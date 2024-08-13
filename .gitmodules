@@ -28,3 +28,9 @@
 [submodule "wp-content/plugins/openlab-announcements"]
 	path = wp-content/plugins/openlab-announcements
 	url = git@github.com:openlab-at-city-tech/openlab-announcements
+[submodule "wp-content/plugins/inline-comments"]
+	path = wp-content/plugins/inline-comments
+	url = git@github.com:openlab-at-city-tech/inline-comments
+[submodule "wp-content/plugins/openlab-text-to-speech"]
+	path = wp-content/plugins/openlab-text-to-speech
+	url = git@github.com:openlab-at-city-tech/openlab-text-to-speech

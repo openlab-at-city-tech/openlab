@@ -1,0 +1,2 @@
+filter.svg: material icons filter_alt_FILL0_wght300_GRAD0_opsz24.svg
+tune.svg: tune_FILL0_wght300_GRAD0_opsz24.svg

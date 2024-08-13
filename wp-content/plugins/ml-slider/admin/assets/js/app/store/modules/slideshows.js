@@ -151,14 +151,40 @@ const mutations = {
 
 				// Add sample images to the new slideshow
 				if(window.location.href.indexOf('metaslider_add_sample_slides') > -1) {
-					Axios.post('import/images', QS.stringify({
-						action: 'ms_import_images',
-						slideshow_id: slideshows[key].id,
-					})).then(response => {
-					    window.location.reload(true)
-					}).catch(error => {
-						console.log(error)
-					})
+
+                    // Get value from param in URL for metaslider_add_sample_slides
+                    var slug = new URLSearchParams(window.location.search).get('metaslider_add_sample_slides');
+
+                    // Show the notice while the slides creation runs on the background
+                    document.getElementById('loading-add-sample-slides-notice').style.display = 'flex';
+
+                    // If the slug is included in metaslider.quickstart_slugs (is a Pro demo import)
+                    if (metaslider.quickstart_slugs.includes(slug)) {
+                        // Import sample data from Pro
+                        Axios.post('import/others', QS.stringify({
+                            action: 'ms_import_others',
+                            slideshow_id: slideshows[key].id,
+                            slug: slug
+                        })).then(response => {
+                            // This will trigger sampleSlidesWereAdded()
+                            window.location.href = window.location.href.replace('metaslider_add_sample_slides', 'metaslider_add_sample_slides_after');
+                        }).catch(error => {
+                            console.log(error)
+                        })
+
+                    } else {
+                        // Import sample data from Free (just image slides)
+                        Axios.post('import/images', QS.stringify({
+                            action: 'ms_import_images',
+                            slideshow_id: slideshows[key].id,
+                        })).then(response => {
+                            // This will trigger sampleSlidesWereAdded()
+                            window.location.href = window.location.href.replace('metaslider_add_sample_slides', 'metaslider_add_sample_slides_after');
+                        }).catch(error => {
+                            console.log(error)
+                        })
+                    }
+
 				}
 			}
 		})

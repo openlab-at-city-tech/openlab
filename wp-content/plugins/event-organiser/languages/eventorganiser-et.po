@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 18:03+0000\n"
+"POT-Creation-Date: 2024-02-24 23:49+0000\n"
 "PO-Revision-Date: 2016-11-27T01:17:05+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -110,11 +110,11 @@ msgstr "Sündmuse toimumispaik"
 msgid "All Venues"
 msgstr "Kõik toimumispaigad"
 
-#: classes/class-eo-calendar-widget.php:296
+#: classes/class-eo-calendar-widget.php:298
 msgid "Previous month"
 msgstr "Eelmine kuu"
 
-#: classes/class-eo-calendar-widget.php:299
+#: classes/class-eo-calendar-widget.php:301
 msgid "Next month"
 msgstr "Järgmine kuu"
 
@@ -391,7 +391,7 @@ msgstr "Millal"
 msgid "Event Title"
 msgstr "Sündmuse pealkiri"
 
-#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:403
+#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:406
 msgid "Where"
 msgstr "Kus"
 
@@ -1410,72 +1410,72 @@ msgstr "1 rubriik loodud"
 msgid "%d categories were created"
 msgstr "%d rubriiki loodud"
 
-#: includes/event-organiser-ajax.php:342
+#: includes/event-organiser-ajax.php:345
 msgid "Protected"
 msgstr "Kaitstud"
 
-#: includes/event-organiser-ajax.php:344
+#: includes/event-organiser-ajax.php:347
 msgid "Private"
 msgstr "Privaatne"
 
-#: includes/event-organiser-ajax.php:346
+#: includes/event-organiser-ajax.php:349
 msgid "Draft"
 msgstr "Mustand"
 
-#: includes/event-organiser-ajax.php:386
+#: includes/event-organiser-ajax.php:389
 msgid "Start"
 msgstr "Algus"
 
-#: includes/event-organiser-ajax.php:387
+#: includes/event-organiser-ajax.php:390
 msgid "End"
 msgstr "Lõpp"
 
-#: includes/event-organiser-ajax.php:390
+#: includes/event-organiser-ajax.php:393
 msgid "Organiser:"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:429
+#: includes/event-organiser-ajax.php:432
 msgid "This event recurs"
 msgstr "See sündmus kordub"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
+#: includes/event-organiser-ajax.php:443 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Muuda sündmust"
 
-#: includes/event-organiser-ajax.php:441
+#: includes/event-organiser-ajax.php:444
 #, php-format
 msgid "Edit Event: %s"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:463
+#: includes/event-organiser-ajax.php:466
 msgid "Delete this occurrence"
 msgstr "Kustuta toimumine"
 
-#: includes/event-organiser-ajax.php:469
+#: includes/event-organiser-ajax.php:472
 msgid "Delete this event"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:487
+#: includes/event-organiser-ajax.php:490
 msgid "Break this series"
 msgstr "Katkesta seeria"
 
-#: includes/event-organiser-ajax.php:781
+#: includes/event-organiser-ajax.php:787
 msgid "Event not found"
 msgstr "Sündmust ei leitud"
 
-#: includes/event-organiser-ajax.php:789
+#: includes/event-organiser-ajax.php:795
 msgid "Events are not editable via the admin calendar"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:795
+#: includes/event-organiser-ajax.php:801
 msgid "Are you sure you want to do this?"
 msgstr "Oled sa kindel, et soovid seda teha?"
 
-#: includes/event-organiser-ajax.php:802
+#: includes/event-organiser-ajax.php:808
 msgid "You do not have permission to edit this event"
 msgstr "Sul pole õigusi selle sündmuse muutmiseks"
 
-#: includes/event-organiser-ajax.php:818
+#: includes/event-organiser-ajax.php:824
 #, php-format
 msgid "Event not created: %s"
 msgstr ""

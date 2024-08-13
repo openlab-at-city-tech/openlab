@@ -26,12 +26,14 @@ function su_html_icon( $args ) {
 	);
 
 	if ( ! $args['icon'] ) {
-		return;
+		return '';
 	}
 
 	if ( $args['style'] ) {
 		$args['style'] = rtrim( $args['style'], ';' ) . ';';
 	}
+
+	$args['size'] = intval( $args['size'] );
 
 	// Font Awesome icon
 	if ( strpos( $args['icon'], 'icon:' ) !== false ) {
@@ -48,7 +50,7 @@ function su_html_icon( $args ) {
 			su_query_asset( 'css', 'su-icons' );
 		}
 
-		return '<i class="sui sui-' . trim( str_replace( 'icon:', '', $args['icon'] ) ) . '" style="' . $args['style'] . '" aria-label="' . $args['alt'] . '"></i>';
+		return '<i class="sui sui-' . esc_attr( trim( str_replace( 'icon:', '', $args['icon'] ) ) ) . '" style="' . esc_attr( $args['style'] ) . '" aria-label="' . esc_attr( $args['alt'] ) . '"></i>';
 
 	}
 
@@ -59,7 +61,7 @@ function su_html_icon( $args ) {
 			$args['style'] .= 'width:' . $args['size'] . 'px;height:' . $args['size'] . 'px;';
 		}
 
-		return '<img src="' . $args['icon'] . '" alt="' . $args['alt'] . '" style="' . $args['style'] . '" />';
+		return '<img src="' . esc_attr( $args['icon'] ) . '" alt="' . esc_attr( $args['alt'] ) . '" style="' . esc_attr( $args['style'] ) . '" />';
 
 	}
 

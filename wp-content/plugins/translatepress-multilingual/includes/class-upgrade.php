@@ -91,6 +91,12 @@ class TRP_Upgrade {
             if( version_compare( $stored_database_version, '2.2.2', '<=' ) ){
                 $this->migrate_auto_translate_slug_to_automatic_translation();
             }
+            if( version_compare( $stored_database_version, '2.7.2', '<=' ) ){
+                $this->migrate_machine_translation_counter();
+            }
+            if( version_compare( $stored_database_version, '2.7.4', '<=' ) ){
+                $this->add_tp_block_index();
+            }
 
             /**
              * Write an upgrading function above this comment to be executed only once: while updating plugin to a higher version.
@@ -628,8 +634,12 @@ class TRP_Upgrade {
 
 
     public function trp_prepare_options_for_database_optimization(){
-        if ( !current_user_can('manage_options') ){
+        if ( !current_user_can( 'manage_options' ) || !isset( $_GET['trp_rm_nonce'] ) ) {
             return;
+        }
+
+        if ( !wp_verify_nonce( sanitize_text_field( $_GET['trp_rm_nonce'] ), 'tpremoveduplicaterows' ) ){
+            exit;
         }
 
         $redirect = false;
@@ -1039,6 +1049,50 @@ class TRP_Upgrade {
         }
 
         return true;
+    }
+
+    /**
+     * Migrate machine_translation_counter to a standalone row in the wp_options.
+     * It's necessary for running atomic queries on it
+     *
+     * @return void
+     */
+    public function migrate_machine_translation_counter() {
+        $mt_settings_option = get_option( 'trp_machine_translation_settings', null );
+        if ( $mt_settings_option && isset( $mt_settings_option['machine_translation_counter'] ) ) {
+            update_option( 'trp_machine_translation_counter', $mt_settings_option['machine_translation_counter'] );
+        }
+    }
+
+    /*
+     * Since Version 2.7.5
+     * Adding index on the column block_type in dictionary table for performance improvement
+     * In the function that creates the dictionaty tables, a syntax to add this index was also written
+     */
+    public function add_tp_block_index() {
+        global $wpdb;
+
+        $prefix = $wpdb->prefix;
+        $suffix = 'trp_dictionary_';
+
+        $tables = $wpdb->get_col("SHOW TABLES LIKE '%$prefix%$suffix%'");
+
+        foreach ($tables as $table) {
+
+            $indexes = $wpdb->get_results("SHOW INDEXES FROM $table WHERE Key_name = 'block_type'");
+
+            if (empty($indexes)) {
+                $columns = $wpdb->get_results("DESCRIBE $table");
+                if (array_search('block_type', wp_list_pluck($columns, 'Field')) !== false) {
+
+                    //using %1s because a sql syntax error was persistant when using %s; basically the %s added ''(quotes) around the table name
+                    //after searhing online, it was sugested to use %i which worked fine but using %1s also seems o work
+                    $query = $wpdb->prepare("ALTER TABLE %1s ADD INDEX block_type ( block_type )", $table);
+                    $wpdb->query($query);
+
+                }
+            }
+        }
     }
 
 }

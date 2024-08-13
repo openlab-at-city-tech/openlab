@@ -61,7 +61,7 @@ class B2S_Ship_Save {
             'post_for_relay' => ((isset($data['post_for_relay']) && (int) $data['post_for_relay'] == 1) ? 1 : 0),
             'post_for_approve' => $shareApprove,
             'network_details_id' => $networkDetailsId,
-            'post_format' => ((isset($data['post_format']) && ($data['post_format'] != null || $data['post_format'] == 0)&& $data['post_format'] !== '') ? (((int) $data['post_format'] >= 1) ? (int) $data['post_format'] : 0) : NULL),
+            'post_format' => ((isset($data['post_format']) && ($data['post_format'] != null || $data['post_format'] == 0) && $data['post_format'] !== '') ? (((int) $data['post_format'] >= 1) ? (int) $data['post_format'] : 0) : NULL),
         );
         $wpdb->insert($wpdb->prefix . 'b2s_posts', $postData, array('%d', '%d', '%d', '%s', '%d', '%d', '%d'));
         B2S_Rating::trigger();
@@ -296,13 +296,14 @@ class B2S_Ship_Save {
         global $wpdb;
         $content = array();
         $this->postData['action'] = 'sentToNetwork';
+        $this->postData['version'] = B2S_PLUGIN_VERSION;
         $postData = $this->postData['post'];
         $this->postData['post'] = serialize($this->postData['post']);
         $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $this->postData, 90));
         $errorText = unserialize(B2S_PLUGIN_NETWORK_ERROR);
         $insertInsights = true;
         $requestSuccess = false;
-        
+
         foreach ($postData as $k => $v) {
             $found = false;
             $networkId = (isset($v['network_id']) && (int) $v['network_id'] > 0) ? (int) $v['network_id'] : 0;
@@ -310,9 +311,9 @@ class B2S_Ship_Save {
                 foreach ($result->data as $key => $post) {
                     if (isset($post->internal_post_id) && (int) $post->internal_post_id > 0 && (int) $post->internal_post_id == (int) $v['internal_post_id']) {
                         $hook_action = 0;
-                        if(isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type > 0){
+                        if (isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type > 0) {
                             $hook_action = 6;
-                        }else if(isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type == 0){
+                        } else if (isset($post->video_token) && !empty($post->video_token) && (int) $post->video_upload_type == 0) {
                             $hook_action = 7;
                         }
 
@@ -390,7 +391,7 @@ class B2S_Ship_Save {
             }
             //DEFAULT ERROR
             if ($found == false) {
-                $errorCode = (isset($result->data->error) && isset($errorText[$result->data->error])) ? sanitize_text_field(wp_unslash($result->data)) : 'DEFAULT';
+                $errorCode = (isset($result->data) && isset($errorText[$result->data])) ? sanitize_text_field(wp_unslash($result->data)) : 'DEFAULT';
                 if (!$quickShare) {
                     $content[] = array('networkAuthId' => $v['network_auth_id'], 'html' => $this->getItemHtml($networkId, $errorCode, '', '', true));
                 } else {
@@ -681,7 +682,7 @@ class B2S_Ship_Save {
         $data['language'] = substr(B2S_LANGUAGE, 0, 2);
         if ($info) {
             if ($data['network_id'] == 1) {
-                $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('For sharing your posts on personal Facebook Profiles you can use Facebook Instant Sharing', 'blog2social') . '</b> (<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('facebook_instant_sharing')) . '">' . esc_html__('Learn how it works', 'blog2social') . '</a>).';
+                $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('For sharing your posts on personal Facebook Profiles or Groups you can use Facebook Instant Sharing', 'blog2social') . '</b> (<a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('facebook_instant_sharing')) . '">' . esc_html__('Learn how it works', 'blog2social') . '</a>).';
                 $html .= '<br><br>';
                 $html .= '<b>' . esc_html__('This is how it works:', 'blog2social') . '</b><br>';
                 $html .= esc_html__('-To share your post immediately, click the "Share" button next to your selected Facebook profile below.', 'blog2social') . '<br>';
@@ -709,14 +710,18 @@ class B2S_Ship_Save {
             if ($directPost) {
                 if ($isVideo == 1) {
                     if ($network_id == 36) { // mobile approvement
-                        $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('Your video will now be uploaded. After TikTok has processed your video, you can unlock it in your TikTok app.', 'blog2social') . '</b> (<a href="' . esc_url(B2S_Tools::getSupportLink('video_sharing_tiktok')) . '" target="_blank">' . esc_html__('Learn how it works', 'blog2social') . '</a>)</div>';
+                        $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('Your video will be uploaded. After TikTok has processed your video, you can unlock it in your TikTok app.', 'blog2social') . '</b> (<a href="' . esc_url(B2S_Tools::getSupportLink('video_sharing_tiktok')) . '" target="_blank">' . esc_html__('Learn how it works', 'blog2social') . '</a>)</div>';
                     } else if (is_array($schedDate) && empty($schedDate)) {
-                        $html .= '<br><div class="alert alert-info"><b>' . esc_html__('Your video is uploading.', 'blog2social') . '</b></div>';
-                    } 
+                        if ($network_id == 32) { // youtube approvement
+                            $html .= '<br><div class="alert alert-info"><b>' . esc_html__('Your Video is uploading. Please note: It can take up to 2-3 hours for YouTube to index your newly uploaded video (Youtube Shorts excluded).', 'blog2social') . '</b></div>';
+                        } else {
+                            $html .= '<br><div class="alert alert-info"><b>' . esc_html__('Your video is uploading.', 'blog2social') . '</b></div>';
+                        }
+                    }
                 } else {
                     if (!isset($schedDate) || empty($schedDate)) {
                         $html .= '<br><span class="text-success"><i class="glyphicon glyphicon-ok-circle"></i> ' . esc_html__('published', 'blog2social');
-                        $html .= !empty($link) ? ': <a href="' . esc_url($link) . '" target="_blank">' . esc_html__('view social media post', 'blog2social') . '</a>' : '';    	
+                        $html .= !empty($link) ? ': <a href="' . esc_url($link) . '" target="_blank">' . esc_html__('view social media post', 'blog2social') . '</a>' : '';
                     }
                     $html .= '</span>';
                 }

@@ -46,6 +46,16 @@ jQuery(window).on("load", function () {
                                         jQuery('.b2s-enable-auto-post').prop('checked', false).trigger('change');
                                     }
                                 }
+                                if (typeof data.schedLimit != 'undefined') {
+                                    if (data.schedLimit != '') {
+                                        if (data.schedLimit <= 0) {
+                                            jQuery('#b2s-licence-condition').show();
+                                            jQuery('#b2s-enable-auto-post').prop('checked', false).attr("disabled", true);
+                                            jQuery('.b2s-post-meta-box-active').hide();
+                                            jQuery('.b2s-post-meta-box-inactive').show();
+                                        }
+                                    }
+                                }
                             }
                         }
                     });
@@ -76,6 +86,16 @@ jQuery(window).on("load", function () {
         jQuery('#b2s-post-box-calendar-header').show();
         if (jQuery('#b2s-post-meta-box-version').val() == "0" && jQuery(this).val() == "publish") {
             jQuery('#b2s-enable-auto-post').prop('checked', false);
+        }
+    }
+
+    //Licence Condition
+    if (typeof jQuery('#b2s-post-meta-box-licence-condition-sched-limit').val() != 'undefined') {
+        if (jQuery('#b2s-post-meta-box-licence-condition-sched-limit').val() <= 0) {
+            jQuery('#b2s-licence-condition').show();
+            jQuery('#b2s-enable-auto-post').prop('checked', false).attr("disabled", true);
+            jQuery('.b2s-post-meta-box-active').hide();
+            jQuery('.b2s-post-meta-box-inactive').show();
         }
     }
 

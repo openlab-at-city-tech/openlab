@@ -21,8 +21,7 @@ class SheetView
 	 * ZoomScale.
 	 *
 	 * Valid values range from 10 to 400.
-	 *
-	 * @var ?int
+	 * @var int|null
 	 */
 	private $zoomScale = 100;
 
@@ -30,17 +29,31 @@ class SheetView
 	 * ZoomScaleNormal.
 	 *
 	 * Valid values range from 10 to 400.
-	 *
-	 * @var ?int
+	 * @var int|null
 	 */
 	private $zoomScaleNormal = 100;
+
+	/**
+	 * ZoomScalePageLayoutView.
+	 *
+	 * Valid values range from 10 to 400.
+	 * @var int
+	 */
+	private $zoomScalePageLayoutView = 100;
+
+	/**
+	 * ZoomScaleSheetLayoutView.
+	 *
+	 * Valid values range from 10 to 400.
+	 * @var int
+	 */
+	private $zoomScaleSheetLayoutView = 100;
 
 	/**
 	 * ShowZeros.
 	 *
 	 * If true, "null" values from a calculation will be shown as "0". This is the default Excel behaviour and can be changed
 	 * with the advanced worksheet option "Show a zero in cells that have zero value"
-	 *
 	 * @var bool
 	 */
 	private $showZeros = true;
@@ -49,7 +62,6 @@ class SheetView
 	 * View.
 	 *
 	 * Valid values range from 10 to 400.
-	 *
 	 * @var string
 	 */
 	private $sheetviewType = self::SHEETVIEW_NORMAL;
@@ -63,10 +75,8 @@ class SheetView
 
 	/**
 	 * Get ZoomScale.
-	 *
-	 * @return ?int
 	 */
-	public function getZoomScale()
+	public function getZoomScale(): ?int
 	{
 		return $this->zoomScale;
 	}
@@ -75,11 +85,9 @@ class SheetView
 	 * Set ZoomScale.
 	 * Valid values range from 10 to 400.
 	 *
-	 * @param ?int $zoomScale
-	 *
 	 * @return $this
 	 */
-	public function setZoomScale($zoomScale)
+	public function setZoomScale(?int $zoomScale)
 	{
 		// Microsoft Office Excel 2007 only allows setting a scale between 10 and 400 via the user interface,
 		// but it is apparently still able to handle any scale >= 1
@@ -94,10 +102,8 @@ class SheetView
 
 	/**
 	 * Get ZoomScaleNormal.
-	 *
-	 * @return ?int
 	 */
-	public function getZoomScaleNormal()
+	public function getZoomScaleNormal(): ?int
 	{
 		return $this->zoomScaleNormal;
 	}
@@ -106,11 +112,9 @@ class SheetView
 	 * Set ZoomScale.
 	 * Valid values range from 10 to 400.
 	 *
-	 * @param ?int $zoomScaleNormal
-	 *
 	 * @return $this
 	 */
-	public function setZoomScaleNormal($zoomScaleNormal)
+	public function setZoomScaleNormal(?int $zoomScaleNormal)
 	{
 		if ($zoomScaleNormal === null || $zoomScaleNormal >= 1) {
 			$this->zoomScaleNormal = $zoomScaleNormal;
@@ -121,30 +125,61 @@ class SheetView
 		return $this;
 	}
 
+	public function getZoomScalePageLayoutView(): int
+	{
+		return $this->zoomScalePageLayoutView;
+	}
+
+	/**
+	 * @return static
+	 */
+	public function setZoomScalePageLayoutView(int $zoomScalePageLayoutView)
+	{
+		if ($zoomScalePageLayoutView >= 1) {
+			$this->zoomScalePageLayoutView = $zoomScalePageLayoutView;
+		} else {
+			throw new PhpSpreadsheetException('Scale must be greater than or equal to 1.');
+		}
+
+		return $this;
+	}
+
+	public function getZoomScaleSheetLayoutView(): int
+	{
+		return $this->zoomScaleSheetLayoutView;
+	}
+
+	/**
+	 * @return static
+	 */
+	public function setZoomScaleSheetLayoutView(int $zoomScaleSheetLayoutView)
+	{
+		if ($zoomScaleSheetLayoutView >= 1) {
+			$this->zoomScaleSheetLayoutView = $zoomScaleSheetLayoutView;
+		} else {
+			throw new PhpSpreadsheetException('Scale must be greater than or equal to 1.');
+		}
+
+		return $this;
+	}
+
 	/**
 	 * Set ShowZeroes setting.
-	 *
-	 * @param bool $showZeros
 	 */
-	public function setShowZeros($showZeros): void
+	public function setShowZeros(bool $showZeros): void
 	{
 		$this->showZeros = $showZeros;
 	}
 
-	/**
-	 * @return bool
-	 */
-	public function getShowZeros()
+	public function getShowZeros(): bool
 	{
 		return $this->showZeros;
 	}
 
 	/**
 	 * Get View.
-	 *
-	 * @return string
 	 */
-	public function getView()
+	public function getView(): string
 	{
 		return $this->sheetviewType;
 	}
@@ -157,11 +192,9 @@ class SheetView
 	 *        'pageLayout'        self::SHEETVIEW_PAGE_LAYOUT
 	 *        'pageBreakPreview'  self::SHEETVIEW_PAGE_BREAK_PREVIEW
 	 *
-	 * @param ?string $sheetViewType
-	 *
 	 * @return $this
 	 */
-	public function setView($sheetViewType)
+	public function setView(?string $sheetViewType)
 	{
 		// MS Excel 2007 allows setting the view to 'normal', 'pageLayout' or 'pageBreakPreview' via the user interface
 		if ($sheetViewType === null) {

@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["frontend-modules"],{
 
 /***/ "../assets/dev/js/editor/utils/is-instanceof.js":
@@ -446,7 +446,6 @@ class CarouselHandlerBase extends _baseSwiper.default {
     if (isNestedCarouselInEditMode || !offsetSide || 'none' === offsetSide) {
       return;
     }
-    const offset = this.getOffsetWidth();
     switch (offsetSide) {
       case 'right':
         this.forceSliderToShowNextSlideWhenOnLast(swiperOptions, slidesToShow);
@@ -472,15 +471,18 @@ class CarouselHandlerBase extends _baseSwiper.default {
     if (!this.elements.$swiperContainer.length || 2 > this.elements.$slides.length) {
       return;
     }
+    await this.initSwiper();
+    const elementSettings = this.getElementSettings();
+    if ('yes' === elementSettings.pause_on_hover) {
+      this.togglePauseOnHover(true);
+    }
+  }
+  async initSwiper() {
     const Swiper = elementorFrontend.utils.swiper;
     this.swiper = await new Swiper(this.elements.$swiperContainer, this.getSwiperSettings());
 
     // Expose the swiper instance in the frontend
     this.elements.$swiperContainer.data('swiper', this.swiper);
-    const elementSettings = this.getElementSettings();
-    if ('yes' === elementSettings.pause_on_hover) {
-      this.togglePauseOnHover(true);
-    }
   }
   bindEvents() {
     this.elements.$swiperArrows.on('keydown', this.onDirectionArrowKeydown.bind(this));
@@ -585,8 +587,8 @@ class CarouselHandlerBase extends _baseSwiper.default {
     $widget.attr('aria-label', elementorFrontend.config.i18n.a11yCarouselWrapperAriaLabel);
   }
   a11ySetPaginationTabindex() {
-    const bulletClass = this.swiper?.params.pagination.bulletClass,
-      activeBulletClass = this.swiper?.params.pagination.bulletActiveClass;
+    const bulletClass = this.swiper?.params?.pagination.bulletClass,
+      activeBulletClass = this.swiper?.params?.pagination.bulletActiveClass;
     this.getPaginationBullets().forEach(bullet => {
       if (!bullet.classList?.contains(activeBulletClass)) {
         bullet.removeAttribute('tabindex');
@@ -844,7 +846,7 @@ module.exports = elementorModules.ViewModule.extend({
       if (!settingsKeys) {
         settingsKeys = elementorFrontend.config.elements.keys[type] = [];
         jQuery.each(settings.controls, (name, control) => {
-          if (control.frontend_available) {
+          if (control.frontend_available || control.editor_available) {
             settingsKeys.push(name);
           }
         });
@@ -1012,6 +1014,7 @@ var _baseSwiper = _interopRequireDefault(__webpack_require__(/*! ./handlers/base
 var _baseCarousel = _interopRequireDefault(__webpack_require__(/*! ./handlers/base-carousel */ "../assets/dev/js/frontend/handlers/base-carousel.js"));
 var _nestedTabs = _interopRequireDefault(__webpack_require__(/*! elementor/modules/nested-tabs/assets/js/frontend/handlers/nested-tabs */ "../modules/nested-tabs/assets/js/frontend/handlers/nested-tabs.js"));
 var _nestedAccordion = _interopRequireDefault(__webpack_require__(/*! elementor/modules/nested-accordion/assets/js/frontend/handlers/nested-accordion */ "../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion.js"));
+var _contactButtons = _interopRequireDefault(__webpack_require__(/*! elementor/modules/conversion-center/assets/js/frontend/handlers/contact-buttons */ "../modules/conversion-center/assets/js/frontend/handlers/contact-buttons.js"));
 var _nestedTitleKeyboardHandler = _interopRequireDefault(__webpack_require__(/*! ./handlers/accessibility/nested-title-keyboard-handler */ "../assets/dev/js/frontend/handlers/accessibility/nested-title-keyboard-handler.js"));
 _modules.default.frontend = {
   Document: _document.default,
@@ -1025,7 +1028,8 @@ _modules.default.frontend = {
     CarouselBase: _baseCarousel.default,
     NestedTabs: _nestedTabs.default,
     NestedAccordion: _nestedAccordion.default,
-    NestedTitleKeyboardHandler: _nestedTitleKeyboardHandler.default
+    NestedTitleKeyboardHandler: _nestedTitleKeyboardHandler.default,
+    ContactButtonsHandler: _contactButtons.default
   }
 };
 
@@ -1279,7 +1283,6 @@ class ArgsObject extends _instanceType.default {
    * @param {{}}     args
    *
    * @throws {Error}
-   *
    */
   requireArgument(property) {
     let args = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : this.args;
@@ -1298,7 +1301,6 @@ class ArgsObject extends _instanceType.default {
    * @param {{}}     args
    *
    * @throws {Error}
-   *
    */
   requireArgumentType(property, type) {
     let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
@@ -1318,7 +1320,6 @@ class ArgsObject extends _instanceType.default {
    * @param {{}}     args
    *
    * @throws {Error}
-   *
    */
   requireArgumentInstance(property, instance) {
     let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
@@ -1338,7 +1339,6 @@ class ArgsObject extends _instanceType.default {
    * @param {{}}     args
    *
    * @throws {Error}
-   *
    */
   requireArgumentConstructor(property, type) {
     let args = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : this.args;
@@ -1866,6 +1866,189 @@ exports["default"] = _default;
 
 /***/ }),
 
+/***/ "../modules/conversion-center/assets/js/frontend/handlers/contact-buttons.js":
+/*!***********************************************************************************!*\
+  !*** ../modules/conversion-center/assets/js/frontend/handlers/contact-buttons.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _base = _interopRequireDefault(__webpack_require__(/*! elementor-frontend/handlers/base */ "../assets/dev/js/frontend/handlers/base.js"));
+class ContactButtonsHandler extends _base.default {
+  getDefaultSettings() {
+    return {
+      selectors: {
+        main: '.e-contact-buttons',
+        content: '.e-contact-buttons__content',
+        contentWrapper: '.e-contact-buttons__content-wrapper',
+        chatButton: '.e-contact-buttons__chat-button',
+        closeButton: '.e-contact-buttons__close-button',
+        messageBubbleTime: '.e-contact-buttons__message-bubble-time'
+      },
+      constants: {
+        entranceAnimation: 'style_chat_box_entrance_animation',
+        exitAnimation: 'style_chat_box_exit_animation',
+        chatButtonAnimation: 'style_chat_button_animation',
+        animated: 'animated',
+        animatedWrapper: 'animated-wrapper',
+        visible: 'visible',
+        reverse: 'reverse',
+        hidden: 'hidden',
+        hasAnimations: 'has-animations',
+        none: 'none'
+      }
+    };
+  }
+  getDefaultElements() {
+    const selectors = this.getSettings('selectors');
+    return {
+      main: this.$element[0].querySelector(selectors.main),
+      content: this.$element[0].querySelector(selectors.content),
+      contentWrapper: this.$element[0].querySelector(selectors.contentWrapper),
+      chatButton: this.$element[0].querySelector(selectors.chatButton),
+      closeButton: this.$element[0].querySelector(selectors.closeButton),
+      messageBubbleTime: this.$element[0].querySelector(selectors.messageBubbleTime)
+    };
+  }
+  getResponsiveSetting(controlName) {
+    const currentDevice = elementorFrontend.getCurrentDeviceMode();
+    return elementorFrontend.utils.controls.getResponsiveControlValue(this.getElementSettings(), controlName, '', currentDevice);
+  }
+  bindEvents() {
+    this.elements.closeButton.addEventListener('click', this.closeChatBox.bind(this));
+    this.elements.chatButton.addEventListener('click', this.onChatButtonClick.bind(this));
+    this.elements.content.addEventListener('animationend', this.removeAnimationClasses.bind(this));
+  }
+  removeAnimationClasses() {
+    const {
+      reverse,
+      entranceAnimation,
+      exitAnimation,
+      animated,
+      visible
+    } = this.getSettings('constants');
+    const isExitAnimation = this.elements.content.classList.contains(reverse),
+      openAnimationClass = this.getResponsiveSetting(entranceAnimation),
+      exitAnimationClass = this.getResponsiveSetting(exitAnimation);
+    if (isExitAnimation) {
+      this.elements.content.classList.remove(animated);
+      this.elements.content.classList.remove(reverse);
+      this.elements.content.classList.remove(exitAnimationClass);
+      this.elements.content.classList.remove(visible);
+    } else {
+      this.elements.content.classList.remove(animated);
+      this.elements.content.classList.remove(openAnimationClass);
+      this.elements.content.classList.add(visible);
+    }
+  }
+  chatBoxEntranceAnimation() {
+    const {
+      entranceAnimation,
+      animated,
+      animatedWrapper,
+      none
+    } = this.getSettings('constants');
+    const entranceAnimationControl = this.getResponsiveSetting(entranceAnimation);
+    if (none === entranceAnimationControl) {
+      return;
+    }
+    this.elements.content.classList.add(animated);
+    this.elements.content.classList.add(entranceAnimationControl);
+    this.elements.contentWrapper.classList.remove(animatedWrapper);
+  }
+  chatBoxExitAnimation() {
+    const {
+      reverse,
+      exitAnimation,
+      animated,
+      animatedWrapper,
+      none
+    } = this.getSettings('constants');
+    const exitAnimationControl = this.getResponsiveSetting(exitAnimation);
+    if (none === exitAnimationControl) {
+      return;
+    }
+    this.elements.content.classList.add(animated);
+    this.elements.content.classList.add(reverse);
+    this.elements.content.classList.add(exitAnimationControl);
+    this.elements.contentWrapper.classList.add(animatedWrapper);
+  }
+  openChatBox() {
+    const {
+      hasAnimations,
+      visible,
+      hidden
+    } = this.getSettings('constants');
+    if (this.elements.main.classList.contains(hasAnimations)) {
+      this.chatBoxEntranceAnimation();
+    } else {
+      this.elements.content.classList.add(visible);
+    }
+    this.elements.contentWrapper.classList.remove(hidden);
+  }
+  closeChatBox() {
+    const {
+      hasAnimations,
+      visible,
+      hidden
+    } = this.getSettings('constants');
+    if (this.elements.main.classList.contains(hasAnimations)) {
+      this.chatBoxExitAnimation();
+    } else {
+      this.elements.content.classList.remove(visible);
+    }
+    this.elements.contentWrapper.classList.add(hidden);
+  }
+  onChatButtonClick() {
+    const {
+      hidden
+    } = this.getSettings('constants');
+    if (this.elements.contentWrapper.classList.contains(hidden)) {
+      this.openChatBox();
+    } else {
+      this.closeChatBox();
+    }
+  }
+  initMessageBubbleTime() {
+    const messageBubbleTimeFormat = this.elements.messageBubbleTime.dataset.timeFormat;
+    const is12hFormat = '12h' === messageBubbleTimeFormat;
+    const time = new Intl.DateTimeFormat('default', {
+      hour12: is12hFormat,
+      hour: 'numeric',
+      minute: 'numeric'
+    }).format(new Date());
+    this.elements.messageBubbleTime.innerHTML = time;
+  }
+  initChatButtonEntranceAnimation() {
+    const {
+      none,
+      chatButtonAnimation,
+      animated
+    } = this.getSettings('constants');
+    const entranceAnimationControl = this.getResponsiveSetting(chatButtonAnimation);
+    if (none === entranceAnimationControl) {
+      return;
+    }
+    this.elements.chatButton.classList.add(animated);
+    this.elements.chatButton.classList.add(entranceAnimationControl);
+  }
+  onInit() {
+    super.onInit(...arguments);
+    this.initMessageBubbleTime();
+    this.initChatButtonEntranceAnimation();
+  }
+}
+exports["default"] = ContactButtonsHandler;
+
+/***/ }),
+
 /***/ "../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion-title-keyboard-handler.js":
 /*!**********************************************************************************************************!*\
   !*** ../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion-title-keyboard-handler.js ***!
@@ -1951,10 +2134,16 @@ class NestedAccordion extends _base.default {
         accordionContentContainers: '.e-n-accordion > .e-con',
         accordionItems: '.e-n-accordion-item',
         accordionItemTitles: '.e-n-accordion-item-title',
+        accordionItemTitlesText: '.e-n-accordion-item-title-text',
         accordionContent: '.e-n-accordion-item > .e-con',
-        accordionWrapper: '.e-n-accordion-item'
+        directAccordionItems: ':scope > .e-n-accordion-item',
+        directAccordionItemTitles: ':scope > .e-n-accordion-item > .e-n-accordion-item-title'
       },
-      default_state: 'expanded'
+      default_state: 'expanded',
+      attributes: {
+        index: 'data-accordion-index',
+        ariaLabelledBy: 'aria-labelledby'
+      }
     };
   }
   getDefaultElements() {
@@ -1991,27 +2180,89 @@ class NestedAccordion extends _base.default {
       $accordionItems[index].appendChild(element);
     });
   }
+  linkContainer(event) {
+    const {
+        container,
+        index,
+        targetContainer,
+        action: {
+          type
+        }
+      } = event.detail,
+      view = container.view.$el,
+      id = container.model.get('id'),
+      currentId = this.$element.data('id');
+    if (id === currentId) {
+      const {
+        $accordionItems
+      } = this.getDefaultElements();
+      let accordionItem, contentContainer;
+      switch (type) {
+        case 'move':
+          [accordionItem, contentContainer] = this.move(view, index, targetContainer, $accordionItems);
+          break;
+        case 'duplicate':
+          [accordionItem, contentContainer] = this.duplicate(view, index, targetContainer, $accordionItems);
+          break;
+        default:
+          break;
+      }
+      if (undefined !== accordionItem) {
+        accordionItem.appendChild(contentContainer);
+      }
+      this.updateIndexValues();
+      this.updateListeners(view);
+      elementor.$preview[0].contentWindow.dispatchEvent(new CustomEvent('elementor/elements/link-data-bindings'));
+    }
+  }
+  move(view, index, targetContainer, accordionItems) {
+    return [accordionItems[index], targetContainer.view.$el[0]];
+  }
+  duplicate(view, index, targetContainer, accordionItems) {
+    return [accordionItems[index + 1], targetContainer.view.$el[0]];
+  }
+  updateIndexValues() {
+    const {
+        $accordionContent,
+        $accordionItems
+      } = this.getDefaultElements(),
+      settings = this.getSettings(),
+      itemIdBase = $accordionItems[0].getAttribute('id').slice(0, -1);
+    $accordionItems.each((index, element) => {
+      element.setAttribute('id', `${itemIdBase}${index}`);
+      element.querySelector(settings.selectors.accordionItemTitles).setAttribute(settings.attributes.index, index + 1);
+      element.querySelector(settings.selectors.accordionItemTitles).setAttribute('aria-controls', `${itemIdBase}${index}`);
+      element.querySelector(settings.selectors.accordionItemTitlesText).setAttribute('data-binding-index', index + 1);
+      $accordionContent[index].setAttribute(settings.attributes.ariaLabelledBy, `${itemIdBase}${index}`);
+    });
+  }
+  updateListeners(view) {
+    this.elements.$accordionTitles = view.find(this.getSettings('selectors.accordionItemTitles'));
+    this.elements.$accordionItems = view.find(this.getSettings('selectors.accordionItems'));
+    this.elements.$accordionTitles.on('click', this.clickListener.bind(this));
+  }
   bindEvents() {
     this.elements.$accordionTitles.on('click', this.clickListener.bind(this));
+    elementorFrontend.elements.$window.on('elementor/nested-container/atomic-repeater', this.linkContainer.bind(this));
   }
   unbindEvents() {
     this.elements.$accordionTitles.off();
   }
   clickListener(event) {
     event.preventDefault();
+    this.elements = this.getDefaultElements();
     const settings = this.getSettings(),
-      accordionItem = event?.currentTarget?.closest(settings.selectors.accordionWrapper),
+      accordionItem = event?.currentTarget?.closest(settings.selectors.accordionItems),
+      accordion = event?.currentTarget?.closest(settings.selectors.accordion),
       itemSummary = accordionItem.querySelector(settings.selectors.accordionItemTitles),
       accordionContent = accordionItem.querySelector(settings.selectors.accordionContent),
       {
         max_items_expended: maxItemsExpended
       } = this.getElementSettings(),
-      {
-        $accordionTitles,
-        $accordionItems
-      } = this.elements;
+      directAccordionItems = accordion.querySelectorAll(settings.selectors.directAccordionItems),
+      directAccordionItemTitles = accordion.querySelectorAll(settings.selectors.directAccordionItemTitles);
     if ('one' === maxItemsExpended) {
-      this.closeAllItems($accordionItems, $accordionTitles);
+      this.closeAllItems(directAccordionItems, directAccordionItemTitles);
     }
     if (!accordionItem.open) {
       this.prepareOpenAnimation(accordionItem, itemSummary, accordionContent);
@@ -2055,9 +2306,9 @@ class NestedAccordion extends _base.default {
     this.animations.set(accordionItem, null);
     accordionItem.style.height = accordionItem.style.overflow = '';
   }
-  closeAllItems($items, $titles) {
-    $titles.each((index, title) => {
-      this.closeAccordionItem($items[index], title);
+  closeAllItems(items, titles) {
+    titles.forEach((title, index) => {
+      this.closeAccordionItem(items[index], title);
     });
   }
   getAnimationDuration() {
@@ -2125,6 +2376,7 @@ class NestedTabs extends _base.default {
       selectors: {
         widgetContainer: '.e-n-tabs',
         tabTitle: '.e-n-tab-title',
+        tabTitleText: '.e-n-tab-title-text',
         tabContent: '.e-n-tabs-content > .e-con',
         headingContainer: '.e-n-tabs-heading',
         activeTabContentContainers: '.e-con.e-active'
@@ -2146,6 +2398,7 @@ class NestedTabs extends _base.default {
   getDefaultElements() {
     const selectors = this.getSettings('selectors');
     return {
+      $wdigetContainer: this.findElement(selectors.widgetContainer),
       $tabTitles: this.findElement(selectors.tabTitle),
       $tabContents: this.findElement(selectors.tabContent),
       $headingContainer: this.findElement(selectors.headingContainer)
@@ -2171,6 +2424,7 @@ class NestedTabs extends _base.default {
 
     // Return back original toggle effects
     this.setSettings(originalToggleMethods);
+    this.elements.$wdigetContainer.addClass('e-activated');
   }
   deactivateActiveTab(newTabIndex) {
     const settings = this.getSettings(),
@@ -2257,6 +2511,7 @@ class NestedTabs extends _base.default {
     elementorFrontend.elements.$window.on('resize', this.setTouchMode.bind(this));
     elementorFrontend.elements.$window.on('elementor/nested-tabs/activate', this.reInitSwipers);
     elementorFrontend.elements.$window.on('elementor/nested-elements/activate-by-keyboard', this.changeActiveTabByKeyboard.bind(this));
+    elementorFrontend.elements.$window.on('elementor/nested-container/atomic-repeater', this.linkContainer.bind(this));
   }
   unbindEvents() {
     this.elements.$tabTitles.off();
@@ -2405,6 +2660,44 @@ class NestedTabs extends _base.default {
       return;
     }
     this.$element.find(widgetSelector).attr('data-touch-mode', 'false');
+  }
+  linkContainer(event) {
+    const {
+        container
+      } = event.detail,
+      id = container.model.get('id'),
+      currentId = this.$element.data('id');
+    if (id === currentId) {
+      this.updateIndexValues();
+      this.updateListeners();
+      elementor.$preview[0].contentWindow.dispatchEvent(new CustomEvent('elementor/elements/link-data-bindings'));
+    }
+  }
+  updateListeners() {
+    elementorFrontend.elementsHandler.runReadyTrigger(this.$element[0]);
+  }
+  updateIndexValues() {
+    const {
+        $tabContents,
+        $tabTitles
+      } = this.getDefaultElements(),
+      settings = this.getSettings(),
+      itemIdBase = $tabTitles[0].getAttribute('id').slice(0, -1),
+      containerIdBase = $tabContents[0].getAttribute('id').slice(0, -1);
+    $tabTitles.each((index, element) => {
+      const newIndex = index + 1,
+        updatedTabID = itemIdBase + newIndex,
+        updatedContainerID = containerIdBase + newIndex;
+      element.setAttribute('id', updatedTabID);
+      element.setAttribute('style', `--n-tabs-title-order: ${newIndex}`);
+      element.setAttribute('data-tab-index', newIndex);
+      element.querySelector(settings.selectors.tabTitleText).setAttribute('data-binding-index', newIndex);
+      element.querySelector(settings.selectors.tabTitleText).setAttribute('aria-controls', updatedTabID);
+      $tabContents[index].setAttribute('aria-labelledby', updatedTabID);
+      $tabContents[index].setAttribute('data-tab-index', updatedTabID);
+      $tabContents[index].setAttribute('id', updatedContainerID);
+      $tabContents[index].setAttribute('style', `--n-tabs-title-order: ${newIndex}`);
+    });
   }
 }
 exports["default"] = NestedTabs;

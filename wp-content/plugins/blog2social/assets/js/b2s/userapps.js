@@ -1,11 +1,22 @@
 jQuery.noConflict();
 
 jQuery(document).on('click', '.b2s-network-add-user-app-btn', function () {
-    if (jQuery('#b2s-user-app-count-current')[0].innerText < jQuery('#b2s-network-app-full-count')[0].innerText) {
+
+    var network_id = jQuery(this).attr("data-network-id");
+
+    if (jQuery('#b2s-user-app-count-current[data-network-id="' + network_id + '"]')[0].innerText < jQuery('#b2s-network-app-full-count[data-network-id="' + network_id + '"]')[0].innerText) {
         jQuery('#b2s-edit-user-app-id').val("");
         jQuery('#b2s-edit-user-app-name').val("");
         jQuery('#b2s-edit-user-app-key').val("");
         jQuery('#b2s-edit-user-app-secret').val("");
+
+        if (network_id == "6") {
+            jQuery('#b2s-add-user-app-key').attr("placeholder", "App-Id");
+        } else {
+            jQuery('#b2s-add-user-app-key').attr("placeholder", "App Key");
+        }
+        jQuery('.network-app-info').hide();
+        jQuery('.network-app-info[data-network-id="' + network_id + '"]').show();
         jQuery("#b2sAddUserAppModal").modal('show');
 
     } else if (jQuery("#b2s-user-license").val() == 1) {
@@ -142,6 +153,13 @@ jQuery(document).on('click', '.b2s-btn-edit-app-button', function () {
         jQuery('#b2s-edit-user-app-id').val(app_id);
         jQuery('#b2s-edit-user-app-key').attr("placeholder", app_key);
         jQuery('#b2s-edit-user-app-secret').attr("placeholder", app_secret);
+
+        if (jQuery(this).attr("data-network-id") == "6") {
+            jQuery('#b2s-edit-user-app-key-name').html("App-Id");
+        } else {
+            jQuery('#b2s-edit-user-app-key-name').html("App Key");
+        }
+
         jQuery('#b2sEditUserAppModal').modal('show');
     }
 
@@ -197,7 +215,7 @@ jQuery(document).on('click', '.b2s-btn-delete-app-button', function () {
 
 jQuery(document).on('click', '.b2s-btn-network-delete-app-confirm-btn', function () {
     var app_id = jQuery('#b2s-delete-user-app-id').val();
-
+    var network_id = jQuery('.b2s-btn-delete-app-button[data-app-id="'+app_id+'"]').attr('data-network-id');
     jQuery.ajax({
         url: ajaxurl,
         type: "POST",
@@ -214,8 +232,8 @@ jQuery(document).on('click', '.b2s-btn-network-delete-app-confirm-btn', function
             return false;
         },
         success: function (data) {
-            var currentAppCount = Number(jQuery('#b2s-user-app-count-current')[0].innerText);
-            jQuery('#b2s-user-app-count-current').text(currentAppCount - 1);
+            var currentAppCount = Number(jQuery('#b2s-user-app-count-current[data-network-id="'+network_id+'"]')[0].innerText);
+            jQuery('#b2s-user-app-count-current[data-network-id="'+network_id+'"]').text(currentAppCount - 1);
             jQuery('#b2sDeleteUserAppModal').modal('hide');
             jQuery('.b2s-user-apps-delete-success').show();
             var app = jQuery('.b2s-network-item-auth-list-li[data-app-id="' + app_id + '"]');

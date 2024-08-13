@@ -60,12 +60,17 @@ function showContentByCurrentTab() {
         jQuery('.b2s-sched-manager-time-area').hide();
         jQuery('.b2s-sched-manager-day-area').hide();
 
-        //FB Profiles are not supported
+        //FB Profiles+Groups are not supported
         jQuery('.btn-facebook[data-network-type="0"]').hide();
+        jQuery('.btn-facebook[data-network-type="2"]').hide();
         jQuery('.b2s-network-video-not-supported').show();
         jQuery('.b2s-network-item-auth-list-li[data-network-id="1"][data-network-type="0"]').find('div').find('button').each(function () {
             jQuery(this).addClass('b2s-disabled');
         });
+        jQuery('.b2s-network-item-auth-list-li[data-network-id="1"][data-network-type="2"]').find('div').find('button').each(function () {
+            jQuery(this).addClass('b2s-disabled');
+        });
+
 
         if (jQuery('#b2sBlogHasUsedVideoAddon').val() == 0 && jQuery('#b2sUserVersion').val() == 0) {
             jQuery('.b2s-network-auth-area').css('opacity', '0.2');
@@ -81,12 +86,17 @@ function showContentByCurrentTab() {
         jQuery('.b2s-sched-manager-time-area').show();
         jQuery('.b2s-sched-manager-day-area').show();
 
+        //FB Profiles+Groups are not supported
         jQuery('.btn-facebook[data-network-type="0"]').show();
+        jQuery('.btn-facebook[data-network-type="2"]').show();
         jQuery('.b2s-network-video-not-supported').hide();
         jQuery('.b2s-network-item-auth-list-li[data-network-id="1"][data-network-type="0"]').find('div').find('a').each(function () {
             jQuery(this).removeClass('b2s-disabled');
         });
-
+        jQuery('.b2s-network-item-auth-list-li[data-network-id="1"][data-network-type="2"]').find('div').find('a').each(function () {
+            jQuery(this).removeClass('b2s-disabled');
+        });
+        
         jQuery('.b2s-network-auth-area').css('opacity', '');
         jQuery('.b2s-post').css('opacity', '');
 
@@ -989,7 +999,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('0');
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if (jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24) {
+            if (jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 43) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             }
         });
@@ -1000,7 +1010,7 @@ jQuery(window).on("load", function () {
             jQuery('.b2s-edit-template-post-format[data-network-type=' + jQuery(this).attr('data-network-type') + ']').val('1');
             jQuery('.b2s-edit-template-link-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').hide();
             jQuery('.b2s-edit-template-image-preview[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
-            if (jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24) {
+            if (jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 43) {
                 jQuery('.b2s-edit-template-enable-link-area[data-network-type=' + jQuery(this).attr('data-network-type') + ']').show();
             }
         });
@@ -1222,7 +1232,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
             }
         }
 
-        if (jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
+        if (jQuery('#b2s-edit-template-network-id').val() == 43 || jQuery('#b2s-edit-template-network-id').val() == 24 || jQuery('#b2s-edit-template-network-id').val() == 12 || jQuery('#b2s-edit-template-network-id').val() == 1 || jQuery('#b2s-edit-template-network-id').val() == 2) {
             if (jQuery('.b2s-edit-template-enable-link[data-network-type="' + networkType + '"]').is(':checked')) {
                 template_data[networkType]['addLink'] = true;
             } else {
@@ -1577,6 +1587,13 @@ jQuery(document).on('click', '.b2s-network-add-page-info-btn', function () {
     });
     return false;
 });
+
+
+jQuery(document).on('click', '.b2s-network-add-app-info-btn', function () {
+    jQuery('#b2sNetworkAddAppInfoModal').modal('show');
+    return false;
+});
+
 
 jQuery(document).on('click', '.b2s-network-add-group-info-btn', function () {
     jQuery('#b2sNetworkAddGroupInfoModal').modal('show');

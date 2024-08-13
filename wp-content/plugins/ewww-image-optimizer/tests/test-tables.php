@@ -55,9 +55,8 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 		if ( ! $original ) {
 			$original = self::$test_gif;
 		}
-		global $ewww_force;
-		$ewww_force = 1;
-		$filename = $original . ".gif";
+		ewwwio()->force = true;
+		$filename       = $original . ".gif";
 		copy( $original, $filename );
 		$results = ewww_image_optimizer( $filename, 1 );
 		return $results;
@@ -94,9 +93,9 @@ class EWWWIO_Table_Tests extends WP_UnitTestCase {
 		unset( $record['id'] );
 		$record['image_size'] = $file_size;
 		$record['path']       = ewww_image_optimizer_relativize_path( $opt_file );
+		$record['converted']  = '';
 		$wpdb->insert( $wpdb->ewwwio_images, $record );
 		$record['image_size'] = 0;
-		$record['results'] = '';
 		$wpdb->insert( $wpdb->ewwwio_images, $record );
 
 		$ewww_image = false;

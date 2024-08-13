@@ -13,7 +13,7 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
 /** @internal */
 class IncompleteDsnException extends InvalidArgumentException
 {
-    public function __construct(string $message, string $dsn = null, \Throwable $previous = null)
+    public function __construct(string $message, ?string $dsn = null, ?\Throwable $previous = null)
     {
         if ($dsn) {
             $message = \sprintf('Invalid "%s" provider DSN: ', $dsn) . $message;

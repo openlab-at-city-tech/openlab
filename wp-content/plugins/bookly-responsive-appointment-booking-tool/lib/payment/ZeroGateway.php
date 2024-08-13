@@ -2,11 +2,10 @@
 namespace Bookly\Lib\Payment;
 
 use Bookly\Lib;
-use Bookly\Lib\Entities\Payment;
 
 class ZeroGateway extends Lib\Base\Gateway
 {
-    protected $type = Payment::TYPE_FREE;
+    protected $type = Lib\Entities\Payment::TYPE_FREE;
     protected $on_site = true;
 
     /**

@@ -18,13 +18,11 @@ abstract class Sender extends Base\Sender
      * @param bool $reply_to_customers
      * @param array $notification_ids
      * @param string $gateway
-     * @param string $phone
-     * @return bool
      */
-    public static function send( $to_email, $sender_name, $sender_email, $send_as, $reply_to_customers, array $notification_ids, $gateway, $phone = null )
+    public static function send( $to_email, $sender_name, $sender_email, $send_as, $reply_to_customers, array $notification_ids, $gateway )
     {
         $codes = new Codes();
-        $attachments  = new Attachments( $codes );
+        $attachments = new Attachments( $codes );
         $notification = new Notification();
 
         $from = array(
@@ -40,50 +38,30 @@ abstract class Sender extends Base\Sender
             switch ( $notification->getType() ) {
                 case Notification::TYPE_CUSTOMER_BIRTHDAY:
                 case Notification::TYPE_VERIFY_EMAIL:
-                    if( $gateway === 'email' ) {
-                        if ( $notification->getToCustomer() ) {
-                            return static::_sendEmailTo(
-                                self::RECIPIENT_CLIENT,
-                                $to_email,
-                                $notification,
-                                $codes,
-                                null,
-                                null,
-                                $send_as,
-                                $from
-                            );
-                        }
-                    } elseif( $gateway === 'voice' ) {
-                        return static::_callTo(
+                    if ( ( $gateway === 'email' ) && $notification->getToCustomer() ) {
+                        static::_sendEmailTo(
                             self::RECIPIENT_CLIENT,
-                            $phone,
+                            $to_email,
                             $notification,
                             $codes,
-                            array( 'name' => 'Customer name' )
+                            null,
+                            null,
+                            $send_as,
+                            $from
                         );
                     }
                     break;
                 case Notification::TYPE_STAFF_DAY_AGENDA:
-                    if ( $gateway === 'email' ) {
-                        if ( $notification->getToStaff() ) {
-                            return static::_sendEmailTo(
-                                self::RECIPIENT_STAFF,
-                                $to_email,
-                                $notification,
-                                $codes,
-                                null,
-                                $reply_to,
-                                $send_as,
-                                $from
-                            );
-                        }
-                    } elseif ( $gateway === 'voice' ) {
-                        return static::_callTo(
-                            self::RECIPIENT_CLIENT,
-                            $phone,
+                    if ( ( $gateway === 'email' ) && $notification->getToStaff() ) {
+                        static::_sendEmailTo(
+                            self::RECIPIENT_STAFF,
+                            $to_email,
                             $notification,
                             $codes,
-                            array( 'name' => 'Customer name' )
+                            null,
+                            $reply_to,
+                            $send_as,
+                            $from
                         );
                     }
                     break;
@@ -95,9 +73,10 @@ abstract class Sender extends Base\Sender
                 case Notification::TYPE_NEW_BOOKING_RECURRING:
                 case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED:
                 case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING:
+                case Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN:
                     if ( $gateway === 'email' ) {
                         if ( $notification->getToAdmin() ) {
-                            return static::_sendEmailTo(
+                            static::_sendEmailTo(
                                 self::RECIPIENT_ADMINS,
                                 $to_email,
                                 $notification,
@@ -109,7 +88,7 @@ abstract class Sender extends Base\Sender
                             );
                         }
                         if ( $notification->getToCustomer() ) {
-                            return static::_sendEmailTo(
+                            static::_sendEmailTo(
                                 self::RECIPIENT_CLIENT,
                                 $to_email,
                                 $notification,
@@ -121,7 +100,7 @@ abstract class Sender extends Base\Sender
                             );
                         }
                         if ( $notification->getToStaff() ) {
-                            return static::_sendEmailTo(
+                            static::_sendEmailTo(
                                 self::RECIPIENT_STAFF,
                                 $to_email,
                                 $notification,
@@ -132,14 +111,6 @@ abstract class Sender extends Base\Sender
                                 $from
                             );
                         }
-                    } elseif ( $gateway === 'voice' ) {
-                        return static::_callTo(
-                            self::RECIPIENT_CLIENT,
-                            $phone,
-                            $notification,
-                            $codes,
-                            array( 'name' => 'Customer name' )
-                        );
                     }
                     break;
                 default:
@@ -153,5 +124,37 @@ abstract class Sender extends Base\Sender
                     );
             }
         }
+    }
+
+    /**
+     * Test call notification.
+     *
+     * @param string $phone
+     * @param int $notification_id
+     * @return bool
+     */
+    public static function call( $phone, $notification_id )
+    {
+        $codes = new Codes();
+        $notification = new Notification();
+
+        $notification->loadBy( array( 'id' => $notification_id, 'gateway' => 'voice' ) );
+        switch ( $notification->getType() ) {
+            case Notification::TYPE_CUSTOMER_BIRTHDAY:
+            case Notification::TYPE_VERIFY_EMAIL:
+            case Notification::TYPE_STAFF_DAY_AGENDA:
+            case Notification::TYPE_NEW_PACKAGE:
+            case Notification::TYPE_PACKAGE_DELETED:
+            case Notification::TYPE_APPOINTMENT_REMINDER:
+            case Notification::TYPE_LAST_CUSTOMER_APPOINTMENT:
+            case Notification::TYPE_NEW_BOOKING:
+            case Notification::TYPE_NEW_BOOKING_RECURRING:
+            case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED:
+            case Notification::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING:
+            case Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN:
+                return static::_callTo( self::RECIPIENT_CLIENT, $phone, $notification, $codes, array( 'name' => 'Customer name' ) );
+        }
+
+        return false;
     }
 }

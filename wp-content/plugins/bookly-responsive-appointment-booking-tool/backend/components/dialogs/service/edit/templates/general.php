@@ -119,7 +119,7 @@ $service_id = $service['id'];
     </div>
     <div class="form-group">
         <label for="bookly-service-info"><?php esc_html_e( 'Info', 'bookly' ) ?></label>
-        <textarea class="form-control" id="bookly-service-info" name="info" rows="3" type="text"><?php echo esc_textarea( $service['info'] ) ?></textarea>
+        <textarea class="form-control" id="bookly-service-info" name="info" rows="3" type="text"><?php echo $service['info'] === null ? '' : esc_textarea( $service['info'] ) ?></textarea>
         <small class="form-text text-muted"><?php printf( __( 'This text can be inserted into notifications with %s code.', 'bookly' ), '{service_info}' ) ?></small>
     </div>
 </div>

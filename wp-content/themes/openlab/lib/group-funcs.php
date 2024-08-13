@@ -115,6 +115,17 @@ function openlab_group_privacy_settings($group_type) {
         </div>
     <?php endif ?>
 
+	<?php if ( bp_is_group_create() && 'portfolio' === $group_type ) : ?>
+		<div class="panel panel-default">
+			<div class="panel-heading semibold"><?php echo esc_html( $group_type_name_uc ); ?> Link on my OpenLab Profile</div>
+			<div class="panel-body">
+				<p>You can choose to show a link to your Portfolio on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name but you want to use your real name on your Portfolio, you may wish to leave this unchecked.</p>
+
+				<input name="portfolio-profile-link" id="portfolio-profile-link-toggle" type="checkbox" name="portfolio-profile-link-toggle" value="1" /> <label for="portfolio-profile-link-toggle">Show link to my <?php echo esc_html( $group_type_name_uc ); ?> on my public OpenLab Profile</label>
+			</div>
+		</div>
+	<?php endif; ?>
+
     <?php if ($bp->current_action == 'admin'): ?>
     <?php elseif ($bp->current_action == 'create'): ?>
         <?php wp_nonce_field('groups_create_save_group-settings') ?>
@@ -197,11 +208,24 @@ function openlab_group_privacy_membership_save( $group ) {
 
 	switch ( $group->status ) {
 		case 'public' :
-			if ( empty( $_POST['allow-joining-public'] ) ) {
-				groups_update_groupmeta( $group->id, 'disable_public_group_joining', 1 );
+			$group_type = openlab_get_group_type( $group->id );
+
+			$allow_raw = ! empty( $_POST['allow-joining-public'] );
+
+			if ( openlab_is_portfolio( $group->id ) ) {
+				if ( $allow_raw ) {
+					groups_update_groupmeta( $group->id, 'enable_public_group_joining', 1 );
+				} else {
+					groups_delete_groupmeta( $group->id, 'enable_public_group_joining' );
+				}
 			} else {
-				groups_delete_groupmeta( $group->id, 'disable_public_group_joining' );
+				if ( $allow_raw ) {
+					groups_delete_groupmeta( $group->id, 'disable_public_group_joining' );
+				} else {
+					groups_update_groupmeta( $group->id, 'disable_public_group_joining', 1 );
+				}
 			}
+
 			break;
 
 		case 'private' :
@@ -331,7 +355,12 @@ add_action( 'bp_after_group_details_creation_step', 'openlab_add_to_my_portfolio
  * @return bool
  */
 function openlab_public_group_has_disabled_joining( $group_id ) {
-	$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	// Portfolios default to 'disabled', so we store an 'enable' flag.
+	if ( openlab_is_portfolio( $group_id ) ) {
+		$disabled = empty( groups_get_groupmeta( $group_id, 'enable_public_group_joining', true ) );
+	} else {
+		$disabled = ! empty( groups_get_groupmeta( $group_id, 'disable_public_group_joining', true ) );
+	}
 
 	if ( ! $disabled && ! openlab_group_is_active( $group_id ) ) {
 		$disabled = true;
@@ -747,7 +776,10 @@ function cuny_group_single() {
                     }
 
                     $group_terms = function_exists( 'bpcgc_get_group_selected_terms' ) ? bpcgc_get_group_selected_terms( $group_id, true ) : '';
-                    $acknowledgements = openlab_get_acknowledgements( $group_id );
+
+					// Never show Acknowledgements for Portfolio groups.
+					$acknowledgements = 'portfolio' !== $group_type ? openlab_get_acknowledgements( $group_id ) : [];
+
                 ?>
                 <div class="info-panel panel panel-default no-margin no-margin-top">
                     <div class="table-div">
@@ -820,13 +852,6 @@ function cuny_group_single() {
 								<div class="col-sm-17 row-content"><?php echo implode( ', ', array_map( 'bp_core_get_userlink', $group_contacts ) ); ?></div>
 							</div>
 						<?php endif; ?>
-
-                        <?php if ( $group_type === 'portfolio' ) : ?>
-                        <div class="table-row row">
-                            <div class="bold col-sm-7">Member Profile</div>
-                            <div class="col-sm-17 row-content"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
-                        </div>
-                        <?php endif; ?>
 
                         <?php if ( $acknowledgements ) : ?>
                         <div class="table-row row">
@@ -906,7 +931,7 @@ function openlab_group_profile_activity_list() {
         $group     = groups_get_current_group();
 		$group_url = bp_get_group_permalink( $group );
 
-		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+		if ( current_user_can( 'view_private_members_of_group', $group->id ) ) {
 			$group_private_members = [];
 		} else {
 			$group_private_members = openlab_get_private_members_of_group( $group->id );
@@ -1158,9 +1183,9 @@ HTML;
  *
  * @see http://openlab.citytech.cuny.edu/redmine/issues/397
  */
-function openlab_previous_step_type($url) {
-    if (!empty($_GET['type'])) {
-        $url = add_query_arg('type', $_GET['type'], $url);
+function openlab_previous_step_type( $url ) {
+    if ( ! empty( $_GET['type'] ) ) {
+        $url = add_query_arg( 'type', sanitize_text_field( $_GET['type'] ), $url );
     }
 
     return $url;
@@ -1466,7 +1491,7 @@ function openlab_show_site_posts_and_comments() {
     add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
     switch ($site_type) {
         case 'local':
-			if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			if ( current_user_can( 'view_private_members_of_group', $group_id ) ) {
 				$group_private_members = [];
 				$post__not_in          = [];
 			} else {
@@ -1935,7 +1960,7 @@ function openlab_add_badge_button_to_profile() {
 add_action( 'bp_group_header_actions', 'openlab_add_badge_button_to_profile', 60 );
 
 add_action( 'bp_after_group_details_creation_step', function() {
-	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+	$group_type = ! empty( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : null;
 
 	if ( 'portfolio' === $group_type ) {
 		return;
@@ -1945,7 +1970,7 @@ add_action( 'bp_after_group_details_creation_step', function() {
 }, 4 );
 
 add_action( 'bp_after_group_details_creation_step', function() {
-	$group_type = ! empty( $_GET['type'] ) ? $_GET['type'] : null;
+	$group_type = ! empty( $_GET['type'] ) ? sanitize_text_field( $_GET['type'] ) : null;
 
 	if ( 'portfolio' === $group_type ) {
 		// Necessary to ensure that the nulled collaboration tools settings are saved.
@@ -2051,6 +2076,27 @@ function openlab_group_add_to_portfolio_save( $group ) {
 	}
 }
 add_action( 'groups_group_after_save', 'openlab_group_add_to_portfolio_save' );
+
+/**
+ * Saves 'Portfolio profile link' setting on group edit.
+ *
+ * @param int $group_id ID of the group.
+ * @return void
+ */
+function openlab_group_save_portfolio_profile_link_setting_on_group_edit( $group_id ) {
+	if ( ! isset( $_POST['portfolio-profile-link-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'portfolio_profile_link', 'portfolio-profile-link-nonce' );
+
+	$enabled = ! empty( $_POST['portfolio-profile-link'] );
+
+	$portfolio_user_id = openlab_get_user_id_from_portfolio_group_id( $group_id );
+
+	openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, $enabled );
+}
+add_action( 'groups_group_details_edited', 'openlab_group_save_portfolio_profile_link_setting_on_group_edit' );
 
 /**
  * Saves 'Active' status.
@@ -2250,23 +2296,27 @@ add_filter(
 /**
  * Checks whether a group is "open".
  *
+ * We define a group as "open" when EITHER the group is public OR the site has
+ * blog_public 1 or 0.
+ *
  * @param int $group_id Group ID.
  * @return bool
  */
 function openlab_group_is_open( $group_id ) {
 	$group = groups_get_group( $group_id );
 
-	$is_open = false;
 	if ( 'public' === $group->status ) {
-		$site_id = openlab_get_site_id_by_group_id( $group_id );
-		if ( $site_id ) {
-			// Avoid switch_to_blog().
-			$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
-			$is_open     = '0' === $blog_public || '1' === $blog_public;
-		} else {
-			$is_open = true;
-		}
+		return true;
 	}
+
+	$site_id = openlab_get_site_id_by_group_id( $group_id );
+	if ( ! $site_id ) {
+		return false;
+	}
+
+	// Avoid switch_to_blog().
+	$blog_public = groups_get_groupmeta( $group_id, 'blog_public', true );
+	$is_open     = '0' === $blog_public || '1' === $blog_public;
 
 	return $is_open;
 }
@@ -2471,5 +2521,85 @@ add_filter(
 		return openlab_get_site_id_by_group_id( $activity->item_id );
 	},
 	10,
+	2
+);
+
+/**
+ * Determines whether a group should have the noindex meta tag added to its pages.
+ *
+ * @param int $group_id ID of the group.
+ * @return bool
+ */
+function openlab_should_noindex_group_profile( $group_id ) {
+	$should_noindex = groups_get_groupmeta( $group_id, 'openlab_noindex_group_profile', true );
+
+	return (bool) $should_noindex;
+}
+
+/**
+ * Adds the noindex meta tag to a group profile.
+ */
+function openlab_add_noindex_to_group_profile() {
+	if ( ! bp_is_group() ) {
+		return;
+	}
+
+	$group_id = bp_get_current_group_id();
+	if ( ! $group_id ) {
+		return;
+	}
+
+	if ( openlab_should_noindex_group_profile( $group_id ) ) {
+		echo '<meta name="robots" content="noindex" />' . "\n";
+	}
+}
+add_action( 'wp_head', 'openlab_add_noindex_to_group_profile', 0 );
+
+/**
+ * Modifies site template REST requests to restrict based on academic_unit.
+ *
+ * @param array           $args    Query arguments.
+ * @param WP_REST_Request $request Request object.
+ * @return array
+ */
+add_filter(
+	'rest_cboxol_site_template_query',
+	function( $args, $request ) {
+		$academic_units_raw = $request->get_param( 'academic_units' );
+		if ( empty( $academic_units_raw ) ) {
+			return $args;
+		}
+
+		$academic_units = array_map( 'sanitize_text_field', explode( ',', $academic_units_raw ) );
+
+		// Identify the existing 'cboxol_limit_template_by_academic_unit' meta query.
+		$existing_meta_query = $args['meta_query'] ?? array();
+		foreach ( $existing_meta_query as &$meta_query ) {
+			if ( ! isset( $meta_query['all_types'] ) ) {
+				continue;
+			}
+
+			if ( 'cboxol_limit_template_by_academic_unit' !== $meta_query['all_types'][0]['key'] ) {
+				continue;
+			}
+
+			$meta_query['limited_types'] = [
+				'relation' => 'AND',
+				[
+					'key'     => 'cboxol_limit_template_by_academic_unit',
+					'compare' => 'EXISTS',
+				],
+				[
+					'key'   => 'cboxol_template_academic_unit',
+					'value' => $academic_units,
+				],
+			];
+		}
+
+		$args['meta_query'] = $existing_meta_query;
+
+		return $args;
+	},
+	50,
 	2
 );

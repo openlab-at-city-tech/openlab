@@ -20,12 +20,15 @@ function nggallery_picturelist( $controller ) {
 	$wp_list_table = new _NGG_Images_List_Table( 'nggallery-manage-images' );
 
 	// look for pagination.
-	$_GET['paged']  = isset( $_GET['paged'] ) && ( $_GET['paged'] > 0 ) ? absint( $_GET['paged'] ) : 1;
-	$items_per_page = ( ! empty( $_GET['items'] ) ? (int) $_GET['items'] : apply_filters( 'ngg_manage_images_items_per_page', 50 ) );
-	if ( $items_per_page == 'all' ) {
-		$items_per_page = PHP_INT_MAX;
+	$paged          = isset( $_GET['paged'] ) && ( $_GET['paged'] > 0 ) ? absint( $_GET['paged'] ) : 1;
+	$items_per_page = ( ! empty( $_GET['items'] ) ? $_GET['items'] : apply_filters( 'ngg_manage_images_items_per_page', 50 ) );
+
+	if ( 'all' === $items_per_page ) {
+		$items_per_page = 1;
+		$max            = -1;
 	} else {
 		$items_per_page = (int) $items_per_page;
+		$max            = $items_per_page;
 	}
 
 	$gallery_mapper = \Imagely\NGG\DataMappers\Gallery::get_instance();
@@ -55,7 +58,7 @@ function nggallery_picturelist( $controller ) {
 			return;
 		}
 
-		$start = ( $_GET['paged'] - 1 ) * $items_per_page;
+		$start = ( $paged - 1 ) * $items_per_page;
 
 		// get picture values..
 		$image_mapper = \Imagely\NGG\DataMappers\Image::get_instance();
@@ -71,7 +74,7 @@ function nggallery_picturelist( $controller ) {
 		if ( ( $galSort = $settings->get( 'galSort', false ) ) && ( $galSortDir = $settings->get( 'galSortDir', false ) ) ) {
 			$image_mapper->order_by( $galSort, $galSortDir );
 		}
-		$picturelist = $image_mapper->limit( $items_per_page, $start )->run_query();
+		$picturelist = $image_mapper->limit( $max, $start )->run_query();
 	}
 
 	// list all galleries.
@@ -158,7 +161,7 @@ function nggallery_picturelist( $controller ) {
 					<form id="updategallery"
 							class="nggform"
 							method="POST"
-							action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $act_gid . '&amp;paged=' . esc_attr( $_GET['paged'] ); ?>"
+							action="<?php echo $ngg->manage_page->base_page . '&amp;mode=edit&amp;gid=' . $act_gid . '&amp;paged=' . esc_attr( $paged ); ?>"
 							accept-charset="utf-8">
 
 						<?php wp_nonce_field( 'ngg_updategallery' ); ?>
@@ -213,7 +216,7 @@ function nggallery_picturelist( $controller ) {
 						<div class="tablenav top ngg-tablenav">
 
 							<?php
-							$ngg->manage_page->pagination( 'top', $_GET['paged'], $total_number_of_images, $items_per_page );
+							$ngg->manage_page->pagination( 'top', $paged, $total_number_of_images, $items_per_page );
 
 							$items_per_page_array = apply_filters(
 								'ngg_manage_images_items_per_page_array',
@@ -335,7 +338,7 @@ function nggallery_picturelist( $controller ) {
 									class="button-primary action"
 									name="updatepictures"
 									value="<?php esc_attr_e( 'Save Changes', 'nggallery' ); ?>"/>
-							<?php $ngg->manage_page->pagination( 'bottom', $_GET['paged'], $total_number_of_images, $items_per_page ); ?>
+							<?php $ngg->manage_page->pagination( 'bottom', $paged, $total_number_of_images, $items_per_page ); ?>
 						</div>
 
 					</form><!-- /form#updategallery  -->

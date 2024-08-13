@@ -105,7 +105,9 @@ jQuery(document).on('change', '#b2s-post-curation-ship-type', function () {
         if (jQuery('#b2s-post-curation-ship-date').attr('data-language') == 'de') {
             setTodayDate = padDate(today.getDate()) + '.' + (padDate(today.getMonth() + 1)) + '.' + today.getFullYear() + ' ' + padDate(today.getHours()) + ':' + padDate(today.getMinutes());
         }
-        jQuery('#b2s-post-curation-ship-date').b2sdatepicker({'autoClose': true, 'toggleSelected': false, 'minutesStep': 15, 'minDate': new Date(), 'startDate': today, 'todayButton': new Date(), 'position': 'top left'});
+        //MaxSchedDate
+        var maxDate = new Date(jQuery('#b2sMaxSchedDate').val());
+        jQuery('#b2s-post-curation-ship-date').b2sdatepicker({'autoClose': true, 'toggleSelected': false, 'minutesStep': 15, 'minDate': new Date(), 'maxDate': maxDate, 'startDate': today, 'todayButton': new Date(), 'position': 'top left'});
 
         var curationPicker = jQuery('#b2s-post-curation-ship-date').b2sdatepicker().data('b2sdatepicker');
         curationPicker.selectDate(new Date(today.getFullYear(), today.getMonth(), today.getDate()));

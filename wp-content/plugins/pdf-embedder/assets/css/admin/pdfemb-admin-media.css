@@ -1,0 +1,25 @@
+tr.compat-field-pdfemb-upgrade td.field {
+  padding-top: 8px;
+  margin: 0 1px;
+}
+
+.pdfemb-admin-attachment-meta-icon {
+  color: #8c8f94;
+  display: inline-block;
+  padding-right: 3px;
+}
+
+tr.compat-field-pdfemb-secured-lite td.field,
+tr.compat-field-pdfemb-tracking-lite td.field {
+  padding-top: 8px;
+  margin: 0 1px;
+  color: #2c3338;
+}
+
+tr.compat-field-pdfemb-secured td.field,
+tr.compat-field-pdfemb-downloads td.field,
+tr.compat-field-pdfemb-views td.field {
+  padding-top: 8px;
+  margin: 0 1px;
+  color: #2c3338;
+}

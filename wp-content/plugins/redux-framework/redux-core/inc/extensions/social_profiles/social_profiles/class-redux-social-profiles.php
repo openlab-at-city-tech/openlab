@@ -67,6 +67,11 @@ if ( ! class_exists( 'Redux_Social_Profiles' ) ) {
 				$default_id = $arr['id'];
 
 				foreach ( $settings as $a ) {
+					if ( isset( $a['data'] ) ) {
+						$a['data'] = rawurldecode( $a['data'] );
+						$a         = (array) json_decode( $a['data'] );
+					}
+
 					if ( $default_id === $a['id'] ) {
 						$search_default    = false;
 						$fixed_arr[ $key ] = $a;
@@ -301,6 +306,13 @@ if ( ! class_exists( 'Redux_Social_Profiles' ) ) {
 		public function output( $style = '' ) {
 			if ( ! empty( $this->value ) ) {
 				foreach ( $this->value as $arr ) {
+
+					// For customizer.
+					if ( isset( $arr['data'] ) ) {
+						$arr = rawurldecode( $arr['data'] );
+						$arr = (array) json_decode( $arr );
+					}
+
 					if ( $arr['enabled'] ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement
 						Redux_Functions_Ex::enqueue_font_awesome();
 					}

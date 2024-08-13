@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -34,6 +34,7 @@ __export(src_exports, {
   QueryClient: () => import_react_query2.QueryClient,
   QueryClientProvider: () => import_react_query2.QueryClientProvider,
   createQueryClient: () => createQueryClient,
+  useInfiniteQuery: () => import_react_query2.useInfiniteQuery,
   useMutation: () => import_react_query2.useMutation,
   useQuery: () => import_react_query2.useQuery,
   useQueryClient: () => import_react_query2.useQueryClient
@@ -522,6 +523,7 @@ var queryClient = new _query.QueryClient({
 });
 
 var WhatsNew = function WhatsNew(props) {
+  var _window$elementor, _window$elementor$get;
   var isOpen = props.isOpen,
     setIsOpen = props.setIsOpen,
     setIsRead = props.setIsRead,
@@ -535,8 +537,10 @@ var WhatsNew = function WhatsNew(props) {
   }, [isOpen, setIsRead]);
   return /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_query.QueryClientProvider, {
     client: queryClient
+  }, /*#__PURE__*/_react.default.createElement(_ui.DirectionProvider, {
+    rtl: elementorCommon.config.isRTL
   }, /*#__PURE__*/_react.default.createElement(_ui.ThemeProvider, {
-    colorScheme: "auto"
+    colorScheme: ((_window$elementor = window.elementor) === null || _window$elementor === void 0 ? void 0 : (_window$elementor$get = _window$elementor.getPreferences) === null || _window$elementor$get === void 0 ? void 0 : _window$elementor$get.call(_window$elementor, 'ui_theme')) || 'auto'
   }, /*#__PURE__*/_react.default.createElement(_ui.Drawer, {
     anchor: anchorPosition,
     open: isOpen,
@@ -561,7 +565,7 @@ var WhatsNew = function WhatsNew(props) {
     sx: {
       padding: '16px'
     }
-  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, null)))))));
+  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, null))))))));
 };
 exports.WhatsNew = WhatsNew;
 WhatsNew.propTypes = {

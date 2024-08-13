@@ -9894,7 +9894,7 @@ function setPDFNetworkStreamFactory(pdfNetworkStreamFactory) {
 function getDocument(src,cmapURL) {
   var task = new PDFDocumentLoadingTask();
   var source;
-  
+
   if (typeof src === 'string') {
     source = {
       url: src
@@ -9951,7 +9951,7 @@ function getDocument(src,cmapURL) {
 
     params[key] = source[key];
   }
-  
+
   params.rangeChunkSize = params.rangeChunkSize || DEFAULT_RANGE_CHUNK_SIZE;
   params.CMapReaderFactory = params.CMapReaderFactory || _display_utils.DOMCMapReaderFactory;
   params.ignoreErrors = params.stopAtErrors !== true;
@@ -10483,7 +10483,7 @@ function () {
           dontFlip = _ref$dontFlip === void 0 ? false : _ref$dontFlip;
 
       if (arguments.length > 1 || typeof arguments[0] === 'number') {
-        
+
         /*(0, _display_utils.deprecated)('getViewport is called with obsolete arguments.');*/
         scale = arguments[0];
         rotation = typeof arguments[1] === 'number' ? arguments[1] : this.rotate;
@@ -24624,4 +24624,3 @@ function () {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=pdf.js.map

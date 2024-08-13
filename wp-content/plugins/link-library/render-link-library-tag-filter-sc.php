@@ -60,48 +60,53 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		if ( !$showapplybutton ) {
 			$output .= '<script type="text/javascript">';
 
+			$javascriptoutput = '';
 			if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-				$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
-				$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+				$javascriptoutput .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+				$javascriptoutput .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
 			}
 	
-			$output .= "function isInArray(days, day) {\n";
-			$output .= "\treturn days.indexOf(day.toLowerCase()) > -1;\n";
-			$output .= "}\n";
+			$javascriptoutput .= "function isInArray(days, day) {\n";
+			$javascriptoutput .= "\treturn days.indexOf(day.toLowerCase()) > -1;\n";
+			$javascriptoutput .= "}\n";
 	
-			$output .= "jQuery('.link_tag_list').click( function() {\n";
-			$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
-			$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
-			$output .= "\tif ( current_link_tags ) { current_link_tags_array = current_link_tags.split('.'); } else { current_link_tags_array = new Array(); }\n";
-			$output .= "\tif ( jQuery(this).is(':checked') && !isInArray( current_link_tags_array, jQuery(this).val() ) ) {\n";
-			$output .= "\t\tcurrent_link_tags_array.push( jQuery(this).val() );\n";
-			$output .= "\t} else if ( jQuery(this).prop('checked', false) && isInArray( current_link_tags_array, jQuery(this).val() ) ) {\n";
-			$output .= "\t\tcurrent_link_tags_array.splice( current_link_tags_array.indexOf(jQuery(this).val()));\n";
-			$output .= "\t}\n";
-			$output .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
-			$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?' + 'link_tags=' + link_tags_string";
+			$javascriptoutput .= "jQuery('.link_tag_list').click( function() {\n";
+			$javascriptoutput .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
+			$javascriptoutput .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
+			$javascriptoutput .= "\tif ( current_link_tags ) { current_link_tags_array = current_link_tags.split('.'); } else { current_link_tags_array = new Array(); }\n";
+			$javascriptoutput .= "\tif ( jQuery(this).is(':checked') && !isInArray( current_link_tags_array, jQuery(this).val() ) ) {\n";
+			$javascriptoutput .= "\t\tcurrent_link_tags_array.push( jQuery(this).val() );\n";
+			$javascriptoutput .= "\t} else if ( jQuery(this).prop('checked', false) && isInArray( current_link_tags_array, jQuery(this).val() ) ) {\n";
+			$javascriptoutput .= "\t\tcurrent_link_tags_array.splice( current_link_tags_array.indexOf(jQuery(this).val()));\n";
+			$javascriptoutput .= "\t}\n";
+			$javascriptoutput .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
+			$javascriptoutput .= "\twindow.location.href = '//' + location.host + location.pathname + '?' + 'link_tags=' + link_tags_string";
 	
 			if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-				$output .= " + '&'";
-				$output .= " + 'link_letter=' + current_link_letter";
+				$javascriptoutput .= " + '&'";
+				$javascriptoutput .= " + 'link_letter=' + current_link_letter";
 			}
 	
 			if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
-				$output .= " + '&'";
+				$javascriptoutput .= " + '&'";
 	
 				if ( 'free' == $prev_link_price ) {
-					$output .= " + 'link_price=free'";
+					$javascriptoutput .= " + 'link_price=free'";
 				} else {
-					$output .= " + 'link_price='";
+					$javascriptoutput .= " + 'link_price='";
 				}
 			}
 	
 			if ( !empty( $searchstring ) ) {
-				$output .= " + '&searchll=" . $searchstring . "'";
+				$javascriptoutput .= " + '&searchll=" . esc_js( $searchstring ) . "'";
 			}
+
+			$javascriptoutput .= ";\n";
 	
-			$output .= "});\n";
-	
+			$javascriptoutput .= "});\n";			
+
+			$output .= $javascriptoutput;
+
 			$output .= '</script>';
 		}
 
@@ -119,42 +124,46 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 		if ( !$showapplybutton ) {
 			$output .= '<script type="text/javascript">';
 
-			$output .= "jQuery('.link_price').click( function() {\n";
+			$javascriptoutput = '';
+
+			$javascriptoutput .= "jQuery('.link_price').click( function() {\n";
 
 			if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-				$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
-				$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
+				$javascriptoutput .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
+				$javascriptoutput .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
 			}
 
 			if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-				$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
-				$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+				$javascriptoutput .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+				$javascriptoutput .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
 			}
 
-			$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
+			$javascriptoutput .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
 
 			if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-				$output .= " + 'link_tags=' + current_link_tags";
+				$javascriptoutput .= " + 'link_tags=' + current_link_tags";
 			}
 
 			if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-				$output .= " + '&'";
-				$output .= " + 'link_letter=' + current_link_letter";
+				$javascriptoutput .= " + '&'";
+				$javascriptoutput .= " + 'link_letter=' + current_link_letter";
 			}
 
 			if ( 'free' == $prev_link_price ) {
-				$output .= " + '&link_price='";
+				$javascriptoutput .= " + '&link_price='";
 			} else {
-				$output .= " + '&link_price=free'";
+				$javascriptoutput .= " + '&link_price=free'";
 			}
 
 			if ( !empty( $searchstring ) ) {
-				$output .= " + '&searchll='" . $searchstring . "'";
+				$javascriptoutput .= " + '&searchll=" . esc_js( $searchstring ) . "'";
 			}
 
-			$output .= ";\n";
+			$javascriptoutput .= ";\n";
 
-			$output .= "});\n";
+			$javascriptoutput .= "});\n";			
+
+			$output .= $javascriptoutput;
 
 			$output .= '</script>';
 		}
@@ -193,42 +202,46 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 			$output .= '<script type="text/javascript">';
 
-			$output .= "jQuery('.link_letter').change( function() {\n";
+			$javascriptoutput = '';
+
+			$javascriptoutput .= "jQuery('.link_letter').change( function() {\n";
 
 			if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-				$output .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
-				$output .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
+				$javascriptoutput .= "\tcurrent_link_tags = jQuery('.link_tags').val();\n";
+				$javascriptoutput .= "\tif (typeof current_link_tags == 'undefined') current_link_tags = '';\n";
 			}
 
-			$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
-			$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+			$javascriptoutput .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+			$javascriptoutput .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
 
-			$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
+			$javascriptoutput .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
 
-			$output .= " + 'link_letter=' + current_link_letter";
+			$javascriptoutput .= " + 'link_letter=' + current_link_letter";
 
 			if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-				$output .= " + '&'";
-				$output .= " + 'link_tags=' + current_link_tags";
+				$javascriptoutput .= " + '&'";
+				$javascriptoutput .= " + 'link_tags=' + current_link_tags";
 			}
 
 			if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
-				$output .= " + '&'";
+				$javascriptoutput .= " + '&'";
 
 				if ( 'free' == $prev_link_price ) {
-					$output .= " + 'link_price='";
+					$javascriptoutput .= " + 'link_price='";
 				} else {
-					$output .= " + 'link_price=free'";
+					$javascriptoutput .= " + 'link_price=free'";
 				}
 			}
 
 			if ( !empty( $searchstring ) ) {
-				$output .= " + '&searchll='" . $searchstring . "'";
+				$javascriptoutput .= " + '&searchll=" . esc_js( $searchstring ) . "'";
 			}
 
-			$output .= ";\n";
+			$javascriptoutput .= ";\n";
 
-			$output .= "});\n";
+			$javascriptoutput .= "});\n";
+
+			$output .= $javascriptoutput;
 
 			$output .= '</script>';
 
@@ -242,56 +255,61 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= '<script type="text/javascript">';
 
-		$output .= "function isInArray(days, day) {\n";
-		$output .= "\treturn days.indexOf(day.toLowerCase()) > -1;\n";
-		$output .= "}\n";
+		$javascriptoutput = '';
 
-		$output .= "jQuery('#applyfilters').click( function() {\n";
+		$javascriptoutput .= "function isInArray(days, day) {\n";
+		$javascriptoutput .= "\treturn days.indexOf(day.toLowerCase()) > -1;\n";
+		$javascriptoutput .= "}\n";
+
+		$javascriptoutput .= "jQuery('#applyfilters').click( function() {\n";
 
 		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-			$output .= "\tvar current_link_tags_array = new Array();\n";
-			$output .= "\tjQuery('.link_tag_list:checked').each(function(){\n";
-			$output .= "\t\tcurrent_link_tags_array.push( jQuery( this ).val());\n";
-			$output .= "\t});\n";
-			$output .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
+			$javascriptoutput .= "\tvar current_link_tags_array = new Array();\n";
+			$javascriptoutput .= "\tjQuery('.link_tag_list:checked').each(function(){\n";
+			$javascriptoutput .= "\t\tcurrent_link_tags_array.push( jQuery( this ).val());\n";
+			$javascriptoutput .= "\t});\n";
+			$javascriptoutput .= "\tvar link_tags_string = current_link_tags_array.join('.');\n";
 		}
 
 		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-			$output .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
-			$output .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
+			$javascriptoutput .= "\tcurrent_link_letter = jQuery('.link_letter').val();\n";
+			$javascriptoutput .= "\tif (typeof current_link_letter == 'undefined') current_link_letter = '';\n";
 		}
 
 		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
-			$output .= "\tcurrent_price = '';\n";
-			$output .= "\tif ( jQuery('.link_price').is(':checked') ) current_price = 'free';\n";
+			$javascriptoutput .= "\tcurrent_price = '';\n";
+			$javascriptoutput .= "\tif ( jQuery('.link_price').is(':checked') ) current_price = 'free';\n";
 		}
 
-		$output .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
+		$javascriptoutput .= "\twindow.location.href = '//' + location.host + location.pathname + '?'";
 
 		if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
-			$output .= " + 'link_tags=' + link_tags_string";
-			$output .= " + '&'";
+			$javascriptoutput .= " + 'link_tags=' + link_tags_string";
+			$javascriptoutput .= " + '&'";
 		}
 
 		if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
-			$output .= " + 'link_letter=' + current_link_letter";
-			$output .= " + '&'";
+			$javascriptoutput .= " + 'link_letter=' + current_link_letter";
+			$javascriptoutput .= " + '&'";
 		}
 
 		if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {			
-			$output .= " + 'link_price=' + current_price";
-			$output .= " + '&'";
+			$javascriptoutput .= " + 'link_price=' + current_price";
+			$javascriptoutput .= " + '&'";
 		}
 
 		if ( !empty( $searchstring ) ) {
-			$output .= " + 'searchll='" . $searchstring . "'";
+			$javascriptoutput .= " + 'searchll=" . esc_js( $searchstring ) . "'";
 		}
 
-		$output .= ";\n";
+		$javascriptoutput .= ";\n";
 
-		$output .= "});\n";
+		$javascriptoutput .= "});\n";
+
+		$output .= $javascriptoutput;
 
 		$output .= '</script>';
+
 	}
 
 	$output .= '</fieldset>';

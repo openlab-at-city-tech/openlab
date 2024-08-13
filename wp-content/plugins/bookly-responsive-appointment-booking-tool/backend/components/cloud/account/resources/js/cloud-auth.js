@@ -62,7 +62,7 @@ jQuery(function ($) {
                 password_repeat: $registerForm.find('input[name="password_repeat"]').val(),
                 country        : $registerForm.find('select[name="country"]').val(),
                 accept_tos     : $registerForm.find('input[name="accept_tos"]').prop('checked') ? 1 : 0,
-                csrf_token     : BooklyCloudAuthL10n.csrfToken,
+                csrf_token     : BooklyL10nGlobal.csrf_token,
             },
             dataType: 'json',
             success : function (response) {
@@ -90,7 +90,7 @@ jQuery(function ($) {
                 action    : 'bookly_cloud_login',
                 username  : $loginForm.find('input[name="username"]').val(),
                 password  : $loginForm.find('input[name="password"]').val(),
-                csrf_token: BooklyCloudAuthL10n.csrfToken,
+                csrf_token: BooklyL10nGlobal.csrf_token,
             },
             dataType: 'json',
             success : function (response) {
@@ -127,7 +127,7 @@ jQuery(function ($) {
                     code      : $recoveryCodeForm.find('input[name="code"]').val(),
                     password  : password,
                     step      : step,
-                    csrf_token: BooklyCloudAuthL10n.csrfToken,
+                    csrf_token: BooklyL10nGlobal.csrf_token,
                 },
                 dataType: 'json',
                 success : function (response) {

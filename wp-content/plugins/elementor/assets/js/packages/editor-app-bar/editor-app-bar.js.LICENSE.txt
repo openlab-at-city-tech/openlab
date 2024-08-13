@@ -1,12 +1,12 @@
 /*! @elementor/editor */
 
+/*! @elementor/editor-app-bar-ui */
+
 /*! @elementor/editor-documents */
 
 /*! @elementor/editor-v1-adapters */
 
 /*! @elementor/icons */
-
-/*! @elementor/locations */
 
 /*! @elementor/ui */
 
@@ -34,9 +34,9 @@
   !*** external ["elementorV2","editor"] ***!
   \*****************************************/
 
-/*!********************************************!*\
-  !*** external ["elementorV2","locations"] ***!
-  \********************************************/
+/*!*************************************************!*\
+  !*** external ["elementorV2","editorAppBarUi"] ***!
+  \*************************************************/
 
 /*!**************************************************!*\
   !*** external ["elementorV2","editorDocuments"] ***!

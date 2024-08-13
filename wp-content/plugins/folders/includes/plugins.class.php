@@ -26,11 +26,11 @@ class WCP_Folder_Plugins
     /**
      * Collection of Post types to Import
      *
-     * @var    array    $postTypes    Post types to import
+     * @var    array    $post_types    Post types to import
      * @since  1.0.0
      * @access public
      */
-    public $postTypes = [];
+    public $post_types = [];
 
     /**
      * Check is there any data to import
@@ -136,7 +136,7 @@ class WCP_Folder_Plugins
             $response['status'] = 1;
         }//end if
 
-        echo json_encode($response);
+        echo wp_json_encode($response);
         exit;
 
     }//end remove_plugin_folders_data()
@@ -229,12 +229,13 @@ class WCP_Folder_Plugins
                     }
 
                     $arg      = [
+                        'taxonomy'              => $taxonomy,
                         'hide_empty'            => false,
                         'parent'                => $parent,
                         'hierarchical'          => false,
                         'update_count_callback' => '_update_generic_term_count',
                     ];
-                    $terms    = get_terms($taxonomy, $arg);
+                    $terms    = get_terms($arg);
                     $position = count($terms);
 
                     if ($plugin == 'mediamatic' || $plugin == 'happyfiles') {
@@ -266,8 +267,8 @@ class WCP_Folder_Plugins
                     $newTermID     = $new_term['term_id'];
                     $folderItems   = 0;
                     $failedItems   = 0;
-                    $query         = "SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id = %d";
-                    $query         = $wpdb->prepare($query, [$folder->term_taxonomy_id]);
+                    $query         = "SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id = %d AND object_id != 1";
+                    $query         = $wpdb->prepare($query, $folder->term_taxonomy_id);
                     $results       = $wpdb->get_results($query);
                     $found_results = count($results);
                     if ($currentFolder >= $startFrom && $currentFolder < $endFolder) {
@@ -335,12 +336,13 @@ class WCP_Folder_Plugins
                     $taxonomy = 'media_folder';
 
                     $arg      = [
+                        'taxonomy'              => $taxonomy,
                         'hide_empty'            => false,
                         'parent'                => $parentID,
                         'hierarchical'          => false,
                         'update_count_callback' => '_update_generic_term_count',
                     ];
-                    $terms    = get_terms($taxonomy, $arg);
+                    $terms    = get_terms($arg);
                     $position = count($terms);
 
                     update_term_meta($new_term['term_id'], 'wcp_custom_order', intval($position));
@@ -400,10 +402,10 @@ class WCP_Folder_Plugins
             $response['data']['pages']       = $totalPages;
             $response['data']['current']     = $paged;
             $response['data']['plugin']      = $plugin;
-            $response['message'] = sprintf(esc_html__('%s folders imported and %s attachments categorized.', 'folders'), count($foldersImported), (count($attachmentsImported) + $attachedItems));
+            $response['message'] = sprintf(esc_html__("%1\$s folders imported and %2\$s attachments categorized.", 'folders'), count($foldersImported), (count($attachmentsImported) + $attachedItems));
         }//end if
 
-        echo json_encode($response);
+        echo wp_json_encode($response);
         exit;
 
     }//end import_plugin_folders_data()
@@ -518,8 +520,24 @@ class WCP_Folder_Plugins
                 'total_folders'     => 0,
                 'total_attachments' => 0,
                 'is_exists'         => 0,
-            ],
+            ]
         ];
+        $DS      = DIRECTORY_SEPARATOR;
+        $dirName = ABSPATH."wp-content{$DS}plugins{$DS}wp-media-library-categories{$DS}";
+        if (is_dir($dirName)) {
+            $settings = get_option("wpmlc_settings");
+            $category = isset($settings['wpmediacategory_taxonomy'])&&!empty($settings['wpmediacategory_taxonomy'])?$settings['wpmediacategory_taxonomy']:'category';
+            $this->plugins['media_library_categories'] = [
+                'name'              => 'Media Library Categories',
+                'taxonomy'          => $category,
+                'folders'           => [],
+                'attachments'       => [],
+                'total_folders'     => 0,
+                'total_attachments' => 0,
+                'is_exists'         => 0,
+            ];
+        }
+
         $post_types       = get_post_types([]);
         $this->post_types = array_keys($post_types);
 
@@ -568,7 +586,6 @@ class WCP_Folder_Plugins
                 $this->is_exists = 1;
             }
         }
-
     }//end get_other_plugins_data()
 
 
@@ -596,7 +613,7 @@ class WCP_Folder_Plugins
                 $query   = "SELECT * FROM ".$wpdb->term_taxonomy."
 					LEFT JOIN  ".$wpdb->terms."
 					ON  ".$wpdb->term_taxonomy.".term_id =  ".$wpdb->terms.".term_id
-					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%d'
+					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%s'
 					ORDER BY parent ASC";
                 $query   = $wpdb->prepare($query, $taxonomy);
                 $folders = $wpdb->get_results($query);
@@ -636,7 +653,7 @@ class WCP_Folder_Plugins
             $query   = "SELECT * FROM ".$wpdb->term_taxonomy."
 					LEFT JOIN  ".$wpdb->terms."
 					ON  ".$wpdb->term_taxonomy.".term_id =  ".$wpdb->terms.".term_id
-					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%d'
+					WHERE ".$wpdb->term_taxonomy.".taxonomy = '%s'
 					ORDER BY parent ASC";
             $query   = $wpdb->prepare($query, $taxonomy);
             $folders = $wpdb->get_results($query);
@@ -783,7 +800,7 @@ class WCP_Folder_Plugins
                 "SELECT  TR.object_id,
                         TR.term_taxonomy_id
 				FROM ".$wpdb->term_relationships." AS TR
-				WHERE TR.term_taxonomy_id IN (".implode(',', array_column($folders, 'term_taxonomy_id')).")"
+				WHERE TR.object_id != 1 && TR.term_taxonomy_id IN (".implode(',', array_column($folders, 'term_taxonomy_id')).")"
             );
         }
 

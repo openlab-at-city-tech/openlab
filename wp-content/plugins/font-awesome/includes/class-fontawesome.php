@@ -126,7 +126,7 @@ class FontAwesome {
 	 *
 	 * @since 4.0.0
 	 */
-	const PLUGIN_VERSION = '4.4.0';
+	const PLUGIN_VERSION = '4.5.0';
 	/**
 	 * The namespace for this plugin's REST API.
 	 *
@@ -277,7 +277,7 @@ class FontAwesome {
 	 * @internal
 	 * @ignore
 	 */
-	protected $icon_chooser_screens = array( 'post.php', 'post-new.php' );
+	protected $icon_chooser_screens = array( 'post.php', 'post-new.php', 'site-editor.php' );
 
 	/**
 	 * @internal
@@ -729,12 +729,13 @@ class FontAwesome {
 	 *
 	 * ```
 	 * wp.apiFetch( {
-	 *      path: '/font-awesome/v1/api',
-	 *      method: 'POST',
-	 *      body: 'query { release(version: "5.x") { version } }'
-	 *  } ).then( res => {
-	 *      console.log( res );
-	 *  } )
+     *     path: '/font-awesome/v1/api',
+     *     method: 'POST',
+     *     headers: {'Content-Type': 'application/json'},
+     *     body: '{ "query": "query Version5x($ver: String!) { release(version: $ver){ version } }", "variables": {"ver": "5.x"} }'
+     * } ).then( res => {
+     *     console.log( res );
+     * } )
 	 * ```
 	 *
 	 * Or you could issue your own `POST` request directly `api.fontawesome.com`.
@@ -2763,6 +2764,8 @@ EOT;
 	 * message, if non-null, is appropriate for displaying in the WordPress admin ui
 	 * to an admin user.
 	 *
+	 * It also accepts an associative array with keys "query" and "variables".
+	 *
 	 * Requests to the Font Awesome API server will automatically be authorized
 	 * by the WordPress site owner's API Token if they have added one through the
 	 * plugin's settings page. The API Token is used to retrieve a short-lived
@@ -2882,7 +2885,21 @@ EOT;
 	 * Point it at `https://api.fontawesome.com`.
 	 *
 	 * @since 4.0.0
-	 * @param string $query_string a GraphQL query document
+	 * @param string | array $query If given a string, it'll be used as the query document.
+	 *   If given an associative array, it must be JSON-encodable, and must have a "query"
+	 *   key whose value is the GraphQL query document. It may also have a "variables" key whose
+	 *   value is another associative array containing values for the variables in the query.
+	 *
+	 *   For example:
+	 *
+	 *   ```php
+	 *   [
+	 *     "query" => "query KitMetadata($token: String!){ me { kit(token: $token){ version name } } }",
+	 *     "variables" => [
+	 *       "token" => "abc123"
+	 *     ]
+	 *   ]
+	 *   ```
 	 * @throws ApiTokenMissingException
 	 * @throws ApiTokenEndpointRequestException
 	 * @throws ApiTokenEndpointResponseException
@@ -2892,8 +2909,8 @@ EOT;
 	 * @return string json encoded response body when the API server response
 	 *     has a HTTP 200 status.
 	 */
-	public function query( $query_string ) {
-		return $this->metadata_provider()->metadata_query( $query_string );
+	public function query( $query ) {
+		return $this->metadata_provider()->metadata_query( $query );
 	}
 
 	/**

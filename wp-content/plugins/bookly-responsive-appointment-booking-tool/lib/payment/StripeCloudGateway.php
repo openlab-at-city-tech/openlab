@@ -2,11 +2,10 @@
 namespace Bookly\Lib\Payment;
 
 use Bookly\Lib;
-use Bookly\Lib\Entities\Payment;
 
 class StripeCloudGateway extends Lib\Base\Gateway
 {
-    protected $type = Payment::TYPE_CLOUD_STRIPE;
+    protected $type = Lib\Entities\Payment::TYPE_CLOUD_STRIPE;
 
     /**
      * @inerhitDoc
@@ -38,18 +37,23 @@ class StripeCloudGateway extends Lib\Base\Gateway
     protected function createGatewayIntent()
     {
         $api = Lib\Cloud\API::getInstance();
-        $response = $api->stripe
+        $response = $api->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )
             ->createSession(
                 array(
                     'total' => $this->getGatewayAmount(),
                     'description' => $this->request->getUserData()->cart->getItemsTitle(),
-                    'customer_email' => $this->request->getUserData()->getEmail(),
                     'metadata' => $this->getMetaData(),
+                ),
+                array(
+                    'email' => $this->request->getUserData()->getEmail(),
+                    'name' => $this->request->getUserData()->getCustomer()->getFullName(),
+                    'stripe_customer' => $this->request->getUserData()->getCustomer()->getStripeCloudAccount(),
                 ),
                 $this->getResponseUrl( self::EVENT_RETRIEVE ),
                 $this->getResponseUrl( self::EVENT_CANCEL )
             );
         if ( $response ) {
+            $this->request->getUserData()->getCustomer()->setStripeCloudAccount( $response['customer'] )->save();
             return array(
                 'ref_id' => $response['payment_intent'],
                 'target_url' => $response['redirect_url'],
@@ -66,7 +70,7 @@ class StripeCloudGateway extends Lib\Base\Gateway
     public function retrieveStatus()
     {
         $payment_intent = $this->payment->getRefId();
-        $data = Lib\Cloud\API::getInstance()->stripe->retrievePaymentIntent( $payment_intent );
+        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->retrievePaymentIntent( $payment_intent );
         if ( ( $data['status'] !== 'canceled' )
             && strtoupper( $data['currency'] ) == Lib\Config::getCurrency()
         ) {
@@ -87,5 +91,17 @@ class StripeCloudGateway extends Lib\Base\Gateway
         }
 
         return self::STATUS_FAILED;
+    }
+
+    /**
+     * @inerhitDoc
+     */
+    protected function refundPayment()
+    {
+        $payment = $this->getPayment();
+        $cloud = Lib\Cloud\API::getInstance();
+        if ( ! $cloud->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->refund( $payment->getRefId() ) ) {
+            throw new \Exception( current( $cloud->getErrors() ) );
+        }
     }
 }

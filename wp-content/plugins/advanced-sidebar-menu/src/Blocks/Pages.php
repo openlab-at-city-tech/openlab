@@ -9,11 +9,25 @@ use Advanced_Sidebar_Menu\Widget\Page;
  * Advanced Sidebar - Pages, Gutenberg block.
  *
  * @since  9.0.0
+ *
+ * @phpstan-import-type ATTR_SHAPE from Block_Abstract
+ *
+ * @phpstan-type PAGE_ATTRIBUTES array{
+ *   display_all?: bool,
+ *   exclude: string,
+ *   include_childless_parent?: bool,
+ *   include_parent?: bool,
+ *   levels: int,
+ *   order_by: 'menu_order'|'post_title'|'post_date',
+ *   post_type?: string,
+ * }
+ *
+ * @extends Block_Abstract<PAGE_ATTRIBUTES>
  */
 class Pages extends Block_Abstract {
 	use Singleton;
 
-	const NAME = 'advanced-sidebar-menu/pages';
+	public const NAME = 'advanced-sidebar-menu/pages';
 
 
 	/**
@@ -69,10 +83,11 @@ class Pages extends Block_Abstract {
 	 *
 	 * @link https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
 	 *
+	 * @phpstan-return array<key-of<PAGE_ATTRIBUTES>, ATTR_SHAPE>
 	 * @return array
 	 */
-	protected function get_attributes() {
-		return apply_filters( 'advanced-sidebar-menu/blocks/pages/attributes', [
+	protected function get_attributes(): array {
+		return (array) apply_filters( 'advanced-sidebar-menu/blocks/pages/attributes', [
 			Page::INCLUDE_PARENT           => [
 				'type' => 'boolean',
 			],

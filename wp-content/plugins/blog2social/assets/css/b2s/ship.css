@@ -914,7 +914,7 @@ input[type="number"]{
 #b2s-network-cut-image{
     z-index:9000!important;
     height: 700px;
-   
+
 }
 #cropsubmit
 {
@@ -969,28 +969,12 @@ input[type="number"]{
 
 #b2s-onboarding-toastee {
     position: fixed; 
-    top: 30px; 
-    right: 20px;
+    top: 15px; 
+    right: 15px;
+    z-index: 100001;
 }
 
 #b2s-onboarding-toastee-inner {
-    display: block; 
-    position: relative; 
-    z-index: 2000; 
-    border-radius: 10px; 
-    min-width: 250px; 
-    max-width: 250px; 
-    height: auto; 
-    background: rgb(121, 179, 51);
-}
-
-#b2s-onboarding-toastee2 {
-    position: fixed; 
-    top: 30px; 
-    right: 20px;
-}
-
-#b2s-onboarding-toastee-inner2 {
     display: block; 
     position: relative; 
     z-index: 2000; 
@@ -1022,7 +1006,7 @@ input[type="number"]{
     padding-left:10px;
     padding-right:10px;
     padding-top:5px;
-    padding-bottom:10px;
+    padding-bottom:5px;
     color: #fff;
 }
 
@@ -1036,7 +1020,8 @@ input[type="number"]{
 
 .b2s-onboarding-p {
     padding: 20px; 
-    color: #fff
+    color: #fff;
+    word-wrap: break-word;
 }
 
 .toggle {

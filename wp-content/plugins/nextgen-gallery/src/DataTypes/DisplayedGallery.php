@@ -647,6 +647,7 @@ class DisplayedGallery extends Model {
 
 		// Is this an image query?
 		$source_obj = $this->get_source();
+
 		if ( in_array( 'image', $source_obj->returns ) ) {
 			$retval = count( $this->_get_image_entities( $source_obj, false, false, true, $returns ) );
 		}

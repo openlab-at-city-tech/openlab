@@ -188,7 +188,7 @@ class Controller {
 			return apply_filters( 'ngg_effect_code', $lightbox->code, $displayed_gallery );
 		}
 
-		if ( $lightbox->is_supported( $displayed_gallery )  ) {
+		if ( $lightbox->is_supported( $displayed_gallery ) ) {
 			$retval = $lightbox->code;
 			$retval = str_replace( '%GALLERY_ID%', $displayed_gallery->id(), $retval );
 			$retval = str_replace( '%GALLERY_NAME%', $displayed_gallery->id(), $retval );
@@ -692,12 +692,14 @@ class Controller {
 	}
 
 	/**
-	 * Installs a display type
+	 * Method for installing a display type.
 	 *
-	 * @param string $name
-	 * @param array  $properties
+	 * @param string $name Display type name.
+	 * @param array  $properties Display type properties.
+	 * @param bool   $reset True: revert to default setting.
+	 * @return bool|int
 	 */
-	public function install_display_type( $name, $properties = [] ) {
+	public function install_display_type( string $name, array $properties = [], bool $reset = false ) {
 		$this->delete_duplicates( $name );
 
 		// Try to find the existing entity. If it doesn't exist, we'll create.
@@ -710,12 +712,20 @@ class Controller {
 
 		// Update the properties of the display type.
 		$properties['name'] = $name;
+		$changed            = false;
 		foreach ( $properties as $key => $val ) {
-			$display_type->$key = $val;
+			if ( ! isset( $display_type->$key ) || empty( $display_type->$key ) || is_null( $display_type->$key ) || $reset ) {
+				$display_type->$key = $val;
+				$changed            = true;
+			}
 		}
 
 		// Save the entity.
-		return $mapper->save( $display_type );
+		if ( $changed ) {
+			return $mapper->save( $display_type );
+		}
+
+		return false;
 	}
 
 	/**
@@ -743,5 +753,4 @@ class Controller {
 	public function get_default_settings() {
 		return [];
 	}
-
 }

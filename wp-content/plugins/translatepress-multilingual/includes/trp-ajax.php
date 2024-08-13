@@ -151,7 +151,11 @@ class TRP_Ajax{
      */
     protected function output_translations( $strings, $skip_machine_translation, $language, $original_language ){
         $sql = 'SELECT original, translated, status FROM ' . $this->table_prefix . 'trp_dictionary_' . strtolower( $original_language ) . '_' . strtolower( $language ) . ' WHERE original IN (\'' . implode( "','", $strings ) .'\') AND status != 0';
-        $result = mysqli_query( $this->connection, $sql );
+        try {
+            $result = mysqli_query( $this->connection, $sql );
+        }catch(Throwable $e){
+            $this->return_error();
+        }
         if ( $result === false ){
             $this->return_error();
         }else {

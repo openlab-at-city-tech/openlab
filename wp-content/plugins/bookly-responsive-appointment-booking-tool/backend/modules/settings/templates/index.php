@@ -29,7 +29,6 @@ use Bookly\Backend\Components;
                 <?php Components\Settings\Menu::renderItem( __( 'Holidays', 'bookly' ), 'holidays' ) ?>
                 <?php Proxy\Pro::renderMenuItem( __( 'Purchase Code', 'bookly' ), 'purchase_code' ) ?>
                 <?php Proxy\Pro::renderPurchaseCodeMenuItem() ?>
-                <?php Components\Settings\Menu::renderItem( __( 'Logs', 'bookly' ), 'logs' ) ?>
             </div>
         </div>
 
@@ -68,9 +67,6 @@ use Bookly\Backend\Components;
                         <?php include '_holidaysForm.php' ?>
                     </div>
                     <?php Proxy\Pro::renderPurchaseCodeTab() ?>
-                    <div class="tab-pane" id="bookly_settings_logs">
-                        <?php include '_logsForm.php' ?>
-                    </div>
                 </div>
             </div>
         </div>

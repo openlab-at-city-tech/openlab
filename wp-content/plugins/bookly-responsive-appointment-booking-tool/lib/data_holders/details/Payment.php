@@ -52,9 +52,9 @@ class Payment extends Base
     public function addDetails( Base $details )
     {
         switch ( $details->getType() ) {
-            case Base::TYPE_APPOINTMENT:
-            case Base::TYPE_PACKAGE:
-            case Base::TYPE_GIFT_CARD:
+            case Lib\Entities\Payment::ITEM_APPOINTMENT:
+            case Lib\Entities\Payment::ITEM_PACKAGE:
+            case Lib\Entities\Payment::ITEM_GIFT_CARD:
                 $this->data['items'][] = $details->getData();
                 if ( ! isset( $this->data['subtotal']['price'] ) ) {
                     $this->data['subtotal']['deposit'] = 0;
@@ -63,7 +63,7 @@ class Payment extends Base
                 $this->data['subtotal']['deposit'] += $details->getDeposit();
                 $this->data['subtotal']['price'] += $details->getPrice();
                 break;
-            case Base::TYPE_ADJUSTMENT:
+            case Lib\Entities\Payment::ITEM_ADJUSTMENT:
                 $this->data['adjustments'][] = $details->getData();
                 break;
         }
@@ -153,14 +153,7 @@ class Payment extends Base
     public function getCustomerName()
     {
         $customer_name = $this->getValue( 'customer' );
-        if ( $this->payment->getTarget() === Lib\Entities\Payment::TARGET_APPOINTMENTS ) {
-            $customer = Lib\Entities\Customer::query( 'c' )
-                ->select( 'c.full_name' )
-                ->leftJoin( 'CustomerAppointment', 'ca', 'ca.customer_id = c.id' )
-                ->where( 'ca.payment_id', $this->payment->getId() )
-                ->fetchRow();
-            $customer_name = empty( $customer ) ? $customer_name : $customer['full_name'];
-        } elseif ( $this->getValue( 'customer_id' ) ) {
+        if ( $this->getValue( 'customer_id' ) ) {
             $customer = Lib\Entities\Customer::find( $this->getValue( 'customer_id' ) );
             $customer_name = $customer ? $customer->getFullName() : $customer_name;
         }

@@ -264,7 +264,7 @@ class CMTT_Glossary_Index {
 
 		$borderBottom          = sprintf( '%s %dpx %s;', \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineStyle' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineWidth' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineColor' ) );
 		$borderBottomHover     = sprintf( '%s %dpx %s;', \CM\CMTT_Settings::get( 'cmtt_tooltipLinkHoverUnderlineStyle' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkHoverUnderlineWidth' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkHoverUnderlineColor' ) );
-		$borderBottomTemporary = sprintf( '%s %dpx %s;', \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineStyle' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineWidth' ), \CM\CMTT_Settings::get( 'cmtt_glossaryDoubleClickUnderlineColor' ) );
+		$borderBottomTemporary = sprintf( '%s %dpx %s;', \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineStyle' ), \CM\CMTT_Settings::get( 'cmtt_tooltipLinkUnderlineWidth' ), '#eeff11' );
 		?>
 		span.glossaryLink, a.glossaryLink {
 		border-bottom: <?php echo $borderBottom; ?>
@@ -721,7 +721,7 @@ class CMTT_Glossary_Index {
 	public static function addScriptParams( $shortcodeAtts ) {
 		global $post;
 		static $runOnce;
-		if ( $runOnce === true ) {
+		if ( $runOnce === true || (is_admin() && isset($_GET['action']) && $_GET['action'] == 'elementor')) {
 			return;
 		}
 
@@ -1454,7 +1454,7 @@ class CMTT_Glossary_Index {
 		 * If sort by post_name (3.8.15)
 		 */
 		$dataPostName = '';
-		$lang         = \CM\CMTT_Settings::get( 'cmtt_index_locale' );
+		$lang         = \CM\CMTT_Settings::get( 'cmtt_index_locale' , '');
 		if ( empty( $sortByTitle ) && in_array( substr( $lang, 0, 2 ), array( 'ja', 'ar', 'ru', 'zh' ) ) ) {
 			$dataPostName = ' data-postname="' . $glossaryItem->post_name . '" ';
 		}

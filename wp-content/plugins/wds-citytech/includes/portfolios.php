@@ -96,6 +96,44 @@ function openlab_user_portfolio_site_is_local( $user_id = 0 ) {
 }
 
 /**
+ * Should the user's portfolio link be shown on the user's profile?
+ *
+ * @param int $user_id
+ * @return bool
+ */
+function openlab_show_portfolio_link_on_user_profile( $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = bp_displayed_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	$show_raw = get_user_meta( $user_id, 'show_portfolio_link_on_user_profile', true );
+
+	if ( '' === $show_raw ) {
+		$show = true;
+	} else {
+		$show = '1' === $show_raw;
+	}
+
+	return (bool) $show;
+}
+
+/**
+ * Save the setting of whether the user's portfolio link should be shown on the user's profile.
+ *
+ * @param int $user_id The user ID.
+ * @param bool $show Whether to show the portfolio link.
+ */
+function openlab_save_show_portfolio_link_on_user_profile( $user_id, $show ) {
+	$save_value = $show ? '1' : '0';
+
+	update_user_meta( $user_id, 'show_portfolio_link_on_user_profile', $save_value );
+}
+
+/**
  * Get the user id of a portfolio user from the portfolio group's id
  */
 function openlab_get_user_id_from_portfolio_group_id( $group_id = 0 ) {
@@ -509,10 +547,15 @@ function openlab_portfolio_list_group_display() {
 		return false;
 	}
 
+	// In a course, display only to members.
+	if ( 'course' === openlab_get_group_type() && ! groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+		return;
+	}
+
 	$portfolio_data = openlab_get_group_member_portfolios();
 
 	// Hide private-member portfolios from non-members.
-	if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group->id ) ) {
+	if ( current_user_can( 'view_private_members_of_group', $group->id ) ) {
 		$group_private_members = [];
 	} else {
 		$group_private_members = openlab_get_private_members_of_group( $group->id );

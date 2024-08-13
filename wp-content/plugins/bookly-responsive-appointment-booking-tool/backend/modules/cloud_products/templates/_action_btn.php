@@ -1,6 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Lib\Config;
+
 /**
  * @var array $product
  * @var Bookly\Lib\Cloud\API $cloud
@@ -19,6 +20,9 @@ $pro_required = $product['pro_required'] && ! Config::proActive();
                     <?php Buttons::render( null, 'bookly-js-required-bookly-pro btn-success', $product['texts']['action-on'] ) ?>
                 <?php endif ?>
             <?php else : ?>
+                <?php if ( isset( $product['accept_pc'] ) && $product['accept_pc'] ) : ?>
+                    <?php Buttons::render( null, 'bookly-js-product-enable-pc btn-success bookly-collapse', __( 'Get started', 'bookly' ) ) ?>
+                <?php endif ?>
                 <?php Buttons::render( null, 'bookly-js-product-enable btn-success bookly-collapse', $product['texts']['action-on'] ) ?>
                 <?php Buttons::render( null, 'bookly-js-product-disable btn-danger bookly-collapse', $product['texts']['action-off'] ) ?>
             <?php endif ?>

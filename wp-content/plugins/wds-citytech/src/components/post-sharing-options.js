@@ -1,104 +1,125 @@
-import { RadioControl, VisuallyHidden } from '@wordpress/components'
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post'
-import { registerPlugin } from '@wordpress/plugins'
-import { useDispatch, useSelect } from '@wordpress/data'
+/* global openlabBlocksPostVisibility */
 
-const PostSharingOptions = ({}) => {
-	const { currentGroupTypeSiteLabel, shareOnlyWithGroup, siteIsPublic } = openlabBlocksPostVisibility
+import { VisuallyHidden } from '@wordpress/components';
+import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { registerPlugin } from '@wordpress/plugins';
+import { useDispatch, useSelect } from '@wordpress/data';
 
-	if ( ! siteIsPublic ) {
-		return null
-	}
+const PostSharingOptions = () => {
+  const { blogPublic, shareOnlyWithGroup } = openlabBlocksPostVisibility;
+  const { editPost } = useDispatch( 'core/editor' );
 
-	const { editPost } = useDispatch( 'core/editor' )
+  const blogPublicInt = parseInt( blogPublic );
 
-	const onChange = ( value ) => {
-		editPost( { meta: { 'openlab_post_visibility': value } } )
-	}
+  const { postVisibility } = useSelect( ( selectObj ) => {
+    const postMeta = selectObj( 'core/editor' ).getEditedPostAttribute( 'meta' );
+    const defaultVisibility = blogPublicInt >= 0 ? 'default' : 'members-only';
 
-	const { postVisibility } = useSelect( ( select ) => {
-		const postMeta = select( 'core/editor' ).getEditedPostAttribute( 'meta' )
+    return {
+      postVisibility: postMeta.openlab_post_visibility || defaultVisibility,
+    };
+  }, [ blogPublicInt ] );
 
-		return {
-			postVisibility: postMeta['openlab_post_visibility'] || 'default'
-		}
-	} )
+  if ( blogPublicInt < -1 ) {
+    return null;
+  }
 
-	const publicOverrideString = 'This will override the Public visibility setting above.'
+  const onChange = ( value ) => {
+    editPost( { meta: { 'openlab_post_visibility': value } } );
+  };
 
-	return (
-		<PluginDocumentSettingPanel
-			name="post-sharing-options"
-			title="More visibility options"
-			className="post-sharing-options"
-		>
-			<fieldset className="editor-post-visibility__fieldset">
-				<VisuallyHidden as="legend">
-					Sharing
-				</VisuallyHidden>
+  const publicOverrideString = 'This will override the Public visibility setting above.';
 
-				<p>{ 'Control who can see this post.' }</p>
+  const visibilityOptions = [
+    {
+      value: 'group-members-only',
+      label: 'Site Members',
+      info: shareOnlyWithGroup + ' ' + publicOverrideString,
+    },
+    {
+      value: 'members-only',
+      label: 'OpenLab members only',
+      info: 'Only logged-in OpenLab members can see this post. ' + publicOverrideString,
+    },
+  ];
 
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="group-members-only"
-					label="Site Members"
-					info={ shareOnlyWithGroup + ' ' + publicOverrideString }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={ postVisibility === 'group-members-only' }
-				/>
+  if ( blogPublicInt >= 0 ) {
+    visibilityOptions.push({
+      value: 'default',
+      label: 'Everyone',
+      info: 'Everyone who can view this site can see this post.',
+    });
+  }
 
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="members-only"
-					label="OpenLab members only"
-					info={ 'Only logged-in OpenLab members can see this post. ' + publicOverrideString }
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={	postVisibility === 'members-only' }
-				/>
+  return (
+    <PluginDocumentSettingPanel
+      name="post-sharing-options"
+      title="More visibility options"
+      className="post-sharing-options"
+    >
+      <fieldset className="editor-post-visibility__fieldset">
+        <VisuallyHidden as="legend">Sharing</VisuallyHidden>
 
-				<PostSharingChoice
-					instanceId="post-sharing-options"
-					value="default"
-					label="Everyone"
-					info="Everyone who can view this site can see this post."
-					onChange={ ( event ) => onChange( event.target.value ) }
-					checked={ postVisibility === 'default' }
-				/>
-			</fieldset>
-		</PluginDocumentSettingPanel>
-	)
-}
+        <p>Control who can see this post.</p>
+
+        { visibilityOptions.map( ( option ) => (
+          <PostSharingChoice
+            key={ option.value }
+            instanceId="post-sharing-options"
+            value={ option.value }
+            label={ option.label }
+            info={ option.info }
+            onChange={ ( event ) => onChange( event.target.value ) }
+            checked={ postVisibility === option.value }
+          />
+        )) }
+      </fieldset>
+    </PluginDocumentSettingPanel>
+  );
+};
 
 function PostSharingChoice( { instanceId, value, label, info, ...props } ) {
-	return (
-		<div className="editor-post-visibility__choice">
-			<input
-				type="radio"
-				name={ `editor-post-visibility__setting-${ instanceId }` }
-				value={ value }
-				id={ `editor-post-${ value }-${ instanceId }` }
-				aria-describedby={ `editor-post-${ value }-${ instanceId }-description` }
-				className="editor-post-visibility__radio"
-				{ ...props }
-			/>
-			<label
-				htmlFor={ `editor-post-${ value }-${ instanceId }` }
-				className="editor-post-visibility__label"
-			>
-				{ label }
-			</label>
-			<p
-				id={ `editor-post-${ value }-${ instanceId }-description` }
-				className="editor-post-visibility__info"
-			>
-				{ info }
-			</p>
-		</div>
-	);
+  return (
+    <div className="editor-post-visibility__choice">
+      <input
+        type="radio"
+        name={ `editor-post-visibility__setting-${ instanceId }` }
+        value={ value }
+        id={ `editor-post-${ value }-${ instanceId }` }
+        aria-describedby={ `editor-post-${ value }-${ instanceId }-description` }
+        className="editor-post-visibility__radio"
+        { ...props }
+      />
+      <label
+        htmlFor={ `editor-post-${ value }-${ instanceId }` }
+        className="editor-post-visibility__label"
+      >
+        { label }
+      </label>
+      <p
+        id={ `editor-post-${ value }-${ instanceId }-description` }
+        className="editor-post-visibility__info"
+      >
+        { info }
+      </p>
+    </div>
+  );
 }
 
-registerPlugin(
-	'post-sharing-options',
-	{ render: PostSharingOptions }
-)
+const OpenlabPostVisibilityPlugin = () => {
+  const isSiteEditor = useSelect( ( select ) => {
+    const editSite = select( 'core/edit-site' );
+    return !!editSite;
+  }, [] );
+
+  return !isSiteEditor && <PostSharingOptions />;
+};
+
+const registerPostVisibility = () => {
+  registerPlugin( 'post-sharing-options', {
+    render: OpenlabPostVisibilityPlugin,
+    icon: 'visibility',
+  } );
+};
+
+wp.domReady( registerPostVisibility );

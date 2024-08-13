@@ -71,8 +71,19 @@ class Ajax_Get {
                 $preview = $curation->getCurationPreviewHtml(esc_url_raw(wp_unslash($_POST['url'])), $data);
                 if (!empty($preview)) {
                     if (isset($_POST['loadSettings']) && filter_var(wp_unslash($_POST['loadSettings']), FILTER_VALIDATE_BOOLEAN)) {
-                        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
+                        $currentDate = new DateTime("now", wp_timezone());
+                        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
                         if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
+
+                            if (isset($result->licence_condition)) {
+                                //update
+                                $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                                if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                                    $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $result->licence_condition;
+                                    update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                                }
+                            }
+
                             /*
                              * since V7.0 Remove Video Networks
                              */
@@ -253,11 +264,10 @@ class Ajax_Get {
                     if (isset($isValid['canReel']['result']) && !empty($isValid['canReel']['result']) && $isValid['canReel']['result'] === true) {
                         $canReel = array('result' => true);
                     } else {
-                        if(isset($isValid['canReel']['content']) && !empty($isValid['canReel']['content'])){
+                        if (isset($isValid['canReel']['content']) && !empty($isValid['canReel']['content'])) {
                             $canReel = array('result' => false, 'content' => $isValid['canReel']['content']);
                         } else {
                             $canReel = array('result' => false, 'content' => '');
-
                         }
                     }
                 }
@@ -822,8 +832,19 @@ class Ajax_Get {
         if (current_user_can('read') && isset($_GET['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_GET['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {
             require_once (B2S_PLUGIN_DIR . 'includes/B2S/Curation/View.php');
             $curation = new B2S_Curation_View();
-            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
+            $currentDate = new DateTime("now", wp_timezone());
+            $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
             if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
+
+                if (isset($result->licence_condition)) {
+                    //update
+                    $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                    if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                        $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $result->licence_condition;
+                        update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+                    }
+                }
+
                 /*
                  * since V7.0 Remove Video Networks
                  */
@@ -892,7 +913,7 @@ class Ajax_Get {
                 require_once (B2S_PLUGIN_DIR . 'includes/B2S/PostBox.php');
                 $postBox = new B2S_PostBox();
                 $updateInfo = $postBox->updateInfo((int) $_GET['post_id']);
-                echo json_encode(array('result' => true, 'active' => $updateInfo['active'], 'lastPostDate' => $updateInfo['lastPostDate'], 'shareCount' => $updateInfo['shareCount']));
+                echo json_encode(array('result' => true, 'active' => $updateInfo['active'], 'lastPostDate' => $updateInfo['lastPostDate'], 'schedLimit' => $updateInfo['schedLimit'], 'shareCount' => $updateInfo['shareCount']));
                 wp_die();
             }
         } else {
@@ -929,8 +950,6 @@ class Ajax_Get {
             wp_die();
         }
     }
-
-    
 
     public function getPostsDetailData() {
         if (current_user_can('read') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {

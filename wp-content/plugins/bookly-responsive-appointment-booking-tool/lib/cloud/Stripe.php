@@ -7,7 +7,7 @@ use Bookly\Lib\Config;
 class Stripe extends Base
 {
     const CONNECT        = '/1.0/users/%token%/products/stripe/connect';            //POST|DELETE
-    const CREATE_SESSION = '/1.0/users/%token%/products/stripe/checkout/sessions';  //POST
+    const CREATE_SESSION = '/1.1/users/%token%/products/stripe/checkout/sessions';  //POST
     const RETRIEVE_EVENT = '/1.0/users/%token%/products/stripe/events/%event_id%';  //GET
     const RETRIEVE_PAYMENT_INTENT = '/1.0/users/%token%/products/stripe/payment-intents/%payment_intent_id%';  //GET
     const REFUND         = '/1.0/users/%token%/products/stripe/refund';             //POST
@@ -15,17 +15,19 @@ class Stripe extends Base
 
     /**
      * @param array  $info
+     * @param array  $customer
      * @param string $success_url
      * @param string $cancel_url
      * @return bool|array
      */
-    public function createSession( $info, $success_url, $cancel_url )
+    public function createSession( $info, $customer, $success_url, $cancel_url )
     {
         $info['currency'] = Config::getCurrency();
         $info = array(
-            'order_data'  => $info,
+            'order_data' => $info,
+            'customer' => $customer,
             'success_url' => $success_url,
-            'cancel_url'  => $cancel_url,
+            'cancel_url' => $cancel_url,
         );
 
         return $this->api->sendPostRequest( self::CREATE_SESSION, $info );
@@ -98,7 +100,7 @@ class Stripe extends Base
      */
     public function retrieveEvent( $event_id )
     {
-        $data     = array( '%event_id%' => $event_id );
+        $data = array( '%event_id%' => $event_id );
         $response = $this->api->sendGetRequest( self::RETRIEVE_EVENT, $data );
 
         if ( $response ) {
@@ -117,13 +119,13 @@ class Stripe extends Base
      */
     public function retrievePaymentIntent( $payment_intent_id )
     {
-        $data     = array( '%payment_intent_id%' => $payment_intent_id );
+        $data = array( '%payment_intent_id%' => $payment_intent_id );
         $response = $this->api->sendGetRequest( self::RETRIEVE_PAYMENT_INTENT, $data );
 
         if ( $response ) {
             return $response['data'];
         } else {
-            throw new \Exception();
+            throw new \LogicException( current( $this->api->getErrors() ) );
         }
     }
 

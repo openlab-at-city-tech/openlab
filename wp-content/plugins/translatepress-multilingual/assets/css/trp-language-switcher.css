@@ -133,3 +133,11 @@
         display: block;
     }
 }
+
+/*
+ * Fix Language Switcher Shortcode in Elementor Popup
+ */
+.elementor-shortcode .trp-ls-shortcode-current-language,
+.elementor-shortcode .trp-ls-shortcode-language {
+    width: 300px !important;
+}

@@ -1,14 +1,14 @@
 === WP Reading Progress ===
 Contributors: ruigehond
-Tags: reading, progress, progressbar
+Tags: reading, progress, progressbar, estimated reading time
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=hallo@ruigehond.nl&lc=US&item_name=WP+reading+progress+plugin&no_note=0&cn=&currency_code=EUR&bn=PP-DonationsBF:btn_donateCC_LG.gif:NonHosted
 Requires at least: 4.9
-Tested up to: 6.4
+Tested up to: 6.6
 Requires PHP: 5.6
-Stable tag: 1.5.7
+Stable tag: 1.6.0
 License: GPLv3
 
-Light weight fully customizable reading progress bar. Sticks to top, bottom or sticky menu, with fallback for small screens
+Light weight fully customizable reading progress bar. Sticks to top, bottom or sticky menu, with fallback for small screens. Includes estimated reading time functionality (beta).
 
 == Description ==
 The reading progress bar is a great user experience on longreads. Especially if it accurately depicts the reading progress in the article text, and nothing else. This is standard on single blog posts and enabled by default.
@@ -33,6 +33,11 @@ Behaviour:
 
 - If there is no single article identified (by class names or id) it uses the whole page to calculate progress.
 
+Estimated reading time (beta)
+
+Since 1.6.0 this plugin has rudimentary estimated reading time functionality, for when your theme does not support it out of the box.
+There are some potential issues, some of which cannot be fixed in a plugin. If it does not work for you, switch it off. It will have no effect on the plugin then.
+
 This is my 6th WordPress plugin but my first one freely available to everybody. I hope you enjoy using it as much as I enjoy building it!
 
 Regards,
@@ -53,6 +58,8 @@ Upon uninstall WP Reading Progress removes its own options and `post_meta` data 
 3. Activate the bar for an individual post (if that post type is not enabled)
 
 == Changelog ==
+
+1.6.0: add estimated reading time as beta functionality, improve sticking and detecting article
 
 1.5.7: fix save settings and calculation correction (again)
 

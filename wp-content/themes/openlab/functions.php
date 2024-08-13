@@ -46,8 +46,9 @@ require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
 require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
 require_once( STYLESHEETPATH . '/lib/group-connections.php' );
+require_once( STYLESHEETPATH . '/lib/bp-auto-export-data.php' );
+require_once( STYLESHEETPATH . '/lib/two-factor.php' );
 
-require_once( STYLESHEETPATH . '/lib/cbox-polyfills/index.php' );
 require_once( STYLESHEETPATH . '/lib/site-template.php' );
 
 // Initialize async cloning.
@@ -136,6 +137,14 @@ function openlab_load_scripts() {
             'ajax_url'  => admin_url( 'admin-ajax.php' )
         ) );
     }
+
+	wp_register_script(
+		'bp-docs-edit',
+		$stylesheet_dir_uri . '/js/bp-docs-edit.js',
+		[],
+		OL_VERSION,
+		true
+	);
 }
 
 add_action('wp_enqueue_scripts', 'openlab_load_scripts');
@@ -385,3 +394,59 @@ add_filter(
 function openlab_is_search_results_page() {
 	return is_page( 'search' );
 }
+
+/**
+ * Gets our custom visibility levels for xprofile fields.
+ *
+ * @return array
+ */
+function openlab_get_xprofile_visibility_levels() {
+	$visibility_levels = bp_xprofile_get_visibility_levels();
+
+	// Reorder: public, loggedin, friends, adminsonly
+	$visibility_levels = array_merge(
+		array(
+			'public'     => $visibility_levels['public'],
+			'loggedin'   => $visibility_levels['loggedin'],
+			'friends'    => $visibility_levels['friends'],
+			'adminsonly' => $visibility_levels['adminsonly'],
+		)
+	);
+
+	$visibility_levels['loggedin']['label'] = 'OpenLab Members';
+	$visibility_levels['friends']['label']  = 'Friends';
+
+	return $visibility_levels;
+}
+
+/**
+ * Generates the markup for xprofile field visibility selector.
+ *
+ * @param int $field_id The ID of the field.
+ */
+function openlab_xprofile_field_visibility_selector( $field_id = null ) {
+	if ( ! $field_id ) {
+		$field_id = bp_get_the_profile_field_id();
+	}
+
+	$visibility_levels = openlab_get_xprofile_visibility_levels();
+
+	$selected_value = bp_is_register_page() ? '' : xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
+
+	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility', $field_id ) ) : ?>
+		<div class="field-visibility-settings" id="field-visibility-settings-<?php echo esc_attr( $field_id ); ?>">
+			<label for="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">Who can see this?</label>
+
+			<select name="<?php echo esc_attr( 'field_' . $field_id . '_visibility' ); ?>" id="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">
+				<?php if ( bp_is_register_page() ) : ?>
+					<option value="">----</option>
+				<?php endif; ?>
+
+				<?php foreach( $visibility_levels as $level ) : ?>
+					<option value="<?php echo esc_attr( $level['id'] ) ?>"<?php selected( $selected_value, $level['id'], true ) ?>><?php echo esc_html( $level['label'] ) ?></option>
+				<?php endforeach; ?>
+			</select>
+		</div>
+	<?php endif;
+}
+

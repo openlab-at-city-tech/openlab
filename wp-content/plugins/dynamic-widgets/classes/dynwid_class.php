@@ -7,7 +7,8 @@
  */
 
 	defined('ABSPATH') or die("No script kiddies please!");
-
+	
+	#[AllowDynamicProperties]
 	class dynWid {
 		private $dbtable;
 		public  $device;
@@ -31,10 +32,6 @@
 		public  $userrole;
 		public  $whereami;
 		private $wpdb;
-		public $wpml;
-        public $custom_taxonomy;
-	    public $custom_post_type;
-
 		/**
 		 * dynWid::__construct() Master class
 		 *

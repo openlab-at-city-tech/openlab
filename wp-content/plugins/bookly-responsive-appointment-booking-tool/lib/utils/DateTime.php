@@ -6,9 +6,8 @@ use Bookly\Lib\Base\Cache;
 
 class DateTime extends Cache
 {
-    const FORMAT_MOMENT_JS         = 1;
+    const FORMAT_MOMENT_JS = 1;
     const FORMAT_JQUERY_DATEPICKER = 2;
-    const FORMAT_PICKADATE         = 3;
 
     private static $format_characters_day = array( 'd', 'D', 'j', 'l', 'N', 'S', 'w', 'z' );
     private static $format_characters_month = array( 'F', 'm', 'M', 'n' );
@@ -122,35 +121,6 @@ class DateTime extends Cache
             '\o' => '\'o\'',
             '\\' => '',
         ),
-        self::FORMAT_PICKADATE => array(
-            // Day
-            'd' => 'dd',
-            '\d' => '!d',
-            'D' => 'ddd',
-            '\D' => 'D',
-            'l' => 'dddd',
-            '\l' => 'l',
-            'j' => 'd',
-            '\j' => 'j',
-            // Month
-            'm' => 'mm',
-            '\m' => '!m',
-            'M' => 'mmm',
-            '\M' => 'M',
-            'F' => 'mmmm',
-            '\F' => 'F',
-            'n' => 'm',
-            '\n' => 'n',
-            // Year
-            'y' => 'yy',
-            '\y' => 'y',
-            'Y' => 'yyyy',
-            '\Y' => 'Y',
-            // Others
-            'S' => '',
-            '\S' => 'S',
-            '\\' => '',
-        ),
     );
 
     /**
@@ -178,7 +148,6 @@ class DateTime extends Cache
         switch ( $for ) {
             case self::FORMAT_JQUERY_DATEPICKER:
             case self::FORMAT_MOMENT_JS:
-            case self::FORMAT_PICKADATE:
                 foreach ( self::$format_replacements[ $for ] as $key => $value ) {
                     if ( $value === '' ) {
                         $replacements[ $key ] = $value;
@@ -301,7 +270,6 @@ class DateTime extends Cache
 
         switch ( $to ) {
             case self::FORMAT_MOMENT_JS:
-            case self::FORMAT_PICKADATE:
                 return strtr( $php_format, self::$format_replacements[ $to ] );
             case self::FORMAT_JQUERY_DATEPICKER:
                 return str_replace( '\'\'', '', strtr( $php_format, self::$format_replacements[ $to ] ) );
@@ -508,6 +476,7 @@ class DateTime extends Cache
                 'customRangeLabel' => __( 'Custom range', 'bookly' ),
                 'tomorrow' => __( 'Tomorrow', 'bookly' ),
                 'today' => __( 'Today', 'bookly' ),
+                'anyTime' => __( 'Any time', 'bookly' ),
                 'yesterday' => __( 'Yesterday', 'bookly' ),
                 'last_7' => __( 'Last 7 days', 'bookly' ),
                 'last_30' => __( 'Last 30 days', 'bookly' ),
@@ -515,6 +484,7 @@ class DateTime extends Cache
                 'next_30' => __( 'Next 30 days', 'bookly' ),
                 'thisMonth' => __( 'This month', 'bookly' ),
                 'nextMonth' => __( 'Next month', 'bookly' ),
+                'lastMonth' => __( 'Last month', 'bookly' ),
                 'firstDay' => (int) get_option( 'start_of_week' ),
             ),
             $array

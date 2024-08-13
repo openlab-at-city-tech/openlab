@@ -52,7 +52,7 @@
 			</p>
 		</div>
 		<div class="nextgen-admin-modal-button">
-		<a href="<?php echo esc_url( M_Marketing::get_utm_link( 'https://www.imagely.com/lite', 'albumsPage', 'upgrade' ) ); ?>" class="button nextgen-green-button" target="_blank" rel="noopener noreferrer">
+		<a href="<?php echo esc_url( M_Marketing::get_utm_link( 'https://www.imagely.com/lite', 'ecommercePage', 'upgrade' ) ); ?>" class="button nextgen-green-button" target="_blank" rel="noopener noreferrer">
 		<?php esc_html_e( 'Upgrade to Pro and Unlock Ecommerce', 'nggallery' ); ?>
 		</a>
 		</div>

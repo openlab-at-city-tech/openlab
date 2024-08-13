@@ -131,5 +131,4 @@ class Event {
 		 */
 		return apply_filters( 'stellarwp/telemetry/' . Config::get_hook_prefix() . 'events_url', $events_url );
 	}
-
 }

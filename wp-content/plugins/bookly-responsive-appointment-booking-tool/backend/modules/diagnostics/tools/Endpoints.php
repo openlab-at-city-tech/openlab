@@ -49,17 +49,7 @@ class Endpoints extends Tool
     public function updateEndPoint( $post )
     {
         $api = Lib\Cloud\API::getInstance();
-        $product = null;
-        switch ( $post['params']['product'] ) {
-            case Account::PRODUCT_ZAPIER;
-                $product = $api->zapier;
-                break;
-            case Account::PRODUCT_STRIPE;
-                $product = $api->stripe;
-                break;
-            case Account::PRODUCT_CRON;
-                $product = $api->cron;
-        }
+        $product = $api->getProduct( $post['params']['product'] );
         if ( $product && $product->updateEndPoint() ) {
             wp_send_json_success();
         }
@@ -75,25 +65,35 @@ class Endpoints extends Tool
         if ( $this->troubles === null ) {
             $this->troubles = array();
             $api = Lib\Cloud\API::getInstance();
-            foreach ( $api->account->getEndPoints() as $product => $endpoint ) {
-                switch ( $product ) {
-                    case Account::PRODUCT_STRIPE:
-                        $expected_endpoint = $api->stripe->getEndPoint();
-                        break;
-                    case Account::PRODUCT_ZAPIER;
-                        $expected_endpoint = $api->zapier->getEndPoint();
-                        break;
-                    case Account::PRODUCT_CRON;
-                        $expected_endpoint = $api->cron->getEndPoint();
-                        break;
-                    default:
-                        continue 2;
-                }
-                if ( strcasecmp( $endpoint, $expected_endpoint ) != 0 ) {
-                    $this->troubles[ $product ] = array(
-                        'current' => $endpoint,
-                        'expected' => $expected_endpoint,
-                    );
+            if ( $api->getToken() ) {
+                foreach ( $api->account->getEndPoints() as $product => $endpoint ) {
+                    switch ( $product ) {
+                        case Account::PRODUCT_STRIPE:
+                        case Account::PRODUCT_ZAPIER;
+                        case Account::PRODUCT_CRON;
+                            $expected_endpoint = $api->getProduct( $product )->getEndPoint();
+                            break;
+                        case Account::PRODUCT_MOBILE_STAFF_CABINET;
+                            $expected_endpoint = $api->getProduct( $product )->getEndPoint();
+                            $list = Lib\Entities\Staff::query()->whereNot( 'cloud_msc_token', null )->fetchCol( 'cloud_msc_token' );
+                            foreach ( $endpoint as $cloud_msc_token => $point ) {
+                                if ( in_array( $cloud_msc_token, $list ) && strcasecmp( $point, $expected_endpoint ) != 0 ) {
+                                    $this->troubles[ $product ] = array(
+                                        'current' => $point,
+                                        'expected' => $expected_endpoint,
+                                    );
+                                }
+                            }
+                            continue 2;
+                        default:
+                            continue 2;
+                    }
+                    if ( strcasecmp( $endpoint, $expected_endpoint ) != 0 ) {
+                        $this->troubles[ $product ] = array(
+                            'current' => $endpoint,
+                            'expected' => $expected_endpoint,
+                        );
+                    }
                 }
             }
         }

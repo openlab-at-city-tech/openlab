@@ -6,6 +6,7 @@ use Bookly\Lib;
 abstract class Tables
 {
     const APPOINTMENTS = 'appointments';
+    const CLOUD_MOBILE_STAFF_CABINET = 'cloud_mobile_staff_cabinet';
     const CLOUD_PURCHASES = 'cloud_purchases';
     const COUPONS = 'coupons';
     const CUSTOMERS = 'customers';
@@ -119,6 +120,7 @@ abstract class Tables
                     'service' => esc_html__( 'Service', 'bookly' ),
                     'start_date' => esc_html__( 'Appointment date', 'bookly' ),
                     'paid' => esc_html__( 'Amount', 'bookly' ),
+                    'subtotal' => esc_html__( 'Subtotal', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
                 );
                 break;
@@ -222,6 +224,14 @@ abstract class Tables
                     'wp_user' => esc_html__( 'User', 'bookly' ),
                 );
                 break;
+            case self::CLOUD_MOBILE_STAFF_CABINET:
+                $columns = array(
+                    'id' => esc_html__( 'ID', 'bookly' ),
+                    'full_name' => esc_html__( 'Name', 'bookly' ),
+                    'email' => esc_html__( 'Email', 'bookly' ),
+                    'cloud_msc_token' => esc_html__( 'Access token', 'bookly' ),
+                );
+                break;
             case self::CUSTOMER_CABINET_APPOINTMENTS:
                 $columns = array(
                     'category' => Common::getTranslatedOption( 'bookly_l10n_label_category' ),
@@ -241,6 +251,7 @@ abstract class Tables
                 break;
             case self::LOGS:
                 $columns = array(
+                    'id' => __( 'ID', 'bookly' ),
                     'created_at' => __( 'Date', 'bookly' ),
                     'action' => __( 'Action', 'bookly' ),
                     'target' => __( 'Target', 'bookly' ),
@@ -443,6 +454,7 @@ abstract class Tables
             case self::SMS_MAILING_RECIPIENTS_LIST:
             case self::SMS_NOTIFICATIONS:
             case self::STAFF_MEMBERS:
+            case self::CLOUD_MOBILE_STAFF_CABINET:
                 $columns = array( 'id' => false, );
                 break;
         }

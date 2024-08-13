@@ -111,7 +111,6 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                         ),
                     ));
                     require_once (B2S_PLUGIN_DIR . 'views/b2s/html/footer.php');
-
                     ?>
                 </div>
             </div>
@@ -122,122 +121,132 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
 
 
 
-<div class="modal fade" id="b2sAddUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sAddUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAddUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php echo sprintf(__('Please enter the credentials of your API app (<a target="_blank" href="%s">Info</a>)', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))) ?></h4>
-            </div>
-            <div class="modal-body">
-                <div id="b2s-add-user-app-info-missing" style="display:none">
-                    <?php esc_html_e('Please fill all required fields', 'blog2social'); ?>
+    <div class="modal fade" id="b2sAddUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sAddUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sAddUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Please enter the credentials of your API app', 'blog2social') ?></h4>
                 </div>
-                <div class="row">
-                    <div class="col-md-12">
-                        <p class="b2s-padding-bottom-5"><?php echo sprintf(__('The API Key and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your Twitter account via OAuth (You can find more information on this <a href="%s">here</a>.)', 'blog2social'), esc_url('https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret')); ?></p>
-                        
-                        <form id = "b2s-add-app-form" method = "post">
-                        <div class="form-group">
-                            <input type="text" class="form-control b2s-user-app-form" maxlength="50" id="b2s-add-user-app-name" name="b2s-add-user-app-name" placeholder="App Name">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control b2s-user-app-form" maxlength="100" id="b2s-add-user-app-key" name="b2s-add-user-app-key" placeholder="App Key">
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control b2s-user-app-form" maxlength="150" id="b2s-add-user-app-secret" name="b2s-add-user-app-secret" placeholder="App Secret">
-                        </div>
-                        <div class="clearfix"></div>
-                        <input type="hidden" id="b2s-add-user-app-network-id" value="">
-                        </form> 
-                        <div class="b2s-padding-top-8">
-                            <button class="btn btn-primary pull-right b2s-add-app-submit-btn"><?php esc_html_e('Confirm', 'blog2social'); ?></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-
-<div class="modal fade" id="b2sEditUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sEditUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sEditUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('Edit app data', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <div id="b2s-edit-user-app-info-missing" style="display:none">
-                    <?php esc_html_e('Please fill all required fields', 'blog2social'); ?>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
+                <div class="modal-body">
+                    <div id="b2s-add-user-app-info-missing" style="display:none">
                         <?php esc_html_e('Please fill all required fields', 'blog2social'); ?>
-                        <div class="form-group">
-                            <label for="b2s-edit-user-app-name"><?php esc_html_e('API App Name', 'blog2social')?></label>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="network-app-info" data-network-id="2" class="b2s-padding-bottom-5" style="display:none;">
+                                <?php echo sprintf(__('The App Key and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your X (Twitter) account via <a href="%s">OAuth</a>.', 'blog2social'), esc_url('https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret')); ?>
+                                <br>
+                                <?php echo sprintf(__('For get your App Key and Sercet, you can use the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))); ?>
+                            </p>
+                            <p class="network-app-info" data-network-id="6" class="b2s-padding-bottom-5" style="display:none;">
+                                <?php echo sprintf(__('The App-Id and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your Pinterest account via <a href="%s">OAuth</a>.', 'blog2social'), esc_url('https://developers.pinterest.com/docs/getting-started/authentication/')); ?>
+                                <br>
+                                <?php echo sprintf(__('For get your App-Id and Sercet, you can use the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_faq'))); ?>
+                            </p>
 
-                            <input type="text" maxlength="50" class="form-control b2s-edit-user-app-name" id="b2s-edit-user-app-name" name="b2s-edit-user-app-name" placeholder="App Name" value="">
+
+                            <form id="b2s-add-app-form" method="post">
+                                <div class="form-group">
+                                    <input type="text" class="form-control b2s-user-app-form" maxlength="50" id="b2s-add-user-app-name" name="b2s-add-user-app-name" placeholder="App Name">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control b2s-user-app-form" maxlength="100" id="b2s-add-user-app-key" name="b2s-add-user-app-key" placeholder="App Key">
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" class="form-control b2s-user-app-form" maxlength="150" id="b2s-add-user-app-secret" name="b2s-add-user-app-secret" placeholder="App Secret">
+                                </div>
+                                <div class="clearfix"></div>
+                                <input type="hidden" id="b2s-add-user-app-network-id" value="">
+                            </form> 
+                            <div class="b2s-padding-top-8">
+                                <button class="btn btn-primary pull-right b2s-add-app-submit-btn"><?php esc_html_e('Confirm', 'blog2social'); ?></button>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="b2s-edit-user-app-key"><?php esc_html_e('API Key', 'blog2social')?></label>
-                            <input type="text" maxlength="100" class="form-control b2s-edit-user-app-key" id="b2s-edit-user-app-key" name="b2s-edit-user-app-key" placeholder="App Key">
-                        </div>
-                        <div class="form-group">
-                            <label for="b2s-edit-user-app-secret"><?php esc_html_e('API Secret', 'blog2social')?></label>
-                            <input type="text" maxlength="150" class="form-control b2s-edit-user-app-secret" id="b2s-edit-user-app-secret" name="b2s-edit-user-app-secret" placeholder="App Secret">
-                        </div>
-                        <input type="hidden" id="b2s-edit-user-app-id" value="">
-                        <button class="btn btn-primary pull-right b2s-edit-app-submit-btn"><?php esc_html_e('Confirm', 'blog2social'); ?></button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="b2sDeleteUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sDeleteUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sDeleteUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('Delete app data', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <?php esc_html_e('WARNING: Deleting this app data will also delete all authorisations and scheduled social media posts associated with this app.', 'blog2social'); ?>
-            </div>
-            <div class="modal-footer">
-                <input type="hidden" id="b2s-delete-user-app-id" value="">
-                <button class="btn btn-sm btn-danger b2s-btn-network-delete-app-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
+
+
+    <div class="modal fade" id="b2sEditUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sEditUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sEditUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Edit app data', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <div id="b2s-edit-user-app-info-missing" style="display:none">
+                        <?php esc_html_e('Please fill all required fields', 'blog2social'); ?>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <?php esc_html_e('Please fill all required fields', 'blog2social'); ?>
+                            <div class="form-group">
+                                <label for="b2s-edit-user-app-name"><?php esc_html_e('API App Name', 'blog2social') ?></label>
+
+                                <input type="text" maxlength="50" class="form-control b2s-edit-user-app-name" id="b2s-edit-user-app-name" name="b2s-edit-user-app-name" placeholder="App Name" value="">
+                            </div>
+                            <div class="form-group">
+                                <label id="b2s-edit-user-app-key-name" for="b2s-edit-user-app-key"><?php esc_html_e('API Key', 'blog2social') ?></label>
+                                <input type="text" maxlength="100" class="form-control b2s-edit-user-app-key" id="b2s-edit-user-app-key" name="b2s-edit-user-app-key" placeholder="App Key">
+                            </div>
+                            <div class="form-group">
+                                <label for="b2s-edit-user-app-secret"><?php esc_html_e('API Secret', 'blog2social') ?></label>
+                                <input type="text" maxlength="150" class="form-control b2s-edit-user-app-secret" id="b2s-edit-user-app-secret" name="b2s-edit-user-app-secret" placeholder="App Secret">
+                            </div>
+                            <input type="hidden" id="b2s-edit-user-app-id" value="">
+                            <button class="btn btn-primary pull-right b2s-edit-app-submit-btn"><?php esc_html_e('Confirm', 'blog2social'); ?></button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<div class="modal fade" id="b2sBuyAddonAppsModal" tabindex="-1" role="dialog" aria-labelledby="b2sBuyAddonAppsModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sBuyAddonAppsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('You want to add additional apps?', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <p>
-                <?php esc_html_e('Purchase additional apps to your actual license.', 'blog2social'); ?>
-                </p>
-                <p>
-                <?php  
-                  esc_html_e('Click the button to open your Blog2Social account. Please, log in and complete the purchase.', 'blog2social');
-                ?>
-                </p>
-            </div>
-            <div class="modal-footer">
-            <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_apps'); ?> " class="btn btn-sm btn-success b2s-btn-buy-addon-apps-btn"><?php esc_html_e('purchase additional apps', 'blog2social') ?></a>
+    <div class="modal fade" id="b2sDeleteUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sDeleteUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sDeleteUserAppModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Delete app data', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <?php esc_html_e('WARNING: Deleting this app data will also delete all authorisations and scheduled social media posts associated with this app.', 'blog2social'); ?>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" id="b2s-delete-user-app-id" value="">
+                    <button class="btn btn-sm btn-danger b2s-btn-network-delete-app-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
+                </div>
             </div>
         </div>
     </div>
-</div>
+
+    <div class="modal fade" id="b2sBuyAddonAppsModal" tabindex="-1" role="dialog" aria-labelledby="b2sBuyAddonAppsModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sBuyAddonAppsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('You want to add additional apps?', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p>
+                        <?php esc_html_e('Purchase additional apps to your actual license.', 'blog2social'); ?>
+                    </p>
+                    <p>
+                        <?php
+                        esc_html_e('Click the button to open your Blog2Social account. Please, log in and complete the purchase.', 'blog2social');
+                        ?>
+                    </p>
+                </div>
+                <div class="modal-footer">
+                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_apps'); ?> " class="btn btn-sm btn-success b2s-btn-buy-addon-apps-btn"><?php esc_html_e('purchase additional apps', 'blog2social') ?></a>
+                </div>
+            </div>
+        </div>
+    </div>
 

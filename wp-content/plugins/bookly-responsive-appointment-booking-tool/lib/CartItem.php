@@ -160,10 +160,11 @@ class CartItem
                 if ( ! $staff_service->isLoaded() ) {
                     $staff_service->loadBy( array( 'staff_id' => $staff_id, 'service_id' => $service_id, 'location_id' => null ) );
                 }
-                $service_price = $staff_service->getPrice() * $this->getUnits();
+                $service_price = $staff_service->getPrice();
                 if ( $this->slots && $date_time ) {
                     $service_price = Proxy\SpecialHours::adjustPrice( $service_price, $staff_id, $service_id, $location_id, $service_start, date( 'w', strtotime( $date_time ) ) + 1 );
                 }
+                $service_price *= $this->getUnits();
                 $service_prices_cache[ $staff_id ][ $service_id ][ $location_id ][ $service_start ][ $this->getUnits() ] = $service_price;
             }
         }
@@ -208,11 +209,11 @@ class CartItem
     /**
      * Get staff ID.
      *
-     * @return int
+     * @return int|null
      */
     public function getStaffId()
     {
-        return (int) $this->slots[0][1];
+        return isset( $this->slots[0][1] ) ? (int) $this->slots[0][1] : null;
     }
 
     /**
@@ -288,10 +289,12 @@ class CartItem
      */
     public function toBePutOnWaitingList()
     {
-        foreach ( $this->slots as $slot ) {
-            if ( isset ( $slot[4] ) && $slot[4] == 'w' ) {
+        if ( $this->getType() === self::TYPE_APPOINTMENT ) {
+            foreach ( $this->slots as $slot ) {
+                if ( isset ( $slot[4] ) && $slot[4] == 'w' ) {
 
-                return true;
+                    return true;
+                }
             }
         }
 

@@ -69,7 +69,7 @@ class Dialog extends Lib\Base\Component
                 'no_result_found' => __( 'No result found', 'bookly' ),
                 'searching' => __( 'Searching', 'bookly' ),
                 'save' => __( 'Save', 'bookly' ),
-                'cancel' => __( 'Cancel', 'bookly' ),
+                'close' => __( 'Close', 'bookly' ),
                 'internal_note' => __( 'Internal note', 'bookly' ),
                 'chose_queue_type_info' => __( 'If you have added a new customer to this appointment or changed the appointment status for an existing customer, and for these records you want the corresponding email or SMS notifications to be sent to their recipients, select the "Send if new or status changed" option before clicking Send. You can also send notifications as if all customers were added as new by selecting "Send as for new".', 'bookly' ),
                 'send_if_new_or_status_changed' => __( 'Send if new or status changed', 'bookly' ),

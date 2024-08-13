@@ -40,7 +40,7 @@
 				var margin_bottom = 0;
 				var $thumbNav = $(this).find('.filmstrip, .flex-control-thumbs, .nivo-thumbs-enabled');				
 				// gets the slideshow's height
-				var height = get_max_height($(this).find('.ms-image > img, .rslides > li > img, .nivoSlider > img'));
+				var height = get_max_height($(this).find('.flexslider > ul > li img, .ms-image > img, .rslides > li > img, .nivoSlider > img'));
 
 				// if has filmstrip nav
 				if ($(this).find('.filmstrip').length) {

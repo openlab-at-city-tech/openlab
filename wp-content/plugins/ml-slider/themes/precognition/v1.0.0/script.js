@@ -9,6 +9,14 @@
 			if (captions.length) {
 				$container.addClass('ms-has-caption');
 			}
+
+			// Revert nav and slides order
+			var slides = $slider.find('.flex-viewport ul.slides');
+			if (slides.length) {
+				var nav = $slider.find('.flex-control-nav').detach();
+				nav.insertAfter(slides);
+			}
+			
 			$container.addClass('ms-loaded');
 		}
 		$(window).trigger('resize');

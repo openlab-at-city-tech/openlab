@@ -363,3 +363,7 @@
 .b2s-post-box-calendar-content .fc-view-container .fc-view {
     z-index: 1001;
 }
+
+.b2s-text-bold{
+    font-weight: 600;
+}

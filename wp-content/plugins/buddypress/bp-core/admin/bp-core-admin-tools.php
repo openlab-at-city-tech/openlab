@@ -112,12 +112,6 @@ function bp_admin_repair_list() {
 		'bp_admin_repair_count_members',
 	);
 
-	$repair_list[25] = array(
-		'bp-last-activity',
-		__( 'Repair member "last activity" data.', 'buddypress' ),
-		'bp_admin_repair_last_activity',
-	);
-
 	// Friends:
 	// - user friend count.
 	if ( bp_is_active( 'friends' ) ) {
@@ -191,9 +185,71 @@ function bp_admin_repair_list() {
  */
 function bp_admin_reset_slugs() {
 	/* translators: %s: the result of the action performed by the repair tool */
-	$statement = __( 'Removing all custom slugs and resetting default ones&hellip; %s', 'buddypress' );
+	$statement    = __( 'Removing all custom slugs and resetting default ones&hellip; %s', 'buddypress' );
+	$components   = buddypress()->active_components;
+	$bp_pages     = bp_get_option( 'bp-pages', array() );
+	$keep         = array_intersect_key( $bp_pages, $components );
+	$delete       = array_diff_key( $bp_pages, $keep );
+	$needs_switch = is_multisite() && ! bp_is_root_blog();
 
-	bp_core_add_page_mappings( buddypress()->active_components, 'delete' );
+	if ( bp_allow_access_to_registration_pages() && isset( $delete['register'], $delete['activate'] ) ) {
+		$keep = array_merge(
+			$keep,
+			array(
+				'register' => $delete['register'],
+				'activate' => $delete['activate'],
+			)
+		);
+	}
+
+	if ( $needs_switch ) {
+		switch_to_blog( bp_get_root_blog_id() );
+	}
+
+	// Remove all inactive components BP Pages and reset active ones slugs.
+	if ( $keep ) {
+		$deleted_pages = get_posts(
+			array(
+				'numberposts' => -1,
+				'post_type'   => bp_core_get_directory_post_type(),
+				'exclude'     => array_values( $keep ),
+				'fields'      => 'ids',
+			)
+		);
+
+		if ( $deleted_pages ) {
+			foreach ( $deleted_pages as $deleted_id ) {
+				wp_delete_post( $deleted_id, true );
+			}
+		}
+
+		foreach ( $keep as $component_id => $directory_page_id ) {
+			if ( ! isset( $components[ $component_id ] ) && 'register' !== $component_id && 'activate' !== $component_id ) {
+				continue;
+			}
+
+			wp_update_post(
+				array(
+					'ID'        => $directory_page_id,
+					'post_name' => $component_id,
+				)
+			);
+		}
+	}
+
+	// Remove all custom slugs.
+	if ( $bp_pages ) {
+		foreach ( $bp_pages as $page_id ) {
+			delete_post_meta( $page_id, '_bp_component_slugs' );
+		}
+	}
+
+	if ( $needs_switch ) {
+		restore_current_blog();
+	}
+
+	// Reset page mapping.
+	bp_core_add_page_mappings( $components );
 
 	// Delete BP Pages cache and rewrite rules.
 	wp_cache_delete( 'directory_pages', 'bp_pages' );
@@ -412,20 +468,6 @@ function bp_admin_repair_count_members() {
 }
 
 /**
- * Repair user last_activity data.
- *
- * Re-runs the migration from usermeta introduced in BP 2.0.
- *
- * @since 2.0.0
- */
-function bp_admin_repair_last_activity() {
-	/* translators: %s: the result of the action performed by the repair tool */
-	$statement = __( 'Determining last activity dates for each user&hellip; %s', 'buddypress' );
-	bp_last_activity_migrate();
-	return array( 0, sprintf( $statement, __( 'Complete!', 'buddypress' ) ) );
-}
-
-/**
  * Create the invitations database table if it does not exist.
  * Migrate outstanding group invitations if needed.
  *
@@ -515,7 +557,23 @@ function bp_admin_tools_feedback( $message, $class = false ) {
 
 	$message = '<div id="message" class="' . esc_attr( $class ) . ' notice is-dismissible">' . $message . '</div>';
 	$message = str_replace( "'", "\'", $message );
-	$lambda  = function() use ( $message ) { echo $message; };
+	$lambda  = function() use ( $message ) {
+		echo wp_kses(
+			$message,
+			array(
+				'p'   => true,
+				'ul'  => true,
+				'li'  => true,
+				'div' => array(
+					'id' => true,
+					'class' => true,
+				),
+				'a'   => array(
+					'href' => true,
+				),
+			)
+		);
+	};
 
 	add_action( bp_core_do_network_admin() ? 'network_admin_notices' : 'admin_notices', $lambda );
 
@@ -680,7 +738,7 @@ function bp_core_admin_notice_repopulate_blogs_resume() {
 		return;
 	}
 
-	echo '<div class="error"><p>' . __( 'It looks like you have more sites to record. Resume recording by checking the "Repopulate site tracking records" option.', 'buddypress' ) . '</p></div>';
+	echo '<div class="error"><p>' . esc_html__( 'It looks like you have more sites to record. Resume recording by checking the "Repopulate site tracking records" option.', 'buddypress' ) . '</p></div>';
 }
 add_action( 'network_admin_notices', 'bp_core_admin_notice_repopulate_blogs_resume' );
 

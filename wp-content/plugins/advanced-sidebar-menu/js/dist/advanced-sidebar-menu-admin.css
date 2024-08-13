@@ -22,7 +22,8 @@
   margin: 17px 0 !important
 }
 .advanced-sidebar-menu-column-box p {
-  line-height: 19px !important
+  line-height: 19px !important;
+  padding: 0 !important
 }
 .advanced-sidebar-menu-column-box label {
   display: inline !important;

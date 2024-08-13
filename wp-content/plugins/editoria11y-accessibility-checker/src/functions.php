@@ -101,7 +101,7 @@ function ed11y_get_plugin_settings( $option = false, $include_defaults = false )
 /**
  * Loads the scripts for the plugin.
  */
-function ed11y_load_scripts() {
+function ed11y_load_scripts(): void {
 	$user               = wp_get_current_user();
 	$allowed_roles      = array( 'editor', 'administrator', 'author', 'contributor' );
 	$allowed_user_roles = array_intersect( $allowed_roles, $user->roles );
@@ -112,6 +112,7 @@ function ed11y_load_scripts() {
 		// added last two parameters 10/27/22 need to test.
 		wp_enqueue_script( 'editoria11y-js', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js', null, Editoria11y::ED11Y_VERSION, false );
 		wp_enqueue_script( 'editoria11y-js-shim', trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-wp.js', array( 'wp-api' ), Editoria11y::ED11Y_VERSION, false );
+		wp_enqueue_style( 'editoria11y-lib-css', trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css', null, Editoria11y::ED11Y_VERSION );
 	}
 }
 add_action( 'wp_enqueue_scripts', 'ed11y_load_scripts' );
@@ -127,7 +128,7 @@ function ed11y_enqueue_editor_content_assets() {
 		$user               = wp_get_current_user();
 		$allowed_roles      = array( 'editor', 'administrator', 'author', 'contributor' );
 		$allowed_user_roles = array_intersect( $allowed_roles, $user->roles );
-		if ( $allowed_user_roles && 'none' !== ed11y_get_plugin_settings( 'ed11y_livecheck', false ) ) {
+		if ( ( $allowed_user_roles || current_user_can( 'edit_posts' ) || current_user_can( 'edit_pages' ) ) && 'none' !== ed11y_get_plugin_settings( 'ed11y_livecheck', false ) ) {
 			wp_enqueue_script(
 				'editoria11y-js',
 				trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.js',
@@ -150,6 +151,12 @@ function ed11y_enqueue_editor_content_assets() {
 					'options' => ed11y_get_params( wp_get_current_user() ),
 				)
 			);
+			wp_enqueue_style(
+				'editoria11y-lib-css',
+				trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css',
+				null,
+				Editoria11y::ED11Y_VERSION
+			);
 		}
 	}
 }
@@ -158,6 +165,8 @@ add_action( 'enqueue_block_assets', 'ed11y_enqueue_editor_content_assets' );
 
 /**
  * Returns page-specific config for the Editoria11y library.
+ *
+ * @SuppressWarnings(PHPMD.StaticAccess)
  *
  * @param Object $user WP_User.
  */
@@ -171,7 +180,7 @@ function ed11y_get_params( $user ) {
 		$ed1vals['theme']                    = $settings['ed11y_theme'];
 		$ed1vals['checkRoots']               = $settings['ed11y_checkRoots'];
 		$ed1vals['ignoreElements']           = '#wpadminbar *,' . $settings['ed11y_ignore_elements'];
-		$ed1vals['linkIgnoreStrings']        = $settings['ed11y_link_ignore_strings'];
+		$ed1vals['linkStringsNewWindows']    = $settings['ed11y_link_ignore_strings'];
 		$ed1vals['videoContent']             = $settings['ed11y_videoContent'];
 		$ed1vals['audioContent']             = $settings['ed11y_audioContent'];
 		$ed1vals['documentLinks']            = $settings['ed11y_documentContent'];
@@ -180,22 +189,76 @@ function ed11y_get_params( $user ) {
 		$ed1vals['preventCheckingIfPresent'] = $settings['ed11y_no_run'];
 		$ed1vals['liveCheck']                = $settings['ed11y_livecheck'];
 		$ed1vals['customTests']              = $settings['ed11y_custom_tests'];
+		$ed1vals['cssLocation']              = trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css';
 		set_site_transient( 'editoria11y_settings', $ed1vals, 360 );
 	}
 
+	$ed1vals['title'] = trim( wp_title( '', false, 'right' ) );
+
+	// Get entity type and post id (if single).
+	$ed1vals['post_id']     = get_the_ID();
+	$ed1vals['entity_type'] = 'other';
+	// Ref https://wordpress.stackexchange.com/questions/83887/return-current-page-type .
+	if ( is_page() ) {
+		$ed1vals['entity_type'] = is_front_page() ? 'Front' : 'Page';
+	} elseif ( is_home() ) {
+		$ed1vals['entity_type'] = 'Home';
+		$ed1vals['post_id']     = 0;
+	} elseif ( is_single() ) {
+		$ed1vals['entity_type'] = ( is_attachment() ) ? 'Attachment' : 'Post';
+	} elseif ( is_category() ) {
+		$ed1vals['entity_type'] = 'Category';
+		$ed1vals['post_id']     = 0;
+	} elseif ( is_tag() ) {
+		$ed1vals['entity_type'] = 'Tag';
+		$ed1vals['post_id']     = 0;
+	} elseif ( is_tax() ) {
+		$ed1vals['entity_type'] = 'Taxonomy';
+		$ed1vals['post_id']     = 0;
+	} elseif ( is_archive() ) {
+		$ed1vals['post_id'] = 0;
+		if ( is_author() ) {
+			$ed1vals['entity_type'] = 'Author';
+		} else {
+			$ed1vals['entity_type'] = 'Archive';
+		}
+	} elseif ( is_search() ) {
+		$ed1vals['post_id']     = 0;
+		$ed1vals['entity_type'] = 'Search';
+	} elseif ( is_404() ) {
+		$ed1vals['post_id']     = 0;
+		$ed1vals['entity_type'] = '404';
+	}
+
+	global $wp;
+
 	// Use permalink as sync URL if available, otherwise use query path.
-	$ed1vals['currentPage'] = get_permalink( get_the_ID() );
-	if ( empty( $ed1vals['currentPage'] ) || is_archive() || is_home() || is_front_page() ) {
-		global $wp;
+	if ( $ed1vals['post_id'] > 0 ) {
+		$ed1vals['currentPage'] = get_permalink( $ed1vals['post_id'] );
+	} else {
 		$ed1vals['currentPage'] = home_url( $wp->request );
 	}
 
+	// Mode is assertive from 0ms to 10minutes after a post is modified.
+	$page_edited          = get_post_modified_time( 'U', true );
+	$page_edited          = $page_edited ? abs( 1 + $page_edited - time() ) : false;
+	$ed1vals['alertMode'] = $page_edited && $page_edited < 600 ? 'assertive' : 'polite';
+
+	// Lazy-create DB if network activation failed.
+	if ( ! Editoria11y::check_tables() ) {
+		// No DB available.
+		$ed1vals['syncedDismissals'] = false;
+		return $ed1vals;
+	}
+
 	// Get dismissals for route. Complex joins require manual DB call.
+	// OR for permalink during transition to new DB structure.
 	// phpcs:disable
 	global $wpdb;
 	$utable                      = $wpdb->prefix . 'ed11y_urls';
 	$dtable                      = $wpdb->prefix . 'ed11y_dismissals';
-	$dismissals_on_page          = $wpdb->get_results(
+
+	$dismissals_on_page = $wpdb->get_results(
 		$wpdb->prepare(
 			"SELECT
 			{$dtable}.result_key,
@@ -203,7 +266,15 @@ function ed11y_get_params( $user ) {
 			{$dtable}.dismissal_status
 			FROM {$dtable}
 			INNER JOIN {$utable} ON {$utable}.pid={$dtable}.pid
-			WHERE {$utable}.page_url = %s
+			WHERE (
+			    {$utable}.page_url = %s
+			        OR
+			    	(
+			    	    0 < %d
+			    	    AND
+			    	    {$utable}.post_id = %d
+			    	)
+			    )
 			AND (
 				{$dtable}.dismissal_status = 'ok'
 					OR
@@ -216,48 +287,19 @@ function ed11y_get_params( $user ) {
 			;",
 			array(
 				$ed1vals['currentPage'],
+				$ed1vals['post_id'],
+				$ed1vals['post_id'],
 				$user->ID,
 			)
 		)
 	);
 	// phpcs:enable
+
 	$ed1vals['syncedDismissals'] = array();
 	foreach ( $dismissals_on_page as $key => $value ) {
 		$ed1vals['syncedDismissals'][ $value->result_key ][ $value->element_id ] = $value->dismissal_status;
 	}
 
-	$ed1vals['title'] = trim( wp_title( '', false, 'right' ) );
-
-	$ed1vals['entity_type'] = 'other';
-	// Ref https://wordpress.stackexchange.com/questions/83887/return-current-page-type .
-	if ( is_page() ) {
-		$ed1vals['entity_type'] = is_front_page() ? 'Front' : 'Page';
-	} elseif ( is_home() ) {
-		$ed1vals['entity_type'] = 'Home';
-	} elseif ( is_single() ) {
-		$ed1vals['entity_type'] = ( is_attachment() ) ? 'Attachment' : 'Post';
-	} elseif ( is_category() ) {
-		$ed1vals['entity_type'] = 'Category';
-	} elseif ( is_tag() ) {
-		$ed1vals['entity_type'] = 'Tag';
-	} elseif ( is_tax() ) {
-		$ed1vals['entity_type'] = 'Taxonomy';
-	} elseif ( is_archive() ) {
-		if ( is_author() ) {
-			$ed1vals['entity_type'] = 'Author';
-		} else {
-			$ed1vals['entity_type'] = 'Archive';
-		}
-	} elseif ( is_search() ) {
-		$ed1vals['entity_type'] = 'Search';
-	} elseif ( is_404() ) {
-		$ed1vals['entity_type'] = '404';
-	}
-
-	// Mode is assertive from 0ms to 10minutes after a post is modified.
-	$page_edited          = get_post_modified_time( 'U', true );
-	$page_edited          = $page_edited ? abs( 1 + $page_edited - time() ) : false;
-	$ed1vals['alertMode'] = $page_edited && $page_edited < 600 ? 'assertive' : 'polite';
 	return( $ed1vals );
 }
 

@@ -1,4 +1,4 @@
-<?php if (!defined('ABSPATH')) exit; // Exit if accessed directly ?>
+<?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly ?>
 <div class="bookly-js-holidays-nav text-center">
     <div class="btn-group btn-group-lg" role="group">
         <button class="btn btn-default bookly-js-jCalBtn" data-trigger=".jCal .left" type="button">

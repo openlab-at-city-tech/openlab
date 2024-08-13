@@ -66,20 +66,20 @@
         },
         {
             "name": "imagely/pope-framework",
-            "version": "v0.18",
-            "version_normalized": "0.18.0.0",
+            "version": "v0.19",
+            "version_normalized": "0.19.0.0",
             "source": {
                 "type": "git",
                 "url": "git@github.com:awesomemotive/pope-framework.git",
-                "reference": "83e5dc738c8eb5bb74cb5e7a9ac5f73c67bb45de"
+                "reference": "78e0b0c59b68c44b86e688f447a5a80e78e44b4f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/awesomemotive/pope-framework/zipball/83e5dc738c8eb5bb74cb5e7a9ac5f73c67bb45de",
-                "reference": "83e5dc738c8eb5bb74cb5e7a9ac5f73c67bb45de",
+                "url": "https://api.github.com/repos/awesomemotive/pope-framework/zipball/78e0b0c59b68c44b86e688f447a5a80e78e44b4f",
+                "reference": "78e0b0c59b68c44b86e688f447a5a80e78e44b4f",
                 "shasum": ""
             },
-            "time": "2023-11-10T13:42:01+00:00",
+            "time": "2023-12-20T13:22:52+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -98,7 +98,7 @@
             ],
             "description": "A component framework inspired by Zope 3. Pope is \"PHP's Zope\".",
             "support": {
-                "source": "https://github.com/awesomemotive/pope-framework/tree/v0.18",
+                "source": "https://github.com/awesomemotive/pope-framework/tree/v0.19",
                 "issues": "https://github.com/awesomemotive/pope-framework/issues"
             },
             "install-path": "../imagely/pope-framework"

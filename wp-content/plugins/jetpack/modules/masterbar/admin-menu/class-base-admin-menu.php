@@ -82,7 +82,7 @@ abstract class Base_Admin_Menu {
 			add_filter( 'admin_body_class', array( $this, 'admin_body_class' ) );
 
 			// Do not inject core mobile toggle when the user wants to use the WP Admin interface.
-			if ( ! $this->use_wp_admin_interface( 'jetpack' ) ) {
+			if ( ! $this->use_wp_admin_interface() ) {
 				add_action( 'adminmenu', array( $this, 'inject_core_mobile_toggle' ) );
 			}
 		}
@@ -268,7 +268,7 @@ abstract class Base_Admin_Menu {
 		wp_style_add_data( 'jetpack-admin-menu', 'rtl', $this->is_rtl() );
 
 		// Load nav unification styles when the user isn't using wp-admin interface style.
-		if ( ! $this->use_wp_admin_interface( 'jetpack' ) ) {
+		if ( ! $this->use_wp_admin_interface() ) {
 			wp_enqueue_style(
 				'jetpack-admin-nav-unification',
 				plugins_url( 'admin-menu-nav-unification.css', __FILE__ ),
@@ -503,15 +503,20 @@ abstract class Base_Admin_Menu {
 		foreach ( $menu as $menu_index => $menu_item ) {
 			$has_submenus = isset( $submenu[ $menu_item[2] ] );
 
-			// Skip if the menu doesn't have submenus.
-			if ( ! $has_submenus ) {
+			// Skip if the menu doesn't have submenus or the submenu is not an array.
+			if ( ! $has_submenus || ! is_array( $submenu[ $menu_item[2] ] ) ) {
+				continue;
+			}
+
+			$submenu_items = array_values( $submenu[ $menu_item[2] ] );
+			if ( empty( $submenu_items ) ) {
 				continue;
 			}
 
 			// If the first submenu item is hidden then we should also hide the parent.
 			// Since the submenus are ordered by self::HIDE_CSS_CLASS (hidden submenus should be at the end of the array),
 			// we can say that if the first submenu is hidden then we should also hide the menu.
-			$first_submenu_item       = array_values( $submenu[ $menu_item[2] ] )[0];
+			$first_submenu_item       = $submenu_items[0];
 			$is_first_submenu_visible = $this->is_item_visible( $first_submenu_item );
 
 			// if the user does not have access to the menu and the first submenu is hidden, then hide the menu.
@@ -520,8 +525,8 @@ abstract class Base_Admin_Menu {
 				$menu[ $menu_index ][4] = self::HIDE_CSS_CLASS;
 			}
 
-			// if the menu has the same slug as the first submenu then hide the submenu.
-			if ( $menu_item[2] === $first_submenu_item[2] && ! $is_first_submenu_visible ) {
+			// If the menu has the same slug as the first submenu then hide the submenu.
+			if ( isset( $first_submenu_item[2] ) && $menu_item[2] === $first_submenu_item[2] && ! $is_first_submenu_visible ) {
 				// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 				$menu[ $menu_index ][4] = self::HIDE_CSS_CLASS;
 			}
@@ -538,6 +543,10 @@ abstract class Base_Admin_Menu {
 		global $submenu;
 
 		foreach ( $submenu as $menu_slug => $submenu_items ) {
+			if ( ! $submenu_items ) {
+				continue;
+			}
+
 			foreach ( $submenu_items as $submenu_index => $submenu_item ) {
 				if ( $this->is_item_visible( $submenu_item ) ) {
 					continue;
@@ -663,7 +672,7 @@ abstract class Base_Admin_Menu {
 				return self::UNKNOWN_VIEW;
 			}
 
-			$should_link_to_wp_admin = $this->should_link_to_wp_admin( $screen ) || $this->use_wp_admin_interface( $screen );
+			$should_link_to_wp_admin = $this->should_link_to_wp_admin( $screen ) || $this->use_wp_admin_interface();
 			return $should_link_to_wp_admin ? self::CLASSIC_VIEW : self::DEFAULT_VIEW;
 		}
 
@@ -779,29 +788,10 @@ abstract class Base_Admin_Menu {
 	/**
 	 * Whether the current user has indicated they want to use the wp-admin interface for the given screen.
 	 *
-	 * @param string $screen The current screen.
 	 * @return bool
 	 */
-	public function use_wp_admin_interface( $screen ) {
-		$screen_excluded = $this->is_excluded_wp_admin_interface_screen( $screen );
-		return ! $screen_excluded && 'wp-admin' === get_option( 'wpcom_admin_interface' );
-	}
-
-	/**
-	 * Returns whether we should default to wp_admin for the given screen.
-	 *
-	 * Screens that should not default to wp_admin when the wpcom_admin_interface is set.
-	 * This applies to screens that have both a wp-admin and a Calypso interface.
-	 *
-	 * @param string $screen The current screen.
-	 *
-	 * @return bool
-	 */
-	protected function is_excluded_wp_admin_interface_screen( $screen ) {
-		$excluded_screens = array(
-			'import.php',
-		);
-		return in_array( $screen, $excluded_screens, true );
+	public function use_wp_admin_interface() {
+		return 'wp-admin' === get_option( 'wpcom_admin_interface' );
 	}
 
 	/**

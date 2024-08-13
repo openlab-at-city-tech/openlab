@@ -49,7 +49,7 @@ class CMTT_Settings extends \CMTT\Settings {
 
     public static function beforeSaveOption($option_value, $option_name) {
         if ($option_name == 'cmtt_index_letters') {
-            $option_value = array_map('mb_strtolower', explode(',', $option_value));
+            $option_value = array_map('mb_strtolower', explode(',', sanitize_text_field($option_value)));
         }
         return $option_value;
     }
@@ -57,11 +57,13 @@ class CMTT_Settings extends \CMTT\Settings {
     public static function beforeSaveSettings($post, $messages) {
 
         if (isset($post['cmtt_removeAllOptions'])) {
+            check_admin_referer('remove-options-items');
             self::_cleanupOptions();
             $messages = 'CM Tooltip Glossary data options have been removed from the database.';
         }
 
         if (isset($post['cmtt_removeAllItems'])) {
+            check_admin_referer('remove-options-items');
             self::_cleanupItems();
             $messages = 'CM Tooltip Glossary data terms have been removed from the database.';
         }

@@ -37,56 +37,64 @@
                 $('body, a').css('cursor', 'wait');
 
                 // Send the AJAX request
-                $.get($(this).attr('href'), function (response) {
-                    window['ngg_ajax_operaton_count']--;
-                    if (window['ngg_ajax_operaton_count'] <= 0) {
-                        window['ngg_ajax_operaton_count'] = 0;
-                        $('body, a').css('cursor', 'auto');
-                    }
+                $.get({
+                    url: $(this).attr('href'),
+                    headers: { 'X-NGG-Pagination-Request': true },
+                    success: function (response) {
+                        window['ngg_ajax_operaton_count']--;
+                        if (window['ngg_ajax_operaton_count'] <= 0) {
+                            window['ngg_ajax_operaton_count'] = 0;
+                            $('body, a').css('cursor', 'auto');
+                        }
 
-                    if (response) {
-                        var html = $(response);
-                        var replacement = false;
-                        html.find(self.container_name).each(function() {
-                            if (replacement) {
-                                return true;
-                            }
-                            if ($(this).data('nextgen-gallery-id') != self.displayed_gallery_id) {
-                                return true;
-                            }
-                            replacement = $(this);
-                        });
-                        if (replacement) {
-                            self.container.each(function () {
-                                var $this = $(this);
-
-                                if ($this.data('nextgen-gallery-id') != self.displayed_gallery_id) {
+                        if (response) {
+                            var html = $(response);
+                            var replacement = false;
+                            html.find(self.container_name).each(function() {
+                                if (replacement) {
                                     return true;
                                 }
+                                if ($(this).data('nextgen-gallery-id') != self.displayed_gallery_id) {
+                                    return true;
+                                }
+                                replacement = $(this);
+                            });
+                            if (replacement) {
+                                self.container.each(function () {
+                                    var $this = $(this);
 
-                                // If the image gallery makes up the bulk of the post/page content the .html() call
-                                // below will empty the contents causing the browser's scroll position to be reset to
-                                // zero as the browser believes it has been pushed back to the top of the page. Here
-                                // we give the parent container a min-height equal to the gallery's height to prevent
-                                // this flicker and resetting of the scroll position.
-                                var $new_element = $(replacement.html());
-                                var promises = $new_element.find('img').toArray().map(function(img){
-                                    return new Promise(function(resolve, reject){
-                                        var i = new Image();
-                                        i.src = img.src;
-                                        $(i).on('load', resolve);
+                                    if ($this.data('nextgen-gallery-id') != self.displayed_gallery_id) {
+                                        return true;
+                                    }
+
+                                    // If the image gallery makes up the bulk of the post/page content the .html() call
+                                    // below will empty the contents causing the browser's scroll position to be reset to
+                                    // zero as the browser believes it has been pushed back to the top of the page. Here
+                                    // we give the parent container a min-height equal to the gallery's height to prevent
+                                    // this flicker and resetting of the scroll position.
+                                    var $new_element = $(replacement.html());
+                                    var promises = $new_element.find('img').toArray().map(function(img){
+                                        return new Promise(function(resolve, reject){
+                                            var i = new Image();
+                                            i.src = img.src;
+                                            $(i).on('load', resolve);
+                                        });
                                     });
-                                });
 
-                                Promise.all(promises).then(function(){
+                                    Promise.all(promises).then(function(){
                                         $this.html($new_element);
 
                                         // Let the user know that we've refreshed the content
                                         $(document).trigger('refreshed');
-                                });
 
-                                return true;
-                            });
+                                        // Emit an event that doesn't require jQuery
+                                        const event = new Event("nextgen_page_refreshed");
+                                        document.dispatchEvent(event);
+                                    });
+
+                                    return true;
+                                });
+                            }
                         }
                     }
                 });

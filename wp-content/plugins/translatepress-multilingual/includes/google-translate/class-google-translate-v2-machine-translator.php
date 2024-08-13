@@ -15,7 +15,7 @@ class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator 
      */
     public function send_request( $source_language, $language_code, $strings_array ){
         /* build our translation request */
-        $translation_request = 'key='.$this->settings['trp_machine_translation_settings']['google-translate-key'];
+        $translation_request = 'key=' . $this->get_api_key();
         $translation_request .= '&source='.$source_language;
         $translation_request .= '&target='.$language_code;
         foreach( $strings_array as $new_string ){
@@ -126,27 +126,29 @@ class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator 
 
 
     public function get_supported_languages(){
-        $response = wp_remote_post( "https://translation.googleapis.com/language/translate/v2/languages", array(
-                'headers' => array(
-                    'timeout'                => 45,
-                    'Referer'                => $this->get_referer()
-                ),
-                'body' => 'key='.$this->settings['trp_machine_translation_settings']['google-translate-key'],
-            )
-        );
-        
 
-        if ( is_array( $response ) && ! is_wp_error( $response ) && isset( $response['response'] ) &&
-            isset( $response['response']['code']) && $response['response']['code'] == 200 ) {
-            $data = json_decode( $response['body'] );
-            $supported_languages = array();
-            foreach( $data->data->languages as $language ){
-                $supported_languages[] = $language->language;
+        if ( $this->get_api_key() ) {
+            $response = wp_remote_post( "https://translation.googleapis.com/language/translate/v2/languages", array(
+                    'headers' => array(
+                        'timeout' => 45,
+                        'Referer' => $this->get_referer()
+                    ),
+                    'body' => 'key=' . $this->get_api_key(),
+                )
+            );
+
+
+            if ( is_array( $response ) && !is_wp_error( $response ) && isset( $response['response'] ) &&
+                isset( $response['response']['code'] ) && $response['response']['code'] == 200 ) {
+                $data                = json_decode( $response['body'] );
+                $supported_languages = array();
+                foreach ( $data->data->languages as $language ) {
+                    $supported_languages[] = $language->language;
+                }
+                return apply_filters( 'trp_add_google_v2_supported_languages_to_the_array', $supported_languages );
             }
-            return apply_filters( 'trp_add_google_v2_supported_languages_to_the_array', $supported_languages );
-        }else{
-            return array();
         }
+        return array();
     }
 
     public function add_google_v2_supported_languages_that_are_not_returned_by_the_post_response($supported_language){

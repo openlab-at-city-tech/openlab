@@ -37,10 +37,10 @@ class TRP_Gettext_Scan {
 				continue;
 			}
 			$interrupted_in_the_recursive_scan = false;
-			if ( is_file( $path ) ) {
-				trp_potx_process_file( realpath( $path ), 0, 'trp_save_gettext_string' );
-			} else {
-				$iterator = new RecursiveDirectoryIterator( $path );
+            if ( is_file( $path ) ) {
+                trp_potx_process_file( realpath( $path ), 0, 'trp_save_gettext_string' );
+            } elseif (is_dir($path)) {
+                $iterator = new RecursiveDirectoryIterator( $path );
 
 				// loop through directory and get _e(), __() etc. function calls
 				foreach ( new RecursiveIteratorIterator( $iterator ) as $filename => $current_file ) {

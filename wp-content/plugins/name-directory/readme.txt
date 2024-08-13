@@ -1,15 +1,15 @@
-=== Plugin Name ===
+=== Name Directory ===
 Contributors: jeroenpeters1986, mpmarinov, mastababa
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=T284NKYDFC8PE&lc=US&item_name=WordPress%2dPlugin&item_number=Name%2dDirectory&currency_code=USD
-Tags: glossary, index, name, directory, names, NameDirectory, Name Directory, telephonebook, glossaries, directories, dictionary, dictionaries
+Donate link: https://ko-fi.com/jeroenpeters
+Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 6.4
-Stable tag: 1.28.5
+Tested up to: 6.5
+Stable tag: 1.29.0
 
-Name directory (glossary) with lots of options. Very easy to add to your site with a simple shortcode. It can have multiple directories. Supports multibyte characters (Chinese, Russian, Arabic, Danish/Nordic alphabet, etc) and reCAPTCHA for submits.
+Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
 == Description ==
 
@@ -20,7 +20,7 @@ The output on your website is like a glossary/index, including a search function
 This plugin supports **multiple directories** in one WordPress installation.
 I recommend you to take a look at the screenshots, they illustrate more than words.
 
-The Name Directory plugin was orginally developed for [ParkietenVilla.nl](https://www.parkietenvilla.nl/namenlijst/) to show a directory of names to name your budgies.
+The Name Directory plugin was originally developed for [ParkietenVilla.nl](https://www.parkietenvilla.nl/namenlijst/) to show a directory of names to name your budgies.
 
 #### Create multiple directories and customize them!
 
@@ -52,9 +52,10 @@ This plugin is also tested compatible with:
  * the popular [Members plugin](https://wordpress.org/plugins/members/) which makes role permissions easy
  * [Relevanssi plugin](https://wordpress.org/plugins/relevanssi/), the better search plugin
 
-#### Try the instant demo-site!
-If you want to try Name Directory right away,
-[click here for an instant demo-website with Name Directory installed](https://demo.tastewp.com/name-directory).
+#### Try the plugin without installing it yourself.
+Do you want to try Name Directory instantly? Thanks to TasteWP, you can start with an empty demo-site, just for you!
+Also, it's free. 
+[Click here to create the instant demo-website with Name Directory installed](https://demo.tastewp.com/name-directory).
 
 #### Embed the directory in the WordPress default search engine
 When you go to the General Settings of the plugin, you can enable WordPress search compatibility.
@@ -74,6 +75,9 @@ We are proud to be featured on:
  - [WordPress tutorials](https://wpglob.com/blog/)
  - [Kinsta: The best Directory plugins (no. 7)](https://kinsta.com/blog/wordpress-directory-plugins/#name-directory)
  - [WPBeginner: Best Directory plugins (no. 5)](https://www.wpbeginner.com/plugins/best-directory-plugins-for-wordpress/)
+ - [QuadLayers: Best Directory Plugins (no. 3)](https://quadlayers.com/best-wordpress-glossary-plugins/)
+ - [ThemeGrill: Business Directory Plugins (no. 6)](https://themegrill.com/blog/wordpress-business-directory-plugin/#6-name-directory)
+ - [WP Wax: Best Directory plugins](https://wpwax.com/best-wordpress-directory-plugins/)
 
 #### Thank you
 Thank you to the few who have donated to me already, or bought a custom version of Name Directory.
@@ -258,6 +262,11 @@ Yes, I do. For this I offer paid help. Please contact me at [my website](https:/
 
 
 == Changelog ==
+
+= 1.29.0 | March 25, 2024 =
+ * Enhancement: Improved sorting with diacritic characters
+ * Enhancement: Tested up to WordPress 6.5
+ * Enhancement: Clarify implications of the use of HTML
 
 = 1.28.5 | November 5, 2023 =
  * Bugfix: PHP showed a notice when in debug mode about missing variable, thanks @jibbius

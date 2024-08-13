@@ -61,7 +61,13 @@ class Transfer_Entries_Controller extends Zapier_Controller {
 		$admin_labels  = ! empty( $request->get_param( '_admin_labels' ) );
 		$data          = array();
 		foreach ( $entries as $entry ) {
-			$data[] = $this->get_sample_data( $form, $admin_labels, $entry );
+			$entry_data = $this->get_sample_data( $form, $admin_labels, $entry );
+
+			// Manually add in entry ID to prevent translated keys from breaking entries.
+			if ( ! isset( $entry_data['Entry ID'] ) ) {
+				$entry_data['Entry ID'] = rgar( $entry, 'id' );
+			}
+			$data[] = $entry_data;
 		}
 
 		$per_page  = isset( $search_params['paging']['page_size'] ) ? $search_params['paging']['page_size'] : 10;

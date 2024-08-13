@@ -85,8 +85,8 @@ class Page extends Lib\Base\Component
                     'datatables' => $datatables,
                 )
             );
-
-            self::renderTemplate( 'index', compact( 'cloud', 'datatables', 'undelivered_count' ) );
+            $sms = $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS );
+            self::renderTemplate( 'index', compact( 'sms', 'datatables', 'undelivered_count' ) );
         }
     }
 
@@ -107,7 +107,7 @@ class Page extends Lib\Base\Component
             $title = $count ? sprintf( '%s <span class="update-plugins"><span class="update-count">%d</span></span>', $sms, $count ) : $sms;
         }
 
-        $page = $cloud->getToken() && $cloud->account->productActive( 'sms' ) ? self::pageSlug() : CloudProducts::pageSlug();
+        $page = $cloud->getToken() && $cloud->account->productActive( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS ) ? self::pageSlug() : CloudProducts::pageSlug();
 
         add_submenu_page(
             'bookly-menu',

@@ -48,11 +48,27 @@ $group_label_uc = openlab_get_group_type_label( 'case=upper' );
 
 					<?php do_action( 'bp_before_group_details_admin' ); ?>
 
+					<?php if ( 'portfolio' === $group_type ) : ?>
+						<p><?php echo esc_html( openlab_get_profile_field_helper_text( 'portfolio_name' ) ); ?></p>
+					<?php endif; ?>
+
 					<label for="group-name"><?php echo $group_label_uc . ' Name'; ?> (required)</label>
 					<input class="form-control" type="text" name="group-name" id="group-name" value="<?php bp_group_name(); ?>" />
 
 					<label for="group-desc"><?php echo $group_label_uc . ' Description'; ?> (required)</label>
 					<textarea class="form-control" name="group-desc" id="group-desc"><?php bp_group_description_editable(); ?></textarea>
+
+					<?php if ( openlab_is_portfolio() ) : ?>
+						<fieldset class="portfolio-profile-link-wrapper">
+							<legend><?php echo esc_html( $group_label_uc ); ?> Link on my OpenLab Profile</legend>
+
+							<p>You can choose to show a link to your <?php echo esc_html( $group_label_uc ); ?> on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name, but you want to use your real name on your <?php echo esc_html( $group_label_uc ); ?>, you may wish to leave this unchecked.</p>
+
+							<input name="portfolio-profile-link" id="portfolio-profile-link-toggle" <?php checked( openlab_show_portfolio_link_on_user_profile( openlab_get_user_id_from_portfolio_group_id( bp_get_current_group_id() ) ) ); ?> type="checkbox" name="portfolio-profile-link-toggle" value="1" /> <label for="portfolio-profile-link-toggle">Show link to my <?php echo esc_html( $group_label_uc ); ?> on my public OpenLab Profile</label>
+
+							<?php wp_nonce_field( 'portfolio_profile_link', 'portfolio-profile-link-nonce', false ); ?>
+						</fieldset>
+					<?php endif; ?>
 
 					<fieldset class="group-active-status-fieldset">
 						<legend><?php echo esc_html( sprintf( '%s Status', $group_label_uc ) ); ?></legend>

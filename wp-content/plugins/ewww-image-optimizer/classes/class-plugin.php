@@ -55,6 +55,13 @@ final class Plugin extends Base {
 	public $async_test_request;
 
 	/**
+	 * Background Attachment Update object.
+	 *
+	 * @var object|EWWW\Background_Process_Attachment_Update $background_attachment_update
+	 */
+	public $background_attachment_update;
+
+	/**
 	 * Background Process Flag object.
 	 *
 	 * @var object|EWWW\Background_Process_Flag $background_flag
@@ -118,6 +125,46 @@ final class Plugin extends Base {
 	public $cloud_mode = false;
 
 	/**
+	 * Whether the plugin is allowed to use async mode for the API.
+	 *
+	 * @var bool $cloud_mode
+	 */
+	public $cloud_async_allowed = false;
+
+	/**
+	 * Whether deferral (async processing) of image optimization is allowed.
+	 *
+	 * Normally true, but if the plugin is already in processing an image
+	 * in async mode, then it shouldn't be deferred endlessly.
+	 *
+	 * @var bool $defer
+	 */
+	public $defer = true;
+
+	/**
+	 * Whether forced re-optimization is enabled.
+	 *
+	 * @var bool $force
+	 */
+	public $force = false;
+
+	/**
+	 * Whether smart, forced re-optimization is enabled, to re-optimize
+	 * images that were previously compressed at a different optimization level.
+	 *
+	 * @var bool $force
+	 */
+	public $force_smart = false;
+
+	/**
+	 * Whether WebP-only mode is enabled, so that other optimizations
+	 * are disabled, and only WebP conversion is attempted.
+	 *
+	 * @var bool $webp_only
+	 */
+	public $webp_only = false;
+
+	/**
 	 * Did we already run tool_init()?
 	 *
 	 * @var bool $tools_initialized
@@ -149,6 +196,8 @@ final class Plugin extends Base {
 			// For classes we need everywhere, front-end and back-end. Others are only included on admin_init (below).
 			self::$instance->requires();
 			self::$instance->load_children();
+			// Load plugin compatibility functions for S3 Uploads, NextGEN, FlaGallery, and Nextcellent.
+			\add_action( 'plugins_loaded', array( self::$instance, 'plugins_compat' ) );
 			// Initializes the plugin for admin interactions, like saving network settings and scheduling cron jobs.
 			\add_action( 'admin_init', array( self::$instance, 'admin_init' ) );
 			// We run this early, and then double-check after admin_init, once network settings have been saved/updated.
@@ -193,6 +242,10 @@ final class Plugin extends Base {
 	private function requires() {
 		// Fall-back and convenience functions.
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'functions.php';
+		// Functions for bulk processing.
+		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'bulk.php';
+		// Functions for the images and queue db tables and bulk processing images outside the library.
+		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'aux-optimize.php';
 		// Require the various class extensions for background optimization.
 		$this->async_requires();
 		// EWWW_Image class for working with queued images and image records from the database.
@@ -236,6 +289,8 @@ final class Plugin extends Base {
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-async-test-optimize.php';
 		// Async test request, used to make sure async works properly.
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-async-test-request.php';
+		// Background attachment updating.
+		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-background-process-attachment-update.php';
 		// Background optimization for GRAND FlaGallery.
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-background-process-flag.php';
 		// Background optimization for individual images.
@@ -253,19 +308,71 @@ final class Plugin extends Base {
 	 */
 	public function load_children() {
 		// Setup async/background classes first.
-		self::$instance->async_key_verify    = new Async_Key_Verify();
-		self::$instance->async_scan          = new Async_Scan();
-		self::$instance->async_test_optimize = new Async_Test_Optimize();
-		self::$instance->async_test_request  = new Async_Test_Request();
-		self::$instance->background_flag     = new Background_Process_Flag();
-		self::$instance->background_image    = new Background_Process_Image();
-		self::$instance->background_media    = new Background_Process_Media();
-		self::$instance->background_ngg      = new Background_Process_Ngg();
-		self::$instance->background_ngg2     = new Background_Process_Ngg2();
+		self::$instance->async_key_verify             = new Async_Key_Verify();
+		self::$instance->async_scan                   = new Async_Scan();
+		self::$instance->async_test_optimize          = new Async_Test_Optimize();
+		self::$instance->async_test_request           = new Async_Test_Request();
+		self::$instance->background_attachment_update = new Background_Process_Attachment_Update();
+		self::$instance->background_image             = new Background_Process_Image();
+		self::$instance->background_media             = new Background_Process_Media();
 
 		// Then, setup the rest of the classes we need.
 		self::$instance->local    = new Local();
 		self::$instance->tracking = new Tracking();
+	}
+
+	/**
+	 * Load plugin compat on the plugins_loaded hook, which is about as early as possible.
+	 */
+	public function plugins_compat() {
+		$this->debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+
+		if ( $this->s3_uploads_enabled() ) {
+			$this->debug_message( 's3-uploads detected, deferring resize_upload' );
+			\add_filter( 'ewww_image_optimizer_defer_resizing', '__return_true' );
+		}
+
+		$active_plugins = \get_option( 'active_plugins' );
+		if ( \is_multisite() && \is_array( $active_plugins ) ) {
+			$sitewide_plugins = \get_site_option( 'active_sitewide_plugins' );
+			if ( \is_array( $sitewide_plugins ) ) {
+				$active_plugins = \array_merge( $active_plugins, \array_flip( $sitewide_plugins ) );
+			}
+		}
+		if ( $this->is_iterable( $active_plugins ) ) {
+			$this->debug_message( 'checking active plugins' );
+			foreach ( $active_plugins as $active_plugin ) {
+				if ( \strpos( $active_plugin, '/nggallery.php' ) || \strpos( $active_plugin, '\nggallery.php' ) ) {
+					$ngg = ewww_image_optimizer_get_plugin_version( \trailingslashit( WP_PLUGIN_DIR ) . $active_plugin );
+					// Include the file that loads the nextgen gallery optimization functions.
+					$this->debug_message( 'Nextgen version: ' . $ngg['Version'] );
+					if ( 1 < \intval( \substr( $ngg['Version'], 0, 1 ) ) ) { // For Nextgen 2+ support.
+						$nextgen_major_version = \substr( $ngg['Version'], 0, 1 );
+						$this->debug_message( "loading nextgen $nextgen_major_version support for $active_plugin" );
+						// Initialize the nextgen async/background class.
+						self::$instance->background_ngg2 = new Background_Process_Ngg2();
+						require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewww-nextgen.php';
+					} else {
+						\preg_match( '/\d+\.\d+\.(\d+)/', $ngg['Version'], $nextgen_minor_version );
+						if ( ! empty( $nextgen_minor_version[1] ) && $nextgen_minor_version[1] < 14 ) {
+							$this->debug_message( "NOT loading nextgen legacy support for $active_plugin" );
+						} elseif ( ! empty( $nextgen_minor_version[1] ) && $nextgen_minor_version[1] > 13 ) {
+							$this->debug_message( "loading nextcellent support for $active_plugin" );
+							// Initialize the nextcellent async/background class.
+							self::$instance->background_ngg = new Background_Process_Ngg();
+							require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewww-nextcellent.php';
+						}
+					}
+				}
+				if ( \strpos( $active_plugin, '/flag.php' ) || \strpos( $active_plugin, '\flag.php' ) ) {
+					$this->debug_message( "loading flagallery support for $active_plugin" );
+					// Initialize the flagallery async/background class.
+					self::$instance->background_flag = new Background_Process_Flag();
+					// Include the file that loads the grand flagallery optimization functions.
+					require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'classes/class-ewww-flag.php';
+				}
+			}
+		}
 	}
 
 	/**
@@ -367,14 +474,6 @@ final class Plugin extends Base {
 	public function admin_init() {
 		$this->hs_beacon = new HS_Beacon();
 		/**
-		 * Require the file that does the bulk processing.
-		 */
-		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'bulk.php';
-		/**
-		 * Require the files that contain functions for the images table and bulk processing images outside the library.
-		 */
-		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'aux-optimize.php';
-		/**
 		 * Require the files that migrate WebP images from extension replacement to extension appending.
 		 */
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'mwebp.php';
@@ -427,6 +526,12 @@ final class Plugin extends Base {
 				$ao_extra['autoptimize_imgopt_checkbox_field_1'] = 0;
 				\update_option( 'autoptimize_imgopt_settings', $ao_extra );
 				\add_action( 'admin_notices', 'ewww_image_optimizer_notice_exactdn_sp_conflict' );
+			}
+		}
+		if ( \method_exists( '\HMWP_Classes_Tools', 'getOption' ) ) {
+			if ( $this->get_option( 'ewww_image_optimizer_exactdn' ) && \HMWP_Classes_Tools::getOption( 'hmwp_hide_version' ) && ! \HMWP_Classes_Tools::getOption( 'hmwp_hide_version_random' ) ) {
+				$this->debug_message( 'detected HMWP Hide Version' );
+				\add_action( 'admin_notices', array( $this, 'notice_exactdn_hmwp' ) );
 			}
 		}
 		if (
@@ -493,10 +598,14 @@ final class Plugin extends Base {
 			\add_action( 'admin_notices', 'ewww_image_optimizer_notice_lr_sync' );
 			\add_action( 'admin_footer', 'ewww_image_optimizer_lr_sync_script' );
 		}
+		if ( \class_exists( '\Bbpp_Animated_Gif' ) ) {
+			\add_action( 'admin_notices', 'ewww_image_optimizer_notice_agr' );
+			\add_action( 'network_admin_notices', 'ewww_image_optimizer_notice_agr' );
+		}
 		// Increase the version when the next bump is coming.
 		if ( \defined( 'PHP_VERSION_ID' ) && PHP_VERSION_ID < 70200 ) {
-			\add_action( 'network_admin_notices', 'ewww_image_optimizer_php72_warning' );
 			\add_action( 'admin_notices', 'ewww_image_optimizer_php72_warning' );
+			\add_action( 'network_admin_notices', 'ewww_image_optimizer_php72_warning' );
 		}
 		if ( \get_option( 'ewww_image_optimizer_debug' ) ) {
 			\add_action( 'admin_notices', 'ewww_image_optimizer_debug_enabled_notice' );
@@ -519,7 +628,6 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_pdf_level', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_svg_level', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_backup_files', 'sanitize_text_field' );
-		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_enable_cloudinary', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_sharpen', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_jpg_quality', 'ewww_image_optimizer_jpg_quality' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_webp_quality', 'ewww_image_optimizer_webp_quality' );
@@ -538,6 +646,7 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_lazy_load', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_ll_autoscale', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_use_lqip', 'boolval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_use_dcip', 'boolval' );
 		// Using sanitize_text_field instead of textarea on purpose.
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_ll_all_things', 'sanitize_text_field' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_ll_exclude', array( $this, 'exclude_paths_sanitize' ) );
@@ -589,9 +698,12 @@ final class Plugin extends Base {
 		\add_option( 'exactdn_exclude', '' );
 		\add_option( 'exactdn_sub_folder', false );
 		\add_option( 'exactdn_prevent_db_queries', true );
+		\add_option( 'exactdn_asset_domains', '' );
 		\add_option( 'ewww_image_optimizer_lazy_load', false );
+		\add_option( 'ewww_image_optimizer_add_missing_dims', false );
 		\add_option( 'ewww_image_optimizer_use_siip', false );
 		\add_option( 'ewww_image_optimizer_use_lqip', false );
+		\add_option( 'ewww_image_optimizer_use_dcip', false );
 		\add_option( 'ewww_image_optimizer_ll_exclude', '' );
 		\add_option( 'ewww_image_optimizer_ll_all_things', '' );
 		\add_option( 'ewww_image_optimizer_disable_pngout', true );
@@ -627,6 +739,27 @@ final class Plugin extends Base {
 	}
 
 	/**
+	 * Outputs the script to dismiss the 'exec' notice.
+	 */
+	protected function display_exec_dismiss_script() {
+		?>
+		<script>
+			jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {
+				var ewww_dismiss_exec_data = {
+					action: 'ewww_dismiss_exec_notice',
+					_wpnonce: <?php echo wp_json_encode( wp_create_nonce( 'ewww-image-optimizer-notice' ) ); ?>,
+				};
+				jQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {
+					if (response) {
+						console.log(response);
+					}
+				});
+			});
+		</script>
+		<?php
+	}
+
+	/**
 	 * Checks for exec() and availability of local optimizers, then displays an error if needed.
 	 *
 	 * @param string $quiet Optional. Use 'quiet' to suppress output.
@@ -641,7 +774,7 @@ final class Plugin extends Base {
 				// Display a warning if exec() is disabled, can't run local tools without it.
 				if ( \ewww_image_optimizer_easy_active() ) {
 					echo "<div id='ewww-image-optimizer-warning-exec' class='notice notice-info is-dismissible'><p>";
-					\esc_html_e( 'Free compression of local images cannot be done on your site without an API key. Since Easy IO is already automatically optimizing your site, you may dismiss this notice unless you need to save storage space.', 'ewww-image-optimizer' );
+					\esc_html_e( 'Compression of local images cannot be done on your site without an API key. Since Easy IO is already automatically optimizing your site, you may dismiss this notice unless you need to save storage space.', 'ewww-image-optimizer' );
 				} else {
 					echo "<div id='ewww-image-optimizer-warning-exec' class='notice notice-warning is-dismissible'><p>";
 					\printf(
@@ -652,18 +785,7 @@ final class Plugin extends Base {
 				}
 				\ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
 				echo '</p></div>';
-				echo "<script>\n" .
-					"jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {\n" .
-						"\tvar ewww_dismiss_exec_data = {\n" .
-							"\t\taction: 'ewww_dismiss_exec_notice',\n" .
-						"\t};\n" .
-						"\tjQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {\n" .
-							"\t\tif (response) {\n" .
-								"\t\t\tconsole.log(response);\n" .
-							"\t\t}\n" .
-						"\t});\n" .
-					"});\n" .
-					"</script>\n";
+				$this->display_exec_dismiss_script();
 				if (
 					\ewww_image_optimizer_easy_active() &&
 					! $this->get_option( 'ewww_image_optimizer_ludicrous_mode' )
@@ -704,12 +826,11 @@ final class Plugin extends Base {
 				if ( false !== $key ) {
 					unset( $missing[ $key ] );
 				}
-				$pngout_install_url = \admin_url( 'admin.php?action=ewww_image_optimizer_install_pngout' );
 				echo "<div id='ewww-image-optimizer-warning-opt-missing' class='notice notice-warning'><p>" .
 				\sprintf(
 					/* translators: 1: automatically (link) 2: manually (link) */
 					\esc_html__( 'EWWW Image Optimizer is missing pngout. Install %1$s or %2$s.', 'ewww-image-optimizer' ),
-					"<a href='" . \esc_url( $pngout_install_url ) . "'>" . \esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
+					"<a href='" . \esc_url( \wp_nonce_url( \admin_url( 'admin.php?action=ewww_image_optimizer_install_pngout' ), 'ewww_image_optimizer_options-options' ) ) . "'>" . \esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
 					'<a href="https://docs.ewww.io/article/13-installing-pngout" data-beacon-article="5854531bc697912ffd6c1afa">' . \esc_html__( 'manually', 'ewww-image-optimizer' ) . '</a>'
 				) .
 				'</p></div>';
@@ -719,12 +840,11 @@ final class Plugin extends Base {
 				if ( false !== $key ) {
 					unset( $missing[ $key ] );
 				}
-				$svgcleaner_install_url = \admin_url( 'admin.php?action=ewww_image_optimizer_install_svgcleaner' );
 				echo "<div id='ewww-image-optimizer-warning-opt-missing' class='notice notice-warning'><p>" .
 				\sprintf(
 					/* translators: 1: automatically (link) 2: manually (link) */
 					\esc_html__( 'EWWW Image Optimizer is missing svgleaner. Install %1$s or %2$s.', 'ewww-image-optimizer' ),
-					"<a href='" . \esc_url( $svgcleaner_install_url ) . "'>" . \esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
+					"<a href='" . \esc_url( \wp_nonce_url( \admin_url( 'admin.php?action=ewww_image_optimizer_install_svgcleaner' ), 'ewww_image_optimizer_options-options' ) ) . "'>" . \esc_html__( 'automatically', 'ewww-image-optimizer' ) . '</a>',
 					'<a href="https://docs.ewww.io/article/95-installing-svgcleaner" data-beacon-article="5f7921c9cff47e001a58adbc">' . \esc_html__( 'manually', 'ewww-image-optimizer' ) . '</a>'
 				) .
 				'</p></div>';
@@ -810,20 +930,7 @@ final class Plugin extends Base {
 			\sprintf( \esc_html__( 'Dismiss this notice to continue with free cloud-based JPG compression or %s.', 'ewww-image-optimizer' ), "<a href='https://ewww.io/plans/'>" . \esc_html__( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>' );
 		\ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
 		echo '</strong></p></div>';
-		?>
-	<script>
-		jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {
-			var ewww_dismiss_exec_data = {
-				action: 'ewww_dismiss_exec_notice',
-			};
-			jQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {
-				if (response) {
-					console.log(response);
-				}
-			});
-		});
-	</script>
-		<?php
+		$this->display_exec_dismiss_script();
 	}
 
 	/**
@@ -849,20 +956,7 @@ final class Plugin extends Base {
 			\sprintf( \esc_html__( 'Dismiss this notice to continue with free cloud-based JPG compression or %s.', 'ewww-image-optimizer' ), "<a href='https://ewww.io/plans/'>" . \esc_html__( 'start your premium trial', 'ewww-image-optimizer' ) . '</a>' );
 		\ewwwio_help_link( 'https://docs.ewww.io/article/29-what-is-exec-and-why-do-i-need-it', '592dd12d0428634b4a338c39' );
 		echo '</strong></p></div>';
-		?>
-	<script>
-		jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {
-			var ewww_dismiss_exec_data = {
-				action: 'ewww_dismiss_exec_notice',
-			};
-			jQuery.post(ajaxurl, ewww_dismiss_exec_data, function(response) {
-				if (response) {
-					console.log(response);
-				}
-			});
-		});
-	</script>
-		<?php
+		$this->display_exec_dismiss_script();
 	}
 
 	/**
@@ -885,11 +979,26 @@ final class Plugin extends Base {
 	}
 
 	/**
+	 * Tell the user to disable Hide my WP function that removes query strings.
+	 */
+	public function notice_exactdn_hmwp() {
+		?>
+		<div id='ewww-image-optimizer-warning-hmwp-hide-version' class='notice notice-warning'>
+			<p>
+				<?php \esc_html_e( 'Please enable the Random Static Number option in Hide My WP to ensure compatibility with Easy IO or disable the Hide Version option for best performance.', 'ewww-image-optimizer' ); ?>
+				<?php \ewwwio_help_link( 'https://docs.ewww.io/article/50-exactdn-and-query-strings', '5a3d278a2c7d3a1943677b52' ); ?>
+			</p>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Disables local compression when exec notice is dismissed.
 	 */
 	public function dismiss_exec_notice() {
 		$this->ob_clean();
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		check_ajax_referer( 'ewww-image-optimizer-notice' );
 		// Verify that the user is properly authorized.
 		if ( ! \current_user_can( \apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 			\wp_die( \esc_html__( 'Access denied.', 'ewww-image-optimizer' ) );

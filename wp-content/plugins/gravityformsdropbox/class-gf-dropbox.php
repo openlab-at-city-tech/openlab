@@ -275,6 +275,9 @@ class GF_Dropbox extends GFFeedAddOn {
 		// Add AJAX callback for de-authorizing with Dropbox.
 		add_action( 'wp_ajax_gfdropbox_deauthorize', array( $this, 'ajax_deauthorize' ) );
 
+		// Add AJAX callback for removing the access token so that the user can re-authorize.
+		add_action( 'wp_ajax_gfdropbox_remove_access_token', array( $this, 'ajax_remove_access_token' ) );
+
 		// Add AJAX callback for checking app key/secret validity.
 		add_action( 'wp_ajax_gfdropbox_valid_app_key_secret', array( $this, 'ajax_is_valid_app_key_secret' ) );
 
@@ -725,29 +728,28 @@ class GF_Dropbox extends GFFeedAddOn {
 				// Get account information.
 				$account = $this->api->get_current_account();
 
-				$html .= '<p>';
-				$html .= sprintf(
-					// Translators: 1. Link to forms list page, 2. Closing </a> tag
-					esc_html__( 'To configure Dropbox with your form(s), choose a form you wish to use Dropbox with from the %sforms list page%s, and select Dropbox from the form settings menu.', 'gravityformsdropbox' ),
-					'<a href="?page=gf_edit_forms">',
-					'</a>'
-				);
-				$html .= '</p>';
-				$html .= '<p><strong>' . esc_html__( 'Dropbox Account Status' ) . '</strong></p>';
-				$html .= '<p><span class="gform-status-indicator gform-status--active">';
-				if ( $this->is_gravityforms_supported( '2.5' ) ) {
-					$html .= '<svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>';
-				}
-				if ( isset( $account->name ) ) {
-					$html .= esc_html__( 'Connected to Dropbox as: ', 'gravityformsdropbox' );
-					$html .= esc_html( $account->name->display_name ) . '</span></p>';
+				$is_account_disabled = method_exists( $account, 'getCode' ) && $account->getCode() === 400;
+
+				if ( $is_account_disabled ) {
+					$html .= $this->get_error_indicator();
 				} else {
-					$html .= esc_html__( 'Connected to Dropbox.', 'gravityformsdropbox' ) . '</span></p>';
+
+					$html .= '<p>';
+					$html .= sprintf(
+					// Translators: 1. Link to forms list page, 2. Closing </a> tag.
+						esc_html__( 'To configure Dropbox with your form(s), choose a form you wish to use Dropbox with from the %sforms list page%s, and select Dropbox from the form settings menu.', 'gravityformsdropbox' ),
+						'<a href="?page=gf_edit_forms">',
+						'</a>'
+					);
+					$html .= '</p>';
+					$html .= '<p><strong>' . esc_html__( 'Dropbox Account Status' ) . '</strong></p>';
+					$html .= $this->get_status_indicator( $account );
+
+					$html .= sprintf(
+						' <a href="#" class="button primary" id="gform_dropbox_deauth_button">%1$s</a>',
+						esc_html__( 'Disconnect from Dropbox', 'gravityformsdropbox' )
+					);
 				}
-				$html .= sprintf(
-					' <a href="#" class="button primary" id="gform_dropbox_deauth_button">%1$s</a>',
-					esc_html__( 'Disconnect from Dropbox', 'gravityformsdropbox' )
-				);
 
 			} catch ( Exception $e ) {
 
@@ -827,6 +829,81 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		return $html;
 
+	}
+
+	/**
+	 * Get the correct status indicator markup for the version of Core.
+	 *
+	 * @since 3.1.2
+	 *
+	 * @param $account The account being evaluated.
+	 *
+	 * @return string
+	 */
+	private function get_status_indicator( $account ) {
+
+		// Indicator styles were updated in 2.8.8
+		if ( $this->is_gravityforms_supported( '2.8.8' ) ) {
+			$html = '<p><span class="gform-status-indicator gform-status-indicator--size-sm gform-status-indicator--theme-cosmos gform-status--active gform-status--no-icon gform-status--no-hover">';
+			$html .= '<span class="gform-status-indicator-status gform-typography--weight-medium gform-typography--size-text-xs">';
+
+			if ( isset( $account->name ) ) {
+				$html .= esc_html__( 'Connected to Dropbox as: ', 'gravityformsdropbox' );
+				$html .= esc_html( $account->name->display_name );
+			} else {
+				$html .= esc_html__( 'Connected to Dropbox.', 'gravityformsdropbox' );
+			}
+
+			$html .= '</span></span></p>';
+
+			return $html;
+		}
+
+		$html = '<p><span class="gform-status-indicator gform-status--static gform-status--active">';
+		if ( $this->is_gravityforms_supported( '2.5' ) ) {
+			$html .= '<svg viewBox="0 0 6 6" xmlns="http://www.w3.org/2000/svg"><circle cx="3" cy="2" r="1" stroke-width="2"/></svg>';
+		}
+		if ( isset( $account->name ) ) {
+			$html .= esc_html__( 'Connected to Dropbox as: ', 'gravityformsdropbox' );
+			$html .= esc_html( $account->name->display_name ) . '</span></p>';
+		} else {
+			$html .= esc_html__( 'Connected to Dropbox.', 'gravityformsdropbox' ) . '</span></p>';
+		}
+
+		return $html;
+	}
+
+	/**
+	 * Get the correct error indicator markup for the version of Core.
+	 *
+	 * @since 3.1.2
+	 *
+	 * @return string
+	 */
+	private function get_error_indicator() {
+
+		// Indicator styles were updated in 2.8.8
+		if ( $this->is_gravityforms_supported( '2.8.8' ) ) {
+			$html = '<p><span class="gform-status-indicator gform-status-indicator--size-sm gform-status-indicator--theme-cosmos gform-status--error gform-status--no-icon gform-status--no-hover">';
+			$html .= '<span class="gform-status-indicator-status gform-typography--weight-medium gform-typography--size-text-xs">';
+			$html .= esc_html__( 'The connected Dropbox app is disabled or has been deleted. Please reconnect.', 'gravityformsdropbox' );
+			$html .= '</span></span></p>';
+
+			$html .= sprintf(
+				' <a href="#" class="button primary" id="gform_dropbox_reconnect_button">%1$s</a>',
+				esc_html__( 'Reconnect to Dropbox', 'gravityformsdropbox' )
+			);
+
+			return $html;
+		}
+
+		$html = '<p> <span class="gform-status-indicator gform-status--static gform-status--error">' . esc_html__( 'The connected Dropbox app is disabled or has been deleted. Please reconnect.', 'gravityformsdropbox' ) . ' </span></p>';
+		$html = sprintf(
+			' <a href="#" class="button primary" id="gform_dropbox_reconnect_button">%1$s</a>',
+			esc_html__( 'Reconnect to Dropbox', 'gravityformsdropbox' )
+		);
+
+		return $html;
 	}
 
 	/**
@@ -912,6 +989,34 @@ class GF_Dropbox extends GFFeedAddOn {
 	}
 
 	/**
+	 * Removes access token and custom app settings to deauthorize.
+	 *
+	 * @since 3.2
+	 *
+	 * @param array $settings Existing settings.
+	 *
+	 * @return void
+	 */
+	public function remove_access_token( $settings = null ) {
+
+		if ( ! $settings ) {
+			$settings = $this->get_plugin_settings();
+		}
+
+		// Remove access token from settings to deauthorize.
+		unset( $settings['accessToken'] );
+		unset( $settings['access_token_expires'] );
+		unset( $settings['refresh_token'] );
+
+		// Removing custom app settings if they exist.
+		unset( $settings['customAppKey'] );
+		unset( $settings['customAppSecret'] );
+
+		// Save settings.
+		$this->update_plugin_settings( $settings );
+	}
+
+	/**
 	 * Deauthorize with Dropbox.
 	 *
 	 * @since  2.0
@@ -944,13 +1049,7 @@ class GF_Dropbox extends GFFeedAddOn {
 			// Log that we revoked the access token.
 			$this->log_debug( __METHOD__ . '(): Access token revoked.' );
 
-			// Remove access token from settings.
-			unset( $settings['accessToken'] );
-			unset( $settings['access_token_expires'] );
-			unset( $settings['refresh_token'] );
-
-			// Save settings.
-			$this->update_plugin_settings( $settings );
+			$this->remove_access_token( $settings );
 
 			// Return success response.
 			wp_send_json_success();
@@ -961,25 +1060,48 @@ class GF_Dropbox extends GFFeedAddOn {
 			$this->log_debug( __METHOD__ . '(): Unable to revoke access token; ' . $e->getMessage() );
 
 			if ( $e->getCode() === 401 ) {
-				// Remove access token from settings because it was already revoked.
-				unset( $settings['accessToken'] );
-				unset( $settings['access_token_expires'] );
-				unset( $settings['refresh_token'] );
 
-				// Save settings.
-				$this->update_plugin_settings( $settings );
+				$this->remove_access_token( $settings );
+
+				// Return success response.
+				wp_send_json_success();
+
+			} else {
+
+				// Return error response.
+				wp_send_json_error(
+					array(
+						'message' => $e->getMessage(),
+						'code'    => $e->getCode(),
+					)
+				);
+
 			}
+		}
+	}
 
-			// Return error response.
-			wp_send_json_error(
-				array(
-					'message' => $e->getMessage(),
-					'code'    => $e->getCode(),
-				)
-			);
+	/**
+	 * Handles the AJAX request to remove the access token .
+	 *
+	 * @since  3.2
+	 */
+	public function ajax_remove_access_token() {
 
+		// Verify nonce.
+		if ( false === wp_verify_nonce( rgget( 'nonce' ), 'gfdropbox_deauthorize' ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Access denied.', 'gravityformsdropbox' ) ) );
 		}
 
+		// If user is not authorized, exit.
+		if ( ! GFCommon::current_user_can_any( $this->_capabilities_settings_page ) ) {
+			wp_send_json_error( array( 'message' => esc_html__( 'Access denied.', 'gravityformsdropbox' ) ) );
+		}
+
+		// Remove access token.
+		$this->remove_access_token();
+
+		// Return success response.
+		wp_send_json_success();
 	}
 
 
@@ -1813,6 +1935,40 @@ class GF_Dropbox extends GFFeedAddOn {
 	}
 
 	/**
+	 * Passes the folder path through the gform_dropbox_folder_path filter.
+	 *
+	 * @since 3.2
+	 *
+	 * @param string     $folder_path The folder in the Dropbox account where the files will be stored.
+	 * @param array      $form        Form object.
+	 * @param int|string $field_id    The ID of the field currently being processed.
+	 * @param array      $entry       Entry object.
+	 * @param array      $feed        Feed object.
+	 * @param string     $file_url    The URL of the file being processed.
+	 *
+	 * @return string
+	 */
+	public function filter_folder_path( $folder_path, $form, $field_id, $entry, $feed, $file_url ) {
+		/**
+		 * Modify the destination folder configured on the Dropbox feed.
+		 *
+		 * @since 1.0
+		 * @since 3.2 Added the $file_url param.
+		 *
+		 * @param string     $folder_path The folder in the Dropbox account where the files will be stored.
+		 * @param array      $form        Form object.
+		 * @param int|string $field_id    The ID of the field currently being processed.
+		 * @param array      $entry       Entry object.
+		 * @param array      $feed        Feed object.
+		 * @param string     $file_url    The URL of the file being processed.
+		 */
+		return gf_apply_filters( array(
+			'gform_dropbox_folder_path',
+			rgar( $form, 'id' ),
+		), $folder_path, $form, $field_id, $entry, $feed, $file_url );
+	}
+
+	/**
 	 * Process Dropbox upload fields.
 	 *
 	 * @since  1.0
@@ -1850,19 +2006,7 @@ class GF_Dropbox extends GFFeedAddOn {
 			}
 
 			// Get destination path.
-			$folder_path = rgars( $feed, 'meta/destinationFolder' );
-
-			/**
-			 * Modify the destination folder configured on the Dropbox feed.
-			 *
-			 * @since 1.0
-			 * @param string $folder_path The folder in the Dropbox account where the files will be stored.
-			 * @param array  $form        Form object.
-			 * @param string $field_id    The ID of the field currently being processed.
-			 * @param array  $entry       Entry object.
-			 * @param array  $feed        Feed object.
-			 */
-			$folder_path = gf_apply_filters( array( 'gform_dropbox_folder_path', $form['id'] ), $folder_path, $form, $field->id, $entry, $feed );
+			$folder_path = $this->filter_folder_path( rgars( $feed, 'meta/destinationFolder' ), $form, $field->id, $entry, $feed, $file );
 
 			// Add starting slash to folder path.
 			$folder_path = strpos( $folder_path, '/' ) !== 0 ? '/' . $folder_path : $folder_path;
@@ -2076,17 +2220,7 @@ class GF_Dropbox extends GFFeedAddOn {
 
 		}
 
-		/**
-		 * Modify the destination folder configured on the Dropbox feed.
-		 *
-		 * @since 1.0
-		 * @param string $folder_path The folder in the Dropbox account where the files will be stored.
-		 * @param array  $form        Form object.
-		 * @param string $field_id    The ID of the field currently being processed.
-		 * @param array  $entry       Entry object.
-		 * @param array  $feed        Feed object.
-		 */
-		$folder_path = gf_apply_filters( array( 'gform_dropbox_folder_path', $form['id'] ), $file['destination'], $form, $field_id, $entry, $feed );
+		$folder_path = $this->filter_folder_path( rgar( $file, 'destination' ), $form, $field_id, $entry, $feed, rgar( $file, 'url' ) );
 
 		// If destination folder is not the root folder, ensure the folder exists.
 		if ( '/' !== $folder_path ) {
@@ -2302,9 +2436,8 @@ class GF_Dropbox extends GFFeedAddOn {
 				continue;
 			}
 
-			// Get file name.
-			$file_name = basename( $attachment_path );
-			$file_name = str_replace( '?dl=0', '', $file_name );
+			// Get file name without the Dropbox query arguments.
+			$file_name = basename( strtok( $attachment_path, '?' ) );
 
 			// Get path to local file.
 			$local_path = GFFormsModel::get_upload_path( $entry['form_id'] ) . GFCommon::format_date( rgar( $entry, 'date_created' ), false, '/Y/m/', false ) . $file_name;
@@ -2313,6 +2446,7 @@ class GF_Dropbox extends GFFeedAddOn {
 			if ( file_exists( $local_path ) ) {
 				$email['attachments'][ $a ] = $local_path;
 			} else {
+				gf_dropbox()->log_debug( __METHOD__ . '(): Removing attachment from notification as file "' . $local_path . '" does not exist.' );
 				unset( $email['attachments'][ $a ] );
 			}
 

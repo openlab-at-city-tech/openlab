@@ -267,11 +267,99 @@ class QueryBuilder
         $prefix_len = strlen( $wpdb->prefix );
         $key = substr( $table, $prefix_len ) . '.' . $column;
         $ref = substr( $ref_table, $prefix_len ) . '.' . $ref_column;
-        if ( isset( $rules[ $key ][ $ref ] ) ) {
-            return $rules[ $key ][ $ref ];
-        } else {
-            return array( 'UPDATE_RULE' => null, 'DELETE_RULE' => null );
+        $result = isset( $rules[ $key ][ $ref ] )
+            ? $rules[ $key ][ $ref ]
+            : array( 'UPDATE_RULE' => null, 'DELETE_RULE' => null );
+
+        $fix = self::getConstraintFixRule( substr( $table, $prefix_len ), $column, substr( $ref_table, $prefix_len ), $ref_column );
+        if ( $fix ) {
+            $result['fix'] = $fix;
         }
+
+        return $result;
+    }
+
+    /**
+     * @param string $table
+     * @param string $column
+     * @param string $ref_table
+     * @param string $ref_column
+     * @return array|null
+     */
+    public static function getConstraintFixRule( $table, $column, $ref_table, $ref_column )
+    {
+        $rules = array(
+            'bookly_gift_cards' => array(
+                'customer_id' => array( 'bookly_customers.id' => 'UPDATE', ),
+            ),
+            'bookly_appointments' => array(
+                'location_id' => self::getCustomConstraintFix( 'bookly_locations.id', 'Add missing locations', 'Let`s create dummy locations named Dummy_*',
+                    function( $wp_table, $column, $wp_ref_table, $ref_column, $wpdb, $missing ) {
+                        foreach ( $missing as $id ) {
+                            $wpdb->insert( $wp_ref_table, array(
+                                'id' => $id,
+                                'name' => 'Dummy_' . str_pad( $id, 2, '_', STR_PAD_LEFT ),
+                            ) );
+                        }
+                    } ),
+                'service_id' => self::getCustomConstraintFix( 'bookly_services.id', 'Add missing services', 'Let`s create private dummy services named Dummy_*',
+                    function( $wp_table, $column, $wp_ref_table, $ref_column, $wpdb, $missing ) {
+                        foreach ( $missing as $id ) {
+                            $wpdb->insert( $wp_ref_table, array(
+                                'id' => $id,
+                                'title' => 'Dummy_' . str_pad( $id, 2, '_', STR_PAD_LEFT ),
+                                'visibility' => 'private',
+                            ) );
+                        }
+                    } ),
+                'staff_id' => self::getCustomConstraintFix( 'bookly_staff.id', 'Add missing staff', 'Let`s create archived dummy employees named Dummy_*',
+                    function( $wp_table, $column, $wp_ref_table, $ref_column, $wpdb, $missing ) {
+                        foreach ( $missing as $id ) {
+                            $wpdb->insert( $wp_ref_table, array(
+                                'id' => $id,
+                                'full_name' => 'Dummy_' . str_pad( $id, 2, '_', STR_PAD_LEFT ),
+                                'visibility' => 'archive',
+                            ) );
+                        }
+                    } ),
+            ),
+        );
+
+        if ( isset( $rules[ $table ][ $column ][ $ref_table . '.' . $ref_column ] ) ) {
+            $fix = array(
+                'action' => $rules[ $table ][ $column ][ $ref_table . '.' . $ref_column ],
+                'description' => '',
+                'button' => 'Custom fix',
+                'method' => function() {},
+            );
+            foreach ( array( 'description', 'button', 'method' ) as $key ) {
+                if ( isset( $rules[ $table ][ $column ][ $key ] ) ) {
+                    $fix[ $key ] = $rules[ $table ][ $column ][ $key ];
+                }
+            }
+
+            return $fix;
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $field
+     * @param string $button_caption
+     * @param string $info
+     * @param callable $closure
+     * @param bool $ellipsis
+     * @return array
+     */
+    private static function getCustomConstraintFix( $field, $button_caption, $info, $closure, $ellipsis = true )
+    {
+        return array(
+            $field => 'METHOD',
+            'button' => $button_caption . ( $ellipsis ? '…' : '' ),
+            'description' => $info,
+            'method' => $closure,
+        );
     }
 
     /**
@@ -419,7 +507,10 @@ class QueryBuilder
             'bookly_customers.full_address' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_customers.notes' => array( 'type' => "text", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_customers.info_fields' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
-            'bookly_customers.stripe_account' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_customers.tags' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_customers.stripe_account' => array( 'type' => "varchar(36)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_customers.stripe_cloud_account' => array( 'type' => "varchar(36)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_customers.attachment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_customers.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_discounts.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_discounts.title' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => "", 'key' => "" ),
@@ -469,6 +560,7 @@ class QueryBuilder
             'bookly_gift_card_types.wc_cart_info' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_gift_card_types.wc_cart_info_name' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_gift_card_types.wc_product_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
+            'bookly_gift_card_types.attachment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_gift_cards.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_gift_cards.code' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "", 'key' => "" ),
             'bookly_gift_cards.gift_card_type_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "MUL" ),
@@ -488,7 +580,7 @@ class QueryBuilder
             'bookly_locations.info' => array( 'type' => "text", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_locations.position' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => "9999", 'key' => "" ),
             'bookly_log.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
-            'bookly_log.action' => array( 'type' => "enum('create','update','delete','error')", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_log.action' => array( 'type' => "enum('create','update','delete','error','debug')", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_log.target' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_log.target_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_log.author' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -560,7 +652,6 @@ class QueryBuilder
             'bookly_packages.order_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_packages.created_at' => array( 'type' => "datetime", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_payments.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
-            'bookly_payments.target' => array( 'type' => "enum('appointments','packages','gift_cards')", 'is_nullabe' => 0, 'extra' => "", 'default' => "appointments", 'key' => "" ),
             'bookly_payments.coupon_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_payments.gift_card_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_payments.type' => array( 'type' => "enum('local','free','paypal','authorize_net','stripe','2checkout','payu_biz','payu_latam','payson','mollie','woocommerce','cloud_stripe','cloud_square')", 'is_nullabe' => 0, 'extra' => "", 'default' => "local", 'key' => "" ),
@@ -713,6 +804,7 @@ class QueryBuilder
             'bookly_staff.icalendar_days_after' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => "365", 'key' => "" ),
             'bookly_staff.color' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "#dddddd", 'key' => "" ),
             'bookly_staff.gateways' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
+            'bookly_staff.cloud_msc_token' => array( 'type' => "varchar(32)", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_staff_categories.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_staff_categories.name' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_staff_categories.attachment_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
@@ -766,6 +858,9 @@ class QueryBuilder
             'bookly_sub_services.sub_service_id' => array( 'type' => "int unsigned", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "MUL" ),
             'bookly_sub_services.duration' => array( 'type' => "int", 'is_nullabe' => 1, 'extra' => "", 'default' => null, 'key' => "" ),
             'bookly_sub_services.position' => array( 'type' => "int", 'is_nullabe' => 0, 'extra' => "", 'default' => "9999", 'key' => "" ),
+            'bookly_tags.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
+            'bookly_tags.tag' => array( 'type' => "varchar(255)", 'is_nullabe' => 0, 'extra' => "", 'default' => "", 'key' => "MUL" ),
+            'bookly_tags.color_id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "", 'default' => "0", 'key' => "" ),
             'bookly_taxes.id' => array( 'type' => "int unsigned", 'is_nullabe' => 0, 'extra' => "auto_increment", 'default' => null, 'key' => "PRI" ),
             'bookly_taxes.title' => array( 'type' => "varchar(255)", 'is_nullabe' => 1, 'extra' => "", 'default' => "", 'key' => "" ),
             'bookly_taxes.rate' => array( 'type' => "decimal(10,3)", 'is_nullabe' => 0, 'extra' => "", 'default' => "0.000", 'key' => "" ),

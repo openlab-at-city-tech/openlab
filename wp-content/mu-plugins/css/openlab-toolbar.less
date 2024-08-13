@@ -1,5 +1,7 @@
 /* Toolbar / Top Nav */
 
+@block-editor-breakpoint-tablet: 782px;
+
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
 
 /**vendor**/
@@ -725,7 +727,7 @@
 				}
 			}
 			#wp-admin-bar-updates {
-				@media (max-width: 767px) {
+				@media (max-width: @block-editor-breakpoint-tablet) {
 					display: none;
 				}
 			}
@@ -1264,12 +1266,57 @@ html {
 	position: relative;
 }
 
+.password-expiration-warning-notice {
+	align-items: center;
+	background: #63DFD2;
+	color: #333;
+	display: flex;
+	height: 40px;
+	padding: 10px 20px;
+	justify-content: center;
+	position: relative;
+	width: 100%;
+
+	@media (max-width: 600px) {
+		height: auto;
+	}
+
+	a {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	button.notice-dismiss {
+		background: transparent;
+		border: none;
+		position: absolute;
+		right: 30px;
+		font: normal normal normal 14px/1 FontAwesome;
+	}
+}
+
 /**for content placement on group sites and admin**/
 
 body {
+	&.has-password-expiration-warning-notice {
+		.oplb-bs.navbar-default {
+			padding-bottom: 40px;
+
+			@media (max-width: 600px) {
+				padding-bottom: 80px;
+			}
+		}
+	}
 	&.adminbar-special {
 		padding-top: 50.5px;
-		@media (max-width: 767px) {
+
+		&.has-password-expiration-warning-notice {
+			padding-top: 90px;
+		}
+		@media screen and (max-width: @block-editor-breakpoint-tablet) {
 			padding-top: 114px;
 		}
 	}
@@ -1424,5 +1471,20 @@ a.cc-widget-icon-link {
 	}
 	li {
 		display: block;
+	}
+}
+
+@media screen and (min-width: 783px) {
+	.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
+	}
+
+	.block-editor-block-contextual-toolbar.is-fixed>.block-editor-block-toolbar {
+		top: 18px;
+	}
+}
+
+@media screen and (max-width: @block-editor-breakpoint-tablet) {
+	.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
+		top: 52px;
 	}
 }

@@ -22,6 +22,8 @@ require 'includes/print-this-page.php';
 require 'includes/license-widget.php';
 require 'includes/user-moderation.php';
 require 'includes/block-widgets.php';
+require 'includes/cbox-polyfills/index.php';
+require 'includes/passwords.php';
 
 // Conditionally load Easy TOC modifications.
 add_action( 'plugins_loaded', function() {
@@ -1146,6 +1148,12 @@ function wds_bp_group_meta_save( $group ) {
 		}
 	}
 
+	// Portfolio profile link
+	if ( ! empty( $_POST['portfolio-profile-link'] ) ) {
+		$portfolio_user_id = openlab_get_user_id_from_portfolio_group_id( $group->id );
+		openlab_save_show_portfolio_link_on_user_profile( $portfolio_user_id, true );
+	}
+
 	// Member roles.
 	if ( openlab_get_site_id_by_group_id( $group->id ) ) {
 		$role_map = [
@@ -1643,6 +1651,8 @@ class Buddypress_Translation_Mangler {
 			return $translation;
 		}
 
+		$grouptype = esc_html( $grouptype );
+
 		$uc_grouptype = ucfirst( $grouptype );
 		$translations = get_translations_for_domain( 'buddypress' );
 
@@ -1807,6 +1817,28 @@ add_filter(
 		return '';
 	}
 );
+
+/**
+ * Show 'Account Deleted' for the user name of deleted comment authors.
+ *
+ * @param string $author The comment author.
+ * @param int	$comment_ID The comment ID.
+ * @param WP_Comment $comment The comment object.
+ * @return string
+ */
+function openlab_deleted_comment_author_name( $author, $comment_ID, $comment ) {
+	if ( ! $comment || ! $comment->user_id ) {
+		return $author;
+	}
+
+	$user = get_userdata( $comment->user_id );
+	if ( $user && ! $user->deleted ) {
+		return $author;
+	}
+
+	return 'Account Deleted';
+}
+add_filter( 'get_comment_author', 'openlab_deleted_comment_author_name', 10, 3 );
 
 /**
  * Adds the URL of the user profile to the New User Registration admin emails
@@ -2280,16 +2312,22 @@ class OpenLab_Course_Portfolios_Widget extends WP_Widget {
 	}
 
 	public function widget( $args, $instance ) {
+		// If the associated group is a course, display only to members.
+		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
+		$group_type = openlab_get_group_type( $group_id );
+		if ( 'course' === $group_type && ! groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+			return;
+		}
+
 		echo $args['before_widget'];
 
 		echo $args['before_title'] . esc_html( $instance['title'] ) . $args['after_title'];
 
 		$name_key   = 'display_name' === $instance['sort_by'] ? 'user_display_name' : 'portfolio_title';
-		$group_id   = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 		$portfolios = openlab_get_group_member_portfolios( $group_id, $instance['sort_by'] );
 
 		// Hide private-member portfolios from non-members.
-		if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		if ( current_user_can( 'view_private_members_of_group', $group_id ) ) {
 			$group_private_members = [];
 		} else {
 			$group_private_members = openlab_get_private_members_of_group( $group_id );
@@ -3378,6 +3416,39 @@ add_action(
 );
 
 /**
+ * Register inline-comments customization assets.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function() {
+		if ( ! defined( 'INCOM_VERSION' ) ) {
+			return;
+		}
+
+		wp_enqueue_style(
+			'openlab-inline-comments',
+			plugins_url( 'wds-citytech/assets/css/inline-comments.css' ),
+			null,
+			OL_VERSION
+		);
+	}
+);
+
+/**
+ * Force Gravity Forms key.
+ */
+add_filter(
+	'option_rg_gforms_key',
+	function( $value ) {
+		if ( defined( 'GF_LICENSE_KEY' ) ) {
+			$value = GF_LICENSE_KEY;
+		}
+
+		return $value;
+	}
+);
+
+/**
  * Gravity Forms Quiz field width.
  */
 add_action(
@@ -3744,3 +3815,55 @@ add_action(
 		update_option( 'typology_settings', $settings );
 	}
 );
+
+/**
+ * Delete a user's BP Files and WP media items on account deletion.
+ *
+ * @param int $user_id The ID of the user being deleted.
+ * @return void
+ */
+function openlab_delete_user_files_on_account_deletion( $user_id ) {
+	global $wpdb;
+
+	// bp-group-documents.
+	if ( class_exists( 'BP_Group_Documents' ) ) {
+		$bp = buddypress();
+
+		$user_file_ids = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM {$bp->group_documents->table_name} WHERE user_id = %d", $user_id ) );
+		foreach ( $user_file_ids as $user_file_id ) {
+			$document = new BP_Group_Documents( $user_file_id );
+
+			// The `delete()` method has a cap check built in, which we want to skip.
+			if ( $document->file ) {
+				$document_file_path = $document->get_path( 1 );
+				if ( file_exists( $document_file_path ) ) {
+					wp_delete_file( $document_file_path );
+				}
+			}
+
+			$wpdb->query( $wpdb->prepare( "DELETE FROM {$bp->group_documents->table_name} WHERE id = %d", $user_file_id ) );
+		}
+	}
+
+	// Site media.
+	$user_blogs = get_blogs_of_user( $user_id );
+	foreach ( $user_blogs as $user_blog ) {
+		switch_to_blog( $user_blog->userblog_id );
+
+		$media_query = new WP_Query(
+			[
+				'post_type'      => 'attachment',
+				'posts_per_page' => -1,
+				'author'         => $user_id,
+				'post_status'    => 'any',
+			]
+		);
+
+		foreach ( $media_query->posts as $media_post ) {
+			wp_delete_attachment( $media_post->ID, true );
+		}
+
+		restore_current_blog();
+	}
+}
+add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_files_on_account_deletion' );

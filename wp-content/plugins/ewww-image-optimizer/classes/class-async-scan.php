@@ -1,6 +1,6 @@
 <?php
 /**
- * Class for Background of Media Library images.
+ * Class for asynchronous scanning of folders.
  *
  * @link https://ewww.io
  * @package EWWW_Image_Optimizer

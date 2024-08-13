@@ -28,6 +28,8 @@ jQuery( document ).ready(
     $setuptoggle   = $( 'input[name="wds_website_check"]' );
 		$setuptoggle_mirror = $( 'input#set-up-site-toggle' );
 
+		catchOutgoingFetches();
+
 		if ( $body.hasClass( 'group-admin' ) ) {
 			form_type = 'admin';
 			form      = document.getElementById( 'group-settings-form' );
@@ -656,13 +658,20 @@ jQuery( document ).ready(
 		setTimeout( maybeShowSiteTemplates, 1500 )
 
 		// We must also run maybeShowSiteTemplates after a category change.
-		$( '.site-template-categories' ).on( 'change', function() {
+		document.querySelector( '#site-template-categories' ).addEventListener( 'change', function() {
 			setTimeout( function() {
 				// After a category change, we never hide the picker, only show it.
 				if ( $('.panel-template-picker').hasClass( 'hidden' ) ) {
 					maybeShowSiteTemplates();
 				}
 			}, 1500 )
+		} );
+
+		// Trigger site template update when academic unit changes.
+		// We trick the system into thinking a category has changed.
+		$( 'input.academic-unit-checkbox' ).on( 'change', function() {
+			const event = new Event( 'change' );
+			document.querySelector( '#site-template-categories' ).dispatchEvent( event );
 		} );
 
 		if ( 'course' === group_type && ! $setuptoggle.is( ':checked' ) ) {
@@ -682,6 +691,35 @@ jQuery( document ).ready(
 					noCache: true
 				}
 			);
+		}
+
+		function catchOutgoingFetches() {
+			// Save a reference to the original fetch function
+			const originalFetch = window.fetch;
+			console.log('monkey patching...')
+
+			window.fetch = async function(resource, init) {
+				const { endpoint } = window.SiteTemplatePicker;
+
+					// Check if the request matches the one you want to modify
+					if (typeof resource === 'string' && resource.startsWith(endpoint)) {
+							// Extract the query string
+							const url = new URL(resource);
+							const params = new URLSearchParams(url.search);
+
+							const academicUnitCheckboxes = document.querySelectorAll('.academic-unit-checkbox:checked');
+							const academicUnitIds = Array.from(academicUnitCheckboxes).map(checkbox => checkbox.value);
+
+							// Modify the query string parameters
+							params.set('academic_units', academicUnitIds.join(','));
+
+							// Reconstruct the resource URL with the modified query string
+							resource = url.origin + url.pathname + '?' + params.toString();
+					}
+
+					// Call the original fetch function with the modified resource or init
+					return originalFetch(resource, init);
+			};
 		}
 	},
 	(jQuery)

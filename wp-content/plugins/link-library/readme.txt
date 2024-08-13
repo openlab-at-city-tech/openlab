@@ -1,10 +1,12 @@
 === Link Library ===
 Contributors: jackdewey
 Donate link: https://ylefebvre.github.io/wordpress-plugins/link-library/
-Tags: link, list, directory, page, library, AJAX, RSS, feeds, inline, search, paging, add, submit, import, batch, pop-up
+Tags: link, list, directory, page, library
 Requires at least: 4.4
-Tested up to: 6.4.1
-Stable tag: 7.5.13
+Tested up to: 6.5.3
+Stable tag: 7.7.2
+License: GPLv2 or later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 The purpose of this plugin is to add the ability to output a list of link categories and a complete list of links with notes and descriptions.
 
@@ -49,6 +51,55 @@ In addition to specifying a library, categories to be displayed can be specified
 Further configuration is available under the Link Library Settings panel.
 
 == Changelog ==
+
+= 7.7.2 =
+* Fixed potential security issue
+
+= 7.7.1 =
+* Added way to export all links to OPML format under Global Options
+
+= 7.7 =
+* Fixes for potential security issues
+
+= 7.6.11 =
+* Fix to avoid PHP warning
+
+= 7.6.10 =
+* Fixed to previous checkin to restore compabitility with older versions of WordPress
+
+= 7.6.9 =
+* Added check to see if current page is login page and exit plugin if it is
+
+= 7.6.8 =
+* Fix to retain comments in Stylesheet editor
+
+= 7.6.7 =
+* Fix for potential security issue
+* Fix for large description field in link editor showing bad HTML
+* Fix for taglistoverride not working when pagination is enabled
+
+= 7.6.6 =
+* Fixes to restore user link submission capabilities
+
+= 7.6.5 =
+* Link editor now automatically shows most used tag list
+
+= 7.6.4 =
+* Fixes for potential security vulnerabilities
+* Admin notices now only displayed on Link Library pages
+* Potential fix for issue with categorylistoverride introduced with last version
+
+= 7.6.3 =
+* Fix to allow categorylistoverride to work correctly when library is configured to show a single library at a time
+
+= 7.6.2 =
+* Added new function to only show link with specific text as part of their URL
+
+= 7.6.1 =
+* Fixes for potential security vulnerabilities
+
+= 7.6 =
+* Fixes for potential security vulnerabilities
 
 = 7.5.13 =
 * Fix for hierarchical list of categories in add link form
@@ -348,204 +399,6 @@ Further configuration is available under the Link Library Settings panel.
 * New admin icon for Link Library using dashicons
 * Fix for better match of duplicate links entered through bookmarklet
 * Updated new feature pop-up
-
-= 6.8.19 =
-* Check if has_blocks and parse_blocks functions exist before calling it for pre-5.0 WordPress
-
-= 6.8.18 =
-* Added support for Block editor
-* Added new Masonry link display methods
-* Added a new display mode for categories to allow you to toggle category visibility
-* Added two new presets showcasing Masonry layouts
-* Added new filter hook link_library_export_all_links to allow filtering when exporting all links
-
-= 6.8.17 =
-* Fix for ll_get_title function definition
-
-= 6.8.16 =
-* Added global search results customization for links
-* Realigned colors in advanced configuration grid
-
-= 6.8.15 =
-* Fix for PHP notice in render-link-library-sc.php, line 930
-
-= 6.8.14 =
-* Fix for RSS inline items publication date limit
-* Added code to translate word ALL in alpha filter function
-
-= 6.8.13 =
-* Improved RSS Inline item rendering by using transients
-* Updated links to new github site
-
-= 6.8.12 =
-* Fix bug with library-specific stylesheet editor
-
-= 6.8.11 =
-* Library-specific stylesheets are actually output in pages
-* Added import/export functions to global options
-* Fix tabs in general options section
-* Refreshed some aspects of Link Library GUI to match current WordPress styling
-
-= 6.8.10 =
-* Added per-library configutation stylesheet editor
-* Added new field to user submission form to select an existing link as reference. Useful to allow users to propose a correction to a link
-* Added custom URL, text and list fields to user submissions
-* Stylesheet editors now do syntax highlighting
-
-= 6.8.9 =
-* Added new options to specify a custom WP Query parameter and a value for this extra parameter to allow for custom post filtering
-* Allowed users to reorder fields in user submission form
-* Fixes for HTML + Permalink mode when working in sub-directories
-
-= 6.8.8 =
-* Category name links now use permalink configuration data if available
-
-= 6.8.7 =
-* Removed unnecessary double call to showcategory function
-* Add option to Show category name to only show current category or to show all categories assigned to the link
-* Add option not to make category name a link even if link is assigned to category
-
-= 6.8.6 =
-* Added new link checker tool to find links without any category assigned
-* Hide category filter from link list if no categories defined
-* Hide tag filter from link list if no tags defined
-
-= 6.8.5 =
-* Links can now be ordered by using the values stored in custom text fields
-* Inline RSS feed display now shows an error if RSS feed is invalid
-* Added new div-based preset and re-wrote preset page code to be more flexible
-* Added new parameter for [link-library-cats] shortcode to specify target library (targetlibrary)
-* Removed accessibe menu
-
-= 6.8.4 =
-* Added new option to most advanced configuration fields to suppress their output if no value is set
-* Fixed issue where link hits are not displayed if value is 0 and library configured not to output empty items
-
-= 6.8.3 =
-* Fixed issue where a link with a bad RSS feed shows RSS items from the previous link's feed
-* Fixed issue where custom url fields are not saved correctly if a link image is present
-
-= 6.8.2 =
-* Fixed issue with dates of RSS feed items
-
-= 6.8.1 =
-* Fixed issue where Link Library message display in e-mails did not all respect supression setting under General Options
-
-= 6.8 =
-* Fixed issues with links export and import functions
-* Added ability to export and import custom fields
-
-= 6.7.15 =
-* Fixed issue with being able to view links as single page items
-* Improvements for bookmarklet existing link verification
-
-= 6.7.14 =
-* Added new function where bookmarklet checks for existing link URL and redirects to edit that link if one is found
-
-= 6.7.13 =
-* Added ability to specify publication date for imported links
-
-= 6.7.12 =
-* Fix bug in generation of target field for web link
-
-= 6.7.11 =
-* Add support for lazy loading images
-
-= 6.7.10 =
-* Fix to avoid permalinks / rewrite issues on some installations
-
-= 6.7.9 =
-* Fixed issues with quotes in HTML fields for custom lists
-* Fixed issue with custom text fields
-
-= 6.7.8 =
-* Fix for some users experiencing issues with AJAX mode. Extra line breaks were being output on some configurations
-* Added custom text fields and custom list fields
-
-= 6.7.7 =
-* Reduced the transient time for form submissions to 5 seconds instead of 60
-* Fixed warning in category display
-* User submission message is now transmitted in transient expiring after 10 seconds
-
-= 6.7.6 =
-* Added new options to linkorderoverride parameter when calling [link-library] shortcode to reflect list of choices in interface
-* Cleared some PHP warnings related to recent changes
-* Fix for show not cat on startup in AJAX mode not working
-* Modified link hits logic to disregard visits from administrators to links
-
-= 6.7.5 =
-* Fixed to support new option to allow categories to be used to refine search results when displayed in more configurations
-
-= 6.7.4 =
-* Fixed warning in admin when activatinguser voting
-* Changed mechanism for user-submitted links to repost info if anything is missing or wrong. Now using transients.
-* Fixed issues with escaped characters when users submit new links
-
-= 6.7.3 =
-* Fixed issues with user-submission form
-
-= 6.7.2 =
-* Added new option to allow categories to be used to refine search results when displayed
-* Fixed issues with user-submission form
-
-= 6.7.1 =
-* Fixed issue with user vote custom label not staying when you upvote links
-
-= 6.7 =
-* Added update message for new version
-* Removed Accessibe banner ads and moved Accessibe menu to bottom of list
-* Fixed issue with New tag displayed before link name not working correctly if link name is not the first field or is in a table
-
-= 6.6.12 =
-* Fixed bug with image link not displayed at the right place with new dedicated page option
-
-= 6.6.11 =
-* Added two options to link image display. Can now link to dedicated page or not link to any page
-
-= 6.6.10 =
-* Added ability to set label of user vote button
-* Fixed bugs with user voting system
-* When activating user voting system, all existing links will be assigned an initial vote value of 0
-
-= 6.6.9 =
-* First implementation of user voting system. New block in Advanced page for User Votes. Ability to sort links by number of user votes. Open to user feedback
-* Added new option to display link names only, not as link. Set under source for Link Name field.
-
-= 6.6.8 =
-* Added new section under General Options to add custom URL fields to Link Library. Fields can be enabled and named to appear in all relevant places (Link editor, advanced configuration table for links)
-* Removed debug code from user submission code to avoid issues with headers submitted too early
-
-= 6.6.7 =
-* Revamped user submission section of library configuration to implement table approach
-* Added code to fortify LL core
-* Added stylesheet rules to make user-submission form look better on mobile
-* Added option to delete media attachment or local site file assigned as link URL
-
-= 6.6.6 =
-* Added multi select lists in the Moderation screen to allow users to assign one or more tags or categories to user-submitted links, or make changes to the ones assigned by users
-* Added ability to upload a file for the link to point to instead of specifying a URL
-* Added new option to [link-library-addlink] shortcode to override default category in category list (addlinkdefaultcatoverride)
-
-= 6.6.5 =
-* Added button to open media library dialog for link URL selection. Allows you to upload a media item and easily link to it
-
-= 6.6.4 =
-* Fixed issue with broken link checker only reporting first error
-
-= 6.6.3 =
-* Renamed ll_write_log function to linklibrary_write_log function to avoid potential conflicts with other plugins.
-
-= 6.6.2 =
-* Improved broken link checked to identify redirections to new URLs
-
-= 6.6.1 =
-* Added new option field for user submission form to specify tooltips to be displayed when user hovers over the fields
-* Fixed issue with export all links function not working if no tags are assigned
-* Fixed issue with some form fields not being re-displayed is captcha is wrong
-* Fixed issue with form validation not working with description field is set to required
-
-= 6.6 =
-* Fixed editor issue in WP 5.5
 
 == Frequently Asked Questions ==
 

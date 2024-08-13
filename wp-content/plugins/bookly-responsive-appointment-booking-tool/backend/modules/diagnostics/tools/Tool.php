@@ -11,6 +11,8 @@ abstract class Tool extends Component
     protected $slug;
     /** @var string */
     protected $title;
+    /** @var int */
+    public $position;
 
     /**
      * Render template

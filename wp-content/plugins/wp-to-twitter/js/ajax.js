@@ -14,19 +14,19 @@
 			}
 		);
 		$('button.tweet').on('click', function (e) {
-			visible = $( '.wpt_log' ).is( ':visible' );
+			let visible = $( '.wpt_log' ).is( ':visible' );
 			if ( visible ) {
 				$( '.wpt_log' ).hide( 200 );
 			}
 			e.preventDefault();
-			var text   = $('#wpt_custom_tweet').val();
-			var date   = $('#wpt_set_tweet_time .date').val();
-			var time   = $('#wpt_set_tweet_time .time').val();
-			var auth   = $('#wpt_authorized_users').val();
+			let text   = $('#wpt_custom_tweet').val();
+			let date   = $('#wpt_set_tweet_time .date').val();
+			let time   = $('#wpt_set_tweet_time .time').val();
+			let auth   = $('#wpt_authorized_users').val();
 			
-			var upload = $('input:radio[name=_wpt_image]:checked').val();
-			var tweet_action = ( $(this).attr('data-action') === 'tweet' ) ? 'tweet' : 'schedule'
-			var data = {
+			let upload = $('input:radio[name=_wpt_image]:checked').val();
+			let tweet_action = ( $(this).attr('data-action') === 'tweet' ) ? 'tweet' : 'schedule'
+			let data = {
 				'action': wpt_data.action,
 				'tweet_post_id': wpt_data.post_ID,
 				'tweet_text': text,
@@ -37,7 +37,7 @@
 				'security': wpt_data.security
 			};
 			$.post(ajaxurl, data, function (response) {
-				$('.wpt_log').text(response).show(500);
+				$('.wpt_log').text(response).show(300);
 			});
 		});
 	});

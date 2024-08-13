@@ -1,6 +1,45 @@
 NextGEN Gallery
 by Imagely
 
+* Fixed: Updated permission check
+
+= V3.59  - 03.14.2024 =
+* Fixed: URI too long prevents "Sort or exclude images" from loading images.
+* Fixed: Correcting Lightroom clients being unable to sync image .
+* Fixed: Prevent PHP warning / error when watermarking.
+* Fixed: Sorting images from a Classic Editor launched IGW.
+* Fixed: Shutter lightbox randomly failing to load the captions.
+* Fixed: PHP notices and warnings.
+* Fixed: Addressed a bug reported by Dmitrii Ignatyev of Cleantalk.
+
+= V3.58  - 02.08.2024 =
+* Fixed:   A potential fatal DivisionByZeroError caused by image files being deleted outside of NextGEN.
+* Fixed:   A potential fatal error in the XML-RPC controller.
+* Fixed:   An issue with classic (non-block) themes could break Pro's "Open album children in the Pro Lightbox" feature.
+* Fixed:   Assorted potential PHP notices and warnings.
+* Fixed:   Manage Galleries' "Images per Page" feature was not working.
+* Fixed:   Passing 'gallery_width="auto"' to a Slideshow shortcode could result in a fatal error.
+
+= V3.57  - 01.10.2024 =
+* Fixed:   Albums were generating an incorrect URL to their child galleries.
+* Fixed:   Albums could generate a fatal error when viewing a sub-album.
+* Fixed:   Do not call opcache_reset() if it does not exist.
+
+= V3.56  - 01.09.2024 =
+* Fixed:   "Open album children in Pro Lightbox" feature was only working with block based themes.
+* Fixed:   Adding more than one Pro display to one page caused galleries after the first to be unstyled.
+* Fixed:   Albums with very a large number of children may have broken gallery displays if it relies on the dynamic-css feature.
+* Fixed:   Continued fixing recently introduced incompatibilies with 3rd party extensions.
+* Fixed:   Creating a new gallery from the Manage Galleries page was just reloading the page.
+* Fixed:   Display Type settings could be forced back to their default settings when upgrading.
+* Fixed:   IIS servers may generate a fatal error searching for an absolute path to template files.
+* Fixed:   Inserting NextGEN singlepic from the Add Media popup was creating an <img> without a src attribute.
+* Fixed:   Possible PHP notices, warnings.
+* Fixed:   Restored the NGG_DISABLE_SHORTCODE_MANAGER constant.
+* Fixed:   Router->fix_page_parameter() generated a warning if the global $post is not an object.
+* Fixed:   The button 'Scan folder for new images' was re-importing existing images.
+* Fixed:   Updating tags via the Manage Tags page did not flush the displayed gallery rendering cache.
+
 = V3.55  - 12.13.2023 =
 * Changed: Changing SweetAlert library version to prevent the interference on .ru sites.
 

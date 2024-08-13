@@ -58,7 +58,7 @@ class Admin_Menu extends Base_Admin_Menu {
 	 */
 	public function get_preferred_view( $screen, $fallback_global_preference = true ) {
 		$force_default_view = in_array( $screen, array( 'users.php', 'options-general.php' ), true );
-		$use_wp_admin       = $this->use_wp_admin_interface( $screen );
+		$use_wp_admin       = $this->use_wp_admin_interface();
 
 		// When no preferred view has been set for "Users > All Users" or "Settings > General", keep the previous
 		// behavior that forced the default view regardless of the global preference.
@@ -106,6 +106,7 @@ class Admin_Menu extends Base_Admin_Menu {
 	public function add_my_home_menu() {
 
 		if ( self::DEFAULT_VIEW !== $this->get_preferred_view( 'index.php' ) ) {
+			add_menu_page( __( 'My Home', 'jetpack' ), __( 'My Home', 'jetpack' ), 'read', 'https://wordpress.com/home/' . $this->domain, null, 'dashicons-admin-home', '1.5' );
 			return;
 		}
 
@@ -289,7 +290,7 @@ class Admin_Menu extends Base_Admin_Menu {
 			$default_customize_background_slug_2 => add_query_arg( array( 'autofocus' => array( 'section' => 'colors_manager_tool' ) ), $customize_url ),
 		);
 
-		if ( self::DEFAULT_VIEW === $this->get_preferred_view( 'themes.php' ) || self::CLASSIC_VIEW === $this->get_preferred_view( 'themes.php' ) ) {
+		if ( self::DEFAULT_VIEW === $this->get_preferred_view( 'themes.php' ) ) {
 			$submenus_to_update['themes.php'] = 'https://wordpress.com/themes/' . $this->domain;
 		}
 
@@ -349,7 +350,9 @@ class Admin_Menu extends Base_Admin_Menu {
 		$this->hide_submenu_page( 'tools.php', 'delete-blog' );
 
 		add_submenu_page( 'tools.php', esc_attr__( 'Marketing', 'jetpack' ), __( 'Marketing', 'jetpack' ), 'publish_posts', 'https://wordpress.com/marketing/tools/' . $this->domain, null, 0 );
-		add_submenu_page( 'tools.php', esc_attr__( 'Monetize', 'jetpack' ), __( 'Monetize', 'jetpack' ), 'manage_options', 'https://wordpress.com/earn/' . $this->domain, null, 1 );
+		if ( ! $this->use_wp_admin_interface() ) {
+			add_submenu_page( 'tools.php', esc_attr__( 'Monetize', 'jetpack' ), __( 'Monetize', 'jetpack' ), 'manage_options', 'https://wordpress.com/earn/' . $this->domain, null, 1 );
+		}
 	}
 
 	/**
@@ -387,15 +390,21 @@ class Admin_Menu extends Base_Admin_Menu {
 	}
 
 	/**
-	 * Adds Jetpack menu.
+	 * Create Jetpack menu.
+	 *
+	 * @param int  $position  Menu position.
+	 * @param bool $separator Whether to add a separator before the menu.
 	 */
-	public function add_jetpack_menu() {
-		$this->add_admin_menu_separator( 50, 'manage_options' );
+	public function create_jetpack_menu( $position = 50, $separator = true ) {
+		if ( $separator ) {
+			$this->add_admin_menu_separator( $position, 'manage_options' );
+			++$position;
+		}
 
 		$icon            = ( new Logo() )->get_base64_logo();
-		$is_menu_updated = $this->update_menu( 'jetpack', null, null, null, $icon, 51 );
+		$is_menu_updated = $this->update_menu( 'jetpack', null, null, null, $icon, $position );
 		if ( ! $is_menu_updated ) {
-			add_menu_page( esc_attr__( 'Jetpack', 'jetpack' ), __( 'Jetpack', 'jetpack' ), 'manage_options', 'jetpack', null, $icon, 51 );
+			add_menu_page( esc_attr__( 'Jetpack', 'jetpack' ), __( 'Jetpack', 'jetpack' ), 'manage_options', 'jetpack', null, $icon, $position );
 		}
 
 		add_submenu_page( 'jetpack', esc_attr__( 'Activity Log', 'jetpack' ), __( 'Activity Log', 'jetpack' ), 'manage_options', 'https://wordpress.com/activity-log/' . $this->domain, null, 2 );
@@ -412,6 +421,13 @@ class Admin_Menu extends Base_Admin_Menu {
 			// Remove the submenu auto-created by Core just to be sure that there no issues on non-admin roles.
 			remove_submenu_page( 'jetpack', 'jetpack' );
 		}
+	}
+
+	/**
+	 * Adds Jetpack menu.
+	 */
+	public function add_jetpack_menu() {
+		$this->create_jetpack_menu();
 	}
 
 	/**

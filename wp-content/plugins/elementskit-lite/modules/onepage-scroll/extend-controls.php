@@ -5,6 +5,7 @@ namespace Elementor;
 use \ElementsKit_Lite\Modules\Onepage_Scroll\Init;
 
 class ElementsKit_Extend_Onepage_Scroll {
+
 	public function __construct() {
 		/**
 		 * Page Controls
@@ -182,7 +183,26 @@ class ElementsKit_Extend_Onepage_Scroll {
 				break;
 		}
 
-		include_once 'nav-styles/' . $nav_style . '.php';
+		$nav_styles = array(
+			'circle-scale-up',
+			'circle-fill-in',
+			'circle-fill-out',
+			'circle-stroke',
+			'circle-stroke-dot',
+			'circle-stroke-simple',
+			'circle-dot-move',
+			'circle-timeline',
+			'square-scale-up',
+			'line-grow',
+			'line-shrink',
+			'line-fill',
+			'line-move',
+			'icon',
+		);
+
+		if( in_array($nav_style, $nav_styles) ) {
+			include_once 'nav-styles/' . $nav_style . '.php';
+		}
 
 		if ( $is_editor ) :
 			echo '</div>';

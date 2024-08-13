@@ -19,14 +19,20 @@ jQuery(function($){
 
               self.toggle_busy(true);
 
-              $.get($this.attr('href'), function(response){
-                  var html = $(response);
-                  $gallery.replaceWith(html.find('div[id*="ngg-gallery-'+gallery_id+'"]'));
+              $.get({
+                  url: $this.attr('href'),
+                  headers: { 'X-NGG-Pagination-Request': true },
+                  success: function (response) {
+                      var html = $(response);
+                      $gallery.replaceWith(html.find('div[id*="ngg-gallery-' + gallery_id + '"]'));
 
-                  // Let the user know that we've refreshed the content
-                  $(document).trigger('refreshed');
+                      // Let the user know that we've refreshed the content
+                      $(document).trigger('refreshed');
 
-
+                      // Emit an event that doesn't require jQuery
+                      const event = new Event("nextgen_page_refreshed");
+                      document.dispatchEvent(event);
+                  }
               }).always(function() {
                   self.toggle_busy(false);
               });

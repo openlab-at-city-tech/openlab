@@ -54,7 +54,7 @@ add_shortcode( 'openprocessing', 'openlab_openprocessing_shortcode' );
  * Register auto-embed handlers.
  */
 function openlab_register_embed_handlers() {
-	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/#i', 'openlab_embed_handler_screencast' );
+	wp_embed_register_handler( 'screencast', '#https?://([^\.]+)\.screencast\.com/([^/?]+)#i', 'openlab_embed_handler_screencast' );
 
 	wp_embed_register_handler(
 		'pinterest',
@@ -74,6 +74,7 @@ function openlab_register_embed_handlers() {
 	wp_embed_register_handler( 'geogebra', '#https?://([^\.]+)\.geogebra\.org/#i', 'openlab_embed_handler_geogebra' );
 	wp_embed_register_handler( 'yuja', '#https?://([^\.]+)\.yuja\.com/#i', 'openlab_embed_handler_yuja' );
 	wp_embed_register_handler( 'mathdot', '#https?://mathdev\.citytech\.cuny\.edu/DOT/([^/]*)/?#i', 'openlab_embed_handler_mathdot' );
+	wp_embed_register_handler( 'circuitverse', '#https?://circuitverse\.org/#i', 'openlab_embed_handler_circuitverse' );
 
 	$network_home_url = network_home_url(); // Network home URL
 	wp_embed_register_handler( 'openlab', "#{$network_home_url}#i", 'openlab_embed_local_uploaded_images' );
@@ -87,21 +88,27 @@ add_action( 'init', 'openlab_register_embed_handlers' );
  * screencast.com embed callback.
  */
 function openlab_embed_handler_screencast( $matches, $attr, $url, $rawattr ) {
-	$cached = wp_cache_get( 'screencast_embed_url_v2_' . $url );
-	if ( false === $cached ) {
-		// This is the worst thing in the whole world.
-		$r = wp_remote_get( $url );
-		$b = wp_remote_retrieve_body( $r );
-		$b = htmlspecialchars_decode( $b );
-
-		$embed_url = '';
-		if ( preg_match( '|<iframe[^>]+src="([^"]+screencast\.com[^"]+)"|', $b, $url_matches ) ) {
-			$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
-		}
-
-		wp_cache_set( 'screencast_embed_url_v2_' . $url, $embed_url );
+	if ( 'app' === $matches[1] ) {
+		// "Modern" Screencast.
+		$embed_url = $matches[0] . '/e';
 	} else {
-		$embed_url = $cached;
+		// "Classic" Screencast.
+		$cached = wp_cache_get( 'screencast_embed_url_v2_' . $url );
+		if ( false === $cached ) {
+			// This is the worst thing in the whole world.
+			$r = wp_remote_get( $url );
+			$b = wp_remote_retrieve_body( $r );
+			$b = htmlspecialchars_decode( $b );
+
+			$embed_url = '';
+			if ( preg_match( '|<iframe[^>]+src="([^"]+screencast\.com[^"]+)"|', $b, $url_matches ) ) {
+				$embed_url = str_replace( '/tsc_player.swf', '', $url_matches[1] );
+			}
+
+			wp_cache_set( 'screencast_embed_url_v2_' . $url, $embed_url );
+		} else {
+			$embed_url = $cached;
+		}
 	}
 
 	// Get height/width from URL params, if available.
@@ -286,7 +293,7 @@ function openlab_embed_local_uploaded_images( $matches, $attr, $url ) {
 
 	// Get extension from the URL
 	$ext = strtolower( pathinfo( $url, PATHINFO_EXTENSION ) );
-	
+
 	// If URL doesn't end with supported image extension, return the URL
 	if( ! in_array( $ext, $supported_images ) ) {
 		return $url;
@@ -329,3 +336,88 @@ function openlab_padlet_shortcode( $attr = [] ) {
     );
 }
 add_shortcode( 'padlet', 'openlab_padlet_shortcode' );
+
+/**
+ * circuitverse shortcode.
+ */
+function openlab_circuitverse_shortcode( $attr = [] ) {
+	static $counter = 0;
+
+	$r = shortcode_atts(
+		[
+			'url'           => '',
+			'height'        => 500,
+			'width'         => 500,
+			'theme'         => 'default',
+			'clock_time'    => '1',
+			'zoom_in_out'   => '1',
+			'fullscreen'    => '1',
+			'display_title' => '1',
+		],
+		$attr
+	);
+
+	if ( empty( $r['url'] ) ) {
+		return '';
+	}
+
+	$domain = parse_url( $r['url'], PHP_URL_HOST );
+	if ( 'circuitverse.org' !== $domain ) {
+		return '';
+	}
+
+	// Try to get the project ID from the URL.
+	$project_id = '';
+
+	$path = parse_url( $r['url'], PHP_URL_PATH );
+
+	$user_project_regex = '/\/users\/(\d+)\/projects\/([a-z0-9-]+)/';
+	if ( preg_match( $user_project_regex, $path, $matches ) ) {
+		$project_id = $matches[2];
+	}
+
+	if ( ! $project_id ) {
+		return '';
+	}
+
+	$boolean_attributes = [ 'clock_time', 'display_title', 'fullscreen', 'zoom_in_out' ];
+	foreach ( $boolean_attributes as $attr ) {
+		$r[ $attr ] = filter_var( $r[ $attr ], FILTER_VALIDATE_BOOLEAN ) ? 'true' : 'false';
+	}
+
+	$embed_src = sprintf(
+		'https://circuitverse.org/simulator/embed/%s?theme=%s&display_title=%s&clock_time=%s&fullscreen=%s&zoom_in_out=%s',
+		$project_id,
+		$r['theme'],
+		$r['display_title'],
+		$r['clock_time'],
+		$r['fullscreen'],
+		$r['zoom_in_out']
+	);
+
+	++$counter;
+
+	$embed = sprintf(
+		'<iframe id="circuitverse-embed-%s-%s" src="%s" style="border-width:; border-style: solid; border-color:;" name="myiframe" id="projectPreview" scrolling="no" frameborder="1" marginheight="0px" marginwidth="0px" height="%d" width="%d" allowFullScreen></iframe>',
+		esc_attr( $project_id ),
+		(int) $counter,
+		esc_url( $embed_src ),
+		(int) $r['height'],
+		(int) $r['width']
+	);
+
+	return $embed;
+}
+add_shortcode( 'circuitverse', 'openlab_circuitverse_shortcode' );
+
+/**
+ * Circuitverse embed callback.
+ *
+ * @param array $matches Matches from embed URL regex.
+ * @param array $attr    Attributes from embed URL regex.
+ * @param string $url    URL.
+ * @return string
+ */
+function openlab_embed_handler_circuitverse( $matches, $attr, $url ) {
+	return openlab_circuitverse_shortcode( [ 'url' => $url ] );
+}

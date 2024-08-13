@@ -17,6 +17,7 @@
 		"google-calendar",
 		"image-compare",
 		"instagram-gallery",
+		"like",
 		"likes",
 		"mailchimp",
 		"map",
@@ -40,6 +41,7 @@
 		"slideshow",
 		"social-previews",
 		"story",
+		"subscriber-login",
 		"subscriptions",
 		"tiled-gallery",
 		"tock",
@@ -53,23 +55,31 @@
 		"ai-assistant-support",
 		"ai-assistant-form-support",
 		"paywall",
-		"ai-content-lens",
 		"blogroll",
 		"blogroll-item",
 		"nextdoor",
-		"ai-assistant-usage-panel"
+		"ai-assistant-usage-panel",
+		"sharing-button",
+		"sharing-buttons",
+		"ai-content-lens",
+		"blog-stats",
+		"top-posts",
+		"goodreads",
+		"voice-to-content",
+		"ai-featured-image-generator",
+		"ai-title-optimization",
+		"ai-assistant-experimental-image-generation-support"
 	],
 	"beta": [
 		"google-docs-embed",
 		"launchpad-save-modal",
-		"like",
 		"recipe",
 		"v6-video-frame-poster",
 		"videopress/video-chapters",
-		"create-with-voice",
 		"ai-assistant-backend-prompts",
-		"sharing-button",
-		"sharing-buttons"
+		"ai-assistant-extensions-support",
+		"ai-general-purpose-image-generator",
+		"ai-proofread-breve"
 	],
 	"experimental": [ "ai-image", "ai-paragraph" ],
 	"no-post-editor": [
@@ -97,6 +107,7 @@
 		"tiled-gallery",
 		"tock",
 		"videopress",
+		"voice-to-content",
 		"wordads"
 	]
 }

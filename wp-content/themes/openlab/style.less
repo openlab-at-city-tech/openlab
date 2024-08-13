@@ -151,6 +151,20 @@ blockquote {
 	position: relative;
 }
 
+.clickable-card {
+	&.card-is-hovered {
+		border-color: @40gray !important;
+	}
+
+	.see-more {
+		text-decoration: underline;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+}
+
 // Base class
 // --------------------------------------------------
 
@@ -556,12 +570,17 @@ input:disabled+label {
 	.social-link-fields-inner {
 		display: flex;
 		gap: 20px;
-		flex: 0 0 520px;
+		flex: 1;
 
         @media( max-width: @screen-xs-max ) {
 			display: block;
-			flex: 1;
 			order: 1;
+		}
+
+		.field-visibility-settings {
+			label {
+				font-weight: @bold;
+			}
 		}
 	}
 
@@ -1182,6 +1201,10 @@ a{
 }
 /**custom tags**/
 body{
+	.field-contains-last-name-error.error {
+		background: @cyan !important;
+		font-weight: @bold !important;
+	}
     .no-gutter{
         &.no-gutter-right{
             padding-right: 0;
@@ -1371,6 +1394,13 @@ body{
             }
         }
     }
+
+	.portfolio-profile-link-wrapper {
+		margin-top: 32px;
+		label {
+			font-weight: 600;
+		}
+	}
 
 	.group-active-status-fieldset {
 		margin: 24px 0;
@@ -1673,8 +1703,21 @@ body{
                 }
             }
         }
+		legend .label-gloss,
 		label .label-gloss {
 			font-weight: normal;
+		}
+
+		.account-description-approval-fieldset {
+			margin-top: 20px;
+		}
+
+		.registration-continue-button {
+			margin-top: 20px;
+
+			a {
+				text-decoration: none;
+			}
 		}
     }
     .panel-body{
@@ -2483,15 +2526,7 @@ body form{
                     }
                 }
                 .item-avatar{
-                    height: 0;
                     position: relative;
-                    padding-top: 100%;
-                    a{
-                        position: absolute;
-                        top: 0;
-                        left: 0;
-                        width: 100%;
-                    }
                     @media (max-width: @screen-xs-max){
                         height: 100%;
                         width: 100%;
@@ -2627,6 +2662,22 @@ body form{
     }
   }
 }
+
+.portfolio-profile-link-toggle-wrapper {
+	align-items: flex-start;
+	display: flex;
+	gap: 8px;
+	margin-left: 5%;
+
+	label {
+		display: block;
+		font-weight: normal;
+		font-size: 12px;
+		padding-top: 3px;
+		margin-bottom: 0;
+	}
+}
+
 .mobile-group-site-links {
   margin-top: 30px;
   .portfolio-site-link {
@@ -3683,6 +3734,10 @@ body.membership-requests {
     }
 }
 
+.group-documents-privacy {
+	margin: 2em 0;
+}
+
 /* BuddyPress Docs toggleable panels */
 .toggleable {
 	.plus-or-minus {
@@ -3906,6 +3961,15 @@ body.docs{
             }
         }
     }
+
+	#doc-privacy {
+		.toggle-content {
+			label {
+				font-weight: 400;
+			}
+		}
+	}
+
     #toggle-table-settings{
         .desc-column{
             vertical-align: top;
@@ -4588,6 +4652,13 @@ body{
         background: @yellow;
         border-color: @yellow;
     }
+}
+.field-visibility-settings {
+	margin-bottom: 15px;
+	label {
+		font-weight: @normal;
+		padding-right: 8px;
+	}
 }
 #member-header{
     margin-top: 41px;
@@ -5700,4 +5771,9 @@ p.private-membership-indicator {
             margin-bottom: 15px;
         }
     }
+}
+.two-factor-methods-table {
+	.col-primary {
+		display: none;
+	}
 }

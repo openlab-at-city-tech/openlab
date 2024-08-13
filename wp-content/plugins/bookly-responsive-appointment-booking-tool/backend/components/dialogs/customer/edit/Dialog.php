@@ -16,7 +16,7 @@ class Dialog extends Lib\Base\Component
         global $wpdb;
 
         $tel_input_enabled = get_option( 'bookly_cst_phone_default_country' ) != 'disabled';
-
+        is_admin() && wp_enqueue_media();
         self::enqueueStyles(
             $tel_input_enabled
                 ? array( 'frontend' => array( 'css/intlTelInput.css' => array( 'bookly-backend-globals' ) ), )
@@ -27,7 +27,7 @@ class Dialog extends Lib\Base\Component
             'frontend' => $tel_input_enabled
                 ? array( 'js/intlTelInput.min.js' => array( 'jquery' ) )
                 : array(),
-            'module' => array( 'js/customer.js' => array( 'bookly-backend-globals' ) ),
+            'module' => array( 'js/customer.js' => is_admin() ? array( 'bookly-backend-globals', 'media-views' ) : array( 'bookly-backend-globals' ) ),
         ) );
 
         if ( $show_wp_users ) {
@@ -71,6 +71,8 @@ class Dialog extends Lib\Base\Component
                 'required' => __( 'Required', 'bookly' ),
                 'no_result_found' => __( 'No result found', 'bookly' ),
                 'searching' => __( 'Searching', 'bookly' ),
+                'image' => __( 'Image', 'bookly' ),
+                'delete' => __( 'Delete', 'bookly' )
             ),
         ) ) );
 

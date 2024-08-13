@@ -110,9 +110,9 @@ class Codes extends Order\Codes
         $this->item = $item;
         $this->lang = $lang;
         $this->recipient = $recipient;
-        $category = $item->getService()->getCategoryId() ? Category::find( $item->getService()->getCategoryId() ) : false;
+        $service_category = $item->getService()->getCategoryId() ? Category::find( $item->getService()->getCategoryId() ) : false;
 
-        $this->appointment_end = $this->tz( $item->getTotalEnd()->format( 'Y-m-d H:i:s' ) );
+        $this->appointment_end = $item->getTotalEnd() ? $this->tz( $item->getTotalEnd()->format( 'Y-m-d H:i:s' ) ) : null;
         $this->appointment_end_info = $item->getService()->getEndTimeInfo();
         $this->appointment_id = $item->getAppointment()->getId();
         $this->appointment_notes = $item->getCA()->getNotes();
@@ -121,8 +121,8 @@ class Codes extends Order\Codes
         $this->appointment_token = $item->getCA()->getToken();
         $this->booking_number = Config::groupBookingActive() ? $item->getAppointment()->getId() . '-' . $item->getCA()->getId() : $item->getCA()->getId();
         $this->category_name = $item->getService()->getTranslatedCategoryName();
-        $this->category_info = $category ? $category->getTranslatedInfo() : '';
-        $this->category_image = $category ? $category->getImageUrl() : '';
+        $this->category_info = $service_category ? $service_category->getTranslatedInfo() : '';
+        $this->category_image = $service_category ? $service_category->getImageUrl() : '';
         $this->client_timezone = $item->getCA()->getTimeZone()
             ?: ( $item->getCA()->getTimeZoneOffset() !== null
                 ? 'UTC' . Utils\DateTime::formatOffset( - $item->getCA()->getTimeZoneOffset() * 60 )
@@ -163,10 +163,12 @@ class Codes extends Order\Codes
         $staff_photo = '';
         $service_image = '';
         $category_image = '';
+        $staff_category_image = '';
         if ( $format === 'html' ) {
             $category_image = Utils\Common::getImageTag( $this->category_image, $this->category_name );
             $service_image = Utils\Common::getImageTag( $this->service_image, $this->service_name );
             $staff_photo = Utils\Common::getImageTag( $this->staff_photo, $this->staff_name );
+            $staff_category_image = Utils\Common::getImageTag( $this->staff_category_image, $this->staff_category_name );
         }
         $cancel_appointment_confirm_url = get_option( 'bookly_url_cancel_confirm_page_url' );
         $cancel_appointment_confirm_url = $this->appointment_token
@@ -195,13 +197,15 @@ class Codes extends Order\Codes
             'category_name' => $this->category_name,
             'category_info' => $this->category_info,
             'category_image' => $category_image,
-            'google_calendar_url' => sprintf(
-                'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&details=%s',
-                urlencode( $this->service_name ),
-                date( 'Ymd\THis', strtotime( $this->appointment_start ) ),
-                date( 'Ymd\THis', strtotime( $this->appointment_end ) ),
-                urlencode( sprintf( "%s\n%s", $this->service_name, $this->staff_name ) )
-            ),
+            'google_calendar_url' => $this->appointment_start === null
+                ? ''
+                : sprintf(
+                    'https://calendar.google.com/calendar/render?action=TEMPLATE&text=%s&dates=%s/%s&details=%s',
+                    urlencode( $this->service_name ),
+                    date( 'Ymd\THis', strtotime( $this->appointment_start ) ),
+                    date( 'Ymd\THis', strtotime( $this->appointment_end ) ),
+                    urlencode( sprintf( "%s\n%s", $this->service_name, $this->staff_name ) )
+                ),
             'number_of_persons' => $this->number_of_persons,
             'reject_appointment_url' => $this->appointment_token
                 ? admin_url( 'admin-ajax.php?action=bookly_reject_appointment&token=' . urlencode( Utils\Common::xorEncrypt( $this->appointment_token, 'reject' ) ) )
@@ -217,6 +221,9 @@ class Codes extends Order\Codes
             'staff_name' => $this->staff_name,
             'staff_phone' => $this->staff_phone,
             'staff_photo' => $staff_photo,
+            'staff_category_info' => $format === 'html' && $this->staff_category_info ? nl2br( $this->staff_category_info ) : $this->staff_category_info,
+            'staff_category_name' => $this->staff_category_name,
+            'staff_category_image' => $staff_category_image,
             'staff_timezone' => $this->staff_timezone,
             'internal_note' => $this->internal_note,
         );

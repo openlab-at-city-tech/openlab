@@ -6,22 +6,27 @@ if ( have_comments() ) :
     $comments_by_type = &separate_comments( $comments );
 
     if ( ! empty($comments_by_type['comment']) ) :
-?>
-<section id="comments-list" class="comments">
-    <div class="panel panel-default">
-        <div class="comments-list-header">
-            <h3 class="comments-title"><?php comments_number(); ?></h3>
-        </div>
-        <ul class="comments-list-body">
-            <?php wp_list_comments( 'type=comment&callback=openlab_doc_list_comments_render' ); ?>
-        </ul>
-    </div>
-    <?php if ( get_comment_pages_count() > 1 ) : ?>
-    <nav id="comments-nav-below" class="comments-navigation" role="navigation">
-        <div class="paginated-comments-links"><?php paginate_comments_links(); ?></div>
-    </nav>
-    <?php endif; ?>
-</section>
+		?>
+		<section id="comments-list" class="comments">
+			<div class="panel panel-default">
+				<div class="comments-list-header">
+					<h3 class="comments-title"><?php comments_number(); ?></h3>
+				</div>
+				<ul class="comments-list-body">
+					<?php wp_list_comments( 'type=comment&callback=openlab_doc_list_comments_render' ); ?>
+				</ul>
+			</div>
+
+			<?php if ( get_comment_pages_count() > 1 ) : ?>
+				<nav id="comments-nav-below" class="comments-navigation" role="navigation">
+					<div class="paginated-comments-links"><?php paginate_comments_links(); ?></div>
+				</nav>
+			<?php endif; ?>
+		</section>
+	<?php
+	endif;
+	?>
+
 <?php endif; ?>
 
 <?php
@@ -59,6 +64,4 @@ if ( comments_open() ) {
 	);
 }
 ?>
-
-<?php endif; ?>
 </section>

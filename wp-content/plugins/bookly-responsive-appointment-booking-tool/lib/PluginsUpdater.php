@@ -5,15 +5,13 @@ class PluginsUpdater
 {
     public static function init()
     {
-        self::registerHooks();
-    }
-
-    public static function registerHooks()
-    {
-        // Update Bookly add-ons
-        add_action( 'wp_ajax_bookly_update_plugin', array( __CLASS__, 'updateAddon' ), 10, 0 );
-        // Check update add-ns
-        add_action( 'wp_ajax_bookly_check_update', array( __CLASS__, 'getAddonsUpdatingData' ), 10, 0 );
+        if ( defined( 'DOING_AJAX' ) ) {
+            // Update Bookly add-ons
+            add_action( 'wp_ajax_bookly_update_plugin', array( __CLASS__, 'updateAddon' ), 10, 0 );
+            // Check update add-ns
+            add_action( 'wp_ajax_bookly_check_update', array( __CLASS__, 'getAddonsUpdatingData' ), 10, 0 );
+            add_action( 'wp_ajax_nopriv_bookly_speed_up_update_addons', array( __CLASS__, 'speedUpUpdateAddons' ), 10, 0 );
+        }
         // Modify updating data
         add_action( 'after_plugin_row', array( __CLASS__, 'renderAfterPluginRow' ), 10, 3 );
         // Reduce time of last check for updates of Bookly plugins to quicker identify new versions
@@ -29,6 +27,77 @@ class PluginsUpdater
             $scripts->enqueue( 'bookly-plugins-page' );
             PluginsUpdater::renderModal();
         } );
+
+        add_action( 'update_plugins_api.booking-wp-plugin.com', function( $update, $plugin_data, $plugin_file, $locales ) {
+            if ( $plugin_data['Author'] === 'Nota-Info' ) {
+                if ( ! is_array( $update ) ) {
+                    $update = array();
+                }
+                $update['version'] = $plugin_data['Version'];
+            }
+
+            return $update;
+        }, 10, 4 );
+    }
+
+    /**
+     * @param string[] $slugs
+     * @return void
+     */
+    public static function speedUpUpdate( $slugs )
+    {
+        self::resetLastCheckTime( $slugs );
+
+        wp_remote_post(
+            admin_url( 'admin-ajax.php' ),
+            array(
+                'timeout' => 5,
+                'redirection' => false,
+                'sslverify' => false,
+                'body' => array(
+                    'action' => 'bookly_speed_up_update_addons',
+                    'signature' => self::getSignature(),
+                    'slugs' => $slugs,
+                ),
+            ) );
+    }
+
+    /**
+     * @return void
+     */
+    public static function speedUpUpdateAddons()
+    {
+        if ( isset( $_POST['signature'], $_POST['slugs'] ) && $_POST['signature'] === self::getSignature() ) {
+            $bookly_plugins = apply_filters( 'bookly_plugins', array() );
+            /** @var Base\Plugin[] $plugins */
+            $plugins = array();
+            foreach ( $_POST['slugs'] as $slug ) {
+                if ( isset( $bookly_plugins[ $slug ] ) ) {
+                    $plugins[ $slug ] = $bookly_plugins[ $slug ];
+                }
+            }
+            // Required for calling wp_version_check
+            add_action( 'wp_doing_cron', '__return_true', PHP_INT_MAX, 1 );
+            wp_version_check( array(), true );
+            $update_plugins = get_site_transient( 'update_plugins' );
+            if ( isset( $update_plugins->response ) ) {
+                $auto_update_plugins = get_option( 'auto_update_plugins' ) ?: array();
+                /**@var \stdClass $data */
+                foreach ( $update_plugins->response as $data ) {
+                    if ( isset( $data->slug, $plugins[ $data->slug ] )
+                        && in_array( $plugins[ $data->slug ]::getBasename(), $auto_update_plugins )
+                    ) {
+                        wp_maybe_auto_update();
+                        wp_remote_post( admin_url( 'admin-ajax.php' ) );
+                        break;
+                    }
+                }
+            }
+        } else {
+            Utils\Log::put( Utils\Log::ACTION_DEBUG, 'Invalid request for speed up update addons', null, json_encode( $_POST, JSON_PRETTY_PRINT ) );
+        }
+
+        wp_send_json_success();
     }
 
     /**
@@ -84,11 +153,11 @@ class PluginsUpdater
         if ( wp_verify_nonce( $_POST['csrf_token'], 'bookly' ) == 1 ) {
             $slug = $_POST['slug'];
             $bookly_plugins = apply_filters( 'bookly_plugins', array() );
-            if ( $slug == 'bookly-responsive-appointment-booking-tool' ) {
+            if ( $slug === 'bookly-responsive-appointment-booking-tool' ) {
                 if ( array_key_exists( 'bookly-addon-pro', $bookly_plugins ) ) {
                     $update = self::getUpdates( array( 'bookly-addon-pro' => $bookly_plugins['bookly-addon-pro'] ) );
                 }
-            } elseif ( $slug == 'bookly-addon-pro' ) {
+            } elseif ( $slug === 'bookly-addon-pro' ) {
                 $plugins = apply_filters( 'bookly_plugins', array() );
                 $bookly_plugins = array();
                 foreach ( $_POST['slugs'] as $slug ) {
@@ -141,19 +210,33 @@ class PluginsUpdater
      */
     public static function reduceTimeOfLastCheck( $upgrader, $data )
     {
-        if ( isset( $data['type'], $data['plugins'] ) && $data['type'] == 'plugin' ) {
+        if ( isset( $data['action'], $data['type'] ) && $data['action'] === 'update' && $data['type'] === 'plugin' ) {
             $slugs = array();
-            if ( in_array( 'bookly-addon-pro/main.php', $data['plugins'] ) ) {
-                $bookly_plugins = apply_filters( 'bookly_plugins', array() );
-                unset( $bookly_plugins['bookly-responsive-appointment-booking-tool'], $bookly_plugins['bookly-addon-pro'] );
-                $slugs = array_keys( $bookly_plugins );
-            } elseif ( in_array( 'bookly-responsive-appointment-booking-tool/main.php', $data['plugins'] ) ) {
-                $slugs = array( 'bookly-addon-pro' );
+            if ( isset( $data['plugins'], $data['bulk'] ) && $data['bulk'] ) {
+                if ( in_array( 'bookly-addon-pro/main.php', $data['plugins'] ) ) {
+                    $bookly_plugins = apply_filters( 'bookly_plugins', array() );
+                    unset( $bookly_plugins['bookly-responsive-appointment-booking-tool'], $bookly_plugins['bookly-addon-pro'] );
+                    $slugs = array_keys( $bookly_plugins );
+                } elseif ( in_array( 'bookly-responsive-appointment-booking-tool/main.php', $data['plugins'] ) ) {
+                    $slugs = array( 'bookly-addon-pro' );
+                }
             }
-            foreach ( $slugs as $slug ) {
-                $plugin_checked = get_option( 'external_updates-' . $slug );
-                if ( $plugin_checked instanceof \stdClass && property_exists( $plugin_checked, 'lastCheck' ) ) {
-                    $plugin_checked->lastCheck = time() - WEEK_IN_SECONDS;
+            self::resetLastCheckTime( $slugs );
+        }
+    }
+
+    /**
+     * @param array $slugs
+     * @return void
+     */
+    protected static function resetLastCheckTime( array $slugs )
+    {
+        foreach ( $slugs as $slug ) {
+            $plugin_checked = get_option( 'external_updates-' . $slug );
+            if ( $plugin_checked instanceof \stdClass && property_exists( $plugin_checked, 'lastCheck' ) ) {
+                $current_last_check = $plugin_checked->lastCheck;
+                $plugin_checked->lastCheck = time() - WEEK_IN_SECONDS;
+                if ( abs( $current_last_check - $plugin_checked->lastCheck ) > 60 ) {
                     update_option( 'external_updates-' . $slug, $plugin_checked );
                 }
             }
@@ -201,7 +284,6 @@ class PluginsUpdater
 
     /**
      * @param Plugin $bookly_plugin
-     * @param $bookly_plugin
      * @return string|void
      */
     protected static function renderSupportInfo( $bookly_plugin )
@@ -237,12 +319,11 @@ class PluginsUpdater
     }
 
     /**
-     * @param Plugin[] $bookly_plugins
-     * @return array
+     * @param Base\Plugin[] $bookly_plugins
+     * @return void
      */
-    protected static function getUpdates( $bookly_plugins )
+    protected static function checkUpdates( $bookly_plugins )
     {
-        $update = array();
         if ( $bookly_plugins ) {
             $cookies = array();
             foreach ( $_COOKIE as $name => $value ) {
@@ -251,23 +332,38 @@ class PluginsUpdater
             session_write_close();
             $current = get_site_transient( 'update_plugins' );
             foreach ( $bookly_plugins as $bookly_plugin ) {
-                $slug = $bookly_plugin::getSlug();
-                $base_name = $slug . '/main.php';
-                if ( ! isset( $current->response[ $base_name ] ) && $bookly_plugin::getPurchaseCode() != '' ) {
-                    $url = html_entity_decode( wp_nonce_url(
-                        add_query_arg(
-                            array(
-                                'puc_check_for_updates' => 1,
-                                'puc_slug' => $slug,
+                try {
+                    $slug = $bookly_plugin::getSlug();
+                    $base_name = $slug . '/main.php';
+                    if ( ! isset( $current->response[ $base_name ] ) && $bookly_plugin::getPurchaseCode() != '' ) {
+                        $url = html_entity_decode( wp_nonce_url(
+                            add_query_arg(
+                                array(
+                                    'puc_check_for_updates' => 1,
+                                    'puc_slug' => $slug,
+                                ),
+                                self_admin_url( 'plugins.php' )
                             ),
-                            self_admin_url( 'plugins.php' )
-                        ),
-                        'puc_check_for_updates'
-                    ) );
-                    wp_remote_get( $url, compact( 'cookies' ) );
+                            'puc_check_for_updates'
+                        ) );
+                        wp_remote_get( $url, compact( 'cookies' ) );
+                    }
+                } catch ( \Exception $e ) {
                 }
             }
             wp_cache_flush();
+        }
+    }
+
+    /**
+     * @param Plugin[] $bookly_plugins
+     * @return array
+     */
+    protected static function getUpdates( $bookly_plugins )
+    {
+        $update = array();
+        if ( $bookly_plugins ) {
+            self::checkUpdates( $bookly_plugins );
             $current = get_site_transient( 'update_plugins' );
             foreach ( $bookly_plugins as $bookly_plugin ) {
                 $base_name = $bookly_plugin::getBasename();
@@ -291,8 +387,15 @@ class PluginsUpdater
               .bookly-plugins-modal-content{ background-color: #fefefe; margin: 15% auto; padding: 20px; border: 1px solid #888; width: 50%; border-radius: 6px; }
               </style>
               <div class="bookly-plugins-modal" id="bookly-js-update-plugins-modal"><div class="bookly-plugins-modal-content"><div><b>' . esc_html__( 'Bookly updater', 'bookly' ) . '</b></div><p class="bookly-js-plugins-list"></p></div></div>';
+        /** @var \Bookly\Lib\Base\Plugin[] $bookly_plugins */
         $bookly_plugins = apply_filters( 'bookly_plugins', array() );
         unset( $bookly_plugins['bookly-responsive-appointment-booking-tool'], $bookly_plugins['bookly-addon-pro'] );
+        $auto_update_plugins = get_option( 'auto_update_plugins' ) ?: array();
+        foreach ( $bookly_plugins as $slug => $plugin ) {
+            if ( in_array( $plugin::getBasename(), $auto_update_plugins ) ) {
+                unset( $bookly_plugins[ $slug ] );
+            }
+        }
         wp_localize_script( 'bookly-plugins-page', 'BooklyPluginsPageL10n', array(
             'csrfToken' => Utils\Common::getCsrfToken(),
             'deleteData' => get_option( 'bookly_gen_delete_data_on_uninstall', '1' ),
@@ -304,4 +407,11 @@ class PluginsUpdater
         ) );
     }
 
+    /**
+     * @return string
+     */
+    protected static function getSignature()
+    {
+        return Utils\Common::xorEncrypt( get_option( 'bookly_installation_time' ) . '-' . get_option( 'bookly_co_name' ), 'bookly-automatically-update-request' );
+    }
 }

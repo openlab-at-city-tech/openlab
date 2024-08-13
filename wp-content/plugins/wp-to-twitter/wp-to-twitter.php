@@ -4,24 +4,24 @@
  *
  * @package     XPoster
  * @author      Joe Dolson
- * @copyright   2008-2023 Joe Dolson
+ * @copyright   2008-2024 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
- * Plugin Name: XPoster - Share to Twitter/X from WordPress
+ * Plugin Name: XPoster - Share to X and Mastodon
  * Plugin URI:  http://www.joedolson.com/wp-to-twitter/
- * Description: Posts a Tweet when you update your WordPress blog or post a link, using your URL shortener. Many options to customize and promote your Tweets.
+ * Description: Posts a status update when you update your WordPress blog or post a link, using your URL shortener. Many options to customize and promote your statuses.
  * Author:      Joseph C Dolson
  * Author URI:  http://www.joedolson.com
  * Text Domain: wp-to-twitter
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     4.1.2
+ * Version:     4.2.4
  */
 
 /*
-	Copyright 2008-2023  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2008-2024  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -57,16 +57,19 @@ if ( function_exists( 'wp_get_environment_type' ) ) {
 	}
 }
 
-require_once( plugin_dir_path( __FILE__ ) . 'vendor_prefixed/vendor/scoper-autoload.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wpt-functions.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wp-to-twitter-oauth.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wp-to-twitter-shorteners.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wp-to-twitter-manager.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wpt-truncate.php' );
-require_once( plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php' );
+require_once plugin_dir_path( __FILE__ ) . 'vendor_prefixed/vendor/scoper-autoload.php';
+require_once plugin_dir_path( __FILE__ ) . 'wpt-functions.php';
+require_once plugin_dir_path( __FILE__ ) . 'wpt-post-to-twitter.php';
+require_once plugin_dir_path( __FILE__ ) . 'wpt-post-to-mastodon.php';
+require_once plugin_dir_path( __FILE__ ) . 'wp-to-twitter-oauth.php';
+require_once plugin_dir_path( __FILE__ ) . 'wp-to-twitter-shorteners.php';
+require_once plugin_dir_path( __FILE__ ) . 'wp-to-twitter-mastodon.php';
+require_once plugin_dir_path( __FILE__ ) . 'wp-to-twitter-manager.php';
+require_once plugin_dir_path( __FILE__ ) . 'wpt-truncate.php';
+require_once plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php';
 
 global $wpt_version;
-$wpt_version = '4.1.2';
+$wpt_version = '4.2.4';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**
@@ -128,7 +131,7 @@ function wptotwitter_activate() {
 		update_option( 'wpt_post_types', $initial_settings );
 		update_option( 'jd_twit_blogroll', '1' );
 		update_option( 'newlink-published-text', 'New link: #title# #url#' );
-		update_option( 'jd_shortener', '1' );
+		update_option( 'jd_shortener', '3' );
 		update_option( 'jd_strip_nonan', '0' );
 		update_option( 'jd_max_tags', 4 );
 		update_option( 'jd_max_characters', 20 );
@@ -191,7 +194,7 @@ function wptotwitter_activate() {
 }
 
 /**
- * Function checks for an alternate URL to be Tweeted. Contribution by Bill Berry.
+ * Function checks for an alternate URL to be updated. Contribution by Bill Berry.
  *
  * @param int $post_ID Post ID.
  *
@@ -209,16 +212,16 @@ function wpt_link( $post_ID ) {
 }
 
 /**
- * Save error messages for Tweets.
+ * Save error messages for status updates.
  *
  * @param int    $id Post ID.
  * @param int    $auth Current author.
- * @param string $twit Tweet text.
- * @param string $error Error string from X.com.
- * @param int    $http_code Http code from X.com.
+ * @param string $twit Update text.
+ * @param string $error Error string from service.
+ * @param int    $http_code Http code from service.
  * @param string $ts Current timestamp.
  */
-function wpt_saves_error( $id, $auth, $twit, $error, $http_code, $ts ) {
+function wpt_save_error( $id, $auth, $twit, $error, $http_code, $ts ) {
 	$http_code = (int) $http_code;
 	if ( 200 !== $http_code ) {
 		add_post_meta(
@@ -239,6 +242,28 @@ function wpt_saves_error( $id, $auth, $twit, $error, $http_code, $ts ) {
 	}
 }
 
+/**
+ * Save a record of a successful status update.
+ *
+ * @param int    $id Post ID.
+ * @param string $twit Status update text.
+ * @param int    $http_code HTTP Code returned by query.
+ */
+function wpt_save_success( $id, $twit, $http_code ) {
+	if ( 200 === $http_code ) {
+		$jwt = get_post_meta( $id, '_jd_wp_twitter', true );
+		if ( ! is_array( $jwt ) ) {
+			$jwt = array();
+		}
+		$jwt[] = urldecode( $twit );
+		// Why do I pass this into the POST array? Is this something from a past version? Todo.
+		if ( empty( $_POST ) ) {
+			$_POST = array();
+		}
+		$_POST['_jd_wp_twitter'] = $jwt;
+		update_post_meta( $id, '_jd_wp_twitter', $jwt );
+	}
+}
 
 /**
  * Checks whether XPoster has sent a tweet on this post to this author within the last 30 seconds and blocks duplicates.
@@ -247,7 +272,7 @@ function wpt_saves_error( $id, $auth, $twit, $error, $http_code, $ts ) {
  * @param int $auth Author.
  *
  * @uses filter wpt_recent_tweet_threshold
- * @return boolean true to send Tweet, false to block.
+ * @return boolean true to send status update, false to block.
  */
 function wpt_check_recent_tweet( $id, $auth ) {
 	if ( ! $id ) {
@@ -262,7 +287,8 @@ function wpt_check_recent_tweet( $id, $auth ) {
 			return true;
 		} else {
 			/**
-			 * Modify the expiration window for recent Tweets. This value does flood control, to prevent a runaway process from sending multiple Tweets. Default `30` seconds.
+			 * Modify the expiration window for recent status updates.
+			 * This value does flood control, to prevent a runaway process from sending multiple status updates. Default `30` seconds.
 			 *
 			 * @hook wpt_recent_tweet_threshold
 			 * @param {int} $expire Integer representing seconds. How long the transient will exist.
@@ -272,7 +298,7 @@ function wpt_check_recent_tweet( $id, $auth ) {
 			$expire = apply_filters( 'wpt_recent_tweet_threshold', 30 );
 			// if expiration is 0, don't set the transient. We don't want permanent transients.
 			if ( 0 !== $expire ) {
-				wpt_mail( 'Tweet transient set', "$expire / $auth / $id", $id );
+				wpt_mail( 'Update transient set', "$expire / $auth / $id", $id );
 				if ( false === $auth ) {
 					set_transient( "_wpt_most_recent_tweet_$id", true, $expire );
 				} else {
@@ -285,26 +311,42 @@ function wpt_check_recent_tweet( $id, $auth ) {
 	return false;
 }
 
+
 /**
- * Performs the API post to X.com
+ * Performs the API post to target services. Alias for wpt_post_to_twitter.
  *
- * @param string  $twit Text of Tweet to be sent to X.com.
+ * @param string  $text Text of post to be sent to service.
  * @param int     $auth Author ID.
  * @param int     $id Post ID.
  * @param boolean $media Whether to upload media attached to the post specified in $id.
  *
- * @return boolean Success of query.
+ * @return boolean|array False if blocked, array of statuses if attempted.
+ */
+function wpt_post_to_service( $text, $auth = false, $id = false, $media = false ) {
+	$return = wpt_post_to_twitter( $text, $auth, $id, $media );
+
+	return $return;
+}
+
+/**
+ * Performs the API post to target services.
+ *
+ * @param string  $twit Text of post to be sent to service.
+ * @param int     $auth Author ID.
+ * @param int     $id Post ID.
+ * @param boolean $media Whether to upload media attached to the post specified in $id.
+ *
+ * @return boolean|array False if blocked, array of statuses if attempted.
  */
 function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false ) {
-	$http_code = 0;
-	$notice    = '';
 	// If an ID is set but the post is not currently present or published, ignore.
+	$return = array();
 	if ( $id ) {
 		$status = get_post_status( $id );
 		if ( ! $status || 'publish' !== $status ) {
 			$error = __( 'This post is no longer published or has been deleted', 'wp-to-twitter' );
-			wpt_saves_error( $id, $auth, $twit, $error, '404', time() );
-			wpt_set_log( 'wpt_status_message', $id, $error );
+			wpt_save_error( $id, $auth, $twit, $error, '404', time() );
+			wpt_set_log( 'wpt_status_message', $id, $error, '404' );
 
 			return false;
 		}
@@ -322,38 +364,44 @@ function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false 
 
 	$recent = wpt_check_recent_tweet( $id, $auth );
 	if ( $recent ) {
-		wpt_mail( 'This post was just Tweeted, and this is a duplicate.', 'Post ID: ' . $id . '; Account: ' . $auth );
+		wpt_mail( 'This post was just sent, and this is a duplicate.', 'Post ID: ' . $id . '; Account: ' . $auth );
 
 		return false;
 	}
 
-	if ( ! wpt_check_oauth( $auth ) ) {
-		$error = __( 'This account is not authorized to post to X.com.', 'wp-to-twitter' );
-		wpt_saves_error( $id, $auth, $twit, $error, '401', time() );
-		wpt_set_log( 'wpt_status_message', $id, $error );
-		wpt_mail( 'Account not authorized with X.com', 'Post ID: ' . $id );
+	$check_twitter  = wpt_check_oauth( $auth );
+	$check_mastodon = wpt_mastodon_connection( $auth );
+	if ( ! $check_twitter && ! $check_mastodon ) {
+		$error = __( 'This account is not authorized to post to any services.', 'wp-to-twitter' );
+		wpt_save_error( $id, $auth, $twit, $error, '401', time() );
+		wpt_set_log( 'wpt_status_message', $id, $error, '401' );
+		if ( ! $check_twitter ) {
+			wpt_mail( 'Account not authorized with X.com API.', 'Post ID: ' . $id );
+		}
+		if ( ! $check_mastodon ) {
+			wpt_mail( 'Account not authorized with Mastodon.', 'Post ID: ' . $id );
+		}
 
 		return false;
 	} // exit silently if not authorized.
 
 	$check = ( ! $auth ) ? get_option( 'jd_last_tweet', '' ) : get_user_meta( $auth, 'wpt_last_tweet', true ); // get user's last tweet.
-	// prevent duplicate Tweets.
+	// prevent duplicate status updates. Checks whether this text has already been sent.
 	if ( $check === $twit && '' !== $twit ) {
-		wpt_mail( 'Matched: tweet identical', "This Tweet: $twit; Check Tweet: $check; $auth, $id, $media", $id ); // DEBUG.
-		$error = __( 'This tweet is identical to another Tweet recently sent to this account.', 'wp-to-twitter' ) . ' ' . __( 'X.com requires all Tweets to be unique.', 'wp-to-twitter' );
-		wpt_saves_error( $id, $auth, $twit, $error, '403-1', time() );
-		wpt_set_log( 'wpt_status_message', $id, $error );
+		wpt_mail( 'Matched: status update identical', "This Update: $twit; Check Update: $check; $auth, $id, $media", $id ); // DEBUG.
+		$error = __( 'This status update is identical to another update recently sent to this account.', 'wp-to-twitter' ) . ' ' . __( 'All status updates are expected to be unique.', 'wp-to-twitter' );
+		wpt_save_error( $id, $auth, $twit, $error, '403-1', time() );
+		wpt_set_log( 'wpt_status_message', $id, $error, '403' );
 
 		return false;
 	} elseif ( '' === $twit || ! $twit ) {
-		wpt_mail( 'Tweet check: empty sentence', "$twit, $auth, $id, $media", $id ); // DEBUG.
-		$error = __( 'This tweet was blank and could not be sent to X.com.', 'wp-to-twitter' );
-		wpt_saves_error( $id, $auth, $twit, $error, '403-2', time() );
-		wpt_set_log( 'wpt_status_message', $id, $error );
+		wpt_mail( 'Status update check: empty sentence', "$twit, $auth, $id, $media", $id ); // DEBUG.
+		$error = __( 'This status update was blank and could not be sent to the API.', 'wp-to-twitter' );
+		wpt_save_error( $id, $auth, $twit, $error, '403-2', time() );
+		wpt_set_log( 'wpt_status_message', $id, $error, '403' );
 
 		return false;
 	} else {
-		$media_id = false;
 		// must be designated as media and have a valid attachment.
 		$attachment = ( $media ) ? wpt_post_attachment( $id ) : false;
 		if ( $attachment ) {
@@ -369,234 +417,27 @@ function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false 
 			'text' => $twit,
 		);
 
+		$connection = false;
 		if ( wtt_oauth_test( $auth ) ) {
 			$connection = wpt_oauth_connection( $auth );
-			if ( $connection ) {
-				if ( $media && $attachment && ! $media_id ) {
-					$attachment_data = wpt_image_binary( $attachment );
-					$media_info      = $connection->uploadMedia()->upload( $attachment_data );
-					$status          = array(
-						'text'  => $twit,
-						'media' => array(
-							'media_ids' => array(
-								$media_info['media_id_string'],
-							),
-						),
-					);
-					// noweh/twitter-api-v2-php doesn't currently support metadata.
-					$ct       = wpt_oauth_connection( $auth, '1.1' );
-					$media_id = $ct->media(
-						'https://upload.twitter.com/1.1/media/metadata/create.json',
-						array(
-							'auth'       => $auth,
-							'media'      => $media_info['media_id_string'],
-							'attachment' => $attachment,
-						)
-					);
-					wpt_mail( 'Media Uploaded', "$auth, $media_id, $attachment", $id );
-				}
-			}
+			$status     = wpt_upload_twitter_media( $connection, $auth, $attachment, $status, $id );
+			$response   = wpt_send_post_to_twitter( $connection, $auth, $id, $status );
+			wpt_post_submit_handler( $connection, $response, $id, $auth, $twit );
+			$return['xcom'] = $response;
 		}
-		if ( empty( $connection ) ) {
-			$connection = array( 'connection' => 'undefined' );
-		} else {
-
-			/**
-			 * Turn on staging mode. Staging mode is automatically turned on if WPT_STAGING_MODE constant is defined.
-			 *
-			 * @hook wpt_staging_mode
-			 * @param {bool}     $staging_mode True to enable staging mode.
-			 * @param {int|bool} $auth Current author.
-			 * @param {int}      $id Post ID.
-			 *
-			 * @return {bool}
-			 */
-			$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id );
-			if ( ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) || $staging_mode ) {
-				// if in staging mode, we'll behave as if the Tweet succeeded, but not send it.
-				$connection = true;
-				$http_code  = 200;
-				$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ';
-			} else {
-				/**
-				 * Filter the approval to send a Tweet.
-				 *
-				 * @hook wpt_do_tweet
-				 * @param {bool}     $do_tweet Return false to cancel this Tweet.
-				 * @param {int|bool} $auth Author.
-				 * @param {int}      $id Post ID.
-				 * @param {string}   $twit Tweet text.
-				 *
-				 * @return {bool}
-				 */
-				$do_tweet = apply_filters( 'wpt_do_tweet', true, $auth, $id, $twit );
-				$tweet_id = false;
-				if ( $do_tweet ) {
-					try {
-						$return     = $connection->tweet()->create()->performRequest( $status, true );
-						$http_code  = 200;
-						$tweet_id   = $return->data->id;
-						$headers    = $return->headers;
-						$rate_limit = array(
-							'rate-limit'    => $headers['x-rate-limit-remaining'],
-							'rate-reset'    => $headers['x-rate-limit-reset'],
-							'rate-24'       => $headers['x-app-limit-24hour-limit'],
-							'rate-24-reset' => $headers['x-app-limit-24hour-reset'],
-						);
-						update_option( 'wpt_app_limit', $rate_limit );
-					} catch ( RequestException $e ) {
-						// Get Guzzle exception response.
-						if ( method_exists( $e, 'getResponse' ) ) {
-							$response   = $e->getResponse();
-							$headers    = $response->getHeaders();
-							$rate_limit = array(
-								'rate-limit'    => $headers['x-rate-limit-remaining'],
-								'rate-reset'    => $headers['x-rate-limit-reset'],
-								'rate-24'       => $headers['x-app-limit-24hour-limit'],
-								'rate-24-reset' => $headers['x-app-limit-24hour-reset'],
-							);
-							update_option( 'wpt_app_limit', $rate_limit );
-							$http_code = $response->getStatusCode();
-							wpt_mail( 'X RequestException', print_r( $response, 1 ), $id );
-						}
-					} catch ( Exception $e ) {
-						if ( method_exists( $e, 'getMessage' ) ) {
-							$error     = json_decode( $e->getMessage() );
-							$http_code = $e->getCode();
-							$notice    = $error->title . ': ' . $error->detail;
-							wpt_mail( 'X Exception', print_r( $error, 1 ), $id );
-						} else {
-							$http_code = 405;
-							$notice    = __( 'Unhandled response', 'wp-to-twitter' );
-						}
-					}
-				} else {
-					$http_code = '000';
-					$notice    = __( 'XPost Canceled by custom filter.', 'wp-to-twitter' );
-				}
-			}
+		if ( wpt_mastodon_connection( $auth ) ) {
+			$connection = wpt_mastodon_connection( $auth );
+			$status     = wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $id );
+			$response   = wpt_send_post_to_mastodon( $connection, $auth, $id, $status );
+			wpt_post_submit_handler( $connection, $response, $id, $auth, $twit );
+			$return['mastodon'] = $response;
 		}
-		wpt_mail( 'X Connection', "$twit, $auth, $id, $media", $id );
-		if ( $connection ) {
-			$return = false;
-			switch ( $http_code ) {
-				case '000':
-					$error = '';
-					break;
-				case 100:
-					$error = __( '100 Continue: X received the header of your submission, but your server did not follow through by sending the body of the data.', 'wp-to-twitter' );
-					break;
-				case 200:
-					$return = true;
-					$error  = __( '200 OK: Success!', 'wp-to-twitter' );
-					update_option( 'wpt_authentication_missing', false );
-					break;
-				case 304:
-					$error = __( '304 Not Modified: There was no new data to return', 'wp-to-twitter' );
-					break;
-				case 400:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '400: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 401:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '401: %s', 'wp-to-twitter' ), $notice );
-					update_option( 'wpt_authentication_missing', "$auth" );
-					break;
-				case 403:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '403: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 404:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '404: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 406:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '406: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 422:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '422: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 429:
-					// Translators: Error description from X.com.
-					$error = sprintf( __( '429: %s', 'wp-to-twitter' ), $notice );
-					break;
-				case 500:
-					$error = __( '500 Internal Server Error: Something is broken at X.com.', 'wp-to-twitter' );
-					break;
-				case 502:
-					$error = __( '502 Bad Gateway: X.com is down or being upgraded.', 'wp-to-twitter' );
-					break;
-				case 503:
-					$error = __( '503 Service Unavailable: The X.com servers are up, but overloaded with requests - Please try again later.', 'wp-to-twitter' );
-					break;
-				case 504:
-					$error = __( "504 Gateway Timeout: The X.com servers are up, but the request couldn't be serviced due to some failure within our stack. Try again later.", 'wp-to-twitter' );
-					break;
-				default:
-					// Translators: http code.
-					$error = sprintf( __( '<strong>Code %s</strong>: X.com did not return a recognized response code.', 'wp-to-twitter' ), $http_code );
-					break;
-			}
-			wpt_mail( "X.com Response: $http_code", $error, $id ); // DEBUG.
-			// only save last Tweet if successful.
-			if ( 200 === $http_code ) {
-				if ( ! $auth ) {
-					update_option( 'jd_last_tweet', $twit );
-				} else {
-					update_user_meta( $auth, 'wpt_last_tweet', $twit );
-				}
-			}
-			wpt_saves_error( $id, $auth, $twit, $error, $http_code, time() );
-			if ( 200 === $http_code ) {
-				$jwt = get_post_meta( $id, '_jd_wp_twitter', true );
-				if ( ! is_array( $jwt ) ) {
-					$jwt = array();
-				}
-				$jwt[] = urldecode( $twit );
-				if ( empty( $_POST ) ) {
-					$_POST = array();
-				}
-				$_POST['_jd_wp_twitter'] = $jwt;
-				update_post_meta( $id, '_jd_wp_twitter', $jwt );
-			}
-			if ( ! $return ) {
-				/**
-				 * Executes an action after posting a Tweet fails.
-				 *
-				 * @hook wpt_tweet_failed
-				 *
-				 * @since 3.6.0
-				 *
-				 * @param {object} $connection The current OAuth connection.
-				 * @param {int}    $id Post ID for Tweeted post.
-				 * @param {string} $error Error message returned.
-				 */
-				do_action( 'wpt_tweet_failed', $connection, $id, $error );
-				wpt_set_log( 'wpt_status_message', $id, $error );
-			} else {
-				/**
-				 * Executes an action after a Tweet is posted successfully.
-				 *
-				 * @hook wpt_tweet_posted
-				 *
-				 * @param {object} $connection The current OAuth connection.
-				 * @param {int}    $id Post ID for Tweeted post.
-				 */
-				do_action( 'wpt_tweet_posted', $connection, $id );
-				// Log the Tweet ID of the first Tweet for this post.
-				$has_tweet_id = get_post_meta( $id, '_wpt_tweet_id', true );
-				if ( ! $has_tweet_id && $tweet_id ) {
-					update_post_meta( $id, '_wpt_tweet_id', $tweet_id );
-				}
-				wpt_set_log( 'wpt_status_message', $id, $notice . __( 'Tweet sent successfully.', 'wp-to-twitter' ) );
-			}
+		wpt_mail( 'Share Connection Status', "$twit, $auth, $id, $media, " . print_r( $response, 1 ), $id );
+		if ( ! empty( $return ) ) {
 
 			return $return;
 		} else {
-			wpt_set_log( 'wpt_status_message', $id, __( 'No X.com OAuth connection found.', 'wp-to-twitter' ) );
+			wpt_set_log( 'wpt_status_message', $id, __( 'No API connection found.', 'wp-to-twitter' ), '404' );
 
 			return false;
 		}
@@ -604,58 +445,258 @@ function wpt_post_to_twitter( $twit, $auth = false, $id = false, $media = false 
 }
 
 /**
- * Get image binary.
+ * Handle post-sending responses for APIs.
  *
- * @param int $attachment Attachment ID.
+ * @param object   $connection API connection.
+ * @param array    $response Array of response data from API.
+ * @param int      $id Post ID.
+ * @param int|bool $auth Author context.
+ * @param string   $twit Posted status text.
  */
-function wpt_image_binary( $attachment ) {
+function wpt_post_submit_handler( $connection, $response, $id, $auth, $twit ) {
+	$return    = $response['return'];
+	$http_code = $response['http'];
+	$notice    = $response['notice'];
+	$tweet_id  = isset( $response['tweet_id'] ) ? $response['tweet_id'] : false;
+	$status_id = isset( $response['status_id'] ) ? $response['status_id'] : false;
+	wpt_mail( "X.com Response: $http_code", $notice, $id ); // DEBUG.
+	// only save last status if successful.
+	if ( 200 === $http_code ) {
+		if ( ! $auth ) {
+			update_option( 'jd_last_tweet', $twit );
+		} else {
+			update_user_meta( $auth, 'wpt_last_tweet', $twit );
+		}
+	}
+	wpt_save_error( $id, $auth, $twit, $notice, $http_code, time() );
+	wpt_save_success( $id, $twit, $http_code );
+	if ( ! $return ) {
+		/**
+		 * Executes an action after posting a status fails.
+		 *
+		 * @hook wpt_tweet_failed
+		 *
+		 * @since 3.6.0
+		 *
+		 * @param {object} $connection The current OAuth connection.
+		 * @param {int}    $id Post ID for status update.
+		 * @param {string} $error Error message returned.
+		 */
+		do_action( 'wpt_tweet_failed', $connection, $id, $notice );
+		wpt_set_log( 'wpt_status_message', $id, $notice, $http_code );
+	} else {
+		/**
+		 * Executes an action after a status is posted successfully.
+		 *
+		 * @hook wpt_tweet_posted
+		 *
+		 * @param {object} $connection The current OAuth connection.
+		 * @param {int}    $id Post ID for status update.
+		 */
+		do_action( 'wpt_tweet_posted', $connection, $id );
+		// Log the Status ID of the first Tweet on this post.
+		$has_tweet_id = get_post_meta( $id, '_wpt_tweet_id', true );
+		if ( ! $has_tweet_id && $tweet_id ) {
+			update_post_meta( $id, '_wpt_tweet_id', $tweet_id );
+		}
+		// Log the Status ID of the first non-Tweet update on this post.
+		$has_status_id = get_post_meta( $id, '_wpt_status_id', true );
+		if ( ! $has_status_id && $status_id ) {
+			update_post_meta( $id, '_wpt_status_id', $status_id );
+		}
+		wpt_set_log( 'wpt_status_message', $id, $notice );
+	}
+}
+
+/**
+ * Get text error message from HTTP code.
+ *
+ * @param int      $http_code HTTP returned.
+ * @param string   $notice Any already generated notification message.
+ * @param int|bool $auth Current authentication context.
+ *
+ * @return array
+ */
+function wpt_get_response_message( $http_code, $notice, $auth ) {
+	$return = false;
+	switch ( $http_code ) {
+		case '000':
+			$error = '';
+			break;
+		case 100:
+			$error = __( '100 Continue: X received the header of your submission, but your server did not follow through by sending the body of the data.', 'wp-to-twitter' );
+			break;
+		case 200:
+			$return = true;
+			$error  = __( '200 OK: Success!', 'wp-to-twitter' );
+			update_option( 'wpt_authentication_missing', false );
+			break;
+		case 304:
+			$error = __( '304 Not Modified: There was no new data to return', 'wp-to-twitter' );
+			break;
+		case 400:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '400: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 401:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '401: %s', 'wp-to-twitter' ), $notice );
+			update_option( 'wpt_authentication_missing', "$auth" );
+			break;
+		case 403:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '403: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 404:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '404: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 406:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '406: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 422:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '422: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 429:
+			// Translators: Error description from X.com.
+			$error = sprintf( __( '429: %s', 'wp-to-twitter' ), $notice );
+			break;
+		case 500:
+			$error = __( '500 Internal Server Error: Something is broken at X.com.', 'wp-to-twitter' );
+			break;
+		case 502:
+			$error = __( '502 Bad Gateway: X.com is down or being upgraded.', 'wp-to-twitter' );
+			break;
+		case 503:
+			$error = __( '503 Service Unavailable: The X.com servers are up, but overloaded with requests - Please try again later.', 'wp-to-twitter' );
+			break;
+		case 504:
+			$error = __( "504 Gateway Timeout: The X.com servers are up, but the request couldn't be serviced due to some failure within our stack. Try again later.", 'wp-to-twitter' );
+			break;
+		default:
+			// Translators: http code.
+			$error = sprintf( __( '<strong>Code %s</strong>: X.com did not return a recognized response code.', 'wp-to-twitter' ), $http_code );
+			break;
+	}
+	return array(
+		'error'  => $error,
+		'return' => $return,
+	);
+}
+
+/**
+ * Get image binary for passing to API.
+ *
+ * @param int    $attachment Attachment ID.
+ * @param string $service Which service needs the binary.
+ *
+ * @return string|object;
+ */
+function wpt_image_binary( $attachment, $service = 'twitter' ) {
 	$image_sizes = get_intermediate_image_sizes();
 	if ( in_array( 'large', $image_sizes, true ) ) {
 		$size = 'large';
 	} else {
 		$size = array_pop( $image_sizes );
 	}
-	$upload    = wp_get_attachment_image_src( $attachment, apply_filters( 'wpt_upload_image_size', $size ) );
-	$parent    = get_post_ancestors( $attachment );
-	$parent    = ( is_array( $parent ) && isset( $parent[0] ) ) ? $parent[0] : false;
-	$image_url = $upload[0];
-	$remote    = wp_remote_get( $image_url );
-	if ( is_wp_error( $remote ) ) {
+	/**
+	 * Filter the uploaded image size.
+	 *
+	 * @hook wpt_upload_image_size
+	 *
+	 * @param string $size Name of size targeted for upload. Default 'large' if exists.
+	 *
+	 * @return string
+	 */
+	$size   = apply_filters( 'wpt_upload_image_size', $size );
+	$parent = get_post_ancestors( $attachment );
+	$parent = ( is_array( $parent ) && isset( $parent[0] ) ) ? $parent[0] : false;
+	if ( 'mastodon' === $service ) {
+		$path      = wpt_attachment_path( $attachment, $size );
+		$mime      = wp_get_image_mime( $path );
+		$name      = basename( $path );
+		$file      = curl_file_create( $path, $mime, $name );
 		$transport = 'curl';
-		$binary    = wp_get_curl( $image_url );
+		wpt_mail( 'XPoster: media binary fetched', 'Path: ' . $path . 'Transport: ' . $transport . PHP_EOL . $attachment, $parent );
+		if ( ! $file ) {
+			return false;
+		}
+
+		return $file;
 	} else {
-		$transport = 'wp_http';
-		$binary    = wp_remote_retrieve_body( $remote );
+		$upload    = wp_get_attachment_image_src( $attachment, $size );
+		$image_url = $upload[0];
+		$remote    = wp_remote_get( $image_url );
+		if ( is_wp_error( $remote ) ) {
+			$transport = 'curl';
+			$binary    = wp_get_curl( $image_url );
+		} else {
+			$transport = 'wp_http';
+			$binary    = wp_remote_retrieve_body( $remote );
+		}
+		wpt_mail( 'XPoster: media binary fetched', 'Url: ' . $image_url . 'Transport: ' . $transport . print_r( $remote, 1 ), $parent );
+		if ( ! $binary ) {
+			return false;
+		}
+
+		return base64_encode( $binary );
 	}
-	wpt_mail( 'XPoster: media binary fetched', 'Url: ' . $image_url . 'Transport: ' . $transport . print_r( $remote, 1 ), $parent );
-	if ( ! $binary ) {
-		return false;
+}
+
+/**
+ * Fetch an attachment's file path. Recurses to fetch full sized path if an invalid size is passed.
+ *
+ * @param int    $attachment_id Attachment ID.
+ * @param string $size Requested size.
+ *
+ * @return string|false
+ */
+function wpt_attachment_path( $attachment_id, $size = '' ) {
+	$file = get_attached_file( $attachment_id, true );
+	if ( empty( $size ) || 'full' === $size ) {
+		// for the original size get_attached_file is fine.
+		return realpath( $file );
+	}
+	if ( ! wp_attachment_is_image( $attachment_id ) ) {
+		return false; // the id is not referring to a media.
+	}
+	$info = image_get_intermediate_size( $attachment_id, $size );
+	if ( ! is_array( $info ) || ! isset( $info['file'] ) ) {
+		// If this is invalid due to an invalid size, recurse to fetch full size.
+		if ( '' !== $size ) {
+			$path = wpt_attachment_path( $attachment_id );
+
+			return $path;
+		}
+		return false; // probably a bad size argument.
 	}
 
-	return base64_encode( $binary );
+	return realpath( str_replace( wp_basename( $file ), $info['file'], $file ) );
 }
 
 /**
  * For servers without PEAR normalize installed, approximates normalization. With normalizer, executes normalization on string.
  *
- * @param string $string Text to normalize.
+ * @param string $text Text to normalize.
  *
  * @return string Normalized text.
  */
-function wpt_normalize( $string ) {
+function wpt_normalize( $text ) {
 	if ( version_compare( PHP_VERSION, '5.0.0', '>=' ) && function_exists( 'normalizer_normalize' ) ) {
-		if ( normalizer_is_normalized( $string ) ) {
-			return $string;
+		if ( normalizer_is_normalized( $text ) ) {
+			return $text;
 		}
 
-		return normalizer_normalize( $string );
+		return normalizer_normalize( $text );
 	} else {
 		$normalizer = new WPT_Normalizer();
-		if ( $normalizer->is_normalized( $string ) ) {
-			return $string;
+		if ( $normalizer->is_normalized( $text ) ) {
+			return $text;
 		}
 
-		return $normalizer->normalize( $string );
+		return $normalizer->normalize( $text );
 	}
 }
 
@@ -675,11 +716,11 @@ function wpt_is_ssl( $url ) {
 }
 
 /**
- * Builds array of post info for use in Tweet functions.
+ * Builds array of post info for use in status update functions.
  *
  * @param integer $post_ID Post ID.
  *
- * @return array Post data used in Tweet functions.
+ * @return array Post data used in status update functions.
  */
 function wpt_post_info( $post_ID ) {
 	$encoding = get_option( 'blog_charset', '' );
@@ -704,8 +745,8 @@ function wpt_post_info( $post_ID ) {
 	$values['_postModified'] = mysql2date( 'Y-m-d H:i:s', $moddate );
 	$values['postModified']  = mysql2date( $dateformat, $moddate );
 	// get first category.
-	$category   = null;
-	$cat_desc   = null;
+	$category   = '';
+	$cat_desc   = '';
 	$categories = get_the_category( $post_ID );
 	$cats       = array();
 	$cat_descs  = array();
@@ -723,7 +764,7 @@ function wpt_post_info( $post_ID ) {
 		 * Filter the space separated list of category names in #cats#.
 		 *
 		 * @hook wpt_twitter_category_names
-		 * @param {array} $cats Array of category names attached to this Tweet.
+		 * @param {array} $cats Array of category names attached to this status update.
 		 *
 		 * @return {array}
 		 */
@@ -732,7 +773,7 @@ function wpt_post_info( $post_ID ) {
 		 * Filter the space separated list of category descriptions in #cat_descs#.
 		 *
 		 * @hook wpt_twitter_category_descs
-		 * @param {array} $cats Array of category descriptions attached to this Tweet.
+		 * @param {array} $cats Array of category descriptions attached to this status update.
 		 *
 		 * @return {array}
 		 */
@@ -745,11 +786,11 @@ function wpt_post_info( $post_ID ) {
 	$values['cats']        = $cat_names;
 	$values['cat_descs']   = $cat_descs;
 	$values['categoryIds'] = $category_ids;
-	$values['category']    = html_entity_decode( $category, ENT_COMPAT, $encoding );
-	$values['cat_desc']    = html_entity_decode( $cat_desc, ENT_COMPAT, $encoding );
+	$values['category']    = ( $category ) ? html_entity_decode( $category, ENT_COMPAT, $encoding ) : '';
+	$values['cat_desc']    = ( $cat_desc ) ? html_entity_decode( $cat_desc, ENT_COMPAT, $encoding ) : '';
 	$excerpt_length        = get_option( 'jd_post_excerpt' );
 	$post_excerpt          = ( '' === trim( $post->post_excerpt ) ) ? mb_substr( strip_tags( strip_shortcodes( $post->post_content ) ), 0, $excerpt_length ) : mb_substr( strip_tags( strip_shortcodes( $post->post_excerpt ) ), 0, $excerpt_length );
-	$values['postExcerpt'] = html_entity_decode( $post_excerpt, ENT_COMPAT, $encoding );
+	$values['postExcerpt'] = ( $post_excerpt ) ? html_entity_decode( $post_excerpt, ENT_COMPAT, $encoding ) : '';
 	$thisposttitle         = $post->post_title;
 	if ( '' === $thisposttitle && isset( $_POST['title'] ) ) {
 		$thisposttitle = wp_kses_post( $_POST['title'] );
@@ -766,7 +807,7 @@ function wpt_post_info( $post_ID ) {
 	$values['postStatus'] = $post->post_status;
 	$values['postType']   = $post->post_type;
 	/**
-	 * Filters post array to insert custom data that can be used in Tweet process.
+	 * Filters post array to insert custom data that can be used in status update process.
 	 *
 	 * @param array   $values Existing values.
 	 * @param integer $post_ID Post ID.
@@ -782,7 +823,7 @@ function wpt_post_info( $post_ID ) {
  *
  * @param int $post_id Post ID.
  *
- * @return mixed
+ * @return string|bool False if no stored URL.
  */
 function wpt_short_url( $post_id ) {
 	global $post_ID;
@@ -852,7 +893,7 @@ function wpt_category_limit( $post_type, $post_info, $post_ID ) {
 }
 
 /**
- * Set up a Tweet to be sent.
+ * Set up a status update to be sent.
  *
  * @param int     $post_ID Post ID.
  * @param string  $type Publishing context: instant, future, xmlrpc.
@@ -890,7 +931,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 		$default      = ( 'yes' === $tweet_this ) ? true : false;
 		$text_default = 'yes';
 	}
-	wpt_mail( '1: Tweet Status', "Should tweet: $tweet_this; Setting: $text_default; Publication method: $type", $post_ID ); // DEBUG.
+	wpt_mail( '1: Status Update', "Should send: $tweet_this; Setting: $text_default; Publication method: $type", $post_ID ); // DEBUG.
 	if ( $default ) { // default switch: depend on default settings.
 		$post_info = wpt_post_info( $post_ID );
 		$media     = wpt_post_with_media( $post_ID, $post_info );
@@ -903,19 +944,27 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 		unset( $debug_post_info['post_content'] );
 		unset( $debug_post_info['postContent'] );
 		wpt_mail( '2: XPoster Post Info (post content omitted)', print_r( $debug_post_info, 1 ), $post_ID ); // DEBUG.
-		if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() && function_exists( 'wpt_filter_post_info' ) ) {
-			$filter = wpt_filter_post_info( $post_info );
-			if ( true === $filter ) {
-				wpt_mail( '3: Post blocked by XPoster Pro custom filters', 'No additional data available', $post_ID );
+		/**
+		 * Apply filters against this post to determine whether it should be allowed to be sent.
+		 *
+		 * @hook wpt_should_block_status
+		 *
+		 * @param {bool}  $filter Always false by default.
+		 * @param {array} $post_info Array of post data.
+		 *
+		 * @return {bool} True to block post.
+		 */
+		$filter = apply_filters( 'wpt_should_block_status', false, $post_info );
+		if ( true === $filter ) {
+			wpt_mail( '3: Post blocked by XPoster Pro custom filters', 'No additional data available', $post_ID );
 
-				return false;
-			}
+			return false;
 		}
 		/**
 		 * Return true to ignore this post based on POST data. Default false.
 		 *
 		 * @hook wpt_filter_post_data
-		 * @param {bool} $filter True if this post should not be Tweeted.
+		 * @param {bool} $filter True if this post should not have a status update sent.
 		 * @param {array} $post POST global.
 		 *
 		 * @return {bool}
@@ -949,7 +998,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 				wpt_mail( '4b: XPoster Pro: Limited by term filters', 'This post was rejected by a taxonomy/term filter', $post_ID );
 				return false;
 			}
-			// create Tweet and ID whether current action is edit or new.
+			// create status update and ID whether current action is edit or new.
 			$ct = get_post_meta( $post_ID, '_jd_twitter', true );
 			if ( isset( $_POST['_jd_twitter'] ) && '' !== trim( $_POST['_jd_twitter'] ) ) {
 				$ct = sanitize_textarea_field( $_POST['_jd_twitter'] );
@@ -979,7 +1028,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 			if ( $newpost || $oldpost ) {
 				$template = ( '' !== $custom_tweet ) ? $custom_tweet : $nptext;
 				$sentence = jd_truncate_tweet( $template, $post_info, $post_ID );
-				wpt_mail( '5: Tweet Template Processed', "Template: $template; Tweet: $sentence", $post_ID ); // DEBUG.
+				wpt_mail( '5: Status Update Template Processed', "Template: $template; Status: $sentence", $post_ID ); // DEBUG.
 				if ( function_exists( 'wpt_pro_exists' ) && true === wpt_pro_exists() ) {
 					$sentence2 = jd_truncate_tweet( $template, $post_info, $post_ID, false, $auth );
 				}
@@ -1001,7 +1050,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 					if ( '0' === (string) $post_info['wpt_delay_tweet'] || '' === $post_info['wpt_delay_tweet'] || 'on' === $post_info['wpt_no_delay'] ) {
 						foreach ( $wpt_selected_users as $acct ) {
 							if ( wtt_oauth_test( $acct, 'verify' ) ) {
-								wpt_post_to_twitter( $sentence2, $acct, $post_ID, $media );
+								wpt_post_to_service( $sentence2, $acct, $post_ID, $media );
 							}
 						}
 					} else {
@@ -1012,7 +1061,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 								$time = apply_filters( 'wpt_schedule_delay', ( (int) $post_info['wpt_delay_tweet'] ) * 60, $acct );
 
 								/**
-								 * Render the template of a scheduled Tweet only at the time it's sent.
+								 * Render the template of a scheduled status update only at the time it's sent.
 								 *
 								 * @hook wpt_postpone_rendering
 								 * @param {bool} $postpone True to postpone rendering.
@@ -1036,7 +1085,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 								if ( WPT_DEBUG ) {
 									$author_id = ( $acct ) ? "#$acct" : 'Main';
 									wpt_mail(
-										"7a: Tweet Scheduled for author: $author_id",
+										"7a: Status update Scheduled for author: $author_id",
 										print_r(
 											array(
 												'id'       => $acct,
@@ -1063,13 +1112,13 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 						$first  = true;
 						foreach ( $wpt_selected_users as $acct ) {
 							if ( wtt_oauth_test( $acct, 'verify' ) ) {
-								for ( $i = 1; $i <= $repeat; $i ++ ) {
+								for ( $i = 1; $i <= $repeat; $i++ ) {
 									$continue = apply_filters( 'wpt_allow_reposts', true, $i, $post_ID, $acct );
 									if ( $continue ) {
 										$retweet = apply_filters( 'wpt_set_retweet_text', $template, $i, $post_ID );
 
 										/**
-										 * Render the template of a scheduled Tweet only at the time it's sent.
+										 * Render the template of a scheduled status only at the time it's sent.
 										 *
 										 * @hook wpt_postpone_rendering
 										 * @param {bool} $postpone True to postpone rendering.
@@ -1088,7 +1137,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 										}
 										// add original delay to schedule.
 										$delay = ( isset( $post_info['wpt_delay_tweet'] ) ) ? ( (int) $post_info['wpt_delay_tweet'] ) * 60 : 0;
-										// Don't delay the first Tweet of the group.
+										// Don't delay the first stats update of the group.
 										$offset = ( true === $first ) ? 0 : wp_rand( 60, 240 ); // delay each co-tweet by 1-4 minutes.
 										$time   = apply_filters( 'wpt_schedule_retweet', ( $post_info['wpt_retweet_after'] ) * ( 60 * 60 ) * $i, $acct, $i, $post_info );
 										wp_schedule_single_event(
@@ -1134,7 +1183,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 						}
 					}
 				} else {
-					wpt_post_to_twitter( $sentence, false, $post_ID, $media );
+					wpt_post_to_service( $sentence, false, $post_ID, $media );
 				}
 				// END WPT PRO.
 			}
@@ -1145,7 +1194,7 @@ function wpt_tweet( $post_ID, $type = 'instant', $post = null, $updated = null, 
 }
 
 /**
- *  Send Tweets on links in link manager. Only active if Link plug-in is installed.
+ *  Send updates on links in link manager. Only active if Link plug-in is installed.
  *
  * @param integer $link_id Database ID for link.
  *
@@ -1180,7 +1229,7 @@ function wpt_twit_link( $link_id ) {
 		}
 
 		if ( '' !== $sentence ) {
-			wpt_post_to_twitter( $sentence, false, $link_id );
+			wpt_post_to_service( $sentence, false, $link_id );
 		}
 
 		return $link_id;
@@ -1194,7 +1243,7 @@ function wpt_twit_link( $link_id ) {
  *
  * @param int $post_ID Post ID.
  *
- * @return string $hashtags Hashtags in format needed for Tweet.
+ * @return string $hashtags Hashtags in format needed for status updates.
  */
 function wpt_generate_hash_tags( $post_ID ) {
 	$hashtags       = '';
@@ -1281,7 +1330,7 @@ function wpt_generate_hash_tags( $post_ID ) {
 			}
 			if ( mb_strlen( $newtag ) > 2 && ( mb_strlen( $newtag ) <= $max_characters ) && ( $i <= $max_tags ) ) {
 				$hashtags .= "$newtag ";
-				$i ++;
+				++$i;
 			}
 		}
 	}
@@ -1360,10 +1409,18 @@ function wpt_add_twitter_inner_box( $post ) {
 		if ( isset( $_REQUEST['message'] ) && '10' !== $_REQUEST['message'] ) {
 			// don't display when draft is updated or if no message.
 			if ( ! ( ( '1' === $_REQUEST['message'] ) && ( 'publish' === $status && '1' !== $options[ $type ]['post-edited-update'] ) ) && 'no' !== $tweet_this ) {
-				$log   = wpt_get_log( 'wpt_status_message', $post_id );
-				$class = ( __( 'Tweet sent successfully.', 'wp-to-twitter' ) !== $log ) ? 'error' : 'updated';
-				if ( '' !== trim( $log ) ) {
-					echo "<div class='$class'><p>$log</p></div>";
+				$log = wpt_get_log( 'wpt_status_message', $post_id );
+				if ( is_array( $log ) ) {
+					$message = $log['message'];
+					$http    = $log['http'];
+				} else {
+					$message = $log;
+					$http    = '200';
+				}
+				// FIX THIS.
+				$class = ( '200' !== (string) $http ) ? 'error' : 'success';
+				if ( '' !== trim( $message ) ) {
+					echo "<div class='notice notice-$class'><p>$message</p></div>";
 				}
 			}
 		}
@@ -1380,32 +1437,44 @@ function wpt_add_twitter_inner_box( $post ) {
 		}
 		if ( 'publish' === $status && '1' !== $options[ $type ]['post-edited-update'] ) {
 			// Translators: post type.
-			$tweet_status = sprintf( __( '%s will not be Tweeted on update.', 'wp-to-twitter' ), ucfirst( $type ) );
+			$tweet_status = sprintf( __( '%s will not be shared on save.', 'wp-to-twitter' ), ucfirst( $type ) );
 		}
 		if ( 'publish' === $status && ( current_user_can( 'wpt_tweet_now' ) || current_user_can( 'manage_options' ) ) ) {
 			?>
 			<div class='tweet-buttons'>
-				<button type='button' class='tweet button-primary' data-action='tweet'><span class='dashicons dashicons-twitter' aria-hidden='true'></span><?php _e( 'Tweet Now', 'wp-to-twitter' ); ?></button>
-			<?php
-			if ( function_exists( 'wpt_pro_exists' ) && wpt_pro_exists() ) {
+				<div class="wpt-buttons">
+					<button type='button' class='tweet button-primary' data-action='tweet'><span class='dashicons dashicons-share' aria-hidden='true'></span><?php _e( 'Share Now', 'wp-to-twitter' ); ?></button>
+				<?php
+				if ( function_exists( 'wpt_pro_exists' ) && wpt_pro_exists() ) {
+					?>
+				<button type='button' class='tweet schedule button-secondary' data-action='schedule' disabled><?php _e( 'Schedule', 'wp-to-twitter' ); ?></button>
+				<button type='button' class='time button-secondary'>
+					<span class="dashicons dashicons-clock" aria-hidden="true"></span><span class="screen-reader-text"><?php _e( 'Set Date/Time', 'wp-to-twitter' ); ?></span>
+				</button>
+					<?php
+				}
 				?>
-			<button type='button' class='tweet schedule button-secondary' data-action='schedule' disabled><?php _e( 'Schedule', 'wp-to-twitter' ); ?></button>
-			<button type='button' class='time button-secondary'>
-				<span class="dashicons dashicons-clock" aria-hidden="true"></span><span class="screen-reader-text"><?php _e( 'Set Date/Time', 'wp-to-twitter' ); ?></span>
-			</button>
+				</div>
+				<?php
+				if ( function_exists( 'wpt_pro_exists' ) && wpt_pro_exists() ) {
+					?>
 			<div id="wpt_set_tweet_time">
-				<?php
-				$datavalue = gmdate( 'Y-m-d', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-				$timevalue = date_i18n( 'h:s a', current_time( 'timestamp' ) + 3600 ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-				?>
-				<label for='wpt_date'><?php _e( 'Date', 'wp-to-twitter' ); ?></label>
-				<input type='date' value='' class='wpt_date date' name='wpt_datetime' id='wpt_date' data-value='<?php echo $datavalue; ?>' /><br/>
-				<label for='wpt_time'><?php _e( 'Time', 'wp-to-twitter' ); ?></label>
-				<input type='text' value='<?php echo $timevalue; ?>' class='wpt_time time' name='wpt_datetime' id='wpt_time'/>
+					<?php
+					$datavalue = gmdate( 'Y-m-d', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+					$timevalue = date_i18n( 'h:s a', current_time( 'timestamp' ) + 3600 ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+					?>
+				<div class="wpt-date-field">
+					<label for='wpt_date'><?php _e( 'Date', 'wp-to-twitter' ); ?></label>
+					<input type='date' value='' class='wpt_date date' name='wpt_datetime' id='wpt_date' data-value='<?php echo $datavalue; ?>' /><br/>
+				</div>
+				<div class="wpt-time-field">
+					<label for='wpt_time'><?php _e( 'Time', 'wp-to-twitter' ); ?></label>
+					<input type='time' value='<?php echo $timevalue; ?>' class='wpt_time time' name='wpt_datetime' id='wpt_time'/>
+				</div>
 			</div>
-				<?php
-			}
-			?>
+					<?php
+				}
+				?>
 			</div>
 			<div class='wpt_log' aria-live='assertive'></div>
 			<?php
@@ -1413,12 +1482,12 @@ function wpt_add_twitter_inner_box( $post ) {
 		if ( current_user_can( 'wpt_twitter_custom' ) || current_user_can( 'manage_options' ) ) {
 			?>
 			<p class='jtw'>
-				<label for="wpt_custom_tweet"><?php _e( 'Custom Tweet', 'wp-to-twitter' ); ?></label><br/>
+				<label for="wpt_custom_tweet"><?php _e( 'Custom Status Update', 'wp-to-twitter' ); ?></label><br/>
 				<textarea class="wpt_tweet_box widefat" name="_jd_twitter" id="wpt_custom_tweet" placeholder="<?php esc_attr( $expanded ); ?>" rows="2" cols="60"><?php echo esc_attr( $tweet ); ?></textarea>
 				<?php echo apply_filters( 'wpt_custom_box', '', $tweet, $post_id ); ?>
 			</p>
 			<p class='wpt-template'>
-				<?php _e( 'Template:', 'wp-to-twitter' ); ?> <code><?php echo stripcslashes( $expanded ); ?></code>
+				<?php _e( 'Template:', 'wp-to-twitter' ); ?><br /><code><?php echo stripcslashes( $expanded ); ?></code>
 				<?php echo apply_filters( 'wpt_template_block', '', $expanded, $post_id ); ?>
 			</p>
 			<?php
@@ -1437,13 +1506,13 @@ function wpt_add_twitter_inner_box( $post ) {
 			<?php
 		}
 		if ( current_user_can( 'wpt_twitter_switch' ) || current_user_can( 'manage_options' ) ) {
-			// "no" means 'Don't Tweet' (is checked)
+			// "no" means 'Don't Post' (is checked)
 			$nochecked  = ( 'no' === $tweet_this ) ? ' checked="checked"' : '';
 			$yeschecked = ( 'yes' === $tweet_this ) ? ' checked="checked"' : '';
 			?>
 		<p class='toggle-btn-group'>
-			<input type="radio" name="_jd_tweet_this" value="no" id="jtn"<?php echo $nochecked; ?> /><label for="jtn"><?php _e( "Don't Tweet", 'wp-to-twitter' ); ?></label>
-			<input type="radio" name="_jd_tweet_this" value="yes" id="jty"<?php echo $yeschecked; ?> /><label for="jty"><?php _e( 'Tweet', 'wp-to-twitter' ); ?></label>
+			<input type="radio" name="_jd_tweet_this" value="no" id="jtn"<?php echo $nochecked; ?> /><label for="jtn"><?php _e( "Don't Post", 'wp-to-twitter' ); ?></label>
+			<input type="radio" name="_jd_tweet_this" value="yes" id="jty"<?php echo $yeschecked; ?> /><label for="jty"><?php _e( 'Post', 'wp-to-twitter' ); ?></label>
 		</p>
 			<?php
 		} else {
@@ -1487,7 +1556,8 @@ function wpt_add_twitter_inner_box( $post ) {
 				<?php
 				$tags = wpt_tags();
 				foreach ( $tags as $tag ) {
-					echo '<li><code>#' . $tag . '#</code></li>';
+					$pressed = ( false === stripos( $expanded, '#' . $tag . '#' ) ) ? 'false' : 'true';
+					echo '<li><button type="button" class="button-secondary" aria-pressed="' . $pressed . '">#' . $tag . '#</button></li>';
 				}
 				do_action( 'wpt_notes_tab', $post_id );
 				?>
@@ -1518,8 +1588,8 @@ function wpt_add_twitter_inner_box( $post ) {
 		</div>
 		<?php
 	} else {
-		// permissions: this user isn't allowed to Tweet.
-		_e( 'Your role does not have the ability to Post Tweets from this site.', 'wp-to-twitter' );
+		// permissions: this user isn't allowed to post status updates.
+		_e( 'Your role does not have the ability to post status updates from this site.', 'wp-to-twitter' );
 		?>
 		<input type='hidden' name='_jd_tweet_this' value='no'/>
 		<?php
@@ -1527,9 +1597,9 @@ function wpt_add_twitter_inner_box( $post ) {
 }
 
 /**
- * Format history of Tweets attempted on current post.
+ * Format history of status updates attempted on current post.
  *
- * @param array $post_id Post ID to fetch Tweets on.
+ * @param array $post_id Post ID to fetch status updates on.
  */
 function wpt_show_tweets( $post_id ) {
 	$previous_tweets = get_post_meta( $post_id, '_jd_wp_twitter', true );
@@ -1541,10 +1611,10 @@ function wpt_show_tweets( $post_id ) {
 	if ( ! empty( $previous_tweets ) || ! empty( $failed_tweets ) ) {
 		?>
 	<p class='panel-toggle'>
-		<a href='#wpt_tweet_history' class='history-toggle'><span class='dashicons dashicons-plus' aria-hidden="true"></span><?php _e( 'View Tweet History', 'wp-to-twitter' ); ?></a>
+		<a href='#wpt_tweet_history' class='history-toggle'><span class='dashicons dashicons-plus' aria-hidden="true"></span><?php _e( 'View Update History', 'wp-to-twitter' ); ?></a>
 	</p>
 	<div class='history'>
-	<p class='error'><em><?php _e( 'Previous Tweets', 'wp-to-twitter' ); ?>:</em></p>
+	<p class='error'><em><?php _e( 'Previous Updates', 'wp-to-twitter' ); ?>:</em></p>
 	<ul>
 		<?php
 		$has_history   = false;
@@ -1552,9 +1622,18 @@ function wpt_show_tweets( $post_id ) {
 		if ( is_array( $previous_tweets ) ) {
 			foreach ( $previous_tweets as $previous_tweet ) {
 				if ( '' !== $previous_tweet ) {
-					$has_history    = true;
+					$has_history     = true;
+					$twitter_intent  = '';
+					$mastodon_intent = '';
+					if ( wtt_oauth_test() ) {
+						$twitter_intent = "<a href='https://twitter.com/intent/tweet?text=" . urlencode( $previous_tweet ) . "'>" . __( 'Repost on X.com', 'wp-to-twitter' ) . '</a>';
+					}
+					if ( wpt_mastodon_connection() ) {
+						$mastodon        = get_option( 'wpt_mastodon_instance' );
+						$mastodon_intent = "<a href='" . esc_url( $mastodon ) . '/statuses/new?text=' . urlencode( $previous_tweet ) . "'>" . __( 'Repost on Mastodon', 'wp-to-twitter' ) . '</a>';
+					}
 					$hidden_fields .= "<input type='hidden' name='_jd_wp_twitter[]' value='" . esc_attr( $previous_tweet ) . "' />";
-					echo "<li>$previous_tweet <a href='http://twitter.com/intent/tweet?text=" . urlencode( $previous_tweet ) . "'>Retweet this</a></li>";
+					echo "<li>$previous_tweet $twitter_intent $mastodon_intent</li>";
 				}
 			}
 		}
@@ -1566,21 +1645,31 @@ function wpt_show_tweets( $post_id ) {
 		if ( is_array( $failed_tweets ) ) {
 			foreach ( $failed_tweets as $failed_tweet ) {
 				if ( ! empty( $failed_tweet ) ) {
-					$ft          = $failed_tweet['sentence'];
-					$reason      = $failed_tweet['code'];
-					$error       = $failed_tweet['error'];
-					$list        = true;
-					$error_list .= "<li> <code>Error: $reason</code> $ft <a href='http://twitter.com/intent/tweet?text=" . urlencode( $ft ) . "'>Tweet this</a><br /><em>$error</em></li>";
+					$ft     = $failed_tweet['sentence'];
+					$reason = $failed_tweet['code'];
+					$error  = $failed_tweet['error'];
+					$list   = true;
+
+					$twitter_intent  = '';
+					$mastodon_intent = '';
+					if ( wtt_oauth_test() ) {
+						$twitter_intent = "<a href='https://twitter.com/intent/tweet?text=" . urlencode( $ft ) . "'>" . __( 'Send update to X.com', 'wp-to-twitter' ) . '</a>';
+					}
+					if ( wpt_mastodon_connection() ) {
+						$mastodon        = get_option( 'wpt_mastodon_instance' );
+						$mastodon_intent = "<a href='" . esc_url( $mastodon ) . '/statuses/new?text=' . urlencode( $ft ) . "'>" . __( 'Send update to Mastodon', 'wp-to-twitter' ) . '</a>';
+					}
+					$error_list .= "<li> <code>Error: $reason</code> $ft $twitter_intent $mastodon_intent <br /><em>$error</em></li>";
 				}
 			}
 			if ( true === $list ) {
-				echo "<p class='error'><em>" . __( 'Failed Tweets', 'wp-to-twitter' ) . ":</em></p>
+				echo "<p class='error'><em>" . __( 'Failed Status Updates', 'wp-to-twitter' ) . ":</em></p>
 				<ul>$error_list</ul>";
 			}
 		}
 		echo '<div>' . $hidden_fields . '</div>';
 		if ( $has_history || $list ) {
-			echo "<p><input type='checkbox' name='wpt_clear_history' id='wptch' value='clear' /> <label for='wptch'>" . __( 'Delete Tweet History', 'wp-to-twitter' ) . '</label></p>';
+			echo "<p><input type='checkbox' name='wpt_clear_history' id='wptch' value='clear' /> <label for='wptch'>" . __( 'Delete Status History', 'wp-to-twitter' ) . '</label></p>';
 		}
 		?>
 	</div>
@@ -1597,15 +1686,11 @@ function wpt_admin_scripts() {
 	if ( SCRIPT_DEBUG ) {
 		$wpt_version .= '-' . wp_rand( 10000, 99999 );
 	}
+	wp_register_script( 'wpt.charcount', plugins_url( 'js/jquery.charcount.js', __FILE__ ), array( 'jquery' ), $wpt_version );
 	if ( 'post' === $current_screen->base || 'xposter-pro_page_wp-to-twitter-schedule' === $current_screen->id ) {
-		wp_enqueue_script( 'wpt.charcount', plugins_url( 'js/jquery.charcount.js', __FILE__ ), array( 'jquery' ), $wpt_version );
+		wp_enqueue_script( 'wpt.charcount' );
 		wp_register_style( 'wpt-post-styles', plugins_url( 'css/post-styles.css', __FILE__ ), array(), $wpt_version );
 		wp_enqueue_style( 'wpt-post-styles' );
-		$css = '#wp2t h2 {
-			background: url("' . plugins_url( 'images/logo-black.png', __FILE__ ) . '") 12px 50% no-repeat;
-			padding-left: 32px !important;
-		}';
-		wp_add_inline_style( 'wpt-post-styles', $css );
 		$config = wpt_max_length();
 		// add one; character count starts from 1.
 		if ( 'post' === $current_screen->base ) {
@@ -1628,6 +1713,7 @@ function wpt_admin_scripts() {
 				'first'   => $first,
 				'is_ssl'  => ( wpt_is_ssl( home_url() ) ) ? 'true' : 'false',
 				'text'    => __( 'Characters left: ', 'wp-to-twitter' ),
+				'updated' => __( 'Custom status template updated', 'wp-to-twitter' ),
 			)
 		);
 	}
@@ -1660,7 +1746,7 @@ function wpt_admin_scripts() {
 
 add_action( 'wp_ajax_wpt_tweet', 'wpt_ajax_tweet' );
 /**
- * Handle Tweets sent via Ajax Tweet Now/Schedule Tweet buttons.
+ * Handle updates sent via Ajax Update Now/Schedule Update buttons.
  */
 function wpt_ajax_tweet() {
 	if ( ! check_ajax_referer( 'wpt-tweet-nonce', 'security', false ) ) {
@@ -1706,7 +1792,7 @@ function wpt_ajax_tweet() {
 
 			switch ( $action ) {
 				case 'tweet':
-					wpt_post_to_twitter( $sentence, $auth, $post_ID, $media );
+					wpt_post_to_service( $sentence, $auth, $post_ID, $media );
 					break;
 				case 'schedule':
 					wp_schedule_single_event(
@@ -1721,8 +1807,10 @@ function wpt_ajax_tweet() {
 					);
 					break;
 			}
-			// Translators: Full text of Tweet, time scheduled for.
-			$return = ( 'tweet' === $action ) ? wpt_get_log( 'wpt_status_message', $post_ID ) : sprintf( __( 'Tweet scheduled: %1$s for %2$s', 'wp-to-twitter' ), '"' . $sentence . '"', $print_schedule );
+			$log     = wpt_get_log( 'wpt_status_message', $post_ID );
+			$message = is_array( $log ) ? $log['message'] : $log;
+			// Translators: Full text of Update, time scheduled for.
+			$return = ( 'tweet' === $action ) ? $message : sprintf( __( 'Update scheduled: %1$s for %2$s', 'wp-to-twitter' ), '"' . $sentence . '"', $print_schedule );
 			echo $return;
 			if ( count( $authors ) > 1 ) {
 				echo '<br />';
@@ -1735,7 +1823,7 @@ function wpt_ajax_tweet() {
 }
 
 /**
- * Post the Custom Tweet & custom Tweet data into the post meta table
+ * Post the Custom Update & custom Update data into the post meta table
  *
  * @param integer $id Post ID.
  * @param object  $post Post object.
@@ -1839,7 +1927,7 @@ function wpt_admin_style() {
  * @return link new array.
  */
 function wpt_plugin_action( $links, $file ) {
-	if ( plugin_basename( dirname( __FILE__ ) . '/wp-to-twitter.php' ) === $file ) {
+	if ( plugin_basename( __DIR__ . '/wp-to-twitter.php' ) === $file ) {
 		$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
 		$links[]   = "<a href='$admin_url'>" . __( 'XPoster Settings', 'wp-to-twitter' ) . '</a>';
 	}
@@ -1859,9 +1947,12 @@ function wpt_plugin_update_message() {
 	define( 'WPT_PLUGIN_README_URL', 'http://svn.wp-plugins.org/wp-to-twitter/trunk/readme.txt' );
 	$response = wp_remote_get( WPT_PLUGIN_README_URL, array( 'user-agent' => 'WordPress/XPoster' . $wpt_version . '; ' . get_bloginfo( 'url' ) ) );
 	if ( ! is_wp_error( $response ) || is_array( $response ) ) {
-		$data = $response['body'];
-		$bits = explode( '== Upgrade Notice ==', $data );
-		$note = '</div><div id="wpt-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) . '</li></ul>';
+		$data   = $response['body'];
+		$bits   = explode( '== Upgrade Notice ==', $data );
+		$notice = trim( str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) );
+		if ( $notice ) {
+			$note = '</div><div id="wpt-upgrade" class="notice inline notice-warning"><ul><li><strong style="color:#c22;">Upgrade Notes:</strong> ' . str_replace( '* ', '', nl2br( trim( $bits[1] ) ) ) . '</li></ul>';
+		}
 	}
 
 	echo $note;
@@ -1873,7 +1964,7 @@ if ( '1' === get_option( 'jd_twit_blogroll' ) ) {
 
 if ( function_exists( 'wp_after_insert_post' ) ) {
 	/**
-	 * Use the `wp_after_insert_post` action to run Tweets.
+	 * Use the `wp_after_insert_post` action to run Updates.
 	 *
 	 * @since WordPress 5.6
 	 */
@@ -1897,14 +1988,14 @@ function wpt_in_post_type( $id ) {
 		return true;
 	}
 	if ( WPT_DEBUG ) {
-		wpt_mail( '0: Not a Tweeted post type', 'This post type is not enabled for Tweeting: ' . $type, $id );
+		wpt_mail( '0: Not an updated post type', 'This post type is not enabled for status updates: ' . $type, $id );
 	}
 
 	return false;
 }
 
 /**
- * Get array of post types that can be Tweeted.
+ * Get array of post types that can be updated.
  *
  * @return array
  */
@@ -1920,10 +2011,10 @@ function wpt_allowed_post_types() {
 	}
 
 	/**
-	 * Return array of post types that can be sent as Tweets.
+	 * Return array of post types that can be sent as status updates.
 	 *
 	 * @hook wpt_allowed_post_types
-	 * @param {array} $types Array of post type names enabled for Tweets either when editing or publishing.
+	 * @param {array} $types Array of post type names enabled for status updates either when editing or publishing.
 	 * @param {array} $post_type_settings Multidimensional array of post types and post type settings.
 	 *
 	 * @return {array}
@@ -1933,7 +2024,7 @@ function wpt_allowed_post_types() {
 
 add_action( 'future_to_publish', 'wpt_future_to_publish', 16 );
 /**
- * Handle Tweeting posts scheduled for the future.
+ * Handle updating posts scheduled for the future.
  *
  * @param object $post Post object.
  */
@@ -1970,7 +2061,7 @@ function wpt_auto_tweet_allowed( $post_id ) {
 }
 
 /**
- * Handle Tweeting posts published directly. As of 12/10/2020, supports new wp_after_insert_post to improve support when used with block editor.
+ * Handle updating posts published directly. As of 12/10/2020, supports new wp_after_insert_post to improve support when used with block editor.
  *
  * @param int     $id Post ID.
  * @param object  $post Post object.
@@ -1987,7 +2078,7 @@ function wpt_twit( $id, $post = null, $updated = null, $post_before = null ) {
 		return $id;
 	}
 	// is there any reason to accept any other status?
-	wpt_mail( 'Tweeting published post', $id );
+	wpt_mail( 'Status update on published post', $id );
 	wpt_twit_instant( $id, $post, $updated, $post_before );
 }
 
@@ -1995,7 +2086,7 @@ add_action( 'xmlrpc_publish_post', 'wpt_twit_xmlrpc' );
 add_action( 'publish_phone', 'wpt_twit_xmlrpc' );
 
 /**
- * For future posts, check transients to see whether this post has already been published. Prevents duplicate Tweet attempts in older versions of WP.
+ * For future posts, check transients to see whether this post has already been published. Prevents duplicate status update attempts in older versions of WP.
  *
  * @param integer $id Post ID.
  */
@@ -2013,7 +2104,7 @@ function wpt_twit_future( $id ) {
 }
 
 /**
- * For immediate posts, check transients to see whether this post has already been published. Prevents duplicate Tweet attempts in older versions of WP or cases where a future action is being run after the initial action.
+ * For immediate posts, check transients to see whether this post has already been published. Prevents duplicate status update attempts in older versions of WP or cases where a future action is being run after the initial action.
  *
  * @param int     $id Post ID.
  * @param object  $post Post object.
@@ -2038,7 +2129,7 @@ function wpt_twit_instant( $id, $post, $updated, $post_before ) {
 }
 
 /**
- * Tweet XMLRPC posts.
+ * Status updates on XMLRPC posts.
  *
  * @param integer $id Post ID.
  *
@@ -2049,7 +2140,7 @@ function wpt_twit_xmlrpc( $id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE || wp_is_post_revision( $id ) || ! wpt_in_post_type( $id ) ) {
 		return $id;
 	}
-	wpt_mail( 'Tweeting XMLRPC published post', $id );
+	wpt_mail( 'Status update sent on XMLRPC published post', $id );
 	wpt_tweet( $id, 'xmlrpc' );
 	return $id;
 }
@@ -2071,7 +2162,7 @@ add_action( 'admin_notices', 'wpt_needs_bearer_token', 10 );
 function wpt_needs_bearer_token() {
 	if ( current_user_can( 'manage_options' ) || current_user_can( 'wpt_twitter_oauth' ) ) {
 		$screen = get_current_screen();
-		if ( 'profile' === $screen->id ) {
+		if ( 'profile' === $screen->id && get_option( 'jd_individual_twitter_users' ) ) {
 			$auth       = wp_get_current_user()->ID;
 			$authorized = wtt_oauth_test( $auth );
 			$bt         = get_user_meta( $auth, 'bearer_token', true );
@@ -2090,3 +2181,46 @@ function wpt_needs_bearer_token() {
 		}
 	}
 }
+
+/**
+ * Dismiss the missing connection notice.
+ */
+function wpt_dismiss_connection() {
+	if ( isset( $_GET['page'] ) && 'wp-tweets-pro' === $_GET['page'] && isset( $_GET['dismiss'] ) && 'connection' === $_GET['dismiss'] ) {
+		update_option( 'wpt_ignore_connection', 'true' );
+	}
+}
+add_action( 'admin_init', 'wpt_dismiss_connection' );
+/**
+ * Display notices if update services are not connected.
+ */
+function wpt_needs_connection() {
+	if ( isset( $_GET['page'] ) && 'wp-tweets-pro' === $_GET['page'] && ! 'true' === get_option( 'wpt_ignore_connection' ) ) {
+		$message  = '';
+		$mastodon = wpt_mastodon_connection();
+		$x        = wpt_check_oauth();
+		// show notification to authenticate with OAuth. No longer global; settings only.
+		if ( ! $mastodon && ! ( isset( $_GET['tab'] ) && 'connection' === $_GET['tab'] ) ) {
+			$admin_url = admin_url( 'admin.php?page=wp-tweets-pro&tab=mastodon' );
+			// Translators: Settings page to authenticate Mastodon.
+			$message = '<p>' . sprintf( __( "Mastodon requires authentication. <a href='%s'>Update your settings</a> to enable XPoster to send updates to Mastodon.", 'wp-to-twitter' ), $admin_url ) . '</p>';
+		}
+		// show notification to authenticate with OAuth. No longer global; settings only.
+		if ( ! $x && ! ( isset( $_GET['tab'] ) && 'connection' === $_GET['tab'] ) ) {
+			$admin_url = admin_url( 'admin.php?page=wp-tweets-pro' );
+			// Translators: Settings page to authenticate X.com.
+			$message = '<p>' . sprintf( __( "X.com requires authentication by OAuth. <a href='%s'>Update your settings</a> to enable XPoster to send updates to X.com.", 'wp-to-twitter' ), $admin_url ) . '</p>';
+		}
+		$is_dismissible = '';
+		$class          = 'xposter-connection';
+		if ( $x || $mastodon ) {
+			$class          = 'xposter-connection dismissible';
+			$dismiss_url    = add_query_arg( 'dismiss', 'connection', admin_url( 'admin.php?page=wp-tweets-pro' ) );
+			$is_dismissible = ' <a href="' . esc_url( $dismiss_url ) . '" class="button button-secondary">' . __( 'Ignore', 'wp-to-twitter' ) . '</a>';
+		}
+		if ( $message ) {
+			echo "<div class='notice notice-error $class'>$message $is_dismissible</div>";
+		}
+	}
+}
+add_action( 'admin_notices', 'wpt_needs_connection' );

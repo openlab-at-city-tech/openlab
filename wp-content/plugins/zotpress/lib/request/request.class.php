@@ -323,6 +323,7 @@ if ( ! class_exists('ZotpressRequest') )
                             || ! isset($response['body']) )
                     {
                         $this->request_error = $response->get_error_message();
+                        
                         if ( $response->get_error_code() == "http_request_failed" )
                         {
                             // Try again with less restrictions

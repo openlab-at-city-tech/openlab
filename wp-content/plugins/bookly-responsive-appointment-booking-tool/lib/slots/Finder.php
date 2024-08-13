@@ -801,29 +801,34 @@ class Finder
     }
 
     /**
-     * Get disabled days in Pickadate format.
+     * Get disabled days for a month.
      *
      * @return array
      * @throws
      */
-    public function getDisabledDaysForPickadate()
+    public function getMonthDisabledDays()
     {
         $one_day = new \DateInterval( 'P1D' );
-        $result = array();
+        $holidays = array();
+        $first_available_date = null;
         $date = new \DateTime( $this->selected_date ?: $this->userData->getDateFrom() );
-        $date->modify( 'first day of this month' );
         $end_date = clone $date;
-        $end_date->modify( 'first day of next month' );
-        $Y = (int) $date->format( 'Y' );
-        $n = (int) $date->format( 'n' ) - 1;
+        $first_day_of_month = clone $date;
+        $last_day_of_month = clone $date;
+        $date->modify( 'first day of this month' )->modify( '-7 days' );
+        $end_date->modify( 'first day of next month' )->modify( '+7 days' );
+        $first_day_of_month->modify( 'first day of this month' );
+        $last_day_of_month->modify( 'first day of next month' );
         while ( $date < $end_date ) {
             if ( ! array_key_exists( $date->format( 'Y-m-d' ), $this->slots ) ) {
-                $result[] = array( $Y, $n, (int) $date->format( 'j' ) );
+                $holidays[] = $date->format( 'Y-m-d' );
+            } elseif ( $first_available_date === null && $date >= $first_day_of_month && $date < $last_day_of_month ) {
+                $first_available_date = $date->format( 'Y-m-d' );
             }
             $date->add( $one_day );
         }
 
-        return $result;
+        return compact( 'holidays', 'first_available_date' );
     }
 
     /**
@@ -863,7 +868,7 @@ class Finder
         return $this->selected_date;
     }
 
-    public function getSelectedDateForPickadate()
+    public function getSelectedDateForCalendar()
     {
         if ( $this->selected_date ) {
             foreach ( $this->slots as $group => $slots ) {

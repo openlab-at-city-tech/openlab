@@ -26,7 +26,7 @@ class LogErrors extends Test
             ->count();
 
         if ( $errors ) {
-            $this->addError( __( 'Some critical errors in Bookly were found recently. Please check Settings > Logs and contact Bookly support.', 'bookly' ) );
+            $this->addError( __( 'Some critical errors in Bookly were found recently.', 'bookly' ) . ' ' . __( 'Please contact Bookly support.', 'bookly' ) );
         }
 
         return empty( $this->errors );

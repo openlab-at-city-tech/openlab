@@ -400,6 +400,7 @@ function openlab_profile_settings_submenu() {
         $dud . 'profile/change-avatar' => 'Change Avatar',
         $settings_slug => 'Account Settings',
         $dud . 'settings/notifications' => 'Email Notifications',
+		$dud . 'settings/data' => 'Data Export',
         $dud . 'settings/delete-account' => 'Delete Account',
     );
     return openlab_submenu_gen($menu_list, true);
@@ -535,10 +536,14 @@ function openlab_my_messages_submenu() {
     }
 
     $menu_list = array(
-        $dud . 'messages/inbox/' => 'Inbox',
+        $dud . 'messages/inbox/'   => 'Inbox',
         $dud . 'messages/sentbox/' => 'Sent',
-        $dud . 'messages/compose' => 'Compose',
     );
+
+	if ( openlab_user_can_send_messages() ) {
+		$menu_list[ $dud . 'messages/compose/' ] = 'Compose';
+	}
+
     return openlab_submenu_gen($menu_list);
 }
 
@@ -792,7 +797,7 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
         } else if ($page_identify == 'my-groups') {
             //special case for my-<groups> pages
             if (isset($_GET['type'])) {
-                $type = $_GET['type'];
+                $type = sanitize_text_field( $_GET['type'] );
 				$type_title = '';
 				if ( in_array( $type, openlab_group_types(), 1 ) ) {
 					$type_title = esc_html( 'My ' . ucfirst( str_replace( '-', ' ', $type ) ) . 's' );
@@ -937,7 +942,7 @@ function openlab_filter_subnav_members($subnav_item) {
 
     //get total member count
     $total_mem = (int) bp_core_number_format(groups_get_groupmeta(bp_get_current_group_id(), 'total_member_count'));
-    if( ! current_user_can( 'bp_moderate' ) ) {
+    if ( ! current_user_can( 'bp_moderate' ) && ! groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
         $private_users = openlab_get_group_private_users( bp_get_current_group_id() );
         $total_mem -= count( $private_users );
     }
@@ -950,6 +955,22 @@ function openlab_filter_subnav_members($subnav_item) {
 
     return $new_item;
 }
+
+/**
+ * Only group members should have access to Portfolio 'members' nav item.
+ */
+function openlab_filter_subnav_portfolio_members() {
+	if ( ! openlab_is_portfolio( bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	if ( groups_is_user_member( bp_loggedin_user_id(), bp_get_current_group_id() ) ) {
+		return;
+	}
+
+	bp_core_remove_subnav_item( groups_get_current_group()->slug, 'members', 'groups' );
+}
+add_action( 'bp_actions', 'openlab_filter_subnav_portfolio_members' );
 
 add_filter('bp_get_options_nav_nav-docs', 'openlab_filter_subnav_docs');
 

@@ -29,6 +29,8 @@ class bpass_Translation_Mangler {
 			$grouptype = groups_get_groupmeta( $group_id, 'wds_group_type' );
 		}
 
+		$grouptype = esc_html( $grouptype );
+
 		$uc_grouptype     = ucfirst( $grouptype );
 		$plural_grouptype = $grouptype . 's';
 		$translations     = get_translations_for_domain( 'bp-ass' );
@@ -457,20 +459,6 @@ function openlab_remove_sitewide_notices() {
 add_action( 'wp_footer', 'openlab_remove_sitewide_notices' );
 
 /**
- * Force BP Docs to have comments open
- *
- * I guess old ones get closed automatically
- */
-function openlab_force_doc_comments_open( $open, $post_id ) {
-	$_post = get_post( $post_id );
-	if ( 'bp_doc' === $_post->post_type ) {
-		$open = true;
-	}
-	return $open;
-}
-add_action( 'comments_open', 'openlab_force_doc_comments_open', 10, 2 );
-
-/**
  * Markup for the 'A member has joined a public group for which you are an admin' setting.
  */
 function openlab_group_join_admin_notification_markup() {
@@ -798,4 +786,45 @@ add_action( 'admin_head', function() {
 function openlab_get_group_link( $group_id ) {
 	$group = groups_get_group( $group_id );
 	return sprintf( '<a href="%s">%s</a>', esc_attr( bp_get_group_permalink( $group ) ), esc_html( $group->name ) );
+}
+
+/**
+ * Can the user send messages?
+ *
+ * @param int $user_id Optional. Defaults to the current user.
+ * @return bool
+ */
+function openlab_user_can_send_messages( $user_id = null ) {
+	if ( null === $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	$user_member_type = openlab_get_user_member_type( $user_id );
+
+	$allowed_types = [ 'faculty', 'staff' ];
+
+	return in_array( $user_member_type, $allowed_types, true );
+}
+
+/**
+ * Was the current thread started by a faculty or staff?
+ *
+ * @return bool
+ */
+function openlab_message_thread_was_started_by_faculty_or_staff() {
+	global $thread_template;
+
+	if ( ! isset( $thread_template->thread->thread_id ) ) {
+		return false;
+	}
+
+	$thread_sender = $thread_template->thread->messages[0]->sender_id;
+
+	$thread_sender_member_type = openlab_get_user_member_type( $thread_sender );
+
+	return in_array( $thread_sender_member_type, [ 'faculty', 'staff' ], true );
 }

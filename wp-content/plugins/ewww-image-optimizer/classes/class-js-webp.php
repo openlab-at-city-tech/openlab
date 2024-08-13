@@ -508,7 +508,7 @@ class JS_Webp extends Page_Parser {
 							$this->set_attribute( $new_image, 'data-srcset-webp', $srcset_webp );
 						}
 						$this->set_attribute( $new_image, 'data-srcset-img', $srcset );
-						$this->remove_attribute( $new_image, 'srcset' );
+						$this->set_attribute( $new_image, 'srcset', $this->placeholder_src . ' 1w', true );
 					}
 					if ( $this->get_attribute( $image, 'data-orig-file' ) && $this->get_attribute( $image, 'data-medium-file' ) && $this->get_attribute( $image, 'data-large-file' ) ) {
 						$new_image = $this->jetpack_replace( $new_image );
@@ -576,18 +576,6 @@ class JS_Webp extends Page_Parser {
 					if ( $new_image !== $image ) {
 						$this->set_attribute( $new_image, 'class', $this->get_attribute( $new_image, 'class' ) . ' ewww_webp_lazy_load', true );
 						$buffer = \str_replace( $image, $new_image, $buffer );
-					}
-				}
-				// Rev Slider data-lazyload attribute on image elements.
-				if ( $this->get_attribute( $image, 'data-lazyload' ) ) {
-					$new_image = $image;
-					$lazyload  = $this->get_attribute( $new_image, 'data-lazyload' );
-					if ( $lazyload ) {
-						if ( $this->validate_image_url( $lazyload ) ) {
-							$this->set_attribute( $new_image, 'data-webp-lazyload', $this->generate_url( $lazyload ) );
-							$this->debug_message( "replacing with webp for data-lazyload: $lazyload" );
-							$buffer = \str_replace( $image, $new_image, $buffer );
-						}
 					}
 				}
 			} // End foreach().
@@ -727,39 +715,13 @@ class JS_Webp extends Page_Parser {
 				}
 			}
 		}
-		// Revolution Slider 'li' elements and LL li backgrounds.
+		// LL li elements with background images.
 		$listitems = $this->get_elements_from_html( $buffer, 'li' );
 		if ( $this->is_iterable( $listitems ) ) {
 			foreach ( $listitems as $index => $listitem ) {
 				$this->debug_message( 'parsing a listitem' );
 				if ( ! $this->validate_tag( $listitem ) ) {
 					continue;
-				}
-				if ( $this->get_attribute( $listitem, 'data-title' ) === 'Slide' && ( $this->get_attribute( $listitem, 'data-lazyload' ) || $this->get_attribute( $listitem, 'data-thumb' ) ) ) {
-					$thumb = $this->get_attribute( $listitem, 'data-thumb' );
-					$this->debug_message( "checking webp for revslider data-thumb: $thumb" );
-					if ( $this->validate_image_url( $thumb ) ) {
-						$this->set_attribute( $listitem, 'data-webp-thumb', $this->generate_url( $thumb ) );
-						$this->debug_message( "found webp for revslider data-thumb: $thumb" );
-					}
-					$param_num = 1;
-					while ( $param_num < 11 ) {
-						$parameter = $this->get_attribute( $listitem, 'data-param' . $param_num );
-						if ( $parameter ) {
-							$this->debug_message( "checking webp for revslider data-param$param_num: $parameter" );
-							if ( \strpos( $parameter, 'http' ) === 0 ) {
-								$this->debug_message( "looking for $parameter" );
-								if ( $this->validate_image_url( $parameter ) ) {
-									$this->set_attribute( $listitem, 'data-webp-param' . $param_num, $this->generate_url( $parameter ) );
-									$this->debug_message( "found webp for data-param$param_num: $parameter" );
-								}
-							}
-						}
-						++$param_num;
-					}
-					if ( $listitem !== $listitems[ $index ] ) {
-						$buffer = \str_replace( $listitems[ $index ], $listitem, $buffer );
-					}
 				}
 				$bg_image = $this->get_attribute( $listitem, 'data-back' );
 				$li_class = $this->get_attribute( $listitem, 'class' );
@@ -1139,9 +1101,17 @@ class JS_Webp extends Page_Parser {
 		if ( ! \apply_filters( 'eio_do_js_webp', true, $this->request_uri ) ) {
 			return;
 		}
+		$check_args = array(
+			'strategy'  => 'async',
+			'in_footer' => false,
+		);
+		$load_args  = array(
+			'strategy'  => 'async',
+			'in_footer' => true,
+		);
 		if ( ! \ewww_image_optimizer_ce_webp_enabled() ) {
-			\wp_enqueue_script( 'ewww-webp-check-script', \plugins_url( '/includes/check-webp.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version );
-			\wp_enqueue_script( 'ewww-webp-load-script', \plugins_url( '/includes/load-webp.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, true );
+			\wp_enqueue_script( 'ewww-webp-check-script', \plugins_url( '/includes/check-webp.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, $check_args );
+			\wp_enqueue_script( 'ewww-webp-load-script', \plugins_url( '/includes/load-webp.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, $load_args );
 		}
 	}
 
@@ -1155,9 +1125,17 @@ class JS_Webp extends Page_Parser {
 		if ( ! \apply_filters( 'eio_do_js_webp', true, $this->request_uri ) ) {
 			return;
 		}
+		$check_args = array(
+			'strategy'  => 'async',
+			'in_footer' => false,
+		);
+		$load_args  = array(
+			'strategy'  => 'async',
+			'in_footer' => true,
+		);
 		if ( ! \ewww_image_optimizer_ce_webp_enabled() ) {
-			\wp_enqueue_script( 'ewww-webp-check-script', \plugins_url( '/includes/check-webp.min.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version );
-			\wp_enqueue_script( 'ewww-webp-load-script', \plugins_url( '/includes/load-webp.min.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, true );
+			\wp_enqueue_script( 'ewww-webp-check-script', \plugins_url( '/includes/check-webp.min.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, $check_args );
+			\wp_enqueue_script( 'ewww-webp-load-script', \plugins_url( '/includes/load-webp.min.js', EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE ), array(), $this->version, true, $load_args );
 		}
 	}
 

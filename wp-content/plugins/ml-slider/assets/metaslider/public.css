@@ -91,6 +91,11 @@ body .metaslider .flexslider .flex-direction-nav li {
 	display: block;
 }
 
+.metaslider .flex-pauseplay a {
+	height: 30px;
+	width: 30px;
+}
+
 /* Flexslider */
 
 .metaslider .flexslider {
@@ -210,7 +215,7 @@ body .metaslider .flexslider .flex-direction-nav li {
     z-index: 10;
     cursor: pointer;
     text-indent: -9999px;
-    opacity: 0;
+    opacity: 1;
     -webkit-transition: all .3s ease;
        -moz-transition: opacity .25s ease-in-out;
             transition: all .3s ease;
@@ -258,6 +263,30 @@ body .metaslider .flexslider .flex-direction-nav li {
 }
 .metaslider .flexslider .slides > li {
     position: relative;
+}
+.metaslider .flexslider .flex-pauseplay .flex-play,
+.metaslider .flexslider .flex-pauseplay .flex-pause {
+    width: 30px;
+    height: 30px;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    border-radius: 50%;
+    line-height: 27px;
+}
+.metaslider .flexslider .flex-pauseplay a:before {
+    font-size: 16px;
+}
+.metaslider .flexslider .flex-pauseplay .flex-play:focus,
+.metaslider .flexslider .flex-pauseplay .flex-pause:focus {
+    background: #000;
+    color: #fff;
+}
+.metaslider .flexslider .flex-pauseplay .flex-play:before {
+    margin-left: 4px;
+}
+.metaslider .flexslider .flex-pauseplay .flex-pause:before {
+    margin-left: 1px;
 }
 
 /* Responsive Slides */
@@ -361,4 +390,40 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
 
 #preview-container .ms-edit-frontend{
     display: none;
+}
+
+
+/* Precognition Theme */
+.ms-theme-precognition .flex-control-nav {
+	display: table !important;
+	width: 100% !important;
+	margin-top: 0 !important;
+}
+.metaslider.ms-theme-precognition .flex-control-nav li {
+	display: table-cell !important;
+	width: auto;
+	text-align: center;
+	border-left: 1px solid;
+	border-bottom: 1px solid;
+}
+.metaslider.ms-theme-precognition .flex-control-nav li:last-child {
+	border-right: 1px solid;
+}
+.metaslider.ms-theme-precognition .flex-control-nav li a {
+	text-indent: 0 !important;
+	width: auto !important;
+	display: block !important;
+	height: auto !important;
+	padding: 10px !important;
+	margin: 0 !important;
+}
+@media only screen and (max-width : 767px) {
+    .metaslider.ms-theme-precognition .flex-control-nav li a {
+        text-indent: -9999px !important;
+    }
+}
+@media only screen and (min-width : 768px) {
+    .metaslider.ms-theme-precognition .flex-control-nav li a {
+        text-indent: 0 !important;
+    }
 }

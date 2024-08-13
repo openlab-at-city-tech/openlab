@@ -2,11 +2,11 @@
 
 Contributors: Mat Lipe, onpointplugins
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=paypal%40onpointplugins%2ecom&lc=US&item_name=Advanced%20Sidebar%20Menu&no_note=0&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
-Tags: block, widget, dynamic, hierarchy, menus, sidebar menu, category, pages, parent, child, automatic
+Tags: menus, page menus, category menus, sidebars, hierarchy
 Requires at least: 6.1.0
-Tested up to: 6.4.3
+Tested up to: 6.5.5
 Requires PHP: 7.2.0
-Stable tag: 9.4.3
+Stable tag: 9.5.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -19,10 +19,6 @@ Uses the parent/child relationship of your pages or categories to generate menus
 Keeps the menu clean and usable. Only related items display, so you don't have to worry about keeping a custom menu up to date or displaying links to items that don't belong.
 
 Blocks are available to display menus where you need them. Look for the "Advanced Sidebar - Pages" block, or the "Advanced Sidebar - Categories" block. Widgets are also available for page builders or sites using classic widgets.
-
-<strong>Check out <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org">Advanced Sidebar Menu PRO</a> for more features including accordion menus, menu colors and styles, custom link text, excluding of pages, category ordering, custom post types, custom taxonomies, priority support, and so much more!</strong>
-
-<blockquote><a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org" target="_blank">PRO version 9.2.0</a> is now available with the ability to exclude pages or categories using intuitive search and select!</blockquote>
 
 <h3>Features</h3>
 * Page and Category menu Gutenberg blocks.
@@ -53,7 +49,24 @@ Blocks are available to display menus where you need them. Look for the "Advance
 * Always display child categories.
 * Levels of Categories to display when always display child categories is checked.
 
-<h3>PRO Features</h3>
+<h3>Included Language Translations</h3>
+* English (en_US).
+* French (fr_FR).
+* German (de_DE).
+* Spanish (es_ES).
+
+<h3>Documentation</h3>
+The official documentation for the plugin <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/">may be found here</a>.
+
+<h3>Developers</h3>
+Developer docs <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">may be found here</a>.
+
+<h3>Contribute</h3>
+Send pull requests via the <a target="_blank" href="https://github.com/lipemat/advanced-sidebar-menu">GitHub Repo</a>
+
+<h3>Go PRO</h3>
+Our <a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/?utm_source=readme&utm_campaign=gopro&utm_medium=dot-org">PRO version</a> brings additional functionality to this plugin. Check out [the demo](https://onpointplugins.com/advanced-sidebar-menu/advanced-sidebar-pro-demo/?utm_source=readme&utm_campaign=demo&utm_medium=dot-org) to see if the PRO version is useful for you.
+
 * Navigation menu widget.
 * Navigation menu Gutenberg block.
 * Ability to customize each page or navigation menu item link's text.
@@ -87,21 +100,6 @@ Blocks are available to display menus where you need them. Look for the "Advance
 * Ability to display the current navigation menu item's parents and children only.
 * Option to display the top-level navigation menu items when there are no child items or not viewing a menu item.
 * Priority support with access to members only support area.
-
-<h3>Included Language Translations</h3>
-* English (en_US).
-* French (fr_FR).
-* German (de_DE).
-* Spanish (es_ES).
-
-<h3>Documentation</h3>
-The official documentation for the plugin <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/">may be found here</a>.
-
-<h3>Developers</h3>
-Developer docs <a target="_blank" href="https://onpointplugins.com/advanced-sidebar-menu/developer-docs/">may be found here</a>.
-
-<h3>Contribute</h3>
-Send pull requests via the <a target="_blank" href="https://github.com/lipemat/advanced-sidebar-menu">GitHub Repo</a>
 
 == Installation ==
 
@@ -165,6 +163,39 @@ The Categories Menu widget/block contains a "Display categories on single posts"
 Yes. Based on whatever page, post or category you are on, the menu will change automatically to display the current parents and children.
 
 == Changelog ==
+= 9.5.2 =
+* Provided unique HTML ids for category widgets with multiple top level categories.
+* Continued work on converting the `Menu_Abstract` to an interface.
+* Fixed click handling of menu previews in the block editor.
+* Fixed fatal error when `is_plugin_active` is not available.
+* Implemented PHPStan array shapes for block classes.
+* Improved falsey conditions in the `Utils::is_empty` method.
+* Officially added support for PHP 8.3.
+* Tested to WordPress Core 6.5.3.
+
+= 9.5.1 =
+* Improved the plugin readme.
+* Improved the translation headers.
+* Improved the `List_Pages` cache.
+* Added support to live previews using a playground blueprint.
+* Tested to WordPress Core 6.5.0.
+
+= 9.5.0 =
+* Introduced `is_truthy` utility method.
+* Introduced `get_post_type_label` utility method.
+* Introduced `is_empty` utility method.
+* Introduced `Menu` interface and began promoting `Menu_Abstract` to it.
+* Introduced `Utils_Interface` to guarantee the existence of shared methods.
+* Included classic editor state in debug information.
+* Fixed the missing dashicons shown in the Preview component inside iframes.
+* Fixed PHPCS minimum_wp_version config.
+* Switched widget classes to trait/interface based structure.
+* Introduced full array shapes for widget settings.
+* Improved default widget settings.
+* Prevented conflicts with theme styles and widget fields.
+* Fixed excluding of child items if the top level parent is excluded.
+* Converted deprecated block registering args to WordPress 6.1 version.
+
 = 9.4.3 =
 * Updated all block's api version to 3.
 * Updated Node to version 20.

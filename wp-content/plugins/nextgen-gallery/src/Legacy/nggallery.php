@@ -20,9 +20,6 @@ class nggLoader {
 
 		// Start this plugin once all other plugins are fully loaded.
 		add_action( 'plugins_loaded', [ $this, 'start_plugin' ] );
-
-		// Register_taxonomy must be used during the init.
-		add_action( 'init', [ $this, 'register_taxonomy' ], 9 );
 		add_action( 'wpmu_new_blog', [ $this, 'multisite_new_blog' ], 10, 6 );
 
 		// Add some links on the plugin page.
@@ -56,19 +53,6 @@ class nggLoader {
 		$wpdb->nggpictures = $wpdb->prefix . 'ngg_pictures';
 		$wpdb->nggallery   = $wpdb->prefix . 'ngg_gallery';
 		$wpdb->nggalbum    = $wpdb->prefix . 'ngg_album';
-	}
-
-	public function register_taxonomy() {
-		// Register the NextGEN taxonomy.
-		$args = [
-			'label'    => __( 'Picture tag', 'nggallery' ),
-			'template' => __( 'Picture tag: %2$l.', 'nggallery' ),
-			'helps'    => __( 'Separate picture tags with commas.', 'nggallery' ),
-			'sort'     => true,
-			'args'     => [ 'orderby' => 'term_order' ],
-		];
-
-		register_taxonomy( 'ngg_tag', 'nggallery', $args );
 	}
 
 	public function define_constant() {

@@ -7,7 +7,9 @@ class B2S_AutoPost_Item {
     private $postCategoriesData;
     private $networkAuthData = array();
     private $networkAutoPostData;
+    private $networkMandantData = array();
     private $networkAuthCount = false;
+    private $schedLimit = null;
 
     public function __construct() {
         $this->getSettings();
@@ -18,11 +20,31 @@ class B2S_AutoPost_Item {
     }
 
     private function getSettings() {
-        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getSettings', 'portal_view_mode' => true, 'portal_auth_count' => true, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
+        $currentDate = new DateTime("now", wp_timezone());
+        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getSettings', 'portal_view_mode' => true, 'current_date' => $currentDate->format('Y-m-d'), 'update_licence' => 1, 'portal_auth_count' => true, 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION)));
+
         if (is_object($result) && isset($result->result) && (int) $result->result == 1 && isset($result->portale) && is_array($result->portale)) {
             $this->networkAuthCount = isset($result->portal_auth_count) ? $result->portal_auth_count : false;
             $this->networkAuthData = isset($result->portal_auth) ? $result->portal_auth : array();
             $this->networkAutoPostData = isset($result->portal_auto_post) ? $result->portal_auto_post : array();
+            $this->networkMandantData = isset($result->mandantData) ? $result->mandantData : array();
+
+            if (isset($result->licence_condition)) {
+                //update
+                $versionDetails = get_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
+                if ($versionDetails !== false && is_array($versionDetails) && !empty($versionDetails)) {
+                    $versionDetails['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $result->licence_condition;
+                    update_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID, $versionDetails, false);
+
+                    if (isset($result->licence_condition->open_sched_post_quota) && B2S_PLUGIN_USER_VERSION > 0) {
+                        if ((int) $result->licence_condition->open_sched_post_quota > 0) {
+                            $this->schedLimit = (int) $result->licence_condition->open_sched_post_quota;
+                        } else {
+                            $this->schedLimit = 0;
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -97,15 +119,15 @@ class B2S_AutoPost_Item {
             $selected1 = '';
             $selected2 = '';
             $selected3 = '';
-            if(isset($optionAutoPost['echo'])){
-                if((int)$optionAutoPost['echo'] > 0){
+            if (isset($optionAutoPost['echo'])) {
+                if ((int) $optionAutoPost['echo'] > 0) {
                     $echoChecked = 'checked';
                     $echoShow = '';
                     $selected1 = $optionAutoPost['echo'] == 1 ? 'selected="selected"' : '';
                     $selected2 = $optionAutoPost['echo'] == 2 ? 'selected="selected"' : '';
                     $selected3 = $optionAutoPost['echo'] == 3 ? 'selected="selected"' : '';
                 } else {
-                    $echoChecked = ''; 
+                    $echoChecked = '';
                     $echoShow = 'style="display:none;"';
                 }
             } else {
@@ -115,23 +137,22 @@ class B2S_AutoPost_Item {
 
             $content .= '<div class="col-md-12">';
             $content .= '<br>';
-            $content .= '<input type="checkbox" id="b2s-auto-post-echo-setting" class="b2s-auto-post-echo-setting" name="b2s-auto-post-echo-setting" value="1" '.$echoChecked.'>';
+            $content .= '<input type="checkbox" id="b2s-auto-post-echo-setting" class="b2s-auto-post-echo-setting" name="b2s-auto-post-echo-setting" value="1" ' . $echoChecked . '>';
             $content .= '<label for="b2s-auto-post-echo-setting"> ' . esc_html__('Repost', 'blog2social') . '</label>  <a href="#" class="b2sAutoPostEchoSettingInfoModalBtn">Info</a>';
-            
+
             $content .= '<div class="row">
-            <div class="col-md-3 b2s-auto-post-echo" '.$echoShow.'>
+            <div class="col-md-3 b2s-auto-post-echo" ' . $echoShow . '>
             <br>
 
                 <select class="b2s-w-100" id="b2s-auto-post-echo-dropdown" name="b2s-auto-post-echo-dropdown">
-                    <option value="' . esc_attr(1). '" '.$selected1.'>' . esc_html__("Day 1", "blog2social") . '</option>
-                    <option value="' . esc_attr(2). '" '.$selected2.'>' . esc_html__("Day 2", "blog2social") . '</option>
-                    <option value="' . esc_attr(3). '" '.$selected3.'>' . esc_html__("Day 1 and 2", "blog2social") . '</option>
+                    <option value="' . esc_attr(1) . '" ' . $selected1 . '>' . esc_html__("Day 1", "blog2social") . '</option>
+                    <option value="' . esc_attr(2) . '" ' . $selected2 . '>' . esc_html__("Day 2", "blog2social") . '</option>
+                    <option value="' . esc_attr(3) . '" ' . $selected3 . '>' . esc_html__("Day 1 and 2", "blog2social") . '</option>
                 </select>
 
             </div>
             </div>';
-            
-            
+
             $content .= "</div>";
             $content .= '<div class=" col-md-12 b2s-auto-post-area">';
             $content .= '<br>';
@@ -143,10 +164,9 @@ class B2S_AutoPost_Item {
             $content .= '<br>';
             $content .= "</div>";
 
-
-
             if (current_user_can('administrator')) {
                 global $wpdb;
+
                 $blogUserTokenResult = $wpdb->get_results("SELECT token FROM `{$wpdb->prefix}b2s_user`");
                 $blogUserToken = array();
                 foreach ($blogUserTokenResult as $k => $row) {
@@ -184,24 +204,14 @@ class B2S_AutoPost_Item {
             $content .= '</div>';
         }
 
+        $showSchedLimitInfo = (B2S_PLUGIN_USER_VERSION > 0 && $this->schedLimit <= 0) ? "" : "b2s-info-display-none";
+
         $content .= '<br>';
         $content .= '<hr>';
-        
-        
-        
-    
-
-
-
-
         $content .= '</div>';
-
-
-
-
-    
         $content .= '<h4 class="b2s-auto-post-header">' . esc_html__('Autoposter for Imported Posts', 'blog2social') . '</h4><a target="_blank" href="' . esc_url(B2S_Tools::getSupportLink('auto_post_import')) . '">Info</a>';
         $content .= '<p class="b2s-bold">' . esc_html__('Set up your autoposter to automatically share your imported posts, pages and custom post types on your social media channels.', 'blog2social') . '</p>';
+        $content .= '<div id="b2s-licence-condition" class="alert alert-danger ' . $showSchedLimitInfo . '"><span class="b2s-text-bold">' . esc_html__("You've reached your posting limit!", "blog2social") . '</span><br>' . esc_html__('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') . '<br><a target="_blank" class="b2s-text-bold" href="' . esc_url(B2S_Tools::getSupportLink('pricing')) . '">' . esc_html__('Upgrade', 'blog2social') . '</a></div>';
         $content .= '<p>' . esc_html__('Your current license:', 'blog2social') . '<span class="b2s-key-name"> ' . esc_html($versionType[B2S_PLUGIN_USER_VERSION]) . '</span> ';
         if (B2S_PLUGIN_USER_VERSION == 0) {
             $content .= '<br>' . esc_html__('Immediate Cross-Posting across all networks: Share an unlimited number of posts', 'blog2social') . '<br>';
@@ -210,7 +220,6 @@ class B2S_AutoPost_Item {
             $content .= '(' . esc_html__('share up to', 'blog2social') . ' ' . esc_html($limit[B2S_PLUGIN_USER_VERSION]) . ((B2S_PLUGIN_USER_VERSION >= 2) ? ' ' . esc_html__('posts per day', 'blog2social') : '') . ') ';
             $content .= '<a class="b2s-info-btn" href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '" target="_blank">' . esc_html__('Upgrade', 'blog2social') . '</a>';
         }
-
         $content .= '</p>';
         $content .= '<br>';
         $content .= '<div class="' . (!empty($isPremium) ? 'b2s-btn-disabled' : '') . '">';
@@ -227,19 +236,18 @@ class B2S_AutoPost_Item {
         $content .= ' <input type="number" maxlength="2" max="10" min="1" class="b2s-input-text-size-45" name="b2s-import-auto-post-time-data" value="' . esc_attr((isset($optionAutoPostImport['ship_delay_time']) ? $optionAutoPostImport['ship_delay_time'] : 1)) . '" placeholder="1" > (1-10) ' . esc_html__('minutes', 'blog2social') . '</label>';
         $content .= '<br>';
 
-        if(isset($optionAutoPost['import_template'])){
-            if($optionAutoPost['import_template'] == 1){
+        if (isset($optionAutoPost['import_template'])) {
+            if ($optionAutoPost['import_template'] == 1) {
                 $templateChecked = 'checked="checked"';
-
             } else {
-                $templateChecked = ''; 
+                $templateChecked = '';
             }
         } else {
             $templateChecked = '';
         }
 
         $content .= '<div class="">';
-        $content .= '<input type="checkbox" id="b2s-auto-post-import-template-setting" class="b2s-auto-post-import-template-setting" name="b2s-auto-post-import-template-setting" value="1" '.$templateChecked.'>';
+        $content .= '<input type="checkbox" id="b2s-auto-post-import-template-setting" class="b2s-auto-post-import-template-setting" name="b2s-auto-post-import-template-setting" value="1" ' . $templateChecked . '>';
         $content .= '<label for="b2s-auto-post-import-template-setting"> ' . sprintf(__('Apply post templates for imported posts. (You can find more information on this <a href="%s">here</a>.)', 'blog2social'), esc_url(B2S_Tools::getSupportLink('post_template'))) . '</label>';
         $content .= '</div>';
 
@@ -248,8 +256,6 @@ class B2S_AutoPost_Item {
         $content .= '</div>';
         $content .= '<input type="hidden" name="action" value="b2s_auto_post_settings">';
 
-        
-        
         $content .= '</form>';
         if (B2S_PLUGIN_USER_VERSION > 0) {
             $content .= '<button class="pull-right btn btn-primary btn-sm" id="b2s-auto-post-settings-btn" type="submit">';
@@ -262,10 +268,12 @@ class B2S_AutoPost_Item {
     }
 
     private function getMandantSelect($mandantId = 0, $twitterId = 0) {
-        $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getProfileUserAuth', 'token' => B2S_PLUGIN_TOKEN)));
-        if (isset($result->result) && (int) $result->result == 1 && isset($result->data) && !empty($result->data) && isset($result->data->mandant) && isset($result->data->auth) && !empty($result->data->mandant) && !empty($result->data->auth)) {
-            $mandant = $result->data->mandant;
-            $auth = $result->data->auth;
+
+        if (!empty($this->networkMandantData) && isset($this->networkMandantData->mandant) && isset($this->networkMandantData->auth)) {
+
+            $mandant = $this->networkMandantData->mandant;
+            $auth = $this->networkMandantData->auth;
+
             $authContent = '';
             $content = '<div class="row"><div class="col-md-3 b2s-auto-post-profile"><label for="b2s-auto-post-profil-dropdown">' . esc_html__('Select network collection:', 'blog2social') . '</label>
                 <select class="b2s-w-100" id="b2s-auto-post-profil-dropdown" name="b2s-auto-post-profil-dropdown">';
@@ -334,13 +342,13 @@ class B2S_AutoPost_Item {
                 }
                 $html .= ' <a href="admin.php?page=blog2social-network" class="b2s-info-btn">' . esc_html__('add/change connection', 'blog2social') . '</a>';
                 $html .= '</h4>';
-                $html .= '<ul class="b2s-network-item-auth-list" data-network-id="' . esc_attr($v) . '" data-network-count="true" >';           
+                $html .= '<ul class="b2s-network-item-auth-list" data-network-id="' . esc_attr($v) . '" data-network-count="true" >';
 
                 if (!empty($this->networkAuthData)) {
                     foreach ($this->networkAuthData as $i => $t) {
                         if ($v == $t->networkId) {
                             $html .= '<li class="b2s-network-item-auth-list-li" data-network-auth-id="' . esc_attr($t->networkAuthId) . '"  data-network-id="' . esc_attr($t->networkId) . '" data-network-type="0">';
-                                                    
+
                             $networkType = ((int) $t->networkType == 0 ) ? __('Profile', 'blog2social') : __('Page', 'blog2social');
                             if ($t->notAllow !== false) {
                                 $html .= '<span class="glyphicon glyphicon-remove-circle glyphicon-danger"></span> <span class="not-allow">' . esc_html($networkType) . ': ' . esc_html(stripslashes($t->networkUserName)) . '</span> ';

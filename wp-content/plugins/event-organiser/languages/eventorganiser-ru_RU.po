@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 18:03+0000\n"
+"POT-Creation-Date: 2024-02-24 23:49+0000\n"
 "PO-Revision-Date: 2017-04-16T23:29:26+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -112,11 +112,11 @@ msgstr "Место проведения события"
 msgid "All Venues"
 msgstr "Все места"
 
-#: classes/class-eo-calendar-widget.php:296
+#: classes/class-eo-calendar-widget.php:298
 msgid "Previous month"
 msgstr "Предыдущий месяц"
 
-#: classes/class-eo-calendar-widget.php:299
+#: classes/class-eo-calendar-widget.php:301
 msgid "Next month"
 msgstr "Следующий месяц"
 
@@ -398,7 +398,7 @@ msgstr "Когда"
 msgid "Event Title"
 msgstr "Заголовок события"
 
-#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:403
+#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:406
 msgid "Where"
 msgstr "Где"
 
@@ -1430,72 +1430,72 @@ msgstr "Создана одна категория "
 msgid "%d categories were created"
 msgstr "%d категорий создано"
 
-#: includes/event-organiser-ajax.php:342
+#: includes/event-organiser-ajax.php:345
 msgid "Protected"
 msgstr "Защищено"
 
-#: includes/event-organiser-ajax.php:344
+#: includes/event-organiser-ajax.php:347
 msgid "Private"
 msgstr "Личный"
 
-#: includes/event-organiser-ajax.php:346
+#: includes/event-organiser-ajax.php:349
 msgid "Draft"
 msgstr "Черновик"
 
-#: includes/event-organiser-ajax.php:386
+#: includes/event-organiser-ajax.php:389
 msgid "Start"
 msgstr "Начало"
 
-#: includes/event-organiser-ajax.php:387
+#: includes/event-organiser-ajax.php:390
 msgid "End"
 msgstr "Конец"
 
-#: includes/event-organiser-ajax.php:390
+#: includes/event-organiser-ajax.php:393
 msgid "Organiser:"
 msgstr "Organiser:"
 
-#: includes/event-organiser-ajax.php:429
+#: includes/event-organiser-ajax.php:432
 msgid "This event recurs"
 msgstr "Это событие повторяется"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
+#: includes/event-organiser-ajax.php:443 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Редактировать событие"
 
-#: includes/event-organiser-ajax.php:441
+#: includes/event-organiser-ajax.php:444
 #, fuzzy, php-format
 msgid "Edit Event: %s"
 msgstr "Редактировать событие: %s"
 
-#: includes/event-organiser-ajax.php:463
+#: includes/event-organiser-ajax.php:466
 msgid "Delete this occurrence"
 msgstr "Удалить это повторение"
 
-#: includes/event-organiser-ajax.php:469
+#: includes/event-organiser-ajax.php:472
 msgid "Delete this event"
 msgstr "Удалить это событие"
 
-#: includes/event-organiser-ajax.php:487
+#: includes/event-organiser-ajax.php:490
 msgid "Break this series"
 msgstr "Разорвать связи"
 
-#: includes/event-organiser-ajax.php:781
+#: includes/event-organiser-ajax.php:787
 msgid "Event not found"
 msgstr "Событие не найдено"
 
-#: includes/event-organiser-ajax.php:789
+#: includes/event-organiser-ajax.php:795
 msgid "Events are not editable via the admin calendar"
 msgstr "События не редактируются через календарь в Консоли"
 
-#: includes/event-organiser-ajax.php:795
+#: includes/event-organiser-ajax.php:801
 msgid "Are you sure you want to do this?"
 msgstr "Вы действительно хотите сделать это?"
 
-#: includes/event-organiser-ajax.php:802
+#: includes/event-organiser-ajax.php:808
 msgid "You do not have permission to edit this event"
 msgstr "У вас недостаточно прав для редактирования этого события"
 
-#: includes/event-organiser-ajax.php:818
+#: includes/event-organiser-ajax.php:824
 #, php-format
 msgid "Event not created: %s"
 msgstr "Событие не создано: %s"

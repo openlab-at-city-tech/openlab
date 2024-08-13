@@ -66,6 +66,17 @@ su_add_shortcode(
 				'name'    => __( 'Height', 'shortcodes-ultimate' ),
 				'desc'    => __( 'Single item height (in pixels)', 'shortcodes-ultimate' ),
 			),
+			'align' => array(
+				'type'    => 'select',
+				'values'  => array(
+					'left'  => __( 'Left', 'shortcodes-ultimate' ),
+					'center' => __( 'Center', 'shortcodes-ultimate' ),
+					'right' => __( 'Right', 'shortcodes-ultimate' ),
+				),
+				'default' => 'left',
+				'name'    => __( 'Align', 'shortcodes-ultimate' ),
+				'desc'    => __( 'The alignment of the gallery thumbnails', 'shortcodes-ultimate' ),
+			),
 			'title'  => array(
 				'type'    => 'select',
 				'values'  => array(
@@ -99,6 +110,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 			'link'    => 'none',
 			'width'   => 90,
 			'height'  => 90,
+			'align'  => 'left',
 			'title'   => 'hover',
 			'target'  => 'self',
 			'class'   => '',
@@ -112,6 +124,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 
 	$atts['width']  = intval( $atts['width'] );
 	$atts['height'] = intval( $atts['height'] );
+	$atts['align'] = sanitize_key( $atts['align'] );
 
 	// Loop slides
 	if ( count( $slides ) ) {
@@ -122,7 +135,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 			$atts['class'] .= ' su-lightbox-gallery';
 		}
 		// Open gallery
-		$return = '<div class="su-custom-gallery su-custom-gallery-title-' . esc_attr( $atts['title'] ) . su_get_css_class( $atts ) . '">';
+		$return = '<div class="su-custom-gallery su-custom-gallery-align-' . $atts['align'] . ' su-custom-gallery-title-' . esc_attr( $atts['title'] ) . su_get_css_class( $atts ) . '">';
 		// Create slides
 		foreach ( $slides as $slide ) {
 			// Crop image
@@ -135,7 +148,7 @@ function su_shortcode_custom_gallery( $atts = null, $content = null ) {
 			// Prepare slide title
 			$title = ( $slide['title'] ) ? '<span class="su-custom-gallery-title">' . stripslashes( $slide['title'] ) . '</span>' : '';
 			// Open slide
-			$return .= '<div class="su-custom-gallery-slide">';
+			$return .= '<div class="su-custom-gallery-slide" style="width:' . $atts['width'] . 'px;height:' . $atts['height'] . 'px">';
 			// Slide content with link
 			if ( $slide['link'] ) {
 				$return .= '<a href="' . esc_attr( $slide['link'] ) . '"' . $atts['target'] . ' title="' . esc_attr( $slide['title'] ) . '"><img src="' . $image['url'] . '" alt="' . esc_attr( $slide['title'] ) . '" width="' . $atts['width'] . '" height="' . $atts['height'] . '" />' . $title . '</a>';

@@ -30,9 +30,9 @@ class Selects
                     </label>
                 </div>',
                 array(
-                    '{id}'      => "{$option_name}_{$i}",
-                    '{name}'    => $option_name,
-                    '{value}'   => esc_attr( $option[0] ),
+                    '{id}' => $option_name . '_' . $i,
+                    '{name}' => $option_name,
+                    '{value}' => esc_attr( $option[0] ),
                     '{checked}' => checked( in_array( $option[0], $values ), true, false ),
                     '{caption}' => esc_html( $option[1] ),
                 )

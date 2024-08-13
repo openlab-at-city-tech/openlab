@@ -3,12 +3,14 @@ die('No direct access.');
 } ?>
 <div class="row mb-2 can-inherit title<?php echo esc_attr($inherit_image_title_class); ?>">
     <div class="mb-1 image-title-label">
-        <label><?php esc_html_e("Image Title Text", "ml-slider"); ?></label>
+        <label>
+            <?php esc_html_e("Image Title Text", "ml-slider"); ?>
+            <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('Visitors will see this text if they hover over your image slide. Adding Title text is useful but not required.', 'ml-slider') ?>"></span>
+        </label>
         <div class="input-label right">
             <label class="small" title="<?php esc_attr_e("Enable this to inherit the image title", "ml-slider"); ?>">
                 <?php 
                 esc_html_e( 'Use the image title', 'ml-slider' ); 
-                ?> <?php 
                 echo $this->switch_button( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
                     'attachment[' . esc_attr( $slide_id ) . '][inherit_image_title]',
                     $inherit_image_title_check, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -27,7 +29,10 @@ die('No direct access.');
 </div>
 <div class="row can-inherit alt<?php echo esc_attr($inherit_image_alt_class); ?>">
     <div class="mb-1 image-alt-label">
-        <label><?php esc_html_e("Image Alt Text", "ml-slider"); ?></label>
+        <label>
+            <?php esc_html_e("Image Alt Text", "ml-slider"); ?>
+            <span class="dashicons dashicons-info tipsy-tooltip-top" title="<?php esc_attr_e('This text is used by search engines and visitors using screen readers. Adding Alt text is highly recommended.', 'ml-slider') ?>"></span>
+        </label>
         <div class="input-label right">
             <label class="small" title="<?php esc_attr_e('Enable this to inherit the image alt text', 'ml-slider'); ?>">
                 <?php 

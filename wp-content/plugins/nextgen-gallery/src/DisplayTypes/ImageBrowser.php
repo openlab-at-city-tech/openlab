@@ -239,7 +239,8 @@ class ImageBrowser extends ParentController {
 					'photocrati-nextgen_basic_imagebrowser',
 				],
 				'settings'       => $this->get_default_settings(),
-			]
+			],
+			$reset
 		);
 	}
 }

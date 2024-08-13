@@ -51,12 +51,12 @@ class MKS_Social_Widget extends WP_Widget {
 		echo $before_widget;
 
 		if ( !empty( $title ) ) {
-			echo $before_title . $title . $after_title;
+			echo $before_title . wp_kses_post($title) . $after_title;
 		}
 ?>
 
 		<?php if ( !empty( $instance['content'] ) ) : ?>
-			<?php echo wpautop( wp_kses_post( $instance['content'] ) ); ?> 
+			<?php echo wp_kses_post( wpautop($instance['content'] ) ); ?> 
 		<?php endif; ?>
 
 		<?php if ( !empty( $instance['social'] ) ): ?>
@@ -67,7 +67,7 @@ class MKS_Social_Widget extends WP_Widget {
 			?>
 			<ul class="mks_social_widget_ul">
 			<?php foreach ( $instance['social'] as $item ) : ?>
-				<li><a href="<?php echo $item['url']; ?>" title="<?php echo esc_attr( $this->get_social_title( $item['icon'] ) ); ?>" class="socicon-<?php echo esc_attr( $item['icon'] ); ?> <?php echo esc_attr( 'soc_'.$instance['style'] ); ?>" <?php echo $target; ?> <?php echo $size_style; ?>><span><?php echo $item['icon']; ?></span></a></li>
+				<li><a href="<?php echo esc_url($item['url']); ?>" title="<?php echo esc_attr( $this->get_social_title( $item['icon'] ) ); ?>" class="socicon-<?php echo esc_attr( $item['icon'] ); ?> <?php echo esc_attr( 'soc_'.$instance['style'] ); ?>" <?php echo $target; ?> <?php echo $size_style; ?>><span><?php echo esc_html($item['icon']); ?></span></a></li>
 			<?php endforeach; ?>
 			</ul>
 		<?php endif; ?>
@@ -81,7 +81,7 @@ class MKS_Social_Widget extends WP_Widget {
 
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		$instance['title'] = strip_tags( $new_instance['title'] );
+		$instance['title'] = wp_strip_all_tags( $new_instance['title'] );
 		$instance['content'] = $new_instance['content'];
 		$instance['style'] = $new_instance['style'];
 		$instance['size'] = absint( $new_instance['size'] );
@@ -107,44 +107,44 @@ class MKS_Social_Widget extends WP_Widget {
 ?>
 
 		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title', 'meks-smart-social-widget' ); ?>:</label>
-			<input id="<?php echo $this->get_field_id( 'title' ); ?>" type="text" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" class="widefat" />
+			<label for="<?php echo esc_attr($this->get_field_id( 'title' )); ?>"><?php esc_html_e( 'Title', 'meks-smart-social-widget' ); ?>:</label>
+			<input id="<?php echo esc_attr($this->get_field_id( 'title' )); ?>" type="text" name="<?php echo esc_attr($this->get_field_name( 'title' )); ?>" value="<?php echo esc_attr($instance['title']); ?>" class="widefat" />
 		</p>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'content' ); ?>"><?php _e( 'Introduction text (optional)', 'meks-smart-social-widget' ); ?>:</label>
-			<textarea id="<?php echo $this->get_field_id( 'content' ); ?>" rows="5" name="<?php echo $this->get_field_name( 'content' ); ?>" class="widefat"><?php echo $instance['content']; ?></textarea>
+			<label for="<?php echo esc_attr($this->get_field_id( 'content' )); ?>"><?php esc_html_e( 'Introduction text (optional)', 'meks-smart-social-widget' ); ?>:</label>
+			<textarea id="<?php echo esc_attr($this->get_field_id( 'content' )); ?>" rows="5" name="<?php echo esc_attr($this->get_field_name( 'content' )); ?>" class="widefat"><?php echo wp_kses_post($instance['content']); ?></textarea>
 		</p>
 
 		<p>
-			<span class="mks-option-label mks-option-fl"><?php _e( 'Icon shape', 'meks-smart-social-widget' ); ?>:</span><br/>
+			<span class="mks-option-label mks-option-fl"><?php esc_html_e( 'Icon shape', 'meks-smart-social-widget' ); ?>:</span><br/>
 			<div class="mks-option-radio-wrapper">
 
-			<label class="mks-option-radio"><input type="radio" name="<?php echo $this->get_field_name( 'style' ); ?>" value="square" <?php checked( $instance['style'], 'square' ); ?>/><?php _e( 'Square', 'meks-smart-social-widget' ); ?></label><br/>
-			<label class="mks-option-radio"><input type="radio" name="<?php echo $this->get_field_name( 'style' ); ?>" value="circle" <?php checked( $instance['style'], 'circle' ); ?>/><?php _e( 'Circle', 'meks-smart-social-widget' ); ?></label><br/>
-			<label class="mks-option-radio"><input type="radio" name="<?php echo $this->get_field_name( 'style' ); ?>" value="rounded" <?php checked( $instance['style'], 'rounded' ); ?>/><?php _e( 'Rounded corners', 'meks-smart-social-widget' ); ?></label>
+			<label class="mks-option-radio"><input type="radio" name="<?php echo esc_attr($this->get_field_name( 'style' )); ?>" value="square" <?php checked( $instance['style'], 'square' ); ?>/><?php esc_html_e( 'Square', 'meks-smart-social-widget' ); ?></label><br/>
+			<label class="mks-option-radio"><input type="radio" name="<?php echo esc_attr($this->get_field_name( 'style' )); ?>" value="circle" <?php checked( $instance['style'], 'circle' ); ?>/><?php esc_html_e( 'Circle', 'meks-smart-social-widget' ); ?></label><br/>
+			<label class="mks-option-radio"><input type="radio" name="<?php echo esc_attr($this->get_field_name( 'style' )); ?>" value="rounded" <?php checked( $instance['style'], 'rounded' ); ?>/><?php esc_html_e( 'Rounded corners', 'meks-smart-social-widget' ); ?></label>
 			</div>
 		</p>
 
 		<p>
-			<label class="mks-option-label" for="<?php echo $this->get_field_id( 'size' ); ?>"><?php _e( 'Icon size', 'meks-smart-social-widget' ); ?>: </label>
-			<input id="<?php echo $this->get_field_id( 'size' ); ?>" type="text" name="<?php echo $this->get_field_name( 'size' ); ?>" value="<?php echo absint( $instance['size'] ); ?>" class="small-text" /> px
+			<label class="mks-option-label" for="<?php echo esc_attr($this->get_field_id( 'size' )); ?>"><?php esc_html_e( 'Icon size', 'meks-smart-social-widget' ); ?>: </label>
+			<input id="<?php echo esc_attr($this->get_field_id( 'size' )); ?>" type="text" name="<?php echo esc_attr($this->get_field_name( 'size' )); ?>" value="<?php echo absint( $instance['size'] ); ?>" class="small-text" /> px
 		</p>
 
 
 		<p>
-			<label class="mks-option-label" for="<?php echo $this->get_field_id( 'font_size' ); ?>"><?php _e( 'Icon font size', 'meks-smart-social-widget' ); ?>: </label>
-			<input id="<?php echo $this->get_field_id( 'font_size' ); ?>" type="text" name="<?php echo $this->get_field_name( 'font_size' ); ?>" value="<?php echo absint( $instance['font_size'] ); ?>" class="small-text" /> px
+			<label class="mks-option-label" for="<?php echo esc_attr($this->get_field_id( 'font_size' )); ?>"><?php esc_html_e( 'Icon font size', 'meks-smart-social-widget' ); ?>: </label>
+			<input id="<?php echo esc_attr($this->get_field_id( 'font_size' )); ?>" type="text" name="<?php echo esc_attr($this->get_field_name( 'font_size' )); ?>" value="<?php echo absint( $instance['font_size'] ); ?>" class="small-text" /> px
 		</p>
 
 		<p>
-			<label class="mks-option-label" for="<?php echo $this->get_field_id( 'target' ); ?>"><?php _e( 'Open links in', 'meks-smart-social-widget' ); ?>: </label>
-			<select id="<?php echo $this->get_field_id( 'target' ); ?>" name="<?php echo $this->get_field_name( 'target' ); ?>">
-				<option value="_blank" <?php selected( '_blank', $instance['target'] ); ?>><?php _e( 'New Window', 'meks-smart-social-widget' ); ?></option>
-				<option value="_self" <?php selected( '_self', $instance['target'] ); ?>><?php _e( 'Same Window', 'meks-smart-social-widget' ); ?></option>
+			<label class="mks-option-label" for="<?php echo esc_attr($this->get_field_id( 'target' )); ?>"><?php esc_html_e( 'Open links in', 'meks-smart-social-widget' ); ?>: </label>
+			<select id="<?php echo esc_attr($this->get_field_id( 'target' )); ?>" name="<?php echo esc_attr($this->get_field_name( 'target' )); ?>">
+				<option value="_blank" <?php selected( '_blank', $instance['target'] ); ?>><?php esc_html_e( 'New Window', 'meks-smart-social-widget' ); ?></option>
+				<option value="_self" <?php selected( '_self', $instance['target'] ); ?>><?php esc_html_e( 'Same Window', 'meks-smart-social-widget' ); ?></option>
 			</select>
 		</p>
 
-		<h4 class="mks-icons-title"><?php _e( 'Icons', 'meks-smart-social-widget' ); ?>:</h4>
+		<h4 class="mks-icons-title"><?php esc_html_e( 'Icons', 'meks-smart-social-widget' ); ?>:</h4>
 
 		<ul class="mks_social_container mks-social-sortable">
 		  <?php foreach ( $instance['social'] as $link ) : ?>
@@ -156,7 +156,7 @@ class MKS_Social_Widget extends WP_Widget {
 
 
 		<p>
-	  	<a href="#" class="mks_add_social button"><?php _e( 'Add Icon', 'meks-smart-social-widget' ); ?></a>
+	  	<a href="#" class="mks_add_social button"><?php esc_html_e( 'Add Icon', 'meks-smart-social-widget' ); ?></a>
 	  </p>
 
 	  <div class="mks_social_clone" style="display:none">
@@ -170,15 +170,15 @@ class MKS_Social_Widget extends WP_Widget {
 
 	function draw_social( $widget, $social_links, $selected = array( 'icon' => '', 'url' => '' ) ) { ?>
 
-				<label class="mks-sw-icon"><?php _e( 'Icon', 'meks-smart-social-widget' ); ?> :</label>
-				<select type="text" name="<?php echo $widget->get_field_name( 'social_icon' ); ?>[]" value="<?php echo $selected['icon']; ?>" style="width: 82%">
+				<label class="mks-sw-icon"><?php esc_html_e( 'Icon', 'meks-smart-social-widget' ); ?> :</label>
+				<select type="text" name="<?php echo esc_attr($widget->get_field_name( 'social_icon' )); ?>[]" value="<?php echo esc_attr($selected['icon']); ?>" style="width: 82%">
 					<?php foreach ( $social_links as $key => $link ) : ?>
-						<option value="<?php echo $key; ?>" <?php selected( $key, $selected['icon'] ); ?>><?php echo $link; ?></option>
+						<option value="<?php echo esc_attr($key); ?>" <?php selected( $key, $selected['icon'] ); ?>><?php echo esc_html($link); ?></option>
 					<?php endforeach; ?>
 				</select>
 
-				<label class="mks-sw-icon"><?php _e( 'Url', 'meks-smart-social-widget' ); ?> :</label>
-				<input type="text" name="<?php echo $widget->get_field_name( 'social_url' ); ?>[]" value="<?php echo $selected['url']; ?>" style="width: 82%">
+				<label class="mks-sw-icon"><?php esc_html_e( 'Url', 'meks-smart-social-widget' ); ?> :</label>
+				<input type="text" name="<?php echo esc_attr($widget->get_field_name( 'social_url' )); ?>[]" value="<?php echo esc_attr($selected['url']); ?>" style="width: 82%">
 
 
 				<span class="mks-remove-social dashicons dashicons-no-alt"></span>

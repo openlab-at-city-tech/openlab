@@ -2,7 +2,6 @@
 
 if (!defined('POPE_VERSION')) { die('Use autoload.php'); }
 
-
 /**
  *  A registry of registered products, modules, adapters, and utilities.
  *
@@ -25,8 +24,6 @@ class C_Component_Registry
     var     $_module_type_cache = array();
     var     $_module_type_cache_count = 0;
 
-
-
     /**
      * This is a singleton object
      */
@@ -44,8 +41,7 @@ class C_Component_Registry
     static function &get_instance()
     {
         if (is_null(self::$_instance)) {
-            $klass = get_class();
-            self::$_instance = new $klass();
+            self::$_instance = new C_Component_Registry();
         }
         return self::$_instance;
     }

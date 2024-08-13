@@ -23,6 +23,10 @@ body.elementor-apps-page {
   margin: 60px auto;
   text-align: center;
 }
+.e-a-apps .e-a-page-footer p {
+  max-width: 1200px;
+  margin: auto;
+}
 .e-a-apps .e-a-list {
   display: grid;
   grid-gap: 30px;

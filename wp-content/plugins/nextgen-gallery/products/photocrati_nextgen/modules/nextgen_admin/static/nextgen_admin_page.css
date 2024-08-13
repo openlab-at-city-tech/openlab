@@ -901,7 +901,7 @@ body div.ui-tooltip {
 }
 
 .ngg-post-type .ngg_page_content_main .page-title-action {
-  padding: 10px 18px !important;
+  /*padding: 10px 18px !important;*/
   margin-left: 10px;
   top: -4px;
 }

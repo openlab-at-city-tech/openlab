@@ -82,6 +82,28 @@ class BBP_Admin {
 	 */
 	public $notices = array();
 
+	/** Components ************************************************************/
+
+	/**
+	 * @var BBP_Forums_Admin Forums admin
+	 */
+	public $forums = null;
+
+	/**
+	 * @var BBP_Topics_Admin Topics admin
+	 */
+	public $topics = null;
+
+	/**
+	 * @var BBP_Replies_Admin Replies admin
+	 */
+	public $replies = null;
+
+	/**
+	 * @var BBP_Converter Converter admin
+	 */
+	public $converter = null;
+
 	/** Functions *************************************************************/
 
 	/**

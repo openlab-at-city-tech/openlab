@@ -136,7 +136,7 @@ function bp_groups_render_group_block( $attributes = array() ) {
 	if ( $display_action_button ) {
 		$action_button = sprintf(
 			'<div class="bp-profile-button">
-				<a href="%1$s" class="button large primary button-primary" role="button">%2$s</a>
+				<a href="%1$s" class="button large primary button-primary wp-block-button__link wp-element-button" role="button">%2$s</a>
 			</div>',
 			esc_url( $group_link ),
 			esc_html__( 'View Group', 'buddypress' )
@@ -348,6 +348,7 @@ function bp_groups_blocks_add_script_data() {
 	);
 
 	// Include the common JS template.
+	// phpcs:ignore WordPress.Security.EscapeOutput
 	echo bp_get_dynamic_template_part( 'assets/widgets/dynamic-groups.php' );
 
 	// List the block specific props.
@@ -370,12 +371,16 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 	$block_args = bp_parse_args(
 		$attributes,
 		array(
-			'title'        => __( 'Groups', 'buddypress' ),
+			'title'        => '',
 			'maxGroups'    => 5,
 			'groupDefault' => 'active',
 			'linkTitle'    => false,
 		)
 	);
+
+	if ( ! $block_args['title'] ) {
+		$block_args['title'] = __( 'Groups', 'buddypress' );
+	}
 
 	$classnames         = 'widget_bp_groups_widget buddypress widget';
 	$wrapper_attributes = get_block_wrapper_attributes( array( 'class' => $classnames ) );
@@ -482,11 +487,11 @@ function bp_groups_render_dynamic_groups_block( $attributes = array() ) {
 							sprintf(
 								/* Translators: %s is the group's name. */
 								__( 'Group Profile photo of %s', 'buddypress' ),
-								$group->name
+								bp_get_group_name( $group )
 							)
 						),
 						'data.id'                => $group->id,
-						'data.extra'             => $extra,
+						'data.extra'             => esc_html( $extra ),
 					)
 				);
 			}

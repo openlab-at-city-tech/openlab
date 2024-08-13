@@ -130,6 +130,17 @@ class TableDriver extends DriverBase {
 		} else {
 			$limit = $this->_wpdb()->prepare( 'LIMIT %d', max( 0, $max ) );
 		}
+
+		/***
+		 * Set $limit to false when we want to display all records, that is $items_per_page = all.
+		 * LIMIT 0 results in no entries found error. So we remove limit_clause altogether.
+		 */
+
+		if ( (int) $max < 0 ) {
+			$limit              = false;
+			$this->limit_clause = false;
+		}
+
 		if ( $limit ) {
 			$this->limit_clause = $limit;
 		}

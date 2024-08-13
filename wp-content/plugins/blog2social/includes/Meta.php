@@ -20,38 +20,42 @@ class B2S_Meta {
     public function _run() {
         global $post;
         $this->post = $post;
-        $this->print = true;
-        $post_id = isset($this->post->ID) ? $this->post->ID : 0; //V5.1.0 optimization
-        $this->getMeta($post_id);
-        $this->options = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
-        $authorData = new B2S_Options((isset($this->post->post_author) ? $this->post->post_author : 0));
-        $this->author = $authorData->_getOption('meta_author_data');
 
-        //Check 3rd Plugin Yoast - override
-        if (isset($this->options['og_active']) && (int) $this->options['og_active'] == 1) {  //on
-            $yoast = get_option('wpseo_social');
-            if (is_array($yoast) && isset($yoast['opengraph']) && $yoast['opengraph'] !== false && defined('WPSEO_VERSION')) { //plugin with settings is active
-                $this->override3rdYoast();
-            } else {
-                $this->getOgMeta();
-            }
-        }
-        //Check 3rd Plugin Yoast - override
-        if (isset($this->options['card_active']) && (int) $this->options['card_active'] == 1) {  //on
-            $yoast = get_option('wpseo_social');
-            if (is_array($yoast) && isset($yoast['twitter']) && $yoast['twitter'] !== false && defined('WPSEO_VERSION')) {//plugin with settings is active
-                $this->override3rdYoast('card');
-            } else {
-                $this->getCardMeta();
-            }
-        }
-        if (isset($this->options['oembed_active']) && (int) $this->options['oembed_active'] == 0) {  //on
-            remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
-        }
+        if (isset($this->post->post_status) && $this->post->post_status == 'publish' && isset($this->post->post_password) && empty($this->post->post_password)) {
 
-        //SEO
-        if (!defined('WPSEO_VERSION') && (isset($this->options['og_active']) && (int) $this->options['og_active'] == 1) || isset($this->options['card_active']) && (int) $this->options['card_active'] == 1) {
-            $this->getAuthor();
+            $this->print = true;
+            $post_id = isset($this->post->ID) ? $this->post->ID : 0; //V5.1.0 optimization
+            $this->getMeta($post_id);
+            $this->options = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
+            $authorData = new B2S_Options((isset($this->post->post_author) ? $this->post->post_author : 0));
+            $this->author = $authorData->_getOption('meta_author_data');
+
+            //Check 3rd Plugin Yoast - override
+            if (isset($this->options['og_active']) && (int) $this->options['og_active'] == 1) {  //on
+                $yoast = get_option('wpseo_social');
+                if (is_array($yoast) && isset($yoast['opengraph']) && $yoast['opengraph'] !== false && defined('WPSEO_VERSION')) { //plugin with settings is active
+                    $this->override3rdYoast();
+                } else {
+                    $this->getOgMeta();
+                }
+            }
+            //Check 3rd Plugin Yoast - override
+            if (isset($this->options['card_active']) && (int) $this->options['card_active'] == 1) {  //on
+                $yoast = get_option('wpseo_social');
+                if (is_array($yoast) && isset($yoast['twitter']) && $yoast['twitter'] !== false && defined('WPSEO_VERSION')) {//plugin with settings is active
+                    $this->override3rdYoast('card');
+                } else {
+                    $this->getCardMeta();
+                }
+            }
+            if (isset($this->options['oembed_active']) && (int) $this->options['oembed_active'] == 0) {  //on
+                remove_action('wp_head', 'wp_oembed_add_discovery_links', 10);
+            }
+
+            //SEO
+            if (!defined('WPSEO_VERSION') && (isset($this->options['og_active']) && (int) $this->options['og_active'] == 1) || isset($this->options['card_active']) && (int) $this->options['card_active'] == 1) {
+                $this->getAuthor();
+            }
         }
     }
 
@@ -120,7 +124,7 @@ class B2S_Meta {
             if (isset($this->metaData[$type . '_title']) && !empty($this->metaData[$type . '_title'])) {
                 $title = $this->metaData[$type . '_title'];
             } else {
-                $title = wp_strip_all_tags(get_the_title(),true);
+                $title = wp_strip_all_tags(get_the_title(), true);
             }
         } else {
             $title = (isset($this->options[$type . '_default_title']) && !empty($this->options[$type . '_default_title'])) ? $this->options[$type . '_default_title'] : get_bloginfo('name');

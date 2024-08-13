@@ -2,7 +2,7 @@
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.55
+ * Version: 3.59.3
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
  * Author URI: https://www.imagely.com
@@ -269,7 +269,6 @@ class C_NextGEN_Bootstrap {
 		class_alias( '\Imagely\NGG\DisplayType\InstallerProxy', 'C_Gallery_Display_Installer' );
 		class_alias( '\Imagely\NGG\DisplayTypes\Taxonomy', 'C_Taxonomy_Controller' );
 		class_alias( '\Imagely\NGG\Display\I18N', 'M_I18N' );
-		class_alias( '\Imagely\NGG\Display\LightboxManager', 'C_Lightbox_Library_Manager' );
 		class_alias( '\Imagely\NGG\Display\Shortcodes', 'C_NextGen_Shortcode_Manager' );
 		class_alias( '\Imagely\NGG\DisplayedGallery\Renderer', 'C_Displayed_Gallery_Renderer' );
 		class_alias( '\Imagely\NGG\DisplayedGallery\TriggerManager', 'C_Displayed_Gallery_Trigger_Manager' );
@@ -337,6 +336,10 @@ class C_NextGEN_Bootstrap {
 	public static function get_legacy_module_directory( $module_id ) {
 		// POPE is not loaded; return the result from a manual mapping of id -> directory name.
 		$module_dir = null;
+
+		if ( $module_id === 'photocrati-nextgen_pagination' ) {
+			$module_dir = 'nextgen_pagination';
+		}
 
 		if ( $module_id === 'photocrati-attach_to_post' ) {
 			$module_dir = 'attach_to_post';
@@ -535,12 +538,12 @@ class C_NextGEN_Bootstrap {
 		// Nonce verification is not necessary here.
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! $force
-		     && empty( $_REQUEST['photocrati_ajax'] )
-		     && ( self::get_pro_api_version() >= 4.0 && ! is_admin() )
-		     && ! defined( 'EWWW_IMAGE_OPTIMIZER_VERSION' ) // EWWW uses I_Gallery_Storage.
-		     && ! defined( 'WP_SMUSH_VERSION' ) // WP_SMUSH_VERSION uses I_Gallery_Storage.
-		     && ! defined( 'IMAGIFY_VERSION' ) // Imagify adds their own mixin to C_Gallery_Storage.
-		     || self::$pope_loaded ) {
+			&& empty( $_REQUEST['photocrati_ajax'] )
+			&& ( self::get_pro_api_version() >= 4.0 && ! is_admin() )
+			&& ! defined( 'EWWW_IMAGE_OPTIMIZER_VERSION' ) // EWWW uses I_Gallery_Storage.
+			&& ! defined( 'WP_SMUSH_VERSION' ) // WP_SMUSH_VERSION uses I_Gallery_Storage.
+			&& ! defined( 'IMAGIFY_VERSION' ) // Imagify adds their own mixin to C_Gallery_Storage.
+			|| self::$pope_loaded ) {
 			return;
 		}
 
@@ -745,7 +748,16 @@ class C_NextGEN_Bootstrap {
 		&& ! empty( $_REQUEST['action'] )
 		&& '1' === (string) ( $_REQUEST['photocrati_ajax'] )
 		&& in_array( $_REQUEST['action'], $lightroom_actions, true ) ) {
-			add_action( 'init', [ '\Imagely\NGG\Lightroom\Controller', 'run' ], 0 );
+			add_action(
+				'init',
+				function() {
+					$this->register_taxonomy();
+					(new \Imagely\NGG\Lightroom\Controller())->run();
+				},
+				0
+			);
+		} else {
+			add_action( 'init', [ $this, 'register_taxonomy' ], 9 );
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
@@ -787,6 +799,24 @@ class C_NextGEN_Bootstrap {
 		\Imagely\NGG\IGW\EventPublisher::get_instance()->register_hooks();
 		\Imagely\NGG\Util\Router::get_instance()->register_hooks();
 		\Imagely\NGG\Util\ThirdPartyCompatibility::get_instance()->register_hooks();
+	}
+
+	/**
+	 * Registers the NextGEN taxonomy.
+	 *
+	 * @return void
+	 */
+	public function register_taxonomy() {
+		// Register the NextGEN taxonomy.
+		$args = [
+			'label'    => __( 'Picture tag', 'nggallery' ),
+			'template' => __( 'Picture tag: %2$l.', 'nggallery' ),
+			'helps'    => __( 'Separate picture tags with commas.', 'nggallery' ),
+			'sort'     => true,
+			'args'     => [ 'orderby' => 'term_order' ],
+		];
+
+		register_taxonomy( 'ngg_tag', 'nggallery', $args );
 	}
 
 	public function handle_activation_redirect() {
@@ -917,6 +947,12 @@ class C_NextGEN_Bootstrap {
 	public function activate() {
 		\Imagely\NGG\Util\Installer::set_role_caps();
 		set_transient( 'ngg-activated', time(), 30 );
+
+		$over_time = get_option( 'nextgen_over_time', [] );
+		if ( empty( $over_time['installed_lite'] ) ) {
+			$over_time['installed_lite'] = wp_date( 'U' );
+			update_option( 'nextgen_over_time', $over_time );
+		}
 	}
 
 	public function define_constants() {
@@ -929,7 +965,7 @@ class C_NextGEN_Bootstrap {
 		define( 'NGG_PRODUCT_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PLUGIN_DIR, '/\\' ), 'products' ] ) );
 		define( 'NGG_MODULE_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PRODUCT_DIR, '/\\' ), 'photocrati_nextgen', 'modules' ] ) );
 		define( 'NGG_PLUGIN_STARTED_AT', microtime() );
-		define( 'NGG_PLUGIN_VERSION', '3.55' );
+		define( 'NGG_PLUGIN_VERSION', '3.59.3' );
 
 		define( 'NGG_SCRIPT_VERSION', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? (string) mt_rand( 0, mt_getrandmax() ) : NGG_PLUGIN_VERSION );
 

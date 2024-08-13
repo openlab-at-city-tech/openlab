@@ -1077,33 +1077,27 @@ HTML;
 			while ( bp_activities() ) {
 				bp_the_activity();
 
-				// avatar
-				$title = '<div class="ol-toolbar-row activity-row"><div class="col-sm-6"><div class="item-avatar"><a href="' . bp_get_activity_user_link() . '"><img class="img-responsive" src ="' . bp_core_fetch_avatar(
+				$avatar_url = bp_core_fetch_avatar(
 					array(
 						'item_id' => bp_get_activity_user_id(),
 						'object'  => 'member',
 						'type'    => 'full',
 						'html'    => false,
 					)
-				) . '" alt="Profile picture of ' . bp_get_activity_user_id() . '"/></a></div></div>';
+				);
+
+				$avatar_alt_text = sprintf(
+					'Profile picture of %s',
+					bp_core_get_user_displayname( bp_get_activity_user_id() )
+				);
+
+				// avatar
+				$title = '<div class="ol-toolbar-row activity-row"><div class="col-sm-6"><div class="item-avatar"><img class="img-responsive" src="' . esc_url( $avatar_url ) . '" alt="' . esc_attr( $avatar_alt_text ) . '"/></div></div>';
 
 				// action
 				$title .= '<div class="col-sm-18">';
 
-				// the things we do...
-				$action_output     = '';
-				$action_output_raw = $activities_template->activity->action;
-				$action_output_ary = explode( '<a', $action_output_raw );
-				$count             = 0;
-				foreach ( $action_output_ary as $action_redraw ) {
-					if ( ! ctype_space( $action_redraw ) ) {
-						$class          = ( $count == 0 ? 'activity-user' : 'activity-action' );
-						$action_output .= '<a class="' . $class . '"' . $action_redraw;
-						$count++;
-					}
-				}
-
-				$title .= '<p class="item inline-links hyphenate">' . $action_output . '</p>';
+				$title .= '<p class="item inline-links hyphenate">' . wp_strip_all_tags( $activities_template->activity->action ) . '</p>';
 				$title .= '<p class="item">' . bp_insert_activity_meta( '' ) . '</p>';
 				$title .= '</div></div>';
 

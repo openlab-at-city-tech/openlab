@@ -690,6 +690,9 @@ class Base {
 		if ( 'ewww_image_optimizer_ll_all_things' === $option_name && \defined( $constant_name ) ) {
 			return \sanitize_text_field( \constant( $constant_name ) );
 		}
+		if ( 'easyio_ll_all_things' === $option_name && \defined( $constant_name ) ) {
+			return \sanitize_text_field( \constant( $constant_name ) );
+		}
 		if ( 'ewww_image_optimizer_aux_paths' === $option_name && \defined( $constant_name ) ) {
 			return \ewww_image_optimizer_aux_paths_sanitize( \constant( $constant_name ) );
 		}
@@ -1118,6 +1121,92 @@ class Base {
 	}
 
 	/**
+	 * Get the PNG type: PNG8, PNG24, PNG32, or other.
+	 *
+	 * From https://stackoverflow.com/questions/57547818/php-detect-png8-or-png24
+	 *
+	 * @param string $path The name of the file.
+	 * @return string The type of PNG, or an empty string.
+	 */
+	public function get_png_depth( $path ) {
+		$png_type = '';
+		if ( $this->filesize( $path ) < 24 ) {
+			return $png_type;
+		}
+
+		$file_handle = fopen( $path, 'rb' );
+
+		$png_header = fread( $file_handle, 4 );
+		if ( chr( 0x89 ) . 'PNG' !== $png_header ) {
+			return $png_type;
+		}
+
+		// Move forward 8 bytes.
+		fread( $file_handle, 8 );
+		$png_ihdr = fread( $file_handle, 4 );
+
+		// Make sure we have an IHDR.
+		if ( 'IHDR' !== $png_ihdr ) {
+			return $png_type;
+		}
+
+		// Skip past the dimensions.
+		$dimensions = fread( $file_handle, 8 );
+
+		// Bit depth: 1 byte
+		// Bit depth is a single-byte integer giving the number of bits per sample or
+		// per palette index (not per pixel).
+		//
+		// Valid values are 1, 2, 4, 8, and 16, although not all values are allowed for all color types.
+		$bit_depth = ord( (string) fread( $file_handle, 1 ) );
+
+		// Color type is a single-byte integer that describes the interpretation of the image data.
+		// Color type codes represent sums of the following values:
+		// 1 (palette used), 2 (color used), and 4 (alpha channel used).
+		// The valid color types are:
+		// 0 => Grayscale
+		// 2 => Truecolor
+		// 3 => Indexed
+		// 4 => Greyscale with alpha
+		// 6 => Truecolour with alpha
+		//
+		// Valid values are 0, 2, 3, 4, and 6.
+		$color_type = ord( (string) fread( $file_handle, 1 ) );
+
+		// Note that none of these names are "official", and some we have made up to reference particular bit-depths.
+		// If the bitdepth is 1 and the colortype is 3 (Indexed color) you have a PNG1 with 2 colors.
+		if ( 1 === $bit_depth && 3 === $color_type ) {
+			$png_type = 'PNG1';
+		}
+
+		// If the bitdepth is 2 and the colortype is 3 (Indexed color) you have a PNG2 with 4 colors.
+		if ( 2 === $bit_depth && 3 === $color_type ) {
+			$png_type = 'PNG2';
+		}
+
+		// If the bitdepth is 4 and the colortype is 3 (Indexed color) you have a PNG4 with 16 colors.
+		if ( 4 === $bit_depth && 3 === $color_type ) {
+			$png_type = 'PNG4';
+		}
+
+		// If the bitdepth is 8 and the colortype is 3 (Indexed color) you have a PNG8 with 256 colors.
+		if ( 8 === $bit_depth && 3 === $color_type ) {
+			$png_type = 'PNG8';
+		}
+
+		// If the bitdepth is 8 and colortype is 2 (Truecolor) you have a PNG24.
+		if ( 8 === $bit_depth && 2 === $color_type ) {
+			$png_type = 'PNG24';
+		}
+
+		// If the bitdepth is 8 and colortype is 6 (Truecolor with alpha) you have a PNG32.
+		if ( 8 === $bit_depth && 6 === $color_type ) {
+			$png_type = 'PNG32';
+		}
+		return $png_type;
+	}
+
+	/**
 	 * Checks if there is enough memory still available.
 	 *
 	 * Looks to see if the current usage + padding will fit within the memory_limit defined by PHP.
@@ -1198,6 +1287,21 @@ class Base {
 	}
 
 	/**
+	 * Trims the given 'needle' from the end of the 'haystack'.
+	 *
+	 * @param string $haystack The string to be modified if it contains needle.
+	 * @param string $needle The string to remove if it is at the end of the haystack.
+	 * @return string The haystack with needle removed from the end.
+	 */
+	public function remove_from_end( $haystack, $needle ) {
+		$needle_length = strlen( $needle );
+		if ( substr( $haystack, -$needle_length ) === $needle ) {
+			return substr( $haystack, 0, -$needle_length );
+		}
+		return $haystack;
+	}
+
+	/**
 	 * Set an option: use 'site' setting if plugin is network activated, otherwise use 'blog' setting.
 	 *
 	 * @param string $option_name The name of the option to save.
@@ -1219,6 +1323,28 @@ class Base {
 			$success = \update_option( $option_name, $option_value );
 		}
 		return $success;
+	}
+
+	/**
+	 * Convert a gallery name to the corresponding integer/ID.
+	 *
+	 * Used for the $gallery_type parameter of the ewww_image_optimizer() function.
+	 *
+	 * @param string $gallery_name The gallery identificer, like 'media', 'nextgen', etc.
+	 * @return int The ID for the gallery/type of image.
+	 */
+	public function gallery_name_to_id( $gallery_name ) {
+		switch ( $gallery_name ) {
+			case 'media':
+				return 1;
+			case 'nextgen':
+			case 'nextcell':
+				return 2;
+			case 'flag':
+				return 3;
+			default:
+				return 4;
+		}
 	}
 
 	/**
@@ -1310,6 +1436,12 @@ class Base {
 				$local_url = \str_replace( $allowed_url, $this->upload_url, $url );
 				$this->debug_message( "found $allowed_url, replaced with $this->upload_url to get $local_url" );
 				$path = $this->url_to_path_exists( $local_url );
+				if ( ! $path ) {
+					// This won't work if the upload dir is outside ABSPATH, but normally it does fix sub-folder multisites.
+					$local_url = \str_replace( $allowed_url, $this->home_url, $url );
+					$this->debug_message( "found $allowed_url, replaced with $this->home_url to get $local_url" );
+					$path = $this->url_to_path_exists( $local_url );
+				}
 				if ( $path ) {
 					return $path;
 				}
@@ -1539,6 +1671,15 @@ class Base {
 		}
 		// This is used by the WebP parsers, and by the Lazy Load via get_image_dimensions_by_url().
 		$this->upload_url = \trailingslashit( ! empty( $upload_dir['baseurl'] ) ? $upload_dir['baseurl'] : \content_url( 'uploads' ) );
+		if ( \is_multisite() ) {
+			// Check for a site-specific suffix and remove it.
+			$current_blog_id = get_current_blog_id();
+			if ( \str_ends_with( $this->upload_url, 'sites/' . $current_blog_id . '/' ) ) {
+				$this->upload_url = $this->remove_from_end( $this->upload_url, 'sites/' . $current_blog_id . '/' );
+			} elseif ( \str_ends_with( $this->upload_url, '/' . $current_blog_id . '/' ) ) {
+				$this->upload_url = $this->remove_from_end( $this->upload_url, $current_blog_id . '/' );
+			}
+		}
 
 		// But this is used by Easy IO, so it should be derived from the above logic instead, which already matches the site/home URLs against the upload URL.
 		$this->upload_domain     = $this->parse_url( $this->site_url, PHP_URL_HOST );

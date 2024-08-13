@@ -93,12 +93,42 @@ function ewww_image_optimizer_gifsicle_resize( $file, $dst_x, $dst_y, $src_x, $s
 }
 
 /**
+ * Quantize and reduce the bit-depth of a PNG image using pngquant.
+ *
+ * @param string $file Name of the PNG image file.
+ * @param int    $colors Maximum number of colors allowed.
+ * @return bool True if the reduction was successful.
+ */
+function ewww_image_optimizer_pngquant_reduce_png( $file, $colors ) {
+	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	$tools['pngquant'] = ewwwio()->local->get_path( 'pngquant', true );
+	if ( empty( $tools['pngquant'] ) ) {
+		return false;
+	}
+	$colors = (int) min( $colors, 256 );
+	$cmd    = $tools['pngquant'] . ' ' . $colors . ' --nofs --skip-if-larger ' . ewww_image_optimizer_escapeshellarg( $file );
+	ewwwio_debug_message( "running: $cmd" );
+	exec( $cmd, $output, $exit );
+	$quantfile = preg_replace( '/\.\w+$/', '-or8.png', $file );
+	if ( ewwwio_is_file( $quantfile ) && filesize( $file ) > filesize( $quantfile ) ) {
+		ewwwio_debug_message( 'PNG reduction is better: original - ' . filesize( $file ) . ' vs. lossy - ' . filesize( $quantfile ) );
+		rename( $quantfile, $file );
+		return true;
+	} elseif ( ewwwio_is_file( $quantfile ) ) {
+		ewwwio_debug_message( 'PNG reduction is worse: original - ' . filesize( $file ) . ' vs. lossy - ' . filesize( $quantfile ) );
+		ewwwio_delete_file( $quantfile );
+	} else {
+		ewwwio_debug_message( 'pngquant did not produce any output' );
+	}
+	return false;
+}
+
+/**
  * Automatically corrects JPG rotation using local jpegtran tool.
  *
  * @param string $file Name of the file to fix.
  * @param string $type File type of the file.
  * @param int    $orientation The EXIF orientation value.
- *
  * @return bool True if the rotation was successful.
  */
 function ewww_image_optimizer_jpegtran_autorotate( $file, $type, $orientation ) {
@@ -205,10 +235,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		return array( false, __( 'Optimization skipped', 'ewww-image-optimizer' ), $converted, $file );
 	}
 	global $ewww_image;
-	global $ewww_force;
-	global $ewww_force_smart;
 	global $ewww_convert;
-	global $ewww_webp_only;
 	// Initialize the original filename.
 	$original = $file;
 	$result   = '';
@@ -229,15 +256,21 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		ewwwio_debug_message( "couldn't write to the file $file" );
 		return array( false, $msg, $converted, $original );
 	}
-	$type = ewww_image_optimizer_mimetype( $file, 'i' );
+	// Get the original image size.
+	$orig_size = ewww_image_optimizer_filesize( $file );
+	$type      = ewww_image_optimizer_mimetype( $file, 'i' );
 	if ( ! $type ) {
 		ewwwio_debug_message( 'could not find mimetype' );
+		// Store a 'no savings' record to prevent this image from being processed without the 'force' flag set.
+		ewww_image_optimizer_update_table( $file, $orig_size, $orig_size );
 		// Otherwise we store an error message since we couldn't get the mime-type.
 		return array( false, __( 'Unknown file type', 'ewww-image-optimizer' ), $converted, $original );
 	}
 	// Not an image or pdf.
 	if ( strpos( $type, 'image' ) === false && strpos( $type, 'pdf' ) === false ) {
 		ewwwio_debug_message( "unsupported mimetype: $type" );
+		// Store a 'no savings' record to prevent this image from being processed without the 'force' flag set.
+		ewww_image_optimizer_update_table( $file, $orig_size, $orig_size );
 		return array( false, __( 'Unsupported file type', 'ewww-image-optimizer' ) . ": $type", $converted, $original );
 	}
 	if ( ! is_object( $ewww_image ) || ! $ewww_image instanceof EWWW_Image || $ewww_image->file !== $file ) {
@@ -292,7 +325,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				1 === (int) $gallery_type &&
 				$fullsize &&
 				( ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_to_png' ) || ! empty( $ewww_convert ) ) &&
-				empty( $ewww_webp_only )
+				empty( ewwwio()->webp_only )
 			) {
 				// Generate the filename for a PNG:
 				// If this is a resize version.
@@ -311,9 +344,9 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' );
 			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
+			if ( empty( ewwwio()->force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
-				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				$smart_reopt = ! empty( ewwwio()->force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
 					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
 					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
@@ -326,7 +359,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			$ewww_image->level = $compression_level;
-			if ( $compression_level > 10 && empty( $ewww_webp_only ) ) {
+			if ( $compression_level > 10 && empty( ewwwio()->webp_only ) ) {
 				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
 				if ( $converted ) {
 					// Check to see if the user wants the originals deleted.
@@ -339,6 +372,8 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				} else {
 					$webp_result = ewww_image_optimizer_webp_create( $file, $new_size, $type, null, $orig_size !== $new_size );
 				}
+				if ( 'pending' === $result ) {
+				}
 				break;
 			}
 			$tools['jpegtran'] = ewwwio()->local->get_path( 'jpegtran' );
@@ -350,7 +385,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			// For exec-deprived servers, or those where jpegtran doesn't want to work.
 			if ( 10 === (int) $compression_level && empty( $tools['jpegtran'] ) ) {
-				if ( empty( $ewww_webp_only ) ) {
+				if ( empty( ewwwio()->webp_only ) ) {
 					list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type );
 				}
 				$webp_result = ewww_image_optimizer_webp_create( $file, $new_size, $type, null, $orig_size !== $new_size );
@@ -360,7 +395,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			ewww_image_optimizer_autorotate( $file );
 			// Get the (possibly new) original image size.
 			$orig_size = ewww_image_optimizer_filesize( $file );
-			if ( ! empty( $ewww_webp_only ) ) {
+			if ( ! empty( ewwwio()->webp_only ) ) {
 				$optimize = false;
 			} elseif ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_jpg_level' ) ) {
 				// Store an appropriate message in $result.
@@ -550,7 +585,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				$fullsize &&
 				( ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_to_jpg' ) || ! empty( $ewww_convert ) ) &&
 				! $skip_lossy &&
-				empty( $ewww_webp_only )
+				empty( ewwwio()->webp_only )
 			) {
 				ewwwio_debug_message( 'PNG to JPG conversion turned on' );
 				$cloud_background = '';
@@ -592,9 +627,9 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			} // End if().
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' );
 			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
+			if ( empty( ewwwio()->force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
-				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				$smart_reopt = ! empty( ewwwio()->force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
 					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
 					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
@@ -610,7 +645,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			if (
 				$compression_level >= 20 &&
 				ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) &&
-				empty( $ewww_webp_only )
+				empty( ewwwio()->webp_only )
 			) {
 				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer(
 					$file,
@@ -648,7 +683,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				$tools['jpegtran'] = ewwwio()->local->get_path( 'jpegtran' );
 			}
 			// Check if we can (and should) do local PNG optimization.
-			if ( ! empty( $ewww_webp_only ) ) {
+			if ( ! empty( ewwwio()->webp_only ) ) {
 				$optimize = false;
 			} elseif ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_png_level' ) ) {
 				// Tell the user all PNG tools are disabled.
@@ -778,7 +813,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 						$imagick = new Imagick( $file );
 						if ( ewww_image_optimizer_png_alpha( $file ) ) {
 							$imagick->setImageBackgroundColor( new ImagickPixel( '#' . $magick_background ) );
-							$imagick->setImageAlphaChannel( 11 );
+							$imagick->setImageAlphaChannel( imagick::ALPHACHANNEL_REMOVE );
 						}
 						$imagick->setImageFormat( 'JPG' );
 						$imagick->setImageCompressionQuality( $gquality );
@@ -880,7 +915,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		case 'image/gif':
 			// If gif2png is turned on, and the image is in the WordPress media library.
 			if (
-				empty( $ewww_webp_only ) &&
+				empty( ewwwio()->webp_only ) &&
 				1 === (int) $gallery_type &&
 				$fullsize &&
 				( ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_to_png' ) || ! empty( $ewww_convert ) ) &&
@@ -903,9 +938,9 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' );
 			// Check for previous optimization, so long as the force flag is on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) && ! ( $new_image && $convert ) ) {
+			if ( empty( ewwwio()->force ) && ! ( $new_image && $convert ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
-				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				$smart_reopt = ! empty( ewwwio()->force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
 					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
 					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
@@ -918,7 +953,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				}
 			}
 			$ewww_image->level = $compression_level;
-			if ( empty( $ewww_webp_only ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && 10 === $compression_level ) {
+			if ( empty( ewwwio()->webp_only ) && ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) && 10 === $compression_level ) {
 				list( $file, $converted, $result, $new_size, $backup_hash ) = ewww_image_optimizer_cloud_optimizer( $file, $type, $convert, $pngfile, 'image/png', $skip_lossy );
 				if ( $converted ) {
 					// Check to see if the user wants the originals deleted.
@@ -942,7 +977,7 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 				$tools['pngquant'] = ewwwio()->local->get_path( 'pngquant' );
 			}
 			// Check if we can (and should) do local GIF optimization.
-			if ( ! empty( $ewww_webp_only ) ) {
+			if ( ! empty( ewwwio()->webp_only ) ) {
 				$optimize = false;
 			} elseif ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_gif_level' ) ) {
 				$result = __( 'GIF optimization is disabled', 'ewww-image-optimizer' );
@@ -1051,13 +1086,13 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			} // End if().
 			break;
 		case 'application/pdf':
-			if ( ! empty( $ewww_webp_only ) ) {
+			if ( ! empty( ewwwio()->webp_only ) ) {
 				break;
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_pdf_level' );
-			if ( empty( $ewww_force ) ) {
+			if ( empty( ewwwio()->force ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
-				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				$smart_reopt = ! empty( ewwwio()->force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
 					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
 					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
@@ -1075,14 +1110,14 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 			}
 			break;
 		case 'image/svg+xml':
-			if ( ! empty( $ewww_webp_only ) ) {
+			if ( ! empty( ewwwio()->webp_only ) ) {
 				break;
 			}
 			$compression_level = (int) ewww_image_optimizer_get_option( 'ewww_image_optimizer_svg_level' );
 			// Check for previous optimization, so long as the force flag is not on and this isn't a new image that needs converting.
-			if ( empty( $ewww_force ) ) {
+			if ( empty( ewwwio()->force ) ) {
 				$results_msg = ewww_image_optimizer_check_table( $file, $orig_size );
-				$smart_reopt = ! empty( $ewww_force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
+				$smart_reopt = ! empty( ewwwio()->force_smart ) && ewww_image_optimizer_level_mismatch( $ewww_image->level, $compression_level ) ? true : false;
 				if ( $smart_reopt ) {
 					ewwwio_debug_message( "smart re-opt found level mismatch for $file, db says " . $ewww_image->level . " vs. current $compression_level" );
 					// If the current compression level is less than what was previously used, and the previous level was premium (or premium plus).
@@ -1183,11 +1218,12 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
 		return array( $file, $results_msg, $converted, $original );
 	}
 	ewwwio_memory( __FUNCTION__ );
-	// Otherwise, send back the filename, the results (some sort of error message), the $converted flag, and the name of the original image.
-	if ( ! empty( $webp_result ) && ! empty( $ewww_webp_only ) ) {
+	// If this is WebP-only mode, and we got a WebP file.
+	if ( ! empty( $webp_result ) && ! empty( ewwwio()->webp_only ) ) {
 		$result = $webp_result;
 		return array( true, $result, $converted, $original );
 	}
+	// Otherwise, send back the filename, the results (some sort of error message), the $converted flag, and the name of the original image.
 	return array( false, $result, $converted, $original );
 }
 
@@ -1203,7 +1239,6 @@ function ewww_image_optimizer( $file, $gallery_type = 4, $converted = false, $ne
  */
 function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $recreate = false ) {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
-	global $ewww_force;
 	$orig_size = ewww_image_optimizer_filesize( $file );
 	$webpfile  = $file . '.webp';
 	if ( apply_filters( 'ewww_image_optimizer_bypass_webp', false, $file ) ) {
@@ -1216,17 +1251,20 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 		return esc_html__( 'Could not find file.', 'ewww-image-optimizer' );
 	} elseif ( ! is_writable( $file ) ) {
 		ewwwio_debug_message( 'original file not writable' );
-		return esc_html__( 'File is not writable.', 'ewww-image-optimizer' );
-	} elseif ( ewwwio_is_file( $webpfile ) && empty( $ewww_force ) && ! $recreate ) {
+		ewww_image_optimizer_update_webp_results( $file, 0, 2 );
+		return ewww_image_optimizer_webp_error_message( 2 );
+	} elseif ( ewwwio_is_file( $webpfile ) && empty( ewwwio()->force ) && ! $recreate ) {
 		ewwwio_debug_message( 'webp file exists, not forcing or recreating' );
 		return esc_html__( 'WebP image already exists.', 'ewww-image-optimizer' );
 	} elseif ( 'image/png' === $type && ewww_image_optimizer_is_animated_png( $file ) ) {
 		ewwwio_debug_message( 'APNG found, WebP not possible' );
-		return esc_html__( 'APNG cannot be converted to WebP.', 'ewww-image-optimizer' );
+		ewww_image_optimizer_update_webp_results( $file, 0, 3 );
+		return ewww_image_optimizer_webp_error_message( 3 );
 	}
 	list( $width, $height ) = wp_getimagesize( $file );
 	if ( $width > 16383 || $height > 16383 ) {
-		return esc_html__( 'Image dimensions too large for WebP conversion.', 'ewww-image-optimizer' );
+		ewww_image_optimizer_update_webp_results( $file, 0, 4 );
+		return ewww_image_optimizer_webp_error_message( 4 );
 	}
 	if ( empty( $tool ) || 'image/gif' === $type ) {
 		if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
@@ -1280,12 +1318,14 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 	if ( ewwwio_is_file( $webpfile ) && $orig_size < $webp_size && ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_force' ) ) {
 		ewwwio_debug_message( 'webp file was too big, deleting' );
 		ewwwio_delete_file( $webpfile );
-		return esc_html__( 'WebP image was larger than original.', 'ewww-image-optimizer' );
+		ewww_image_optimizer_update_webp_results( $file, 0, 5 );
+		return ewww_image_optimizer_webp_error_message( 5 );
 	} elseif ( ewwwio_is_file( $webpfile ) && 'image/webp' === ewww_image_optimizer_mimetype( $webpfile, 'i' ) ) {
 		// Set correct file permissions.
 		$stat  = stat( dirname( $webpfile ) );
 		$perms = $stat['mode'] & 0000666; // Same permissions as parent folder, strip off the executable bits.
 		ewwwio_chmod( $webpfile, $perms );
+		ewww_image_optimizer_update_webp_results( $file, $webp_size );
 		if ( $orig_size < $webp_size && ewww_image_optimizer_get_option( 'ewww_image_optimizer_webp_force' ) ) {
 			return esc_html__( 'WebP image larger than original, saved anyway with Force WebP option.', 'ewww-image-optimizer' );
 		}
@@ -1293,9 +1333,36 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
 	} elseif ( ewwwio_is_file( $webpfile ) ) {
 		ewwwio_debug_message( 'webp file mimetype did not validate, deleting' );
 		ewwwio_delete_file( $webpfile );
-		return esc_html__( 'WebP conversion error.', 'ewww-image-optimizer' );
+		ewww_image_optimizer_update_webp_results( $file, 0, 6 );
+		return ewww_image_optimizer_webp_error_message( 6 );
 	}
-	return esc_html__( 'Image could not be converted to WebP.', 'ewww-image-optimizer' );
+	ewww_image_optimizer_update_webp_results( $file, 0, 1 );
+	return ewww_image_optimizer_webp_error_message( 1 );
+}
+
+/**
+ * Get an error message for the given WebP status code.
+ *
+ * @param int $webp_code The error code for WebP conversion.
+ * @return string The error message for the given status code.
+ */
+function ewww_image_optimizer_webp_error_message( $webp_code = 0 ) {
+	switch ( $webp_code ) {
+		case 1:
+			return __( 'Image could not be converted to WebP.', 'ewww-image-optimizer' );
+		case 2:
+			return __( 'File is not writable.', 'ewww-image-optimizer' );
+		case 3:
+			return __( 'APNG cannot be converted to WebP.', 'ewww-image-optimizer' );
+		case 4:
+			return __( 'Image dimensions too large for WebP conversion.', 'ewww-image-optimizer' );
+		case 5:
+			return __( 'WebP image was larger than original.', 'ewww-image-optimizer' );
+		case 6:
+			return __( 'WebP conversion error.', 'ewww-image-optimizer' );
+		default:
+			return '';
+	}
 }
 
 /**
@@ -1303,6 +1370,7 @@ function ewww_image_optimizer_webp_create( $file, $orig_size, $type, $tool, $rec
  */
 function ewww_image_optimizer_install_pngout_wrapper() {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	check_admin_referer( 'ewww_image_optimizer_options-options' );
 	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 		wp_die( esc_html__( 'You do not have permission to install image optimizer utilities.', 'ewww-image-optimizer' ) );
 	}
@@ -1466,6 +1534,7 @@ function ewww_image_optimizer_install_pngout() {
  */
 function ewww_image_optimizer_install_svgcleaner_wrapper() {
 	ewwwio_debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+	check_admin_referer( 'ewww_image_optimizer_options-options' );
 	if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
 		wp_die( esc_html__( 'You do not have permission to install image optimizer utilities.', 'ewww-image-optimizer' ) );
 	}
@@ -1484,13 +1553,18 @@ function ewww_image_optimizer_install_svgcleaner() {
 	if ( ! extension_loaded( 'zlib' ) || ! class_exists( 'PharData' ) ) {
 		$download_error = __( 'zlib or phar extension missing from PHP', 'ewww-image-optimizer' );
 	}
+	if ( ! ewwwio()->local->exec_check() ) {
+		$download_error = __( 'Your web server does not meet the requirements for free server-based compression with EWWW Image Optimizer.', 'ewww-image-optimizer' );
+	}
 	$os_chmod  = true;
 	$os_binary = 'svgcleaner';
 	$os_ext    = 'tar.gz';
 	if ( PHP_OS === 'Linux' ) {
 		$arch_type = 'x86_64';
 		if ( ewww_image_optimizer_function_exists( 'php_uname' ) ) {
-			$arch_type = php_uname( 'm' );
+			if ( php_uname( 'm' ) !== $arch_type ) {
+				$download_error = __( 'svgcleaner on Linux only supports the x86_64 architecture', 'ewww-image-optimizer' );
+			}
 		}
 		$os_string = 'linux_' . $arch_type;
 	} elseif ( PHP_OS === 'Darwin' ) {
@@ -1501,6 +1575,8 @@ function ewww_image_optimizer_install_svgcleaner() {
 		$os_string = 'win32';
 		$os_binary = 'svgcleaner.exe';
 		$os_ext    = 'zip';
+	} elseif ( PHP_OS === 'FreeBSD' ) {
+		$download_error = __( 'svgcleaner is not available for FreeBSD', 'ewww-image-optimizer' );
 	}
 	$latest    = '0.9.5';
 	$tool_path = trailingslashit( EWWW_IMAGE_OPTIMIZER_TOOL_PATH );
@@ -1558,7 +1634,7 @@ function ewww_image_optimizer_install_svgcleaner() {
 			}
 		}
 	}
-	if ( is_string( $download_result ) && is_writable( $download_result ) ) {
+	if ( isset( $download_result ) && is_string( $download_result ) && is_writable( $download_result ) ) {
 		unlink( $download_result );
 	}
 	if ( ! empty( $pkg_version ) ) {
@@ -1578,6 +1654,28 @@ function ewww_image_optimizer_install_svgcleaner() {
 		);
 	}
 	return $sendback;
+}
+
+/**
+ * Checks availability of svgcleaner installer.
+ */
+function ewww_image_optimizer_svgcleaner_installer_available() {
+	if ( ! ewwwio()->local->exec_check() ) {
+		return false;
+	}
+	if ( PHP_OS === 'Linux' ) {
+		if ( ewww_image_optimizer_function_exists( 'php_uname' ) ) {
+			if ( php_uname( 'm' ) !== 'x86_64' ) {
+				return false;
+			}
+		}
+		return true;
+	} elseif ( PHP_OS === 'Darwin' ) {
+		return true;
+	} elseif ( PHP_OS === 'WINNT' ) {
+		return true;
+	}
+	return false;
 }
 
 /**

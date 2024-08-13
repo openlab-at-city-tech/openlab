@@ -887,7 +887,7 @@ if ( !Array.prototype.indexOf ) {
 				}
 
 				if ( typeof jQuery.fn.slick !== 'undefined' ) {
-					init_carousel();
+					//init_carousel();
 				}
 
 				if ( $( '.cm-glossary.img-term-definition' ).length > 0 ) {

@@ -1,13 +1,10 @@
 <?php
 
-class Shortcodes_Ultimate_Admin_Pro_Features
-{
-    public function __construct()
-    {
+class Shortcodes_Ultimate_Admin_Pro_Features {
+    public function __construct() {
     }
-    
-    public function register_shortcodes()
-    {
+
+    public function register_shortcodes() {
         if ( did_action( 'su/extra/ready' ) ) {
             return;
         }
@@ -19,101 +16,96 @@ class Shortcodes_Ultimate_Admin_Pro_Features
                 'desc'               => '',
                 'callback'           => '__return_empty_string',
                 'atts'               => array(),
-                'generator_callback' => array( $this, 'generator_callback' ),
+                'generator_callback' => array($this, 'generator_callback'),
             ) ) );
         }
     }
-    
-    public function register_group( $groups )
-    {
+
+    public function register_group( $groups ) {
         if ( did_action( 'su/extra/ready' ) ) {
             return $groups;
         }
         $groups['extra'] = _x( 'Pro Shortcodes', 'Custom shortcodes group name', 'shortcodes-ultimate' );
         return $groups;
     }
-    
-    public function generator_callback( $shortcode )
-    {
+
+    public function generator_callback( $shortcode ) {
         su_partial( 'admin/partials/pro-features/generator.php', array(
             'shortcode' => $shortcode,
             'image_url' => $this->get_image_url(),
         ) );
     }
-    
-    public function get_image_url( $path = '' )
-    {
+
+    public function get_image_url( $path = '' ) {
         return plugin_dir_url( __FILE__ ) . 'images/pro-features/' . $path;
     }
-    
-    private function get_shortcodes()
-    {
+
+    private function get_shortcodes() {
         return array(
             array(
-            'id'   => 'splash',
-            'name' => __( 'Splash screen', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'splash',
+                'name' => __( 'Splash screen', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'exit_popup',
-            'name' => __( 'Exit popup', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'exit_popup',
+                'name' => __( 'Exit popup', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'panel',
-            'name' => __( 'Panel', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'panel',
+                'name' => __( 'Panel', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'photo_panel',
-            'name' => __( 'Photo panel', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'photo_panel',
+                'name' => __( 'Photo panel', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'icon_panel',
-            'name' => __( 'Icon panel', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'icon_panel',
+                'name' => __( 'Icon panel', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'icon_text',
-            'name' => __( 'Text with icon', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'icon_text',
+                'name' => __( 'Text with icon', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'progress_pie',
-            'name' => __( 'Progress pie', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'progress_pie',
+                'name' => __( 'Progress pie', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'progress_bar',
-            'name' => __( 'Progress bar', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'progress_bar',
+                'name' => __( 'Progress bar', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'member',
-            'name' => __( 'Member', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'member',
+                'name' => __( 'Member', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'section',
-            'name' => __( 'Section', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'section',
+                'name' => __( 'Section', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'pricing_table',
-            'name' => __( 'Pricing table', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'pricing_table',
+                'name' => __( 'Pricing table', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'testimonial',
-            'name' => __( 'Testimonial', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'testimonial',
+                'name' => __( 'Testimonial', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'icon',
-            'name' => __( 'Icon', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'icon',
+                'name' => __( 'Icon', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'content_slider',
-            'name' => __( 'Content slider', 'shortcodes-ultimate' ),
-        ),
+                'id'   => 'content_slider',
+                'name' => __( 'Content slider', 'shortcodes-ultimate' ),
+            ),
             array(
-            'id'   => 'shadow',
-            'name' => __( 'Shadow', 'shortcodes-ultimate' ),
-        )
+                'id'   => 'shadow',
+                'name' => __( 'Shadow', 'shortcodes-ultimate' ),
+            )
         );
     }
-    
-    public function add_generator_cta( $shortcodes )
-    {
+
+    public function add_generator_cta( $shortcodes ) {
         if ( did_action( 'su/skins/ready' ) || su_fs()->can_use_premium_code() ) {
             return $shortcodes;
         }
@@ -137,7 +129,7 @@ class Shortcodes_Ultimate_Admin_Pro_Features
             'spoiler',
             'quote'
         ) as $shortcode ) {
-            unset( $shortcodes[$shortcode]['note'] );
+            unset($shortcodes[$shortcode]['note']);
             $shortcodes[$shortcode]['generator_cta'] = $cta;
         }
         return $shortcodes;

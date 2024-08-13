@@ -20,6 +20,30 @@ $networkData = $networkItem->getData();
 ?>
 
 <div class="b2s-container">
+    <?php
+    if ($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0) {
+        $onboardingPaused = $optionsOnboarding->_getOption('onboarding_paused');
+        if (!isset($onboardingPaused) || empty($onboardingPaused)) {
+            $onboardingPaused = 0;
+        }
+        ?>
+        <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+
+        <div id="b2s-onboarding-toastee">
+            <div id="b2s-onboarding-toastee-inner">
+                <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour", "blog2social") ?>
+                    <input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox" <?php echo $onboardingPaused == 0 ? 'checked' : '' ?>>
+                </h3>
+                <div class="b2s-onboarding-toastee-body" <?php echo $onboardingPaused == 1 ? 'style="display:none;"' : '' ?>>
+                    <hr class="b2s-onboarding-hr">
+                    <p class="b2s-onboarding-p" ><?php esc_html_e("Connect your first network with Blog2Social and start sharing your content.", "blog2social") ?><a class="btn btn-link btn-xs" href="admin.php?page=blog2social-post"><?php esc_html_e("Go to the next step", "blog2social") ?></a></p>
+                </div>
+            </div>
+        </div>
+        <?php
+    }
+    ?>
+
     <div class=" b2s-inbox col-md-12 del-padding-left">
 
         <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/sidebar.php'); ?>
@@ -27,7 +51,7 @@ $networkData = $networkItem->getData();
             <!--Header|Start - Include-->
             <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
             <!--Header|End-->
-                 
+
             <div class="clearfix"></div>
             <!--Content|Start-->
             <div class="panel panel-default">
@@ -62,14 +86,14 @@ $networkData = $networkItem->getData();
                             </div>
                         <?php } ?>
 
-                        
+
                         <div class="b2s-post">
                             <div class="grid-body">
                                 <div class="hidden-lg hidden-md hidden-sm filterShow"><a href="#" onclick="showFilter('show');return false;"><i class="glyphicon glyphicon-chevron-down"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
                                 <div class="hidden-lg hidden-md hidden-sm filterHide"><a href="#" onclick="showFilter('hide');return false;"><i class="glyphicon glyphicon-chevron-up"></i> <?php esc_html_e('filter', 'blog2social') ?></a></div>
 
-                                    
-                                
+
+
                                 <div class="form-inline" role="form">
                                     <?php
                                     echo wp_kses($networkItem->getSelectMandantHtml($networkData['mandanten']), array(
@@ -658,6 +682,27 @@ $networkData = $networkItem->getData();
     </div>
 </div>
 
+<div class="modal fade" id="b2sNetworkAddAppInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddAppInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2sNetworkAddAppInfoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Add APP', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <?php echo sprintf(__('To comply with <a href="%s" target="_blank">Pinterest\'s policies and API guidelines</a>, Pinterest integration is exclusively available in our premium versions. Now available in Smart, Pro and Business licenses.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_app_tos_spam'))); ?>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-default pull-left" target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('pinterest_faq')); ?>"><?php esc_html_e('How to connect Pinterest with Blog2Social', 'blog2social'); ?></a>
+                <?php if (B2S_PLUGIN_USER_VERSION >= 1) { ?>
+                    <a class="btn btn-primary pull-right" href="admin.php?page=blog2social-user-apps"><?php esc_html_e('Continue', 'blog2social'); ?></a>
+                <?php } ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="modal fade" id="b2sNetworkAddGroupInfoModal" tabindex="-1" role="dialog" aria-labelledby="b2sNetworkAddGroupInfoModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -780,35 +825,3 @@ $networkData = $networkItem->getData();
 <input type="hidden" id="b2sDaysName" value="<?php echo esc_attr(esc_html_e('Days', 'blog2social')); ?>">
 <input type="hidden" id="b2sBlogHasUsedVideoAddon" value="<?php echo esc_attr((defined('B2S_PLUGIN_ADDON_VIDEO_TRIAL_END_DATE') ? 1 : 0)); ?>">
 <input type="hidden" id="b2s-redirect-url-sched-post" value="<?php echo esc_url($b2sSiteUrl) . 'wp-admin/admin.php?page=blog2social-sched'; ?>"/>
-
-<?php
-    if($onboarding == 1 && B2S_PLUGIN_USER_VERSION == 0){
-        $onboardingPaused = $optionsOnboarding->_getOption('onboarding_paused');
-        if(!isset($onboardingPaused) || empty($onboardingPaused)){
-            $onboardingPaused = 0;
-        }
-
-?>
-    <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
-
-    <div id="b2s-onboarding-toastee">
-        <div id="b2s-onboarding-toastee-inner">
-            <!--<a class="closeToastee">X</a>-->
-            <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour","blog2social") ?>
-                <input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox" <?php echo $onboardingPaused == 0 ? 'checked' : '' ?>>
-            </h3>
-            <div class="b2s-onboarding-toastee-body" <?php echo $onboardingPaused == 1 ? 'style="display:none;"' : '' ?>>
-                <hr class="b2s-onboarding-hr">
-                <p class="b2s-onboarding-p" ><?php esc_html_e("Connect your first network with Blog2Social and start sharing your content.","blog2social")  ?><a class="btn btn-default btn-sm" href="admin.php?page=blog2social-post"><?php esc_html_e("Go to the next step", "blog2social") ?></a></p>
-            </div>
-        </div>
-    </div>
-        <!--
-
-<div class="toggle btn btn-xs btn-primary" data-toggle="toggle" style="width: 90px; height: 22px;"><input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox"><div class="toggle-group"><label class="btn btn-primary btn-xs toggle-on" style="line-height: 14px;">ON</label><label class="btn btn-default btn-xs active toggle-off" style="line-height: 14px;">OFF</label><span class="toggle-handle btn btn-default btn-xs"></span></div></div>
-<input data-size="mini" data-toggle="toggle" data-width="90" data-height="22" data-onstyle="primary" data-on="ON" data-off="OFF" name="b2s-toastee-toggle" class="b2s-toastee-toggle" data-area-type="manuell" value="1" type="checkbox">
-
-    -->
-<?php
-    }
-?>

@@ -9,8 +9,7 @@
  * @package      Shortcodes_Ultimate
  * @subpackage   Shortcodes_Ultimate/includes
  */
-class Shortcodes_Ultimate
-{
+class Shortcodes_Ultimate {
     /**
      * The path to the main plugin file.
      *
@@ -18,7 +17,8 @@ class Shortcodes_Ultimate
      * @access   private
      * @var      string      $plugin_file   The path to the main plugin file.
      */
-    private  $plugin_file ;
+    private $plugin_file;
+
     /**
      * The current version of the plugin.
      *
@@ -26,7 +26,8 @@ class Shortcodes_Ultimate
      * @access   private
      * @var      string      $plugin_version   The current version of the plugin.
      */
-    private  $plugin_version ;
+    private $plugin_version;
+
     /**
      * The path to the plugin folder.
      *
@@ -34,11 +35,13 @@ class Shortcodes_Ultimate
      * @access   private
      * @var      string      $plugin_path   The path to the plugin folder.
      */
-    private  $plugin_path ;
+    private $plugin_path;
+
     /**
      * The basename of the plugin.
      */
-    private  $plugin_basename ;
+    private $plugin_basename;
+
     /**
      * The prefix of the plugin.
      *
@@ -46,7 +49,8 @@ class Shortcodes_Ultimate
      * @access   private
      * @var      string      $plugin_prefix   The prefix of the plugin.
      */
-    private  $plugin_prefix ;
+    private $plugin_prefix;
+
     /**
      * Class instance.
      *
@@ -54,48 +58,57 @@ class Shortcodes_Ultimate
      * @access private
      * @var    null      The single class instance.
      */
-    private static  $instance ;
+    private static $instance;
+
     /**
      * Upgrader class instance.
      *
      * @since  5.1.0
      * @var    Shortcodes_Ultimate_Upgrade  Upgrader class instance.
      */
-    public  $upgrade ;
+    public $upgrade;
+
     /**
      * Menu classes instances.
      *
      * @since  5.1.0
      */
-    public  $top_level_menu ;
-    public  $shortcodes_menu ;
-    public  $settings_menu ;
-    public  $about_menu ;
+    public $top_level_menu;
+
+    public $shortcodes_menu;
+
+    public $settings_menu;
+
+    public $about_menu;
+
     /**
      * Notices classes instances.
      *
      * @since  5.1.0
      */
-    public  $rate_notice ;
-    public  $unsafe_features_notice ;
+    public $rate_notice;
+
+    public $unsafe_features_notice;
+
     /**
      * Other stuff
      *
      * @since  5.6.0
      */
-    public  $admin_pro_features ;
-    public  $widget ;
+    public $admin_pro_features;
+
+    public $widget;
+
     /**
      * Get class instance.
      *
      * @since  5.1.0
      * @return Shortcodes_Ultimate
      */
-    public static function get_instance()
-    {
+    public static function get_instance() {
         return self::$instance;
     }
-    
+
     /**
      * Define the core functionality of the plugin.
      *
@@ -104,8 +117,7 @@ class Shortcodes_Ultimate
      * @param string  $plugin_version The current version of the plugin.
      * @param string  $plugin_prefix  The prefix of the plugin.
      */
-    public function __construct( $plugin_file, $plugin_version, $plugin_prefix )
-    {
+    public function __construct( $plugin_file, $plugin_version, $plugin_prefix ) {
         $this->plugin_file = $plugin_file;
         $this->plugin_version = $plugin_version;
         $this->plugin_path = plugin_dir_path( $plugin_file );
@@ -116,15 +128,14 @@ class Shortcodes_Ultimate
         $this->define_common_hooks();
         self::$instance = $this;
     }
-    
+
     /**
      * Load the required dependencies for the plugin.
      *
      * @since    5.0.0
      * @access   private
      */
-    private function load_dependencies()
-    {
+    private function load_dependencies() {
         /**
          * Legacy dependencies.
          */
@@ -182,7 +193,7 @@ class Shortcodes_Ultimate
         require_once $this->plugin_path . 'includes/deprecated/class-su-widget.php';
         require_once $this->plugin_path . 'includes/deprecated/functions.php';
     }
-    
+
     /**
      * Register all of the hooks related to the admin area functionality of the
      * plugin.
@@ -190,51 +201,50 @@ class Shortcodes_Ultimate
      * @since    5.0.0
      * @access   private
      */
-    private function define_admin_hooks()
-    {
+    private function define_admin_hooks() {
         /**
          * Upgrades.
          */
-        $this->upgrade = new Shortcodes_Ultimate_Upgrade( $this->plugin_version );
-        add_action( 'admin_init', array( $this->upgrade, 'maybe_upgrade' ) );
+        $this->upgrade = new Shortcodes_Ultimate_Upgrade($this->plugin_version);
+        add_action( 'admin_init', array($this->upgrade, 'maybe_upgrade') );
         /**
          * Top-level menu: Shortcodes
          * admin.php?page=shortcodes-ultimate
          */
-        $this->top_level_menu = new Shortcodes_Ultimate_Admin_Top_Level( $this->plugin_file, $this->plugin_version, $this->plugin_prefix );
-        add_action( 'admin_menu', array( $this->top_level_menu, 'add_menu_pages' ), 0 );
+        $this->top_level_menu = new Shortcodes_Ultimate_Admin_Top_Level($this->plugin_file, $this->plugin_version, $this->plugin_prefix);
+        add_action( 'admin_menu', array($this->top_level_menu, 'add_menu_pages'), 0 );
         /**
          * Submenu: About
          * admin.php?page=shortcodes-ultimate
          */
-        $this->about_menu = new Shortcodes_Ultimate_Admin_About( $this->plugin_file, $this->plugin_version, $this->plugin_prefix );
-        add_action( 'admin_menu', array( $this->about_menu, 'add_menu_pages' ), 0 );
-        add_action( 'admin_enqueue_scripts', array( $this->about_menu, 'enqueue_scripts' ) );
+        $this->about_menu = new Shortcodes_Ultimate_Admin_About($this->plugin_file, $this->plugin_version, $this->plugin_prefix);
+        add_action( 'admin_menu', array($this->about_menu, 'add_menu_pages'), 0 );
+        add_action( 'admin_enqueue_scripts', array($this->about_menu, 'enqueue_scripts') );
         /**
          * Submenu: Settings
          * admin.php?page=shortcodes-ultimate-settings
          */
-        $this->settings_menu = new Shortcodes_Ultimate_Admin_Settings( $this->plugin_file, $this->plugin_version, $this->plugin_prefix );
-        add_action( 'admin_menu', array( $this->settings_menu, 'add_menu_pages' ), 20 );
-        add_action( 'admin_init', array( $this->settings_menu, 'add_settings' ) );
-        add_action( 'admin_enqueue_scripts', array( $this->settings_menu, 'enqueue_scripts' ) );
-        add_action( 'admin_init', array( $this->settings_menu, 'maybe_disable_unsafe_features' ) );
+        $this->settings_menu = new Shortcodes_Ultimate_Admin_Settings($this->plugin_file, $this->plugin_version, $this->plugin_prefix);
+        add_action( 'admin_menu', array($this->settings_menu, 'add_menu_pages'), 20 );
+        add_action( 'admin_init', array($this->settings_menu, 'add_settings') );
+        add_action( 'admin_enqueue_scripts', array($this->settings_menu, 'enqueue_scripts') );
+        add_action( 'admin_init', array($this->settings_menu, 'maybe_disable_unsafe_features') );
         /**
          * Notice: Rate plugin
          */
-        $this->rate_notice = new Shortcodes_Ultimate_Notice_Rate( 'rate', $this->plugin_path . 'admin/partials/notices/rate.php' );
-        add_action( 'load-plugins.php', array( $this->rate_notice, 'defer_first_time' ) );
-        add_action( 'admin_notices', array( $this->rate_notice, 'display_notice' ) );
-        add_action( 'admin_post_su_dismiss_notice', array( $this->rate_notice, 'dismiss_notice' ) );
+        $this->rate_notice = new Shortcodes_Ultimate_Notice_Rate('rate', $this->plugin_path . 'admin/partials/notices/rate.php');
+        add_action( 'load-plugins.php', array($this->rate_notice, 'defer_first_time') );
+        add_action( 'admin_notices', array($this->rate_notice, 'display_notice') );
+        add_action( 'admin_post_su_dismiss_notice', array($this->rate_notice, 'dismiss_notice') );
         /**
          * Notice: Unsafe features
          */
-        $this->unsafe_features_notice = new Shortcodes_Ultimate_Notice_Unsafe_Features( 'unsafe-features', $this->plugin_path . 'admin/partials/notices/unsafe-features.php' );
-        add_action( 'admin_notices', array( $this->unsafe_features_notice, 'display_notice' ) );
-        add_action( 'admin_post_su_dismiss_notice', array( $this->unsafe_features_notice, 'dismiss_notice' ) );
+        $this->unsafe_features_notice = new Shortcodes_Ultimate_Notice_Unsafe_Features('unsafe-features', $this->plugin_path . 'admin/partials/notices/unsafe-features.php');
+        add_action( 'admin_notices', array($this->unsafe_features_notice, 'display_notice') );
+        add_action( 'admin_post_su_dismiss_notice', array($this->unsafe_features_notice, 'dismiss_notice') );
         add_action(
             'update_option_su_option_unsafe_features',
-            array( $this->unsafe_features_notice, 'hide_notice_on_option_change' ),
+            array($this->unsafe_features_notice, 'hide_notice_on_option_change'),
             10,
             3
         );
@@ -256,17 +266,17 @@ class Shortcodes_Ultimate
         /**
          * Register custom widget
          */
-        $this->widget = new Shortcodes_Ultimate_Widget( $this->plugin_prefix );
-        add_action( 'widgets_init', array( $this->widget, 'register' ) );
+        $this->widget = new Shortcodes_Ultimate_Widget($this->plugin_prefix);
+        add_action( 'widgets_init', array($this->widget, 'register') );
         /**
          * Suggest PRO features
          */
         $this->admin_pro_features = new Shortcodes_Ultimate_Admin_Pro_Features();
-        add_action( 'admin_init', array( $this->admin_pro_features, 'register_shortcodes' ) );
-        add_filter( 'su/data/groups', array( $this->admin_pro_features, 'register_group' ) );
-        add_filter( 'su/data/shortcodes', array( $this->admin_pro_features, 'add_generator_cta' ) );
+        add_action( 'admin_init', array($this->admin_pro_features, 'register_shortcodes') );
+        add_filter( 'su/data/groups', array($this->admin_pro_features, 'register_group') );
+        add_filter( 'su/data/shortcodes', array($this->admin_pro_features, 'add_generator_cta') );
     }
-    
+
     /**
      * Register all of the hooks related to both admin area and public part of
      * the plugin.
@@ -274,16 +284,15 @@ class Shortcodes_Ultimate
      * @since    5.0.4
      * @access   private
      */
-    private function define_common_hooks()
-    {
+    private function define_common_hooks() {
         /**
          * Add default shortcodes.
          */
-        add_action( 'init', array( 'Shortcodes_Ultimate_Shortcodes', 'add_default_shortcodes' ), 20 );
+        add_action( 'init', array('Shortcodes_Ultimate_Shortcodes', 'add_default_shortcodes'), 20 );
         /**
          * Register all added shortcodes in WordPress.
          */
-        add_action( 'init', array( 'Shortcodes_Ultimate_Shortcodes', 'register' ), 40 );
+        add_action( 'init', array('Shortcodes_Ultimate_Shortcodes', 'register'), 40 );
         /**
          * Disable wptexturize filter for nestable shortcodes.
          */

@@ -1,15 +1,20 @@
 <?php
 
-$h5p_hub_urls = [
-	'http://openlabdev.org/h5ptesting',
-	'https://openlab.citytech.cuny.edu/id-',
-	'https://openlab.citytech.cuny.edu/id-hub',
-	'https://openlab.citytech.cuny.edu/oer-h5p-hub/',
-];
+function openlab_h5p_hub_urls() {
+	return [
+		'http://openlabdev.org/h5p-hub',
+		'http://openlabdev.org/h5ptesting',
+		'https://openlab.citytech.cuny.edu/id-',
+		'https://openlab.citytech.cuny.edu/id-hub',
+		'https://openlab.citytech.cuny.edu/oer-h5p-hub/',
+	];
+}
 
 add_action(
 	'init',
-	function() use ( $h5p_hub_urls ) {
+	function() {
+		$h5p_hub_urls = openlab_h5p_hub_urls();
+
 		foreach ( $h5p_hub_urls as $hub_url ) {
 			$handle = 'h5p-' . sanitize_title_with_dashes( $hub_url );
 			wp_embed_register_handler( $handle, '#' . preg_quote( trailingslashit( $hub_url ) ) . 'wp-admin/admin-ajax.php\?action=h5p_embed\&id=([\d]+)#i', 'openlab_handle_h5p_embed' );

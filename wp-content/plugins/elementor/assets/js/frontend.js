@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 "use strict";
 (self["webpackChunkelementor"] = self["webpackChunkelementor"] || []).push([["frontend"],{
 
@@ -103,6 +103,9 @@ module.exports = function ($) {
   }
   if (elementorFrontendConfig.experimentalFeatures['nested-elements']) {
     this.elementsHandlers['nested-accordion.default'] = () => Promise.resolve(/*! import() */).then(__webpack_require__.bind(__webpack_require__, /*! elementor/modules/nested-accordion/assets/js/frontend/handlers/nested-accordion */ "../modules/nested-accordion/assets/js/frontend/handlers/nested-accordion.js"));
+  }
+  if (elementorFrontendConfig.experimentalFeatures['conversion-center']) {
+    this.elementsHandlers['contact-buttons.default'] = () => Promise.resolve(/*! import() */).then(__webpack_require__.bind(__webpack_require__, /*! elementor/modules/conversion-center/assets/js/frontend/handlers/contact-buttons */ "../modules/conversion-center/assets/js/frontend/handlers/contact-buttons.js"));
   }
   const addGlobalHandlers = () => elementorFrontend.hooks.addAction('frontend/element_ready/global', _global.default);
   const addElementsHandlers = () => {
@@ -212,7 +215,8 @@ module.exports = function ($) {
     return this.elementsHandlers;
   };
   this.runReadyTrigger = function (scope) {
-    if (elementorFrontend.config.is_static) {
+    const isDelayChildHandlers = !!scope.closest('[data-delay-child-handlers="true"]') && 0 !== scope.closest('[data-delay-child-handlers="true"]').length;
+    if (elementorFrontend.config.is_static || isDelayChildHandlers) {
       return;
     }
 
@@ -1632,18 +1636,15 @@ class LightboxManager extends elementorModules.ViewModule {
     if (isColorPickingMode) {
       return;
     }
-    const lightbox = this.isOptimizedAssetsLoading() ? await LightboxManager.getLightbox() : elementorFrontend.utils.lightbox;
+    const lightbox = await LightboxManager.getLightbox();
     lightbox.createLightbox(element);
-  }
-  isOptimizedAssetsLoading() {
-    return elementorFrontend.config.experimentalFeatures.e_optimized_assets_loading;
   }
   bindEvents() {
     elementorFrontend.elements.$document.on('click', this.getSettings('selectors.links'), event => this.onLinkClick(event));
   }
   onInit() {
     super.onInit(...arguments);
-    if (!this.isOptimizedAssetsLoading() || elementorFrontend.isEditMode()) {
+    if (elementorFrontend.isEditMode()) {
       return;
     }
 
@@ -1689,9 +1690,6 @@ class Swiper {
     container.closest('.elementor-widget-wrap')?.classList.add('e-swiper-container');
     container.closest('.elementor-widget')?.classList.add('e-widget-swiper');
     return new Promise(resolve => {
-      if (!elementorFrontend.config.experimentalFeatures.e_optimized_assets_loading) {
-        return resolve(this.createSwiperInstance(container, this.config));
-      }
       elementorFrontend.utils.assetsLoader.load('script', 'swiper').then(() => resolve(this.createSwiperInstance(container, this.config)));
     });
   }

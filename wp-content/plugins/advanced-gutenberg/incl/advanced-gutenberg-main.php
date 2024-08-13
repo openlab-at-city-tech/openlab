@@ -3705,7 +3705,7 @@ if ( ! class_exists( 'AdvancedGutenbergMain' ) ) {
 			foreach ( $tabs as $tab ) {
 				$html .= '<li class="nav-tab' . ( $tab['slug'] === $active ? ' nav-tab-active' : '' ) . '">
                     <a href="' . admin_url( 'admin.php?page=' . $page . '&tab=' . $tab['slug'] ) . '">
-                        ' . $tab['title'] . '
+                        ' . esc_html( $tab['title'] ) . '
                     </a>
                 </li>';
 			}

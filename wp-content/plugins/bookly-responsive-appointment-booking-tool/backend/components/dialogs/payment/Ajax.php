@@ -24,11 +24,8 @@ class Ajax extends Lib\Base\Ajax
     public static function getPaymentDetails()
     {
         $payment = new Lib\Entities\Payment();
-        if ( self::hasParameter( 'target' ) ) {
-            $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ), 'target' => self::parameter( 'target', Lib\Entities\Payment::TARGET_APPOINTMENTS ) ) );
-        } else {
-            $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ) ) );
-        }
+        $payment->loadBy( array( 'id' => self::parameter( 'payment_id' ) ) );
+        
         $payment = $payment->getId() ? $payment : false;
         if ( $payment && ! Lib\Utils\Common::isCurrentUserSupervisor() && ! Lib\Utils\Common::isCurrentUserStaff() ) {
             // Check if customer trying to get his own payment.
@@ -43,18 +40,14 @@ class Ajax extends Lib\Base\Ajax
         }
         if ( $payment ) {
             $data = $payment->getPaymentData();
+            $show_deposit = false;
             if ( $payment->getPaidType() === Lib\Entities\Payment::PAY_DEPOSIT ) {
-                $show_deposit = Lib\Config::depositPaymentsActive();
-                if ( ! $show_deposit ) {
-                    foreach ( $data['payment']['items'] as $item ) {
-                        if ( array_key_exists( 'deposit_format', $item ) && $item['deposit_format'] ) {
-                            $show_deposit = true;
-                            break;
-                        }
+                foreach ( $data['payment']['items'] as $item ) {
+                    if ( array_key_exists( 'deposit_format', $item ) && $item['deposit_format'] ) {
+                        $show_deposit = true;
+                        break;
                     }
                 }
-            } else {
-                $show_deposit = false;
             }
 
             switch ( $data['payment']['type'] ) {
@@ -87,7 +80,20 @@ class Ajax extends Lib\Base\Ajax
             ) {
                 $data['payment']['order_link'] = admin_url( 'post.php?action=edit&post=' . $data['payment']['gateway_ref_id'] );
             }
-            $data['refundable'] = $payment->getRefId() && $payment->getType() === Lib\Entities\Payment::TYPE_CLOUD_STRIPE && $payment->getStatus() === Lib\Entities\Payment::STATUS_COMPLETED;
+
+            $refundable = false;
+            if ( $payment->getStatus() === Lib\Entities\Payment::STATUS_COMPLETED && $payment->getRefId() ) {
+                switch ( $payment->getType() ) {
+                    case Lib\Entities\Payment::TYPE_CLOUD_STRIPE:
+                        $refundable = Lib\Cloud\API::getInstance()->account->productActive( Lib\Cloud\Account::PRODUCT_STRIPE );
+                        break;
+                    default:
+                        $refundable = Lib\Payment\Proxy\Shared::getGatewayForRefund( null, $payment ) !== null;
+                        break;
+                }
+            }
+            $data['refundable'] = $refundable;
+
             foreach ( $data['payment']['items'] as &$item ) {
                 if ( isset( $item['units'], $item['duration'] ) && $item['units'] > 1 ) {
                     $item['service_name'] .= ' (' . Lib\Utils\DateTime::secondsToInterval( $item['units'] * $item['duration'] ) . ')';
@@ -127,6 +133,18 @@ class Ajax extends Lib\Base\Ajax
             Lib\Entities\Payment::statusToString( $payment->getStatus() )
         );
 
+        list( $sync ) = Lib\Config::syncCalendars();
+        if ( $sync ) {
+            $appointments = Lib\Entities\Appointment::query( 'a' )
+                ->leftJoin( 'CustomerAppointment', 'ca', 'ca.appointment_id = a.id' )
+                ->whereNot( 'a.start_date', null )
+                ->where( 'ca.payment_id', $payment->getId() )
+                ->find();
+            foreach ( $appointments as $appointment ) {
+                Lib\Utils\Common::syncWithCalendars( $appointment );
+            }
+        }
+
         wp_send_json_success( array( 'payment_title' => $payment_title ) );
     }
 
@@ -136,16 +154,11 @@ class Ajax extends Lib\Base\Ajax
     public static function refundPayment()
     {
         $payment = Lib\Entities\Payment::find( self::parameter( 'payment_id' ) );
-        if ( ( $payment->getStatus() != Lib\Entities\Payment::STATUS_REFUNDED )
-            && ( $payment->getType() == Lib\Entities\Payment::TYPE_CLOUD_STRIPE )
-        ) {
-            $cloud = Lib\Cloud\API::getInstance();
-            if ( $cloud->stripe->refund( $payment->getRefId() ) ) {
-                $payment
-                    ->setStatus( Lib\Entities\Payment::STATUS_REFUNDED )
-                    ->save();
-            } else {
-                wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
+        if ( $payment->getStatus() != Lib\Entities\Payment::STATUS_REFUNDED ) {
+            try {
+                self::getGatewayForRefund( $payment )->refund();
+            } catch ( \Exception $e ) {
+                wp_send_json_error( array( 'message' => $e->getMessage() ) );
             }
         }
 
@@ -161,6 +174,30 @@ class Ajax extends Lib\Base\Ajax
         );
 
         wp_send_json_success( compact( 'payment_title' ) );
+    }
+
+    /**
+     * @param Lib\Entities\Payment $payment
+     * @return Lib\Base\Gateway
+     * @throws \Exception
+     */
+    protected static function getGatewayForRefund( Lib\Entities\Payment $payment )
+    {
+        $gateway = null;
+        switch ( $payment->getType() ) {
+            case Lib\Entities\Payment::TYPE_CLOUD_STRIPE:
+                $gateway = new Lib\Payment\StripeCloudGateway();
+                break;
+            default:
+                $gateway = Lib\Payment\Proxy\Shared::getGatewayForRefund( $gateway, $payment );
+                break;
+        }
+
+        if ( $gateway ) {
+            return $gateway->setPayment( $payment );
+        }
+
+        throw new \Exception( __( 'Unsupported action', 'bookly' ) );
     }
 
     /**

@@ -7049,6 +7049,11 @@ h4{
     margin-top: 10px;
 }
 
+
+.b2s-info-display-none{
+    display: none;
+}
+
 .b2s-blog-news-title{
     font-size: 14px !important;
     margin-top: 0px !important;
@@ -7222,6 +7227,10 @@ input[type="checkbox"].error + label{
 .b2s-color-black{
     color: #444;
 }
+.b2s-color-red{
+    color: #f14242 !important;
+}
+
 
 .b2s-version-info{
     font-size: 12px;
@@ -7785,12 +7794,12 @@ CSS CheckBOX
     color: #fff;
 }
 
-.btn-vkontakte {
+.btn-vk {
     background-color:  #4c75a3 !important;
     border-color:  #4c75a3 !important;
     color: #fff;
 }
-.btn-vkontakte:hover {
+.btn-vk:hover {
     color: #fff;
 }
 
@@ -7830,12 +7839,12 @@ CSS CheckBOX
     color: #fff;
 }
 
-.btn-ravelry {
+.btn-raverly {
     background-color:  #ee6e62 !important;
     border-color:  #ee6e62 !important;
     color: #fff;
 }
-.btn-ravelry:hover {
+.btn-raverly:hover {
     color: #fff;
 }
 
@@ -7891,13 +7900,37 @@ CSS CheckBOX
 
 }
 
+.btn-skyrock:hover {
+    color: #fff;
+}
+
 .btn-mastodon {
     background-color: #5b49de !important;
     border-color: #5b49de !important;
     color: #fff;
 }
 
-.btn-skyrock:hover {
+.btn-mastodon:hover {
+    color: #fff;
+}
+
+.btn-humhub {
+    background-color: #61c3d1 !important;
+    border-color: #61c3d1 !important;
+    color: #fff;
+}
+
+.btn-humhub:hover {
+    color: #fff;
+}
+
+.btn-bluesky {
+    background-color: #1185fe !important;
+    border-color: #1185fe !important;
+    color: #fff;
+}
+
+.btn-bluesky:hover {
     color: #fff;
 }
 
@@ -7922,10 +7955,6 @@ CSS CheckBOX
 
 .b2s-bold{
     font-weight: 600;
-}
-
-.b2s-delete-post-btn {
-    margin-top: 5px;
 }
 
 .padding-lr-40 {
@@ -8050,7 +8079,7 @@ CSS CheckBOX
 
 .b2s-stats-h3{
     margin: 0px 0px 5px 0px !important;
-    
+
 }
 
 .b2s-h3{
@@ -8115,6 +8144,11 @@ CSS CheckBOX
 .b2s-padding-top-20{
     padding-top:20px !important;
 }
+.b2s-padding-top-10{
+    padding-top:10px !important;
+}
+
+
 .b2s-text-sm{
     margin-top: 5px;
     font-size: 10px;

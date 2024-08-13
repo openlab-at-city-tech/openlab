@@ -20,22 +20,34 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/data */ "@wordpress/data");
 /* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_4__);
 
+/* global openlabBlocksPostVisibility */
 
 
 
 
-const PostSharingOptions = ({}) => {
+
+const PostSharingOptions = () => {
   const {
-    currentGroupTypeSiteLabel,
-    shareOnlyWithGroup,
-    siteIsPublic
+    blogPublic,
+    shareOnlyWithGroup
   } = openlabBlocksPostVisibility;
-  if (!siteIsPublic) {
-    return null;
-  }
   const {
     editPost
   } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useDispatch)('core/editor');
+  const blogPublicInt = parseInt(blogPublic);
+  const {
+    postVisibility
+  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(selectObj => {
+    const postMeta = selectObj('core/editor').getEditedPostAttribute('meta');
+    const defaultVisibility = blogPublicInt >= 0 ? 'default' : 'members-only';
+    return {
+      postVisibility: postMeta.openlab_post_visibility || defaultVisibility
+    };
+  }, [blogPublicInt]);
+  console.log(postVisibility, blogPublicInt);
+  if (blogPublicInt < -1) {
+    return null;
+  }
   const onChange = value => {
     editPost({
       meta: {
@@ -43,15 +55,23 @@ const PostSharingOptions = ({}) => {
       }
     });
   };
-  const {
-    postVisibility
-  } = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
-    const postMeta = select('core/editor').getEditedPostAttribute('meta');
-    return {
-      postVisibility: postMeta['openlab_post_visibility'] || 'default'
-    };
-  });
   const publicOverrideString = 'This will override the Public visibility setting above.';
+  const visibilityOptions = [{
+    value: 'group-members-only',
+    label: 'Site Members',
+    info: shareOnlyWithGroup + ' ' + publicOverrideString
+  }, {
+    value: 'members-only',
+    label: 'OpenLab members only',
+    info: 'Only logged-in OpenLab members can see this post. ' + publicOverrideString
+  }];
+  if (blogPublicInt >= 0) {
+    visibilityOptions.push({
+      value: 'default',
+      label: 'Everyone',
+      info: 'Everyone who can view this site can see this post.'
+    });
+  }
   return (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_2__.PluginDocumentSettingPanel, {
     name: "post-sharing-options",
     title: "More visibility options",
@@ -60,28 +80,15 @@ const PostSharingOptions = ({}) => {
     className: "editor-post-visibility__fieldset"
   }, (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.VisuallyHidden, {
     as: "legend"
-  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, 'Control who can see this post.'), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+  }, "Sharing"), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", null, "Control who can see this post."), visibilityOptions.map(option => (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
+    key: option.value,
     instanceId: "post-sharing-options",
-    value: "group-members-only",
-    label: "Site Members",
-    info: shareOnlyWithGroup + ' ' + publicOverrideString,
+    value: option.value,
+    label: option.label,
+    info: option.info,
     onChange: event => onChange(event.target.value),
-    checked: postVisibility === 'group-members-only'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
-    instanceId: "post-sharing-options",
-    value: "members-only",
-    label: "OpenLab members only",
-    info: 'Only logged-in OpenLab members can see this post. ' + publicOverrideString,
-    onChange: event => onChange(event.target.value),
-    checked: postVisibility === 'members-only'
-  }), (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingChoice, {
-    instanceId: "post-sharing-options",
-    value: "default",
-    label: "Everyone",
-    info: "Everyone who can view this site can see this post.",
-    onChange: event => onChange(event.target.value),
-    checked: postVisibility === 'default'
-  })));
+    checked: postVisibility === option.value
+  }))));
 };
 function PostSharingChoice({
   instanceId,
@@ -108,9 +115,20 @@ function PostSharingChoice({
     className: "editor-post-visibility__info"
   }, info));
 }
-(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
-  render: PostSharingOptions
-});
+const OpenlabPostVisibilityPlugin = () => {
+  const isSiteEditor = (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_4__.useSelect)(select => {
+    const editSite = select('core/edit-site');
+    return !!editSite;
+  }, []);
+  return !isSiteEditor && (0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(PostSharingOptions, null);
+};
+const registerPostVisibility = () => {
+  (0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-sharing-options', {
+    render: OpenlabPostVisibilityPlugin,
+    icon: 'visibility'
+  });
+};
+wp.domReady(registerPostVisibility);
 
 /***/ }),
 

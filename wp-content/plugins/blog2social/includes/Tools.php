@@ -10,11 +10,13 @@ class B2S_Tools {
         return B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $data, 30);
     }
 
-    public static function setUserDetails() {
+    public static function setUserDetails($blog_user_id = null, $blog_url = null, $email = null) {
         if (defined("B2S_PLUGIN_TOKEN")) {
             delete_option('B2S_PLUGIN_USER_VERSION_' . B2S_PLUGIN_BLOG_USER_ID);
             delete_option('B2S_PLUGIN_PRIVACY_POLICY_USER_ACCEPT_' . B2S_PLUGIN_BLOG_USER_ID);
-            $version = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getUserDetails', 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION), 30));
+
+            $currentDate = new DateTime("now", wp_timezone());
+            $version = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getUserDetails', 'blog_user_id' => $blog_user_id, 'blog_url' => $blog_url, 'email' => $email, 'current_date' => $currentDate->format('Y-m-d'), 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION), 30));
 
             $tokenInfo = array();
             $tokenInfo['B2S_PLUGIN_USER_VERSION'] = (isset($version->version) ? $version->version : 0);
@@ -61,11 +63,17 @@ class B2S_Tools {
                         }
                     }
                 }
+
                 if (!defined('B2S_PLUGIN_ALLOWED_USER_APPS')) {
                     define('B2S_PLUGIN_ALLOWED_USER_APPS', serialize($network_quantities));
                     $tokenInfo['B2S_PLUGIN_ALLOWED_USER_APPS'] = serialize($network_quantities);
                 }
             }
+
+            if (isset($version->licence_condition)) {
+                $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $version->licence_condition;
+            }
+
             if (!isset($version->version)) {
                 define('B2S_PLUGIN_NOTICE', 'CONNECTION');
             } else {
@@ -137,7 +145,7 @@ class B2S_Tools {
         return $userTimes;
     }
 
-    public static function getSupportLink($type = 'howto') {
+    public static function getSupportLink($type = 'howto', $add_slug = '') {
         $lang = substr(B2S_LANGUAGE, 0, 2);
         if ($type == 'howto') {
             return 'https://blog2social.com/docs/' . (($lang == 'en') ? 'blog2social-guide-step-by-step-en.pdf' : 'step-by-step-guide-zu-blog2social.pdf');
@@ -153,7 +161,7 @@ class B2S_Tools {
         }
         if ($type == 'affiliate') {
             $affiliateId = self::getAffiliateId();
-            return 'https://b2s.li/wp-btn-premium/' . (((int) $affiliateId != 0) ? $affiliateId : '');
+            return 'https://b2s.li/wp-btn-premium/' . (((int) $affiliateId != 0) ? $affiliateId : 0) . '/' . ((!empty($add_slug)) ? $add_slug . '/' : '');
         }
         if ($type == 'video_sharing_tiktok') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1204' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1201';
@@ -173,6 +181,11 @@ class B2S_Tools {
         if ($type == 'privacy_policy') {
             return 'https://www.blog2social.com/' . (($lang == 'en') ? 'en/privacy-policy' : 'de/datenschutz');
         }
+
+        if ($type == 'pinterest_app_tos_spam') {
+            return 'https://developers.pinterest.com/docs/reference/spam/';
+        }
+
         if ($type == 'userTimeSettings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=5&id=32&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=5&id=43&artlang=de';
         }
@@ -188,6 +201,10 @@ class B2S_Tools {
         //Twitter own app since V7.2.0
         if ($type == 'deprecated_auth_network_2') {
             return $lang == 'en' ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1145' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1007';
+        }
+        //TOS Pinterest own app since V7.5.1
+        if ($type == 'network_app_is_trial') {
+            return $lang == 'en' ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1019' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1022';
         }
         //TOS Facebook 072018
         //BTN: read more  Facebook
@@ -497,14 +514,20 @@ class B2S_Tools {
         if ($type == "twitter_faq") {
             return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1007' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1145';
         }
-        if ($type == "twitter_faq") {
-            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1007' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1145';
+        if ($type == "pinterest_faq") {
+            return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1022' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1019';
         }
         if ($type == "post_templates") {
             return ($lang == 'de') ? 'https://www.blog2social.com/de/faq/content/4/150/de/wie-kann-ich-die-beitragsvorlagen-fuer-meine-social_media_posts-nutzen.html?highlight=beitragsvorlagen' : 'https://www.blog2social.com/en/faq/content/4/152/en/how-to-use-post-templates-for-social-media-posts.html';
         }
         if ($type == "addon_apps") {
-            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network_app';
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network_app&token=' . B2S_PLUGIN_TOKEN;
+        }
+        if ($type == "addon_post_volume") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=post_limit_yearly&token=' . B2S_PLUGIN_TOKEN;
+        }
+        if ($type == "addon_video") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=video&token=' . B2S_PLUGIN_TOKEN;
         }
         if ($type == "twitter_threads") {
             return ($lang == "de") ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1149' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1152';

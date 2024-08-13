@@ -29,7 +29,7 @@ class Config {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @var \TEC\Common\StellarWP\ContainerContract\ContainerInterface
+	 * @var ?\TEC\Common\StellarWP\ContainerContract\ContainerInterface
 	 */
 	protected static $container;
 
@@ -152,6 +152,7 @@ class Config {
 		static::$hook_prefix  = '';
 		static::$server_url   = 'https://telemetry.stellarwp.com/api/v1';
 		static::$stellar_slug = '';
+		static::$container    = null;
 	}
 
 	/**
@@ -231,5 +232,4 @@ class Config {
 	public static function set_server_url( string $url ) {
 		static::$server_url = $url;
 	}
-
 }

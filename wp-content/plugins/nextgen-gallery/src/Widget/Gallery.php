@@ -166,7 +166,7 @@ class Gallery extends \WP_Widget {
 			$new_instance['exclude'] = 'all';
 		}
 
-		$instance['title']    = \strip_tags( $new_instance['title'] );
+		$instance['title']    = \esc_attr( $new_instance['title'] );
 		$instance['items']    = (int) $new_instance['items'];
 		$instance['type']     = $new_instance['type'];
 		$instance['show']     = $new_instance['show'];

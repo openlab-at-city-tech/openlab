@@ -127,7 +127,7 @@ class Buttons
             'btn-default',
             '',
             $attrs,
-            $caption ?: __( 'Cancel' ),
+            $caption ?: __( 'Cancel', 'bookly' ),
             '{caption}' . ( $ellipsis ? '…' : '' )
         );
     }

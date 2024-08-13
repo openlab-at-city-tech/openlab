@@ -51,6 +51,12 @@ class GF_Field_Survey extends GF_Field {
 			'label_placement_setting',
 		);
 	}
+
+	public function is_conditional_logic_supported() {
+
+		return true;
+
+	}
 }
 
 GF_Fields::register( new GF_Field_Survey() );

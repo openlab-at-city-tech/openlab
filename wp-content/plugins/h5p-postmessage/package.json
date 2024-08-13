@@ -1,0 +1,11 @@
+{
+	"name": "h5p-postmessage",
+	"version": "1.0.0-alpha",
+	"devDependencies": {
+		"@wordpress/scripts": "^28.2.0"
+	},
+	"scripts": {
+		"build": "wp-scripts build assets/src/frontend.js",
+		"start": "wp-scripts start assets/src/frontend.js"
+	}
+}

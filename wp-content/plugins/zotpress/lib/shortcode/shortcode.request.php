@@ -203,6 +203,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 	{
 		foreach ( $zp_request_queue as $zp_request_account )
 		{
+			// Multiple/more than one request
 			if ( count($zp_request_account["requests"]) > 1 )
 			{
 				foreach ( $zp_request_account["requests"] as $zp_request_url )
@@ -230,7 +231,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 						$zp_imported = $zp_import_contents->get_request_contents( $zp_request_url, $zpr["update"] );
 
 						if ( $zp_imported["updateneeded"] )
-						$zp_updateneeded = true;
+							$zp_updateneeded = true;
 					}
 
 					// Stop and let JS Ajax take over
@@ -258,7 +259,8 @@ function Zotpress_shortcode_request( $checkcache = false )
 			else
 			{
 				// First, check the cache with PHP
-				if ( $checkcache && ! $zpr["request_update"] )
+				if ( $checkcache 
+						&& ! $zpr["request_update"] )
 				{
 					$zp_checkcache = $zp_import_contents->get_request_cache( $zp_request_account["requests"][0], $zpr["update"] );
 					$zp_checkcache_json = json_decode( $zp_checkcache['json'], false );
@@ -292,7 +294,8 @@ function Zotpress_shortcode_request( $checkcache = false )
 				}
 
 				// Stop and let JS Ajax take over
-				if ( ( $checkcache && ! $zp_usecache ) )
+				if ( ( $checkcache 
+						&& ! $zp_usecache ) )
 					continue;
 
 				// Deal with possible error
@@ -315,8 +318,10 @@ function Zotpress_shortcode_request( $checkcache = false )
 						$zp_request["json"] = rtrim($zp_request["json"], "]") . "," . ltrim($zp_imported["json"], "[") . "]";
 					}
 				}
+
 				if ( $zp_request["json"] == "Not found" )
 					$zp_error = $zp_request["json"];
+				
     			// } elseif ( empty($zp_request) ) {
 			    //     $zp_request = $zp_imported;
 			    // } else // Add to existing all-requests json
@@ -370,8 +375,11 @@ function Zotpress_shortcode_request( $checkcache = false )
 		
 		// Figure out the next starting position for the next request, if any
 		// 7.3.3: Changed from >= to >
-		if ( $zp_request_meta["request_last"] >= ($zpr["request_start"] + $zpr["limit"]) )
-			$zp_request_meta["request_next"] = $zpr["request_start"] + $zpr["limit"] ;
+		if ( $zp_request_meta["request_last"] >= ($zpr["request_start"] + $zpr["limit"]) ) {
+
+			// 7.3.9: Only if next is greater than limit
+			$zp_request_meta["request_next"] = $zpr["request_start"] + $zpr["limit"];
+		}
 
 		// Overwrite request if limit
 		// 7.3.3: Fix for collections?
@@ -430,6 +438,10 @@ function Zotpress_shortcode_request( $checkcache = false )
 				{
 					$zp_authors_check = false;
 
+					// 7.3.10: CHECK: Have to replace the apostrophe entity ...
+					$zpr["author"] = str_replace('#039;', "'", $zpr["author"]);
+					// var_dump($zpr["author"]);
+
 					// Deal with multiple authors
 					if ( gettype($zpr["author"]) != "array"
 							&& strpos($zpr["author"], ",") !== false )
@@ -446,14 +458,26 @@ function Zotpress_shortcode_request( $checkcache = false )
 					{
 						if ( $zpr["inclusive"] === false )
 						{
-							$author_exists_count = 1;
+							// 7.3.10: CHECK: Why is this assuming 1? Setting to 0:
+							$author_exists_count = 0;
 
-							foreach ( $zpr["author"] as $author )
-								if ( zp_check_author_continue( $item, $author ) === true )
-									$author_exists_count++;
+							// 7.3.10: CHECK: Not always an array ... 
+							if ( is_array($zpr["author"]) ) {
 
-							if ( $author_exists_count === count($zpr["author"]) +1 )
-								$zp_authors_check = true;
+								foreach ( $zpr["author"] as $author )
+									if ( zp_check_author_continue( $item, $author ) === true )
+										$author_exists_count++;
+								
+								// if ( $author_exists_count == count($zpr["author"]) +1 )
+								if ( $author_exists_count == count($zpr["author"]) )
+									$zp_authors_check = true;
+							}
+							else { // Just a string/single author
+								// var_dump($item,$zpr["author"]);exit;
+								if ( zp_check_author_continue( $item, $zpr["author"] ) === true )
+									$zp_authors_check = true;
+							}
+							
 						}
 						else // inclusive and single
 						{
@@ -466,6 +490,8 @@ function Zotpress_shortcode_request( $checkcache = false )
 						// }
 					}
 
+					// var_dump("HUM");exit;
+
 					if ( $zp_authors_check === false )
 						continue;
 				} // author
@@ -475,7 +501,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 						&& property_exists($item->meta, "parsedDate") )
 				{
 					// multiple
-					if (strpos($zpr["year"], ",") !== false)
+					if ( strpos($zpr["year"], ",") !== false )
 					{
 				        $zp_years_check = false;
 				        $zp_years = explode( ",", $zpr["year"] );

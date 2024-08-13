@@ -5,6 +5,9 @@ use Bookly\Lib;
 
 class Base
 {
+    protected $empty = true;
+    protected $data;
+
     /**
      * @param $recipient
      * @return string
@@ -21,22 +24,24 @@ class Base
      */
     public function create()
     {
-        $path = tempnam( get_temp_dir(), 'Bookly_' );
+        if ( ! $this->empty ) {
+            $path = tempnam( get_temp_dir(), 'Bookly_' );
 
-        if ( $path ) {
-            $info = pathinfo( $path );
-            $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['filename'] );
-            if ( rename( $path, $new_path ) ) {
-                $path = $new_path;
-            } else {
-                $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['basename'] );
+            if ( $path ) {
+                $info = pathinfo( $path );
+                $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['filename'] );
                 if ( rename( $path, $new_path ) ) {
                     $path = $new_path;
+                } else {
+                    $new_path = sprintf( '%s%s%s.ics', $info['dirname'], DIRECTORY_SEPARATOR, $info['basename'] );
+                    if ( rename( $path, $new_path ) ) {
+                        $path = $new_path;
+                    }
                 }
-            }
-            Lib\Utils\Common::getFilesystem()->put_contents( $path, $this->data );
+                Lib\Utils\Common::getFilesystem()->put_contents( $path, $this->data );
 
-            return $path;
+                return $path;
+            }
         }
 
         return false;

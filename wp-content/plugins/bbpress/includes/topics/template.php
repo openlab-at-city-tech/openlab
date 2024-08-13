@@ -808,7 +808,7 @@ function bbp_topic_pagination( $args = array() ) {
 		$has_slug = bbp_get_topic( $r['topic_id'] )->post_name;
 
 		// If pretty permalinks are enabled, make our pagination pretty
-		$base = ! empty( $has_slug ) && bbp_use_pretty_urls() && ! bbp_is_topic_pending( $r['topic_id'] )
+		$base = ! empty( $has_slug ) && bbp_use_pretty_urls() && bbp_is_topic_public( $r['topic_id'] )
 			? trailingslashit( get_permalink( $r['topic_id'] ) ) . user_trailingslashit( bbp_get_paged_slug() . '/%#%/' )
 			: add_query_arg( 'paged', '%#%', get_permalink( $r['topic_id'] ) );
 
@@ -963,7 +963,7 @@ function bbp_topic_revision_log( $topic_id = 0 ) {
  * @since 2.0.0 bbPress (r2782)
  *
  * @param int $topic_id Optional. Topic id
- * @return string Topic revisions
+ * @return WP_Post[]|int[] Topic revisions
  */
 function bbp_get_topic_revisions( $topic_id = 0 ) {
 	$topic_id  = bbp_get_topic_id( $topic_id );

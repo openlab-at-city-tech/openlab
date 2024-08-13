@@ -70,7 +70,7 @@ $invoice = $cloud->account->getInvoiceData();
                                 </div>
                                 <div class="form-group">
                                     <label for="bookly_sms_invoice_company_add_text"><?php esc_html_e( 'Additional text to include in invoice', 'bookly' ) ?></label>
-                                    <textarea name="invoice[company_add_text]" class="form-control" rows="3" id="bookly_sms_invoice_company_add_text"><?php echo esc_textarea( $invoice['company_add_text'] === null ? '' : $invoice['company_add_text'] ) ?></textarea>
+                                    <textarea name="invoice[company_add_text]" class="form-control" rows="3" id="bookly_sms_invoice_company_add_text"><?php echo $invoice['company_add_text'] === null ? '' : esc_textarea( $invoice['company_add_text'] ) ?></textarea>
                                 </div>
                                 <div class="form-group border-top pt-2">
                                     <input name="invoice[send]" value="0" class="hidden"/>

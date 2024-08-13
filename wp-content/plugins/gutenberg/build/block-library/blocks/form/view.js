@@ -1,4 +1,4 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 var __webpack_exports__ = {};
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable no-undef */
@@ -21,6 +21,8 @@ document.querySelectorAll('form.wp-block-form').forEach(function (form) {
     formData.formAction = form.action;
     formData._ajax_nonce = wpBlockFormSettings.nonce;
     formData.action = wpBlockFormSettings.action;
+    formData._wp_http_referer = window.location.href;
+    formData.formAction = form.action;
     try {
       const response = await fetch(wpBlockFormSettings.ajaxUrl, {
         method: 'POST',

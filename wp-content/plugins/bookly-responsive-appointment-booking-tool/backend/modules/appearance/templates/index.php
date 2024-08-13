@@ -7,9 +7,14 @@ use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components;
 use Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Backend\Modules\Appearance;
+
 ?>
 <?php if ( trim( $custom_css ) ) : ?>
     <style type="text/css">
+        :root {
+            --bookly-main-color: <?php echo esc_attr( get_option( 'bookly_app_color', '#f4662f' ) ) ?>;
+        }
+
         <?php echo Lib\Utils\Common::stripScripts( $custom_css ) ?>
     </style>
 <?php endif ?>
@@ -49,6 +54,9 @@ use Bookly\Backend\Modules\Appearance;
                         <?php Proxy\Tasks::renderShowTimeStep() ?>
                         <?php Proxy\RecurringAppointments::renderShowStep() ?>
                         <?php Proxy\Cart::renderShowStep() ?>
+                        <div class="col-lg-4 col-xl-3 mb-2">
+                            <?php Inputs::renderCheckBox( __( 'Invert datepicker colors', 'bookly' ), null, get_option( 'bookly_app_datepicker_inverted' ), array( 'id' => 'bookly-invert-datepicker-colors' ) ) ?>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -60,7 +68,8 @@ use Bookly\Backend\Modules\Appearance;
                 <?php $i = 1 ?>
                 <?php foreach ( $steps as $data ) : ?>
                     <li class="nav-item text-center" <?php if ( ! $data['show'] ) : ?>style="display: none;"<?php endif ?>>
-                        <a class="nav-link<?php if ( $data['step'] == 1 ) : ?> active<?php endif ?>" href="#bookly-step-<?php echo esc_attr( $data['step'] ) ?>" data-toggle="bookly-tab"><span class="bookly-js-step-number"><?php echo esc_html( $data['show'] ? $i++ : $i ) ?></span>. <?php echo esc_html( $data['title'] ) ?></a>
+                        <a class="nav-link<?php if ( $data['step'] == 1 ) : ?> active<?php endif ?>" href="#bookly-step-<?php echo esc_attr( $data['step'] ) ?>" data-toggle="bookly-tab"><span class="bookly-js-step-number"><?php echo esc_html( $data['show'] ? $i++ : $i ) ?></span>. <?php echo esc_html( $data['title'] ) ?>
+                        </a>
                     </li>
                 <?php endforeach ?>
             </ul>

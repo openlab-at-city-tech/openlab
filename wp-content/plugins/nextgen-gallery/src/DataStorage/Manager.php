@@ -35,8 +35,8 @@ class Manager {
 		/**
 		 * @TODO Remove in a later release - this fixes an issue with Imagify at the time of 3.50's release.
 		 */
-		$this->object = $this;
-		$this->_image_mapper   = $this->image_mapper;
+		$this->object        = $this;
+		$this->_image_mapper = $this->image_mapper;
 	}
 
 	/**
@@ -1155,8 +1155,8 @@ class Manager {
 				if ( ! $retval && $dynthumbs && $dynthumbs->is_size_dynamic( $size ) ) {
 					$new_dims = $this->calculate_image_size_dimensions( $image, $size );
 					// Prevent a possible PHP warning if the sizes weren't calculated.
-					if ( isset ( $new_dims['real_width'] ) && isset ( $new_dims['real_height'] ) ) {
-						$retval   = [
+					if ( isset( $new_dims['real_width'] ) && isset( $new_dims['real_height'] ) ) {
+						$retval = [
 							'width'  => $new_dims['real_width'],
 							'height' => $new_dims['real_height'],
 						];
@@ -1968,7 +1968,13 @@ class Manager {
 			&& 0 === $_FILES['file']['error']
 			&& isset( $_REQUEST['nonce'] )
 			&& Security::verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['nonce'] ) ), 'nextgen_upload_image' ) ) {
-			$filename = sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) );
+			// Windows' use of backslash characters for file paths means wp_unslash() here is destructive.
+			if ( 0 === strncasecmp( PHP_OS, 'WIN', 3 ) ) {
+				// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+				$filename = sanitize_text_field( $_FILES['file']['tmp_name'] );
+			} else {
+				$filename = sanitize_text_field( wp_unslash( $_FILES['file']['tmp_name'] ) );
+			}
 		}
 		// phpcs:enable WordPress.Security.NonceVerification.Missing
 		// phpcs:enable WordPress.Security.NonceVerification.Recommended
@@ -2238,7 +2244,12 @@ class Manager {
 			$settings = Settings::get_instance();
 
 			// Get the image filename.
-			$filename  = $this->get_image_abspath( $image, 'full' );
+			$filename = $this->get_image_abspath( $image, 'full' );
+
+			if ( ! @file_exists( $filename ) ) {
+				return false; // bail out if the file doesn't exist.
+			}
+
 			$thumbnail = null;
 
 			if ( $size == 'full' && $settings->get( 'imgBackup' ) == 1 ) {
@@ -2859,17 +2870,15 @@ class Manager {
 	 * @return null|int
 	 * @deprecated
 	 */
-	function _get_image_id($image_obj_or_id)
-	{
-		$retval = NULL;
+	function _get_image_id( $image_obj_or_id ) {
+		$retval = null;
 
 		$image_key = $this->_image_mapper->get_primary_key_column();
-		if (is_object($image_obj_or_id)) {
-			if (isset($image_obj_or_id->$image_key)) {
+		if ( is_object( $image_obj_or_id ) ) {
+			if ( isset( $image_obj_or_id->$image_key ) ) {
 				$retval = $image_obj_or_id->$image_key;
 			}
-		}
-		elseif (is_numeric($image_obj_or_id)) {
+		} elseif ( is_numeric( $image_obj_or_id ) ) {
 			$retval = $image_obj_or_id;
 		}
 

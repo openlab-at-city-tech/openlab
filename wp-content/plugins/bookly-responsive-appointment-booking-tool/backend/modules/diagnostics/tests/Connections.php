@@ -46,9 +46,67 @@ class Connections extends Test
         );
 
         $response = $cloud->sendPostRequest( '/1.0/test/feedback-request', $data );
-
-        if ( ! ( isset( $response['data']['POST']['query'], $response['data']['GET']['query'] ) && $response['data']['POST']['query'] === self::$query && $response['data']['GET']['query'] === self::$query ) ) {
-            $this->addError( sprintf( '<b>%s</b><br/>%s', parse_url( Cloud\API::API_URL, PHP_URL_HOST ), __( 'For some reason, your server blocks Bookly Cloud requests. To fix the issue, please ask your hosting provider to whitelist the Bookly Cloud server.', 'bookly' ) ) );
+        if ( $cloud->getErrors() ) {
+            foreach ( $cloud->getErrors() as $error ) {
+                $this->addError( $error );
+            }
+        } else {
+            $post = $get = false;
+            if ( isset( $response['data'] ) ) {
+                if ( isset( $response['data']['POST']['query'] ) && $response['data']['POST']['query'] === self::$query ) {
+                    $post = true;
+                }
+                if ( isset( $response['data']['GET']['query'] ) && $response['data']['GET']['query'] === self::$query ) {
+                    $get = true;
+                }
+                if ( ! $get && ! $post ) {
+                    $this->addError( 'POST and GET requests from Bookly Cloud with Bookly are failed' );
+                } elseif ( ! $post ) {
+                    $this->addError( 'POST request from Bookly Cloud is failed' );
+                } elseif ( ! $get ) {
+                    $this->addError( 'GET request from Bookly Cloud is failed' );
+                }
+                if ( isset( $response['data']['raw'] ) && is_array( $response['data']['raw'] ) ) {
+                    $this->addError( sprintf( '<b>%s</b><br/>%s<br/>', parse_url( Cloud\API::API_URL, PHP_URL_HOST ), __( 'For some reason, your server blocks Bookly Cloud requests. To fix the issue, please ask your hosting provider to whitelist the Bookly Cloud server.', 'bookly' ) ) );
+                    foreach ( $response['data']['raw'] as $i => $error_data ) {
+                        $title = '';
+                        if ( isset( $error_data['method'] ) ) {
+                            $title .= 'Method <b>' . $error_data['method'] . '</b> ';
+                        }
+                        if ( isset( $error_data['status'] ) ) {
+                            $title .= 'Status <b>' . $error_data['status'] . '</b>';
+                        }
+                        $message = '';
+                        if ( isset( $error_data['content'] ) ) {
+                            $message .= '<span class="badge badge-primary">Content</span> ' . $error_data['content'] . '<br>';
+                        }
+                        if ( isset( $error_data['headers'] ) ) {
+                            $message .= '<span class="badge badge-primary">Headers</span>';
+                            if ( is_array( $error_data['headers'] ) ) {
+                                $message .= '<pre>' . json_encode( $error_data['headers'], JSON_PRETTY_PRINT ) . '</pre>';
+                            } else {
+                                $message .= $error_data['headers'];
+                            }
+                        }
+                        if ( $message ) {
+                            $this->addError( sprintf( '<div class="card bookly-collapse-with-arrow bookly-js-tool">
+                                <div class="card-header bg-light d-flex align-items-center bookly-cursor-pointer bookly-collapsed" href="#bookly-connections-%1$d" data-toggle="bookly-collapse" aria-expanded="false">
+                                    <div class="d-flex w-100 align-items-center">
+                                        <div class="flex-fill bookly-collapse-title bookly-js-test-title">%2$s</div>
+                                    </div>
+                                </div>
+                                <div id="bookly-connections-%1$d" class="bookly-collapse" style="">
+                                    <div class="card-body">
+                                        <div id="accordion" class="accordion" role="tablist" aria-multiselectable="true">%3$s</div>
+                                    </div>
+                                </div>
+                            </div>', $i, $title ?: __( 'Error', 'bookly' ), $message ) );
+                        }
+                    }
+                }
+            } else {
+                $this->addError( 'Bookly Cloud response is failed' );
+            }
         }
 
         return empty( $this->errors );

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 18:03+0000\n"
+"POT-Creation-Date: 2024-02-24 23:49+0000\n"
 "PO-Revision-Date: 2017-08-23T05:39:57+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -110,11 +110,11 @@ msgstr "Luogo evento"
 msgid "All Venues"
 msgstr "Tutti i luoghi"
 
-#: classes/class-eo-calendar-widget.php:296
+#: classes/class-eo-calendar-widget.php:298
 msgid "Previous month"
 msgstr "Mese precedente"
 
-#: classes/class-eo-calendar-widget.php:299
+#: classes/class-eo-calendar-widget.php:301
 msgid "Next month"
 msgstr "Prossimo mese"
 
@@ -398,7 +398,7 @@ msgstr "Quando"
 msgid "Event Title"
 msgstr "Titolo evento"
 
-#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:403
+#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:406
 msgid "Where"
 msgstr "Dove"
 
@@ -1488,77 +1488,77 @@ msgstr "È stata creata 1 categoria"
 msgid "%d categories were created"
 msgstr "Sono state create %d categorie"
 
-#: includes/event-organiser-ajax.php:342
+#: includes/event-organiser-ajax.php:345
 msgid "Protected"
 msgstr "Protetto"
 
-#: includes/event-organiser-ajax.php:344
+#: includes/event-organiser-ajax.php:347
 msgid "Private"
 msgstr "Privato"
 
-#: includes/event-organiser-ajax.php:346
+#: includes/event-organiser-ajax.php:349
 msgid "Draft"
 msgstr "Bozza"
 
-#: includes/event-organiser-ajax.php:386
+#: includes/event-organiser-ajax.php:389
 msgid "Start"
 msgstr "Inizio"
 
-#: includes/event-organiser-ajax.php:387
+#: includes/event-organiser-ajax.php:390
 msgid "End"
 msgstr "Fine"
 
-#: includes/event-organiser-ajax.php:390
+#: includes/event-organiser-ajax.php:393
 #, fuzzy
 msgid "Organiser:"
 msgstr "Organiser:"
 
-#: includes/event-organiser-ajax.php:429
+#: includes/event-organiser-ajax.php:432
 msgid "This event recurs"
 msgstr "Questo evento si ripete"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
+#: includes/event-organiser-ajax.php:443 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Modifica evento"
 
-#: includes/event-organiser-ajax.php:441
+#: includes/event-organiser-ajax.php:444
 #, php-format
 msgid "Edit Event: %s"
 msgstr "Modifica Evento: %s"
 
-#: includes/event-organiser-ajax.php:463
+#: includes/event-organiser-ajax.php:466
 msgid "Delete this occurrence"
 msgstr "Elimina questa ricorrenza"
 
-#: includes/event-organiser-ajax.php:469
+#: includes/event-organiser-ajax.php:472
 msgid "Delete this event"
 msgstr "Elimina questo evento"
 
-#: includes/event-organiser-ajax.php:487
+#: includes/event-organiser-ajax.php:490
 msgid "Break this series"
 msgstr "Spezza questa serie"
 
-#: includes/event-organiser-ajax.php:781
+#: includes/event-organiser-ajax.php:787
 #, fuzzy
 msgid "Event not found"
 msgstr "Evento non trovato"
 
-#: includes/event-organiser-ajax.php:789
+#: includes/event-organiser-ajax.php:795
 #, fuzzy
 msgid "Events are not editable via the admin calendar"
 msgstr "Gli eventi non sono modificabili dal calendario"
 
-#: includes/event-organiser-ajax.php:795
+#: includes/event-organiser-ajax.php:801
 #, fuzzy
 msgid "Are you sure you want to do this?"
 msgstr "Sicuro di volerlo fare?"
 
-#: includes/event-organiser-ajax.php:802
+#: includes/event-organiser-ajax.php:808
 #, fuzzy
 msgid "You do not have permission to edit this event"
 msgstr "Non puoi modificare questo evento"
 
-#: includes/event-organiser-ajax.php:818
+#: includes/event-organiser-ajax.php:824
 #, php-format
 msgid "Event not created: %s"
 msgstr "Evento non creato: %s"

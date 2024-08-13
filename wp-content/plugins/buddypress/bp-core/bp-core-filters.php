@@ -956,6 +956,11 @@ add_filter( 'customize_nav_menu_available_item_types', 'bp_customizer_nav_menus_
  * @return WP_Post[]       Array of page objects, potentially including BP directories.
  */
 function bp_core_include_directory_on_front( $pages = array(), $args = array() ) {
+	// Prevent duplicate "page on front" option values when the 'legacy' BuddyPress URL Parser is in use.
+	if ( 'rewrites' !== bp_core_get_query_parser() ) {
+		return $pages;
+	}
+
 	$is_page_on_front_dropdown = false;
 
 	if ( isset( $args['name'] ) ) {
@@ -1315,6 +1320,8 @@ function bp_core_render_email_template( $template ) {
 
 	// Make sure we add a <title> tag so WP Customizer picks it up.
 	$template = str_replace( '<head>', '<head><title>' . esc_html_x( 'BuddyPress Emails', 'screen heading', 'buddypress' ) . '</title>', $template );
+
+	// phpcs:ignore WordPress.Security.EscapeOutput
 	echo str_replace( '{{{content}}}', wpautop( get_post()->post_content ), $template );
 
 	/*

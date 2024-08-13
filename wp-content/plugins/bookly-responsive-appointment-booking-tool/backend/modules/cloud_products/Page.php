@@ -26,13 +26,15 @@ class Page extends Lib\Base\Component
         $products = array();
         $subscriptions = $cloud->account->getSubscriptions();
         foreach ( $cloud->general->getProducts() as $product ) {
+            $active = $cloud->account->productActive( $product['id'] );
             $js_products[ $product['id'] ] = array(
-                'title'      => $product['texts']['title'],
+                'title' => $product['texts']['title'],
                 'info_title' => $product['texts']['info-title'],
-                'active'     => $cloud->account->productActive( $product['id'] )
+                'active' => $active,
             );
             // Prepare next billing date
             if ( isset ( $product['prices'] ) ) {
+                $has_product_price_id = false;
                 $js_products[ $product['id'] ]['has_subscription'] = true;
                 foreach ( $product['prices'] as $price ) {
                     foreach ( $subscriptions as $subscription ) {
@@ -51,9 +53,13 @@ class Page extends Lib\Base\Component
                                     $product['usage'] = sprintf( '%s: %d / %d', $prefix, $subscription['usage']['used'], $subscription['usage']['limit'] );
                                 }
                             }
+                            $has_product_price_id = true;
                             break 2;
                         }
                     }
+                }
+                if ( isset( $product['accept_pc'] ) && $product['accept_pc'] && $active && ! $has_product_price_id ) {
+                    $js_products[ $product['id'] ]['activated_by_pc'] = true;
                 }
             }
             $products[] = $product;

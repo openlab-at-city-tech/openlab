@@ -27,6 +27,14 @@ class Gallery extends Model {
 	// TODO: remove this when get_pro_compat_level() >= 1.
 	public $pricelist_id;
 
+	public $closedpostboxesnonce;
+	public $parent_id;
+	public $post_paged;
+	public $bulkaction;
+	public $images = [];
+	public $updatepictures;
+	public $attach_to_post;
+
 	public function get_primary_key_column() {
 		return 'gid';
 	}

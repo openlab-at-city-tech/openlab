@@ -163,11 +163,6 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 				],
 				'placeholder' => esc_html__( 'https://wpmet.com', 'elementskit-lite' ),
 				'show_external' => true,
-				'default' => [
-					'url' => '',
-					'is_external' => true,
-					'nofollow' => true,
-				],
 				'condition' => [
 					'ekit_page_list_select_page_or_custom_link!' => 'yes'
 				]
@@ -1007,29 +1002,16 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 		<div <?php $this->print_render_attribute_string( 'icon_list' ); ?>>
 			<?php
 			foreach ( $settings['icon_list'] as $index => $item ) :
-				$post = '';
-				if ($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
-					$post = !empty( $item['link'] ) ? get_post($item['link']) : 0;
-				} else {
-					$post = $item['ekit_page_list_website_link']['url'];
-				}
+				$post = !empty( $item['link'] ) ? get_post($item['link']) : null;
+				$text_title = empty($item['text']) ? ($post instanceof \WP_Post ? $post->post_title : '') : $item['text'];
 
-				if($post != null) :
-					$text = empty($item['text']) ? $post->post_title : $item['text'];
-					if($item['ekit_page_list_select_page_or_custom_link'] == 'yes') {
-						$options = [
-							'url'			=> !empty($post) ? get_the_permalink($post->ID) : '',
-							'is_external'	=> ($settings['ekit_href_target'] === '_blank') ? true : false,
-							'nofollow'		=> ($settings['ekit_href_rel'] === 'yes') ? true : false,
-						];
-						$this->add_link_attributes( 'link_' .$index, $options );
-					} else {
-						if (!empty($item['ekit_page_list_website_link']['url'])) {
-							$this->add_link_attributes( 'link_' . $index, $item['ekit_page_list_website_link'] );
-						}
-					}
-					?>
-					<div class="elementor-icon-list-item <?php echo esc_attr($grid_d); ?> <?php echo esc_attr($grid_t); ?> <?php echo esc_attr($grid_m); ?>">
+				if ( ! empty( $item['ekit_page_list_website_link']['url'] ) ) {
+					$this->add_link_attributes( 'link_' . $index, $item['ekit_page_list_website_link'] );
+				} else if ( ! empty( $item['link']  && (get_permalink($post) !== 0)) ) {
+					$this->add_link_attributes( 'link_' . $index, ['url' => get_permalink($item['link'])] );
+				}
+				?>
+				<div class="elementor-icon-list-item <?php echo esc_attr($grid_d); ?> <?php echo esc_attr($grid_t); ?> <?php echo esc_attr($grid_m); ?>">
 						<a class="elementor-repeater-item-<?php echo esc_attr( $item[ '_id' ] ); ?> <?php echo  esc_attr( $settings['ekit_menu_list_label_align'] ); ?>" <?php $this->print_render_attribute_string( 'link_' . $index ); ?>>
 							<div class="ekit_page_list_content">
 								<?php if ( ! empty( $item['icons'] ) && $item['ekit_page_list_show_icon'] == 'yes') : ?>
@@ -1051,7 +1033,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 									</span>
 								<?php endif; ?>
 								<span class="elementor-icon-list-text">
-									<span class="ekit_page_list_title_title"><?php echo esc_html( $text ); ?></span>
+									<span class="ekit_page_list_title_title"><?php echo esc_html( $text_title ); ?></span>
 									<?php if ($item['ekit_menu_widget_sub_title'] != '') : ?>
 										<span class="ekit_menu_subtitle"><?php echo esc_html($item['ekit_menu_widget_sub_title']); ?></span>
 									<?php endif; ?>
@@ -1064,7 +1046,7 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
 							<?php endif; ?>
 						</a>
 					</div>
-				<?php endif;
+				<?php
 			endforeach; ?>
 		</div>
 		<?php

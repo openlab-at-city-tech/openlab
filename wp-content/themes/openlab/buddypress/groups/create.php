@@ -141,12 +141,14 @@
                     <div class="panel panel-default">
                         <div class="panel-heading semibold"><label for="group-name"><?php echo ucfirst($group_type); ?> Name <?php _e('(required)', 'buddypress') ?></label></div>
                         <div class="panel-body">
-                            <?php if( 'course' == $group_type ) : ?>
+                            <?php if ( 'course' === $group_type ) : ?>
                                 <p class="ol-tooltip clone-course-tooltip" id="clone-course-tooltip-4">Please take a moment to consider the name of your new or cloned Course. We recommend keeping your Course Name under 50 characters. You can always change it later. We recommend the following format:</p>
                                 <ul class="ol-tooltip" id="clone-course-tooltip-3">
                                     <li>CourseCode CourseName, Semester Year</li>
                                     <li>ARCH3522 NYC Arch, FA2013</li>
                                 </ul>
+							<?php elseif ( 'portfolio' === $group_type ) : ?>
+								<p class="ol-tooltip"><?php echo esc_html( openlab_get_profile_field_helper_text( 'portfolio_name' ) ); ?></p>
                             <?php else : ?>
                                 <p class="ol-tooltip">Please take a moment to consider the name of your <?php echo ucwords($group_type) ?>.  Choosing a name that clearly identifies your  <?php echo ucwords($group_type) ?> will make it easier for others to find your <?php echo ucwords($group_type) ?> profile. We recommend keeping your  <?php echo ucwords($group_type) ?> name under 50 characters.</p>
                             <?php endif; ?>

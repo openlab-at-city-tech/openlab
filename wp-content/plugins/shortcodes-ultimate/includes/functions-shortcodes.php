@@ -166,11 +166,11 @@ function su_get_shortcode_prefix() {
  * @param string  $value Attribute value with shortcodes.
  * @return string        Parsed string.
  */
-function su_do_attribute( $value ) {
+function su_do_attribute( $value, $kses = false ) {
 
 	$value = str_replace( array( '{', '}' ), array( '[', ']' ), $value );
 	$value = do_shortcode( $value );
 
-	return $value;
+	return $kses ? wp_kses_post( $value ) : esc_attr( $value );
 
 }

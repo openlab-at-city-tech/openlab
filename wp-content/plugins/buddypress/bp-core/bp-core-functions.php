@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
  * @since 1.6.0
  */
 function bp_version() {
-	echo bp_get_version();
+	echo esc_html( bp_get_version() );
 }
 	/**
 	 * Return the BuddyPress version.
@@ -37,7 +37,7 @@ function bp_version() {
  * @since 1.6.0
  */
 function bp_db_version() {
-	echo bp_get_db_version();
+	echo esc_html( bp_get_db_version() );
 }
 	/**
 	 * Return the BuddyPress database version.
@@ -56,7 +56,7 @@ function bp_db_version() {
  * @since 1.6.0
  */
 function bp_db_version_raw() {
-	echo bp_get_db_version_raw();
+	echo esc_html( bp_get_db_version_raw() );
 }
 	/**
 	 * Return the BuddyPress database version.
@@ -78,7 +78,7 @@ function bp_db_version_raw() {
  * @param string $version BuddyPress version.
  */
 function bp_major_version( $version = '' ) {
-	echo bp_get_major_version( $version );
+	echo esc_html( bp_get_major_version( $version ) );
 }
 
 	/**
@@ -112,7 +112,7 @@ function bp_major_version( $version = '' ) {
  * @since 11.0.0
  */
 function bp_initial_version() {
-	echo bp_get_initial_version();
+	echo esc_html( bp_get_initial_version() );
 }
 
 	/**
@@ -775,7 +775,14 @@ function bp_core_get_directory_pages() {
 	if ( false === $pages ) {
 
 		// Set pages as standard class.
-		$pages = new stdClass;
+		$pages                 = new stdClass;
+		$switched_to_root_blog = false;
+
+		// Make sure the current blog is set to the root blog.
+		if ( ! bp_is_root_blog() && ! bp_is_multiblog_mode() ) {
+			switch_to_blog( bp_get_root_blog_id() );
+			$switched_to_root_blog = true;
+		}
 
 		// Get pages and IDs.
 		$page_ids = bp_core_get_directory_page_ids();
@@ -815,6 +822,10 @@ function bp_core_get_directory_pages() {
 					unset( $slug );
 				}
 			}
+		}
+
+		if ( $switched_to_root_blog ) {
+			restore_current_blog();
 		}
 
 		wp_cache_set( 'directory_pages', $pages, 'bp_pages' );
@@ -987,12 +998,14 @@ function bp_core_get_directory_page_default_titles() {
  * @param string $original_slug The original post slug.
  */
 function bp_core_set_unique_directory_page_slug( $slug = '', $post_ID = 0, $post_status = '', $post_type = '', $post_parent = 0, $original_slug = '' ) {
-	if ( ( 'buddypress' === $post_type || 'page' === $post_type ) && $slug === $original_slug ) {
+	if ( ( 'buddypress' === $post_type || 'page' === $post_type ) && $slug === $original_slug && ! $post_parent ) {
 		$pages = get_posts(
 			array(
 				'post__not_in' => array( $post_ID ),
 				'post_status'  => bp_core_get_directory_pages_stati(),
 				'post_type'    => array( 'buddypress', 'page' ),
+				'post_parent'  => 0,     // Only get a top level page.
+				'name'         => $slug, // Only get the same name page.
 			)
 		);
 
@@ -1587,7 +1600,7 @@ function bp_core_time_old( $birth_date ) {
  * @return string|null
  */
  function bp_core_iso8601_date( $timestamp = '' ) {
-	echo bp_core_get_iso8601_date( $timestamp );
+	echo esc_attr( bp_core_get_iso8601_date( $timestamp ) );
 }
 	/**
 	 * Return an ISO-8601 date from a date string.
@@ -1712,7 +1725,11 @@ function bp_core_render_message() {
 
 		<div id="message" class="bp-template-notice <?php echo esc_attr( $type ); ?>">
 
-			<?php echo $content; ?>
+			<?php
+				// Escaping is done in `bp-core/bp-core-filters.php`.
+				// phpcs:ignore WordPress.Security.EscapeOutput
+				echo $content;
+			?>
 
 		</div>
 
@@ -2810,7 +2827,23 @@ function bp_nav_menu_get_loggedin_pages() {
 	$bp_menu_items = array();
 
 	if ( 'rewrites' !== bp_core_get_query_parser() ) {
-		$bp_menu_items = $bp->members->nav->get_primary();
+		$primary_items     = $bp->members->nav->get_primary();
+		$user_is_displayed = bp_is_user();
+
+		foreach( $primary_items as $primary_item ) {
+			$current_user_link = $primary_item['link'];
+
+			// When displaying a user, reset the primary item link.
+			if ( $user_is_displayed ) {
+				$current_user_link = bp_loggedin_user_url( bp_members_get_path_chunks( array( $primary_item['slug'] ) ) );
+			}
+
+			$bp_menu_items[] = array(
+				'name' => $primary_item['name'],
+				'slug' => $primary_item['slug'],
+				'link' => $current_user_link,
+			);
+		}
 	} else {
 		$members_navigation = bp_get_component_navigations();
 
@@ -3165,7 +3198,7 @@ function bp_upload_dir() {
  * @since 2.5.0
  */
 function bp_email_post_type() {
-	echo bp_get_email_post_type();
+	echo esc_html( bp_get_email_post_type() );
 }
 	/**
 	 * Returns the name of the email post type.
@@ -3291,7 +3324,7 @@ function bp_get_taxonomy_common_labels() {
  * @since 2.5.0
  */
 function bp_email_tax_type() {
-	echo bp_get_email_tax_type();
+	echo esc_html( bp_get_email_tax_type() );
 }
 	/**
 	 * Return the name of the email type taxonomy.
@@ -4496,8 +4529,8 @@ function bp_email_unsubscribe_handler() {
 			sprintf( '%1$s %2$s', esc_html( $unsub_msg ), esc_html( $result_msg ) ),
 			esc_html( $unsub_msg ),
 			array(
-				'link_url'  => home_url(),
-				'link_text' => __( 'Go to website\'s home page.', 'buddypress' ),
+				'link_url'  => esc_url( home_url() ),
+				'link_text' => esc_html__( 'Go to website\'s home page.', 'buddypress' ),
 			)
 		);
 	}
@@ -4835,30 +4868,30 @@ function bp_get_deprecated_functions_versions() {
 
 	// List of versions containing deprecated functions.
 	$deprecated_functions_versions = array(
-		'1.2',
-		'1.5',
-		'1.6',
-		'1.7',
-		'1.9',
-		'2.0',
-		'2.1',
-		'2.2',
-		'2.3',
-		'2.4',
-		'2.5',
-		'2.6',
-		'2.7',
-		'2.8',
-		'2.9',
-		'3.0',
-		'4.0',
-		'6.0',
-		'7.0',
-		'8.0',
-		'9.0',
-		'10.0',
-		'11.0',
-		'12.0',
+		1.2,
+		1.5,
+		1.6,
+		1.7,
+		1.9,
+		2.0,
+		2.1,
+		2.2,
+		2.3,
+		2.4,
+		2.5,
+		2.6,
+		2.7,
+		2.8,
+		2.9,
+		3.0,
+		4.0,
+		6.0,
+		7.0,
+		8.0,
+		9.0,
+		10.0,
+		11.0,
+		12.0,
 	);
 
 	/*
@@ -4882,8 +4915,8 @@ function bp_get_deprecated_functions_versions() {
 	 * 2 last versions deprecated functions will be loaded for upgraded installs.
 	 */
 	$initial_version        = (float) bp_get_initial_version();
-	$current_version        = (float) bp_get_version();
-	$load_latest_deprecated = $initial_version < $current_version;
+	$current_major_version  = (float) bp_get_major_version( bp_get_version() );
+	$load_latest_deprecated = $initial_version < $current_major_version;
 
 	// New installs.
 	if ( ! $load_latest_deprecated ) {
@@ -4893,7 +4926,7 @@ function bp_get_deprecated_functions_versions() {
 				array_map(
 					function( $file ) {
 						if ( false !== strpos( $file, '.php' ) ) {
-							return str_replace( '.php', '', $file );
+							return (float) str_replace( '.php', '', $file );
 						};
 					},
 					scandir( buddypress()->plugin_dir . 'bp-core/deprecated' )
@@ -4906,16 +4939,10 @@ function bp_get_deprecated_functions_versions() {
 		}
 
 		// Only load 12.0 deprecated functions.
-		return array( '12.0' );
+		return array( 12.0 );
 	}
 
-	// Try to get the first major version that was in used when BuddyPress was fist installed.
-	$first_major = '';
-	if ( $initial_version ) {
-		$first_major = bp_get_major_version( $initial_version );
-	}
-
-	$index_first_major = array_search( $first_major, $deprecated_functions_versions, true );
+	$index_first_major = array_search( $initial_version, $deprecated_functions_versions, true );
 	if ( false === $index_first_major ) {
 		return array_splice( $deprecated_functions_versions, -2 );
 	}
@@ -4926,7 +4953,7 @@ function bp_get_deprecated_functions_versions() {
 		$latest_deprecated_functions_versions = array_splice( $latest_deprecated_functions_versions, -2 );
 	}
 
-	$index_initial_version = array_search( $first_major, $latest_deprecated_functions_versions, true );
+	$index_initial_version = array_search( $initial_version, $latest_deprecated_functions_versions, true );
 	if ( false !== $index_initial_version ) {
 		unset( $latest_deprecated_functions_versions[ $index_initial_version ] );
 	}
@@ -4980,17 +5007,18 @@ function bp_get_component_navigations( $component = '' ) {
 		}
 
 		if ( isset( $component->sub_nav ) && is_array( $component->sub_nav ) && $component->sub_nav ) {
-			// We possibly need to move some members nav items.
-			if ( 'members' === $key_component && isset( $navigations['profile']['sub_nav'] ) ) {
-				$profile_subnav_slugs = wp_list_pluck( $navigations['profile']['sub_nav'], 'slug' );
-				foreach ( $component->sub_nav as $members_subnav ) {
-					if ( 'profile' === $members_subnav['parent_slug'] && ! in_array( $members_subnav['slug'], $profile_subnav_slugs, true ) ) {
-						$navigations['profile']['sub_nav'][] = $members_subnav;
-					}
-				}
-			}
-
 			$navigations[ $key_component ]['sub_nav'] = $component->sub_nav;
+		}
+	}
+
+	// We possibly need to move some members nav items.
+	if ( isset( $navigations['members']['sub_nav'], $navigations['profile']['sub_nav'] ) ) {
+		$profile_subnav_slugs = wp_list_pluck( $navigations['profile']['sub_nav'], 'slug' );
+
+		foreach ( $navigations['members']['sub_nav'] as $members_subnav ) {
+			if ( 'profile' === $members_subnav['parent_slug'] && ! in_array( $members_subnav['slug'], $profile_subnav_slugs, true ) ) {
+				$navigations['profile']['sub_nav'][] = $members_subnav;
+			}
 		}
 	}
 

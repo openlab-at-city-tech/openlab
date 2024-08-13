@@ -492,7 +492,7 @@ class Controller {
 		return intval( ini_get( 'max_file_uploads' ) );
 	}
 
-	protected function do_shutdown() {
+	public function do_shutdown() {
 		if ( $this->nextgen_api_locked ) {
 			$this->get_nextgen_api()->set_execution_locked( false );
 		}
@@ -500,7 +500,7 @@ class Controller {
 
 	protected function start_locked_execute() {
 		if ( ! $this->shutdown_registered ) {
-			register_shutdown_function( [ $this, 'do_shutdown' ] );
+			\register_shutdown_function( [ $this, 'do_shutdown' ] );
 			$this->shutdown_registered = true;
 		}
 

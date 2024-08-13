@@ -102,6 +102,10 @@ class BlockManager {
 			return;
 		}
 
+		if( 0 === $target->ngg_post_thumbnail) { // Thumbnail ID is zero, skip deleting.
+			return;
+		}
+
 		$storage = StorageManager::get_instance();
 
 		// Was the post thumbnail removed?

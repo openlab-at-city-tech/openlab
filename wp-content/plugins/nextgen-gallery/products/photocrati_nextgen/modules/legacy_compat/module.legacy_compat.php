@@ -49,6 +49,7 @@ class M_Legacy_Compat extends C_Base_Module {
 			'C_Displayed_Gallery_Source_Manager'   => 'class.displayed_gallery_source_manager.php',
 			'C_Displayed_Gallery_Trigger'          => 'class.displayed_gallery_trigger.php',
 			'C_Gallery_Storage'                    => 'class.gallery_storage.php',
+			'C_NextGEN_Wizard_Manager'             => 'class.nextgen_wizard_manager.php',
 			'C_Router_Wrapper'                     => 'class.router_wrapper.php',
 			'Mixin_GalleryStorage_Base_Dynamic'    => 'mixin.gallerystorage_base_dynamic.php',
 			'Mixin_GalleryStorage_Base_Getters'    => 'mixin.gallerystorage_base_getters.php',

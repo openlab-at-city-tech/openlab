@@ -185,7 +185,9 @@ class BP_Admin {
 		add_action( 'bp_register_admin_settings', array( $this, 'register_admin_settings' ) );
 
 		// Add a link to BuddyPress Hello in the admin bar.
-		add_action( 'admin_bar_menu', array( $this, 'admin_bar_about_link' ), 100 );
+		if ( bp_current_user_can( 'bp_moderate' ) ) {
+			add_action( 'admin_bar_menu', array( $this, 'admin_bar_about_link' ), 100 );
+		}
 
 		// Add a description of BuddyPress tools in the available tools page.
 		if ( bp_current_user_can( 'bp_moderate' ) ) {
@@ -800,7 +802,7 @@ class BP_Admin {
 						<?php printf(
 							/* translators: %s is the placeholder for the BuddyPress version number. */
 							esc_html__( 'BuddyPress %s', 'buddypress' ),
-							$version
+							esc_html( $version )
 						); ?>
 					</h1>
 				</div>
@@ -818,13 +820,14 @@ class BP_Admin {
 							printf(
 									/* Translators: %s is a raising hands emoji. */
 									esc_html__( 'You now have complete control over all BuddyPress-generated URLs %s', 'buddypress' ),
+									// phpcs:ignore WordPress.Security.EscapeOutput
 									wp_staticize_emoji( '🙌' )
 								);
 							?>
 						</h2>
 						<p>
 							<?php esc_html_e( 'Among the 100 changes introduced in 12.0.0, the BP Rewrites API is a massive revolution opening the way for a progressive BuddyPress evolution.', 'buddypress' ); ?>
-							<?php esc_html_e( 'Based on 10 years of experience gained through hard work, we are beginning to reimagine what it means to organize and manage communities within WordPess.', 'buddypress' ); ?>
+							<?php esc_html_e( 'Based on 10 years of experience gained through hard work, we are beginning to reimagine what it means to organize and manage communities within WordPress.', 'buddypress' ); ?>
 							<?php esc_html_e( 'Here are the immediate benefits of the new BP Rewrites API :', 'buddypress' ); ?>
 						</p>
 						<ol>
@@ -888,6 +891,7 @@ class BP_Admin {
 							printf(
 									/* Translators: %s is a woman supervillain emoji. */
 									esc_html__( 'Here\'s another benefit of the BP Rewrites API: the new "members only" community visibility level %s', 'buddypress' ),
+									// phpcs:ignore WordPress.Security.EscapeOutput
 									wp_staticize_emoji( '🦹🏻' )
 								);
 							?>
@@ -927,6 +931,7 @@ class BP_Admin {
 								printf(
 									/* Translators: %s is a smiling face with heart-eyes emoji. */
 									esc_html__( 'Many thanks to you for trusting BuddyPress to power your community site %s', 'buddypress' ),
+									// phpcs:ignore WordPress.Security.EscapeOutput
 									wp_staticize_emoji( '😍' )
 								);
 							?>
@@ -940,12 +945,22 @@ class BP_Admin {
 				<div class="bp-hello-social-cta">
 					<p>
 						<?php
-						printf(
-							/* translators: 1: heart dashicons. 2: BP Credits screen url. 3: number of BuddyPress contributors to this version. */
-							_n( 'Built with %1$s by <a href="%2$s">%3$d volunteer</a>.', 'Built with %1$s by <a href="%2$s">%3$d volunteers</a>.', 46, 'buddypress' ),
-							'<span class="dashicons dashicons-heart"></span>',
-							esc_url( bp_get_admin_url( 'admin.php?page=bp-credits' ) ),
-							number_format_i18n( 46 )
+						echo wp_kses(
+							sprintf(
+								/* translators: 1: heart dashicons. 2: BP Credits screen url. 3: number of BuddyPress contributors to this version. */
+								_n( 'Built with %1$s by <a href="%2$s">%3$d volunteer</a>.', 'Built with %1$s by <a href="%2$s">%3$d volunteers</a>.', 49, 'buddypress' ),
+								'<span class="dashicons dashicons-heart"></span>',
+								esc_url( bp_get_admin_url( 'admin.php?page=bp-credits' ) ),
+								esc_html( number_format_i18n( 49 ) )
+							),
+							array(
+								'a'    => array(
+									'href' => true,
+								),
+								'span' => array(
+									'class' => true,
+								)
+							)
 						);
 						?>
 					</p>
@@ -1091,26 +1106,12 @@ class BP_Admin {
 				</li>
 			</ul>
 
-			<h3 class="wp-people-group"><?php esc_html_e( 'BuddyPress Docs Team', 'buddypress' ); ?></h3>
-			<ul class="wp-people-group " id="wp-people-group-docs-team">
-				<li class="wp-person" id="wp-person-jaz_on">
-					<a class="web" href="https://profiles.wordpress.org/jaz_on/"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/156bf201e3860e2d75a9f13a890de950?s=120">
-					Jason Rouet</a>
-					<span class="title"><?php esc_html_e( 'Documentation leader', 'buddypress' ); ?></span>
-				</li>
-				<li class="wp-person" id="wp-person-bouncingsprout">
-					<a class="web" href="https://profiles.wordpress.org/bouncingsprout/"><img alt="" class="gravatar" src="//www.gravatar.com/avatar/8f6faaf383a02d2a478339c8dfbf910e?s=120">
-					Ben Roberts</a>
-					<span class="title"><?php esc_html_e( 'Documentation deputy', 'buddypress' ); ?></span>
-				</li>
-			</ul>
-
 			<h3 class="wp-people-group">
 				<?php
 				printf(
 					/* translators: %s: BuddyPress version number */
 					esc_html__( 'Noteworthy Contributors to %s', 'buddypress' ),
-					self::display_version()
+					esc_html( self::display_version() )
 				);
 				?>
 			</h3>
@@ -1134,7 +1135,7 @@ class BP_Admin {
 				printf(
 					/* translators: %s: BuddyPress version number */
 					esc_html__( 'All Contributors to BuddyPress %s', 'buddypress' ),
-					self::display_version()
+					esc_html( self::display_version() )
 				);
 				?>
 			</h3>
@@ -1172,16 +1173,19 @@ class BP_Admin {
 				<a href="https://profiles.wordpress.org/nekojonez/">Pieterjan Deneys (nekojonez)</a>,
 				<a href="https://profiles.wordpress.org/niftythree/">Nifty (niftythree)</a>,
 				<a href="https://profiles.wordpress.org/nilovelez/">Nilo Velez (nilovelez)</a>,
+				<a href="https://profiles.wordpress.org/perchenet/">perchenet</a>,
 				<a href="https://profiles.wordpress.org/plugindevs/">Plugin Devs</a>,
 				<a href="https://profiles.wordpress.org/psmits1567/">Peter Smits (psmits1567)</a>,
 				<a href="https://profiles.wordpress.org/r-a-y/">r-a-y</a>,
 				<a href="https://profiles.wordpress.org/rajinsharwar/">Rajin Sharwar (rajinsharwar)</a>,
 				<a href="https://profiles.wordpress.org/raviousprime/">raviousprime</a>,
 				<a href="https://profiles.wordpress.org/espellcaste/">Renato Alves (espellcaste)</a>,
+				<a href="https://profiles.wordpress.org/sabernhardt/">Stephen Bernhardt (sabernhardt)</a>,
 				<a href="https://profiles.wordpress.org/shailu25/">Shail Mehta (shailu25)</a>,
 				<a href="https://profiles.wordpress.org/shawfactor/">shawfactor</a>,
-				<a href="https://profiles.wordpress.org/slaffik/">Slava Abakumov (slaFFik)</a>,
 				<a href="https://profiles.wordpress.org/sjregan/">sjregan</a>,
+				<a href="https://profiles.wordpress.org/slaffik/">Slava Abakumov (slaFFik)</a>,
+				<a href="https://profiles.wordpress.org/strategio/">Pierre Sylvestre (strategio)</a>,
 				<a href="https://profiles.wordpress.org/teeboy4real/">teeboy4real</a>,
 				<a href="https://profiles.wordpress.org/upadalavipul/">Upadala Vipul (upadalavipul)</a>,
 				<a href="https://profiles.wordpress.org/vapvarun/">Varun Dubey (vapvarun)</a>.
@@ -1270,13 +1274,13 @@ class BP_Admin {
 		$taxonomy_object = get_taxonomy( bp_get_email_tax_type() );
 
 		if ( is_wp_error( $terms ) || ! $terms  ) {
-			printf( '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">%s</span>', $taxonomy_object->labels->no_terms );
+			printf( '<span aria-hidden="true">&#8212;</span><span class="screen-reader-text">%s</span>', esc_html( $taxonomy_object->labels->no_terms ) );
 		} else {
 			$situations = wp_list_pluck( $terms, 'description' );
 
 			// Output each situation as a list item.
 			echo '<ul><li>';
-			echo implode( '</li><li>', $situations );
+			echo implode( '</li><li>', array_map( 'esc_html', $situations ) );
 			echo '</li></ul>';
 		}
 	}
@@ -1393,7 +1397,7 @@ class BP_Admin {
 			// 3.0
 			'bp-hello-css' => array(
 				'file'         => "{$url}hello{$min}.css",
-				'dependencies' => array( 'bp-admin-common-css', 'thickbox' ),
+				'dependencies' => array( 'bp-admin-common-css', 'thickbox', 'bp-tooltips' ),
 			),
 		) );
 

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 18:03+0000\n"
+"POT-Creation-Date: 2024-02-24 23:49+0000\n"
 "PO-Revision-Date: 2017-04-16T23:10:48+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -118,12 +118,12 @@ msgstr "Gebeurtenis plek"
 msgid "All Venues"
 msgstr "Alle Plekke"
 
-#: classes/class-eo-calendar-widget.php:296
+#: classes/class-eo-calendar-widget.php:298
 #, fuzzy
 msgid "Previous month"
 msgstr "Vorige maand"
 
-#: classes/class-eo-calendar-widget.php:299
+#: classes/class-eo-calendar-widget.php:301
 msgid "Next month"
 msgstr "Volgende maand"
 
@@ -428,7 +428,7 @@ msgstr "Wanneer"
 msgid "Event Title"
 msgstr ""
 
-#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:403
+#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:406
 #, fuzzy
 msgid "Where"
 msgstr "Waar"
@@ -1474,82 +1474,82 @@ msgstr "1 kategorie was geskep"
 msgid "%d categories were created"
 msgstr "%d kategorieë was geskep"
 
-#: includes/event-organiser-ajax.php:342
+#: includes/event-organiser-ajax.php:345
 #, fuzzy
 msgid "Protected"
 msgstr "Beskerm"
 
-#: includes/event-organiser-ajax.php:344
+#: includes/event-organiser-ajax.php:347
 #, fuzzy
 msgid "Private"
 msgstr "Privaat"
 
-#: includes/event-organiser-ajax.php:346
+#: includes/event-organiser-ajax.php:349
 #, fuzzy
 msgid "Draft"
 msgstr "Konsep"
 
-#: includes/event-organiser-ajax.php:386
+#: includes/event-organiser-ajax.php:389
 #, fuzzy
 msgid "Start"
 msgstr "Begin"
 
-#: includes/event-organiser-ajax.php:387
+#: includes/event-organiser-ajax.php:390
 #, fuzzy
 msgid "End"
 msgstr "Einde"
 
-#: includes/event-organiser-ajax.php:390
+#: includes/event-organiser-ajax.php:393
 msgid "Organiser:"
 msgstr "Organiseerder"
 
-#: includes/event-organiser-ajax.php:429
+#: includes/event-organiser-ajax.php:432
 #, fuzzy
 msgid "This event recurs"
 msgstr "Die gebeurtenis herhaal"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
+#: includes/event-organiser-ajax.php:443 includes/event-organiser-cpt.php:230
 #, fuzzy
 msgid "Edit Event"
 msgstr "Wysig Gebeurtenis"
 
-#: includes/event-organiser-ajax.php:441
+#: includes/event-organiser-ajax.php:444
 #, php-format
 msgid "Edit Event: %s"
 msgstr "Wysig Gebeurtenis: %s"
 
-#: includes/event-organiser-ajax.php:463
+#: includes/event-organiser-ajax.php:466
 msgid "Delete this occurrence"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:469
+#: includes/event-organiser-ajax.php:472
 msgid "Delete this event"
 msgstr "Verwyder die gebeurtenis"
 
-#: includes/event-organiser-ajax.php:487
+#: includes/event-organiser-ajax.php:490
 #, fuzzy
 msgid "Break this series"
 msgstr "Breek die series"
 
-#: includes/event-organiser-ajax.php:781
+#: includes/event-organiser-ajax.php:787
 #, fuzzy
 msgid "Event not found"
 msgstr "Gebeurtenis nie gevind nie"
 
-#: includes/event-organiser-ajax.php:789
+#: includes/event-organiser-ajax.php:795
 msgid "Events are not editable via the admin calendar"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:795
+#: includes/event-organiser-ajax.php:801
 #, fuzzy
 msgid "Are you sure you want to do this?"
 msgstr "Is jy seker jy wil dit doen?"
 
-#: includes/event-organiser-ajax.php:802
+#: includes/event-organiser-ajax.php:808
 msgid "You do not have permission to edit this event"
 msgstr ""
 
-#: includes/event-organiser-ajax.php:818
+#: includes/event-organiser-ajax.php:824
 #, php-format
 msgid "Event not created: %s"
 msgstr "Gebeurtenis nie geskep nie: %s"

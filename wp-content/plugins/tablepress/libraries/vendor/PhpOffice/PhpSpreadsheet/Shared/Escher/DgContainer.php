@@ -3,24 +3,25 @@
 namespace TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher;
 
 use TablePress\PhpOffice\PhpSpreadsheet\Exception as SpreadsheetException;
+use TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer;
 
 class DgContainer
 {
 	/**
 	 * Drawing index, 1-based.
-	 *
-	 * @var ?int
+	 * @var int|null
 	 */
 	private $dgId;
 
 	/**
 	 * Last shape index in this drawing.
-	 *
-	 * @var ?int
+	 * @var int|null
 	 */
 	private $lastSpId;
 
-	/** @var ?DgContainer\SpgrContainer */
+	/**
+	 * @var \TablePress\PhpOffice\PhpSpreadsheet\Shared\Escher\DgContainer\SpgrContainer|null
+	 */
 	private $spgrContainer;
 
 	public function getDgId(): ?int
@@ -43,12 +44,12 @@ class DgContainer
 		$this->lastSpId = $value;
 	}
 
-	public function getSpgrContainer(): ?DgContainer\SpgrContainer
+	public function getSpgrContainer(): ?SpgrContainer
 	{
 		return $this->spgrContainer;
 	}
 
-	public function getSpgrContainerOrThrow(): DgContainer\SpgrContainer
+	public function getSpgrContainerOrThrow(): SpgrContainer
 	{
 		if ($this->spgrContainer !== null) {
 			return $this->spgrContainer;
@@ -57,8 +58,7 @@ class DgContainer
 		throw new SpreadsheetException('spgrContainer is unexpectedly null');
 	}
 
-	/** @param DgContainer\SpgrContainer $spgrContainer */
-	public function setSpgrContainer($spgrContainer): DgContainer\SpgrContainer
+	public function setSpgrContainer(SpgrContainer $spgrContainer): SpgrContainer
 	{
 		return $this->spgrContainer = $spgrContainer;
 	}

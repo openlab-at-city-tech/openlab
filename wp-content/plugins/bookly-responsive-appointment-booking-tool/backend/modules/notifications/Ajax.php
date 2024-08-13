@@ -32,7 +32,6 @@ class Ajax extends Lib\Base\Ajax
         update_option( 'bookly_email_sender', self::parameter( 'bookly_email_sender' ) );
         update_option( 'bookly_email_sender_name', self::parameter( 'bookly_email_sender_name' ) );
         update_option( 'bookly_ntf_processing_interval', (int) self::parameter( 'bookly_ntf_processing_interval' ) );
-        Proxy\Pro::saveSettings( self::parameters() );
 
         wp_send_json_success();
     }

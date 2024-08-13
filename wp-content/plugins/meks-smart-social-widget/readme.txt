@@ -3,8 +3,8 @@ Contributors: mekshq
 Donate link: https://mekshq.com/
 Tags: social, icons, widget, linkedin, reddit, vimeo, dribble, instagram, pinterest
 Requires at least: 3.0
-Tested up to: 6.4
-Stable tag: 1.6.4
+Tested up to: 6.5
+Stable tag: 1.6.5
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl.html
 
@@ -46,6 +46,10 @@ For any questions, error reports and suggestions please visit https://mekshq.com
 4. Widget in action - example 3
 
 == Changelog ==
+
+= 1.6.5 =
+* WP 6.5 compatibility tested
+* Modified: Minor XSS vulnerability resolved
 
 = 1.6.4 =
 * WP 6.4 compatibility tested

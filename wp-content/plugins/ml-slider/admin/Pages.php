@@ -60,6 +60,23 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
     }
 
     /**
+     * Loads TinyMCE
+     * 
+     * @since 3.62
+     * 
+     * @return void
+     */
+    public function load_wysiwyg()
+    {
+        wp_enqueue_script(
+            'metaslider-tinymce-script',
+            METASLIDER_ADMIN_URL . 'assets/vendor/tinymce/js/tinymce/tinymce.min.js',
+            array(),
+            METASLIDER_ASSETS_VERSION
+        );
+    }
+
+    /**
      * Loads in custom javascript
      */
     public function load_javascript()
@@ -67,10 +84,48 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
         wp_enqueue_media();
         wp_enqueue_script('jquery-ui-core');
         wp_enqueue_script('jquery-ui-sortable');
-        wp_register_script('metaslider-admin-script', METASLIDER_ADMIN_URL . 'assets/dist/js/admin.js', array('jquery', 'plupload-all'), METASLIDER_ASSETS_VERSION, true);
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_register_script(
+            'metaslider-admin-script', 
+            METASLIDER_ADMIN_URL . 'assets/dist/js/admin.js', 
+            array('jquery', 'plupload-all', 'metaslider-wp-color-picker'), 
+            METASLIDER_ASSETS_VERSION, 
+            true
+        );
+        wp_register_script(
+            'metaslider-wp-color-picker',
+            METASLIDER_ADMIN_URL . 'assets/vendor/wp-color-picker-alpha/wp-color-picker-alpha.min.js',
+            array( 'wp-color-picker' ),
+            METASLIDER_VERSION
+        );
         
         $global_settings = get_option( 'metaslider_global_settings' );
 
+        // @TODO - Move the logic below and MetaSlider->get_breakpoints() to a single place to avoid duplication
+        $default_settings   = get_site_option( 'metaslider_default_settings' );
+        $global_settings    = $this->get_global_settings();
+        
+        if ( $default_settings 
+            && ! isset( $global_settings['mobileSettings'] ) 
+            || ( isset( $global_settings['mobileSettings'] ) 
+                && true == $global_settings['mobileSettings'] 
+            )  
+        ) {
+            $breakpoints = array(
+                'smartphone' => isset( $default_settings['smartphone'] ) ? (int) $default_settings['smartphone'] : 480,
+                'tablet' => isset( $default_settings['tablet'] ) ? (int) $default_settings['tablet'] : 768,
+                'laptop' => isset( $default_settings['laptop'] ) ? (int) $default_settings['laptop'] : 1024,
+                'desktop' => isset( $default_settings['desktop'] ) ? (int) $default_settings['desktop'] : 1440,
+            );
+        } else {
+            $breakpoints = array(
+                'smartphone' => 480,
+                'tablet' => 768,
+                'laptop' => 1024,
+                'desktop' => 1440
+            );
+        }
+        
         wp_localize_script('metaslider-admin-script', 'metaslider', array(
             'url' => esc_html__("URL", "ml-slider"),
             'caption' => esc_html__("Caption", "ml-slider"),
@@ -90,13 +145,17 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
             'undelete_slide_nonce' => wp_create_nonce('metaslider_undelete_slide'),
             'permanent_delete_slide_nonce' => wp_create_nonce('metaslider_permanent_delete_slide'),
             'update_slide_image_nonce' => wp_create_nonce('metaslider_update_slide_image'),
+            'duplicate_slide_nonce' => wp_create_nonce('metaslider_duplicate_slide'),
             'quickstart_slideshow_nonce' => wp_create_nonce('metaslider_quickstart_slideshow'),
             'legacy_notification_nonce' => wp_create_nonce('metaslider_legacy_notification'),
             'useWithCaution' => esc_html__("Caution: This setting is for advanced developers only. If you're unsure, leave it checked.", "ml-slider"),
             'locale' => preg_replace('/[^a-z]/', '', get_locale()),
             'newSlideOrder' => isset( $global_settings['newSlideOrder'] ) 
                 && $global_settings['newSlideOrder'] === 'first' 
-                ? esc_html( $global_settings['newSlideOrder'] ) : 'last'
+                ? esc_html( $global_settings['newSlideOrder'] ) : 'last',
+            'tinymce' => array(), // Just initialize to add values later through JS files
+            'quickstart_slugs' => $this->quickstart_slugs(),
+            'breakpoints' => $breakpoints
         ));
         wp_enqueue_script('metaslider-admin-script');
         do_action('metaslider_register_admin_scripts');
@@ -189,6 +248,9 @@ class MetaSlider_Admin_Pages extends MetaSliderPlugin
         add_action('load-' . $page, array($this, 'load_tooltips'));
         add_action('load-' . $page, array($this, 'load_javascript'));
         add_action('load-' . $page, array($this, 'load_styles'));
+
+        // TinyMCE is only required in edit sldieshow page
+        add_action('load-toplevel_page_metaslider', array($this, 'load_wysiwyg'));
     }
 
     /**

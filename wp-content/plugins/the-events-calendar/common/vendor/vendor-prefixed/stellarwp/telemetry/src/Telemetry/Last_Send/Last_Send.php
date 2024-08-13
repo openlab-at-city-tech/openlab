@@ -134,5 +134,4 @@ class Last_Send {
 
 		return $result;
 	}
-
 }

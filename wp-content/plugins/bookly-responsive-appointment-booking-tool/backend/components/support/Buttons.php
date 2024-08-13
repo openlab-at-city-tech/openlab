@@ -25,8 +25,8 @@ class Buttons extends Lib\Base\Component
 
         wp_localize_script( 'bookly-support.js', 'BooklySupportL10n', array(
             'featuresRequestUrl' => Lib\Utils\Common::prepareUrlReferrers( Urls::FEATURES_REQUEST_PAGE, 'notification_bar' ),
-            'capabilities' => sprintf( __( 'Please note that your user doesn\'t have the %s capability. All potentially unsecure HTML in Appearance, Email Notifications, and other Bookly sections will be sanitized during the saving of any changes' ), '`unfiltered_html`' ),
-            'contact_with_admin' => __( 'Please contact your website administrator for additional information' ),
+            'capabilities' => sprintf( __( 'Please note that your user doesn\'t have the %s capability. All potentially unsecure HTML in Appearance, Email Notifications, and other Bookly sections will be sanitized during the saving of any changes', 'bookly' ), '`unfiltered_html`' ),
+            'contact_with_admin' => __( 'Please contact your website administrator for additional information', 'bookly' ),
         ) );
 
         $days_in_use = (int) ( ( time() - Lib\Plugin::getInstallationTime() ) / DAY_IN_SECONDS );

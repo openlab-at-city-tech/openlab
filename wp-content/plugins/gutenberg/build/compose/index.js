@@ -1,963 +1,8 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
-
-/***/ 8294:
-/***/ (function(module) {
-
-/*!
- * clipboard.js v2.0.8
- * https://clipboardjs.com/
- *
- * Licensed MIT © Zeno Rocha
- */
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(true)
-		module.exports = factory();
-	else {}
-})(this, function() {
-return /******/ (function() { // webpackBootstrap
-/******/ 	var __webpack_modules__ = ({
-
-/***/ 134:
-/***/ (function(__unused_webpack_module, __nested_webpack_exports__, __nested_webpack_require_622__) {
-
-"use strict";
-
-// EXPORTS
-__nested_webpack_require_622__.d(__nested_webpack_exports__, {
-  "default": function() { return /* binding */ clipboard; }
-});
-
-// EXTERNAL MODULE: ./node_modules/tiny-emitter/index.js
-var tiny_emitter = __nested_webpack_require_622__(279);
-var tiny_emitter_default = /*#__PURE__*/__nested_webpack_require_622__.n(tiny_emitter);
-// EXTERNAL MODULE: ./node_modules/good-listener/src/listen.js
-var listen = __nested_webpack_require_622__(370);
-var listen_default = /*#__PURE__*/__nested_webpack_require_622__.n(listen);
-// EXTERNAL MODULE: ./node_modules/select/src/select.js
-var src_select = __nested_webpack_require_622__(817);
-var select_default = /*#__PURE__*/__nested_webpack_require_622__.n(src_select);
-;// CONCATENATED MODULE: ./src/clipboard-action.js
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-/**
- * Inner class which performs selection from either `text` or `target`
- * properties and then executes copy or cut operations.
- */
-
-var ClipboardAction = /*#__PURE__*/function () {
-  /**
-   * @param {Object} options
-   */
-  function ClipboardAction(options) {
-    _classCallCheck(this, ClipboardAction);
-
-    this.resolveOptions(options);
-    this.initSelection();
-  }
-  /**
-   * Defines base properties passed from constructor.
-   * @param {Object} options
-   */
-
-
-  _createClass(ClipboardAction, [{
-    key: "resolveOptions",
-    value: function resolveOptions() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      this.action = options.action;
-      this.container = options.container;
-      this.emitter = options.emitter;
-      this.target = options.target;
-      this.text = options.text;
-      this.trigger = options.trigger;
-      this.selectedText = '';
-    }
-    /**
-     * Decides which selection strategy is going to be applied based
-     * on the existence of `text` and `target` properties.
-     */
-
-  }, {
-    key: "initSelection",
-    value: function initSelection() {
-      if (this.text) {
-        this.selectFake();
-      } else if (this.target) {
-        this.selectTarget();
-      }
-    }
-    /**
-     * Creates a fake textarea element, sets its value from `text` property,
-     */
-
-  }, {
-    key: "createFakeElement",
-    value: function createFakeElement() {
-      var isRTL = document.documentElement.getAttribute('dir') === 'rtl';
-      this.fakeElem = document.createElement('textarea'); // Prevent zooming on iOS
-
-      this.fakeElem.style.fontSize = '12pt'; // Reset box model
-
-      this.fakeElem.style.border = '0';
-      this.fakeElem.style.padding = '0';
-      this.fakeElem.style.margin = '0'; // Move element out of screen horizontally
-
-      this.fakeElem.style.position = 'absolute';
-      this.fakeElem.style[isRTL ? 'right' : 'left'] = '-9999px'; // Move element to the same position vertically
-
-      var yPosition = window.pageYOffset || document.documentElement.scrollTop;
-      this.fakeElem.style.top = "".concat(yPosition, "px");
-      this.fakeElem.setAttribute('readonly', '');
-      this.fakeElem.value = this.text;
-      return this.fakeElem;
-    }
-    /**
-     * Get's the value of fakeElem,
-     * and makes a selection on it.
-     */
-
-  }, {
-    key: "selectFake",
-    value: function selectFake() {
-      var _this = this;
-
-      var fakeElem = this.createFakeElement();
-
-      this.fakeHandlerCallback = function () {
-        return _this.removeFake();
-      };
-
-      this.fakeHandler = this.container.addEventListener('click', this.fakeHandlerCallback) || true;
-      this.container.appendChild(fakeElem);
-      this.selectedText = select_default()(fakeElem);
-      this.copyText();
-      this.removeFake();
-    }
-    /**
-     * Only removes the fake element after another click event, that way
-     * a user can hit `Ctrl+C` to copy because selection still exists.
-     */
-
-  }, {
-    key: "removeFake",
-    value: function removeFake() {
-      if (this.fakeHandler) {
-        this.container.removeEventListener('click', this.fakeHandlerCallback);
-        this.fakeHandler = null;
-        this.fakeHandlerCallback = null;
-      }
-
-      if (this.fakeElem) {
-        this.container.removeChild(this.fakeElem);
-        this.fakeElem = null;
-      }
-    }
-    /**
-     * Selects the content from element passed on `target` property.
-     */
-
-  }, {
-    key: "selectTarget",
-    value: function selectTarget() {
-      this.selectedText = select_default()(this.target);
-      this.copyText();
-    }
-    /**
-     * Executes the copy operation based on the current selection.
-     */
-
-  }, {
-    key: "copyText",
-    value: function copyText() {
-      var succeeded;
-
-      try {
-        succeeded = document.execCommand(this.action);
-      } catch (err) {
-        succeeded = false;
-      }
-
-      this.handleResult(succeeded);
-    }
-    /**
-     * Fires an event based on the copy operation result.
-     * @param {Boolean} succeeded
-     */
-
-  }, {
-    key: "handleResult",
-    value: function handleResult(succeeded) {
-      this.emitter.emit(succeeded ? 'success' : 'error', {
-        action: this.action,
-        text: this.selectedText,
-        trigger: this.trigger,
-        clearSelection: this.clearSelection.bind(this)
-      });
-    }
-    /**
-     * Moves focus away from `target` and back to the trigger, removes current selection.
-     */
-
-  }, {
-    key: "clearSelection",
-    value: function clearSelection() {
-      if (this.trigger) {
-        this.trigger.focus();
-      }
-
-      document.activeElement.blur();
-      window.getSelection().removeAllRanges();
-    }
-    /**
-     * Sets the `action` to be performed which can be either 'copy' or 'cut'.
-     * @param {String} action
-     */
-
-  }, {
-    key: "destroy",
-
-    /**
-     * Destroy lifecycle.
-     */
-    value: function destroy() {
-      this.removeFake();
-    }
-  }, {
-    key: "action",
-    set: function set() {
-      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'copy';
-      this._action = action;
-
-      if (this._action !== 'copy' && this._action !== 'cut') {
-        throw new Error('Invalid "action" value, use either "copy" or "cut"');
-      }
-    }
-    /**
-     * Gets the `action` property.
-     * @return {String}
-     */
-    ,
-    get: function get() {
-      return this._action;
-    }
-    /**
-     * Sets the `target` property using an element
-     * that will be have its content copied.
-     * @param {Element} target
-     */
-
-  }, {
-    key: "target",
-    set: function set(target) {
-      if (target !== undefined) {
-        if (target && _typeof(target) === 'object' && target.nodeType === 1) {
-          if (this.action === 'copy' && target.hasAttribute('disabled')) {
-            throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
-          }
-
-          if (this.action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
-            throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
-          }
-
-          this._target = target;
-        } else {
-          throw new Error('Invalid "target" value, use a valid Element');
-        }
-      }
-    }
-    /**
-     * Gets the `target` property.
-     * @return {String|HTMLElement}
-     */
-    ,
-    get: function get() {
-      return this._target;
-    }
-  }]);
-
-  return ClipboardAction;
-}();
-
-/* harmony default export */ var clipboard_action = (ClipboardAction);
-;// CONCATENATED MODULE: ./src/clipboard.js
-function clipboard_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { clipboard_typeof = function _typeof(obj) { return typeof obj; }; } else { clipboard_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return clipboard_typeof(obj); }
-
-function clipboard_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function clipboard_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function clipboard_createClass(Constructor, protoProps, staticProps) { if (protoProps) clipboard_defineProperties(Constructor.prototype, protoProps); if (staticProps) clipboard_defineProperties(Constructor, staticProps); return Constructor; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
-
-function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
-
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
-
-function _possibleConstructorReturn(self, call) { if (call && (clipboard_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
-
-function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
-
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
-
-function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
-
-
-
-
-/**
- * Helper function to retrieve attribute value.
- * @param {String} suffix
- * @param {Element} element
- */
-
-function getAttributeValue(suffix, element) {
-  var attribute = "data-clipboard-".concat(suffix);
-
-  if (!element.hasAttribute(attribute)) {
-    return;
-  }
-
-  return element.getAttribute(attribute);
-}
-/**
- * Base class which takes one or more elements, adds event listeners to them,
- * and instantiates a new `ClipboardAction` on each click.
- */
-
-
-var Clipboard = /*#__PURE__*/function (_Emitter) {
-  _inherits(Clipboard, _Emitter);
-
-  var _super = _createSuper(Clipboard);
-
-  /**
-   * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
-   * @param {Object} options
-   */
-  function Clipboard(trigger, options) {
-    var _this;
-
-    clipboard_classCallCheck(this, Clipboard);
-
-    _this = _super.call(this);
-
-    _this.resolveOptions(options);
-
-    _this.listenClick(trigger);
-
-    return _this;
-  }
-  /**
-   * Defines if attributes would be resolved using internal setter functions
-   * or custom functions that were passed in the constructor.
-   * @param {Object} options
-   */
-
-
-  clipboard_createClass(Clipboard, [{
-    key: "resolveOptions",
-    value: function resolveOptions() {
-      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
-      this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
-      this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
-      this.text = typeof options.text === 'function' ? options.text : this.defaultText;
-      this.container = clipboard_typeof(options.container) === 'object' ? options.container : document.body;
-    }
-    /**
-     * Adds a click event listener to the passed trigger.
-     * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
-     */
-
-  }, {
-    key: "listenClick",
-    value: function listenClick(trigger) {
-      var _this2 = this;
-
-      this.listener = listen_default()(trigger, 'click', function (e) {
-        return _this2.onClick(e);
-      });
-    }
-    /**
-     * Defines a new `ClipboardAction` on each click event.
-     * @param {Event} e
-     */
-
-  }, {
-    key: "onClick",
-    value: function onClick(e) {
-      var trigger = e.delegateTarget || e.currentTarget;
-
-      if (this.clipboardAction) {
-        this.clipboardAction = null;
-      }
-
-      this.clipboardAction = new clipboard_action({
-        action: this.action(trigger),
-        target: this.target(trigger),
-        text: this.text(trigger),
-        container: this.container,
-        trigger: trigger,
-        emitter: this
-      });
-    }
-    /**
-     * Default `action` lookup function.
-     * @param {Element} trigger
-     */
-
-  }, {
-    key: "defaultAction",
-    value: function defaultAction(trigger) {
-      return getAttributeValue('action', trigger);
-    }
-    /**
-     * Default `target` lookup function.
-     * @param {Element} trigger
-     */
-
-  }, {
-    key: "defaultTarget",
-    value: function defaultTarget(trigger) {
-      var selector = getAttributeValue('target', trigger);
-
-      if (selector) {
-        return document.querySelector(selector);
-      }
-    }
-    /**
-     * Returns the support of the given action, or all actions if no action is
-     * given.
-     * @param {String} [action]
-     */
-
-  }, {
-    key: "defaultText",
-
-    /**
-     * Default `text` lookup function.
-     * @param {Element} trigger
-     */
-    value: function defaultText(trigger) {
-      return getAttributeValue('text', trigger);
-    }
-    /**
-     * Destroy lifecycle.
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.listener.destroy();
-
-      if (this.clipboardAction) {
-        this.clipboardAction.destroy();
-        this.clipboardAction = null;
-      }
-    }
-  }], [{
-    key: "isSupported",
-    value: function isSupported() {
-      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['copy', 'cut'];
-      var actions = typeof action === 'string' ? [action] : action;
-      var support = !!document.queryCommandSupported;
-      actions.forEach(function (action) {
-        support = support && !!document.queryCommandSupported(action);
-      });
-      return support;
-    }
-  }]);
-
-  return Clipboard;
-}((tiny_emitter_default()));
-
-/* harmony default export */ var clipboard = (Clipboard);
-
-/***/ }),
-
-/***/ 828:
-/***/ (function(module) {
-
-var DOCUMENT_NODE_TYPE = 9;
-
-/**
- * A polyfill for Element.matches()
- */
-if (typeof Element !== 'undefined' && !Element.prototype.matches) {
-    var proto = Element.prototype;
-
-    proto.matches = proto.matchesSelector ||
-                    proto.mozMatchesSelector ||
-                    proto.msMatchesSelector ||
-                    proto.oMatchesSelector ||
-                    proto.webkitMatchesSelector;
-}
-
-/**
- * Finds the closest parent that matches a selector.
- *
- * @param {Element} element
- * @param {String} selector
- * @return {Function}
- */
-function closest (element, selector) {
-    while (element && element.nodeType !== DOCUMENT_NODE_TYPE) {
-        if (typeof element.matches === 'function' &&
-            element.matches(selector)) {
-          return element;
-        }
-        element = element.parentNode;
-    }
-}
-
-module.exports = closest;
-
-
-/***/ }),
-
-/***/ 438:
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_17417__) {
-
-var closest = __nested_webpack_require_17417__(828);
-
-/**
- * Delegates event to a selector.
- *
- * @param {Element} element
- * @param {String} selector
- * @param {String} type
- * @param {Function} callback
- * @param {Boolean} useCapture
- * @return {Object}
- */
-function _delegate(element, selector, type, callback, useCapture) {
-    var listenerFn = listener.apply(this, arguments);
-
-    element.addEventListener(type, listenerFn, useCapture);
-
-    return {
-        destroy: function() {
-            element.removeEventListener(type, listenerFn, useCapture);
-        }
-    }
-}
-
-/**
- * Delegates event to a selector.
- *
- * @param {Element|String|Array} [elements]
- * @param {String} selector
- * @param {String} type
- * @param {Function} callback
- * @param {Boolean} useCapture
- * @return {Object}
- */
-function delegate(elements, selector, type, callback, useCapture) {
-    // Handle the regular Element usage
-    if (typeof elements.addEventListener === 'function') {
-        return _delegate.apply(null, arguments);
-    }
-
-    // Handle Element-less usage, it defaults to global delegation
-    if (typeof type === 'function') {
-        // Use `document` as the first parameter, then apply arguments
-        // This is a short way to .unshift `arguments` without running into deoptimizations
-        return _delegate.bind(null, document).apply(null, arguments);
-    }
-
-    // Handle Selector-based usage
-    if (typeof elements === 'string') {
-        elements = document.querySelectorAll(elements);
-    }
-
-    // Handle Array-like based usage
-    return Array.prototype.map.call(elements, function (element) {
-        return _delegate(element, selector, type, callback, useCapture);
-    });
-}
-
-/**
- * Finds closest match and invokes callback.
- *
- * @param {Element} element
- * @param {String} selector
- * @param {String} type
- * @param {Function} callback
- * @return {Function}
- */
-function listener(element, selector, type, callback) {
-    return function(e) {
-        e.delegateTarget = closest(e.target, selector);
-
-        if (e.delegateTarget) {
-            callback.call(element, e);
-        }
-    }
-}
-
-module.exports = delegate;
-
-
-/***/ }),
-
-/***/ 879:
-/***/ (function(__unused_webpack_module, exports) {
-
-/**
- * Check if argument is a HTML element.
- *
- * @param {Object} value
- * @return {Boolean}
- */
-exports.node = function(value) {
-    return value !== undefined
-        && value instanceof HTMLElement
-        && value.nodeType === 1;
-};
-
-/**
- * Check if argument is a list of HTML elements.
- *
- * @param {Object} value
- * @return {Boolean}
- */
-exports.nodeList = function(value) {
-    var type = Object.prototype.toString.call(value);
-
-    return value !== undefined
-        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
-        && ('length' in value)
-        && (value.length === 0 || exports.node(value[0]));
-};
-
-/**
- * Check if argument is a string.
- *
- * @param {Object} value
- * @return {Boolean}
- */
-exports.string = function(value) {
-    return typeof value === 'string'
-        || value instanceof String;
-};
-
-/**
- * Check if argument is a function.
- *
- * @param {Object} value
- * @return {Boolean}
- */
-exports.fn = function(value) {
-    var type = Object.prototype.toString.call(value);
-
-    return type === '[object Function]';
-};
-
-
-/***/ }),
-
-/***/ 370:
-/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_20781__) {
-
-var is = __nested_webpack_require_20781__(879);
-var delegate = __nested_webpack_require_20781__(438);
-
-/**
- * Validates all params and calls the right
- * listener function based on its target type.
- *
- * @param {String|HTMLElement|HTMLCollection|NodeList} target
- * @param {String} type
- * @param {Function} callback
- * @return {Object}
- */
-function listen(target, type, callback) {
-    if (!target && !type && !callback) {
-        throw new Error('Missing required arguments');
-    }
-
-    if (!is.string(type)) {
-        throw new TypeError('Second argument must be a String');
-    }
-
-    if (!is.fn(callback)) {
-        throw new TypeError('Third argument must be a Function');
-    }
-
-    if (is.node(target)) {
-        return listenNode(target, type, callback);
-    }
-    else if (is.nodeList(target)) {
-        return listenNodeList(target, type, callback);
-    }
-    else if (is.string(target)) {
-        return listenSelector(target, type, callback);
-    }
-    else {
-        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
-    }
-}
-
-/**
- * Adds an event listener to a HTML element
- * and returns a remove listener function.
- *
- * @param {HTMLElement} node
- * @param {String} type
- * @param {Function} callback
- * @return {Object}
- */
-function listenNode(node, type, callback) {
-    node.addEventListener(type, callback);
-
-    return {
-        destroy: function() {
-            node.removeEventListener(type, callback);
-        }
-    }
-}
-
-/**
- * Add an event listener to a list of HTML elements
- * and returns a remove listener function.
- *
- * @param {NodeList|HTMLCollection} nodeList
- * @param {String} type
- * @param {Function} callback
- * @return {Object}
- */
-function listenNodeList(nodeList, type, callback) {
-    Array.prototype.forEach.call(nodeList, function(node) {
-        node.addEventListener(type, callback);
-    });
-
-    return {
-        destroy: function() {
-            Array.prototype.forEach.call(nodeList, function(node) {
-                node.removeEventListener(type, callback);
-            });
-        }
-    }
-}
-
-/**
- * Add an event listener to a selector
- * and returns a remove listener function.
- *
- * @param {String} selector
- * @param {String} type
- * @param {Function} callback
- * @return {Object}
- */
-function listenSelector(selector, type, callback) {
-    return delegate(document.body, selector, type, callback);
-}
-
-module.exports = listen;
-
-
-/***/ }),
-
-/***/ 817:
-/***/ (function(module) {
-
-function select(element) {
-    var selectedText;
-
-    if (element.nodeName === 'SELECT') {
-        element.focus();
-
-        selectedText = element.value;
-    }
-    else if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
-        var isReadOnly = element.hasAttribute('readonly');
-
-        if (!isReadOnly) {
-            element.setAttribute('readonly', '');
-        }
-
-        element.select();
-        element.setSelectionRange(0, element.value.length);
-
-        if (!isReadOnly) {
-            element.removeAttribute('readonly');
-        }
-
-        selectedText = element.value;
-    }
-    else {
-        if (element.hasAttribute('contenteditable')) {
-            element.focus();
-        }
-
-        var selection = window.getSelection();
-        var range = document.createRange();
-
-        range.selectNodeContents(element);
-        selection.removeAllRanges();
-        selection.addRange(range);
-
-        selectedText = selection.toString();
-    }
-
-    return selectedText;
-}
-
-module.exports = select;
-
-
-/***/ }),
-
-/***/ 279:
-/***/ (function(module) {
-
-function E () {
-  // Keep this empty so it's easier to inherit from
-  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
-}
-
-E.prototype = {
-  on: function (name, callback, ctx) {
-    var e = this.e || (this.e = {});
-
-    (e[name] || (e[name] = [])).push({
-      fn: callback,
-      ctx: ctx
-    });
-
-    return this;
-  },
-
-  once: function (name, callback, ctx) {
-    var self = this;
-    function listener () {
-      self.off(name, listener);
-      callback.apply(ctx, arguments);
-    };
-
-    listener._ = callback
-    return this.on(name, listener, ctx);
-  },
-
-  emit: function (name) {
-    var data = [].slice.call(arguments, 1);
-    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
-    var i = 0;
-    var len = evtArr.length;
-
-    for (i; i < len; i++) {
-      evtArr[i].fn.apply(evtArr[i].ctx, data);
-    }
-
-    return this;
-  },
-
-  off: function (name, callback) {
-    var e = this.e || (this.e = {});
-    var evts = e[name];
-    var liveEvents = [];
-
-    if (evts && callback) {
-      for (var i = 0, len = evts.length; i < len; i++) {
-        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
-          liveEvents.push(evts[i]);
-      }
-    }
-
-    // Remove event from queue to prevent memory leak
-    // Suggested by https://github.com/lazd
-    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
-
-    (liveEvents.length)
-      ? e[name] = liveEvents
-      : delete e[name];
-
-    return this;
-  }
-};
-
-module.exports = E;
-module.exports.TinyEmitter = E;
-
-
-/***/ })
-
-/******/ 	});
-/************************************************************************/
-/******/ 	// The module cache
-/******/ 	var __webpack_module_cache__ = {};
-/******/ 	
-/******/ 	// The require function
-/******/ 	function __nested_webpack_require_26163__(moduleId) {
-/******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			// no module.id needed
-/******/ 			// no module.loaded needed
-/******/ 			exports: {}
-/******/ 		};
-/******/ 	
-/******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_26163__);
-/******/ 	
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/ 	
-/************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nested_webpack_require_26163__.n = function(module) {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
-/******/ 			__nested_webpack_require_26163__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nested_webpack_require_26163__.d = function(exports, definition) {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nested_webpack_require_26163__.o(definition, key) && !__nested_webpack_require_26163__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	}();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__nested_webpack_require_26163__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
-/******/ 	
-/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
-/******/ 	// startup
-/******/ 	// Load entry module and return exports
-/******/ 	return __nested_webpack_require_26163__(134);
-/******/ })()
-.default;
-});
-
-/***/ }),
 
 /***/ 7973:
-/***/ (function(module, exports, __webpack_require__) {
+/***/ ((module, exports, __webpack_require__) => {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /**
@@ -2023,7 +1068,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /***/ }),
 
 /***/ 5538:
-/***/ (function() {
+/***/ (() => {
 
 /**
  * adds a bindGlobal method to Mousetrap that allows you to
@@ -2073,6 +1118,897 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 }) (typeof Mousetrap !== "undefined" ? Mousetrap : undefined);
 
 
+/***/ }),
+
+/***/ 6207:
+/***/ (function(module) {
+
+/*!
+ * clipboard.js v2.0.11
+ * https://clipboardjs.com/
+ *
+ * Licensed MIT © Zeno Rocha
+ */
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(true)
+		module.exports = factory();
+	else {}
+})(this, function() {
+return /******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ 686:
+/***/ (function(__unused_webpack_module, __nested_webpack_exports__, __nested_webpack_require_623__) {
+
+"use strict";
+
+// EXPORTS
+__nested_webpack_require_623__.d(__nested_webpack_exports__, {
+  "default": function() { return /* binding */ clipboard; }
+});
+
+// EXTERNAL MODULE: ./node_modules/tiny-emitter/index.js
+var tiny_emitter = __nested_webpack_require_623__(279);
+var tiny_emitter_default = /*#__PURE__*/__nested_webpack_require_623__.n(tiny_emitter);
+// EXTERNAL MODULE: ./node_modules/good-listener/src/listen.js
+var listen = __nested_webpack_require_623__(370);
+var listen_default = /*#__PURE__*/__nested_webpack_require_623__.n(listen);
+// EXTERNAL MODULE: ./node_modules/select/src/select.js
+var src_select = __nested_webpack_require_623__(817);
+var select_default = /*#__PURE__*/__nested_webpack_require_623__.n(src_select);
+;// CONCATENATED MODULE: ./src/common/command.js
+/**
+ * Executes a given operation type.
+ * @param {String} type
+ * @return {Boolean}
+ */
+function command(type) {
+  try {
+    return document.execCommand(type);
+  } catch (err) {
+    return false;
+  }
+}
+;// CONCATENATED MODULE: ./src/actions/cut.js
+
+
+/**
+ * Cut action wrapper.
+ * @param {String|HTMLElement} target
+ * @return {String}
+ */
+
+var ClipboardActionCut = function ClipboardActionCut(target) {
+  var selectedText = select_default()(target);
+  command('cut');
+  return selectedText;
+};
+
+/* harmony default export */ var actions_cut = (ClipboardActionCut);
+;// CONCATENATED MODULE: ./src/common/create-fake-element.js
+/**
+ * Creates a fake textarea element with a value.
+ * @param {String} value
+ * @return {HTMLElement}
+ */
+function createFakeElement(value) {
+  var isRTL = document.documentElement.getAttribute('dir') === 'rtl';
+  var fakeElement = document.createElement('textarea'); // Prevent zooming on iOS
+
+  fakeElement.style.fontSize = '12pt'; // Reset box model
+
+  fakeElement.style.border = '0';
+  fakeElement.style.padding = '0';
+  fakeElement.style.margin = '0'; // Move element out of screen horizontally
+
+  fakeElement.style.position = 'absolute';
+  fakeElement.style[isRTL ? 'right' : 'left'] = '-9999px'; // Move element to the same position vertically
+
+  var yPosition = window.pageYOffset || document.documentElement.scrollTop;
+  fakeElement.style.top = "".concat(yPosition, "px");
+  fakeElement.setAttribute('readonly', '');
+  fakeElement.value = value;
+  return fakeElement;
+}
+;// CONCATENATED MODULE: ./src/actions/copy.js
+
+
+
+/**
+ * Create fake copy action wrapper using a fake element.
+ * @param {String} target
+ * @param {Object} options
+ * @return {String}
+ */
+
+var fakeCopyAction = function fakeCopyAction(value, options) {
+  var fakeElement = createFakeElement(value);
+  options.container.appendChild(fakeElement);
+  var selectedText = select_default()(fakeElement);
+  command('copy');
+  fakeElement.remove();
+  return selectedText;
+};
+/**
+ * Copy action wrapper.
+ * @param {String|HTMLElement} target
+ * @param {Object} options
+ * @return {String}
+ */
+
+
+var ClipboardActionCopy = function ClipboardActionCopy(target) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+    container: document.body
+  };
+  var selectedText = '';
+
+  if (typeof target === 'string') {
+    selectedText = fakeCopyAction(target, options);
+  } else if (target instanceof HTMLInputElement && !['text', 'search', 'url', 'tel', 'password'].includes(target === null || target === void 0 ? void 0 : target.type)) {
+    // If input type doesn't support `setSelectionRange`. Simulate it. https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/setSelectionRange
+    selectedText = fakeCopyAction(target.value, options);
+  } else {
+    selectedText = select_default()(target);
+    command('copy');
+  }
+
+  return selectedText;
+};
+
+/* harmony default export */ var actions_copy = (ClipboardActionCopy);
+;// CONCATENATED MODULE: ./src/actions/default.js
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+
+
+/**
+ * Inner function which performs selection from either `text` or `target`
+ * properties and then executes copy or cut operations.
+ * @param {Object} options
+ */
+
+var ClipboardActionDefault = function ClipboardActionDefault() {
+  var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+  // Defines base properties passed from constructor.
+  var _options$action = options.action,
+      action = _options$action === void 0 ? 'copy' : _options$action,
+      container = options.container,
+      target = options.target,
+      text = options.text; // Sets the `action` to be performed which can be either 'copy' or 'cut'.
+
+  if (action !== 'copy' && action !== 'cut') {
+    throw new Error('Invalid "action" value, use either "copy" or "cut"');
+  } // Sets the `target` property using an element that will be have its content copied.
+
+
+  if (target !== undefined) {
+    if (target && _typeof(target) === 'object' && target.nodeType === 1) {
+      if (action === 'copy' && target.hasAttribute('disabled')) {
+        throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');
+      }
+
+      if (action === 'cut' && (target.hasAttribute('readonly') || target.hasAttribute('disabled'))) {
+        throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');
+      }
+    } else {
+      throw new Error('Invalid "target" value, use a valid Element');
+    }
+  } // Define selection strategy based on `text` property.
+
+
+  if (text) {
+    return actions_copy(text, {
+      container: container
+    });
+  } // Defines which selection strategy based on `target` property.
+
+
+  if (target) {
+    return action === 'cut' ? actions_cut(target) : actions_copy(target, {
+      container: container
+    });
+  }
+};
+
+/* harmony default export */ var actions_default = (ClipboardActionDefault);
+;// CONCATENATED MODULE: ./src/clipboard.js
+function clipboard_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { clipboard_typeof = function _typeof(obj) { return typeof obj; }; } else { clipboard_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return clipboard_typeof(obj); }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function"); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } }); if (superClass) _setPrototypeOf(subClass, superClass); }
+
+function _setPrototypeOf(o, p) { _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf(o, p) { o.__proto__ = p; return o; }; return _setPrototypeOf(o, p); }
+
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = _getPrototypeOf(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = _getPrototypeOf(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return _possibleConstructorReturn(this, result); }; }
+
+function _possibleConstructorReturn(self, call) { if (call && (clipboard_typeof(call) === "object" || typeof call === "function")) { return call; } return _assertThisInitialized(self); }
+
+function _assertThisInitialized(self) { if (self === void 0) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return self; }
+
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Date.prototype.toString.call(Reflect.construct(Date, [], function () {})); return true; } catch (e) { return false; } }
+
+function _getPrototypeOf(o) { _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf(o) { return o.__proto__ || Object.getPrototypeOf(o); }; return _getPrototypeOf(o); }
+
+
+
+
+
+
+/**
+ * Helper function to retrieve attribute value.
+ * @param {String} suffix
+ * @param {Element} element
+ */
+
+function getAttributeValue(suffix, element) {
+  var attribute = "data-clipboard-".concat(suffix);
+
+  if (!element.hasAttribute(attribute)) {
+    return;
+  }
+
+  return element.getAttribute(attribute);
+}
+/**
+ * Base class which takes one or more elements, adds event listeners to them,
+ * and instantiates a new `ClipboardAction` on each click.
+ */
+
+
+var Clipboard = /*#__PURE__*/function (_Emitter) {
+  _inherits(Clipboard, _Emitter);
+
+  var _super = _createSuper(Clipboard);
+
+  /**
+   * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
+   * @param {Object} options
+   */
+  function Clipboard(trigger, options) {
+    var _this;
+
+    _classCallCheck(this, Clipboard);
+
+    _this = _super.call(this);
+
+    _this.resolveOptions(options);
+
+    _this.listenClick(trigger);
+
+    return _this;
+  }
+  /**
+   * Defines if attributes would be resolved using internal setter functions
+   * or custom functions that were passed in the constructor.
+   * @param {Object} options
+   */
+
+
+  _createClass(Clipboard, [{
+    key: "resolveOptions",
+    value: function resolveOptions() {
+      var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      this.action = typeof options.action === 'function' ? options.action : this.defaultAction;
+      this.target = typeof options.target === 'function' ? options.target : this.defaultTarget;
+      this.text = typeof options.text === 'function' ? options.text : this.defaultText;
+      this.container = clipboard_typeof(options.container) === 'object' ? options.container : document.body;
+    }
+    /**
+     * Adds a click event listener to the passed trigger.
+     * @param {String|HTMLElement|HTMLCollection|NodeList} trigger
+     */
+
+  }, {
+    key: "listenClick",
+    value: function listenClick(trigger) {
+      var _this2 = this;
+
+      this.listener = listen_default()(trigger, 'click', function (e) {
+        return _this2.onClick(e);
+      });
+    }
+    /**
+     * Defines a new `ClipboardAction` on each click event.
+     * @param {Event} e
+     */
+
+  }, {
+    key: "onClick",
+    value: function onClick(e) {
+      var trigger = e.delegateTarget || e.currentTarget;
+      var action = this.action(trigger) || 'copy';
+      var text = actions_default({
+        action: action,
+        container: this.container,
+        target: this.target(trigger),
+        text: this.text(trigger)
+      }); // Fires an event based on the copy operation result.
+
+      this.emit(text ? 'success' : 'error', {
+        action: action,
+        text: text,
+        trigger: trigger,
+        clearSelection: function clearSelection() {
+          if (trigger) {
+            trigger.focus();
+          }
+
+          window.getSelection().removeAllRanges();
+        }
+      });
+    }
+    /**
+     * Default `action` lookup function.
+     * @param {Element} trigger
+     */
+
+  }, {
+    key: "defaultAction",
+    value: function defaultAction(trigger) {
+      return getAttributeValue('action', trigger);
+    }
+    /**
+     * Default `target` lookup function.
+     * @param {Element} trigger
+     */
+
+  }, {
+    key: "defaultTarget",
+    value: function defaultTarget(trigger) {
+      var selector = getAttributeValue('target', trigger);
+
+      if (selector) {
+        return document.querySelector(selector);
+      }
+    }
+    /**
+     * Allow fire programmatically a copy action
+     * @param {String|HTMLElement} target
+     * @param {Object} options
+     * @returns Text copied.
+     */
+
+  }, {
+    key: "defaultText",
+
+    /**
+     * Default `text` lookup function.
+     * @param {Element} trigger
+     */
+    value: function defaultText(trigger) {
+      return getAttributeValue('text', trigger);
+    }
+    /**
+     * Destroy lifecycle.
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.listener.destroy();
+    }
+  }], [{
+    key: "copy",
+    value: function copy(target) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {
+        container: document.body
+      };
+      return actions_copy(target, options);
+    }
+    /**
+     * Allow fire programmatically a cut action
+     * @param {String|HTMLElement} target
+     * @returns Text cutted.
+     */
+
+  }, {
+    key: "cut",
+    value: function cut(target) {
+      return actions_cut(target);
+    }
+    /**
+     * Returns the support of the given action, or all actions if no action is
+     * given.
+     * @param {String} [action]
+     */
+
+  }, {
+    key: "isSupported",
+    value: function isSupported() {
+      var action = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : ['copy', 'cut'];
+      var actions = typeof action === 'string' ? [action] : action;
+      var support = !!document.queryCommandSupported;
+      actions.forEach(function (action) {
+        support = support && !!document.queryCommandSupported(action);
+      });
+      return support;
+    }
+  }]);
+
+  return Clipboard;
+}((tiny_emitter_default()));
+
+/* harmony default export */ var clipboard = (Clipboard);
+
+/***/ }),
+
+/***/ 828:
+/***/ (function(module) {
+
+var DOCUMENT_NODE_TYPE = 9;
+
+/**
+ * A polyfill for Element.matches()
+ */
+if (typeof Element !== 'undefined' && !Element.prototype.matches) {
+    var proto = Element.prototype;
+
+    proto.matches = proto.matchesSelector ||
+                    proto.mozMatchesSelector ||
+                    proto.msMatchesSelector ||
+                    proto.oMatchesSelector ||
+                    proto.webkitMatchesSelector;
+}
+
+/**
+ * Finds the closest parent that matches a selector.
+ *
+ * @param {Element} element
+ * @param {String} selector
+ * @return {Function}
+ */
+function closest (element, selector) {
+    while (element && element.nodeType !== DOCUMENT_NODE_TYPE) {
+        if (typeof element.matches === 'function' &&
+            element.matches(selector)) {
+          return element;
+        }
+        element = element.parentNode;
+    }
+}
+
+module.exports = closest;
+
+
+/***/ }),
+
+/***/ 438:
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_15749__) {
+
+var closest = __nested_webpack_require_15749__(828);
+
+/**
+ * Delegates event to a selector.
+ *
+ * @param {Element} element
+ * @param {String} selector
+ * @param {String} type
+ * @param {Function} callback
+ * @param {Boolean} useCapture
+ * @return {Object}
+ */
+function _delegate(element, selector, type, callback, useCapture) {
+    var listenerFn = listener.apply(this, arguments);
+
+    element.addEventListener(type, listenerFn, useCapture);
+
+    return {
+        destroy: function() {
+            element.removeEventListener(type, listenerFn, useCapture);
+        }
+    }
+}
+
+/**
+ * Delegates event to a selector.
+ *
+ * @param {Element|String|Array} [elements]
+ * @param {String} selector
+ * @param {String} type
+ * @param {Function} callback
+ * @param {Boolean} useCapture
+ * @return {Object}
+ */
+function delegate(elements, selector, type, callback, useCapture) {
+    // Handle the regular Element usage
+    if (typeof elements.addEventListener === 'function') {
+        return _delegate.apply(null, arguments);
+    }
+
+    // Handle Element-less usage, it defaults to global delegation
+    if (typeof type === 'function') {
+        // Use `document` as the first parameter, then apply arguments
+        // This is a short way to .unshift `arguments` without running into deoptimizations
+        return _delegate.bind(null, document).apply(null, arguments);
+    }
+
+    // Handle Selector-based usage
+    if (typeof elements === 'string') {
+        elements = document.querySelectorAll(elements);
+    }
+
+    // Handle Array-like based usage
+    return Array.prototype.map.call(elements, function (element) {
+        return _delegate(element, selector, type, callback, useCapture);
+    });
+}
+
+/**
+ * Finds closest match and invokes callback.
+ *
+ * @param {Element} element
+ * @param {String} selector
+ * @param {String} type
+ * @param {Function} callback
+ * @return {Function}
+ */
+function listener(element, selector, type, callback) {
+    return function(e) {
+        e.delegateTarget = closest(e.target, selector);
+
+        if (e.delegateTarget) {
+            callback.call(element, e);
+        }
+    }
+}
+
+module.exports = delegate;
+
+
+/***/ }),
+
+/***/ 879:
+/***/ (function(__unused_webpack_module, exports) {
+
+/**
+ * Check if argument is a HTML element.
+ *
+ * @param {Object} value
+ * @return {Boolean}
+ */
+exports.node = function(value) {
+    return value !== undefined
+        && value instanceof HTMLElement
+        && value.nodeType === 1;
+};
+
+/**
+ * Check if argument is a list of HTML elements.
+ *
+ * @param {Object} value
+ * @return {Boolean}
+ */
+exports.nodeList = function(value) {
+    var type = Object.prototype.toString.call(value);
+
+    return value !== undefined
+        && (type === '[object NodeList]' || type === '[object HTMLCollection]')
+        && ('length' in value)
+        && (value.length === 0 || exports.node(value[0]));
+};
+
+/**
+ * Check if argument is a string.
+ *
+ * @param {Object} value
+ * @return {Boolean}
+ */
+exports.string = function(value) {
+    return typeof value === 'string'
+        || value instanceof String;
+};
+
+/**
+ * Check if argument is a function.
+ *
+ * @param {Object} value
+ * @return {Boolean}
+ */
+exports.fn = function(value) {
+    var type = Object.prototype.toString.call(value);
+
+    return type === '[object Function]';
+};
+
+
+/***/ }),
+
+/***/ 370:
+/***/ (function(module, __unused_webpack_exports, __nested_webpack_require_19113__) {
+
+var is = __nested_webpack_require_19113__(879);
+var delegate = __nested_webpack_require_19113__(438);
+
+/**
+ * Validates all params and calls the right
+ * listener function based on its target type.
+ *
+ * @param {String|HTMLElement|HTMLCollection|NodeList} target
+ * @param {String} type
+ * @param {Function} callback
+ * @return {Object}
+ */
+function listen(target, type, callback) {
+    if (!target && !type && !callback) {
+        throw new Error('Missing required arguments');
+    }
+
+    if (!is.string(type)) {
+        throw new TypeError('Second argument must be a String');
+    }
+
+    if (!is.fn(callback)) {
+        throw new TypeError('Third argument must be a Function');
+    }
+
+    if (is.node(target)) {
+        return listenNode(target, type, callback);
+    }
+    else if (is.nodeList(target)) {
+        return listenNodeList(target, type, callback);
+    }
+    else if (is.string(target)) {
+        return listenSelector(target, type, callback);
+    }
+    else {
+        throw new TypeError('First argument must be a String, HTMLElement, HTMLCollection, or NodeList');
+    }
+}
+
+/**
+ * Adds an event listener to a HTML element
+ * and returns a remove listener function.
+ *
+ * @param {HTMLElement} node
+ * @param {String} type
+ * @param {Function} callback
+ * @return {Object}
+ */
+function listenNode(node, type, callback) {
+    node.addEventListener(type, callback);
+
+    return {
+        destroy: function() {
+            node.removeEventListener(type, callback);
+        }
+    }
+}
+
+/**
+ * Add an event listener to a list of HTML elements
+ * and returns a remove listener function.
+ *
+ * @param {NodeList|HTMLCollection} nodeList
+ * @param {String} type
+ * @param {Function} callback
+ * @return {Object}
+ */
+function listenNodeList(nodeList, type, callback) {
+    Array.prototype.forEach.call(nodeList, function(node) {
+        node.addEventListener(type, callback);
+    });
+
+    return {
+        destroy: function() {
+            Array.prototype.forEach.call(nodeList, function(node) {
+                node.removeEventListener(type, callback);
+            });
+        }
+    }
+}
+
+/**
+ * Add an event listener to a selector
+ * and returns a remove listener function.
+ *
+ * @param {String} selector
+ * @param {String} type
+ * @param {Function} callback
+ * @return {Object}
+ */
+function listenSelector(selector, type, callback) {
+    return delegate(document.body, selector, type, callback);
+}
+
+module.exports = listen;
+
+
+/***/ }),
+
+/***/ 817:
+/***/ (function(module) {
+
+function select(element) {
+    var selectedText;
+
+    if (element.nodeName === 'SELECT') {
+        element.focus();
+
+        selectedText = element.value;
+    }
+    else if (element.nodeName === 'INPUT' || element.nodeName === 'TEXTAREA') {
+        var isReadOnly = element.hasAttribute('readonly');
+
+        if (!isReadOnly) {
+            element.setAttribute('readonly', '');
+        }
+
+        element.select();
+        element.setSelectionRange(0, element.value.length);
+
+        if (!isReadOnly) {
+            element.removeAttribute('readonly');
+        }
+
+        selectedText = element.value;
+    }
+    else {
+        if (element.hasAttribute('contenteditable')) {
+            element.focus();
+        }
+
+        var selection = window.getSelection();
+        var range = document.createRange();
+
+        range.selectNodeContents(element);
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        selectedText = selection.toString();
+    }
+
+    return selectedText;
+}
+
+module.exports = select;
+
+
+/***/ }),
+
+/***/ 279:
+/***/ (function(module) {
+
+function E () {
+  // Keep this empty so it's easier to inherit from
+  // (via https://github.com/lipsmack from https://github.com/scottcorgan/tiny-emitter/issues/3)
+}
+
+E.prototype = {
+  on: function (name, callback, ctx) {
+    var e = this.e || (this.e = {});
+
+    (e[name] || (e[name] = [])).push({
+      fn: callback,
+      ctx: ctx
+    });
+
+    return this;
+  },
+
+  once: function (name, callback, ctx) {
+    var self = this;
+    function listener () {
+      self.off(name, listener);
+      callback.apply(ctx, arguments);
+    };
+
+    listener._ = callback
+    return this.on(name, listener, ctx);
+  },
+
+  emit: function (name) {
+    var data = [].slice.call(arguments, 1);
+    var evtArr = ((this.e || (this.e = {}))[name] || []).slice();
+    var i = 0;
+    var len = evtArr.length;
+
+    for (i; i < len; i++) {
+      evtArr[i].fn.apply(evtArr[i].ctx, data);
+    }
+
+    return this;
+  },
+
+  off: function (name, callback) {
+    var e = this.e || (this.e = {});
+    var evts = e[name];
+    var liveEvents = [];
+
+    if (evts && callback) {
+      for (var i = 0, len = evts.length; i < len; i++) {
+        if (evts[i].fn !== callback && evts[i].fn._ !== callback)
+          liveEvents.push(evts[i]);
+      }
+    }
+
+    // Remove event from queue to prevent memory leak
+    // Suggested by https://github.com/lazd
+    // Ref: https://github.com/scottcorgan/tiny-emitter/commit/c6ebfaa9bc973b33d110a84a307742b7cf94c953#commitcomment-5024910
+
+    (liveEvents.length)
+      ? e[name] = liveEvents
+      : delete e[name];
+
+    return this;
+  }
+};
+
+module.exports = E;
+module.exports.TinyEmitter = E;
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __nested_webpack_require_24495__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __nested_webpack_require_24495__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__nested_webpack_require_24495__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__nested_webpack_require_24495__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__nested_webpack_require_24495__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__nested_webpack_require_24495__.o(definition, key) && !__nested_webpack_require_24495__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__nested_webpack_require_24495__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __nested_webpack_require_24495__(686);
+/******/ })()
+.default;
+});
+
 /***/ })
 
 /******/ 	});
@@ -2103,93 +2039,96 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  __experimentalUseDialog: function() { return /* reexport */ use_dialog; },
-  __experimentalUseDragging: function() { return /* reexport */ useDragging; },
-  __experimentalUseDropZone: function() { return /* reexport */ useDropZone; },
-  __experimentalUseFixedWindowList: function() { return /* reexport */ useFixedWindowList; },
-  __experimentalUseFocusOutside: function() { return /* reexport */ useFocusOutside; },
-  compose: function() { return /* reexport */ higher_order_compose; },
-  createHigherOrderComponent: function() { return /* reexport */ createHigherOrderComponent; },
-  debounce: function() { return /* reexport */ debounce; },
-  ifCondition: function() { return /* reexport */ if_condition; },
-  pipe: function() { return /* reexport */ higher_order_pipe; },
-  pure: function() { return /* reexport */ higher_order_pure; },
-  throttle: function() { return /* reexport */ throttle; },
-  useAsyncList: function() { return /* reexport */ use_async_list; },
-  useConstrainedTabbing: function() { return /* reexport */ use_constrained_tabbing; },
-  useCopyOnClick: function() { return /* reexport */ useCopyOnClick; },
-  useCopyToClipboard: function() { return /* reexport */ useCopyToClipboard; },
-  useDebounce: function() { return /* reexport */ useDebounce; },
-  useDisabled: function() { return /* reexport */ useDisabled; },
-  useFocusOnMount: function() { return /* reexport */ useFocusOnMount; },
-  useFocusReturn: function() { return /* reexport */ use_focus_return; },
-  useFocusableIframe: function() { return /* reexport */ useFocusableIframe; },
-  useInstanceId: function() { return /* reexport */ use_instance_id; },
-  useIsomorphicLayoutEffect: function() { return /* reexport */ use_isomorphic_layout_effect; },
-  useKeyboardShortcut: function() { return /* reexport */ use_keyboard_shortcut; },
-  useMediaQuery: function() { return /* reexport */ useMediaQuery; },
-  useMergeRefs: function() { return /* reexport */ useMergeRefs; },
-  usePrevious: function() { return /* reexport */ usePrevious; },
-  useReducedMotion: function() { return /* reexport */ use_reduced_motion; },
-  useRefEffect: function() { return /* reexport */ useRefEffect; },
-  useResizeObserver: function() { return /* reexport */ useResizeAware; },
-  useStateWithHistory: function() { return /* reexport */ useStateWithHistory; },
-  useThrottle: function() { return /* reexport */ useThrottle; },
-  useViewportMatch: function() { return /* reexport */ use_viewport_match; },
-  useWarnOnChange: function() { return /* reexport */ use_warn_on_change; },
-  withGlobalEvents: function() { return /* reexport */ withGlobalEvents; },
-  withInstanceId: function() { return /* reexport */ with_instance_id; },
-  withSafeTimeout: function() { return /* reexport */ with_safe_timeout; },
-  withState: function() { return /* reexport */ withState; }
+  __experimentalUseDialog: () => (/* reexport */ use_dialog),
+  __experimentalUseDragging: () => (/* reexport */ useDragging),
+  __experimentalUseDropZone: () => (/* reexport */ useDropZone),
+  __experimentalUseFixedWindowList: () => (/* reexport */ useFixedWindowList),
+  __experimentalUseFocusOutside: () => (/* reexport */ useFocusOutside),
+  compose: () => (/* reexport */ higher_order_compose),
+  createHigherOrderComponent: () => (/* reexport */ createHigherOrderComponent),
+  debounce: () => (/* reexport */ debounce),
+  ifCondition: () => (/* reexport */ if_condition),
+  observableMap: () => (/* reexport */ observableMap),
+  pipe: () => (/* reexport */ higher_order_pipe),
+  pure: () => (/* reexport */ higher_order_pure),
+  throttle: () => (/* reexport */ throttle),
+  useAsyncList: () => (/* reexport */ use_async_list),
+  useConstrainedTabbing: () => (/* reexport */ use_constrained_tabbing),
+  useCopyOnClick: () => (/* reexport */ useCopyOnClick),
+  useCopyToClipboard: () => (/* reexport */ useCopyToClipboard),
+  useDebounce: () => (/* reexport */ useDebounce),
+  useDebouncedInput: () => (/* reexport */ useDebouncedInput),
+  useDisabled: () => (/* reexport */ useDisabled),
+  useFocusOnMount: () => (/* reexport */ useFocusOnMount),
+  useFocusReturn: () => (/* reexport */ use_focus_return),
+  useFocusableIframe: () => (/* reexport */ useFocusableIframe),
+  useInstanceId: () => (/* reexport */ use_instance_id),
+  useIsomorphicLayoutEffect: () => (/* reexport */ use_isomorphic_layout_effect),
+  useKeyboardShortcut: () => (/* reexport */ use_keyboard_shortcut),
+  useMediaQuery: () => (/* reexport */ useMediaQuery),
+  useMergeRefs: () => (/* reexport */ useMergeRefs),
+  useObservableValue: () => (/* reexport */ useObservableValue),
+  usePrevious: () => (/* reexport */ usePrevious),
+  useReducedMotion: () => (/* reexport */ use_reduced_motion),
+  useRefEffect: () => (/* reexport */ useRefEffect),
+  useResizeObserver: () => (/* reexport */ useResizeAware),
+  useStateWithHistory: () => (/* reexport */ useStateWithHistory),
+  useThrottle: () => (/* reexport */ useThrottle),
+  useViewportMatch: () => (/* reexport */ use_viewport_match),
+  useWarnOnChange: () => (/* reexport */ use_warn_on_change),
+  withGlobalEvents: () => (/* reexport */ withGlobalEvents),
+  withInstanceId: () => (/* reexport */ with_instance_id),
+  withSafeTimeout: () => (/* reexport */ with_safe_timeout),
+  withState: () => (/* reexport */ withState)
 });
 
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
@@ -2534,7 +2473,7 @@ function __disposeResources(env) {
   return next();
 }
 
-/* harmony default export */ var tslib_es6 = ({
+/* harmony default export */ const tslib_es6 = ({
   __extends,
   __assign,
   __rest,
@@ -2983,6 +2922,59 @@ const throttle = (func, wait, options) => {
   });
 };
 
+;// CONCATENATED MODULE: ./packages/compose/build-module/utils/observable-map/index.js
+/**
+ * A constructor (factory) for `ObservableMap`, a map-like key/value data structure
+ * where the individual entries are observable: using the `subscribe` method, you can
+ * subscribe to updates for a particular keys. Each subscriber always observes one
+ * specific key and is not notified about any unrelated changes (for different keys)
+ * in the `ObservableMap`.
+ *
+ * @template K The type of the keys in the map.
+ * @template V The type of the values in the map.
+ * @return   A new instance of the `ObservableMap` type.
+ */
+function observableMap() {
+  const map = new Map();
+  const listeners = new Map();
+  function callListeners(name) {
+    const list = listeners.get(name);
+    if (!list) {
+      return;
+    }
+    for (const listener of list) {
+      listener();
+    }
+  }
+  return {
+    get(name) {
+      return map.get(name);
+    },
+    set(name, value) {
+      map.set(name, value);
+      callListeners(name);
+    },
+    delete(name) {
+      map.delete(name);
+      callListeners(name);
+    },
+    subscribe(name, listener) {
+      let list = listeners.get(name);
+      if (!list) {
+        list = new Set();
+        listeners.set(name, list);
+      }
+      list.add(listener);
+      return () => {
+        list.delete(listener);
+        if (list.size === 0) {
+          listeners.delete(name);
+        }
+      };
+    }
+  };
+}
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/pipe.js
 /**
  * Parts of this source were derived and modified from lodash,
@@ -3029,7 +3021,7 @@ const throttle = (func, wait, options) => {
  *
  * Allows to choose whether to perform left-to-right or right-to-left composition.
  *
- * @see https://docs-lodash.com/v4/flow/
+ * @see https://lodash.com/docs/4#flow
  *
  * @param {boolean} reverse True if right-to-left, false for left-to-right composition.
  */
@@ -3047,11 +3039,11 @@ const basePipe = (reverse = false) => (...funcs) => (...args) => {
  *
  * This is inspired by `lodash`'s `flow` function.
  *
- * @see https://docs-lodash.com/v4/flow/
+ * @see https://lodash.com/docs/4#flow
  */
 const pipe = basePipe();
 
-/* harmony default export */ var higher_order_pipe = (pipe);
+/* harmony default export */ const higher_order_pipe = (pipe);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/compose.js
 /**
@@ -3065,15 +3057,14 @@ const pipe = basePipe();
  *
  * This is inspired by `lodash`'s `flowRight` function.
  *
- * @see https://docs-lodash.com/v4/flow-right/
+ * @see https://lodash.com/docs/4#flow-right
  */
 const compose = basePipe(true);
-/* harmony default export */ var higher_order_compose = (compose);
+/* harmony default export */ const higher_order_compose = (compose);
 
-;// CONCATENATED MODULE: external "React"
-var external_React_namespaceObject = window["React"];
+;// CONCATENATED MODULE: external "ReactJSXRuntime"
+const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/if-condition/index.js
-
 /**
  * External dependencies
  */
@@ -3100,25 +3091,25 @@ var external_React_namespaceObject = window["React"];
  *
  * @return Higher-order component.
  */
+
 function ifCondition(predicate) {
   return createHigherOrderComponent(WrappedComponent => props => {
     if (!predicate(props)) {
       return null;
     }
-    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
       ...props
     });
   }, 'ifCondition');
 }
-/* harmony default export */ var if_condition = (ifCondition);
+/* harmony default export */ const if_condition = (ifCondition);
 
 ;// CONCATENATED MODULE: external ["wp","isShallowEqual"]
-var external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
+const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/pure/index.js
-
 /**
  * External dependencies
  */
@@ -3137,7 +3128,10 @@ var external_wp_element_namespaceObject = window["wp"]["element"];
 /**
  * Given a component returns the enhanced component augmented with a component
  * only re-rendering when its props/state change
+ *
+ * @deprecated Use `memo` or `PureComponent` instead.
  */
+
 const pure = createHigherOrderComponent(function (WrappedComponent) {
   if (WrappedComponent.prototype instanceof external_wp_element_namespaceObject.Component) {
     return class extends WrappedComponent {
@@ -3151,16 +3145,16 @@ const pure = createHigherOrderComponent(function (WrappedComponent) {
       return !external_wp_isShallowEqual_default()(nextProps, this.props);
     }
     render() {
-      return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
         ...this.props
       });
     }
   };
 }, 'pure');
-/* harmony default export */ var higher_order_pure = (pure);
+/* harmony default export */ const higher_order_pure = (pure);
 
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/listener.js
 /**
@@ -3199,10 +3193,9 @@ class Listener {
     });
   }
 }
-/* harmony default export */ var listener = (Listener);
+/* harmony default export */ const listener = (Listener);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3218,6 +3211,7 @@ class Listener {
 /**
  * Listener instance responsible for managing document event handling.
  */
+
 const with_global_events_listener = new listener();
 
 /* eslint-disable jsdoc/no-undefined-types */
@@ -3265,11 +3259,10 @@ function withGlobalEvents(eventTypesToHandlers) {
         });
       }
       handleEvent( /** @type {any} */event) {
-        const handler = eventTypesToHandlers[/** @type {keyof GlobalEventHandlersEventMap} */
+        const handler = eventTypesToHandlers[( /** @type {keyof GlobalEventHandlersEventMap} */
         event.type
 
-        /* eslint-enable jsdoc/no-undefined-types */];
-
+        /* eslint-enable jsdoc/no-undefined-types */)];
         if (typeof this.wrappedRef[handler] === 'function') {
           this.wrappedRef[handler](event);
         }
@@ -3284,14 +3277,14 @@ function withGlobalEvents(eventTypesToHandlers) {
         }
       }
       render() {
-        return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
           ...this.props.ownProps,
           ref: this.handleRef
         });
       }
     }
     return (0,external_wp_element_namespaceObject.forwardRef)((props, ref) => {
-      return (0,external_React_namespaceObject.createElement)(Wrapper, {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Wrapper, {
         ownProps: props,
         forwardedRef: ref
       });
@@ -3341,18 +3334,20 @@ function createId(object) {
  */
 function useInstanceId(object, prefix, preferredId) {
   return (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (preferredId) return preferredId;
+    if (preferredId) {
+      return preferredId;
+    }
     const id = createId(object);
     return prefix ? `${prefix}-${id}` : id;
   }, [object, preferredId, prefix]);
 }
-/* harmony default export */ var use_instance_id = (useInstanceId);
+/* harmony default export */ const use_instance_id = (useInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-instance-id/index.js
-
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -3364,16 +3359,15 @@ const withInstanceId = createHigherOrderComponent(WrappedComponent => {
   return props => {
     const instanceId = use_instance_id(WrappedComponent);
     // @ts-ignore
-    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
       ...props,
       instanceId: instanceId
     });
   };
 }, 'instanceId');
-/* harmony default export */ var with_instance_id = (withInstanceId);
+/* harmony default export */ const with_instance_id = (withInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-safe-timeout/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3423,8 +3417,9 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
     }
     render() {
       return (
+        /*#__PURE__*/
         // @ts-ignore
-        (0,external_React_namespaceObject.createElement)(OriginalComponent, {
+        (0,external_ReactJSXRuntime_namespaceObject.jsx)(OriginalComponent, {
           ...this.props,
           setTimeout: this.setTimeout,
           clearTimeout: this.clearTimeout
@@ -3433,10 +3428,9 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
     }
   };
 }, 'withSafeTimeout');
-/* harmony default export */ var with_safe_timeout = (withSafeTimeout);
+/* harmony default export */ const with_safe_timeout = (withSafeTimeout);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-state/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3458,6 +3452,7 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
  *
  * @return {any} A higher order component wrapper accepting a component that takes the state props + its own props + `setState` and returning a component that only accepts the own props.
  */
+
 function withState(initialState = {}) {
   external_wp_deprecated_default()('wp.compose.withState', {
     since: '5.8',
@@ -3471,7 +3466,7 @@ function withState(initialState = {}) {
         this.state = initialState;
       }
       render() {
-        return (0,external_React_namespaceObject.createElement)(OriginalComponent, {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OriginalComponent, {
           ...this.props,
           ...this.state,
           setState: this.setState
@@ -3481,10 +3476,8 @@ function withState(initialState = {}) {
   }, 'withState');
 }
 
-;// CONCATENATED MODULE: external ["wp","keycodes"]
-var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: external ["wp","dom"]
-var external_wp_dom_namespaceObject = window["wp"]["dom"];
+const external_wp_dom_namespaceObject = window["wp"]["dom"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-ref-effect/index.js
 /**
  * External dependencies
@@ -3531,7 +3524,6 @@ function useRefEffect(callback, dependencies) {
  */
 
 
-
 /**
  * Internal dependencies
  */
@@ -3562,11 +3554,11 @@ function useConstrainedTabbing() {
   return useRefEffect(( /** @type {HTMLElement} */node) => {
     function onKeyDown( /** @type {KeyboardEvent} */event) {
       const {
-        keyCode,
+        key,
         shiftKey,
         target
       } = event;
-      if (keyCode !== external_wp_keycodes_namespaceObject.TAB) {
+      if (key !== 'Tab') {
         return;
       }
       const action = shiftKey ? 'findPrevious' : 'findNext';
@@ -3580,7 +3572,6 @@ function useConstrainedTabbing() {
       // See https://github.com/WordPress/gutenberg/issues/46041.
       if ( /** @type {HTMLElement} */target.contains(nextElement)) {
         event.preventDefault();
-        /** @type {HTMLElement} */
         nextElement?.focus();
         return;
       }
@@ -3614,10 +3605,10 @@ function useConstrainedTabbing() {
     };
   }, []);
 }
-/* harmony default export */ var use_constrained_tabbing = (useConstrainedTabbing);
+/* harmony default export */ const use_constrained_tabbing = (useConstrainedTabbing);
 
-// EXTERNAL MODULE: ./node_modules/clipboard/dist/clipboard.js
-var dist_clipboard = __webpack_require__(8294);
+// EXTERNAL MODULE: ./packages/compose/node_modules/clipboard/dist/clipboard.js
+var dist_clipboard = __webpack_require__(6207);
 var clipboard_default = /*#__PURE__*/__webpack_require__.n(dist_clipboard);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-copy-on-click/index.js
 /**
@@ -3751,9 +3742,6 @@ function useCopyToClipboard(text, onSuccess) {
       // button, ensuring that it is not reset to the body, and
       // further that it is kept within the rendered node.
       clearSelection();
-      // Handle ClipboardJS focus bug, see
-      // https://github.com/zenorocha/clipboard.js/issues/680
-      node.focus();
       if (onSuccessRef.current) {
         onSuccessRef.current();
       }
@@ -3764,11 +3752,18 @@ function useCopyToClipboard(text, onSuccess) {
   }, []);
 }
 
+;// CONCATENATED MODULE: external ["wp","keycodes"]
+const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-on-mount/index.js
 /**
  * WordPress dependencies
  */
 
+
+
+/**
+ * Internal dependencies
+ */
 
 
 /**
@@ -3815,14 +3810,7 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     focusOnMountRef.current = focusOnMount;
   }, [focusOnMount]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    return () => {
-      if (timerId.current) {
-        clearTimeout(timerId.current);
-      }
-    };
-  }, []);
-  return (0,external_wp_element_namespaceObject.useCallback)(node => {
+  return useRefEffect(node => {
     var _node$ownerDocument$a;
     if (!node || focusOnMountRef.current === false) {
       return;
@@ -3834,12 +3822,17 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
       timerId.current = setTimeout(() => {
         const firstTabbable = external_wp_dom_namespaceObject.focus.tabbable.find(node)[0];
         if (firstTabbable) {
-          setFocus( /** @type {HTMLElement} */firstTabbable);
+          setFocus(firstTabbable);
         }
       }, 0);
       return;
     }
     setFocus(node);
+    return () => {
+      if (timerId.current) {
+        clearTimeout(timerId.current);
+      }
+    };
   }, []);
 }
 
@@ -3914,7 +3907,7 @@ function useFocusReturn(onFocusReturn) {
     }
   }, []);
 }
-/* harmony default export */ var use_focus_return = (useFocusReturn);
+/* harmony default export */ const use_focus_return = (useFocusReturn);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-outside/index.js
 /**
@@ -4226,6 +4219,9 @@ function useMergeRefs(refs) {
  */
 function useDialog(options) {
   const currentOptions = (0,external_wp_element_namespaceObject.useRef)();
+  const {
+    constrainTabbing = options.focusOnMount !== false
+  } = options;
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     currentOptions.current = options;
   }, Object.values(options));
@@ -4253,12 +4249,12 @@ function useDialog(options) {
       }
     });
   }, []);
-  return [useMergeRefs([options.focusOnMount !== false ? constrainedTabbingRef : null, options.focusOnMount !== false ? focusReturnRef : null, options.focusOnMount !== false ? focusOnMountRef : null, closeOnEscapeRef]), {
+  return [useMergeRefs([constrainTabbing ? constrainedTabbingRef : null, options.focusOnMount !== false ? focusReturnRef : null, options.focusOnMount !== false ? focusOnMountRef : null, closeOnEscapeRef]), {
     ...focusOutsideProps,
     tabIndex: -1
   }];
 }
-/* harmony default export */ var use_dialog = (useDialog);
+/* harmony default export */ const use_dialog = (useDialog);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-disabled/index.js
 /**
@@ -4355,7 +4351,7 @@ function useDisabled({
  * throws a warning when using useLayoutEffect in that environment.
  */
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? external_wp_element_namespaceObject.useLayoutEffect : external_wp_element_namespaceObject.useEffect;
-/* harmony default export */ var use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
+/* harmony default export */ const use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-dragging/index.js
 /**
@@ -4516,13 +4512,14 @@ shortcuts, callback, {
     };
   }, [shortcuts, bindGlobal, eventName, target, isDisabled]);
 }
-/* harmony default export */ var use_keyboard_shortcut = (useKeyboardShortcut);
+/* harmony default export */ const use_keyboard_shortcut = (useKeyboardShortcut);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-media-query/index.js
 /**
  * WordPress dependencies
  */
 
+const matchMediaCache = new Map();
 
 /**
  * A new MediaQueryList object for the media query
@@ -4531,8 +4528,17 @@ shortcuts, callback, {
  * @return {MediaQueryList|null} A new object for the media query
  */
 function getMediaQueryList(query) {
-  if (query && typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
-    return window.matchMedia(query);
+  if (!query) {
+    return null;
+  }
+  let match = matchMediaCache.get(query);
+  if (match) {
+    return match;
+  }
+  if (typeof window !== 'undefined' && typeof window.matchMedia === 'function') {
+    match = window.matchMedia(query);
+    matchMediaCache.set(query, match);
+    return match;
   }
   return null;
 }
@@ -4606,7 +4612,7 @@ function usePrevious(value) {
  * @return {boolean} Reduced motion preference value.
  */
 const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)');
-/* harmony default export */ var use_reduced_motion = (useReducedMotion);
+/* harmony default export */ const use_reduced_motion = (useReducedMotion);
 
 ;// CONCATENATED MODULE: ./packages/undo-manager/build-module/index.js
 /**
@@ -4949,10 +4955,9 @@ const useViewportMatch = (breakpoint, operator = '>=') => {
   return mediaQueryResult;
 };
 useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provider;
-/* harmony default export */ var use_viewport_match = (useViewportMatch);
+/* harmony default export */ const use_viewport_match = (useViewportMatch);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
-
 /**
  * External dependencies
  */
@@ -4960,6 +4965,7 @@ useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provide
 /**
  * WordPress dependencies
  */
+
 
 // This of course could've been more streamlined with internal state instead of
 // refs, but then host hooks / components could not opt out of renders.
@@ -5013,6 +5019,10 @@ function useResolvedElement(subscriber, refOrElement) {
     callSubscriber();
   }, [callSubscriber]);
 }
+
+// Declaring my own type here instead of using the one provided by TS (available since 4.2.2), because this way I'm not
+// forcing consumers to use a specific TS version.
+
 // We're only using the first element of the size sequences, until future versions of the spec solidify on how
 // exactly it'll be used for fragments in multi-column scenarios:
 // From the spec:
@@ -5175,7 +5185,7 @@ function useResizeAware() {
       height: height !== null && height !== void 0 ? height : null
     };
   }, [width, height]);
-  const resizeListener = (0,external_React_namespaceObject.createElement)("div", {
+  const resizeListener = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     style: {
       position: 'absolute',
       top: 0,
@@ -5194,7 +5204,7 @@ function useResizeAware() {
 }
 
 ;// CONCATENATED MODULE: external ["wp","priorityQueue"]
-var external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
+const external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-async-list/index.js
 /**
  * WordPress dependencies
@@ -5255,7 +5265,7 @@ function useAsyncList(list, config = {
   }, [list]);
   return current;
 }
-/* harmony default export */ var use_async_list = (useAsyncList);
+/* harmony default export */ const use_async_list = (useAsyncList);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-warn-on-change/index.js
 /**
@@ -5287,16 +5297,17 @@ function useAsyncList(list, config = {
 function useWarnOnChange(object, prefix = 'Change detection') {
   const previousValues = usePrevious(object);
   Object.entries(previousValues !== null && previousValues !== void 0 ? previousValues : []).forEach(([key, value]) => {
-    if (value !== object[/** @type {keyof typeof object} */key]) {
+    if (value !== object[( /** @type {keyof typeof object} */key)]) {
       // eslint-disable-next-line no-console
-      console.warn(`${prefix}: ${key} key changed:`, value, object[/** @type {keyof typeof object} */key]
+      console.warn(`${prefix}: ${key} key changed:`, value, object[( /** @type {keyof typeof object} */key)]
       /* eslint-enable jsdoc/check-types */);
     }
   });
 }
+/* harmony default export */ const use_warn_on_change = (useWarnOnChange);
 
-/* harmony default export */ var use_warn_on_change = (useWarnOnChange);
-
+;// CONCATENATED MODULE: external "React"
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/use-memo-one/dist/use-memo-one.esm.js
 
 
@@ -5364,7 +5375,7 @@ var useCallback = (/* unused pure expression or super */ null && (useCallbackOne
  * including the function to debounce, so please wrap functions created on
  * render in components in `useCallback`.
  *
- * @see https://docs-lodash.com/v4/debounce/
+ * @see https://lodash.com/docs/4#debounce
  *
  * @template {(...args: any[]) => void} TFunc
  *
@@ -5377,6 +5388,33 @@ function useDebounce(fn, wait, options) {
   const debounced = useMemoOne(() => debounce(fn, wait !== null && wait !== void 0 ? wait : 0, options), [fn, wait, options]);
   (0,external_wp_element_namespaceObject.useEffect)(() => () => debounced.cancel(), [debounced]);
   return debounced;
+}
+
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-debounced-input/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Helper hook for input fields that need to debounce the value before using it.
+ *
+ * @param defaultValue The default value to use.
+ * @return The input value, the setter and the debounced input value.
+ */
+function useDebouncedInput(defaultValue = '') {
+  const [input, setInput] = (0,external_wp_element_namespaceObject.useState)(defaultValue);
+  const [debouncedInput, setDebouncedState] = (0,external_wp_element_namespaceObject.useState)(defaultValue);
+  const setDebouncedInput = useDebounce(setDebouncedState, 250);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    setDebouncedInput(input);
+  }, [input, setDebouncedInput]);
+  return [input, setInput, debouncedInput];
 }
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-throttle/index.js
@@ -5401,7 +5439,7 @@ function useDebounce(fn, wait, options) {
  * including the function to throttle, so please wrap functions created on
  * render in components in `useCallback`.
  *
- * @see https://docs-lodash.com/v4/throttle/
+ * @see https://lodash.com/docs/4#throttle
  *
  * @template {(...args: any[]) => void} TFunc
  *
@@ -5647,11 +5685,15 @@ function useFocusableIframe() {
     const {
       ownerDocument
     } = element;
-    if (!ownerDocument) return;
+    if (!ownerDocument) {
+      return;
+    }
     const {
       defaultView
     } = ownerDocument;
-    if (!defaultView) return;
+    if (!defaultView) {
+      return;
+    }
 
     /**
      * Checks whether the iframe is the activeElement, inferring that it has
@@ -5805,12 +5847,41 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
   return [fixedListWindow, setFixedListWindow];
 }
 
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-observable-value/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+/**
+ * React hook that lets you observe an entry in an `ObservableMap`. The hook returns the
+ * current value corresponding to the key, or `undefined` when there is no value stored.
+ * It also observes changes to the value and triggers an update of the calling component
+ * in case the value changes.
+ *
+ * @template K    The type of the keys in the map.
+ * @template V    The type of the values in the map.
+ * @param    map  The `ObservableMap` to observe.
+ * @param    name The map key to observe.
+ * @return   The value corresponding to the map key requested.
+ */
+function useObservableValue(map, name) {
+  const [subscribe, getValue] = (0,external_wp_element_namespaceObject.useMemo)(() => [listener => map.subscribe(name, listener), () => map.get(name)], [map, name]);
+  return (0,external_wp_element_namespaceObject.useSyncExternalStore)(subscribe, getValue, getValue);
+}
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/index.js
 // The `createHigherOrderComponent` helper and helper types.
 
 // The `debounce` helper and its types.
 
 // The `throttle` helper and its types.
+
+// The `ObservableMap` data structure
 
 
 // The `compose` and `pipe` helpers (inspired by `flowRight` and `flow` from Lodash).
@@ -5854,7 +5925,10 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
 
 
 
-}();
+
+
+})();
+
 (window.wp = window.wp || {}).compose = __webpack_exports__;
 /******/ })()
 ;

@@ -23,7 +23,7 @@ if ( !defined( 'DB_NAME' ) ) {
 }
 
 // Version of the OpenLab. Used for asset versioning and cache busting.
-define( 'OL_VERSION', '1.7.77' );
+define( 'OL_VERSION', '1.7.78' );
 
 if ( defined( 'DO_SHARDB' ) && DO_SHARDB ) {
 	require __DIR__ . '/db-settings.php';
@@ -62,6 +62,8 @@ define( 'BLOG_ID_CURRENT_SITE', 1 );
 define ( 'BP_FORUMS_SLUG', 'discussion' );
 define( 'BP_GROUP_DOCUMENTS_SLUG', 'files' );
 define( 'BP_USE_WP_ADMIN_BAR', true );
+
+define( 'CBOXOL_ASSET_VER', OL_VERSION );
 
 define( 'NGG_JQUERY_CONFLICT_DETECTION', false );
 

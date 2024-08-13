@@ -26,7 +26,7 @@ function bp_activity_render_latest_activities_block( $attributes = array() ) {
 	$block_args = bp_parse_args(
 		$attributes,
 		array(
-			'title'         => __( 'Latest updates', 'buddypress' ),
+			'title'         => '',
 			'maxActivities' => 5,
 			'type'          => array( 'activity_update' ),
 			'postId'        => 0,
@@ -34,6 +34,14 @@ function bp_activity_render_latest_activities_block( $attributes = array() ) {
 	);
 
 	$max_activities = (int) $block_args['maxActivities'];
+
+	if ( ! $block_args['postId'] ) {
+		$block_args['postId'] = get_the_ID();
+	}
+
+	if ( ! $block_args['title'] ) {
+		$block_args['title'] = __( 'Latest updates', 'buddypress' );
+	}
 
 	// Should we get a specific member's activities?
 	$member_id = 0;
@@ -79,8 +87,10 @@ function bp_activity_render_latest_activities_block( $attributes = array() ) {
 		$block_args
 	);
 
+	add_filter( 'bp_activity_get_types_supporting_generated_content', '__return_empty_array' );
+
 	// Build the activity loop.
-	if ( bp_is_theme_compat_active() && 'nouveau' === bp_get_theme_compat_id() ) {
+	if ( function_exists( 'bp_nouveau' ) ) {
 		$bp_nouveau = bp_nouveau();
 
 		// Globalize the activity widget arguments.
@@ -150,11 +160,16 @@ function bp_activity_render_latest_activities_block( $attributes = array() ) {
 		);
 	}
 
+	remove_filter( 'bp_activity_get_types_supporting_generated_content', '__return_empty_array' );
+
 	// Adds a container to make sure the block is styled even when used into the Columns parent block.
 	$widget_content = sprintf( '<div class="bp-latest-activities-block">%s</div>', "\n" . $widget_content . "\n" );
 
 	// Reset the global template loop.
 	$GLOBALS['activities_template'] = $reset_activities_template;
+
+	// Enqueue BP Tooltips.
+	wp_enqueue_style( 'bp-tooltips' );
 
 	// Only add a block wrapper if not loaded into a Widgets sidebar.
 	if ( ! did_action( 'dynamic_sidebar_before' ) ) {

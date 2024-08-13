@@ -1,4 +1,4 @@
-/*! elementor - v3.19.0 - 28-02-2024 */
+/*! elementor - v3.22.0 - 26-06-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -961,6 +961,141 @@ exports["default"] = ExperimentsModule;
 
 /***/ }),
 
+/***/ "../modules/conversion-center/assets/js/admin/links-pages.js":
+/*!*******************************************************************!*\
+  !*** ../modules/conversion-center/assets/js/admin/links-pages.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _get2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/get */ "../node_modules/@babel/runtime/helpers/get.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _menuHandler = _interopRequireDefault(__webpack_require__(/*! elementor-admin/menu-handler */ "../assets/dev/js/admin/menu-handler.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var LinksPagesHandler = /*#__PURE__*/function (_AdminMenuHandler) {
+  (0, _inherits2.default)(LinksPagesHandler, _AdminMenuHandler);
+  var _super = _createSuper(LinksPagesHandler);
+  function LinksPagesHandler() {
+    (0, _classCallCheck2.default)(this, LinksPagesHandler);
+    return _super.apply(this, arguments);
+  }
+  (0, _createClass2.default)(LinksPagesHandler, [{
+    key: "getDefaultSettings",
+    value: function getDefaultSettings() {
+      return {
+        selectors: {
+          addButton: '.page-title-action:first',
+          pagesMenuItemAndLink: '#menu-pages, #menu-pages > a',
+          templatesMenuItem: '#toplevel_page_e-link-pages-'
+        }
+      };
+    }
+  }, {
+    key: "getDefaultElements",
+    value: function getDefaultElements() {
+      var selectors = this.getSettings('selectors'),
+        elements = (0, _get2.default)((0, _getPrototypeOf2.default)(LinksPagesHandler.prototype), "getDefaultElements", this).call(this);
+      elements.$templatesMenuItem = jQuery(selectors.templatesMenuItem);
+      elements.$pagesMenuItemAndLink = jQuery(selectors.pagesMenuItemAndLink);
+      return elements;
+    }
+  }, {
+    key: "onInit",
+    value: function onInit() {
+      (0, _get2.default)((0, _getPrototypeOf2.default)(LinksPagesHandler.prototype), "onInit", this).call(this);
+      var settings = this.getSettings(),
+        isLinksPagesTablePage = !!window.location.href.includes(settings.paths.linksPagesTablePage),
+        isLinksPagesTrashPage = !!window.location.href.includes(settings.paths.linksPagesTrashPage),
+        isLinksPagesCreateYourFirstPage = !!window.location.href.includes(settings.paths.linksPagesAddNewPage);
+      if (isLinksPagesTablePage || isLinksPagesTrashPage || isLinksPagesCreateYourFirstPage || settings.isLinksPageAdminEdit) {
+        var activeClasses = 'wp-has-current-submenu wp-menu-open current';
+        this.elements.$templatesMenuItem.addClass(activeClasses).removeClass('wp-not-current-submenu');
+        this.elements.$templatesMenuItem.find('li.wp-first-item').addClass('current');
+
+        // Overwrite the 'Add New' button at the top of the page to open in Elementor with the library module open.
+        jQuery(settings.selectors.addButton).attr('href', elementorAdminConfig.urls.addNewLinkUrl);
+      }
+    }
+  }]);
+  return LinksPagesHandler;
+}(_menuHandler.default);
+exports["default"] = LinksPagesHandler;
+
+/***/ }),
+
+/***/ "../modules/conversion-center/assets/js/admin/module.js":
+/*!**************************************************************!*\
+  !*** ../modules/conversion-center/assets/js/admin/module.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports["default"] = void 0;
+var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "../node_modules/@babel/runtime/helpers/classCallCheck.js"));
+var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "../node_modules/@babel/runtime/helpers/createClass.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
+var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
+var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _linksPages = _interopRequireDefault(__webpack_require__(/*! ./links-pages */ "../modules/conversion-center/assets/js/admin/links-pages.js"));
+function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
+function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+var _default = /*#__PURE__*/function (_elementorModules$Mod) {
+  (0, _inherits2.default)(_default, _elementorModules$Mod);
+  var _super = _createSuper(_default);
+  function _default() {
+    var _this;
+    (0, _classCallCheck2.default)(this, _default);
+    _this = _super.call(this);
+    elementorCommon.elements.$window.on('elementor/admin/init', function () {
+      _this.runHandler();
+    });
+    return _this;
+  }
+  (0, _createClass2.default)(_default, [{
+    key: "runHandler",
+    value: function runHandler() {
+      var _elementorAdmin$confi, _elementorAdmin$confi2;
+      var pageName = 'e-link-pages',
+        paths = {
+          linksPagesTablePage: 'edit.php?post_type=' + pageName,
+          linksPagesAddNewPage: 'edit.php?post_type=elementor_library&page=' + pageName,
+          linksPagesTrashPage: 'edit.php?post_status=trash&post_type=' + pageName
+        },
+        args = {
+          path: (_elementorAdmin$confi = elementorAdmin.config.linksPages) !== null && _elementorAdmin$confi !== void 0 && _elementorAdmin$confi.hasPages ? paths.linksPagesTablePage : paths.linksPagesAddNewPage,
+          isLinksPageAdminEdit: (_elementorAdmin$confi2 = elementorAdmin.config.linksPages) === null || _elementorAdmin$confi2 === void 0 ? void 0 : _elementorAdmin$confi2.isAdminEdit,
+          paths: paths
+        };
+
+      // This class modifies elements in the WordPress admin that are rendered "wrong" by the WordPress core
+      // and could not be modified in the backend.
+      new _linksPages.default(args);
+    }
+  }]);
+  return _default;
+}(elementorModules.Module);
+exports["default"] = _default;
+
+/***/ }),
+
 /***/ "../modules/landing-pages/assets/js/admin/landing-pages.js":
 /*!*****************************************************************!*\
   !*** ../modules/landing-pages/assets/js/admin/landing-pages.js ***!
@@ -1797,17 +1932,17 @@ module.exports = _superPropBase, module.exports.__esModule = true, module.export
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-function _toPrimitive(input, hint) {
-  if (_typeof(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (_typeof(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
-module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -1819,11 +1954,11 @@ module.exports = _toPrimitive, module.exports.__esModule = true, module.exports[
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "../node_modules/@babel/runtime/helpers/typeof.js")["default"]);
 var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "../node_modules/@babel/runtime/helpers/toPrimitive.js");
-function _toPropertyKey(arg) {
-  var key = toPrimitive(arg, "string");
-  return _typeof(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : String(i);
 }
-module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -1938,6 +2073,7 @@ var _events = _interopRequireDefault(__webpack_require__(/*! elementor-utils/eve
 var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../editor/utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 var _templateControls = _interopRequireDefault(__webpack_require__(/*! ./new-template/template-controls.js */ "../assets/dev/js/admin/new-template/template-controls.js"));
 var _jsonUploadWarningMessage = __webpack_require__(/*! elementor-utils/json-upload-warning-message */ "../assets/dev/js/utils/json-upload-warning-message.js");
+var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/conversion-center/assets/js/admin/module */ "../modules/conversion-center/assets/js/admin/module.js"));
 (function ($) {
   var ElementorAdmin = elementorModules.ViewModule.extend({
     maintenanceMode: null,
@@ -2200,6 +2336,9 @@ var _jsonUploadWarningMessage = __webpack_require__(/*! elementor-utils/json-upl
       this.roleManager.init();
       if (elementorCommon.config.experimentalFeatures['landing-pages']) {
         new _module.default();
+      }
+      if (elementorCommon.config.experimentalFeatures['conversion-center']) {
+        new _module3.default();
       }
       this.templateControls = new _templateControls.default();
       new _module2.default();

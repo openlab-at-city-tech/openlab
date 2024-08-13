@@ -2090,9 +2090,11 @@ function DeleteField( element ) {
 
 	// Get field ID from element.
 	var fieldId = jQuery( element )[0].id.split( '_' )[2];
+	var field = GetFieldById( fieldId );
+	var confirmDeleteMessage = field.displayOnly ? gf_vars.confirmationDeleteDisplayField : gf_vars.confirmationDeleteField;
 
 	// Confirm that user is aware about entry data being deleted.
-	if ( ! HasConditionalLogicDependency( fieldId ) && ! confirm( gf_vars.confirmationDeleteField ) ) {
+	if ( ! HasConditionalLogicDependency( fieldId ) && ! confirm( confirmDeleteMessage ) ) {
 		return;
 	}
 
@@ -2697,7 +2699,10 @@ function ShowSettings( element ) {
 		//hide field and form pagination setting fields
 		jQuery( '.field_setting' ).hide();
 		jQuery( '.pagination_setting' ).hide();
+		jQuery("#gfield_post_category_initial_item_container").hide();
+		jQuery("#gfield_min_strength_container").hide();
 		// Show last pagination setting fields
+		fieldObject = GetSelectedField();
 		jQuery( '.last_pagination_setting' ).show();
 		var label = jQuery( '#gform_last_page_settings' ).data( 'title' );
 		var description = jQuery( '#gform_last_page_settings' ).data( 'description' );
@@ -2740,6 +2745,7 @@ function ShowSettings( element ) {
 		var icon_img = $button_icon.find( 'img' );
 		var icon_classes = $button_icon.children().attr( 'class' );
 	}
+
 	// Show field icon and description in sidebar
 	jQuery( '#nothing_selected' ).hide();
 	jQuery( '#sidebar_field_label' )
@@ -2954,7 +2960,12 @@ function SelectCustomChoice( name ){
 }
 
 function SelectPredefinedChoice(name){
-    jQuery('#gfield_bulk_add_input').val(gform_predefined_choices[name].join('\n'));
+	var list = gform_predefined_choices[name];
+	// Countries can also be an object if the gform_countries filter is used, so convert to array with just the values.
+	if( name == "Countries" && Array.isArray( list ) !== true ) {
+		list = Object.values( list );
+	}
+    jQuery('#gfield_bulk_add_input').val(list.join('\n'));
     gform_selected_custom_choice = "";
     InitBulkCustomPanel();
 }
@@ -3750,6 +3761,9 @@ function SetFieldLabel(label){
     var requiredElement = jQuery(".field_selected .gfield_required")[0];
     jQuery(".field_selected label.gfield_label, .field_selected .gsection_title, .field_selected legend.gfield_label > span").text(label).append(requiredElement);
 	SetFieldProperty("label", label);
+
+	var nativeEvent = new Event('gform/form_editor/set_field_label');
+	document.dispatchEvent(nativeEvent);
 }
 
 /**
@@ -4124,6 +4138,11 @@ function ToggleCalculationOptions(isEnabled, field) {
     }
 
     SetFieldProperty('enableCalculation', isEnabled);
+
+	if ( field.type === 'number' ) {
+		var nativeEvent = new Event('gform/form_editor/toggle_calculation_options');
+		document.dispatchEvent(nativeEvent);
+	}
 }
 
 function FormulaContentCallback() {

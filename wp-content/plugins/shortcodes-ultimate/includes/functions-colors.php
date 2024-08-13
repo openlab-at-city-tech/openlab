@@ -123,3 +123,7 @@ function su_adjust_lightness( $color, $percent ) {
 	return $new_color;
 
 }
+
+function su_sanitize_css_color($value) {
+	return preg_replace( '/[^a-z\d\#\(\)\.\-\,%]+/i', '', $value );
+}

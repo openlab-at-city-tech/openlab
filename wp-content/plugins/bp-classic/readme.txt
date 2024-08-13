@@ -7,7 +7,7 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.8
 Requires PHP: 5.6
 Tested up to: 6.4
-Stable tag: 1.2.0
+Stable tag: 1.4.0
 
 BP Classic, a BuddyPress (12.0.0 & up) backwards compatibility add-on
 
@@ -65,6 +65,14 @@ If you would like to provide monetary support to the BP Classic or BuddyPress pl
 
 == Upgrade Notice ==
 
+= 1.4.0 =
+
+No specific upgrade tasks needed.
+
+= 1.3.0 =
+
+No specific upgrade tasks needed.
+
 = 1.2.0 =
 
 No specific upgrade tasks needed.
@@ -78,6 +86,17 @@ No specific upgrade tasks needed.
 Initial version of the plugin, no upgrade needed.
 
 == Changelog ==
+
+= 1.4.0 =
+
+- Make sure bbPress topics/replies pagination is behaving as expected with BuddyPress 12.0 & up (See [#44](https://github.com/buddypress/bp-classic/pull/44)).
+
+= 1.3.0 =
+
+- Switch to BP root blog when migrating directories if necessary (See [#33](https://github.com/buddypress/bp-classic/pull/33)).
+- Make sure Tooltips are used in Legacy widgets (See [#35](https://github.com/buddypress/bp-classic/issues/35) & [#39](https://github.com/buddypress/bp-classic/issues/39)).
+- Use a npm script to get BP Default (See [#37](https://github.com/buddypress/bp-classic/issues/37)).
+- Improve how we check BP Nouveau is the current BP Template Pack in use (See [#41](https://github.com/buddypress/bp-classic/issues/41)).
 
 = 1.2.0 =
 

@@ -47,7 +47,7 @@ if ($optionUserTimeFormat == false) {
                                     <a href="admin.php?page=blog2social-repost" class="b2s-re-post"><?php esc_html_e("Re-Share Posts", "blog2social") ?></a> 
                                 </li>
                                 <li>
-                                    <a href="#b2s-network" class="b2s-network" data-toggle="tab"><?php esc_html_e("Social Media Networks", "blog2social") ?></a> 
+                                    <a href="admin.php?page=blog2social-network" class="b2s-network"><?php esc_html_e("Social Media Networks", "blog2social") ?></a> 
                                 </li>
                                 <li>
                                     <a href="#b2s-times" class="b2s-times" data-toggle="tab"><?php esc_html_e("Social Media Time Settings", "blog2social") ?></a> 
@@ -192,35 +192,6 @@ if ($optionUserTimeFormat == false) {
                                             <div class="text-center b2s-text-bold"><?php esc_html_e("You need admin rights to use the Social Meta Data. Please contact your administrator.", "blog2social"); ?></div>
                                         </div>
                                     <?php } ?>
-                                </div>
-
-                                <div class="tab-pane" id="b2s-network">
-                                    <p><strong><?php esc_html_e("Connect Blog2Social with 16 different social media networks you like to share your WordPress blog posts and pages as well as imported posts and social media posts on. The following networks are available:", "blog2social") ?></strong></p>
-                                    <br>
-                                    <ul class="list-group">
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Facebook" src="<?php echo esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)) ?>"> Facebook</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Twitter" src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)) ?>"> Twitter</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Instagram" src="<?php echo esc_url(plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE)) ?>"> Instagram</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Google Business Profile" src="<?php echo esc_url(plugins_url('/assets/images/portale/18_flat.png', B2S_PLUGIN_FILE)) ?>"> Google Business Profile</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="LinkedIn" src="<?php echo esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)) ?>"> LinkedIn</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="XING" src="<?php echo esc_url(plugins_url('/assets/images/portale/19_flat.png', B2S_PLUGIN_FILE)) ?>"> XING</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Pinterest" src="<?php echo esc_url(plugins_url('/assets/images/portale/6_flat.png', B2S_PLUGIN_FILE)) ?>"> Pinterest</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Reddit" src="<?php echo esc_url(plugins_url('/assets/images/portale/15_flat.png', B2S_PLUGIN_FILE)) ?>"> Reddit</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Torial" src="<?php echo esc_url(plugins_url('/assets/images/portale/14_flat.png', B2S_PLUGIN_FILE)) ?>"> Torial</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Medium" src="<?php echo esc_url(plugins_url('/assets/images/portale/11_flat.png', B2S_PLUGIN_FILE)) ?>"> Medium</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Tumblr" src="<?php echo esc_url(plugins_url('/assets/images/portale/4_flat.png', B2S_PLUGIN_FILE)) ?>"> Tumblr</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Flickr" src="<?php echo esc_url(plugins_url('/assets/images/portale/7_flat.png', B2S_PLUGIN_FILE)) ?>"> Flickr</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Diigo" src="<?php echo esc_url(plugins_url('/assets/images/portale/9_flat.png', B2S_PLUGIN_FILE)) ?>"> Diigo</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Bloglovin" src="<?php echo esc_url(plugins_url('/assets/images/portale/16_flat.png', B2S_PLUGIN_FILE)) ?>"> Bloglovin</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="VK" src="<?php echo esc_url(plugins_url('/assets/images/portale/17_flat.png', B2S_PLUGIN_FILE)) ?>"> VK</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Telegram" src="<?php echo esc_url(plugins_url('/assets/images/portale/24_flat.png', B2S_PLUGIN_FILE)) ?>"> Telegram</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Blogger" src="<?php echo esc_url(plugins_url('/assets/images/portale/25_flat.png', B2S_PLUGIN_FILE)) ?>"> Blogger</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Ravelry" src="<?php echo esc_url(plugins_url('/assets/images/portale/26_flat.png', B2S_PLUGIN_FILE)) ?>"> Ravelry</li></a>
-                                        <a href="admin.php?page=blog2social-network"><li class="list-group-item"><img class="b2s-network-image" alt="Instapaper" src="<?php echo esc_url(plugins_url('/assets/images/portale/27_flat.png', B2S_PLUGIN_FILE)) ?>"> Instapaper</li></a>
-                                    </ul>
-                                    <p><?php echo sprintf(__('You will find more information on how to connect your social media networks in the <a href="%s" target="_blank">connecting social media network guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('faq_network'))); ?></p>
-                                    <br>
-                                    <a href="admin.php?page=blog2social-network" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-user"></i> <?php esc_html_e('Connect your social media networks', 'blog2social') ?></a>
                                 </div>
                                 <div class="tab-pane" id="b2s-times">
                                     <p><?php esc_html_e('Use the pre-defined best time settings or define your own best time settings for sharing  your posts . Posting at the right time can be essential to make sure your content is most likely be seen.', 'blog2social') ?></p>

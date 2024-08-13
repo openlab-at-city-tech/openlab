@@ -71,6 +71,12 @@ class Transient {
 		$updated = false;
 		$groups  = is_array( $group_or_groups ) ? $group_or_groups : [ $group_or_groups ];
 
+		// Initialize the groups array if it doesn't exist or is not an array.
+		//  If the 'ngg_transient_groups' option is set and is not an array, this could cause fatal error.
+		if( !is_array( $this->_groups ) ) {
+			$this->_groups = [];
+		}
+
 		foreach ( $groups as $group ) {
 			if ( ! isset( $this->_groups[ $group ] ) ) {
 				$id                      = $this->_groups['__counter'] += 1;

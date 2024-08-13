@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 2.1.7
+ * Version: 2.1.10
  */
 
 /*
@@ -39,15 +39,15 @@
 */
 
 if ( 'on' === get_option( 'wpa_toolbar' ) || 'on' === get_option( 'wpa_widget_toolbar' ) ) {
-	require_once( dirname( __FILE__ ) . '/wp-accessibility-toolbar.php' );
+	require_once __DIR__ . '/wp-accessibility-toolbar.php';
 }
-require_once( dirname( __FILE__ ) . '/wp-accessibility-longdesc.php' );
-require_once( dirname( __FILE__ ) . '/wp-accessibility-alt.php' );
-require_once( dirname( __FILE__ ) . '/wp-accessibility-contrast.php' );
-require_once( dirname( __FILE__ ) . '/wp-accessibility-settings.php' );
-require_once( dirname( __FILE__ ) . '/wp-accessibility-help.php' );
+require_once __DIR__ . '/wp-accessibility-longdesc.php';
+require_once __DIR__ . '/wp-accessibility-alt.php';
+require_once __DIR__ . '/wp-accessibility-contrast.php';
+require_once __DIR__ . '/wp-accessibility-settings.php';
+require_once __DIR__ . '/wp-accessibility-help.php';
 if ( 'off' !== get_option( 'wpa_track_stats' ) ) {
-	require_once( dirname( __FILE__ ) . '/wp-accessibility-stats.php' );
+	require_once __DIR__ . '/wp-accessibility-stats.php';
 }
 
 register_activation_hook( __FILE__, 'wpa_install' );
@@ -58,6 +58,27 @@ add_action( 'plugins_loaded', 'wpa_load_textdomain' );
  */
 function wpa_load_textdomain() {
 	load_plugin_textdomain( 'wp-accessibility' );
+}
+
+add_action( 'admin_notices', 'wpa_status_notice', 10 );
+/**
+ * Display notice in Playground for demo purposes.
+ */
+function wpa_status_notice() {
+	// Only shown when in the Playground preview.
+	if ( 'true' === get_option( 'wpa_show_playground_intro', '' ) ) {
+		echo '<div class="notice notice-info">';
+		echo '<h3>' . __( 'Thanks for trying out WP Accessibility!', 'wp-accessibility' ) . '</h3>';
+		echo '<p>' . __( "Let me give you a few quick things to try out while you're here:", 'wp-accessibility' ) . '</p>';
+		echo '<ol>';
+		echo '<li>' . __( 'Create a new post and add media to observe some WP Accessibility features.', 'wp-accessibility' ) . '</li>';
+		echo '<li>' . __( 'Go to the Themes page and install a theme of your choice, then explore the site. Errors corrected are logged in the console and saved to stats.', 'wp-accessibility' ) . '</li>';
+		echo '<li>' . __( 'Visit the WP Accessibility Stats to view what WP Accessibility did on each page.', 'wp-accessibility' ) . '</li>';
+		echo '</ol>';
+		// translators: link to plugin documentation.
+		echo '<p>' . sprintf( __( 'To learn more, check out the <a href="%s">plugin documentation</a>.', 'wp-accessibility' ), 'https://docs.joedolson.com/wp-accessibility/' ) . '</p>';
+		echo '</div>';
+	}
 }
 
 add_action( 'admin_menu', 'wpa_admin_menu' );
@@ -73,7 +94,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '2.1.7';
+	$wpa_version = '2.1.10';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -129,7 +150,7 @@ add_filter( 'plugin_action_links', 'wpa_plugin_action', 10, 2 );
  * @param string $file File name.
  */
 function wpa_plugin_action( $links, $file ) {
-	if ( plugin_basename( dirname( __FILE__ ) . '/wp-accessibility.php' ) === $file ) {
+	if ( plugin_basename( __DIR__ . '/wp-accessibility.php' ) === $file ) {
 		$admin_url = admin_url( 'admin.php?page=wp-accessibility' );
 		$links[]   = "<a href='$admin_url'>" . __( 'Accessibility Settings', 'wp-accessibility' ) . '</a>';
 	}
@@ -623,7 +644,7 @@ function wpa_search_error( $template ) {
 if ( 'on' === get_option( 'wpa_more' ) && ! wpa_accessible_theme() ) {
 	add_filter(
 		'body_class',
-		function( $classes ) {
+		function ( $classes ) {
 			return array_merge( $classes, array( 'wpa-excerpt' ) );
 		}
 	);
@@ -646,7 +667,7 @@ function wpa_continue_reading( $id ) {
 /**
  * Add custom continue reading text to excerpts.
  *
- * @return Ellipsis + continue reading text.
+ * @return string Ellipsis + continue reading text.
  */
 function wpa_excerpt_more() {
 	global $id;
@@ -984,4 +1005,3 @@ function wpa_save_content_summary( $id, $post ) {
 	return $id;
 }
 add_action( 'save_post', 'wpa_save_content_summary', 10, 2 );
-

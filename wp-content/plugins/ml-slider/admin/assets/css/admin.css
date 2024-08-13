@@ -205,22 +205,6 @@ eventually be removed/refactored */
     position: relative;
     margin-bottom: 7px;
 }
-.theme-select-module .theme-hover-text {
-    position: absolute;
-    top: 0;
-    background: rgba(34,113,177,0.7);
-    color: #fff;
-    box-sizing: border-box;
-    padding: 20px;
-    height: 100%;
-    width: 100%;
-    display: none;
-}
-.theme-select-module .change-theme-img-button:hover .theme-hover-text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
 .theme-select-module .button-link {
     text-decoration: none;
 }
@@ -260,8 +244,8 @@ eventually be removed/refactored */
 
 .metaslider .left table tr.slide textarea {
     width: 100%;
-    height: 60px;
-    margin: 0 0 5px 0;
+    height: 120px;
+    margin: 0;
     padding: 2px 5px;
 }
 
@@ -341,7 +325,8 @@ eventually be removed/refactored */
 	display: block;
 }
 .metaslider .tabs-content .image-title-label,
-.metaslider .tabs-content .image-alt-label {
+.metaslider .tabs-content .image-alt-label,
+.metaslider .tabs-content .link-alt-label {
     line-height: 30px;
 }
 
@@ -841,13 +826,14 @@ eventually be removed/refactored */
 }
 .metaslider-ui .metaslider-slides-container .slide .thumb img {
     width: 100%;
-    height: auto;
+    height: 100%;
     object-fit: cover;
 }
 .metaslider-ui .metaslider-slides-container .toolbar-button,
 .metaslider-ui .metaslider-slides-container .update-image,
 .metaslider-ui .metaslider-slides-container .delete-slide,
-.metaslider-ui .metaslider-slides-container .undo-delete-slide {
+.metaslider-ui .metaslider-slides-container .undo-delete-slide, 
+.metaslider-ui .metaslider-slides-container .duplicate-slide {
     color: #50575e;
     outline: 0;
     cursor: pointer;
@@ -858,15 +844,18 @@ eventually be removed/refactored */
     height: 30px;
 }
 .metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-image,
-.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-video {
+.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-video,
+.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .duplicate-slide {
     padding: 0 0 0 6px;
 }
 .metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-image svg,
-.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-video svg {
+.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .update-video svg,
+.metaslider-ui .metaslider-slides-container .metaslider-ui-controls .duplicate-slide svg {
     width: 18px;
 }
 .metaslider-ui .metaslider-slides-container .update-image.image-button,
-.metaslider-ui .metaslider-slides-container .update-video.image-button {
+.metaslider-ui .metaslider-slides-container .update-video.image-button,
+.metaslider-ui .metaslider-slides-container .duplicate-slide.image-button {
     padding: 0;
     margin: 0;
     display: block;
@@ -977,6 +966,11 @@ input[type="radio"] {
     content: "";
     display: table;
     clear: both;
+}
+
+/* TinyMCE */
+.tox.tox-tinymce-aux {
+    z-index: 9999;
 }
 
  /* Spin an svg */
@@ -1312,17 +1306,6 @@ input.no_last_pass {
 	color: green;
 }
 
-@keyframes autoplaythumb {
-    0% {opacity: 0.0}
-    4% {opacity: 1.0}
-    33.33% {opacity: 1.0}
-    37.33% {opacity: 0.0}
-    100% {opacity: 0.0}
-}
-.column-slides .image-wrap > *:nth-child(1) {animation-delay: 0s}
-.column-slides .image-wrap > *:nth-child(2) {animation-delay: 4s}
-.column-slides .image-wrap > *:nth-child(3) {animation-delay: 8s}
-
 /* Quick Start Page */
 .metaslider_page_metaslider-start #wpbody-content,
 .metaslider-pro_page_metaslider-start #wpbody-content {
@@ -1481,6 +1464,12 @@ input.no_last_pass {
     font-size: 13px;
 }
 
+.slidethumb {
+    overflow: hidden;
+    width: 150px;
+    height: 150px;
+}
+
 /* Force CSS properties overriden by core for .form-select class */
 .form-select--forced {
     background-color: #fff !important;
@@ -1533,6 +1522,11 @@ input.no_last_pass {
 	width: 18px;
 	margin-top: -2px;
 	color: rgb(70, 180, 80);
+}
+
+.ms-settings-table .mobile-checkbox-wrap {
+	margin-right: 5px;
+	padding: 5px 8px !important;
 }
 
 /* Settngs & Help Page */
@@ -1620,7 +1614,92 @@ td .dot.available {
 	background: #dd6923;
 }
 
+/* CSS Manager Upsell */
+.css-manager-ad-container {
+	background-color: #F0F0F1;
+	padding: 30px 0;
+}
+.css-manager-ad-container .probutton, .schedule_placeholder .probutton{
+	color: #fff;
+	background: #dd6923;
+	padding: 12px 30px !important;
+	border-radius: 5px;
+	text-decoration: none;
+	display: inline-block;
+	border: none;
+	font-size: 17px !important;
+	margin-top: 15px;
+	min-height: 46px !important;
+	line-height: 1.8 !important;
+	white-space: unset;
+}
+.schedule_placeholder .probutton {
+	margin-top: 0!important;
+	margin-bottom: 15px;
+}
+.css-manager-ad-container .dashicons.dashicons-external,
+.schedule_placeholder .dashicons.dashicons-external{
+	margin-top: 5px;
+}
+.css-manager-ad-container h1, .schedule_placeholder h1 {
+	color: #29375b;
+	font-size: 28px;
+	line-height: 1.2;
+	font-weight: 600 !important;
+}
+.schedule_placeholder h1 {
+    margin-bottom: 5px!important;
+}
+.css-manager-ad-container li,
+.css-manager-ad-container p,
+.schedule_placeholder p {
+	font-size: 16px !important;
+	font-style: normal !important;
+	color: #3c434a !important;
+}
+.css-manager-ad-container img {
+	width: 80%;
+	margin: 5% auto;
+	box-shadow: 0px 5px 5px 0px silver;
+}
+
+#loading-add-sample-slides-notice,
+#add-first-slide-notice {
+    height: 200px;
+    text-align: center;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #f1f1f1;
+    font-size: 1.2em;
+    background: #fff;
+}
+
+#loading-add-sample-slides-notice span {
+    padding-left: 30px;
+    background-repeat: no-repeat;
+    background-size: contain;
+}
+
+@media only screen and (min-width : 320px) {
+    .toolbar-separator, .toolbar-actions{
+        padding: 0!important;
+    }
+    .ms-toolbar-button {
+        padding-left: 4px!important;
+        padding-right: 4px!important;
+    }
+}
+
 @media (min-width : 768px) {
+    .toolbar-separator, .toolbar-actions{
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+    .ms-toolbar-button {
+        padding-left: .5rem!important;
+        padding-right: .5rem!important;
+    }
     /* Quick Start */
     .metaslider-welcome .ms-panel-container > div:nth-child(2) {
         padding-left: 1rem;

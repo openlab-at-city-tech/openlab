@@ -20,17 +20,32 @@ abstract class Plugin extends Base\Plugin
     /**
      * @inheritDoc
      */
-    public static function init()
+    protected static function init()
     {
         include_once 'BooklyDeprecated.php';
 
-        Backend\Modules\Settings\Ajax::init();
+        Backend\Components\Dashboard\Appointments\Widget::init();
+        Backend\Components\Editable\Proxy\Shared::init();
+        Backend\Components\Gutenberg\BooklyForm\Block::init();
+        Backend\Components\TinyMce\Tools::init();
+        Frontend\Modules\Booking\Proxy\Invoices::init();
 
-        // Init ajax.
+        if ( ! is_admin() ) {
+            // Init short code.
+            Frontend\Modules\Booking\ShortCode::init();
+        }
+    }
+
+    /**
+     * @inerhitDoc
+     */
+    protected static function registerAjax()
+    {
+        Backend\Modules\Diagnostics\Ajax::init();
+
         Backend\Components\Cloud\Account\Ajax::init();
         Backend\Components\Cloud\Recharge\Ajax::init();
         Backend\Components\Dashboard\Appointments\Ajax::init();
-        Backend\Components\Dashboard\Appointments\Widget::init();
         Backend\Components\Dialogs\Appointment\Delete\Ajax::init();
         Backend\Components\Dialogs\Appointment\Edit\Ajax::init();
         Backend\Components\Dialogs\Customer\Delete\Ajax::init();
@@ -38,6 +53,7 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dialogs\Mailing\AddRecipients\Ajax::init();
         Backend\Components\Dialogs\Mailing\Campaign\Ajax::init();
         Backend\Components\Dialogs\Mailing\CreateList\Ajax::init();
+        Backend\Components\Dialogs\MobileStaffCabinet\AccessEdit\Ajax::init();
         Backend\Components\Dialogs\Payment\Ajax::init();
         Backend\Components\Dialogs\Service\Edit\Ajax::init();
         Backend\Components\Dialogs\Service\Order\Ajax::init();
@@ -47,8 +63,6 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Dialogs\TableSettings\Ajax::init();
         Backend\Components\Dialogs\VoiceTest\Ajax::init();
         Backend\Components\Dialogs\Whatsapp\Ajax::init();
-        Backend\Components\Editable\Proxy\Shared::init();
-        Backend\Components\Gutenberg\BooklyForm\Block::init();
         Backend\Components\Notices\Limitation\Ajax::init();
         Backend\Components\Notices\Lite\Ajax::init();
         Backend\Components\Notices\Nps\Ajax::init();
@@ -60,11 +74,11 @@ abstract class Plugin extends Base\Plugin
         Backend\Components\Notices\Subscribe\Ajax::init();
         Backend\Components\Notices\Wpml\Ajax::init();
         Backend\Components\Support\ButtonsAjax::init();
-        Backend\Components\TinyMce\Tools::init();
         Backend\Modules\Appearance\Ajax::init();
         Backend\Modules\Appointments\Ajax::init();
         Backend\Modules\Calendar\Ajax::init();
         Backend\Modules\CloudBilling\Ajax::init();
+        Backend\Modules\CloudMobileStaffCabinet\Ajax::init();
         Backend\Modules\CloudProducts\Ajax::init();
         Backend\Modules\CloudSettings\Ajax::init();
         Backend\Modules\CloudSms\Ajax::init();
@@ -72,25 +86,20 @@ abstract class Plugin extends Base\Plugin
         Backend\Modules\CloudWhatsapp\Ajax::init();
         Backend\Modules\CloudZapier\Ajax::init();
         Backend\Modules\Customers\Ajax::init();
-        Backend\Modules\Diagnostics\Ajax::init();
         Backend\Modules\News\Ajax::init();
         Backend\Modules\Notifications\Ajax::init();
         Backend\Modules\Payments\Ajax::init();
         Backend\Modules\Services\Ajax::init();
+        Backend\Modules\Settings\Ajax::init();
         Backend\Modules\Setup\Ajax::init();
         Backend\Modules\Shop\Ajax::init();
         Backend\Modules\Staff\Ajax::init();
         Frontend\Modules\Booking\Ajax::init();
-        Frontend\Modules\Booking\Proxy\Invoices::init();
         Frontend\Modules\Cron\Ajax::init();
+        Frontend\Modules\MobileStaffCabinet\Ajax::init();
         Frontend\Modules\Payment\Ajax::init();
         Frontend\Modules\Stripe\Ajax::init();
         Frontend\Modules\Zapier\Ajax::init();
-
-        if ( ! is_admin() ) {
-            // Init short code.
-            Frontend\Modules\Booking\ShortCode::init();
-        }
     }
 
     /**

@@ -137,6 +137,10 @@ class nggManageAlbum {
 	 * @return Album
 	 */
 	public function _set_album_preview_pic( $album ) {
+		if ( ! isset( $album->sortorder ) || ! is_array( $album->sortorder ) ) {
+			return $album;
+		}
+
 		$sortorder = array_merge( $album->sortorder );
 
 		while ( ! $album->previewpic ) {
@@ -170,12 +174,20 @@ class nggManageAlbum {
 		// Create album.
 		if ( isset( $_POST['add'] ) && isset( $_POST['newalbum'] ) ) {
 
+			// sanitize the album name.
+			$name = sanitize_text_field( $_POST['newalbum'] );
+
+			if( empty( $name ) ) {
+				nggGallery::show_message( __( 'Album name is invalid', 'nggallery' ) );
+				return;
+			}
+
 			if ( ! nggGallery::current_user_can( 'NextGEN Add/Delete album' ) ) {
 				wp_die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 			}
 
 			$album       = new stdClass();
-			$album->name = $_POST['newalbum'];
+			$album->name = $name;
 			if ( AlbumMapper::get_instance()->save( $album ) ) {
 				$this->currentID = $_REQUEST['act_album'] = $album->{$album->id_field};
 
@@ -197,7 +209,11 @@ class nggManageAlbum {
 			parse_str( $_REQUEST['sortorder'], $sortorder );
 
 			// Set the new sortorder.
-			$album->sortorder = $sortorder['gid'];
+			if ( isset( $sortorder['gid'] ) ) {
+				$album->sortorder = $sortorder['gid'];
+			} else {
+				$album->sortorder = [];
+			}
 
 			// Ensure that a preview pic has been sent.
 			$this->_set_album_preview_pic( $album );
@@ -218,7 +234,7 @@ class nggManageAlbum {
 				wp_die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 			}
 
-			$this->currentID = $_REQUEST['act_album'];
+			$this->currentID = (int) $_REQUEST['act_album'];
 
 			if ( AlbumMapper::get_instance()->destroy( $this->currentID ) ) {
 				// hook for other plugins.
@@ -241,8 +257,8 @@ class nggManageAlbum {
 
 		$this->currentID   = $_REQUEST['act_album'];
 		$album             = $this->_get_album( $this->currentID );
-		$album->name       = stripslashes( $_POST['album_name'] );
-		$album->albumdesc  = stripslashes( $_POST['album_desc'] );
+		$album->name       = sanitize_text_field( $_POST['album_name'] );
+		$album->albumdesc  = sanitize_textarea_field( $_POST['album_desc'] );
 		$album->previewpic = (int) $_POST['previewpic'];
 		$album->pageid     = (int) $_POST['pageid'];
 		$result            = AlbumMapper::get_instance()->save( $album );
@@ -512,7 +528,7 @@ function ngg_confirm_delete_album(form) {
 					<?php } else { ?>
 						<?php if ( nggGallery::current_user_can( 'NextGEN Add/Delete album' ) ) { ?>
 							<span class="ngg_new_album"><?php esc_html_e( 'Add new album', 'nggallery' ); ?>&nbsp;</span>
-							<input class="search-input" id="newalbum" name="newalbum" type="text" value="" />
+							<input class="search-input" id="newalbum" name="newalbum" type="text" value="" required />
 							<input class="button-primary action" type="submit" name="add" value="<?php esc_attr_e( 'Add', 'nggallery' ); ?>"/>
 						<?php } ?>
 					<?php } ?>

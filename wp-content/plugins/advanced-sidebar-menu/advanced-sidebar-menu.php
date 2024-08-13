@@ -4,7 +4,7 @@
  * Plugin URI: https://onpointplugins.com/advanced-sidebar-menu/
  * Description: Creates dynamic menus based on parent/child relationship of your pages or categories.
  * Author: OnPoint Plugins
- * Version: 9.4.3
+ * Version: 9.5.2
  * Author URI: https://onpointplugins.com
  * Text Domain: advanced-sidebar-menu
  * Domain Path: /languages/
@@ -19,31 +19,18 @@ if ( defined( 'ADVANCED_SIDEBAR_BASIC_VERSION' ) ) {
 	return;
 }
 
-define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.4.3' );
+define( 'ADVANCED_SIDEBAR_MENU_BASIC_VERSION', '9.5.2' );
 define( 'ADVANCED_SIDEBAR_MENU_REQUIRED_PRO_VERSION', '9.2.0' );
 define( 'ADVANCED_SIDEBAR_MENU_DIR', plugin_dir_path( __FILE__ ) );
 define( 'ADVANCED_SIDEBAR_MENU_URL', plugin_dir_url( __FILE__ ) );
 
-use Advanced_Sidebar_Menu\Blocks\Block_Abstract;
 use Advanced_Sidebar_Menu\Blocks\Categories;
 use Advanced_Sidebar_Menu\Blocks\Pages;
 use Advanced_Sidebar_Menu\Cache;
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\Debug;
-use Advanced_Sidebar_Menu\List_Pages;
-use Advanced_Sidebar_Menu\Menus\Category;
-use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
-use Advanced_Sidebar_Menu\Menus\Page;
 use Advanced_Sidebar_Menu\Notice;
 use Advanced_Sidebar_Menu\Scripts;
-use Advanced_Sidebar_Menu\Traits\Memoize;
-use Advanced_Sidebar_Menu\Traits\Singleton;
-use Advanced_Sidebar_Menu\Utils;
-use Advanced_Sidebar_Menu\Walkers\Category_Walker;
-use Advanced_Sidebar_Menu\Walkers\Page_Walker;
-use Advanced_Sidebar_Menu\Widget\Category as Widget_Category;
-use Advanced_Sidebar_Menu\Widget\Page as Widget_Page;
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
 
 /**
  * Load the plugin
@@ -71,50 +58,23 @@ function advanced_sidebar_menu_load() {
 add_action( 'plugins_loaded', 'advanced_sidebar_menu_load' );
 
 /**
- * Autoload classes from PSR4 src directory
- * Mirrored after Composer dump-autoload for performance
+ * Autoload classes from PSR4 src directory.
  *
  * @param string $class_name - class being loaded.
  *
  * @return void
  */
 function advanced_sidebar_menu_autoload( $class_name ) {
-	$classes = [
-		// Widgets.
-		Widget_Abstract::class => 'Widget/Widget_Abstract.php',
-		Widget_Page::class     => 'Widget/Page.php',
-		Widget_Category::class => 'Widget/Category.php',
-
-		// Blocks.
-		Block_Abstract::class  => 'Blocks/Block_Abstract.php',
-		Categories::class      => 'Blocks/Categories.php',
-		Pages::class           => 'Blocks/Pages.php',
-
-		// Core.
-		Cache::class           => 'Cache.php',
-		Core::class            => 'Core.php',
-		Debug::class           => 'Debug.php',
-		List_Pages::class      => 'List_Pages.php',
-		Notice::class          => 'Notice.php',
-		Scripts::class         => 'Scripts.php',
-		Utils::class           => 'Utils.php',
-
-		// Menus.
-		Category::class        => 'Menus/Category.php',
-		Menu_Abstract::class   => 'Menus/Menu_Abstract.php',
-		Page::class            => 'Menus/Page.php',
-
-		// Traits.
-		Memoize::class         => 'Traits/Memoize.php',
-		Singleton::class       => 'Traits/Singleton.php',
-
-		// Walkers.
-		Category_Walker::class => 'Walkers/Category_Walker.php',
-		Page_Walker::class     => 'Walkers/Page_Walker.php',
-	];
-	if ( isset( $classes[ $class_name ] ) ) {
-		require __DIR__ . '/src/' . $classes[ $class_name ];
+	$parts = \explode( '\\', $class_name );
+	if ( 'Advanced_Sidebar_Menu' === \array_shift( $parts ) && \file_exists( __DIR__ . '/src/' . \implode( DIRECTORY_SEPARATOR, $parts ) . '.php' ) ) {
+		require __DIR__ . '/src/' . \implode( DIRECTORY_SEPARATOR, $parts ) . '.php';
 	}
 }
-
 spl_autoload_register( 'advanced_sidebar_menu_autoload' );
+
+/**
+ * Cleanup any caches on deactivation.
+ */
+register_deactivation_hook( __FILE__, function() {
+	Cache::instance()->clear_cache_group();
+} );

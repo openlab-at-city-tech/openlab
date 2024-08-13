@@ -9,11 +9,25 @@ use Advanced_Sidebar_Menu\Widget\Category;
  * Advanced Sidebar - Categories, Gutenberg block.
  *
  * @since  9.0.0
+ *
+ * @phpstan-import-type ATTR_SHAPE from Block_Abstract
+ *
+ * @phpstan-type CATEGORY_ATTRIBUTES array{
+ *     display_all: bool,
+ *     exclude: string,
+ *     include_childless_parent: bool,
+ *     include_parent: bool,
+ *     levels: int,
+ *     new_widget: 'list'|'widget',
+ *     single: bool,
+ *     taxonomy?: string,
+ * }
+ * @extends Block_Abstract<CATEGORY_ATTRIBUTES>
  */
 class Categories extends Block_Abstract {
 	use Singleton;
 
-	const NAME = 'advanced-sidebar-menu/categories';
+	public const NAME = 'advanced-sidebar-menu/categories';
 
 
 	/**
@@ -77,6 +91,7 @@ class Categories extends Block_Abstract {
 	 *
 	 * @link https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
 	 *
+	 * @phpstan-return array<key-of<CATEGORY_ATTRIBUTES>, ATTR_SHAPE>
 	 * @return array
 	 */
 	protected function get_attributes() {
@@ -105,6 +120,10 @@ class Categories extends Block_Abstract {
 			Category::EACH_CATEGORY_DISPLAY => [
 				'type'    => 'string',
 				'default' => \Advanced_Sidebar_Menu\Menus\Category::EACH_LIST,
+				'enum' => [
+					\Advanced_Sidebar_Menu\Menus\Category::EACH_LIST,
+					\Advanced_Sidebar_Menu\Menus\Category::EACH_WIDGET,
+				],
 			],
 			Category::LEVELS                => [
 				'type'    => 'number',
@@ -115,7 +134,7 @@ class Categories extends Block_Abstract {
 
 
 	/**
-	 * Return a new instance of the Page widget.
+	 * Return a new instance of the Categories widget.
 	 *
 	 * @return Category
 	 */

@@ -22,7 +22,6 @@ import { buildQueryString } from '@wordpress/url';
  */
 import { $ } from './common/functions';
 import contextMenu from './edit/contextmenu';
-import naturalSort from './edit/naturalsort';
 
 // Ensure the global `tp` object exists.
 window.tp = window.tp || {};
@@ -391,7 +390,11 @@ tp.helpers.editor.sorting = function( direction ) {
 	direction = direction ? -1 : 1;
 	return function( a, b ) {
 		// The actual value is stored in the second array element, the first contains the row index.
-		return direction * naturalSort( a[1], b[1] );
+		const sortResult = a[1].localeCompare( b[1], undefined, {
+			numeric: true,
+			sensitivity: 'base'
+		} );
+		return direction * sortResult;
 	};
 };
 
@@ -1586,9 +1589,11 @@ document.querySelectorAll( '#tablepress-body .button-module-help' ).forEach( ( $
 
 // Register callbacks for the screen options.
 const $tablepress_screen_options = $( '#tablepress-screen-options' );
-$tablepress_screen_options.addEventListener( 'input', tp.callbacks.screen_options.update );
-$tablepress_screen_options.addEventListener( 'change', tp.callbacks.screen_options.set_was_changed );
-$tablepress_screen_options.addEventListener( 'focusout', tp.callbacks.screen_options.save ); // Use the `focusout` event instead of `blur` as that does not bubble.
+if ( $tablepress_screen_options ) {
+	$tablepress_screen_options.addEventListener( 'input', tp.callbacks.screen_options.update );
+	$tablepress_screen_options.addEventListener( 'change', tp.callbacks.screen_options.set_was_changed );
+	$tablepress_screen_options.addEventListener( 'focusout', tp.callbacks.screen_options.save ); // Use the `focusout` event instead of `blur` as that does not bubble.
+}
 
 // Register keyboard shortcut handler.
 window.addEventListener( 'keydown', tp.callbacks.keyboard_shortcuts, true );

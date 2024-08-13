@@ -249,8 +249,10 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		 * @throws Exception Comment.
 		 */
 		private function includes() {
-			if ( class_exists( 'Redux_Pro' ) && isset( Redux_Pro::$dir ) ) {
-				echo '<div class="error"><p>' . sprintf( esc_html__( 'Redux has detected the Redux Pro plugin is enabled. All featured of Redux Pro are now part of the entire Redux plugin and is no longer required. Please disable the Redux Pro plugin to avoid potential conflicts.', 'redux-framework' ), '<code></code>' ) . '</p></div>';
+			if ( is_admin() ) {
+				if ( class_exists( 'Redux_Pro' ) && isset( Redux_Pro::$dir ) ) {
+					echo '<div class="error"><p>' . sprintf( esc_html__( 'Redux has detected the Redux Pro plugin is enabled. All featured of Redux Pro are now part of the entire Redux plugin and is no longer required. Please disable the Redux Pro plugin to avoid potential conflicts.', 'redux-framework' ), '<code></code>' ) . '</p></div>';
+				}
 			}
 
 			require_once __DIR__ . '/inc/classes/class-redux-path.php';
@@ -260,13 +262,11 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 
 			Redux_Functions_Ex::register_class_path( 'Redux', __DIR__ . '/inc/classes' );
 			Redux_Functions_Ex::register_class_path( 'Redux', __DIR__ . '/inc/welcome' );
-			Redux_Functions_Ex::load_extendify_css();
 
 			spl_autoload_register( array( $this, 'register_classes' ) );
 
 			self::$welcome = new Redux_Welcome();
 
-			add_action( 'admin_init', array( $this, 'admin_init' ) );
 			add_filter( 'debug_information', array( $this, 'add_debug_info' ) );
 		}
 
@@ -501,13 +501,6 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		private function hooks() {
 			// phpcs:ignore WordPress.NamingConventions.ValidHookName
 			do_action( 'redux/core/hooks', $this );
-		}
-
-		/**
-		 * Display the connection banner.
-		 */
-		public function admin_init() {
-			Redux_Connection_Banner::init();
 		}
 
 		/**

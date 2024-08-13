@@ -43,10 +43,16 @@ class Customer extends Lib\Base\Entity
     protected $notes = '';
     /** @var string */
     protected $birthday;
-    /** @var  string */
+    /** @var string */
     protected $info_fields = '[]';
-    /** @var  string */
+    /** @var string */
+    protected $tags;
+    /** @var string */
     protected $stripe_account;
+    /** @var string */
+    protected $stripe_cloud_account;
+    /** @var int */
+    protected $attachment_id;
     /** @var string */
     protected $created_at;
 
@@ -75,7 +81,10 @@ class Customer extends Lib\Base\Entity
         'full_address' => array( 'format' => '%s' ),
         'notes' => array( 'format' => '%s' ),
         'info_fields' => array( 'format' => '%s' ),
+        'tags' => array( 'format' => '%s' ),
         'stripe_account' => array( 'format' => '%s' ),
+        'stripe_cloud_account' => array( 'format' => '%s' ),
+        'attachment_id' => array( 'format' => '%d' ),
         'created_at' => array( 'format' => '%s' ),
     );
 
@@ -158,7 +167,7 @@ class Customer extends Lib\Base\Entity
     {
         foreach ( $records as &$record ) {
             $record['start_date'] = Lib\Utils\DateTime::applyTimeZone( $record['start_date'], $record['time_zone'], $record['time_zone_offset'] );
-            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : - $record['time_zone_offset'];
+            $time_zone_offset = $record['time_zone_offset'] === null ? get_option( 'gmt_offset' ) * 60 : -$record['time_zone_offset'];
             $record['time_zone'] = $record['time_zone'] ?: 'UTC' . ( $time_zone_offset >= 0 ? '+' : '' ) . ( $time_zone_offset / 60 );
         }
 
@@ -601,6 +610,29 @@ class Customer extends Lib\Base\Entity
     }
 
     /**
+     * Gets tags
+     *
+     * @return string
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param string $tags
+     * @return $this
+     */
+    public function setTags( $tags )
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
+    /**
      * Gets created_at
      *
      * @return string
@@ -649,6 +681,25 @@ class Customer extends Lib\Base\Entity
     /**
      * @return string
      */
+    public function getStripeCloudAccount()
+    {
+        return $this->stripe_cloud_account;
+    }
+
+    /**
+     * @param string $stripe_cloud_account
+     * @return Customer
+     */
+    public function setStripeCloudAccount( $stripe_cloud_account )
+    {
+        $this->stripe_cloud_account = $stripe_cloud_account;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
     public function getAddress()
     {
         return Lib\Proxy\Pro::getFullAddressByCustomerData( array(
@@ -673,10 +724,30 @@ class Customer extends Lib\Base\Entity
 
     /**
      * @param string $full_address
+     * @return $this
      */
     public function setFullAddress( $full_address )
     {
         $this->full_address = $full_address;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAttachmentId()
+    {
+        return $this->attachment_id;
+    }
+
+    /**
+     * @param int $attachment_id
+     * @return $this
+     */
+    public function setAttachmentId( $attachment_id )
+    {
+        $this->attachment_id = $attachment_id;
 
         return $this;
     }

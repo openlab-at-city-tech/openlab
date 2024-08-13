@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Category Order and Taxonomy Terms Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-29 10:32+0300\n"
-"PO-Revision-Date: 2023-05-29 10:32+0300\n"
+"POT-Creation-Date: 2023-12-29 12:16+0200\n"
+"PO-Revision-Date: 2023-12-29 12:16+0200\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: nsp-code <electronice_delphi@yahoo.com>\n"
 "Language: en_US\n"
@@ -13,61 +13,61 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;gettext;__;_e\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: include/functions.php:72
+#: include/functions.php:74
 msgid ""
 "Did you find this plugin useful? Please support our work with a donation or "
 "write an article about this plugin in your blog with a link to our site"
 msgstr ""
 
-#: include/functions.php:73
+#: include/functions.php:75
 msgid "Did you know there is an Advanced Version of this plug-in?"
 msgstr ""
 
-#: include/functions.php:73
+#: include/functions.php:75
 msgid "Read more"
 msgstr ""
 
-#: include/functions.php:74 include/functions.php:75
+#: include/functions.php:76 include/functions.php:77
 msgid "Check our"
 msgstr ""
 
-#: include/functions.php:74
+#: include/functions.php:76
 msgid "plugin which allows to custom sort all posts, pages, custom post types"
 msgstr ""
 
-#: include/functions.php:75
+#: include/functions.php:77
 msgid ""
 "plugin which allows to custom sort categories and custom taxonomies terms "
 "per post basis"
 msgstr ""
 
-#: include/interface.php:38 taxonomy-terms-order.php:134
-#: taxonomy-terms-order.php:136 taxonomy-terms-order.php:138
+#: include/interface.php:42 taxonomy-terms-order.php:147
+#: taxonomy-terms-order.php:149 taxonomy-terms-order.php:151
 msgid "Taxonomy Order"
 msgstr ""
 
-#: include/interface.php:46
+#: include/interface.php:50
 msgid ""
 "This plugin can't work without javascript, because it's use drag and drop "
 "and AJAX."
 msgstr ""
 
-#: include/interface.php:100
+#: include/interface.php:104
 msgid "Taxonomies"
 msgstr ""
 
-#: include/interface.php:104
+#: include/interface.php:108
 msgid "Taxonomy Title"
 msgstr ""
 
-#: include/interface.php:104
+#: include/interface.php:108
 msgid "Total Posts"
 msgstr ""
 
-#: include/interface.php:156
+#: include/interface.php:160
 msgid "Update"
 msgstr ""
 
@@ -143,6 +143,6 @@ msgstr ""
 msgid "Save Settings"
 msgstr ""
 
-#: taxonomy-terms-order.php:99
+#: taxonomy-terms-order.php:110
 msgid "Taxonomy Terms Order"
 msgstr ""

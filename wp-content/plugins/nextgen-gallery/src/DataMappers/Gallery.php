@@ -146,6 +146,10 @@ class Gallery extends TableDriver {
 				$entity->path = $entity->path . '-' . $count;
 			}
 
+			if( ! class_exists( 'WP_Filesystem_Direct' ) ) {
+				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
+				require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-direct.php';
+			}
 			$wpfs = new \WP_Filesystem_Direct( null );
 			$wpfs->move( $abspath, $new_abspath );
 		}

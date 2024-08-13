@@ -18,7 +18,27 @@
             return TRUE;
             
         }
-        
+    
+    
+    //Polylang fix
+    add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_polylang', 10, 3);
+    function to_get_terms_orderby_ignore_polylang( $ignore, $orderby, $args )
+        {
+            if( !function_exists('is_plugin_active') )
+                include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+            
+            if( !   is_plugin_active( 'polylang/polylang.php' ))
+                return $ignore;
+            
+            if ( ! isset( $args['taxonomy'] ) ||  count( $args['taxonomy'] ) <    1  )
+                return $ignore;
+                
+            if( in_array( 'language', $args['taxonomy'] ) )
+                return TRUE;    
+                
+            return $ignore;
+            
+        }    
     
     //WooCommerce Attribute order
     add_action ('to/get_terms_orderby/ignore', 'to_get_terms_orderby_ignore_woocommerce', 10, 3);

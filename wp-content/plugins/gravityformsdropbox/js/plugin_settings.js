@@ -20,6 +20,8 @@ window.GFDropboxSettings = null;
 
 			this.bindDeauthorize();
 
+			this.bindReconnect();
+
 			this.bindDisableCustomApp();
 
 			this.bindEnableCustomApp();
@@ -85,6 +87,37 @@ window.GFDropboxSettings = null;
 
 						$( this ).removeAttr( 'disabled' );
 
+					}
+				} );
+
+			} );
+
+		}
+
+		this.bindReconnect = function() {
+
+			// De-Authorize Dropbox.
+			$( '#gform_dropbox_reconnect_button' ).on( 'click', function( e ){
+
+				// Prevent default event.
+				e.preventDefault();
+
+				// Set disabled state.
+				$( this ).attr( 'disabled', 'disabled' );
+
+				// Re-Authorize.
+				$.ajax( {
+					async:    false,
+					url:      ajaxurl,
+					dataType: 'json',
+					data:     {
+						action: 'gfdropbox_remove_access_token',
+						nonce:  gform_dropbox_pluginsettings_strings.nonce_deauthorize
+					},
+					success:  function ( response ) {
+						window.location.href = self.pageURL;
+
+						$( this ).removeAttr( 'disabled' );
 					}
 				} );
 

@@ -76,6 +76,17 @@ let ed11yUpdateButton = function(count) {
     ed11yStyle.setAttribute('hidden', '');
     ed11yStyle.innerHTML = `
  <style>
+   .edit-site-layout #ed11y-issue-link {
+      display: none;
+  }
+   .is-full-canvas #ed11y-issue-link {
+      display: inline-block;
+      position: absolute;
+      top: 59px;
+      background: white;
+      border-radius: 0;
+      box-shadow: 1px 1px var(--wp-components-color-accent,var(--wp-admin-theme-color,#3858e9));
+  }
   #ed11y-issue-link.ed11y-warning {
    background-color: #fad859;
    color: #000b;
@@ -98,7 +109,7 @@ let ed11yUpdateButton = function(count) {
  </style>`;
     Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yStyle);
   }
-  let buttonText = ed11yOpen ? 'Hide alerts' : `${count} issues`;
+  let buttonText = ed11yOpen ? 'Hide alerts' : `${count} issue${count > 1 ? 's' : ''}`;
   Ed11y.wpIssueToggle.textContent = buttonText;
   if ((ed11yOptions['liveCheck'] === 'all') && Ed11y.totalCount === 0 || ed11yOptions['liveCheck'] === 'errors' && Ed11y.errorCount === 0) {
     Ed11y.wpIssueToggle.classList.add('hidden');
@@ -188,7 +199,7 @@ let  ed11yReadResults = function () {
             }
             ed11yKnownContainers[ed11yContainerId].title = ed11yNewTitle;
             ed11yKnownContainers[ed11yContainerId].ring = ed11yRingColor;
-            ed11yKnownContainers[ed11yContainerId].font = ed11yFontColor;            
+            ed11yKnownContainers[ed11yContainerId].font = ed11yFontColor;
             ed11yKnownContainers[ed11yContainerId].subSelector.push(subRing);
           }
         }
@@ -241,12 +252,12 @@ let  ed11yReadResults = function () {
         `;
        }
    });
-   
+
     }
-    
 
 
-    
+
+
     newStyles.innerHTML = '';
     let styleWrapper = document.createElement('style');
     styleWrapper.textContent = ed11yStyles;
@@ -282,7 +293,7 @@ let ed11yFirstScan = function() {
 };
 
 let ed11yGetOptions = function() {
-  ed11yOptions.linkIgnoreStrings = ed11yOptions.linkIgnoreStrings ? new RegExp(ed11yOptions.linkIgnoreStrings, 'g') : false;
+  ed11yOptions.linkStringsNewWindows = ed11yOptions.linkStringsNewWindows ? new RegExp(ed11yOptions.linkStringsNewWindows, 'g') : /window|\stab|download/g;
 
   // Initiate Ed11y with admin options.
   // Possible todo: pick checkRoot dynamically based on ed11yTarget.
@@ -377,7 +388,7 @@ let ed11yFindCompatibleEditor = function () {
     return;
   case 'onPage':
   case 'outsideIframe':
-    ed11yButtonWrapper = ed11yButtonWrapper ? ed11yButtonWrapper : document.querySelector('.edit-post-header__settings, .edit-site-header-edit-mode__end');
+    ed11yButtonWrapper = ed11yButtonWrapper ? ed11yButtonWrapper : document.querySelector('.edit-post-header__settings, .edit-site-layout__header-container');
   }
   if (!!ed11yButtonWrapper && !!ed11yOptions) {
     if (ed11yScriptIs === 'onPage') {
@@ -387,11 +398,11 @@ let ed11yFindCompatibleEditor = function () {
     }
     return;
   }
-  if (ed11yReadyCount < 10) {
+  if (ed11yReadyCount < 600) {
     window.setTimeout(function () {
       ed11yReadyCount++;
       ed11yFindCompatibleEditor();
-    }, 500);
+    }, 1000);
   } else {
     console.log('No editor found');
   }

@@ -3,7 +3,8 @@
 $trp                = TRP_Translate_Press::get_trp_instance();
 $machine_translator = $trp->get_component( 'machine_translator' );
 $response           = $machine_translator->test_request();
-$api_key            = $machine_translator->get_api_key();
+// When MTAPI is active, Api key is actually the license and we should never show it in clear text
+$api_key            = ( isset( $this->settings['trp_machine_translation_settings']['translation-engine'] ) && $this->settings['trp_machine_translation_settings']['translation-engine'] == 'mtapi' ) ? false : $machine_translator->get_api_key();
 ?>
 
 <div id="trp-addons-page" class="wrap">

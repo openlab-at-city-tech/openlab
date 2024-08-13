@@ -1754,56 +1754,67 @@ class ElementsKit_Widget_Countdown_Timer extends Widget_Base {
         echo '</div>';
     }
 
-    protected function render_raw( ) {
-        $settings = $this->get_settings_for_display();
-        extract($settings);
+	protected function render_raw( ) {
+		$settings = $this->get_settings_for_display();
+		extract($settings);
 
-	   $data = '';
 		if(isset($ekit_countdown_timer_weeks_label)){
-			$data .= ' data-date-ekit-week="'.esc_attr($ekit_countdown_timer_weeks_label).'"';
+			$this->add_render_attribute('ekit_countdown_timer', 'data-date-ekit-week', esc_attr($ekit_countdown_timer_weeks_label));
 		}
+
 		if(isset($ekit_countdown_timer_days_label)){
-			$data .= ' data-date-ekit-day="'.esc_attr($ekit_countdown_timer_days_label).'"';
+			$this->add_render_attribute('ekit_countdown_timer', 'data-date-ekit-day', esc_attr($ekit_countdown_timer_days_label));
 		}
+
 		if(isset($ekit_countdown_timer_hours_label)){
-			$data .= ' data-date-ekit-hour="'.esc_attr($ekit_countdown_timer_hours_label).'"';
+			$this->add_render_attribute('ekit_countdown_timer', 'data-date-ekit-hour', esc_attr($ekit_countdown_timer_hours_label));
 		}
+
 		if(isset($ekit_countdown_timer_minutes_hours_label)){
-			$data .= ' data-date-ekit-minute="'.esc_attr($ekit_countdown_timer_minutes_hours_label).'"';
+			$this->add_render_attribute('ekit_countdown_timer', 'data-date-ekit-minute', esc_attr($ekit_countdown_timer_minutes_hours_label));
 		}
+
 		if(isset($ekit_countdown_timer_seconds_hours_label)){
-			$data .= ' data-date-ekit-second="'.esc_attr($ekit_countdown_timer_seconds_hours_label).'"';
+			$this->add_render_attribute('ekit_countdown_timer', 'data-date-ekit-second', esc_attr($ekit_countdown_timer_seconds_hours_label));
 		}
+
 		if(isset($ekit_countdown_timer_due_time)){
-			$data .= ' data-ekit-countdown="'.esc_attr($ekit_countdown_timer_due_time).'"';
-        }
+			$this->add_render_attribute('ekit_countdown_timer', 'data-ekit-countdown', esc_attr($ekit_countdown_timer_due_time));
+		}
 
-        $data .= ' data-finish-title="'.esc_attr($ekit_countdown_timer_title).'"';
-        $data .= ' data-finish-content="'.esc_attr($ekit_countdown_timer_expiry_content).'"';
+		$this->add_render_attribute('ekit_countdown_timer', [
+			'data-finish-title' => esc_attr($ekit_countdown_timer_title),
+			'data-finish-content' => esc_attr($ekit_countdown_timer_expiry_content),
+		]);
 
-        switch ( $ekit_countdown_timer_style ) {
-            case 'style1':
-                ?><div class="elementskit-countdown-timer ekit-countdown text-center" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div><?php
-                break;
-            case 'style2':
-                ?><div class="elementskit-countdown-timer-2 ekit-countdown text-center" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div><?php
-                break;
-            case 'style3':
-                ?><div class="elementskit-flip-clock text-center" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div><?php
-                break;
-            case 'style4':
-                ?><div class="elementskit-countdown-timer-3 ekit-countdown text-center" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div><?php
-                break;
-            case 'style5':
-                ?><div class="elementskit-countdown-timer-3 ekit-countdown elementskit-version-box text-center align-items-end" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div>
-                <?php
-                break;
-            case 'style6':
-                ?><div class="elementskit-countdown-container text-center">
-                    <div class="elementskit-countdown-timer-4 ekit-countdown" <?php echo wp_kses($data, \ElementsKit_Lite\Utils::get_kses_array()); ?>></div>
-                </div><?php
-                break;
+		switch ( $ekit_countdown_timer_style ) {
+			case 'style1' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-countdown-timer ekit-countdown text-center');
+				break;
+			case 'style2' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-countdown-timer-2 ekit-countdown text-center');
+				break;
+			case 'style3' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-flip-clock text-center');
+				break;
+			case 'style4' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-countdown-timer-3 ekit-countdown text-center');
+				break;
+			case 'style5' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-countdown-timer-3 ekit-countdown elementskit-version-box text-center align-items-end');
+				break;
+			case 'style6' :
+				$this->add_render_attribute('ekit_countdown_timer', 'class', 'elementskit-countdown-timer-4 ekit-countdown');
+				break;
+		}
 
-        }
-    }
+		if($ekit_countdown_timer_style != 'style6' ) {
+			$markup = sprintf('<div %s></div>', $this->get_render_attribute_string('ekit_countdown_timer'));
+		} else {
+			$markup = sprintf('<div class="elementskit-countdown-container text-center"><div %s></div></div>', $this->get_render_attribute_string('ekit_countdown_timer'));
+		}
+
+		// PHPCS - the variable $markup holds safe data.
+		echo $markup; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
 }

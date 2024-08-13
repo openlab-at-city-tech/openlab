@@ -255,9 +255,12 @@ if ( ! class_exists( '\Wpmet\Libs\Stories' ) ) :
 			global $wp_meta_boxes;
 
 			$dashboard = $wp_meta_boxes['dashboard']['normal']['core'];
-			$ours      = array(
-				'wpmet-stories' => $dashboard['wpmet-stories'],
-			);
+			$ours = [];
+			if(isset($dashboard['wpmet-stories'])) {
+				$ours      = array(
+					'wpmet-stories' => $dashboard['wpmet-stories'],
+				);
+			}
 
 			$wp_meta_boxes['dashboard']['normal']['core'] = array_merge( $ours, $dashboard );
 		}

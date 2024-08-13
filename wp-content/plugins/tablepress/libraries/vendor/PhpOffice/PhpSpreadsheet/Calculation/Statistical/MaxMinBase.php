@@ -5,9 +5,8 @@ namespace TablePress\PhpOffice\PhpSpreadsheet\Calculation\Statistical;
 abstract class MaxMinBase
 {
 	/**
-	 * @param mixed $value
-	 *
-	 * @return mixed
+	 * @param int|float|string|bool $value
+	 * @return float|int
 	 */
 	protected static function datatypeAdjustmentAllowStrings($value)
 	{

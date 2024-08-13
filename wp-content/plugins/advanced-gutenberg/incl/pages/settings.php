@@ -26,7 +26,7 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
     <?php
     $tabs = [
         [
-            'title' => __( 'General', 'advanced-gutenberg' ),
+            'title' => esc_html__( 'General', 'advanced-gutenberg' ),
             'slug' => 'general'
         ]
     ];
@@ -35,23 +35,23 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
         array_push(
             $tabs,
             [
-                'title' => __( 'Images', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'Images', 'advanced-gutenberg' ),
                 'slug' => 'images'
             ],
             [
-                'title' => __( 'Maps', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'Maps', 'advanced-gutenberg' ),
                 'slug' => 'maps'
             ],
             [
-                'title' => __( 'Email & Forms', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'Email & Forms', 'advanced-gutenberg' ),
                 'slug' => 'forms'
             ],
             [
-                'title' => __( 'reCAPTCHA', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'reCAPTCHA', 'advanced-gutenberg' ),
                 'slug' => 'recaptcha'
             ],
             [
-                'title' => __( 'Data Export', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'Data Export', 'advanced-gutenberg' ),
                 'slug' => 'data'
             ]
         );
@@ -61,7 +61,7 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
         array_push(
             $tabs,
             [
-                'title' => __( 'License', 'advanced-gutenberg' ),
+                'title' => esc_html__( 'License', 'advanced-gutenberg' ),
                 'slug' => 'license'
             ]
         );

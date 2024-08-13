@@ -1,11 +1,11 @@
 === Contact Form 7 ===
 Contributors: takayukister
 Donate link: https://contactform7.com/donate/
-Tags: contact, form, contact form, feedback, email, ajax, captcha, akismet, multilingual
-Requires at least: 6.2
+Tags: contact form, schema-woven validation
+Requires at least: 6.3
 Requires PHP: 7.4
-Tested up to: 6.4
-Stable tag: 5.8.7
+Tested up to: 6.5
+Stable tag: 5.9.6
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,30 @@ Do you have questions or issues with Contact Form 7? Use these support channels 
 
 For more information, see [Releases](https://contactform7.com/category/releases/).
 
+= 5.9.6 =
+
+[https://contactform7.com/contact-form-7-596/](https://contactform7.com/contact-form-7-596/)
+
+= 5.9.5 =
+
+[https://contactform7.com/contact-form-7-595/](https://contactform7.com/contact-form-7-595/)
+
+= 5.9.4 =
+
+[https://contactform7.com/contact-form-7-594/](https://contactform7.com/contact-form-7-594/)
+
+= 5.9.3 =
+
+[https://contactform7.com/contact-form-7-593/](https://contactform7.com/contact-form-7-593/)
+
+= 5.9.2 =
+
+[https://contactform7.com/contact-form-7-592/](https://contactform7.com/contact-form-7-592/)
+
+= 5.9 =
+
+[https://contactform7.com/contact-form-7-59/](https://contactform7.com/contact-form-7-59/)
+
 = 5.8.7 =
 
 [https://contactform7.com/contact-form-7-587/](https://contactform7.com/contact-form-7-587/)
@@ -109,41 +133,5 @@ For more information, see [Releases](https://contactform7.com/category/releases/
 = 5.8 =
 
 [https://contactform7.com/contact-form-7-58/](https://contactform7.com/contact-form-7-58/)
-
-= 5.7.7 =
-
-[https://contactform7.com/contact-form-7-577/](https://contactform7.com/contact-form-7-577/)
-
-= 5.7.6 =
-
-[https://contactform7.com/contact-form-7-576/](https://contactform7.com/contact-form-7-576/)
-
-= 5.7.5.1 =
-
-* Fixes an old PHP compatibility issue.
-
-= 5.7.5 =
-
-[https://contactform7.com/contact-form-7-575/](https://contactform7.com/contact-form-7-575/)
-
-= 5.7.4 =
-
-[https://contactform7.com/contact-form-7-574/](https://contactform7.com/contact-form-7-574/)
-
-= 5.7.3 =
-
-[https://contactform7.com/contact-form-7-573/](https://contactform7.com/contact-form-7-573/)
-
-= 5.7.2 =
-
-[https://contactform7.com/contact-form-7-572/](https://contactform7.com/contact-form-7-572/)
-
-= 5.7.1 =
-
-[https://contactform7.com/contact-form-7-571/](https://contactform7.com/contact-form-7-571/)
-
-= 5.7 =
-
-[https://contactform7.com/contact-form-7-57/](https://contactform7.com/contact-form-7-57/)
 
 == Upgrade Notice ==

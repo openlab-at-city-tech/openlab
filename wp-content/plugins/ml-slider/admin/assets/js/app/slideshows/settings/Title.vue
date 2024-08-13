@@ -11,8 +11,8 @@
 			id="metaslider-current-title"
 			data-lpignore="true"
 			type="text"
-			style="width:calc(100% + 1rem)!important;transition:background .3s ease,border-left .3s ease!important"
-			class="-ml-4 h-16 pl-4 pr-12 text-2xl font-light rounded-none shadow-none bg-transparent border-0 border-l-4 border-transparent hover:border-gray-light hover:bg-white focus:bg-white focus:shadow-sm focus:border-gray-light rtl:border-l-0 rtl:border-r-0 rtl:ml-0 rtl:-mr-4 rtl:pl-12 rtl:pr-4"
+			style="width:100%!important;transition:background .3s ease,border-left .3s ease!important"
+			class="h-16 text-2xl font-light rounded-none shadow-none bg-transparent border-0 border-l-4 border-transparent hover:border-gray-light hover:bg-white focus:bg-white focus:shadow-sm focus:border-gray-light rtl:border-l-0 rtl:border-r-0 rtl:ml-0 rtl:-mr-4 rtl:pl-12 rtl:pr-4"
 			required />
         <svg
 			class="pointer-events-none opacity-0 transition-all duration-300 ease-in absolute m-2 w-6 top-0 right-0 text-gray rtl:left-0 rtl:right-auto"

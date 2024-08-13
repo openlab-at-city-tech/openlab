@@ -11,6 +11,7 @@ return [
 		'elementor-v2-editor-app-bar',
 		'elementor-v2-editor-documents',
 		'elementor-v2-editor-panels',
+		'elementor-v2-editor-v1-adapters',
 		'elementor-v2-env',
 		'elementor-v2-icons',
 		'elementor-v2-query',
@@ -18,6 +19,5 @@ return [
 		'react',
 		'wp-api-fetch',
 		'wp-i18n',
-		'wp-url',
 	],
 ];

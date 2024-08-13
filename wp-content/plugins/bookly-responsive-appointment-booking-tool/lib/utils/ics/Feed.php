@@ -31,16 +31,20 @@ class Feed
      * @param string $start_date
      * @param string $end_date
      * @param string $summary
+     * @param string $staff_name
+     * @param string $staff_email
      * @param string $description
      * @param int $location_id
      * @return $this
      */
-    public function addEvent( $start_date, $end_date, $summary, $description, $location_id = null )
+    public function addEvent( $start_date, $end_date, $summary, $staff_name, $staff_email, $description, $location_id )
     {
         $event = new Event();
         $event
             ->setStartDate( $start_date )
             ->setEndDate( $end_date )
+            ->setStaffName( $staff_name )
+            ->setStaffEmail( $staff_email )
             ->setLocationId( $location_id )
             ->setSummary( $summary )
             ->setDescription( $description );
@@ -63,9 +67,14 @@ class Feed
             $description_template = Lib\Utils\Codes::getICSDescriptionTemplate();
             foreach ( $order->getCaItems() as $data ) {
                 $description_codes = Lib\Utils\Codes::getICSCodes( $data['item'] );
+                $staff = Lib\Entities\Staff::find( $data['item']->getAppointment()->getStaffId() );
+
                 $ics->addEvent(
                     $data['item']->getAppointment()->getStartDate(),
-                    $data['item']->getAppointment()->getEndDate(), $data['title'],
+                    $data['item']->getAppointment()->getEndDate(),
+                    $data['title'],
+                    $staff->getFullName(),
+                    $staff->getEmail(),
                     Lib\Utils\Codes::replace( $description_template, $description_codes, false ),
                     $data['item']->getAppointment()->getLocationId()
                 );
@@ -86,9 +95,14 @@ class Feed
         $description_template = Lib\Utils\Codes::getICSDescriptionTemplate();
         foreach ( $order->getCaItems() as $data ) {
             $description_codes = Lib\Utils\Codes::getICSCodes( $data['item'] );
+            $staff = Lib\Entities\Staff::find( $data['item']->getAppointment()->getStaffId() );
+
             $ics->addEvent(
                 $data['item']->getAppointment()->getStartDate(),
-                $data['item']->getAppointment()->getEndDate(), $data['title'],
+                $data['item']->getAppointment()->getEndDate(),
+                $data['title'],
+                $staff->getFullName(),
+                $staff->getEmail(),
                 Lib\Utils\Codes::replace( $description_template, $description_codes, false ),
                 $data['item']->getAppointment()->getLocationId()
             );

@@ -4,6 +4,9 @@
  *
  * */
 do_action('bp_before_member_settings_template');
+
+$account_type = openlab_get_user_member_type( bp_displayed_user_id() );
+
 ?>
 
 <?php echo openlab_submenu_markup(); ?>
@@ -23,7 +26,7 @@ do_action('bp_before_member_settings_template');
         <div class="form-group settings-section username-section">
             <label for="username">Username</label>
             <input class="form-control" type="text" id="username" disabled="disabled" value="<?php bp_displayed_user_username() ?>" />
-            <p class="description">Your username cannot be changed.</p>
+            <p class="description">Your username cannot be changed. If you need to change your username, <a href="https://openlab.citytech.cuny.edu/blog/help/contact-us/">contact us</a> for assistance.</p>
         </div>
 
         <div class="form-group settings-section email-section">
@@ -31,28 +34,6 @@ do_action('bp_before_member_settings_template');
             <input class="form-control" type="text" name="email_visible" id="email_visible" value="<?php echo bp_get_displayed_user_email(); ?>" class="settings-input" disabled="disabled" />
             <input type="hidden" name="email" value="<?php echo bp_get_displayed_user_email() ?>" />
             <p class="description">Your email address cannot be changed. If your City Tech email address has changed, <a class="underline" href="<?php bp_get_root_domain(); ?>/about/contact-us">contact us</a> for assistance.</p>
-        </div>
-
-        <div class="form-group settings-section current-pw-section">
-            <label for="pwd">Current Password</label>
-            <input class="form-control" type="password" name="pwd" id="pwd" size="16" value="" class="settings-input small" />
-
-            <?php
-            $account_type = openlab_get_displayed_user_account_type();
-            $include_acct_type = in_array( $account_type, array( 'student', 'alumni' ) ) ? ' account type, ' : ' ';
-            ?>
-
-            <p class="description">Required to change<?php echo $include_acct_type ?>current password, first name, or last name. <a class="underline" href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>"><?php _e('Lost your password?', 'buddypress'); ?></a></p>
-        </div>
-
-        <div class="form-group settings-section change-pw-section">
-            <label for="pass1">Change Password</label>
-            <input class="form-control" type="password" name="pass1" id="pass1" size="16" value="" class="settings-input small" />
-
-            <label for="pass2">Confirm Change Password</label>
-            <input class="form-control" type="password" name="pass2" id="pass2" size="16" value="" class="settings-input small" />
-
-            <p class="description">Leave blank for no change</p>
         </div>
 
         <div class="form-group settings-section name-section">
@@ -73,8 +54,24 @@ do_action('bp_before_member_settings_template');
             </div>
         <?php endif ?>
 
+        <div class="form-group settings-section change-pw-section">
+            <label for="pass1">Change Password</label>
+
+			<p>To change your password, visit the <a href="<?php echo site_url(add_query_arg(array('action' => 'lostpassword'), 'wp-login.php'), 'login'); ?>" title="<?php _e('Password Lost and Found', 'buddypress'); ?>">Reset Password</a> page.</p>
+        </div>
+
             </div>
         </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Two-factor Authentication</div>
+
+			<div class="panel-body">
+				<?php openlab_2fa_settings(); ?>
+			</div>
+		</div>
+
+
         <?php do_action('bp_core_general_settings_before_submit'); ?>
 
         <div class="submit">

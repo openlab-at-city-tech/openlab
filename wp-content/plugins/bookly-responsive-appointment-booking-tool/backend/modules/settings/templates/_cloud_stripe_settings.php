@@ -7,7 +7,7 @@ use Bookly\Backend\Components\Controls\Elements;
 use Bookly\Lib\Entities\Payment;
 use Bookly\Backend\Modules\Appearance\Codes;
 ?>
-<div class="card bookly-collapse-with-arrow" data-slug="cloud_stripe">
+<div class="card bookly-collapse-with-arrow" data-gateway="<?php echo esc_attr( $type ) ?>">
     <div class="card-header d-flex align-items-center">
         <?php Elements::renderReorder() ?>
         <a href="#bookly_pmt_cloud_stripe" class="ml-2" role="button" data-toggle="bookly-collapse">

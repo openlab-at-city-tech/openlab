@@ -17,7 +17,7 @@ class Album extends Model {
 	public $pageid;
 	public $previewpic;
 	public $slug;
-	public $sortorder;
+	public $sortorder = [];
 
 	public function get_primary_key_column() {
 		return 'id';

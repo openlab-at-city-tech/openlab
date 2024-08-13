@@ -3,7 +3,7 @@
 Plugin Name: GTranslate
 Plugin URI: https://gtranslate.io/?xyz=998
 Description: Translate your website and make it multilingual. For support visit <a href="https://wordpress.org/support/plugin/gtranslate">GTranslate Support Forum</a>.
-Version: 3.0.5
+Version: 3.0.6
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
 Text Domain: gtranslate
@@ -2438,6 +2438,12 @@ if($data['pro_version'] or $data['enterprise_version']) {
         elseif(isset($_SERVER['HTTP_X_GT_CLIENTIP']))
             $_SERVER['HTTP_X_REAL_IP'] = $_SERVER['HTTP_X_GT_CLIENTIP'];
 
+        if(isset($_SERVER['HTTP_X_REAL_IP']))
+            $_SERVER['HTTP_X_REAL_IP'] = trim(current(explode(',', sanitize_text_field(wp_unslash($_SERVER['HTTP_X_REAL_IP'])))));
+
+        if(isset($_SERVER['HTTP_X_GT_CLIENTIP'], $_SERVER['HTTP_CF_IPCOUNTRY']))
+            unset($_SERVER['HTTP_CF_IPCOUNTRY']);
+
         return $false;
     }
 
@@ -2648,8 +2654,20 @@ if($data['pro_version'] or $data['enterprise_version']) {
             return $html;
         }
 
+        function gt_translate_wp_smtp_email($args) {
+            //file_put_contents(dirname(__FILE__) . '/url_addon/debug.txt', date('Y-m-d H:i:s') . " - gt_translate_wp_smtp_email args: " . print_r($args, true) . "\n", FILE_APPEND);
+
+            if(!is_object($args) or !isset($args->Subject) or !isset($args->Body))
+                return;
+
+            $result = gt_translate_emails(array('subject' => $args->Subject, 'message' => $args->Body));
+            $args->Subject = $result['subject'];
+            $args->Body = $result['message'];
+        }
+
         add_filter('wpo_wcpdf_get_html', 'gt_translate_invoice_pdf', 10000, 1);
         add_filter('wp_mail', 'gt_translate_emails', 10000, 1);
+        add_filter('wp_mail_smtp_mailcatcher_smtp_pre_send_before', 'gt_translate_wp_smtp_email', 10000, 1);
     }
 }
 
@@ -2689,6 +2707,7 @@ function cache_exclude_js_gtranslate($excluded_js) {
     if(is_array($excluded_js) or empty($excluded_js)) {
         $excluded_js[] = '/gtranslate/js/.+\.js';
         $excluded_js[] = 'cdn.gtranslate.net';
+        $excluded_js[] = 'gtranslate';
     }
 
     return $excluded_js;

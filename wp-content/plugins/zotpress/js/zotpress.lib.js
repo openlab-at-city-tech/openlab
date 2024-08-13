@@ -84,6 +84,40 @@ jQuery(document).ready(function()
 					}
 				}
 
+				// Add a scroller, if doesn't exist
+				if ( jQuery(".zpSearchResultsPagingScroller", $thisLib).length == 0 )
+				{
+					// Update the width of the crop
+					// NOTE: Based on five page numbers shown
+					// jQuery(".zpSearchResultsPagingCrop", $thisLib).width( jQuery(".zpSearchResultsPaging a.selected", $thisLib).outerWidth() * 5 );
+
+					// Add the scroller
+					jQuery(".zpSearchResultsPagingContainerInner", $thisLib)
+						.append( '<div class="zpSearchResultsPagingScroller"><span class="zpSearchResultsPagingBack">&#8249;</span><span class="zpSearchResultsPagingForward">&#8250;</span></div>' );
+
+					// Add event handler for "back"
+					jQuery(".zpSearchResultsPagingContainer", $thisLib).on( 'click', '.zpSearchResultsPagingBack', function()
+					{
+						var leftPos = parseInt( jQuery(".zpSearchResultsPaging", $thisLib).css('left') );
+						var shiftW = parseInt(jQuery(".zpSearchResultsPaging a.selected", $thisLib).css('width')) + ( parseInt(jQuery(".zpSearchResultsPaging a.selected", $thisLib).css("border-left-width")) * 2 );
+
+						// Don't go too far forward/right = past zpSearchResultsPaging.width
+						if ( leftPos != 0 )
+							jQuery(".zpSearchResultsPaging", $thisLib).css('left', leftPos+shiftW+'px');
+					});
+
+					// Add event handler for "forward"
+					jQuery(".zpSearchResultsPagingContainer", $thisLib).on( 'click', '.zpSearchResultsPagingForward', function()
+					{
+						var leftPos = parseInt( jQuery(".zpSearchResultsPaging", $thisLib).css('left') );
+						var shiftW = parseInt(jQuery(".zpSearchResultsPaging a.selected", $thisLib).css('width')) + ( parseInt(jQuery(".zpSearchResultsPaging a.selected", $thisLib).css("border-left-width")) * 2 );
+
+						// Don't go too far back/left = past 0
+						if ( ( leftPos * -1 ) < ( jQuery(".zpSearchResultsPaging", $thisLib).width() - 50 ) )
+							jQuery(".zpSearchResultsPaging", $thisLib).css('left', leftPos-shiftW+'px');
+					});
+				}
+
 				// Show it
 				if ( jQuery(".zpSearchResultsPagingContainer", $thisLib).is(":hidden") )
 					jQuery(".zpSearchResultsPagingContainer", $thisLib).show();
@@ -102,11 +136,6 @@ jQuery(document).ready(function()
 				window.zpBrowseList[l].page = jQuery(this).text();
 
 				// Scroll back up to top of list
-				// jQuery([document.documentElement, document.body]).animate({
-			    //     scrollTop: jQuery(".zp-List", $thisLib).offset().top
-			    // }, 500);
-				// alert(jQuery(".zp-List", $thisLib).offset().top);
-
 				setTimeout(function() {
 					jQuery([document.documentElement, document.body]).scrollTop(
 						zpLibOffsetTop

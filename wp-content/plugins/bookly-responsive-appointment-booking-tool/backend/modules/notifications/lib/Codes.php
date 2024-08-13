@@ -90,8 +90,6 @@ class Codes
                 'staff_info' => array( 'description' => __( 'Info of staff', 'bookly' ), 'if' => true ),
                 'staff_name' => array( 'description' => __( 'Name of staff', 'bookly' ) ),
                 'staff_phone' => array( 'description' => __( 'Phone of staff', 'bookly' ), 'if' => true ),
-                'staff_category_name' => array( 'description' => __( 'Name of staff category', 'bookly' ), 'if' => true ),
-                'staff_category_info' => array( 'description' => __( 'Info of staff category', 'bookly' ), 'if' => true ),
             ),
             'staff_agenda' => array(
                 'agenda_date' => array( 'description' => __( 'Agenda date', 'bookly' ) ),
@@ -106,6 +104,9 @@ class Codes
             'verification_code' => array(
                 'verification_code' => array( 'description' => __( 'Verification code', 'bookly' ) ),
             ),
+            'mobile_staff_cabinet' => array(
+                'access_token' => array( 'description' => __( 'Access token', 'bookly' ) ),
+            )
         );
         $this->codes['appointments_list'] = array(
             'appointments' => array(
@@ -126,9 +127,9 @@ class Codes
             ),
         );
 
-        if ( $type == 'email' ) {
+        if ( $type === 'email' ) {
             // Only email.
-            $this->codes['category']['category_image'] = array( 'description' => __( 'Image of category', 'bookly' ), 'if' => true );
+            $this->codes['category']['category_image'] = array( 'description' => __( 'Image of service category', 'bookly' ), 'if' => true );
             $this->codes['company']['company_logo'] = array( 'description' => __( 'Company logo', 'bookly' ), 'if' => true );
             $this->codes['customer_appointment']['cancel_appointment'] = array( 'description' => __( 'Cancel appointment link', 'bookly' ) );
             $this->codes['service']['service_image'] = array( 'description' => __( 'Image of service', 'bookly' ), 'if' => true );
@@ -257,6 +258,13 @@ class Codes
                     $this->codes['company'],
                     $this->codes['customer'],
                     $this->codes['verification_code']
+                );
+                break;
+            case Notification::TYPE_MOBILE_SC_GRANT_ACCESS_TOKEN:
+                $codes = array_merge(
+                    $this->codes['company'],
+                    $this->codes['staff'],
+                    $this->codes['mobile_staff_cabinet']
                 );
                 break;
             default:

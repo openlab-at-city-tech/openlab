@@ -1,9 +1,9 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external ["wp","interactivity"]
-var external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
+const external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/navigation/view.js
 /**
  * WordPress dependencies
@@ -49,10 +49,20 @@ const {
       } = (0,external_wp_interactivity_namespaceObject.getContext)();
       if (type === 'submenu' &&
       // Only open on hover if the overlay is closed.
-      Object.values(overlayOpenedBy || {}).filter(Boolean).length === 0) actions.openMenu('hover');
+      Object.values(overlayOpenedBy || {}).filter(Boolean).length === 0) {
+        actions.openMenu('hover');
+      }
     },
     closeMenuOnHover() {
-      actions.closeMenu('hover');
+      const {
+        type,
+        overlayOpenedBy
+      } = (0,external_wp_interactivity_namespaceObject.getContext)();
+      if (type === 'submenu' &&
+      // Only close on hover if the overlay is closed.
+      Object.values(overlayOpenedBy || {}).filter(Boolean).length === 0) {
+        actions.closeMenu('hover');
+      }
     },
     openMenuOnClick() {
       const ctx = (0,external_wp_interactivity_namespaceObject.getContext)();
@@ -75,7 +85,9 @@ const {
         ref
       } = (0,external_wp_interactivity_namespaceObject.getElement)();
       // Safari won't send focus to the clicked element, so we need to manually place it: https://bugs.webkit.org/show_bug.cgi?id=22261
-      if (window.document.activeElement !== ref) ref.focus();
+      if (window.document.activeElement !== ref) {
+        ref.focus();
+      }
       const {
         menuOpenedBy
       } = state;
@@ -116,16 +128,17 @@ const {
     },
     handleMenuFocusout(event) {
       const {
-        modal
+        modal,
+        type
       } = (0,external_wp_interactivity_namespaceObject.getContext)();
       // If focus is outside modal, and in the document, close menu
       // event.target === The element losing focus
       // event.relatedTarget === The element receiving focus (if any)
-      // When focusout is outsite the document,
+      // When focusout is outside the document,
       // `window.document.activeElement` doesn't change.
 
       // The event.relatedTarget is null when something outside the navigation menu is clicked. This is only necessary for Safari.
-      if (event.relatedTarget === null || !modal?.contains(event.relatedTarget) && event.target !== window.document.activeElement) {
+      if (event.relatedTarget === null || !modal?.contains(event.relatedTarget) && event.target !== window.document.activeElement && type === 'submenu') {
         actions.closeMenu('click');
         actions.closeMenu('focus');
       }
@@ -174,10 +187,13 @@ const {
         ref
       } = (0,external_wp_interactivity_namespaceObject.getElement)();
       if (state.isMenuOpen) {
-        ref.querySelector('.wp-block-navigation-item > *:first-child').focus();
+        const focusableElements = ref.querySelectorAll(focusableSelectors);
+        focusableElements?.[0]?.focus();
       }
     }
   }
+}, {
+  lock: true
 });
 
 /******/ })()

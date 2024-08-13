@@ -262,6 +262,7 @@ jQuery(function($){
             var self = this;
             this.in_progress = true;
             $.ajax({
+                method: 'POST',
                 url: this.fetch_url + this.action,
                 data: this._create_request(limit, offset),
                 beforeSend: function(xhr) {

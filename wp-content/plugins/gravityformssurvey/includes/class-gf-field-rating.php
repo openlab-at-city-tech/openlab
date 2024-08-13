@@ -112,7 +112,7 @@ class GF_Field_Rating extends GF_Field {
 				}
 
 				$content .= sprintf(
-					"<input name='input_%d' type='radio' value='%s' %s id='choice_%s' %s %s %s /><label for='choice_%s' title='%s'>%s</label>",
+					"<input name='input_%d' type='radio' value='%s' %s id='choice_%s' %s %s %s /><label for='choice_%s' title='%s'><span>%s</span></label>",
 					$this->id,
 					esc_attr( $field_value ),
 					$checked,

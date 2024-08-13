@@ -1,10 +1,12 @@
 <?php
 wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/RePost/Item.php';
-$rePostItem = new B2S_RePost_Item();
-
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Settings/Item.php';
+
+$rePostItem = new B2S_RePost_Item();
+$rePostItem->getAuthData();
+
 $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
 $optionUserTimeZone = $options->_getOption('user_time_zone');
 $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');

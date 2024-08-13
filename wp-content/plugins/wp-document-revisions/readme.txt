@@ -3,8 +3,8 @@
 Contributors: benbalter, nwjames
 Tags: documents, uploads, attachments, document management, enterprise, version control, revisions, collaboration, journalism, government, files, revision log, document management, intranet, digital asset management
 Requires at least: 4.6
-Tested up to: 6.1.1
-Stable tag: 3.5.0
+Tested up to: 6.4.2
+Stable tag: 3.6.0
 
 == Description ==
 
@@ -89,7 +89,6 @@ See [the full documentation](https://wp-document-revisions.github.io/wp-document
 * **Bulk Import** - how to batch import a directory (or other list) of files as documents
 * **Filetype Taxonomy** - Adds support to filter by filetype
 * **Track Changes** - Auto-generates and appends revision summaries for changes to taxonomies, title, and visibility
-* **Remove Workflow States** - Completely removes Workflow state taxonomy backend and UI
 * **Change Tracker** - Auto-generates and appends revision summaries for changes to taxonomies, title, and visibility
 
 
@@ -180,9 +179,31 @@ In: class-wp-document-revisions.php
 
 == Changelog ==
 
+Numbers in brackets show the issue number in https://github.com/wp-document-revisions/wp-document-revisions/issues/
+
+= 3.6.0 =
+
+* NEW: Integrate with PublishPress Statuses plugin for custom statuses. (#335)
+* NEW: Accessibility rules states that links to PDF documents should have visible references. Blocks have an explicit switch. (#322)
+* NEW: User pulldowns will show only relevant users. (#321)
+* NEW: Filter 'document_post_thumbnail' used to define the post-thumbnail image size (if not set by theme). (#339)
+* NEW: Filter 'document_use_wp_filesystem' used to serve document (instead of PHP readfile). Irrelevant if the file is compressed on output. (#320)
+* NEW: Filter 'document_internal_filename' for updating internal file name additionally passed the original name. (#319)
+* NEW: Filter 'document_validate_md5' to switch off attachment MD5 format validation. (#318)
+* NEW: Optionally stop direct web access to document files to force access only via WordPress. (#317)
+* NEW: If a role already has "read_documents" capability, do not touch capabilities on plugin reactivation. (#315)
+* NEW: Filter 'document_home_url' to allow changes to be made to it (used with WPML). (#329)
+* FIX: Ensure File descriptor of Document Upload includes subdir component. (#342)
+* FIX: Use with plugin EditFlow gives PHP 8.0 error. (#331)
+* FIX: Typo in description of default upload location. (#328)	
+* FIX: Filter 'document_revisions_owner' withdrawn as parameter acted on (who) deprecated in WP 5.9. (#316)
+* FIX: Updates to document description do not enable the Submit button
+* DEV: JS scripts will be called with Defer in WP 6.3 onwards. (#314)
+* DEV: Review for WP Coding standard 3.0 (#313)
+
 = 3.5.0 =
 
-" SECURITY: Rest media interface may expose document name. 
+* SECURITY: Rest media interface may expose document name. 
 * NEW: Site can decide to save permalinks without year/month part.
 * NEW: Permalinks may be updated on the documents screen.
 * FIX: guid field for documents was generally incorrect. Will be stored as a valid value.
@@ -540,6 +561,88 @@ Updated documentation.
 * Proof of concept prototype
 
 
+=== WP-Documents-Revisions Data Design and Data Structure ===
+
+== Requirements ==
+
+- To maintain a reference to a document and to hold a list of published versions of the documents.
+	- It is not particularly concerned about how the document is created and the process to arrive at the state ready to upload.
+	- It will maintain a status of where it is in the publishing process.
+
+- It makes use of a custom post type "document" and revisions to maintain the history of Document file uploads.
+
+- The Document file will be uploaded using the standard Media loader.
+	- This will result in an Attachment post being created with the Document post as its parent.
+	- It will not be visible in the Media library as Queries to the Media library remove attachments with parents that are documents.
+	- Document files can be stored in a different host library.
+
+- The Document file should not be accessible directly by the user, but ideally via the WP interface.
+	- This will be supported by changing the uploaded file name to be an MD5-hash of the original file name and load time.
+	- This can be supplemented by changing .htaccess rules to stop direct access to files with MD5 format names
+	- Standard WP processing may create a JPEG image of PDF uploads.
+	- Since it will store these using the MD5 file name that will be downloaded to the user this would expose the MD5 file name. Therefore there is a process to change these images to use another name.
+
+- The document post record can also support Featured Images.
+	- If loaded via the Edit document page, it would be considered as a Document file. So the parent post identifier will be removed to eliminate confusion between it being a Featured Image and a Document file being stored.
+
+- Since version 3.4 of the plugin, it is possible to enter a user-oriented description that can be displayed to users with the shortcodes or blocks provided with the plugin.  
+
+- An audit trail of changes to published versions of the Document file.
+	- The user can enter a reason for changing the Document including uploading a Document file; changing the Document Description; or Title; or any Taxonomy element.
+	- This reason will be stored in the Excerpt field.
+	- The aggregate information may be displayed as a Revision Log.
+   
+- Use will be made of the standard WP Revisions functionality to contain the Audit Trail itself.
+	- Standard WP processing creates a Revision if any one of these fields are changed: title, content or excerpt.
+	- Since all Attachments are linked to the parent Document record, by storing the Attachment Id in the content field, then a Revision record will be created automatically. 
+
+- This plugin is delivered with just one Taxonomy - Workflow_State. This shows the status of the Document file in its processing.
+	- This is not considered very useful for user data classification.
+	- However, being a generic tool, sites can use of a dedicated Taxonomy plugin.
+
+== Data Structure ==
+
+The records held in the database will be:
+
+1. Document Record
+
+- post_content contains the id of the latest Document file attachment record.
+	- When a Document file is loaded on editing this Document record, the post_content will be modified to contain the ID of the Attachment record created.
+	- In plugin versions prior to 3.4, this would simply be the numeric ID.
+	- Subsequent versions hold this in the form of an HTML comment "&lt;!-- WPDR nnn --&gt;" where nnn is the ID of an attachment post. It can also contain a text Document description.
+	- When editing the post, this field is decomposed into its two parts of ID and description with program management of the former and user management of the latter, recombined automatically when changes are made.
+
+- post_excerpt will contain any comment entered when the document record is updated.
+
+- As taxonomy records are held only against this Document record, there is no effective audit trail of changes to Taxonomy. Changes can be noted manually in the excerpt field
+
+2. Attachment Record(s)
+
+There can be multiple Attachment records, one for each Document file loaded.
+
+- The name and title of the Attachment record is set to a MD5 hash of the original file name and the load time.
+
+- The Document file name is also set as this MD5 hash.
+
+- post_parent is set to the Document Record ID.
+
+- When a PDF Document file is loaded, then standard WP processing will attempt to make a JPEG image of the first page as a thumbnail (using all sizes). These will be held in the same directory as the Document file.
+	- However if the file name is MD5Hash.pdf, then these images will be called MD5Hash-pdf.jpg.
+	- If used on a page, this would expose the name of the file to the user.
+	- To avoid this, there is a process to transform this name to another (essentially random) MD5 and rename these image files.
+	- Once done, a postmeta record is created with these new file names (and a field denoting this process has been done).
+
+- If a Featured Image is loaded whilst editing the Document record, this would also have the same post_parent set, so in this case, the post_parent is set to 0 leaving the functional postmeta link to denote the presence of the featured image.
+
+3. Revision Record(s)
+
+When saving a Document Record, standard WP processing will be invoked to detect a change in title, content or excerpt fields. If one is found then a Revision record is created.
+
+There can be multiple Revision records held, one for each saving event where a change in these fields are detected.
+
+Because the document content contains the latest Attachment ID, an upload of a revised Document file will create a new document Revision record.
+
+
 === WP-Documents-Revisions Filters ===
 
 This plugin makes use of many filters to tailor the delivered processing according to a site's needs.
@@ -590,6 +693,12 @@ In: class-wp-document-revisions-admin.php
 
 Filters the default help text for current screen.
 
+== Filter document_home_url ==
+
+In: class-wp-document-revisions.php
+
+Filters the home_url() for WPML and translated documents.
+
 == Filter document_internal_filename ==
 
 In: class-wp-document-revisions.php
@@ -625,6 +734,12 @@ Filters the file name for WAMP settings (filter routine provided by plugin).
 In: class-wp-document-revisions.php
 
 Filters the Document permalink.
+
+== Filter document_post_thumbnail ==
+
+In: class-wp-document-revisions.php
+
+Filters the post-thumbnail size parameters (used only if this image size has not been set).
 
 == Filter document_read_uses_read ==
 
@@ -667,12 +782,6 @@ Filters whether to merge two revisions for a change in excerpt (generally where 
 In: class-wp-document-revisions.php
 
 Filters the MIME type for a file before it is processed by WP Document Revisions.
-
-== Filter document_revisions_owners ==
-
-In: class-wp-document-revisions-admin.php
-
-Filters the author metabox query for document owners.
 
 == Filter document_revisions_serve_file_headers ==
 
@@ -734,6 +843,12 @@ In: class-wp-document-revisions.php
 
 Filters the document slug.
 
+== Filter document_stop_file_access_pattern ==
+
+In: class-wp-document-revisions.php
+
+Filter to stop direct file access to documents (specify the URL element (or trailing part) to traverse to the document directory.
+
 == Filter document_taxonomy_term_count ==
 
 In: class-wp-document-revisions.php
@@ -757,6 +872,18 @@ Filters setting the new document status to private.
 In: class-wp-document-revisions.php
 
 Filter to switch off use of standard Workflow States taxonomy. For internal use.
+
+== Filter document_use_wp_filesystem ==
+
+In: class-wp-document-revisions.php
+
+Filter whether WP_FileSystem used to serve document (or PHP readfile). Irrelevant if file compressed on output.
+
+== Filter document_validate_md5 ==
+
+In: class-wp-document-revisions-validate-structure.php
+
+Filter to switch off md5 format attachment validation.
 
 == Filter document_verify_feed_key ==
 
@@ -831,7 +958,7 @@ Yes and no. It will track who uploaded each version of the file, and will provid
 
 = How do permissions work? =
 
-There are default permissions (based off the default post permissions), but they can be overridden either with third-party plugins such as the [Members plugin](https://wordpress.org/plugins/members/), or for developers, via the <code>document_permissions</code> filter.
+There are default permissions (based off the default post permissions), but they can be overridden either with third-party plugins such as the [Members plugin](https://wordpress.org/plugins/members/), or for developers, via the <code>document_caps</code> filter.
 
 = What types of documents can my team collaborate on? =
 
@@ -1012,6 +1139,8 @@ As delivered, administrators will have the show_edit implicitly active. A filter
 
 `new_tab` (with a true/false parameter) that will open the document in a new browser tab rather than in the current one.
 
+`show_pdf` (with a true/false parameter) that, for accessibility, will display `(PDF)` as part of links if this links to a PDF document.
+
 `show_thumb` (with a true/false parameter) that will display a featured image (or generated one from the first page of PDF documents) if provided.
 
 `show_descr` (with a true/false parameter) that will output the entered description if provided.
@@ -1052,7 +1181,9 @@ It is also possible to add formatting parameters:
 
 `new_tab` (with a true/false parameter) that will open the revision in a new browser tab rather than in the current one.
 
-Both of these boolean variables can be entered without a value (with default value true ). 
+`show_pdf` (with a true/false parameter) that, for accessibility, will display `(PDF)` as part of links if this links to a PDF document.
+
+These boolean variables can be entered without a value (with default value true ). 
 
 = Block Usage =
 
@@ -1081,6 +1212,8 @@ It is also possible to add formatting parameters:
 `show_author`(with a true/false parameter) that will identify the document author.
 
 `new_tab` (with a true/false parameter) that will open the revision in a new browser tab rather than in the current one.
+
+`show_pdf` (with a true/false parameter) that, for accessibility, will display `(PDF)` as part of links if this links to a PDF document.
 
 = Block Usage =
 
@@ -1121,7 +1254,14 @@ Interested in translating WP Document Revisions? You can do so [via Crowdin](htt
 
 * [Simple Taxonomy Refreshed](https://wordpress.org/plugins/simple-taxonomy-refreshed/)
 
+= Email notification and distribution =
+
+* [Email Notice for WP Document Revisions](https://wordpress.org/plugins/email-notice-wp-document-revisions/)
+
 = Document workflow management =
 
 * [Edit Flow](https://wordpress.org/plugins/edit-flow/)
-* [PublishPress](https://wordpress.org/plugins/publishpress/)
+* [PublishPress Planner](https://wordpress.org/plugins/publishpress/)
+
+	(Previously called PublishPress)
+* [PublishPress Statuses](https://wordpress.org/plugins/publishpress-statuses/)

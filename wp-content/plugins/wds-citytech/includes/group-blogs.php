@@ -749,6 +749,10 @@ function wds_bp_group_meta() {
 
 								<div id="noo_new_options">
 									<div id="noo_new_options-div" class="row">
+										<?php if ( 'portfolio' === $group_type ) : ?>
+											<p style="padding: 0 5px 10px 5px">Depending on the privacy settings you choose, your <?php echo esc_html( $group_label ); ?> URL may be publicly visible, so you may not wish to include your full name. Your <?php echo esc_html( $group_label ); ?> URL cannot be changed.</p>
+										<?php endif; ?>
+
 										<div class="radio col-sm-6">
 											<label>
 												<input type="radio" class="noo_radio" name="new_or_old" id="new_or_old_new" value="new" />
@@ -2289,10 +2293,10 @@ function openlab_add_post_visibility_script_data() {
 		'openlab-blocks',
 		'const openlabBlocksPostVisibility = ' . wp_json_encode(
 			[
+				'blogPublic'                => $blog_public,
 				'currentGroupTypeLabel'     => $group_type_label,
 				'currentGroupTypeSiteLabel' => sprintf( '%s Site', $group_type_label ),
 				'shareOnlyWithGroup'        => sprintf( 'Only logged-in members of this %s can see this post.', $group_type_label ),
-				'siteIsPublic'              => $blog_public >= 0,
 			]
 		) . ';',
 	);

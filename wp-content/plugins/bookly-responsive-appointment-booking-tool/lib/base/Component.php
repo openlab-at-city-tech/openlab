@@ -165,7 +165,7 @@ abstract class Component extends Cache
     /**
      * Get all request parameters.
      *
-     * @return mixed
+     * @return array
      */
     protected static function parameters()
     {
@@ -261,6 +261,11 @@ abstract class Component extends Cache
                 'mjsTimeFormat' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
                 'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
                 'dateRange' => Lib\Utils\DateTime::dateRangeOptions(),
+                'l10n' => array(
+                    'apply' => __( 'Apply', 'bookly' ),
+                    'cancel' => __( 'Cancel', 'bookly' ),
+                    'areYouSure' => __( 'Are you sure?', 'bookly' ),
+                ),
                 'addons' => array(),
                 'cloud_products' => get_option( 'bookly_cloud_account_products', array() ),
                 'data' => (object) array(),

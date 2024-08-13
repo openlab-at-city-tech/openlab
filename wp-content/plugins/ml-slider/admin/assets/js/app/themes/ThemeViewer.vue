@@ -49,11 +49,6 @@
 							:src="themeDirectoryUrl + current.theme.folder + '/screenshot.png'"
 							:alt="current.theme.title">
 					</div>
-					<div class="theme-hover-text">
-						<span>
-							{{ __('Click to edit or update', 'ml-slider') }}
-						</span>
-					</div>
 				</button>
 				<button
 					type="button"
@@ -96,21 +91,38 @@
                     </svg>
 				</button>
 				<sweet-modal-tab
-					id="free"
-					:title="__('Themes', 'ml-slider')">
-					<template v-if="themes && Object.keys(themes).length">
+					id="all"
+					:title="__('All themes', 'ml-slider')">
+					<div v-if="loading || loadingCustom">
+						{{ __('Loading...', 'ml-slider') }}
+					</div>
+					<template v-if="(themes && Object.keys(themes).length) || (Object.keys(customThemes).length && proUser)">
 						<div class="columns">
 							<div class="theme-list-column">
 								<ul class="ms-image-selector regular-themes">
 									<li
+										v-if="themes && Object.keys(themes).length"
 										v-for="theme in themes"
 										:key="theme.folder"
-										:class="{ 'a-theme': true, selected: (selectedTheme.folder == theme.folder) }"
+										:class="{ 
+											'a-theme': true, selected: (selectedTheme.folder === theme.folder), 
+											'unlock-pro-theme-ad': nonSelectablePremiumTheme(theme.type)
+										}"
 										role="checkbox"
-										@mouseover="hoveredTheme = theme"
+										@mouseover="hoveredTheme = theme; showPremiumThemeAd(theme.type, theme.folder)"
 										@mouseout="hoveredTheme = selectedTheme"
-										@click="selectTheme(theme)">
+										@mouseleave="hidePremiumThemeAd(theme.type)"
+										@click="nonSelectablePremiumTheme(theme.type) ? null : selectTheme(theme)">
 										<span>
+											<div 
+												v-if="revealThemeAd === theme.folder"
+												class="custom-theme-single upgrade-pro-theme-ad">
+												<h3 class="text-white mb-3">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h3>
+												<p class="text-white font-normal text-sm mb-3">
+													{{ __('Upgrade now to unlock this theme!', 'ml-slider') }}
+												</p>
+												<a class="w-full inline-flex items-center justify-center px-5 py-2 border border-transparent rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto text-base" :href="hoplink" target="_blank">{{ __('Upgrade now', 'ml-slider') }} <span class="dashicons dashicons-external border-0"></span></a>
+											</div>
 											<img
 												v-if="theme.screenshot_dir"
 												:src="theme.screenshot_dir + '/screenshot.png'"
@@ -121,6 +133,49 @@
 												:alt="theme.title">
 										</span>
 									</li>
+
+									<template v-if="Object.keys(customThemes).length && proUser">
+										<li
+											v-for="theme in customThemes"
+											:key="theme.folder"
+											:class="{ 'a-theme': true, selected: (selectedTheme.folder == theme.folder) }"
+											role="checkbox"
+											@mouseover="hoveredTheme = theme"
+											@mouseout="hoveredTheme = selectedTheme"
+											@click="selectTheme(theme)">
+											<span>
+												<div class="custom-theme-single">
+													{{ theme.title }}
+												</div>
+											</span>
+										</li>
+									</template>
+									<template v-else-if="!Object.keys(customThemes).length && proUser && !loadingCustom">
+										<li class="a-theme">
+											<span>
+												<div class="custom-theme-single upgrade-pro-theme-ad">
+													<h3 class="text-white mb-3">{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h3>
+													<p class="text-white font-normal text-sm mb-3">
+														{{ __('You can create your own themes with our theme editor', 'ml-slider') }}
+													</p>
+													<a class="w-full inline-flex items-center justify-center px-5 py-2 border border-transparent rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto text-base" :href="themeEditorLink">{{ __('Get started', 'ml-slider') }}</a>
+												</div>
+											</span>
+										</li>
+									</template>
+									<template v-else>
+										<li class="a-theme unlock-pro-custom-themes-ad">
+											<span>
+												<div class="custom-theme-single upgrade-pro-theme-ad">
+													<h3 class="text-white mb-3">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h3>
+													<p class="text-white font-normal text-sm mb-3">
+														{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
+													</p>
+													<a class="w-full inline-flex items-center justify-center px-5 py-2 border border-transparent rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto text-base" :href="hoplink" target="_blank">{{ __('Upgrade now', 'ml-slider') }} <span class="dashicons dashicons-external border-0"></span></a>
+												</div>
+											</span>
+										</li>
+									</template>
 								</ul>
 							</div>
 							<div class="theme-details-column">
@@ -153,6 +208,16 @@
 										</ul>
 									</div>
 								</template>
+								<template v-else-if="hoveredTheme.type === 'custom'">
+									<div>
+										<h1 class="metaslider-theme-title">{{ hoveredTheme.title }}</h1>
+										<div class="ms-theme-description">
+											<h2>{{ __('Theme Details', 'ml-slider') }}</h2>
+											<p>{{ __('This theme was created through the theme editor.', 'ml-slider') }}</p>
+											<p>{{ __('If no theme is selected we will use the default theme provided by the slider plugin', 'ml-slider') }}</p>
+										</div>
+									</div>
+								</template>
 								<template v-else>
 									<div>
 										<h1 class="metaslider-theme-title">{{ __('How To Use', 'ml-slider') }}</h1>
@@ -164,69 +229,10 @@
 						</div>
 					</template>
 					<template v-else>
-						<div v-if="loading">
-                            {{ __('Loading...', 'ml-slider') }}
-						</div>
-						<div
-							v-else
-							class="free-themes-not-found">
+						<div class="free-themes-not-found">
 							<h1>{{ __('Error: No themes were found.', 'ml-slider') }}</h1>
-							<p v-if="Object.keys(customThemes).length">{{ __('However, it looks like you have custom themes available. Select "My Custom Themes" from the navigation up top to view your custom themes.', 'ml-slider') }}</p>
 						</div>
 					</template>
-				</sweet-modal-tab>
-				<sweet-modal-tab
-					id="custom-themes"
-					:title="__('My Custom Themes', 'ml-slider')">
-					<template v-if="!proUser">
-						<div class="promo-wrapper clearfix">
-							<div class="col left">
-								<img :src="asset('images/hero-theme-editor.jpg')" class="w-full block">
-							</div>
-							<div class="col right">
-								<h1 class="customtheme-list-h">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h1>
-								<p class="customtheme-list-p">
-									{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
-								</p>
-								<a class="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent font-medium rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto md:text-xl md:leading-5" :href="hoplink" target="_blank">{{ __('Upgrade now', 'ml-slider') }} <span class="dashicons dashicons-external upgrade-icon"></span></a>
-							</div>
-						</div>
-					</template>
-					<div v-if="loadingCustom">
-                        {{ __('Loading...', 'ml-slider') }}
-					</div>
-					<template v-if="!Object.keys(customThemes).length && proUser && !loadingCustom">
-						<h1 class="customtheme-list-h">{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h1>
-						<p class="customtheme-list-p">
-							{{ __('You can create your own themes with our theme editor', 'ml-slider') }}	
-						</p>
-						<a class="w-full inline-flex items-center justify-center px-6 py-4 border border-transparent font-medium rounded-md text-white bg-orange hover:bg-orange-darker active:bg-orange-darkest transition ease-in-out duration-150 md:w-auto md:text-xl md:leading-5" :href="themeEditorLink">{{ __('Get started', 'ml-slider') }}</a>
-					</template>
-					<div
-						v-if="Object.keys(customThemes).length && proUser"
-						class="columns">
-						<div class="theme-list-column">
-							<ul class="ms-image-selector custom-themes">
-								<li
-									v-for="theme in customThemes"
-									:key="theme.folder"
-									:class="{ 'a-theme': true, selected: (selectedTheme.folder == theme.folder) }"
-									role="checkbox"
-									@click="selectTheme(theme)">
-									<span><div class="custom-theme-single">
-										{{ theme.title }}
-									</div></span>
-								</li>
-							</ul>
-						</div>
-						<div class="theme-details-column">
-							<div>
-								<h1 class="metaslider-theme-title">{{ __('How To Use', 'ml-slider') }}</h1>
-								<p>{{ __('On the left are themes that you have created in the theme editor.', 'ml-slider') }}</p>
-								<p>{{ __('If no theme is selected we will use the default theme provided by the slider plugin', 'ml-slider') }}</p>
-							</div>
-						</div>
-					</div>
 				</sweet-modal-tab>
 				<template
 					slot="button">
@@ -284,7 +290,8 @@ export default {
 			customThemes: {},
 			selectedTheme: {},
 			hoveredTheme: {},
-			is_open: false
+			is_open: false,
+			revealThemeAd: null
 		}
 	},
 	watch: {
@@ -421,7 +428,7 @@ export default {
 			this.hoveredTheme = this.selectedTheme || this.current.theme
 
 			// If a current theme is selected, show that tab
-			let tab = this.isCustomTheme ? 'custom-themes' : 'free'
+			let tab = 'all'
 			this.is_open = true
 			this.$refs.themesModal.open(tab)
 		},
@@ -446,6 +453,19 @@ export default {
 				title: null,
 				type: null
 			}
+		},
+		showPremiumThemeAd(type, id) {
+			if (this.nonSelectablePremiumTheme(type)) {
+				this.revealThemeAd = id;
+			}
+		},
+		hidePremiumThemeAd(type) {
+			if (this.nonSelectablePremiumTheme(type)) {
+				this.revealThemeAd = null;
+			}
+		},
+		nonSelectablePremiumTheme(type) {
+			return !this.proUser && type === 'premium';
 		}
 	}
 }
@@ -692,8 +712,8 @@ export default {
 	}
 	#metaslider-ui .custom-theme-single {
 		width: 100%;
-		min-height: 200px;
-		height: 10vw;
+		min-height: 216px;
+		height: 100%;
 		line-height: normal;
 		display: flex;
 		flex-direction: column;
@@ -705,6 +725,48 @@ export default {
 		color: white;
 		padding: 1rem;
 		box-sizing: border-box;
+	}
+	.regular-themes {
+		.a-theme {
+			//min-height: 216px;
+		}
+		.unlock-pro-theme-ad {
+			span {
+				position: relative
+			}
+			.custom-theme-single {
+				position: absolute;
+				z-index: 2;
+			}
+			img {
+				//position: absolute;
+				z-index: 1;
+				width: calc( 100% - 4px ) !important;
+				height: auto !important;
+			}
+			.upgrade-pro-theme-ad {
+				width: calc( 100% - 4px ) !important;
+				height: calc( 100% - 4px ) !important;
+
+				@media (max-width: 1199px) and (min-width: 1100px) {
+					h3 {
+						display: none;
+					}
+				}
+			}
+		}
+		.unlock-pro-custom-themes-ad {
+			.upgrade-pro-theme-ad {
+				@media (max-width: 1199px) and (min-width: 1100px) {
+					h3 {
+						display: none;
+					}
+				}
+			}
+		}
+	}
+	#metaslider-ui .sweet-modal-tabs li.sweet-modal-tab {
+		display: none !important;
 	}
 	@include until(700px) {
 		#metaslider-ui .sweet-modal {

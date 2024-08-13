@@ -55,7 +55,6 @@ trait Rounding
             'microsecond' => [0, 999999],
         ]);
         $factor = 1;
-        $initialMonth = $this->month;
         if ($normalizedUnit === 'week') {
             $normalizedUnit = 'day';
             $precision *= static::DAYS_PER_WEEK;
@@ -110,11 +109,11 @@ trait Rounding
         [$value, $minimum] = $arguments;
         $normalizedValue = \floor($function(($value - $minimum) / $precision) * $precision + $minimum);
         /** @var CarbonInterface $result */
-        $result = $this->{$normalizedUnit}($normalizedValue);
+        $result = $this;
         foreach ($changes as $unit => $value) {
             $result = $result->{$unit}($value);
         }
-        return $normalizedUnit === 'month' && $precision <= 1 && \abs($result->month - $initialMonth) === 2 ? $result->{$normalizedUnit}($normalizedValue) : $result;
+        return $result->{$normalizedUnit}($normalizedValue);
     }
     /**
      * Truncate the current instance at the given unit with given precision if specified.

@@ -1,0 +1,9 @@
+/**
+ * CSS fixes for inline-comments that are OpenLab-specific.
+ */
+
+/* Don't show wp-grade-comments elements inside inline comments */
+.incom-comments-wrapper .olgc-checkboxes {
+	display: none;
+	visibility: hidden;
+}

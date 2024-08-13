@@ -17,7 +17,7 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
  */
 final class PumpStream implements StreamInterface
 {
-    /** @var callable|null */
+    /** @var callable(int): (string|false|null)|null */
     private $source;
     /** @var int|null */
     private $size;
@@ -135,9 +135,9 @@ final class PumpStream implements StreamInterface
     }
     private function pump(int $length) : void
     {
-        if ($this->source) {
+        if ($this->source !== null) {
             do {
-                $data = \call_user_func($this->source, $length);
+                $data = ($this->source)($length);
                 if ($data === \false || $data === null) {
                     $this->source = null;
                     return;

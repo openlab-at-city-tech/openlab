@@ -5,14 +5,10 @@ use Bookly\Backend\Modules\Appearance\Codes;
 use Bookly\Lib\Config;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Price;
+
 /** @var WP_Locale $wp_locale */
 global $wp_locale;
 ?>
-<style>
-    .picker__holder * {
-        box-sizing: unset !important;
-    }
-</style>
 <div class="bookly-form">
     <?php include '_progress_tracker.php' ?>
 
@@ -119,22 +115,21 @@ global $wp_locale;
             </div>
         </div>
         <div class="bookly-mobile-step-2 bookly-js-mobile-step-2">
-            <div class="bookly-box" style="display: table;">
+            <div class="bookly-box">
                 <div class="bookly-left">
                     <div class="bookly-available-date bookly-js-available-date bookly-left">
                         <div class="bookly-form-group">
                             <?php Elements::renderLabel( array( 'bookly_l10n_label_select_date', ) ) ?>
                             <div>
-                               <input class="bookly-date-from bookly-js-date-from" style="background-color: #fff;" type="text" data-value="<?php echo date( 'Y-m-d' ) ?>" />
+                                <input class="bookly-date-from bookly-js-date-from" style="background-color: #fff;" type="text" data-value="<?php echo date( 'Y-m-d' ) ?>" value="<?php echo DateTime::formatDate( date_create()->format( 'Y-m-d' ) ) ?>"/>
                             </div>
                         </div>
                     </div>
                     <div class="bookly-week-days bookly-js-week-days bookly-table bookly-left">
                         <?php foreach ( $wp_locale->weekday_abbrev as $day ) : ?>
-                            <div>
-                                <div class="bookly-font-bold"><?php echo esc_html( $day ) ?></div>
+                            <div class="bookly-form-group">
+                                <label for="bookly-week-day-<?php echo esc_attr( $day ) ?>"><?php echo esc_html( $day ) ?></label>
                                 <input id="bookly-week-day-<?php echo esc_attr( $day ) ?>" checked="checked" type="checkbox">
-                                <label for="bookly-week-day-<?php echo esc_attr( $day ) ?>"></label>
                             </div>
                         <?php endforeach ?>
                     </div>
@@ -185,4 +180,3 @@ global $wp_locale;
         <div data-option="<?php echo esc_attr( $validator ) ?>"><?php echo esc_html( get_option( $validator ) ) ?></div>
     <?php endforeach ?>
 </div>
-<style id="bookly-pickadate-style"></style>

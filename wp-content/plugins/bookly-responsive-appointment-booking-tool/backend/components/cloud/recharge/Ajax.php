@@ -11,7 +11,7 @@ class Ajax extends Lib\Base\Ajax
     public static function initAutoRechargePaypal()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $url = $cloud->account->getPreApprovalUrl( self::parameter( 'recharge' ), self::parameter( 'url' ) );
+        $url = $cloud->account->getBillingAgreementUrl( self::parameter( 'recharge' ), self::parameter( 'url' ) );
         if ( $url !== false ) {
             wp_send_json_success( array( 'paypal_preapproval' => $url ) );
         } else {

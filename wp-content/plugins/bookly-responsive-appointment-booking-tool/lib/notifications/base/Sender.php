@@ -11,7 +11,7 @@ abstract class Sender extends Reminder
      * @param string $type
      * @return array
      */
-    protected static function getNotifications( $type )
+    public static function getNotifications( $type )
     {
         $result = array(
             'client' => array(),

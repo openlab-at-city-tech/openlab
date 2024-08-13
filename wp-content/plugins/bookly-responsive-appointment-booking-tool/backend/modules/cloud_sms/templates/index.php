@@ -4,7 +4,7 @@ use Bookly\Backend\Components\Dialogs\TableSettings;
 use Bookly\Backend\Components\Cloud;
 use Bookly\Lib\Utils\DateTime;
 /**
- * @var Bookly\Lib\Cloud\API $cloud
+ * @var Bookly\Lib\Cloud\SMS $sms
  * @var int $undelivered_count
  */
 ?>
@@ -17,11 +17,11 @@ use Bookly\Lib\Utils\DateTime;
         <div class="card-body">
             <div class="row pb-3">
                 <div class="col">
-                    <p class="h6 m-0 p-0"><strong><?php esc_html_e( 'Sender ID', 'bookly' ) ?>:</strong> <a href="#" id="bookly-open-tab-sender-id"><?php echo esc_html( $cloud->sms->getSenderId() ) ?>
+                    <p class="h6 m-0 p-0"><strong><?php esc_html_e( 'Sender ID', 'bookly' ) ?>:</strong> <a href="#" id="bookly-open-tab-sender-id"><?php echo esc_html( $sms->getSenderId() ) ?>
                             <i class="fas fa-pencil-alt ml-1"></i></a></p>
-                    <?php if ( $cloud->sms->getSenderIdApprovalDate() ) : ?>
+                    <?php if ( $sms->getSenderIdApprovalDate() ) : ?>
                         <p class="h6 small m-0 p-0 mb-1 mr-1 text-muted text-form bookly-js-sender-id-approval-date"><?php esc_html_e( 'Approved at', 'bookly' ) ?>:
-                            <strong><?php echo DateTime::formatDate( $cloud->sms->getSenderIdApprovalDate() ) ?></strong></p>
+                            <strong><?php echo DateTime::formatDate( $sms->getSenderIdApprovalDate() ) ?></strong></p>
                     <?php else: ?>
                         <p class="h6 small m-0 p-0 mb-1 mr-1 text-muted"><?php esc_html_e( 'Change the sender\'s name to your phone number or any other name', 'bookly' ) ?></p>
                     <?php endif ?>

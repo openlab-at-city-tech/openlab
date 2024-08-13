@@ -58,8 +58,7 @@ class GF_Field_Dropbox extends GF_Field {
 		// If we are in the form editor, display a placeholder button.
 		if ( $is_form_editor ) {
 			return sprintf(
-				"<div class='gdropbox ginput-container'><img class='gform-dropbox-upload-button' src='%s' alt='%s' title='%s' /></div>
-				<span class='gform_dropbox_fileupload_rules'>{$allowed_extensions_message}</span>",
+				"<div class='gdropbox ginput_container'><img class='gform-dropbox-upload-button' src='%s' alt='%s' title='%s' /><span class='gform_dropbox_fileupload_rules gfield_description'>{$allowed_extensions_message}</span></div>",
 				gf_dropbox()->get_base_url() . '/images/button-preview.png',
 				esc_html__( 'Dropbox Button Preview', 'gravityformsdropbox' ),
 				esc_html__( 'Dropbox Button Preview', 'gravityformsdropbox' )

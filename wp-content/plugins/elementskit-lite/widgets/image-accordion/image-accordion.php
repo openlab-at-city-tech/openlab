@@ -977,7 +977,10 @@ class ElementsKit_Widget_Image_Accordion extends Widget_Base {
 
 				// enabling wrap link
 				if(isset($item['ekit_img_accordion_enable_wrap_link']) && $item['ekit_img_accordion_enable_wrap_link'] == 'yes') {
-					$this->add_render_attribute( 'wrap-link-' . $key, 'data-link', wp_json_encode($item['ekit_img_accordion_wrap_link_url']) );
+					$wrap_link = $item['ekit_img_accordion_wrap_link_url'] ?? [];
+					$wrap_link['url'] = !empty($wrap_link['url']) ? esc_url($wrap_link['url']) : '';
+
+					$this->add_render_attribute( 'wrap-link-' . $key, 'data-link', wp_json_encode($wrap_link) );
 					$this->add_render_attribute( 'wrap-link-' . $key, 'data-behavior', $active_behavior );
 					$this->add_render_attribute( 'wrap-link-' . $key, 'data-active', $item['ekit_img_accordion_active'] );
 				}

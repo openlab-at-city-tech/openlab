@@ -26,7 +26,7 @@
 		if ( $o != 'date' && $o != 'url' ) {
 			$act_field = $o . '_act';
 			if ( isset($_POST[$act_field]) ) {
-				if ( $_POST[$o] == 'no' && count($_POST[$act_field]) == 0 ) {
+				if ( $_POST[$o] == 'no' && is_array($_POST[$act_field]) && count($_POST[$act_field]) == 0 ) {
 					wp_redirect($_SERVER['REQUEST_URI'] . '&work=none');
 					die();
 				}
@@ -310,7 +310,7 @@
 		foreach ( $_POST['page_tax_list'] as $tax ) {
 			$tax = sanitize_text_field($tax);
 			$act_tax_field = $tax . '_act';
-			if ( isset($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
+			if ( isset($_POST[$act_tax_field]) && is_array($_POST[$act_tax_field]) && count($_POST[$act_tax_field]) > 0 ) {
 				$page_taxonomy = TRUE;
 				break;
 			}

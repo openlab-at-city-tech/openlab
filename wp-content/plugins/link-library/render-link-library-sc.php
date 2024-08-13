@@ -692,6 +692,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 			}
 
 			$number_of_links = 0;
+			$tag_type = 'term_id';
 
 			if ( !empty( $taglist_cpt ) || ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
 
@@ -699,9 +700,11 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 
 				if ( ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) ) {
 					$tag_array = explode( '.', sanitize_text_field( $_GET['link_tags'] ) );
+					$tag_type = 'slug';
 				} elseif( !empty( $taglist_cpt ) ) {
 					$tag_array = explode( ',', $taglist_cpt );
-				}				
+					$tag_type = 'term_id';
+				}
 			}
 
 			foreach ( $link_categories as $cat_array_index => $link_category ) {
@@ -722,7 +725,7 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 					$args['tax_query'][] = array( 
 						array(
 							'taxonomy'  => $generaloptions['tagtaxonomy'],
-							'field'     => 'slug',
+							'field'     => $tag_type,
 							'terms'     => $tag_array
 						)
 					);
@@ -1014,6 +1017,15 @@ function RenderLinkLibrary( $LLPluginClass, $generaloptions, $libraryoptions, $s
 							'column' => 'post_date',
 						),
 					);
+				}
+
+				if ( isset( $urltextfilter ) && !empty( $urltextfilter ) ) {
+					$link_query_args['meta_query']['link_url'] =
+						array(
+							'key'     => 'link_url',
+							'value'   => $urltextfilter,
+							'compare' => 'like',
+						);
 				}
 
 				if ( isset( $_GET['link_letter'] ) && !empty( $_GET['link_letter'] ) ) {

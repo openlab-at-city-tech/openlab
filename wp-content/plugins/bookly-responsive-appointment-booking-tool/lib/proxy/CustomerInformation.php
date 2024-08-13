@@ -5,7 +5,8 @@ use Bookly\Lib as BooklyLib;
 
 /**
  * @method static void addBooklyMenuItem() Add 'Customer Information' to Bookly menu.
- * @method static \stdClass[] getFields( $exclude = array() ) Get fields.
+ * @method static \stdClass[] getFields( array $exclude = array() ) Get fields.
+ * @method static \stdClass[] getOnlyFields( array $types = array() ) Get fields.
  * @method static \stdClass[] getFieldsWhichMayHaveData() Get fields which may have data (no Text Content).
  * @method static \stdClass[] getTranslatedFields() Get translated fields.
  * @method static array prepareInfoFields( array $info_fields ) Prepare information fields for customer.

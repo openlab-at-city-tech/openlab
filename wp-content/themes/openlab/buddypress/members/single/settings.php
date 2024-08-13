@@ -24,6 +24,9 @@ switch ( bp_current_action() ) :
 	case 'general'        :
 		bp_get_template_part( 'members/single/settings/general'        );
 		break;
+	case 'data'		   :
+		bp_get_template_part( 'members/single/settings/data'           );
+		break;
 	default:
 		bp_get_template_part( 'members/single/plugins'                 );
 		break;

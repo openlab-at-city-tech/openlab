@@ -299,7 +299,7 @@ abstract class Codes
         $category_image = $category ? $category->getImageUrl() : '';
 
         $company_logo = '';
-        if ( $format == 'html' ) {
+        if ( $format === 'html' ) {
             $company_logo = Common::getImageTag( Common::getAttachmentUrl( get_option( 'bookly_co_logo_attachment_id' ), 'full' ), get_option( 'bookly_co_name' ) );
             $staff_photo = Common::getImageTag( $staff_photo, $staff->getFullName() );
             $category_image = Common::getImageTag( $category_image, $category->getName() );
@@ -309,16 +309,16 @@ abstract class Codes
             'signed_up' => 0,
             'number_of_persons' => 0,
             'participants' => array(),
-            'appointment_id' => $appointment->getId(),
             'appointment_date' => $appointment_start === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_start ),
-            'appointment_time' => $appointment_start === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_start ) : $service->getStartTimeInfo() ),
             'appointment_end_date' => $appointment_end === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $appointment_end_date ),
             'appointment_end_time' => $appointment_end === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_end_date ) : $service->getEndTimeInfo() ),
+            'appointment_id' => $appointment->getId(),
+            'appointment_time' => $appointment_start === null ? __( 'N/A', 'bookly' ) : ( $service->getDuration() < DAY_IN_SECONDS ? Lib\Utils\DateTime::formatTime( $appointment_start ) : $service->getStartTimeInfo() ),
             'booking_number' => $appointment->getId(),
-            'category_name' => $service->getTranslatedCategoryName(),
-            'category_info' => $category ? $category->getTranslatedInfo() : '',
             'category_image' => $category_image,
-            'company_address' => $format == 'html' ? nl2br( get_option( 'bookly_co_address' ) ) : get_option( 'bookly_co_address' ),
+            'category_info' => $category ? $category->getTranslatedInfo() : '',
+            'category_name' => $service->getTranslatedCategoryName(),
+            'company_address' => $format === 'html' ? nl2br( get_option( 'bookly_co_address' ) ) : get_option( 'bookly_co_address' ),
             'company_logo' => $company_logo,
             'company_name' => get_option( 'bookly_co_name' ),
             'company_phone' => get_option( 'bookly_co_phone' ),
@@ -329,17 +329,17 @@ abstract class Codes
                 date( 'Ymd\THis', strtotime( $appointment_end ) ),
                 urlencode( sprintf( "%s\n%s", $service_name, $staff->getTranslatedName() ) )
             ),
-            'service_info' => $format == 'html' ? nl2br( $service->getTranslatedInfo() ) : $service->getTranslatedInfo(),
+            'internal_note' => $appointment->getInternalNote(),
+            'service_duration' => Lib\Utils\DateTime::secondsToInterval( $service->getDuration() ),
+            'service_info' => $format === 'html' ? nl2br( $service->getTranslatedInfo() ) : $service->getTranslatedInfo(),
             'service_name' => $service_name,
             'service_price' => Lib\Utils\Price::format( $service->getPrice() ),
-            'service_duration' => Lib\Utils\DateTime::secondsToInterval( $service->getDuration() ),
             'staff_email' => $staff->getEmail(),
-            'staff_info' => $format == 'html' ? nl2br( $staff->getTranslatedInfo() ) : $staff->getTranslatedInfo(),
+            'staff_info' => $format === 'html' ? nl2br( $staff->getTranslatedInfo() ) : $staff->getTranslatedInfo(),
             'staff_name' => $staff->getTranslatedName(),
             'staff_phone' => $staff->getPhone(),
             'staff_photo' => $staff_photo,
             'staff_timezone' => $staff->getTimeZone( false ) ?: '',
-            'internal_note' => $appointment->getInternalNote(),
         );
 
         if ( $appointment->getServiceId() ) {
@@ -359,14 +359,19 @@ abstract class Codes
 
         $appointment_notes = array();
         $client_names = array();
+        $client_phones = array();
         foreach ( $appointment->getCustomerAppointments( true ) as $customer_appointment ) {
             $codes['participants'][] = self::getCustomerAppointmentCodes( $customer_appointment );
             $codes['signed_up'] += $customer_appointment->getNumberOfPersons();
             $codes['number_of_persons'] += $customer_appointment->getNumberOfPersons();
+            $codes['booking_number'] = Lib\Config::groupBookingActive() ? $codes['appointment_id'] . '-' . $customer_appointment->getId() : $customer_appointment->getId();
             $appointment_notes[] = $customer_appointment->getNotes();
             $client_names[] = $customer_appointment->customer->getFullName();
+            $client_phones[] = $customer_appointment->customer->getPhone();
         }
+        $codes['coupon'] = $codes['participants'] ? $codes['participants'][0]['coupon'] : '';
         $codes['client_names'] = implode( ', ', $client_names );
+        $codes['client_phones'] = implode( ', ', $client_phones );
         $codes['appointment_notes'] = implode( ', ', $appointment_notes );
 
         return Lib\Proxy\Shared::prepareAppointmentCodes( $codes, $appointment );
@@ -399,6 +404,7 @@ abstract class Codes
             'client_name' => $customer->getFullName(),
             'client_note' => $customer->getNotes(),
             'client_phone' => $customer->getPhone(),
+            'coupon' => '',
             'number_of_persons' => $customer_appointment->getNumberOfPersons(),
             'payment_status' => $payment ? Lib\Entities\Payment::statusToString( $payment->getStatus() ) : '',
             'payment_type' => $payment ? Lib\Entities\Payment::typeToString( $payment->getType() ) : '',
@@ -419,7 +425,7 @@ abstract class Codes
         $appointment_start_date = $item->getAppointment()->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatDate( $item->getAppointment()->getStartDate() );
         $appointment_start_time = $item->getAppointment()->getStartDate() === null ? __( 'N/A', 'bookly' ) : Lib\Utils\DateTime::formatTime( $item->getAppointment()->getStartDate() );
 
-        return array(
+        $codes = array(
             'appointment_date' => $appointment_start_date,
             'appointment_time' => $item->getService()->getDuration() > DAY_IN_SECONDS && $item->getService()->getStartTimeInfo() !== null ? $item->getService()->getStartTimeInfo() : $appointment_start_time,
             'service_name' => $item->getService()->getTranslatedTitle(),
@@ -434,6 +440,10 @@ abstract class Codes
             'online_meeting_start_url' => Lib\Proxy\Shared::buildOnlineMeetingStartUrl( '', $item->getAppointment() ),
             'online_meeting_join_url' => Lib\Proxy\Shared::buildOnlineMeetingJoinUrl( '', $item->getAppointment(), $customer ),
         );
+
+        $ca = $item->getCA();
+        $ca->customer = $customer;
+        return Lib\Proxy\Shared::prepareCustomerAppointmentCodes( $codes, $ca, 'text' );
     }
 
     /**

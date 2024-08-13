@@ -66,8 +66,8 @@ class Page extends Lib\Base\Component
                     ),
                 )
             );
-
-            self::renderTemplate( 'index', compact( 'datatables' ) );
+            $voice = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_VOICE );
+            self::renderTemplate( 'index', compact( 'datatables', 'voice' ) );
         } else {
             Lib\Utils\Common::redirect( add_query_arg(
                 array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),

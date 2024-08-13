@@ -25,16 +25,16 @@ echo Common::stripScripts( $progress_tracker );
     <?php if ( Lib\Config::showFirstLastName() ) : ?>
     <div class="bookly-box bookly-table">
         <div class="bookly-form-group">
-            <label><?php echo Common::getTranslatedOption( 'bookly_l10n_label_first_name' ) ?></label>
+            <label for="bookly-first-name-<?php echo $form_id ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_first_name' ) ?></label>
             <div>
-                <input class="bookly-js-first-name" type="text" value="<?php echo esc_attr( $userData->getFirstName() ) ?>"/>
+                <input id="bookly-first-name-<?php echo $form_id ?>" class="bookly-js-first-name" type="text" value="<?php echo esc_attr( $userData->getFirstName() ) ?>"/>
             </div>
             <div class="bookly-js-first-name-error bookly-label-error"></div>
         </div>
         <div class="bookly-form-group">
-            <label><?php echo Common::getTranslatedOption( 'bookly_l10n_label_last_name' ) ?></label>
+            <label for="bookly-last-name-<?php echo $form_id ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_last_name' ) ?></label>
             <div>
-                <input class="bookly-js-last-name" type="text" value="<?php echo esc_attr( $userData->getLastName() ) ?>"/>
+                <input id="bookly-last-name-<?php echo $form_id ?>" class="bookly-js-last-name" type="text" value="<?php echo esc_attr( $userData->getLastName() ) ?>"/>
             </div>
             <div class="bookly-js-last-name-error bookly-label-error"></div>
         </div>
@@ -44,31 +44,31 @@ echo Common::stripScripts( $progress_tracker );
     <div class="bookly-box bookly-table">
         <?php if ( ! Lib\Config::showFirstLastName() ) : ?>
         <div class="bookly-form-group">
-            <label><?php echo Common::getTranslatedOption( 'bookly_l10n_label_name' ) ?></label>
+            <label for="bookly-full-name-<?php echo $form_id ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_name' ) ?></label>
             <div>
-                <input class="bookly-js-full-name" type="text" value="<?php echo esc_attr( $userData->getFullName() ) ?>"/>
+                <input id="bookly-full-name-<?php echo $form_id ?>" class="bookly-js-full-name" type="text" value="<?php echo esc_attr( $userData->getFullName() ) ?>"/>
             </div>
             <div class="bookly-js-full-name-error bookly-label-error"></div>
         </div>
         <?php endif ?>
         <div class="bookly-form-group">
-            <label><?php echo Common::getTranslatedOption( 'bookly_l10n_label_phone' ) ?></label>
+            <label for="bookly-phone-<?php echo $form_id ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_phone' ) ?></label>
             <div>
-                <input class="bookly-js-user-phone-input<?php if ( get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ) : ?> bookly-user-phone<?php endif ?>" value="<?php echo esc_attr( $userData->getPhone() ) ?>" type="text" />
+                <input id="bookly-phone-<?php echo $form_id ?>" class="bookly-js-user-phone-input<?php if ( get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ) : ?> bookly-user-phone<?php endif ?>" value="<?php echo esc_attr( $userData->getPhone() ) ?>" type="text" />
             </div>
             <div class="bookly-js-user-phone-error bookly-label-error"></div>
         </div>
         <?php if ( Lib\Config::showFirstLastName() || ( ! Lib\Config::showFirstLastName() && ! Lib\Config::showEmailConfirm() ) ) : ?>
-            <?php $self::renderTemplate( '_details_email', compact('userData') ) ?>
+            <?php $self::renderTemplate( '_details_email', compact( 'userData', 'form_id' ) ) ?>
         <?php endif ?>
         <?php if ( Lib\Config::showFirstLastName() && Lib\Config::showEmailConfirm() ) : ?>
-            <?php $self::renderTemplate( '_details_email_confirm', compact('userData') ) ?>
+            <?php $self::renderTemplate( '_details_email_confirm', compact( 'userData', 'form_id' ) ) ?>
         <?php endif ?>
     </div>
     <?php if ( ! Lib\Config::showFirstLastName() && Lib\Config::showEmailConfirm() ) : ?>
         <div class="bookly-box bookly-table">
-            <?php $self::renderTemplate( '_details_email', compact( 'userData' ) ) ?>
-            <?php $self::renderTemplate( '_details_email_confirm', compact( 'userData' ) ) ?>
+            <?php $self::renderTemplate( '_details_email', compact( 'userData', 'form_id' ) ) ?>
+            <?php $self::renderTemplate( '_details_email_confirm', compact( 'userData', 'form_id' ) ) ?>
         </div>
     <?php endif ?>
 
@@ -80,9 +80,9 @@ echo Common::stripScripts( $progress_tracker );
     <?php if ( Lib\Config::showNotes() ): ?>
         <div class="bookly-box">
             <div class="bookly-form-group">
-                <label><?php echo Common::getTranslatedOption( 'bookly_l10n_label_notes' ) ?></label>
+                <label for="bookly-notes-<?php echo $form_id ?>"><?php echo Common::getTranslatedOption( 'bookly_l10n_label_notes' ) ?></label>
                 <div>
-                    <textarea class="bookly-js-user-notes" rows="3"><?php echo esc_html( $userData->getNotes() ) ?></textarea>
+                    <textarea id="bookly-notes-<?php echo $form_id ?>" class="bookly-js-user-notes" rows="3"><?php echo esc_html( $userData->getNotes() ) ?></textarea>
                 </div>
             </div>
         </div>
@@ -90,11 +90,11 @@ echo Common::stripScripts( $progress_tracker );
     <?php if ( get_option( 'bookly_app_show_terms', false ) ): ?>
         <div class="bookly-box">
             <div class="bookly-checkbox-group" style="line-height: 28px;">
-                <input type="checkbox" class="bookly-js-terms" id="bookly-terms-<?php echo $userData->getFormId() ?>">
-                <label class="bookly-square bookly-checkbox" style="width:28px; float:left; margin-left: 0; margin-right: 5px;" for="bookly-terms-<?php echo $userData->getFormId() ?>">
+                <input type="checkbox" class="bookly-js-terms" id="bookly-terms-<?php echo $form_id ?>">
+                <label class="bookly-square bookly-checkbox" style="width:28px; float:left; margin-left: 0; margin-right: 5px;" for="bookly-terms-<?php echo $form_id ?>">
                     <i class="bookly-icon-sm"></i>
                 </label>
-                <label for="bookly-terms-<?php echo $userData->getFormId() ?>">
+                <label for="bookly-terms-<?php echo $form_id ?>">
                     <?php echo Common::getTranslatedOption( 'bookly_l10n_label_terms' ) ?>
                 </label>
             </div>

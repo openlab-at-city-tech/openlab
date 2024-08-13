@@ -66,7 +66,7 @@ class Folder_affiliate_program
                 if ($days == -1) {
                     add_option($this->pluginSlug."_hide_affiliate_box", "1");
                 } else {
-                    $date = date("Y-m-d", strtotime("+".$days." days"));
+                    $date = gmdate("Y-m-d", strtotime("+".$days." days"));
                     update_option($this->pluginSlug."_show_affiliate_box_after", $date);
                 }
             }
@@ -86,6 +86,7 @@ class Folder_affiliate_program
      */
     public function admin_notices()
     {
+        $current_date = gmdate("Y-m-d H:i:s");
         if (current_user_can('manage_options')) {
             $is_hidden = get_option($this->pluginSlug."_hide_affiliate_box");
             if ($is_hidden !== false) {
@@ -94,12 +95,12 @@ class Folder_affiliate_program
 
             $date_to_show = get_option($this->pluginSlug."_show_affiliate_box_after");
             if ($date_to_show === false || empty($date_to_show)) {
-                $date = date("Y-m-d", strtotime("+5 days"));
+                $date = gmdate("Y-m-d", strtotime("+5 days"));
                 update_option($this->pluginSlug."_show_affiliate_box_after", $date);
                 return;
             }
 
-            $current_date = date("Y-m-d");
+            $current_date = gmdate("Y-m-d");
             if ($current_date < $date_to_show) {
                 return;
             }
@@ -189,7 +190,9 @@ class Folder_affiliate_program
                 }
             </style>
             <div class="notice notice-info chaty-notice <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate <?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate">
-                <p><?php printf(esc_html__("Hi there, you've been using %s for a while now. Do you know that %s has an affiliate program? Join now and get %s ", "folders"), $this->pluginName, "<b>".$this->pluginName."</b>", "<b>".esc_html__("25% lifetime commission", "folders")."</b>") ?> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> <?php esc_html_e("Dismiss", "folders") ?></a></p>
+                <p><?php
+                    $message = esc_html__("Hi there, you've been using %1\$s for a while now. Do you know that %2\$s has an affiliate program? Join now and get %3\$s ", "folders");
+                    printf(esc_attr($message), esc_attr($this->pluginName), "<b>".esc_attr($this->pluginName)."</b>", "<b>".esc_html__("25% lifetime commission", "folders")."</b>") ?> <a href="javascript:;" class="dismiss-btn"><span class="dashicons dashicons-no-alt"></span> <?php esc_html_e("Dismiss", "folders") ?></a></p>
                 <div class="clear clearfix"></div>
                 <a class="button button-primary <?php echo esc_attr($this->pluginSlug) ?>-affiliate-btn" target="_blank" href="https://premio.io/affiliates/?utm_source=inapp&plugin=folders&domain=<?php echo esc_url($_SERVER['HTTP_HOST']) ?>"><?php esc_html_e("Tell me more", "folders") ?> <span class="dashicons dashicons-arrow-right-alt"></span></a>
             </div>
@@ -217,7 +220,7 @@ class Folder_affiliate_program
                         jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-affiliate-popup").hide();
                         jQuery(".<?php echo esc_attr($this->pluginSlug) ?>-premio-affiliate").hide();
                         jQuery.ajax({
-                            url: "<?php echo admin_url("admin-ajax.php") ?>",
+                            url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                             data: "action=<?php echo esc_attr($this->pluginSlug) ?>_affiliate_program&days="+dataDays+"&nonce=<?php echo esc_attr(wp_create_nonce($this->pluginSlug."_affiliate_program")) ?>",
                             type: "post",
                             success: function() {

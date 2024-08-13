@@ -1,48 +1,48 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -51,54 +51,54 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  __unstableStripHTML: function() { return /* reexport */ stripHTML; },
-  computeCaretRect: function() { return /* reexport */ computeCaretRect; },
-  documentHasSelection: function() { return /* reexport */ documentHasSelection; },
-  documentHasTextSelection: function() { return /* reexport */ documentHasTextSelection; },
-  documentHasUncollapsedSelection: function() { return /* reexport */ documentHasUncollapsedSelection; },
-  focus: function() { return /* binding */ build_module_focus; },
-  getFilesFromDataTransfer: function() { return /* reexport */ getFilesFromDataTransfer; },
-  getOffsetParent: function() { return /* reexport */ getOffsetParent; },
-  getPhrasingContentSchema: function() { return /* reexport */ getPhrasingContentSchema; },
-  getRectangleFromRange: function() { return /* reexport */ getRectangleFromRange; },
-  getScrollContainer: function() { return /* reexport */ getScrollContainer; },
-  insertAfter: function() { return /* reexport */ insertAfter; },
-  isEmpty: function() { return /* reexport */ isEmpty; },
-  isEntirelySelected: function() { return /* reexport */ isEntirelySelected; },
-  isFormElement: function() { return /* reexport */ isFormElement; },
-  isHorizontalEdge: function() { return /* reexport */ isHorizontalEdge; },
-  isNumberInput: function() { return /* reexport */ isNumberInput; },
-  isPhrasingContent: function() { return /* reexport */ isPhrasingContent; },
-  isRTL: function() { return /* reexport */ isRTL; },
-  isTextContent: function() { return /* reexport */ isTextContent; },
-  isTextField: function() { return /* reexport */ isTextField; },
-  isVerticalEdge: function() { return /* reexport */ isVerticalEdge; },
-  placeCaretAtHorizontalEdge: function() { return /* reexport */ placeCaretAtHorizontalEdge; },
-  placeCaretAtVerticalEdge: function() { return /* reexport */ placeCaretAtVerticalEdge; },
-  remove: function() { return /* reexport */ remove; },
-  removeInvalidHTML: function() { return /* reexport */ removeInvalidHTML; },
-  replace: function() { return /* reexport */ replace; },
-  replaceTag: function() { return /* reexport */ replaceTag; },
-  safeHTML: function() { return /* reexport */ safeHTML; },
-  unwrap: function() { return /* reexport */ unwrap; },
-  wrap: function() { return /* reexport */ wrap; }
+  __unstableStripHTML: () => (/* reexport */ stripHTML),
+  computeCaretRect: () => (/* reexport */ computeCaretRect),
+  documentHasSelection: () => (/* reexport */ documentHasSelection),
+  documentHasTextSelection: () => (/* reexport */ documentHasTextSelection),
+  documentHasUncollapsedSelection: () => (/* reexport */ documentHasUncollapsedSelection),
+  focus: () => (/* binding */ build_module_focus),
+  getFilesFromDataTransfer: () => (/* reexport */ getFilesFromDataTransfer),
+  getOffsetParent: () => (/* reexport */ getOffsetParent),
+  getPhrasingContentSchema: () => (/* reexport */ getPhrasingContentSchema),
+  getRectangleFromRange: () => (/* reexport */ getRectangleFromRange),
+  getScrollContainer: () => (/* reexport */ getScrollContainer),
+  insertAfter: () => (/* reexport */ insertAfter),
+  isEmpty: () => (/* reexport */ isEmpty),
+  isEntirelySelected: () => (/* reexport */ isEntirelySelected),
+  isFormElement: () => (/* reexport */ isFormElement),
+  isHorizontalEdge: () => (/* reexport */ isHorizontalEdge),
+  isNumberInput: () => (/* reexport */ isNumberInput),
+  isPhrasingContent: () => (/* reexport */ isPhrasingContent),
+  isRTL: () => (/* reexport */ isRTL),
+  isTextContent: () => (/* reexport */ isTextContent),
+  isTextField: () => (/* reexport */ isTextField),
+  isVerticalEdge: () => (/* reexport */ isVerticalEdge),
+  placeCaretAtHorizontalEdge: () => (/* reexport */ placeCaretAtHorizontalEdge),
+  placeCaretAtVerticalEdge: () => (/* reexport */ placeCaretAtVerticalEdge),
+  remove: () => (/* reexport */ remove),
+  removeInvalidHTML: () => (/* reexport */ removeInvalidHTML),
+  replace: () => (/* reexport */ replace),
+  replaceTag: () => (/* reexport */ replaceTag),
+  safeHTML: () => (/* reexport */ safeHTML),
+  unwrap: () => (/* reexport */ unwrap),
+  wrap: () => (/* reexport */ wrap)
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/focusable.js
 var focusable_namespaceObject = {};
 __webpack_require__.r(focusable_namespaceObject);
 __webpack_require__.d(focusable_namespaceObject, {
-  find: function() { return find; }
+  find: () => (find)
 });
 
 // NAMESPACE OBJECT: ./packages/dom/build-module/tabbable.js
 var tabbable_namespaceObject = {};
 __webpack_require__.r(tabbable_namespaceObject);
 __webpack_require__.d(tabbable_namespaceObject, {
-  find: function() { return tabbable_find; },
-  findNext: function() { return findNext; },
-  findPrevious: function() { return findPrevious; },
-  isTabbableIndex: function() { return isTabbableIndex; }
+  find: () => (tabbable_find),
+  findNext: () => (findNext),
+  findPrevious: () => (findPrevious),
+  isTabbableIndex: () => (isTabbableIndex)
 });
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/focusable.js
@@ -186,9 +186,7 @@ function isValidFocusableArea(element) {
 function find(context, {
   sequential = false
 } = {}) {
-  /* eslint-disable jsdoc/no-undefined-types */
   /** @type {NodeListOf<HTMLElement>} */
-  /* eslint-enable jsdoc/no-undefined-types */
   const elements = context.querySelectorAll(buildSelector(sequential));
   return Array.from(elements).filter(element => {
     if (!isVisible(element)) {
@@ -238,7 +236,7 @@ function isTabbableIndex(element) {
   return getTabIndex(element) !== -1;
 }
 
-/** @typedef {Element & { type?: string, checked?: boolean, name?: string }} MaybeHTMLInputElement */
+/** @typedef {HTMLElement & { type?: string, checked?: boolean, name?: string }} MaybeHTMLInputElement */
 
 /**
  * Returns a stateful reducer function which constructs a filtered array of
@@ -289,10 +287,10 @@ function createStatefulCollapseRadioGroup() {
  * sort where equal tabIndex should be left in order of their occurrence in the
  * document.
  *
- * @param {Element} element Element.
- * @param {number}  index   Array index of element.
+ * @param {HTMLElement} element Element.
+ * @param {number}      index   Array index of element.
  *
- * @return {{ element: Element, index: number }} Mapped object with element, index.
+ * @return {{ element: HTMLElement, index: number }} Mapped object with element, index.
  */
 function mapElementToObjectTabbable(element, index) {
   return {
@@ -305,9 +303,9 @@ function mapElementToObjectTabbable(element, index) {
  * An array map callback, returning an element of the given mapped object's
  * element value.
  *
- * @param {{ element: Element }} object Mapped object with element.
+ * @param {{ element: HTMLElement }} object Mapped object with element.
  *
- * @return {Element} Mapped object element.
+ * @return {HTMLElement} Mapped object element.
  */
 function mapObjectTabbableToElement(object) {
   return object.element;
@@ -318,8 +316,8 @@ function mapObjectTabbableToElement(object) {
  *
  * @see mapElementToObjectTabbable
  *
- * @param {{ element: Element, index: number }} a First object to compare.
- * @param {{ element: Element, index: number }} b Second object to compare.
+ * @param {{ element: HTMLElement, index: number }} a First object to compare.
+ * @param {{ element: HTMLElement, index: number }} b Second object to compare.
  *
  * @return {number} Comparator result.
  */
@@ -335,9 +333,9 @@ function compareObjectTabbables(a, b) {
 /**
  * Givin focusable elements, filters out tabbable element.
  *
- * @param {Element[]} focusables Focusable elements to filter.
+ * @param {HTMLElement[]} focusables Focusable elements to filter.
  *
- * @return {Element[]} Tabbable elements.
+ * @return {HTMLElement[]} Tabbable elements.
  */
 function filterTabbable(focusables) {
   return focusables.filter(isTabbableIndex).map(mapElementToObjectTabbable).sort(compareObjectTabbables).map(mapObjectTabbableToElement).reduce(createStatefulCollapseRadioGroup(), []);
@@ -345,7 +343,7 @@ function filterTabbable(focusables) {
 
 /**
  * @param {Element} context
- * @return {Element[]} Tabbable elements within the context.
+ * @return {HTMLElement[]} Tabbable elements within the context.
  */
 function tabbable_find(context) {
   return filterTabbable(find(context));
@@ -357,15 +355,12 @@ function tabbable_find(context) {
  * @param {Element} element The focusable element before which to look. Defaults
  *                          to the active element.
  *
- * @return {Element|undefined} Preceding tabbable element.
+ * @return {HTMLElement|undefined} Preceding tabbable element.
  */
 function findPrevious(element) {
-  return filterTabbable(find(element.ownerDocument.body)).reverse().find(focusable => {
-    return (
-      // eslint-disable-next-line no-bitwise
-      element.compareDocumentPosition(focusable) & element.DOCUMENT_POSITION_PRECEDING
-    );
-  });
+  return filterTabbable(find(element.ownerDocument.body)).reverse().find(focusable =>
+  // eslint-disable-next-line no-bitwise
+  element.compareDocumentPosition(focusable) & element.DOCUMENT_POSITION_PRECEDING);
 }
 
 /**
@@ -374,15 +369,12 @@ function findPrevious(element) {
  * @param {Element} element The focusable element after which to look. Defaults
  *                          to the active element.
  *
- * @return {Element|undefined} Next tabbable element.
+ * @return {HTMLElement|undefined} Next tabbable element.
  */
 function findNext(element) {
-  return filterTabbable(find(element.ownerDocument.body)).find(focusable => {
-    return (
-      // eslint-disable-next-line no-bitwise
-      element.compareDocumentPosition(focusable) & element.DOCUMENT_POSITION_FOLLOWING
-    );
-  });
+  return filterTabbable(find(element.ownerDocument.body)).find(focusable =>
+  // eslint-disable-next-line no-bitwise
+  element.compareDocumentPosition(focusable) & element.DOCUMENT_POSITION_FOLLOWING);
 }
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/utils/assert-is-defined.js
@@ -440,10 +432,18 @@ function getRectangleFromRange(range) {
       left,
       right
     } of filteredRects) {
-      if (top < furthestTop) furthestTop = top;
-      if (bottom > furthestBottom) furthestBottom = bottom;
-      if (left < furthestLeft) furthestLeft = left;
-      if (right > furthestRight) furthestRight = right;
+      if (top < furthestTop) {
+        furthestTop = top;
+      }
+      if (bottom > furthestBottom) {
+        furthestBottom = bottom;
+      }
+      if (left < furthestLeft) {
+        furthestLeft = left;
+      }
+      if (right > furthestRight) {
+        furthestRight = right;
+      }
     }
     return new window.DOMRect(furthestLeft, furthestTop, furthestRight - furthestLeft, furthestBottom - furthestTop);
   }
@@ -772,8 +772,7 @@ function getOffsetParent(node) {
   }
 
   // offsetParent is undocumented/draft.
-  return (/** @type {Node & { offsetParent: Node }} */closestElement.offsetParent
-  );
+  return /** @type {Node & { offsetParent: Node }} */closestElement.offsetParent;
 }
 
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-input-or-text-area.js
@@ -1108,7 +1107,7 @@ function isEdge(container, isReverse, onlyVertical = false) {
     }
     return container.value.length === container.selectionStart;
   }
-  if (! /** @type {HTMLElement} */container.isContentEditable) {
+  if (!container.isContentEditable) {
     return true;
   }
   const {
@@ -1199,7 +1198,7 @@ function isHorizontalEdge(container, isReverse) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/dom/build-module/dom/is-number-input.js
 /**
@@ -1318,7 +1317,9 @@ function placeCaretAtEdge(container, isReverse, x) {
     return;
   }
   const range = scrollIfNoRange(container, isReverse, () => getRange(container, isReverse, x));
-  if (!range) return;
+  if (!range) {
+    return;
+  }
   const {
     ownerDocument
   } = container;
@@ -1568,8 +1569,7 @@ function isEmpty(element) {
       } else if (!element.hasChildNodes()) {
         return true;
       }
-      return (/** @type {Element[]} */Array.from(element.childNodes).every(isEmpty)
-      );
+      return /** @type {Element[]} */Array.from(element.childNodes).every(isEmpty);
     default:
       return true;
   }
@@ -1686,7 +1686,7 @@ const embeddedContentSchema = {
     attributes: ['data', 'type', 'name', 'usemap', 'form', 'width', 'height']
   },
   video: {
-    attributes: ['src', 'poster', 'preload', 'autoplay', 'mediagroup', 'loop', 'muted', 'controls', 'width', 'height']
+    attributes: ['src', 'poster', 'preload', 'playsinline', 'autoplay', 'mediagroup', 'loop', 'muted', 'controls', 'width', 'height']
   }
 };
 

@@ -322,9 +322,7 @@ class GFFormDetail {
 						require_once( GFCommon::get_base_path() . '/form_display.php' );
 						foreach ( $form['fields'] as $field ) {
 							echo GFFormDisplay::get_field( $field, '', true, $form );
-							if ( $field->layoutSpacerGridColumnSpan && ! GFCommon::is_legacy_markup_enabled( $form ) ) {
-								printf( '<div class="spacer gfield" style="grid-column: span %d;" data-groupId="%s"></div>', $field->layoutSpacerGridColumnSpan, $field->layoutGroupId );
-							}
+							echo GFFormDisplay::get_row_spacer( $field, $form );
 						}
 					}
 					?>
@@ -778,8 +776,7 @@ class GFFormDetail {
 
 								<div class="next_button_options" id="next_button_container">
 									<input type="radio" id="next_button_text" name="next_button" value="text" onclick="TogglePageButton('next'); SetPageButton('next');" onkeypress="TogglePageButton('next'); SetPageButton('next');"/>
-									<label for="next_button_text" class="inline"><?php esc_html_e( 'Default', 'gravityforms' ); ?><?php gform_tooltip( 'next_button_text' ); ?>
-									</label>
+									<label for="next_button_text" class="inline"><?php esc_html_e( 'Default', 'gravityforms' ); ?><?php gform_tooltip( 'next_button_text' ); ?></label>
 									&nbsp;&nbsp;
 									<input type="radio" id="next_button_image" name="next_button" value="image" onclick="TogglePageButton('next'); SetPageButton('next');" onkeypress="TogglePageButton('next'); SetPageButton('next');"/>
 									<label for="next_button_image" class="inline"><?php esc_html_e( 'Image', 'gravityforms' ); ?><?php gform_tooltip( 'next_button_image' ); ?></label>
@@ -1203,24 +1200,16 @@ class GFFormDetail {
 							<li class="post_image_setting field_setting">
 								<label class="section_label"><?php esc_html_e( 'Image Metadata', 'gravityforms' ); ?> <?php gform_tooltip( 'form_field_image_meta' ); ?></label>
 								<input type="checkbox" id="gfield_display_alt" onclick="SetPostImageMeta();" onkeypress="SetPostImageMeta();"/>
-								<label for="gfield_display_alt" class="inline">
-									<?php esc_html_e( 'Alternative Text', 'gravityforms' ); ?>
-								</label>
+								<label for="gfield_display_alt" class="inline"><?php esc_html_e( 'Alternative Text', 'gravityforms' ); ?></label>
 								<br/>
 								<input type="checkbox" id="gfield_display_title" onclick="SetPostImageMeta();" onkeypress="SetPostImageMeta();"/>
-								<label for="gfield_display_title" class="inline">
-									<?php esc_html_e( 'Title', 'gravityforms' ); ?>
-								</label>
+								<label for="gfield_display_title" class="inline"><?php esc_html_e( 'Title', 'gravityforms' ); ?></label>
 								<br/>
 								<input type="checkbox" id="gfield_display_caption" onclick="SetPostImageMeta();" onkeypress="SetPostImageMeta();"/>
-								<label for="gfield_display_caption" class="inline">
-									<?php esc_html_e( 'Caption', 'gravityforms' ); ?>
-								</label>
+								<label for="gfield_display_caption" class="inline"><?php esc_html_e( 'Caption', 'gravityforms' ); ?></label>
 								<br/>
 								<input type="checkbox" id="gfield_display_description" onclick="SetPostImageMeta();" onkeypress="SetPostImageMeta();"/>
-								<label for="gfield_display_description" class="inline">
-									<?php esc_html_e( 'Description', 'gravityforms' ); ?>
-								</label>
+								<label for="gfield_display_description" class="inline"><?php esc_html_e( 'Description', 'gravityforms' ); ?></label>
 							</li>
 
 							<?php
@@ -1325,15 +1314,12 @@ class GFFormDetail {
 							<li class="name_setting field_setting">
 								<div class="custom_inputs_setting gfield_sub_setting">
 									<label for="field_name_fields" class="section_label inline">
-										<?php esc_html_e( 'Name Fields', 'gravityforms' ); ?>
-										<?php gform_tooltip( 'form_field_name_fields' ); ?>
-									</label>
-
+									    <?php esc_html_e( 'Name Fields', 'gravityforms' ); ?><?php gform_tooltip( 'form_field_name_fields' ); ?>
+                                    					</label>
 									<div id="field_name_fields_container" style="padding-top:10px;">
 										<!-- content dynamically created from js.php -->
 									</div>
 								</div>
-
 							</li>
 							<?php
 							do_action( 'gform_field_standard_settings', 1150, $form_id );
@@ -1614,7 +1600,7 @@ class GFFormDetail {
 											__( 'Industry', 'gravityforms' )                    => array( __( 'Accounting/Finance', 'gravityforms' ), __( 'Advertising/Public Relations', 'gravityforms' ), __( 'Aerospace/Aviation', 'gravityforms' ), __( 'Arts/Entertainment/Publishing', 'gravityforms' ), __( 'Automotive', 'gravityforms' ), __( 'Banking/Mortgage', 'gravityforms' ), __( 'Business Development', 'gravityforms' ), __( 'Business Opportunity', 'gravityforms' ), __( 'Clerical/Administrative', 'gravityforms' ), __( 'Construction/Facilities', 'gravityforms' ), __( 'Consumer Goods', 'gravityforms' ), __( 'Customer Service', 'gravityforms' ), __( 'Education/Training', 'gravityforms' ), __( 'Energy/Utilities', 'gravityforms' ), __( 'Engineering', 'gravityforms' ), __( 'Government/Military', 'gravityforms' ), __( 'Green', 'gravityforms' ), __( 'Healthcare', 'gravityforms' ), __( 'Hospitality/Travel', 'gravityforms' ), __( 'Human Resources', 'gravityforms' ), __( 'Installation/Maintenance', 'gravityforms' ), __( 'Insurance', 'gravityforms' ), __( 'Internet', 'gravityforms' ), __( 'Job Search Aids', 'gravityforms' ), __( 'Law Enforcement/Security', 'gravityforms' ), __( 'Legal', 'gravityforms' ), __( 'Management/Executive', 'gravityforms' ), __( 'Manufacturing/Operations', 'gravityforms' ), __( 'Marketing', 'gravityforms' ), __( 'Non-Profit/Volunteer', 'gravityforms' ), __( 'Pharmaceutical/Biotech', 'gravityforms' ), __( 'Professional Services', 'gravityforms' ), __( 'QA/Quality Control', 'gravityforms' ), __( 'Real Estate', 'gravityforms' ), __( 'Restaurant/Food Service', 'gravityforms' ), __( 'Retail', 'gravityforms' ), __( 'Sales', 'gravityforms' ), __( 'Science/Research', 'gravityforms' ), __( 'Skilled Labor', 'gravityforms' ), __( 'Technology', 'gravityforms' ), __( 'Telecommunications', 'gravityforms' ), __( 'Transportation/Logistics', 'gravityforms' ), __( 'Other', 'gravityforms' ) ),
 											__( 'Education', 'gravityforms' )                   => array( __( 'High School', 'gravityforms' ), __( 'Associate Degree', 'gravityforms' ), __( "Bachelor's Degree", 'gravityforms' ), __( 'Graduate or Professional Degree', 'gravityforms' ), __( 'Some College', 'gravityforms' ), __( 'Other', 'gravityforms' ), __( 'Prefer Not to Answer', 'gravityforms' ) ),
 											__( 'Days of the Week', 'gravityforms' )            => array( __( 'Sunday', 'gravityforms' ), __( 'Monday', 'gravityforms' ), __( 'Tuesday', 'gravityforms' ), __( 'Wednesday', 'gravityforms' ), __( 'Thursday', 'gravityforms' ), __( 'Friday', 'gravityforms' ), __( 'Saturday', 'gravityforms' ) ),
-											__( 'Months of the Year', 'gravityforms' )          => array( __( 'January', 'gravityforms' ), __( 'February', 'gravityforms' ), __( 'March', 'gravityforms' ), __( 'April', 'gravityforms' ), __( 'May', 'gravityforms' ), __( 'June', 'gravityforms' ), __( 'July', 'gravityforms' ), __( 'August', 'gravityforms' ), __( 'September', 'gravityforms' ), __( 'October', 'gravityforms' ), __( 'November', 'gravityforms' ), __( 'December', 'gravityforms' ) ),
+											__( 'Months of the Year', 'gravityforms' )          => array( __( 'January', 'gravityforms' ), __( 'February', 'gravityforms' ), __( 'March', 'gravityforms' ), __( 'April', 'gravityforms' ), esc_html_x('May', 'Full month name', 'gravityforms'), __( 'June', 'gravityforms' ), __( 'July', 'gravityforms' ), __( 'August', 'gravityforms' ), __( 'September', 'gravityforms' ), __( 'October', 'gravityforms' ), __( 'November', 'gravityforms' ), __( 'December', 'gravityforms' ) ),
 											__( 'How Often', 'gravityforms' )                   => array( __( 'Every day', 'gravityforms' ), __( 'Once a week', 'gravityforms' ), __( '2 to 3 times a week', 'gravityforms' ), __( 'Once a month', 'gravityforms' ), __( '2 to 3 times a month', 'gravityforms' ), __( 'Less than once a month', 'gravityforms' ) ),
 											__( 'How Long', 'gravityforms' )                    => array( __( 'Less than a month', 'gravityforms' ), __( '1-6 months', 'gravityforms' ), __( '1-3 years', 'gravityforms' ), __( 'Over 3 years', 'gravityforms' ), __( 'Never used', 'gravityforms' ) ),
 											__( 'Satisfaction', 'gravityforms' )                => array( __( 'Very Satisfied', 'gravityforms' ), __( 'Satisfied', 'gravityforms' ), __( 'Neutral', 'gravityforms' ), __( 'Unsatisfied', 'gravityforms' ), __( 'Very Unsatisfied', 'gravityforms' ) ),
@@ -1703,9 +1689,7 @@ class GFFormDetail {
 									onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('enableSelectAll', value); RefreshSelectedFieldPreview();"
 									onkeypress="var value = jQuery(this).is(':checked'); SetFieldProperty('enableSelectAll', value); RefreshSelectedFieldPreview();"
 								/>
-								<label for="field_select_all_choices" class="inline">
-									<?php esc_html_e( 'Enable "Select All" choice', 'gravityforms' ); ?>
-								</label>
+								<label for="field_select_all_choices" class="inline"><?php esc_html_e( 'Enable "Select All" choice', 'gravityforms' ); ?></label>
 
 							</li>
 							<?php
@@ -1720,10 +1704,7 @@ class GFFormDetail {
 									onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('enableOtherChoice', value); UpdateFieldChoices(GetInputType(field));"
 									onkeypress="var value = jQuery(this).is(':checked'); SetFieldProperty('enableOtherChoice', value); UpdateFieldChoices(GetInputType(field));"
 								/>
-								<label for="field_other_choice" class="inline">
-									<?php esc_html_e( 'Enable "other" choice', 'gravityforms' ); ?>
-									<?php gform_tooltip( 'form_field_other_choice' ); ?>
-								</label>
+								<label for="field_other_choice" class="inline"><?php esc_html_e( 'Enable "other" choice', 'gravityforms' ); ?><?php gform_tooltip( 'form_field_other_choice' ); ?></label>
 
 							</li>
 
@@ -1993,7 +1974,7 @@ class GFFormDetail {
 									</label>
 								</div>
 
-								<div id="calculation_options" style="display:none;margin-top:10px;">
+								<div id="calculation_options" style="display:none;margin-top:10px;position:relative;">
 
 									<label for="field_calculation_formula">
 										<?php esc_html_e( 'Formula', 'gravityforms' ); ?>
@@ -2001,14 +1982,13 @@ class GFFormDetail {
 									</label>
 
 									<div>
-										<?php GFCommon::insert_calculation_variables( $form['fields'], 'field_calculation_formula', '', 'FormulaContentCallback', 40 ); ?>
 										<div class="gf_calculation_buttons">
 											<?php foreach ( array( '+', '-', '/', '*', '(', ')', '.' ) as $button ) { ?>
 											<input type="button" value="<?php echo in_array( $button, array( '.' ) ) ? $button : " $button "; ?>" onclick="InsertVariable('field_calculation_formula', 'FormulaContentCallback', this.value);" onkeypress="InsertVariable('field_calculation_formula', 'FormulaContentCallback', this.value);"/>
 											<?php } ?>
 										</div>
 									</div>
-									<textarea id="field_calculation_formula" fieldheight-2"></textarea>
+									<textarea id="field_calculation_formula" class="merge-tag-support mt-position-right mt-prepopulate merge-tag-calculation" fieldheight-2"></textarea>
 									<br/>
 									<a class="gf_calculation_trigger" href="javascript:void(0)" onclick="var field = GetSelectedField(); alert(IsValidFormula(field.calculationFormula) ? '<?php echo esc_js( __( 'The formula appears to be valid.', 'gravityforms' ) ); ?>' : '<?php echo esc_js( __( 'There appears to be a problem with the formula.', 'gravityforms' ) ); ?>');" onkeypress="var field = GetSelectedField(); alert(IsValidFormula(field.calculationFormula) ? '<?php echo esc_js( __( 'The formula appears to be valid.', 'gravityforms' ) ); ?>' : '<?php echo esc_js( __( 'There appears to be a problem with the formula.', 'gravityforms' ) ); ?>');"><?php esc_html_e( 'Validate Formula', 'gravityforms' ); ?></a>
 

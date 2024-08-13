@@ -99,5 +99,5 @@ function su_shortcode_spoiler( $atts = null, $content = null ) {
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'su-shortcodes' );
 	do_action( 'su/shortcode/spoiler', $atts );
-	return '<div class="su-spoiler su-spoiler-style-' . esc_attr( $atts['style'] ) . ' su-spoiler-icon-' . esc_attr( $atts['icon'] ) . su_get_css_class( $atts ) . '"' . $atts['anchor'] . ' data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'] ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
+	return '<div class="su-spoiler su-spoiler-style-' . esc_attr( $atts['style'] ) . ' su-spoiler-icon-' . esc_attr( $atts['icon'] ) . su_get_css_class( $atts ) . '"' . $atts['anchor'] . ' data-scroll-offset="' . intval( $atts['scroll_offset'] ) . '" data-anchor-in-url="' . sanitize_key( $atts['anchor_in_url'] ) . '"><div class="su-spoiler-title" tabindex="0" role="button"><span class="su-spoiler-icon"></span>' . su_do_attribute( $atts['title'], true ) . '</div><div class="su-spoiler-content su-u-clearfix su-u-trim">' . su_do_nested_shortcodes( $content, 'spoiler' ) . '</div></div>';
 }

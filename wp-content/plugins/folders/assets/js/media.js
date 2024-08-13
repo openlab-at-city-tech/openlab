@@ -257,6 +257,7 @@ function resetSelectMediaDropDown() {
 }
 var wp = window.wp;
 var hasNoMedia = false;
+var fileUploadArray = [];
 //Upload on page Media Library (upload.php)
 if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
     wp.media.view.Modal.prototype.on('open', function() {
@@ -283,6 +284,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
         init: function () {
             if (this.uploader) {
                 this.uploader.bind('FileFiltered', function (up, file) {
+                    fileUploadArray.push(selectedFolderMediaId);
                     filesInQueue++;
                     if(jQuery(".attachments li").length) {
                         jQuery(".attachments li:first-child").before('<li id="file-'+file.id+'" class="attachment first-file-uploads temp-attachment-li uploading save-ready"> <div class="attachment-preview"> <div class="thumbnail"> <div class="media-progress-bar"><div style=""></div></div> </div> </div> </li>');
@@ -298,7 +300,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                 this.uploader.bind('BeforeUpload', function (uploader, file) {
                     var folder_id = selectedFolderMediaId;
                     var params = uploader.settings.multipart_params;
-                    folder_id = parseInt(folder_id);
+                    folder_id = parseInt(fileUploadArray[uploadedFileCount]);
                     if (folder_id > 0) {
                         params.folder_for_media = folder_id;
                     }
@@ -311,10 +313,8 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                     jQuery("#current_upload_files").text(uploadedFileCount);
                 });
                 this.uploader.bind('FileUploaded', function (fileData, file) {
-                    console.log(file);
                     if(typeof(file.attachment.attributes.url) !== 'undefined') {
                         var data = file.attachment.attributes;
-                        console.log(data);
                         var mediaHtml = "<div class='attachment-preview js--select-attachment type-"+data.type+" subtype-"+ data.subtype+" "+data.orientation+"'><div class='thumbnail'>";
                         if ( 'image' === data.type && data.size && data.size.url ) {
                             mediaHtml += '<div class="centered"><img src="'+data.size.url+'" draggable="false" alt="" /></div>';
@@ -345,6 +345,12 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                     if(error.file && error.file.id && jQuery("#file-"+error.file.id).length) {
                         jQuery("#file-"+error.file.id).remove();
                     }
+
+                    var file_type = error.file.type;
+                    if(file_type.indexOf("svg") != -1 && !jQuery(".upload-error.fldr-svg-error").length > 0 ) {
+                        var success_msg = '<div class="upload-error fldr-svg-error"><strong>'+folders_media_options.lang.activate_msg+'</strong><br /><a target="_blank" href="'+folders_media_options.activate_url+'"> '+folders_media_options.lang.activate_key+' 🎉</a></div>';
+                        jQuery(".media-sidebar .upload-errors").append(success_msg);
+                    }
                 });
                 this.uploader.bind('UploadProgress', function (up, file) {
                     if(parseInt(file.percent) < 100) {
@@ -368,10 +374,15 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
                         jQuery(".folder-meter").css("width", "0%");
                         filesInQueue = 0;
                         uploadedFileCount = 0;
-                    }, 100);
+                        fileUploadArray = [];
+                    }, 1250);
 
                     resetDDCounter();
                     if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
+                        folderSelectedAttachmentID = "";
+                        if(jQuery(".folder-modal ul.attachments li.selected").length) {
+                            folderSelectedAttachmentID = jQuery(".folder-modal ul.attachments li.selected").data("id");
+                        }
                         wp_media.media.frame.content.get().collection.props.set({ignore: (+ new Date())});
                         wp_media.media.frame.content.get().options.selection.reset();
                     } else {
@@ -459,3 +470,5 @@ jQuery(document).on("click", "#custom-folder-media-popup-form", function (e) {
 jQuery(document).on("click", ".media-popup-form", function (e) {
     e.stopPropagation();
 });
+
+

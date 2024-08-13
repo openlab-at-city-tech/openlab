@@ -5,29 +5,55 @@ namespace Advanced_Sidebar_Menu\Menus;
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\Traits\Memoize;
 use Advanced_Sidebar_Menu\Walkers\Category_Walker;
+use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
 
 /**
  * Category menu.
  *
  * @author OnPoint Plugins
+ *
+ * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ *
+ * @phpstan-type CATEGORY_SETTINGS array{
+ *     'display-posts'?: string,
+ *     display_all?: ''|'checked',
+ *     exclude: string,
+ *     include_childless_parent?: ''|'checked',
+ *     include_parent?: ''|'checked',
+ *     levels: numeric-string|int,
+ *     new_widget: 'widget'|'list',
+ *     single: ''|'checked',
+ *     taxonomy?: string,
+ *     title?: string
+ * }
+ *
+ * @extends Menu_Abstract<CATEGORY_SETTINGS>
+ * @implements Menu<CATEGORY_SETTINGS, Category>
  */
-class Category extends Menu_Abstract {
+class Category extends Menu_Abstract implements Menu {
 	use Memoize;
 
-	const WIDGET = 'category';
+	public const WIDGET = 'category';
 
-	const DISPLAY_ON_SINGLE     = 'single';
-	const EACH_CATEGORY_DISPLAY = 'new_widget';
+	public const DISPLAY_ON_SINGLE     = 'single';
+	public const EACH_CATEGORY_DISPLAY = 'new_widget';
 
-	const EACH_LIST   = 'list';
-	const EACH_WIDGET = 'widget';
+	public const EACH_LIST   = 'list';
+	public const EACH_WIDGET = 'widget';
 
 	/**
 	 * Top_level_term.
 	 *
-	 * @var \WP_Term
+	 * @var ?\WP_Term
 	 */
 	public $top_level_term;
+
+	/**
+	 * Store current menu instance.
+	 *
+	 * @var ?Category
+	 */
+	protected static $current_menu;
 
 
 	/**
@@ -38,7 +64,7 @@ class Category extends Menu_Abstract {
 	 *
 	 * @return void
 	 */
-	public function set_current_top_level_term( \WP_Term $term ) {
+	public function set_current_top_level_term( \WP_Term $term ): void {
 		$this->top_level_term = $term;
 	}
 
@@ -147,22 +173,21 @@ class Category extends Menu_Abstract {
 	 *
 	 * @return \WP_Term[]
 	 */
-	public function get_child_terms() {
-		$terms = get_terms(
-			\array_filter(
-				[
-					'taxonomy' => $this->get_taxonomy(),
-					'parent'   => $this->get_top_parent_id(),
-					'orderby'  => $this->get_order_by(),
-					'order'    => $this->get_order(),
-				]
-			)
-		);
-		if ( is_wp_error( $terms ) ) {
-			return [];
+	public function get_child_terms(): array {
+		$terms = [];
+		if ( null !== $this->get_top_parent_id() && ! $this->is_excluded( $this->get_top_parent_id() ) ) {
+			$terms = get_terms( \array_filter( [
+				'taxonomy' => $this->get_taxonomy(),
+				'parent'   => $this->get_top_parent_id(),
+				'orderby'  => $this->get_order_by(),
+				'order'    => $this->get_order(),
+			] ) );
+			if ( is_wp_error( $terms ) ) {
+				$terms = [];
+			}
 		}
 
-		return apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', \array_filter( $terms ), $this );
+		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', \array_filter( $terms ), $this );
 	}
 
 
@@ -256,8 +281,8 @@ class Category extends Menu_Abstract {
 	 *
 	 * @return ?int
 	 */
-	public function get_top_parent_id() {
-		if ( empty( $this->top_level_term->term_id ) ) {
+	public function get_top_parent_id(): ?int {
+		if ( null === $this->top_level_term || $this->top_level_term->term_id < 1 ) {
 			return null;
 		}
 
@@ -268,10 +293,12 @@ class Category extends Menu_Abstract {
 	/**
 	 * Get key to order the menu items by.
 	 *
+	 * 'term_id'|'name'|'count'|'slug'
+	 *
 	 * @return string
 	 */
-	public function get_order_by() {
-		return apply_filters( 'advanced-sidebar-menu/menus/category/order-by', 'name', $this->args, $this->instance, $this );
+	public function get_order_by(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/category/order-by', 'name', $this->args, $this->instance, $this );
 	}
 
 
@@ -280,8 +307,8 @@ class Category extends Menu_Abstract {
 	 *
 	 * @return string
 	 */
-	public function get_order() {
-		return apply_filters( 'advanced-sidebar-menu/menus/category/order', 'ASC', $this->args, $this->instance, $this );
+	public function get_order(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/category/order', 'ASC', $this->args, $this->instance, $this );
 	}
 
 
@@ -301,6 +328,20 @@ class Category extends Menu_Abstract {
 		}
 
 		return apply_filters( 'advanced-sidebar-menu/menus/category/is-displayed', $display, $this->args, $this->instance, $this );
+	}
+
+
+	/**
+	 * Is this term excluded from this menu?
+	 *
+	 * @param int|string $id ID of the object.
+	 *
+	 * @return bool
+	 */
+	public function is_excluded( $id ): bool {
+		$excluded = \in_array( (int) $id, $this->get_excluded_ids(), true );
+
+		return (bool) apply_filters( 'advanced-sidebar-menu/menus/category/is-excluded', $excluded, $id, $this->get_widget_args(), $this->get_widget_instance(), $this );
 	}
 
 
@@ -349,13 +390,13 @@ class Category extends Menu_Abstract {
 	/**
 	 * Is a term our current top level term?
 	 *
-	 * @param \WP_Term $term - Term to check against.
-	 *
 	 * @since 8.8.0
+	 *
+	 * @param \WP_Term $term - Term to check against.
 	 *
 	 * @return bool
 	 */
-	public function is_current_top_level_term( \WP_Term $term ) {
+	public function is_current_top_level_term( \WP_Term $term ): bool {
 		if ( null === $this->top_level_term ) {
 			return false;
 		}
@@ -469,9 +510,9 @@ class Category extends Menu_Abstract {
 	/**
 	 * Is a term the currently viewed term?
 	 *
-	 * @param \WP_Term $term - Term to check against.
-	 *
 	 * @since 8.8.0
+	 *
+	 * @param \WP_Term $term - Term to check against.
 	 *
 	 * @return bool
 	 */
@@ -496,7 +537,7 @@ class Category extends Menu_Abstract {
 
 		if ( $this->is_current_top_level_term( $term ) || \in_array( $term->term_id, $this->get_current_ancestors(), true ) ) {
 			$children = get_term_children( $term->term_id, $this->get_taxonomy() );
-			if ( ! empty( $children ) ) {
+			if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
 				$return = true;
 			}
 		}
@@ -515,7 +556,7 @@ class Category extends Menu_Abstract {
 	public function has_children( \WP_Term $term ) {
 		$return = false;
 		$children = get_term_children( $term->term_id, $this->get_taxonomy() );
-		if ( ! empty( $children ) ) {
+		if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
 			$return = true;
 		}
 
@@ -557,14 +598,19 @@ class Category extends Menu_Abstract {
 		$close_menu = false;
 		$output = '';
 
-		foreach ( $this->get_top_level_terms() as $_cat ) {
+		foreach ( $this->get_top_level_terms() as $i => $_cat ) {
 			$this->set_current_top_level_term( $_cat );
 			if ( ! $this->is_term_displayed( $_cat ) ) {
 				continue;
 			}
 
-			if ( ! $menu_open || ( static::EACH_WIDGET === $this->instance[ static::EACH_CATEGORY_DISPLAY ] ) ) {
-				echo $this->args['before_widget']; //phpcs:ignore
+			if ( ! $menu_open || self::EACH_WIDGET === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
+				if ( $i > 0 && isset( $this->args['widget_id'] ) ) {
+					$this->args['id_increment'] = '-' . ( $i + 1 );
+					echo \str_replace( "id=\"{$this->args['widget_id']}\"", "id=\"{$this->args['widget_id']}{$this->args['id_increment']}\"", $this->args['before_widget'] ); //phpcs:ignore WordPress.Security
+				} else {
+					echo $this->args['before_widget']; //phpcs:ignore WordPress.Security
+				}
 
 				do_action( 'advanced-sidebar-menu/menus/category/render', $this );
 
@@ -574,7 +620,7 @@ class Category extends Menu_Abstract {
 
 					$menu_open = true;
 					$close_menu = true;
-					if ( static::EACH_LIST === $this->instance[ static::EACH_CATEGORY_DISPLAY ] ) {
+					if ( self::EACH_LIST === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
 						$close_menu = false;
 					}
 				}
@@ -606,9 +652,9 @@ class Category extends Menu_Abstract {
 	 * The `advanced-sidebar-menu/menus/category/close-menu` filter lets
 	 * us target the inner content of each `<div>`.
 	 *
-	 * @param string $output - Contents of the widget `<div>`.
-	 *
 	 * @since   9.0.0
+	 *
+	 * @param string $output - Contents of the widget `<div>`.
 	 *
 	 * @return void
 	 */
@@ -618,5 +664,34 @@ class Category extends Menu_Abstract {
 		do_action( 'advanced-sidebar-menu/menus/category/render/after', $this );
 		echo $this->args['after_widget'];
 		//phpcs:enable WordPress.Security.EscapeOutput
+	}
+
+
+	/**
+	 * Get current menu instance.
+	 *
+	 * @return Category|null
+	 */
+	public static function get_current(): ?Category {
+		return static::$current_menu;
+	}
+
+
+	/**
+	 * Constructs a new instance of this class.
+	 *
+	 * @phpstan-param CATEGORY_SETTINGS $widget_instance
+	 * @phpstan-param WIDGET_ARGS       $widget_args
+	 *
+	 * @param array                     $widget_instance - Widget settings.
+	 * @param array                     $widget_args     - Widget registration args.
+	 *
+	 * @return Category
+	 */
+	public static function factory( array $widget_instance, array $widget_args ): Category {
+		$menu = new static( $widget_instance, $widget_args );
+		static::$current_menu = $menu;
+
+		return $menu;
 	}
 }

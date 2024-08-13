@@ -22,6 +22,15 @@ aside.xposter-sales {
 	margin-top: 10px;
 }
 
+.wpt-connection-form .auth-fields {
+	margin: .5rem 0;
+	padding: .25rem 1rem;
+	width:fit-content;
+	background:rgba( 0,0,0,.04 );
+	box-shadow: 3px 3px 3px #ddd;
+	border: 1px solid #bbb;
+}
+
 .wpt-connection-form label {
 	font-weight: 600;
 	display: block;
@@ -166,12 +175,29 @@ label[for="wpt_license_key"] {
 	width: 100%;
 }
 
+#wpt_settings_page .inline-labels label {
+	vertical-align: inherit;
+}
+
+#wp-to-twitter .xposter-connection.dismissible {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
 #wpt_settings_page .tabs {
 	margin: .5em 0 0;
 	padding: 0 4px;
 	position: relative;
 	top: 1px;
 	font-size: 1.1em;
+}
+
+#wpt_settings_page .wpt-has-link {
+	display: flex;
+	align-items: center;
+	gap: 12px;
 }
 
 #wpt_settings_page .tabs li {
@@ -217,13 +243,15 @@ label[for="wpt_license_key"] {
 }
 
 #wp-to-twitter  .wpt-pro-tab {
-	background: #213e7f;
-	color: #fff;
+	background: #fcb000;
+	color: #000;
+	border-color: #000;
 }
 
 #wp-to-twitter .wpt-pro-tab:hover, #wp-to-twitter .wpt-pro-tab:focus {
-	background: #fff;
-	color: #213e7f;
+	background: #000;
+	color: #fcb000;
+	border-color: #fcb000;
 }
 
 .wpt-permissions .wptab {

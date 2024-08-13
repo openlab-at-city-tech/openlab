@@ -41,12 +41,23 @@ class GF_Field_Dropbox extends GF_Field {
 		if ( $this->is_form_editor() ) {
 			return sprintf(
 				'<div class="ginput_container"><p>%s</p></div>',
-				esc_html__( 'Dropbox Upload field is unavailable because the Dropbox Add-On is not configured using a custom Dropbox App.', 'gravityformsdropbox' )
+				$this->get_field_sidebar_messages()
 			);
 		}
 
-		return;
+		return '';
 
+	}
+
+	/**
+	 * The message to be displayed in the form editor sidebar.
+	 *
+	 * @since 3.2
+	 *
+	 * @return array|array[]|string
+	 */
+	public function get_field_sidebar_messages() {
+		return esc_html__( 'Dropbox Upload field is unavailable because the Dropbox Add-On is not configured using a custom Dropbox App.', 'gravityformsdropbox' );
 	}
 
 	/**

@@ -13,7 +13,7 @@
         }
     ],
     "require": {
-        "imagely/pope-framework": "v0.18",
+        "imagely/pope-framework": "v0.19",
         "ezyang/htmlpurifier": "^4.17"
     },
     "require-dev": {

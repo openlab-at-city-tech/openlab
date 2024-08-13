@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jpf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ12_9\al3_0_2;
+namespace Automattic\Jetpack\Autoloader\jpf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6\al3_0_8;
 
  // phpcs:ignore
 
@@ -79,7 +79,7 @@ class PHP_Autoloader {
 	public static function load_class( $class_name ) {
 		global $jetpack_autoloader_loader;
 		if ( ! isset( $jetpack_autoloader_loader ) ) {
-			return;
+			return false;
 		}
 
 		$file = $jetpack_autoloader_loader->find_class_file( $class_name );

@@ -8,42 +8,15 @@ abstract class Log
     const ACTION_CREATE = 'create';
     const ACTION_UPDATE = 'update';
     const ACTION_DELETE = 'delete';
-    const ACTION_ERROR  = 'error';
+    const ACTION_ERROR = 'error';
+    const ACTION_DEBUG = 'debug';
 
-    /**
-     * @param        $entity
-     * @param string $ref
-     * @param string $comment
-     */
-    public static function createEntity( $entity, $ref = null, $comment = null )
+    const OPTION_OUTLOOK = 'bookly_temporary_logs_outlook';
+    const OPTION_GOOGLE = 'bookly_temporary_logs_google';
+
+    public static function getTypes()
     {
-        self::common( self::ACTION_CREATE, $entity->getTableName(), $entity->getId(), json_encode( $entity->getFields() ), $ref, $comment );
-    }
-
-    /**
-     * @param        $entity
-     * @param string $ref
-     * @param string $comment
-     */
-    public static function updateEntity( $entity, $ref = null, $comment = null )
-    {
-        $modified = array();
-        $fields = $entity->getFields();
-        foreach ( array_keys( $entity->getModified() ) as $key ) {
-            $modified[ $key ] = $fields[ $key ];
-        }
-
-        self::common( self::ACTION_UPDATE, $entity->getTableName(), $entity->getId(), json_encode( $modified ), $ref, $comment );
-    }
-
-    /**
-     * @param        $entity
-     * @param string $ref
-     * @param string $comment
-     */
-    public static function deleteEntity( $entity, $ref = null, $comment = null )
-    {
-        self::common( self::ACTION_DELETE, $entity->getTableName(), $entity->getId(), json_encode( $entity->getFields() ), $ref, $comment );
+        return array( self::OPTION_OUTLOOK, self::OPTION_GOOGLE );
     }
 
     /**
@@ -57,10 +30,6 @@ abstract class Log
      */
     public static function common( $action = null, $target = null, $target_id = null, $details = null, $ref = null, $comment = null )
     {
-        if ( ! get_option( 'bookly_logs_enabled' ) ) {
-            return false;
-        }
-
         self::put( $action, $target, $target_id, $details, $ref, $comment );
     }
 
@@ -72,10 +41,6 @@ abstract class Log
      */
     public static function fromBacktrace( $entity, $action = self::ACTION_UPDATE, $comment = '' )
     {
-        if ( ! get_option( 'bookly_logs_enabled' ) ) {
-            return false;
-        }
-
         try {
             if ( $entity->isLoggable() ) {
                 $debug_backtrace = debug_backtrace();
@@ -86,7 +51,7 @@ abstract class Log
                     }
                 }
                 $ref = '';
-                for ( $offset = 3; $offset < 6; $offset ++ ) {
+                for ( $offset = 3; $offset < 6; $offset++ ) {
                     if ( isset( $debug_backtrace[ $key + $offset ] ) && ( $trace = $debug_backtrace[ $key + $offset ] ) && $trace['function'] !== 'call_user_func' ) {
                         $ref .= ( isset( $trace['class'] ) ? $trace['class'] : '' ) . ( isset( $trace['type'] ) ? $trace['type'] : ' ' ) . ( isset( $trace['function'] ) ? $trace['function'] : '' ) . "\n";
                     }
@@ -154,7 +119,7 @@ abstract class Log
      * @param string $comment
      * @return void
      */
-    public static function put( $action = null, $target = null, $target_id = null, $details = null, $ref = null, $comment = null )
+    public static function put( $action = 'debug', $target = null, $target_id = null, $details = null, $ref = null, $comment = null )
     {
         $log = new Lib\Entities\Log();
         $log
@@ -167,6 +132,18 @@ abstract class Log
             ->setDetails( $details )
             ->setCreatedAt( current_time( 'mysql' ) )
             ->save();
+    }
+
+    public static function tempPut( $option, $target = null, $target_id = null, $details = null, $comment = null )
+    {
+        if ( get_option( $option ) ) {
+            self::put( self::ACTION_DEBUG, $target, $target_id, $details, ucfirst( self::getLogOptionTitle( $option ) ), $comment );
+        }
+    }
+
+    public static function getLogOptionTitle( $option )
+    {
+        return substr( $option, strrpos( $option, '_' ) + 1 );
     }
 
     /**

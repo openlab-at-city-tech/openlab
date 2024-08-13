@@ -382,7 +382,22 @@ class GFCommon {
 		}
 
 		return false;
+	}
 
+	/**
+	 * Strips HTML tags using wp_strip_all_tags from a string that may contain unicode.
+	 *
+     * @since 2.8.5
+     *
+	 * @param string $string JSON string.
+	 *
+	 * @return string
+	 */
+	public static function strip_all_tags_from_json_string( $string ) {
+		$decoded_json   = json_decode( $string, true );
+		$reencoded_json = json_encode( $decoded_json );
+
+		return wp_strip_all_tags( $reencoded_json );
 	}
 
 	//Returns the url of the plugin's root folder
@@ -957,38 +972,29 @@ class GFCommon {
 	}
 
 	public static function insert_calculation_variables( $fields, $element_id, $onchange = '', $callback = '', $max_label_size = 40 ) {
-
 		if ( $fields == null ) {
 			$fields = array();
 		}
-
 		$onchange = empty( $onchange ) ? sprintf( "InsertVariable('%s', '%s');", esc_js( $element_id ), esc_js( $callback ) ) : $onchange;
 		$class    = 'gform_merge_tags';
 		?>
 
-		<select data-js-reload="gforms-calculation-variables" id="<?php echo esc_attr( $element_id ); ?>_variable_select" onchange="<?php echo $onchange ?>" class="<?php echo esc_attr( $class ) ?>">
+		<select data-js-reload="gforms-calculation-variables" id="<?php echo esc_attr( $element_id ); ?>_variable_select" class="<?php echo esc_attr( $class ); ?>" onchange="<?php echo $onchange; ?>">
 			<option value=''><?php esc_html_e( 'Insert Merge Tag', 'gravityforms' ); ?></option>
 			<optgroup label="<?php esc_attr_e( 'Allowable form fields', 'gravityforms' ); ?>">
-
-				<?php
-				foreach ( $fields as $field ) {
-
+				<?php foreach ( $fields as $field ) {
 					if ( ! self::is_valid_for_calcuation( $field ) ) {
 						continue;
 					}
 
 					if ( RGFormsModel::get_input_type( $field ) == 'checkbox' ) {
-						foreach ( $field->inputs as $input ) {
-							?>
-							<option value='<?php echo esc_attr( '{' . esc_html( GFCommon::get_label( $field, $input['id'] ) ) . ':' . $input['id'] . '}' ); ?>'><?php echo esc_html( GFCommon::get_label( $field, $input['id'] ) ) ?></option>
-							<?php
-						}
+						foreach ( $field->inputs as $input ) { ?>
+							<option value='<?php echo esc_attr( '{' . esc_html( GFCommon::get_label( $field, $input['id'] ) ) . ':' . $input['id'] . '}' ); ?>'><?php echo esc_html( GFCommon::get_label( $field, $input['id'] ) ); ?></option>
+						<?php }
 					} else {
 						self::insert_field_variable( $field, $max_label_size );
 					}
-				}
-				?>
-
+				} ?>
 			</optgroup>
 
 			<?php
@@ -997,8 +1003,7 @@ class GFCommon {
 
 			$custom_merge_tags = apply_filters( 'gform_custom_merge_tags', array(), $form_id, $fields, $element_id );
 
-			if ( is_array( $custom_merge_tags ) && ! empty( $custom_merge_tags ) ) {
-				?>
+			if ( is_array( $custom_merge_tags ) && ! empty( $custom_merge_tags ) ) { ?>
 
 				<optgroup label="<?php esc_attr_e( 'Custom', 'gravityforms' ); ?>">
 
@@ -1146,7 +1151,7 @@ class GFCommon {
 
 		if ( false !== strpos( $text, 'merge_tag' ) ) {
 			// Replacing conditional merge tag variables: [gravityforms action="conditional" merge_tag="{Other Services:4}" ....
-			preg_match_all( '/merge_tag\s*=\s*["|\']({[^{]*?:(\d+(\.\d+)?)(:(.*?))?})["|\']/mi', $text, $matches, PREG_SET_ORDER );
+			preg_match_all( '/merge_tag\s*=\s*["|\']({[^{]*?:(\d+(\.\w+)?)(:(.*?))?})["|\']/mi', $text, $matches, PREG_SET_ORDER );
 			if ( is_array( $matches ) ) {
 				foreach ( $matches as $match ) {
 					$input_id = $match[2];
@@ -1177,7 +1182,7 @@ class GFCommon {
 		}
 
 		// Replacing field variables: {FIELD_LABEL:FIELD_ID} {My Field:2}.
-		preg_match_all( '/{[^{]*?:(\d+(\.\d+)?)(:(.*?))?}/mi', $text, $matches, PREG_SET_ORDER );
+		preg_match_all( '/{[^{]*?:(\d+(\.\w+)?)(:(.*?))?}/mi', $text, $matches, PREG_SET_ORDER );
 		if ( is_array( $matches ) ) {
 			foreach ( $matches as $match ) {
 				$input_id = $match[1];
@@ -1359,11 +1364,12 @@ class GFCommon {
 
 	public static function get_ul_classes( $form ) {
 
-		$description_class = rgar( $form, 'descriptionPlacement' ) == 'above' ? 'description_above' : 'description_below';
-		$sublabel_class    = rgar( $form, 'subLabelPlacement' ) == 'above' ? 'form_sublabel_above' : 'form_sublabel_below';
 		$label_class       = rgempty( 'labelPlacement', $form ) ? 'top_label' : rgar( $form, 'labelPlacement' );
+		$description_class = ( rgar( $form, 'descriptionPlacement' ) == 'above' ) && ( $label_class == 'top_label' ) ? 'description_above' : 'description_below';
+		$validation_class  = rgar( $form, 'validationPlacement' ) == 'above' ? 'validation_above' : 'validation_below';
+		$sublabel_class    = rgar( $form, 'subLabelPlacement' ) == 'above' ? 'form_sublabel_above' : 'form_sublabel_below';
 
-		$css_class = preg_replace( '/\s+/', ' ', "gform_fields {$label_class} {$sublabel_class} {$description_class}" ); //removing extra spaces
+		$css_class = preg_replace( '/\s+/', ' ', "gform_fields {$label_class} {$sublabel_class} {$description_class} {$validation_class}" ); //removing extra spaces
 
 		return $css_class;
 	}
@@ -2002,12 +2008,12 @@ class GFCommon {
 		}
 
 		// Running through variable replacement
-		$to        = GFCommon::replace_variables( $email_to, $form, $lead, false, false, false, 'text', $data );
+		$to        = GFCommon::remove_extra_commas( GFCommon::replace_variables( $email_to, $form, $lead, false, false, false, 'text', $data ) );
 		$subject   = GFCommon::replace_variables( rgar( $notification, 'subject' ), $form, $lead, false, false, false, 'text', $data );
 		$from      = GFCommon::replace_variables( rgar( $notification, 'from' ), $form, $lead, false, false, false, 'text', $data );
 		$from_name = GFCommon::replace_variables( rgar( $notification, 'fromName' ), $form, $lead, false, false, false, 'text', $data );
-		$bcc       = GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, false, 'text', $data );
-		$replyTo   = GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, false, 'text', $data );
+		$bcc       = GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'bcc' ), $form, $lead, false, false, false, 'text', $data ) );
+		$replyTo   = GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'replyTo' ), $form, $lead, false, false, false, 'text', $data ) );
 
 		/**
 		 * Enable the CC header for the notification.
@@ -2021,7 +2027,7 @@ class GFCommon {
 		$enable_cc = gf_apply_filters( array( 'gform_notification_enable_cc', $form['id'], $notification['id'] ), false, $notification, $form );
 
 		// Set CC if enabled.
-		$cc = $enable_cc ? GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, false, 'text', $data ) : null;
+		$cc = $enable_cc ? GFCommon::remove_extra_commas( GFCommon::replace_variables( rgar( $notification, 'cc' ), $form, $lead, false, false, false, 'text', $data ) ) : null;
 
 		$message_format = rgempty( 'message_format', $notification ) ? 'html' : rgar( $notification, 'message_format' );
 
@@ -2044,31 +2050,34 @@ class GFCommon {
 		// Add attachment fields.
 		if ( rgar( $notification, 'enableAttachments', false ) ) {
 
-			// Get file upload fields and upload root.
 			$upload_fields = GFCommon::get_fields_by_type( $form, array( 'fileupload' ) );
-			$upload_root   = GFFormsModel::get_upload_root();
 
 			foreach ( $upload_fields as $upload_field ) {
 
 				// Get field value.
-				$attachment_urls = rgar( $lead, $upload_field->id );
+				$field_value = rgar( $lead, $upload_field->id );
 
 				// If field value is empty, skip.
-				if ( empty( $attachment_urls ) ) {
+				if ( empty( $field_value ) ) {
 					self::log_debug( __METHOD__ . '(): No file(s) to attach for field #' . $upload_field->id );
 					continue;
 				}
 
-				// Convert to array.
-				$attachment_urls = $upload_field->multipleFiles ? json_decode( $attachment_urls, true ) : array( $attachment_urls );
+				$files = json_decode( $field_value, true );
+				if ( ! is_array( $files ) ) {
+					$files = array( $field_value );
+				}
 
-				self::log_debug( __METHOD__ . '(): Attaching file(s) for field #' . $upload_field->id . '. ' . print_r( $attachment_urls, true ) );
+				self::log_debug( __METHOD__ . '(): Attaching file(s) for field #' . $upload_field->id . '. ' . print_r( $files, true ) );
 
 				// Loop through attachment URLs; replace URL with path and add to attachments.
-				foreach ( $attachment_urls as $attachment_url ) {
-					$attachment_url = preg_replace( '|^(.*?)/gravity_forms/|', $upload_root, $attachment_url );
-					$attachments[]  = $attachment_url;
-				}
+				foreach ( $files as $file ) {
+					if ( is_string( $file ) ) {
+						$attachments[] = GFFormsModel::get_physical_file_path( $file, rgar( $lead, 'id' ) );
+					} elseif ( ! empty( $file['tmp_path'] ) && file_exists( $file['tmp_path'] ) ) {
+						$attachments[] = $file['tmp_path'];
+					}
+ 				}
 
 			}
 
@@ -2098,6 +2107,23 @@ class GFCommon {
 		self::send_email( $from, $to, $bcc, $replyTo, $subject, $message, $from_name, $message_format, $attachments, $lead, $notification, $cc );
 
 		return compact( 'to', 'from', 'bcc', 'replyTo', 'subject', 'message', 'from_name', 'message_format', 'attachments', 'cc' );
+	}
+
+	/**
+	 * Strip extra commas from email headers.
+	 *
+	 * If an email field has multiple merge tags, and not all of the fields are
+	 * filled out, we can end up with extra commas that break the header.
+	 *
+	 * @since 2.8.6
+	 *
+	 * @param $email
+	 *
+	 * @return string
+	 */
+	public static function remove_extra_commas( $email ) {
+		//return rtrim( preg_replace( '/,+/', ',', $email ), ',' );
+		return ltrim( rtrim( preg_replace( '/,+/', ',', $email ), ',' ), ',' );
 	}
 
 	public static function send_notifications( $notification_ids, $form, $lead, $do_conditional_logic = true, $event = 'form_submission', $data = array() ) {
@@ -5405,6 +5431,7 @@ Content-Type: text/html;
 		$gf_vars['confirmationInvalidRedirect']      = __( 'Please enter a URL.', 'gravityforms' );
 		$gf_vars['confirmationInvalidName']          = __( 'Please enter a confirmation name.', 'gravityforms' );
 		$gf_vars['confirmationDeleteField']          = __( "Warning! Deleting this field will also delete all entry data associated with it. 'Cancel' to stop. 'OK' to delete.", 'gravityforms' );
+		$gf_vars['confirmationDeleteDisplayField']   = __( "Warning! You're about to delete this field. 'Cancel' to stop. 'OK' to delete.", 'gravityforms' );
 
 		$gf_vars['conditionalLogicDependency']           = __( "Warning! This form contains conditional logic dependent upon this field. Deleting this field will deactivate those conditional logic rules and also delete all entry data associated with the field. 'OK' to delete, 'Cancel' to abort.", 'gravityforms' );
 		$gf_vars['conditionalLogicDependencyChoice']     = __( "This form contains conditional logic dependent upon this choice. Are you sure you want to delete this choice? 'OK' to delete, 'Cancel' to abort.", 'gravityforms' );
@@ -6669,7 +6696,7 @@ Content-Type: text/html;
 		$current_locale = version_compare( get_bloginfo( 'version', 'display' ), '5.0', '>=' ) ? determine_locale() : self::legacy_determine_locale();
 		$locale         = apply_filters( 'plugin_locale', $current_locale, $domain );
 
-		if ( $locale != 'en_US' && ! is_textdomain_loaded( $domain ) ) {
+		if ( ! empty( $domain ) && $locale != 'en_US' && ! is_textdomain_loaded( $domain ) ) {
 			if ( empty( $basename ) ) {
 				$basename = plugin_basename( self::get_base_path() );
 			}

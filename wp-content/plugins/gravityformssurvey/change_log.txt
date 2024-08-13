@@ -1,3 +1,14 @@
+### 4.0.0 | 2024-01-11
+- Added support for conditional logic to Survey fields.
+- Fixed a bug that prevents Rank choices from being draggable on iPads.
+
+
+### 3.9 | 12-07-2023
+- Fixed an issue where the Rating field labels are being partially displayed.
+- Fixed an issue where Likert fields with more than 10 columns get an incorrect aria-labelledby attribute.
+- Updated styles to be compatible with Theme Framework changes in Gravity Forms 2.8.0.
+
+
 ### 3.8 | 2023-01-11
 - Added support for the Theme Framework and implemented new Orbital styles.
 - Fixed an accessibility issue with the Likert field by adding an aria-labelledby attribute to radio inputs.

@@ -983,6 +983,10 @@ class LegacyThumbnail {
 	 * @param int    $wmOpaque
 	 */
 	public function watermarkCreateText( $color, $wmFont, $wmSize = 10, $wmOpaque = 90 ) {
+		if ( empty( $this->watermarkText ) ) {
+			return;
+		}
+
 		if ( ! $color ) {
 			$color = '000000';
 		}
@@ -1012,7 +1016,7 @@ class LegacyThumbnail {
 				$line . preg_replace(
 					'~^(&([a-zA-Z0-9]);)~',
 					htmlentities( '${1}' ),
-					mb_convert_encoding( $word, 'HTML-ENTITIES', 'UTF-8' )
+					htmlspecialchars_decode( htmlentities( $word, ENT_QUOTES, 'UTF-8' ) )
 				)
 			);
 
@@ -1124,6 +1128,10 @@ class LegacyThumbnail {
 				if ( is_file( $fs->join_paths( $fs->get_document_root( 'content' ), $this->watermarkImgPath ) ) ) {
 					$this->watermarkImgPath = $fs->get_document_root( 'content' ) . $this->watermarkImgPath;
 				}
+			}
+
+			if ( empty( $this->watermarkImgPath ) ) {
+				return;
 			}
 
 			// Would you really want to use anything other than a png?

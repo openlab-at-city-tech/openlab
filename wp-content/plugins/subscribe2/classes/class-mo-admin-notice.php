@@ -74,7 +74,7 @@ if ( ! class_exists( 'MO_Admin_Notice' ) ) {
 							<?php
 							printf(
 							        /* translators: Placeholders: %s - mail option admin notice */
-								__( 'Free email newsletter plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
+								esc_html__( 'Free email newsletter plugin that will %1$sincrease your email list subscribers%2$s and keep them engaged with %1$sautomated and schedule newsletters%2$s.', 'subscribe2' ),
 								'<span class="mo-stylize"><strong>',
 								'</strong></span>'
 							);

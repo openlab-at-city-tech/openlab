@@ -567,7 +567,6 @@ class nggManageGallery {
 		// bulk update in a single gallery.
 		if ( isset( $_POST['bulkaction'] ) && isset( $_POST['doaction'] ) ) {
 
-
 			switch ( $_POST['bulkaction'] ) {
 				case 'no_action';
 					// No action.
@@ -852,6 +851,7 @@ class nggManageGallery {
 				}
 
 				if ( $this->gallery ) {
+					$excludes = [ '_wpnonce', '_wp_http_referer', 'nggpage' ];
 					foreach ( $_POST as $key => $value ) {
 						// Yet another IIS hack: gallery paths can be mangled into \\wp-content\\blah\\ which causes
 						// later errors when validating the gallery path: just automatically replace \\ with / here.
@@ -859,7 +859,9 @@ class nggManageGallery {
 							$value = str_replace( '\\\\', '/', $value );
 						}
 
-						$this->gallery->$key = $value;
+						if ( ! in_array( $key, $excludes, true ) ) {
+							$this->gallery->$key = $value;
+						}
 					}
 
 					$mapper->save( $this->gallery );

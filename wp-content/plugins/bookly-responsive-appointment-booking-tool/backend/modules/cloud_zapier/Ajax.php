@@ -11,7 +11,7 @@ class Ajax extends Lib\Base\Ajax
     public static function cloudZapierGenerateNewApiKey()
     {
         $api = Lib\Cloud\API::getInstance();
-        $response = $api->zapier->generateNewApiKey();
+        $response = $api->getProduct( Lib\Cloud\Account::PRODUCT_ZAPIER )->generateNewApiKey();
         if ( $response !== false ) {
             wp_send_json_success( array(
                 'api_key' => $response['api_key']

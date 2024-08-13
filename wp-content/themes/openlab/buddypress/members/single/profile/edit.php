@@ -59,7 +59,9 @@ $social_fields = openlab_social_media_fields();
                     <div class="editfield field_1 field_name alt form-group">
                         <label for="field_1">Display Name (required)</label>
                         <input class="form-control" type="text" value="<?php echo $display_name; ?>" id="field_1" name="field_1">
-                        <p class="description"></p>
+                        <p class="description">
+							<?php echo openlab_get_profile_field_helper_text( 'display_name' ); ?>
+						</p>
                     </div>
                     <?php $display_name_shown = true ?>
                 <?php } ?>
@@ -237,6 +239,8 @@ $social_fields = openlab_social_media_fields();
                             <?php endif; ?>
 
                             <?php do_action('bp_custom_profile_edit_fields') ?>
+
+							<?php openlab_xprofile_field_visibility_selector(); ?>
 
                             <p class="description"><?php bp_the_profile_field_description() ?></p>
                         </div>

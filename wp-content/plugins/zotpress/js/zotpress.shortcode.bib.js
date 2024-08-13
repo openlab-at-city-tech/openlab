@@ -177,7 +177,6 @@ jQuery(document).ready(function()
 		if ( typeof(request_last) === "undefined" || request_last == "false" || request_last == "" )
 			request_last = 0;
 
-
 		jQuery.ajax(
 		{
 			url: zpShortcodeAJAX.ajaxurl,
@@ -193,7 +192,10 @@ jQuery(document).ready(function()
 				'collection_id': params.zpCollectionId,
 				'tag_id': params.zpTagId,
 
-				'author': encodeURI(params.zpAuthor).replace("'","%27"),
+				// 'author': encodeURI(params.zpAuthor).replace("'","%27"),
+				// 'author': params.zpAuthor.toString().replace("\\","%5C"),
+				'author': params.zpAuthor,
+				// 'author': params.zpAuthor.toString().replace("'","&#39;"),
 				'year': params.zpYear,
 				'style': params.zpStyle,
 				'limit': params.zpLimit,
@@ -233,7 +235,9 @@ jQuery(document).ready(function()
 
 				// Account for Zotero errors
 				// QUESTION: Did something change? Now have to ref [0]
-				if ( zp_items.status == 'empty'
+				// 7.3.10: CHECK: Added 'error' status check
+				if ( zp_items.status == 'error'
+						|| zp_items.status == 'empty'
 			 			|| zp_items.data == 'Not found' )
 				{
 					var zp_msg = zpShortcodeAJAX.txt_zperror + " ";

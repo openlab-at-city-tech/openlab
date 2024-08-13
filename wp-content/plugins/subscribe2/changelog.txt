@@ -1,3 +1,8 @@
+= 10.43 (06th June, 2024) =
+
+* Update: Appsero client library.
+* Fix: Security related issues.
+
 = 10.42 (12th October, 2023) =
 
 * Fix: Subscribers searching filter can't search by email address.

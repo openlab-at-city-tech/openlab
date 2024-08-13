@@ -33,6 +33,10 @@ function bp_core_set_ajax_uri_globals() {
 		return;
 	}
 
+	if ( 'heartbeat' === $action && empty( $_REQUEST['data']['bp_heartbeat'] ) ) {
+		return;
+	}
+
 	bp_reset_query( bp_get_referer_path(), $GLOBALS['wp_query'] );
 }
 
@@ -176,7 +180,10 @@ function bp_core_load_template( $templates ) {
 			$wp_query->is_404      = false;
 
 			// Check if a BuddyPress component's direcory is set as homepage.
-			$wp_query->is_home = bp_is_directory_homepage( bp_current_component() );
+			if ( bp_is_directory_homepage( bp_current_component() ) ) {
+				$wp_query->home          = true;
+				$wp_query->is_front_page = true;
+			}
 		}
 
 		/**

@@ -203,6 +203,9 @@ abstract class Backend
                                 case Lib\Cloud\Account::PRODUCT_WHATSAPP:
                                     Modules\CloudWhatsapp\Page::addBooklyCloudMenuItem( $product );
                                     break;
+                                case Lib\Cloud\Account::PRODUCT_MOBILE_STAFF_CABINET:
+                                    Modules\CloudMobileStaffCabinet\Page::addBooklyCloudMenuItem( $product );
+                                    break;
                                 default:
                                     Lib\Cloud\Proxy\Shared::renderCloudMenu( $product );
                             }

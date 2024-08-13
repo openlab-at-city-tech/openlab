@@ -5,16 +5,47 @@ namespace Advanced_Sidebar_Menu\Blocks;
 use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
 use Advanced_Sidebar_Menu\Scripts;
 use Advanced_Sidebar_Menu\Utils;
+use Advanced_Sidebar_Menu\Widget\Category;
+use Advanced_Sidebar_Menu\Widget\Page;
+use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget_Options\Shared\Style_Targeting;
 
 /**
  * Functionality shared by and required by all blocks.
  *
  * @since 9.0.0
+ *
+ * @phpstan-import-type PAGE_SETTINGS from Page
+ * @phpstan-import-type CATEGORY_SETTINGS from Category
+ * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ *
+ * @phpstan-type ATTR_SHAPE array{
+ *    type: string,
+ *    default?: mixed,
+ *    enum?: array<string|int|bool>,
+ *    items?: array{
+ *      type: string,
+ *      required?: array<string>,
+ *      properties?: array<string, array{
+ *         type: string,
+ *      }>
+ *    }
+ * }
+ *
+ * @phpstan-type SHARED array{
+ *     clientId?: string,
+ *     sidebarId?: string,
+ *     style?: array<string, string>,
+ *     title?: string,
+ *     isServerSideRenderRequest?: bool,
+ * }
+ *
+ * @phpstan-template SETTINGS of array<string, string|int|bool|array<string, string>>
  */
 abstract class Block_Abstract {
-	const NAME = 'block-abstract';
+	public const NAME = 'block-abstract';
 
-	const RENDER_REQUEST = 'isServerSideRenderRequest';
+	public const RENDER_REQUEST = 'isServerSideRenderRequest';
 
 	/**
 	 * Widget arguments used in rendering.
@@ -23,7 +54,8 @@ abstract class Block_Abstract {
 	 * 2. We append the block wrap to `before_widget` before use to include
 	 *  styles and other HTML attributes in the output.
 	 *
-	 * @var string[]
+	 * @phpstan-var WIDGET_ARGS
+	 * @var array<string, string>
 	 */
 	protected $widget_args = [
 		'before_widget' => '',
@@ -135,14 +167,16 @@ abstract class Block_Abstract {
 	 * We mimic the functionality of the inner echo while excluding
 	 * the calls to output the wrap.
 	 *
+	 * @phpstan-param WIDGET_ARGS $args
+	 *
 	 * @param false|array $instance - Contents of the block, before parsing.
-	 * @param \WP_Widget  $widget   - Object representing a block based widget.
+	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget - Object representing a block based widget.
 	 * @param array       $args     - Widget area arguments.
 	 *
 	 * @return false|array
 	 */
 	public function short_circuit_widget_blocks( $instance, $widget, array $args ) {
-		if ( ! \is_array( $instance ) || empty( $instance['content'] ) || false === \strpos( $instance['content'], static::NAME ) ) {
+		if ( ! \is_array( $instance ) || ! isset( $instance['content'] ) || false === \strpos( $instance['content'], static::NAME ) ) {
 			return $instance;
 		}
 
@@ -192,18 +226,29 @@ abstract class Block_Abstract {
 	 *
 	 * @return void
 	 */
-	public function register() {
-		register_block_type( static::NAME,
-			apply_filters( 'advanced-sidebar-menu/block-register/' . static::NAME, [
-				'api_version'     => 3,
-				'attributes'      => $this->get_all_attributes(),
-				'description'     => $this->get_description(),
-				'editor_script'   => Scripts::GUTENBERG_HANDLE,
-				'editor_style'    => Scripts::GUTENBERG_CSS_HANDLE,
-				'keywords'        => $this->get_keywords(),
-				'render_callback' => [ $this, 'render' ],
-				'supports'        => $this->get_block_support(),
-			] ) );
+	public function register(): void {
+		$args = apply_filters( 'advanced-sidebar-menu/block-register/' . static::NAME, [
+			'api_version'           => 3,
+			'attributes'            => $this->get_all_attributes(),
+			'description'           => $this->get_description(),
+			'editor_script_handles' => [ Scripts::GUTENBERG_HANDLE ],
+			'editor_style_handles'  => [ Scripts::GUTENBERG_CSS_HANDLE ],
+			'keywords'              => $this->get_keywords(),
+			'render_callback'       => [ $this, 'render' ],
+			'supports'              => $this->get_block_support(),
+		] );
+
+		// Translate deprecated keys until required PRO version is 9.5.0.
+		if ( isset( $args['editor_script'] ) ) {
+			$args['editor_script_handles'] = (array) $args['editor_script'];
+			unset( $args['editor_script'] );
+		}
+		if ( isset( $args['editor_style'] ) ) {
+			$args['editor_style_handles'] = (array) $args['editor_style'];
+			unset( $args['editor_style'] );
+		}
+
+		register_block_type( static::NAME, $args );
 	}
 
 
@@ -211,6 +256,7 @@ abstract class Block_Abstract {
 	 * Get attributes defined in this class as well
 	 * as common attributes shared by all blocks.
 	 *
+	 * @phpstan-return array<string, ATTR_SHAPE>
 	 * @return array
 	 */
 	protected function get_all_attributes() {
@@ -218,7 +264,7 @@ abstract class Block_Abstract {
 			'clientId'             => [
 				'type' => 'string',
 			],
-			static::RENDER_REQUEST => [
+			self::RENDER_REQUEST => [
 				'type' => 'boolean',
 			],
 			'sidebarId'            => [
@@ -258,15 +304,18 @@ abstract class Block_Abstract {
 	 * Checkboxes are saved as `true` on the Gutenberg side.
 	 * The widgets expect the values to be `checked`.
 	 *
-	 * @param array $attr - Attribute values pre-converted.
+	 * @param array<string, mixed> $attr - Attribute values pre-converted.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
-	public function convert_checkbox_values( array $attr ) {
+	public function convert_checkbox_values( array $attr ): array {
 		// Map the boolean values to widget style 'checked'.
 		return Utils::instance()->array_map_recursive( function( $value ) {
 			if ( true === $value ) {
 				return 'checked';
+			}
+			if ( false === $value ) {
+				return '';
 			}
 			return $value;
 		}, $attr );
@@ -274,48 +323,58 @@ abstract class Block_Abstract {
 
 
 	/**
-	 * Render the block template via ServerSideRender.
+	 * Within the Editor ServerSideRender request come in as REST requests.
+	 * We spoof the WP_Query as much as required to get the menus to
+	 * display the same way they will on the front-end.
+	 */
+	protected function spoof_wp_query(): void {
+		$post = get_post();
+		if ( ! $post instanceof \WP_Post ) {
+			return;
+		}
+		add_action( 'advanced-sidebar-menu/widget/before-render', function( Menu_Abstract $menu ) {
+			if ( method_exists( $menu, 'set_current_post' ) ) {
+				$menu->set_current_post( get_post() );
+			}
+		} );
+		add_filter( 'advanced-sidebar-menu/core/include-template-parts-comments', '__return_false' );
+		$GLOBALS['wp_query']->queried_object = $post;
+		$GLOBALS['wp_query']->queried_object_id = $post->ID;
+		$GLOBALS['wp_query']->is_singular = true;
+		if ( 'page' === get_post_type() ) {
+			$GLOBALS['wp_query']->is_page = true;
+		} else {
+			$GLOBALS['wp_query']->is_single = true;
+		}
+	}
+
+
+	/**
+	 * Render the block by passing the attributes to the widget renders.
+	 *
+	 * @phpstan-param \Union<SETTINGS, SHARED> $attr
 	 *
 	 * @param array $attr - Block attributes matching widget settings.
 	 *
 	 * @return string
 	 */
 	public function render( $attr ) {
-		/**
-		 * Within the Editor ServerSideRender request come in as REST requests.
-		 * We spoof the WP_Query as much as required to get the menus to
-		 * display the same way they will on the front-end.
-		 */
-		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST && ! empty( $attr[ static::RENDER_REQUEST ] ) ) {
-			if ( ! empty( get_post() ) ) {
-				add_action( 'advanced-sidebar-menu/widget/before-render', function( Menu_Abstract $menu ) {
-					if ( method_exists( $menu, 'set_current_post' ) ) {
-						$menu->set_current_post( get_post() );
-					}
-				} );
-				add_filter( 'advanced-sidebar-menu/core/include-template-parts-comments', '__return_false' );
-				$GLOBALS['wp_query']->queried_object = get_post();
-				$GLOBALS['wp_query']->queried_object_id = get_the_ID();
-				$GLOBALS['wp_query']->is_singular = true;
-				if ( 'page' === get_post_type() ) {
-					$GLOBALS['wp_query']->is_page = true;
-				} else {
-					$GLOBALS['wp_query']->is_single = true;
-				}
-			}
+		if ( \defined( 'REST_REQUEST' ) && REST_REQUEST && ! Utils::instance()->is_empty( $attr, self::RENDER_REQUEST ) ) {
+			$this->spoof_wp_query();
+		}
 
-			// Use the sidebar arguments if available.
-			if ( ! empty( $attr['sidebarId'] ) && ! empty( $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ] ) ) {
-				$this->widget_args = wp_parse_args( $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ], $this->widget_args );
-			}
+		// Use the sidebar arguments if available.
+		if ( isset( $attr['sidebarId'], $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ] ) && '' !== $attr['sidebarId'] ) {
+			// @phpstan-ignore-next-line -- Until we can support @template in `\Union` we can't properly type this.
+			$this->widget_args = wp_parse_args( (array) $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ], $this->widget_args );
 		}
 
 		$classnames = '';
-		if ( ! empty( $attr['block_style'] ) ) {
+		if ( class_exists( Style_Targeting::class ) && isset( $attr[ Style_Targeting::BLOCK_STYLE ] ) && true === $attr[ Style_Targeting::BLOCK_STYLE ] ) {
 			$classnames .= ' advanced-sidebar-blocked-style';
 		}
 
-		if ( ! empty( $this->widget_args['before_widget'] ) ) {
+		if ( ! Utils::instance()->is_empty( $this->widget_args, 'before_widget' ) ) {
 			// Add main CSS class to widgets wrap.
 			if ( false !== \strpos( $this->widget_args['before_widget'], 'widget_block' ) ) {
 				$this->widget_args['before_widget'] = \str_replace( 'widget_block', 'widget_block advanced-sidebar-menu', $this->widget_args['before_widget'] );
@@ -347,7 +406,7 @@ abstract class Block_Abstract {
 		$this->widget_args['before_widget'] .= \sprintf( '<%s %s>', $wrap, $wrapper_attributes );
 		$this->widget_args['after_widget'] = \sprintf( '</%s>', $wrap ) . $this->widget_args['after_widget'];
 		// Passed via ServerSideRender, so we can enable accordions in Gutenberg editor.
-		if ( ! empty( $attr['clientId'] ) ) {
+		if ( isset( $attr['clientId'] ) && '' !== \trim( $attr['clientId'] ) ) {
 			$this->widget_args['widget_id'] = $attr['clientId'];
 		}
 

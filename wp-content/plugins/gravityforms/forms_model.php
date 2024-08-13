@@ -1606,6 +1606,7 @@ class GFFormsModel {
 				 * @since 2.3.3.9
 				 */
 				do_action( "gform_post_update_entry_property", $lead_id, $property_name, $property_value, $previous_value );
+				gf_feed_processor()->save()->dispatch();
 			}
 		}
 
@@ -3434,20 +3435,48 @@ class GFFormsModel {
 				}
 				break;
 
-			case 'fileupload' :
+			case 'fileupload':
+				$tmp_path = GFFormsModel::get_upload_path( $form['id'] ) . '/tmp/';
+				$tmp_url  = GFFormsModel::get_upload_url( $form['id'] ) . '/tmp/';
+				$value    = array(); // Initialize as empty array to store file info
+				// Check if it's a multiple file upload field
 				if ( $field->multipleFiles ) {
-					if ( ! empty( $value ) ) {
-						$value = json_encode( $value );
+					$temp_files = rgars( GFFormsModel::$uploaded_files, $form['id'] . '/' . $input_name );
+
+					if ( ! empty( $temp_files ) && is_array( $temp_files ) ) {
+						foreach ( $temp_files as $temp_file ) {
+							if ( rgar( $temp_file, 'temp_filename' ) ) {
+								$value[] = array(
+									'tmp_path'      => $tmp_path . $temp_file['temp_filename'],
+									'tmp_url'       => $tmp_url . $temp_file['temp_filename'],
+									'tmp_name'      => $temp_file['temp_filename'],
+									'uploaded_name' => rgar( $temp_file, 'uploaded_filename' ),
+								);
+							}
+						}
 					}
 				} else {
+					// Handle single file upload scenario
 					$file_info = self::get_temp_filename( $form['id'], $input_name );
-					if ( ! empty( $file_info ) ) {
-						$file_path = self::get_file_upload_path( $form['id'], $file_info['uploaded_filename'] );
-						$value     = $file_path['url'];
+					if ( ! empty( $file_info ) && isset( $file_info['temp_filename'] ) ) {
+						$value[] = array(
+							'tmp_path'      => $tmp_path . $file_info['temp_filename'],
+							'tmp_url'       => $tmp_url . $file_info['temp_filename'],
+							'tmp_name'      => $file_info['temp_filename'],
+							'uploaded_name' => rgar( $file_info, 'uploaded_filename' ),
+						);
 					}
 				}
 
+				if ( ! empty( $value ) ) {
+					$value = json_encode( $value ); // Encode the array of temp URLs as JSON string
+				} else {
+					// If no files were uploaded, set the value to an empty string for backwards compatibility
+					$value = '';
+				}
+
 				break;
+
 
 			default:
 
@@ -5437,7 +5466,7 @@ class GFFormsModel {
 				}
 			} else {
 				// Deleting details for this field
-				if ( is_array( $field->get_entry_inputs() ) ) {
+				if ( is_a( $field, 'GF_Field' ) && is_array( $field->get_entry_inputs() ) ) {
 					$_input_id = ( false === strpos( $input_id, '.' ) ) ? sprintf( '%d.%%', $input_id ) : $input_id;
 					$sql = $wpdb->prepare( "DELETE FROM $entry_meta_table_name WHERE entry_id=%d AND meta_key LIKE %s ", $entry_id, $_input_id );
 				} else {
@@ -5759,14 +5788,12 @@ class GFFormsModel {
 
 	public static function drop_tables() {
 		global $wpdb;
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 		foreach ( GF_Forms_Model_Legacy::get_legacy_tables() as $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS $table" );
 		}
 		foreach ( self::get_tables() as $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS $table" );
 		}
-		add_filter( 'query', array( 'GFForms', 'filter_query' ) );
 	}
 
 	/**
@@ -5795,9 +5822,6 @@ class GFFormsModel {
 		$legacy_tables = GF_Forms_Model_Legacy::get_legacy_tables();
 
 		$drop_tables = array_merge( $drop_tables, $legacy_tables );
-
-		// Prevent the legacy table query notice when they are dropped by wp_uninitialize_site().
-		remove_filter( 'query', array( 'GFForms', 'filter_query' ) );
 
 		return $drop_tables;
 	}
@@ -6739,15 +6763,15 @@ class GFFormsModel {
 			return null;
 		}
 
-		if ( is_numeric( $field_id ) ) {
-			// Removing floating part of field (i.e 1.3 -> 1) to return field by input id.
+		if ( is_numeric( $field_id ) || preg_match( '/^\d+\.\w+$/', $field_id ) ) {
+			// Removing the input-specific segment from the field ID (i.e 1.3 or 1.something -> 1).
 			$field_id = intval( $field_id );
 		}
 
 		global $_fields;
 		$key = $form['id'] . '_' . $field_id;
 		$return = null;
-		if (isset( $_fields[ $key ] ) ) {
+		if ( isset( $_fields[ $key ] ) ) {
 			return $_fields[ $key ];
 		}
 
@@ -7732,8 +7756,13 @@ class GFFormsModel {
 		if ( isset( $form['labelPlacement'] ) ) {
 			$form['labelPlacement'] = GFCommon::whitelist( $form['labelPlacement'], array( 'top_label', 'left_label', 'right_label' ) );
 		}
+
 		if ( isset( $form['descriptionPlacement'] ) ) {
 			$form['descriptionPlacement'] = GFCommon::whitelist( $form['descriptionPlacement'], array( 'below', 'above' ) );
+		}
+
+		if ( isset( $form['validationPlacement'] ) ) {
+			$form['validationPlacement'] = GFCommon::whitelist( $form['validationPlacement'], array( 'below', 'above' ) );
 		}
 
 		if ( isset( $form['subLabelPlacement'] ) ) {
@@ -7789,11 +7818,11 @@ class GFFormsModel {
 			$form['scheduleForm']           = (bool) $form['scheduleForm'];
 			$form['scheduleStart']          = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleStart'] ) : '';
 			$form['scheduleStartHour']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartHour'], 1, 12 ) : '';
-			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 1, 60 ) : '';
+			$form['scheduleStartMinute']    = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleStartMinute'], 0, 59 ) : '';
 			$form['scheduleStartAmpm']      = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleStartAmpm'], array( 'am', 'pm' ) ) : '';
 			$form['scheduleEnd']            = $form['scheduleForm'] ? wp_strip_all_tags( $form['scheduleEnd'] ) : '';
 			$form['scheduleEndHour']        = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndHour'], 1, 12 ) : '';
-			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 1, 60 ) : '';
+			$form['scheduleEndMinute']      = $form['scheduleForm'] ? GFCommon::int_range( $form['scheduleEndMinute'], 0, 59 ) : '';
 			$form['scheduleEndAmpm']        = $form['scheduleForm'] ? GFCommon::whitelist( $form['scheduleEndAmpm'], array( 'am', 'pm' ) ) : '';
 			$form['schedulePendingMessage'] = $form['scheduleForm'] ? self::maybe_wp_kses( $form['schedulePendingMessage'] ) : '';
 			$form['scheduleMessage']        = $form['scheduleForm'] ? self::maybe_wp_kses( $form['scheduleMessage'] ) : '';

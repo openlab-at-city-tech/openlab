@@ -71,9 +71,6 @@ class Slideshow extends ParentController {
 			$params['current_page']         = $current_page;
 			$params['effect_code']          = $this->get_effect_code( $displayed_gallery );
 			$params['anchor']               = 'ngg-slideshow-' . $displayed_gallery->id() . '-' . rand( 1, getrandmax() ) . $current_page;
-			$gallery_width                  = $displayed_gallery->display_settings['gallery_width'];
-			$gallery_height                 = $displayed_gallery->display_settings['gallery_height'];
-			$params['aspect_ratio']         = $gallery_width / $gallery_height;
 			$params['placeholder']          = StaticAssets::get_url( 'Slideshow/placeholder.gif', 'photocrati-nextgen_basic_gallery#slideshow/placeholder.gif' );
 
 			// This was not set correctly in previous versions.
@@ -193,7 +190,8 @@ class Slideshow extends ParentController {
 					'photocrati-nextgen_basic_slideshow',
 				],
 				'settings'       => $this->get_default_settings(),
-			]
+			],
+			$reset
 		);
 	}
 }

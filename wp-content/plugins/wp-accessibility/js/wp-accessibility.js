@@ -87,11 +87,19 @@
 				if ( ( ! hasAria && ! hasAriaId ) || ( ! hasAria && ( hasAriaId && 0 === ariaTarget.length ) ) ) {
 					if ( field_id ) {
 						var label = $( 'label[for=' + field_id + ']' );
+						var labelText = label.text();
+						if ( label.length && ! labelText ) {
+							label.text( wpa.wpalabels[value] );
+							if ( wpa.errors || wpa.tracking ) {
+								errors.push( ['empty-label', wpa.wpalabels[value]] );
+								console.log( 'Empty label on ' + wpa.wpalabels[value] + ' added by WP Accessibility' );
+							}
+						}
 						if ( !label.length && !implicit.length ) {
 							field.before( "<label for='" + field_id + "' class='wpa-screen-reader-text'>" + wpa.wpalabels[value] + "</label>" );
 							if ( wpa.errors || wpa.tracking ) {
 								errors.push( ['explicit-label', wpa.wpalabels[value]] );
-								console.log( 'Explicit label on ' + wpa.wpalabels[value] + 'added by WP Accessibility' );
+								console.log( 'Explicit label on ' + wpa.wpalabels[value] + ' added by WP Accessibility' );
 							}
 						}
 					} else {
@@ -99,7 +107,7 @@
 							field.attr( 'id', 'wpa_label_' + value ).before( "<label for='wpa_label_" + value + "' class='wpa-screen-reader-text'>" + wpa.wpalabels[value] + "</label>" );
 							if ( wpa.errors || wpa.tracking ) {
 								errors.push( ['implicit-label', wpa.wpalabels[value]] );
-								console.log( 'Implicit label on ' + wpa.wpalabels[value] + 'added by WP Accessibility' );
+								console.log( 'Implicit label on ' + wpa.wpalabels[value] + ' added by WP Accessibility' );
 							}
 						}
 					}
@@ -112,9 +120,14 @@
 		var images   = 0;
 		var controls = 0;
 		var fields   = 0;
+		let noremove = false;
 		const els    = document.querySelectorAll( 'img, a, input, textarea, select, button' );
 		els.forEach((el) => {
 			var title = el.getAttribute( 'title' );
+			if ( el.classList.contains( 'nturl' ) ) {
+				// Exempt title attributes from Translate WordPress - Google Language Translator, which uses them as a CSS hook.
+				noremove = true;
+			}
 			if ( title && '' !== title ) {
 				switch ( el.tagName ) {
 					case 'IMG':
@@ -136,7 +149,9 @@
 							var ariaLabel = el.getAttribute( 'aria-label' );
 							if ( ! ariaLabel || '' === ariaLabel ) {
 								el.setAttribute( 'aria-label', title );
-								el.removeAttribute( 'title' );
+								if ( ! noremove ) {
+									el.removeAttribute( 'title' );
+								}
 							}
 						} else {
 							el.removeAttribute( 'title' );

@@ -112,6 +112,7 @@ class GFSurvey extends GFAddOn {
 		// conditional logic filters
 		add_filter( 'gform_entry_meta_conditional_logic_confirmations', array( $this, 'conditional_logic_filters' ), 10, 3 );
 		add_filter( 'gform_entry_meta_conditional_logic_notifications', array( $this, 'conditional_logic_filters' ), 10, 3 );
+		add_filter( 'gform_is_value_match', array( $this, 'is_value_match_rank' ), 10, 6 );
 
 		parent::init();
 
@@ -165,11 +166,6 @@ class GFSurvey extends GFAddOn {
 
 		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
-		$gsurvey_js_deps = array( 'jquery', 'jquery-ui-sortable' );
-		if ( wp_is_mobile() ) {
-			$gsurvey_js_deps[] = 'jquery-touch-punch';
-		}
-
 		$scripts = array(
 			array(
 				'handle'   => 'gsurvey_form_editor_js',
@@ -178,17 +174,19 @@ class GFSurvey extends GFAddOn {
 				'deps'     => array( 'jquery' ),
 				'callback' => array( $this, 'localize_scripts' ),
 				'enqueue'  => array(
-					array( 'admin_page' => array( 'form_editor' ) ),
+					array( 'admin_page' => array( 'form_editor', 'form_settings'  ) ),
 				),
 			),
 			array(
 				'handle'  => 'gsurvey_js',
 				'src'     => $this->get_base_url() . "/js/gsurvey{$min}.js",
 				'version' => $this->_version,
-				'deps'    => $gsurvey_js_deps,
+				'deps'    => array( 'jquery', 'jquery-ui-sortable', 'jquery-touch-punch' ),
 				'enqueue' => array(
 					array( $this, 'should_enqueue_gravity_theme' ),
-					array( 'admin_page', array( 'entry_detail_edit' ) ),
+					array(
+						'field_types' => array( 'survey' )
+					),
 				),
 			),
 		);
@@ -369,6 +367,23 @@ class GFSurvey extends GFAddOn {
 			'fifthChoice'  => wp_strip_all_tags( __( 'Fifth Choice', 'gravityformssurvey' ) ),
 		);
 		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyRankStrings', $rank_strings );
+
+		//localize strings for the rank field conditional logic settings
+		$rank_condition_strings = array(
+			'position'  => wp_strip_all_tags( __( 'Position', 'gravityformssurvey' ) ),
+			'is' => wp_strip_all_tags( __( 'is in position', 'gravityformssurvey' ) ),
+			'isNot'  => wp_strip_all_tags( __( 'is not in position', 'gravityformssurvey' ) ),
+			'greaterThan' => wp_strip_all_tags( __( 'is in a position greater than', 'gravityformssurvey' ) ),
+			'lessThan'  => wp_strip_all_tags( __( 'is in a position less than', 'gravityformssurvey' ) ),
+		);
+		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyRankConditionStrings', $rank_condition_strings );
+
+		// localize strings for the likert field conditional logic settings
+		$likert_condition_strings = array(
+			'is' => wp_strip_all_tags( __( 'is', 'gravityformssurvey' ) ),
+			'isNot'  => wp_strip_all_tags( __( 'is not', 'gravityformssurvey' ) ),
+		);
+		wp_localize_script( 'gsurvey_form_editor_js', 'gsurveyLikertConditionStrings', $likert_condition_strings );
 
 		//localize strings for the ratings field
 		$rating_strings = array(
@@ -842,6 +857,56 @@ class GFSurvey extends GFAddOn {
 		}
 
 		return $filters;
+	}
+
+	/**
+	 * Evaluate conditional logic on the rank field.
+	 *
+	 * @since 3.9
+	 *
+	 * @param $is_match
+	 * @param $field_value
+	 * @param $target_value
+	 * @param $operation
+	 * @param $source_field
+	 * @param $rule
+	 *
+	 * @return bool
+	 */
+	public function is_value_match_rank( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+
+		if ( $source_field->type == 'survey' && $source_field->inputType == 'rank' ) {
+			if ( '' === $target_value ) {
+				// If a target value doesn't get saved, it's because the target value is 1.
+				$target_value = 1;
+			}
+
+			$field_id_parts = explode('.', $rule['fieldId']);
+			if ( 1 === count( $field_id_parts ) ) {
+				return $is_match;
+			}
+
+			$field_index       = $field_id_parts[1];
+			$choice_value      = $source_field->choices[$field_index]['value'];
+			$choice_value_index = array_search( $choice_value, $source_field->choices[$field_index] );
+			$field_value_array = explode(',', $field_value);
+			$target_index	   = $target_value - 1;
+
+			switch ( $rule['operator'] ) {
+				case 'is':
+					return $choice_value === $field_value_array[ $target_index ];
+				case 'isnot':
+					return $choice_value !== $field_value_array[ $target_index ];
+				case '>':
+					return $choice_value_index > $target_index;
+				case '<':
+					return $choice_value_index < $target_index;
+				default:
+					return false;
+			}
+		}
+
+		return $is_match;
 	}
 
 	/**

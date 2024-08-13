@@ -1,5 +1,4 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
-use Bookly\Backend\Components;
 use Bookly\Backend\Components\Support;
 use Bookly\Backend\Modules\Diagnostics\Tests\Test;
 use Bookly\Backend\Modules\Diagnostics\Tools\Tool;
@@ -11,6 +10,11 @@ use Bookly\Lib;
 <div id="bookly-tbs" class="wrap">
     <div class="form-row align-items-center mb-3">
         <h4 class="col m-0"><?php esc_html_e( 'Diagnostics', 'bookly' ) ?></h4>
+        <div class="col-auto">
+            <button class="btn btn-default bookly-js-autorun-all-tests" type="button" title="<?php esc_attr_e( 'Run tests automatically', 'bookly' ) ?>">
+                <i class="far fa-square fa-check-square"></i><span class="d-none d-lg-inline ml-2"><?php esc_html_e( 'Run tests automatically', 'bookly' ) ?></span>
+            </button>
+        </div>
         <?php Support\Buttons::render( $self::pageSlug() ) ?>
     </div>
     <div class="card">
@@ -51,8 +55,8 @@ use Bookly\Lib;
                                     <?php esc_html_e( 'Warning', 'bookly' ) ?>
                                 </button>
                             </div>
-                            <div class="bookly-js-button-test">
-                                <button class="btn btn-default bookly-js-loading-test" type="button" disabled>
+                            <div class="bookly-js-button-test" style="min-height: 40px">
+                                <button class="btn btn-default bookly-js-loading-test" type="button" disabled style="display: none;">
                                     <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                 </button>
                                 <button class="btn btn-default bookly-js-reload-test" type="button" style="display: none;">

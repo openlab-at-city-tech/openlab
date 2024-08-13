@@ -15,6 +15,10 @@ class Event extends Base
     protected $description;
     /** @var int */
     protected $location_id;
+    /** @var string */
+    protected $staff_name;
+    /** @var string */
+    protected $staff_email;
 
     /**
      * @return string
@@ -28,6 +32,7 @@ class Event extends Base
 
         $template = "BEGIN:VEVENT\r\n"
             . "UID:%s\r\n"
+            . "ORGANIZER;%s\r\n"
             . "DTSTAMP:%s\r\n"
             . "DTSTART:%s\r\n"
             . "DTEND:%s\r\n"
@@ -39,6 +44,7 @@ class Event extends Base
         return sprintf(
             $template,
             $this->escape( $this->start_date . '-' . substr( md5( uniqid( time(), true ) ), 0, 8 ) . '@' . site_url() ),
+            $this->escape( sprintf( 'CN=%s:mailto:%s', $this->staff_name, $this->staff_email ) ),
             $this->formatDateTime( $this->start_date ),
             $this->formatDateTime( $this->start_date ),
             $this->formatDateTime( $this->end_date ),
@@ -138,6 +144,44 @@ class Event extends Base
     public function setLocationId( $location_id )
     {
         $this->location_id = $location_id;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStaffName()
+    {
+        return $this->staff_name;
+    }
+
+    /**
+     * @param string $staff_name
+     * @return Event
+     */
+    public function setStaffName( $staff_name )
+    {
+        $this->staff_name = $staff_name;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStaffEmail()
+    {
+        return $this->staff_email;
+    }
+
+    /**
+     * @param string $staff_email
+     * @return Event
+     */
+    public function setStaffEmail( $staff_email )
+    {
+        $this->staff_email = $staff_email;
 
         return $this;
     }

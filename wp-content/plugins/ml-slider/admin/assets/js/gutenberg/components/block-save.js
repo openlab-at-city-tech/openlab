@@ -12,7 +12,7 @@ const save = (props) => {
 
     return (!!slideshowId && <Fragment>
         <div class={stretchClassName}>
-            [metaslider id={slideshowId} cssclass="{containerClass}"]
+            [metaslider id="{slideshowId}"]
         </div>
     </Fragment>) || ''
 }

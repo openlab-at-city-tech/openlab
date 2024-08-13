@@ -2,8 +2,11 @@
 /*
 Plugin Name: WP Reading Progress
 Plugin URI: https://github.com/joerivanveen/wp-reading-progress
-Description: Light weight customizable reading progress bar. Great UX on longreads.
-Version: 1.5.7
+Description: Light weight customizable reading progress bar. Great UX on longreads. Includes estimated reading time (beta).
+Version: 1.6.0
+Requires at least: 4.9
+Tested up to: 6.5
+Requires PHP: 5.6
 Author: Joeri van Veen
 Author URI: https://wp-developer.eu
 License: GPLv3
@@ -12,19 +15,18 @@ Domain Path: /languages/
 */
 defined( 'ABSPATH' ) || die();
 // This is plugin nr. 6 by Ruige hond. It identifies as: ruigehond006.
-const RUIGEHOND006_VERSION = '1.5.7';
-// Register hooks for plugin management, functions are at the bottom of this file.
+const RUIGEHOND006_VERSION = '1.6.0';
+// Register install hook
 register_activation_hook( __FILE__, 'ruigehond006_install' );
-register_uninstall_hook( __FILE__, 'ruigehond006_uninstall' );
 // Startup the plugin
 add_action( 'init', 'ruigehond006_run' );
-add_action( 'wp', 'ruigehond006_localize' );
+add_action( 'wp', 'ruigehond006_start' );
 /**
  * the actual plugin on the frontend
  */
 function ruigehond006_run() {
 	if ( is_admin() ) {
-		load_plugin_textdomain( 'wp-reading-progress', null, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'wp-reading-progress', '', dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script( 'wp-color-picker' );
 		wp_enqueue_script( 'ruigehond006_admin_javascript', plugin_dir_url( __FILE__ ) . 'admin.min.js', 'wp-color-picker', RUIGEHOND006_VERSION, true );
@@ -38,7 +40,7 @@ function ruigehond006_run() {
 	}
 }
 
-function ruigehond006_localize() {
+function ruigehond006_start() {
 	if ( is_admin() ) {
 		return;
 	}
@@ -70,10 +72,57 @@ function ruigehond006_localize() {
 	if ( ! isset( $options['no_css'] ) ) {
 		add_action( 'wp_head', 'ruigehond006_stylesheet' );
 	}
+	/**
+	 * separate ert section...
+	 */
+	if (isset($options['use_ert'])) {
+		if (isset($options['ert_speed']) && (int) $options['ert_speed'] > 0) {
+			if ( isset( $options['use_ert_shortcode'] ) ) {
+				add_shortcode( 'wp-reading-progress-ert', 'ruigehond006_shortcode' );
+			}
+			if ( isset( $options['use_ert_excerpt'] ) ) {
+				add_filter( 'get_the_excerpt', 'ruigehond006_ert', 99 );
+			}
+			//add_filter( 'get_the_content', 'ruigehond006_ert', 99 );
+			//add_filter( 'the_content', 'ruigehond006_ert', 99 );
+		}
+	}
 }
 
 function ruigehond006_stylesheet() {
 	echo '<style>#ruigehond006_wrap{z-index:10001;position:fixed;display:block;left:0;width:100%;margin:0;overflow:visible}#ruigehond006_inner{position:absolute;height:0;width:inherit;background-color:rgba(255,255,255,.2);-webkit-transition:height .4s;transition:height .4s}html[dir=rtl] #ruigehond006_wrap{text-align:right}#ruigehond006_bar{width:0;height:100%;background-color:transparent}</style>';
+}
+
+function ruigehond006_shortcode( $attributes = [], $content = null, $short_code = 'wp-reading-progress-ert' ) {
+	return ruigehond006_ert();
+}
+
+function ruigehond006_ert( $content = null, $args = null ) {
+	global $post;
+	if ( ! $post ) {
+		return '';
+	}
+	$speed   = 250;
+	$options = get_option( 'ruigehond006' );
+	if ( isset( $options['ert_speed'] ) && (int) $options['ert_speed'] > 0 ) {
+		$speed = (int) $options['ert_speed'];
+	}
+	$minutes = max( 1, round( $time =  (str_word_count( strip_tags( $post->post_content ) ) / $speed), 0 ) );
+	if (
+		isset( $options['ert_snippet'] )
+		&& 1 === substr_count( ( $str = $options['ert_snippet'] ), '%d' )
+	) {
+		$str = sprintf( $str, $minutes );
+	} else {
+		$str = sprintf( '%d” read', $minutes );
+	}
+	$snippet = sprintf("<span class='wp-reading-progress-ert post-$post->ID' data-ert='$time' data-minutes='$minutes'>%s</span>", $str);
+
+	if ( $content ) {
+		return "$snippet $content";
+	}
+
+	return $snippet;
 }
 
 // meta box exposes setting to display reading progress for an individual post
@@ -208,13 +257,6 @@ function ruigehond006_settings() {
 		$option,
 		esc_html__( 'Explain the purpose of this reading bar to screenreaders', 'wp-reading-progress' )
 	);
-//    ruigehond006_add_settings_field(
-//        'ert_speed',
-//        'text-short',
-//        esc_html__('Reading speed', 'wp-reading-progress'), // title
-//        $option,
-//        esc_html__('Average reading speed in words per minute, integers only. Used to estimate reading time. Leave empty for no ERT. Usual is something between 200 and 300.', 'wp-reading-progress')
-//    );
 	ruigehond006_add_settings_field(
 		'mark_it_zero',
 		'checkbox',
@@ -267,9 +309,65 @@ function ruigehond006_settings() {
 		$option,
 		esc_html__( 'necessary css for the reading bar is included elsewhere', 'wp-reading-progress' )
 	);
+	add_settings_section(
+		'ert_settings', // section id
+		esc_html__( 'Estimated reading time', 'wp-reading-progress' ) . ' (BETA)', // title
+		function () {
+			echo '<p>';
+			echo esc_html__( 'If you want to display estimated reading time (ert) and your theme does not support it, you can activate it here.', 'wp-reading-progress' );
+			echo '<br/>';
+			echo esc_html__( 'When activated, you need to set some extra options. Upon deactivation, those options will be removed as well.', 'wp-reading-progress' );
+			echo '<br/>';
+			echo esc_html__( 'The ert (snippet) will be output in a span with css class `wp-reading-progress-ert` for you to style.', 'wp-reading-progress' );
+			echo '</p>';
+		}, //callback
+		'ruigehond006' // page
+	);
+	ruigehond006_add_settings_field(
+		'use_ert',
+		'checkbox',
+		esc_html__( 'Activate ert', 'wp-reading-progress' ),
+		$option,
+		esc_html__( 'Check to activate ert, leave unchecked if you have ert in your theme.', 'wp-reading-progress' ),
+		'ert_settings'
+	);
+	if (isset($option['use_ert'])) {
+		ruigehond006_add_settings_field(
+			'use_ert_shortcode',
+			'checkbox',
+			esc_html__( 'Use shortcode', 'wp-reading-progress' ),
+			$option,
+			esc_html__( 'Switch this on to display ert using the shortcode: [wp-reading-progress-ert].', 'wp-reading-progress' ),
+			'ert_settings'
+		);
+		ruigehond006_add_settings_field(
+			'use_ert_excerpt',
+			'checkbox',
+			esc_html__( 'Add before excerpt', 'wp-reading-progress' ),
+			$option,
+			esc_html__( 'This will add the snippet before any excerpt. Note that some themes strip the html.', 'wp-reading-progress' ),
+			'ert_settings'
+		);
+		ruigehond006_add_settings_field(
+			'ert_speed',
+			'text-short',
+			esc_html__( 'Reading speed', 'wp-reading-progress' ), // title
+			$option,
+			esc_html__( 'Average reading speed in words per minute, integers only. Used to estimate reading time. Usual is something between 200 and 300.', 'wp-reading-progress' ),
+			'ert_settings'
+		);
+		ruigehond006_add_settings_field(
+			'ert_snippet',
+			'text-short',
+			esc_html__( 'Snippet text', 'wp-reading-progress' ), // title
+			$option,
+			esc_html__( 'Define your own text here. Mandatory placeholder `%d` will display the minutes.', 'wp-reading-progress' ),
+			'ert_settings'
+		);
+	}
 }
 
-function ruigehond006_add_settings_field( $name, $type, $title, $option, $explanation = null ) {
+function ruigehond006_add_settings_field( $name, $type, $title, $option, $explanation = null, $section = 'progress_bar_settings' ) {
 	add_settings_field(
 		"ruigehond006_$name",
 		$title,
@@ -279,7 +377,7 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 					echo '<label><input type="checkbox" name="ruigehond006[';
 					echo htmlentities( $args['name'], ENT_QUOTES );
 					echo ']"';
-					if ( isset( $args['value'] ) && $args['value'] ) {
+					if ( $args['value'] ) {
 						echo ' checked="checked"';
 					}
 					echo '/> ';
@@ -297,11 +395,10 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 					echo '"/>';
 					break;
 				default: // regular input
-					$value = isset( $args['value'] ) ? $args['value'] : '';
 					echo '<input type="text" name="ruigehond006[';
 					echo htmlentities( $args['name'], ENT_QUOTES );
 					echo ']" value="';
-					echo htmlentities( $value, ENT_QUOTES );
+					echo htmlentities( $args['value'], ENT_QUOTES );
 					if ( 'text-short' !== $args['type'] ) {
 						echo '" class="regular-text';
 					}
@@ -314,11 +411,11 @@ function ruigehond006_add_settings_field( $name, $type, $title, $option, $explan
 			}
 		},
 		'ruigehond006',
-		'progress_bar_settings',
+		$section,
 		array(
 			'name'        => $name,
 			'type'        => $type,
-			'value'       => isset( $option[ $name ] ) ? $option[ $name ] : null,
+			'value'       => isset( $option[ $name ] ) ? $option[ $name ] : '',
 			'explanation' => $explanation,
 		) // args
 	);
@@ -376,7 +473,12 @@ function ruigehond006_settings_validate( $input ) {
 		'bar_height',
 		'bar_attach',
 		'aria_label',
-		'post_types'
+		'post_types',
+		'use_ert',
+		'ert_speed',
+		'ert_snippet',
+		'use_ert_shortcode',
+		'use_ert_excerpt',
 	);
 
 	foreach ( $settings as $index => $key ) {
@@ -392,6 +494,9 @@ function ruigehond006_settings_validate( $input ) {
 			case 'include_comments':
 			case 'archives':
 			case 'no_css':
+			case 'use_ert':
+			case 'use_ert_shortcode':
+			case 'use_ert_excerpt':
 				// IMPORTANT: this is backwards compatible, 'false' options must not be present
 				if ( 'on' === $value ) {
 					$options[ $key ] = 'on';
@@ -402,8 +507,12 @@ function ruigehond006_settings_validate( $input ) {
 			case 'bar_color':
 			case 'bar_height':
 			case 'bar_attach':
+			case 'ert_snippet':
 			case 'aria_label':
 				$options[ $key ] = strip_tags( $value );
+				break;
+			case 'ert_speed':
+				$options[ $key ] = (int) $value;
 				break;
 			case 'post_types': // array of strings
 				$options[ $key ] = array_map( static function ( $value ) {
@@ -432,12 +541,4 @@ function ruigehond006_install() {
 	if ( ! get_option( 'ruigehond006' ) ) { // insert default settings:
 		ruigehond006_add_defaults();
 	}
-}
-
-function ruigehond006_uninstall() {
-	// remove settings
-	delete_option( 'ruigehond006' );
-	delete_option( 'ruigehond006_upgraded_1.2.4' );
-	// remove the post_meta entries
-	delete_post_meta_by_key( '_ruigehond006_show' );
 }

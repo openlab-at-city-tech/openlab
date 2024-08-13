@@ -7345,6 +7345,15 @@ blockquote .h6 {
 .bp-docs #comments .comment-respond #submit {
   position: relative;
 }
+.clickable-card.card-is-hovered {
+  border-color: #999999 !important;
+}
+.clickable-card .see-more {
+  text-decoration: underline;
+}
+.clickable-card .see-more:hover {
+  text-decoration: none;
+}
 .nav.nav-inline {
   margin-top: 0;
 }
@@ -7760,14 +7769,16 @@ input:disabled + label {
 .link-edit-items .social-link-fields-inner {
   display: flex;
   gap: 20px;
-  flex: 0 0 520px;
+  flex: 1;
 }
 @media (max-width: 767px) {
   .link-edit-items .social-link-fields-inner {
     display: block;
-    flex: 1;
     order: 1;
   }
+}
+.link-edit-items .social-link-fields-inner .field-visibility-settings label {
+  font-weight: 700;
 }
 .link-edit-items .social-link-fields-service {
   flex: 0 0 250px;
@@ -8275,6 +8286,10 @@ a:hover .cyan-circle {
   color: #49cabe;
 }
 /**custom tags**/
+body .field-contains-last-name-error.error {
+  background: #63dfd2 !important;
+  font-weight: 700 !important;
+}
 body .no-gutter.no-gutter-right {
   padding-right: 0;
 }
@@ -8434,6 +8449,12 @@ body a.roll-over-loss:focus {
 body a.roll-over-color:hover,
 body a.roll-over-color:focus {
   color: #333333 !important;
+}
+body .portfolio-profile-link-wrapper {
+  margin-top: 32px;
+}
+body .portfolio-profile-link-wrapper label {
+  font-weight: 600;
 }
 body .group-active-status-fieldset {
   margin: 24px 0;
@@ -8708,8 +8729,18 @@ body #register-page .has-error .error {
 body #register-page .has-error .error .parsley-errors-list {
   padding: 15px;
 }
+body #register-page legend .label-gloss,
 body #register-page label .label-gloss {
   font-weight: normal;
+}
+body #register-page .account-description-approval-fieldset {
+  margin-top: 20px;
+}
+body #register-page .registration-continue-button {
+  margin-top: 20px;
+}
+body #register-page .registration-continue-button a {
+  text-decoration: none;
 }
 body .panel-body .bp-template-notice {
   margin-top: 0;
@@ -9499,15 +9530,7 @@ body form .checkbox-list-container {
   margin-bottom: 25px;
 }
 .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
-  height: 0;
   position: relative;
-  padding-top: 100%;
-}
-.home-page .activity-list .activity-wrapper .activity-item .item-avatar a {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
 }
 @media (max-width: 767px) {
   .home-page .activity-list .activity-wrapper .activity-item .item-avatar {
@@ -9628,6 +9651,19 @@ body form .checkbox-list-container {
 .portfolio-site-link:hover > a .cyan-circle,
 .portfolio-site-link:focus > a .cyan-circle {
   color: #63dfd2;
+}
+.portfolio-profile-link-toggle-wrapper {
+  align-items: flex-start;
+  display: flex;
+  gap: 8px;
+  margin-left: 5%;
+}
+.portfolio-profile-link-toggle-wrapper label {
+  display: block;
+  font-weight: normal;
+  font-size: 12px;
+  padding-top: 3px;
+  margin-bottom: 0;
 }
 .mobile-group-site-links {
   margin-top: 30px;
@@ -10621,6 +10657,9 @@ body.membership-requests .group-list {
 .bp-group-documents-fields.show-upload #bp-group-documents-fields-for-file-type-link {
   display: none;
 }
+.group-documents-privacy {
+  margin: 2em 0;
+}
 /* BuddyPress Docs toggleable panels */
 .toggleable .plus-or-minus {
   background-image: none;
@@ -10809,6 +10848,9 @@ body.docs .notify-group-members-ui {
   font-weight: 700;
 }
 #doc-meta .toggle-content .doc-meta-label em {
+  font-weight: 400;
+}
+#doc-meta #doc-privacy .toggle-content label {
   font-weight: 400;
 }
 #doc-meta #toggle-table-settings .desc-column {
@@ -11561,6 +11603,13 @@ body.single-event #content .eo-event-venue-map {
   margin-top: 5px;
   background: #f7e700;
   border-color: #f7e700;
+}
+.field-visibility-settings {
+  margin-bottom: 15px;
+}
+.field-visibility-settings label {
+  font-weight: 400;
+  padding-right: 8px;
 }
 #member-header {
   margin-top: 41px;
@@ -12440,4 +12489,7 @@ p.private-membership-indicator {
 }
 .group-validate-form #site-options .error-container {
   margin-bottom: 15px;
+}
+.two-factor-methods-table .col-primary {
+  display: none;
 }

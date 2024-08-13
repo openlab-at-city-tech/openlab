@@ -280,6 +280,8 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2sAnimateGif" value='<?php echo esc_attr(B2S_PLUGIN_NETWORK_ANIMATE_GIF); ?>'>
 <input type="hidden" id="ogMetaNetworks" value="<?php echo esc_attr(implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og'])); ?>">
 <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
+<input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(date(strtotime("+ 3 years"))); ?>000">
+
 
 <script>
     var b2s_has_premium = <?php echo esc_attr(B2S_PLUGIN_USER_VERSION) > 0 ? "true" : "false"; ?>;

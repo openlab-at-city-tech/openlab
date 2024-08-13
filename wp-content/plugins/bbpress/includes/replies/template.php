@@ -402,7 +402,7 @@ function bbp_reply_permalink( $reply_id = 0 ) {
 	 * @since 2.0.0 bbPress (r2553)
 	 *
 	 * @param int $reply_id Optional. Reply id
-	 *                        and reply id
+	 *
 	 * @return string Permanent link to reply
 	 */
 	function bbp_get_reply_permalink( $reply_id = 0 ) {
@@ -465,7 +465,7 @@ function bbp_reply_url( $reply_id = 0 ) {
 		// Get vars needed to support pending topics with unpretty links
 		$has_slug   = ! empty( $topic ) ? $topic->post_name : '';
 		$pretty     = bbp_use_pretty_urls();
-		$published  = ! bbp_is_topic_pending( $topic_id );
+		$published  = bbp_is_topic_public( $topic_id );
 
 		// Don't include pagination if on first page
 		if ( 1 >= $reply_page ) {
@@ -799,7 +799,7 @@ function bbp_reply_revision_log( $reply_id = 0 ) {
  * @since 2.0.0 bbPress (r2782)
  *
  * @param int $reply_id Optional. Reply id
- * @return string reply revisions
+ * @return WP_Post[]|int[] reply revisions
  */
 function bbp_get_reply_revisions( $reply_id = 0 ) {
 	$reply_id  = bbp_get_reply_id( $reply_id );
@@ -1457,7 +1457,7 @@ function bbp_reply_forum_id( $reply_id = 0 ) {
 	 * @since 2.0.0 bbPress (r2679)
 	 *
 	 * @param int $reply_id Optional. Reply id
-	 *                        id and reply id
+	 *
 	 * @return int The forum id of the reply
 	 */
 	function bbp_get_reply_forum_id( $reply_id = 0 ) {

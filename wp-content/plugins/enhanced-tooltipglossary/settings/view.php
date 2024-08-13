@@ -28,7 +28,8 @@
 			</div>
 			<div>
 				<div class="cm_field_help_container">Warning! This option will completely erase all of the data stored by the CM Tooltip Glossary in the database: terms, options, synonyms etc. <br/> It will also remove the Glossary Index Page. <br/> It cannot be reverted.</div>
-				<input onclick="return confirm('All options of CM Tooltip Glossary will be erased. This cannot be reverted.')" type="submit" name="cmtt_removeAllOptions" value="Remove all options" class="button cmtt-cleanup-button"/>
+                <?php wp_nonce_field( 'remove-options-items' ); ?>
+                <input onclick="return confirm('All options of CM Tooltip Glossary will be erased. This cannot be reverted.')" type="submit" name="cmtt_removeAllOptions" value="Remove all options" class="button cmtt-cleanup-button"/>
 				<input onclick="return confirm('All terms of CM Tooltip Glossary will be erased. This cannot be reverted.')" type="submit" name="cmtt_removeAllItems" value="Remove all items" class="button cmtt-cleanup-button"/>
 				<span style="display: inline-block;position: relative;"></span>
 			</div>

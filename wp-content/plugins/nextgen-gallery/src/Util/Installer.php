@@ -107,6 +107,9 @@ class Installer {
 			$do_upgrade = true;
 		}
 
+		// Allow NextGEN extensions to trigger this process.
+		$do_upgrade = \apply_filters( 'ngg_do_install_or_setup_process', $do_upgrade );
+
 		$can_upgrade = $do_upgrade && self::can_do_upgrade();
 
 		if ( $can_upgrade && $do_upgrade ) {
@@ -114,6 +117,12 @@ class Installer {
 			if ( \function_exists( 'apc_clear_cache' ) ) {
 				@\apc_clear_cache( 'opcode' );
 				\apc_clear_cache();
+			}
+
+			// Attempt to reset the opcache. NextGEN 3.50+ and Pro 3.30+ moved, renamed, and deleted several files
+			// and purging the opcache should help prevent fatal errors due to cached instructions.
+			if ( \function_exists( 'opcache_reset' ) ) {
+				\opcache_reset();
 			}
 
 			// Clear all of our transients.
@@ -144,6 +153,7 @@ class Installer {
 			$local_settings->save();
 
 			self::set_role_caps();
+			\do_action( 'ngg_did_install_or_setup_process' );
 		}
 
 		// Update the module list, and remove the update flag.

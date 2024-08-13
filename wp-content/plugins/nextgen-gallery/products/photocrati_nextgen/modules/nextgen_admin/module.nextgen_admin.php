@@ -138,8 +138,8 @@ class M_NextGen_Admin extends C_Base_Module {
 		// Enqueue common static resources for NGG admin pages.
 		add_filter( 'ngg_admin_style_handles', [ $this, 'get_common_admin_css_handlers' ] );
 		add_filter( 'ngg_admin_script_handles', [ $this, 'get_common_admin_js_handlers' ] );
-		add_action( 'admin_enqueue_scripts', [ get_class(), 'enqueue_common_admin_static_resources' ] );
-		add_action( 'admin_footer_print_scripts', [ &$this, 'enqueue_common_admin_footer_static_resources' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_common_admin_static_resources' ] );
+		add_action( 'admin_footer_print_scripts', [ $this, 'enqueue_common_admin_footer_static_resources' ] );
 
 		// Provides menu options for managing NextGEN Settings.
 		add_action( 'admin_menu', [ $this, 'add_menu_pages' ], 999 );
@@ -164,10 +164,11 @@ class M_NextGen_Admin extends C_Base_Module {
 		add_action( 'admin_footer', [ $notices, 'enqueue_scripts' ] );
 		add_action( 'do_ngg_notices', [ $notices, 'render' ] );
 		add_action( 'ngg_created_new_gallery', [ $this, 'set_review_notice_flag' ] );
-		add_action( 'ngg_created_new_gallery', get_class() . '::update_gallery_count_setting' );
-		add_action( 'ngg_delete_gallery', get_class() . '::update_gallery_count_setting' );
+		add_action( 'ngg_created_new_gallery', 'M_NextGEN_Admin::update_gallery_count_setting' );
+		add_action( 'ngg_delete_gallery', 'M_NextGEN_Admin::update_gallery_count_setting' );
+
 		if ( ! self::is_ngg_legacy_page() ) {
-			add_action( 'all_admin_notices', get_class() . '::emit_do_notices_action' );
+			add_action( 'all_admin_notices', 'M_NextGEN_Admin::emit_do_notices_action' );
 		}
 
 		if ( defined( 'PHP_VERSION_ID' ) ) {
@@ -176,22 +177,6 @@ class M_NextGen_Admin extends C_Base_Module {
 			$version = explode( '.', PHP_VERSION );
 			$php_id  = ( $version[0] * 10000 + $version[1] * 100 + $version[2] );
 		}
-
-		$notices->add(
-			'ngg_styles_and_custom_templates_deprecation',
-			[
-				'message' => implode(
-					"\n",
-					[
-						__( 'NextGEN Gallery will soon be removing support for custom styles and legacy templates. For more information, see:' ),
-						'<ul>',
-						sprintf( "<li><a target='_blank' href='%s'>" . __( 'Custom Styles Deprecation' ) . '</a></li>', 'https://www.imagely.com/docs/styles-tab-deprecation' ),
-						sprintf( "<li><a target='_blank' href='%s'>" . __( 'Legacy Templates Deprecation' ) . '</a></li>', 'https://www.imagely.com/docs/legacy-templates-deprecation' ),
-						'</ul>',
-					]
-				),
-			]
-		);
 
 		if ( $php_id < 50300 ) {
 			$notices->add(

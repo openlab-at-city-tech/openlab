@@ -3,7 +3,7 @@
  * Common functions
  *
  * @since 3.0.0
- * @version 12.0.0
+ * @version 12.3.0
  */
 
 // Exit if accessed directly.
@@ -304,7 +304,7 @@ function bp_nouveau_wrapper( $args = array() ) {
 		$container_classes = ' class="' . join( ' ', array_map( 'sanitize_html_class', $r['container_classes'] ) ) . '"';
 	}
 
-	// Print the wrapper and its content.
+	// phpcs:ignore WordPress.Security.EscapeOutput
 	printf( '<%1$s%2$s%3$s>%4$s</%1$s>', $container, $container_id, $container_classes, $output );
 }
 
@@ -752,7 +752,10 @@ function bp_nouveau_customizer_grid_choices( $type = 'option' ) {
  * @return array An array of nav items slugs.
  */
 function bp_nouveau_sanitize_nav_order( $option = '' ) {
-	$option = explode( ',', $option );
+	if ( ! is_array( $option ) ) {
+		$option = explode( ',', $option );
+	}
+
 	return array_map( 'sanitize_key', $option );
 }
 

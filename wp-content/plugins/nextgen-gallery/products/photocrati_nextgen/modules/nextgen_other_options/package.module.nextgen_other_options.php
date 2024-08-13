@@ -279,7 +279,7 @@ class A_Lightbox_Manager_Form extends Mixin
         }
         // Highslide and jQuery.Lightbox were removed in 2.0.73 due to licensing. If a user has selected
         // either of those options we silently make their selection fallback to Fancybox.
-        $selected = $this->get_model()->thumbEffect;
+        $selected = \Imagely\NGG\Display\LightboxManager::get_instance()->get_selected()->name;
         if (in_array($selected, ['highslide', 'lightbox'])) {
             $selected = 'fancybox';
         }
@@ -580,7 +580,13 @@ class A_Watermarking_Ajax_Actions extends Mixin
             $watermark_options = $this->param('watermark_options');
             $sizeinfo = ['crop' => false, 'height' => 250, 'quality' => 100, 'watermark' => true, 'wmColor' => trim(esc_sql($watermark_options['wmColor'])), 'wmFont' => trim(esc_sql($watermark_options['wmFont'])), 'wmOpaque' => intval(trim($watermark_options['wmOpaque'])), 'wmPath' => trim(esc_sql($watermark_options['wmPath'])), 'wmPos' => trim(esc_sql($watermark_options['wmPos'])), 'wmSize' => intval(trim($watermark_options['wmSize'])), 'wmText' => trim(esc_sql($watermark_options['wmText'])), 'wmType' => trim(esc_sql($watermark_options['wmType'])), 'wmXpos' => intval(trim($watermark_options['wmXpos'])), 'wmYpos' => intval(trim($watermark_options['wmYpos']))];
             $size = $imagegen->get_size_name($sizeinfo);
-            $storage->generate_image_size($image, $size, $sizeinfo);
+            if (empty($image)) {
+                return ['thumbnail_url' => '', 'error' => 'Could not find image to generate preview for'];
+            }
+            $image_size = $storage->generate_image_size($image, $size, $sizeinfo);
+            if (empty($image_size)) {
+                return ['thumbnail_url' => '', 'error' => 'Could not generate image size'];
+            }
             $storage->flush_image_path_cache($image, $size);
             $thumbnail_url = $storage->get_image_url($image, $size);
             return ['thumbnail_url' => $thumbnail_url];
@@ -699,19 +705,28 @@ class A_Watermarks_Form extends Mixin
         $image = $this->object->_get_preview_image();
         return $this->render_partial('photocrati-nextgen_other_options#watermarks_tab', ['watermark_automatically_at_upload_value' => $settings->get('watermark_automatically_at_upload', 0), 'watermark_automatically_at_upload_label' => __('Automatically watermark images during upload:', 'nggallery'), 'watermark_automatically_at_upload_label_yes' => __('Yes', 'nggallery'), 'watermark_automatically_at_upload_label_no' => __('No', 'nggallery'), 'notice' => __('Please note: You can only activate the watermark under Manage Gallery. This action cannot be undone.', 'nggallery'), 'watermark_source_label' => __('How will you generate a watermark?', 'nggallery'), 'watermark_sources' => $this->object->_get_watermark_sources(), 'watermark_fields' => $this->object->_get_watermark_source_fields($settings), 'watermark_source' => $settings->get('wmType'), 'position_label' => __('Position:', 'nggallery'), 'position' => $settings->get('wmPos'), 'offset_label' => __('Offset:', 'nggallery'), 'offset_x' => $settings->get('wmXpos'), 'offset_y' => $settings->get('wmYpos'), 'hidden_label' => __('(Show Customization Options)', 'nggallery'), 'active_label' => __('(Hide Customization Options)', 'nggallery'), 'thumbnail_url' => $image['url'], 'preview_label' => __('Preview of saved settings:', 'nggallery'), 'refresh_label' => __('Refresh preview image', 'nggallery'), 'refresh_url' => $settings->get('ajax_url')], true);
     }
+    /**
+     * Save the form action.
+     */
     public function save_action()
     {
-        if ($settings = $this->object->param('watermark_options')) {
+        global $wp_filesystem;
+        if (!$wp_filesystem) {
+            require_once ABSPATH . '/wp-admin/includes/file.php';
+            WP_Filesystem();
+        }
+        $settings = $this->object->param('watermark_options');
+        if (is_array($settings)) {
             // Sanitize.
             foreach ($settings as $key => &$value) {
                 switch ($key) {
                     case 'wmType':
-                        if (!in_array($value, ['', 'text', 'image'])) {
+                        if (!in_array($value, ['', 'text', 'image'], true)) {
                             $value = '';
                         }
                         break;
                     case 'wmPos':
-                        if (!in_array($value, ['topLeft', 'topCenter', 'topRight', 'midLeft', 'midCenter', 'midRight', 'botLeft', 'botCenter', 'botRight'])) {
+                        if (!in_array($value, ['topLeft', 'topCenter', 'topRight', 'midLeft', 'midCenter', 'midRight', 'botLeft', 'botCenter', 'botRight'], true)) {
                             $value = 'midCenter';
                         }
                         break;
@@ -726,8 +741,8 @@ class A_Watermarks_Form extends Mixin
             }
             $this->object->get_model()->set($settings)->save();
             $image = $this->object->_get_preview_image();
-            if (is_file($image['abspath'])) {
-                @unlink($image['abspath']);
+            if (!empty($image['abspath']) && $wp_filesystem->is_file($image['abspath'])) {
+                $wp_filesystem->delete($image['abspath'], false, 'f');
             }
         }
     }

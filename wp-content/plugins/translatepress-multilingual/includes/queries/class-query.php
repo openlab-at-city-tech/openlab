@@ -60,8 +60,14 @@ class TRP_Query{
 	 */
     public function get_all_translation_blocks( $language_code ){
         if ( apply_filters( 'trp_enable_translation_blocks_querying', true ) ) {
-            $query      = "SELECT original, id, block_type, status FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE block_type = " . self::BLOCK_TYPE_ACTIVE . " OR block_type = " . self::BLOCK_TYPE_DEPRECATED;
-            $dictionary = $this->db->get_results( $query, OBJECT_K );
+            $cache_key = 'get_all_translation_blocks_' . md5( $language_code );
+            $dictionary = wp_cache_get( $cache_key, 'trp' );
+
+            if ( false === $dictionary ) {
+                $query      = "SELECT original, id, block_type, status FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE block_type = " . self::BLOCK_TYPE_ACTIVE . " OR block_type = " . self::BLOCK_TYPE_DEPRECATED;
+                $dictionary = $this->db->get_results( $query, OBJECT_K );
+                wp_cache_set( $cache_key, $dictionary, 'trp' );
+            }
         }else{
             $dictionary = array();
         }
@@ -211,6 +217,11 @@ class TRP_Query{
 
             $sql_index = "CREATE INDEX index_name ON `" . $table_name . "` (original(100));";
             $this->db->query( $sql_index );
+
+            // added index on block_type for performance improvement when creating a new dictionary table
+            // for existing tables a function was added in class-upgrade on version 2.7.4
+            $sql_index_block_type = "CREATE INDEX block_type ON `" . $table_name . "` (block_type);";
+            $this->db->query( $sql_index_block_type );
 
             $this->maybe_record_automatic_translation_error(array( 'details' => 'Error creating regular tables' ) );
 

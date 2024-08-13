@@ -2,7 +2,10 @@
 namespace Bookly\Lib;
 
 use Bookly\Lib\Base\Schema;
+use Bookly\Lib\Cloud\Account;
+use Bookly\Lib\Entities\Appointment;
 use Bookly\Lib\Entities\CustomerAppointment;
+use Bookly\Lib\Entities\Log;
 use Bookly\Lib\Entities\MailingCampaign;
 use Bookly\Lib\Entities\MailingListRecipient;
 use Bookly\Lib\Entities\MailingQueue;
@@ -50,6 +53,8 @@ abstract class Routines
             self::mailing();
             // Handle expired sessions
             self::clearSessions();
+            // Handle expired logs
+            self::clearLogs();
         }
 
         self::doDailyRoutine();
@@ -115,6 +120,11 @@ abstract class Routines
                 ->set( 'status_changed_at', current_time( 'mysql' ) )
                 ->whereIn( 'payment_id', $payments )
                 ->execute();
+            $affected_appointments = Appointment::query( 'a' )
+                ->leftJoin( 'CustomerAppointment', 'ca', 'a.id = ca.appointment_id' )
+                ->whereNot( 'a.start_date', null )
+                ->whereIn( 'ca.payment_id', $payments )
+                ->fetchCol( 'a.id' );
             // Reject recurring appointments when customer pay only for first one.
             $series = CustomerAppointment::query()
                 ->whereIn( 'payment_id', $payments )
@@ -127,8 +137,20 @@ abstract class Routines
                     ->set( 'status_changed_at', current_time( 'mysql' ) )
                     ->whereIn( 'series_id', $series )
                     ->execute();
+                $affected_appointments = array_merge( $affected_appointments, Appointment::query( 'a' )
+                    ->leftJoin( 'CustomerAppointment', 'ca', 'a.id = ca.appointment_id' )
+                    ->whereNot( 'a.start_date', null )
+                    ->whereIn( 'ca.series_id', $series )
+                    ->fetchCol( 'a.id' ) );
             }
             Proxy\Shared::unpaidPayments( $payments );
+
+            /** @var Appointment $appointment */
+            foreach ( array_unique( $affected_appointments ) as $appointment_id ) {
+                $appointment = Appointment::find( $appointment_id );
+                Proxy\Shared::syncOnlineMeeting( array(), $appointment, Entities\Service::find( $appointment->getServiceId() ) );
+                Utils\Common::syncWithCalendars( $appointment );
+            }
         }
     }
 
@@ -257,8 +279,7 @@ abstract class Routines
             while ( $mc = MailingCampaign::query()
                 ->where( 'state', MailingCampaign::STATE_PENDING )
                 ->whereLte( 'send_at', current_time( 'mysql' ) )
-                ->findOne() )
-            {
+                ->findOne() ) {
                 $mc->setState( MailingCampaign::STATE_IN_PROGRESS )->save();
                 $query = 'INSERT INTO `' . MailingQueue::getTableName() . '` (phone, name, text, sent, campaign_id, created_at)
                           SELECT mlr.phone, mlr.name, %s, 0, %d, %s
@@ -272,13 +293,14 @@ abstract class Routines
 
             /** @var MailingQueue[] $sms_items */
             $query = MailingQueue::query()->where( 'sent', '0' )->sortBy( 'campaign_id' )->limit( 2 );
+            $sms_sender = $cloud->getProduct( Account::PRODUCT_SMS_NOTIFICATIONS );
             while ( $sms_items = $query->find() ) {
                 $sms = $sms_items[0];
                 $sms->setSent( 1 )->save();
 
                 $codes = new Notifications\Assets\Mailing\Codes( $sms );
                 $message = $codes->replaceForSms( $sms->getText() );
-                $cloud->sms->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], 60 );
+                $sms_sender->sendSms( $sms->getPhone(), $message['personal'], $message['impersonal'], 60 );
                 if ( count( $sms_items ) === 1 || $sms_items[0]->getCampaignId() != $sms_items[1]->getCampaignId() ) {
                     MailingCampaign::query()
                         ->update()
@@ -293,5 +315,19 @@ abstract class Routines
     public static function clearSessions()
     {
         Entities\Session::query()->delete()->whereLt( 'expire', current_time( 'mysql' ) )->execute();
+    }
+
+    public static function clearLogs()
+    {
+        Log::query()->delete()
+            ->whereRaw( 'created_at < DATE(NOW() - INTERVAL %s DAY)', array( get_option( 'bookly_logs_expire', 30 ) ) )
+            ->execute();
+
+        foreach ( Utils\Log::getTypes() as $type ) {
+            $option_value = get_option( $type );
+            if ( $option_value && ( date_create( $option_value ) < date_create() ) ) {
+                update_option( $type, '0' );
+            }
+        }
     }
 }

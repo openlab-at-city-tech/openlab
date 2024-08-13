@@ -79,7 +79,7 @@ jQuery(function($) {
             data: function(d) {
                 return {
                     action: 'bookly_get_purchases_list',
-                    csrf_token: BooklyL10n.csrfToken,
+                    csrf_token: BooklyL10nGlobal.csrf_token,
                     range: $date_range.data('date')
                 };
             },

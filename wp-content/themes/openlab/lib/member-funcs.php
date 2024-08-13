@@ -838,7 +838,7 @@ function cuny_member_profile_header() {
 						<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/edit/'; ?>"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Profile</a>
 						<a class="btn btn-default btn-block btn-primary link-btn" href="<?php echo $dud . 'profile/change-avatar/'; ?>"><i class="fa fa-camera" aria-hidden="true"></i> Change Avatar</a>
 					</div>
-				<?php elseif ( is_user_logged_in() && ! openlab_is_my_profile() ) : ?>
+				<?php elseif ( is_user_logged_in() && ! openlab_is_my_profile() && openlab_user_can_send_messages() ) : ?>
 					<?php bp_add_friend_button( openlab_fallback_user(), bp_loggedin_user_id() ); ?>
 
 					<?php
@@ -858,8 +858,9 @@ function cuny_member_profile_header() {
 					?>
 
 				<?php endif ?>
+
+				<?php do_action( 'openlab_member_under_avatar' ); ?>
 			</div><!--profile-action-wrapper-->
-					<!--<p>Some descriptive tags about the student...</p>-->
 		</div><!-- #item-header-avatar -->
 
 		<div id="member-header-content" class="col-sm-16 col-xs-24">
@@ -1029,13 +1030,23 @@ function cuny_member_profile_header() {
 							</div>
 						<?php endif; // bp_has_profile() ?>
 
-						<?php /* Social fields are handled separately */ ?>
-						<?php $social_fields = openlab_social_media_fields(); ?>
+						<?php
+						// Social fields are handled separately
+						$social_fields = openlab_social_media_fields();
+
+						$hidden_fields_for_user = bp_xprofile_get_hidden_fields_for_user( bp_displayed_user_id() );
+						?>
+
 						<?php foreach ( $social_fields as $field_slug => $field_data ) : ?>
 							<?php
 
 							$field_value = openlab_get_social_media_field_for_user( bp_displayed_user_id(), $field_slug );
 							if ( ! $field_value ) {
+								continue;
+							}
+
+							// Visibility.
+							if ( in_array( $social_fields[ $field_slug ]['field_id'], $hidden_fields_for_user, true ) ) {
 								continue;
 							}
 
@@ -1959,6 +1970,8 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 		$saved_social_fields[0] = '';
 	}
 
+	$visibility_levels = openlab_get_xprofile_visibility_levels();
+
 	?>
 
 	<div class="social-fields">
@@ -1984,6 +1997,21 @@ function openlab_social_fields_edit_markup( $user_id = 0 ) {
 
 								<div class="form-group social-link-fields-url">
 									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-url">URL or username</label> <input name="social-links[<?php echo esc_attr( $sfi ); ?>][url]" id="social-links-<?php echo esc_attr( $sfi ); ?>-url" class="form-control social-links-url" value="<?php echo esc_attr( $saved_social_field_value ); ?>" />
+								</div>
+
+								<div class="form-group social-link-fields-visibility">
+									<label for="social-links-<?php echo esc_attr( $sfi ); ?>-visibility">Who can see this?</label>
+									<select name="social-links[<?php echo esc_attr( $sfi ); ?>][visibility]" id="social-links-<?php echo esc_attr( $sfi ); ?>-visibility">
+										<?php if ( bp_is_register_page() ) : ?>
+											<option value="">-</option>
+										<?php endif; ?>
+
+										<?php foreach ( $visibility_levels as $level => $level_data ) : ?>
+											<?php $saved_level = xprofile_get_field_visibility_level( $social_fields[ $saved_social_field_slug ]['field_id'], $user_id ); ?>
+
+											<option value="<?php echo esc_attr( $level ); ?>" <?php selected( $level, $saved_level ); ?>><?php echo esc_html( $level_data['label'] ); ?></option>
+										<?php endforeach; ?>
+									</select>
 								</div>
 							</div>
 
@@ -2143,6 +2171,64 @@ function openlab_user_social_links_save( $user_id ) {
 		$url     = sanitize_text_field( wp_unslash( $social_link['url'] ) );
 
 		openlab_set_social_media_field_for_user( $user_id, $service, $url );
+
+		$field_id   = $all_fields[ $service ]['field_id'];
+		$visibility = isset( $social_link['visibility'] ) ? sanitize_text_field( wp_unslash( $social_link['visibility'] ) ) : 'public';
+		xprofile_set_field_visibility_level( $field_id, $user_id, $visibility );
 	}
 }
 add_action( 'xprofile_updated_profile', 'openlab_user_social_links_save' );
+
+/**
+ * AJAX callback for 'openlab_portfolio_link_visibility'.
+ *
+ * @return void
+ */
+function openlab_portfolio_link_visibility_ajax_cb() {
+	$verified = wp_verify_nonce( $_GET['nonce'], 'openlab_portfolio_link_visibility' );
+
+	if ( ! $verified ) {
+		wp_send_json_error( 'Invalid nonce' );
+	}
+
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( 'Not logged in' );
+	}
+
+	$enabled = 'enabled' === $_GET['state'];
+	openlab_save_show_portfolio_link_on_user_profile( get_current_user_id(), $enabled );
+
+	wp_send_json_success();
+}
+add_action( 'wp_ajax_openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_ajax_cb' );
+
+/**
+ * Determines whether a user's profile should have the noindex meta tag.
+ *
+ * @param int $user_id User ID.
+ * @return bool
+ */
+function openlab_should_noindex_user_profile( $user_id ) {
+	$noindex = get_user_meta( $user_id, 'openlab_noindex_user_profile', true );
+
+	return (bool) $noindex;
+}
+
+/**
+ * Adds the noindex meta tag to a user's profile.
+ */
+function openlab_add_noindex_to_user_profile() {
+	if ( ! bp_is_user() ) {
+		return;
+	}
+
+	$user_id = bp_displayed_user_id();
+	if ( ! $user_id ) {
+		return;
+	}
+
+	if ( openlab_should_noindex_user_profile( $user_id ) ) {
+		echo '<meta name="robots" content="noindex" />' . "\n";
+	}
+}
+add_action( 'wp_head', 'openlab_add_noindex_to_user_profile', 0 );

@@ -28,7 +28,7 @@ function render_attributions( $content ) {
 	);
 
 	ob_start();
-	require_once ROOT_DIR . '/views/attributions.php';
+	require ROOT_DIR . '/views/attributions.php';
 	$content .= ob_get_clean();
 
 	return openlab_get_formatted_content_with_attributions( $content );

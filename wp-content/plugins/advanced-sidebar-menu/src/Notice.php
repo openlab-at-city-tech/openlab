@@ -10,6 +10,9 @@ use Advanced_Sidebar_Menu\Widget\Category;
  *
  * @author OnPoint Plugins
  * @since  8.1.0
+ *
+ * @phpstan-import-type PAGE_SETTINGS from Widget\Page
+ * @phpstan-import-type CATEGORY_SETTINGS from Widget\Category
  */
 class Notice {
 	use Singleton;
@@ -73,12 +76,14 @@ class Notice {
 	/**
 	 * Notify widget users about the PRO options
 	 *
-	 * @param array      $instance - widget instance.
-	 * @param \WP_Widget $widget   - widget class.
+	 * @phpstan-param PAGE_SETTINGS|CATEGORY_SETTINGS     $_
+	 *
+	 * @param array                                       $_      - widget instance.
+	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget - widget class.
 	 *
 	 * @return void
 	 */
-	public function info_panel( array $instance, \WP_Widget $widget ) {
+	public function info_panel( array $_, \WP_Widget $widget ) {
 		if ( $this->is_conflicting_pro_version() ) {
 			?>
 			<div class="advanced-sidebar-menu-column-box" style="border-color: red; font-size: 13px !important;">
@@ -138,8 +143,10 @@ class Notice {
 	 * Display a preview image, which covers the widget when the "Preview"
 	 * button is clicked.
 	 *
+	 * @phpstan-param PAGE_SETTINGS|CATEGORY_SETTINGS     $instance
+	 *
 	 * @param array      $instance - Widgets settings.
-	 * @param \WP_Widget $widget   - Widget class.
+	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget - Widget class.
 	 */
 	public function preview( array $instance, \WP_Widget $widget ) {
 		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {

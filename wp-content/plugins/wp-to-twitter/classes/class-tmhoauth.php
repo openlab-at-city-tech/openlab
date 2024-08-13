@@ -33,7 +33,7 @@ class TmhOAuth {
 	 *
 	 * @var $response
 	 */
-	var $response = array();
+	public $response = array();
 
 	/**
 	 * Creates a new TmhOAuth object
@@ -79,8 +79,8 @@ class TmhOAuth {
 				// for security this should always be set to true.
 				'curl_ssl_verifypeer'        => true,
 				// you can get the latest cacert.pem from here http://curl.haxx.se/ca/cacert.pem.
-				'curl_cainfo'                => dirname( __FILE__ ) . DIRECTORY_SEPARATOR . 'cacert.pem',
-				'curl_capath'                => dirname( __FILE__ ),
+				'curl_cainfo'                => __DIR__ . DIRECTORY_SEPARATOR . 'cacert.pem',
+				'curl_capath'                => __DIR__,
 				'curl_followlocation'        => false,
 				// whether to follow redirects or not.
 				// support for proxy servers.
@@ -625,7 +625,7 @@ class TmhOAuth {
 		$buffered = explode( $this->config['streaming_eol'], $data );
 		$content  = $this->buffer . $buffered[0];
 
-		$this->metrics['tweets'] ++;
+		++$this->metrics['tweets'];
 		$this->metrics['bytes'] += strlen( $content );
 
 		if ( ! is_callable( $this->config['streaming_callback'] ) ) {

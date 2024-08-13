@@ -5,11 +5,6 @@ use Bookly\Lib\DataHolders\Booking\Item;
 
 class Base
 {
-    const TYPE_APPOINTMENT = 'appointment';
-    const TYPE_PACKAGE = 'package';
-    const TYPE_GIFT_CARD = 'gift_card';
-    const TYPE_ADJUSTMENT = 'adjustment';
-
     /** @var string */
     protected $type;
 

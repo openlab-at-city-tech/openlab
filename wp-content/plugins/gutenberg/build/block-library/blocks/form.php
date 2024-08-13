@@ -33,7 +33,7 @@ function gutenberg_render_block_core_form( $attributes, $content ) {
 	$method = empty( $attributes['method'] ) ? 'post' : $attributes['method'];
 	$processed_content->set_attribute( 'method', $method );
 
-	$extra_fields = apply_filters( 'gutenberg_render_block_core_form_extra_fields', '', $attributes );
+	$extra_fields = apply_filters( 'render_block_core_form_extra_fields', '', $attributes );
 
 	return str_replace(
 		'</form>',
@@ -79,7 +79,7 @@ function gutenberg_block_core_form_extra_fields_comment_form( $extra_fields, $at
 	}
 	return $extra_fields;
 }
-add_filter( 'gutenberg_render_block_core_form_extra_fields', 'gutenberg_block_core_form_extra_fields_comment_form', 10, 2 );
+add_filter( 'render_block_core_form_extra_fields', 'gutenberg_block_core_form_extra_fields_comment_form', 10, 2 );
 
 /**
  * Sends an email if the form is a contact form.
@@ -96,7 +96,7 @@ function gutenberg_block_core_form_send_email() {
 		'<a href="' . esc_url( get_site_url( null, $params['_wp_http_referer'] ) ) . '">' . get_bloginfo( 'name' ) . '</a>'
 	);
 
-	$skip_fields = array( 'formAction', '_ajax_nonce', 'action' );
+	$skip_fields = array( 'formAction', '_ajax_nonce', 'action', '_wp_http_referer' );
 	foreach ( $params as $key => $value ) {
 		if ( in_array( $key, $skip_fields, true ) ) {
 			continue;
@@ -105,11 +105,11 @@ function gutenberg_block_core_form_send_email() {
 	}
 
 	// Filter the email content.
-	$content = apply_filters( 'gutenberg_render_block_core_form_email_content', $content, $params );
+	$content = apply_filters( 'render_block_core_form_email_content', $content, $params );
 
 	// Send the email.
 	$result = wp_mail(
-		str_replace( 'mailto:', '', $params['wp-email-address'] ),
+		str_replace( 'mailto:', '', $params['formAction'] ),
 		__( 'Form submission', 'gutenberg' ),
 		$content
 	);

@@ -16,8 +16,8 @@ if (! defined('ABSPATH')) {
     </div>
     <div class="media-clean-box-border"></div>
     <div class="m-top">
-        <?php wp_enqueue_script("folders-lottie-player", WCP_FOLDER_URL."assets/js/lottie-player.js") ?>
-        <lottie-player src="<?php echo WCP_FOLDER_URL."assets/js/lottie-player.json" ?>" background="transparent"  speed="1"  style="width: 300px; height: 300px; margin: 0 auto"  loop autoplay></lottie-player>
+        <?php wp_enqueue_script("folders-lottie-player", WCP_FOLDER_URL."assets/js/lottie-player.js", [], WCP_FOLDER_VERSION, true) ?>
+        <lottie-player src="<?php echo esc_url(WCP_FOLDER_URL."assets/js/lottie-player.json") ?>" background="transparent"  speed="1"  style="width: 300px; height: 300px; margin: 0 auto"  loop autoplay></lottie-player>
     </div>
     <div class="media-clean-box-desc">
         <?php esc_html_e("Find unused media files which aren't used in your website. An internal trash allows you to make sure everything works properly before deleting the media entries (and files) permanently.", "folders") ?>
@@ -31,6 +31,6 @@ if (! defined('ABSPATH')) {
         </a>
     </div>
     <div class="skip-scan-btn">
-        <a href="<?php echo admin_url("upload.php?hide_menu=scan-files&nonce=".wp_create_nonce("folders-scan-files")) ?>"><?php esc_html_e("Hide this page from the menu", "folders"); ?></a>
+        <a href="<?php echo esc_url(admin_url("upload.php?hide_menu=scan-files&nonce=".wp_create_nonce("folders-scan-files"))) ?>"><?php esc_html_e("Hide this page from the menu", "folders"); ?></a>
     </div>
 </div>

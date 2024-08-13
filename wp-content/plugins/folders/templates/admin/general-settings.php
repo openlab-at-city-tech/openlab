@@ -33,7 +33,7 @@ if (! defined('ABSPATH')) {
     }(function ($, undefined) {
         var selectedItem;
         var importTitle = "<?php esc_html_e("Import folders from %plugin%", "folders"); ?>";
-        var importDesc = "<?php esc_html_e("Are you sure you'd like to import %d folders from %plugin%?", "folders"); ?>";
+        var importDesc = "<?php esc_html_e("Are you sure you'd like to import %1\$d folders from %plugin%?", "folders"); ?>";
         var removeTitle = "<?php esc_html_e("Are you sure?", "folders"); ?>";
         var removeDesc = "<?php esc_html_e("You're about to delete %plugin%'s folders. Are you sure you'd like to proceed?", "folders"); ?>";
         $(document).ready(function(){
@@ -41,7 +41,8 @@ if (! defined('ABSPATH')) {
                 $(".select2-box").select2();
             <?php } ?>
             <?php
-            if(isset($_GET['focus']) && $_GET['focus'] == "icon-color") {
+            $focus = filter_input(INPUT_GET, 'focus');
+            if($focus == "icon-color") {
                 $hide_folder_color_pop_up = get_option("hide_folder_color_pop_up");
                 if(!($hide_folder_color_pop_up)) {
                     add_option("hide_folder_color_pop_up", "yes");
@@ -197,7 +198,7 @@ if (! defined('ABSPATH')) {
                 e.preventDefault();
                 if($.trim($("#delete-input").val()).toLowerCase() == "delete") {
                     $.ajax({
-                        url: "<?php echo admin_url("admin-ajax.php") ?>",
+                        url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                         data: {
                             action: 'wcp_remove_all_folders_data',
                             nonce: $("#remove-folder-nonce").val()
@@ -291,11 +292,11 @@ if (! defined('ABSPATH')) {
 
         function setFoldersRemoveStatus(status) {
             $.ajax({
-                url: "<?php echo admin_url("admin-ajax.php") ?>",
+                url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                 data: {
                     'action': 'wcp_update_folders_uninstall_status',
                     'status': status,
-                    'nonce': "<?php echo wp_create_nonce("wcp_folders_uninstall_status") ?>"
+                    'nonce': "<?php echo esc_attr(wp_create_nonce("wcp_folders_uninstall_status")) ?>"
                 },
                 type: 'post',
                 success: function (res) {
@@ -317,7 +318,7 @@ if (! defined('ABSPATH')) {
 
         function importPluginDataByPage(pageNo) {
             $.ajax({
-                url: "<?php echo admin_url("admin-ajax.php") ?>",
+                url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                 data: {
                     'plugin': $(".other-plugins-"+selectedItem).data("plugin"),
                     'nonce': $(".other-plugins-"+selectedItem).data("nonce"),
@@ -362,7 +363,7 @@ if (! defined('ABSPATH')) {
         function removePluginData() {
             $(".other-plugins-"+selectedItem+" .remove-folder-data .spinner").addClass("active");
             $.ajax({
-                url: "<?php echo admin_url("admin-ajax.php") ?>",
+                url: "<?php echo esc_url(admin_url("admin-ajax.php")) ?>",
                 data: {
                     'plugin': $(".other-plugins-"+selectedItem).data("plugin"),
                     'nonce': $(".other-plugins-"+selectedItem).data("nonce"),
@@ -498,7 +499,7 @@ if (! defined('ABSPATH')) {
 $wp_status = get_option("is_web_hosted_on_wp");
 if ($wp_status === false) {
     $site_url = site_url("/");
-    $domain   = parse_url($site_url);
+    $domain   = wp_parse_url($site_url);
 
     $options = [
         'http' => ['ignore_errors' => true],
@@ -507,17 +508,16 @@ if ($wp_status === false) {
     $webLink = $domain['host'];
 
     $context  = stream_context_create($options);
-    $response = @file_get_contents(
-        'https://public-api.wordpress.com/rest/v1/sites/'.$webLink,
-        false,
-        $context
-    );
-    $response = json_decode($response, true);
+    $response = wp_remote_get('https://public-api.wordpress.com/rest/v1/sites/'.$webLink);
+    if (!is_wp_error($response)) {
+        $data = wp_remote_retrieve_body($response);
+        $response = json_decode($data, true);
 
-    if (!empty($response) && is_array($response)) {
-        if (isset($response['ID']) && !empty($response['ID'])) {
-            add_option("is_web_hosted_on_wp", "yes");
-            $wp_status = "yes";
+        if (!empty($response) && is_array($response)) {
+            if (isset($response['ID']) && !empty($response['ID'])) {
+                add_option("is_web_hosted_on_wp", "yes");
+                $wp_status = "yes";
+            }
         }
     }
 }//end if
@@ -622,7 +622,7 @@ if ($wp_status == "yes") {
                                                     </label>
                                                 </td>
                                                 <td class="" width="260px">
-                                                    <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Use Folders with: ', 'folders')." ".esc_html_e($post_type->label); ?></label>
+                                                    <label for="folders_<?php echo esc_attr($post_type->name); ?>" ><?php echo esc_html__( 'Use Folders with: ', 'folders')." ".esc_attr($post_type->label); ?></label>
                                                 </td>
                                                 <td class="default-folder">
                                                     <label class="hide-show-option <?php echo esc_attr($is_checked) ?>" for="folders_for_<?php echo esc_attr($post_type->name); ?>" ><?php esc_html_e( 'Default folder: ', 'folders'); ?></label>
@@ -672,7 +672,7 @@ if ($wp_status == "yes") {
                                                             <span></span>
                                                         </label>
                                                         <label for="" class="send-user-to-pro">
-                                                            <?php esc_html_e( 'Use Folders with: ', 'folders')." ".esc_html_e($post_type->label); ?>
+                                                            <?php esc_html_e( 'Use Folders with: ', 'folders')." ".esc_attr($post_type->label); ?>
                                                             <button type="button" class="upgrade-link" ><?php esc_html_e("Upgrade to Pro", 'folders'); ?></button>
                                                         </label>
                                                     </a>
@@ -904,7 +904,7 @@ if ($wp_status == "yes") {
                                                     <span class="dashicons dashicons-editor-help"></span>
                                                     <span class="tooltip-text top" style="">
                                                         <?php esc_html_e("The Replace Media feature will allow you to replace your media files throughout your website with the click of a button,  which means the file will be replaced for all your posts, pages, etc", "folders") ?>
-                                                        <span class="new"><?php printf(esc_html__("%sPro version ✨%s includes updating all previous links of the file in the database, changing dates &  more", "folders"), "<a href='".esc_url($this->getFoldersUpgradeURL())."' target='_blank'>", "</a>") ?></span>
+                                                        <span class="new"><?php printf(esc_html__("%1\$sPro version ✨%2\$s includes updating all previous links of the file in the database, changing dates &  more", "folders"), "<a href='".esc_url($this->getFoldersUpgradeURL())."' target='_blank'>", "</a>") ?></span>
                                                     </span>
                                                 </span>
                                                 <span class="recommanded"><?php esc_html_e("Recommended", "folders") ?></span>
@@ -1514,7 +1514,7 @@ if ($wp_status == "yes") {
         </div>
         <?php
         ?>
-        <input type="hidden" name="folder_nonce" value="<?php echo wp_create_nonce("folder_settings") ?>">
+        <input type="hidden" name="folder_nonce" value="<?php echo esc_attr(wp_create_nonce("folder_settings")) ?>">
         <input type="hidden" name="folder_page" value="<?php echo filter_input(INPUT_SERVER, "REQUEST_URI") ?>">
         <?php if ($setting_page != "upgrade-to-pro") { ?>
     </form>
@@ -1552,10 +1552,10 @@ if ($wp_status == "yes") {
                         <tbody>
                         <?php foreach ($plugin_info as $slug => $plugin) { ?>
                             <?php if ($plugin['is_exists']) { ?>
-                                <tr class="other-plugins-<?php echo esc_attr__($slug) ?>" data-plugin="<?php echo esc_attr__($slug) ?>" data-nonce="<?php echo wp_create_nonce("import_data_from_".$slug) ?>" data-folders="<?php echo esc_attr($plugin['total_folders']) ?>" data-attachments="<?php echo esc_attr($plugin['total_attachments']) ?>">
-                                    <th class="plugin-name"><?php echo esc_attr__($plugin['name']) ?></th>
+                                <tr class="other-plugins-<?php echo esc_attr($slug) ?>" data-plugin="<?php echo esc_attr($slug) ?>" data-nonce="<?php echo esc_attr(wp_create_nonce("import_data_from_".$slug)) ?>" data-folders="<?php echo esc_attr($plugin['total_folders']) ?>" data-attachments="<?php echo esc_attr($plugin['total_attachments']) ?>">
+                                    <th class="plugin-name"><?php echo esc_attr($plugin['name']) ?></th>
                                     <td>
-                                        <span class="import-message"><?php printf(esc_html__("%s folder%s and %s attachment%s", "folders"), "<b>".esc_attr($plugin['total_folders'])."</b>", ($plugin['total_folders'] > 1) ? esc_html__("s") : "", "<b>".esc_attr($plugin['total_attachments'])."</b>", ($plugin['total_attachments'] > 1) ? esc_html__("s") : "") ?></span>
+                                        <span class="import-message"><?php printf(esc_html__("%1\$s folder%2\$s and %3\$s attachment%4\$s", "folders"), "<b>".esc_attr($plugin['total_folders'])."</b>", ($plugin['total_folders'] > 1) ? esc_html__("s") : "", "<b>".esc_attr($plugin['total_attachments'])."</b>", ($plugin['total_attachments'] > 1) ? esc_html__("s") : "") ?></span>
                                         <button type="button" class="button button-primary import-folder-data in-popup"><?php esc_html_e("Import", "folders"); ?> <span class="spinner"></span></button>
                                         <button type="button" class="button button-secondary remove-folder-data in-popup"><?php esc_html_e("Delete plugin data", "folders"); ?> <span class="spinner"></span></button>
                                     </td>
@@ -1599,7 +1599,7 @@ if ($wp_status == "yes") {
                 <a class="" href="javascript:;"><span></span></a>
             </div>
             <div class="remove-folder-title"><?php esc_html_e("Are you sure?", 'folders'); ?></div>
-            <div class="remove-folder-note"><?php printf(esc_html__("Folders will remove all created folders once you remove the plugin. We recommend you %snot to use this feature%s if you plan to use Folders in future.", 'folders'), "<b>", "</b>"); ?></div>
+            <div class="remove-folder-note"><?php printf(esc_html__("Folders will remove all created folders once you remove the plugin. We recommend you %1\$snot to use this feature%2\$s if you plan to use Folders in future.", 'folders'), "<b>", "</b>"); ?></div>
             <div class="folder-form-buttons">
                 <a href="javascript:;" class="form-cancel-btn cancel-folders"><?php esc_html_e("Cancel", 'folders'); ?></a>
                 <button type="submit" class="form-cancel-btn delete-button"><?php esc_html_e("I want to delete anyway", 'folders'); ?></button>
@@ -1621,10 +1621,10 @@ if ($wp_status == "yes") {
                     <div class="input-box">
                         <input autocomplete="off" type="text" id="delete-input" name="delete" >
                     </div>
-                    <div class="delete-confirmation-message"><?php esc_html_e('', 'folders'); ?></div>
+                    <div class="delete-confirmation-message"></div>
                 </div>
                 <div class="folder-form-buttons">
-                    <input type="hidden" name="nonce" id="remove-folder-nonce" value="<?php echo wp_create_nonce("remove_folders_data") ?>">
+                    <input type="hidden" name="nonce" id="remove-folder-nonce" value="<?php echo esc_attr(wp_create_nonce("remove_folders_data")) ?>">
                     <input type="hidden" name="action" value="remove_all_folders_data">
                     <button disabled type="submit" class="form-submit-btn delete-button" id="remove-folders-data-button"><?php esc_html_e("Delete", 'folders'); ?></button>
                     <a href="javascript:;" class="form-cancel-btn"><?php esc_html_e("Cancel", 'folders'); ?></a>
@@ -1678,11 +1678,11 @@ if (($option == "show" || get_option("folder_redirect_status") == 2) && $is_plug
                             <tbody>
                             <?php foreach ($plugin_info as $slug => $plugin) {
                                 if ($plugin['is_exists']) { ?>
-                                    <tr class="other-plugins-<?php echo esc_attr__($slug) ?>" data-plugin="<?php echo esc_attr__($slug) ?>" data-nonce="<?php echo wp_create_nonce("import_data_from_".$slug) ?>" data-folders="<?php echo esc_attr($plugin['total_folders']) ?>" data-attachments="<?php echo esc_attr($plugin['total_attachments']) ?>">
-                                        <th class="plugin-name"><?php echo esc_attr__($plugin['name']) ?></th>
+                                    <tr class="other-plugins-<?php echo esc_attr($slug) ?>" data-plugin="<?php echo esc_attr($slug) ?>" data-nonce="<?php echo esc_attr(wp_create_nonce("import_data_from_".$slug)) ?>" data-folders="<?php echo esc_attr($plugin['total_folders']) ?>" data-attachments="<?php echo esc_attr($plugin['total_attachments']) ?>">
+                                        <th class="plugin-name"><?php echo esc_attr($plugin['name']) ?></th>
                                         <td>
                                             <button type="button" class="button button-primary import-folder-data in-popup"><?php esc_html_e("Import", "folders"); ?> <span class="spinner"></span></button>
-                                            <span class="import-message"><?php printf(esc_html__("%s folder%s and %s attachment%s", "folders"), "<b>".esc_attr($plugin['total_folders'])."</b>", ($plugin['total_folders'] > 1) ? esc_html__("s") : "", "<b>".esc_attr($plugin['total_attachments'])."</b>", ($plugin['total_attachments'] > 1) ? esc_html__("s") : "") ?></span>
+                                            <span class="import-message"><?php printf(esc_html__("%1\$s folder%2\$s and %3\$s attachment%4\$s", "folders"), "<b>".esc_attr($plugin['total_folders'])."</b>", ($plugin['total_folders'] > 1) ? esc_html__("s") : "", "<b>".esc_attr($plugin['total_attachments'])."</b>", ($plugin['total_attachments'] > 1) ? esc_html__("s") : "") ?></span>
                                         </td>
                                     </tr>
                                 <?php }

@@ -13,7 +13,7 @@ class Account extends Base
     const CHANGE_PASSWORD                = '/1.0/users/%token%';                          //PATCH
     const CONFIRM_EMAIL                  = '/1.3/users/%token%/confirm';                  //POST
     const CREATE_PAYPAL_ORDER            = '/1.0/users/%token%/paypal/order';             //POST
-    const CREATE_PREAPPROVAL             = '/1.1/users/%token%/paypal/pre-approvals';     //POST
+    const CREATE_BILLING_AGREEMENT       = '/1.0/users/%token%/paypal/billing-agreement'; //POST
     const RENEW_PAYPAL_AUTO_RECHARGE     = '/1.1/users/%token%/paypal/renew/auto-recharge'; //POST
     const CREATE_STRIPE_CHECKOUT_SESSION = '/1.0/users/%token%/stripe/checkout/sessions'; //POST
     const RENEW_STRIPE_AUTO_RECHARGE     = '/1.0/users/%token%/stripe/renew/auto-recharge'; //POST
@@ -30,13 +30,26 @@ class Account extends Base
     const PRODUCTS                       = '/1.0/users/%token%/products';                 //GET
 
     const PRODUCT_SMS_NOTIFICATIONS = 'sms';
-    const PRODUCT_STRIPE            = 'stripe';
-    const PRODUCT_ZAPIER            = 'zapier';
-    const PRODUCT_CRON              = 'cron';
-    const PRODUCT_VOICE             = 'voice';
-    const PRODUCT_SQUARE            = 'square';
-    const PRODUCT_GIFT              = 'gift';
-    const PRODUCT_WHATSAPP          = 'whatsapp';
+    const PRODUCT_STRIPE = 'stripe';
+    const PRODUCT_ZAPIER = 'zapier';
+    const PRODUCT_CRON = 'cron';
+    const PRODUCT_VOICE = 'voice';
+    const PRODUCT_SQUARE = 'square';
+    const PRODUCT_GIFT = 'gift';
+    const PRODUCT_WHATSAPP = 'whatsapp';
+    const PRODUCT_MOBILE_STAFF_CABINET = 'mobile-staff-cabinet';
+
+    const PRODUCT_PAYU_LATAM = 'payu-latam';
+    const PRODUCT_PAYSON = 'payson';
+    const PRODUCT_2CHECKOUT = '2checkout';
+    const PRODUCT_AUTHORIZE_NET = 'authorize-net';
+    const PRODUCT_CART = 'cart';
+    const PRODUCT_COUPONS = 'coupons';
+    const PRODUCT_CUSTOM_FIELDS = 'custom-fields';
+    const PRODUCT_GROUP_BOOKING = 'group-booking';
+    const PRODUCT_MOLLIE = 'mollie';
+    const PRODUCT_STRIPE_CLASSIC = 'stripe-classic';
+    const PRODUCT_SERVICE_EXTRAS = 'service-extras';
 
     /** @var string */
     protected $username;
@@ -247,17 +260,17 @@ class Account extends Base
     }
 
     /**
-     * Get PayPal PreApproval url, (for enabling auto recharge)
+     * Get PayPal billing agreement url, (for enabling auto recharge)
      *
      * @param string $recharge_id
      * @param string $url
      * @return bool|string
      */
-    public function getPreApprovalUrl( $recharge_id, $url )
+    public function getBillingAgreementUrl( $recharge_id, $url )
     {
         if ( $this->api->getToken() ) {
             $response = $this->api->sendPostRequest(
-                self::CREATE_PREAPPROVAL,
+                self::CREATE_BILLING_AGREEMENT,
                 array(
                     'recharge' => $recharge_id,
                     'enabled_url' => $url . '#auto-recharge=enabled',

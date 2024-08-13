@@ -42,6 +42,10 @@
     width: 55px;
 }
 
+.b2s-info-display-none{
+    display:none;   
+}
+
 .b2s-re-post-input-time {
     width: 85px !important;
     display: inline-block !important;

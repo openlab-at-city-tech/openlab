@@ -51,7 +51,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param string $secret Secret.
 		 * @param string $callback_url Response sent to.
 		 */
-		function __construct( $key, $secret, $callback_url = null ) {
+		public function __construct( $key, $secret, $callback_url = null ) {
 			$this->key          = $key;
 			$this->secret       = $secret;
 			$this->callback_url = $callback_url;
@@ -60,7 +60,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Generate consumer string.
 		 */
-		function __toString() {
+		public function __toString() {
 			return "OAuthConsumer[key=$this->key,secret=$this->secret]";
 		}
 	}
@@ -88,7 +88,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param string $key = the token.
 		 * @param string $secret = the token secret.
 		 */
-		function __construct( $key, $secret ) {
+		public function __construct( $key, $secret ) {
 			$this->key    = $key;
 			$this->secret = $secret;
 		}
@@ -99,14 +99,14 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @return string Oauth serialization.
 		 */
-		function to_string() {
+		public function to_string() {
 			return 'oauth_token=' . WPOAuthUtil::urlencode_rfc3986( $this->key ) . '&oauth_token_secret=' . WPOAuthUtil::urlencode_rfc3986( $this->secret );
 		}
 
 		/**
 		 * Return string.
 		 */
-		function __toString() {
+		public function __toString() {
 			return $this->to_string();
 		}
 	}
@@ -165,7 +165,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Signature method.
 		 */
-		function get_name() {
+		public function get_name() {
 			return 'HMAC-SHA1';
 		}
 
@@ -289,9 +289,6 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 			// Sign using the key.
 			$ok = openssl_sign( $base_string, $signature, $privatekeyid );
 
-			// Release the key resource.
-			openssl_free_key( $privatekeyid );
-
 			return base64_encode( $signature );
 		}
 
@@ -318,9 +315,6 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 
 			// Check the computed signature against the one passed in the query.
 			$ok = openssl_verify( $base_string, $decoded_sig, $publickeyid );
-
-			// Release the key resource.
-			openssl_free_key( $publickeyid );
 
 			return 1 === $ok;
 		}
@@ -379,7 +373,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param string $http_url URL.
 		 * @param array  $parameters Query parameters; will be combined with POST data.
 		 */
-		function __construct( $http_method, $http_url, $parameters = array() ) {
+		public function __construct( $http_method, $http_url, $parameters = array() ) {
 			$parameters        = array_merge( WPOAuthUtil::parse_parameters( parse_url( $http_url, PHP_URL_QUERY ) ), $parameters );
 			$this->parameters  = $parameters;
 			$this->http_method = $http_method;
@@ -619,7 +613,6 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 				$out = 'Authorization: OAuth';
 			}
 
-			$total = array();
 			foreach ( $this->parameters as $k => $v ) {
 				if ( 'oauth' !== substr( $k, 0, 5 ) ) {
 					continue;
@@ -647,7 +640,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Sign the OAuth request.
 		 *
-		 * @param string $signature_method Method to use to sign.
+		 * @param object $signature_method Request object Method to use to sign.
 		 * @param object $consumer Consumer object.
 		 * @param object $token Token object.
 		 */
@@ -664,7 +657,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Create the OAuth signature.
 		 *
-		 * @param string $signature_method Method to use to sign.
+		 * @param object $signature_method Method to use to sign.
 		 * @param object $consumer Consumer object.
 		 * @param object $token Token object.
 		 *
@@ -695,7 +688,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 */
 		private static function generate_nonce() {
 			$mt   = microtime();
-			$rand = mt_rand();
+			$rand = wp_rand();
 
 			return md5( $mt . $rand ); // md5s look nicer than numbers.
 		}

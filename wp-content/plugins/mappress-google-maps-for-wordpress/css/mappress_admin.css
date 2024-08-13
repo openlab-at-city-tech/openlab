@@ -71,85 +71,19 @@
 	display: flex;
 	align-items: center;
 }
-
-/*
-	-----------------------------------------------------------------------------------
-	Picker / Editor Modal
-	-----------------------------------------------------------------------------------
-*/
-
-
-.mapp-gt-modal {
-	max-height: none;
-	max-width: none;
-	height: 90vh;
-	width: 90vw;
-}
-
-/* Box sizing is set in GT but not in MCE, so force it here */
-.mapp-gt-modal *, .mapp-gt-modal :before, .mapp-gt-modal :after {
-	box-sizing: border-box;
-}
-
-/*
-	---------------------------------------------------------------------------------------------------------------------------------------
-	Map modal - must use WP modal because WP components (media uploader, dropdown) aren't compatible with html dialog element
-	---------------------------------------------------------------------------------------------------------------------------------------
-*/
-.mapp-gt-modal .components-modal__content {
-	display: flex;
-	padding: 0;
-}
-
-.mapp-gt-modal .components-modal__header {
-	border: none;
-	padding: 0 32px 0 0;
-}
-
-/* The ever-changing WP modal sometimes has an extra div in modal__content without flex set */
-.mapp-gt-modal .components-modal__content > div {
-	display: flex;
-	flex: 1;
-}
-
-.mapp-gt-modal .components-modal__children-container {
-	display: flex;
-	flex: 1;
-}
-
-.mapp-gt-modal-header {
-	display: flex;
-	height: 60px;
-	justify-content: space-between;
-	padding: 10px 20px;
-}
-
-.mapp-gt-modal-header h1 {
-	font-size: 16px;
-}
-
-.mapp-gt-modal-header button {
-	margin-left: 20px;
-}
-
-.mapp-gt-modal-header-title {
-	display: flex;
-	align-items: center;
-}
-
-
+						 
 /*
 	-----------------------------------------------------------------------------------
 	Map picker
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-pick-modal {
+.mapp-pick-dialog {
 	max-width: 1000px;
 }
 
 /* Override WP font stuff */
-.mapp-pick-modal input, .mapp-pick-modal select {
+.mapp-pick-dialog input, .mapp-pick-dialog select {
 	font-size: 13px;
 }
 
@@ -157,11 +91,38 @@
 .mapp-pick {
 	display: flex;
 	flex: 1;
+	flex-direction: column;
 	overflow: hidden;
 	position: relative;
 }
 
-.mapp-pick-list {
+/* Remove WP margins on checkboxes */
+.mapp-pick .components-checkbox-control > div {
+	margin: 0;
+}
+
+.mapp-pick-header {
+	align-items: center;
+	display: flex;
+	gap: 30px;
+	padding: 10px 20px;
+}
+
+.mapp-pick-header-title {
+	font-size: 20px;
+}
+	
+.mapp-pick-header-actions {
+	align-items: center;
+	border-bottom: 1px solid lightgray;
+	border-top: 1px solid lightgray;
+	display: flex;
+	height: 60px;
+	padding: 0 15px;
+}
+
+
+.mapp-pick-content {
 	background-color: white;
 	display: flex;
 	flex-direction: column;
@@ -174,35 +135,25 @@
 	margin-bottom : 40px;
 }
 
-.mapp-pick-header {
-	align-items: center;
-	border-bottom: 1px solid lightgray;
-	display: flex;
-	flex-wrap: wrap;
-	gap: 10px;
-	justify-content: space-between;
-	padding-right: 20px;
-}
-
-.mapp-pick-filter-tabs {
+.mapp-pick-tabs {
 	display: flex;
 }
 
-.mapp-pick-filter-tab {
+.mapp-pick-tab {
 	align-items: center;
 	border-bottom: 2px solid white;
 	color: #2271b1;
 	cursor: pointer;
 	display: flex;
-	padding: 16px;
+	padding: 12px 20px;
 	text-decoration: none;
 }
 
-.mapp-pick-filter-tab:hover {
+.mapp-pick-tab:hover {
 	background-color: #e9f0f5;
 }
 
-.mapp-pick-filter-tab.mapp-active {
+.mapp-pick-tab.mapp-active {
 	border-bottom: 2px solid black;
 	color: black;
 }
@@ -213,22 +164,7 @@
 	margin-left: 10px;
 	padding: 1px 6px;
 }
-
-.mapp-pick-sort-search {
-	align-items: center;
-	display: flex;
-}
-
-.mapp-pick-sort {
-	align-items: center;
-	display: flex;
-	margin-right: 10px;
-}
-
-.mapp-pick-sort-label {
-	margin-right: 5px;
-}
-
+	
 .mapp-pick-search {
 	align-items: center;
 	display: flex;
@@ -247,9 +183,8 @@
 
 .mapp-pick-search input {
 	margin-bottom: 8px;
-	max-width: 225px;
 	margin-bottom: 0 !important;
-	padding-left: 28px !important;
+	padding: 5px 5px 5px 28px;
 	width: 100%;
 }
 
@@ -264,16 +199,24 @@
 	top: 45%;
 }
 
-/* In post editor, right margin adds some room for scrollbar in modal */
-.mapp-pick-items-section {
+/* In post editor, right margin adds some room for scrollbar in modal to avoid accidental clicks outside */
+.mapp-pick-list {
 	flex: 1;
 	margin-bottom: 20px;
 	margin-right: 20px;
 	overflow: auto;
 }
 
-.mapp-library .mapp-pick-items-section {
+.mapp-library .mapp-pick-list {
 	margin-right: 0;
+}
+
+.mapp-pick-bulk-actions {
+	display: flex;
+}
+
+.mapp-pick-bulk-actions input[type='checkbox'] {
+	margin: 0;
 }
 
 .mapp-pick-items  {
@@ -283,10 +226,10 @@
 }
 
 .mapp-pick-item {
-	align-items: stretch;					/* Make map title fill its whole column so it's easier to click  */
+	align-items: center;				
 	border-bottom: 1px solid lightgray;
 	display: flex;
-	padding: 15px 20px;
+	padding: 0 15px;
 	text-overflow: ellipsis;
 }
 
@@ -299,14 +242,29 @@
 	background-color: #ededed;
 }
 
-.mapp-pick-col-actions {
-	max-width: 250px;
-	text-align: right;
-	width: 50%;
+.mapp-pick-hover {
+	background-color: #f8f8f8;
+}         
+
+.mapp-pick-col-main {
+	align-items: center;
+	cursor: pointer;    
+	display: flex;
+	flex: 1;
+	padding: 15px 0;    
 }
 
-.mapp-pick-actions button.is-opened svg {
-	border: 1px solid lightgray;
+.mapp-pick-col-checkbox {  }
+
+.mapp-pick-col-title {
+	flex: 1;
+	overflow: hidden;    
+}       
+	
+.mapp-pick-col-mapid {
+	color: gray;
+	text-decoration: none;
+	width: 100px;
 }
 
 .mapp-pick-col-title {
@@ -316,27 +274,46 @@
 	white-space: nowrap;
 }
 
-.mapp-pick-all .mapp-pick-col-title, .mapp-pick-object .mapp-pick-col-title {
-	cursor: pointer;
-}
-
-.mapp-pick-col-title > div {
-	overflow: hidden;
-	padding-right: 10px;
-	text-overflow: ellipsis;
-}
-
-.mapp-pick-col-title .mapp-title {
-	font-size: 16px;
+.mapp-pick-title {
 	font-weight: 600;
 }
 
-.mapp-pick-col-title .mapp-mapid {
-	color: darkgray;
-	margin-top: 5px;
+.mapp-pick-link {
+	overflow: hidden;     
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}     
+
+.mapp-pick-link.mapp-pick-unattached {
+	color: gray;
+}     
+
+.mapp-pick-col-actions {
+	text-align: right;
 }
 
-.mapp-pick-col-title .mapp-postlink {}
+.mapp-pick-item-actions, .mapp-pick-bulk-actions {
+	align-items: center;
+	color: #a8a8a8;
+	display: flex;
+	gap: 10px;
+}
+
+.mapp-pick-action {
+	border-radius: 20px;
+	cursor: pointer;
+	padding: 8px;
+	user-select: none;
+}
+
+.mapp-pick-action:hover {
+	background-color: rgba(0,0,0,0.05);
+	color: black;
+}
+
+.mapp-pick-action:active {
+	background-color: rgba(0,0,0,0.1);
+}
 
 .mapp-pick-toolbar {
 	display: flex;
@@ -349,17 +326,13 @@
 	height: 32px;
 }
 
-.mapp-skeleton .mapp-title {
-	height: 1.3em;
-	width: 30em;
+.mapp-skeleton.mapp-pick-item {
+	height: 66.4px;
 }
 
-.mapp-skeleton .mapp-mapid, .mapp-skeleton .mapp-postlink {
-	height: 1.3em;
-	width: 10em;
-}
-
-.mapp-skeleton .mapp-title, .mapp-skeleton .mapp-mapid, .mapp-skeleton .mapp-postlink {
+.mapp-skeleton .mapp-pick-col-title {
+	height: 20px;
+	flex: 0.5;
 	background-color: #e2e5e7;
 	background-image: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0));
 	background-size: 40px 100%;
@@ -380,6 +353,10 @@
 	-----------------------------------------------------------------------------------
 */
 
+.mapp-edit-dialog .mapp-dialog-content {
+	padding: 0;
+}
+
 .mapp-edit {
 	display: flex;
 	flex: 1;
@@ -388,19 +365,16 @@
 }
 
 .mapp-edit-title {
+	border: 1px solid white;
+	font-size: 24px;
 	max-width: 500px;
+	outline: none;
+	padding: 0 5px;
 	width: 90%;
 }
 
-.mapp-edit-title input {
-	cursor: pointer;
-	font-size: 16px !important;
-	font-weight: 600;
-	margin-left: -10px;
-}
-
-.mapp-edit-title input:not(:hover) {
-	border: 1px solid white !important;
+.mapp-edit-title:focus {
+	border: 1px solid gray !important;
 }
 
 .mapp-edit-main {
@@ -427,14 +401,6 @@
 .mapp-edit .mapp-wrapper {
 	height: 100% !important;
 	padding-bottom: 0px !important;
-}
-
-.mapp-edit-toolbar {
-	align-items: center;
-	border-top: 1px solid lightgray;
-	display: flex;
-	padding: 5px 20px;
-	white-space: nowrap;
 }
 
 .mapp-edit-toolbar .components-toggle-control {
@@ -525,15 +491,8 @@
 }
 
 .mapp-settings-title {
-	justify-content: space-between;
-}
-
-.mapp-settings-title label {
 	font-weight: 500;
-}
-
-.mapp-settings-title input {
-	font-size: 2em;
+	justify-content: space-between;
 }
 
 .mapp-settings-id {
@@ -658,6 +617,13 @@ button.mapp-query-refresh {
 	flex: 1;
 	overflow: hidden;
 	padding: 0 15px 10px 15px;
+}
+
+.mapp-poi-edit {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	overflow: hidden;
 }
 
 /* Custom tabs - flex all the way down */
@@ -792,8 +758,14 @@ button.mapp-query-refresh {
 	top: 1px;
 }
 
-.mapp-poi-lat, .mapp-poi-lng { flex: 1; }
+.mapp-poi-latlng { 
+	align-items: center;
+	display: flex;
+}
 
+.mapp-poi-latlng-refresh {
+	margin-top: 16px;
+}
 
 /* Data tab - data fields */
 .mapp-poi-data .mapp-label {
@@ -1857,8 +1829,9 @@ button.mapp-option-geocode {
 */
 
 .mapp-dialog.mapp-icons-modal {
+	height: 600px;
 	max-width: 800px;
-		width: 90vw;
+	width: 90vw;
 }
 
 .mapp-icons-modal .mapp-dialog-title button {
@@ -2197,7 +2170,7 @@ button.mapp-icons-edit-set-color {
 .mapp-edit .mapp-style-toggle {
 	background-color: white;
 	position: absolute;
-	top: 125px; right: 10px;
+	top: 125px; right: 20px;
 	z-index: 1000;					/* Keep control above Leaflet map */
 }
 
@@ -2208,7 +2181,7 @@ button.mapp-style-toggle {
 .mapp-style-toggle img {
 	height: 40px;
 	object-fit: cover;
-.	width: 40px;
+	width: 40px;
 }
 
 .mapp-style-modal {
@@ -2672,57 +2645,35 @@ a.mapp-templates-item {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-deactivate {
+.mapp-dialog.mapp-deactivate {
+	height: 460px;
+	max-height: 100vh;
 	max-width: 100vw;
 	width: 600px;
+	top: calc(50vh - 230px);
 }
 
-.mapp-deactivate * {
-	font-size: 16px;
-}
-
-.mapp-deactivate h3 {
-	font-style: italic;
-	font-weight: normal;
+.mapp-dialog.mapp-deactivate .mapp-dialog-content {
+	padding: 20px;
 }
 
 .mapp-deactivate-reason {
 	margin-bottom: 10px;
 }
 
-.mapp-deactivate-reason input {
-	margin-right: 10px;
-}
-
 .mapp-deactivate-reason textarea {
-	height: 10em;
+	height: 15em;
 	margin-top: 10px;
 	width: 100%;
 }
 
-.mapp-deactivate-footer {
-	text-align: right;
-}
-
-.mapp-deactivate button {
+.mapp-dialog.mapp-deactivate button {
 	margin-right: 10px;
 }
 
 a.mapp-deactivate-help {
 	margin-left: 10px;
 }
-
-.mapp-deactivate-tip {
-	background-color: lightyellow;
-	border: 1px solid yellow;
-	margin: 5px;
-	padding: 10px;
-}
-
-.mapp-deactivate-tip > div {
-	padding: 10px 0;
-}
-
 
 /*
 	-----------------------------------------------------------------------------------
@@ -2846,6 +2797,34 @@ a.mapp-deactivate-help {
 .mapp-marker-icons { font-family: 'Marker Icons'; }
 .mapp-marker-shapes { font-family: 'Marker Shapes'; }
 
+
+/* 
+	-----------------------------------------------------------------------------------------------------------------
+	Pseudo-modal dialog for Gutenberg, because WP's media library still won't stack over standard html dialog element
+	-----------------------------------------------------------------------------------------------------------------
+*/
+.mapp-gt-dialog {
+	height: 90vh;
+	position: fixed;
+	top: 5vh;
+	width: 90vw;
+	z-index: 100000;        /* admin bar is 99999 and backdrop must cover it */
+}
+
+/* Box sizing is set in GT but not in MCE, so force it here */
+.mapp-gt-dialog * {
+	box-sizing: border-box;
+}
+
+.mapp-gt-dialog-backdrop {
+	background: rgba(0,0,0,.35);
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	z-index: -1;
+}
+
+.mapp-gt-dialog .mapp-dialog-content { padding: 0; }
+.mapp-gt-dialog .mapp-dialog-title, .mapp-gt-dialog .mapp-dialog-content, .mapp-gt-dialog .mapp-dialog-toolbar { background-color: white; }
 
 
 

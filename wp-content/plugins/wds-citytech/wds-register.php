@@ -150,6 +150,13 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		openlab_get_xprofile_field_id( 'Email address (Student)' ),
 	);
 
+	// Legacy: Make sure we exclude all 'Google Scholar' fields.
+	global $wpdb;
+	$google_scholar_field_ids = $wpdb->get_col( "SELECT id FROM {$wpdb->prefix}bp_xprofile_fields WHERE name LIKE '%Google Scholar%'" );
+	if ( ! empty( $google_scholar_field_ids ) ) {
+		$exclude_fields = array_merge( $exclude_fields, $google_scholar_field_ids );
+	}
+
 	$exclude_fields = array_merge( $exclude_fields, wp_list_pluck( openlab_social_media_fields(), 'field_id' ) );
 
 	$has_profile_args = array(
@@ -163,7 +170,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		if ( 'staff' === $account_type || 'faculty' === $account_type ) :
 			?>
 			<div class="editfield field_name alt form-group">
-				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required)</span></label>
+				<label for="ol-offices"><span class="label-text">School / Office / Department</span> <span class="label-gloss">(required; public)</span></label>
 				<?php
 				$selector_args = [
 					'required' => true,
@@ -184,7 +191,7 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 			?>
 			<div class="form-group editfield field_name alt">
 				<div class="error-container" id="academic-unit-selector-error"></div>
-				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required)</span></label>
+				<label for="ol-offices"><span class="label-text">Major Program of Study</span> <span class="label-gloss">(required; public)</span></label>
 				<select
 				  name="departments-dropdown"
 				  class="form-control"
@@ -206,6 +213,8 @@ function wds_get_register_fields( $account_type, $post_data = array() ) {
 		$return .= ob_get_clean();
 
 if ( bp_has_profile( $has_profile_args ) ) :
+	$return .= '<p>The information below is optional and you can choose who is able to see it.</p>';
+
 	while ( bp_profile_groups() ) :
 		bp_the_profile_group();
 		while ( bp_profile_fields() ) :
@@ -223,9 +232,14 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				} else {
 					$return .= '<label class="control-label" for="' . bp_get_the_profile_field_input_name() . '"><span class="label-text">' . bp_get_the_profile_field_name() . '</span>';
 				}
+
 				if ( bp_get_the_profile_field_is_required() ) {
+					$public_required_textbox_fields = [ 'Name' ];
+
 					if ( bp_get_the_profile_field_name() == 'First Name' || bp_get_the_profile_field_name() == 'Last Name' ) {
 						$return .= ' <span class="label-gloss">(required, but not displayed on Public Profile)</span>';
+					} elseif ( in_array( bp_get_the_profile_field_name(), $public_required_textbox_fields, true ) ) {
+						$return .= ' <span class="label-gloss">(required; public)</span>';
 					} else {
 						$return .= ' <span class="label-gloss">(required)</span>';
 					}
@@ -263,7 +277,7 @@ if ( bp_has_profile( $has_profile_args ) ) :
 						/>';
 
 				if ( bp_get_the_profile_field_name() == 'Name' ) {
-					$return .= '<p class="register-field-note">Choose a Display Name to identify yourself publicly on your member profile and whenever you post on the OpenLab. <strong>You don\'t need to use your real name.</strong> Your Display Name can be changed at any time by editing your profile.</p>';
+					$return .= '<p class="register-field-note" id="display-name-help-text">' . openlab_get_profile_field_helper_text( 'display_name' ) . '</p>';
 				}
 				endif;
 			if ( 'textarea' == bp_get_the_profile_field_type() ) :
@@ -358,6 +372,11 @@ if ( bp_has_profile( $has_profile_args ) ) :
 				$return     .= '</div>';
 				endif;
 			$return .= '<p class="description">' . bp_get_the_profile_field_description() . '</p>';
+
+			ob_start();
+			$visibility_selector = openlab_xprofile_field_visibility_selector();
+			$return .= ob_get_clean();
+
 			$return .= '</div>';
 					endwhile;
 
@@ -388,6 +407,43 @@ endif;
 endif;
 
 		return $return;
+}
+
+/**
+ * Gets the helper text for a given registration/profile field.
+ *
+ * Centralized here because we build the markup in two different places. This
+ * allows us to have a single copy of each string.
+ *
+ * @param string $field_name
+ * @return string
+ */
+function openlab_get_profile_field_helper_text( $field_name ) {
+	switch ( $field_name ) {
+		case 'username' :
+			return "Please choose your username. You will use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. <strong>Because the username is public, we recommend that students do not use their full name. You don't need to use your real name.</strong> You cannot change your username after you sign up.</p>";
+
+		case 'display_name' :
+			return "Please choose your Display Name. Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. <strong>Because your Display Name is public, you don't need to use your real name or your full name.</strong> Your Display Name can be changed at any time by editing your profile.";
+
+		case 'portfolio_name' :
+			$group_type_label = openlab_get_portfolio_label(
+				[
+					'case'    => 'upper',
+					'user_id' => bp_loggedin_user_id(),
+				],
+			);
+
+			return sprintf(
+				'Depending on the privacy settings you choose, your %s name may be publicly visible, so you may not wish to include your full name. We recommend keeping your %s name under 50 characters. You can change your %s name at any time.',
+				$group_type_label,
+				$group_type_label,
+				$group_type_label
+			);
+
+		default :
+			return '';
+	}
 }
 
 /**
@@ -429,6 +485,16 @@ function openlab_registration_errors_object() {
 
 	$error_json = json_encode( $errors );
 	echo '<script type="text/javascript">var OpenLab_Registration_Errors = ' . $error_json . '</script>';
+
+	$submitted_visibility_values = [];
+	foreach ( $_POST as $key => $value ) {
+		$matched = preg_match( '/^field_(\d+)_visibility$/', $key, $matches );
+		if ( $matched ) {
+			$submitted_visibility_values[ $matches[1] ] = $value;
+		}
+	}
+
+	echo '<script type="text/javascript">var OpenLab_Submitted_Visibility_Values = ' . json_encode( $submitted_visibility_values ) . '</script>';
 }
 add_action( 'wp_head', 'openlab_registration_errors_object' );
 
@@ -520,8 +586,14 @@ function openlab_process_social_links_at_activation( $user_id, $key, $data ) {
 		return;
 	}
 
+	$all_fields = openlab_social_media_fields();
+
 	foreach ( $data['meta']['social-links'] as $social_link ) {
 		openlab_set_social_media_field_for_user( $user_id, $social_link['service'], $social_link['url'] );
+
+		$field_id   = $all_fields[ $social_link['service'] ]['field_id'];
+		$visibility = isset( $social_link['visibility'] ) ? $social_link['visibility'] : 'public';
+		xprofile_set_field_visibility_level( $field_id, $user_id, $visibility );
 	}
 }
 add_action( 'bp_core_activated_user', 'openlab_process_social_links_at_activation', 10, 3 );

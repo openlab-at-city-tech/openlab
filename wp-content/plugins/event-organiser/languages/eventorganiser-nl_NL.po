@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-02 18:03+0000\n"
+"POT-Creation-Date: 2024-02-24 23:49+0000\n"
 "PO-Revision-Date: 2017-11-03T23:42:56+00:00\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -110,11 +110,11 @@ msgstr "Evenementenlocatie"
 msgid "All Venues"
 msgstr "Alle Locaties"
 
-#: classes/class-eo-calendar-widget.php:296
+#: classes/class-eo-calendar-widget.php:298
 msgid "Previous month"
 msgstr "Vorige maand"
 
-#: classes/class-eo-calendar-widget.php:299
+#: classes/class-eo-calendar-widget.php:301
 msgid "Next month"
 msgstr "Volgende maand"
 
@@ -396,7 +396,7 @@ msgstr "Als"
 msgid "Event Title"
 msgstr "Evenementtitel"
 
-#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:403
+#: event-organiser-calendar.php:286 includes/event-organiser-ajax.php:406
 msgid "Where"
 msgstr "Waar"
 
@@ -1456,72 +1456,72 @@ msgstr "1 categorie aangemaakt"
 msgid "%d categories were created"
 msgstr "%d categorieën aangemaakt"
 
-#: includes/event-organiser-ajax.php:342
+#: includes/event-organiser-ajax.php:345
 msgid "Protected"
 msgstr "Beveiligd"
 
-#: includes/event-organiser-ajax.php:344
+#: includes/event-organiser-ajax.php:347
 msgid "Private"
 msgstr "Prive"
 
-#: includes/event-organiser-ajax.php:346
+#: includes/event-organiser-ajax.php:349
 msgid "Draft"
 msgstr "Ontwerp"
 
-#: includes/event-organiser-ajax.php:386
+#: includes/event-organiser-ajax.php:389
 msgid "Start"
 msgstr "Start"
 
-#: includes/event-organiser-ajax.php:387
+#: includes/event-organiser-ajax.php:390
 msgid "End"
 msgstr "Einde"
 
-#: includes/event-organiser-ajax.php:390
+#: includes/event-organiser-ajax.php:393
 msgid "Organiser:"
 msgstr "Organisator"
 
-#: includes/event-organiser-ajax.php:429
+#: includes/event-organiser-ajax.php:432
 msgid "This event recurs"
 msgstr "Herhaalt zich"
 
-#: includes/event-organiser-ajax.php:440 includes/event-organiser-cpt.php:230
+#: includes/event-organiser-ajax.php:443 includes/event-organiser-cpt.php:230
 msgid "Edit Event"
 msgstr "Evenement bewerken"
 
-#: includes/event-organiser-ajax.php:441
+#: includes/event-organiser-ajax.php:444
 #, php-format
 msgid "Edit Event: %s"
 msgstr "Bewerk evenement: %s"
 
-#: includes/event-organiser-ajax.php:463
+#: includes/event-organiser-ajax.php:466
 msgid "Delete this occurrence"
 msgstr "Deze gebeurtenis verwijderen"
 
-#: includes/event-organiser-ajax.php:469
+#: includes/event-organiser-ajax.php:472
 msgid "Delete this event"
 msgstr "Verwijder dit evenement"
 
-#: includes/event-organiser-ajax.php:487
+#: includes/event-organiser-ajax.php:490
 msgid "Break this series"
 msgstr "Splits deze serie"
 
-#: includes/event-organiser-ajax.php:781
+#: includes/event-organiser-ajax.php:787
 msgid "Event not found"
 msgstr "Evenement niet gevonden"
 
-#: includes/event-organiser-ajax.php:789
+#: includes/event-organiser-ajax.php:795
 msgid "Events are not editable via the admin calendar"
 msgstr "Evenementen zijn niet te wijzigen via admin-kalender"
 
-#: includes/event-organiser-ajax.php:795
+#: includes/event-organiser-ajax.php:801
 msgid "Are you sure you want to do this?"
 msgstr "Weet je zeker dat je dit wilt doen?"
 
-#: includes/event-organiser-ajax.php:802
+#: includes/event-organiser-ajax.php:808
 msgid "You do not have permission to edit this event"
 msgstr "Je hebt geen toestemming om dit evenement te wijzigen"
 
-#: includes/event-organiser-ajax.php:818
+#: includes/event-organiser-ajax.php:824
 #, php-format
 msgid "Event not created: %s"
 msgstr "Evenement niet aangemaakt: %s"

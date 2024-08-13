@@ -23,6 +23,8 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.refreshWhatsHappeningAtCityTech();
 			OpenLab.utility.initMemberRoleDefinitions();
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
+			OpenLab.utility.initClickableCards();
+			OpenLab.utility.initPortfolioProfileLinkToggle();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -700,6 +702,76 @@ OpenLab.utility = (function ($) {
 					}
 				}
 			);
+		},
+		initClickableCards: function() {
+			const cards = document.querySelectorAll('.clickable-card');
+
+			Array.prototype.forEach.call(cards, card => {
+				let down, up;
+				const link = card.querySelector('.item-title a');
+
+				card.onmouseenter = (event) => card.classList.add('card-is-hovered')
+				card.onmouseleave = (event) => card.classList.remove('card-is-hovered')
+
+				card.onmousedown = () => down = +new Date();
+				card.onmouseup = (e) => {
+					let rightclick = false;
+
+					// Old Netscape.
+					if (e.which && e.which === 3) {
+						rightclick = true;
+
+					// Microsoft or W3C model.
+					} else if (e.button && e.button === 2) {
+						rightclick = true;
+					}
+
+					if (rightclick) {
+						return;
+					}
+
+					up = +new Date();
+					if ((up - down) < 200) {
+						link.click();
+					}
+				}
+
+				card.style.cursor = 'pointer';
+			});
+		},
+		initPortfolioProfileLinkToggle: function() {
+			const toggleNodes = document.querySelectorAll('.portfolio-profile-link-toggle-checkbox');
+
+			if (toggleNodes.length > 0) {
+				const toggles = Array.from(toggleNodes);
+				toggles.forEach(toggle => {
+					toggle.addEventListener('change', (e) => {
+						const isChecked = toggle.checked;
+
+						const toggleNonce = document.getElementById( 'openlab_portfolio_link_visibility_nonce_' + toggle.dataset.counter );
+
+						if ( ! toggleNonce ) {
+							return;
+						}
+
+						const nonce = toggleNonce.value;
+
+						const url = ajaxurl + '?action=openlab_portfolio_link_visibility&nonce=' + nonce + '&state=' + ( isChecked ? 'enabled' : 'disabled' );
+
+						toggle.closest( '.portfolio-profile-link-toggle-wrapper' ).classList.add( 'loading' );
+						toggle.disabled = true;
+
+						fetch(url, {
+							method: 'GET',
+						})
+						.then(response => response.json())
+						.then(data => {
+							toggle.closest( '.portfolio-profile-link-toggle-wrapper' ).classList.remove( 'loading' );
+							toggle.disabled = false;
+						})
+					});
+				})
+			}
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings

@@ -13,7 +13,7 @@ class Ajax extends Lib\Base\Ajax
     public static function cloudWhatsappSaveSettings()
     {
         $cloud = Lib\Cloud\API::getInstance();
-        $cloud->whatsapp->setSettings( self::parameter( 'access_token' ), self::parameter( 'phone_id' ), self::parameter( 'business_account_id' ) )
+        $cloud->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->setSettings( self::parameter( 'access_token' ), self::parameter( 'phone_id' ), self::parameter( 'business_account_id' ) )
             ? wp_send_json_success()
             : wp_send_json_error( array( 'message' => current( $cloud->getErrors() ) ) );
     }
@@ -29,6 +29,6 @@ class Ajax extends Lib\Base\Ajax
         $start = Lib\Utils\DateTime::applyTimeZoneOffset( $dates[0], 0 );
         $end   = Lib\Utils\DateTime::applyTimeZoneOffset( date( 'Y-m-d', strtotime( '+1 day', strtotime( $dates[1] ) ) ), 0 );
 
-        wp_send_json( Lib\Cloud\API::getInstance()->whatsapp->getMessagesList( $start, $end ) );
+        wp_send_json( Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->getMessagesList( $start, $end ) );
     }
 }

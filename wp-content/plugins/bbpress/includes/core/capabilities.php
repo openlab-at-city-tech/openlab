@@ -285,6 +285,16 @@ function bbp_get_blog_roles() {
  */
 function bbp_add_forums_roles( $wp_roles = null ) {
 
+	// Maybe initialize WP_Roles just-in-time, but 
+	if ( empty( $wp_roles ) && ! doing_action( 'wp_roles_init' ) ) {
+		$wp_roles = wp_roles();
+	}
+
+	// Bail if unexpected param type
+	if ( ! is_a( $wp_roles, 'WP_Roles' ) ) {
+		return;
+	}
+
 	// Get the dynamic roles
 	$bbp_roles = bbp_get_dynamic_roles();
 

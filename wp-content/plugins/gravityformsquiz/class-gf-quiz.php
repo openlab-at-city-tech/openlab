@@ -113,6 +113,8 @@ class GFQuiz extends GFAddOn {
 
 			add_filter( 'gform_export_field_value', array( $this, 'display_export_field_value' ), 10, 4 );
 		}
+
+		add_filter( 'gform_html_message_template_pre_send_email', array( $this, 'add_icon_style_to_notification' ), 10, 2 );
 	}
 
 	/**
@@ -122,12 +124,12 @@ class GFQuiz extends GFAddOn {
 		/**
 		 * A filter to allow the modification of the indicator when a user gets an answer correct on a quiz (Eg adding a link to your own icon)
 		 */
-		$this->_correct_indicator_url = apply_filters( 'gquiz_correct_indicator', $this->get_base_url() . '/images/green-check-icon.svg' );
+		$this->_correct_indicator_url = apply_filters( 'gquiz_correct_indicator', $this->get_base_url() . '/images/green-check-icon.png' );
 
 		/**
 		 * A filter to allow the modification of the indicator when a user gets an answer wrong on a quiz (Eg adding a link to your own icon)
 		 */
-		$this->_incorrect_indicator_url = apply_filters( 'gquiz_incorrect_indicator', $this->get_base_url() . '/images/red-x-icon.svg' );
+		$this->_incorrect_indicator_url = apply_filters( 'gquiz_incorrect_indicator', $this->get_base_url() . '/images/red-x-icon.png' );
 
 		//------------------- both outside and inside admin context ------------------------
 
@@ -239,13 +241,14 @@ class GFQuiz extends GFAddOn {
 	 * @return array
 	 */
 	public function scripts() {
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$version = $this->_version;
+		$min     = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		$scripts = array(
 			array(
 				'handle'   => 'gquiz_form_editor_js',
 				'src'      => $this->get_enqueue_src( "gquiz_form_editor{$min}.js" ),
-				'version'  => $this->_version,
+				'version'  => $version,
 				'deps'     => array( 'jquery' ),
 				'callback' => array( $this, 'localize_form_editor_scripts' ),
 				'enqueue'  => array(
@@ -255,7 +258,7 @@ class GFQuiz extends GFAddOn {
 			array(
 				'handle'   => 'gquiz_form_settings_js',
 				'src'      => $this->get_enqueue_src( "gquiz_form_settings{$min}.js" ),
-				'version'  => $this->_version,
+				'version'  => $version,
 				'deps'     => array( 'jquery', 'jquery-ui-sortable', 'gform_json' ),
 				'callback' => array( $this, 'localize_form_settings_scripts' ),
 				'enqueue'  => array(
@@ -273,7 +276,7 @@ class GFQuiz extends GFAddOn {
 			$scripts[] = array(
 				'handle'  => 'gform_quiz_merge_tags',
 				'src'     => $this->get_enqueue_src( "gquiz_merge_tags{$min}.js" ),
-				'version' => $this->_version,
+				'version' => $version,
 				'deps'    => array( 'jquery' ),
 				'enqueue' => array(
 					array( 'admin_page' => array( 'form_settings' ) ),
@@ -293,23 +296,24 @@ class GFQuiz extends GFAddOn {
 	 * @return array
 	 */
 	public function styles() {
-		$min  = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
-		$base = $this->get_base_url();
+		$base_url = $this->get_base_url();
+		$version  = $this->_version;
+		$min      = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
 
 		if ( ! $this->is_gravityforms_supported( self::LATEST_UI_VERSION ) ) {
 			$styles = array(
 				array(
 					'handle'  => 'gquiz_form_editor_css',
-					'src'     => $base . "/legacy/css/gquiz_form_editor{$min}.css",
-					'version' => $this->_version,
+					'src'     => $base_url . "/legacy/css/gquiz_form_editor{$min}.css",
+					'version' => $version,
 					'enqueue' => array(
 						array( 'admin_page' => array( 'form_editor' ) ),
 					),
 				),
 				array(
 					'handle'  => 'gquiz_form_settings_css',
-					'src'     => $base . "/legacy/css/gquiz_form_settings{$min}.css",
-					'version' => $this->_version,
+					'src'     => $base_url . "/legacy/css/gquiz_form_settings{$min}.css",
+					'version' => $version,
 					'enqueue' => array(
 						array(
 							'admin_page' => array( 'form_settings' ),
@@ -319,8 +323,8 @@ class GFQuiz extends GFAddOn {
 				),
 				array(
 					'handle'  => 'gquiz_css',
-					'src'     => $base . "/legacy/css/gquiz{$min}.css",
-					'version' => $this->_version,
+					'src'     => $base_url . "/legacy/css/gquiz{$min}.css",
+					'version' => $version,
 					'enqueue' => array(
 						array( 'field_types' => array( 'quiz' ) ),
 						array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail' ) ),
@@ -331,8 +335,8 @@ class GFQuiz extends GFAddOn {
 			$styles = array(
 				array(
 					'handle'  => 'gquiz_form_editor_css',
-					'src'     => $base . "/assets/css/dist/admin{$min}.css",
-					'version' => $this->_version,
+					'src'     => $base_url . "/assets/css/dist/admin{$min}.css",
+					'version' => $version,
 					'enqueue' => array(
 						array( 'admin_page' => array( 'form_editor' ) ),
 						array(
@@ -343,8 +347,8 @@ class GFQuiz extends GFAddOn {
 				),
 				array(
 					'handle'  => 'gquiz_css',
-					'src'     => $base . "/assets/css/dist/theme{$min}.css",
-					'version' => $this->_version,
+					'src'     => $base_url . "/assets/css/dist/theme{$min}.css",
+					'version' => $version,
 					'enqueue' => array(
 						array( 'field_types' => array( 'quiz' ) ),
 						array( 'admin_page' => array( 'form_editor', 'results', 'entry_view', 'entry_detail' ) ),
@@ -352,8 +356,6 @@ class GFQuiz extends GFAddOn {
 				),
 			);
 		}
-
-
 
 		return array_merge( parent::styles(), $styles );
 	}
@@ -397,8 +399,8 @@ class GFQuiz extends GFAddOn {
 		wp_localize_script( 'gquiz_form_editor_js', 'gquizVars', $params );
 
 		$markAnswerAsCorrectString = $this->is_gravityforms_supported( self::LATEST_UI_VERSION )
-			? __( 'Mark an answer as correct by using the checkmark icon to the left of the answer.', 'gravityforms' )
-			: __( 'Mark an answer as correct by using the checkmark icon to the right of the answer.', 'gravityforms' );
+			? __( 'Mark an answer as correct by using the checkmark icon to the left of the answer.', 'gravityformsquiz' )
+			: __( 'Mark an answer as correct by using the checkmark icon to the right of the answer.', 'gravityformsquiz' );
 
 		//localize strings
 		$strings = array(
@@ -469,7 +471,8 @@ class GFQuiz extends GFAddOn {
 
 		$instant_feedback_enabled = $this->get_form_setting( $form, 'instantFeedback' );
 		if ( $instant_feedback_enabled ) {
-			wp_enqueue_script( 'gquiz_js', $this->get_base_url() . '/js/gquiz.js', array( 'jquery' ), $this->_version );
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+			wp_enqueue_script( 'gquiz_js', $this->get_base_url() . "/js/gquiz{$min}.js", array( 'jquery' ), $this->_version );
 			$params = array(
 				'correctIndicator'   => $this->_correct_indicator_url,
 				'incorrectIndicator' => $this->_incorrect_indicator_url,
@@ -1419,6 +1422,10 @@ class GFQuiz extends GFAddOn {
 			// Convert node to HTML.
 			$html = $dom->saveXML( $node );
 
+			if ( ! is_callable( array ( $node, 'getAttribute' ) ) ) {
+				continue;
+			}
+
 			// Skip when empty nodes are present.
 			if ( ! trim( $html ) ) {
 				continue;
@@ -2045,7 +2052,7 @@ class GFQuiz extends GFAddOn {
 				'fields' => array(
 					array(
 						'name'    => 'general',
-						'label'   => esc_html__( 'General', 'gravityformquiz' ),
+						'label'   => esc_html__( 'General', 'gravityformsquiz' ),
 						'type'    => 'checkbox',
 						'choices' => array(
 							0 => array(
@@ -2374,7 +2381,7 @@ class GFQuiz extends GFAddOn {
 		$tooltips['gquiz_letter_grades'] = '<h6>' . esc_html__( 'Letter Grades', 'gravityformsquiz' ) . '</h6>' . esc_html__( 'Define the minimum percentage required for each grade.', 'gravityformsquiz' );
 
 		$quizAnswersText = $this->is_gravityforms_supported( self::LATEST_UI_VERSION )
-			? esc_html__( 'Enter the answers for the quiz question. You can mark each choice as correct by using the checkmark icon on the left.', 'gravityforms' )
+			? esc_html__( 'Enter the answers for the quiz question. You can mark each choice as correct by using the checkmark icon on the left.', 'gravityformsquiz' )
 			: esc_html__( 'Enter the answers for the quiz question. You can mark each choice as correct by using the radio/checkbox fields on the right.', 'gravityformsquiz' );
 
 		//field settings
@@ -2442,9 +2449,7 @@ class GFQuiz extends GFAddOn {
 					<ul class="gquiz-weighted-score-wrapper">
 						<li class="gquiz-setting-weighted-score-enabled field_setting" data-js="choices-ui-setting" data-type="option">
 							<input id="gquiz-weighted-score-enabled" type="checkbox" onclick="gquizToggleWeightedScore( this );">
-							<label class="inline gfield_value_label" for="gquiz-weighted-score-enabled">
-								<?php esc_html_e( 'Weighted score', 'gravityformsquiz' ); ?>
-							</label>
+							<label class="inline gfield_value_label" for="gquiz-weighted-score-enabled"><?php esc_html_e( 'Weighted score', 'gravityformsquiz' ); ?></label>
 							<?php gform_tooltip( 'gquiz_weighted_score' ); ?>
 						</li>
 						<li class="gquiz-setting-values-visible-wrapper field_setting" data-js="choices-ui-setting" data-type="option">
@@ -2463,12 +2468,12 @@ class GFQuiz extends GFAddOn {
 				</div>
 
 				<div class="choices-ui__section" data-js="choices-ui-section" data-type="options">
-					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Options', 'gravityforms' ) ?></h6>
+					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Options', 'gravityformsquiz' ) ?></h6>
 					<ul class="choices-ui__options-list" data-js="choices-ui-option-list"></ul>
 				</div>
 
 				<div class="choices-ui__section" data-js="choices-ui-section" data-type="bulk-choices">
-					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Add Bulk Choices', 'gravityforms' ) ?></h6>
+					<h6 class="choices-ui__section-label"><?php esc_html_e( 'Add Bulk Choices', 'gravityformsquiz' ) ?></h6>
 					<?php $window_title = esc_html__( 'Bulk Add / Predefined Choices', 'gravityformsquiz' ); ?>
 					<input
 						type='button'
@@ -2486,20 +2491,14 @@ class GFQuiz extends GFAddOn {
 			<li class="gquiz-setting-randomize-quiz-choices field_setting" data-js="choices-ui-setting" data-type="option">
 
 				<input type="checkbox" id="gquiz-randomize-quiz-choices" onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizEnableRandomizeQuizChoices', value);">
-				<label for="gquiz-randomize-quiz-choices" class="inline">
-					<?php esc_html_e( 'Randomize order of choices', 'gravityformsquiz' ); ?>
-					<?php gform_tooltip( 'gquiz_randomize_quiz_choices' ); ?>
-				</label>
+				<label for="gquiz-randomize-quiz-choices" class="inline"><?php esc_html_e( 'Randomize order of choices', 'gravityformsquiz' ); ?><?php gform_tooltip( 'gquiz_randomize_quiz_choices' ); ?></label>
 
 			</li>
 			<li class="gquiz-setting-show-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
 
 				<input type="checkbox" id="gquiz-show-answer-explanation"
 				       onclick="var value = jQuery(this).is(':checked'); SetFieldProperty('gquizShowAnswerExplanation', value); gquiz_toggle_answer_explanation(value);"/>
-				<label for="gquiz-show-answer-explanation" class="inline">
-					<?php esc_html_e( 'Enable answer explanation', 'gravityformsquiz' ); ?>
-					<?php gform_tooltip( 'gquiz_enable_answer_explanation' ) ?>
-				</label>
+				<label for="gquiz-show-answer-explanation" class="inline"><?php esc_html_e( 'Enable answer explanation', 'gravityformsquiz' ); ?><?php gform_tooltip( 'gquiz_enable_answer_explanation' ) ?></label>
 
 			</li>
 			<li class="gquiz-setting-answer-explanation field_setting" data-js="choices-ui-setting" data-type="option">
@@ -2736,6 +2735,41 @@ class GFQuiz extends GFAddOn {
 		$output['is_pass'] = $is_pass;
 
 		return $output;
+	}
+
+	/**
+	 * Add style to notifications to control the size of the correct/incorrect icons.
+	 *
+	 * @since 4.2
+	 *
+	 * @param $template
+	 *
+	 * @return mixed
+	 */
+	public function add_icon_style_to_notification( $template ) {
+		$template = '
+        <html>
+            <head>
+            	<style type="text/css">
+            		.gquiz-correct-choice img, 
+            		.gquiz-incorrect-choice img, 
+            		.gquiz-incorrect-response img, 
+            		.gquiz-correct-response img {
+            			width: 16px; height: 16px;
+            		}
+            		tr:not([bgcolor]) {
+						display: table-row !important;
+						width: 100% !important;
+					}
+				</style>
+                <title>{subject}</title>
+            </head>
+            <body>
+                {message}
+            </body>
+        </html>';
+
+		return $template;
 	}
 
 	/**
@@ -3024,6 +3058,10 @@ class GFQuiz extends GFAddOn {
 	 * @param string $previous_version The version number of the previously installed version.
 	 */
 	public function upgrade( $previous_version ) {
+		if ( ! $previous_version ) {
+			return;
+		}
+
 		$previous_is_pre_addon_framework   = version_compare( $previous_version, '1.1.7', '<' );
 		$previous_is_using_misspelled_keys = version_compare( $previous_version, '3.7.1', '<' ) && version_compare( $previous_version, '3.4', '>=' );
 		$forms                             = GFFormsModel::get_forms();

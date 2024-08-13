@@ -297,6 +297,13 @@ class Local extends Base {
 		$this->debug_message( 'Checking/Installing tools in ' . $this->content_dir );
 		$this->skip_tools();
 		$toolfail = false;
+		if ( $this->function_exists( '\php_uname' ) ) {
+			$arch_type = \php_uname( 'm' );
+			$this->debug_message( "CPU architecture: $arch_type" );
+			if ( 'aarch64' === $arch_type && PHP_OS === 'Linux' ) {
+				return;
+			}
+		}
 		if ( ! \is_dir( $this->content_dir ) && \is_writable( \dirname( $this->content_dir ) ) ) {
 			$this->debug_message( 'folder does not exist, creating...' );
 			if ( ! \wp_mkdir_p( $this->content_dir ) ) {
@@ -354,7 +361,7 @@ class Local extends Base {
 				$this->debug_message( 'could not copy optipng' );
 			}
 		}
-		if ( $this->tools['pngquant']['enabled'] && ( ! $this->is_file( $pngquant_dst ) || \filesize( $pngquant_dst ) !== \filesize( $pngquant_src ) ) ) {
+		if ( ! $this->is_file( $pngquant_dst ) || \filesize( $pngquant_dst ) !== \filesize( $pngquant_src ) ) {
 			$this->debug_message( 'pngquant not found or different size, installing' );
 			if ( ! \copy( $pngquant_src, $pngquant_dst ) ) {
 				$toolfail = true;
@@ -391,7 +398,7 @@ class Local extends Base {
 					$this->debug_message( 'could not set optipng permissions' );
 				}
 			}
-			if ( $this->tools['pngquant']['enabled'] && ! $this->check_permissions( $pngquant_dst, 'rwxr-xr-x' ) ) {
+			if ( ! $this->check_permissions( $pngquant_dst, 'rwxr-xr-x' ) ) {
 				if ( ! \is_writable( $pngquant_dst ) || ! \chmod( $pngquant_dst, 0755 ) ) {
 					$toolfail = true;
 					$this->debug_message( 'could not set pngquant permissions' );
@@ -481,6 +488,10 @@ class Local extends Base {
 			'36535c1b262e0c457bbb0ed2bc71e812a49e26a6cada63b6acbd8d809c68a5a1', // optipng-mac   0.7.7 EWWW 4.1.0.
 			'41a4c78e6c97ea26836f4b021157b34f1812a9e5c2341502aad8cde942b18576', // optipng-sol   0.7.7 EWWW 4.1.0.
 			'6a321e07eca8e28fa8a969b5db3c1d3cc008a2064d636cf74762bbe4364b7b14', // optipng.exe   0.7.7 EWWW 4.1.0.
+			'7f51fe39778d1a0da733efa7e518bb0612acfceaee2409945abe89ec1c91682f', // optipng-fbsd  0.7.8 EWWW 7.5.0.
+			'c81b54f299a1284c6312448abf9fb79351d424f64709081dfb5e9afa3b7ad9c8', // optipng-linux 0.7.8 EWWW 7.5.0.
+			'd38e6c9162ae5dc7c801b56de92dfa144d1dee7171f011233ce0acf24718b29b', // optipng-mac   0.7.8 EWWW 7.5.0.
+			'3464cd6c7fc9cb893f368111eb19b634b2acf14dcc94958d0758251071cfcbd9', // optipng.exe   0.7.8 EWWW 7.5.0.
 			// end optipng.
 			'a2292c0085863a65c99cb41ff8418ce63033e162906df72e8fdde52f0633579b', // gifsicle linux 1.67, EWWW 1.2.0.
 			'd7f9609b6fd0000b2eaad2bd0c3cb85476988b18705762e915bda3f2e6007801', // gifsicle-linux 1.68, EWWW 1.3.0.
@@ -516,6 +527,10 @@ class Local extends Base {
 			'3b745d61a6be2b546424523848f699db5c60765a69659c328621daf39be199a1', // gifsicle-fbsd  1.93, EWWW 6.7.0.
 			'205abe804d1060375f713d990c45b0285cbc4b56226da1612e9f1d2d2e2c5369', // gifsicle-linux 1.93, EWWW 6.7.0.
 			'fbd269135c779acf8f96e38116cea3e2f429fb4fada3f876f2cedea8511830ba', // gifsicle-mac   1.93, EWWW 6.7.0.
+			'6f60cc7f696ab4b861bf9e6fb5b4fd940b3cb6b9731e2ef04708334af95a7de4', // gifsicle.exe   1.95, EWWW 7.5.0.
+			'8e69f9ff4807c14613986348d7a06e99eabff2a30c9f1efd32363ab8e5a23c07', // gifsicle-fbsd  1.95, EWWW 7.5.0.
+			'7fc9de52fff727604655a349b579918ba34b76ea371de3460d6272774bd896c6', // gifsicle-linux 1.95, EWWW 7.5.0.
+			'a4ae039ce0d4fb788c97a5b130c1865091fcd12f98345cb8aa4bc1a8e098326e', // gifsicle-mac   1.95, EWWW 7.5.0.
 			// end gifsicle.
 			'bdea95497d6e60aae8938cae8e999ef74a255ad603531bf523dcdb531f61fc8f', // 20110722-bsd/i686/pngout.
 			'57c09b3ebd7d4623d16f6056efd7951e8f98e2362a27993a7d865af677875c00', // 20110722-bsd-static/i686/pngout-static.
@@ -646,7 +661,10 @@ class Local extends Base {
 			'fc25866344efb604b3e70dc3e5519199605da13b550ccee4b7bbdcdeb0b5e6be', // cwebp-mac15 1.2.0, EWWW 6.1.0.
 			'488410937dbbc4ec55fddfc0fa6835b862f7024680744a5e5ac8b88be9270fcc', // cwebp-sol   1.2.0, EWWW 6.1.0.
 			'2849fd06012a9eb311b02a4f8918ae4b16775693bc21e95f4cc6a382eac299f9', // cwebp.exe   1.2.0, EWWW 6.1.0.
-			// libwebp 1.2.2 contains no changes to cwebp from 1.2.0 so far.
+			'b8094b40d73e5eb51fa9f68cc9d5c5a1bf610b0589f1b65698729d27fe2c327f', // cwebp-fbsd  1.3.2, EWWW 7.5.0.
+			'52dde413dc4547abf607d8f1e5426ab8110ae9f02e685c1d7c49537ea75be9ca', // cwebp-linux 1.3.2, EWWW 7.5.0.
+			'6eda6785dac4c23fc363e5db2dc45cfaab71225435a8bad95f3b56c1b7ee026d', // cwebp-mac15 1.3.2, EWWW 7.5.0.
+			'f317c8bc61624db206f5aa254f3bbc46d5cafdcb91862378ce7a0371dbf61b03', // cwebp.exe   1.3.2, EWWW 7.5.0.
 			// end cwebp.
 			'15d8b7d54b73059a9a63ab3d5ca8201cd30c2f6fc59fc068f7bd6c85e6a22420', // svgcleaner-linux 0.9.5.
 			'c88c1961374b3edc93a29376ccbd447a514c1cda335fe6a868c0dac6d77c79fa', // svgcleaner-mac 0.9.5.
@@ -712,15 +730,16 @@ class Local extends Base {
 	 * Get the filesystem path for a given tool, if enabled.
 	 *
 	 * @param string $tool The optimization tool to retrieve.
+	 * @param bool   $override True to bypass tool_enabled() check.
 	 * @return string The path to the requested tool.
 	 */
-	public function get_path( $tool ) {
+	public function get_path( $tool, $override = false ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
-		if ( $this->exec_enabled && $this->tool_enabled( $tool ) ) {
+		if ( $this->exec_enabled && ( $override || $this->tool_enabled( $tool ) ) ) {
 			if ( isset( $this->tools[ $tool ]['path'] ) ) {
 				return $this->tools[ $tool ]['path'];
 			}
-			$this->check_tool( $tool );
+			$this->check_tool( $tool, $override );
 			return $this->tools[ $tool ]['path'];
 		} elseif ( ! $this->tool_enabled( $tool ) ) {
 			$this->debug_message( "$tool disabled" );
@@ -732,13 +751,14 @@ class Local extends Base {
 	 * Sends each tool to the binary checker appropriate for the operating system.
 	 *
 	 * @param string $tool The name of the tool to check/test.
+	 * @param bool   $override True to bypass tool_enabled() check.
 	 */
-	public function check_tool( $tool ) {
+	public function check_tool( $tool, $override = false ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		if ( isset( $this->tools[ $tool ]['path'] ) ) {
 			return;
 		}
-		if ( ! $this->tool_enabled( $tool ) ) {
+		if ( ! $this->tool_enabled( $tool ) && ! $override ) {
 			$this->tools[ $tool ]['path'] = '';
 			return;
 		}
@@ -832,7 +852,7 @@ class Local extends Base {
 		$tool_path = \trailingslashit( $this->content_dir );
 		// First check for the binary in the ewww tool folder.
 		if ( ! $this->get_option( 'ewww_image_optimizer_skip_bundle' ) ) {
-			$this->debug_message( 'checking bundled tool' );
+			$this->debug_message( 'checking for bundled tool' );
 			if ( 'pngout' === $binary && $this->is_file( $tool_path . $binary . '-static' ) ) {
 				$binary_path = $tool_path . $binary . '-static';
 				$this->debug_message( "found $binary_path, testing..." );
@@ -1026,7 +1046,7 @@ class Local extends Base {
 					$this->debug_message( "$path: invalid output" );
 					break;
 				}
-				if ( ! empty( $pngquant_version ) && \substr( $pngquant_version[0], 0, 3 ) >= 2.0 ) {
+				if ( ! empty( $pngquant_version ) && \preg_match( '/^\d\.\d{1,2}\.\d{1,2}/', $pngquant_version[0] ) && \substr( $pngquant_version[0], 0, 3 ) >= 2.0 ) {
 					$this->debug_message( 'optimizer found' );
 					return $pngquant_version[0];
 				}

@@ -874,6 +874,8 @@ class Openlab_Clone_Course_Site {
 			'fileupload_url',
 			'oplb_gradebook_db_version', // This will force reinstallation of tables.
 			'duplicate_post_version', // Forces duplicate-post to initialize roles
+			'openlab_rewrite_rules_flushed',
+			'openlab_modules_rewrite_rules_flushed', // Triggers rewrite rule flush post-clone.
 		);
 
 		$preserve_prefix = [
@@ -941,6 +943,7 @@ class Openlab_Clone_Course_Site {
 			'posts',
 			'postmeta',
 			'terms',
+			'termmeta',
 			'term_taxonomy',
 			'term_relationships',
 		);

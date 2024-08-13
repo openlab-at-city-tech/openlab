@@ -153,13 +153,13 @@ if (! defined('ABSPATH')) {
                                         $currentRole = $defaultRole;
                                     }
                                     ?>
-                                    <div class="role-settings active" data-role="<?php echo esc_attr($key) ?>" data-nonce="<?php echo wp_create_nonce("change_folders_role_".$key) ?>" >
+                                    <div class="role-settings active" data-role="<?php echo esc_attr($key) ?>" data-nonce="<?php echo esc_attr(wp_create_nonce("change_folders_role_".$key)) ?>" >
                                         <div class="role-setting-left">
                                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                 <path d="M12.5708 2.09956L19.2082 4.32652C19.9512 4.57461 20.4535 5.25711 20.4575 6.02198L20.4998 12.6626C20.5129 14.6758 19.779 16.6282 18.435 18.1579C17.8169 18.8601 17.0246 19.4631 16.0128 20.0025L12.4449 21.9097C12.3332 21.9686 12.2103 21.999 12.0865 22C11.9627 22.0009 11.8389 21.9715 11.7281 21.9137L8.12702 20.0505C7.10417 19.52 6.30482 18.9258 5.68064 18.2335C4.3145 16.7194 3.55542 14.7758 3.54233 12.7597L3.50002 6.12397C3.49602 5.35811 3.98932 4.67071 4.72827 4.41281L11.3405 2.10643C11.7332 1.96718 12.1711 1.96424 12.5708 2.09956Z" fill="#E6386C"/>
                                                 <path d="M12.1255 12.4737C14.2948 12.4737 16.1255 12.8262 16.1255 14.1862C16.1255 15.5467 14.2828 15.8867 12.1255 15.8867C9.95667 15.8867 8.12549 15.5342 8.12549 14.1742C8.12549 12.8137 9.96818 12.4737 12.1255 12.4737ZM12.1255 5.88672C13.595 5.88672 14.7725 7.06373 14.7725 8.53225C14.7725 10.0008 13.595 11.1783 12.1255 11.1783C10.6564 11.1783 9.4785 10.0008 9.4785 8.53225C9.4785 7.06373 10.6564 5.88672 12.1255 5.88672Z" fill="white"/>
                                             </svg>
-                                            <span class="role-title"><?php echo $role['name'] ?></span>
+                                            <span class="role-title"><?php echo esc_attr($role['name']) ?></span>
                                         </div>
                                         <div class="role-setting-right">
                                             <?php if($key != "administrator") { ?>

@@ -1,11 +1,11 @@
 === EWWW Image Optimizer ===
 Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
-Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, seo, scale
-Requires at least: 6.1
-Tested up to: 6.4
+Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, scale
+Requires at least: 6.2
+Tested up to: 6.5
 Requires PHP: 7.3
-Stable tag: 7.2.3
+Stable tag: 7.7.0
 License: GPLv3
 
 Smaller Images, Faster Sites, Happier Visitors. Comprehensive image optimization that doesn't require a degree in rocket science.
@@ -140,49 +140,59 @@ That's not a question, but since I made it up, I'll answer it. See this resource
 * Feature requests can be viewed and submitted on our [feedback portal](https://feedback.ewww.io/b/features)
 * If you would like to help translate this plugin in your language, [join the team](https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/)
 
-= 7.2.3 =
-*Release Date - January 4, 2024*
+= 7.7.0 =
+*Release Date - June 6, 2024*
 
-* fixed: Easy IO incorrectly modifies JS/CSS URLs when using S3 on multisite
-* fixed: regression with WP Offload Media compatibility and incorrect ContentType for WebP images
-* fixed: local backup folder not protected from optimization
+* added: improved resizing of paletted PNG images in WP_Image_Editor using pngquant or API
+* added: warning when hiding query strings with Hide My WP
+* changed: apply async loading to lazyload JS using WP core functionality
+* fixed: missing srcset when using JS WebP rewriting
+* fixed: multisite deactivate for Easy IO fails nonce verification
+* fixed: some strings were missing i18n (props @DAnn2012)
 
-= 7.2.2 =
-*Release Date - December 12, 2023*
+= 7.6.0 =
+*Release Date - April 24, 2024*
 
-* fixed: Lazy Load compatibility with X/Pro themes and Cornerstone builder
-* fixed: JPG quality level ignored during PNG to JPG conversion
-* fixed: too much scaling for Visual Composer background images with zoom effect
-* fixed: Perfect Images compatibility function broken during image upload
-* fixed: Easy IO strips extra sub-folders in non-image URLs
-* fixed: compatibility with NextGEN Gallery 3.50+
-* fixed: optimization of dynamic thumbs for NextGEN Gallery
+* added: Easy IO delivery for JS/CSS assets from additional domains
+* added: Lazy Load can use dominant color placeholders via Easy IO
+* added: ability to filter/parse admin-ajax.php requests via eio_filter_admin_ajax_response filter
+* added: Easy IO support for Divi Pixel image masks
+* changed: improved smoothing of LQIP for Lazy Load when using Easy IO
+* changed: after editing an image in WordPress, optimization results for backup sizes will be hidden from Media Library list mode
+* changed: Lazy Load checks for auto-scale exclusions on ancestors of lazyloaded element
+* fixed: async bulk interface does not show Start Optimizing when image queue is already visible
+* fixed: bulk process appears to have completed after clearing queue
+* fixed: storing resize/webp results for new images fails with MySQL strict mode
+* fixed: database records not cleaned after thumbs are removed by Force Regenerate Thumbnails
+* fixed: JPG to PNG conversion on 8-bit PNGs sometimes uses incorrect black background
+* fixed: Help links broken in Firefox's Strict mode
+* fixed: async queue status not properly checked on multi-site
 
-= 7.2.1 =
-*Release Date - September 7, 2023*
+= 7.5.0 =
+*Release Date - March 26, 2024*
 
-* changed: Scheduled Optimizer skips image errors faster
-* changed: use updated coding standards, and restructure code for async/background functions
-* removed: legacy image editor extensions for unmaintained plugins
-* security: randomize filename of debug log
+* added: Easy IO support for upcoming Slider Revolution 7 rendering engine
+* added: Easy IO updates existing image preload URLs
+* added: Lazy Load automatically excludes preloaded images
+* changed: async process locking uses unique key on disk to avoid duplicate processes
+* fixed: Easy IO skipping Slider Revolution 6 URLs
+* fixed: Lazy Load incorrectly auto-scales fixed group background images
+* fixed: uncaught errors when attempting svgcleaner install on FreeBSD
+* fixed: optimized images list links to WebP thumbnail for all sizes
+* fixed: optimized images list shows wrong thumbnail for non-media library images
+* fixed: quirks with new bulk interface and optimized images list
+* updated: cwebp to version 1.3.2
+* updated: gifsicle to version 1.95
+* updated: optipng to version 0.7.8
 
-= 7.2.0 =
-*Release Date - July 20, 2023*
+= 7.4.0 =
+*Release Date - March 6, 2024*
 
-* added: Easy IO rewrites poster/thumbnail image URLs for video elements
-* changed: Easy IO + Auto Scale checks images on load and resize events to reduce browser upscaling
-* changed: prevent Easy IO font substitution when OMGF is active
-* fixed: Auto Scale downscales too much for landscape images displayed in portrait containers
-* fixed: Easy IO compatibility with Brizy thumbnail generation endpoint
-
-= 7.1.0 =
-*Release Date - June 29, 2023*
-
-* added: deliver Google Fonts via Easy IO or Bunny Fonts for improved user privacy
-* fixed: PHP error trying to save EXIF data to JPG after resizing
-* fixed: could not disable auto-scaling
-* fixed: prevent errors when using legacy Animated GIF Resizing plugin
-* fixed: prevent WP Offload Media from prematurely re-offloading when using bulk optimizer
+* added: async bulk optimizer on settings page
+* added: store WebP results/errors for display in Media Library, and in optimization table/results
+* added: ability to view pending/queued images, remove images from queue, and sort queue by original image size
+* fixed: restoring images from optimization table
+* fixed: attempting to install x64 binaries on arm64 servers
 
 = Earlier versions =
 Please refer to the separate changelog.txt file.

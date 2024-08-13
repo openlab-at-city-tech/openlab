@@ -33,7 +33,7 @@ function gutenberg_render_block_core_post_title( $attributes, $content, $block )
 
 	$tag_name = 'h2';
 	if ( isset( $attributes['level'] ) ) {
-		$tag_name = 'h' . $attributes['level'];
+		$tag_name = 0 === $attributes['level'] ? 'p' : 'h' . (int) $attributes['level'];
 	}
 
 	if ( isset( $attributes['isLink'] ) && $attributes['isLink'] ) {
@@ -60,6 +60,8 @@ function gutenberg_render_block_core_post_title( $attributes, $content, $block )
 
 /**
  * Registers the `core/post-title` block on the server.
+ *
+ * @since 5.8.0
  */
 function gutenberg_register_block_core_post_title() {
 	register_block_type_from_metadata(

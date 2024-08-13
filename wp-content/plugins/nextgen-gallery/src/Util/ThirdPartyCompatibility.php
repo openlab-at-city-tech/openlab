@@ -113,7 +113,7 @@ class ThirdPartyCompatibility {
 
 		// WPML fix.
 		if ( in_array( 'SitePress', get_declared_classes(), true ) ) {
-			Router::$use_canonical_redirect = false;
+			Router::$use_canonical_redirect = true;
 			Router::$use_old_slugs          = false;
 			\add_action( 'template_redirect', [ $this, 'fix_wpml_canonical_redirect' ], 1 );
 		}

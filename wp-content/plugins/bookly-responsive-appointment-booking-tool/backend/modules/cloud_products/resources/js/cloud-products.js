@@ -6,9 +6,10 @@ jQuery(function ($) {
             items: '[data-product-price-id]',
             dropdown: '.bookly-js-product-price-dropdown',
             enable: '.bookly-js-product-enable',
+            enable_pc: '.bookly-js-product-enable-pc',
             disable: '.bookly-js-product-disable',
         },
-        $onOffButtons = $('.bookly-js-product-enable,.bookly-js-product-disable'),
+        $onOffButtons = $('.bookly-js-product-enable,.bookly-js-product-enable-pc,.bookly-js-product-disable'),
         $infoButtons = $('.bookly-js-product-info-button'),
         $revertCancelButtons = $('.bookly-js-product-revert-cancel'),
         $updateRequiredButtons = $('.bookly-js-bookly-update-required'),
@@ -17,7 +18,7 @@ jQuery(function ($) {
         infoModal = {
             $loading: $('.bookly-js-loading', $infoModal),
             $content: $('#bookly-info-content', $infoModal),
-            $title: $('.modal-title',$infoModal)
+            $title: $('.modal-title', $infoModal)
         },
         $activationModal = $('#bookly-product-activation-modal'),
         activationModal = {
@@ -35,7 +36,19 @@ jQuery(function ($) {
     $prices
         .on('click', component.items, function () {
             const $selector = $(this).parents('.bookly-js-product-price-selector'),
-                productPriceId = $(this).data('product-price-id');
+                product = $selector.data('product'),
+                productPriceId = $(this).data('product-price-id'),
+                $card = $('[data-product="' + product + '"]')
+            ;
+            if ($(this).data('type') === 'purchase_code') {
+                $(this).closest('.bookly-js-cloud-product').find('.bookly-js-product-purchase-code-wrap').toggle(!BooklyL10n.products[product].active);
+                $(component.enable, $card).toggle(false);
+                $(component.enable_pc, $card).toggle(true);
+            } else {
+                $(this).closest('.bookly-js-cloud-product').find('.bookly-js-product-purchase-code-wrap').hide();
+                $(component.enable, $card).toggle(true);
+                $(component.enable_pc, $card).toggle(false);
+            }
             $selector.data('pp-id', productPriceId);
             $('.bookly-js-product-price', $selector).html($(this).html());
         });
@@ -49,17 +62,22 @@ jQuery(function ($) {
             $(component.items, $card).each(function () {
                 const productPriceId = $(this).data('product-price-id');
                 let selected = false;
-                BooklyL10n.subscriptions.forEach(function (item) {
-                    if (selected === false && item.product_price_id == productPriceId) {
-                        selected = true;
-                    }
-                });
+                if (BooklyL10n.products[product].activated_by_pc && productPriceId === 0) {
+                    selected = true;
+                } else {
+                    BooklyL10n.subscriptions.forEach(function (item) {
+                        if (selected === false && item.product_price_id == productPriceId) {
+                            selected = true;
+                        }
+                    });
+                }
                 if (selected) {
                     $(this).trigger('click');
                 }
             });
         }
 
+        $(component.enable_pc, $card).toggle(!productActive);
         $(component.enable, $card).toggle(!productActive);
         $(component.disable, $card).toggle(productActive);
         $(component.dropdown, $card).prop('disabled', productActive).toggleClass('disabled', productActive);
@@ -82,7 +100,7 @@ jQuery(function ($) {
 
     $infoButtons.on('click', function () {
         const ladda = Ladda.create(this);
-        const product =  $(this).closest('.bookly-js-cloud-product').data('product');
+        const product = $(this).closest('.bookly-js-cloud-product').data('product');
         ladda.start();
         infoModal.$loading.show();
         infoModal.$title.html(BooklyL10n.products[product].info_title).show();
@@ -117,16 +135,17 @@ jQuery(function ($) {
     $onOffButtons.on('click', function () {
         const $button = $(this);
         const product = $(this).closest('.bookly-js-cloud-product').data('product');
-        const status = $button.hasClass('bookly-js-product-enable') ? 1 : 0;
-        let product_price;
+        const status = $button.hasClass('bookly-js-product-enable') || $button.hasClass('bookly-js-product-enable-pc') ? 1 : 0;
+        let product_price, purchase_code;
         if (status) {
-            product_price = $(this).parents('.bookly-js-product-price-selector').data('pp-id');
+            product_price = $(this).closest('.bookly-js-product-price-selector').data('pp-id');
+            purchase_code = $(this).closest('.bookly-js-product-price-selector').find('.bookly-js-product-purchase-code-wrap input').val();
         }
-        if (!status && BooklyL10n.products[product].has_subscription) {
+        if (!status && BooklyL10n.products[product].has_subscription && !BooklyL10n.products[product].activated_by_pc) {
             $unsubscribeModal.data('product', product);
             $unsubscribeModal.booklyModal('show');
         } else {
-            changeProductStatus(product, status, product_price, $button)
+            changeProductStatus(product, status, product_price, purchase_code, $button)
         }
     });
 
@@ -142,7 +161,7 @@ jQuery(function ($) {
         ladda.start();
         $.ajax({
             type: 'POST',
-            url : ajaxurl,
+            url: ajaxurl,
             data: {
                 action: 'bookly_cloud_revert_cancel_subscription',
                 product: product,
@@ -161,10 +180,10 @@ jQuery(function ($) {
     });
 
     $cancelSubscriptionButton.on('click', function () {
-        changeProductStatus($unsubscribeModal.data('product'), $cancelSubscriptionMethod.find("input:checked").val(), 0, $(this));
+        changeProductStatus($unsubscribeModal.data('product'), $cancelSubscriptionMethod.find("input:checked").val(), 0, '', $(this));
     });
 
-    function changeProductStatus(product, status, product_price, $button) {
+    function changeProductStatus(product, status, product_price, purchase_code, $button) {
         const ladda = Ladda.create($button.get(0));
         let action;
         switch (product) {
@@ -178,6 +197,7 @@ jQuery(function ($) {
             case 'cron':
             case 'voice':
             case 'square':
+            case 'mobile-staff-cabinet':
             default:
                 action = 'bookly_cloud_change_product_status';
                 break;
@@ -186,11 +206,12 @@ jQuery(function ($) {
         ladda.start();
         $.ajax({
             type: 'POST',
-            url : ajaxurl,
+            url: ajaxurl,
             data: {
                 action: action,
                 status: status,
                 product_price: product_price,
+                purchase_code: purchase_code,
                 product: product,
                 csrf_token: BooklyL10nGlobal.csrf_token
             },
@@ -212,6 +233,7 @@ jQuery(function ($) {
             }
         });
     }
+
     function showProductActivationMessage(product, status) {
         $activationModal.booklyModal('show');
         activationModal.$title.html(BooklyL10n.products[product].title);
@@ -276,7 +298,7 @@ jQuery(function ($) {
         }
     }
 
-    $requiredBooklyPro.on('click', function() {
+    $requiredBooklyPro.on('click', function () {
         requiredBooklyPro();
     });
 });

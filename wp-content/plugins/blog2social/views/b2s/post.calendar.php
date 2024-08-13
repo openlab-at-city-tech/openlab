@@ -138,6 +138,7 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type='hidden' id="user_timezone" name="user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
 <input type="hidden" id="user_version" name="user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
 <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
+<input type="hidden" id="b2sMaxSchedDateAddBtn" value="<?php echo date('Y-m-d', strtotime("+ 3 years")) ?>">
 <input type="hidden" id="b2sPostId" value="">
 <input type="hidden" id="b2sInsertImageType" value="0">
 <input type="hidden" id="isOgMetaChecked" value="<?php echo (isset($metaSettings['og_active']) ? (int) $metaSettings['og_active'] : 0); ?>">
@@ -147,6 +148,8 @@ $metaSettings = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 <input type="hidden" id="b2sAnimateGif" value='<?php echo esc_attr(B2S_PLUGIN_NETWORK_ANIMATE_GIF); ?>'>
 <input type="hidden" id="ogMetaNetworks" value="<?php echo esc_attr(implode(';', json_decode(B2S_PLUGIN_NETWORK_META_TAGS, true)['og'])); ?>">
 <input type="hidden" id="b2sEmojiTranslation" value='<?php echo esc_attr(json_encode(B2S_Tools::getEmojiTranslationList())); ?>'>
+<input type="hidden" id="b2sMaxSchedDate" value="<?php echo esc_attr(date(strtotime("+ 3 years"))); ?>000">
+
 <!--Routing from dashboard-->
 <input type="hidden" id="b2s_rfd" value="<?php echo (isset($_GET['rfd'])) ? 1 : 0; ?>">
 <input type="hidden" id="b2s_rfd_b2s_id" value="<?php echo (isset($_GET['b2s_id'])) ? esc_attr(sanitize_text_field(wp_unslash($_GET['b2s_id']))) : ""; ?>">

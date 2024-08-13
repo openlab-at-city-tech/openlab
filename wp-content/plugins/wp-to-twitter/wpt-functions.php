@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-include( dirname( __FILE__ ) . '/classes/class-wpt-normalizer.php' );
+require __DIR__ . '/classes/class-wpt-normalizer.php';
 
 /**
  * See if checkboxes should be checked
@@ -67,11 +67,16 @@ function wpt_selected( $field, $value, $type = 'select' ) {
  * @param string $data Option key.
  * @param int    $id Post ID.
  * @param string $message Log message.
+ * @param string $http HTTP code for this message.
  */
-function wpt_set_log( $data, $id, $message ) {
+function wpt_set_log( $data, $id, $message, $http = '200' ) {
 	if ( 'test' === $id ) {
 		update_option( $data, $message );
 	} else {
+		$message = array(
+			'message' => $message,
+			'http'    => (string) $http,
+		);
 		update_post_meta( $id, '_' . $data, $message );
 	}
 	update_option( $data . '_last', array( $id, $message ) );
@@ -83,7 +88,7 @@ function wpt_set_log( $data, $id, $message ) {
  * @param string $data Option key.
  * @param int    $id Post ID.
  *
- * @return string message.
+ * @return string|array message.
  */
 function wpt_get_log( $data, $id ) {
 	if ( 'test' === $id ) {
@@ -119,19 +124,26 @@ function wpt_check_functions() {
 		$message .= '<li><strong>' . __( "XPoster successfully contacted your URL shortening service.</strong>  This link should point to your site's homepage:", 'wp-to-twitter' );
 		$message .= " <a href='$shrink'>$shrink</a></li>";
 	}
-	// check twitter credentials.
-	if ( wtt_oauth_test() ) {
+	// check twitter & mastodon credentials.
+	if ( wtt_oauth_test() || wpt_mastodon_connection() ) {
 		$rand     = wp_rand( 1000000, 9999999 );
-		$testpost = wpt_post_to_twitter( "This is a test of XPoster. $shrink ($rand)" );
-		if ( $testpost ) {
-			$message .= '<li><strong>' . __( 'XPoster successfully submitted a status update to X.com.', 'wp-to-twitter' ) . '</strong></li>';
+		$testpost = wpt_post_to_service( "This is a test of XPoster. $shrink ($rand)" );
+		if ( $testpost && ! empty( $testpost ) ) {
+			foreach ( $testpost as $key => $test ) {
+				if ( 'xcom' === $key ) {
+					$message .= '<li><strong>' . __( 'XPoster successfully submitted a status update to X.com.', 'wp-to-twitter' ) . '</strong></li>';
+				}
+				if ( 'mastodon' === $key ) {
+					$message .= '<li><strong>' . __( 'XPoster successfully submitted a status update to your Mastodon instance.', 'wp-to-twitter' ) . '</strong></li>';
+				}
+			}
 		} else {
 			$error    = wpt_get_log( 'wpt_status_message', 'test' );
-			$message .= '<li class="error"><strong>' . __( 'XPoster failed to submit an update to X.com.', 'wp-to-twitter' ) . '</strong></li>';
+			$message .= '<li class="error"><strong>' . __( 'XPoster failed to submit status updates.', 'wp-to-twitter' ) . '</strong></li>';
 			$message .= "<li class='error'>$error</li>";
 		}
 	} else {
-		$message .= '<strong>' . __( 'You have not connected WordPress to X.com.', 'wp-to-twitter' ) . '</strong> ';
+		$message .= '<strong>' . __( 'You have not connected WordPress to X.com or Mastodon.', 'wp-to-twitter' ) . '</strong> ';
 	}
 	if ( false === $testpost && false === $shrink ) {
 		$message .= '<li class="error">' . __( "<strong>Your server does not appear to support the required methods for XPoster to function.</strong> You can try it anyway - these tests aren't perfect.", 'wp-to-twitter' ) . '</li>';
@@ -156,6 +168,7 @@ function wpt_settings_tabs() {
 	$pro_text = ( function_exists( 'wpt_pro_exists' ) ) ? __( 'Pro Settings', 'wp-to-twitter' ) : __( 'XPoster PRO', 'wp-to-twitter' );
 	$pages    = array(
 		'connection' => __( 'X Connection', 'wp-to-twitter' ),
+		'mastodon'   => __( 'Mastodon API', 'wp-to-twitter' ),
 		'basic'      => __( 'Basic Settings', 'wp-to-twitter' ),
 		'shortener'  => __( 'URL Shortener', 'wp-to-twitter' ),
 		'advanced'   => __( 'Advanced Settings', 'wp-to-twitter' ),
@@ -179,6 +192,21 @@ function wpt_settings_tabs() {
 }
 
 /**
+ * Mask secure values.
+ *
+ * @param string $value Original value.
+ *
+ * @return string
+ */
+function wpt_mask_attr( $value ) {
+	$count  = strlen( $value );
+	$substr = substr( $value, -5 );
+	$return = str_pad( $substr, $count, '*', STR_PAD_LEFT );
+
+	return $return;
+}
+
+/**
  * Show the last Tweet attempt as admin notice.
  */
 function wpt_show_last_tweet() {
@@ -192,8 +220,17 @@ function wpt_show_last_tweet() {
 			} else {
 				$title = '(' . __( 'No post', 'wp-to-twitter' ) . ')';
 			}
-			$notice = esc_html( $log[1] );
-			echo "<div class='updated'><p><strong>" . __( 'Last Tweet', 'wp-to-twitter' ) . "</strong>: $title &raquo; $notice</p></div>";
+			if ( is_array( $log[1] ) ) {
+				$notice = esc_html( $log[1]['message'] );
+				$code   = esc_html( $log[1]['http'] );
+			} elseif ( is_string( $log[1] ) ) {
+				$notice = esc_html( $log[1] );
+				$code   = '';
+			} else {
+				$notice = __( 'Unrecognized error', 'wp-to-twitter' );
+				$code   = '';
+			}
+			echo "<div class='notice notice-info'><p><strong>" . __( 'Last Status Update', 'wp-to-twitter' ) . ": <code>$code</code></strong> $title &raquo; $notice</p></div>";
 		}
 	}
 }
@@ -299,10 +336,17 @@ function wpt_show_debug() {
 		$debug_log = get_post_meta( $post_ID, '_wpt_debug_log' );
 		if ( is_array( $debug_log ) ) {
 			foreach ( $debug_log as $entry ) {
-				$date     = date_i18n( 'Y-m-d H:i:s', $entry[0] );
+				$microtime = $entry[0];
+				$date      = explode( ' ', $microtime );
+				if ( count( $date ) > 1 ) {
+					$datetime = $date[1];
+				} else {
+					$datetime = $date[0];
+				}
+				$date     = date_i18n( 'Y-m-d H:i:s', $datetime );
 				$subject  = $entry[1];
 				$body     = $entry[2];
-				$records .= "<li><button type='button' class='toggle-debug button-secondary' aria-expanded='false'><strong>$date</strong>:<br />" . esc_html( $subject ) . "</button><pre class='wpt-debug-details'>" . esc_html( $body ) . '</pre></li>';
+				$records .= "<li><button type='button' class='toggle-debug button-secondary' aria-expanded='false'><strong>$date</strong><br />" . esc_html( $subject ) . "</button><pre class='wpt-debug-details'>" . esc_html( $body ) . '</pre></li>';
 			}
 		}
 		$script = "
@@ -335,15 +379,15 @@ function wpt_show_debug() {
  * Send a remote query expecting JSON.
  *
  * @param string $url Target URL.
- * @param array  $array Arguments if not default.
+ * @param array  $args JSON decode arguments if not default.
  * @param string $method Query method.
  * @throws Exception JSON error string.
  *
  * @return JSON object.
  */
-function wpt_remote_json( $url, $array = true, $method = 'GET' ) {
+function wpt_remote_json( $url, $args = true, $method = 'GET' ) {
 	$input = wpt_fetch_url( $url, $method );
-	$obj   = json_decode( $input, $array );
+	$obj   = json_decode( $input, $args );
 	if ( function_exists( 'json_last_error' ) ) { // > PHP 5.3.
 		try {
 			if ( is_null( $obj ) ) {
@@ -401,12 +445,12 @@ function wpt_is_valid_url( $url ) {
  * @param string $method Method.
  * @param string $body Body of query.
  * @param string $headers Headers to add.
- * @param string $return Array key from fetched object to return.
+ * @param string $return_type Array key from fetched object to return.
  *
  * @return string|false value from query.
  */
-function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return = 'body' ) {
-	$request = new WP_Http;
+function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return_type = 'body' ) {
+	$request = new WP_Http();
 	$result  = $request->request(
 		$url,
 		array(
@@ -419,7 +463,7 @@ function wpt_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $retur
 
 	if ( ! is_wp_error( $result ) && isset( $result['body'] ) ) {
 		if ( 200 === absint( $result['response']['code'] ) ) {
-			if ( 'body' === $return ) {
+			if ( 'body' === $return_type ) {
 				return $result['body'];
 			} else {
 				return $result;
@@ -600,6 +644,26 @@ function wpt_post_attachment( $post_ID ) {
 }
 
 /**
+ * Check for a valid license key.
+ *
+ * @return bool|string
+ */
+function wpt_pro_is_valid() {
+	$license  = ( get_option( 'wpt_license_key' ) ) ? get_option( 'wpt_license_key' ) : 'none';
+	$validity = get_option( 'wpt_license_valid' );
+	$valid    = false;
+	if ( function_exists( 'wpt_pro_functions' ) ) {
+		if ( 'none' !== $license ) {
+			$valid = ( ( 'true' === $validity ) || ( 'active' === $validity ) || ( 'valid' === $validity ) ) ? $license : false;
+		} else {
+			$valid = false;
+		}
+	}
+
+	return $valid;
+}
+
+/**
  * Show support form. Note: text in the message body should not be translatable.
  */
 function wpt_get_support_form() {
@@ -608,15 +672,9 @@ function wpt_get_support_form() {
 	$request        = '';
 	$response_email = $current_user->user_email;
 	// send fields for XPoster.
-	$license = ( get_option( 'wpt_license_key' ) ) ? get_option( 'wpt_license_key' ) : 'none';
-	if ( 'none' !== $license ) {
-		$valid = ( ( 'true' === get_option( 'wpt_license_valid' ) ) || ( 'active' === get_option( 'wpt_license_valid' ) ) || ( 'valid' === get_option( 'wpt_license_valid' ) ) ) ? ' (active)' : ' (inactive)';
-	} else {
-		$valid = '';
-	}
-	if ( $valid && function_exists( 'wpt_pro_functions' ) ) {
-		$license = 'License Key: ' . $license . $valid;
-
+	$license = wpt_pro_is_valid();
+	if ( $license ) {
+		$license_key          = 'License Key: ' . $license;
 		$version              = $wpt_version;
 		$wtt_twitter_username = get_option( 'wtt_twitter_username' );
 		// send fields for all plugins.
@@ -654,7 +712,7 @@ function wpt_get_support_form() {
 	==XPoster==
 	Version: $version
 	X.com username: http://twitter.com/$wtt_twitter_username
-	$license
+	$license_key
 
 	==WordPress:==
 	Version: $wp_version
@@ -795,9 +853,7 @@ function wpt_is_writable( $file ) {
  * @return Curl response.
  */
 function wp_get_curl( $url ) {
-
 	$curl = curl_init( $url );
-
 	curl_setopt( $curl, CURLOPT_RETURNTRANSFER, true );
 	curl_setopt( $curl, CURLOPT_HEADER, 0 );
 	curl_setopt( $curl, CURLOPT_USERAGENT, '' );
@@ -836,30 +892,30 @@ function wpt_delete_copied_meta( $new_id, $post ) {
 }
 
 /**
- * Provide aliases for changed function names if plug-ins or themes are calling XPoster functions in custom code.
+ * Provide aliases for changed function names if plug-ins or themes are calling XPoster functions in custom code. Deprecated.
  *
  * @param string $url Query url.
  * @param string $method Method.
  * @param string $body Body.
  * @param string $headers Headers.
- * @param string $return Return data.
+ * @param string $return_type Return data.
  *
  * @return data.
  */
-function jd_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return = 'body' ) {
-	return wpt_fetch_url( $url, $method, $body, $headers, $return );
+function jd_fetch_url( $url, $method = 'GET', $body = '', $headers = '', $return_type = 'body' ) {
+	return wpt_fetch_url( $url, $method, $body, $headers, $return_type );
 }
 
 /**
- * Alias for remote_json.
+ * Alias for remote_json. Deprecated.
  *
  * @param string $url Query url.
- * @param array  $array Arguments.
+ * @param array  $query_args Arguments sent to remote query.
  *
  * @return remote JSON.
  */
-function jd_remote_json( $url, $array = true ) {
-	return wpt_remote_json( $url, $array );
+function jd_remote_json( $url, $query_args = true ) {
+	return wpt_remote_json( $url, $query_args );
 }
 
 /**

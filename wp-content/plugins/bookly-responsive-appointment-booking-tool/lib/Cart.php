@@ -152,8 +152,6 @@ class Cart
         $order->setOrderId( $orders_entity->getId() );
         $this->userData->setOrderId( $orders_entity->getId() );
 
-        list( $sync, $gc, $oc ) = Config::syncCalendars();
-
         foreach ( $this->getItems() as $cart_item ) {
             switch ( $cart_item->getType() ) {
                 case CartItem::TYPE_APPOINTMENT:
@@ -320,13 +318,9 @@ class Cart
                                 ->save();
                         }
 
-                        // Online meeting.
-                        Proxy\Shared::syncOnlineMeeting( array(), $appointment, $service );
-                        if( $sync ) {
-                            // Google Calendar.
-                            $gc && Proxy\Pro::syncGoogleCalendarEvent( $appointment );
-                            // Outlook Calendar.
-                            $oc && Proxy\OutlookCalendar::syncEvent( $appointment );
+                        if ( $appointment->getStartDate() ) {
+                            Proxy\Shared::syncOnlineMeeting( array(), $appointment, $service );
+                            Common::syncWithCalendars( $appointment );
                         }
 
                         // Add entities to result.
@@ -418,6 +412,8 @@ class Cart
                 $title = Payment\Proxy\Shared::getTranslatedTitle( null, $item );
         }
 
+        $title = wp_strip_all_tags( $title );
+
         $tail = '';
         $more = count( $this->items ) - 1;
         if ( $more > 0 ) {
@@ -475,8 +471,13 @@ class Cart
                     $bound_start = Slots\DatePoint::fromStr( $datetime );
                     $bound_end = Slots\DatePoint::fromStr( $datetime )->modify( ( (int) ( $service->isCollaborative() ? $service->getCollaborativeDuration() : $service->getDuration() ) * $cart_item->getUnits() ) . ' sec' );
                     if ( Config::proActive() ) {
-                        $bound_start->modify( '-' . (int) $service->getPaddingLeft() . ' sec' );
-                        $bound_end->modify( ( (int) $service->getPaddingRight() + $cart_item->getExtrasDuration() ) . ' sec' );
+                        $bound_start = $bound_start->modify( '-' . (int) $service->getPaddingLeft() . ' sec' );
+                        $bound_end = $bound_end->modify( ( (int) $service->getPaddingRight() + $cart_item->getExtrasDuration() ) . ' sec' );
+                    }
+
+                    if ( Slots\DatePoint::now()->gte( $bound_start->modify( -Proxy\Pro::getMinimumTimePriorBooking( $cart_item->getServiceId() ) ) ) ) {
+                        // The appointment cannot be booked, the condition for getMinimumTimePriorBooking is violated.
+                        return $cart_key;
                     }
 
                     if ( $bound_end->lte( $max_date ) ) {

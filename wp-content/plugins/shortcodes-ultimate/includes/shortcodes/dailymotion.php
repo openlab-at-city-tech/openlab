@@ -137,7 +137,7 @@ function su_shortcode_dailymotion( $atts = null, $content = null ) {
 		return su_error_message( 'Dailymotion', __( 'please specify correct url', 'shortcodes-ultimate' ) );
 	}
 
-	$atts['url'] = su_do_attribute( $atts['url'] );
+	$atts['url'] = esc_url( su_do_attribute( $atts['url'] ) );
 	$id          = strtok( basename( $atts['url'] ), '_' );
 
 	if ( ! $id ) {

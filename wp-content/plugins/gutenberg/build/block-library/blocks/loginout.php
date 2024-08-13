@@ -8,6 +8,8 @@
 /**
  * Renders the `core/loginout` block on server.
  *
+ * @since 5.8.0
+ *
  * @param array $attributes The block attributes.
  *
  * @return string Returns the login-out link or form.
@@ -39,6 +41,8 @@ function gutenberg_render_block_core_loginout( $attributes ) {
 
 /**
  * Registers the `core/loginout` block on server.
+ *
+ * @since 5.8.0
  */
 function gutenberg_register_block_core_loginout() {
 	register_block_type_from_metadata(

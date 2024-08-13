@@ -325,3 +325,277 @@ function openlab_bp_docs_map_meta_caps( $caps, $cap, $user_id, $args ) {
 	return $caps;
 }
 add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps', 100, 4 );
+
+/**
+ * Checks whether comments are allowed on a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return bool
+ */
+function openlab_comments_allowed_on_doc( $doc_id ) {
+	$allowed = true;
+
+	$doc = get_post( $doc_id );
+	if ( ! $doc || 'bp_doc' !== $doc->post_type ) {
+		return $allowed;
+	}
+
+	$disabled = get_post_meta( $doc_id, 'openlab_comments_disabled', true );
+	if ( 'yes' === $disabled ) {
+		$allowed = false;
+	}
+
+	return $allowed;
+}
+
+/**
+ * Gets 'View' setting for a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return string
+ */
+function openlab_get_doc_view_setting( $doc_id ) {
+	$saved_setting = get_post_meta( $doc_id, 'openlab_view_setting', true );
+
+	if ( ! $saved_setting ) {
+		$group_id = bp_docs_get_associated_group_id( $doc_id );
+
+		// During Doc creation.
+		if ( ! $group_id && bp_docs_is_doc_create() ) {
+			$group_id = bp_get_current_group_id();
+		}
+
+		$group = groups_get_group( $group_id );
+
+		if ( $group && 'public' === $group->status ) {
+			$setting = 'everyone';
+		} else {
+			$setting = 'group-members';
+		}
+	} else {
+		$setting = $saved_setting;
+	}
+
+	return $setting;
+}
+
+/**
+ * Gets 'Edit' setting for a doc.
+ *
+ * @param int $doc_id Doc ID.
+ * @return string
+ */
+function openlab_get_doc_edit_setting( $doc_id ) {
+	$saved_setting = get_post_meta( $doc_id, 'openlab_edit_setting', true );
+
+	if ( ! $saved_setting ) {
+		$setting = 'group-members';
+	} else {
+		$setting = $saved_setting;
+	}
+
+	return $setting;
+}
+
+/**
+ * Saves our custom Doc-specific settings.
+ *
+ * @param int $doc_id Doc ID.
+ * @return void
+ */
+function openlab_save_custom_doc_settings( $doc_id ) {
+	if ( empty( $_POST['bp-docs-save-doc-privacy-nonce'] ) ) {
+		return;
+	}
+
+	check_admin_referer( 'bp-docs-save-doc-privacy', 'bp-docs-save-doc-privacy-nonce' );
+
+	if ( ! current_user_can( 'bp_docs_manage', $doc_id ) ) {
+		return;
+	}
+
+	if ( isset( $_POST['doc']['allow_comments'] ) ) {
+		$allow_comments = '1' === wp_unslash( $_POST['doc']['allow_comments'] );
+
+		if ( $allow_comments ) {
+			delete_post_meta( $doc_id, 'openlab_comments_disabled' );
+		} else {
+			update_post_meta( $doc_id, 'openlab_comments_disabled', 'yes' );
+		}
+	}
+
+	if ( isset( $_POST['doc']['view_setting'] ) ) {
+		$view_setting = wp_unslash( $_POST['doc']['view_setting'] );
+
+		$allowed_settings = [ 'everyone', 'group-members', 'admins' ];
+		if ( in_array( $view_setting, $allowed_settings, true ) ) {
+			update_post_meta( $doc_id, 'openlab_view_setting', $view_setting );
+		}
+	}
+
+	if ( isset( $_POST['doc']['edit_setting'] ) ) {
+		$edit_setting = wp_unslash( $_POST['doc']['edit_setting'] );
+
+		$allowed_settings = [ 'group-members', 'admins' ];
+		if ( in_array( $edit_setting, $allowed_settings, true ) ) {
+			update_post_meta( $doc_id, 'openlab_edit_setting', $edit_setting );
+		}
+	}
+}
+add_action( 'bp_docs_after_save', 'openlab_save_custom_doc_settings' );
+
+/**
+ * Custom implementation of comments_open for docs.
+ *
+ * Old Docs can have comments closed by default. We must respect
+ * openlab_comments_disabled meta and other doc-specific settings.
+ */
+function openlab_force_doc_comments_open( $open, $post_id ) {
+	return openlab_comments_allowed_on_doc( $post_id );
+}
+add_action( 'comments_open', 'openlab_force_doc_comments_open', 999, 2 );
+
+/**
+ * Meta cap mapping for our custom doc settings.
+ *
+ * @param array  $caps    Capabilities.
+ * @param string $cap     Capability.
+ * @param int    $user_id User ID.
+ * @param array  $args    Args.
+ * @return array
+ */
+function openlab_bp_docs_map_meta_caps_for_custom_settings( $caps, $cap, $user_id, $args ) {
+	switch ( $cap ) {
+		case 'bp_docs_read':
+		case 'bp_docs_view_history':
+		case 'bp_docs_read_comments':
+		case 'bp_docs_edit':
+			$doc = bp_docs_get_doc_for_caps( $args );
+
+			if ( ! $doc ) {
+				return $caps;
+			}
+
+			$group_id = bp_docs_get_associated_group_id( $doc->ID, $doc );
+			if ( ! $group_id ) {
+				return $caps;
+			}
+
+			if ( 'bp_docs_edit' === $cap ) {
+				$setting = openlab_get_doc_edit_setting( $doc->ID );
+			} else {
+				$setting = openlab_get_doc_view_setting( $doc->ID );
+			}
+
+			if ( (int) $doc->post_author === (int) $user_id ) {
+				$caps = [ 'exist' ];
+				break;
+			}
+
+			$caps = [ 'do_not_allow' ];
+
+			switch ( $setting ) {
+				case 'everyone':
+					$caps = [ 'exist' ];
+					break;
+
+				case 'group-members':
+					if ( groups_is_user_member( $user_id, $group_id ) ) {
+						$caps = [ 'exist' ];
+					}
+					break;
+
+				case 'admins':
+					if ( groups_is_user_admin( $user_id, $group_id ) ) {
+						$caps = [ 'exist' ];
+					}
+					break;
+			}
+
+			break;
+	}
+
+	return $caps;
+}
+add_filter( 'bp_docs_map_meta_caps', 'openlab_bp_docs_map_meta_caps_for_custom_settings', 100, 4 );
+
+/**
+ * Exclude off-limits docs from group listings.
+ *
+ * @param array         $args       WP_Query args.
+ * @param BP_Docs_Query $docs_query Docs query object.
+ * @return array
+ */
+function openlab_exclude_off_limits_docs_from_group_listings( $args, $docs_query ) {
+	if ( empty( $docs_query->query_args['group_id'] ) ) {
+		return $args;
+	}
+
+	$group_id = $docs_query->query_args['group_id'];
+
+	// Group administrators see everything.
+	if ( current_user_can( 'bp_moderate' ) || groups_is_user_admin( bp_loggedin_user_id(), $group_id ) ) {
+		return $args;
+	}
+
+	$allowed_settings = [ 'everyone' ];
+	if ( groups_is_user_member( bp_loggedin_user_id(), $group_id ) ) {
+		$allowed_settings[] = 'group-members';
+	}
+
+	$args['post__not_in'] = openlab_get_off_limits_doc_ids_for_user_group( bp_loggedin_user_id(), $group_id );
+
+	return $args;
+}
+add_filter( 'bp_docs_pre_query_args', 'openlab_exclude_off_limits_docs_from_group_listings', 50, 2 );
+
+/**
+ * Gets a list of IDs belonging to off-limits docs for a user-group combination.
+ *
+ * @param int $user_id  User ID.
+ * @param int $group_id Group ID.
+ * @return array
+ */
+function openlab_get_off_limits_doc_ids_for_user_group( $user_id, $group_id ) {
+	if ( user_can( $user_id, 'bp_moderate' ) || groups_is_user_admin( $user_id, $group_id ) ) {
+		return [];
+	}
+
+	$forbidden_settings = [ 'admins' ];
+	if ( ! groups_is_user_member( $user_id, $group_id ) ) {
+		$forbidden_settings[] = 'group-members';
+	}
+
+	$meta_query = [
+		'relation'         => 'AND',
+		'forbidden_settings' => [
+			'key'     => 'openlab_view_setting',
+			'value'   => $forbidden_settings,
+			'compare' => 'IN',
+		],
+	];
+
+	$tax_query = BP_Docs_Groups_Integration::tax_query_arg_for_groups( [ $group_id ] );
+
+	$docs = get_posts(
+		[
+			'post_type'      => bp_docs_get_post_type_name(),
+			'posts_per_page' => -1,
+			'meta_query'     => $meta_query,
+			'tax_query'      => [ $tax_query ],
+		]
+	);
+
+	// Users can always see their own docs.
+	$doc_ids = [];
+	foreach ( $docs as $doc ) {
+		if ( (int) $user_id === (int) $doc->post_author ) {
+			continue;
+		}
+
+		$doc_ids[] = $doc->ID;
+	}
+
+	return $doc_ids;
+}
+

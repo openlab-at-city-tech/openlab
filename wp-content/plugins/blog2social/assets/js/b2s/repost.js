@@ -149,6 +149,14 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
                     if (jQuery('.b2s-re-post-queue-area .list-group-item[data-type="post"]').length == 0) {
                         jQuery('.b2s-re-post-queue-delete-area').hide();
                     }
+
+                    //Licence Condition
+                    jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
+                    if (data.currentOpenSchedLimit <= 0) {
+                        jQuery('#b2s-licence-condition').show();
+                        jQuery('.b2s-re-post-submit-btn').prop('disabled', true);
+                    }
+
                 }
                 renderCalender();
             } else {
@@ -337,6 +345,15 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function () 
                     jQuery('.b2s-re-post-queue-delete-area').hide();
                 }
                 jQuery('.b2s-re-post-queue-checkbox').trigger('change');
+
+                //Licence Condition
+                jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
+                if (data.currentOpenSchedLimit > 0) {
+                    jQuery('#b2s-licence-condition').hide();
+                    if (jQuery("#b2sUserVersion").val() > 0) {
+                        jQuery('.b2s-re-post-submit-btn').removeAttr('disabled');
+                    }
+                }
                 renderCalender();
             } else {
                 if (data.error == 'nonce') {
@@ -355,7 +372,6 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
     jQuery('.b2s-repost-options-area').hide();
     jQuery('.b2s-repost-queue-area').hide();
     jQuery('.b2s-loading-area').show();
-
     jQuery('.b2s-post-remove-fail').hide();
     jQuery('.b2s-post-remove-success').hide();
     jQuery('.b2s-sched-delete-confirm-btn').prop('disabeld', true);
@@ -394,6 +410,16 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
                     }
                 }
                 jQuery('.b2s-post-remove-success').show();
+                
+                //Licence Condition
+                if (jQuery("#b2sUserVersion").val() > 0) {
+                    jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
+                    if (data.currentOpenSchedLimit > 0) {
+                        jQuery('#b2s-licence-condition').hide();
+                        jQuery('.b2s-re-post-submit-btn').removeAttr('disabled');
+                    }
+                }
+
                 renderCalender();
             } else {
                 if (data.error == 'nonce') {
@@ -406,14 +432,9 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
         }
     });
 });
-
-
-
 jQuery(document).on('click', '.b2s-post-edit-sched-btn', function () {
     showEditSchedPost(jQuery(this).attr('data-b2s-id'), jQuery(this).attr('data-post-id'), jQuery(this).attr('data-network-auth-id'), jQuery(this).attr('data-network-type'), jQuery(this).attr('data-network-id'), jQuery(this).attr('data-relay-primary-post-id'));
-
 });
-
 //Customize 
 function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, network_id, relay_primary_post_id) {
     if (jQuery('#b2s-edit-event-modal-' + b2s_id).length == 1)
@@ -546,7 +567,6 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
         checkSchedDateTime(network_auth_id);
     });
     init();
-
     //is relay post?
     if (relay_primary_post_id > 0) {
         jQuery('#b2s-edit-event-modal-' + b2s_id).find("input, textarea, button").each(function () {
@@ -601,7 +621,6 @@ jQuery(document).on('click', '.b2s-select-image-modal-open', function () {
     jQuery('#b2s-network-select-image').modal('show');
     return false;
 });
-
 jQuery(document).on("click", ".b2s-edit-post-save-this", function (e) {
     e.preventDefault();
     jQuery('#save_method').val("apply-this");
@@ -647,7 +666,6 @@ jQuery(document).on("click", ".release_locks", function () {
         }
     });
 });
-
 function showFilter(typ) {
     if (typ == 'show') {
         jQuery('.filterShow').hide();
@@ -671,7 +689,6 @@ function checkSchedDateTime() {
     var dateStr = jQuery(dateElement).val();
     var minStr = jQuery(timeElement).val();
     var timeZone = parseInt(jQuery('#user_timezone').val()) * (-1);
-
     if (jQuery('#b2sUserLang').val() == 'de') {
         dateStr = dateStr.substring(6, 10) + '-' + dateStr.substring(3, 5) + '-' + dateStr.substring(0, 2);
     } else {
@@ -688,7 +705,6 @@ function checkSchedDateTime() {
         minParts3[0] = '0' + minParts3[0];
     }
     var dateParts = dateStr.split('-');
-
     //utc current time
     var now = new Date();
     //offset between utc und user
@@ -699,7 +715,7 @@ function checkSchedDateTime() {
     var enter = new Date(dateParts[0], dateParts[1] - 1, dateParts[2], hour, minParts3[1]);
     //compare enter date time with allowed user time
     if (enter.getTime() < now.getTime()) {
-        //enter set on next 15 minutes and calculate on user timezone
+//enter set on next 15 minutes and calculate on user timezone
         enter.setTime(now.getTime() + (900000 - (now.getTime() % 900000)) - (3600000 * (timeZone + offset)));
         jQuery(dateElement).datepicker('update', enter);
         jQuery(timeElement).timepicker('setTime', enter);
@@ -715,7 +731,6 @@ jQuery(document).on('click', '.b2s-sched-calendar-btn', function () {
         jQuery('#b2s-sched-calendar-area').show();
     }
 });
-
 //Overlay second modal
 jQuery('#b2s-network-select-image').on('hidden.bs.modal', function () {
     jQuery('body').addClass('modal-open');
@@ -727,21 +742,17 @@ jQuery('#b2s-post-ship-item-post-format-modal').on('hidden.bs.modal', function (
 jQuery('#b2s-info-change-meta-tag-modal').on('hidden.bs.modal', function () {
     jQuery('body').addClass('modal-open');
 });
-
 //Modal Edit Post close
 jQuery(document).on('click', '.b2s-modal-close-edit-post', function (e) {
     jQuery(jQuery(this).attr('data-modal-name')).remove();
     return false;
 });
-
 jQuery(document).on('click', '.b2sTwitterInfoModalBtn', function () {
     jQuery('#b2sTwitterInfoModal').modal('show');
 });
-
 jQuery(document).on('click', '.b2s-re-post-submit-premium', function () {
     jQuery('#b2sInfoRePosterModal').modal('show');
 });
-
 jQuery(document).on('change', '.b2s-re-post-type', function () {
     if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-type-active').prop('checked', false);
@@ -749,7 +760,6 @@ jQuery(document).on('change', '.b2s-re-post-type', function () {
         jQuery('.b2s-re-post-type-active').prop('checked', true);
     }
 });
-
 jQuery(document).on('change', '.b2s-re-post-categories', function () {
     if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-categories-active').prop('checked', false);
@@ -757,8 +767,6 @@ jQuery(document).on('change', '.b2s-re-post-categories', function () {
         jQuery('.b2s-re-post-categories-active').prop('checked', true);
     }
 });
-
-
 jQuery(document).on('change', '.b2s-re-post-tags', function () {
     if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-tags-active').prop('checked', false);
@@ -766,7 +774,6 @@ jQuery(document).on('change', '.b2s-re-post-tags', function () {
         jQuery('.b2s-re-post-tags-active').prop('checked', true);
     }
 });
-
 jQuery(document).on('change', '.b2s-re-post-author', function () {
     if (jQuery(this).val() == null) {
         jQuery('.b2s-re-post-author-active').prop('checked', false);
@@ -774,7 +781,6 @@ jQuery(document).on('change', '.b2s-re-post-author', function () {
         jQuery('.b2s-re-post-author-active').prop('checked', true);
     }
 });
-
 jQuery(document).on('change', '.b2s-re-post-date-start', function () {
     if (jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
         jQuery('.b2s-re-post-date-active').prop('checked', false);
@@ -783,7 +789,6 @@ jQuery(document).on('change', '.b2s-re-post-date-start', function () {
     }
     jQuery('.b2s-re-post-date-start').removeClass('error');
 });
-
 jQuery(document).on('change', '.b2s-re-post-date-end', function () {
     if (jQuery('.b2s-re-post-date-start').val() == "" && jQuery('.b2s-re-post-date-end').val() == "") {
         jQuery('.b2s-re-post-date-active').prop('checked', false);
@@ -792,12 +797,10 @@ jQuery(document).on('change', '.b2s-re-post-date-end', function () {
     }
     jQuery('.b2s-re-post-date-end').removeClass('error');
 });
-
 jQuery(document).on('click', '.b2s-network-info-modal-btn', function () {
     jQuery('#b2sInfoNetworkModal').modal('show');
     return false;
 });
-
 jQuery(document).on('click', '.b2s-re-post-show-calender-btn', function () {
     jQuery('.b2s-re-post-queue-area').hide();
     jQuery('.b2s-re-post-calender-area').show();
@@ -805,7 +808,6 @@ jQuery(document).on('click', '.b2s-re-post-show-calender-btn', function () {
     jQuery(".fc-today-button").trigger('click');
     return false;
 });
-
 jQuery(document).on('click', '.b2s-re-post-show-list-btn', function () {
     jQuery('.b2s-re-post-queue-area').show();
     jQuery('.b2s-re-post-calender-area').hide();
@@ -816,8 +818,6 @@ jQuery(document).on('click', '.b2s-re-post-show-list-btn', function () {
     }
     return false;
 });
-
-
 function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_type, network_id, post_format, relay_primary_post_id) {
     if (jQuery('#b2s-edit-event-modal-' + b2s_id).length == 1)
     {
@@ -947,7 +947,6 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
         checkSchedDateTime(network_auth_id);
     });
     init();
-
     //is relay post?
     if (relay_primary_post_id > 0) {
         jQuery('#b2s-edit-event-modal-' + b2s_id).find("input, textarea, button").each(function () {

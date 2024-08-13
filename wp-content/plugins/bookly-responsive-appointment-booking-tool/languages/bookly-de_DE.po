@@ -8,8 +8,8 @@ msgstr ""
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-16 12:30+0000\n"
-"PO-Revision-Date: 2023-10-19 13:56+0000\n"
+"POT-Creation-Date: 2024-07-01 12:52+0000\n"
+"PO-Revision-Date: 2024-07-03 08:42+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: German\n"
 "X-Loco-Version: 2.3.1; wp-6.3.1"
@@ -131,6 +131,12 @@ msgstr "Einstellung wurden gespeichert."
 msgid "Download invoices"
 msgstr "Rechnungen herunterladen"
 
+msgid "Download selected invoices"
+msgstr "Ausgewählte Rechnungen herunterladen"
+
+msgid "Download filtered invoices"
+msgstr "Gefilterte Rechnungen herunterladen"
+
 msgid "Show 'Download invoice' button"
 msgstr "Schaltfläche \"Rechnung herunterladen\" anzeigen"
 
@@ -159,8 +165,8 @@ msgstr ""
 "Zahlungsfrist der Rechnung: Bitte geben Sie einen Wert in Tagen von 1 bis "
 "365 ein"
 
-msgid "Service"
-msgstr "Dienstleistung"
+msgid "Item"
+msgstr "Artikel"
 
 # Dienstleister wrong
 msgid "Provider"
@@ -174,15 +180,6 @@ msgstr "Preis"
 
 msgid "Tax"
 msgstr "Steuer"
-
-msgid "Package"
-msgstr "Paket"
-
-msgid "Gift card code"
-msgstr "Geschenkgutscheincode"
-
-msgid "Gift card type"
-msgstr "Geschenkgutscheintyp"
 
 # n.a. wrong
 msgid "N/A"
@@ -214,6 +211,9 @@ msgstr "Bezahlt"
 # Während wrong
 msgid "Due"
 msgstr "Fällig"
+
+msgid "Service"
+msgstr "Dienstleistung"
 
 msgid "Outlook Calendar event"
 msgstr "Outlook-Kalenderereignis"
@@ -265,11 +265,11 @@ msgstr ""
 "Portalsitzung auf den gewünschten Azure AD-Mandanten ein."
 
 msgid ""
-"In the left-hand navigation panel, select the <b>Azure Active Directory</b>. "
-"Then select <b>Add > App registration</b>."
+"In the left-hand navigation panel, select <b>Microsoft Entra ID</b>. Then "
+"select <b>Add > App registration</b>."
 msgstr ""
-"Wählen Sie im linken Navigationsbereich das <b>Azure Active Directory</b>. "
-"Wählen Sie dann <b>Hinzufügen > App-Registrierung</b>."
+"Wählen Sie in der Navigationsleiste auf der linken Seite <b>Microsoft Entra "
+"ID</b>. Wählen Sie dann <b>Hinzufügen > App-Registrierung</b>."
 
 msgid ""
 "When the <b>Register an application</b> page appears, enter your "
@@ -280,27 +280,33 @@ msgstr ""
 "auf dieser Seite finden."
 
 msgid ""
-"Make sure that the <b>Supported account types</b> is set to <b>Accounts in "
-"any organizational directory (Any Azure AD directory - Multitenant) and "
-"personal Microsoft accounts (e.g. Skype, Xbox)</b>."
+"Under the <b>Redirect URI</b>, in <b>Select a platform</b> field, choose <b>"
+"Web</b>."
 msgstr ""
-"Stellen Sie sicher, dass die <b>Unterstützten Kontotypen</b> auf <b>Konten "
-"in einem beliebigen Organisationsverzeichnis (ein beliebiges Azure AD-"
-"Verzeichnis - Mehrinstanzenfähig) und persönliche Microsoft-Konten (z.B. "
-"Skype, Xbox)</b> eingestellt sind."
+"Wählen Sie unter dem <b>Umleitungs-URI</b> im Feld <b>Plattform wählen</b> "
+"die Option <b>Web</b>."
+
+msgid ""
+"Make sure that the <b>Supported account types</b> is set to <b>Accounts in "
+"any organizational directory (Any Microsoft Entra ID tenant - Multitenant) "
+"and personal Microsoft accounts (e.g. Skype, Xbox)</b>."
+msgstr ""
+"Achten Sie darauf, dass die Option <b>Unterstützte Kontotypen</b> auf <b>"
+"Konten in einem beliebigen Organisationsverzeichnis (beliebiger Microsoft "
+"Entra-ID-Mandant – mehrinstanzenfähig) und persönliche Microsoft-Konten (z.B."
+" Skype, Xbox)</b> eingestellt ist."
 
 msgid "When finished, select <b>Register</b>."
 msgstr "Wenn Sie fertig sind, wählen Sie <b>Registrieren</b>."
 
-# Azure AD weist Ihrer App eine eindeutige Anwendungs-ID (Client) zu, und Sie werden zur Seite <b>Übersicht</b> Ihrer Anwendung weitergeleitet.
-# wrong
 msgid ""
 "Azure AD assigns a unique application (client) ID to your app, and you're "
-"taken to your application's <b>Overview</b> page."
+"taken to the Home page. Find your application in <b>App registrations > All "
+"applications</b>, and select it."
 msgstr ""
-"Azure AD ordnet Ihrer Anwendung eine eindeutige Anwendungs-ID (Client-ID) zu "
-"und Sie werden direkt auf die Seite <b>Übersicht</b> Ihrer Anwendung "
-"weitergeleitet."
+"Azure AD weist Ihrer App eine eindeutige Anwendungs-(Kunden-)ID zu, und Sie "
+"werden zur Startseite weitergeleitet. Suchen Sie Ihre Anwendung unter <b>App-"
+"Registrierungen > Alle Anwendungen</b>, und wählen Sie sie aus."
 
 # Kopieren Sie die <b>Application (client) ID</b> und fügen Sie sie in das untenstehende Formular auf dieser Seite ein. wrong
 msgid ""
@@ -312,11 +318,11 @@ msgstr ""
 
 msgid ""
 "Under <b>Certificates & secrets</b>, choose <b>New client secret</b>, set <b>"
-"Expires</b> to <b>24 months</b> and click <b>Add</b>."
+"Expires</b> to <b>24 months</b>, add description and click <b>Add</b>."
 msgstr ""
 "Wählen Sie unter <b>Zertifikate & Geheimnisse</b> die Option <b>Neues "
-"Clientgeheimnis</b>, legen Sie <b>Ablaufzeit</b> auf <b>24 Monate</b> fest "
-"und klicken Sie auf <b>Hinzufügen</b>."
+"Kundengeheimnis</b> aus, setzen Sie <b>Laufzeit</b> auf <b>24 Monate</b>, "
+"fügen Sie eine Beschreibung hinzu und klicken Sie auf <b>Hinzufügen</b>."
 
 msgid ""
 "Copy the app secret value from the <b>Client secrets</b> list before leaving "
@@ -464,12 +470,14 @@ msgstr "Vorlage für Ereignistitel"
 
 msgid ""
 "Configure what information should be placed in the title of Outlook Calendar "
-"event. Available codes are {service_name}, {category_name}, {staff_name} and "
-"{client_names}."
+"event."
 msgstr ""
-"Legen Sie fest, welche Informationen in den Titel des Outlook Kalender-"
-"Ereignisses aufgenommen werden sollen. Verfügbare Codes sind {service_name}, "
-"{category_name}, {staff_name} und {client_names}."
+"Legen Sie fest, welche Informationen im Titel des Outlook-Kalender-"
+"Ereignisses angezeigt werden sollen."
+
+#, php-format
+msgid "Available codes are %s and %s."
+msgstr "Die verfügbaren Codes sind %s und %s."
 
 msgid "Template for event description"
 msgstr "Vorlage für Ereignisbeschreibung"
@@ -1629,6 +1637,12 @@ msgstr "Alle"
 msgid "Nothing selected"
 msgstr "Nichts ausgewählt"
 
+msgid "Interval"
+msgstr "Intervall"
+
+msgid "Single appointment"
+msgstr "Einzelner Termin"
+
 msgid "Save"
 msgstr "Speichern"
 
@@ -1774,7 +1788,7 @@ msgstr ""
 "für die Suche nach verfügbaren Zeitfenstern für alle Teildienste verwendet."
 
 msgid "Short Codes"
-msgstr "Kurzcodes"
+msgstr "Shortcodes"
 
 msgid "Add Staff Calendar"
 msgstr "Mitarbeiterkalendar hinzufügen"
@@ -1818,7 +1832,7 @@ msgid "Insert"
 msgstr "Einfügen"
 
 msgid "Add Staff Cabinet"
-msgstr "Mitarbeiterbereich hinzufügen"
+msgstr "Staff Cabinet hinzufügen"
 
 msgid "A custom block for displaying staff calendar"
 msgstr "Ein benutzerdefinierter Block zur Anzeige des Mitarbeiterkalenders"
@@ -1944,6 +1958,9 @@ msgstr "Zahlung"
 
 msgid "On waiting list"
 msgstr "Auf der Warteliste"
+
+msgid "Package"
+msgstr "Paket"
 
 #, php-format
 msgid "%s of %s"
@@ -2117,6 +2134,9 @@ msgstr "Infofeld"
 msgid "Download"
 msgstr "Herunterladen"
 
+msgid "Customer information"
+msgstr "Kunden-Information"
+
 msgid ""
 "To receive REST API credentials, in <b>My Apps & Credentials</b> of your "
 "PayPal account do the following steps:"
@@ -2209,8 +2229,17 @@ msgstr ""
 "\n"
 "\n"
 
+msgid "Busy"
+msgstr "Beschäftigt"
+
+msgid "Free"
+msgstr "Frei"
+
 msgid "Address"
 msgstr "Adresse"
+
+msgid "Full address"
+msgstr "Vollständige Adresse"
 
 msgid "Follow these steps to get an API key:"
 msgstr "Befolgen Sie diese Schritte, um einen API-Schlüssel zu erhalten:"
@@ -2341,6 +2370,9 @@ msgstr "Profilverwaltung"
 msgid "Birthday"
 msgstr "Geburtstag"
 
+msgid "Customer address"
+msgstr "Kundenadresse"
+
 msgid "Wordpress password"
 msgstr "Wordpress-Passwort"
 
@@ -2367,9 +2399,6 @@ msgstr "Zeitzone"
 
 msgid "Employee"
 msgstr "Mitarbeiter"
-
-msgid "Customer information"
-msgstr "Kunden-Information"
 
 msgid "Appointments"
 msgstr "Termine"
@@ -2472,6 +2501,20 @@ msgstr "Telefonnummer ist leer."
 msgid "%d min"
 msgstr "%d min"
 
+msgid "Purchase code is not valid"
+msgstr "Der Einkaufscode ist nicht gültig"
+
+msgid "Purchase code is used on another account"
+msgstr "Der Einkaufscode wird von einem anderen Konto verwendet"
+
+# Registrierung Code-Verifikation ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später noch einmal. wrong
+msgid ""
+"Purchase code verification is temporarily unavailable. Please try again "
+"later."
+msgstr ""
+"Die Überprüfung des Bestellcodes ist vorübergehend nicht verfügbar. Bitte "
+"versuchen Sie es später noch einmal."
+
 msgid "Bookly Cloud couldn't connect to your server."
 msgstr "Bookly Cloud konnte keine Verbindung zu Ihrem Server herstellen."
 
@@ -2497,6 +2540,9 @@ msgid ""
 msgstr ""
 "Die Erstattung kann nicht bearbeitet werden. Versuchen Sie es später noch "
 "einmal oder bearbeiten Sie sie manuell in Ihrem Zahlungssystem."
+
+msgid "Error"
+msgstr "Fehler"
 
 msgid "Error connecting to server."
 msgstr "Fehler beim Verbinden mit dem Server."
@@ -2583,9 +2629,6 @@ msgstr "Das Senden der SMS ist fehlgeschlagen."
 
 msgid "Queued"
 msgstr "In Warteschlange"
-
-msgid "Error"
-msgstr "Fehler"
 
 msgid "Out of credit"
 msgstr "Kein Guthaben mehr"
@@ -2986,6 +3029,21 @@ msgstr "Benachrichtigung an den Kunden mit Verifizierungscode"
 msgid "Bookly verification code"
 msgstr "Bookly-Verifizierungscode"
 
+msgid "New staff member's Bookly Staff Cabinet mobile app access token details"
+msgstr ""
+"Details zum Zugriffs-Token eines neuen Mitarbeiters für die mobile App "
+"Bookly Staff Cabinet"
+
+msgid "Your Bookly Staff Cabinet mobile app access token"
+msgstr "Ihr Zugriffs-Token für die mobile App Bookly Staff Cabinet"
+
+msgid ""
+"Hello.\n"
+"Your access token for Bookly Staff Cabinet mobile app: {access_token}"
+msgstr ""
+"Hallo. Hier ist Ihr Zugriffs-Token für die mobile App Bookly Staff Cabinet: "
+"{access_token}"
+
 msgid "&lt;"
 msgstr "&lt;"
 
@@ -3134,6 +3192,9 @@ msgstr "Abgeschlossen"
 msgid "Start over"
 msgstr "Neustart"
 
+msgid "Incorrect verification code"
+msgstr "Falscher Verifizierungscode"
+
 # Registrieren wrong
 msgid "Signed up"
 msgstr "Angemeldet"
@@ -3185,6 +3246,9 @@ msgstr "Vollständige Tagesordnung"
 msgid "Notification to staff member about pending appointment"
 msgstr "Benachrichtigung an Mitarbeiter über ausstehende Termine"
 
+msgid "Unsupported action"
+msgstr "Nicht unterstützte Aktion"
+
 msgid "Page Redirection"
 msgstr "Seite Umleitung"
 
@@ -3197,9 +3261,6 @@ msgstr ""
 
 msgid "Uncategorized"
 msgstr "Nicht kategorisiert"
-
-msgid "Local"
-msgstr "Örtlich"
 
 msgid "Today"
 msgstr "Heute"
@@ -3476,6 +3537,25 @@ msgstr "Dieser Monat"
 msgid "Next month"
 msgstr "Nächster Monat"
 
+msgid "Last month"
+msgstr "Letzter Monat"
+
+msgid "Start time must not be empty"
+msgstr "Startzeit darf nicht leer sein"
+
+msgid "End time must not be empty"
+msgstr "Endzeit darf nicht leer sein"
+
+msgid "End time must not be equal to start time"
+msgstr "Die Endzeit darf nicht gleich der Startzeit sein."
+
+msgid "Could not save appointment in database."
+msgstr "Termin konnte nicht in Datenbank gespeichert werden."
+
+#, php-format
+msgid "%s has reached the limit of bookings for this service"
+msgstr "%s hat die Buchungsgrenze für diese Dienstleistung erreicht"
+
 msgid "No."
 msgstr "Nr."
 
@@ -3576,6 +3656,9 @@ msgstr "Angeforderte ID"
 
 msgid "Status date"
 msgstr "Statusdatum"
+
+msgid "Access token"
+msgstr "Zugriffs-Token"
 
 msgid "Action"
 msgstr "Aktion"
@@ -3681,8 +3764,8 @@ msgstr ""
 msgid "No updates available"
 msgstr "Keine Aktualisierungen verfügbar"
 
-msgid "Free"
-msgstr "Frei"
+msgid "Local"
+msgstr "Örtlich"
 
 # Fertiggestellt wrong here
 msgid "Completed"
@@ -3725,6 +3808,11 @@ msgstr "Telefon des Kunden verifizieren"
 
 msgid "Mailing message"
 msgstr "Mailing-Nachricht"
+
+msgid "New staff member's Staff Cabinet mobile app access token details"
+msgstr ""
+"Details zum Zugriffs-Token eines neuen Mitarbeiters für die mobile App Staff "
+"Cabinet"
 
 msgid "Test message"
 msgstr "Testnachricht"
@@ -3832,6 +3920,30 @@ msgstr "Anhänge"
 msgid "Archived"
 msgstr "Archiviert"
 
+msgid "Staff Cabinet Mobile App"
+msgstr "Staff Cabinet Mobile App"
+
+msgid "Access tokens"
+msgstr "Zugriffs-Token"
+
+msgid "Revoke"
+msgstr "Widerrufen"
+
+msgid "Invite"
+msgstr "Einladen"
+
+msgid ""
+"You are going to delete access token(s). Please note that tokens will be "
+"automatically revoked, so user(s) associated with deleted token(s) will lose "
+"access"
+msgstr ""
+"Sie sind im Begriff, ein oder mehrere Zugriffs-Token zu löschen. Bitte "
+"beachten Sie, dass die Token automatisch widerrufen werden, sodass der/die "
+"mit dem/den gelöschten Token verbundene(n) Benutzer den Zugriff verlieren."
+
+msgid "No records."
+msgstr "Keine Einträge."
+
 msgid "1 - 9 employees"
 msgstr "1 - 9 Mitarbeiter"
 
@@ -3885,15 +3997,15 @@ msgid "Congratulations, the initial setup is complete!"
 msgstr "Herzlichen Glückwunsch, die Ersteinrichtung ist abgeschlossen!"
 
 #, php-format
-msgid "Shortcut of your form is %s"
-msgstr "Das Kürzel für Ihr Formular lautet %s"
+msgid "Shortcode of your form is %s"
+msgstr "Der Shortcode für Ihr Formular lautet %s"
 
 msgid ""
-"Open the page where you want to add the booking form in page edit mode and "
-"paste this shortcut in a free block."
+"Open the page you want to add the booking form to in edit mode and paste "
+"this shortcode into a free block."
 msgstr ""
-"Öffnen Sie die Seite, auf der Sie das Buchungsformular hinzufügen möchten, "
-"im Bearbeitungsmodus und fügen Sie dieses Kürzel in einen freien Block ein."
+"Öffnen Sie die Seite, der Sie das Buchungsformular hinzufügen möchten, im "
+"Bearbeitungsmodus und fügen Sie diesen Shortcode in einen freien Block ein."
 
 #, php-format
 msgid ""
@@ -3943,9 +4055,6 @@ msgstr "nächster Tag"
 # Nachbestellung wrong
 msgid "Reorder"
 msgstr "nachbestellen"
-
-msgid "No records."
-msgstr "Keine Einträge."
 
 msgid "Image"
 msgstr "Bild"
@@ -4154,12 +4263,9 @@ msgstr "Feiertage"
 msgid "Purchase Code"
 msgstr "Bestellcode"
 
-msgid "Logs"
-msgstr "Protokolle"
-
 # Termin-Genehmigung URL (erfolgreich) wrong
 msgid "Approve appointment URL (success)"
-msgstr "Termin-URL genehmigen ( Erfolg)"
+msgstr "Termin-URL genehmigen (Erfolg)"
 
 msgid ""
 "Set the URL of a page that is shown to staff after they successfully "
@@ -4487,29 +4593,6 @@ msgstr "E-Mail immer verifizieren"
 msgid "Only if data is different from the previous order"
 msgstr "Nur wenn sich die Daten vom vorherigen Auftrag unterscheiden"
 
-msgid "Debug logs"
-msgstr "Debug-Protokolle"
-
-msgid ""
-"If this setting is enabled then all actions with appointments will be "
-"recorded in a log table. We recommend enabling this setting as it will be "
-"helpful for our support team in case of unpredictable issues with "
-"appointments."
-msgstr ""
-"Ist diese Einstellung aktiviert, werden alle Aktionen mit Terminen in einer "
-"Log-Tabelle protokolliert. Wir raten dazu, diese Einstellung zu aktivieren, "
-"da sie für unser Support-Team bei unvorhersehbaren Problemen mit Terminen "
-"von Nutzen sein wird."
-
-msgid "All actions"
-msgstr "Alle Aktionen"
-
-msgid "Quick search"
-msgstr "Schnellsuche"
-
-msgid "Clear logs"
-msgstr "Protokolle löschen"
-
 msgid "Appointment ID"
 msgstr "Termin-ID"
 
@@ -4578,9 +4661,6 @@ msgstr "Teilnehmerliste durchlaufen"
 
 msgid "Loop over participants list with delimiter"
 msgstr "Teilnehmerliste mit Trennzeichen durchlaufen"
-
-msgid "Last month"
-msgstr "Letzter Monat"
 
 # Keine Datensätze für den gewünschten Zeitraum. wrong
 msgid "No records for selected period."
@@ -4668,6 +4748,9 @@ msgstr "Anfrage abbrechen"
 msgid "Can only contain letters or digits (up to 11 characters)."
 msgstr "Kann nur Buchstaben oder Ziffern (bis zu 11 Zeichen) enthalten."
 
+msgid "Quick search"
+msgstr "Schnellsuche"
+
 msgid "Current mailing list"
 msgstr "Aktuelle Mailing-Liste"
 
@@ -4685,6 +4768,15 @@ msgstr "Aktivieren"
 
 msgid "disable"
 msgstr "deaktivieren"
+
+msgid "Start Now"
+msgstr "Jetzt starten"
+
+msgid "Manual"
+msgstr "Manuell"
+
+msgid "Ready to send"
+msgstr "Bereit zum Senden"
 
 msgid "In progress"
 msgstr "Läuft gerade"
@@ -4947,6 +5039,9 @@ msgstr ""
 "Das Produkt wird sofort deaktiviert. Um das Produkt wieder zu aktivieren, "
 "müssen Sie ein neues Abonnement abschließen."
 
+msgid "Get started"
+msgstr "Starten"
+
 msgid "Congrats!"
 msgstr "Herzlichen Glückwunsch!"
 
@@ -4955,6 +5050,9 @@ msgstr "bestes Angebot"
 
 msgid "users choice"
 msgstr "Benutzer-Auswahl"
+
+msgid "Purchase code"
+msgstr "Einkaufscode"
 
 msgid "Next billing date"
 msgstr "Nächstes Abrechnungsdatum"
@@ -4977,6 +5075,9 @@ msgstr "Die Stripe-Aktivierung wurde nicht abgeschlossen"
 msgid "Diagnostics"
 msgstr "Diagnostik"
 
+msgid "Run tests automatically"
+msgstr "Tests automatisch durchführen"
+
 msgid "Success"
 msgstr "Erfolg"
 
@@ -4985,6 +5086,21 @@ msgstr "Warnung"
 
 msgid "End points"
 msgstr "Endpunkte"
+
+msgid "All actions"
+msgstr "Alle Aktionen"
+
+msgid "Clear logs"
+msgstr "Protokolle löschen"
+
+msgid "Keep logs"
+msgstr "Protokolle führen"
+
+#, php-format
+msgid "%s day"
+msgid_plural "%s days"
+msgstr[0] "%s Tag"
+msgstr[1] "%s Tage"
 
 msgid "PHP Sessions"
 msgstr "PHP-Sitzungen"
@@ -5005,13 +5121,11 @@ msgstr "Kritische Fehler"
 msgid "This test checks for critical errors in Bookly."
 msgstr "Dieser Test sucht nach kritischen Fehlern in Bookly."
 
-msgid ""
-"Some critical errors in Bookly were found recently. Please check Settings > "
-"Logs and contact Bookly support."
-msgstr ""
-"Vor kurzem wurden einige kritische Fehler in Bookly gefunden. Bitte "
-"überprüfen Sie Einstellungen > Protokolle und kontaktieren Sie den Bookly-"
-"Support."
+msgid "Some critical errors in Bookly were found recently."
+msgstr "Vor kurzem wurden einige kritische Fehler in Bookly gefunden."
+
+msgid "Please contact Bookly support."
+msgstr "Bitte kontaktieren Sie den Bookly-Support."
 
 msgid "Time settings"
 msgstr "Zeiteinstellungen"
@@ -5234,6 +5348,9 @@ msgstr "Formular-Fortschrittsverfolger anzeigen"
 msgid "Align buttons to the left"
 msgstr "Schaltflächen nach links ausrichten"
 
+msgid "Invert datepicker colors"
+msgstr "Farben des Datumsauswahlfelds umkehren"
+
 # Zum Ändern klicke auf den unterstrichenen Text. wrong
 msgid "Click on the underlined text to edit."
 msgstr "Klicken Sie zum Bearbeiten auf den unterstrichenen Text."
@@ -5394,15 +5511,6 @@ msgstr "Dienstname des Termins"
 msgid "Service price of appointment"
 msgstr "Servicepreis des Termins"
 
-msgid "Image of staff category"
-msgstr "Bild der Mitarbeiterkategorie"
-
-msgid "Staff category info of appointment"
-msgstr "Mitarbeiterkategorie-Informationen des Termins"
-
-msgid "Staff category name of appointment"
-msgstr "Mitarbeiterkategorie-Name des Termins"
-
 msgid "Staff member full name in appointment"
 msgstr "Vollständiger Name des Mitarbeiters im Termin"
 
@@ -5439,6 +5547,9 @@ msgstr "Dienstleistungsbild-URL (zur Nutzung innerhalb eines img-Tags)"
 msgid "URL of category image (to use inside img tag)"
 msgstr "URL des Kategoriebildes (zur Verwendung innerhalb des img-Tags)"
 
+msgid "Image of staff category"
+msgstr "Bild der Mitarbeiterkategorie"
+
 msgid "Info of staff category"
 msgstr "Informationen der Mitarbeiterkategorie"
 
@@ -5447,9 +5558,6 @@ msgstr "Name der Mitarbeiterkategorie"
 
 msgid "URL of staff photo (to use inside img tag)"
 msgstr "Mitarbeiterbild-URL (zur Nutzung innerhalb eines img-Tags)"
-
-msgid "Previous month"
-msgstr "Vorheriger Monat"
 
 msgid "Your custom CSS was saved. Please refresh the page to see your changes."
 msgstr ""
@@ -5630,6 +5738,9 @@ msgstr "Website-Adresse"
 msgid "Verification code"
 msgstr "Verifizierungscode"
 
+msgid "Image of service category"
+msgstr "Bild der Dienstleistungskategorie"
+
 msgid "Company logo"
 msgstr "Firmenlogo"
 
@@ -5715,9 +5826,6 @@ msgstr "Sprachbenachrichtigungen testen"
 
 msgid "Select the language of your notifications"
 msgstr "Wählen Sie die Sprache für Ihre Benachrichtigungen"
-
-msgid "Busy"
-msgstr "Beschäftigt"
 
 msgid "No answer"
 msgstr "Keine Antwort"
@@ -5825,12 +5933,6 @@ msgstr "Ich mache das später"
 
 msgid "Log out"
 msgstr "Abmelden"
-
-#, php-format
-msgid "%s day"
-msgid_plural "%s days"
-msgstr[0] "%s Tag"
-msgstr[1] "%s Tage"
 
 msgid "Register"
 msgstr "Registrieren"
@@ -6190,6 +6292,9 @@ msgstr "Benachrichtigung erstellen"
 msgid "New notification"
 msgstr "Neue Benachrichtigung"
 
+msgid "Associated staff member"
+msgstr "Zugehöriger Mitarbeiter"
+
 msgid "Select from WordPress users"
 msgstr "Aus WordPress-Benutzern wählen"
 
@@ -6378,22 +6483,6 @@ msgstr ""
 msgid "No timeslots available"
 msgstr "Kein Zeitfenster verfügbar"
 
-msgid "Start time must not be empty"
-msgstr "Startzeit darf nicht leer sein"
-
-msgid "End time must not be empty"
-msgstr "Endzeit darf nicht leer sein"
-
-msgid "End time must not be equal to start time"
-msgstr "Die Endzeit darf nicht gleich der Startzeit sein."
-
-msgid "Could not save appointment in database."
-msgstr "Termin konnte nicht in Datenbank gespeichert werden."
-
-#, php-format
-msgid "%s has reached the limit of bookings for this service"
-msgstr "%s hat die Buchungsgrenze für diese Dienstleistung erreicht"
-
 msgid "Appointment notes"
 msgstr "Terminnotizen"
 
@@ -6409,6 +6498,15 @@ msgid ""
 msgstr ""
 "Sie werden den/die Termin(e) löschen. Die Benachrichtigungen werden "
 "entsprechend Ihren Einstellungen versandt."
+
+msgid "Edit access token"
+msgstr "Zugriffs-Token bearbeiten"
+
+msgid "New access token"
+msgstr "Neues Zugriffs-Token"
+
+msgid "Staff member required"
+msgstr "Mitarbeiter erforderlich"
 
 msgid "Header"
 msgstr "Überschrift"
@@ -6523,9 +6621,6 @@ msgstr "Kampagne bearbeiten"
 msgid "Start campaign"
 msgstr "Kampagne starten"
 
-msgid "Immediately"
-msgstr "Sofort"
-
 msgid "Start sending messages at"
 msgstr "Mit Senden von Nachrichten beginnen um"
 
@@ -6535,9 +6630,6 @@ msgstr "Legen Sie die Uhrzeit fest, zu der Mail-Versand beginnen soll"
 msgid "Start time"
 msgstr "Startzeit"
 
-msgid "Start"
-msgstr "Start"
-
 msgid "Sms text"
 msgstr "SMS-Text"
 
@@ -6546,6 +6638,14 @@ msgstr "Kampagne"
 
 msgid "Cancel campaign"
 msgstr "Kampagne stornieren"
+
+msgid ""
+"You're about to send an SMS Campaign. If you're sure about the setup, click "
+"'Start Now'. Otherwise, please take a moment to review the details."
+msgstr ""
+"Sie sind dabei, eine SMS-Kampagne zu versenden. Wenn Sie sich bei der "
+"Einrichtung sicher sind, klicken Sie auf „Jetzt starten“. Andernfalls nehmen "
+"Sie sich bitte einen Moment Zeit, um die Details zu überprüfen."
 
 msgid "Select mailing list"
 msgstr "Mailing-Liste auswählen"
@@ -7006,6 +7106,21 @@ msgstr ""
 "\n"
 "\n"
 
+#, php-format
+msgid ""
+"Please note that your user doesn't have the %s capability. All potentially "
+"unsecure HTML in Appearance, Email Notifications, and other Bookly sections "
+"will be sanitized during the saving of any changes"
+msgstr ""
+"Bitte beachten Sie, dass Ihr Benutzer die %s-Funktion nicht verwenden kann. "
+"Alle potenziell unsicheren HTML-Elemente in den Bereichen Darstellung, E-"
+"Mail-Benachrichtigungen und anderen Bookly-Abschnitten werden beim Speichern "
+"von Änderungen entfernt."
+
+msgid "Please contact your website administrator for additional information"
+msgstr ""
+"Bitte kontaktieren Sie Ihren Website-Administrator für weitere Informationen"
+
 msgid "Form fields"
 msgstr "Formularfelder"
 
@@ -7021,6 +7136,17 @@ msgstr "Standardwert für die Dienstleistung "
 
 msgid "Default value for employee"
 msgstr "Standardwert für Angestellten"
+
+msgid "Selected period doesn't match service schedule"
+msgstr "Ausgewählter Zeitraum stimmt nicht mit dem Dienstleistungsplan überein"
+
+#, php-format
+msgid "The number of customers should not be more than %d"
+msgstr "Die Anzahl der Kunden sollte nicht größer als %d sein"
+
+# Die Buchungen überschreiten Ihr Arbeitszeitlimit wrong
+msgid "Booking exceeds your working hours limit"
+msgstr "Die Buchung überschreitet Ihr Arbeitszeitlimit"
 
 # Zugangsdaten merken wrong
 msgid "Remember Me"
@@ -7464,6 +7590,9 @@ msgstr "Ihr Paket wurde erstellt."
 msgid "Display packages"
 msgstr "Pakete anzeigen"
 
+msgid "Hidden packages"
+msgstr "Ausgeblendete Pakete"
+
 msgid "Package info"
 msgstr "Paketinformationen"
 
@@ -7886,11 +8015,11 @@ msgstr ""
 "Wenn Sie nicht in {days} einen gültigen Anmeldungs-Code eingeben wird der "
 "Zugang zu ihren Buchungen abgeschaltet."
 
-msgid "Customer address"
-msgstr "Kundenadresse"
-
 msgid "Customer birthday"
 msgstr "Geburtsdatum des Kunden"
+
+msgid "Tags"
+msgstr "Tags"
 
 msgid "Balance"
 msgstr "Guthaben"
@@ -8029,14 +8158,6 @@ msgstr ""
 msgid "%s is not a valid purchase code for %s."
 msgstr "%s ist kein gültiger Bestellcode für %s."
 
-# Registrierung Code-Verifikation ist vorübergehend nicht verfügbar. Bitte versuchen Sie es später noch einmal. wrong
-msgid ""
-"Purchase code verification is temporarily unavailable. Please try again "
-"later."
-msgstr ""
-"Die Überprüfung des Bestellcodes ist vorübergehend nicht verfügbar. Bitte "
-"versuchen Sie es später noch einmal."
-
 #, php-format
 msgid "Your support period has expired on %s."
 msgstr "Ihr Support-Zeitraum ist für %s abgelaufen."
@@ -8072,6 +8193,9 @@ msgstr "Nur aktive anzeigen"
 
 msgid "Add gift card"
 msgstr "Geschenkgutschein hinzufügen"
+
+msgid "Gift card code"
+msgstr "Geschenkgutscheincode"
 
 msgid "No gift card types found."
 msgstr "Es konnten keine Geschenkgutscheintypen gefunden werden."
@@ -8449,12 +8573,10 @@ msgstr ""
 
 msgid ""
 "Configure what information should be placed in the title of Google Calendar "
-"event. Available codes are {service_name}, {category_name}, {staff_name} and "
-"{client_names}."
+"event."
 msgstr ""
-"Legen Sie fest, welche Informationen in den Titel eines Google Kalender-"
-"Ereignisses aufgenommen werden sollen. Verfügbare Codes sind {service_name}, "
-"{category_name}, {staff_name} und {client_names}."
+"Legen Sie fest, welche Informationen im Titel des Google-Kalender-"
+"Ereignisses angezeigt werden sollen."
 
 msgid "To set up Facebook integration, do the following:"
 msgstr ""
@@ -8466,16 +8588,12 @@ msgstr ""
 "Folgen Sie den Schritten unter %s, um ein Entwicklerkonto zu erstellen."
 
 msgid ""
-"In \"My apps\" section, press \"Create App\" button, select \"Consumer\" as "
-"the app type and provide the necessary information (App name, App contact "
-"email)."
+"In the Apps section, click the Create App button. Select Other as the use "
+"case, and then choose Consumer as the app type."
 msgstr ""
-"Klicken Sie im Bereich \"Meine Apps\" auf die Schaltfläche \"App erstellen\","
-" wählen Sie als App-Typ \"Verbraucher\" und geben Sie die erforderlichen "
-"Informationen an (App-Name, App-Kontakt-E-Mail)."
-
-msgid "Then click \"Create App\"."
-msgstr "Klicken Sie dann auf \"App erstellen\"."
+"Klicken Sie im Bereich \"Apps\" auf die Schaltfläche \"App erstellen\". "
+"Wählen Sie als Anwendungsfall \"Andere\" und dann \"Verbraucher\" als App-"
+"Typ."
 
 msgid ""
 "In \"Add products to your app\" section, find \"Facebook login\" and press "
@@ -8567,9 +8685,6 @@ msgstr ""
 msgid "Use it in the form below on this page."
 msgstr "Verwenden Sie dazu das Formular auf dieser Seite."
 
-msgid "Access token"
-msgstr "Zugriffs-Token"
-
 msgid "Location ID"
 msgstr "Standort-ID"
 
@@ -8594,96 +8709,16 @@ msgstr ""
 "Wenn Sie innerhalb von {days} keinen gültigen Bestellcode angeben, wird der "
 "Zugang zu Ihren Buchungen abgeschaltet."
 
+#, php-format
+msgid ""
+"To set up Zoom integration, follow the instructions in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
+msgstr ""
+"Um die Zoom-Integration einzurichten, folgen Sie den Anweisungen in <a "
+"href=\"%s\" target=\"_blank\">unserer Dokumentation</a>"
+
 msgid "Authentication"
 msgstr "Authentifizierung"
-
-msgid "Instructions for creating an OAuth App"
-msgstr "Anweisungen zum Erstellen einer OAuth-App"
-
-msgid "To find your Client ID and Client Secret, do the following:"
-msgstr ""
-"Um Ihre Client-ID und Ihren geheimen Clientschlüssel zu erhalten, gehen Sie "
-"wie folgt vor:"
-
-msgid "Sign in to your Zoom account"
-msgstr "Melden Sie sich bei Ihrem Zoom-Konto an"
-
-msgid ""
-"Visit the <a href=\"https://marketplace.zoom.us/\" target=\"_blank\">Zoom "
-"App Marketplace</a>"
-msgstr ""
-"Besuchen Sie die <a href=\"https://marketplace.zoom.us/\" target=\"_blank\">"
-"Zoom App Marketplace</a>"
-
-msgid ""
-"Click on the <b>Develop</b> option in the dropdown on the top-right corner "
-"and select <b>Build App</b>"
-msgstr ""
-"Klicken Sie auf die <b>Entwickeln</b> Option in der Auswahlliste in der "
-"oberen rechten Ecke und wählen Sie <b>Erstellen App</b>"
-
-msgid ""
-"A page with various app types will be displayed. Select <b>OAuth</b> as the "
-"app type and click on <b>Create</b>"
-msgstr ""
-"Eine Seite mit verschiedenen App-Typen wird angezeigt. Wählen Sie <b>"
-"OAuth</b> als App-Typ aus, und klicken Sie auf <b>Create</b>"
-
-msgid ""
-"Enter the name of your App. In <b>Choose app type</b> select <b>Account-"
-"level app</b> and click <b>Create</b>"
-msgstr ""
-"Geben Sie den Namen Ihrer App ein. In <b>App-Typ auswählen</b> wählen Sie <b>"
-"Kontoebene-App</b> und klicken Sie auf <b>Erstellen</b>"
-
-msgid "After creating your app, fill out descriptive and contact information"
-msgstr ""
-"Nachdem Sie Ihre App angelegt haben, füllen Sie die Beschreibungs- und "
-"Kontaktinformationen aus"
-
-msgid ""
-"Go to <b>App Credentials</b> tab and look for the <b>Client ID</b> and <b>"
-"Client Secret</b>. Use them in the form below on this page"
-msgstr ""
-"Gehen Sie auf die Registerkarte <b>App-Anmeldeinformationen</b> und suchen "
-"Sie nach der <b>Client-ID</b> und dem <b>Clientschlüssel</b>. Verwenden Sie "
-"sie in dem Formular unten auf dieser Seite"
-
-msgid ""
-"For <b>Redirect URL for OAuth</b> enter the <b>Redirect URL for OAuth</b> "
-"found below on this page"
-msgstr ""
-"Für <b>Weiterleitungs-URL für OAuth</b> geben Sie die <b>Weiterleitungs-URL "
-"für OAuth</b> ein, die Sie weiter unten auf dieser Seite finden"
-
-msgid ""
-"For <b>Whitelist URL</b> add a new record with the value of <b>Redirect URL "
-"for OAuth</b> found below on this page. If you use both HTTP and HTTPS, make "
-"sure to add both records for <b>Whitelist URL</b>"
-msgstr ""
-"Für <b>Whitelist-URL</b> fügen Sie einen neuen Datensatz mit dem Wert der <b>"
-"Weiterleitungs-URL für OAuth</b> hinzu, den Sie unten auf dieser Seite "
-"finden. Wenn Sie sowohl HTTP als auch HTTPS verwenden, stellen Sie sicher, "
-"dass Sie beide Einträge für <b>Whitelist-URL</b> hinzufügen."
-
-msgid ""
-"Add the scopes required for your app. At the very least, you should select "
-"meeting:write:admin"
-msgstr ""
-"Ergänzen Sie die für Ihre App benötigten Bereiche. Zumindest sollten Sie "
-"meeting:write:admin auswählen"
-
-msgid "Once the app is created, <b>Save</b> the changes on this page"
-msgstr ""
-"Nachdem die App erstellt wurde, <b>Save</b> Sie die Änderungen auf dieser "
-"Seite"
-
-msgid ""
-"Click the <b>Connect OAuth</b> button below and complete the connection "
-"between Bookly and Zoom"
-msgstr ""
-"Klicken Sie auf die Schaltfläche <b>OAuth verbinden</b> unten und "
-"vervollständigen Sie die Verbindung zwischen Bookly und Zoom"
 
 msgid "The Client ID obtained from your OAuth app"
 msgstr "Die Client-ID, die Sie von Ihrer OAuth-Anwendung erhalten haben"
@@ -8895,6 +8930,12 @@ msgstr "Geschenkgutscheine anzeigen"
 msgid "Show time zone switcher"
 msgstr "Zeitzonen-Umschalter anzeigen"
 
+msgid "Staff category info of appointment"
+msgstr "Mitarbeiterkategorie-Informationen des Termins"
+
+msgid "Staff category name of appointment"
+msgstr "Mitarbeiterkategorie-Name des Termins"
+
 msgid "Please note that QR code will be shown only for single appointments"
 msgstr ""
 "Bitte beachten Sie, dass der QR-Code nur für Einzeltermine angezeigt wird"
@@ -8980,6 +9021,9 @@ msgstr "QR-Code anzeigen"
 msgid "Show cancellation reason"
 msgstr "Stornierungsgrund anzeigen"
 
+msgid "Show badge"
+msgstr "Abzeichen zeigen"
+
 msgid "Default value"
 msgstr "Standardwert"
 
@@ -9046,6 +9090,39 @@ msgstr "Alle verfügbaren Karten anzeigen"
 msgid "Show cards with time slots only"
 msgstr "Nur Karten mit Zeitfenstern anzeigen"
 
+msgid "Save cart locally"
+msgstr "Warenkorb lokal speichern"
+
+msgid "Verify credentials"
+msgstr "Anmeldeinformationen verifizieren"
+
+msgid "Verify phone"
+msgstr "Telefon verifizieren"
+
+msgid "Verify email"
+msgstr "E-Mail verifizieren"
+
+msgid "Hidden services"
+msgstr "Ausgeblendete Dienstleistungen"
+
+msgid "Hidden gift cards"
+msgstr "Ausgeblendete Geschenkgutscheine"
+
+msgid "Show information about time slot"
+msgstr "Informationen zum Zeitfenster anzeigen"
+
+msgid "Available dates in calendar"
+msgstr "Verfügbare Termine im Kalender"
+
+msgid "Display dates according to schedule"
+msgstr "Termine nach Zeitplan anzeigen"
+
+msgid "Disable dates without available timeslots"
+msgstr "Termine ohne verfügbare Zeitfenster deaktivieren"
+
+msgid "Show stepper"
+msgstr "Schritte anzeigen"
+
 msgid "Add new form"
 msgstr "Neues Formular hinzufügen"
 
@@ -9110,6 +9187,24 @@ msgstr "Titel der Dienstleistung"
 msgid "Package title"
 msgstr "Pakettitel"
 
+msgid "Start"
+msgstr "Start"
+
+msgid "Add extras"
+msgstr "Extras hinzufügen"
+
+msgid "Select time slot"
+msgstr "Zeitfenster auswählen"
+
+msgid "Check cart"
+msgstr "Warenkorb überprüfen"
+
+msgid "Your information"
+msgstr "Ihre Daten"
+
+msgid "Make purchase"
+msgstr "Kauf abschließen"
+
 msgid "Book now"
 msgstr "Jetzt buchen"
 
@@ -9163,6 +9258,15 @@ msgstr "Ihre Zeitzone"
 
 msgid "Select city"
 msgstr "Stadt auswählen"
+
+msgid "Amount to pay"
+msgstr "Zu zahlender Betrag"
+
+msgid "Resend code"
+msgstr "Code erneut senden"
+
+msgid "The selected time is not available anymore"
+msgstr "Die ausgewählte Zeit ist nicht mehr verfügbar"
 
 msgid "Please select a category"
 msgstr "Bitte wählen Sie eine Kategorie"
@@ -9220,18 +9324,6 @@ msgstr ""
 "Hinweis: Wenn die Zahlung für mehrere Dienstleistungen erfolgt, dann "
 "erscheint für jede Dienstleistung der gesamte bezahlte Betrag als Einnahme."
 
-msgid "Email logs"
-msgstr "E-Mail-Protokolle"
-
-msgid ""
-"If this setting is enabled then all sent email notifications will be "
-"recorded in a log table. You can find these logs in Email Notifications > "
-"Email logs table."
-msgstr ""
-"Wenn diese Einstellung aktiviert ist, werden alle gesendeten E-Mail-"
-"Benachrichtigungen in einer Protokolltabelle aufgezeichnet. Sie finden diese "
-"Protokolle unter E-Mail-Benachrichtigungen > E-Mail-Protokoll-Tabelle."
-
 msgid "Email details"
 msgstr "E-Mail-Details"
 
@@ -9240,9 +9332,6 @@ msgstr "Empfänger"
 
 msgid "Headers"
 msgstr "Kopfzeilen"
-
-msgid "Time zone of staff"
-msgstr "Zeitzone des Mitarbeiters"
 
 msgid "Gift card amount"
 msgstr "Geschenkgutschein-Betrag"
@@ -9256,16 +9345,25 @@ msgstr "Ablaufdatum des Geschenkgutscheins"
 msgid "Customer notes for gift card"
 msgstr "Kundennotizen für Geschenkgutschein"
 
+msgid "Time zone of staff"
+msgstr "Zeitzone des Mitarbeiters"
+
+msgid "Image of gift card"
+msgstr "Bild des Geschenkgutscheins"
+
+msgid "Email logs"
+msgstr "E-Mail-Protokolle"
+
 msgid "Appearance form name"
 msgstr "Darstellungsformularname"
 
 #, php-format
 msgid ""
-"Check status of this option in Settings > Calendar > <a href=\"%s\" "
+"Check status of this option in Settings > Additional > <a href=\"%s\" "
 "target=\"_blank\"/>Display front-end calendar</a>"
 msgstr ""
-"Überprüfen Sie den Status dieser Option in Einstellungen > Kalender > <a "
-"href=\"%s\" target=\"_blank\"/>Front-End-Kalender anzeigen</a>"
+"Sie können den Status dieser Option unter Einstellungen > Weitere > <a "
+"href=\"%s\" target=\"_blank\"/>Front-End-Kalender anzeigen</a> überprüfen."
 
 msgid "Titles"
 msgstr "Titel"
@@ -9342,7 +9440,7 @@ msgstr ""
 "einzurichten"
 
 msgid "Limit working hours per day"
-msgstr "Arbeitsstundengrenze pro Woche"
+msgstr "Arbeitsstundengrenze pro Tag"
 
 msgid "Unlimited"
 msgstr "Unbeschränkt"
@@ -9468,17 +9566,9 @@ msgstr "Termin sichern, um eine Besprechung zu erstellen"
 msgid "Please enter a service name"
 msgstr "Bitte geben Sie einen Dienstleistungsname ein"
 
-#, php-format
-msgid "The number of customers should not be more than %d"
-msgstr "Die Anzahl der Kunden sollte nicht größer als %d sein"
-
 # Die Buchung überschreitet die Arbeitsstundeneinschränkung für Mitarbeiter wrong
 msgid "Booking exceeds the working hours limit for staff member"
 msgstr "Buchung überschreitet das Arbeitszeitlimit für Mitarbeiter"
-
-# Die Buchungen überschreiten Ihr Arbeitszeitlimit wrong
-msgid "Booking exceeds your working hours limit"
-msgstr "Die Buchung überschreitet Ihr Arbeitszeitlimit"
 
 msgid ""
 "Please setup and enable New customer's WordPress user login details "
@@ -9582,6 +9672,13 @@ msgstr ""
 
 msgid "Select card type"
 msgstr "Gutscheintyp auswählen"
+
+#, php-format
+msgid "Code %s already exists"
+msgstr "Der Code %s existiert bereits"
+
+msgid "Please resolve the duplication by changing code."
+msgstr "Bitte beseitigen Sie das Duplikat, indem Sie den Code ändern."
 
 # Bitte geben Sie eine nicht-leere Maske ein. wrong
 msgid "Please enter a non empty mask."
@@ -9984,9 +10081,6 @@ msgstr ""
 "aktivieren, werden die Kunden aufgefordert, eine Anzahlung oder den vollen "
 "Betrag zu zahlen."
 
-msgid "Amount to pay"
-msgstr "Zu zahlender Betrag"
-
 msgid "Total deposit amount to be paid"
 msgstr "Gesamter zu zahlender Kautionsbetrag"
 
@@ -10105,9 +10199,6 @@ msgstr ""
 "Mit dieser Einstellung können Sie den Schritt zum Auswählen einer Terminzeit "
 "anzeigen, sie ausblenden und eine Aufgabe ohne Fälligkeit erstellen oder den "
 "Zeitschritt anzeigen, aber einem Kunden das Überspringen ermöglichen."
-
-msgid "Selected period doesn't match service schedule"
-msgstr "Ausgewählter Zeitraum stimmt nicht mit dem Dienstleistungsplan überein"
 
 # Agenten-Identifikationsnummer wrong
 msgid "Agent ID"
@@ -10570,7 +10661,7 @@ msgstr ""
 "Setzen Sie den Wert auf 0, um die Warteliste für diese Dienstleistung zu "
 "deaktivieren, oder geben Sie den gewünschten Wert ein."
 
-msgid "waiting list"
+msgid "Waiting list"
 msgstr "Warteliste"
 
 msgid "You have been added to waiting list for appointment."
@@ -10756,11 +10847,31 @@ msgstr "\"Mehr buchen\" neben der Schaltfläche \"Weiter\" anzeigen"
 msgid "Show Cart step"
 msgstr "Einkaufswagen zeigen"
 
+msgid "Added to cart"
+msgstr "Zum Warenkorb hinzugefügt"
+
+msgid "Cart is empty"
+msgstr "Warenkorb ist leer"
+
+msgid "Oops, it looks like some items in your cart are no longer available"
+msgstr ""
+"Ups, es sieht so aus, als ob einige Artikel in Ihrem Warenkorb nicht mehr "
+"verfügbar sind"
+
+msgid "Item count"
+msgstr "Artikelanzahl"
+
+msgid "Below you can find a list of items in your cart"
+msgstr "Nachfolgend finden Sie eine Liste der Artikel in Ihrem Warenkorb"
+
+msgid "Some items are no longer available"
+msgstr "Einige Artikel sind nicht mehr verfügbar"
+
+msgid "Hide cart step"
+msgstr "Warenkorb-Schritt ausblenden"
+
 msgid "Total tax"
 msgstr "Steuer gesamt"
-
-msgid "Waiting list"
-msgstr "Warteliste"
 
 msgid "Free/Busy"
 msgstr "Frei/Beschäftigt"

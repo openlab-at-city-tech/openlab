@@ -16,48 +16,51 @@ class MeowCommon_Rest
 	}
 
 	function rest_api_init() {
-		if ( !current_user_can( 'administrator' ) ) {
+		if ( !current_user_can( 'manage_options' ) ) {
 			return;
 		}
 		register_rest_route( $this->namespace, '/empty_request/', [
 			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				return current_user_can( 'manage_options' );
 			},
 			'callback' => [ $this, 'empty_request' ]
 		]);
 		register_rest_route( $this->namespace, '/file_operation/', [
 			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				return current_user_can( 'manage_options' );
 			},
 			'callback' => [ $this, 'file_operation' ]
 		]);
 		register_rest_route( $this->namespace, '/sql_request/', [
 			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				return current_user_can( 'manage_options' );
 			},
 			'callback' => [ $this, 'sql_request' ]
 		]);
 		register_rest_route( $this->namespace, '/error_logs/', [
 			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				$ok = current_user_can( 'manage_options' );
+				return $ok;
 			},
 			'callback' => [ $this, 'rest_error_logs' ]
 		]);
 		register_rest_route( $this->namespace, '/all_settings/', [
-			'methods' => 'GET',
+			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				$ok = current_user_can( 'manage_options' );
+				return $ok;
 			},
 			'callback' => [ $this, 'rest_all_settings' ]
 		]);
 		register_rest_route( $this->namespace, '/update_option/', [
 			'methods' => 'POST',
 			'permission_callback' => function () { 
-				return current_user_can( 'administrator' );
+				$ok = current_user_can( 'manage_options' );
+				return $ok;
 			},
 			'callback' => [ $this, 'rest_update_option' ]
 		]);

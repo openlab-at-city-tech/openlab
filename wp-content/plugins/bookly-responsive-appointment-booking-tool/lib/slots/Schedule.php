@@ -13,9 +13,9 @@ class Schedule
     /**
      * Add schedule for a day of the week.
      *
-     * @param int $day_of_week  0(Sun)-6(Sat)
-     * @param string $start  Format H:i[:s]
-     * @param string $end    Format H:i[:s]
+     * @param int $day_of_week 0(Sun)-6(Sat)
+     * @param string $start Format H:i[:s]
+     * @param string $end Format H:i[:s]
      * @return $this
      */
     public function addDay( $day_of_week, $start, $end )
@@ -41,9 +41,9 @@ class Schedule
     /**
      * Add break.
      *
-     * @param integer $day_of_week  0(Sun)-6(Sat)
-     * @param string $start  Format H:i[:s]
-     * @param string $end    Format H:i[:s]
+     * @param integer $day_of_week 0(Sun)-6(Sat)
+     * @param string $start Format H:i[:s]
+     * @param string $end Format H:i[:s]
      * @return $this
      */
     public function addBreak( $day_of_week, $start, $end )
@@ -56,7 +56,7 @@ class Schedule
     /**
      * Add holiday.
      *
-     * @param string $date  Format Y-m[-d]
+     * @param string $date Format Y-m[-d]
      * @return $this
      */
     public function addHoliday( $date )
@@ -69,9 +69,9 @@ class Schedule
     /**
      * Add schedule for special day.
      *
-     * @param string $date  Format Y-m-d
-     * @param string $start  Format H:i[:s]
-     * @param string $end    Format H:i[:s]
+     * @param string $date Format Y-m-d
+     * @param string $start Format H:i[:s]
+     * @param string $end Format H:i[:s]
      * @return $this
      */
     public function addSpecialDay( $date, $start, $end )
@@ -102,9 +102,9 @@ class Schedule
     /**
      * Add special day break.
      *
-     * @param string $date  Format Y-m-d
-     * @param string $start  Format H:i[:s]
-     * @param string $end    Format H:i[:s]
+     * @param string $date Format Y-m-d
+     * @param string $start Format H:i[:s]
+     * @param string $end Format H:i[:s]
      * @return $this
      */
     public function addSpecialBreak( $date, $start, $end )
@@ -148,7 +148,7 @@ class Schedule
 
         return $collection
             // Convert to date ranges.
-            ->map( function ( Range $range ) use ( $dp, $range_data ) {
+            ->map( function( Range $range ) use ( $dp, $range_data ) {
                 return new Range(
                     $dp->modify( $range->start()->value() )->toWpTz(),
                     $dp->modify( $range->end()->value() )->toWpTz(),
@@ -170,7 +170,17 @@ class Schedule
     {
         $collection = new RangeCollection();
 
-        return $collection->push( new Range( $dp, $dp->modify( '+1 day' ), new RangeData( $service_id, $staff_id, $location_id ) ) );
+        $date_Ymd = $dp->format( 'Y-m-d' );
+
+        // Check for special day OFF.
+        if ( isset ( $this->special_days[ $date_Ymd ] ) && $this->special_days[ $date_Ymd ]->isEmpty() ) {
+            $collection = $this->special_days[ $date_Ymd ];
+        } else {
+            // Return weekday schedule.
+            $collection->push( new Range( $dp, $dp->modify( '+1 day' ), new RangeData( $service_id, $staff_id, $location_id ) ) );
+        }
+
+        return $collection;
     }
 
     /**

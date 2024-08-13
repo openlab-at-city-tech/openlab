@@ -59,8 +59,8 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add YouTube and Vimeo slides', 'ml-slider');?></h4>
-                    <p><?php esc_html_e('Easily include responsive high definition YouTube and Vimeo videos.', 'ml-slider');?></p>
+                    <h4><?php esc_html_e('Add YouTube, Vimeo and Tiktok slides', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('Easily include videos hosted by YouTube, Vimeo or TikTok.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
                 <td><div class="dot available"></div></td>
@@ -83,8 +83,8 @@
             </tr>
             <tr>
                 <td>
-                    <h4><?php esc_html_e('Add HTML overlay slides', 'ml-slider');?></h4>
-                    <p><?php esc_html_e('Create completely customized HTML slides using the inline editor.', 'ml-slider');?></p>
+                    <h4><?php esc_html_e('Extra premium themes', 'ml-slider');?></h4>
+                    <p><?php esc_html_e('MetaSlider Pro provides stylish and exclusive themes for your slideshows.', 'ml-slider');?></p>
                 </td>
                 <td><div class="dot unavailable"></div></td>
                 <td><div class="dot available"></div></td>

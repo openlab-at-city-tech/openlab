@@ -22,6 +22,15 @@ if ( ! class_exists( 'BBP_Akismet' ) ) :
 class BBP_Akismet {
 
 	/**
+	 * The last post checked by Akismet.
+	 *
+	 * @since 2.0.0 bbPress (r3277)
+	 *
+	 * @var array $last_post Default empty array.
+	 */
+	protected $last_post = array();
+
+	/**
 	 * The main bbPress Akismet loader
 	 *
 	 * @since 2.0.0 bbPress (r3277)

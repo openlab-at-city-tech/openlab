@@ -4,6 +4,10 @@ Plugin Page: https://wordpress.org/plugins/embed-calendly-scheduling/
 
 == Changelog ==
 
+= 3.8 - 21-03-2024 =
+
+- Fixed customizer plugin conflicts.
+
 = 3.7 - 12-10-2023 =
 
 - Improved security

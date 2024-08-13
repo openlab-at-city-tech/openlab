@@ -539,8 +539,13 @@ class WPPostDriver extends DriverBase {
 		$post        = $this->_convert_entity_to_post( $entity );
 		$primary_key = $this->get_primary_key_column();
 
+		// Avoid pre_replace deprecation exception on sanitize_mime_type() by ensuring mime type is not null.
+		if ( is_null( $post->post_mime_type ) ) {
+			$post->post_mime_type = '';
+		}
+
 		// TODO: unsilence this. WordPress 3.9-beta2 is generating an error that should be corrected before its final release.
-		if ( ( $post_id = @wp_insert_post( $post ) ) ) {
+		if ( ( $post_id = wp_insert_post( (array) $post ) ) ) {
 			$new_entity = $this->find( $post_id, true );
 			if ( $new_entity ) {
 				foreach ( get_object_vars( $new_entity ) as $key => $value ) {

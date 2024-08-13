@@ -73,7 +73,7 @@ class B2S_Heartbeat {
         if (!empty($sendData) && is_array($sendData)) {
             $shipData = serialize($sendData);
             if (!empty($shipData)) {
-                $data = array('action' => 'postSchedData', 'data' => $shipData);
+                $data = array('action' => 'postSchedData', 'version' => B2S_PLUGIN_VERSION, 'data' => $shipData);
                 $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $data, 90));
                 foreach ($postData as $k => $value) {
                     if (!isset($result->content) || !isset($result->content->{$value['id']})) {
@@ -320,7 +320,7 @@ class B2S_Heartbeat {
                 $where = array('id' => $value['id']);
                 $wpdb->update($wpdb->prefix . 'b2s_posts', $data, $where, array('%d'), array('%d'));
             }
-            $tempData = array('action' => 'deleteUserSchedPost', 'data' => serialize($sendData));
+            $tempData = array('action' => 'deleteUserSchedPost', 'version' => B2S_PLUGIN_VERSION, 'data' => serialize($sendData));
             $result = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, $tempData, 90));
             foreach ($sendData as $k => $value) {
                 //is failed, try again later
@@ -611,4 +611,5 @@ class B2S_Heartbeat {
             }
         }
     }
+
 }

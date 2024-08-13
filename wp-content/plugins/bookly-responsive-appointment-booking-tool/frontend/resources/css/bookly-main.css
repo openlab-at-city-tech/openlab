@@ -1,4 +1,7 @@
-/* Global */
+:root {
+    --bookly-css-version: "23.7";
+}
+
 .bookly-list-none {
     list-style: none;
 }
@@ -135,8 +138,11 @@
 .bookly-form label {
     display: inline;
     float: none;
-    width: auto;
     font-size: 14px;
+}
+
+.bookly-form label:not(.bookly-col-label) {
+    width: auto;
 }
 
 .bookly-form img {
@@ -392,9 +398,11 @@ span.bookly-round {
     margin-right: 14px !important;
 }
 
-.bookly-service-step .bookly-week-days,
-.bookly-repeat-step .bookly-week-days {
+.bookly-form .bookly-service-step .bookly-week-days,
+.bookly-form .bookly-repeat-step .bookly-week-days {
     width: auto;
+    display: flex;
+    justify-content: center;
 }
 
 .bookly-service-step .bookly-week-days > div,
@@ -403,37 +411,31 @@ span.bookly-round {
     min-width: 35px;
 }
 
-.bookly-service-step .bookly-week-days label,
-.bookly-repeat-step .bookly-week-days label {
+.bookly-form .bookly-service-step .bookly-week-days input[type='checkbox'],
+.bookly-form .bookly-repeat-step .bookly-week-days input[type='checkbox'] {
+    background-color: var(--bookly-main-color);
+    border-color: var(--bookly-main-color);
+}
+
+.bookly-form .bookly-service-step .bookly-week-days input[type='checkbox']:checked,
+.bookly-form .bookly-repeat-step .bookly-week-days input[type='checkbox']:checked {
+    background-image: url("../images/checkbox.png");
+    background-repeat: no-repeat;
+}
+
+.bookly-form .bookly-service-step .bookly-week-days input[type='checkbox'],
+.bookly-form .bookly-repeat-step .bookly-week-days input[type='checkbox'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
     display: block !important;
     width: 23px;
     height: 23px;
     padding: 0;
-    margin: -12px auto 0;
+    margin: 8px auto 0 !important;
     border-radius: 50%;
     cursor: pointer;
-}
-
-.bookly-service-step .bookly-week-days input[type='checkbox'],
-.bookly-repeat-step .bookly-week-days input[type='checkbox'] {
-    width: 0 !important;
-    height: 0 !important;
-    max-width: 0px !important;
-    max-height: 0px !important;
-    min-width: 0px !important;
-    min-height: 0px !important;
-    opacity: 0;
-}
-
-.bookly-service-step .bookly-week-days input[type='checkbox']:checked + label,
-.bookly-repeat-step .bookly-week-days input[type='checkbox']:checked + label {
-    background: #f56530 url("../images/checkbox.png") 0 0 no-repeat;
-}
-
-.bookly-service-step .bookly-week-days input[type='checkbox']:focus + label,
-.bookly-repeat-step .bookly-week-days input[type='checkbox']:focus + label {
-    outline: 0;
-    box-shadow: 0px 0px 1px 0px rgba(37, 0, 255, 1) inset;
+    background-color: var(--bookly-main-color);
 }
 
 .bookly-service-step .bookly-week-days label input,
@@ -612,12 +614,17 @@ span.bookly-round {
     display: inline-block;
 }
 
-.bookly-schedule-date,
-.bookly-columnizer .bookly-day {
+.bookly-form .bookly-schedule-date,
+.bookly-form .bookly-columnizer .bookly-day {
     background: #f4662f;
     color: white !important;
     font-weight: bold !important;
     border: 1px solid #f4662f;
+}
+
+.bookly-form .bookly-schedule-date input {
+    color: black;
+    font-weight: normal;
 }
 
 .bookly-columnizer .booked,
@@ -690,11 +697,6 @@ span.bookly-round {
 .bookly-slot-calendar {
     margin: 0 20px 20px 0;
     float: left;
-}
-
-.bookly-slot-calendar .picker,
-.bookly-slot-calendar .picker__holder {
-    position: static;
 }
 
 .bookly-not-time-screen {
@@ -1313,192 +1315,6 @@ label.bookly-square {
     }
 }
 
-/* Picker */
-.bookly-form .picker__holder {
-    width: 310px !important;
-    overflow: hidden !important;
-    -webkit-border-radius: 5px 5px !important;
-    -moz-border-radius: 5px 5px !important;
-    border-radius: 5px 5px !important;
-    top: 2px;
-    left: 0px;
-    outline: none;
-    bottom: auto;
-}
-
-.bookly-form .picker {
-    width: auto !important;
-    right: auto !important;
-    top: auto !important;
-    bottom: auto !important;
-    left: auto !important;
-}
-
-.bookly-form .picker__header {
-    position: inherit;
-}
-
-.bookly-form .picker__input {
-    float: none !important;
-}
-
-.bookly-form .picker__nav--next {
-    position: inherit;
-    float: right;
-}
-
-.bookly-form .picker__nav--prev {
-    position: inherit;
-    float: left;
-}
-
-.bookly-form .picker:before,
-.bookly-form .picker:after {
-    display: none !important;
-}
-
-.bookly-form .picker__frame * {
-    font-size: 14px !important;
-    font-weight: bold !important;
-    border: 0 !important;
-    color: #fff !important;
-}
-
-.bookly-form .picker__frame {
-    position: static;
-    margin-bottom: 0 !important;
-}
-
-.bookly-form .picker__weekday {
-    font-weight: normal !important;
-    text-align: center !important;
-    padding: 0 !important;
-    padding-bottom: .5em !important;
-    border: 0 !important;
-    background: none !important;
-}
-
-.bookly-form .picker__day--selected,
-.bookly-form .picker__day--selected:hover,
-.bookly-form .picker--focused .picker__day--selected,
-.bookly-form .picker__day--infocus:hover,
-.bookly-form .picker__day--outfocus:hover {
-    background: #fff !important;
-    border-radius: 4px !important;
-}
-
-.bookly-form .picker__day--highlighted {
-    border-color: #fff !important;
-}
-
-.bookly-form .picker__button--today:before {
-    display: none !important;
-}
-
-.bookly-form .picker__nav--prev:before {
-    border-left: 0 !important;
-}
-
-.bookly-form .picker__nav--next:before {
-    border-right: 0 !important;
-}
-
-.bookly-form .picker--focused .picker__day--highlighted {
-    background: none !important;
-    border-radius: 4px !important;
-}
-
-.bookly-form .picker--focused .picker__day--highlighted:hover {
-    background: white !important;
-}
-
-.bookly-form .picker--focused .picker__day--selected {
-    background: white !important;
-}
-
-.bookly-form .picker__button--today:hover,
-.bookly-form .picker__button--clear:hover {
-    background: white !important;
-    border-bottom-color: white !important;
-}
-
-.bookly-form .picker__table {
-    margin-top: .75em !important;
-    margin-bottom: .75em !important;
-    line-height: normal !important;
-    background: none !important;
-}
-
-.bookly-form .picker__table td {
-    text-align: center !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: none !important;
-}
-
-.bookly-form .picker__table tr,
-.bookly-form .picker__table tbody,
-.bookly-form .picker__table thead {
-    background: none !important;
-}
-
-.bookly-form .picker__nav--prev {
-    left: 0;
-}
-
-.bookly-form .picker__nav--next {
-    right: 0;
-}
-
-.bookly-form .picker__nav--prev,
-.bookly-form .picker__nav--next {
-    box-sizing: content-box;
-    background: white !important;
-    border-radius: 50%;
-    padding: 6px;
-    top: -3px;
-}
-
-.bookly-form .picker__day--today {
-    border: 1px solid white !important;
-    -webkit-border-radius: 4px !important;
-    -moz-border-radius: 4px !important;
-    border-radius: 4px !important;
-    position: inherit;
-}
-
-.bookly-form .picker__day--today:before {
-    display: none;
-}
-
-.bookly-form .picker__button--today,
-.bookly-form .picker__button--clear {
-    padding: 5px 0 !important;
-    width: 33% !important;
-    -webkit-border-radius: 4px !important;
-    -moz-border-radius: 4px !important;
-    border-radius: 4px !important;
-    margin-bottom: 10px !important;
-    float: none !important;
-    background: white !important;
-}
-
-.bookly-form .picker__day--outfocus,
-.bookly-form .picker__day--disabled {
-    color: rgba(255, 255, 255, 0.5) !important;
-    background: none !important;
-    pointer-events: none;
-}
-
-.bookly-form .picker__day--disabled:hover {
-    background: white;
-}
-
-.bookly-form .picker__nav--disabled {
-    opacity: 0;
-    cursor: default;
-}
-
 .bookly-form .bookly-image-box {
     height: 298px;
     position: relative;
@@ -1530,8 +1346,10 @@ label.bookly-square {
     white-space: nowrap;
 }
 
-.bookly-row .bookly-col-label {
+.bookly-form .bookly-row .bookly-col-label {
     text-align: right;
+    color: var(--bookly-main-color);
+    font-weight: bold;
 }
 
 .bookly-row {
@@ -1678,7 +1496,7 @@ ol.bookly-stepper {
     }
 
     .bookly-progress-tracker {
-        display: none;
+        display: none !important;
     }
 
     /* Stepper */
@@ -1712,10 +1530,12 @@ ol.bookly-stepper {
         border-color: var(--bookly-main-color);
         outline: 4px solid white;
     }
-    .bookly-form ol.bookly-stepper li.bookly-step-active ~ li::before{
+
+    .bookly-form ol.bookly-stepper li.bookly-step-active ~ li::before {
         background: white;
         border: 2px solid silver;
     }
+
     .bookly-form ol.bookly-stepper li.bookly-step-active::after {
         content: "";
         position: absolute;
@@ -1800,10 +1620,6 @@ ol.bookly-stepper {
         height: 35px !important;
     }
 
-    .bookly-form .picker__holder {
-        left: 0 !important;
-    }
-
     .bookly-extra-step .bookly-extras-item {
         width: 50%;
     }
@@ -1871,6 +1687,10 @@ ol.bookly-stepper {
     button.bookly-inline-block {
         margin-bottom: 3px;
     }
+
+    .bookly-form .bookly-row .bookly-col-label {
+        text-align: left;
+    }
 }
 
 /* intlTelInput.js */
@@ -1920,14 +1740,17 @@ ol.bookly-stepper {
     mask-image: url(../../../frontend/resources/images/google.svg);
     -webkit-mask-image: url(../../../frontend/resources/images/google.svg);
 }
+
 .bookly-microsoft {
     mask-image: url(../../../frontend/resources/images/microsoft.svg);
     -webkit-mask-image: url(../../../frontend/resources/images/microsoft.svg);
 }
+
 .bookly-yahoo {
     mask-image: url(../../../frontend/resources/images/yahoo.svg);
     -webkit-mask-image: url(../../../frontend/resources/images/yahoo.svg);
 }
+
 .bookly-apple {
     mask-image: url(../../../frontend/resources/images/apple.svg);
     -webkit-mask-image: url(../../../frontend/resources/images/apple.svg);

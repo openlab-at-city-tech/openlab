@@ -15,7 +15,7 @@ $user_id = bp_displayed_user_id();
 $filters = array();
 if ( bp_is_user_groups() ) {
 	if ( isset( $_GET['type'] ) && in_array( $_GET['type'], openlab_group_types(), true ) ) {
-		$group_type = wp_unslash( $_GET['type'] );
+		$group_type = sanitize_text_field( wp_unslash( $_GET['type'] ) );
 	} else {
 		$group_type = 'course';
 	}
@@ -276,11 +276,7 @@ do_action( 'openlab_before_groups_loop' );
 									<?php echo openlab_output_course_info_line($group_id); ?>
 								</div>
 
-							<?php elseif ( 'portfolio' === $this_group_type ) : ?>
-
-								<div class="info-line uppercase"><?php echo bp_core_get_userlink( openlab_get_user_id_from_portfolio_group_id( bp_get_group_id() ) ); ?></div>
-
-							<?php else : ?>
+							<?php elseif ( 'portfolio' !== $this_group_type ) : ?>
 
 								<div class="info-line uppercase">
 									<?php echo openlab_output_group_contact_line( $group_id ); ?>

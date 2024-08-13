@@ -2,7 +2,7 @@
  * External dependencies
  */
 import { useAiContext, withAiDataProvider } from '@automattic/jetpack-ai-client';
-import { JETPACK_MODULES_STORE_ID } from '@automattic/jetpack-shared-extension-utils';
+import { useModuleStatus } from '@automattic/jetpack-shared-extension-utils';
 import { BlockControls } from '@wordpress/block-editor';
 import { getBlockType } from '@wordpress/blocks';
 import { createHigherOrderComponent } from '@wordpress/compose';
@@ -13,6 +13,11 @@ import React from 'react';
 /*
  * Internal dependencies
  */
+import { getFeatureAvailability } from '../../lib/utils/get-feature-availability';
+import {
+	AI_ASSISTANT_EXTENSIONS_SUPPORT_NAME,
+	EXTENDED_TRANSFORMATIVE_BLOCKS,
+} from '../ai-assistant';
 import AiAssistantBar from './components/ai-assistant-bar';
 import AiAssistantToolbarButton from './components/ai-assistant-toolbar-button';
 import { isJetpackFromBlockAiCompositionAvailable } from './constants';
@@ -39,10 +44,7 @@ export function useIsPossibleToExtendJetpackFormBlock(
 ): boolean {
 	// Check if the AI Assistant block is registered.
 	const isBlockRegistered = getBlockType( 'jetpack/ai-assistant' );
-	const isModuleActive = useSelect(
-		selectData => selectData( JETPACK_MODULES_STORE_ID ).isModuleActive( 'contact-form' ),
-		[ JETPACK_MODULES_STORE_ID ]
-	);
+	const { isModuleActive } = useModuleStatus( 'contact-form' );
 
 	if ( ! isModuleActive ) {
 		return false;
@@ -54,6 +56,11 @@ export function useIsPossibleToExtendJetpackFormBlock(
 
 	// Check if there is a block name.
 	if ( typeof blockName !== 'string' ) {
+		return false;
+	}
+
+	// Only extend the blocks in the allowed list.
+	if ( ! EXTENDED_TRANSFORMATIVE_BLOCKS.includes( blockName ) ) {
 		return false;
 	}
 
@@ -86,7 +93,7 @@ export function useIsPossibleToExtendJetpackFormBlock(
 	 */
 	const { getHiddenBlockTypes } = select( 'core/edit-post' ) || {};
 	const hiddenBlocks = getHiddenBlockTypes?.() || []; // It will extend the block if the function is undefined.
-	if ( hiddenBlocks.includes( blockName ) ) {
+	if ( hiddenBlocks.includes( 'jetpack/ai-assistant' ) ) {
 		return false;
 	}
 
@@ -144,7 +151,7 @@ const jetpackFormEditWithAiComponents = createHigherOrderComponent( BlockEdit =>
 			 * and close the event source.
 			 */
 			return () => {
-				// Only stop when the parent block is unmouted.
+				// Only stop when the parent block is unmounted.
 				if ( props?.name !== 'jetpack/contact-form' ) {
 					return;
 				}
@@ -159,7 +166,7 @@ const jetpackFormEditWithAiComponents = createHigherOrderComponent( BlockEdit =>
 		}
 
 		const blockControlsProps = {
-			group: 'block',
+			group: 'block' as const,
 		};
 
 		return (
@@ -191,6 +198,16 @@ const jetpackFormEditWithAiComponents = createHigherOrderComponent( BlockEdit =>
 function jetpackFormWithAiSupport( settings, name: string ) {
 	// Only extend Jetpack Form block type.
 	if ( name !== 'jetpack/contact-form' ) {
+		return settings;
+	}
+
+	// Only extend the blocks in the allowed list.
+	if ( ! EXTENDED_TRANSFORMATIVE_BLOCKS.includes( name ) ) {
+		return settings;
+	}
+
+	// Disable if Inline Extension is enabled
+	if ( getFeatureAvailability( AI_ASSISTANT_EXTENSIONS_SUPPORT_NAME ) ) {
 		return settings;
 	}
 
@@ -240,7 +257,7 @@ const jetpackFormChildrenEditWithAiComponents = createHigherOrderComponent( Bloc
 		}
 
 		const blockControlsProps = {
-			group: 'parent',
+			group: 'parent' as const,
 		};
 
 		return (
@@ -260,8 +277,18 @@ const jetpackFormChildrenEditWithAiComponents = createHigherOrderComponent( Bloc
  * with the AI Assistant components.
  */
 function jetpackFormChildrenEditWithAiSupport( settings, name ) {
+	// Only extend the blocks in the allowed list.
+	if ( ! EXTENDED_TRANSFORMATIVE_BLOCKS.includes( name ) ) {
+		return settings;
+	}
+
 	// Only extend allowed blocks (Jetpack form and its children)
 	if ( ! JETPACK_FORM_CHILDREN_BLOCKS.includes( name ) ) {
+		return settings;
+	}
+
+	// Disable if Inline Extension is enabled
+	if ( getFeatureAvailability( AI_ASSISTANT_EXTENSIONS_SUPPORT_NAME ) ) {
 		return settings;
 	}
 
