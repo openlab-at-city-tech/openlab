@@ -61,7 +61,6 @@ function openlab_hide_plugins( $plugins ) {
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
 		'import-html-pages/html-import.php',
-		'inline-comments/inline-comments.php',
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
