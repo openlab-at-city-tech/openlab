@@ -392,6 +392,32 @@ add_action( 'groups_create_group', 'openlab_create_forum_on_group_creation', 10,
 add_filter( 'bp_get_new_group_enable_forum', '__return_true' );
 
 /**
+ * Limit the number of forums the bbPress dropdown can contain on the Groups wp-admin page.
+ */
+function cac_limit_bbpress_dropdown_forums( $r ) {
+	global $pagenow;
+
+	if ( empty( $pagenow ) || 'admin.php' !== $pagenow || empty( $_GET['page'] ) || 'bp-groups' !== $_GET['page'] ) {
+		return $r;
+	}
+
+	// rchouehsrcouesrbcoeuscrboeusbrcoeusbrcoeubcngounbcgo.uncbgoucg
+	$GLOBALS['cac_selected_forum'] = $r['selected'];
+	add_action( 'pre_get_posts', 'cac_limit_bbpress_dropdown_forums_cb' );
+
+	return $r;
+}
+add_filter( 'bbp_before_get_dropdown_parse_args', 'cac_limit_bbpress_dropdown_forums' );
+
+/**
+ * Limit the forum dropdown on Dashboard > Network Admin > Groups to the currently selected group.
+ */
+function cac_limit_bbpress_dropdown_forums_cb( $q ) {
+	$q->set( 'post__in', array( $GLOBALS['cac_selected_forum'] ) );
+	remove_action( 'pre_get_posts', 'cac_limit_bbpress_dropdown_forums_cb' );
+}
+
+/**
  * Make sure the comment-dupe data doesn't get saved in the comments activity
  */
 function openlab_pre_save_comment_activity( $activity ) {
