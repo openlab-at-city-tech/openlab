@@ -22,7 +22,7 @@ add_filter(
 
 		$message .= 'Visit the following address to choose a new password:' . "\r\n\r\n";
 
-		$url = network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . '&wp_lang=' . $locale . "\r\n\r\n";
+		$url = network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . '&wp_lang=' . $locale;
 
 		$message .= '<a href="' . $url . '">' . $url . '</a>' . "\r\n\r\n";
 
