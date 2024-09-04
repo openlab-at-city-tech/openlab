@@ -21,7 +21,10 @@ add_filter(
 		$message .= sprintf( __( 'Username: %s' ), $user_login ) . "\r\n\r\n";
 
 		$message .= 'Visit the following address to choose a new password:' . "\r\n\r\n";
-		$message .= network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . '&wp_lang=' . $locale . "\r\n\r\n";
+
+		$url = network_site_url( "wp-login.php?action=rp&key=$key&login=" . rawurlencode( $user_login ), 'login' ) . '&wp_lang=' . $locale . "\r\n\r\n";
+
+		$message .= '<a href="' . $url . '">' . $url . '</a>' . "\r\n\r\n";
 
 		$message .= __( 'If this was a mistake, ignore this email and nothing will happen.' ) . "\r\n\r\n";
 
