@@ -177,6 +177,9 @@ function openlab_hide_plugins( $plugins ) {
 		'openlab-comd-gform.php'          => array(
 			14428, // gracegallery - http://redmine.citytech.cuny.edu/issues/2692#change-18693
 		),
+		'tablepress-premium/tablepress.php' => [
+			17391, // tc2 - http://redmine.citytech.cuny.edu/issues/3427
+		],
 		'ultimate-responsive-image-slider/ultimate-responsive-image-slider.php' => [
 			8100, // bmi - http://redmine.citytech.cuny.edu/issues/3100
 		],
