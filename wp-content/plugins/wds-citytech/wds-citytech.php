@@ -2893,27 +2893,31 @@ add_filter(
 /**
  * Strict mime-type fixes.
  */
-function openlab_secondary_mime( $check, $filetype, $filename, $mimes ) {
+function openlab_secondary_mime( $check, $filetype, $filename, $mimes, $real_mime ) {
 	if ( empty( $check['ext'] ) && empty( $check['type'] ) ) {
 		$secondary_mimes = [
 			[ 'tex' => 'text/x-tex' ],
 		];
 
-		foreach ( $secondary_mimes as $secondary_mime ) {
-			// Run another check, but only for our secondary mime and not on core mime types.
-			remove_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99 );
-			$check = wp_check_filetype_and_ext( $filetype, $filename, $secondary_mime );
-			add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+		$file_ext = pathinfo( $filename, PATHINFO_EXTENSION );
 
-			if ( ! empty( $check['ext'] ) || ! empty( $check['type'] ) ) {
-				return $check;
+		foreach ( $secondary_mimes as $secondary_mime ) {
+			if ( ! isset( $secondary_mime[ $file_ext ] ) ) {
+				continue;
 			}
+
+			if ( $real_mime !== $secondary_mime[ $file_ext ] ) {
+				continue;
+			}
+
+			$check['ext']  = $file_ext;
+			$check['type'] = $secondary_mime[ $file_ext ];
 		}
 	}
 
 	return $check;
 }
-add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 4 );
+add_filter( 'wp_check_filetype_and_ext', 'openlab_secondary_mime', 99, 5 );
 
 /** TablePress mods **********************************************************/
 
