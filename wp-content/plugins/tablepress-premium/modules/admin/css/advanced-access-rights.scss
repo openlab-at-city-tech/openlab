@@ -1,0 +1,71 @@
+/**
+ * CSS code for the "Advanced Access Rights" Screen.
+ *
+ * @package TablePress
+ * @subpackage Advanced Access Rights
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+/* Import spinner and alert box styling. */
+@import "../../../admin/css/spinner-alert";
+
+/* Allow wide postboxes to scroll sideways. */
+body,
+div#post-body.metabox-holder.columns-1 {
+	overflow: visible !important;
+}
+
+#tablepress-page {
+	.tablepress-access-rights-map {
+		border-collapse: collapse;
+		border-spacing: 0;
+		position: relative;
+		background-color: #ffffff;
+
+		thead th {
+			background-color: #ffffff;
+			text-align: center;
+			padding: 3px 6px;
+			position: sticky;
+			z-index: 2;
+			top: 0;
+
+			/* Fixed header */
+			@media screen and (min-width: 601px) {
+				top: var(--wp-admin--admin-bar--height);
+			}
+		}
+
+		tbody {
+			th {
+				text-align: left;
+				padding: 2px;
+			}
+
+			td {
+				text-align: center;
+				padding: 2px 2px 4px;
+			}
+
+			.column-table-id {
+				text-align: right;
+			}
+
+			.column-table-name {
+				font-weight: normal;
+			}
+		}
+
+		.new-users-column {
+			border-left: 1px solid #999999;
+		}
+
+		.new-tables-row {
+			th,
+			td {
+				border-top: 1px solid #999999;
+			}
+		}
+	}
+}

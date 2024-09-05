@@ -1,0 +1,81 @@
+/**
+ * CSS code for the "Automatic Periodic Table Import" Screen.
+ *
+ * @package TablePress
+ * @subpackage Automatic Periodic Table Import
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+/* Import spinner and alert box styling. */
+@import "../../../admin/css/spinner-alert";
+
+#tablepress-automatic-periodic-import-tables {
+	th,
+	td {
+		vertical-align: middle;
+	}
+
+	.column-checkbox {
+		input {
+			margin: 0;
+			vertical-align: middle;
+		}
+	}
+
+	.column-table-id {
+		min-width: 50px;
+	}
+
+	.column-table-name {
+		min-width: 120px;
+		font-weight: bold;
+		word-break: break-word;
+	}
+
+	.column-import-active {
+		min-width: 60px;
+		width: 60px;
+	}
+
+	.column-import-location {
+		min-width: 200px;
+		width: 30%;
+	}
+
+	.column-import-interval {
+		width: 220px;
+
+		input {
+			width: 120px;
+			padding: 0 6px;
+		}
+
+		select:has(+ input) {
+			margin-bottom: 6px;
+		}
+	}
+
+	.column-import-last-import {
+		min-width: 160px;
+		max-width: 190px;
+	}
+
+	thead th {
+		background-color: #ffffff;
+		position: sticky;
+		z-index: 2;
+		top: 0;
+		white-space: nowrap;
+
+		/* Fixed header */
+		@media screen and (min-width: 601px) {
+			top: var(--wp-admin--admin-bar--height);
+		}
+	}
+
+	/* Vertical positioning of the "Active" toggle control. */
+	.components-toggle-control {
+		margin-bottom: 0;
+	}
+}

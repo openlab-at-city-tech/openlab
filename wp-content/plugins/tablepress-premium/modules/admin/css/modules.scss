@@ -1,0 +1,163 @@
+/**
+ * CSS code for the "Modules" screen.
+ *
+ * @package TablePress
+ * @subpackage Modules
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+#tablepress-page .category-name {
+	font-size: 18px;
+	padding: 20px 0 10px;
+}
+
+.module-box {
+	$color-active: #2271b1;
+	$color-inactive: #dcdcde;
+
+	&-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		column-gap: 16px;
+		max-width: 1100px;
+	}
+
+	position: relative;
+	width: 250px;
+	min-height: 110px;
+	vertical-align: top;
+	margin: 8px 0;
+
+	.module-box-top {
+		padding: 10px 10px 5px;
+	}
+
+	.module-box-bottom {
+		background-color: #f6f7f7;
+		border-top: 1px solid $color-inactive;
+		padding: 10px;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	.ribbon {
+		width: 150px;
+		height: 100px;
+		overflow: hidden;
+		position: absolute;
+		top: 0;
+		right: 0;
+		cursor: not-allowed;
+
+		span {
+			position: absolute;
+			display: block;
+			width: 170px;
+			padding: 5px 0;
+			background-color: #8ab547;
+			text-align: center;
+			left: 25px;
+			top: 25px;
+			transform: rotate(45deg);
+			font-size: 14px;
+			font-weight: bold;
+
+			a {
+				color: #ffffff;
+				text-decoration: none;
+			}
+		}
+	}
+
+	label {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-sizing: border-box;
+		height: 100%;
+		background: #ffffff;
+		border: 2px solid $color-inactive;
+		border-radius: 4px;
+		position: relative;
+
+		h3 {
+			margin: 0;
+		}
+
+		.module-state {
+			input {
+				pointer-events: none;
+			}
+
+			.module-active {
+				display: none;
+			}
+		}
+	}
+
+	> input[type="checkbox"] {
+		position: absolute;
+		left: -9999px;
+		width: 0;
+		height: 0;
+		appearance: none;
+
+		+ label {
+			cursor: pointer;
+		}
+
+		&:checked + label {
+			border-color: $color-active;
+
+			.module-state {
+				.module-inactive {
+					display: none;
+				}
+
+				.module-active {
+					display: inline-block;
+				}
+			}
+		}
+
+		&:disabled + label {
+			border-color: $color-inactive;
+			cursor: not-allowed;
+
+			.module-state {
+				opacity: 0.4;
+
+				.module-inactive {
+					display: inline-block;
+				}
+
+				.module-active {
+					display: none;
+				}
+			}
+		}
+
+		&:focus + label,
+		&:not(:disabled) + label:hover {
+			border-color: $color-inactive;
+			box-shadow: 0 0 0 1px $color-inactive;
+			outline: 2px solid transparent;
+		}
+
+		&:focus + label {
+			.module-state input {
+				border-color: $color-active;
+				box-shadow: 0 0 0 1px $color-active;
+				outline: 2px solid transparent;
+			}
+		}
+
+		&:checked:focus + label,
+		&:checked:not(:disabled) + label:hover {
+			border-color: $color-active;
+			box-shadow: 0 0 0 1px $color-active;
+			outline: 2px solid transparent;
+		}
+	}
+}

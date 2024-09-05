@@ -1,0 +1,425 @@
+/**
+ * TablePress Responsive Tables CSS.
+ *
+ * @package TablePress
+ * @subpackage Responsive Tables
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+/* stylelint-disable block-opening-brace-newline-after, block-closing-brace-newline-before, declaration-block-semicolon-newline-after */
+
+/* Scroll mode */
+
+.tablepress-scroll-wrapper {
+	overflow-x: auto;
+	overflow-y: hidden;
+	-webkit-overflow-scrolling: touch;
+	scroll-behavior: smooth;
+}
+
+/* Don't scroll DataTables UI elements together with the table. */
+.tablepress-scroll-buttons-wrapper-visible .tablepress-scroll-wrapper > .dataTables_wrapper {
+	width: fit-content;
+}
+.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_length,
+.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_info {
+	position: sticky;
+	left: 0;
+}
+.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_filter,
+.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_paginate {
+	position: sticky;
+	right: 1px; /* 1px to prevent visual glitches with borders. */
+	z-index: 1; /* To prevent the table header from overlapping the Fuzzy Search tooltip. */
+}
+@media screen and (max-width: 600px) {
+	.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_filter,
+	.tablepress-scroll-wrapper .dataTables_wrapper .dataTables_paginate {
+		margin-top: 1lh;
+	}
+}
+
+.tablepress-scroll-buttons-wrapper-visible {
+	clear: both;
+	display: flex;
+}
+
+.tablepress-scroll-buttons-wrapper-visible .tablepress-scroll-wrapper {
+	width: calc(100% - 60px);
+}
+
+.tablepress-scroll-buttons-wrapper-visible .tablepress-scroll-button {
+	position: sticky;
+	top: 200px;
+	height: 100px;
+	width: 30px;
+	border: none;
+	cursor: pointer;
+	font-size: larger;
+	padding: 0;
+	background-color: rgba(0, 0, 0, 0.1);
+	margin: 0 0 1rem;
+}
+
+.tablepress-scroll-buttons-wrapper-visible:has(.dataTables_wrapper) .tablepress-scroll-button {
+	margin: 2rem 0 3rem;
+}
+
+.tablepress-scroll-buttons-wrapper-visible .tablepress-scroll-button:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+.tablepress-scroll-buttons-wrapper:not(.tablepress-scroll-buttons-wrapper-visible) .tablepress-scroll-button {
+	display: none;
+}
+
+/* Stack mode */
+
+.tablepress-responsive-stack-headers tbody td:before {
+	content: attr(data-th) !important;
+	display: none;
+	font-weight: bold;
+	word-break: break-word;
+}
+
+@media (max-width: 767px) {
+	.tablepress-responsive-stack-phone thead,
+	.tablepress-responsive-stack-phone tfoot {
+		display: none;
+	}
+	.tablepress-responsive-stack-phone tbody td {
+		display: block;
+		text-align: center;
+		border-top: none;
+		width: auto !important;
+	}
+	.tablepress-responsive-stack-headers.tablepress-responsive-stack-phone tbody td:before {
+		display: block;
+	}
+	.tablepress-responsive-stack-phone tbody td:first-child {
+		border-top: 1px solid #dddddd;
+	}
+}
+
+@media (max-width: 979px) {
+	.tablepress-responsive-stack-tablet thead,
+	.tablepress-responsive-stack-tablet tfoot {
+		display: none;
+	}
+	.tablepress-responsive-stack-tablet tbody td {
+		display: block;
+		text-align: center;
+		border-top: none;
+		width: auto !important;
+	}
+	.tablepress-responsive-stack-headers.tablepress-responsive-stack-tablet tbody td:before {
+		display: block;
+	}
+	.tablepress-responsive-stack-tablet tbody td:first-child {
+		border-top: 1px solid #dddddd;
+	}
+}
+
+@media (max-width: 1199px) {
+	.tablepress-responsive-stack-desktop thead,
+	.tablepress-responsive-stack-desktop tfoot {
+		display: none;
+	}
+	.tablepress-responsive-stack-desktop tbody td {
+		display: block;
+		text-align: center;
+		border-top: none;
+		width: auto !important;
+	}
+	.tablepress-responsive-stack-headers.tablepress-responsive-stack-desktop tbody td:before {
+		display: block;
+	}
+	.tablepress-responsive-stack-desktop tbody td:first-child {
+		border-top: 1px solid #dddddd;
+	}
+}
+
+.tablepress-responsive-stack-all thead,
+.tablepress-responsive-stack-all tfoot {
+	display: none;
+}
+.tablepress-responsive-stack-all tbody td {
+	display: block;
+	text-align: center;
+	border-top: none;
+	width: auto !important;
+}
+.tablepress-responsive-stack-headers.tablepress-responsive-stack-all tbody td:before {
+	display: block;
+}
+.tablepress-responsive-stack-all tbody td:first-child {
+	border-top: 1px solid #dddddd;
+}
+
+/* Flip mode */
+@media not print {
+	@media (max-width: 767px) {
+		.tablepress-responsive-phone { display: block; }
+		.tablepress-responsive-phone thead { display: block; float: left; }
+		.tablepress-responsive-phone tfoot { display: none; }
+		.tablepress-responsive-phone tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+		.tablepress-responsive-phone thead tr,
+		.tablepress-responsive-phone thead th,
+		.tablepress-responsive-phone tbody td { display: block; border: none; }
+		.tablepress-responsive-phone tbody td:empty:before { content: "\00a0"; } /* &nbsp; in empty cells, to prevent weird width/height issues */
+		.tablepress-responsive-phone tbody tr { display: inline-block; vertical-align: top; }
+		.tablepress-responsive-phone thead th { width: auto !important; }
+		.tablepress-responsive-phone thead tr th:not(:last-child) { border-bottom: 1px solid transparent; }
+		.tablepress-responsive-phone tbody tr td:not(:last-child) { border-bottom: 1px solid #dddddd; }
+		.dataTables_wrapper .tablepress-responsive-phone .sorting:after { transform: rotate(-90deg); padding: 0; }
+		.dataTables_wrapper .tablepress-responsive-phone .sorting_asc:after,
+		.dataTables_wrapper .tablepress-responsive-phone .sorting_desc:after { padding-bottom: 2px; }
+	}
+
+	@media (max-width: 979px) {
+		.tablepress-responsive-tablet { display: block; }
+		.tablepress-responsive-tablet thead { display: block; float: left; }
+		.tablepress-responsive-tablet tfoot { display: none; }
+		.tablepress-responsive-tablet tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+		.tablepress-responsive-tablet thead tr,
+		.tablepress-responsive-tablet thead th,
+		.tablepress-responsive-tablet tbody td { display: block; border: none; }
+		.tablepress-responsive-tablet tbody tr { display: inline-block; vertical-align: top; }
+		.tablepress-responsive-tablet thead th { width: auto !important; }
+		.tablepress-responsive-tablet tbody td:empty:before { content: "\00a0"; } /* &nbsp; in empty cells, to prevent weird width/height issues */
+		.tablepress-responsive-tablet thead tr th:not(:last-child) { border-bottom: 1px solid transparent; }
+		.tablepress-responsive-tablet tbody tr td:not(:last-child) { border-bottom: 1px solid #dddddd; }
+		.dataTables_wrapper .tablepress-responsive-tablet .sorting:after { transform: rotate(-90deg); padding: 0; }
+		.dataTables_wrapper .tablepress-responsive-tablet .sorting_asc:after,
+		.dataTables_wrapper .tablepress-responsive-tablet .sorting_desc:after { padding-bottom: 2px; }
+	}
+
+	@media (max-width: 1199px) {
+		.tablepress-responsive-desktop { display: block; }
+		.tablepress-responsive-desktop thead { display: block; float: left; }
+		.tablepress-responsive-desktop tfoot { display: none; }
+		.tablepress-responsive-desktop tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+		.tablepress-responsive-desktop thead tr,
+		.tablepress-responsive-desktop thead th,
+		.tablepress-responsive-desktop tbody td { display: block; border: none; }
+		.tablepress-responsive-desktop tbody td:empty:before { content: "\00a0"; } /* &nbsp; in empty cells, to prevent weird width/height issues */
+		.tablepress-responsive-desktop tbody tr { display: inline-block; vertical-align: top; }
+		.tablepress-responsive-desktop thead th { width: auto !important; }
+		.tablepress-responsive-desktop thead tr th:not(:last-child) { border-bottom: 1px solid transparent; }
+		.tablepress-responsive-desktop tbody tr td:not(:last-child) { border-bottom: 1px solid #dddddd; }
+		.dataTables_wrapper .tablepress-responsive-desktop .sorting:after { transform: rotate(-90deg); padding: 0; }
+		.dataTables_wrapper .tablepress-responsive-desktop .sorting_asc:after,
+		.dataTables_wrapper .tablepress-responsive-desktop .sorting_desc:after { padding-bottom: 2px; }
+	}
+
+	.tablepress-responsive-all { display: block; }
+	.tablepress-responsive-all thead { display: block; float: left; }
+	.tablepress-responsive-all tfoot { display: none; }
+	.tablepress-responsive-all tbody { display: block; width: auto; position: relative; overflow-x: auto; white-space: nowrap; -webkit-overflow-scrolling: touch; }
+	.tablepress-responsive-all thead tr,
+	.tablepress-responsive-all thead th,
+	.tablepress-responsive-all tbody td { display: block; border: none; }
+	.tablepress-responsive-all tbody td:empty:before { content: "\00a0"; } /* &nbsp; in empty cells, to prevent weird width/height issues */
+	.tablepress-responsive-all tbody tr { display: inline-block; vertical-align: top; }
+	.tablepress-responsive-all thead th { width: auto !important; }
+	.tablepress-responsive-all thead tr th:not(:last-child) { border-bottom: 1px solid transparent; }
+	.tablepress-responsive-all tbody tr td:not(:last-child) { border-bottom: 1px solid #dddddd; }
+	.dataTables_wrapper .tablepress-responsive-all .sorting:after { transform: rotate(-90deg); padding: 0; }
+	.dataTables_wrapper .tablepress-responsive-all .sorting_asc:after,
+	.dataTables_wrapper .tablepress-responsive-all .sorting_desc:after { padding-bottom: 2px; }
+}
+
+/* Collapse mode */
+
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.child,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.child,
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty {
+	cursor: default !important;
+}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.child:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dataTables_empty:before {
+	display: none !important;
+}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control {
+	position: relative;
+	padding-left: 30px;
+	cursor: pointer;
+}
+table.dataTable.dtr-inline.collapsed > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr > th.dtr-control:before {
+	top: 8px;
+	left: 4px;
+	height: 16px;
+	width: 16px;
+	display: block;
+	position: absolute;
+	color: #ffffff;
+	border: 2px solid #ffffff;
+	border-radius: 16px;
+	box-shadow: 0 0 3px #444;
+	box-sizing: content-box; /* csslint allow: box-sizing */
+	text-align: center;
+	text-indent: 0 !important;
+	font-family: "Courier New", Courier, monospace;
+	line-height: 16px;
+	content: "+";
+	background-color: #31b131;
+}
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > td.dtr-control:before,
+table.dataTable.dtr-inline.collapsed > tbody > tr.parent > th.dtr-control:before {
+	content: "-";
+	background-color: #d33333;
+}
+table.dataTable.dtr-column > tbody > tr > td.dtr-control,
+table.dataTable.dtr-column > tbody > tr > th.dtr-control,
+table.dataTable.dtr-column > tbody > tr > td.control,
+table.dataTable.dtr-column > tbody > tr > th.control {
+	position: relative;
+	cursor: pointer;
+}
+table.dataTable.dtr-column > tbody > tr > td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr > td.control:before,
+table.dataTable.dtr-column > tbody > tr > th.control:before {
+	top: 50%;
+	left: 50%;
+	height: 16px;
+	width: 16px;
+	margin-top: -10px;
+	margin-left: -10px;
+	display: block;
+	position: absolute;
+	color: #ffffff;
+	border: 2px solid #ffffff;
+	border-radius: 16px;
+	box-shadow: 0 0 3px #444;
+	box-sizing: content-box; /* csslint allow: box-sizing */
+	text-align: center;
+	text-indent: 0 !important;
+	font-family: "Courier New", Courier, monospace;
+	line-height: 16px;
+	content: "+";
+	background-color: #31b131;
+}
+table.dataTable.dtr-column > tbody > tr.parent td.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent th.dtr-control:before,
+table.dataTable.dtr-column > tbody > tr.parent td.control:before,
+table.dataTable.dtr-column > tbody > tr.parent th.control:before {
+	content: "-";
+	background-color: #d33333;
+}
+table.dataTable > tbody > tr.child {
+	padding: 0.5em 1em;
+}
+table.dataTable > tbody > tr.child:hover {
+	background: transparent !important;
+}
+table.dataTable > tbody > tr.child ul.dtr-details {
+	display: inline-block;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li {
+	border-bottom: 1px solid #efefef;
+	padding: 0.5em 0;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li:first-child {
+	padding-top: 0;
+}
+table.dataTable > tbody > tr.child ul.dtr-details > li:last-child {
+	border-bottom: none;
+}
+table.dataTable > tbody > tr.child span.dtr-title {
+	display: inline-block;
+	min-width: 75px;
+	font-weight: bold;
+}
+
+/* Modal mode */
+
+div.dtr-modal {
+	position: fixed;
+	box-sizing: border-box; /* csslint allow: box-sizing */
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 100%;
+	z-index: 1000000;
+	padding: 10em 1em;
+}
+div.dtr-modal div.dtr-modal-display {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 50%;
+	height: -moz-fit-content;
+	height: fit-content;
+	max-height: 75%;
+	overflow: auto;
+	margin: auto;
+	z-index: 1000002;
+	background-color: #f5f5f7;
+	border: 1px solid #000000;
+	border-radius: 0.5em;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+}
+div.dtr-modal div.dtr-modal-content {
+	position: relative;
+	padding: 2em;
+}
+div.dtr-modal table.dtr-details {
+	border-collapse: collapse;
+}
+div.dtr-modal table.dtr-details td {
+	padding: 0.5em 0.5em 0.5em 0;
+	word-break: break-word;
+}
+div.dtr-modal table.dtr-details td:nth-child(2) {
+	padding: 0.5em 0 0.5em 0.5em;
+}
+div.dtr-modal table.dtr-details tr ~ tr td {
+	border-top: 1px solid #888888;
+}
+div.dtr-modal div.dtr-modal-close {
+	position: absolute;
+	top: 0;
+	right: 8px;
+	font-size: xx-large;
+	text-align: center;
+	border-radius: 3px;
+	cursor: pointer;
+	z-index: 12;
+	line-height: normal;
+}
+div.dtr-modal div.dtr-modal-background {
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	z-index: 1000001;
+	background: rgba(0, 0, 0, 0.6);
+}
+
+@media screen and (max-width: 767px) {
+	div.dtr-modal div.dtr-modal-display {
+		width: 95%;
+	}
+}
+
+/* Prevent issues due to mobile Safari changing the font size. */
+.tablepress-responsive {
+	-webkit-text-size-adjust: none;
+	text-size-adjust: none;
+}
+
+/* Fix word wrapping for all modes. */
+.tablepress-responsive * {
+	word-break: normal;
+}

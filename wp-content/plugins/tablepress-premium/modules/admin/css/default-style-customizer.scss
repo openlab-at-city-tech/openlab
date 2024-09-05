@@ -1,0 +1,128 @@
+/**
+ * CSS code for "Default Style Customizer" module on the "Plugin Options" screen.
+ *
+ * @package TablePress
+ * @subpackage Modules
+ * @author Tobias Bäthge
+ * @since 2.2.0
+ */
+
+/* Reset style from postboxes that pollute components' styles. */
+#poststuff {
+	.components-panel__body {
+		> .components-panel__body-title {
+			padding: 0;
+		}
+
+		&.is-opened > .components-panel__body-title {
+			margin: -16px -16px 5px;
+		}
+	}
+
+	.components-card {
+		box-shadow: none;
+
+		.card-title {
+			font-size: 13px;
+			font-weight: 500;
+			padding: 0 0 18px;
+			margin-left: -8px;
+		}
+	}
+}
+
+/* Change cursor of the color indicator, to match the HEX color next to it. */
+.components-tab-panel__tab-content .component-color-indicator {
+	cursor: pointer;
+}
+
+/* Styling for the styling variation blocks. */
+.style-variation {
+	$color-active: #2271b1;
+	$color-inactive: #dcdcde;
+
+	&-wrapper {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 16px;
+
+		@media screen and (max-width: 1740px) {
+			max-width: 800px;
+		}
+	}
+
+	position: relative;
+	width: 170px;
+	vertical-align: top;
+
+	&-content {
+		padding: 8px 10px;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+
+		p {
+			margin: 0;
+		}
+	}
+
+	label {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		box-sizing: border-box;
+		max-width: 100% !important;
+		margin-right: 0 !important;
+		height: 100%;
+		background: #ffffff;
+		border: 2px solid $color-inactive;
+		border-radius: 4px;
+		position: relative;
+
+		h3 {
+			margin: 0;
+		}
+
+		.component-color-indicator {
+			margin-right: 4px;
+		}
+	}
+
+	> input[type="radio"] {
+		position: absolute;
+		left: -9999px;
+		width: 0;
+		height: 0;
+		appearance: none;
+
+		+ label {
+			cursor: pointer;
+		}
+
+		&:checked + label {
+			border-color: $color-active;
+		}
+
+		&:focus + label,
+		+ label:hover {
+			border-color: $color-inactive;
+			box-shadow: 0 0 0 1px $color-inactive;
+			outline: 2px solid transparent;
+		}
+
+		&:checked:focus + label,
+		&:checked + label:hover {
+			border-color: $color-active;
+			box-shadow: 0 0 0 1px $color-active;
+			outline: 2px solid transparent;
+		}
+	}
+}
+
+/* Styling that is specific to the postbox. */
+#tablepress_options-default-style {
+	/* Adjust margin at the top of the "No JavaScript" error notice. */
+	.inside div.notice {
+		margin-top: 12px;
+	}
+}

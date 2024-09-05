@@ -1,0 +1,30 @@
+/**
+ * TablePress DataTables ColumnFilterWidgets CSS.
+ *
+ * @package TablePress
+ * @subpackage DataTables ColumnFilterWidgets
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+.column-filter-widgets {
+
+	&,
+	.column-filter-widget-menus {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 10px;
+		width: 100%;
+		margin-bottom: 0.5em;
+	}
+
+	a.filter-term {
+		display: block;
+		text-decoration: none;
+		padding-left: 10px;
+	}
+
+	a.filter-term:hover {
+		text-decoration: line-through !important;
+	}
+}

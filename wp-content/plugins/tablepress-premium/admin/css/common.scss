@@ -1,0 +1,296 @@
+/**
+ * CSS code for all TablePress admin screens
+ *
+ * @package TablePress
+ * @subpackage Views CSS
+ * @author Tobias Bäthge
+ * @since 1.0.0
+ */
+
+/* Move down the header when the Screen Options or Help tabs are opened. */
+#screen-meta[style$="block;"] ~ #tablepress-page {
+	margin-top: 40px;
+}
+
+/* Move the Screen Options and Help link to their original position. Needed due to the full-width header. */
+#screen-meta-links {
+	position: absolute;
+	right: 0;
+	z-index: 10001; /* Ensure that the tab is always above the arrow of WP feature pointers. */
+}
+
+#tablepress-page {
+	margin: 0 0 0 -20px;
+
+	/* Add space between WP core update nag and header navigation. */
+	.update-nag ~ & {
+		margin-top: 25px;
+	}
+
+	#tablepress-body {
+		padding: 0 20px;
+	}
+
+	.header {
+		background: #ffffff;
+		border-bottom: 1px solid #dedae6;
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		padding-right: 260px; /* Space for the screen meta links. */
+
+		.name {
+			border-right: 1px solid #dedae6;
+			padding: 12px 24px 6px;
+
+			img {
+				vertical-align: middle;
+				margin: 0 12px 6px 0;
+				height: 32px;
+			}
+		}
+	}
+
+	#tablepress-nav {
+		background: #ffffff;
+		padding: 0 0 0 20px;
+	}
+
+	.nav-menu {
+		margin: 0;
+		padding: 0;
+		list-style-type: none;
+		list-style-image: none;
+		display: flex;
+		flex-wrap: wrap;
+
+		.nav-item {
+			margin-bottom: 0;
+		}
+
+		li:hover > a,
+		li > a:focus {
+			border-bottom-color: #049cdb;
+			background-color: #f9f9f9;
+		}
+	}
+
+	.nav-link {
+		white-space: nowrap;
+		border-bottom: 5px solid #ffffff;
+		padding: 18px 18px 12px;
+		font-size: 14px;
+		display: inline-block;
+		text-decoration: none;
+		color: #1e1e1e;
+
+		&.active {
+			border-bottom-color: #049cdb;
+		}
+
+		&.separator {
+			margin-right: 20px;
+		}
+	}
+
+	.buttons {
+		padding: 0 12px;
+
+		.tablepress-button {
+			cursor: pointer;
+			border: 1px solid #ffffff;
+			border-radius: 3px;
+			align-items: center;
+			margin: 10px 12px;
+			padding: 6px 4px 6px 12px;
+			font-size: 14px;
+			line-height: 1;
+			text-decoration: none;
+			transition: color 0.1s, background-color 0.1s, border-color 0.1s;
+			display: inline-flex;
+			color: #ffffff;
+			background-color: #8ab547;
+			border-color: #8ab547;
+
+			&:hover,
+			&:active,
+			&:focus {
+				color: #ffffff;
+				background-color: #69b547;
+				border-color: #69b547;
+			}
+
+			&.renew {
+				background-color: #dba617;
+				border-color: #dba617;
+
+				&:hover,
+				&:active,
+				&:focus {
+					background-color: #ebb72a;
+					border-color: #ebb72a;
+				}
+			}
+
+			.dashicons {
+				margin: 0 6px 0 4px;
+			}
+		}
+	}
+
+	/* Margins for messages on screens */
+	div.notice {
+		margin: 20px 0 0;
+	}
+
+	/* Styling for the "Info" icon next to descriptions/notices. */
+	.info-text {
+		display: flex;
+		gap: 6px;
+		margin: 0;
+
+		svg {
+			min-width: 24px;
+		}
+
+		span {
+			margin-top: 2px;
+		}
+	}
+}
+
+/* Styling for the "Add New Table" form. */
+#tablepress_add-add-table {
+	.form-wrap {
+		max-width: 500px;
+	}
+
+	.form-field {
+		margin: 0;
+
+	}
+
+	/* Number of rows/columns in the "Add New Table" form. */
+	.form-field-small {
+		float: left;
+		width: 150px;
+		margin-right: 20px;
+	}
+}
+
+/* Width of the columns on the "All Tables" list. */
+.tablepress-all-tables {
+	thead {
+		.column-table_id {
+			width: 50px;
+		}
+		.column-table_name {
+			width: 30%;
+		}
+		.column-table_author {
+			width: 12%;
+		}
+		.column-table_last_modified {
+			width: 15%;
+		}
+	}
+
+	/* Font weight for the table ID column. */
+	tbody .column-table_id {
+		font-weight: bold;
+	}
+
+	/* Responsiveness on the All Tables screen. */
+	@media screen and (max-width: 782px) {
+		.column-table_id {
+			display: none !important;
+			padding: 3px 8px 3px 35%;
+		}
+	}
+}
+
+/* Positioning of Search results of WP_List_Tables. */
+#tablepress-page .subtitle {
+	float: left;
+	padding: 8px 0 0 0;
+}
+
+/* Tables in postboxes (on the "Edit" and "Plugin Options" screens). */
+.tablepress-postbox-table {
+	border-spacing: 0;
+	max-width: 1000px;
+	width: 100%;
+
+	/* Default column widths */
+	.column-1 {
+		width: 25%;
+	}
+	.column-2 {
+		width: 75%;
+	}
+
+	th {
+		text-align: left;
+		font-weight: normal;
+	}
+	th,
+	td {
+		padding: 2px;
+		word-wrap: break-word;
+	}
+	.top-border {
+		th,
+		td {
+			padding-top: 6px;
+		}
+	}
+	.bottom-border {
+		th,
+		td {
+			padding-bottom: 6px;
+			border-bottom: 1px solid #eeeeee;
+		}
+	}
+	.top-align {
+		vertical-align: top;
+		padding-top: 6px;
+	}
+}
+
+/* Select dropdown alignment. */
+#tablepress-page select {
+	vertical-align: baseline;
+}
+
+/* Alignment of textareas and buttons in postboxes. */
+#tablepress-page textarea,
+.tablepress-postbox-table .button {
+	margin: 1px;
+}
+
+/* Red color for the "Uninstall TablePress" button on the "Plugin Options" screen. */
+#uninstall-tablepress {
+	color: #bc0b0b;
+}
+
+/* Styling of pills in postbox headings. */
+.postbox .postbox-header .hndle {
+	display: inline;
+
+	.beta-label {
+		display: inline-block;
+		vertical-align: top;
+		box-sizing: border-box;
+		margin: 1px 0 -1px 6px;
+		padding: 0 5px;
+		min-width: 18px;
+		height: 18px;
+		border-radius: 9px;
+		background-color: #049cdb;
+		color: #ffffff;
+		font-size: 11px;
+		line-height: 1.6;
+		text-align: center;
+		z-index: 26;
+	}
+}
