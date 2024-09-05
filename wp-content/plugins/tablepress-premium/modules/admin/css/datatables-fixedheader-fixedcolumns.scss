@@ -1,0 +1,21 @@
+/**
+ * CSS code for "DataTables FixedHeader and FixedColumns" module on the "Edit" screen.
+ *
+ * @package TablePress
+ * @subpackage Modules
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+#tablepress_edit-datatables-fixedheader-fixedcolumns {
+	#tablepress-datatables_fixedheader-advanced-settings {
+		margin-bottom: 1rem;
+	}
+
+	.input-field-box {
+		/* Use min-width instead of width to accommodate for long translated strings. */
+		min-width: 120px;
+		width: auto;
+		height: 46px;
+	}
+}

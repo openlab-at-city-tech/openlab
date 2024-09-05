@@ -1,0 +1,23 @@
+/**
+ * CSS code for "DataTables Column Filter" module on the "Edit" screen.
+ *
+ * @package TablePress
+ * @subpackage Modules
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+#tablepress_edit-datatables-column-filter .input-field-box {
+	width: 140px;
+	height: 120px;
+
+	> label {
+		.mock-field {
+			pointer-events: none;
+			-webkit-user-select: none;
+			user-select: none;
+			width: 100%;
+			margin: 4px -1px;
+		}
+	}
+}
