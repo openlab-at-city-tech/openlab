@@ -35,7 +35,7 @@ $settings = array(
 		'sanitize'     => 'esc_url_raw',
 		'section'      => 'general_social',
 		'default'      => kadence()->default( 'twitter_link' ),
-		'label'        => esc_html__( 'Twitter', 'kadence' ),
+		'label'        => esc_html__( 'X formerly Twitter', 'kadence' ),
 	),
 	'threads_link' => array(
 		'control_type' => 'kadence_text_control',

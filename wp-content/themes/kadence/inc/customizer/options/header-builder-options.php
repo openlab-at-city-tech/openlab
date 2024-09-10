@@ -43,6 +43,13 @@ $settings = array(
 		'section'      => 'header_builder',
 		'settings'     => false,
 		'description'  => $builder_tabs,
+		'context'      => array(
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
+		),
 	),
 	'header_desktop_items' => array(
 		'control_type' => 'kadence_builder_control',
@@ -52,6 +59,11 @@ $settings = array(
 			array(
 				'setting' => '__device',
 				'value'   => 'desktop',
+			),
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
 			),
 		),
 		'partial'      => array(
@@ -123,6 +135,13 @@ $settings = array(
 		'settings'     => false,
 		'priority'     => 1,
 		'description'  => $compontent_tabs,
+		'context'      => array(
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
+		),
 	),
 	'header_desktop_available_items' => array(
 		'control_type' => 'kadence_available_control',
@@ -141,6 +160,11 @@ $settings = array(
 				'setting' => '__current_tab',
 				'value'   => 'general',
 			),
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
 		),
 	),
 	'header_mobile_items' => array(
@@ -153,6 +177,11 @@ $settings = array(
 				'setting'  => '__device',
 				'operator' => 'in',
 				'value'    => array( 'tablet', 'mobile' ),
+			),
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
 			),
 		),
 		'partial'      => array(
@@ -237,6 +266,11 @@ $settings = array(
 				'setting' => '__current_tab',
 				'value'   => 'general',
 			),
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
 		),
 	),
 	'header_transparent_link' => array(
@@ -248,6 +282,13 @@ $settings = array(
 		'input_attrs'  => array(
 			'section' => 'kadence_customizer_transparent_header',
 		),
+		'context'      => array(
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
+		),
 	),
 	'header_sticky_link' => array(
 		'control_type' => 'kadence_focus_button_control',
@@ -257,6 +298,13 @@ $settings = array(
 		'label'        => esc_html__( 'Sticky Header', 'kadence' ),
 		'input_attrs'  => array(
 			'section' => 'kadence_customizer_header_sticky',
+		),
+		'context'      => array(
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '!=',
+				'value'    => true,
+			),
 		),
 	),
 	'header_wrap_background' => array(
@@ -310,6 +358,37 @@ $settings = array(
 		),
 	),
 );
-
+if ( defined( 'KADENCE_BLOCKS_VERSION' ) && version_compare( KADENCE_BLOCKS_VERSION, '3.3.0', '>=' ) ) {
+	$settings['blocks_header'] = array(
+		'control_type' => 'kadence_switch_control',
+		'sanitize'     => 'kadence_sanitize_toggle',
+		'section'      => 'header_layout',
+		'priority'     => 30,
+		'description'  => esc_html__( 'Enable Block Header', 'kadence' ),
+		'default'      => kadence()->default( 'blocks_header' ),
+		'label'        => esc_html__( 'Enable Block Header', 'kadence' ),
+		'transport'    => 'refresh',
+	);
+	$settings['blocks_header_id'] = array(
+		'control_type' => 'kadence_select_control',
+		'section'      => 'header_layout',
+		'label'        => esc_html__( 'Header Block', 'kadence' ),
+		'transport'    => 'refresh',
+		'priority'     => 30,
+		'default'      => kadence()->default( 'blocks_header_id' ),
+		'input_attrs'  => array(
+			'options' => kadence()->block_header_options(),
+		),
+		'context'      => array(
+			array(
+				'setting'  => 'blocks_header',
+				'operator' => '=',
+				'value'    => true,
+			),
+		),
+	);
+} else {
+	$settings['blocks_header'] = array();
+}
 Theme_Customizer::add_settings( $settings );
 

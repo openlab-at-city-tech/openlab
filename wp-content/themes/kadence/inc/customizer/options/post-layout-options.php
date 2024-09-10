@@ -737,7 +737,7 @@ $kadence_post_settings = array(
 	'post_vertical_padding' => array(
 		'control_type' => 'kadence_radio_icon_control',
 		'section'      => 'post_layout',
-		'label'        => esc_html__( 'Content Vertical Padding', 'kadence' ),
+		'label'        => esc_html__( 'Content Vertical Spacing', 'kadence' ),
 		'priority'     => 10,
 		'default'      => kadence()->default( 'post_vertical_padding' ),
 		'live_method'     => array(
@@ -1024,6 +1024,84 @@ $kadence_post_settings = array(
 				),
 			),
 			'responsive' => false,
+		),
+	),
+	'post_related_title' => array(
+		'control_type' => 'kadence_text_control',
+		'section'      => 'post_layout',
+		'priority'     => 20,
+		'sanitize'     => 'sanitize_text_field',
+		'label'        => esc_html__( 'Related Posts Title', 'kadence-pro' ),
+		'default'      => kadence()->default( 'post_related_title' ),
+		'partial'      => array(
+			'selector'            => '.entry-related-title',
+			'container_inclusive' => true,
+			'render_callback'     => 'Kadence\related_posts_title',
+		),
+		'context'      => array(
+			array(
+				'setting'    => 'post_related',
+				'operator'   => '=',
+				'value'      => true,
+			),
+		),
+	),
+	'post_related_orderby' => array(
+		'control_type' => 'kadence_select_control',
+		'section'      => 'post_layout',
+		'label'        => esc_html__( 'Related Posts Order By', 'kadence' ),
+		'priority'     => 20,
+		'default'      => kadence()->default( 'post_related_orderby' ),
+		'input_attrs'  => array(
+			'options' => array(
+				'' => array(
+					'name' => __( 'Random (default)', 'kadence' ),
+				),
+				'ID' => array(
+					'name' => __( 'Post ID', 'kadence' ),
+				),
+				'author' => array(
+					'name' => __( 'Author', 'kadence' ),
+				),
+				'title' => array(
+					'name' => __( 'Post Title', 'kadence' ),
+				),
+				'name' => array(
+					'name' => __( 'Post Slug', 'kadence' ),
+				),
+				'date' => array(
+					'name' => __( 'Post Date', 'kadence' ),
+				),
+				'modified' => array(
+					'name' => __( 'Date Modified', 'kadence' ),
+				),
+				'parent' => array(
+					'name' => __( 'Parent Post ID', 'kadence' ),
+				),
+				'comment_count' => array(
+					'name' => __( 'Comment Count', 'kadence' ),
+				),
+				'menu_order' => array(
+					'name' => __( 'Menu Order', 'kadence' ),
+				),
+			),
+		),
+	),
+	'post_related_order' => array(
+		'control_type' => 'kadence_select_control',
+		'section'      => 'post_layout',
+		'label'        => esc_html__( 'Related Posts Order', 'kadence' ),
+		'priority'     => 20,
+		'default'      => kadence()->default( 'post_related_order' ),
+		'input_attrs'  => array(
+			'options' => array(
+				'' => array(
+					'name' => __( 'Descending (default)', 'kadence' ),
+				),
+				'ASC' => array(
+					'name' => __( 'Ascending', 'kadence' ),
+				),
+			),
 		),
 	),
 	'post_related_carousel_loop' => array(

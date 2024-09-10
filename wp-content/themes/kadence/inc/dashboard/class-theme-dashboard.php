@@ -275,7 +275,7 @@ class Kadence_Dashboard_Settings {
 		<div class="kadence_theme_dash_head">
 			<div class="kadence_theme_dash_head_container">
 				<div class="kadence_theme_dash_logo">
-					<img src="<?php echo esc_attr( get_template_directory_uri() . '/assets/images/kadence-logo.png' ); ?>">
+					<img src="<?php echo esc_attr( apply_filters( 'kadence_theme_dashboard_logo', get_template_directory_uri() . '/assets/images/kadence-logo.png' ) ); ?>">
 				</div>
 				<div class="kadence_theme_dash_version">
 					<span>

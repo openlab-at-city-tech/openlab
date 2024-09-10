@@ -340,14 +340,14 @@ class ColorComponent extends Component {
 															<h2>{ __('Export', 'kadence' ) }</h2>
 															<TextareaControl
 																label=""
-																help="Copy export data to use in another site."
+																help={__("Copy export data to use in another site.", 'kadence')}
 																value={ currentPaletteJson }
 																onChange={ false }
 															/>
 															<h2>{ __('Import', 'kadence' ) }</h2>
 															<TextareaControl
-																label="Import color set from text data."
-																help="Follow format from export above."
+																label={__("Import color set from text data.", 'kadence')}
+																help={__("Follow format from export above.", 'kadence')}
 																value={ this.state.textImport }
 																onChange={ ( text ) => this.setState( { textImport: text } ) }
 															/>

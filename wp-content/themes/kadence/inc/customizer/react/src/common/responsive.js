@@ -17,7 +17,7 @@ class ResponsiveControl extends Component {
 	constructor(props) {
 		super( props );
 		this.state = {
-			view: 'desktop'
+			view: undefined !== this.props.deviceSize ? this.props.deviceSize : 'desktop'
 		};
 		this.linkResponsiveButtons();
 	}

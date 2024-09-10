@@ -827,6 +827,9 @@
 			if ( ! targetAnchor ) {
 				//window.location.href = targetLink.getAttribute('href');
 				return;
+			} else if( targetAnchor?.classList?.contains('kt-accordion-pane')) {
+				//the accordion blcok does it's own js if something is trying to anchor to it, don't mess with it.
+				return;
 			}
 			e.preventDefault();
 			window.kadence.scrollToElement( targetAnchor );

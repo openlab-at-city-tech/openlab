@@ -10,6 +10,7 @@ namespace Kadence\Microdata;
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
 use function apply_filters;
+use function Kadence\kadence;
 
 /**
  * Class for managing Microdata support.
@@ -55,7 +56,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	public function print_microdata( string $context ) {
 
 		// If not using, return early.
-		if ( ! apply_filters( 'kadence_microdata', true, $context ) ) {
+		if ( ! kadence()->option( 'microdata' ) || ! apply_filters( 'kadence_microdata', true, $context ) ) {
 			return;
 		}
 

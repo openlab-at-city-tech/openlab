@@ -27,7 +27,7 @@ if ( is_singular( get_post_type() ) ) {
 			<?php the_post_thumbnail( apply_filters( 'kadence_single_featured_image_size', 'full' ), array( 'class' => 'post-top-featured') ); ?>
 		</div>
 	</div><!-- .post-thumbnail -->
-	<?php 
+	<?php
 		if ( 'behind' !== kadence()->get_feature_position() && kadence()->option( $support_slug . '_feature_caption', false ) ) {
 			$caption = get_the_post_thumbnail_caption();
 			if ( ! empty( $caption ) ) {
@@ -43,12 +43,14 @@ if ( is_singular( get_post_type() ) ) {
 		<div class="post-thumbnail-inner">
 			<?php
 			global $wp_query;
+			$thumbnail_id = get_post_thumbnail_id();
+			$alt          = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
 			if ( 0 === $wp_query->current_post ) {
 				the_post_thumbnail(
 					'post-thumbnail',
 					array(
 						'class' => 'post-top-featured',
-						'alt'   => the_title_attribute(
+						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
 							array(
 								'echo' => false,
 							)
@@ -59,7 +61,7 @@ if ( is_singular( get_post_type() ) ) {
 				the_post_thumbnail(
 					'post-thumbnail',
 					array(
-						'alt' => the_title_attribute(
+						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
 							array(
 								'echo' => false,
 							)

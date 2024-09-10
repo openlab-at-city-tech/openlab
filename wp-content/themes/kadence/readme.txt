@@ -1,10 +1,10 @@
 === Kadence ===
 Contributors: britner
 Tags: translation-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
-Requires at least: 6.2
-Tested up to: 6.4
+Requires at least: 6.3
+Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 1.2.3
+Stable tag: 1.2.9
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,43 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+== 1.2.9 | 20th August 2024 ==
+* Fix: Header settings not showing in customizer.
+
+== 1.2.8 | 19th August 2024 ==
+* Update: Header logic to work with upcoming optional block based header builder.
+* Fix: Styling with Woocommerce.
+* Fix: Styling with LifterLMS 7.7.
+* Fix: Related post order and order by settings.
+
+== 1.2.7 | 23rd July 2024 ==
+* Add: Order, orderby and title to related posts section.
+* Fix: Alt text in archive featured images.
+
+== 1.2.6 | 26th June 2024 ==
+* Add: Settings to adjust off canvas width.
+* Add: Option to disable microdata schema.
+* Add: Google Pay and Strip Link payment icons for products.
+* Update: Visa Payment Icon.
+* Update: Pro Customizer upgrade button.
+* Update: Google font options.
+* Fix: Link styles in group block.
+
+== 1.2.5 | 20th May 2024 ==
+* Add: Support for AVIF images in theme gallery.
+* Fix: Issue with footer builder covering footer.
+* Fix: Issue with content width and page title top margin in editor.
+* Fix: Typo in customizer settings
+* Fix: Issue with post title alignment on tablet.
+
+== 1.2.4 | 10th April 2024 ==
+* Add: Option for transparent header on events archive.
+* Update: Google Font choices.
+* Update: Default icons for social, X and Instagram. 
+* Fix: CSS with payments on product pages.
+* Fix: CSS with TEC single events.
+* Fix: Editor width in unboxed mode.
 
 == 1.2.3 | 21st March 2024 ==
 * Fix: CSS determining content width.

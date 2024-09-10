@@ -176,7 +176,7 @@ class Component implements Component_Interface {
 				'primary'   => \LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_primary' ),
 				'secondary' => \LearnDash_Settings_Section::get_section_setting( 'LearnDash_Settings_Theme_LD30', 'color_secondary' ),
 			);
-			if ( isset( $colors['primary'] ) && empty( $colors['primary'] ) ) {
+			if ( ( isset( $colors['primary'] ) && empty( $colors['primary'] ) ) || apply_filters( 'kadence_override_learndash_colors', false ) ) {
 				ob_start();
 				?>
 				.ld-course-list-items .ld_course_grid .thumbnail.course .ld_course_grid_price.ribbon-enrolled {

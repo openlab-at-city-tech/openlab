@@ -25,6 +25,8 @@ class ItemComponent extends Component {
 				'paypal': true,
 				'applepay': false,
 				'stripe': false,
+				'link': false,
+				'googlepay': false,
 				'card_color': 'inherit',
 				'custom_enable_01': false,
 				'custom_img_01': '',
@@ -808,6 +810,15 @@ class ItemComponent extends Component {
 								} }
 							/>
 						) }
+						{ undefined !== this.state.item.link && (
+							<ToggleControl
+								label={ __(  'Show Link?', 'kadence' ) }
+								checked={ this.state.item.link }
+								onChange={ ( value ) => {
+									this.updateValues( { link: value } );
+								} }
+							/>
+						) }
 						{ undefined !== this.state.item.paypal && (
 							<ToggleControl
 								label={ __(  'Show Paypal?', 'kadence' ) }
@@ -823,6 +834,15 @@ class ItemComponent extends Component {
 								checked={ this.state.item.applepay }
 								onChange={ ( value ) => {
 									this.updateValues( { applepay: value } );
+								} }
+							/>
+						) }
+						{ undefined !== this.state.item.googlepay && (
+							<ToggleControl
+								label={ __(  'Show Google Pay?', 'kadence' ) }
+								checked={ this.state.item.googlepay }
+								onChange={ ( value ) => {
+									this.updateValues( { googlepay: value } );
 								} }
 							/>
 						) }

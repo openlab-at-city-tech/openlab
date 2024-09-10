@@ -464,3 +464,47 @@ li.product a .secondary-product-image, .wc-block-grid__product a .secondary-prod
 		top: 0;
 	}
 }
+
+.wc-block-product-category .product-details .wc-block-grid__product-add-to-cart.wp-block-button .ajax_add_to_cart:after {
+	display: none;
+}
+// Mini Cart Block
+.wc-block-mini-cart__drawer {
+    h2.wc-block-mini-cart__title  {
+        font-size:1.4rem;
+        margin: 1.6rem 1.6rem -2.2rem;
+        padding: 0 0 2.2rem;
+    }
+    .wc-block-mini-cart__items {
+        padding: 1rem 1.6rem 0;
+    }
+    .wc-block-components-drawer__close {
+        box-shadow: none;
+    }
+    .wc-block-mini-cart__footer {
+        padding: 1.6rem;
+        &:after {
+            color: var(--global-palette6);
+        }
+    }
+}
+table.wc-block-cart-items .wc-block-components-product-name {
+    text-decoration: none;
+    color: inherit;
+    font-weight:bold;
+    &:hover {
+        text-decoration:underline;
+    }
+}
+.wc-block-mini-cart .wc-block-mini-cart__button {
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0.5rem;
+    background: transparent;
+    border:0;
+    &:hover, &:focus {
+        color:inherit;
+        box-shadow: none;
+        background: transparent;
+    }
+}

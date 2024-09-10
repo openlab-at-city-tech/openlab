@@ -10,6 +10,7 @@ namespace Kadence;
 use function Kadence\kadence;
 use function get_template_part;
 use function add_action;
+use function render_block;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -18,7 +19,16 @@ defined( 'ABSPATH' ) || exit;
  */
 function header_markup() {
 	if ( kadence()->has_header() ) {
-		get_template_part( 'template-parts/header/base' );
+		if ( kadence()->option( 'blocks_header' ) && defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+			$header_id = kadence()->option( 'blocks_header_id' );
+			if ( empty( $header_id ) ) {
+				echo '<div class="kadence-header-notice">' . esc_html__( 'Select a published Kadence Header block', 'kadence' ) . '</div>';
+			} else {
+				echo apply_filters( 'kadence_theme_the_content', '<!-- wp:kadence/header {"uniqueID":"header-replace","id":' . $header_id . '} /-->' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+		} else {
+			get_template_part( 'template-parts/header/base' );
+		}
 	}
 }
 
