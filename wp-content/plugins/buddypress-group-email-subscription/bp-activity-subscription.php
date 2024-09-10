@@ -4,8 +4,8 @@ Plugin Name: BuddyPress Group Email Subscription
 Plugin URI: http://wordpress.org/extend/plugins/buddypress-group-email-subscription/
 Description: Allows group members to receive email notifications for group activity and forum posts instantly or as daily digest or weekly summary.
 Author: Deryk Wenaus, boonebgorges, r-a-y
-Revision Date: Febrary 29, 2024
-Version: 4.2.2
+Revision Date: July 24, 2024
+Version: 4.2.3
 Text Domain: buddypress-group-email-subscription
 Domain Path: /languages
 */
@@ -17,9 +17,11 @@ Domain Path: /languages
  *
  * @var string Date string of last revision.
  */
-define( 'GES_REVISION_DATE', '2024-02-29 22:00 UTC' );
+define( 'GES_REVISION_DATE', '2024-03-24 22:00 UTC' );
 
-require __DIR__  . '/vendor/autoload.php';
+define( 'BPGES_PLUGIN_DIR', __DIR__ );
+
+require __DIR__ . '/vendor/autoload.php';
 
 HardG\BuddyPress120URLPolyfills\Loader::init();
 
@@ -38,15 +40,18 @@ function ass_loader() {
 
 	// Old BP.
 	if ( version_compare( BP_VERSION, '2.1', '<' ) ) {
-		$error = __( 'BP Group Email Subscription v4.2.0 requires BuddyPress 2.1 or higher.', 'buddypress-group-email-subscription' );
+		$error = esc_html__( 'BP Group Email Subscription v4.2.0 requires BuddyPress 2.1 or higher.', 'buddypress-group-email-subscription' );
 	} elseif ( ! bp_is_active( 'groups' ) || ! bp_is_active( 'activity' ) ) {
 		$admin_url = bp_get_admin_url( add_query_arg( array( 'page' => 'bp-components' ), 'admin.php' ) );
-		$error     = sprintf( __( 'BuddyPress Group Email Subscription requires the BP Groups and Activity components. Please <a href="%s">activate them</a> to use this plugin.', 'buddypress-group-email-subscription' ), esc_url( $admin_url ) );
+
+		// translators: URL of BP's components admin page.
+		$error = sprintf( wp_kses_post( 'BuddyPress Group Email Subscription requires the BP Groups and Activity components. Please <a href="%s">activate them</a> to use this plugin.', 'buddypress-group-email-subscription' ), esc_url( $admin_url ) );
 	}
 
 	if ( $error ) {
 		if ( current_user_can( 'bp_moderate' ) ) {
-			$error_cb = function() use ( $error ) {
+			$error_cb = function () use ( $error ) {
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '<div class="error"><p>' . $error . '</p></div>';
 			};
 
@@ -57,7 +62,7 @@ function ass_loader() {
 		return;
 	}
 
-	require_once( dirname( __FILE__ ) . '/bp-activity-subscription-main.php' );
+	require_once BPGES_PLUGIN_DIR . '/bp-activity-subscription-main.php';
 }
 add_action( 'bp_include', 'ass_loader' );
 
@@ -79,14 +84,14 @@ add_action( 'plugins_loaded', 'activitysub_textdomain' );
  */
 function activitysub_setup_defaults() {
 	// Digests.
-	require_once( dirname( __FILE__ ) . '/bp-activity-subscription-digest.php' );
+	require_once BPGES_PLUGIN_DIR . '/bp-activity-subscription-digest.php';
 	ass_set_daily_digest_time( '05', '00' );
 	ass_set_weekly_digest_time( '4' );
 
 	// Run updater on activation.
 	ass_loader();
-	require_once( dirname( __FILE__ ) . '/admin.php' );
-	require_once( dirname( __FILE__ ) . '/updater.php' );
+	require_once BPGES_PLUGIN_DIR . '/admin.php';
+	require_once BPGES_PLUGIN_DIR . '/updater.php';
 	new GES_Updater( true );
 }
 register_activation_hook( __FILE__, 'activitysub_setup_defaults' );
