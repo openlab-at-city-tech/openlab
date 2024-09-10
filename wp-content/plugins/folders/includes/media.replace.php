@@ -1222,6 +1222,13 @@ class folders_replace_media {
                     wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
                 }
 
+                if($file_ext == "svg" || $file['type'] == 'image/svg+xml') {
+                    $status = sanitizeSvgFileContent($file['tmp_name']);
+                    if(!$status) {
+                        wp_die(esc_html__("Sorry, this file type is not permitted for security reasons", "folders"));
+                    }
+                }
+
                 if (wp_attachment_is('image', $attachment_id)) {
                     $this->is_old_image = 1;
                 }

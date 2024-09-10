@@ -524,12 +524,12 @@ class WCP_Folder_Plugins
         ];
         $DS      = DIRECTORY_SEPARATOR;
         $dirName = ABSPATH."wp-content{$DS}plugins{$DS}wp-media-library-categories{$DS}";
-        if (is_dir($dirName)) {
+        if (is_dir($dirName) && class_exists('wpMediaLibraryCategories')) {
             $settings = get_option("wpmlc_settings");
             $category = isset($settings['wpmediacategory_taxonomy'])&&!empty($settings['wpmediacategory_taxonomy'])?$settings['wpmediacategory_taxonomy']:'category';
             $this->plugins['media_library_categories'] = [
                 'name'              => 'Media Library Categories',
-                'taxonomy'          => $category,
+                'taxonomy'          => esc_sql($category),
                 'folders'           => [],
                 'attachments'       => [],
                 'total_folders'     => 0,
@@ -537,6 +537,7 @@ class WCP_Folder_Plugins
                 'is_exists'         => 0,
             ];
         }
+
 
         $post_types       = get_post_types([]);
         $this->post_types = array_keys($post_types);

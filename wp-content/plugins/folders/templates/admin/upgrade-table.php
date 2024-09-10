@@ -170,6 +170,10 @@ $features = [
         'tooltip' => esc_html__("Advanced access management for your team with roles that restrict their access to view and edit your folders.", "folders")."<img src='".WCP_FOLDER_URL."assets/images/user-access.jpg' alt='".esc_html__("Metadata details on Media Library hover", "folders")."' />"
     ],
     [
+        'title' => esc_html__("Email notifications for Folders changes", "folders"),
+        'tooltip' => esc_html__("Stay informed with notifications whenever an action occurs on Folders — whether a new file is uploaded by a team member, a post is deleted, or any other change is made. Perfect for keeping track of updates.", "folders")
+    ],
+    [
         'title' => esc_html__("Clean unused media files from your Media Library", "folders"),
         'tooltip' => esc_html__("Media Cleaner will first analyze your whole WordPress and show you a list of unused media files for you to go through and delete them", "folders")
     ],
@@ -202,13 +206,17 @@ $features = [
         'tooltip' => esc_html__("Bookmark, lock/unlock or duplicate folders for faster & easier access to your favorite folders", "folders")
     ],
     [
+        'title' => esc_html__("Export and import Folders structure", "folders"),
+        'tooltip' => esc_html__("Easily export your folder structure in JSON format to back up your settings, or import structures from another WordPress account. Perfect for transferring setups, syncing across multiple sites, or sharing configurations with teammates", "folders")
+    ],
+    [
         'title' => esc_html__("Move files to trash before permanently removing", "folders"),
         'tooltip' => esc_html__("Before deleting files permanently, move them to trash to reduce accidental deletion", "folders")
     ],
     [
         'title' => esc_html__("Customize folder styles with fonts, custom colors & more", "folders"),
         'tooltip' => esc_html__("Customize folders with your preferred colors, font size, font family & more", "folders")
-    ],
+    ]
 ];
 ?>
 <div class="pricing-top">
