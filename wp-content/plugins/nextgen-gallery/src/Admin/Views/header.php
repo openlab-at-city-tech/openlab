@@ -10,6 +10,7 @@
 use Imagely\NGG\Admin\AMNotifications as Notifications;
 
 $upgrade_link        = M_Marketing::get_utm_link( 'https://www.imagely.com/lite', 'topbar', 'getnextgenpro' );
+$logo_link           = M_Marketing::get_utm_link( 'https://www.imagely.com/lite', 'wpheader', 'logo' );
 $notifications       = new Notifications();
 $notifications_count = $notifications->get_count();
 $dismissed_count     = $notifications->get_dismissed_count();
@@ -39,7 +40,7 @@ $is_pro = nextgen_is_plus_or_pro_enabled();
 
 <div id="nextgen-header" class="nextgen-header">
 	<h1 class="nextgen-logo" id="nextgen-logo">
-		<img src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/logo.png' ); ?>" alt="<?php esc_attr_e( 'Nextgen Gallery', 'nggallery' ); ?>" width="339"/>
+		<a class="nextgen-logo-link" href="<?php echo esc_url( $logo_link ); ?>" target="_blank" rel="noopener noreferrer"><img src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/logo.png' ); ?>" alt="<?php esc_attr_e( 'Nextgen Gallery', 'nggallery' ); ?>" width="339"/></a>
 	</h1>
 
 	<div class="nextgen-right">

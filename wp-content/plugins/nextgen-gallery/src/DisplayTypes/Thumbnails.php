@@ -183,9 +183,9 @@ class Thumbnails extends ParentController {
 
 				// Additional values for the carousel display view.
 				if ( ! empty( $router->get_parameter( 'pid' ) ) ) {
-					foreach ( $images as $image ) {
-						if ( $image->image_slug === $router->get_parameter( 'pid' ) ) {
-							$params['current_image'] = $image;
+					foreach ( $images as $img ) {
+						if ( $img->image_slug === $router->get_parameter( 'pid' ) ) {
+							$params['current_image'] = $img;
 						}
 					}
 					if ( isset( $pagination_result ) ) {

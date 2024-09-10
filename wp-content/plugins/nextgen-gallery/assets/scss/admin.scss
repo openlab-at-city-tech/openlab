@@ -68,6 +68,24 @@
 				width: 90%;
 			}
 		}
+
+		a.nextgen-logo-link{
+			outline: none;
+			border: none;
+			box-shadow: none;
+
+			&:focus {
+				outline: none;
+				border: none;
+				box-shadow: none;
+			}
+
+			&:active {
+				outline: none;
+				border: none;
+				box-shadow: none;
+			}
+		}
 	}
 	.nextgen-right {
 		padding-right: 20px;

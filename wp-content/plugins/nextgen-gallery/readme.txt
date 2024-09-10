@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 3.59.3
-Tested up to: 6.5
+Stable tag: 3.59.4
+Tested up to: 6.6
 License: GPLv3
 Requires PHP: 7.0
 
@@ -195,6 +195,15 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+= V3.59.4 - 07.18.2024 =
+* Fixed: Warning on WP import file
+* Added: Create gallery nudge
+* Added: Notifications count to the navbar menu
+* Fixed: Duplicated gallery name  in the Gutenberg block
+* Fixed: Gutenberg block not working when adding into the page template
+* Added: Link on the header section logo and make it clickable
+* Fixed: Duplicate thumbnail in basic thumbnails carousel
+
 = V3.59.3 - 05.29.2024 =
 * Fixed: Improved transient registration.
 * Fixed: Rendering shortcodes on rest endpoints.
