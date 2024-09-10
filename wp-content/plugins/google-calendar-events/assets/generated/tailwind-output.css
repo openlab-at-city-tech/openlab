@@ -1254,6 +1254,11 @@ video {
   color: rgb(96 188 78 / var(--tw-text-opacity));
 }
 
+.hover\:simcal-text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
 .focus\:simcal-border-b-\[3px\]:focus {
   border-bottom-width: 3px;
 }
