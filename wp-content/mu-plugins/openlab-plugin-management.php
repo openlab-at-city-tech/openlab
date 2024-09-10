@@ -79,6 +79,7 @@ function openlab_hide_plugins( $plugins ) {
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
 		'rederly.php',
+		'setmore-plus/setmore-plus.php', // #3438
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
 		'slideshare/slideshare.php',
