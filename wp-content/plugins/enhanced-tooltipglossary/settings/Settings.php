@@ -146,6 +146,10 @@ abstract class Settings {
 
         $all_option = get_option(static::abbrev('_options'), []); //array of all plugin options
 
+        if ( !is_array($all_option) ) {
+            $all_option = [];
+        }
+
         /*
          * Check if option already exists in new array
          */

@@ -5,11 +5,10 @@ Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
 Tags: glossary, vocabulary, dictionary, tooltip, lexicon
 Requires at least: 5.4.0
 Tested up to: 6.6
-Stable tag: 4.3.7
+Stable tag: 4.3.11
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
 
 Create a WordPress glossary, encyclopedia, or dictionary of terms and display responsive tooltips on hover.
 
@@ -231,6 +230,18 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 13. Import / Export
 
 == Changelog ==
+
+= 4.3.11 =
+* Improved security by fixing the XSS vulnerability
+
+= 4.3.10 =
+* Fixed access to plugin options during plugin initialization
+
+= 4.3.9 =
+* Fixed XSS issue in glossary_tooltip shortcode content
+
+= 4.3.8 =
+* Fixed XSS issue in glossary_tooltip shortcode
 
 = 4.3.7 =
 * Fixed the compatibility with Elementor
