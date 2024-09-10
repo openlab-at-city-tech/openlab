@@ -38,7 +38,9 @@ class ElementsKit_Widget_Video extends Widget_Base {
     public function get_keywords() {
         return Handler::get_keywords();
     }
-
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     public function get_help_url() {
         return 'https://wpmet.com/doc/video/';
     }

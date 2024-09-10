@@ -34,6 +34,9 @@ class ElementsKit_Widget_Ninja_Forms extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/ninja-forms/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     public function is_reload_preview_required() {
         return true;

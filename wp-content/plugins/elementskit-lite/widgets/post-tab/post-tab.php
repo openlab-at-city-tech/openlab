@@ -35,6 +35,9 @@ class ElementsKit_Widget_Post_Tab extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/how-to-add-post-tab-in-elementor/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 

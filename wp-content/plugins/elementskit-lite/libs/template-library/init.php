@@ -16,7 +16,7 @@ class Init {
 	 */
 	public function __construct() {
 		add_action('activate_gutenkit-blocks-addon/gutenkit-blocks-addon.php', array( $this, 'load_gutenkit_plugin' ), 9999);
-		add_action( 'admin_enqueue_scripts', array( $this, 'library_admin_enqueue_scripts' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'library_enqueue_block_editor_assets' ) );
 	}
 
 	/**
@@ -54,51 +54,28 @@ class Init {
 	 * @param string $screen The current admin screen.
 	 * @since 3.1.4
 	 */
-	public function library_admin_enqueue_scripts($screen) {
+	public function library_enqueue_block_editor_assets() {
 		// Enqueue block editor only JavaScript and CSS.
-		$post_editor_template_library = include self::get_dir() . 'assets/library/post-editor-template-library.asset.php';
-		$site_editor_template_library = include self::get_dir() . 'assets/library/site-editor-template-library.asset.php';
-		
-		if ( $screen === 'post.php' || $screen === 'post-new.php') {
+		if ( file_exists( self::get_dir() . 'assets/library/editor-template-library.asset.php' ) ) {
+			$editor_template_library = include self::get_dir() . 'assets/library/editor-template-library.asset.php';
 			wp_enqueue_script(
-				'gutenkit-post-editor-template-library',
-				self::get_url() . 'assets/library/post-editor-template-library.js',
-				$post_editor_template_library['dependencies'],
-				$post_editor_template_library['version'],
+				'extra-editor-template-library',
+				self::get_url() . 'assets/library/editor-template-library.js',
+				$editor_template_library['dependencies'],
+				$editor_template_library['version'],
 				true
 			);
-	
+
 			wp_enqueue_style(
-				'gutenkit-post-editor-library',
-				self::get_url() . 'assets/library/post-editor-template-library.css',
+				'extra-editor-template-library',
+				self::get_url() . 'assets/library/editor-template-library.css',
 				array(),
-				$post_editor_template_library['version']
+				$editor_template_library['version']
 			);
+
 			// Google Roboto Font
 			wp_enqueue_style(
-				'gutenkit-google-fonts', 
-				'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap'
-			);
-		}
-	
-		if ( $screen === 'site-editor.php') {
-			wp_enqueue_script(
-				'gutenkit-site-editor-library',
-				self::get_url() . 'assets/library/site-editor-template-library.js',
-				$site_editor_template_library['dependencies'],
-				$site_editor_template_library['version'],
-				true
-			);
-	
-			wp_enqueue_style(
-				'gutenkit-site-editor-library',
-				self::get_url() . 'assets/library/site-editor-template-library.css',
-				array(),
-				$site_editor_template_library['version']
-			);
-			// Google Roboto Font
-			wp_enqueue_style(
-				'gutenkit-google-fonts', 
+				'extra-google-fonts',
 				'https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,400;1,500;1,700&display=swap'
 			);
 		}

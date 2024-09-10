@@ -39,6 +39,9 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/nav-menu/';
     }
+    protected function is_dynamic_content(): bool {
+        return true;
+    }
 
     public function get_menus(){
         $list = [];

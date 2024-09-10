@@ -422,6 +422,11 @@ if ( ! class_exists( '\Oxaim\Libs\Notice' ) ) :
 					set_transient( $notice_id, true, $expired_time );
 				}
 
+				if( $notice_id == 'elementskit-lite-edit_with_emailkit_banner' ) {
+					$counter = get_option('elementskit-lite-edit_with_emailkit_banner_dismissed_'.get_current_user_id(), 0);
+					update_option('elementskit-lite-edit_with_emailkit_banner_dismissed_'.get_current_user_id(), $counter+1);
+				}
+
 				wp_send_json_success();
 			}
 

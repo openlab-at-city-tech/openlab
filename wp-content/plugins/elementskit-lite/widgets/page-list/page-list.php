@@ -34,6 +34,9 @@ class ElementsKit_Widget_Page_List extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/page-list/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
 	protected function register_controls() {
 		$this->start_controls_section(

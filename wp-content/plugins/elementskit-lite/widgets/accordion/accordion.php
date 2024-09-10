@@ -35,6 +35,9 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
         return 'https://wpmet.com/doc/accordion/';
     }
 
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     protected function register_controls() {
         
 
@@ -133,7 +136,14 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 ],
             ]
         );
-
+        $this->add_control(
+			'ekit_accordian_faq_schema',
+			[
+				'label' => esc_html__( 'Accordian FAQ Schema', 'elementskit-lite' ),
+				'type' => Controls_Manager::SWITCHER,
+				'separator' => 'before',
+			]
+        );
         $this->end_controls_section();
         // Icon setting
         $this->start_controls_section(
@@ -1036,6 +1046,30 @@ class ElementsKit_Widget_Accordion extends Widget_Base {
                 </div><!-- .elementskit-card END -->
 
                 <?php endforeach; ?>
+                <?php
+                    if ( isset( $settings['ekit_accordian_faq_schema'] ) && 'yes' === $settings['ekit_accordian_faq_schema'] ) {
+                        $json = [
+                            '@context' => 'https://schema.org',
+                            '@type' => 'FAQPage',
+                            'mainEntity' => [],
+                        ];
+
+                        foreach ( $settings['ekit_accordion_items'] as $index => $item ) {
+                            $faq_schema_text = !empty( $item['acc_content'] ) ? $item['acc_content'] : '';
+                            $json['mainEntity'][]  = [
+                                '@type' => 'Question',
+                                'name' => esc_html($item['acc_title']),
+                                'acceptedAnswer' => [
+                                    '@type' => 'Answer',
+                                    'text' =>  \ElementsKit_Lite\Utils::kses($faq_schema_text ) ,
+                                ],
+                            ];
+                        }
+                        ?>
+                        <script type="application/ld+json"><?php echo wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+                        <?php
+                    }
+                ?>
         </div>
     <?php
     }

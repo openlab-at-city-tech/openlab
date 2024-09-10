@@ -20,7 +20,14 @@
 										<div class="elementskit-commentor-content">
 											<?php if (isset($testimonial['client_logo']) && !empty($testimonial['client_logo']['url']) && sizeof($testimonial['client_logo']) > 0) { ?>
 												<div class="elementskit-client_logo">
-													<?php echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_logo', 'full'), \ElementsKit_Lite\Utils::get_kses_array());?>
+													<?php if (isset($testimonial['client_logo_active']) && sizeof($testimonial['client_logo_active']) > 0 && $testimonial['use_hover_logo'] == 'yes') : ?>
+														<?php echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_logo_active', 'full', [
+															'class'	=> 'elementskit-testimonial-client-active-logo'
+														]), \ElementsKit_Lite\Utils::get_kses_array()); ?>	
+													<?php endif; ?>
+													<?php echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_logo', 'full', [
+														'class'	=> 'elementskit-testimonial-client-logo'
+													]), \ElementsKit_Lite\Utils::get_kses_array());?>
 												</div>
 											<?php
 												} ?>

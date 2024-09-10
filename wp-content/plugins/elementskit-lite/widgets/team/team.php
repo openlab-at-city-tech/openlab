@@ -40,7 +40,9 @@ class ElementsKit_Widget_Team extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/team-2/';
     }
-
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     protected function register_controls() {
 
         // Team Content
@@ -1845,7 +1847,7 @@ class ElementsKit_Widget_Team extends Widget_Base {
                 'name' => 'ekit_team_modal_background',
                 'label' => esc_html__( 'Background', 'elementskit-lite' ),
                 'types' => [ 'classic', 'gradient' ],
-                'selector' => '{{WRAPPER}} .elementskit-team-popup .modal-content, ' . $popup_selector . ' .elementskit-team-popup .modal-content',
+                'selector' => '{{WRAPPER}} .elementskit-team-popup .modal-content, ' . $popup_selector . '.elementskit-team-popup .modal-content',
             ]
         );
 

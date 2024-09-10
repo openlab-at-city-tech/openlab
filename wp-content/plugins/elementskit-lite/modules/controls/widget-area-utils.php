@@ -19,6 +19,10 @@ class Widget_Area_Utils {
 		}
 
 		$post_id = isset($_POST['post_id']) ? intval( $_POST['post_id'] ) : 0;
+
+		if ( 'publish' !== get_post_status( $post_id ) ) {
+			wp_die();
+		}
 		
 		if ( isset( $post_id ) ) {
 			$elementor = \Elementor\Plugin::instance();

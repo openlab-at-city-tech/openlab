@@ -38,6 +38,9 @@ class ElementsKit_Widget_Blog_Posts extends Widget_Base {
     public function format_colname($str) {
         return str_replace('ekit', 'col', $str);
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 
