@@ -869,7 +869,7 @@ if (!function_exists('breadcrumb_settings_tabs_content_buy_pro')) {
             ?>
 
             <p><?php echo __('If you love our plugin and want more feature please consider to buy pro version.', 'breadcrumb'); ?></p>
-            <a class="button" href="https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a>
+            <a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a>
 
             <h2><?php echo __('See the differences', 'breadcrumb'); ?></h2>
 
@@ -990,7 +990,7 @@ if (!function_exists('breadcrumb_settings_tabs_content_buy_pro')) {
                 <tr>
                     <td class="col-features"><?php echo __('Buy now', 'breadcrumb'); ?></td>
                     <td> </td>
-                    <td><a class="button" href="https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a></td>
+                    <td><a class="button" href="https://pickplugins.com/breadcrumb/?ref=dashobard"><?php echo __('Buy premium', 'breadcrumb'); ?></a></td>
                 </tr>
 
             </table>

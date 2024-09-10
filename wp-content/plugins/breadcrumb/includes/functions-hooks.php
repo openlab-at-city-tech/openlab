@@ -1283,7 +1283,7 @@ function breadcrumb_permalink_term_ancestors($breadcrumb_items)
 
     $parents_id  = get_ancestors($term_id, $taxonomy);
     $parents_id = array_reverse($parents_id);
-
+    $breadcrumb_items_new = [];
     foreach ($parents_id as $id) {
 
         $parent_term_link = get_term_link($id, $taxonomy);
