@@ -5,6 +5,10 @@
      class CPT_Compatibility
         {
          
+            /**
+            * Constructor
+            * 
+            */
             function __construct()
                 {
                     
@@ -13,7 +17,10 @@
                 }
                 
                 
-                
+            /**
+            * Initialisation function
+            *     
+            */
             function init()
                 {
                     

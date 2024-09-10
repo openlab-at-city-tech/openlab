@@ -11,6 +11,13 @@
                                         );
 
 
+            /**
+            * Start level
+            * 
+            * @param mixed $output
+            * @param mixed $depth
+            * @param mixed $args
+            */
             function start_lvl(&$output, $depth = 0, $args = array()) 
                 {
                     $indent = str_repeat("\t", $depth);
@@ -18,6 +25,13 @@
                 }
 
 
+            /**
+            * End level
+            * 
+            * @param mixed $output
+            * @param mixed $depth
+            * @param mixed $args
+            */
             function end_lvl(&$output, $depth = 0, $args = array()) 
                 {
                     $indent = str_repeat("\t", $depth);
@@ -25,6 +39,15 @@
                 }
 
 
+            /**
+            * Start element
+            * 
+            * @param mixed $output
+            * @param mixed $page
+            * @param mixed $depth
+            * @param mixed $args
+            * @param mixed $id
+            */
             function start_el(&$output, $page, $depth = 0, $args = array(), $id = 0) 
                 {
                     if ( $depth )
@@ -46,13 +69,17 @@
                 }
 
 
+            /**
+            * End element
+            * 
+            * @param mixed $output
+            * @param mixed $page
+            * @param mixed $depth
+            * @param mixed $args
+            */
             function end_el(&$output, $page, $depth = 0, $args = array()) 
                 {
                     $output .= "</li>\n";
                 }
 
         }
-
-
-
-?>

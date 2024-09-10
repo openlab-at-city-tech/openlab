@@ -11,6 +11,10 @@
     class PTO_Compatibility_formidables
         {
                 
+            /**
+            * Constructor
+            * 
+            */
             function __construct()
                 {
                     if( !   $this->is_plugin_active())
@@ -20,6 +24,10 @@
 
                 }                        
             
+            /**
+            * Check if the plugin is active
+            * 
+            */
             function is_plugin_active()
                 {
                     
@@ -31,7 +39,14 @@
                         return FALSE;
                 }
                 
-                
+            /**
+            * Ignore a specific post type
+            *     
+            * @param TRUE $ignore
+            * @param mixed $orderBy
+            * @param mixed $query
+            * @return TRUE
+            */
             function ignore_post_types_order_sort( $ignore, $orderBy, $query ) 
                 {
                     if ( isset($query->query)  &&  !empty( $query->query['post_type'] ) &&  $query->query['post_type'] == 'frm_styles' ) 

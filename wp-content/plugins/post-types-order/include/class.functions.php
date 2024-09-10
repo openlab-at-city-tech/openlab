@@ -78,7 +78,13 @@
                 }
 
                 
-            
+            /**
+            * Gte previous post WHERE
+            * 
+            * @param mixed $where
+            * @param mixed $in_same_term
+            * @param mixed $excluded_terms
+            */
             function cpto_get_previous_post_where($where, $in_same_term, $excluded_terms)
                 {
                     global $post, $wpdb;
@@ -149,7 +155,13 @@
                     
                     return $where;
                 }
-                
+            
+            
+            /**
+            * Get the previous post sort
+            *     
+            * @param mixed $sort
+            */
             function cpto_get_previous_post_sort($sort)
                 {
                     global $post, $wpdb;
@@ -159,6 +171,14 @@
                     return $sort;
                 }
 
+                
+            /**
+            * Get the next post WHERE
+            * 
+            * @param mixed $where
+            * @param mixed $in_same_term
+            * @param mixed $excluded_terms
+            */
             function cpto_get_next_post_where($where, $in_same_term, $excluded_terms)
                 {
                     global $post, $wpdb;
@@ -230,6 +250,12 @@
                     return $where;
                 }
 
+            
+            /**
+            * Get next post sort
+            * 
+            * @param mixed $sort
+            */
             function cpto_get_next_post_sort($sort)
                 {
                     global $post, $wpdb; 
@@ -352,7 +378,7 @@
                             @unlink(FLYING_PRESS_CACHE_DIR . '/preload.txt');
 
                             // Delete all files and subdirectories
-                            $this->rrmdir( FLYING_PRESS_CACHE_DIR );
+                            FlyingPress\Purge::purge_everything();
 
                             @mkdir(FLYING_PRESS_CACHE_DIR, 0755, true);
 
@@ -372,5 +398,3 @@
                 }    
                 
         }
-
-?>

@@ -3,14 +3,14 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
-Tested up to: 6.5.3
-Stable tag: 2.2.3
+Tested up to: 6.6.1
+Stable tag: 2.2.6
 
 Sort Posts and custom Post Type Objects (custom post types) using a Drag and Drop Sortable JavaScript AJAX interface or default WordPress dashboard. 
 
 == Description ==
 
-<strong>Over 9.8 MILLIONS DOWNLOADS and near PERFECT rating out of 200 REVIEWS</strong>. <br />
+<strong>Over 12 MILLIONS DOWNLOADS and near PERFECT rating out of 200 REVIEWS</strong>. <br />
 A powerful plugin, Order Posts and Post Types Objects using a Drag and Drop Sortable JavaScript capability. 
 
 The order can be customized within **default WordPress post type archive list page** or **a separate Re-Order interface** which displays all objects.
@@ -93,6 +93,20 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 
 == Change Log ==
+
+= 2.2.6 = 
+ - Remove boolval on the filter 'pto/posts_orderby' to avoid returning wrong FALSE.
+ - FlyingPress cache lear method update.
+
+= 2.2.4 = 
+ - Add code comments hints for easier understanding and follow.
+ - Use strval when comparing strings using ===
+ - Use additional sanitize_text_field and isset checks to avoid PHP notices.
+ - Use === "strict equality" comparison operator instead simple
+ - Include the check for JetPack mobile, if plugin is active.
+ - Check if there is a post_status filter and if set to 'all' to continue scripts enqueue.
+ - New filter pto/interface/query/args to allow adjustments for the re-order interface query arguments.
+ - WordPress 6.6.1 compatibility check and tag update.
 
 = 2.2.3 = 
  - When order update, attempt to clear the site / server caches. 
