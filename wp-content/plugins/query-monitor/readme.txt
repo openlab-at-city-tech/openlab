@@ -2,8 +2,8 @@
 
 Contributors: johnbillion
 Tags: debug, debug-bar, development, performance, query monitor
-Tested up to: 6.5
-Stable tag: 3.16.3
+Tested up to: 6.6
+Stable tag: 3.16.4
 License: GPLv2 or later
 Donate link: https://github.com/sponsors/johnbillion
 
@@ -131,7 +131,7 @@ Yes. You can enable this on the Settings panel.
 
 ### How can I report a security bug?
 
-You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage, and handle any security vulnerabilities. [Report a security vulnerability here](https://patchstack.com/database/vdp/query-monitor).
+[You can report security bugs through the official Query Monitor Vulnerability Disclosure Program on Patchstack](https://patchstack.com/database/vdp/query-monitor). The Patchstack team helps validate, triage, and handle any security vulnerabilities.
 
 ### Do you accept donations?
 
@@ -140,6 +140,10 @@ You can report security bugs through the Patchstack Vulnerability Disclosure Pro
 In addition, if you like the plugin then I'd love for you to [leave a review](https://wordpress.org/support/view/plugin-reviews/query-monitor). Tell all your friends about it too!
 
 ## Changelog ##
+
+### 3.16.4 (25 July 2024) ###
+
+* Confirms support for WordPress 6.6.
 
 ### 3.16.3 (22 May 2024) ###
 
@@ -227,10 +231,6 @@ In addition, if you like the plugin then I'd love for you to [leave a review](ht
 * Improves output when the SQLite feature in the Performance Labs plugin is in use
 * Removes QM output altogether from the Customizer
 * Ensures `wp-content/db.php` from another plugin doesn't get removed when deactivating QM
-
-### 3.11.1 (3 January 2023) ###
-
-* Avoids a fatal error in PHP 8 when `posix_getpwuid()` or `posix_getgrgid()` doesn't return an expected value.
 
 ### Earlier versions ###
 
