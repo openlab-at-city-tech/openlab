@@ -412,6 +412,7 @@ class Product {
 			[
 				'name'       => rawurlencode( $this->get_name() ),
 				'edd_action' => 'view_changelog',
+				'locale'     => get_user_locale(),
 			],
 			$this->get_store_url()
 		);

@@ -39,6 +39,7 @@ abstract class Abstract_Module {
 		'multiple-pages-generator-by-porthas' => 'multiple-pages-generator-by-porthas/porthas-multi-pages-generator.php',
 		'sparks-for-woocommerce'              => 'sparks-for-woocommerce/sparks-for-woocommerce.php',
 		'templates-patterns-collection'       => 'templates-patterns-collection/templates-patterns-collection.php',
+		'wpcf7-redirect'                      => 'wpcf7-redirect/wpcf7-redirect.php',
 	];
 
 	/**
