@@ -2318,24 +2318,6 @@ if ( ! class_exists( 'AdvancedGutenbergMain' ) ) {
 				         __( 'Contact', 'advanced-gutenberg' )
 				         . '</a>
                                 </li>
-                                <li>
-                                    <a href="https://twitter.com/publishpresscom"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="ag-footer-link"
-                                    >
-                                        <span class="dashicons dashicons-twitter"></span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="https://facebook.com/publishpress"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="ag-footer-link"
-                                    >
-                                        <span class="dashicons dashicons-facebook"></span>
-                                    </a>
-                                </li>
                             </ul>
                         </nav>
                         <div class="advgb-pressshack-logo">
