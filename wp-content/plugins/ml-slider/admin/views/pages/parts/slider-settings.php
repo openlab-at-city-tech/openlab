@@ -79,20 +79,32 @@
             ),
             'links' => array(
                 'priority' => 50,
-                'type' => 'checkbox',
+                'type' => 'select',
                 'label' => __("Arrows", "ml-slider"),
                 'class' => 'option flex',
-                'checked' => $this->slider->get_setting(
-                    'links'
-                ) == 'true' ? 'checked' : '',
+                'value' => $this->slider->get_setting('links'),
                 'helptext' => __(
                     "Show the Previous / Next arrows.",
                     "ml-slider"
                 ),
+                'options' => array(
+                    'false' => array(
+                        'label' => __("Hidden", "ml-slider")
+                    ),
+                    'true' => array(
+                        'label' => __("Visible", "ml-slider")
+                    ),
+                    'onhover' => array(
+                        'label' => __("Visible On Hover", "ml-slider")
+                    )
+                ),
                 'dependencies' => array(
                     array(
                         'show' => 'mobileArrows_smartphone',
-                        'when' => true
+                        'when' => array(
+                            'true',
+                            'onhover'
+                        )
                     )
                 )
             ),
@@ -144,13 +156,13 @@
             'fullWidth' => array(
                 'priority' => 70,
                 'type' => 'checkbox',
-                'label' => esc_html__("100% width", "ml-slider"),
+                'label' => esc_html__("100% Width", "ml-slider"),
                 'class' => 'option flex nivo responsive',
                 'checked' => $this->slider->get_setting(
                     'fullWidth'
                 ) == 'true' ? 'checked' : '',
                 'helptext' => esc_html__(
-                    "Stretch the slideshow output to fill it's parent container.",
+                    "Stretch the slideshow output to fill its parent container.",
                     "ml-slider"
                 )
             ),
@@ -204,7 +216,7 @@
             'mobileArrows' => array(
                 'priority' => 1,
                 'type' => 'mobile',
-                'label' => __("Hide arrows on", "ml-slider"),
+                'label' => __("Hide Arrows On", "ml-slider"),
                 'options' => array(
                     'smartphone' => array(
                         'checked' => $this->slider->get_setting('mobileArrows_smartphone') == 'true' ? 'checked' : '',
@@ -253,7 +265,7 @@
             'mobileNavigation' => array(
                 'priority' => 2,
                 'type' => 'mobile',
-                'label' => __("Hide navigation on", "ml-slider"),
+                'label' => __("Hide Navigation On", "ml-slider"),
                 'options' => array(
                     'smartphone' => array(
                         'checked' => $this->slider->get_setting('mobileNavigation_smartphone') == 'true' ? 'checked' : '',
@@ -320,7 +332,7 @@
         'center' => array(
             'priority' => 10,
             'type' => 'checkbox',
-            'label' => esc_html__("Center align", "ml-slider"),
+            'label' => esc_html__("Center Align", "ml-slider"),
             'class' => 'option flex',
             'checked' => $this->slider->get_setting(
                 'center'
@@ -333,7 +345,7 @@
         'autoPlay' => array( // Don't target 'autoPlay' to show/hide with 'dependencies' array key
             'priority' => 20,
             'type' => 'checkbox',
-            'label' => esc_html__("Auto play", "ml-slider"),
+            'label' => esc_html__("Auto Play", "ml-slider"),
             'class' => 'option flex',
             'checked' => 'true' == $this->slider->get_setting(
                 'autoPlay'
@@ -361,12 +373,12 @@
             'type' => 'select',
             'label' => __("Loop", "ml-slider"),
             'class' => 'option flex',
-            'helptext' => __('If you choose "Loop continuously", the slides will loop infinitely. If you choose "Stop on first slide", the slideshow will stop on the first slide after showing all the items. If you choose "Stop on last slide", the slides will stop on the last slide.', 'ml-slider'),
+            'helptext' => __('If you choose "Loop continuously", the slides will loop infinitely. If you choose "Stop on first slide after looping", the slideshow will stop on the first slide after showing all the items. If you choose "Stop on last slide", the slides will stop on the last slide.', 'ml-slider'),
             'value' => $this->slider->get_setting('loop'),
             'options' => array(
-                'continuously' => array('label' => __("Loop continuously", "ml-slider"), 'class' => ''),
-                'stopOnLast' => array('label' => __("Stop on last slide", "ml-slider"), 'class' => ''),
-                'stopOnFirst' => array('label' => __("Stop on first slide", "ml-slider"), 'class' => ''),
+                'continuously' => array('label' => __("Loop Continuously", "ml-slider"), 'class' => ''),
+                'stopOnLast' => array('label' => __("Stop On Last Slide", "ml-slider"), 'class' => ''),
+                'stopOnFirst' => array('label' => __("Stop On First Slide After Looping", "ml-slider"), 'class' => ''),
             )
         ),
         'smartCrop' => array(
@@ -426,7 +438,7 @@
         'carouselMode' => array(
             'priority' => 40,
             'type' => 'checkbox',
-            'label' => esc_html__("Carousel mode", "ml-slider"),
+            'label' => esc_html__("Carousel Mode", "ml-slider"),
             'class' => 'option flex showNextWhenChecked',
             'checked' => $this->slider->get_setting(
                 'carouselMode'
@@ -465,7 +477,7 @@
             'max' => 9999,
             'step' => 1,
             'type' => 'number',
-            'label' => esc_html__("Carousel margin", "ml-slider"),
+            'label' => esc_html__("Carousel Margin", "ml-slider"),
             'class' => 'option flex',
             'value' => $this->slider->get_setting('carouselMargin'),
             'helptext' => esc_html__(
@@ -477,7 +489,7 @@
         'firstSlideFadeIn' => array(
             'priority' => 47,
             'type' => 'checkbox',
-            'label' => esc_html__("Fade in", "ml-slider"),
+            'label' => esc_html__("Fade In", "ml-slider"),
             'class' => 'option flex',
             'checked' => 'true' == $this->slider->get_setting(
                 'firstSlideFadeIn'
@@ -496,14 +508,14 @@
                 'random'
             ) == 'true' ? 'checked' : '',
             'helptext' => esc_html__(
-                "Randomise the order of the slides.",
+                "Randomize the order of the slides.",
                 "ml-slider"
             )
         ),
         'hoverPause' => array(
             'priority' => 60,
             'type' => 'checkbox',
-            'label' => esc_html__("Hover pause", "ml-slider"),
+            'label' => esc_html__("Hover Pause", "ml-slider"),
             'class' => 'option flex',
             'checked' => $this->slider->get_setting(
                 'hoverPause'
@@ -547,7 +559,7 @@
             'max' => 10000,
             'step' => 100,
             'value' => $this->slider->get_setting('delay'),
-            'label' => esc_html__("Slide delay", "ml-slider"),
+            'label' => esc_html__("Slide Delay", "ml-slider"),
             'class' => 'option flex',
             'helptext' => esc_html__(
                 "How long to display each slide, in milliseconds.",
@@ -582,7 +594,7 @@
         'direction' => array(
             'priority' => 95,
             'type' => 'select',
-            'label' => esc_html__("Slide direction", "ml-slider"),
+            'label' => esc_html__("Slide Direction", "ml-slider"),
             'class' => 'option flex',
             'helptext' => esc_html__(
                 'Select the direction that slides will move. Vertical will not work if "Carousel mode" is enabled or "Effect" is set to "Fade".',
@@ -609,7 +621,7 @@
         'easing' => array(
             'priority' => 100,
             'type' => 'select',
-            'label' => esc_html__("Easing", "ml-slider"),
+            'label' => esc_html__("Image Animation", "ml-slider"),
             'class' => 'option flex',
             'helptext' => esc_html__(
                 'Easing adds gradual acceleration and deceleration to slide transitions, rather than abrupt starts and stops. Easing only uses the "Slide" Effect.',
@@ -640,7 +652,7 @@
         'tabIndex' => array(
             'priority' => 183,
             'type' => 'checkbox',
-            'label' => esc_html__("Tabindex for navigation", "ml-slider"),
+            'label' => esc_html__("Tabindex For Navigation", "ml-slider"),
             'class' => 'option flex',
             'checked' => $this->slider->get_setting(
                 'tabIndex'
@@ -685,7 +697,7 @@
         'cssClass' => array(
             'priority' => 200,
             'type' => 'text',
-            'label' => esc_html__("CSS classes", "ml-slider"),
+            'label' => esc_html__("CSS Classes", "ml-slider"),
             'class' => 'option flex',
             'helptext' => esc_html__(
                 "Enter custom CSS classes to apply to the slider wrapper. Separate multiple classes with a space.",
@@ -724,7 +736,7 @@
         'noConflict' => array(
             'priority' => 230,
             'type' => 'checkbox',
-            'label' => esc_html__("No conflict mode","ml-slider"),
+            'label' => esc_html__("No Conflict Mode","ml-slider"),
             'class' => 'option flex',
             'checked' => $this->slider->get_setting(
                 'noConflict'
@@ -766,7 +778,7 @@
     if ( ! metaslider_viewing_trashed_slides( $this->slider->id ) ) { ?>
         <tr class="highlight trashed-slides-cont" style="<?php echo ! $count ? 'display: none;' : ''  ?>">
             <td colspan="2">
-                <?php esc_html_e( 'Trashed slides', 'ml-slider' ) ?>
+                <?php esc_html_e( 'Trashed Slides', 'ml-slider' ) ?>
             </td>
         </tr>
         <tr class="empty-row-spacing trashed-slides-cont" style="<?php echo ! $count ? 'display: none;' : ''  ?>">

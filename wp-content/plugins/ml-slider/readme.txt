@@ -1,10 +1,10 @@
-=== Slider, Gallery, and Carousel by MetaSlider - Responsive WordPress Image Slideshows ===
+=== Slider, Gallery, and Carousel by MetaSlider - Responsive WordPress Image Sliders ===
 Contributors: andergmartins, htmgarcia, publishpress, stevejburge, rochdesigns
-Tags: slideshow, slider, image slider, carousel slider, gallery, wordpress slider
+Tags: slider, slider, image slider, carousel slider, gallery
 Requires at least: 5.0
-Stable tag: 3.90.0
+Stable tag: 3.91.0
 Requires PHP: 7.0
-Tested up to: 6.5.4
+Tested up to: 6.6.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -319,6 +319,38 @@ Yes, you can build Elementor slides and Beaver Builder slideshows. You can creat
 
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.91.0] - 09 Sep, 2024 =
+
+* ADDED: Customize colors for the new themes, #1055;
+* ADDED: Nexus Theme, #1176;
+* ADDED: Allow some way to hide arrows when not hovering, #1158;
+* ADDED: Navigation Setting on Slideshow Defaults, #1197;
+* ADDED: Autoplay Setting on Slideshow Defaults, #1174;
+* ADDED: Allow users to disable the TinyMCE caption, #1183;
+* ADDED: Tiktok langding page, #1173;
+* CHANGED: Change "Easing" to "Image Animation", #1211;
+* CHANGED: Outline Theme: links can be hard to see, #1207;
+* CHANGED: Update AppSero, #1209;
+* CHANGED: Review theme_customize_base() on MetaSlider_Theme_Base and child theme classes, #1200;
+* CHANGED: Text change for "Stop on first slide", #1233;
+* FIXED: Some image slides are not showing on Carousel Mode in Safari, #1191;
+* FIXED: Databold, Bitono and Draxler themes: Slide Link doesn't work when manual caption is enabled, #1181;
+* FIXED: Fix text for new themes, #1196;
+* FIXED: Incomplete text in notice, #1106;
+* FIXED: Border for Clarity theme, #1163;
+* FIXED: Small typos, #1136;
+* FIXED: Fix capitalization in labels, #1128;
+* FIXED: custom_delay_per_slide() executed multiple times, #1186;
+* FIXED: Mobile icon is not visible for new added slides, #1184;
+* FIXED: Bitono Theme: Caption background not working when slide has a link, #1219;
+
+= [3.90.1] - 09 July, 2024 =
+
+* FIXED: Filtering notices can cause fatal errors bug, #1152;
+* FIXED: Open in new window doesn't work in TinyMCE, #1159;
+* CHANGED: Italian, Spanish and French translation updates, #1154;
+* REMOVED: Duplicate Instances, #1157;
 
 = [3.90.0] - 13 June, 2024 =
 

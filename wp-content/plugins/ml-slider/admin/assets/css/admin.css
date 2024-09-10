@@ -39,7 +39,6 @@ eventually be removed/refactored */
 .metaslider.wrap div.error {
     clear: both
 }
-
 .metaslider .left input[type=text],
 .metaslider .left textarea {
     border: 1px solid #8c8f94;
@@ -1500,7 +1499,7 @@ input.no_last_pass {
   top: 0;
   width: 100%!important;
   height: 100%!important;
-  z-index: 99999;
+  z-index: 1; /*Used to be 99999*/
   opacity: 0;
 }
 .mobile-checkbox-wrap .dashicons {
@@ -1679,6 +1678,47 @@ td .dot.available {
     padding-left: 30px;
     background-repeat: no-repeat;
     background-size: contain;
+}
+
+.static-theme-customize {
+
+    table {
+        margin-top: 20px !important;
+        margin-bottom: 0 !important;
+
+        tr {
+            border: none !important;
+
+            td {
+
+                &:first-child {
+                    padding-left: 0;
+                }
+
+                &:last-child {
+                    padding-right: 0;
+                }
+            }
+        }
+    }
+
+    .colorpicker {
+        width: 150px !important;
+    }
+
+    .wp-picker-container {
+
+        .wp-picker-input-wrap,
+        .wp-picker-holder {
+            position: absolute;
+            z-index: 9999;
+        }
+
+        .wp-color-result-text, 
+        .wp-picker-clear {
+            display: none;
+        }
+    }
 }
 
 @media only screen and (min-width : 320px) {

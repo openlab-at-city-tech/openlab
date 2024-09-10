@@ -96,9 +96,19 @@ class MetaSlider_Slideshows
         $last_modified_settings['printCss'] = true;
         $last_modified_settings['noConflict'] = true;
         $last_modified_settings['effect'] = 'slide';
-        $last_modified_settings['autoPlay'] = false;
 
+        // @since 3.91 - Use saved settings or defaults depending the case
+        $last_modified_settings['autoPlay'] = $default_settings['autoPlay'];
         
+        // @since 3.91 - Use saved settings or defaults depending the case
+        if (is_bool($default_settings['navigation'])) {
+            // Is boolean (hidden or dots)
+            $last_modified_settings['navigation'] = $default_settings['navigation'] ? 'true' : 'false';
+        } else {
+            // Is a string (thumbs or filmstrip)
+            $last_modified_settings['navigation'] = $default_settings['navigation'];
+        }
+
         /* Make sure we set a default theme if available - Pro set '_theme_default' 
          * to bypass $last_modified_settings['theme'] that takes the last saved theme configuration 
          * 
@@ -147,7 +157,7 @@ class MetaSlider_Slideshows
         $old_settings = get_post_meta($slideshow_id, 'ml-slider_settings', true);
 
         // convert submitted checkbox values from 'on' or 'off' to boolean values
-        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'links', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs', 'keyboard', 'touch', 'infiniteLoop',  'mobileArrows_smartphone', 'mobileArrows_tablet','mobileArrows_laptop', 'mobileArrows_desktop', 'mobileNavigation_smartphone', 'mobileNavigation_tablet', 'mobileNavigation_laptop', 'mobileNavigation_desktop', 'ariaLive', 'tabIndex', 'pausePlay','ariaCurrent'));
+        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs', 'keyboard', 'touch', 'infiniteLoop',  'mobileArrows_smartphone', 'mobileArrows_tablet','mobileArrows_laptop', 'mobileArrows_desktop', 'mobileNavigation_smartphone', 'mobileNavigation_tablet', 'mobileNavigation_laptop', 'mobileNavigation_desktop', 'ariaLive', 'tabIndex', 'pausePlay','ariaCurrent'));
 
         foreach ($checkboxes as $checkbox) {
             $new_settings[$checkbox] = (isset($new_settings[$checkbox]) && 'on' == $new_settings[$checkbox]) ? 'true' : 'false';

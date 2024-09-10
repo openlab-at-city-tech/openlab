@@ -220,6 +220,13 @@ body .metaslider .flexslider .flex-direction-nav li {
        -moz-transition: opacity .25s ease-in-out;
             transition: all .3s ease;
 }
+.metaslider.has-onhover-arrows .flexslider .flex-direction-nav li a {
+    opacity: 0;
+}
+.metaslider.has-onhover-arrows .flexslider .flex-direction-nav li a:hover {
+    opacity: 1;
+}
+
 .metaslider .flex-direction-nav .flex-prev {
     background-position: left 0;
     left: 10px;
