@@ -4,8 +4,8 @@ Contributors: tajam
 Tags: accessibility-ready, blog, custom-background, custom-header, custom-logo, custom-menu, editor-style, featured-images, footer-widgets, full-width-template, grid-layout, left-sidebar, right-sidebar, rtl-language-support, sticky-post, theme-options, threaded-comments, translation-ready, two-columns
 
 Requires at least: 4.5
-Tested up to: 6.3
-Stable tag: 1.7.0
+Tested up to: 6.5
+Stable tag: 1.7.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 
@@ -34,6 +34,9 @@ Miniva includes support for the following plugins:
 * AMP
 
 == Changelog ==
+
+= 1.7.1 - Apr 14 2024 =
+* Fixed styles for calendar block
 
 = 1.7.0 - Aug 6 2023 =
 * Fixed default block styles
