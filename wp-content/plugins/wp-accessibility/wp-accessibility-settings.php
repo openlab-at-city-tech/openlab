@@ -53,7 +53,7 @@ function wpa_update_settings() {
 
 			$message = __( 'Remove Title Attributes Settings Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . '</p></div>';
+			return "<div class='notice notice-success'><p>" . $message . '</p></div>';
 		}
 		if ( isset( $_POST['action'] ) && 'asl' === $_POST['action'] ) {
 			$asl_enable         = ( isset( $_POST['asl_enable'] ) ) ? 'on' : '';
@@ -78,7 +78,7 @@ function wpa_update_settings() {
 			update_option( 'asl_styles', $asl_styles );
 			$message = __( 'Skiplinks Settings Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . "</p>$notice</div>";
+			return "<div class='notice notice-success'><p>" . $message . "</p>$notice</div>";
 		}
 
 		if ( isset( $_POST['action'] ) && 'features' === $_POST['action'] ) {
@@ -92,21 +92,23 @@ function wpa_update_settings() {
 			update_option( 'wpa_post_types', $wpa_post_types );
 			$message = __( 'Accessibility Features Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . '</p></div>';
+			return "<div class='notice notice-success'><p>" . $message . '</p></div>';
 		}
 
 		if ( isset( $_POST['action'] ) && 'tools' === $_POST['action'] ) {
 			$wpa_search_alt         = ( isset( $_POST['wpa_search_alt'] ) ) ? 'on' : '';
 			$wpa_diagnostics        = ( isset( $_POST['wpa_diagnostics'] ) ) ? 'on' : '';
 			$wpa_disable_fullscreen = ( isset( $_POST['wpa_disable_fullscreen'] ) ) ? 'on' : '';
+			$wpa_disable_logout     = ( isset( $_POST['wpa_disable_logout'] ) ) ? 'on' : '';
 			$wpa_track_stats        = ( isset( $_POST['wpa_track_stats'] ) ) ? sanitize_text_field( $_POST['wpa_track_stats'] ) : '';
 			update_option( 'wpa_search_alt', $wpa_search_alt );
 			update_option( 'wpa_diagnostics', $wpa_diagnostics );
 			update_option( 'wpa_disable_fullscreen', $wpa_disable_fullscreen );
 			update_option( 'wpa_track_stats', $wpa_track_stats );
+			update_option( 'wpa_disable_logout', $wpa_disable_logout );
 			$message = __( 'Accessibility Tools Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . '</p></div>';
+			return "<div class='notice notice-success'><p>" . $message . '</p></div>';
 		}
 
 		if ( isset( $_POST['action'] ) && 'misc' === $_POST['action'] ) {
@@ -128,7 +130,7 @@ function wpa_update_settings() {
 			update_option( 'wpa_continue', $wpa_continue );
 			$message = __( 'Miscellaneous Accessibility Settings Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . '</p></div>';
+			return "<div class='notice notice-success'><p>" . $message . '</p></div>';
 		}
 
 		if ( isset( $_POST['action'] ) && 'toolbar' === $_POST['action'] ) {
@@ -154,7 +156,7 @@ function wpa_update_settings() {
 			update_option( 'wpa_toolbar_mobile', $wpa_toolbar_mobile );
 			$message = __( 'Toolbar Settings Updated', 'wp-accessibility' );
 
-			return "<div class='updated'><p>" . $message . '</p></div>';
+			return "<div class='notice notice-success'><p>" . $message . '</p></div>';
 		}
 	} else {
 		return;
@@ -186,7 +188,15 @@ function wpa_admin_settings() {
 									<?php
 								} else {
 									?>
+								<p>
+									<?php
+									// translators: link to skiplink documentation.
+									printf( __( 'If your theme does not have skip links, <a href="%s">review the skiplink documentation</a> and configure them.', 'wp-accessibility' ), 'https://docs.joedolson.com/wp-accessibility/2022/10/28/skip-links/' );
+									?>
+								</p>
+								<hr>
 								<form method="post" action="<?php echo admin_url( 'admin.php?page=wp-accessibility' ); ?>">
+									<br>	
 									<fieldset>
 										<legend><?php _e( 'Configure Skiplinks', 'wp-accessibility' ); ?></legend>
 										<ul>
@@ -281,65 +291,75 @@ function wpa_admin_settings() {
 						<div class="postbox">
 							<h2 id="toolbar" class='hndle'><?php esc_html_e( 'Accessibility Toolbar', 'wp-accessibility' ); ?></h2>
 							<div class="inside">
+								<p>
+									<?php
+									// translators: link to toolbar documentation.
+									printf( __( 'Enable a simple <a href="%s">display settings toolbar</a> with high contrast mode and text size enlarging.', 'wp-accessibility' ), 'https://docs.joedolson.com/wp-accessibility/2022/10/29/toolbar-for-high-contrast-and-large-font-styles/' );
+									?>
+								</p>
+								<hr>
 								<form method="post" action="<?php echo esc_url( admin_url( 'admin.php?page=wp-accessibility' ) ); ?>">
-									<ul>
-										<li class="wpa-checkboxes">
-											<input type="checkbox" id="wpa_toolbar" name="wpa_toolbar" <?php checked( get_option( 'wpa_toolbar' ), 'on' ); ?>/>
-											<label for="wpa_toolbar"><?php _e( 'Enable Accessibility toolbar', 'wp-accessibility' ); ?></label>
-											<ul>
-												<li>
-													<input type="checkbox" id="wpa_toolbar_fs" name="wpa_toolbar_fs" <?php checked( get_option( 'wpa_toolbar_fs', '' ), 'on' ); ?> value='on' />
-													<label for="wpa_toolbar_fs"><?php _e( 'Font size', 'wp-accessibility' ); ?></label>
-												</li>
-												<li>
-													<input type="checkbox" id="wpa_toolbar_ct" name="wpa_toolbar_ct" <?php checked( get_option( 'wpa_toolbar_ct', '' ), 'on' ); ?> value='on' />
-													<label for="wpa_toolbar_ct"><?php _e( 'Contrast', 'wp-accessibility' ); ?></label>
-												</li>
-												<li>
-													<input type="checkbox" aria-describedby="wpa_toolbar_gs_note" id="wpa_toolbar_gs" name="wpa_toolbar_gs" <?php checked( get_option( 'wpa_toolbar_gs' ), 'on' ); ?> />
-													<label for="wpa_toolbar_gs"><?php _e( 'Grayscale', 'wp-accessibility' ); ?></label> <em class="wpa-note" id="wpa_toolbar_gs_note"><?php _e( 'Grayscale is intended for testing, and will appear only for logged-in administrators', 'wp-accessibility' ); ?></em>
-												</li>
-											</ul>
-										</li>
-										<li>
-											<label for="wpa_toolbar_default"><?php _e( 'Toolbar location (optional)', 'wp-accessibility' ); ?></label><br />
-											<input type="text" id="wpa_toolbar_default" name="wpa_toolbar_default" aria-describedby="wpa_toolbar_default_description" placeholder="#" value="<?php echo esc_attr( get_option( 'wpa_toolbar_default' ) ); ?>" /> <span id="wpa_toolbar_default_description"><?php _e( 'ID attribute starting with <code>#</code>', 'wp-accessibility' ); ?></span>
-										</li>
-										<?php
-										$size = absint( get_option( 'wpa_toolbar_size' ) );
-										?>
-										<li>
-											<label for="wpa_toolbar_size"><?php _e( 'Toolbar font size', 'wp-accessibility' ); ?></label><br />
-											<select name='wpa_toolbar_size' id='wpa_toolbar_size'>
-												<option value=''><?php _e( 'Default size', 'wp-accessibility' ); ?></option>
-												<?php
-												for ( $i = 1.6; $i <= 3.8; ) {
-													$val           = ( $i * 10 ) + 2;
-													$current       = absint( $val );
-													$selected_size = ( $current === $size ) ? ' selected="selected"' : '';
-													echo "<option value='$val'$selected_size>$val px</option>";
-													$i = $i + .1;
-												}
-												?>
-											</select>
-										</li>
-										<li>
-											<input type="checkbox" id="wpa_alternate_fontsize" name="wpa_alternate_fontsize" <?php checked( get_option( 'wpa_alternate_fontsize' ), 'on' ); ?>/>
-											<label for="wpa_alternate_fontsize"><?php _e( 'Use alternate font resizing stylesheet', 'wp-accessibility' ); ?></label>
-										</li>
-										<li>
-											<input type="checkbox" id="wpa_widget_toolbar" name="wpa_widget_toolbar" <?php checked( get_option( 'wpa_widget_toolbar' ), 'on' ); ?>/>
-											<label for="wpa_widget_toolbar"><?php _e( 'Support Accessibility toolbar as shortcode or widget', 'wp-accessibility' ); ?></label>
-										</li>
-										<li>
-											<input type="checkbox" id="wpa_toolbar_right" name="wpa_toolbar_right" <?php checked( get_option( 'wpa_toolbar_right' ), 'on' ); ?>/>
-											<label for="wpa_toolbar_right"><?php _e( 'Place toolbar on opposite side of screen.', 'wp-accessibility' ); ?></label>
-										</li>
-										<li>
-											<input type="checkbox" id="wpa_toolbar_mobile" name="wpa_toolbar_mobile" <?php checked( get_option( 'wpa_toolbar_mobile' ), 'on' ); ?>/>
-											<label for="wpa_toolbar_mobile"><?php _e( 'Hide toolbar on small screens.', 'wp-accessibility' ); ?></label>
-										</li>
-									</ul>
+									<p>
+										<input type="checkbox" id="wpa_toolbar" name="wpa_toolbar" <?php checked( get_option( 'wpa_toolbar' ), 'on' ); ?>/>
+										<label for="wpa_toolbar"><?php _e( 'Enable Accessibility toolbar', 'wp-accessibility' ); ?></label>
+									</p>
+									<?php
+									$class = ( 'on' === get_option( 'wpa_toolbar' ) ) ? 'visible' : 'hidden';
+									?>
+									<div class="wpa-toolbar-settings <?php echo $class; ?>">
+										<ul>
+											<li>
+												<input type="checkbox" id="wpa_toolbar_fs" name="wpa_toolbar_fs" <?php checked( get_option( 'wpa_toolbar_fs', '' ), 'on' ); ?> value='on' />
+												<label for="wpa_toolbar_fs"><?php _e( 'Include Font size button', 'wp-accessibility' ); ?></label>
+											</li>
+											<li>
+												<input type="checkbox" id="wpa_toolbar_ct" name="wpa_toolbar_ct" <?php checked( get_option( 'wpa_toolbar_ct', '' ), 'on' ); ?> value='on' />
+												<label for="wpa_toolbar_ct"><?php _e( 'Include Contrast button', 'wp-accessibility' ); ?></label>
+											</li>
+											<li>
+												<input type="checkbox" aria-describedby="wpa_toolbar_gs_note" id="wpa_toolbar_gs" name="wpa_toolbar_gs" <?php checked( get_option( 'wpa_toolbar_gs' ), 'on' ); ?> />
+												<label for="wpa_toolbar_gs"><?php _e( 'Test with Grayscale', 'wp-accessibility' ); ?></label> <em class="wpa-note" id="wpa_toolbar_gs_note"><?php _e( 'Grayscale is intended for testing, and will appear only for logged-in administrators', 'wp-accessibility' ); ?></em>
+											</li>
+											<li>
+												<label for="wpa_toolbar_default"><?php _e( 'Toolbar location (optional)', 'wp-accessibility' ); ?></label><br />
+												<input type="text" id="wpa_toolbar_default" name="wpa_toolbar_default" aria-describedby="wpa_toolbar_default_description" placeholder="#" value="<?php echo esc_attr( get_option( 'wpa_toolbar_default' ) ); ?>" /> <span id="wpa_toolbar_default_description"><?php _e( 'ID attribute starting with <code>#</code>', 'wp-accessibility' ); ?></span>
+											</li>
+											<?php
+											$size = absint( get_option( 'wpa_toolbar_size' ) );
+											?>
+											<li>
+												<label for="wpa_toolbar_size"><?php _e( 'Toolbar font size', 'wp-accessibility' ); ?></label><br />
+												<select name='wpa_toolbar_size' id='wpa_toolbar_size'>
+													<option value=''><?php _e( 'Default size', 'wp-accessibility' ); ?></option>
+													<?php
+													for ( $i = 1.6; $i <= 3.8; ) {
+														$val           = ( $i * 10 ) + 2;
+														$current       = absint( $val );
+														$selected_size = ( $current === $size ) ? ' selected="selected"' : '';
+														echo "<option value='$val'$selected_size>$val px</option>";
+														$i = $i + .1;
+													}
+													?>
+												</select>
+											</li>
+											<li>
+												<input type="checkbox" id="wpa_alternate_fontsize" name="wpa_alternate_fontsize" <?php checked( get_option( 'wpa_alternate_fontsize' ), 'on' ); ?>/>
+												<label for="wpa_alternate_fontsize"><?php _e( 'Use alternate font resizing stylesheet', 'wp-accessibility' ); ?></label>
+											</li>
+											<li>
+												<input type="checkbox" id="wpa_widget_toolbar" name="wpa_widget_toolbar" <?php checked( get_option( 'wpa_widget_toolbar' ), 'on' ); ?>/>
+												<label for="wpa_widget_toolbar"><?php _e( 'Support Accessibility toolbar as shortcode or widget', 'wp-accessibility' ); ?></label>
+											</li>
+											<li>
+												<input type="checkbox" id="wpa_toolbar_right" name="wpa_toolbar_right" <?php checked( get_option( 'wpa_toolbar_right' ), 'on' ); ?>/>
+												<label for="wpa_toolbar_right"><?php _e( 'Place toolbar on opposite side of screen.', 'wp-accessibility' ); ?></label>
+											</li>
+											<li>
+												<input type="checkbox" id="wpa_toolbar_mobile" name="wpa_toolbar_mobile" <?php checked( get_option( 'wpa_toolbar_mobile' ), 'on' ); ?>/>
+												<label for="wpa_toolbar_mobile"><?php _e( 'Hide toolbar on small screens.', 'wp-accessibility' ); ?></label>
+											</li>
+										</ul>
+									</div>
 									<p>
 										<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce( 'wpa-nonce' ); ?>"/>
 										<input type="hidden" name="action" value="toolbar" />
@@ -353,7 +373,12 @@ function wpa_admin_settings() {
 							<h2 id="accessibility-settings" class='hndle'><?php _e( 'Accessibility Fixes', 'wp-accessibility' ); ?></h2>
 
 							<div class="inside">
-								<p><?php _e( 'Settings that fix potential accessibility issues on your site.', 'wp-accessibility' ); ?></p>
+								<p>
+									<?php
+									// translators: link to accessibility fix documentation.
+									printf( __( 'Settings that <a href="%s">fix potential accessibility issues</a> on your site.', 'wp-accessibility' ), 'https://docs.joedolson.com/wp-accessibility/category/remediation/' );
+									?>
+								</p>
 								<hr>
 								<form method="post" action="<?php echo admin_url( 'admin.php?page=wp-accessibility' ); ?>">
 									<ul>
@@ -412,7 +437,12 @@ function wpa_admin_settings() {
 						<div class="postbox">
 							<h2 class="hndle"><?php _e( 'Accessibility Features', 'wp-accessibility' ); ?></h2>
 							<div class="inside">
-								<p><?php _e( 'Enable content features to improve site accessibility.', 'wp-accessibility' ); ?></p>
+								<p>
+									<?php
+									// translators: link to accessibility content features documentation.
+									printf( __( 'Enable <a href="%s">content features to improve site accessibility</a>.', 'wp-accessibility' ), 'https://docs.joedolson.com/wp-accessibility/category/features/' );
+									?>
+								</p>
 								<hr>
 								<form method="post" action="<?php echo admin_url( 'admin.php?page=wp-accessibility' ); ?>">
 									<ul>
@@ -478,6 +508,10 @@ function wpa_admin_settings() {
 											<label for="wpa_search_alt"><?php _e( 'Include alt attribute in media library searches', 'wp-accessibility' ); ?></label> <em class="wpa-note" id="wpa_search_alt_note"><?php _e( '* May cause slow searches on large media libraries.', 'wp-accessibility' ); ?></em>
 										</li>
 										<li>
+											<input type="checkbox" id="wpa_disable_logout" name="wpa_disable_logout" <?php checked( get_option( 'wpa_disable_logout' ), 'on' ); ?> aria-describedby="wpa_logout_note" />
+											<label for="wpa_disable_logout"><?php _e( 'Disable top-level adminbar logout link', 'wp-accessibility' ); ?></label>  <em class="wpa-note" id="wpa_logout_note"><?php _e( '* Accessibility problems accessing adminbar dropdowns were fixed in WordPress 6.5.', 'wp-accessibility' ); ?></em>
+										</li>
+										<li>
 											<input type="checkbox" id="wpa_disable_fullscreen" name="wpa_disable_fullscreen" <?php checked( get_option( 'wpa_disable_fullscreen' ), 'on' ); ?>/>
 											<label for="wpa_disable_fullscreen"><?php _e( 'Disable fullscreen block editor by default', 'wp-accessibility' ); ?></label>
 										</li>
@@ -487,11 +521,11 @@ function wpa_admin_settings() {
 										</li>
 										<li>
 											<fieldset>
-												<legend><?php _e( 'Page Statistics Tracking', 'wp-accessibility' ); ?></legend>
+												<legend><?php _e( 'Statistics Tracking', 'wp-accessibility' ); ?></legend>
 												<ul>
 													<li>
 														<input type="radio" id="wpa_track_stats_none" value="off" name="wpa_track_stats" <?php checked( get_option( 'wpa_track_stats' ), 'off' ); ?>/>
-														<label for="wpa_track_stats_none"><?php _e( 'None', 'wp-accessibility' ); ?></label>
+														<label for="wpa_track_stats_none"><?php _e( 'Disabled', 'wp-accessibility' ); ?></label>
 													</li>
 													<li>
 														<input type="radio" id="wpa_track_stats_all" value="all" name="wpa_track_stats" <?php checked( get_option( 'wpa_track_stats' ), 'all' ); ?>/>
@@ -553,7 +587,7 @@ function wpa_admin_settings() {
 									$l_contrast = false;
 								}
 								if ( $l_contrast ) {
-									$results = "<div class='updated notice'>";
+									$results = "<div class='notice notice-info'>";
 									// Translators: Contrast ratio, foreground Hex color, background Hex color.
 									$results .= '<h2 class="stats wcag2">' . sprintf( __( 'Luminosity Contrast Ratio for %2$s and %3$s is %1$s (Threshold: greater than 7:1 for AAA, 4.5:1 for AA)', 'wp-accessibility' ), '<strong>' . $l_contrast . '</strong>', '<code>#' . $hex1 . '</code>', '<code>#' . $hex2 . '</code>' ) . '</h2><p>';
 									if ( $luminance_raw >= 7 ) {
@@ -628,18 +662,6 @@ function wpa_admin_sidebar() {
 					<h2 class='hndle'><?php _e( 'Support this Plugin', 'wp-accessibility' ); ?></h2>
 
 					<div class="inside">
-						<p>
-							<a href="https://twitter.com/intent/follow?screen_name=joedolson" class="twitter-follow-button" data-size="small" data-related="joedolson">Follow @joedolson</a>
-							<script>!function (d, s, id) {
-									var js, fjs = d.getElementsByTagName(s)[0];
-									if (!d.getElementById(id)) {
-										js = d.createElement(s);
-										js.id = id;
-										js.src = "https://platform.twitter.com/widgets.js";
-										fjs.parentNode.insertBefore(js, fjs);
-									}
-								}(document, "script", "twitter-wjs");</script>
-						</p>
 						<div class="wpa-flex">
 							<img src="<?php echo plugins_url( 'imgs/awd-logo-disc.png', __FILE__ ); ?>" alt="Joe Dolson Accessible Web Design" />
 							<p class="small">
@@ -652,6 +674,7 @@ function wpa_admin_sidebar() {
 					</div>
 				</div>
 				<?php wpa_edac_promotion(); ?>
+				<?php wpa_linkedin_promotion(); ?>
 
 				<div class="postbox">
 					<h2 class='hndle'><?php _e( 'Accessibility References', 'wp-accessibility' ); ?></h2>
@@ -663,7 +686,6 @@ function wpa_admin_sidebar() {
 							<li><a href="https://make.wordpress.org/themes/handbook/review/accessibility/">WordPress Theme Accessibility Guidelines</a></li>
 							<li><a href="https://www.joedolson.com/tools/color-contrast.php">Color Contrast Testing</a></li>
 							<li><a href="http://wave.webaim.org/">WAVE: Web accessibility evaluation tool</a></li>
-							<li><a href="https://www.linkedin.com/learning/wordpress-accessibility-2/">WordPress Accessibility course at LinkedIn Learning</a></li>
 						</ul>
 					</div>
 				</div>
@@ -720,6 +742,31 @@ function wpa_admin_sidebar() {
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<?php
+}
+
+/**
+ * Show LinkedIn WordPress Accessibility promotion.
+ */
+function wpa_linkedin_promotion() {
+	// translators: link to linkedin learning course page.
+	$promo_text = sprintf( __( 'Want to learn more about WordPress and Accessibility? Take my <a href="%s">WordPress Accessibility course at LinkedIn Learning</a>!', 'wp-accessibility' ), 'https://www.linkedin.com/learning/wordpress-accessibility-22376834/making-accessible-websites-using-wordpress' );
+	?>
+	<div class="postbox linkedin-course-promotion promotion">
+		<h2 class='hndle'><?php _e( 'Learn more about WordPress Accessibility', 'wp-accessibility' ); ?></h2>
+
+		<div class="inside">
+			<div class="wpa-flex">
+				<img src="<?php echo plugins_url( 'imgs/linkedin.png', __FILE__ ); ?>" alt="LinkedIn" />
+				<p class="small">
+					<?php echo wp_kses_post( $promo_text ); ?>
+				</p>
+			</div>
+			<p class="wpa-affiliate">
+				<a href="https://www.linkedin.com/learning/wordpress-accessibility-22376834/making-accessible-websites-using-wordpress"><?php _e( 'Try the Course', 'wp-accessibility' ); ?></a>
+			</p>
 		</div>
 	</div>
 	<?php
