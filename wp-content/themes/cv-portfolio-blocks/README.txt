@@ -2,9 +2,9 @@
 Contributors: wpradiant
 Tags: grid-layout, one-column, two-columns, right-sidebar, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, news, portfolio, education
 Requires at least: 6.0
-Tested up to: 6.4
-Stable tag: 1.1.3
-Requires PHP: 5.6
+Tested up to: 6.6
+Stable tag: 1.1.7
+Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -16,15 +16,86 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 
 == Changelog ==
 
-Initial release.
-Version 1.0.0
+= Version 1.1.7 =
+- Added css for view cart button.
+- Added css for shop page.
+- Added css for single product page.
+- Added search bar in 404-page.php.
+- Resolved css error for footer in mobile media.
+- Tested upto WP v6.6.
 
-Resolved issues.
-Version 1.0.1
+= Version 1.1.6 =
+- Resolved bugs.
 
-Resolved issues.
-Version 1.0.2
+= Version 1.1.5 =
+- Updated single post pages.
+- Updated archive page.
+- Updated sidebar.
+- Updated get-start.
+- Updated notice function.
 
+= Version 1.1.4 =
+- Added single-post-no-sidebar. 
+- Updated sidebar css.
+- Updated footer.
+- Updated single page typography
+- Updated single post typography
+
+= Version 1.1.3 =
+- Updated get start.
+
+= Version 1.1.2 =
+- Resolved link issues.
+
+= Version 1.1.1 =
+- Resolved pattern issue.
+- Removed sidebar on page.
+
+= Version 1.1.0 =
+- Resolved block pattern issue.
+
+= Version 1.0.9 =
+- Added sidebar on search result page.
+- Updated search header file.
+- Updated search file.
+- Resolved search page responsive css.
+- Added sidebar on page.
+
+= Version 1.0.8 =
+- Added search header.php file.
+- Added search-header on pattern.
+- Added slider button hover effect.
+- Added header menu hover color.
+- Resolved blog post issue.
+- Changed blog sidebar setting.
+
+= Version 1.0.7 =
+- Added wow js.
+- Added animation css.
+- Added animation on all section.
+
+= Version 1.0.6 =
+- 404 updated.
+- Added 404 page in patterns.
+- updated search page.
+- Added search page in patterns.
+- Responsive resolved.
+- Changed mail id.
+
+= Version 1.0.5 =
+- Some error resolved.
+- Added page right sidebar.
+- Added page left sidebar.
+- Added font-family license
+
+= Version 1.0.4 =
+- Changed admin notice function.
+- Added jost font family.
+- Added marhey font family.
+- Added roboto font family.
+- Added lato font family.
+
+= Version 1.0.3 =
 - Updated 404 page.
 - Added log-sidebar-on-left.
 - Added log-sidebar-on-right.
@@ -39,61 +110,15 @@ Version 1.0.2
 - Removed sidebar css.
 - Updated index file.
 - Updated single page.
-Version 1.0.3
 
-- Changed admin notice function.
-- Added jost font family.
-- Added marhey font family.
-- Added roboto font family.
-- Added lato font family.
-Version 1.0.4
+= Version 1.0.2 =
+- Resolved issues.
 
-- Some error resolved.
-- Added page right sidebar.
-- Added page left sidebar.
-- Added font-family license
-Version 1.0.5
+= Version 1.0.1 =
+- Resolved issues.
 
-- 404 updated.
-- Added 404 page in patterns.
-- updated search page.
-- Added search page in patterns.
-- Responsive resolved.
-- Changed mail id.
-Version 1.0.6
-
-- Added wow js.
-- Added animation css.
-- Added animation on all section.
-Version 1.0.7
-
-- Added search header.php file.
-- Added search-header on pattern.
-- Added slider button hover effect.
-- Added header menu hover color.
-- Resolved blog post issue.
-- Changed blog sidebar setting.
-Version 1.0.8
-
-- Added sidebar on search result page.
-- Updated search header file.
-- Updated search file.
-- Resolved search page responsive css.
-- Added sidebar on page.
-Version 1.0.9
-
-- Resolved block pattern issue.
-Version 1.1.0
-
-- Resolved pattern issue.
-- Removed sidebar on page.
-Version 1.1.1
-
-- Resolved link issues.
-Version 1.1.2
-
-- Updated get start.
-Version 1.1.3
+= Version 1.0.0 =
+- Initial release.
 
 == Resources ==
 
