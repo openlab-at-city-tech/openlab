@@ -3,7 +3,7 @@
         'name' => 'boonebgorges/invite-anyone',
         'pretty_version' => '1.4.x-dev',
         'version' => '1.4.9999999.9999999-dev',
-        'reference' => 'ea70634659469ec9b9400ed3acd4c61d6ea8de5b',
+        'reference' => 'f383e0c1dbdd6744fb3892c11f9b2383b8cdfae8',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'boonebgorges/invite-anyone' => array(
             'pretty_version' => '1.4.x-dev',
             'version' => '1.4.9999999.9999999-dev',
-            'reference' => 'ea70634659469ec9b9400ed3acd4c61d6ea8de5b',
+            'reference' => 'f383e0c1dbdd6744fb3892c11f9b2383b8cdfae8',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

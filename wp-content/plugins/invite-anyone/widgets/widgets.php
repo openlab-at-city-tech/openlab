@@ -51,7 +51,6 @@ class InviteAnyoneWidget extends WP_Widget {
 	 */
 	public function widget( $args, $instance ) {
 		global $bp;
-		extract( $args );
 
 		$title = isset( $instance['title'] ) ? esc_attr( $instance['title'] ) : '';
 		if ( ! apply_filters( 'widget_title', $instance['title'] ) ) {
@@ -69,11 +68,11 @@ class InviteAnyoneWidget extends WP_Widget {
 		<?php if ( invite_anyone_access_test() && $bp->current_component !== $bp->invite_anyone->slug ) : ?>
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo $before_widget;
+				echo $args['before_widget'];
 
 				if ( $title ) {
 					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					echo $before_title . esc_html( $title ) . $after_title;
+					echo $args['before_title'] . esc_html( $title ) . $args['after_title'];
 				}
 				?>
 
@@ -108,7 +107,7 @@ class InviteAnyoneWidget extends WP_Widget {
 
 				<?php
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo $after_widget;
+				echo $args['after_widget'];
 				?>
 		<?php endif; ?>
 		<?php
@@ -139,7 +138,7 @@ class InviteAnyoneWidget extends WP_Widget {
 		$instruction_text = isset( $instance['instruction_text'] ) ? esc_attr( $instance['instruction_text'] ) : __( 'Invite friends to join the site by entering their email addresses below.', 'invite-anyone' );
 
 		?>
-			<p><label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
+			<p><label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>"><?php esc_html_e( 'Title:', 'invite-anyone' ); ?> <input class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'title' ) ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" /></label></p>
 
 			<p><label for="<?php echo esc_attr( $this->get_field_id( 'instruction_text' ) ); ?>"><?php esc_html_e( 'Text to display in widget:', 'invite-anyone' ); ?>
 			<textarea class="widefat" id="<?php echo esc_attr( $this->get_field_id( 'instruction_text' ) ); ?>" name="<?php echo esc_attr( $this->get_field_name( 'instruction_text' ) ); ?>"><?php echo wp_kses_post( $instruction_text ); ?></textarea>

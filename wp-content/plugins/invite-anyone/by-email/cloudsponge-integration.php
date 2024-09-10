@@ -6,42 +6,42 @@ class Cloudsponge_Integration {
 	 *
 	 * @var bool
 	 */
-	var $enabled;
+	public $enabled;
 
 	/**
 	 * Cloudsponge domain key.
 	 *
 	 * @var string
 	 */
-	var $key;
+	public $key;
 
 	/**
 	 * Cloudsponge domain key.
 	 *
 	 * @var string
 	 */
-	var $domain_key;
+	public $domain_key;
 
 	/**
 	 * Cloudsponge account key.
 	 *
 	 * @var string
 	 */
-	var $account_key;
+	public $account_key;
 
 	/**
 	 * Cloudsponge sources.
 	 *
 	 * @var array
 	 */
-	var $sources;
+	public $sources;
 
 	/**
 	 * Whether or not to display deep links.
 	 *
 	 * @var bool
 	 */
-	var $deep_links;
+	public $deep_links;
 
 	/**
 	 * PHP 5 Constructor
@@ -49,16 +49,17 @@ class Cloudsponge_Integration {
 	 * @package Invite Anyone
 	 * @since 0.8
 	 */
-	function __construct() {
+	public function __construct() {
 
-		if ( empty( $options ) )
+		if ( empty( $options ) ) {
 			$options = get_option( 'invite_anyone' );
+		}
 
-		$this->enabled = !empty( $options['cloudsponge_enabled'] ) ? $options['cloudsponge_enabled'] : false;
-		$this->domain_key = !empty( $options['cloudsponge_key'] ) ? $options['cloudsponge_key'] : false;
-		$this->account_key = !empty( $options['cloudsponge_account_key'] ) ? $options['cloudsponge_account_key'] : false;
-		$this->sources = !empty( $options['cloudsponge_sources'] ) ? explode(",", $options['cloudsponge_sources']) : false;
-		$this->deep_links = !empty( $options['cloudsponge_deep_links'] ) ? $options['cloudsponge_deep_links'] : false;
+		$this->enabled     = ! empty( $options['cloudsponge_enabled'] ) ? $options['cloudsponge_enabled'] : false;
+		$this->domain_key  = ! empty( $options['cloudsponge_key'] ) ? $options['cloudsponge_key'] : false;
+		$this->account_key = ! empty( $options['cloudsponge_account_key'] ) ? $options['cloudsponge_account_key'] : false;
+		$this->sources     = ! empty( $options['cloudsponge_sources'] ) ? explode( ',', $options['cloudsponge_sources'] ) : false;
+		$this->deep_links  = ! empty( $options['cloudsponge_deep_links'] ) ? $options['cloudsponge_deep_links'] : false;
 
 		if ( $this->enabled && ( $this->domain_key || $this->account_key ) ) {
 			define( 'INVITE_ANYONE_CS_ENABLED', true );
@@ -73,27 +74,50 @@ class Cloudsponge_Integration {
 	 * @package Invite Anyone
 	 * @since 0.8.8
 	 */
-	function enqueue_script() {
+	public function enqueue_script() {
 
 		// Values available in the JavaScript side
 		$strings = array();
 
-		if ($this->domain_key) {
-			wp_register_script( 'ia_cloudsponge_address_books', 'https://api.cloudsponge.com/address_books.js', array(), false, true );
-			wp_register_script( 'ia_cloudsponge', plugins_url() . '/invite-anyone/by-email/cloudsponge-js.js', array( 'ia_cloudsponge_address_books' ), false, true );
-			$strings['domain_key'] = $this->domain_key;
+		if ( $this->domain_key ) {
+			wp_register_script(
+				'ia_cloudsponge_address_books',
+				'https://api.cloudsponge.com/address_books.js',
+				array(),
+				BP_INVITE_ANYONE_VER,
+				true
+			);
+
+			wp_register_script(
+				'ia_cloudsponge',
+				plugins_url() . '/invite-anyone/by-email/cloudsponge-js.js',
+				array( 'ia_cloudsponge_address_books' ),
+				BP_INVITE_ANYONE_VER,
+				true
+			);
+
+			$strings['domain_key']  = $this->domain_key;
 			$strings['account_key'] = false;
 		} else {
-			wp_register_script( 'ia_cloudsponge', plugins_url() . '/invite-anyone/by-email/cloudsponge-js.js', array(), false, true );
+			wp_register_script(
+				'ia_cloudsponge',
+				plugins_url() . '/invite-anyone/by-email/cloudsponge-js.js',
+				array(),
+				BP_INVITE_ANYONE_VER,
+				true
+			);
+
 			$strings['account_key'] = $this->account_key;
-			$strings['domain_key'] = false;
+			$strings['domain_key']  = false;
 		}
 
-		if ( $locale = apply_filters( 'ia_cloudsponge_locale', '' ) ) {
+		$locale = apply_filters( 'ia_cloudsponge_locale', '' );
+		if ( $locale ) {
 			$strings['locale'] = $locale;
 		}
 
-		if ( $stylesheet = apply_filters( 'ia_cloudsponge_stylesheet', '' ) ) {
+		$stylesheet = apply_filters( 'ia_cloudsponge_stylesheet', '' );
+		if ( $stylesheet ) {
 			$strings['stylesheet'] = $stylesheet;
 		}
 
@@ -109,10 +133,8 @@ class Cloudsponge_Integration {
 	 *
 	 * @package Invite Anyone
 	 * @since 0.8
-	 *
-	 * @param array $options Invite Anyone settings. Check em so we can bail if necessary
 	 */
-	function import_markup( $options = false ) {
+	public function import_markup() {
 		wp_enqueue_script( 'ia_cloudsponge' );
 
 		?>
@@ -122,28 +144,31 @@ class Cloudsponge_Integration {
 		<?php if ( ! $this->deep_links ) : ?>
 			<a class="cs_import"><?php esc_html_e( 'You can also add email addresses from your Address Book.', 'invite-anyone' ); ?></a>
 		<?php elseif ( $this->sources ) : ?>
-			<?php $sourcesList = self::sources_list(); ?>
+			<?php $sources_list = self::sources_list(); ?>
 
 			<?php esc_html_e( 'You can also add email addresses from one of the following address books:', 'invite-anyone' ); ?>
 
 			<?php
-			$sourcesDisplay = [];
+			$sources_display = [];
 			foreach ( $this->sources as $source ) {
-				if ( ! isset( $sourcesList[ $source ] ) ) {
+				if ( ! isset( $sources_list[ $source ] ) ) {
 					continue;
 				}
 
-				$sourcesDisplay[] = '<a class="cloudsponge-launch" data-cloudsponge-source="' . esc_attr( $source ) . '">' . esc_html( $sourcesList[ $source ]['name'] ) . '</a>';
+				$sources_display[] = '<a class="cloudsponge-launch" data-cloudsponge-source="' . esc_attr( $source ) . '">' . esc_html( $sources_list[ $source ]['name'] ) . '</a>';
 			}
 
-			echo implode( ', ', $sourcesDisplay );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo implode( ', ', $sources_display );
 			?>
-		<?php endif;
+			<?php
+		endif;
 	}
 
 	public static function sources_list() {
 		$sources = get_transient( 'cloudsponge-services' );
 		if ( false === $sources ) {
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$sources = json_decode( file_get_contents( 'https://api.cloudsponge.com/services.json' ), true );
 
 			if ( $sources ) {
@@ -156,4 +181,4 @@ class Cloudsponge_Integration {
 		return $sources;
 	}
 }
-$cloudsponge_integration = new Cloudsponge_Integration;
+$cloudsponge_integration = new Cloudsponge_Integration();
