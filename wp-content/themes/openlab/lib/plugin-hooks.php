@@ -616,7 +616,7 @@ function openlab_filter_bbpress_search_pagination_parameters( $r ) {
 		return $r;
 	}
 
-	$search_term  = wp_unslash( $_GET['bbp_search'] );
+	$search_term  = sanitize_text_field( wp_unslash( $_GET['bbp_search'] ) );
 	$search_paged = ! empty( $_GET['search_paged'] ) ? (int) $_GET['search_paged'] : 1;
 
 	$r['base']    = add_query_arg( 'bbp_search', $search_term, bp_get_group_permalink( groups_get_current_group() ) . 'forum/' ) . '&search_paged=%#%';

@@ -615,7 +615,7 @@ function openlab_group_forum_submenu() {
 
     if( isset( $_GET['bbp_search'] ) ) {
         $menu_list += [
-            $base_url . '?bbp_search=' . $_GET['bbp_search']  => 'Search Results'
+            $base_url . '?bbp_search=' . esc_attr( sanitize_text_field( wp_unslash( $_GET['bbp_search'] ) ) ) => 'Search Results'
         ];
 
         $current_item = $base_url . '?bbp_search=' . $_GET['bbp_search'];
