@@ -289,6 +289,10 @@ function enqueue_expiration_warning_notice_js() {
 		return;
 	}
 
+	if ( ! bp_is_root_blog() ) {
+		return;
+	}
+
 	$user_expiration = get_password_expiration( get_current_user_id() );
 	if ( ! $user_expiration || $user_expiration < time() ) {
 		return;
