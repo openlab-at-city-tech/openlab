@@ -16,8 +16,6 @@ class MetaSlider
     public $identifier = 0; // unique identifier
     public $slides = array(); // slides belonging to this slider
     public $settings = array(); // slider settings
-    public static $globalCounter = 0; //counter
-    private $instanceId; //instance
 
     /**
      * Constructor
@@ -29,27 +27,8 @@ class MetaSlider
     {
         $this->id = $id;
         $this->settings = array_merge($shortcode_settings, $this->get_settings());
-        self::$globalCounter++;
-        $this->instanceId = self::$globalCounter;
-        if ($this->instanceId == 1) {
-            $this->identifier = 'metaslider_' . $this->id;
-        } else {
-            $this->identifier = 'metaslider_' . $this->id . '_' .  $this->instanceId;
-        }
-        
-        $this->populate_slides();  
-    }
-
-    /**
-     * global counter for multiple instance per page
-     *
-     */
-    public function getInstanceId() {
-        return $this->instanceId;
-    }
-
-    public static function getGlobalCounter() {
-        return self::$globalCounter;
+        $this->identifier = 'metaslider_' . $this->id;
+        $this->populate_slides();
     }
 
     /**
@@ -150,7 +129,7 @@ class MetaSlider
             'carouselMargin' => 5,
             'firstSlideFadeIn' => false,
             'easing' => 'linear',
-            'autoPlay' => false,
+            'autoPlay' => true,
             'thumb_width' => 150,
             'thumb_height' => 100,
             'responsive_thumbs' => true,
@@ -383,6 +362,11 @@ class MetaSlider
             $class .= ' hide-navigation-desktop';
         }
 
+        //arrows class
+        if ('onhover' == $this->get_setting('links')) {
+            $class .= ' has-onhover-arrows';
+        }
+
         // handle any custom classes
         $class = apply_filters('metaslider_css_classes', $class, $this->id, $this->settings);
         return $class;
@@ -511,7 +495,7 @@ class MetaSlider
 
         // theme/plugin conflict avoidance
         if ('true' === $this->get_setting('noConflict') && 'flex' === $type) {
-            $javascript = "$('#{$this->identifier}').addClass('flexslider');";
+            $javascript = "$('#metaslider_{$this->id}').addClass('flexslider');";
         }
 
         $custom_js = apply_filters("metaslider_{$type}_slider_javascript_before", $javascript, $this->id);

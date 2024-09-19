@@ -6,7 +6,7 @@ ob_end_clean();
 $cminds_plugin_config = array(
 	'plugin-is-pro'                 => false,
 	'plugin-has-addons'             => true,
-	'plugin-version'                => '4.3.7',
+	'plugin-version'                => '4.3.11',
 	'plugin-abbrev'                 => 'cmtt',
 	'plugin-affiliate'              => '',
 	'plugin-redirect-after-install' => admin_url( 'admin.php?page=cmtt_settings' ),
@@ -67,3 +67,4 @@ $cminds_plugin_config = array(
 	'plugin-licensing-aliases'      => array( CMTT_LICENSE_NAME ),
 	'plugin-compare-table'          => $plugin_compare_table,
 );
+?>

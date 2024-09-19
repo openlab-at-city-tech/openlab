@@ -2,8 +2,8 @@
 Contributors: publishpress, stevejburge, htmgarcia
 Tags: gutenberg, gutenberg blocks, gutenberg block, block editor, blocks, accordion block, gallery block, slider block, tabs block, maps block, block controls
 Requires at least: 5.5
-Tested up to: 6.5.3
-Stable tag: 3.2.2
+Tested up to: 6.6.1
+Stable tag: 3.2.4
 Requires PHP: 7.2.5
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -269,6 +269,20 @@ Yes, we use the phrase "publishpress-advg-install" to share install links. You w
 16. Block Styles: You create custom CSS styles for blocks and make them available to end users.
 
 == Changelog ==
+
+= 3.2.4 - 05 Aug 2024 =
+  * FIX: Calendar popup odd behavior in Block controls, #1261;
+  * FIX: Weekdays design is wrong, #1388;
+  * FIX: Empty columns inside tabs looks flat, #1264;
+  * FIX: Stripes thumbnail doesn't have stripes design in Table block, #212;
+  * ADD: Bahasa translation, #1340;
+  * CHANGE: Remove social icons in footer, #1358;
+  * CHANGE: Update to Babel 7, #1330;
+  * CHANGE:  Update to Webpack 5, #1393;
+  * CHANGE: Translations for Spanish, French and Italian, #1400;
+
+= 3.2.3 - 29 Jul 2024 =
+  * FIX: Blocks inserted as synced patterns freezes the Gutenberg editor, #1389;
 
 = 3.2.2 - 13 May 2024 =
   * FIX: Tab titles, #1372;

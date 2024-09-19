@@ -782,7 +782,7 @@
 					if ( undefined !== rule['key'] && 'measure' === rule['key'] ) {
 						if ( 'object' == typeof newValue[ 'size' ] && undefined !== newValue[ 'size' ]['desktop'] ) {
 							if ( undefined !== newValue[ 'size' ]['desktop'] ) {
-								var unit = ( undefined !== newValue[ 'unit' ] && undefined !== newValue[ 'unit' ]['desktop'] ? newValue[ 'unit' ]['desktop'] : 'px' );
+								var unit = ( undefined !== newValue?.[ 'unit' ] && undefined !== newValue?.[ 'unit' ]?.['desktop'] ? newValue[ 'unit' ]['desktop'] : 'px' );
 								formattedValue = ( '' !== newValue[ 'size' ]['desktop'][0] ? newValue[ 'size' ]['desktop'][0] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['desktop'][1] ? newValue[ 'size' ]['desktop'][1] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['desktop'][2] ? newValue[ 'size' ]['desktop'][2] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['desktop'][3] ? newValue[ 'size' ]['desktop'][3] : '0' ) + unit;
 								// Define properties.
 								if ( undefined == cssArray[ rule['media'] ] ) cssArray[ rule['media'] ] = {};
@@ -790,7 +790,7 @@
 								cssArray[ rule['media'] ][ rule['selector'] ][ rule['property'] ] = formattedValue;
 							}
 							if ( undefined !== newValue[ 'size' ]['tablet'] ) {
-								var unit = ( undefined !== newValue[ 'unit' ]['tablet'] ? newValue[ 'unit' ]['tablet'] : '' );
+								var unit = ( undefined !== newValue?.[ 'unit' ]?.['tablet'] ? newValue[ 'unit' ]['tablet'] : '' );
 								formattedValue = ( '' !== newValue[ 'size' ]['tablet'][0] ? newValue[ 'size' ]['tablet'][0] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['tablet'][1] ? newValue[ 'size' ]['tablet'][1] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['tablet'][2] ? newValue[ 'size' ]['tablet'][2] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['tablet'][3] ? newValue[ 'size' ]['tablet'][3] : '0' ) + unit;
 								// Define properties.
 								if ( undefined == cssArray[ media_tablet ] ) cssArray[ media_tablet ] = {};
@@ -798,7 +798,7 @@
 								cssArray[ media_tablet ][ rule['selector'] ][ rule['property'] ] = formattedValue;
 							}
 							if ( undefined !== newValue[ 'size' ]['mobile'] ) {
-								var unit = ( undefined !== newValue[ 'unit' ]['mobile'] ? newValue[ 'unit' ]['mobile'] : '' );
+								var unit = ( undefined !== newValue?.[ 'unit' ]?.['mobile'] ? newValue[ 'unit' ]['mobile'] : '' );
 								formattedValue = rule['pattern'].replace( '$', newValue[ 'size' ]['mobile'] + unit );
 								formattedValue = ( '' !== newValue[ 'size' ]['mobile'][0] ? newValue[ 'size' ]['mobile'][0] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['mobile'][1] ? newValue[ 'size' ]['mobile'][1] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['mobile'][2] ? newValue[ 'size' ]['mobile'][2] : '0' ) + unit + ' ' + ( '' !== newValue[ 'size' ]['mobile'][3] ? newValue[ 'size' ]['mobile'][3] : '0' ) + unit;
 								// Define properties.

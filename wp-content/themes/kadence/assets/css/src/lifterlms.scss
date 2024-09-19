@@ -315,6 +315,8 @@
     background: transparent;
     margin: 0;
     padding-bottom: 0;
+	border: 0;
+	border-radius: 0;
 	&:hover {
 		background: transparent;
 	}
@@ -389,7 +391,7 @@ body:not( .elementor-page ) .llms-loop-item-content {
 		color: var(--global-palette-btn-hover);
 	}
 }
-.llms-button-secondary {
+.llms-button-secondary, a.llms-button-secondary {
 	background: var(--global-palette7);
 	color: var(--global-palette-highlight);
 	&:hover {
@@ -402,7 +404,7 @@ body:not( .elementor-page ) .llms-loop-item-content {
 		.llms-student-dashboard {
 			padding-right: 33%;
 			position: relative;
-			min-height: 500px;
+			min-height: 600px;
 		}
 		nav.llms-sd-nav {
 			position: absolute;
@@ -415,7 +417,7 @@ body:not( .elementor-page ) .llms-loop-item-content {
 		.llms-student-dashboard {
 			padding-left: 33%;
 			position: relative;
-			min-height: 500px;
+			min-height: 600px;
 		}
 		nav.llms-sd-nav {
 			position: absolute;
@@ -442,7 +444,8 @@ body:not( .elementor-page ) .llms-loop-item-content {
     font-weight: bold;
 }
 .llms-student-dashboard .llms-sd-item {
-    float: none;
+	float: none;
+	display: block;
 }
 .llms-student-dashboard .llms-sd-item .llms-sep {
     display: none;
@@ -538,5 +541,18 @@ body:not( .elementor-page ) .llms-loop-item-content {
     box-shadow:none;
 }
 .elementor-widget-le-course-list .llms-loop .llms-loop-list .llms-loop-item-content {
-    margin: 10px;
+	margin: 10px;
+}
+
+// 7.7 Fixes
+.llms-student-dashboard.dashboard .llms-sd-section {
+	border: 0;
+	padding: 0;
+}
+.llms-form-fields label:not(.llms-field-html label) {
+	font-weight: 400;
+}
+.llms-loop-item-content .llms-loop-title {
+	margin-top: 5px;
+	margin-bottom: 0;
 }

@@ -348,7 +348,7 @@ if (typeof wp !== 'undefined' && typeof wp.Uploader === 'function') {
 
                     var file_type = error.file.type;
                     if(file_type.indexOf("svg") != -1 && !jQuery(".upload-error.fldr-svg-error").length > 0 ) {
-                        var success_msg = '<div class="upload-error fldr-svg-error"><strong>'+folders_media_options.lang.activate_msg+'</strong><br /><a target="_blank" href="'+folders_media_options.activate_url+'"> '+folders_media_options.lang.activate_key+' 🎉</a></div>';
+                        var success_msg = '<div class="upload-error fldr-svg-error"><strong>'+folders_media_options.lang.pro_message+'</strong><br /><a target="_blank" href="'+folders_media_options.activate_url+'"> '+folders_media_options.lang.activate_key+' 🎉</a></div>';
                         jQuery(".media-sidebar .upload-errors").append(success_msg);
                     }
                 });

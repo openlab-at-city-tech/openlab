@@ -60,11 +60,13 @@ function openlab_hide_plugins( $plugins ) {
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
+		'highlighter-pro/highlighter.php', // #3438
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
+		'openlab-gradebook/GradeBook.php', // #3435
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
 		'page-links-to/page-links-to.php',
@@ -77,6 +79,8 @@ function openlab_hide_plugins( $plugins ) {
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
 		'rederly.php',
+		'setmore-plus/setmore-plus.php', // #3438
+		'share-this/sharethis.php', // #3438
 		'simple-drop-cap/simple-drop-cap.php',
 		'simple-pull-quote/simple-pull-quote.php',
 		'slideshare/slideshare.php',

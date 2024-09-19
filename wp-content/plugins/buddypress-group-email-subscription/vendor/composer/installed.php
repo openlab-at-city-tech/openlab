@@ -3,7 +3,7 @@
         'name' => 'boonebgorges/buddypress-group-email-subscription',
         'pretty_version' => '4.2.1',
         'version' => '4.2.1.0',
-        'reference' => NULL,
+        'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'boonebgorges/buddypress-group-email-subscription' => array(
             'pretty_version' => '4.2.1',
             'version' => '4.2.1.0',
-            'reference' => NULL,
+            'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

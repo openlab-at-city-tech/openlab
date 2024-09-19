@@ -37,6 +37,17 @@
 				<template slot="header">{{ __('100% Width', 'ml-slider') }}</template>
 				<template slot="description">{{ __('While the width and height defined above will be used for cropping (if enabled) and the base slideshow dimensions, you may also set the slideshow to stretch to its container.', 'ml-slider') }}</template>
 			</switch-single-input>
+			<select-field-input 
+				v-model="slideshowDefaults.navigation" 
+				:options="navigationOptions" 
+				@click="saveSlideshowDefaultSettings()">
+				<template slot="header">{{ __('Navigation', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Change the default navigation when creating a new slideshow. Show options so that users can browse the slides.', 'ml-slider') }}</template>
+			</select-field-input>
+			<switch-single-input v-model="slideshowDefaults.autoPlay" @change="saveSlideshowDefaultSettings()">
+				<template slot="header">{{ __('Auto Play', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Change the default transition between slides automatically when creating a new slideshow.', 'ml-slider') }}</template>
+			</switch-single-input>
 		</template>
 	</split-layout>
     <split-layout :loading="loading" class="lg:mt-6">
@@ -133,6 +144,10 @@
 				<template slot="header">{{ __('Disable Legacy Widget', 'ml-slider') }}</template>
 				<template slot="description">{{ __('This setting allows you to disable the legacy MetaSlider widget.', 'ml-slider') }}</template>
 			</switch-single-input>
+			<switch-single-input v-model="globalSettings.tinyMce" @change="saveGlobalSettings()">
+				<template slot="header">{{ __('Enable TinyMCE', 'ml-slider') }}</template>
+				<template slot="description">{{ __('TinyMCE is a WYSIWYG editor you can use in slide captions.', 'ml-slider') }}</template>
+			</switch-single-input>
 		</template>
 	</split-layout>
 	<!-- Pro settings -->
@@ -182,6 +197,8 @@ export default {
 			slideshowDefaults: {
 				title: '',
 				fullWidth: false,
+				navigation: true,
+				autoPlay: true,
 				width: 0,
 				height: 0,
 				smartphone: 480,
@@ -197,7 +214,8 @@ export default {
 				legacy: true,
 				newSlideOrder: 'last',
 				mobileSettings: true,
-				legacyWidget: true
+				legacyWidget: true,
+				tinyMce: true
 			},
 			proSettings: {
 				postFeedFields: 30,
@@ -227,6 +245,26 @@ export default {
 
 			}
 			return this.form.validated;
+		},
+		navigationOptions() {
+			const baseOptions = [
+				{ value: false, label: this.__('Hidden', 'ml-slider') },
+				{ value: true, label: this.__('Dots', 'ml-slider') }
+			];
+
+			return [
+				...baseOptions,
+				{ 
+					value: 'thumbs', 
+					label: this.isPro() ? this.__('Thumbnail', 'ml-slider') : this.__('Thumbnail (Pro)', 'ml-slider'), 
+					disabled: !this.isPro() 
+				},
+				{ 
+					value: 'filmstrip', 
+					label: this.isPro() ? this.__('Filmstrip', 'ml-slider') : this.__('Filmstrip (Pro)', 'ml-slider'),  
+					disabled: !this.isPro() 
+				}
+			];
 		}
 	},
 	created() {

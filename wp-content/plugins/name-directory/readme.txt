@@ -6,8 +6,8 @@ Donate link: https://ko-fi.com/jeroenpeters
 Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
-Tested up to: 6.5
-Stable tag: 1.29.0
+Tested up to: 6.7
+Stable tag: 1.29.1
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -249,6 +249,12 @@ If you want me to do custom, paid work for you, you can get in touch by [contact
 
 Yes, I do. For this I offer paid help. Please contact me at [my website](https://jeroenpeters.dev/contact) to discuss this.
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program.
+The Patchstack team helps validate, triage and handle any security vulnerabilities.
+[Report a security vulnerability.](https://patchstack.com/database/vdp/name-directory)
+
 
 == Screenshots ==
 
@@ -262,6 +268,12 @@ Yes, I do. For this I offer paid help. Please contact me at [my website](https:/
 
 
 == Changelog ==
+
+= 1.29.1 | August 14, 2024 =
+ * Enhancement: Tested with WordPress 6.6
+ * Enhancement: Tested up to WordPress 6.7
+ * Bugfix: escape searchterm in the WordPress admin
+ * Bugfix: add extra permission-check in ajax-status calls
 
 = 1.29.0 | March 25, 2024 =
  * Enhancement: Improved sorting with diacritic characters

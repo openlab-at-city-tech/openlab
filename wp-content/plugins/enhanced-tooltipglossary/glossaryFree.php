@@ -3111,6 +3111,7 @@ class CMTT_Free {
 
 			$class          = 'glossaryLink';
 			$tooltipContent = self::getTooltipContent( $glossary_item );
+
 			$attributes     = array_merge(
 				$attributes,
 				array(
@@ -4173,7 +4174,7 @@ class CMTT_Free {
 			}
 		}
 		if ( empty( $wrappedContent ) ) {
-			$wrappedContent = '<div class=glossaryItemBody>' . $atts['content'] . '</div>';
+			$wrappedContent = '<div class=glossaryItemBody>' . wp_kses_post($atts['content']) . '</div>';
 		}
 
 		if ( ! empty( $atts['bgcolor'] ) ) {
@@ -4207,7 +4208,8 @@ class CMTT_Free {
 			$tooltip = sprintf( '%s<div class="cm-tooltip-more-content" %s>%s %s</div>',
 				$readmore,
 				$hideStyle,
-				html_entity_decode( $wrappedContent ),
+				//html_entity_decode( $wrappedContent ),
+				$wrappedContent,
 				$readless
 			);
 		} else {

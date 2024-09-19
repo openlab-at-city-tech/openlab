@@ -8,10 +8,10 @@
  * @since 0.8
  */
 class Invite_Anyone_Schema {
-	var $post_type_name;
-	var $invitee_tax_name;
-	var $invited_groups_tax_name;
-	var $db_version;
+	public $post_type_name;
+	public $invitee_tax_name;
+	public $invited_groups_tax_name;
+	public $db_version;
 
 	/**
 	 * PHP5 Constructor
@@ -19,11 +19,11 @@ class Invite_Anyone_Schema {
 	 * @package Invite Anyone
 	 * @since 0.8
 	 */
-	function __construct() {
+	public function __construct() {
 		global $current_blog;
 
 		// There's no reason for the CPT to be loaded on non-root-blogs
-		if ( is_multisite() && $current_blog->blog_id != BP_ROOT_BLOG ) {
+		if ( is_multisite() && ! bp_is_root_blog( $current_blog->blog_id ) ) {
 			return;
 		}
 
@@ -33,7 +33,7 @@ class Invite_Anyone_Schema {
 		// Check for necessary updates to data schema
 		$this->update();
 
-		if ( $this->db_version != BP_INVITE_ANYONE_DB_VER ) {
+		if ( BP_INVITE_ANYONE_DB_VER !== $this->db_version ) {
 			update_option( 'invite_anyone_db_version', BP_INVITE_ANYONE_DB_VER );
 			$this->db_version = BP_INVITE_ANYONE_DB_VER;
 		}
@@ -57,103 +57,138 @@ class Invite_Anyone_Schema {
 	 * Data schema:
 	 * - The ia_invites post type represents individual invitations, with post data divvied up
 	 *   as follows:
-	 *     	- post_title is the subject of the email sent
-	 *     	- post_content is the content of the email
-	 *     	- post_author is the person sending the invitation
-	 *     	- post_date is the date/time when the invitation is sent
-	 *     	- post_status represents 'is_hidden' on the old custom table schema:
-	 *      	- Default is 'publish' - i.e. the user sees the invitation on Sent Invites
-	 *     		- When the invitation is hidden, it is switched to 'draft'
+	 *      - post_title is the subject of the email sent
+	 *      - post_content is the content of the email
+	 *      - post_author is the person sending the invitation
+	 *      - post_date is the date/time when the invitation is sent
+	 *      - post_status represents 'is_hidden' on the old custom table schema:
+	 *          - Default is 'publish' - i.e. the user sees the invitation on Sent Invites
+	 *          - When the invitation is hidden, it is switched to 'draft'
 	 * - The ia_invitees taxonomy represents invited email addresses
 	 * - The ia_invited_groups taxonomy represents the groups that a user has been invited to
 	 *   when the group invitation is sent
 	 * - The following data is stored in postmeta:
-	 * 	- opt_out (corresponds to old is_opt_out) is stored at opt_out time
-	 *	- The invitation accepted date is stored in a post_meta called bp_ia_accepted
+	 *  - opt_out (corresponds to old is_opt_out) is stored at opt_out time
+	 *  - The invitation accepted date is stored in a post_meta called bp_ia_accepted
 	 *
 	 * @package BuddyPress Docs
 	 * @since 1.0
 	 */
-	function register_post_type() {
+	public function register_post_type() {
 		global $bp;
 
 		// Define the labels to be used by the post type
-		$post_type_labels = apply_filters( 'invite_anyone_post_type_labels', array(
-			'name' 			=> _x( 'BuddyPress Invitations', 'post type general name', 'invite-anyone' ),
-			'singular_name' 	=> _x( 'Invitation', 'post type singular name', 'invite-anyone' ),
-			'add_new' 		=> _x( 'Add New', 'add new', 'invite-anyone' ),
-			'add_new_item' 		=> __( 'Add New Invitation', 'invite-anyone' ),
-			'edit_item' 		=> __( 'Edit Invitation', 'invite-anyone' ),
-			'new_item' 		=> __( 'New Invitation', 'invite-anyone' ),
-			'view_item' 		=> __( 'View Invitation', 'invite-anyone' ),
-			'search_items' 		=> __( 'Search Invitation', 'invite-anyone' ),
-			'not_found' 		=>  __( 'No Invitations found', 'invite-anyone' ),
-			'not_found_in_trash' 	=> __( 'No Invitations found in Trash', 'invite-anyone' ),
-			'parent_item_colon' 	=> ''
-		), $this );
+		$post_type_labels = apply_filters(
+			'invite_anyone_post_type_labels',
+			array(
+				'name'               => _x( 'BuddyPress Invitations', 'post type general name', 'invite-anyone' ),
+				'singular_name'      => _x( 'Invitation', 'post type singular name', 'invite-anyone' ),
+				'add_new'            => _x( 'Add New', 'add new', 'invite-anyone' ),
+				'add_new_item'       => __( 'Add New Invitation', 'invite-anyone' ),
+				'edit_item'          => __( 'Edit Invitation', 'invite-anyone' ),
+				'new_item'           => __( 'New Invitation', 'invite-anyone' ),
+				'view_item'          => __( 'View Invitation', 'invite-anyone' ),
+				'search_items'       => __( 'Search Invitation', 'invite-anyone' ),
+				'not_found'          => __( 'No Invitations found', 'invite-anyone' ),
+				'not_found_in_trash' => __( 'No Invitations found in Trash', 'invite-anyone' ),
+				'parent_item_colon'  => '',
+			),
+			$this
+		);
 
 		// Register the invitation post type
-		register_post_type( $this->post_type_name, apply_filters( 'invite_anyone_post_type_args', array(
-			'label' 	=> __( 'BuddyPress Invitations', 'invite-anyone' ),
-			'labels' 	=> $post_type_labels,
-			'public' 	=> false,
-			'_builtin' 	=> false,
-			'show_ui' 	=> $this->show_dashboard_ui(),
-			'hierarchical' 	=> false,
-			'menu_icon'	=> plugins_url() . '/invite-anyone/images/smallest_buddypress_icon_ev.png',
-			'supports' 	=> array( 'title', 'editor', 'custom-fields', 'author' )
-		), $this ) );
+		register_post_type(
+			$this->post_type_name,
+			apply_filters(
+				'invite_anyone_post_type_args',
+				array(
+					'label'        => __( 'BuddyPress Invitations', 'invite-anyone' ),
+					'labels'       => $post_type_labels,
+					'public'       => false,
+					'_builtin'     => false,
+					'show_ui'      => $this->show_dashboard_ui(),
+					'hierarchical' => false,
+					'menu_icon'    => plugins_url() . '/invite-anyone/images/smallest_buddypress_icon_ev.png',
+					'supports'     => array( 'title', 'editor', 'custom-fields', 'author' ),
+				),
+				$this
+			)
+		);
 
 		// Define the labels to be used by the invitee taxonomy
-		$invitee_labels = apply_filters( 'invite_anyone_invitee_labels', array(
-			'name' 		=> __( 'Invitees', 'invite-anyone' ),
-			'singular_name' => __( 'Invitee', 'invite-anyone' ),
-			'search_items' 	=>  __( 'Search Invitees', 'invite-anyone' ),
-			'all_items' 	=> __( 'All Invitees', 'invite-anyone' ),
-			'edit_item' 	=> __( 'Edit Invitee', 'invite-anyone' ),
-			'update_item' 	=> __( 'Update Invitee', 'invite-anyone' ),
-			'add_new_item' 	=> __( 'Add New Invitee', 'invite-anyone' ),
-			'new_item_name' => __( 'New Invitee Name', 'invite-anyone' ),
-			'menu_name' 	=> __( 'Invitee' ),
-		), $this );
+		$invitee_labels = apply_filters(
+			'invite_anyone_invitee_labels',
+			array(
+				'name'          => __( 'Invitees', 'invite-anyone' ),
+				'singular_name' => __( 'Invitee', 'invite-anyone' ),
+				'search_items'  => __( 'Search Invitees', 'invite-anyone' ),
+				'all_items'     => __( 'All Invitees', 'invite-anyone' ),
+				'edit_item'     => __( 'Edit Invitee', 'invite-anyone' ),
+				'update_item'   => __( 'Update Invitee', 'invite-anyone' ),
+				'add_new_item'  => __( 'Add New Invitee', 'invite-anyone' ),
+				'new_item_name' => __( 'New Invitee Name', 'invite-anyone' ),
+				'menu_name'     => __( 'Invitee', 'invite-anyone' ),
+			),
+			$this
+		);
 
 		// Register the invitee taxonomy
-		register_taxonomy( $this->invitee_tax_name, $this->post_type_name, apply_filters( 'invite_anyone_invitee_tax_args', array(
-			'label'		=> __( 'Invitees', 'invite-anyone' ),
-			'labels' 	=> $invitee_labels,
-			'hierarchical' 	=> false,
-			'public'        => false,
-			'show_ui' 	=> true,
-		), $this ) );
+		register_taxonomy(
+			$this->invitee_tax_name,
+			$this->post_type_name,
+			apply_filters(
+				'invite_anyone_invitee_tax_args',
+				array(
+					'label'        => __( 'Invitees', 'invite-anyone' ),
+					'labels'       => $invitee_labels,
+					'hierarchical' => false,
+					'public'       => false,
+					'show_ui'      => true,
+				),
+				$this
+			)
+		);
 
 		// Define the labels to be used by the invited groups taxonomy
-		$invited_groups_labels = apply_filters( 'invite_anyone_invited_groups_labels', array(
-			'name' 		=> __( 'Invited Groups', 'invite-anyone' ),
-			'singular_name' => __( 'Invited Group', 'invite-anyone' ),
-			'search_items' 	=>  __( 'Search Invited Groups', 'invite-anyone' ),
-			'all_items' 	=> __( 'All Invited Groups', 'invite-anyone' ),
-			'edit_item' 	=> __( 'Edit Invited Group', 'invite-anyone' ),
-			'update_item' 	=> __( 'Update Invited Group', 'invite-anyone' ),
-			'add_new_item' 	=> __( 'Add New Invited Group', 'invite-anyone' ),
-			'new_item_name' => __( 'New Invited Group Name', 'invite-anyone' ),
-			'menu_name' 	=> __( 'Invited Group' ),
-		), $this );
+		$invited_groups_labels = apply_filters(
+			'invite_anyone_invited_groups_labels',
+			array(
+				'name'          => __( 'Invited Groups', 'invite-anyone' ),
+				'singular_name' => __( 'Invited Group', 'invite-anyone' ),
+				'search_items'  => __( 'Search Invited Groups', 'invite-anyone' ),
+				'all_items'     => __( 'All Invited Groups', 'invite-anyone' ),
+				'edit_item'     => __( 'Edit Invited Group', 'invite-anyone' ),
+				'update_item'   => __( 'Update Invited Group', 'invite-anyone' ),
+				'add_new_item'  => __( 'Add New Invited Group', 'invite-anyone' ),
+				'new_item_name' => __( 'New Invited Group Name', 'invite-anyone' ),
+				'menu_name'     => __( 'Invited Group', 'invite-anyone' ),
+			),
+			$this
+		);
 
 		// Register the invited groups taxonomy
-		register_taxonomy( $this->invited_groups_tax_name, $this->post_type_name, apply_filters( 'invite_anyone_invited_group_tax_args', array(
-			'label'		=> __( 'Invited Groups', 'invite-anyone' ),
-			'labels' 	=> $invited_groups_labels,
-			'hierarchical' 	=> false,
-			'public'        => false,
-			'show_ui' 	=> true,
-		), $this ) );
+		register_taxonomy(
+			$this->invited_groups_tax_name,
+			$this->post_type_name,
+			apply_filters(
+				'invite_anyone_invited_group_tax_args',
+				array(
+					'label'        => __( 'Invited Groups', 'invite-anyone' ),
+					'labels'       => $invited_groups_labels,
+					'hierarchical' => false,
+					'public'       => false,
+					'show_ui'      => true,
+				),
+				$this
+			)
+		);
 
 		// Stash in $bp because of template tags that need it
-		if ( !isset( $bp->invite_anyone ) ) {
-			$bp->invite_anyone = new stdClass;
+		if ( ! isset( $bp->invite_anyone ) ) {
+			$bp->invite_anyone = new stdClass();
 		}
 
-		$bp->invite_anyone->invitee_tax_name = $this->invitee_tax_name;
+		$bp->invite_anyone->invitee_tax_name        = $this->invitee_tax_name;
 		$bp->invite_anyone->invited_groups_tax_name = $this->invited_groups_tax_name;
 	}
 
@@ -166,7 +201,7 @@ class Invite_Anyone_Schema {
 	 *
 	 * @return bool
 	 */
-	function show_dashboard_ui() {
+	public function show_dashboard_ui() {
 		return apply_filters( 'show_dashboard_ui', is_super_admin() );
 	}
 
@@ -176,7 +211,7 @@ class Invite_Anyone_Schema {
 	 * @package Invite Anyone
 	 * @since 0.9
 	 */
-	function update() {
+	public function update() {
 		if ( version_compare( $this->db_version, '0.9', '<' ) ) {
 			add_action( 'admin_init', array( $this, 'upgrade_0_9' ) );
 		}
@@ -192,16 +227,18 @@ class Invite_Anyone_Schema {
 	 * @package Invite Anyone
 	 * @since 0.9
 	 */
-	function upgrade_0_9() {
+	public function upgrade_0_9() {
 		global $wp_query, $post;
 
 		$args = array(
 			'posts_per_page' => '30',
-			'paged'		 => '1'
+			'paged'          => '1',
 		);
 
+		// phpcs:disable WordPress.WP.GlobalVariablesOverride.Prohibited
+
 		// Get the invites
-		$invite = new Invite_Anyone_Invitation;
+		$invite  = new Invite_Anyone_Invitation();
 		$invites = $invite->get( $args );
 
 		// Get the total. We're going to loop through them in an attempt to save memory.
@@ -215,15 +252,15 @@ class Invite_Anyone_Schema {
 
 		$paged = 0;
 		while ( $paged * 30 <= $total_invites ) {
-			$paged++;
+			++$paged;
 
 			$args = array(
 				'posts_per_page' => '30',
-				'paged'		 => $paged
+				'paged'          => $paged,
 			);
 
 			// Get the invites
-			$invite = new Invite_Anyone_Invitation;
+			$invite  = new Invite_Anyone_Invitation();
 			$invites = $invite->get( $args );
 
 			// I don't understand why, but I have to do this to avoid errors. WP bug?
@@ -234,9 +271,9 @@ class Invite_Anyone_Schema {
 					$invites->the_post();
 
 					// Migrate the accepted data from date_modified to a meta
-					if ( !get_post_meta( get_the_ID(), 'bp_ia_accepted', true ) ) {
+					if ( ! get_post_meta( get_the_ID(), 'bp_ia_accepted', true ) ) {
 						// When the dates are different, it's been accepted
-						if ( $post->post_date != $post->post_modified ) {
+						if ( $post->post_date !== $post->post_modified ) {
 							update_post_meta( get_the_ID(), 'bp_ia_accepted', $post->post_modified );
 						} else {
 							// We set this to null so it still comes up in the
@@ -253,6 +290,7 @@ class Invite_Anyone_Schema {
 
 		// WP bug
 		$wp_query = $old_wp_query;
+		// phpcs:enable WordPress.WP.GlobalVariablesOverride.Prohibited
 	}
 
 	/**
@@ -260,12 +298,12 @@ class Invite_Anyone_Schema {
 	 *
 	 * @since 1.4.0
 	 */
-	function upgrade_1_4_0() {
+	public function upgrade_1_4_0() {
 		invite_anyone_install_emails( true );
 	}
 }
 
-$invite_anyone_data = new Invite_Anyone_Schema;
+$invite_anyone_data = new Invite_Anyone_Schema();
 
 /**
  * Defines the invitation object and its methods
@@ -274,11 +312,11 @@ $invite_anyone_data = new Invite_Anyone_Schema;
  * @since 0.8
  */
 class Invite_Anyone_Invitation {
-	var $id;
-	var $invitee_tax_name;
-	var $post_type_name;
-	var $invited_groups_tax_name;
-	var $email_order;
+	public $id;
+	public $invitee_tax_name;
+	public $post_type_name;
+	public $invited_groups_tax_name;
+	public $email_order;
 
 	/**
 	 * PHP5 Constructor
@@ -288,7 +326,7 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param int $id Optional. The unique id of the invitation post
 	 */
-	function __construct( $id = false ) {
+	public function __construct( $id = false ) {
 		if ( $id ) {
 			$this->id = $id;
 		}
@@ -313,29 +351,42 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param array $args
 	 */
-	function create( $args = false ) {
+	public function create( $args = false ) {
 		// Set up the default arguments
-		$defaults = apply_filters( 'invite_anyone_create_invite_defaults', array(
-			'inviter_id' 	 => bp_loggedin_user_id(),
-			'invitee_email'	 => false,
-			'message'	 => false,
-			'subject'	 => false,
-			'groups'	 => false,
-			'status'	 => 'publish', // i.e., visible on Sent Invites
-			'date_created'	 => bp_core_current_time( false ),
-			'date_modified'	 => bp_core_current_time( false ),
-			'is_cloudsponge' => false
-		) );
+		$defaults = apply_filters(
+			'invite_anyone_create_invite_defaults',
+			array(
+				'inviter_id'     => bp_loggedin_user_id(),
+				'invitee_email'  => false,
+				'message'        => false,
+				'subject'        => false,
+				'groups'         => false,
+				'status'         => 'publish', // i.e., visible on Sent Invites
+				'date_created'   => bp_core_current_time( false ),
+				'date_modified'  => bp_core_current_time( false ),
+				'is_cloudsponge' => false,
+			)
+		);
 
 		$r = wp_parse_args( $args, $defaults );
-		extract( $r );
+
+		$inviter_id     = $r['inviter_id'];
+		$invitee_email  = $r['invitee_email'];
+		$message        = $r['message'];
+		$subject        = $r['subject'];
+		$groups         = $r['groups'];
+		$status         = $r['status'];
+		$date_created   = $r['date_created'];
+		$date_modified  = $r['date_modified'];
+		$is_cloudsponge = $r['is_cloudsponge'];
 
 		// Let plugins stop this process if they want
 		do_action( 'invite_anyone_before_invitation_create', $r, $args );
 
 		// We can't record an invitation without a few key pieces of data
-		if ( empty( $inviter_id ) || empty( $invitee_email ) || empty( $message ) || empty( $subject ) )
+		if ( empty( $inviter_id ) || empty( $invitee_email ) || empty( $message ) || empty( $subject ) ) {
 			return false;
+		}
 
 		// Set the arguments and create the post
 		$insert_post_args = array(
@@ -348,14 +399,17 @@ class Invite_Anyone_Invitation {
 			'post_name'    => sanitize_title_with_dashes( $subject . ' ' . microtime() ),
 		);
 
-		if ( !$this->id = wp_insert_post( $insert_post_args ) )
+		$this->id = wp_insert_post( $insert_post_args );
+
+		if ( ! $this->id ) {
 			return false;
+		}
 
 		// If a date_modified has been passed, update it manually
 		if ( $date_modified ) {
 			$post_modified_args = array(
-				'ID'		=> $this->id,
-				'post_modified'	=> $date_modified
+				'ID'            => $this->id,
+				'post_modified' => $date_modified,
 			);
 
 			wp_update_post( $post_modified_args );
@@ -373,8 +427,9 @@ class Invite_Anyone_Invitation {
 		wp_set_post_terms( $this->id, $invitee_email, $this->invitee_tax_name );
 
 		// Groups included in the invitation
-		if ( !empty( $groups ) )
+		if ( ! empty( $groups ) ) {
 			wp_set_post_terms( $this->id, $groups, $this->invited_groups_tax_name );
+		}
 
 		do_action( 'invite_anyone_after_invitation_create', $this->id, $r, $args );
 
@@ -391,59 +446,78 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param array $args
 	 */
-	function get( $args = false ) {
+	public function get( $args = false ) {
 		// Set up the default arguments
-		$defaults = apply_filters( 'invite_anyone_get_invite_defaults', array(
-			'inviter_id' 		=> false,
-			'invitee_email'		=> false,
-			'message'		=> false,
-			'subject'		=> false,
-			'groups'		=> false,
-			'status'		=> 'publish', // i.e., visible on Sent Invites
-			'date_created'		=> false,
-			'posts_per_page'	=> false,
-			'paged'			=> false,
-			'orderby'		=> 'post_date',
-			'order'			=> 'DESC'
-		) );
+		$defaults = apply_filters(
+			'invite_anyone_get_invite_defaults',
+			array(
+				'inviter_id'     => false,
+				'invitee_email'  => false,
+				'message'        => false,
+				'subject'        => false,
+				'groups'         => false,
+				'status'         => 'publish', // i.e., visible on Sent Invites
+				'date_created'   => false,
+				'posts_per_page' => false,
+				'paged'          => false,
+				'orderby'        => 'post_date',
+				'order'          => 'DESC',
+			)
+		);
 
 		$r = wp_parse_args( $args, $defaults );
-		extract( $r );
+
+		$inviter_id     = $r['inviter_id'];
+		$invitee_email  = $r['invitee_email'];
+		$message        = $r['message'];
+		$subject        = $r['subject'];
+		$groups         = $r['groups'];
+		$status         = $r['status'];
+		$date_created   = $r['date_created'];
+		$posts_per_page = $r['posts_per_page'];
+		$paged          = $r['paged'];
+		$orderby        = $r['orderby'];
+		$order          = $r['order'];
 
 		// Backward compatibility, and to keep the URL args clean
-		if ( $orderby == 'email' ) {
-			$orderby	= $this->invitee_tax_name;
-		} else if ( $orderby == 'date_joined' || $orderby == 'accepted' ) {
-			$orderby	= 'meta_value';
-			$r['meta_key']	= 'bp_ia_accepted';
+		if ( 'email' === $orderby ) {
+			$orderby = $this->invitee_tax_name;
+		} elseif ( 'date_joined' === $orderby || 'accepted' === $orderby ) {
+			$orderby       = 'meta_value';
+			$r['meta_key'] = 'bp_ia_accepted';
 		}
 
-		if ( !$posts_per_page && !$paged ) {
-			$r['posts_per_page'] 	= '10';
-			$r['paged']		= '1';
+		if ( ! $posts_per_page && ! $paged ) {
+			$r['posts_per_page'] = '10';
+			$r['paged']          = '1';
 		}
 
 		// Todo: move all of this business to metadata
-		if ( 'ia_invitees' == $orderby ) {
+		if ( 'ia_invitees' === $orderby ) {
 			// Filtering the query so that it's possible to sort by taxonomy terms
 			// This is not a recommended technique, as it's likely to break
-			add_filter( 'posts_fields', array( $this, 'filter_fields_emails' ), 10, 2 );
-			add_filter( 'posts_join_paged', array( $this, 'filter_join_emails' ), 10, 2 );
-			add_filter( 'posts_orderby', array( $this, 'filter_orderby_emails' ), 10, 2 );
+			add_filter( 'posts_fields', array( $this, 'filter_fields_emails' ), 10 );
+			add_filter( 'posts_join_paged', array( $this, 'filter_join_emails' ), 10 );
+			add_filter( 'posts_orderby', array( $this, 'filter_orderby_emails' ), 10 );
 
 			$this->email_order = $order;
 
 			// Limitations in the WP_Tax_Query class mean I have to assemble a tax term
 			// list first
-			$emails = get_terms( $this->invitee_tax_name, array( 'fields' => 'names' ) );
+			$emails = get_terms(
+				[
+					'taxonomy' => $this->invitee_tax_name,
+					'fields'   => 'name',
+				]
+			);
 
 			$r['tax_query'] = array(
 				array(
-					'taxonomy' 	=> $this->invitee_tax_name,
-					'terms' 	=> $emails,
-					'field' 	=> 'slug',
-					'operator'	=> 'IN'
-				)
+					'taxonomy' => $this->invitee_tax_name,
+					'terms'    => $emails,
+					'field'    => 'slug',
+					'operator' => 'IN',
+				),
 			);
 		}
 
@@ -452,36 +526,36 @@ class Invite_Anyone_Invitation {
 
 		// Set the arguments and get the posts
 		$query_post_args = array(
-			'author'	=> $inviter_id,
-			'post_status'	=> $status,
-			'post_type'	=> $this->post_type_name,
-			'orderby'	=> $orderby,
-			'order'		=> $order,
-			'tax_query' => array(),
+			'author'      => $inviter_id,
+			'post_status' => $status,
+			'post_type'   => $this->post_type_name,
+			'orderby'     => $orderby,
+			'order'       => $order,
+			'tax_query'   => array(),
 		);
 
 		if ( ! empty( $r['invitee_email'] ) ) {
 			$query_post_args['tax_query']['invitee'] = array(
 				'taxonomy' => $this->invitee_tax_name,
-				'terms' => (array) $r['invitee_email'],
-				'field' => 'name',
+				'terms'    => (array) $r['invitee_email'],
+				'field'    => 'name',
 			);
 		}
 
 		// Add optional arguments, if provided
 		$optional_args = array(
-			'message' 		=> 'post_content',
-			'subject'		=> 'post_title',
-			'date_created'		=> 'date_created',
-			'meta_key'		=> 'meta_key',
-			'meta_value'		=> 'meta_value',
-			'posts_per_page'	=> 'posts_per_page',
-			'paged'			=> 'paged',
+			'message'        => 'post_content',
+			'subject'        => 'post_title',
+			'date_created'   => 'date_created',
+			'meta_key'       => 'meta_key',
+			'meta_value'     => 'meta_value',
+			'posts_per_page' => 'posts_per_page',
+			'paged'          => 'paged',
 		);
 
 		foreach ( $optional_args as $key => $value ) {
-			if ( !empty( $r[$key] ) ) {
-				$query_post_args[$value] = $r[$key];
+			if ( ! empty( $r[ $key ] ) ) {
+				$query_post_args[ $value ] = $r[ $key ];
 			}
 		}
 
@@ -496,7 +570,7 @@ class Invite_Anyone_Invitation {
 	 * @package Invite Anyone
 	 * @since 0.9
 	 */
-	function filter_join_emails( $join, $query ) {
+	public function filter_join_emails( $join ) {
 		global $wpdb;
 
 		$join .= "
@@ -516,7 +590,7 @@ class Invite_Anyone_Invitation {
 	 * @package Invite Anyone
 	 * @since 0.9
 	 */
-	function filter_fields_emails( $fields, $query ) {
+	public function filter_fields_emails( $fields ) {
 		$fields .= ' ,wp_terms_ia.name, wp_term_taxonomy_ia.term_taxonomy_id';
 
 		return $fields;
@@ -530,7 +604,7 @@ class Invite_Anyone_Invitation {
 	 * @package Invite Anyone
 	 * @since 0.9
 	 */
-	function filter_orderby_emails( $orderby, $query ) {
+	public function filter_orderby_emails( $orderby ) {
 		$orderby = 'wp_terms_ia.name ' . $this->email_order;
 
 		return $orderby;
@@ -544,7 +618,7 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param array $args
 	 */
-	function mark_accepted() {
+	public function mark_accepted() {
 		update_post_meta( $this->id, 'bp_ia_accepted', $args['post_modified'] );
 
 		return true;
@@ -558,13 +632,14 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param array $args
 	 */
-	function clear() {
+	public function clear() {
 		$args = array(
-			'ID'		=> $this->id,
-			'post_status' 	=> 'draft'
+			'ID'          => $this->id,
+			'post_status' => 'draft',
 		);
-		if ( wp_update_post( $args ) )
+		if ( wp_update_post( $args ) ) {
 			return true;
+		}
 
 		return false;
 	}
@@ -577,9 +652,10 @@ class Invite_Anyone_Invitation {
 	 *
 	 * @param array $args
 	 */
-	function mark_opt_out() {
-		if ( update_post_meta( $this->id, 'opt_out', 'yes' ) )
+	public function mark_opt_out() {
+		if ( update_post_meta( $this->id, 'opt_out', 'yes' ) ) {
 			return true;
+		}
 
 		return false;
 	}
@@ -601,18 +677,18 @@ class Invite_Anyone_Invitation {
 function invite_anyone_record_invitation( $inviter_id, $email, $message, $groups, $subject = false, $is_cloudsponge = false ) {
 
 	// hack to make sure that gmail + email addresses work
-	$email	= str_replace( '+', '.PLUSSIGN.', $email );
+	$email = str_replace( '+', '.PLUSSIGN.', $email );
 
 	$args = array(
-		'inviter_id' 	 => $inviter_id,
-		'invitee_email'	 => $email,
-		'message'	 => $message,
-		'subject'	 => $subject,
-		'groups'	 => $groups,
-		'is_cloudsponge' => $is_cloudsponge
+		'inviter_id'     => $inviter_id,
+		'invitee_email'  => $email,
+		'message'        => $message,
+		'subject'        => $subject,
+		'groups'         => $groups,
+		'is_cloudsponge' => $is_cloudsponge,
 	);
 
-	$invite = new Invite_Anyone_Invitation;
+	$invite = new Invite_Anyone_Invitation();
 
 	$id = $invite->create( $args );
 
@@ -632,14 +708,14 @@ function invite_anyone_record_invitation( $inviter_id, $email, $message, $groups
  */
 function invite_anyone_get_invitations_by_inviter_id( $inviter_id, $orderby = false, $order = false, $posts_per_page = false, $paged = false ) {
 	$args = array(
-		'inviter_id'	=> $inviter_id,
-		'orderby'	=> $orderby,
-		'order'		=> $order,
-		'posts_per_page'=> $posts_per_page,
-		'paged'		=> $paged
+		'inviter_id'     => $inviter_id,
+		'orderby'        => $orderby,
+		'order'          => $order,
+		'posts_per_page' => $posts_per_page,
+		'paged'          => $paged,
 	);
 
-	$invite = new Invite_Anyone_Invitation;
+	$invite = new Invite_Anyone_Invitation();
 
 	return $invite->get( $args );
 }
@@ -666,11 +742,11 @@ function invite_anyone_get_invitations_by_invited_email( $email ) {
 	$email = str_replace( '+', '.PLUSSIGN.', $email );
 
 	$args = array(
-		'invitee_email'	=> $email,
-		'posts_per_page' => -1
+		'invitee_email'  => $email,
+		'posts_per_page' => -1,
 	);
 
-	$invite = new Invite_Anyone_Invitation;
+	$invite = new Invite_Anyone_Invitation();
 
 	return $invite->get( $args );
 }
@@ -694,31 +770,48 @@ function invite_anyone_clear_sent_invite( $args ) {
 
 	$defaults = array(
 		'inviter_id' => false,
-		'clear_id' => false,
-		'type' => false
+		'clear_id'   => false,
+		'type'       => false,
 	);
-	$args = wp_parse_args( $args, $defaults );
+	$args     = wp_parse_args( $args, $defaults );
 
-	extract( $args );
+	$inviter_id = $args['inviter_id'];
+	$clear_id   = $args['clear_id'];
+	$type       = $args['type'];
 
-	if ( empty( $inviter_id ) )
+	if ( empty( $inviter_id ) ) {
 		return false;
+	}
 
 	$success = false;
 
 	if ( $clear_id ) {
 		$invite = new Invite_Anyone_Invitation( $clear_id );
-		if ( $invite->clear() )
+		if ( $invite->clear() ) {
 			$success = true;
+		}
 	} else {
-		array(
-			'inviter_id'	=> $inviter_id,
-			'posts_per_page' => -1
+		/**
+		 * Number of invitations to clear during a single request.
+		 *
+		 * We place a limit on the number of invitations that can be cleared to
+		 * avoid timeout and memory-exhaustion errors. You may adjust this
+		 * using the filter.
+		 *
+		 * @since 1.4.8
+		 *
+		 * @param int $limit The number of invitations to clear during a single request.
+		 */
+		$limit = apply_filters( 'invite_anyone_clear_sent_invite_limit', 100 );
+
+		$query_args = array(
+			'inviter_id'     => $inviter_id,
+			'posts_per_page' => $limit,
 		);
 
-		$invite = new Invite_Anyone_Invitation;
+		$invite = new Invite_Anyone_Invitation();
 
-		$iobj = $invite->get( $args );
+		$iobj = $invite->get( $query_args );
 
 		if ( $iobj->have_posts() ) {
 			while ( $iobj->have_posts() ) {
@@ -732,7 +825,7 @@ function invite_anyone_clear_sent_invite( $args ) {
 						}
 						break;
 					case 'unaccepted' :
-						if ( !get_post_meta( get_the_ID(), 'bp_ia_accepted', true ) ) {
+						if ( ! get_post_meta( get_the_ID(), 'bp_ia_accepted', true ) ) {
 							$clearme = true;
 						}
 						break;
@@ -751,7 +844,6 @@ function invite_anyone_clear_sent_invite( $args ) {
 	}
 
 	return true;
-
 }
 
 /**
@@ -789,20 +881,21 @@ function invite_anyone_check_is_opt_out( $email ) {
 	$email = str_replace( ' ', '+', $email );
 
 	$args = array(
-		'invitee_email'		=> $email,
-		'posts_per_page' 	=> 1,
-		'meta_key'		=> 'opt_out',
-		'meta_value'		=> 'yes'
+		'invitee_email'  => $email,
+		'posts_per_page' => 1,
+		'meta_key'       => 'opt_out',
+		'meta_value'     => 'yes',
 	);
 
-	$invite = new Invite_Anyone_Invitation;
+	$invite = new Invite_Anyone_Invitation();
 
 	$invites = $invite->get( $args );
 
-	if ( $invites->have_posts() )
+	if ( $invites->have_posts() ) {
 		return true;
-	else
+	} else {
 		return false;
+	}
 }
 
 /**
@@ -838,52 +931,61 @@ function invite_anyone_migrate_nag() {
 	global $wpdb;
 
 	// only show the nag to the network admin
-	if ( !is_super_admin() )
+	if ( ! is_super_admin() ) {
 		return;
+	}
 
 	// Some backward compatibility crap
 	$maybe_version = get_option( 'invite_anyone_db_version' );
 	if ( empty( $maybe_version ) ) {
-		$iaoptions 	= get_option( 'invite_anyone' );
-	 	$maybe_version	= !empty( $iaoptions['db_version'] ) ? $iaoptions['db_version'] : '0.7';
+		$iaoptions     = get_option( 'invite_anyone' );
+		$maybe_version = ! empty( $iaoptions['db_version'] ) ? $iaoptions['db_version'] : '0.7';
 	}
 
- 	// If you're on the Migrate page, no need to show the message
- 	if ( !empty( $_GET['migrate'] ) && $_GET['migrate'] == '1' )
- 		return;
+	// If you're on the Migrate page, no need to show the message
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$is_migrate = ! empty( $_GET['migrate'] ) && '1' === sanitize_text_field( wp_unslash( $_GET['migrate'] ) );
+	if ( $is_migrate ) {
+		return;
+	}
 
- 	// Don't run this migrator if coming from IA 0.8 or greater
- 	if ( version_compare( $maybe_version, '0.8', '>=' ) )
- 		return;
+	// Don't run this migrator if coming from IA 0.8 or greater
+	if ( version_compare( $maybe_version, '0.8', '>=' ) ) {
+		return;
+	}
 
- 	$table_exists = $wpdb->get_var( "SHOW TABLES LIKE %s", "%{$wpdb->base_prefix}bp_invite_anyone%" );
+	$table_exists = $wpdb->get_var( 'SHOW TABLES LIKE %s', "%{$wpdb->base_prefix}bp_invite_anyone%" );
 
- 	if ( !$table_exists )
- 		return;
+	if ( ! $table_exists ) {
+		return;
+	}
 
 	// First, check to see whether the data table exists
-	$table_name 	= $wpdb->base_prefix . 'bp_invite_anyone';
-	$invite_count	= $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
+	$table_name = $wpdb->base_prefix . 'bp_invite_anyone';
 
-	if ( !$invite_count )
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$invite_count = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
+
+	if ( ! $invite_count ) {
 		return;
+	}
 
 	// The auto-script can usually handle a migration of 5 or less
-	if ( (int)$invite_count <= 5 ) {
+	if ( (int) $invite_count <= 5 ) {
 		invite_anyone_data_migration();
 		return;
 	} else {
 		$url = is_multisite() && function_exists( 'network_admin_url' ) ? network_admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' ) : admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' );
 		$url = add_query_arg( 'migrate', '1', $url );
+		$url = wp_nonce_url( $url, 'invite-anyone-migrate' );
 		?>
 
 		<div class="error">
-			<p>Invite Anyone has been updated. <a href="<?php echo $url ?>">Click here</a> to migrate your invitation data and complete the upgrade.</p>
+			<p>Invite Anyone has been updated. <a href="<?php echo esc_url( $url ); ?>">Click here</a> to migrate your invitation data and complete the upgrade.</p>
 		</div>
 
 		<?php
 	}
-
 }
 add_action( is_multisite() && function_exists( 'is_network_admin' ) ? 'network_admin_notices' : 'admin_notices', 'invite_anyone_migrate_nag' );
 
@@ -908,36 +1010,38 @@ add_action( is_multisite() && function_exists( 'is_network_admin' ) ? 'network_a
  * @param int $start The record id to start with (offset)
  */
 function invite_anyone_data_migration( $type = 'full', $start = 0 ) {
- 	global $wpdb;
+	global $wpdb;
 
- 	$is_partial = $type != 'full' ? true : false;
+	$is_partial = 'full' !== $type;
 
 	$table_name = $wpdb->base_prefix . 'bp_invite_anyone';
 
- 	$total_table_contents = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
+	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	$total_table_contents = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
 
- 	$table_contents_sql = "SELECT * FROM {$table_name}";
+	$table_contents_sql = "SELECT * FROM {$table_name}";
 
-	$table_contents_sql .= "  ORDER BY id ASC LIMIT 5";
+	$table_contents_sql .= '  ORDER BY id ASC LIMIT 5';
 
 	if ( $is_partial ) {
-		$table_contents_sql .= " OFFSET $start";
+		$table_contents_sql .= ' OFFSET ' . intval( $start );
 	}
 
+	// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 	$table_contents = $wpdb->get_results( $table_contents_sql );
 
 	// If this is a stepwise migration, and the start number is too high or the table_contents
 	// query is empty, it means we've gotten to the end of the migration.
-	if ( $is_partial && ( (int)$start > $total_table_contents ) ) {
+	if ( $is_partial && ( (int) $start > $total_table_contents ) ) {
 		// Finally, update the Invite Anyone DB version so this doesn't run again
 		update_option( 'invite_anyone_db_version', BP_INVITE_ANYONE_DB_VER );
 
 		$url = is_multisite() && function_exists( 'network_admin_url' ) ? network_admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' ) : admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' );
 		?>
 
-		<p><?php _e( 'All done!', 'invite-anyone' ) ?></p>
+		<p><?php esc_html_e( 'All done!', 'invite-anyone' ); ?></p>
 
-		<a href="<?php echo $url ?>" class="button"><?php _e( 'Finish', 'invite-anyone' ) ?></a>
+		<a href="<?php echo esc_url( $url ); ?>" class="button"><?php esc_html_e( 'Finish', 'invite-anyone' ); ?></a>
 
 		<?php
 
@@ -946,56 +1050,68 @@ function invite_anyone_data_migration( $type = 'full', $start = 0 ) {
 
 	// If the resulting array is empty, either there's nothing in the table or the table does
 	// not exist (this is probably a new installation)
-	if ( empty( $table_contents ) )
+	if ( empty( $table_contents ) ) {
 		return;
+	}
 
 	$record_count = 0;
 
-	foreach( $table_contents as $key => $invite ) {
+	foreach ( $table_contents as $key => $invite ) {
 		$success = false;
 
 		// Instead of grabbing these from a global or something, I'm just filtering them
 		// in the same way that they are in the data schema
 		$post_type = apply_filters( 'invite_anyone_post_type_name', 'ia_invites' );
-		$tax_name = apply_filters( 'invite_anyone_invitee_tax_name', 'ia_invitees' );
+		$tax_name  = apply_filters( 'invite_anyone_invitee_tax_name', 'ia_invitees' );
 
 		$invite_exists_args = array(
-			'author' 	=> $invite->inviter_id,
-			$tax_name	=> $invite->email,
-			'date_created'	=> $invite->date_invited,
-			'post_type'	=> $post_type
+			'author'       => $invite->inviter_id,
+			$tax_name      => $invite->email,
+			'date_created' => $invite->date_invited,
+			'post_type'    => $post_type,
 		);
 
 		$maybe_invite = get_posts( $invite_exists_args );
 
 		if ( empty( $maybe_invite ) ) {
 			// First, record the invitation
-			$new_invite	= new Invite_Anyone_Invitation;
-			$args		= array(
-				'inviter_id' 	=> $invite->inviter_id,
-				'invitee_email'	=> $invite->email,
-				'message'	=> $invite->message,
-				'subject'	=> __( 'Migrated Invitation', 'invite-anyone' ),
-				'groups'	=> maybe_unserialize( $invite->group_invitations ),
-				'status'	=> 'publish',
-				'date_created'	=> $invite->date_invited,
-				'date_modified'	=> $invite->date_joined,
+			$new_invite = new Invite_Anyone_Invitation();
+			$args       = array(
+				'inviter_id'    => $invite->inviter_id,
+				'invitee_email' => $invite->email,
+				'message'       => $invite->message,
+				'subject'       => __( 'Migrated Invitation', 'invite-anyone' ),
+				'groups'        => maybe_unserialize( $invite->group_invitations ),
+				'status'        => 'publish',
+				'date_created'  => $invite->date_invited,
+				'date_modified' => $invite->date_joined,
 			);
 
-			if ( $new_invite_id = $new_invite->create( $args ) ) {
+			$new_invite_id = $new_invite->create( $args );
+
+			if ( $new_invite_id ) {
 				// Now look to see whether the item should be opt out
-				if ( $invite->is_opt_out )
+				if ( $invite->is_opt_out ) {
 					update_post_meta( $new_invite_id, 'opt_out', 'yes' );
+				}
 
 				$success = true;
 			}
 
-			if ( $success )
-				$record_count++;
+			if ( $success ) {
+				++$record_count;
+			}
 
 			if ( $is_partial ) {
 				$inviter = bp_core_get_user_displayname( $invite->inviter_id );
-				printf( __( 'Importing: %1$s invited %2$s<br />', 'invite-anyone' ), $inviter, $invite->email );
+				echo esc_html(
+					sprintf(
+						// translators: %1$s is the inviter's name, %2$s is the email address
+						__( 'Importing: %1$s invited %2$s', 'invite-anyone' ),
+						$inviter,
+						$invite->email
+					)
+				) . '<br />';
 			}
 		}
 	}
@@ -1004,14 +1120,15 @@ function invite_anyone_data_migration( $type = 'full', $start = 0 ) {
 		$url = is_multisite() && function_exists( 'network_admin_url' ) ? network_admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' ) : admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' );
 		$url = add_query_arg( 'migrate', '1', $url );
 		$url = add_query_arg( 'start', $start + 5, $url );
+		$url = wp_nonce_url( $url, 'invite-anyone-migrate' );
 
 		?>
-		<p><?php _e( 'If your browser doesn&#8217;t start loading the next page automatically, click this link:', 'invite-anyone' ); ?> <a class="button" href="<?php echo $url ?>"><?php _e( "Next Invitations", 'invite-anyone' ); ?></a></p>
+		<p><?php esc_html_e( 'If your browser doesn&#8217;t start loading the next page automatically, click this link:', 'invite-anyone' ); ?> <a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'Next Invitations', 'invite-anyone' ); ?></a></p>
 
 		<script type='text/javascript'>
 			<!--
 			function nextpage() {
-				location.href = "<?php echo $url ?>";
+				location.href = "<?php echo esc_js( $url ); ?>";
 			}
 			setTimeout( "nextpage()", 1000 );
 			//-->
@@ -1031,17 +1148,20 @@ function invite_anyone_migration_step() {
 	$url = is_multisite() && function_exists( 'network_admin_url' ) ? network_admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' ) : admin_url( 'admin.php?page=invite-anyone/admin/admin-panel.php' );
 	$url = add_query_arg( 'migrate', '1', $url );
 	$url = add_query_arg( 'start', '0', $url );
+	$url = wp_nonce_url( $url, 'invite-anyone-migrate' );
 
 	?>
 	<div class="wrap">
-		<h2><?php _e( 'Invite Anyone Upgrade', 'invite-anyone' ) ?></h2>
+		<h2><?php esc_html_e( 'Invite Anyone Upgrade', 'invite-anyone' ); ?></h2>
 
-		<?php if ( !isset( $_GET['start'] ) ) : ?>
-			<p><?php _e( 'Invite Anyone has just been updated, and needs to move some old invitation data in order to complete the upgrade. Click GO to start the process.', 'invite-anyone' ) ?></p>
+		<?php if ( ! isset( $_GET['start'] ) ) : ?>
+			<p><?php esc_html_e( 'Invite Anyone has just been updated, and needs to move some old invitation data in order to complete the upgrade. Click GO to start the process.', 'invite-anyone' ); ?></p>
 
-			<a class="button" href="<?php echo $url ?>">GO</a>
+			<a class="button" href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'GO', 'invite-anyone' ); ?></a>
 		<?php else : ?>
-			<?php invite_anyone_data_migration( 'partial', (int)$_GET['start'] ) ?>
+			<?php check_admin_referer( 'invite-anyone-migrate' ); ?>
+
+			<?php invite_anyone_data_migration( 'partial', (int) $_GET['start'] ); ?>
 
 		<?php endif ?>
 	</div>

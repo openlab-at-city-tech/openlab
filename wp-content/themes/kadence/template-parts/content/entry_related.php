@@ -29,7 +29,11 @@ if ( $bpc ) :
 		<div class="entry-related alignfull entry-related-style-<?php echo esc_attr( kadence()->option( 'post_related_style' ) ); ?>">
 			<div class="entry-related-inner content-container site-container">
 				<div class="entry-related-inner-content alignwide">
-					<?php echo wp_kses_post( apply_filters( 'kadence_single_post_similar_posts_title', '<h2 class="entry-related-title">' . esc_html__( 'Similar Posts', 'kadence' ) . '</h2>' ) ); ?>
+					<?php
+					$related_title_option = esc_html( do_shortcode( kadence()->option( 'post_related_title' ) ) );
+					$related_title = $related_title_option ? $related_title_option : esc_html__( 'Similar Posts', 'kadence' );
+					echo wp_kses_post( apply_filters( 'kadence_single_post_similar_posts_title', '<h2 class="entry-related-title">' . $related_title . '</h2>' ) );
+					?>
 					<div class="entry-related-carousel kadence-slide-init splide" data-columns-xxl="<?php echo esc_attr( $cols['xxl'] ); ?>" data-columns-xl="<?php echo esc_attr( $cols['xl'] ); ?>" data-columns-md="<?php echo esc_attr( $cols['md'] ); ?>" data-columns-sm="<?php echo esc_attr( $cols['sm'] ); ?>" data-columns-xs="<?php echo esc_attr( $cols['xs'] ); ?>" data-columns-ss="<?php echo esc_attr( $cols['ss'] ); ?>" data-slider-anim-speed="400" data-slider-scroll="1" data-slider-dots="true" data-slider-arrows="true" data-slider-hover-pause="false" data-slider-auto="<?php echo esc_attr( apply_filters( 'kadence_single_post_similar_posts_carousel_autoplay', false ) ? 'true' : 'false' ); ?>" data-slider-speed="7000" data-slider-gutter="40" data-slider-loop="<?php echo esc_attr( kadence()->option( 'post_related_carousel_loop' ) ? 'true' : 'false' ); ?>" data-slider-next-label="<?php echo esc_attr__( 'Next', 'kadence' ); ?>" data-slider-slide-label="<?php echo esc_attr__( 'Posts', 'kadence' ); ?>" data-slider-prev-label="<?php echo esc_attr__( 'Previous', 'kadence' ); ?>">
 						<div class="splide__track">
 							<div class="splide__list grid-cols <?php echo esc_attr( $columns_class ); ?>">

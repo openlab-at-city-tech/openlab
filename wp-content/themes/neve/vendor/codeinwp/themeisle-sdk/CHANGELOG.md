@@ -1,3 +1,79 @@
+##### [Version 3.3.28](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.27...v3.3.28) (2024-08-09)
+
+
+- fix: remove the delay on woo plugins promos [closes Codeinwp/themeisle[#1655](https://github.com/Codeinwp/themeisle-sdk/issues/1655)]
+- fix: swap Neve FSE notice with Neve [closes Codeinwp/themeisle[#1654](https://github.com/Codeinwp/themeisle-sdk/issues/1654)]
+- fix: rework optimole promo [closes Codeinwp/themeisle[#1656](https://github.com/Codeinwp/themeisle-sdk/issues/1656)]
+- fix: translations workflow always requiring updates [closes Codeinwp/neve-pro-addon[#2840](https://github.com/Codeinwp/themeisle-sdk/issues/2840)]
+
+##### [Version 3.3.27](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.26...v3.3.27) (2024-07-30)
+
+- fix: array out of bounds index
+
+##### [Version 3.3.26](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.25...v3.3.26) (2024-07-29)
+
+- fix: JS error in core editor
+- twak: change ROP product name
+- tweak: updated developers list
+- fix: removed duplicate feed URL
+- feat: add private translation functionality
+
+##### [Version 3.3.25](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.24...v3.3.25) (2024-07-08)
+
+improve upgrade link
+
+##### [Version 3.3.24](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.23...v3.3.24) (2024-06-25)
+
+- Feat: Allow affiliate url change via DB option.
+- Fix: Featured plugins displaying on some non-pro products.
+
+##### [Version 3.3.23](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.22...v3.3.23) (2024-06-19)
+
+- fix: compress images
+- fix: replace huge SVG logo with png version
+- fix: improve text on float widget
+
+##### [Version 3.3.22](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.21...v3.3.22) (2024-05-17)
+
+- Updated NPM packages
+- Fixed the default state of the telemetry logger flag for PRO users
+- Added floating widget functionality
+- Updated the remote get check for WordPress VIP env
+
+##### [Version 3.3.21](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.20...v3.3.21) (2024-04-29)
+
+- fixes non-existant string being used in Licenser
+
+##### [Version 3.3.20](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.19...v3.3.20) (2024-04-16)
+
+fix required params on sprintf
+
+##### [Version 3.3.19](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.18...v3.3.19) (2024-04-15)
+
+Add full translation support
+
+##### [Version 3.3.18](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.17...v3.3.18) (2024-04-05)
+
+### Big Fixes
+- Fix rollback for Themes
+
+##### [Version 3.3.17](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.16...v3.3.17) (2024-04-01)
+
+### Improvements
+- Add safeguard against type mutation for featured plugin results.
+
+##### [Version 3.3.16](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.15...v3.3.16) (2024-03-29)
+
+### Improvements
+- Formbricks on multiple products.
+- List Pro Products in featured tab.
+
+##### [Version 3.3.15](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.14...v3.3.15) (2024-03-26)
+
+### Improvements
+- Add a filter to disallow promotions on specific products.
+- Update Formbricks
+
 ##### [Version 3.3.14](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.13...v3.3.14) (2024-02-27)
 
 - Add Announcement Module

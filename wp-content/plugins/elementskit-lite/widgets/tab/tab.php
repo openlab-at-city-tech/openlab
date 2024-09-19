@@ -34,14 +34,15 @@ class ElementsKit_Widget_Tab extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/tab/';
     }
-
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     protected function register_controls() {
         $this->start_controls_section(
             'section_tab', [
                 'label' =>esc_html__( 'Tab', 'elementskit-lite' ),
             ]
         );
-
         $this->add_control(
             'ekit_tab_style',
             [
@@ -476,7 +477,15 @@ class ElementsKit_Widget_Tab extends Widget_Base {
                 'fields' => $repeater->get_controls(),
             ]
         );
-
+        //tab schema
+        $this->add_control(
+            'ekit_tab_schema',
+            [
+                'label' => esc_html__( 'TAB Schema', 'elementskit-lite' ),
+                'type' => Controls_Manager::SWITCHER,
+                'separator' => 'before',
+            ]
+        );
         $this->end_controls_section();
 
         //  Wrapper Control
@@ -2146,7 +2155,32 @@ class ElementsKit_Widget_Tab extends Widget_Base {
                         </div>
                     </div>
                 <?php endforeach; ?>
+                
             </div>
+            <?php
+                if ( isset( $settings['ekit_tab_schema'] ) && 'yes' === $settings['ekit_tab_schema'] ) {
+                    $json = [
+                        '@context' => 'https://schema.org',
+                        '@type' => 'FAQPage',
+                        'mainEntity' => [],
+                    ];
+
+                    foreach ( $settings['ekit_tab_items'] as $index => $item ) {
+                        $faq_tab_text = !empty( $item['ekit_tab_content'] ) ? $item['ekit_tab_content'] : '';
+                        $json['mainEntity'][] = [
+                            '@type' => 'Question',
+                            'name' => esc_html($item['ekit_tab_title']),
+                            'acceptedAnswer' => [
+                                '@type' => 'Answer',
+                                'text' => \ElementsKit_Lite\Utils::kses( $faq_tab_text ),
+                            ],
+                        ];
+                    }
+                    ?>
+                    <script type="application/ld+json"><?php echo wp_json_encode( $json, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ); ?></script>
+                    <?php
+                }
+            ?>
         </div>
     <?php
     }

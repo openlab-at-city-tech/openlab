@@ -883,6 +883,24 @@ foreach ( $kadence_trans_post_types as $post_type_item ) {
 				),
 			),
 		);
+		if ( 'tribe_events' === $post_type_name ) {
+			$kadence_trans_extras_post_types[ 'transparent_header_tribe_events_archive' ] = array(
+				'control_type' => 'kadence_switch_control',
+				'sanitize'     => 'kadence_sanitize_toggle',
+				'section'      => 'transparent_header',
+				'priority'     => 5,
+				'default'      => true,
+				'label'        => esc_html__( 'Disable on Events Archive?', 'kadence' ),
+				'transport'    => 'refresh',
+				'context'      => array(
+					array(
+						'setting'  => 'transparent_header_enable',
+						'operator' => '=',
+						'value'    => true,
+					),
+				),
+			);
+		}
 	}
 }
 if ( $kadence_trans_add_extras ) {

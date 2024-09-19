@@ -12,6 +12,7 @@
 namespace ThemeisleSDK\Modules;
 
 use ThemeisleSDK\Common\Abstract_Module;
+use ThemeisleSDK\Loader;
 use ThemeisleSDK\Product;
 
 // Exit if accessed directly.
@@ -53,9 +54,8 @@ class Compatibilities extends Abstract_Module {
 	 *
 	 * @param Product $product Product to load.
 	 *
-	 * @throws \Exception If the configuration is invalid.
-	 *
 	 * @return Compatibilities Module instance.
+	 * @throws \Exception If the configuration is invalid.
 	 */
 	public function load( $product ) {
 
@@ -121,45 +121,44 @@ class Compatibilities extends Abstract_Module {
 				}
 				if ( $requirement->is_theme() && $screen->id === 'themes' ) {
 					?>
-				<script type="text/javascript">
-					jQuery(document).ready(function ($) {
-						setInterval(checkTheme, 500);
-						function checkTheme() {
-							var theme = jQuery( '.theme.active[data-slug="<?php echo esc_attr( $requirement->get_slug() ); ?>"]' );
-							var notice_id = 'testedup<?php echo esc_attr( $requirement->get_slug() . $product->get_slug() ); ?>';
-							var product_name = '<?php echo esc_attr( $product->get_friendly_name() ); ?>';
-							if (theme.length > 0 && jQuery('#' + notice_id).length === 0) {
-								theme.find('.theme-id-container').prepend('<div style="bottom:100%;top:auto;" id="'+notice_id+'" class="notice notice-warning"><strong>Warning:</strong> This theme has not been tested with your current version of <strong>' + product_name +'</strong>. Please update '+product_name+' plugin.</div>');
-							}
-							if (theme.length > 0 && jQuery('#' + notice_id + 'overlay').length === 0) {
-								jQuery('.theme-overlay.active .theme-author').after('<div style="bottom:100%;top:auto;" id="'+notice_id+'overlay" class="notice notice-warning"><p><strong>Warning:</strong> This theme has not been tested with your current version of <strong>' + product_name +'</strong>. Please update '+product_name+' plugin.</p></div>');
-							}
-						}
-					})
+					<script type="text/javascript">
+						jQuery(document).ready(function ($) {
+							setInterval(checkTheme, 500);
 
-				</script>
+							function checkTheme() {
+								var theme = jQuery('.theme.active[data-slug="<?php echo esc_attr( $requirement->get_slug() ); ?>"]');
+								var notice_id = 'testedup<?php echo esc_attr( $requirement->get_slug() . $product->get_slug() ); ?>';
+								if (theme.length > 0 && jQuery('#' + notice_id).length === 0) {
+									theme.find('.theme-id-container').prepend('<div style="bottom:100%;top:auto;" id="' + notice_id + '" class="notice notice-warning"><?php echo sprintf( esc_html( Loader::$labels['compatibilities']['notice_theme'] ), '<strong>', '</strong>', esc_attr( $product->get_friendly_name() ) ); ?></div>');
+								}
+								if (theme.length > 0 && jQuery('#' + notice_id + 'overlay').length === 0) {
+									jQuery('.theme-overlay.active .theme-author').after('<div style="bottom:100%;top:auto;" id="' + notice_id + 'overlay" class="notice notice-warning"><p><?php echo sprintf( esc_html( Loader::$labels['compatibilities']['notice_theme'] ), '<strong>', '</strong>', esc_attr( $product->get_friendly_name() ) ); ?></p></div>');
+								}
+							}
+						})
+
+					</script>
 					<?php
 				}
 				if ( $requirement->is_plugin() && $screen->id === 'plugins' ) {
 					?>
-				<script type="text/javascript">
-					jQuery(document).ready(function ($) {
-						setInterval(checkPlugin, 500);
-						function checkPlugin() {
-							var plugin = jQuery( '.plugins .active[data-slug="<?php echo esc_attr( $requirement->get_slug() ); ?>"]' );
-							var notice_id = 'testedup<?php echo esc_attr( $requirement->get_slug() . $product->get_slug() ); ?>';
-							var product_name = '<?php echo esc_attr( $product->get_friendly_name() ); ?>';
-							var product_type = '<?php echo ( $product->is_plugin() ? 'plugin' : 'theme' ); ?>';
-							if (plugin.length > 0 && jQuery('#' + notice_id).length === 0) {
-								plugin.find('.column-description').append('<div style="bottom:100%;top:auto;" id="'+notice_id+'" class="notice notice-warning notice-alt notice-inline"><strong>Warning:</strong> This plugin has not been tested with your current version of <strong>' + product_name +'</strong>. Please update '+product_name+' '+product_type+'.</div>');
-							}
-						}
-					})
+					<script type="text/javascript">
+						jQuery(document).ready(function ($) {
+							setInterval(checkPlugin, 500);
 
-				</script>
+							function checkPlugin() {
+								var plugin = jQuery('.plugins .active[data-slug="<?php echo esc_attr( $requirement->get_slug() ); ?>"]');
+								var notice_id = 'testedup<?php echo esc_attr( $requirement->get_slug() . $product->get_slug() ); ?>';
+								if (plugin.length > 0 && jQuery('#' + notice_id).length === 0) {
+									plugin.find('.column-description').append('<div style="bottom:100%;top:auto;" id="' + notice_id + '" class="notice notice-warning notice-alt notice-inline"><?php echo sprintf( esc_html( Loader::$labels['compatibilities']['notice_plugin'] ), '<strong>', '</strong>', esc_attr( $product->get_friendly_name() ), esc_attr( $product->is_plugin() ? Loader::$labels['compatibilities']['plugin'] : Loader::$labels['compatibilities']['theme'] ) ); ?></div>');
+								}
+							}
+						})
+
+					</script>
 					<?php
 				}
-			} 
+			}
 		);
 
 	}
@@ -197,13 +196,13 @@ class Compatibilities extends Abstract_Module {
 				}
 				if ( $should_block ) {
 					echo( sprintf(
-						'%s update requires a newer version of %s. Please %supdate%s %s %s.',
+						esc_html( Loader::$labels['compatibilities']['notice2'] ),
 						esc_attr( $product->get_friendly_name() ),
 						esc_attr( $requirement->get_friendly_name() ),
 						'<a href="' . esc_url( admin_url( $requirement->is_theme() ? 'themes.php' : 'plugins.php' ) ) . '">',
 						'</a>',
 						esc_attr( $requirement->get_friendly_name() ),
-						esc_attr( $requirement->is_theme() ? 'theme' : 'plugin' )
+						esc_attr( $requirement->is_theme() ? Loader::$labels['compatibilities']['theme'] : Loader::$labels['compatibilities']['plugin'] )
 					) );
 					$upgrader->maintenance_mode( false );
 					die();
@@ -220,13 +219,13 @@ class Compatibilities extends Abstract_Module {
 			function () use ( $product, $requirement ) {
 				echo '<div class="notice notice-error "><p>';
 				echo( sprintf(
-					'%s requires a newer version of %s. Please %supdate%s %s %s to the latest version.',
+					esc_html( Loader::$labels['compatibilities']['notice'] ),
 					'<strong>' . esc_attr( $product->get_friendly_name() ) . '</strong>',
 					'<strong>' . esc_attr( $requirement->get_friendly_name() ) . '</strong>',
 					'<a href="' . esc_url( admin_url( $requirement->is_theme() ? 'themes.php' : 'plugins.php' ) ) . '">',
 					'</a>',
 					'<strong>' . esc_attr( $requirement->get_friendly_name() ) . '</strong>',
-					esc_attr( $requirement->is_theme() ? 'theme' : 'plugin' )
+					esc_attr( $requirement->is_theme() ? Loader::$labels['compatibilities']['theme'] : Loader::$labels['compatibilities']['plugin'] )
 				) );
 				echo '</p></div>';
 			}

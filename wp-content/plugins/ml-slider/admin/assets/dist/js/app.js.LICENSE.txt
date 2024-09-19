@@ -6,8 +6,8 @@
  */
 
 /*!
- * Vue.js v2.7.14
- * (c) 2014-2022 Evan You
+ * Vue.js v2.7.16
+ * (c) 2014-2023 Evan You
  * Released under the MIT License.
  */
 
@@ -45,3 +45,15 @@ THE SOFTWARE.
 /*! tether 1.4.7 */
 
 /*! tether-shepherd 1.8.1 */
+
+/**! 
+ * hotkeys-js v3.13.7 
+ * A simple micro-library for defining and dispatching keyboard shortcuts. It has no dependencies. 
+ * 
+ * Copyright (c) 2024 kenny wong <wowohoo@qq.com> 
+ * https://github.com/jaywcjlove/hotkeys-js.git 
+ * 
+ * @website: https://jaywcjlove.github.io/hotkeys-js
+ 
+ * Licensed under the MIT license 
+ */

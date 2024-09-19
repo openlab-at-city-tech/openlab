@@ -486,7 +486,7 @@ window.jQuery(function ($) {
         if (autoPlay.is(':checked')) {
             // Add 'Stop on first slide' option if doesn't exists
             if (loop.find('option[value="stopOnFirst"]').length === 0) {
-                loop.append(`<option value="stopOnFirst">${APP.__('Stop on first slide', 'ml-slider')}</option>`);
+                loop.append(`<option value="stopOnFirst">${APP.__('Stop on first slide after looping', 'ml-slider')}</option>`);
             }
         } else {
             // Remove 'Stop on first slide' option
@@ -1028,14 +1028,14 @@ window.jQuery(function ($) {
         show_mobile_icon(tr_id);
     });
 
-    $('.mobile-checkbox').click(function(){
+    $('.metaslider').on('click', '.mobile-checkbox', function(){
         var slider_id = $(this).attr('name').replace(/[^0-9]/g,'');
         show_mobile_icon('slide-'+slider_id);
     });
 
     /* Hide the Mobile Options section when all options are hidden */
     function mobileSectionChecker(){
-        if (!$('[name="settings[links]"]').is(':checked') && $('[name="settings[navigation]"]').val() == 'false') {
+        if ($('[name="settings[links]"]').val() == 'false' && $('[name="settings[navigation]"]').val() == 'false') {
             $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').hide();
         } else {
             $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').show();

@@ -185,3 +185,9 @@ body.ld-in-focus-mode .learndash-wrapper, body.ld-in-focus-mode, .learndash-wrap
 .learndash-wrapper .ld-focus .ld-focus-header .kadence-color-palette-header-switcher {
 	padding-right: 1em;
 }
+.learndash-wrapper .ld-tabs .ld-tabs-navigation .ld-tab {
+	box-shadow: none;
+    border: 0;
+	border-radius: 0;
+	color: var(--global-palette6);
+}

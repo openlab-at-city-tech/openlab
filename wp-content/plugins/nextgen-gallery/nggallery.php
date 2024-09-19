@@ -2,10 +2,10 @@
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.59.3
+ * Version: 3.59.4
  * Author: Imagely
- * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/
- * Author URI: https://www.imagely.com
+ * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=pluginuri
+ * Author URI: https://www.imagely.com/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=authoruri
  * License: GPLv3
  * Text Domain: nggallery
  * Domain Path: /static/I18N/
@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 use Imagely\NGG\Admin\AMNotifications;
 use Imagely\NGG\Admin\About;
+use Imagely\NGG\Admin\MenuNudge;
 use Imagely\NGG\Admin\Ecommerce_Preview;
 
 /**
@@ -153,6 +154,7 @@ class C_NextGEN_Bootstrap {
 
 			if ( is_admin() ) {
 				( new About() )->hooks();
+				( new MenuNudge() )->hooks();
 				( new Ecommerce_Preview() )->hooks();
 			}
 
@@ -965,7 +967,7 @@ class C_NextGEN_Bootstrap {
 		define( 'NGG_PRODUCT_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PLUGIN_DIR, '/\\' ), 'products' ] ) );
 		define( 'NGG_MODULE_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PRODUCT_DIR, '/\\' ), 'photocrati_nextgen', 'modules' ] ) );
 		define( 'NGG_PLUGIN_STARTED_AT', microtime() );
-		define( 'NGG_PLUGIN_VERSION', '3.59.3' );
+		define( 'NGG_PLUGIN_VERSION', '3.59.4' );
 
 		define( 'NGG_SCRIPT_VERSION', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? (string) mt_rand( 0, mt_getrandmax() ) : NGG_PLUGIN_VERSION );
 

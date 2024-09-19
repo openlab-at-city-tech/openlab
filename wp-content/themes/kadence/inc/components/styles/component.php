@@ -238,7 +238,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		if ( ! empty( $generated_css ) ) {
 			$css .= "\n/* Kadence Base CSS */\n" . $generated_css;
 		}
-		if ( kadence()->has_header() ) {
+		if ( kadence()->has_header_styles() ) {
 			$generated_header_css = $this->generate_header_css();
 			if ( ! empty( $generated_header_css ) ) {
 				$css .= "\n/* Kadence Header CSS */\n" . $generated_header_css;
@@ -1261,9 +1261,18 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'primary_navigation_color', 'hover' ) ) );
 			$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'primary_navigation_background', 'hover' ) ) );
 			if ( kadence()->option( 'primary_navigation_parent_active' ) ) {
-				$css->set_selector( '.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-menu-ancestor>a:after' );
+				$css->set_selector( '
+					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-menu-ancestor>a:after,
+					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-page-parent>a:after,
+					.header-navigation[class*="header-navigation-style-underline"] .header-menu-container.primary-menu-container>ul>li.current-product-ancestor>a:after
+				' );
 				$css->add_property( 'transform', 'scale(1, 1) translate(50%, 0)' );
-				$css->set_selector( '.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-item > a, .main-navigation .primary-menu-container > ul > li.menu-item.current-menu-ancestor > a, .main-navigation .primary-menu-container > ul > li.menu-item.current-menu-ancestor > a' );
+				$css->set_selector( '
+					.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-item > a, 
+					.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-ancestor > a, 
+					.main-navigation .primary-menu-container > ul > li.menu-item.current-page-parent > a,
+					.main-navigation .primary-menu-container > ul > li.menu-item.current-product-ancestor > a
+				' );
 			} else {
 				$css->set_selector( '.main-navigation .primary-menu-container > ul > li.menu-item.current-menu-item > a' );
 			}
@@ -1372,17 +1381,33 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'border-bottom', $css->render_border( kadence()->option( 'mobile_navigation_divider' ) ) );
 		$css->set_selector( '.mobile-navigation:not(.drawer-navigation-parent-toggle-true) ul li.menu-item-has-children .drawer-nav-drop-wrap button' );
 		$css->add_property( 'border-left', $css->render_border( kadence()->option( 'mobile_navigation_divider' ) ) );
+
 		// Mobile Popout.
-		$css->set_selector( '#mobile-drawer .drawer-inner, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice .pop-portion-bg, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice.pop-animated.show-drawer .drawer-inner' );
-		$css->render_background( kadence()->sub_option( 'header_popup_background', 'desktop' ), $css );
-		$css->start_media_query( $media_query['tablet'] );
-		$css->set_selector( '#mobile-drawer .drawer-inner, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice .pop-portion-bg, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice.pop-animated.show-drawer .drawer-inner' );
-		$css->render_background( kadence()->sub_option( 'header_popup_background', 'tablet' ), $css );
-		$css->stop_media_query();
-		$css->start_media_query( $media_query['mobile'] );
-		$css->set_selector( '#mobile-drawer .drawer-inner, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice .pop-portion-bg, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice.show-drawer.pop-animated .drawer-inner' );
-		$css->render_background( kadence()->sub_option( 'header_popup_background', 'mobile' ), $css );
-		$css->stop_media_query();
+		$header_popup_width = kadence()->option( 'header_popup_width' );
+		$header_popup_content_max_width = kadence()->option( 'header_popup_content_max_width' );
+		$header_popup_content_align = kadence()->option( 'header_popup_content_align' ) ?? 'left';
+		foreach ( array( 'desktop', 'tablet', 'mobile' ) as $device ) {
+			$css->set_selector( '#mobile-drawer .drawer-inner, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice .pop-portion-bg, #mobile-drawer.popup-drawer-layout-fullwidth.popup-drawer-animation-slice.pop-animated.show-drawer .drawer-inner' );
+
+			if ( $device != 'desktop' ) {
+				$css->start_media_query( $media_query[ $device ] );
+			}
+			$css->render_background( kadence()->sub_option( 'header_popup_background', $device ), $css );
+			if ( 'sidepanel' === kadence()->option( 'header_popup_layout' ) && isset( $header_popup_width['size'] ) && isset( $header_popup_width['size'][ $device ] ) && $header_popup_width['size'][ $device ] ) {
+				$unit = isset( $header_popup_width['unit'][ $device ] ) ? $header_popup_width['unit'][ $device ] : ( isset( $header_popup_width['unit'] ) ? $header_popup_width['unit'] : 'px' );
+				$css->add_property( 'width', $header_popup_width['size'][ $device ] . $unit );
+			}
+			$css->set_selector( '#mobile-drawer .drawer-content' );
+			if ( isset( $header_popup_content_max_width['size'] ) && isset( $header_popup_content_max_width['size'][ $device ] ) && $header_popup_content_max_width['size'][ $device ] ) {
+				$unit = isset( $header_popup_content_max_width['unit'][ $device ] ) ? $header_popup_content_max_width['unit'][ $device ] : ( isset( $header_popup_content_max_width['unit'] ) ? $header_popup_content_max_width['unit'] : 'px' );
+				$css->add_property( 'max-width', $header_popup_content_max_width['size'][ $device ] . $unit );
+				$css->add_property( 'margin', '0 auto' );
+			}
+			if ( $device != 'desktop' ) {
+				$css->stop_media_query();
+			}
+		}
+
 		$css->set_selector( '#mobile-drawer .drawer-header .drawer-toggle' );
 		$css->add_property( 'padding', $this->render_measure( kadence()->option( 'header_popup_close_padding' ) ) );
 		$css->add_property( 'font-size', kadence()->sub_option( 'header_popup_close_icon_size', 'size' ) . kadence()->sub_option( 'header_popup_close_icon_size', 'unit' ) );
@@ -2123,7 +2148,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'image_border_radius' ), 'mobile' ) );
 		$css->stop_media_query();
 		// Padding for transparent header.
-		if ( kadence()->has_header() ) {
+		if ( kadence()->has_header_styles() ) {
 			$css->start_media_query( $media_query['desktop'] );
 			$css->set_selector( '.transparent-header .entry-hero .entry-hero-container-inner' );
 			$css->add_property( 'padding-top', $this->render_hero_padding( 'desktop' ) );
@@ -3306,7 +3331,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'max-width', 'var(--global-calc-content-width)' );
 		$css->set_selector( '.editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper > [data-align="wide"], .editor-styles-wrapper .block-editor-block-list__layout.is-root-container > [data-align="wide"]' );
 		$css->add_property( 'max-width', 'var(--global-content-wide-width)' );
-		
+		$css->set_selector( '.post-content-style-unboxed, .admin-color-pcs-unboxed' );
+		$css->add_property( '--global-calc-content-width', 'var(--global-content-width)' );
 		// Boxed Content Editor Width.
 		$css->set_selector( '.post-content-style-boxed, .admin-color-pcs-boxed' );
 		$css->add_property( '--global-calc-content-width', 'calc(var(--global-content-width) - var(--global-content-edge-padding) - var(--global-content-edge-padding) - 4rem )' );
@@ -4092,7 +4118,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'kadence-header'    => array(
 				'file'             => 'header.min.css',
 				'preload_callback' => function() {
-					return kadence()->has_header();
+					return kadence()->has_header_styles();
 				},
 			),
 			'kadence-content'    => array(

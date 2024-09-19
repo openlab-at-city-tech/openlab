@@ -16,7 +16,7 @@
 					<img class="ekit-onboard-single-plugin--logo" src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/getgenie-logo.svg" alt="GetGenie">
 					<p class="ekit-onboard-single-plugin--description"><span><?php echo esc_html__( 'Get FREE 1500 AI words, SEO Keyword, and Competitor Analysis credits', 'elementskit-lite' )?> </span><?php echo esc_html__('on your personal AI assistant for Content & SEO right inside WordPress!', 'elementskit-lite' ); ?></p>
 					<?php $plugin = $pluginStatus->get_status( 'getgenie/getgenie.php' ); ?>
-					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'], 'elementskit-lite' ); ?></a>
+					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'] ); ?></a>
 				</label>
 			</div>
 		</div>
@@ -26,7 +26,7 @@
 					<img class="ekit-onboard-single-plugin--logo" src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/shopengine-logo.svg" alt="ShopEngine">
 					<p class="ekit-onboard-single-plugin--description"><?php echo esc_html__( 'Completely customize your  WooCommerce WordPress', 'elementskit-lite' ); ?></p>
 					<?php $plugin = $pluginStatus->get_status( 'shopengine/shopengine.php' ); ?>
-					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'], 'elementskit-lite' ); ?></a>
+					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title']); ?></a>
 				</label>
 			</div>
 		</div>
@@ -36,7 +36,7 @@
 					<img class="ekit-onboard-single-plugin--logo" src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/metform-logo.svg" alt="Metform">
 					<p class="ekit-onboard-single-plugin--description"><?php echo esc_html__( 'Most flexible drag-and-drop form builder', 'elementskit-lite' ); ?></p>
 					<?php $plugin = $pluginStatus->get_status( 'metform/metform.php' ); ?>
-					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'], 'elementskit-lite' ); ?></a>
+					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'] ); ?></a>
 				</label>
 			</div>
 		</div>
@@ -46,7 +46,7 @@
 					<img class="ekit-onboard-single-plugin--logo" src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/wp-social-logo.svg" alt="WpSocial">
 					<p class="ekit-onboard-single-plugin--description"><?php echo esc_html__( 'Integrate all your social media to your website', 'elementskit-lite' ); ?></p>
 					<?php $plugin = $pluginStatus->get_status( 'wp-social/wp-social.php' ); ?>
-					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'], 'elementskit-lite' ); ?></a>
+					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'] ); ?></a>
 				</label>
 			</div>
 		</div>
@@ -56,7 +56,7 @@
 					<img class="ekit-onboard-single-plugin--logo" src="<?php echo esc_url(self::get_url()); ?>assets/images/onboard/ultimate-review-logo.svg" alt="UltimateReview">
 					<p class="ekit-onboard-single-plugin--description"><?php echo esc_html__( 'Integrate various styled review system in your website', 'elementskit-lite' ); ?></p>
 					<?php $plugin = $pluginStatus->get_status( 'wp-ultimate-review/wp-ultimate-review.php' ); ?>
-					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title'], 'elementskit-lite' ); ?></a>
+					<a data-plugin_status="<?php echo esc_attr( $plugin['status'] ); ?>" data-activation_url="<?php echo esc_url( $plugin['activation_url'] ); ?>" href="<?php echo esc_url( $plugin['installation_url'] ); ?>" class="ekit-pro-btn ekit-onboard-single-plugin--install_plugin <?php echo $plugin['status'] == 'activated' ? 'activated' : ''; ?>"><?php echo esc_html( $plugin['title']); ?></a>
 				</label>
 			</div>
 		</div>

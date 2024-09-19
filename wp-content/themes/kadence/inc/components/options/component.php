@@ -76,6 +76,13 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	protected static $sidebars = null;
 
 	/**
+	 * Holds header options values
+	 *
+	 * @var values of the theme settings.
+	 */
+	protected static $headers = null;
+
+	/**
 	 * Holds default palette values
 	 *
 	 * @var values of the theme settings.
@@ -100,7 +107,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 *
 	 * @var values of the allowed alt urls.
 	 */
-	protected static $allowed_urls = array( 'https://www.kadencewp.com/kadence-theme/hostinger/' );
+	protected static $allowed_urls = array( 'https://www.kadencewp.com/kadence-theme/hostinger/', 'https://www.kadencewp.com/kadence-theme/instawp/' );
 
 	/**
 	 * Gets the unique identifier for the theme component.
@@ -139,6 +146,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			'get_default_palette'        => array( $this, 'get_default_palette' ),
 			'get_palette_for_customizer' => array( $this, 'get_palette_for_customizer' ),
 			'get_pro_url'                => array( $this, 'get_pro_url' ),
+			'block_header_options'       => array( $this, 'block_header_options' ),
 		);
 	}
 
@@ -504,7 +512,33 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					),
 					'enable_footer_on_bottom' => true,
 					'enable_scroll_to_id'     => true,
+					'blocks_header'           => false,
+					'blocks_header_id'        => '',
 					'lightbox' => false,
+					'header_popup_width' => array(
+						'size' => array(
+							'mobile'  => '',
+							'tablet'  => '',
+							'desktop' => '',
+						),
+						'unit' => array(
+							'mobile'  => 'px',
+							'tablet'  => 'px',
+							'desktop' => 'px',
+						),
+					),
+					'header_popup_content_max_width' => array(
+						'size' => array(
+							'mobile'  => '',
+							'tablet'  => '',
+							'desktop' => '',
+						),
+						'unit' => array(
+							'mobile'  => 'px',
+							'tablet'  => 'px',
+							'desktop' => 'px',
+						),
+					),
 					'enable_popup_body_animate' => false,
 					// Typography.
 					'font_rendering' => false,
@@ -1254,8 +1288,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'twitter',
-								'label'   => 'Twitter',
+								'icon'    => 'twitterAlt2',
+								'label'   => 'X',
 							),
 							array(
 								'id'      => 'instagram',
@@ -1264,7 +1298,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'instagram',
+								'icon'    => 'instagramAlt',
 								'label'   => 'Instagram',
 							),
 						),
@@ -1338,8 +1372,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'twitter',
-								'label'   => 'Twitter',
+								'icon'    => 'twitterAlt2',
+								'label'   => 'X',
 							),
 							array(
 								'id'      => 'instagram',
@@ -1348,7 +1382,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'instagram',
+								'icon'    => 'instagramAlt',
 								'label'   => 'Instagram',
 							),
 						),
@@ -2128,8 +2162,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'twitter',
-								'label'   => 'Twitter',
+								'icon'    => 'twitterAlt2',
+								'label'   => 'X',
 							),
 							array(
 								'id'      => 'instagram',
@@ -2138,7 +2172,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 								'url'     => '',
 								'imageid' => '',
 								'width'   => 24,
-								'icon'    => 'instagram',
+								'icon'    => 'instagramAlt',
 								'label'   => 'Instagram',
 							),
 						),
@@ -2428,6 +2462,9 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					'post_related_style'      => 'wide',
 					'post_related_carousel_loop' => true,
 					'post_related_columns'    => '',
+					'post_related_title'      => '',
+					'post_related_orderby'    => '',
+					'post_related_order'    => '',
 					'post_related_title_font' => array(
 						'size' => array(
 							'desktop' => '',
@@ -3111,6 +3148,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'paypal' => true,
 						'applepay' => false,
 						'stripe' => false,
+						'link' => false,
+						'googlepay' => false,
 						'card_color' => 'inherit',
 						'custom_enable_01' => false,
 						'custom_img_01' => '',
@@ -4205,6 +4244,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 					// MISC
 					'ie11_basic_support' => false,
 					'theme_json_mode'    => false,
+					'microdata'          => true,
 				)
 			);
 		}
@@ -4698,7 +4738,34 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 		return apply_filters( 'kadence_palette_option', $value, $subkey );
 	}
-
+	/**
+	 * Get all the kadence_header posts to show in the customizer.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function block_header_options() {
+		if ( is_null( self::$headers ) ) {
+			$headers = array( '' => array( 'name' => esc_html__( 'Select', 'kadence' ) ) );
+			if ( defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+				$args    = array(
+					'post_type'      => 'kadence_header',
+					'posts_per_page' => 100,
+					'post_status'    => 'publish',
+					'order'          => 'ASC',
+					'orderby'        => 'menu_order',
+				);
+				$posts = get_posts( $args );
+				foreach ( $posts as $post ) {
+					$headers[ $post->ID ] = array(
+						'name' => $post->post_title,
+					);
+				}
+			}
+			self::$headers = $headers;
+		}
+		return self::$headers;
+	}
 	/**
 	 * Get Customizer Sidebar Options
 	 *

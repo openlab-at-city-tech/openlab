@@ -1,3 +1,54 @@
+##### [Version 3.8.11](https://github.com/Codeinwp/neve/compare/v3.8.10...v3.8.11) (2024-08-14)
+
+- Fixed Breadcrumb NavXT integration
+- Fixed Neve and Easy Digital Downloads compatibility: Custom Layout on Download Archive was being misapplied for Tags & Taxonomy
+- Improved translations coverage
+
+##### [Version 3.8.10](https://github.com/Codeinwp/neve/compare/v3.8.9...v3.8.10) (2024-07-31)
+
+- Fixed duplicate ID issue with secondary navigation menu
+- Fixed translations support on dashboard pages
+
+##### [Version 3.8.9](https://github.com/Codeinwp/neve/compare/v3.8.8...v3.8.9) (2024-07-04)
+
+- Fixed an issue with the permalinks of the new starter site menu items
+
+##### [Version 3.8.8](https://github.com/Codeinwp/neve/compare/v3.8.7...v3.8.8) (2024-07-03)
+
+- Fixed duplication of Bank Details on the WooCommerce Order-Received Page
+- Fixed text overlapping in Onboarding notice for multiple languages
+- Fixed schema issues in the footer
+- Fixed CSS syntax error causing W3C validation error
+- Updated Google Fonts
+- Updated the thumbnail for the default starter site
+- Added new default Marketing Agency starter site content
+
+##### [Version 3.8.7](https://github.com/Codeinwp/neve/compare/v3.8.6...v3.8.7) (2024-04-27)
+
+- Updated assets
+
+##### [Version 3.8.6](https://github.com/Codeinwp/neve/compare/v3.8.5...v3.8.6) (2024-04-05)
+
+### Bug Fixes
+- **Fixed menu items** where long item names with a dropdown on the mobile were overlapping with the dropdown button.
+### Improvements
+- **Updated internal dependencies**
+
+##### [Version 3.8.5](https://github.com/Codeinwp/neve/compare/v3.8.4...v3.8.5) (2024-04-01)
+
+### Improvements
+- **Updated internal dependencies**
+- **Update Google Fonts**​:​ Get the newest Google fonts from the public font library.
+
+##### [Version 3.8.4](https://github.com/Codeinwp/neve/compare/v3.8.3...v3.8.4) (2024-03-29)
+
+### Bug Fixes
+- Fix an issue with footer element IDs not being unique.
+
+### Improvements
+- Improved Formbricks
+- Updated internal dependencies
+
 ##### [Version 3.8.3](https://github.com/Codeinwp/neve/compare/v3.8.2...v3.8.3) (2024-03-12)
 
 ### Bug Fixes:

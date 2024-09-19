@@ -508,11 +508,15 @@ class TRP_Language_Switcher{
                     continue;
                 }
                 $language_code = $ls_post->post_content;
-                $language_name = $item->title;
+
+                // Prefer item title if it exists, otherwise use the corresponding value from $published_languages
+                $language_name = !empty($item->post_title) ? $item->post_title : (isset($published_languages[$language_code]) ? $published_languages[$language_code] : $item->title);
+
                 $language_labels[$language_code] = $language_name;
             }
-
         }
+
+
         foreach ( $items as $key => $item ){
             if ( $item->object == 'language_switcher' ){
                 $ls_id = get_post_meta( $item->ID, '_menu_item_object_id', true );

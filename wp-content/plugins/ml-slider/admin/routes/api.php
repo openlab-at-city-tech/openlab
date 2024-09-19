@@ -77,6 +77,7 @@ class MetaSlider_Api
         // Themes
         add_action('wp_ajax_ms_get_all_free_themes', array(self::$instance, 'get_all_free_themes'));
         add_action('wp_ajax_ms_get_custom_themes', array(self::$instance, 'get_custom_themes'));
+        add_action('wp_ajax_ms_get_theme_customization', array(self::$instance, 'get_theme_customization'));
         add_action('wp_ajax_ms_set_theme', array(self::$instance, 'set_theme'));
 
         // Slides
@@ -353,6 +354,41 @@ class MetaSlider_Api
         }
 
         wp_send_json_success($themes, 200);
+    }
+
+    /**
+     * Returns theme customizations for a given slideshow
+     * 
+     * @since 3.91
+     */
+    public function get_theme_customization($request)
+    {
+        if (!$this->can_access()) {
+            $this->deny_access();
+        }
+
+        $data           = $this->get_request_data($request, array('slideshow_id', 'theme'));
+        $slideshow_id   = absint($data['slideshow_id']);
+        $folder         = sanitize_text_field($data['theme']);
+        
+        $settings       = get_post_meta($slideshow_id, 'ml-slider_settings', true);
+        $manifest       = !empty($folder) ? $this->themes->add_base_customize_settings_single($folder) : array();
+        
+        $data = array(
+            'saved_settings' => isset($settings['theme_customize']) 
+                                && is_array($settings['theme_customize']) 
+                                && count($settings['theme_customize']) > 0 
+                                ? $settings['theme_customize'] : false,
+            'manifest' => $manifest
+        );
+
+        if (is_wp_error($data)) {
+            wp_send_json_error(array(
+                'message' => $data->get_error_message()
+            ), 400);
+        }
+
+        wp_send_json_success($data, 200);
     }
 
     /**
@@ -1335,6 +1371,11 @@ if (class_exists('WP_REST_Controller')) :
             register_rest_route($this->namespace, '/themes/custom', array(array(
                 'methods' => 'GET',
                 'callback' => array($this->api, 'get_custom_themes'),
+                'permission_callback' => array($this->api, 'can_access')
+            )));
+            register_rest_route($this->namespace, '/theme/customization', array(array(
+                'methods' => 'GET',
+                'callback' => array($this->api, 'get_theme_customization'),
                 'permission_callback' => array($this->api, 'can_access')
             )));
             register_rest_route($this->namespace, '/themes/set', array(array(

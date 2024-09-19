@@ -1,10 +1,11 @@
-=== Plugin Name ===
+=== Invite Anyone ===
 Contributors: boonebgorges, cuny-academic-commons
 Donate link: http://teleogistic.net/donate
 Tags: buddypress, invitations, group, invite, friends, members
 Requires at least: 3.2
-Tested up to: 6.4
-Stable tag: 1.4.7
+Tested up to: 6.6
+Stable tag: 1.4.10
+License: GPLv3
 
 Makes BuddyPress's invitation features more powerful.
 
@@ -50,6 +51,17 @@ Additional details about the plugin can be found in the following languages:
 * Serbo-Croatian: <a href="http://science.webhostinggeeks.com/teleogistic">http://science.webhostinggeeks.com/teleogistic</a>
 
 == Changelog ==
+
+= 1.4.10 =
+* Fixed bug that caused group Send Invites nav item to show to non-members
+
+= 1.4.9 =
+* Fixed regression in 1.4.8 that caused group invite template not to load correctly
+
+= 1.4.8 =
+* Security fix: Prevent XSS during AJAX autocomplete
+* Security hardening
+* Internal codebase improvements
 
 = 1.4.7 =
 * Fixed regression in 1.4.6 that may cause duplicate nav items in groups

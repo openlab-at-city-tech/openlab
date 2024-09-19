@@ -225,7 +225,7 @@
 					gallery_name.classList.remove('hidden');
 					gallery_create.classList.remove('hidden');
 				});
-			
+
 
 			// This is used by the NextGEN wizard to determine when the uploads process is complete
 			window.ngg_uppy = uppy;
@@ -333,11 +333,21 @@
 			// Listen for events emitted in other frames
 			if (window.Frame_Event_Publisher) {
 				Frame_Event_Publisher.listen_for('attach_to_post:new_gallery', (data) => {
-					const option = document.createElement('option');
-					option.value = data.gallery_id;
-					option.text  = data.gallery_title;
-					option.dataset.originalValue = data.gallery_title;
-					gallery_select.add(option);
+					// Check if the option already exists.
+					let exists = false;
+					for (let i = 0; i < gallery_select.options.length; i++) {
+						if (gallery_select.options[i].value == data.gallery_id) {
+							exists = true;
+							break;
+						}
+					}
+					if (!exists) {
+						const option = document.createElement('option');
+						option.value = data.gallery_id;
+						option.text  = data.gallery_title;
+						option.dataset.originalValue = data.gallery_title;
+						gallery_select.add(option);
+					}
 				});
 
 			}

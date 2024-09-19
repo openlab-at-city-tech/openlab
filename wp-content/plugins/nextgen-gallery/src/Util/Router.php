@@ -592,8 +592,8 @@ class Router {
 
 		if ( $post
 			&& is_object( $post )
-			&& is_string( $post->content )
-			&& ( strpos( $post->content, '<!--nextpage-->' ) === false )
+			&& is_string( $post->post_content )
+			&& ( strpos( $post->post_content, '<!--nextpage-->' ) === false )
 			&& ( strpos( $_SERVER['REQUEST_URI'], '/page/' ) !== false )
 			&& preg_match( '#/page/(\\d+)#', $_SERVER['REQUEST_URI'], $match ) ) {
 			$_REQUEST['page'] = $match[1];

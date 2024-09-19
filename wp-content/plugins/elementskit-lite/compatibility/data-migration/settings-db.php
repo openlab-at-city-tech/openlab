@@ -44,7 +44,7 @@ class Settings_Db {
 
 	public function social_share_css_was_updated($upgrader_object, $options){
 		$our_plugin = 'elementskit-lite/elementskit-lite.php';
-		if ($options['action'] == 'update' && $options['type'] == 'plugin' ) {
+		if (!empty($options['plugins']) && $options['action'] == 'update' && $options['type'] == 'plugin' ) {
 			foreach($options['plugins'] as $plugin) {
 				if ($plugin == $our_plugin) {
 					if ( !get_transient('social_share_css_was_updated')) {
@@ -55,9 +55,10 @@ class Settings_Db {
 			}
 		}
 	}
+
 	public function team_widget_css_was_updated($upgrader_object, $options){
 		$our_plugin = 'elementskit-lite/elementskit-lite.php';
-		if ($options['action'] == 'update' && $options['type'] == 'plugin' ) {
+		if (!empty($options['plugins']) && $options['action'] == 'update' && $options['type'] == 'plugin' ) {
 			foreach($options['plugins'] as $plugin) {
 				if ($plugin == $our_plugin) {
 					if ( !get_transient('team_widget_css_was_updated')) {

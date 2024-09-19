@@ -214,7 +214,6 @@
 	  color: black;
 	  height: 70px;
 	  margin-top: 0;
-	  opacity: 1;
 	  overflow: hidden;
 	  top: 50%;
 	  -webkit-transform: translateY(-50%);
@@ -423,6 +422,21 @@
 	  &:hover, &.active {
 		border: 0 none;
 	  }
+	}
+	&.has-onhover-arrows {
+		.flex-direction-nav li {
+			opacity: 0;
+		}
+		&:hover {
+			.flex-direction-nav {
+				li {
+					opacity: 1;
+				}
+				a {
+					opacity: 1;
+				}
+			}
+		}
 	}
   }
   

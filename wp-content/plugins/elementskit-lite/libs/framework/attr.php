@@ -58,7 +58,7 @@ class Attr {
 		// dashboard, main menu
 		add_menu_page(
 			esc_html__( 'ElementsKit Settings', 'elementskit-lite' ),
-			esc_html__( 'ElementsKit', 'elementskit-lite' ),
+			'ElementsKit', // esc_html__( 'ElementsKit', 'elementskit-lite' ),
 			'manage_options',
 			self::key(),
 			array( $this, 'register_settings_contents__settings' ),

@@ -359,7 +359,7 @@ CM_Tooltip.gtooltip = function ( opts ) {
                     tooltipContainer.style.color = opts.foreground;
                 }
 
-                tooltipContainer.innerHTML = content;
+                tooltipContainer.innerHTML = DOMPurify.sanitize(content);
                 jQuery( '#tt' ).removeAttr( 'aria-label');
 
                 if ( jQuery( tooltipContainer ).find( '.glossaryItemBody' ).length ) {

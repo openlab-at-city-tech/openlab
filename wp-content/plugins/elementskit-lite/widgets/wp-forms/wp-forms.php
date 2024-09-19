@@ -39,7 +39,9 @@ class ElementsKit_Widget_Wp_Forms extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/wp-forms/';
     }
-
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     protected function register_controls() {
         $this->start_controls_section(
             'ekit_wpform_section_tab', [

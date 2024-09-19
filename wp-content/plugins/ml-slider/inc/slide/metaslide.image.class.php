@@ -23,6 +23,7 @@ class MetaImageSlide extends MetaSlide
     {
         parent::__construct();
         add_filter('metaslider_get_image_slide', array($this, 'get_slide' ), 10, 2);
+        add_filter('metaslider_html_purifier_config', array($this, 'html_purifier_config'));
         add_action('metaslider_save_image_slide', array($this, 'save_slide' ), 5, 3);
         add_action('wp_ajax_create_image_slide', array($this, 'ajax_create_image_slides'));
         add_action('wp_ajax_resize_image_slide', array($this, 'ajax_resize_slide'));
@@ -764,7 +765,8 @@ class MetaImageSlide extends MetaSlide
         $anchor_attributes = apply_filters('metaslider_flex_slider_anchor_attributes', array(
                 'href' => $slide['url'],
                 'target' => $slide['target'],
-                'aria-label' => $slide['link-alt']
+                'aria-label' => $slide['link-alt'],
+                'class' => 'metaslider_image_link'
             ), $slide, $this->slider->ID);
 
         if (strlen($anchor_attributes['href'])) {
@@ -936,6 +938,18 @@ class MetaImageSlide extends MetaSlide
         }
 
         return apply_filters('metaslider_image_responsive_slider_markup', $html, $slide, $this->settings);
+    }
+
+    /**
+     * Allow '_blank' as target value in HTML. Only in use for captions for now.
+     * 
+     * @since 3.90.1
+     */
+    public function html_purifier_config($config)
+    {
+        $config->set('Attr.AllowedFrameTargets', array('_blank'));
+        
+        return $config;
     }
 
     /**

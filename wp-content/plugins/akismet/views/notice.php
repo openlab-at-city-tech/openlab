@@ -9,9 +9,12 @@ $kses_allow_link   = array(
 );
 $kses_allow_strong = array( 'strong' => true );
 
+if ( ! isset( $type ) ) {
+	$type = false; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+}
+
 /*
- * Some notices (plugin, spam-check, spam-check-cron-disabled, alert and usage-limit) are shown elsewhere in wp-admin,
- * so look different to the standard notices.
+ * Some notices (plugin, spam-check, spam-check-cron-disabled, alert and usage-limit) are also shown elsewhere in wp-admin, so have different classes applied so that they match the standard WordPress notice format.
  */
 ?>
 <?php if ( $type === 'plugin' ) : ?>
@@ -37,25 +40,27 @@ $kses_allow_strong = array( 'strong' => true );
 </div>
 
 <?php elseif ( $type === 'spam-check' ) : ?>
-<div class="notice notice-warning">
-	<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
-	<p><?php esc_html_e( 'Some comments have not yet been checked for spam by Akismet. They have been temporarily held for moderation and will automatically be rechecked later.', 'akismet' ); ?></p>
-	<?php if ( $link_text ) : ?>
-		<p><?php echo wp_kses( $link_text, $kses_allow_link ); ?></p>
-	<?php endif; ?>
-</div>
+	<?php // This notice is only displayed on edit-comments.php. ?>
+	<div class="notice notice-warning">
+		<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
+		<p><?php esc_html_e( 'Some comments have not yet been checked for spam by Akismet. They have been temporarily held for moderation and will automatically be rechecked later.', 'akismet' ); ?></p>
+		<?php if ( ! empty( $link_text ) ) : ?>
+			<p><?php echo wp_kses( $link_text, $kses_allow_link ); ?></p>
+		<?php endif; ?>
+	</div>
 
 <?php elseif ( $type === 'spam-check-cron-disabled' ) : ?>
-<div class="notice notice-warning">
-	<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
-	<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
-</div>
-
+	<?php // This notice is only displayed on edit-comments.php. ?>
+	<div class="notice notice-warning">
+		<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
+		<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
+	</div>
+	
 <?php elseif ( $type === 'alert' ) : ?>
-<div class="error">
+<div class="<?php echo isset( $parent_view ) && $parent_view === 'config' ? 'akismet-alert is-bad' : 'error'; ?>">
 	<?php /* translators: The placeholder is an error code returned by Akismet. */ ?>
 	<p><strong><?php printf( esc_html__( 'Akismet error code: %s', 'akismet' ), esc_html( $code ) ); ?></strong></p>
-	<p><?php echo esc_html( $msg ); ?></p>
+	<p><?php echo isset( $msg ) ? esc_html( $msg ) : ''; ?></p>
 	<p>
 		<?php
 		/* translators: the placeholder is a clickable URL that leads to more information regarding an error code. */
@@ -307,8 +312,11 @@ $kses_allow_strong = array( 'strong' => true );
 	<div class="akismet-usage-limit-cta">
 		<a href="<?php echo esc_attr( $upgrade_url ); ?>" class="button" target="_blank">
 			<?php
-			// If only a qty upgrade is required, show a more generic message.
-			if ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
+			if ( isset( $upgrade_via_support ) && $upgrade_via_support ) {
+				// Direct user to contact support.
+				esc_html_e( 'Contact Akismet support', 'akismet' );
+			} elseif ( ! empty( $upgrade_type ) && 'qty' === $upgrade_type ) {
+				// If only a qty upgrade is required, show a more generic message.
 				esc_html_e( 'Upgrade your subscription level', 'akismet' );
 			} else {
 				echo esc_html(

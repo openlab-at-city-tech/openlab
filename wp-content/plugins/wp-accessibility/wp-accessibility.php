@@ -9,15 +9,15 @@
  *
  * @wordpress-plugin
  * Plugin Name: WP Accessibility
- * Plugin URI: http://www.joedolson.com/wp-accessibility/
+ * Plugin URI: https://www.joedolson.com/wp-accessibility/
  * Description: Helps improve accessibility in your WordPress site, like removing title attributes.
  * Author: Joe Dolson
- * Author URI: http://www.joedolson.com/
+ * Author URI: https://www.joedolson.com/
  * Text Domain: wp-accessibility
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 2.1.10
+ * Version: 2.1.12
  */
 
 /*
@@ -94,7 +94,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '2.1.10';
+	$wpa_version = '2.1.12';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -554,13 +554,13 @@ add_action( 'admin_bar_menu', 'wpa_logout_item', 11 );
  * @param object $admin_bar Admin bar object.
  */
 function wpa_logout_item( $admin_bar ) {
-	if ( ! is_user_logged_in() ) {
+	if ( ! is_user_logged_in() || 'on' === get_option( 'wpa_disable_logout', 'true' ) ) {
 		return;
 	}
 
 	$args = array(
 		'id'    => 'wpa-logout',
-		'title' => 'Log Out',
+		'title' => __( 'Log Out', 'wp-accessibility' ),
 		'href'  => wp_logout_url(),
 	);
 	$admin_bar->add_node( $args );

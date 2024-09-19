@@ -481,7 +481,11 @@ class TypographyComponent extends Component {
 			<Fragment>
 				<div class="kadence-range-control">
 					<ResponsiveControl
-						onChange={ ( currentDevice) => this.setState( { currentDevice } ) }
+						deviceSize={ deviceIndex }
+						onChange={ ( currentDevice) => {
+							this.setState( { currentDevice } )
+						} 
+						}
 						controlLabel={ __( 'Font Size', 'kadence' ) }
 						tooltip={ false }
 					>
@@ -513,6 +517,7 @@ class TypographyComponent extends Component {
 				</div>
 				<div class="kadence-range-control">
 					<ResponsiveControl
+						deviceSize={ deviceIndex }
 						onChange={ ( currentDevice) => this.setState( { currentDevice } ) }
 						controlLabel={ __( 'Line Height', 'kadence' ) }
 						tooltip={ false }
@@ -545,6 +550,7 @@ class TypographyComponent extends Component {
 				</div>
 				<div class="kadence-range-control">
 					<ResponsiveControl
+						deviceSize={ deviceIndex }
 						onChange={ ( currentDevice) => this.setState( { currentDevice } ) }
 						controlLabel={ __( 'Letter Spacing', 'kadence' ) }
 						tooltip={ false }

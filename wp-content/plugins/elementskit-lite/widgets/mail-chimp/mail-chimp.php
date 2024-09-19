@@ -34,6 +34,9 @@ class ElementsKit_Widget_Mail_Chimp extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/mailchimp-3/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
 	public function __get_lists() {
 		$options = ['' => 'Select List'];

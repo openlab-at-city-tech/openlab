@@ -20,7 +20,7 @@
               class="form-select form-select--forced block w-full md:text-sm md:leading-5"
 			  v-model="selectedValue" 
 			  @input="$emit('input', $event.target.value)">
-			  	<option v-for="option in options" :key="option.value" :value="option.value" :selected="option.value === selectedValue">
+			  	<option v-for="option in options" :key="option.value" :value="option.value" :selected="option.value === selectedValue" :disabled="option.disabled !== undefined ? option.disabled : false">
 					{{ option.label }}
 				</option>
             </select>

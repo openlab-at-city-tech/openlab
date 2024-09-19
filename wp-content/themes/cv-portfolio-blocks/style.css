@@ -4,10 +4,10 @@ Theme URI: https://www.wpradiant.net/products/free-portfolio-wordpress-theme/
 Author: WP Radiant
 Author URI: https://www.wpradiant.net/
 Description: CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It's perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that's all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don't need to be a tech expert because it's designed to be user-friendly. You can add your photo, write about your education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it's flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an "About Me" section, a "Work Experience" section, and a "Contact" section. You can also add buttons for visitors to download your full resume or get in touch with you.
-Version: 1.1.3
+Version: 1.1.7
 Requires at least: 6.0
-Tested up to: 6.4
-Requires PHP: 5.6
+Tested up to: 6.6
+Requires PHP: 7.2
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
 WordPress Available: yes
@@ -167,6 +167,7 @@ color:var(--wp--preset--color--secondary);
 background:var(--wp--preset--color--accent);
 padding:0.6rem 1rem;
 margin:0.3rem;
+text-decoration: none;
 }
 .comment-reply-title,#comments{
 font-weight:500;
@@ -188,7 +189,7 @@ font-weight:500;
 .woocommerce a.button,
 .woocommerce button.button,
 .woocommerce input.button,
-.wc-block-grid__product-add-to-cart.wp-block-button .wp-block-button__link,
+.wc-block-grid__product-add-to-cart.wp-block-button .wp-block-button__link,.woocommerce a.added_to_cart,
 .wp-block-button.wc-block-components-product-button .wc-block-components-product-button__button{
   background: var(--wp--preset--color--secondary);
   border: 1px solid var(--wp--preset--color--accent);
@@ -255,7 +256,7 @@ a, .content > .video-play:hover span, .content > .video-play svg, a svg.icon, .w
 .woocommerce input.button:hover, .woocommerce input.button:focus, 
 .woocommerce #review_form #respond .form-submit input:hover, 
 .wp-block-button .wp-block-button__link,
-.woocommerce #review_form #respond .form-submit input:focus, 
+.woocommerce #review_form #respond .form-submit input:focus, .woocommerce a.added_to_cart:hover,
 .wc-block-grid__product-add-to-cart.wp-block-button .wp-block-button__link:hover, .wc-block-grid__product-add-to-cart.wp-block-button .wp-block-button__link:focus, .wp-block-button.wc-block-components-product-button .wc-block-components-product-button__button:hover, .wp-block-button.wc-block-components-product-button .wc-block-components-product-button__button:focus{
     border-color: transparent;
     background: var(--wp--preset--color--accent);
@@ -1184,4 +1185,95 @@ ul.is-head-menu li a:hover span{
   left: auto;
   right: 0px;
   width: 100%;
+}
+/*sidebar*/
+.has-shadow-dark:hover {
+  box-shadow: 1px 4px 20px -2px #0003;
+  transform: translateY(-10px);
+}
+.has-shadow-dark {
+  box-shadow: 0 6px 30px 7px #2125471a;
+  transition: 0.5s;
+}
+.banner-meta .taxonomy-category a{
+  text-decoration: none;
+  color: var(--wp--preset--color--secondary);
+}
+.post-navigation-link-previous a,.post-navigation-link-next a{
+    text-decoration: none;
+    font-size: 16px;
+    background: var(--wp--preset--color--accent);
+    color: var(--wp--preset--color--secondary);
+    padding: 10px 24px;
+    border-radius: 0px;
+}
+
+/*woocommerce css*/
+.wp-block-button.wc-block-components-product-button{
+  gap: 0;
+}
+.woocommerce a.added_to_cart{
+  margin-top: 0;
+}
+li.wc-block-product{
+  border: 1px solid #dcdcdc;
+  padding: 10px;
+}
+.wc-block-grid .wc-block-grid__product-onsale, .wc-block-grid__product-image .wc-block-grid__product-onsale{
+  background: #7562e0;
+  color: #fff;
+  border-color:#7562e0 ;
+}
+.woocommerce .price ins, .woocommerce bdi{
+  font-size: 16px;
+}
+.woocommerce-Tabs-panel h2,.woocommerce h2.wp-block-heading{
+  font-size: 30px;
+}
+.wp-block-woocommerce-related-products .wp-block-post{
+  width: calc(33% - 1em)!important;
+}
+@media screen and (max-width: 1300px){
+  .wc-block-product-template.wc-block-product-template,.woocommerce h1.alignwide.wp-block-query-title,.woocommerce.wc-block-breadcrumbs{
+    margin: 0 5% !important;
+  }
+  .woocommerce .wp-block-group .alignwide{
+    margin-left: 5% !important;
+    margin-right: 5% !important;
+  }
+}
+@media screen and (min-width: 721px) and (max-width: 768px){
+  .wc-block-product-template.wc-block-product-template{
+    grid-template-columns: repeat(2, minmax(max(150px, calc(50% - 0.83333em)), 1fr));
+    gap: 0.83333em;
+  }
+  .wp-block-woocommerce-related-products .wp-block-post{
+    width: calc(50% - 1em)!important;
+  }
+}
+@media screen and (max-width: 720px){
+  .wc-block-product-template__responsive{
+    display: block;
+    grid-template-columns: auto !important;
+  }
+  li.wc-block-product{
+    margin-bottom: 10px;
+  }
+  .wp-block-woocommerce-related-products .wp-block-post{
+    width: calc(100% - 1em)!important;
+  }
+  .not-found-heading{
+    font-size: 50px !important;
+  }
+}
+@media screen and (max-width: 781px){
+  .is-footer nav{
+    align-items: center;
+  }
+}
+@media screen and (max-width: 425px){
+  .woocommerce .wp-block-group .alignwide{
+    display: block;
+    text-align: center;
+  }
 }

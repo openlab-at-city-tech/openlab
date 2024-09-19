@@ -154,7 +154,6 @@
 	  height: 60px;
 	  margin-top: -30px;
 	  max-width: 60px;
-	  opacity: 1;
 	  overflow: hidden;
 	  top: 50%;
 	  -webkit-transition: all .2s ease-in-out;
@@ -190,19 +189,8 @@
 	}
   
 	.flexslider {
-	  &:hover ul.flex-direction-nav li a, &:focus-within ul.flex-direction-nav li a {
-		opacity: 1 !important;
-	  }
-	}
-  
-	&:hover a.rslides_nav, div.nivoSlider:hover div.nivo-directionNav a, .coin-slider:hover .coin-slider div a {
-	  opacity: 1 !important;
-	}
-  
-	.flexslider {
 	  &:hover ul.flex-direction-nav li a:hover, &:focus-within ul.flex-direction-nav li a:hover {
 		color: black;
-		opacity: 1 !important;
 	  }
 	}
   
@@ -242,6 +230,7 @@
   
 	.flexslider ul.slides .caption-wrap a, .rslides .caption-wrap a {
 	  border: 0;
+	  color: #fff;
 	}
   
 	div.nivoSlider .nivo-caption {
@@ -373,6 +362,23 @@
 		  right: 20px;
 		}
 	  }
+	}
+
+
+	&.has-onhover-arrows {
+		.flex-direction-nav li {
+			opacity: 0;
+		}
+		&:hover {
+			.flex-direction-nav {
+				li {
+					opacity: 1;
+				}
+				a {
+					opacity: 1;
+				}
+			}
+		}
 	}
   }
   

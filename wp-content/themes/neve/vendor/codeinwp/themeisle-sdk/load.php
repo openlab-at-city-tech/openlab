@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	return;
 }
 // Current SDK version and path.
-$themeisle_sdk_version = '3.3.15';
+$themeisle_sdk_version = '3.3.29';
 $themeisle_sdk_path    = dirname( __FILE__ );
 
 global $themeisle_sdk_max_version;
@@ -91,6 +91,7 @@ if ( ! function_exists( 'tsdk_utmify' ) ) {
 			$current_page = sanitize_key( str_replace( '.php', '', $current_page ) );
 		}
 		$location        = $location === null ? $current_page : $location;
+		$is_upgrade_url  = strpos( $url, '/upgrade' ) !== false;
 		$content         = sanitize_key(
 			trim(
 				str_replace(
@@ -121,6 +122,27 @@ if ( ! function_exists( 'tsdk_utmify' ) ) {
 				$url
 			)
 		);
+
+		/**
+		 * Check if there is an affiliate URL for this upgrade link, if so use it.
+		 */
+		if ( $is_upgrade_url ) {
+			$option_content_key         = str_replace( '-', '_', $filter_key );
+			$theme_upgrade_option_name  = 'themeisle_af_' . $option_content_key . '_themes_upgrade';
+			$plugin_upgrade_option_name = 'themeisle_af_' . $option_content_key . '_plugins_upgrade';
+
+			$theme_option_url = get_option( $theme_upgrade_option_name, false );
+			if ( ! empty( $theme_option_url ) ) {
+				$utmify_url = esc_url_raw( $theme_option_url );
+			}
+			$plugin_option_url = get_option( $plugin_upgrade_option_name, false );
+			if ( ! empty( $plugin_option_url ) ) {
+				$utmify_url = esc_url_raw( $plugin_option_url );
+			}
+		}
+
+
+
 		return apply_filters( 'tsdk_utmify_url_' . $filter_key, $utmify_url, $url );
 	}
 
@@ -175,6 +197,46 @@ if ( ! function_exists( 'tsdk_lkey' ) ) {
 	 */
 	function tsdk_lkey( $file ) {
 		return \ThemeisleSDK\Modules\Licenser::key( $file );
+	}
+}
+
+if ( ! function_exists( 'tsdk_translate_link' ) ) {
+
+	/**
+	 * Function to translate a link based on the current language.
+	 *
+	 * @param string                          $url URL to translate.
+	 * @param string{'path'|'query'|'domain'} $type Type of localization. Supports path, query and domain.
+	 * @param array                           $available_languages Available language to choose from.
+	 *
+	 * @return string
+	 */
+	function tsdk_translate_link(
+		$url, $type = 'path', $available_languages = [
+			'de_DE'        => 'de',
+			'de_DE_formal' => 'de',
+		]
+	) {
+		$language = get_user_locale();
+		if ( ! isset( $available_languages[ $language ] ) ) {
+			return $url;
+		}
+		$code = $available_languages[ $language ];
+		// We asume that false is based on query and add the code via query arg.
+		if ( $type === 'query' ) {
+			return add_query_arg( 'lang', $code, $url );
+		}
+
+		$parsed_url = wp_parse_url( $url );
+		// we replace the domain here based on the localized one.
+		if ( $type === 'domain' ) {
+			return $parsed_url['scheme'] . '://' . $code . ( isset( $parsed_url['path'] ) ? $parsed_url['path'] : '' ) . ( isset( $parsed_url['query'] ) ? '?' . $parsed_url['query'] : '' ) . ( isset( $parsed_url['fragment'] ) ? '#' . $parsed_url['fragment'] : '' );
+		}
+		// default is the path based approach.
+		$new_path = isset( $parsed_url['path'] ) ? "/$code" . $parsed_url['path'] : "/$code";
+
+		return $parsed_url['scheme'] . '://' . $parsed_url['host'] . $new_path . ( isset( $parsed_url['query'] ) ? '?' . $parsed_url['query'] : '' ) . ( isset( $parsed_url['fragment'] ) ? '#' . $parsed_url['fragment'] : '' );
+
 	}
 }
 if ( ! function_exists( 'tsdk_support_link' ) ) {

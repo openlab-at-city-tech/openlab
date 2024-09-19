@@ -198,6 +198,8 @@ class Theme_Customizer {
 
 		add_action( 'customize_register', array( $this, 'add_woocommerce_choices' ), 20 );
 
+		add_action( 'customize_register', array( $this, 'upgrade_section' ), 15 );
+
 		add_action( 'customize_section_active', array( $this, 'active_footer_widgets' ), 20, 2 );
 
 		add_filter( 'customize_controls_enqueue_scripts', array( $this, 'convert_beaver_custom_fonts' ), 5 );
@@ -522,6 +524,43 @@ class Theme_Customizer {
 		require_once $react_path . 'class-kadence-control-row.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 		require_once $react_path . 'class-kadence-control-tab.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
 		require_once $react_path . 'class-kadence-control-shadow.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+	}
+	/**
+	 * Add Upgrade Section
+	 *
+	 * @access public
+	 * @param object $wp_customize the customizer object.
+	 * @return void
+	 */
+	public function upgrade_section( $wp_customize ) {
+		if ( ! class_exists( 'Kadence_Theme_Pro' ) ) {
+			$path = get_template_directory() . '/inc/customizer/custom-controls/';
+			require_once $path . 'class-kadence-section-pro.php'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+			$wp_customize->register_section_type( \Kadence_Section_Pro::class );
+			$wp_customize->add_section(
+				new \Kadence_Section_Pro(
+					$wp_customize,
+					'kadence_pro_upgrade',
+					array(
+						'title'    => esc_html__( 'More Options Available in Kadence Pro', 'kadence' ),
+						'pro_link' => esc_url( \Kadence\kadence()->get_pro_url( 'https://www.kadencewp.com/kadence-theme/premium/', 'https://www.kadencewp.com/kadence-theme/premium/', 'in-app', 'theme-customizer' ) ),
+						'priority' => 1,
+					)
+				)
+			);
+			$wp_customize->add_control(
+				new \Kadence_Control_Blank(
+					$wp_customize,
+					'pro-notice',
+					array(
+						'label'    => '',
+						'section'  => 'kadence_pro_upgrade',
+						'settings' => array(),
+						'priority' => 0,
+					)
+				)
+			);
+		}
 	}
 
 	/**

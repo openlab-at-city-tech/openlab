@@ -965,13 +965,13 @@ class nggManageGallery {
 				if ( ( $image = $image_mapper->find( $pid ) ) ) {
 					// Strip slashes from title/description/alttext fields.
 					if ( isset( $data['description'] ) ) {
-						$data['description'] = stripslashes( $data['description'] );
+						$data['description'] = wp_kses_post( $data['description'] );
 					}
 					if ( isset( $data['alttext'] ) ) {
-						$data['alttext'] = stripslashes( $data['alttext'] );
+						$data['alttext'] = wp_kses_post( $data['alttext'] );
 					}
 					if ( isset( $data['title'] ) ) {
-						$data['title'] = stripslashes( $data['title'] );
+						$data['title'] = wp_kses_post( $data['title'] );
 					}
 
 					// Generate new slug if the alttext has changed.

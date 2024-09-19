@@ -41,14 +41,19 @@ import Swal from 'sweetalert2';
 			app.$active_list      = $( '.nextgen-notifications-list .nextgen-notifications-active' );
 			app.$dismissed_list   = $( '.nextgen-notifications-list .nextgen-notifications-dismissed' );
 			app.$dismiss_all      = $( '#nextgen-dismiss-all' );
+			app.$update_nav_count = $( '.ngg-menu-notification-indicator' );
 		},
 		update_count( count ) {
 			var app = this;
 			app.$open_button.data( 'count', count ).attr( 'data-count', count );
 			if ( 0 === count ) {
 				app.$open_button.removeAttr( 'data-count' );
+				app.$update_nav_count.hide('slow').html('');
 			}
 			app.$count.text( count );
+			if ( count > 0 ) {
+				app.$update_nav_count.show('slow').html( count );
+			}
 			app.dismissed_count += Math.abs( count - app.active_count );
 			app.active_count     = count;
 

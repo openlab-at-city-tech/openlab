@@ -82,7 +82,7 @@ class MetaFlexSlider extends MetaSlider
                     $options["slideshow"] = "false";
                     $options['start'] = isset($options['start']) ? $options['start'] : array();
                     $options['start'] = array_merge($options['start'], array("
-                        var ul = $('#" . $this->identifier . " .slides');
+                        var ul = $('#metaslider_" . $slider_id . " .slides');
                         ul.find('li').clone(true).appendTo(ul);
                     "));
                 }                
@@ -161,6 +161,7 @@ class MetaFlexSlider extends MetaSlider
             );
         }
 
+        remove_filter('metaslider_flex_slider_parameters', array($this, 'custom_delay_per_slide'));
         return $options;
     }
 
@@ -220,7 +221,7 @@ class MetaFlexSlider extends MetaSlider
     {
         if (isset($settings['carouselMode']) && $settings['carouselMode'] == 'true') {
             $margin = apply_filters('metaslider_carousel_margin', $this->get_setting('carouselMargin'), $slider_id);
-            $css .= "\n        #" . $this->identifier . ".flexslider .slides li {margin-right: {$margin}px !important;}";
+            $css .= "\n        #metaslider_{$slider_id}.flexslider .slides li {margin-right: {$margin}px !important;}";
             if(isset($settings['infiniteLoop']) && $settings['infiniteLoop'] == 'true'){
                 //check if theres mobile setting to subtract from the slide count
                 if($this->check_mobile_settings() == true) {
@@ -230,23 +231,25 @@ class MetaFlexSlider extends MetaSlider
                 }
                 $double = $slides * 2;
                 $animationtime = ($settings['animationSpeed'] * $slides) + ($settings['delay'] * $slides);
-
+                $transform_width = $margin + $settings["width"];
                 $css .= "
                     @keyframes infiniteloop_" . $slider_id . " {
                         0% {
                             transform: translateX(0);
+                            visibility: visible;
                         }
                         100% {
-                            transform: translateX(calc(-" . $settings["width"] . "px * " . $slides . "));
+                            transform: translateX(calc(-" . $transform_width . "px * " . $slides . "));
+                            visibility: visible;
                         }
                     }
-                    #" . $this->identifier . ".flexslider .slides {
+                    #metaslider_{$slider_id}.flexslider .slides {
                         -webkit-animation: infiniteloop_" . $slider_id . " " . $animationtime . "ms linear infinite;
                                 animation: infiniteloop_" . $slider_id . " " . $animationtime . "ms linear infinite;
                         display: flex;
-                        width: calc(" . $settings["width"] . "px * " . $double . ");
+                        width: calc(" . $transform_width . "px * " . $double . ");
                     }
-                    #" . $this->identifier . ".flexslider .slides:hover{
+                    #metaslider_{$slider_id}.flexslider .slides:hover{
                         animation-play-state: paused;
                     }
                 ";
@@ -268,7 +271,7 @@ class MetaFlexSlider extends MetaSlider
         if ( isset($global_settings['mobileSettings']) && true == $global_settings['mobileSettings']
         ){
             if($this->check_mobile_settings() == true) {
-                $css .= "\n        #" . $this->identifier . ".flexslider {display: none;}";
+                $css .= "\n        #metaslider_{$slider_id}.flexslider {display: none;}";
             }
         }
         remove_filter('metaslider_css', array( $this, 'hide_for_mobile' ), 11, 3);
@@ -325,7 +328,6 @@ class MetaFlexSlider extends MetaSlider
      */
     protected function get_html()
     {
-        
         $class = $this->get_setting('noConflict') == 'true' ? "" : ' class="flexslider"';
 
         //accessibility option
@@ -387,7 +389,7 @@ class MetaFlexSlider extends MetaSlider
                 $js .= "
                     var liHTML = $('#" . $identifier . " .slides li:not(.clone, .hidden_' + newBreakpoint + ')').removeAttr('style').toArray();
                     $('#temp_" . $identifier . " .slides').append(liHTML);
-                    $('#" . $identifier . "').hide();
+                    $('#" . $identifier . "').remove();
                     $('#temp_" . $identifier . "')." . $this->js_function . "({" .   $this->_get_javascript_parameters() . "});
                     $('#temp_" . $identifier . "').attr('id', '" . $identifier . "');
                     $(document).trigger('metaslider/initialized', '#" . $identifier . "');
@@ -415,8 +417,8 @@ class MetaFlexSlider extends MetaSlider
                 $options['start'],
                 array(
                     "
-                    $('#" . $this->get_identifier() . " .flex-control-nav').attr('role', 'tablist');
-                    $('#" . $this->get_identifier() . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav').attr('role', 'tablist');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
                     "
                 )
             );
@@ -426,8 +428,8 @@ class MetaFlexSlider extends MetaSlider
                 $options['after'],
                 array(
                     "
-                    $('#" . $this->get_identifier() . " .flex-control-nav a.flex-active').removeAttr('tabindex');
-                    $('#" . $this->get_identifier() . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a.flex-active').removeAttr('tabindex');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').attr('tabindex', '-1');
                     "
                 )
             );
@@ -453,8 +455,8 @@ class MetaFlexSlider extends MetaSlider
                 $options['start'],
                 array(
                     "
-                    $('#" . $this->get_identifier() . " .flex-control-nav a.flex-active').attr('aria-current', 'true');
-                    $('#" . $this->get_identifier() . " .flex-control-nav a:not(.flex-active)').removeAttr('aria-current');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a.flex-active').attr('aria-current', 'true');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').removeAttr('aria-current');
                     "
                 )
             );
@@ -463,8 +465,8 @@ class MetaFlexSlider extends MetaSlider
                 $options['after'],
                 array(
                     "
-                    $('#" . $this->get_identifier() . " .flex-control-nav a.flex-active').attr('aria-current', 'true');
-                    $('#" . $this->get_identifier() . " .flex-control-nav a:not(.flex-active)').removeAttr('aria-current');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a.flex-active').attr('aria-current', 'true');
+                    $('#metaslider_" . $slider_id . " .flex-control-nav a:not(.flex-active)').removeAttr('aria-current');
                     "
                 )
             );

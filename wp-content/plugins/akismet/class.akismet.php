@@ -53,7 +53,7 @@ class Akismet {
 		add_action( 'transition_comment_status', array( 'Akismet', 'transition_comment_status' ), 10, 3 );
 
 		// Run this early in the pingback call, before doing a remote fetch of the source uri
-		add_action( 'xmlrpc_call', array( 'Akismet', 'pre_check_pingback' ) );
+		add_action( 'xmlrpc_call', array( 'Akismet', 'pre_check_pingback' ), 10, 3 );
 
 		// Jetpack compatibility
 		add_filter( 'jetpack_options_whitelist', array( 'Akismet', 'add_to_jetpack_options_whitelist' ) );
@@ -223,6 +223,21 @@ class Akismet {
 		}
 
 		self::$last_comment_result = null;
+
+		// Skip the Akismet check if the comment matches the Disallowed Keys list.
+		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+			$comment_author       = isset( $commentdata['comment_author'] ) ? $commentdata['comment_author'] : '';
+			$comment_author_email = isset( $commentdata['comment_author_email'] ) ? $commentdata['comment_author_email'] : '';
+			$comment_author_url   = isset( $commentdata['comment_author_url'] ) ? $commentdata['comment_author_url'] : '';
+			$comment_content      = isset( $commentdata['comment_content'] ) ? $commentdata['comment_content'] : '';
+			$comment_author_ip    = isset( $commentdata['comment_author_IP'] ) ? $commentdata['comment_author_IP'] : '';
+			$comment_agent        = isset( $commentdata['comment_agent'] ) ? $commentdata['comment_agent'] : '';
+
+			if ( wp_check_comment_disallowed_list( $comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_ip, $comment_agent ) ) {
+				self::set_last_comment( $commentdata );
+				return $commentdata;
+			}
+		}
 
 		$comment = $commentdata;
 
@@ -427,7 +442,7 @@ class Akismet {
 				load_plugin_textdomain( 'akismet' );
 
 				// normal result: true or false
-				if ( self::$last_comment['akismet_result'] == 'true' ) {
+				if ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'true' ) {
 					update_comment_meta( $comment->comment_ID, 'akismet_result', 'true' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-spam' );
 					if ( $comment->comment_approved != 'spam' ) {
@@ -437,7 +452,7 @@ class Akismet {
 							'status-changed-' . $comment->comment_approved
 						);
 					}
-				} elseif ( self::$last_comment['akismet_result'] == 'false' ) {
+				} elseif ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'false' ) {
 					update_comment_meta( $comment->comment_ID, 'akismet_result', 'false' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-ham' );
 					// Status could be spam or trash, depending on the WP version and whether this change applies:
@@ -449,11 +464,25 @@ class Akismet {
 							} else {
 								self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 							}
-						} else if ( function_exists( 'wp_blacklist_check' ) && wp_blacklist_check( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent ) ) {
-							self::update_comment_history( $comment->comment_ID, '', 'wp-blacklisted' );
 						} else {
 							self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 						}
+					}
+				} elseif ( ! isset( self::$last_comment['akismet_result'] ) ) {
+					// akismet_result isn't set, so the comment wasn't sent to Akismet.
+					update_comment_meta( $comment->comment_ID, 'akismet_skipped', 'true' );
+					$caught_by_disallowed_list = false;
+
+					if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
+						$caught_by_disallowed_list = wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent );
+					}
+
+					if ( $caught_by_disallowed_list ) {
+						self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
+						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped-disallowed' );
+					} else {
+						// Add a generic skipped history item.
+						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped' );
 					}
 				} else {
 					 // abnormal result: error
@@ -887,13 +916,16 @@ class Akismet {
 
 		$comment_id = (int) $comment_id;
 
-		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
+		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ), ARRAY_A );
 
-		if ( !$comment ) // it was deleted
+		if ( ! $comment ) {
+			// it was deleted
 			return;
+		}
 
-		if ( 'spam' != $comment->comment_approved )
+		if ( 'spam' != $comment['comment_approved'] ) {
 			return;
+		}
 
 		self::update_comment_history( $comment_id, '', 'report-spam' );
 
@@ -905,32 +937,36 @@ class Akismet {
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
 
-		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) )
-			$comment = (object) array_merge( (array)$comment, $as_submitted );
-
-		$comment->blog         = get_option( 'home' );
-		$comment->blog_lang    = get_locale();
-		$comment->blog_charset = get_option('blog_charset');
-		$comment->permalink    = get_permalink($comment->comment_post_ID);
-
-		if ( is_object($current_user) )
-			$comment->reporter = $current_user->user_login;
-
-		if ( is_object($current_site) )
-			$comment->site_domain = $current_site->domain;
-
-		$comment->user_role = '';
-		if ( ! empty( $comment->user_ID ) ) {
-			$comment->user_role = Akismet::get_user_roles( $comment->user_ID );
+		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) ) {
+			$comment = array_merge( $comment, $as_submitted );
 		}
 
-		if ( self::is_test_mode() )
-			$comment->is_test = 'true';
+		$comment['blog'] = get_option( 'home' );
+		$comment['blog_lang'] = get_locale();
+		$comment['blog_charset'] = get_option( 'blog_charset' );
+		$comment['permalink'] = get_permalink( $comment['comment_post_ID'] );
 
-		$post = get_post( $comment->comment_post_ID );
+		if ( is_object( $current_user ) ) {
+			$comment['reporter'] = $current_user->user_login;
+		}
+
+		if ( is_object( $current_site ) ) {
+			$comment['site_domain'] = $current_site->domain;
+		}
+
+		$comment['user_role'] = '';
+		if ( ! empty( $comment['user_ID'] ) ) {
+			$comment['user_role'] = self::get_user_roles( $comment['user_ID'] );
+		}
+
+		if ( self::is_test_mode() ) {
+			$comment['is_test'] = 'true';
+		}
+
+		$post = get_post( $comment['comment_post_ID'] );
 
 		if ( ! is_null( $post ) ) {
-			$comment->comment_post_modified_gmt = $post->post_modified_gmt;
+			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
 
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-spam' );
@@ -939,8 +975,8 @@ class Akismet {
 
 		update_comment_meta( $comment_id, 'akismet_user_result', 'true' );
 
-		if ( $comment->reporter ) {
-			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
+		if ( $comment['reporter'] ) {
+			update_comment_meta( $comment_id, 'akismet_user', $comment['reporter'] );
 		}
 
 		do_action('akismet_submit_spam_comment', $comment_id, $response[1]);
@@ -951,9 +987,12 @@ class Akismet {
 
 		$comment_id = (int) $comment_id;
 
-		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ) );
-		if ( !$comment ) // it was deleted
+		$comment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->comments} WHERE comment_ID = %d", $comment_id ), ARRAY_A );
+
+		if ( ! $comment ) {
+			// it was deleted
 			return;
+		}
 
 		self::update_comment_history( $comment_id, '', 'report-ham' );
 
@@ -965,32 +1004,36 @@ class Akismet {
 		// use the original version stored in comment_meta if available
 		$as_submitted = self::sanitize_comment_as_submitted( get_comment_meta( $comment_id, 'akismet_as_submitted', true ) );
 
-		if ( $as_submitted && is_array($as_submitted) && isset($as_submitted['comment_content']) )
-			$comment = (object) array_merge( (array)$comment, $as_submitted );
-
-		$comment->blog         = get_option( 'home' );
-		$comment->blog_lang    = get_locale();
-		$comment->blog_charset = get_option('blog_charset');
-		$comment->permalink    = get_permalink( $comment->comment_post_ID );
-		$comment->user_role    = '';
-
-		if ( is_object($current_user) )
-			$comment->reporter = $current_user->user_login;
-
-		if ( is_object($current_site) )
-			$comment->site_domain = $current_site->domain;
-
-		if ( ! empty( $comment->user_ID ) ) {
-			$comment->user_role = Akismet::get_user_roles( $comment->user_ID );
+		if ( $as_submitted && is_array( $as_submitted ) && isset( $as_submitted['comment_content'] ) ) {
+			$comment = array_merge( $comment, $as_submitted );
 		}
 
-		if ( Akismet::is_test_mode() )
-			$comment->is_test = 'true';
+		$comment['blog'] = get_option( 'home' );
+		$comment['blog_lang'] = get_locale();
+		$comment['blog_charset'] = get_option( 'blog_charset' );
+		$comment['permalink'] = get_permalink( $comment['comment_post_ID'] );
+		$comment['user_role'] = '';
 
-		$post = get_post( $comment->comment_post_ID );
+		if ( is_object( $current_user ) ) {
+			$comment['reporter'] = $current_user->user_login;
+		}
+
+		if ( is_object( $current_site ) ) {
+			$comment['site_domain'] = $current_site->domain;
+		}
+
+		if ( ! empty( $comment['user_ID'] ) ) {
+			$comment['user_role'] = self::get_user_roles( $comment['user_ID'] );
+		}
+
+		if ( self::is_test_mode() ) {
+			$comment['is_test'] = 'true';
+		}
+
+		$post = get_post( $comment['comment_post_ID'] );
 
 		if ( ! is_null( $post ) ) {
-			$comment->comment_post_modified_gmt = $post->post_modified_gmt;
+			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
 
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-ham' );
@@ -999,8 +1042,8 @@ class Akismet {
 
 		update_comment_meta( $comment_id, 'akismet_user_result', 'false' );
 
-		if ( $comment->reporter ) {
-			update_comment_meta( $comment_id, 'akismet_user', $comment->reporter );
+		if ( $comment['reporter'] ) {
+			update_comment_meta( $comment_id, 'akismet_user', $comment['reporter'] );
 		}
 
 		do_action('akismet_submit_nonspam_comment', $comment_id, $response[1]);
@@ -1424,8 +1467,16 @@ class Akismet {
 		}
 		
 		$simplified_response = array( $response['headers'], $response['body'] );
-		
-		self::update_alert( $simplified_response );
+
+		$alert_code_check_paths = array(
+			'verify-key',
+			'comment-check',
+			'get-stats',
+		);
+
+		if ( in_array( $path, $alert_code_check_paths ) ) {
+			self::update_alert( $simplified_response );
+		}
 
 		return $simplified_response;
 	}
@@ -1442,6 +1493,7 @@ class Akismet {
 			'upgrade-plan',
 			'upgrade-url',
 			'upgrade-type',
+			'upgrade-via-support',
 		);
 
 		foreach ( $alert_header_names as $alert_header_name ) {
@@ -1679,126 +1731,60 @@ p {
 		}
 	}
 
-	public static function pre_check_pingback( $method ) {
-		$pingback_args = array();
-		if ( $method !== 'pingback.ping' )
+	/**
+	 * Check pingbacks for spam before they're saved to the DB.
+	 *
+	 * @param string $method The XML-RPC method that was called.
+	 * @param array $args This and the $server arg are marked as optional since plugins might still be
+	 *                    calling do_action( 'xmlrpc_action', [...] ) without the arguments that were added in WP 5.7.
+	 * @param wp_xmlrpc_server $server
+	 */
+	public static function pre_check_pingback( $method, $args = array(), $server = null ) {
+		if ( $method !== 'pingback.ping' ) {
 			return;
-
-		// A lot of this code is tightly coupled with the IXR class because the xmlrpc_call action doesn't pass along any information besides the method name.
-		// This ticket should hopefully fix that: https://core.trac.wordpress.org/ticket/52524
-		// Until that happens, when it's a system.multicall, pre_check_pingback will be called once for every internal pingback call.
-		// Keep track of how many times this function has been called so we know which call to reference in the XML.
-		static $call_count = 0;
-
-		$call_count++;
-
-		global $wp_xmlrpc_server;
-
-		if ( !is_object( $wp_xmlrpc_server ) )
-			return false;
-
-		$is_multicall = false;
-		$multicall_count = 0;
-
-		if ( 'system.multicall' === $wp_xmlrpc_server->message->methodName ) {
-			$is_multicall = true;
-
-			if ( 0 === $call_count ) {
-				// Only pass along the number of entries in the multicall the first time we see it.
-				$multicall_count = is_countable( $wp_xmlrpc_server->message->params ) ? count( $wp_xmlrpc_server->message->params ) : 0;
-			}
-
-			/*
-			 * $wp_xmlrpc_server->message looks like this:
-			 *
-				(
-					[message] =>
-					[messageType] => methodCall
-					[faultCode] =>
-					[faultString] =>
-					[methodName] => system.multicall
-					[params] => Array
-						(
-							[0] => Array
-								(
-									[methodName] => pingback.ping
-									[params] => Array
-										(
-											[0] => http://www.example.net/?p=1 // Site that created the pingback.
-											[1] => https://www.example.com/?p=1 // Post being pingback'd on this site.
-										)
-								)
-							[1] => Array
-								(
-									[methodName] => pingback.ping
-									[params] => Array
-										(
-											[0] => http://www.example.net/?p=1 // Site that created the pingback.
-											[1] => https://www.example.com/?p=2 // Post being pingback'd on this site.
-										)
-								)
-						)
-				)
-			 */
-
-			// Use the params from the nth pingback.ping call in the multicall.
-			$pingback_calls_found = 0;
-
-			foreach ( $wp_xmlrpc_server->message->params as $xmlrpc_action ) {
-				if ( 'pingback.ping' === $xmlrpc_action['methodName'] ) {
-					$pingback_calls_found++;
-				}
-
-				if ( $call_count === $pingback_calls_found ) {
-					$pingback_args = $xmlrpc_action['params'];
-					break;
-				}
-			}
-		} else {
-			/*
-			 * $wp_xmlrpc_server->message looks like this:
-			 *
-				(
-					[message] =>
-					[messageType] => methodCall
-					[faultCode] =>
-					[faultString] =>
-					[methodName] => pingback.ping
-					[params] => Array
-						(
-							[0] => http://www.example.net/?p=1 // Site that created the pingback.
-							[1] => https://www.example.com/?p=2 // Post being pingback'd on this site.
-						)
-				)
-			 */
-			$pingback_args = $wp_xmlrpc_server->message->params;
 		}
 
-		if ( ! empty( $pingback_args[1] ) ) {
-			$post_id = url_to_postid( $pingback_args[1] );
+		/*
+		 * $args looks like this:
+		 *
+		 * Array
+		 * (
+		 *     [0] => http://www.example.net/?p=1 // Site that created the pingback.
+		 *     [1] => https://www.example.com/?p=2 // Post being pingback'd on this site.
+		 * )
+		 */
+
+		if ( ! is_null( $server ) && ! empty( $args[1] ) ) {
+			$is_multicall = false;
+			$multicall_count = 0;
+
+			if ( 'system.multicall' === $server->message->methodName ) {
+				$is_multicall = true;
+				$multicall_count = is_countable( $server->message->params ) ? count( $server->message->params ) : 0;
+			}
+
+			$post_id = url_to_postid( $args[1] );
 
 			// If pingbacks aren't open on this post, we'll still check whether this request is part of a potential DDOS,
 			// but indicate to the server that pingbacks are indeed closed so we don't include this request in the user's stats,
 			// since the user has already done their part by disabling pingbacks.
 			$pingbacks_closed = false;
-			
+
 			$post = get_post( $post_id );
-			
+
 			if ( ! $post || ! pings_open( $post ) ) {
 				$pingbacks_closed = true;
 			}
 
-			// Note: If is_multicall is true and multicall_count=0, then we know this is at least the 2nd pingback we've processed in this multicall.
-
 			$comment = array(
-				'comment_author_url' => $pingback_args[0],
+				'comment_author_url' => $args[0],
 				'comment_post_ID' => $post_id,
 				'comment_author' => '',
 				'comment_author_email' => '',
 				'comment_content' => '',
 				'comment_type' => 'pingback',
 				'akismet_pre_check' => '1',
-				'comment_pingback_target' => $pingback_args[1],
+				'comment_pingback_target' => $args[1],
 				'pingbacks_closed' => $pingbacks_closed ? '1' : '0',
 				'is_multicall' => $is_multicall,
 				'multicall_count' => $multicall_count,
@@ -1808,7 +1794,7 @@ p {
 
 			if ( isset( $comment['akismet_result'] ) && 'true' == $comment['akismet_result'] ) {
 				// Sad: tightly coupled with the IXR classes. Unfortunately the action provides no context and no way to return anything.
-				$wp_xmlrpc_server->error( new IXR_Error( 0, 'Invalid discovery target' ) );
+				$server->error( new IXR_Error( 0, 'Invalid discovery target' ) );
 
 				// Also note that if this was part of a multicall, a spam result will prevent the subsequent calls from being executed.
 				// This is probably fine, but it raises the bar for what should be acceptable as a false positive.

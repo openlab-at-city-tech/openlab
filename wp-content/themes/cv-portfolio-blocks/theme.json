@@ -32,8 +32,8 @@
 	      ]
 	    },
 	    {
-	      "name": "blog-no-sidebar",
-	      "title": "Blog Post (No Sidebar)",
+	      "name": "single-post-no-sidebar",
+	      "title": "Single post (No Sidebar)",
 	      "postTypes": [
 	        "post"
 	      ]

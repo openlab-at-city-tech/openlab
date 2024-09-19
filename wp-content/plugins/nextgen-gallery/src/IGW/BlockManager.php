@@ -25,7 +25,7 @@ class BlockManager {
 
 	public function register_hooks() {
 		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_post_thumbnails' ], 1 );
-		add_action( 'enqueue_block_editor_assets', [ $this, 'enqueue_block_editor' ] );
+		add_action( 'enqueue_block_assets', [ $this, 'ngg_enqueue_block_assets' ] );
 
 		// Adds NextGEN thumbnail support to all posts with 'thumbnail' support by adding a field for posts/pages to
 		// set the ngg_post_thumbnail via REST API.
@@ -54,33 +54,42 @@ class BlockManager {
 		);
 	}
 
-	public function enqueue_block_editor() {
-		\wp_enqueue_script(
-			'nextgen-block-js',
-			StaticAssets::get_url( 'IGW/Block/build/block.min.js', 'photocrati-nextgen_block#build/block.min.js' ),
-			[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-compose' ],
-			NGG_SCRIPT_VERSION,
-			true
-		);
+	public function ngg_enqueue_block_assets() {
+		// Check if we are in the admin area.
+		if ( is_admin() ) {
+			// Get the current screen.
+			$current_screen = get_current_screen();
 
-		\wp_localize_script(
-			'nextgen-block-js',
-			'add_ngg_gallery_block_i18n',
-			[
-				'edit'   => \__( 'Edit', 'nggallery' ),
-				'delete' => \__( 'Delete', 'nggallery' ),
-				'create' => \__( 'Add NextGEN Gallery', 'nggallery' ),
-				'h3'     => \__( 'NextGEN Gallery', 'nggallery' ),
-				'nonce'  => \wp_create_nonce( 'ngg_attach_to_post_iframe' ),
-			]
-		);
+			// Check if we are in the Block Editor or the Site Editor.
+			if ( $current_screen && ( $current_screen->is_block_editor() || $current_screen->id === 'site-editor' ) ) {
+				\wp_enqueue_script(
+					'nextgen-block-js',
+					StaticAssets::get_url( 'IGW/Block/build/block.min.js', 'photocrati-nextgen_block#build/block.min.js' ),
+					[ 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-compose' ],
+					NGG_SCRIPT_VERSION,
+					true
+				);
 
-		\wp_enqueue_style(
-			'nextgen-block-css',
-			StaticAssets::get_url( 'IGW/Block/editor.css', 'photocrati-nextgen_block#editor.css' ),
-			[ 'wp-edit-blocks' ],
-			NGG_SCRIPT_VERSION
-		);
+				\wp_localize_script(
+					'nextgen-block-js',
+					'add_ngg_gallery_block_i18n',
+					[
+						'edit'   => \__( 'Edit', 'nggallery' ),
+						'delete' => \__( 'Delete', 'nggallery' ),
+						'create' => \__( 'Add NextGEN Gallery', 'nggallery' ),
+						'h3'     => \__( 'NextGEN Gallery', 'nggallery' ),
+						'nonce'  => \wp_create_nonce( 'ngg_attach_to_post_iframe' ),
+					]
+				);
+
+				\wp_enqueue_style(
+					'nextgen-block-css',
+					StaticAssets::get_url( 'IGW/Block/editor.css', 'photocrati-nextgen_block#editor.css' ),
+					[ 'wp-edit-blocks' ],
+					NGG_SCRIPT_VERSION
+				);
+			}
+		}
 	}
 
 	public function set_or_remove_ngg_post_thumbnail( $post, $request ) {

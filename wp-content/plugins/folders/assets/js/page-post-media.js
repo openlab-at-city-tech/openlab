@@ -185,25 +185,25 @@
 
     var wpMediaObj = window.wp;
     if (typeof wpMediaObj !== 'undefined' && typeof wpMediaObj.Uploader === 'function') {
-        wpMediaObj.media.view.Modal.prototype.on('open', function() {
-            folderSelectedAttachmentID = [];
-            setTimeout(function(){
-                if($("#media-attachment-taxonomy-filter").length) {
-                    if($("#media-attachment-taxonomy-filter").val() == "all") {
-                        $("#media-attachment-taxonomy-filter option:gt(1)").remove();
-                        _.each(folders_media_options.terms, function(term, index){
-                            $("#media-attachment-taxonomy-filter").append("<option value='" + term.term_id + "'>" + term.name + " (" + term.trash_count + ")</option>")
-                        });
-                    }
-
-                    if(!$("#wcp-content").length) {
-                        if($(".editor-post-featured-image").length) {
-                            $(".attachment-filters").val(selectedFolderPageID).trigger("change");
-                        }
-                    }
-                }
-            },100);
-        });
+        // wpMediaObj.media.view.Modal.prototype.on('open', function() {
+        //     folderSelectedAttachmentID = [];
+        //     setTimeout(function(){
+        //         if($("#media-attachment-taxonomy-filter").length) {
+        //             if($("#media-attachment-taxonomy-filter").val() == "all") {
+        //                 $("#media-attachment-taxonomy-filter option:gt(1)").remove();
+        //                 _.each(folders_media_options.terms, function(term, index){
+        //                     $("#media-attachment-taxonomy-filter").append("<option value='" + term.term_id + "'>" + term.name + " (" + term.trash_count + ")</option>")
+        //                 });
+        //             }
+        //
+        //             if(!$("#wcp-content").length) {
+        //                 if($(".editor-post-featured-image").length) {
+        //                     $(".attachment-filters").val(selectedFolderPageID).trigger("change");
+        //                 }
+        //             }
+        //         }
+        //     },100);
+        // });
         wpMediaObj.media.view.Modal.prototype.on('close', function() {
             folderSelectedAttachmentID = [];
         });
@@ -245,19 +245,19 @@
                             filesInQueue = 0;
                             uploadedFileCount = 0;
                         }, 1250);
-
                         resetMediaCounter();
-                        // if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
-                        //     folderSelectedAttachmentID = [];
-                        //     if($(".folder-modal ul.attachments li.selected").length) {
-                        //         $(".folder-modal ul.attachments li.selected").each(function(){
-                        //             folderSelectedAttachmentID.push($(this).data("id"));
-                        //         });
-                        //     } else {
-                        //         // wp_media.media.frame.content.get().collection.props.set({ignore: (+new Date())});
-                        //         // wp_media.media.frame.content.get().options.selection.reset();
-                        //     }
-                        // }
+                        setDragAndDropElements();
+                        if(typeof wp_media.media.frame !== "undefined" && wp_media.media.frame.content.get() !== null && typeof(wp_media.media.frame.content.get().collection) != "undefined") {
+                            folderSelectedAttachmentID = [];
+                            if($(".folder-modal ul.attachments li.selected").length) {
+                                $(".folder-modal ul.attachments li.selected").each(function(){
+                                    folderSelectedAttachmentID.push($(this).data("id"));
+                                });
+                            } else {
+                                wp_media.media.frame.content.get().collection.props.set({ignore: (+new Date())});
+                                wp_media.media.frame.content.get().options.selection.reset();
+                            }
+                        }
                     });
                 }
             }
@@ -385,18 +385,18 @@
         });
 
         $( document ).ajaxComplete(function( event, xhr, settings ) {
-            // if(settings.data != undefined && settings.data != "" && typeof settings.data == "string" && settings.data.indexOf("action=query-attachments") != -1) {
-            //     setDragAndDropElements();
-            // }
-            // if(folderSelectedAttachmentID.length > 0) {
-            //     for(var i=0; i<folderSelectedAttachmentID.length; i++) {
-            //         if (jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").length && !jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").hasClass("selected")) {
-            //             var e = jQuery.Event("click");
-            //             e.ctrlKey = true;
-            //             //jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").trigger(e);
-            //         }
-            //     }
-            // }
+            if(settings.data != undefined && settings.data != "" && typeof settings.data == "string" && settings.data.indexOf("action=query-attachments") != -1) {
+                setDragAndDropElements();
+            }
+            if(folderSelectedAttachmentID.length > 0) {
+                for(var i=0; i<folderSelectedAttachmentID.length; i++) {
+                    if (jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").length && !jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").hasClass("selected")) {
+                        var e = jQuery.Event("click");
+                        e.ctrlKey = true;
+                        jQuery(".folder-modal ul.attachments li[data-id='" + folderSelectedAttachmentID[i] + "']").trigger(e);
+                    }
+                }
+            }
         });
 
         foldersArray = folders_media_options.terms;
@@ -784,7 +784,7 @@
                                         'folder_count': 0,
                                         'is_sticky': result.data[i]['is_sticky'],
                                         'is_high': result.data[i]['is_high'],
-                                        'has_color': folders.has_color,
+                                        'has_color': result.has_color,
                                         'nonce': result.data[i]['nonce'],
                                         'slug': result.data[i]['slug'],
                                         'is_deleted': 0
@@ -1297,18 +1297,18 @@
                         setTimeout(function(){
                             $("#undo-done").removeClass("active");
                         }, 2500);
-                        if($("#media-attachment-taxonomy-filter").length) {
-                            var wp1 = parent.wp;
-                            if(wp1.media != undefined) {
-                                wp1.media.frame.setState('insert');
-                                if (wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
-                                    wp1.media.frame.content.get().collection.props.set({ignore: (+new Date())});
-                                    wp1.media.frame.content.get().options.selection.reset();
-                                } else {
-                                    wp1.media.frame.library.props.set({ignore: (+new Date())});
-                                }
-                            }
-                        }
+                        // if($("#media-attachment-taxonomy-filter").length) {
+                        //     var wp1 = parent.wp;
+                        //     if(wp1.media != undefined) {
+                        //         wp1.media.frame.setState('insert');
+                        //         if (wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
+                        //             wp1.media.frame.content.get().collection.props.set({ignore: (+new Date())});
+                        //             wp1.media.frame.content.get().options.selection.reset();
+                        //         } else {
+                        //             wp1.media.frame.library.props.set({ignore: (+new Date())});
+                        //         }
+                        //     }
+                        // }
                         resetMediaAndPosts();
                     }
                 })
@@ -2285,16 +2285,16 @@
                 $(".un-categorised-items .total-count").text(res.empty_items);
                 selectedVal = $("#media-attachment-taxonomy-filter").val();
                 if(selectedVal != "all" && loadData == 1) {
-                    var wp1 = parent.wp;
-                    if(wp1.media != undefined) {
-                        wp1.media.frame.setState('insert');
-                        if (wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
-                            wp1.media.frame.content.get().collection.props.set({ignore: (+new Date())});
-                            wp1.media.frame.content.get().options.selection.reset();
-                        } else {
-                            wp1.media.frame.library.props.set({ignore: (+new Date())});
-                        }
-                    }
+                    // var wp1 = parent.wp;
+                    // if(wp1.media != undefined) {
+                    //     wp1.media.frame.setState('insert');
+                    //     if (wp1.media.frame.content.get() !== null && typeof(wp1.media.frame.content.get().collection) != "undefined") {
+                    //         wp1.media.frame.content.get().collection.props.set({ignore: (+new Date())});
+                    //         wp1.media.frame.content.get().options.selection.reset();
+                    //     } else {
+                    //         wp1.media.frame.library.props.set({ignore: (+new Date())});
+                    //     }
+                    // }
                 }
                 foldersArray = res.taxonomies;
                 setFolderCountAndDD();

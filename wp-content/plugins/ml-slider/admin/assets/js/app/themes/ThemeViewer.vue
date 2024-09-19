@@ -60,12 +60,32 @@
 					class="button-link change-theme"
 					@click="openModal">{{ __('Change', 'ml-slider') }}
 				</button>
+				<!-- Customize theme design (optional) -->
+				<div class="static-theme-customize" v-if="theme_customize.length">
+					<table>
+						<tr v-for="(item, index) in theme_customize" :key="index">
+							<td>
+								{{ item.label }}
+							</td>
+							<td>
+								<input 
+									type="text" 
+									class="colorpicker"
+									:name="`settings[theme_customize][${item.name}]`" 
+									v-model="item.value"
+									@change="themeCustomizeChange(item, index)"
+									data-alpha-enabled="true"
+								>
+							</td>
+						</tr>
+					</table>
+				</div>
 			</div>
 
 			<!-- If no theme then we render the theme select button -->
 			<div v-else>
 				<p>
-					{{ __('Change the look and feel of your slideshow with one of our custom-built MetaSlider themes!', 'ml-slider') }}
+					{{ __('Change the design your slideshow with a stylish MetaSlider theme!', 'ml-slider') }}
 				</p>
 				<button
 					v-if="Object.keys(themes).length || Object.keys(customThemes).length"
@@ -291,7 +311,8 @@ export default {
 			selectedTheme: {},
 			hoveredTheme: {},
 			is_open: false,
-			revealThemeAd: null
+			revealThemeAd: null,
+			theme_customize: []
 		}
 	},
 	watch: {
@@ -309,6 +330,32 @@ export default {
 				}
 				this.selectedTheme = this.current.theme
 				this.hoveredTheme = this.current.theme
+
+				// Get the theme customizations if available from db to avoid sync issues
+				Axios.get('theme/customization', {
+					params: {
+						action: 'ms_get_theme_customization',
+						slideshow_id: this.current.id,
+						theme: this.selectedTheme['folder'] // Just the folder!
+					}
+				}).then(response => {
+					var customize_data = response.data.data;
+					
+					// Assign defaults from manifest, including default values
+					this.theme_customize = customize_data.manifest || [];
+
+					// Replace default values with the saved ones
+					for (let i = 0; i < this.theme_customize.length; i++) {
+						this.theme_customize[i].value 	= customize_data.saved_settings 
+															&& typeof Object.entries(customize_data.saved_settings)[i] !== 'undefined' 
+															&& typeof Object.entries(customize_data.saved_settings)[i][1] !== 'undefined' 
+															? Object.entries(customize_data.saved_settings)[i][1] 
+															: this.theme_customize[i].default;
+					}
+					this.updateColorPicker();
+				}).catch(error => {
+					this.notifyError('metaslider/theme-error', error, true)
+				})
 			}
 		}
 	},
@@ -363,6 +410,7 @@ export default {
 		})
 
 		this.updateSupportedStatus()
+		this.setColorPicker();
 	},
 	methods: {
 		fetchThemes() {
@@ -416,11 +464,50 @@ export default {
 					slideshow_id: this.current.id,
 					theme: this.selectedTheme
 				})).then(response => {
+					this.theme_customize = this.selectedTheme.customize || [];
+					
+					// Add value property by copying default property value
+					for (let i = 0; i < this.theme_customize.length; i++) {
+						this.theme_customize[i].value = this.theme_customize[i].default;
+					}
+
+					this.updateColorPicker();
 					this.notifySuccess('metaslider/theme-updated', this.__('Theme saved', 'ml-slider'), true)
 				}).catch(error => {
 					this.notifyError('metaslider/theme-error', error, true)
 				})
 			}
+		},
+		setColorPicker() {
+			var $ = window.jQuery;
+			$('.static-theme-customize .colorpicker').each(function () {
+				$(this).wpColorPicker({
+					change: function(event, ui) {
+						var input = $(this).parents('.wp-picker-container').find('input.colorpicker');
+						var btn = $(this).parents('.wp-picker-container').find('button.wp-color-result');
+			
+						btn.css('background-color',ui.color.toCSS('rgba'));
+			
+						input.data('new-color',ui.color.toCSS('rgba'));
+						input.attr('value',ui.color.toCSS('rgba'));
+			
+						btn.trigger('change');
+					}
+				});
+			});
+		},
+		updateColorPicker() {
+			this.$nextTick( function () {
+				this.setColorPicker();
+
+				var $ = window.jQuery;
+				$('.static-theme-customize .colorpicker').each(function () {
+					const newColor = $(this).val();
+					if (newColor.length) {
+						$(this).wpColorPicker('color', newColor);
+					}
+				});
+			});
 		},
 		openModal() {
 			// TODO: when converting settings to vue, this could be removed.
@@ -466,6 +553,16 @@ export default {
 		},
 		nonSelectablePremiumTheme(type) {
 			return !this.proUser && type === 'premium';
+		},
+		themeCustomizeChange(item, index) {
+			// Logic to handle color change
+			// This change method is not triggered when executed through color picker, 
+			// only by manually changing the color text field
+			console.log(`Color for ${item.name} changed to ${item.value}`);
+
+			// Commented but lines below should work - read comment above for more details
+			//this.theme_customize[index].value = item.value;
+			//this.$set(this.theme_customize, index, { ...item, value: item.value });
 		}
 	}
 }

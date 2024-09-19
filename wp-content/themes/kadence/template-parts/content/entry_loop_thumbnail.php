@@ -20,8 +20,10 @@ $slug            = ( is_search() ? 'search' : get_post_type() );
 $feature_element = kadence()->option( $slug . '_archive_element_feature', $defaults );
 if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feature_element['enabled'] ) {
 	$feature_element = wp_parse_args( $feature_element, $defaults );
-	$ratio = ( isset( $feature_element['ratio'] ) && ! empty( $feature_element['ratio'] ) ? $feature_element['ratio'] : '2-3' );
-	$size  = ( isset( $feature_element['size'] ) && ! empty( $feature_element['size'] ) ? $feature_element['size'] : 'medium_large' );
+	$ratio           = ( isset( $feature_element['ratio'] ) && ! empty( $feature_element['ratio'] ) ? $feature_element['ratio'] : '2-3' );
+	$size            = ( isset( $feature_element['size'] ) && ! empty( $feature_element['size'] ) ? $feature_element['size'] : 'medium_large' );
+	$thumbnail_id    = get_post_thumbnail_id();
+	$alt             = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
 	if ( isset( $feature_element['imageLink'] ) && ! $feature_element['imageLink'] ) {
 		?>
 		<div class="post-thumbnail kadence-thumbnail-ratio-<?php echo esc_attr( $ratio ); ?>">
@@ -30,7 +32,7 @@ if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feat
 				the_post_thumbnail(
 					$size,
 					array(
-						'alt' => the_title_attribute(
+						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
 							array(
 								'echo' => false,
 							)
@@ -49,7 +51,7 @@ if ( isset( $feature_element ) && is_array( $feature_element ) && true === $feat
 				the_post_thumbnail(
 					$size,
 					array(
-						'alt' => the_title_attribute(
+						'alt' => ! empty( $alt ) ? $alt : the_title_attribute(
 							array(
 								'echo' => false,
 							)

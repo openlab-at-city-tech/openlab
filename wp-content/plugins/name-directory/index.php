@@ -3,7 +3,7 @@
  * Plugin Name: Name Directory
  * Plugin URI: https://jeroenpeters.dev/wordpress-plugin-name-directory/
  * Description: A Name Directory, i.e. for animal names or to create a glossary. Visitors can add, search or just browse all names.
- * Version: 1.29.0
+ * Version: 1.29.1
  * Author: Jeroen Peters
  * Author URI: https://jeroenpeters.dev
  * Text Domain: name-directory
@@ -36,7 +36,7 @@ if (! function_exists('add_action'))
 global $wpdb;
 
 global $name_directory_db_version;
-$name_directory_db_version = '1.29.0';
+$name_directory_db_version = '1.29.1';
 
 global $name_directory_table_directory;
 $name_directory_table_directory = $wpdb->prefix . "name_directory";

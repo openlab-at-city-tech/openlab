@@ -12,6 +12,7 @@
 namespace ThemeisleSDK\Modules;
 
 use ThemeisleSDK\Common\Abstract_Module;
+use ThemeisleSDK\Loader;
 use ThemeisleSDK\Product;
 
 // Exit if accessed directly.
@@ -48,25 +49,22 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * @var array $options_plugin The main options list for plugins.
 	 */
 	private $options_plugin = array(
-		'I found a better plugin'            => array(
-			'id'          => 3,
-			'type'        => 'text',
-			'placeholder' => 'What\'s the plugin\'s name?',
+		'id3' => array(
+			'id'   => 3,
+			'type' => 'text',
+
 		),
-		'I could not get the plugin to work' => array(
-			'type'        => 'textarea',
-			'placeholder' => 'What problem are you experiencing?',
-			'id'          => 4,
+		'id4' => array(
+			'type' => 'textarea',
+			'id'   => 4,
 		),
-		'I no longer need the plugin'        => array(
-			'id'          => 5,
-			'type'        => 'textarea',
-			'placeholder' => 'If you could improve one thing about our product, what would it be?',
+		'id5' => array(
+			'id'   => 5,
+			'type' => 'textarea',
 		),
-		'It\'s a temporary deactivation. I\'m just debugging an issue.' => array(
-			'type'        => 'textarea',
-			'placeholder' => 'What problem are you experiencing?',
-			'id'          => 6,
+		'id6' => array(
+			'type' => 'textarea',
+			'id'   => 6,
 		),
 	);
 	/**
@@ -75,21 +73,21 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * @var array $options_theme The main options list for themes.
 	 */
 	private $options_theme = array(
-		'I don\'t know how to make it look like demo' => array(
+		'id7'  => array(
 			'id' => 7,
 		),
-		'It lacks options'                            => array(
-			'placeholder' => 'What option is missing?',
-			'type'        => 'text',
-			'id'          => 8,
+		'id8'  => array(
+			'type' => 'text',
+			'id'   => 8,
 		),
-		'Is not working with a plugin that I need'    => array(
-			'id'          => 9,
-			'type'        => 'text',
-			'placeholder' => 'What is the name of the plugin',
+		'id9'  => array(
+			'id'   => 9,
+			'type' => 'text',
 		),
-		'I want to try a new design, I don\'t like {theme} style' => array(
-			'id' => 10,
+		'id10' => array(
+
+			'title' => '',
+			'id'    => 10,
 		),
 	);
 	/**
@@ -98,36 +96,11 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * @var array $other The other option
 	 */
 	private $other = array(
-		'Other' => array(
-			'id'          => 999,
-			'type'        => 'textarea',
-			'placeholder' => 'What can we do better?',
+		'id999' => array(
+			'id'   => 999,
+			'type' => 'textarea',
 		),
 	);
-	/**
-	 * Default heading for plugin.
-	 *
-	 * @var string $heading_plugin The heading of the modal
-	 */
-	private $heading_plugin = 'What\'s wrong?';
-	/**
-	 * Default heading for theme.
-	 *
-	 * @var string $heading_theme The heading of the modal
-	 */
-	private $heading_theme = 'What does not work for you in {theme}?';
-	/**
-	 * Default submit button action text.
-	 *
-	 * @var string $button_submit The text of the deactivate button
-	 */
-	private $button_submit = 'Submit &amp; Deactivate';
-	/**
-	 * Default cancel button.
-	 *
-	 * @var string $button_cancel The text of the cancel button
-	 */
-	private $button_cancel = 'Skip &amp; Deactivate';
 
 	/**
 	 * Loads the additional resources
@@ -155,11 +128,11 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * Render theme feedback drawer.
 	 */
 	private function render_theme_feedback_popup() {
-		$heading              = str_replace( '{theme}', $this->product->get_name(), $this->heading_theme );
-		$button_submit        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_submit', 'Submit' );
+		$heading              = str_replace( '{theme}', $this->product->get_name(), Loader::$labels['uninstall']['heading_theme'] );
+		$button_submit        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_submit', Loader::$labels['uninstall']['submit'] );
 		$options              = $this->options_theme;
 		$options              = $this->randomize_options( apply_filters( $this->product->get_key() . '_feedback_deactivate_options', $options ) );
-		$info_disclosure_link = '<a href="#" class="info-disclosure-link">' . apply_filters( $this->product->get_slug() . '_themeisle_sdk_info_collect_cta', 'What info do we collect?' ) . '</a>';
+		$info_disclosure_link = '<a href="#" class="info-disclosure-link">' . apply_filters( $this->product->get_slug() . '_themeisle_sdk_info_collect_cta', Loader::$labels['uninstall']['cta_info'] ) . '</a>';
 
 		$options += $this->other;
 
@@ -236,7 +209,7 @@ class Uninstall_Feedback extends Abstract_Module {
 			}
 
 			.ti-feedback .popup--form input[type="radio"] {
-				<?php echo is_rtl() ? 'margin: 0 0 0 10px;' : 'margin: 0 10px 0 0;'; ?>
+			<?php echo is_rtl() ? 'margin: 0 0 0 10px;' : 'margin: 0 10px 0 0;'; ?>
 			}
 
 			.ti-feedback .popup--form input[type="radio"]:checked ~ textarea {
@@ -314,7 +287,7 @@ class Uninstall_Feedback extends Abstract_Module {
 			}
 
 			.ti-feedback .buttons input:last-child {
-				<?php echo is_rtl() ? 'margin-right: auto;' : 'margin-left: auto;'; ?>
+			<?php echo is_rtl() ? 'margin-right: auto;' : 'margin-left: auto;'; ?>
 			}
 
 			.ti-theme-uninstall-feedback-drawer {
@@ -368,17 +341,17 @@ class Uninstall_Feedback extends Abstract_Module {
 				position: absolute;
 				top: 50%;
 				transform: translateY(-50%);
-				<?php
-				echo is_rtl() ?
-				'right: -10px;
-				border-top: 20px solid transparent;
-				border-left: 20px solid #23A1CE;
-				border-bottom: 20px solid transparent;' :
-				'left: -10px;
-				border-top: 20px solid transparent;
-				border-right: 20px solid #23A1CE;
-				border-bottom: 20px solid transparent;';
-				?>
+			<?php
+			echo is_rtl() ?
+			'right: -10px;
+			border-top: 20px solid transparent;
+			border-left: 20px solid #23A1CE;
+			border-bottom: 20px solid transparent;' :
+			'left: -10px;
+			border-top: 20px solid transparent;
+			border-right: 20px solid #23A1CE;
+			border-bottom: 20px solid transparent;';
+			?>
 			}
 
 			.ti-plugin-uninstall-feedback-popup {
@@ -386,8 +359,7 @@ class Uninstall_Feedback extends Abstract_Module {
 				position: absolute;
 				white-space: normal;
 				width: 400px;
-				<?php echo is_rtl() ? 'right: calc( 100% + 15px );' : 'left: calc( 100% + 15px );'; ?>
-				top: -15px;
+			<?php echo is_rtl() ? 'right: calc( 100% + 15px );' : 'left: calc( 100% + 15px );'; ?> top: -15px;
 			}
 
 			.ti-plugin-uninstall-feedback-popup.sending-feedback .popup--body i {
@@ -525,15 +497,20 @@ class Uninstall_Feedback extends Abstract_Module {
 		];
 		?>
 		<ul class="popup--form">
-			<?php foreach ( $options as $title => $attributes ) { ?>
+			<?php
+			foreach ( $options as $idx => $attributes ) {
+				$title       = Loader::$labels['uninstall']['options'][ $idx ]['title'];
+				$placeholder = array_key_exists( 'placeholder', Loader::$labels['uninstall']['options'][ $idx ] ) ? Loader::$labels['uninstall']['options'][ $idx ]['placeholder'] : '';
+				?>
 				<li ti-option-id="<?php echo esc_attr( $attributes['id'] ); ?>">
-					<input type="radio" name="ti-deactivate-option" id="<?php echo esc_attr( $key . $attributes['id'] ); ?>">
+					<input type="radio" name="ti-deactivate-option"
+						   id="<?php echo esc_attr( $key . $attributes['id'] ); ?>">
 					<label for="<?php echo esc_attr( $key . $attributes['id'] ); ?>">
 						<?php echo esc_attr( str_replace( '{theme}', $this->product->get_name(), $title ) ); ?>
 					</label>
 					<?php
 					if ( array_key_exists( 'type', $attributes ) ) {
-						$placeholder = array_key_exists( 'placeholder', $attributes ) ? $attributes['placeholder'] : '';
+
 						echo '<textarea width="100%" rows="' . esc_attr( $inputs_row_map[ $attributes['type'] ] ) . '" name="comments" placeholder="' . esc_attr( $placeholder ) . '"></textarea>';
 					}
 					?>
@@ -547,16 +524,17 @@ class Uninstall_Feedback extends Abstract_Module {
 	 * Render plugin feedback popup.
 	 */
 	private function render_plugin_feedback_popup() {
-		$button_cancel        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_cancel', $this->button_cancel );
-		$button_submit        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_submit', $this->button_submit );
+		$button_cancel        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_cancel', Loader::$labels['uninstall']['button_cancel'] );
+		$button_submit        = apply_filters( $this->product->get_key() . '_feedback_deactivate_button_submit', Loader::$labels['uninstall']['button_submit'] );
 		$options              = $this->randomize_options( apply_filters( $this->product->get_key() . '_feedback_deactivate_options', $this->options_plugin ) );
-		$info_disclosure_link = '<a href="#" class="info-disclosure-link">' . apply_filters( $this->product->get_slug() . '_themeisle_sdk_info_collect_cta', 'What info do we collect?' ) . '</a>';
+		$info_disclosure_link = '<a href="#" class="info-disclosure-link">' . apply_filters( $this->product->get_slug() . '_themeisle_sdk_info_collect_cta', Loader::$labels['uninstall']['cta_info'] ) . '</a>';
 
 		$options += $this->other;
 		?>
-		<div class="ti-plugin-uninstall-feedback-popup ti-feedback" id="<?php echo esc_attr( $this->product->get_slug() . '_uninstall_feedback_popup' ); ?>">
+		<div class="ti-plugin-uninstall-feedback-popup ti-feedback"
+			 id="<?php echo esc_attr( $this->product->get_slug() . '_uninstall_feedback_popup' ); ?>">
 			<div class="popup--header">
-				<h5><?php echo wp_kses( $this->heading_plugin, array( 'span' => true ) ); ?> </h5>
+				<h5><?php echo wp_kses( Loader::$labels['uninstall']['heading_plugin'], array( 'span' => true ) ); ?> </h5>
 			</div><!--/.popup--header-->
 			<div class="popup--body">
 				<?php $this->render_options_list( $options ); ?>
@@ -701,12 +679,12 @@ class Uninstall_Feedback extends Abstract_Module {
 		$disclosure_new_labels = apply_filters( $this->product->get_slug() . '_themeisle_sdk_disclosure_content_labels', [], $this->product );
 		$disclosure_labels     = array_merge(
 			[
-				'title' => 'Below is a detailed view of all data that ThemeIsle will receive if you fill in this survey. No email address or IP addresses are transmitted after you submit the survey.',
+				'title' => Loader::$labels['uninstall']['disclosure']['title'],
 				'items' => [
-					sprintf( '%s %s version %s %s %s %s', '<strong>', ucwords( $this->product->get_type() ), '</strong>', '<code>', $this->product->get_version(), '</code>' ),
-					sprintf( '%sCurrent website:%s %s %s %s', '<strong>', '</strong>', '<code>', get_site_url(), '</code>' ),
-					sprintf( '%sUsage time:%s %s %s%s', '<strong>', '</strong>', '<code>', ( time() - $this->product->get_install_time() ), 's</code>' ),
-					sprintf( '%s Uninstall reason %s %s Selected reason from the above survey %s ', '<strong>', '</strong>', '<i>', '</i>' ),
+					sprintf( Loader::$labels['uninstall']['disclosure']['version'], '<strong>', ucwords( $this->product->get_type() ), '</strong>', '<code>', $this->product->get_version(), '</code>' ),
+					sprintf( Loader::$labels['uninstall']['disclosure']['website'], '<strong>', '</strong>', '<code>', get_site_url(), '</code>' ),
+					sprintf( Loader::$labels['uninstall']['disclosure']['usage'], '<strong>', '</strong>', '<code>', ( time() - $this->product->get_install_time() ), 's</code>' ),
+					sprintf( Loader::$labels['uninstall']['disclosure']['reason'], '<strong>', '</strong>', '<i>', '</i>' ),
 				],
 			],
 			$disclosure_new_labels

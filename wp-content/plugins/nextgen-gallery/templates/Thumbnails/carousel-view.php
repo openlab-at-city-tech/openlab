@@ -1,6 +1,6 @@
 <?php $this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery ); ?>
 
-<div class="ngg-galleryoverview carousel-view 
+<div class="ngg-galleryoverview carousel-view
 <?php
 if ( ! intval( $ajax_pagination ) ) {
 	echo ' ngg-ajax-pagination-none';}
@@ -19,7 +19,7 @@ if ( ! intval( $ajax_pagination ) ) {
 			data-current_image-id="<?php echo esc_attr( $current_image->{$current_image->id_field} ); ?>"
 			data-title="<?php echo esc_attr( $current_image->alttext ); ?>"
 			data-description="<?php echo esc_attr( stripslashes( $current_image->description ) ); ?>"
-			data-current_image-slug="<?php echo esc_attr( $current_image->current_image_slug ); ?>"
+			data-current_image-slug="<?php echo esc_attr( $current_image->image_slug ); ?>"
 			<?php echo $effect_code; ?>>
 			<img title="<?php echo esc_attr( $current_image->alttext ); ?>"
 				alt="<?php echo esc_attr( $current_image->alttext ); ?>"
@@ -51,7 +51,7 @@ if ( ! intval( $ajax_pagination ) ) {
 				$this->start_element( 'nextgen_gallery.image_panel', 'item', $image );
 				?>
 					<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>"
-						class="ngg-basic-thumbnails-carousel-thumbnail" 
+						class="ngg-basic-thumbnails-carousel-thumbnail"
 						<?php
 						if ( $style ) {
 							echo $style;}

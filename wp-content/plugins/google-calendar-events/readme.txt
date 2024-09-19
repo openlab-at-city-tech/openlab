@@ -4,7 +4,7 @@ Tags: google calendar, calendar, calendars, google, event calendar, custom calen
 Requires at least: 4.2
 Requires PHP: 7.3
 Tested up to: 6.5.5
-Stable tag: 3.4.0
+Stable tag: 3.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,14 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.4.2 =
+* Fix: Event rendering issue for public calendar while using Auth via Xtendify.
+
+= 3.4.1 =
+* Dev: Add OAuth helper functionality.
+* Dev: Make OAuth helper option compatibble with Appointment add-on.
+* Update: Update dependency prettier to v3.3.3.
 
 = 3.4.0 =
 * Dev: Added Print calendar feature.

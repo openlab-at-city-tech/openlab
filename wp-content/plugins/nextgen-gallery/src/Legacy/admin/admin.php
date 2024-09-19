@@ -1,5 +1,7 @@
 <?php
 
+use Imagely\NGG\Admin\AMNotifications as Notifications;
+
 /**
  * nggAdminPanel - Admin Section for NextGEN Gallery
  *
@@ -85,10 +87,17 @@ class nggAdminPanel {
 
 	// integrate the menu.
 	public function add_menu() {
+		$notifications = new Notifications();
+
+		// Notification count HTML to append to the menu.
+		$nav_append_count = '';
+		if ( absint( $notifications->get_count() ) > 0 ) {
+			$nav_append_count = "<span class='ngg-menu-notification-indicator update-plugins'>" . absint( $notifications->get_count() ) . "</span>";
+		}
 
 		add_menu_page(
 			__( 'NextGEN Gallery', 'nggallery' ),
-			_n( 'NextGEN Gallery', 'NextGen Galleries', 1, 'nggallery' ),
+			_n( 'NextGEN Gallery', 'NextGen Galleries', 1, 'nggallery' ) . $nav_append_count,
 			'NextGEN Gallery overview',
 			NGGFOLDER,
 			[ $this, 'show_menu' ],

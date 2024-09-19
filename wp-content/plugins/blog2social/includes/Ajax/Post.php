@@ -79,10 +79,10 @@ class Ajax_Post {
 
         if (current_user_can('upload_files') && isset($_POST['b2s_security_nonce']) && (int) wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['b2s_security_nonce'])), 'b2s_security_nonce') > 0) {  //0-24hours lifetime
             if (isset($_FILES["file"]["name"]) && !empty($_FILES["file"]["name"]) && isset($_FILES["file"]["tmp_name"]) && !empty($_FILES["file"]["tmp_name"])) {
-                //get_allowed_mime_types()
-                $isVideo = wp_check_filetype($_FILES["file"]["name"]);
-                if (isset($isVideo['type']) && !empty($isVideo['type'])) {
-                    if (preg_match('/^video/im', $isVideo['type'])) {
+                $isVideo = wp_check_filetype_and_ext(sanitize_text_field($_FILES["file"]["tmp_name"]),sanitize_text_field($_FILES["file"]["name"]));
+                if (isset($isVideo['type']) && $isVideo['type'] !== false) {
+                    $allowed_types = array('video/x-msvideo','video/avi','video/mp4','video/mpeg','video/ogg','video/x-flv','video/quicktime','video/x-ms-asf');
+                    if (preg_match('/^video/im', $isVideo['type']) && in_array($isVideo['type'],$allowed_types)) {
                         $upload = wp_upload_bits(sanitize_text_field($_FILES["file"]["name"]), null, file_get_contents(sanitize_text_field($_FILES["file"]["tmp_name"])));
                         $attachment = array(
                             'post_mime_type' => sanitize_mime_type($_FILES['file']['type']),

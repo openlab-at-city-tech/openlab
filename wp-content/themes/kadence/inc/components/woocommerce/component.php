@@ -715,25 +715,31 @@ class Component implements Component_Interface {
 		}
 		echo '<ul>';
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['stripe'] ) && true === $payments_element['stripe'] ) {
-			echo '<li class="single-product-payments-stripe">' . kadence()->get_icon( 'stripe' ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-stripe">' . kadence()->get_icon( 'stripe', '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['visa'] ) && true === $payments_element['visa'] ) {
-			echo '<li class="single-product-payments-visa">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'visa_gray' : 'visa' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-visa">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'visa_gray' : 'visa' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['mastercard'] ) && true === $payments_element['mastercard'] ) {
-			echo '<li class="single-product-payments-mastercard">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'mastercard_gray' : 'mastercard' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-mastercard">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'mastercard_gray' : 'mastercard' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['amex'] ) && true === $payments_element['amex'] ) {
-			echo '<li class="single-product-payments-amex">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'amex_gray' : 'amex' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-amex">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'amex_gray' : 'amex' ) ), '', false . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['discover'] ) && true === $payments_element['discover'] ) {
-			echo '<li class="single-product-payments-discover">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'discover_gray' : 'discover' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-discover">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'discover_gray' : 'discover' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['link'] ) && true === $payments_element['link'] ) {
+			echo '<li class="single-product-payments-link">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'link_gray' : 'link' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['paypal'] ) && true === $payments_element['paypal'] ) {
-			echo '<li class="single-product-payments-paypal">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'paypal_gray' : 'paypal' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-paypal">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'paypal_gray' : 'paypal' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['applepay'] ) && true === $payments_element['applepay'] ) {
-			echo '<li class="single-product-payments-applepay">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'applepay_gray' : 'applepay' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo '<li class="single-product-payments-applepay">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'applepay_gray' : 'applepay' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['googlepay'] ) && true === $payments_element['googlepay'] ) {
+			echo '<li class="single-product-payments-link">' . kadence()->get_icon( ( 'inherit' !== $colors ? 'googlepay_gray' : 'googlepay' ), '', false ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 		if ( isset( $payments_element ) && is_array( $payments_element ) && isset( $payments_element['custom_enable_01'] ) && true === $payments_element['custom_enable_01'] && isset( $payments_element['custom_img_01'] ) && ! empty( $payments_element['custom_img_01'] ) ) {
 			echo '<li class="single-product-payments-custom-01"><img src="' . esc_attr( $payments_element['custom_img_01'] ) . '" class="payment-custom-img' . ( 'inherit' !== $colors ? ' payment-custom-img-gray' : '' ) . '" alt="' . ( isset( $payments_element['custom_id_01'] ) && ! empty( $payments_element['custom_id_01'] ) ? get_post_meta( $payments_element['custom_id_01'], '_wp_attachment_image_alt', true ) : '' ) . '"/></li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

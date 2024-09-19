@@ -51,7 +51,10 @@ class MetaSlider_Notices extends Updraft_Notices_1_0
 
         add_action('admin_enqueue_scripts', array($this, 'add_notice_assets'));
         add_action('wp_ajax_notice_handler', array($this, 'ajax_notice_handler'));
+        // Notices in admin pages except in MetaSlider admin pages - See MetaSliderPlugin->filter_admin_notices()
         add_action('admin_notices', array($this, 'show_dashboard_notices'));
+        // @since 3.90.1 - Notices in MetaSlider admin pages
+        add_action('metaslider_admin_notices', array($this, 'show_dashboard_notices'));
     }
 
     /**

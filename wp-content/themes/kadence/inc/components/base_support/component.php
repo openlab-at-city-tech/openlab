@@ -9,6 +9,8 @@ namespace Kadence\Base_Support;
 
 use Kadence\Component_Interface;
 use Kadence\Templating_Component_Interface;
+use Kadence_Blocks_Frontend;
+use Kadence_Blocks_Pro_Frontend;
 use WP_Upgrader;
 use WP_Ajax_Upgrader_Skin;
 use Plugin_Upgrader;
@@ -114,6 +116,55 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		add_filter( 'excerpt_length', array( $this, 'custom_excerpt_length' ) );
 		add_filter( 'the_author_description', 'wpautop' );
 		add_action( 'admin_init', array( $this, 'set_theme_initial_version' ) );
+		add_action( 'init', array( $this, 'setup_content_filter' ), 9 );
+		add_action( 'wp', array( $this, 'setup_header_block_css' ), 99 );
+	}
+	/**
+	 * Add the header block css to the head tag.
+	 */
+	public function setup_header_block_css() {
+		if ( is_admin() ) {
+			return;
+		}
+		if ( kadence()->option( 'blocks_header' ) && defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+			$header_id = kadence()->option( 'blocks_header_id' );
+			if ( ! empty( $header_id ) ) {
+				$header_block = get_post( $header_id );
+				if ( ! $header_block || 'kadence_header' !== $header_block->post_type ) {
+					return;
+				}
+				if ( 'publish' !== $header_block->post_status || ! empty( $header_block->post_password ) ) {
+					return;
+				}
+				$header_block->post_content = '<!-- wp:kadence/header {"uniqueID":"header-replace","id":' . $header_id . '} /-->';
+				if ( class_exists( 'Kadence_Blocks_Frontend' ) ) {
+					$kadence_blocks = \Kadence_Blocks_Frontend::get_instance();
+					if ( method_exists( $kadence_blocks, 'frontend_build_css' ) ) {
+						$kadence_blocks->frontend_build_css( $header_block );
+					}
+					if ( class_exists( 'Kadence_Blocks_Pro_Frontend' ) ) {
+						$kadence_blocks_pro = \Kadence_Blocks_Pro_Frontend::get_instance();
+						if ( method_exists( $kadence_blocks_pro, 'frontend_build_css' ) ) {
+							$kadence_blocks_pro->frontend_build_css( $header_block );
+						}
+					}
+				}
+			}
+		}
+	}
+	/**
+	 * Add filters for element content output.
+	 */
+	public function setup_content_filter() {
+		global $wp_embed;
+		add_filter( 'kadence_theme_the_content', array( $wp_embed, 'run_shortcode' ), 8 );
+		add_filter( 'kadence_theme_the_content', array( $wp_embed, 'autoembed'     ), 8 );
+		add_filter( 'kadence_theme_the_content', 'do_blocks' );
+		add_filter( 'kadence_theme_the_content', 'wptexturize' );
+		add_filter( 'kadence_theme_the_content', 'shortcode_unautop' );
+		add_filter( 'kadence_theme_the_content', 'wp_filter_content_tags' );
+		add_filter( 'kadence_theme_the_content', 'do_shortcode', 11 );
+		add_filter( 'kadence_theme_the_content', 'convert_smilies', 20 );
 	}
 	/**
 	 * Set the initial theme version.

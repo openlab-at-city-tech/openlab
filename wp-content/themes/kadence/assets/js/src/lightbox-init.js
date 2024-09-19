@@ -8,7 +8,7 @@
 	'use strict';
 	var kadenceThemeLightbox = {
 		checkImage: function( element ) {
-			return /(png|jpg|jpeg|gif|tiff|bmp|webp)$/.test(
+			return /(png|jpg|jpeg|gif|tiff|bmp|webp|avif)$/.test(
 				element.getAttribute( 'href' ).toLowerCase().split( '?' )[0].split( '#' )[0]
 			);
 		},
