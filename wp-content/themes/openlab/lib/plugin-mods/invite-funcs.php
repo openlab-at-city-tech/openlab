@@ -193,6 +193,7 @@ function openlab_invite_anyone_screen_one_content() {
 
 							<?php
 							$preselected_group = null;
+							$preselected_group_avatar = '';
 							if ( bp_is_action_variable( 'group-invites', 0 ) && bp_action_variable( 1 ) ) {
 								$preselected_group_id = bp_action_variable( 1 );
 
