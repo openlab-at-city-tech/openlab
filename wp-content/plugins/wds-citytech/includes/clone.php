@@ -289,7 +289,7 @@ function openlab_user_can_clone_group( $user_id = null, $group_id = null ) {
 	$group_type = openlab_get_group_type( $group_id );
 	$user_type  = openlab_get_user_member_type( $user_id );
 
-	if ( 'course' === $group_type && 'faculty' === $user_type ) {
+	if ( 'course' === $group_type && openlab_user_can_create_courses( $user_id ) ) {
 		return true;
 	}
 
