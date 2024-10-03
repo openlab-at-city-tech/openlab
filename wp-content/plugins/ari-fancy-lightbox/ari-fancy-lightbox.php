@@ -3,7 +3,7 @@
 	Plugin Name: ARI Fancy Lightbox
 	Plugin URI: http://wp-quiz.ari-soft.com/plugins/wordpress-fancy-lightbox.html
 	Description: Full-featured lightbox plugin for WordPress.
-	Version: 1.3.13
+	Version: 1.3.18
 	Author: ARI Soft
 	Author URI: http://www.ari-soft.com
 	Text Domain: ari-fancy-lightbox
@@ -41,7 +41,8 @@ if ( ! function_exists( 'ari_fancy_lightbox_activation_check' ) ) {
 
             if ( ! $is_supported_php_version )
                 $recommendations[] = sprintf(
-                    __( 'update PHP version on your server from v. %s to at least v. %s', 'ari-fancy-lightbox' ),
+                    /* translators: %1$s: current PHP version, %2$s: min PHP version */
+                    __( 'update PHP version on your server from v. %1$s to at least v. %2$s', 'ari-fancy-lightbox' ),
                     $current_php_version,
                     $min_php_version
                 );
@@ -51,16 +52,24 @@ if ( ! function_exists( 'ari_fancy_lightbox_activation_check' ) ) {
 
             if ( ! $is_supported_wp_version )
                 $recommendations[] = sprintf(
-                    __( 'update WordPress v. %s to at least v. %s', 'ari-fancy-lightbox' ),
+                    /* translators: %1$s: current WP version, %2$s: min WP version */
+                    __( 'update WordPress v. %1$s to at least v. %2$s', 'ari-fancy-lightbox' ),
                     $current_wp_version,
                     $min_wp_version
                 );
 				
             wp_die(
-                sprintf(
-                    __( '"ARI Fancy Lightbox" can not be activated. It requires PHP version 5.4.0+ with SPL extension and WordPress 4.0+.<br /><br /><b>Recommendations:</b> %s.<br /><br /><a href="%s" class="button button-primary">Back</a>', 'ari-fancy-lightbox' ),
-                    join( ', ', $recommendations ),
-                    get_dashboard_url( get_current_user_id() )
+                esc_html(
+                    sprintf(
+                        /* translators: %1s: recommendations, %2$s: dashboard link */ 
+                        _x(
+                            '"ARI Fancy Lightbox" can not be activated. It requires PHP version 5.4.0+ with SPL extension and WordPress 4.0+.<br /><br /><b>Recommendations:</b> %1$s.<br /><br /><a href="%2$s" class="button button-primary">Back</a>',
+                            '%1$s = recommendations, %2$s = dashboard link',
+                            'ari-fancy-lightbox'
+                        ),
+                        join( ', ', $recommendations ),
+                        get_dashboard_url( get_current_user_id() )
+                    )
                 )
             );
         } else {
@@ -80,9 +89,16 @@ if ( version_compare( PHP_VERSION, '5.4.0', '>=' ) ) {
         function ari_fancy_lightbox_requirement_notice() {
             printf(
                 '<div class="notice notice-error"><p>%s</p></div>',
-                sprintf(
-                    __( '"ARI Fancy Lightbox" requires PHP v. 5.4.0+, but PHP version %s is used on the site.', 'ari-fancy-lightbox' ),
-                    PHP_VERSION
+                esc_html(
+                    sprintf(
+                        /* translators: %1s: installed PHP version */ 
+                        _x(
+                            '"ARI Fancy Lightbox" requires PHP v. 5.4.0+, but PHP version %1$s is used on the site.',
+                            '%1$s = installed PHP version',
+                            'ari-fancy-lightbox'
+                        ),
+                        PHP_VERSION
+                    )
                 )
             );
         }

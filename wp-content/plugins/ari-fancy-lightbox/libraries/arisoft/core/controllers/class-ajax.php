@@ -2,7 +2,7 @@
 namespace Ari\Controllers;
 
 class Ajax extends Controller {
-    function __construct( $options = array() ) {
+    public function __construct( $options = array() ) {
         $this->options = new Ajax_Options( $options );
     }
 
@@ -12,24 +12,25 @@ class Ajax extends Controller {
 
             'error' => '',
 
-            'errorCode' => 0
+            'errorCode' => 0,
         );
 
         try {
             $result = $this->process_request();
 
             $ret['result'] = $result;
-        } catch (\Exception $ex) {
+        } catch ( \Exception $ex ) {
             $error_code = $ex->getCode();
 
-            if ( empty( $error_code ) )
+            if ( empty( $error_code ) ) {
                 $error_code = 500;
+            }
 
             $ret['error'] = $ex->getMessage();
             $ret['errorCode'] = $error_code;
         }
 
-        @header('Content-type: application/json');
+        @header( 'Content-type: application/json' );
 
         echo json_encode( $ret, $this->options->json_encode_options );
 
@@ -40,7 +41,7 @@ class Ajax extends Controller {
         throw new \BadMethodCallException(
             sprintf(
                 '%1$s::process_request() method is not implemented.',
-                get_class( $this )
+                esc_html( get_class( $this ) )
             )
         );
     }

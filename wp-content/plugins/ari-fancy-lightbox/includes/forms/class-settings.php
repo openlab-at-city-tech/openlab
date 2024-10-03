@@ -18,6 +18,7 @@ class Settings extends Form {
 
     protected function setup() {
         $nextgen_description = sprintf(
+            /* translators: %s: NextGEN link */
             __( 'Select "ARI Fancy Lightbox" option on "Lightbox Effects" tab on %s page in NextGEN plugin settings.', 'ari-fancy-lightbox' ),
             sprintf(
                 '<a href="%s">%s</a>',
