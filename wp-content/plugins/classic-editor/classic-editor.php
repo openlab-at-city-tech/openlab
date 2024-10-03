@@ -5,7 +5,7 @@
  * Plugin Name: Classic Editor
  * Plugin URI:  https://wordpress.org/plugins/classic-editor/
  * Description: Enables the WordPress classic editor and the old-style Edit Post screen with TinyMCE, Meta Boxes, etc. Supports the older plugins that extend this screen.
- * Version:     1.6.4
+ * Version:     1.6.5
  * Author:      WordPress Contributors
  * Author URI:  https://github.com/WordPress/classic-editor/
  * License:     GPLv2 or later
@@ -65,6 +65,9 @@ class Classic_Editor {
 
 		// Always remove the "Try Gutenberg" dashboard widget. See https://core.trac.wordpress.org/ticket/44635.
 		remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+		
+		// Fix for Safari 18 negative horizontal margin on floats.
+		add_action( 'admin_print_styles', array( __CLASS__, 'safari_18_temp_fix' ) );
 
 		if ( ! $block_editor && ! $gutenberg  ) {
 			return;
@@ -973,6 +976,28 @@ class Classic_Editor {
 
 		delete_option( 'classic-editor-replace' );
 		delete_option( 'classic-editor-allow-users' );
+	}
+	
+	/**
+	 * Temporary fix for Safari 18 negative horizontal margin on floats.
+	 * See: https://core.trac.wordpress.org/ticket/62082 and
+	 * https://bugs.webkit.org/show_bug.cgi?id=280063.
+	 * TODO: Remove when Safari is fixed.
+	 */
+	public static function safari_18_temp_fix() {
+		global $current_screen;
+		
+		if ( isset( $current_screen->base ) && 'post' === $current_screen->base ) {
+			$clear = is_rtl() ? 'right' : 'left';
+			
+			?>
+			<style id="classic-editor-safari-18-temp-fix">
+			_::-webkit-full-page-media, _:future, :root #post-body #postbox-container-2 {
+				clear: <?php echo $clear; ?>;
+			}
+			</style>
+			<?php
+		}
 	}
 }
 
