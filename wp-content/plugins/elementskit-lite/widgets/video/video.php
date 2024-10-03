@@ -240,12 +240,14 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		$this->add_control(
 			'ekit_video_self_external_url',
 			[
-				'label' => esc_html__('URL', 'elementskit-lite'),
+				'label' => esc_html__( 'URL', 'elementskit-lite' ),
+				'type' => Controls_Manager::TEXT,
 				'label_block' => true,
 				'placeholder' => esc_html__('Enter video URL', 'elementskit-lite'),
 				'description' => esc_html__('Input a valid video url', 'elementskit-lite'),
-				'type'  => Controls_Manager::TEXT,
-				'default' => 'https://wpmet.com/plugin/elementskit/wp-content/uploads/2022/11/selfhosted_video.mp4',
+				'dynamic' => [
+					'active' => true,
+				],
 				'condition' => [
 					'ekit_video_self_url' => 'yes',
 					'ekit_video_popup_video_type' => 'self',
@@ -1104,7 +1106,7 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		$video_settings['startVolume'] = (!empty($ekit_video_player_start_volume['size'])) ? $ekit_video_player_start_volume['size']: 0.8;
 		$video_settings['videoType'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'iframe': 'inline';
 		$video_settings['videoClass'] = (!empty($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube')) ? 'mfp-fade': 'ekit_self_video_wrap_content';
-		$poster_image =  !empty($self_poster_image['url']) ? $self_poster_image['url'] : '';
+		$poster_image =  !empty($self_poster_image['url']) ? esc_url($self_poster_image['url']) : '';
 
 		//generate id
 		$generate_id = "test-popup-link".$this->get_id();
@@ -1131,15 +1133,20 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		if (!empty($ekit_video_popup_video_mute) && $ekit_video_popup_video_mute === '1') {
 			$this->add_render_attribute('player', 'muted', '');
 		}
+
+		$clean_url = "#";
+		if (isset($ekit_video_self_external_url) && filter_var($ekit_video_self_external_url, FILTER_VALIDATE_URL)) {
+			$clean_url = $ekit_video_self_external_url;
+		}
 		?>
 		<div class="video-content" data-video-player="<?php echo esc_attr(wp_json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(wp_json_encode($video_settings)); ?>">
 			<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :
 				include Handler::get_dir() . 'parts/video-button.php';  ?>
 			<?php else : 
-				include Handler::get_dir() . 'parts/video-button.php'; ?>	
+				include Handler::get_dir() . 'parts/video-button.php'; ?>
 				<div id="<?php echo esc_attr($generate_id); ?>" class="mfp-hide ekit_self_video_wrap">
 					<video class="video_class" <?php $this->print_render_attribute_string('player'); ?> >
-						<source type="video/mp4" src="<?php echo esc_url($ekit_video_self_url == 'yes' ? $ekit_video_self_external_url : $ekit_video_player_self_hosted['url'] ); ?>" />
+						<source type="video/mp4" src="<?php echo esc_url($clean_url); ?>" />
 					</video>
 				</div>
 			<?php endif;?>

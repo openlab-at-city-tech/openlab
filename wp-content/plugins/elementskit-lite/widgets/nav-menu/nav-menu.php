@@ -3,7 +3,6 @@
 namespace Elementor;
 use \Elementor\ElementsKit_Widget_Nav_Menu_Handler as Handler;
 use \ElementsKit_Lite\Modules\Controls\Controls_Manager as ElementsKit_Controls_Manager;
-
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 class ElementsKit_Widget_Nav_Menu extends Widget_Base {
@@ -1583,9 +1582,14 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
             $responsive_menu_breakpoint = "767";
         }
 
-        echo '<div class="ekit-wid-con '.esc_attr($settings['elementskit_responsive_breakpoint']).'" data-hamburger-icon="'.esc_attr($hamburger_icon_value).'" data-hamburger-icon-type="'.esc_attr($hamburger_icon_type).'" data-responsive-breakpoint="'.esc_attr($responsive_menu_breakpoint).'">';
-        $this->render_raw();
-        echo '</div>';
+		?>
+		<div class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>" 
+			data-hamburger-icon="<?php echo esc_attr($hamburger_icon_value); ?>" 
+			data-hamburger-icon-type="<?php echo esc_attr($hamburger_icon_type); ?>" 
+			data-responsive-breakpoint="<?php echo esc_attr($responsive_menu_breakpoint); ?>">
+			<?php $this->render_raw(); ?>
+		</div>
+		<?php
     }
 
     protected function render_raw( ) {

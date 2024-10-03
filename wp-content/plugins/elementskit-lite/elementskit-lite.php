@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) || exit;
  * Description: The most advanced addons for Elementor with tons of widgets, Header builder, Footer builder, Mega menu builder, layout pack and powerful custom controls.
  * Plugin URI: https://products.wpmet.com/elementskit
  * Author: Wpmet
- * Version: 3.2.7
+ * Version: 3.2.8
  * Author URI: https://wpmet.com/
  *
  * Text Domain: elementskit-lite
@@ -32,7 +32,7 @@ final class ElementsKit_Lite {
 	 * @var string The plugin version.
 	 */
 	static function version() {
-		return '3.2.7';
+		return '3.2.8';
 	}
 
 	/**
