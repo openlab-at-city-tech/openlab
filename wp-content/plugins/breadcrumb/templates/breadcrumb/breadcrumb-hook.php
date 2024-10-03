@@ -4,31 +4,31 @@ if (!defined('ABSPATH')) exit;  // if direct access
 
 add_action('breadcrumb_main', 'breadcrumb_main_items');
 
-function breadcrumb_main_items()
+function breadcrumb_main_items($atts)
 {
     $breadcrumb_items = breadcrumb_trail_array_list();
+    $themes = isset($atts['themes']) ? sanitize_text_field($atts['themes']) : '';
+    $breadcrumb_themes = get_option('breadcrumb_themes', 'theme5');
+
+    $breadcrumb_themes = !empty($themes) ? $themes : $breadcrumb_themes;
 
     $breadcrumb_items = apply_filters('breadcrumb_items_array', $breadcrumb_items);
+    //$breadcrumb_items = [];
 
 
 
     if (!empty($breadcrumb_items)) :
-?><ol>
-            <?php
-            foreach ($breadcrumb_items as $item_index => $item) :
-                do_action('breadcrumb_main_item_loop', $item);
-            endforeach;
-            ?>
-        </ol><?php
-            else :
-                ?>
-        <style type="text/css">
-            .breadcrumb-container {
-                display: none;
-            }
-        </style>
-    <?php
+?> <div class="breadcrumb-container <?php echo esc_attr($breadcrumb_themes); ?>">
 
+            <ol>
+                <?php
+                foreach ($breadcrumb_items as $item_index => $item) :
+                    do_action('breadcrumb_main_item_loop', $item);
+                endforeach;
+                ?>
+            </ol>
+        </div><?php
+                do_action('breadcrumb_main_end', $atts);
             endif;
         }
 
@@ -49,13 +49,13 @@ function breadcrumb_main_items()
             $link = apply_filters('breadcrumb_link_url', $link);
 
             if (!empty($title)) {
-    ?><li><a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url_raw($link); ?>"><span><?php echo wp_kses_post($title); ?></span></a><span class="separator"><?php echo wp_kses_post($breadcrumb_separator); ?></span></li>
+                ?><li><a title="<?php echo esc_attr($title_original); ?>" href="<?php echo esc_url_raw($link); ?>"><span><?php echo wp_kses_post($title); ?></span></a><span class="separator"><?php echo wp_kses_post($breadcrumb_separator); ?></span></li>
     <?php
             }
         }
 
 
-        add_action('breadcrumb_main', 'breadcrumb_main_schema');
+        add_action('breadcrumb_main_end', 'breadcrumb_main_schema');
 
         function breadcrumb_main_schema()
         {
@@ -100,7 +100,7 @@ function breadcrumb_main_items()
 
 
 
-        add_action('breadcrumb_main', 'breadcrumb_main_style_css');
+        add_action('breadcrumb_main_end', 'breadcrumb_main_style_css');
 
         function breadcrumb_main_style_css()
         {
@@ -126,34 +126,41 @@ function breadcrumb_main_items()
         .breadcrumb-container {
             font-size: 13px;
         }
+
         .breadcrumb-container ul {
             margin: 0;
             padding: 0;
         }
+
         .breadcrumb-container li {
             box-sizing: unset;
             display: inline-block;
             margin: 0;
             padding: 0;
         }
+
         .breadcrumb-container li a {
             box-sizing: unset;
             padding: 0 10px;
         }
+
         .breadcrumb-container {
             font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
             padding: <?php echo esc_attr($breadcrumb_padding); ?>;
             margin: <?php echo esc_attr($breadcrumb_margin); ?>;
         }
+
         .breadcrumb-container li a {
             color: <?php echo esc_attr($breadcrumb_link_color); ?> !important;
             font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
             line-height: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
         }
+
         .breadcrumb-container li .separator {
             color: <?php echo esc_attr($breadcrumb_separator_color); ?> !important;
             font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
         }
+
         .breadcrumb-container li:last-child .separator {
             display: none;
         }
@@ -170,7 +177,7 @@ function breadcrumb_main_items()
 
 
 
-        add_action('breadcrumb_main', 'breadcrumb_main_custom_scripts');
+        add_action('breadcrumb_main_end', 'breadcrumb_main_custom_scripts');
 
         function breadcrumb_main_custom_scripts()
         {

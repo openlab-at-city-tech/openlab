@@ -4,7 +4,7 @@
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
 	Tested up to: 6.6
-	Stable tag: 1.5.45
+	Stable tag: 1.5.46
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.46 =
+    * 2024-09-23  - fix - Remove styles, scripts if breadcrumb is empty.
 
 	= 1.5.45 =
     * 2024-07-27  - fix - Style broken issue fixed
