@@ -3,7 +3,7 @@ Contributors: galdub, tomeraharon, premio
 Tags: folder, folders, replace media, pages folders, media library
 Requires at least: 3.0.0
 Tested up to: 6.6
-Stable tag: 3.0.5
+Stable tag: 3.0.6
 Plugin URI: https://premio.io/downloads/folders/
 License: GPLv3
 
@@ -225,6 +225,9 @@ Just follow our <a href="https://premio.io/wordpress-premio-pro-version-installa
 A live demo for the Folders plugin is available at <a href="https://demo.premio.io/folders/?utm_source=wordpressorg" target="_blank" title="Premio.io demo site">Premio's demo site</a>.
 
 == Changelog ==
+
+= 3.0.6 =
+Folders loading bug fixed
 
 = 3.0.5 =
 Notifications - Stay informed with notifications whenever an action occurs on Folders — whether a new file is uploaded by a team member, a post is deleted, or any other change is made (Pro)

@@ -263,8 +263,23 @@ class WCP_Folders
 
         add_action("admin_init", [$this, "check_for_signup_status"]);
         add_action("admin_init", [$this, "change_menu_text"]);
+        add_action( 'admin_init', [$this, 'process_request'], 1 );
 
     }//end __construct()
+
+    public function process_request()
+    {
+        // Check for filter: Remove if filter by folders
+        global $_REQUEST;
+        $isMediaFilter = isset($_REQUEST['action']) && $_REQUEST['action'] == 'query-attachments';
+        $hasMediaFilter = isset($_REQUEST['query']['media_folder']) && !empty($_REQUEST['query']['media_folder']);
+        if($isMediaFilter && $hasMediaFilter && defined('MLA_PLUGIN_PATH')) {
+            if(isset($_REQUEST['query']['s']) && is_array($_REQUEST['query']['s'])) {
+                unset($_REQUEST['query']['s']);
+            }
+            remove_action( 'admin_init', 'MLAModal_Ajax::mla_admin_init_action' );
+        }
+    }
 
     public function change_menu_text()
     {
@@ -5428,7 +5443,6 @@ class WCP_Folders
         $isShown = get_option("folder_update_message");
         if ($isShown === false) {
             wp_enqueue_script('folders-mailcheck-js', plugin_dir_url(dirname(__FILE__)).'assets/js/mailcheck.js', ['jquery'], WCP_FOLDER_VERSION, true);
-            return;
         }
 
         if (self::is_active_for_screen()) {
