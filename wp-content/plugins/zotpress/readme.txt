@@ -3,12 +3,12 @@ Contributors: kseaborn
 Plugin Name: Zotpress
 Plugin URI: http://katieseaborn.com/plugins/
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5HQ8FXAXS9MUQ
-Tags: zotero, zotpress, citation manager, citations, citation, cite, citing, bibliography, bibliographies, reference, referencing, references, reference list, reference manager, academic, academic blogging, academia, scholar, scholarly, scholarly blogging, cv, curriculum vitae, resume, publish, publication, publications
+Tags: zotero, citation manager, bibliography, academic blogging, publications
 Author URI: http://katieseaborn.com/
 Author: Katie Seaborn
 Requires at least: 3.5
-Tested up to: 6.5.2
-Stable tag: 7.3.10
+Tested up to: 6.6.2
+Stable tag: 7.3.13
 License: Apache2.0
 
 Zotpress displays your Zotero citations on WordPress.
@@ -71,6 +71,20 @@ The F.A.Q. can be found on the "Help" page of every Zotpress installation. If yo
 6. Allow visitors to search your library by item metadata or tag, or both.
 
 == Changelog ==
+
+= 7.3.13 =
+
+* Fixed shortcode error.
+* Fixed default collection bug with library shortcode.
+* Fixed security issue with role access.
+
+= 7.3.12 =
+
+* Fixed shortcode error.
+
+= 7.3.11 =
+
+* Fixed shortcode security issue.
 
 = 7.3.10 =
 

@@ -9,7 +9,7 @@
   *
   * @return str JSON with: (a) meta about request, and (b) all data for this request.
   */
-function Zotpress_shortcode_request( $checkcache = false )
+function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 {
 	$is_ajax = isset($_GET['zpShortcode_nonce']);
 
@@ -17,11 +17,11 @@ function Zotpress_shortcode_request( $checkcache = false )
 		check_ajax_referer( 'zpShortcode_nonce_val', 'zpShortcode_nonce' );
 
 	// Set up database
-	global $wpdb;
-	global $post;
+	global $wpdb, $post;
 
 	// Prep request vars
-	$zpr = Zotpress_prep_ajax_request_vars();
+	if ( $zpr === false || $zpr == '' )
+		$zpr = Zotpress_prep_ajax_request_vars($wpdb);
 
 	// Include relevant classes and functions
 	include( dirname(__FILE__) . '/../request/request.class.php' );
@@ -199,6 +199,10 @@ function Zotpress_shortcode_request( $checkcache = false )
 	if ( $zp_request_queue === false )
 		$zp_error = "Zotpress account not found.";
 
+	// New in 12.3.13: Check for missing data
+	// if ( $zp_import_contents->request_error )
+	
+
 	if ( ! $zp_error )
 	{
 		foreach ( $zp_request_queue as $zp_request_account )
@@ -289,7 +293,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 				{
 					$zp_imported = $zp_import_contents->get_request_contents( $zp_request_account["requests"][0], $zpr["update"] );
 
-					if ( $zp_imported["updateneeded"] )
+					if ( isset($zp_imported["updateneeded"]) )
 						$zp_updateneeded = true;
 				}
 
@@ -297,7 +301,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 				if ( ( $checkcache 
 						&& ! $zp_usecache ) )
 					continue;
-
+				
 				// Deal with possible error
 				if ( gettype($zp_imported) == "string"
 				 		&& substr($zp_imported, 0, 5) == "Error" )
@@ -345,7 +349,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 		$temp_headers = json_decode( $zp_request["headers"] );
 		// $temp_headers = json_encode( (array)$zp_request["headers"] );
 		// $temp_headers = json_decode( str_replace('\u0000*\u0000','', $temp_headers) );
-
+		
 		// $temp_data = json_encode( (array)$zp_request["json"] );
 		// $temp_data = json_decode( str_replace('\u0000*\u0000','', $temp_data) );
 		$temp_data = json_decode( $zp_request["json"] );
@@ -440,7 +444,6 @@ function Zotpress_shortcode_request( $checkcache = false )
 
 					// 7.3.10: CHECK: Have to replace the apostrophe entity ...
 					$zpr["author"] = str_replace('#039;', "'", $zpr["author"]);
-					// var_dump($zpr["author"]);
 
 					// Deal with multiple authors
 					if ( gettype($zpr["author"]) != "array"
@@ -473,7 +476,7 @@ function Zotpress_shortcode_request( $checkcache = false )
 									$zp_authors_check = true;
 							}
 							else { // Just a string/single author
-								// var_dump($item,$zpr["author"]);exit;
+
 								if ( zp_check_author_continue( $item, $zpr["author"] ) === true )
 									$zp_authors_check = true;
 							}
@@ -489,8 +492,6 @@ function Zotpress_shortcode_request( $checkcache = false )
 						// 	$zp_authors_check = true;
 						// }
 					}
-
-					// var_dump("HUM");exit;
 
 					if ( $zp_authors_check === false )
 						continue;

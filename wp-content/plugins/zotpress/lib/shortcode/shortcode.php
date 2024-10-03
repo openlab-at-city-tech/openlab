@@ -15,7 +15,8 @@ require(__DIR__ . '/shortcode.request.php');
  */
 function Zotpress_func( $atts ) {
 
-    extract( shortcode_atts( array(
+    // extract( shortcode_atts( array(
+    $zp_atts = shortcode_atts( array(
 
         'user_id' => false, // deprecated
         'userid' => false,
@@ -83,7 +84,7 @@ function Zotpress_func( $atts ) {
 		'forcenumber' => false,
 		'forcenumbers' => false
 
-    ), $atts, 'zotpress'));
+    ), $atts );
 
     // array_push($_GET, shortcode_atts(array(
 
@@ -156,8 +157,7 @@ function Zotpress_func( $atts ) {
     // ), $atts));
 
 
-    global $wpdb;
-    global $post;
+    global $post, $wpdb;
 
 
     // +---------------------------+
@@ -165,7 +165,7 @@ function Zotpress_func( $atts ) {
     // +---------------------------+
 
     // 3.9.10: Use the Zotpress_prep_ajax_request_vars() function on bib, lib
-    $zpr = Zotpress_prep_ajax_request_vars($atts);
+    $zpr = Zotpress_prep_ajax_request_vars($wpdb, $zp_atts);
 
     // Filter by account
     // if ($user_id) {
@@ -398,7 +398,7 @@ function Zotpress_func( $atts ) {
         if ( is_null($zp_account) ):
             return "<p>Sorry, but the selected Zotpress nickname can't be found.</p>";
         endif;
-        $api_user_id = $zp_account->api_user_id;
+        $zpr["api_user_id"] = $zp_account->api_user_id;
     } 
     elseif ( $zpr["api_user_id"] !== false ) {
 
@@ -414,14 +414,14 @@ function Zotpress_func( $atts ) {
         if ( is_null($zp_account) ):
             return "<p>Sorry, but the selected Zotpress account can't be found.</p>";
         endif;
-        $api_user_id = $zp_account->api_user_id;
+        $zpr["api_user_id"] = $zp_account->api_user_id;
     } 
     elseif ( $zpr["nickname"] === false 
             && $zpr["api_user_id"] === false ) {
         
         if ( get_option("Zotpress_DefaultAccount") !== false ) {
 
-            $api_user_id = get_option("Zotpress_DefaultAccount");
+            $zpr["api_user_id"] = get_option("Zotpress_DefaultAccount");
 
             $zp_account = $wpdb->get_row(
                 $wpdb->prepare(
@@ -429,17 +429,18 @@ function Zotpress_func( $atts ) {
                     SELECT * FROM ".$wpdb->prefix."zotpress 
                     WHERE api_user_id='%s'
                     ",
-                    array( $api_user_id )
+                    array( $zpr["api_user_id"] )
                 ), OBJECT
             );
         }
         else { // When all else fails ... assume one account 
 
             $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
-            $api_user_id = $zp_account->api_user_id;
+            $zpr["api_user_id"] = $zp_account->api_user_id;
         }
     }
-
+    // var_dump($zpr["api_user_id"]);
+    
     // Generate instance id for shortcode
 	$temp_item_key = is_array( $zpr['item_key'] ) ? implode( "-", $zpr['item_key']) : $zpr['item_key'];
 	$temp_collection_id = is_array( $zpr['collection_id'] ) ? implode( "-", $zpr['collection_id']) : $zpr['collection_id'];
@@ -451,7 +452,7 @@ function Zotpress_func( $atts ) {
     // REVIEW: Added post ID
     // 7.3.10: REVIEW: Removed $nickname, $item_type
     // $instance_id = "zotpress-".md5($post->ID.$api_user_id.$nickname.$temp_author.$temp_year.$itemtype.$item_type.$temp_collection_id.$temp_item_key.$temp_tag_name.$style.$temp_sortby.$order.$limit.$showimage.$showtags.$downloadable.$shownotes.$citeable.$inclusive);
-    $instance_id = "zotpress-".md5($post->ID.$api_user_id.$temp_author.$temp_year.$zpr['itemtype'].$temp_collection_id.$temp_item_key.$temp_tag_name.$zpr['style'].$temp_sortby.$zpr['order'].$zpr['limit'].$zpr['showimage'].$zpr['showtags'].$zpr['downloadable'].$zpr['shownotes'].$zpr['citeable'].$zpr['inclusive']);
+    $instance_id = "zotpress-".md5($post->ID.$zpr["api_user_id"].$temp_author.$temp_year.$zpr['itemtype'].$temp_collection_id.$temp_item_key.$temp_tag_name.$zpr['style'].$temp_sortby.$zpr['order'].$zpr['limit'].$zpr['showimage'].$zpr['showtags'].$zpr['downloadable'].$zpr['shownotes'].$zpr['citeable'].$zpr['inclusive']);
 
 	// Prepare item key
 	if ( $zpr['item_key'] 
@@ -497,7 +498,7 @@ function Zotpress_func( $atts ) {
     // <span class="ZP_ITEM_TYPE" style="display: none;">'.$item_type.'</span>
 	$zp_output .= '">
 
-		<span class="ZP_API_USER_ID" style="display: none;">'.$api_user_id.'</span>
+		<span class="ZP_API_USER_ID" style="display: none;">'.$zpr["api_user_id"].'</span>
 		<span class="ZP_ITEM_KEY" style="display: none;">'.$zpr['item_key'].'</span>
 		<span class="ZP_COLLECTION_ID" style="display: none;">'.$zpr['collection_id'].'</span>
 		<span class="ZP_TAG_ID" style="display: none;">'.$zpr['tag_id'].'</span>
@@ -537,7 +538,7 @@ function Zotpress_func( $atts ) {
     else // Make the first request via PHP for SEO purposes
     {
         $_GET['instance_id'] = $instance_id;
-        $_GET['api_user_id'] = $api_user_id;
+        $_GET['api_user_id'] = $zpr["api_user_id"];
         $_GET['item_key'] = $zpr['item_key'];
         $_GET['collection_id'] = $zpr['collection_id'];
         $_GET['tag_id'] = $zpr['tag_id'];
@@ -571,8 +572,9 @@ function Zotpress_func( $atts ) {
         $_GET['update'] = $update;
         $_GET['overwrite_last_request'] = $overwrite_last_request;
 
+        // var_dump("HERE",$zpr);
         $zp_output .= "\n\t\t\t<div class=\"zp-SEO-Content\">\n";
-        $zp_output .= Zotpress_shortcode_request( true ); // Check catche first
+        $zp_output .= Zotpress_shortcode_request( $zpr, true ); // Check catche first
         $zp_output .= "\n\t\t\t</div><!-- .zp-zp-SEO-Content -->\n";
     }
     $zp_output .= "\t\t</div><!-- .zp-List -->\n\t</div><!--.zp-Zotpress-->\n\n";

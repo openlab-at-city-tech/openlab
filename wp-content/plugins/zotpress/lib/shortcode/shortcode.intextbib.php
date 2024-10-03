@@ -19,7 +19,8 @@ function Zotpress_zotpressInTextBib ($atts)
     *
     */
 
-    extract(shortcode_atts(array(
+    $atts = shortcode_atts(array(
+    // extract(shortcode_atts(array(
         'style' => false,
         'sortby' => "default",
         'sort' => false,
@@ -47,7 +48,7 @@ function Zotpress_zotpressInTextBib ($atts)
         'forcenumber' => false,
         'forcenumbers' => false
 
-    ), $atts));
+    ), $atts);
 
     // array_push($_GET, shortcode_atts(array(
     //     'style' => false,
@@ -80,7 +81,7 @@ function Zotpress_zotpressInTextBib ($atts)
     // ), $atts));
 
 
-    global $post;
+    global $post, $wpdb;
 
 
     // +---------------------------+
@@ -88,7 +89,7 @@ function Zotpress_zotpressInTextBib ($atts)
     // +---------------------------+
 
     // 3.9.10: Use the Zotpress_prep_ajax_request_vars() function on bib, lib
-    $zpr = Zotpress_prep_ajax_request_vars($atts);
+    $zpr = Zotpress_prep_ajax_request_vars($wpdb, $atts);
 
     // FORMAT PARAMETERS
     // $style = str_replace('"','',html_entity_decode($zpr['style']));
@@ -270,7 +271,7 @@ function Zotpress_zotpressInTextBib ($atts)
     $_GET['overwrite_last_request'] = $overwrite_last_request;
 
     $zp_output .= "\n<div class=\"zp-SEO-Content\">";
-    $zp_output .= Zotpress_shortcode_request( true ); // Check catche first
+    $zp_output .= Zotpress_shortcode_request( $zpr, true ); // Check catche first
     $zp_output .= "</div><!-- .zp-zp-SEO-Content -->\n";
 
     $zp_output .= "</div><!-- .zp-List --></div><!--.zp-Zotpress-->\n\n";

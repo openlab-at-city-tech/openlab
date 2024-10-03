@@ -14,6 +14,7 @@ class zotpressLib
 	private $minlength = false;
 	private $maxresults = false;
 	private $maxperpage = false;
+	private $tag = false;
 	private $maxtags = 100;
 	private $style = false;
 	private $sortby = false;
@@ -47,9 +48,10 @@ class zotpressLib
 
 	public function setType($type)
 	{
-		if ( $type === false )
+		if ( $type === false
+				|| $type == "basic" ) {
 			$type = "dropdown";
-		
+		}
 		$this->type = $type;
 	}
 
@@ -86,6 +88,11 @@ class zotpressLib
 	public function getMaxPerPage()
 	{
 		return $this->maxperpage;
+	}
+
+	public function setTag($tag)
+	{
+		$this->tag = $tag;
 	}
 
 	public function setMaxTags($maxtags)
@@ -272,7 +279,6 @@ class zotpressLib
 
 
 		// Tag Name
-
 		global $tag_id;
 
 		// if ( isset($_GET['page'])
@@ -445,7 +451,6 @@ class zotpressLib
 	                // Max Results per Request
 	                $maxresults = 50; if ( $this->getMaxResults() !== false ) $maxresults = (int) $this->getMaxResults();
 	                $content .= '<input type="hidden" class="ZOTPRESS_AC_MAXRESULTS" name="ZOTPRESS_AC_MAXRESULTS" value="'.$maxresults.'" />';
-					// var_dump("max", $maxresults);
 
 	                // // Max Per Page
 					// REVIEW: Need this in the dropdown, too, so moving up
