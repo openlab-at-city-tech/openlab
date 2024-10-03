@@ -140,3 +140,27 @@ function openlab_get_member_types() {
 function openlab_get_member_type_object( $slug ) {
 	return get_term_by( 'slug', $slug, bp_get_member_type_tax_name() );
 }
+
+/**
+ * Determines whether a user can create courses.
+ *
+ * @param int $user_id Optional. Defaults to the current user.
+ * @return bool
+ */
+function openlab_user_can_create_courses( $user_id = null ) {
+	if ( null === $user_id ) {
+		$user_id = bp_loggedin_user_id();
+	}
+
+	if ( ! $user_id ) {
+		return false;
+	}
+
+	if ( is_super_admin( $user_id ) ) {
+		return true;
+	}
+
+	$member_type = cboxol_get_user_member_type( $user_id );
+
+	return $member_type && $member_type->get_can_create_courses();
+}
