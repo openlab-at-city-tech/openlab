@@ -35,6 +35,24 @@ box-shadow:         1px 1px 7px rgba(50, 50, 50, 0.17);}
 
 .menu_tto {margin-right: 4px; display: inline; vertical-align: middle; margin-top: -1px;}  
 
+#form_data td {vertical-align: top; padding-top: 20px}
+#form_data .pt-list {display:flex; flex-wrap: wrap;}
+#form_data .pt-item {flex-basis: calc(25% - 10px);  flex-grow: 0;  margin: 5px;}
+#form_data .pt-list::after {  content: "";  flex-basis: calc(25% - 10px);  flex-grow: 1;  margin: 5px;}
+@media screen and (max-width: 1350px) {
+  #form_data .pt-item {flex-basis: calc(33% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(33% - 10px);}
+}
+@media screen and (max-width: 1100px) {
+  #form_data .pt-item {flex-basis: calc(50% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(50% - 10px);}
+}
+@media screen and (max-width: 782px) {
+  #form_data .pt-item {flex-basis: calc(100% - 10px);}
+  #form_data .pt-list::after { flex-basis: calc(100% - 10px);}
+  #form_data .form-table th {text-align: left !important}
+}
+
 .clear {clear: both}
 
 
