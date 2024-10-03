@@ -35,7 +35,8 @@ class NGGFeaturedThumbnail extends Component {
 			{
 				method: 'GET',
 				headers: {
-					'Accept': 'application/json'
+					'Accept': 'application/json',
+					'X-WP-Nonce': photocrati_ajax.rest_nonce
 				}
 			})
 			.then(res => res.json())

@@ -427,6 +427,7 @@ class DisplayManager {
 			'wp_content_url'  => $router->get_base_url( 'content' ),
 			'wp_includes_url' => includes_url(),
 			'ngg_param_slug'  => $settings->get( 'router_param_slug', 'nggallery' ),
+			'rest_nonce'      => wp_create_nonce( 'wp_rest' ),
 		];
 
 		\wp_localize_script( 'photocrati_ajax', 'photocrati_ajax', $vars );
