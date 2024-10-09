@@ -2652,7 +2652,7 @@ add_filter( 'bp_is_blog_public', '__return_true' );
  * Blacklist some Jetpack modules.
  */
 function openlab_blacklist_jetpack_modules( $modules ) {
-	$blacklist = array( 'masterbar' );
+	$blacklist = array( 'masterbar', 'sso' );
 
 	foreach ( $blacklist as $module ) {
 		unset( $modules[ $module ] );
