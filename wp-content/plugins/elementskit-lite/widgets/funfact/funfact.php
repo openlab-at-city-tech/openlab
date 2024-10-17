@@ -19,7 +19,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return [ 'elementor-waypoints','odometer'];
+		return ['odometer'];
 	}
 
 	public function get_name() {
@@ -46,6 +46,9 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 
     public function get_help_url() {
         return 'https://wpmet.com/doc/funfact/';
+    }
+    protected function is_dynamic_content(): bool {
+        return false;
     }
 
 	protected function register_controls() {
@@ -1282,8 +1285,7 @@ class ElementsKit_Widget_Funfact extends Widget_Base {
 			'p'    => 'p',
 		]);
 
-
-		$text_align = $settings['ekit_funfact_text_align'];
+		$text_align = isset($settings['ekit_funfact_text_align']) ? $settings['ekit_funfact_text_align'] : 'center';
 
 		$hover_border_bottom_direction = '';
 		$vertically_devider_position   = '';

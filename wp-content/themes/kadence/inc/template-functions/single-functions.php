@@ -34,6 +34,9 @@ function single_content() {
  * @return array query args.
  */
 function get_related_posts_args( $post_id ) {
+	$orderby = kadence()->option( 'post_related_orderby' ) ?: 'rand';
+	$order = kadence()->option( 'post_related_order' ) ?: 'DESC';
+
 	if ( apply_filters( 'kadence_related_posts_use_tags', true ) ) {
 		// Get categories.
 		$categories = get_the_terms( $post_id, 'category' );
@@ -47,6 +50,7 @@ function get_related_posts_args( $post_id ) {
 			$tags = array();
 		}
 		$tag_list = wp_list_pluck( $tags, 'slug' );
+
 		$related_args = array(
 			'post_type'              => 'post',
 			'posts_per_page'         => 6,
@@ -55,7 +59,8 @@ function get_related_posts_args( $post_id ) {
 			// 'update_post_meta_cache' => false,
 			// 'update_post_term_cache' => false,
 			'post__not_in'           => array( $post_id ),
-			'orderby'                => 'rand',
+			'orderby'                => $orderby,
+			'order'                  => $order,
 			'tax_query'              => array(
 				'relation' => 'OR',
 				array(
@@ -84,7 +89,8 @@ function get_related_posts_args( $post_id ) {
 			// 'update_post_meta_cache' => false,
 			// 'update_post_term_cache' => false,
 			'post__not_in'           => array( $post_id ),
-			'orderby'                => 'rand',
+			'orderby'                => $orderby,
+			'order'                  => $order,
 			'category__in'           => $category_list,
 
 		);
@@ -147,6 +153,17 @@ function get_related_posts_columns() {
 		);
 	}
 	return apply_filters( 'kadence_related_posts_carousel_columns', $cols );
+}
+
+/**
+ * Related Posts title
+ */
+function related_posts_title() {
+	$label = kadence()->option( 'post_related_title' );
+
+	if ( $label ) {
+		echo esc_html( do_shortcode( $label ) );
+	}
 }
 
 /**

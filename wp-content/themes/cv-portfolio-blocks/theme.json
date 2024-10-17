@@ -32,8 +32,8 @@
 	      ]
 	    },
 	    {
-	      "name": "blog-no-sidebar",
-	      "title": "Blog Post (No Sidebar)",
+	      "name": "single-post-no-sidebar",
+	      "title": "Single post (No Sidebar)",
 	      "postTypes": [
 	        "post"
 	      ]
@@ -150,6 +150,11 @@
 			],
 			"palette": [
 				{
+					"color": "#7562e0",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
 					"color": "#fff",
 					"name": "Background",
 					"slug": "background"
@@ -178,12 +183,7 @@
 					"color": "#444",
 					"name": "tertiary",
 					"slug": "tertiary"
-				},
-				{
-					"color": "#7562e0",
-					"name": "Accent",
-					"slug": "accent"
-				}
+				}				
 			]
 		},
 		"custom": {

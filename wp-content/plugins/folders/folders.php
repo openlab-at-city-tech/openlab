@@ -2,17 +2,21 @@
 /**
  * Plugin Name: Folders
  * Description: Organize your Media library, Pages, and Posts into folders. You can easily drag and drop items into directories and change the folders tree view.
- * Version: 3.0.3
+ * Version: 3.0.6
  * Author: Premio
  * Author URI: https://premio.io/downloads/folders/
  * Text Domain: folders
  * Domain Path: /languages
+ * License: GPLv3
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 if(!defined("WCP_FOLDERS_PLUGIN_FILE")) {
     define('WCP_FOLDERS_PLUGIN_FILE', __FILE__);
+}
+if(!defined("WCP_FOLDERS_PLUGIN_PATH")) {
+    define('WCP_FOLDERS_PLUGIN_PATH', plugin_dir_path(__FILE__) );
 }
 if(!defined("WCP_FOLDERS_PLUGIN_BASE")) {
     define('WCP_FOLDERS_PLUGIN_BASE', plugin_basename(WCP_FOLDERS_PLUGIN_FILE));
@@ -24,7 +28,7 @@ if(!defined("WCP_FOLDER_URL")) {
     define('WCP_FOLDER_URL', plugin_dir_url(__FILE__));
 }
 if(!defined("WCP_FOLDER_VERSION")) {
-    define('WCP_FOLDER_VERSION', "3.0.3");
+    define('WCP_FOLDER_VERSION', "3.0.6");
 }
 
 
@@ -98,10 +102,10 @@ if(!function_exists("folders_clear_all_caches")) {
     }
 }
 
-
 include_once plugin_dir_path(__FILE__) . "includes/plugins.class.php";
 include_once plugin_dir_path(__FILE__) . "includes/media.replace.php";
 include_once plugin_dir_path(__FILE__) . "includes/folders.class.php";
+include_once plugin_dir_path(__FILE__) . "includes/svg.class.php";
 register_activation_hook( __FILE__, array( 'WCP_Folders', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WCP_Folders', 'deactivate' ) );
 

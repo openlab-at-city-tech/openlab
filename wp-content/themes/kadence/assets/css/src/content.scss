@@ -139,6 +139,9 @@ article.sticky {
 	.wp-block-yoast-faq-block .schema-faq-question {
 		margin-bottom: .5em;
 	}
+	.elementor-widget-container:first-child:not(style) h1, .elementor-widget-container:first-child:not(style) h2, .elementor-widget-container:first-child:not(style) h3, .elementor-widget-container:first-child:not(style) h4, .elementor-widget-container:first-child:not(style) h5, .elementor-widget-container:first-child:not(style) h6 {
+		margin-top: 0;
+	}
 	h1, h2, h3, h4, h5, h6 {
 		margin: 1.5em 0 .5em;
 		&:first-child {
@@ -188,6 +191,7 @@ article.sticky {
 	h1.elementor-heading-title, h2.elementor-heading-title, h3.elementor-heading-title, h4.elementor-heading-title, h5.elementor-heading-title, h6.elementor-heading-title  {
 		margin-bottom: 0.5em;
 	}
+
 	.wp-block-image {
 		margin-top: 0;
 		margin-bottom: 0;
@@ -566,6 +570,9 @@ a.post-more-link {
 @media screen and (max-width: $tablet-minus-query) {
 .title-tablet-align-left {
 	text-align: left;
+	.entry-meta {
+		justify-content: flex-start;
+	}
 }
 .title-tablet-align-center {
 	text-align: center;
@@ -597,6 +604,9 @@ a.post-more-link {
 @media screen and (max-width: $phone-minus-query) {
 .title-mobile-align-left {
 	text-align: left;
+	.entry-meta {
+		justify-content: flex-start;
+	}
 }
 .title-mobile-align-center {
 	text-align: center;

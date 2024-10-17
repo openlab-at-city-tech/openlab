@@ -287,7 +287,9 @@ class Plugin {
 		 *
 		 */
 		if (
-			!did_action('edit_with_emailkit_loaded')
+			class_exists('WooCommerce') 
+			&& !class_exists('EmailKit') 
+			&& !did_action('edit_with_emailkit_loaded')
 			&& class_exists('\Wpmet\Libs\Emailkit')
 			&& $user_consent
 		) {

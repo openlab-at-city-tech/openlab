@@ -250,6 +250,7 @@ class Meow_WPMC_Core {
 			return array();
 		}
 
+
 		// Proposal/fix by @copytrans
 		// Discussion: https://wordpress.org/support/topic/bug-in-core-php/#post-11647775
 		// Modified by Jordy again in 2021 for those who don't have MB enabled
@@ -300,6 +301,8 @@ class Meow_WPMC_Core {
 			}
 		}
 
+		
+
 		// IFrames (by Mike Meinz)
 		$iframes = $dom->getElementsByTagName( 'iframe' );
 		foreach( $iframes as $iframe ) {
@@ -349,12 +352,33 @@ class Meow_WPMC_Core {
 			}
 		}
 
-		// Videos: src
-		$videos = $dom->getElementsByTagName( 'video' );
-		foreach ( $videos as $video ) {
-			//error_log($video->getAttribute('src'));
-			$src = $this->clean_url( $video->getAttribute('src') );
-    	array_push( $results, $src );
+		// Videos: src, poster, and attached file
+		$videos = $dom->getElementsByTagName('video');
+		foreach ($videos as $video) {
+			// Get src attribute
+			$raw_video_src = $video->getAttribute( 'src' );
+			$src = $this->clean_url( $raw_video_src );
+			if ( !empty( $src ) ) {
+				$video_id = $this->custom_attachment_url_to_postid( $raw_video_src );
+
+				$attached_file = get_post_meta( $video_id, '_wp_attached_file', true );
+				if ( !empty( $attached_file ) ) {
+					array_push( $results, $attached_file );
+				}
+			}
+			
+			// Get poster attribute
+			$raw_poster_src = $video->getAttribute( 'poster' );
+			$poster = $this->clean_url( $raw_poster_src );
+			if ( !empty( $poster ) ) {
+				$poster_id = $this->custom_attachment_url_to_postid( $raw_poster_src );
+				
+				$attached_file = get_post_meta( $poster_id, '_wp_attached_file', true );
+				if ( !empty( $attached_file ) ) {
+					array_push( $results, $attached_file );
+				}
+			}
+
 		}
 
 		// Audios: src
@@ -1365,6 +1389,35 @@ class Meow_WPMC_Core {
 			$finalUrl = urldecode( substr( $url, 1 + strlen( $this->upload_url ) + $dirIndex ) );
 		}
 		return $finalUrl;
+	}
+
+	function custom_attachment_url_to_postid( $url ) {
+		global $wpdb;
+		
+		// Remove the query string
+		$url = preg_replace('/\?.*/', '', $url);
+		
+		// Try to find the attachment ID by matching the URL with the guid
+		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE guid LIKE %s;", $url ) );
+		
+		// If found, return the first attachment ID
+		if ( !empty( $attachment ) ) {
+			return ( int )$attachment[0];
+		}
+		
+		// If not found, try to match the URL without the upload directory path
+		$upload_dir = wp_upload_dir();
+		$url_relative = str_replace( $upload_dir['baseurl'] . '/', '', $url );
+		
+		$attachment = $wpdb->get_col( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_wp_attached_file' AND meta_value LIKE %s;", '%' . $wpdb->esc_like( $url_relative ) ) );
+		
+		// If found, return the first attachment ID
+		if ( !empty( $attachment ) ) {
+			return ( int )$attachment[0];
+		}
+		
+		// If still not found, return 0
+		return 0;
 	}
 
 	// From a fullpath to the shortened and cleaned path (for example '2013/02/file.png')

@@ -122,6 +122,7 @@ function wds_email_validate() {
 			break;
 
 		case 'non-city-tech':
+		default :
 			$code = isset( $_POST['signup_validation_code'] ) ? $_POST['signup_validation_code'] : null;
 			if ( ! cac_ncs_validate_code( $code ) ) {
 				$bp->signup->errors['signup_email'] = 'Non-City Tech addresses need a valid registration code to sign up for the OpenLab.';

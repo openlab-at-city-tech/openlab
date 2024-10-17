@@ -29,5 +29,13 @@ return array(
         ),
         'description' => __( 'A theme to showcase vertical images and videos.', 'ml-slider' ),
         'instructions' => __( 'Ideal for Images, Post Feed slides, YouTube and Vimeo vertical videos.', 'ml-slider' )
+    ),
+    'hero' => array(
+        'folder' => 'hero',
+        'title' => 'Hero',
+        'type' => 'premium',
+        'supports' => array( 'flex' ),
+        'description' => __( 'A dynamic slideshow theme that emphasizes the active slide by scaling it larger than the surrounding slides, creating a hero-like focal point that draws the viewer\'s attention.', 'ml-slider' ),
+        'instructions' => __( 'This is the Beta version of the Hero Theme and currently it must be full-width. It should also be used with Carousel Mode disabled.', 'ml-slider' )
     )
 );

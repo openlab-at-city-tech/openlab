@@ -1,6 +1,32 @@
 Changelog
 =========
 
+#### 4.9.17 - Sep 17, 2024
+
+- Fix compatibility with WooCommerce versions 8.5 to 8.8 because of private method that was later made public.
+- Fix potential reflected XSS by stripping and escaping all HTML from `{email}` tag replacements. Thanks to kauenavarro for responsibly disclosing.
+- Fix potential stored XSS for attackers with both administrator access and Mailchimp account access by escaping HTML from interest group name. Thanks to Jorge Diaz (ddiax) for responsibly disclosing.
+
+
+#### 4.9.16 - Sep 11, 2024
+
+- Add support for WooCommerce Checkout Block in sign-up checkbox integration.
+
+
+#### 4.9.15 - Aug 13, 2024
+
+- Improved anti-spam measures on the [custom form integration](https://www.mc4wp.com/kb/subscribe-mailchimp-custom-html-form/). If you are using the custom form integration (using the `mc4wp-subscribe` checkbox), please test your forms after upgrading and report any issues to us.
+- Improved anti-spam measures on all sign-up forms.
+- Remove unsupported filter hook from Gravity Forms integration. 
+
+
+#### 4.9.14 - Jul 17, 2024
+
+- Very minor code-size improvements to public forms related JavaScript.
+- Update third-party JS dependencies.
+- Bump tested WordPress version to 6.6.
+
+
 #### 4.9.13 - Apr 25, 2024
 
 - Fix issue with Composer classmap throwing a fatal error when an older version of Composer is already loaded.

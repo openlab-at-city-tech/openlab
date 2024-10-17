@@ -171,3 +171,9 @@ License: Apache License, Version 2.0
 
 = 1.0.0 - Aug 14 2019 =
 * Initial release.
+
+= 1.2.6 = July 04 2024 =
+* Update  - Updated to the latest WordPress version
+
+= 1.2.7 = July 09 2024 =
+* Update  - small fixes

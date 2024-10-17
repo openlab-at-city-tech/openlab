@@ -126,8 +126,12 @@ class nggLoader {
 
 	public function add_plugin_links( $links, $file ) {
 		if ( $file == NGG_PLUGIN_BASENAME ) {
-			$links[] = '<a href="https://wordpress.org/support/plugin/nextgen-gallery">' . __( 'Get help', 'nggallery' ) . '</a>';
-			$links[] = '<a href="https://bitbucket.org/photocrati/nextgen-gallery">' . __( 'Contribute', 'nggallery' ) . '</a>';
+			$links[] = '<a target="_blank" href="https://wordpress.org/support/plugin/nextgen-gallery">' . __( 'Get help', 'nggallery' ) . '</a>';
+			foreach ( $links as $key => $link ) {
+				if ( false !== strpos( $link, 'Imagely' ) ) {
+					$links[$key] = str_replace( '<a ', '<a target="_blank" ', $link );
+				}
+			}
 		}
 
 		return $links;

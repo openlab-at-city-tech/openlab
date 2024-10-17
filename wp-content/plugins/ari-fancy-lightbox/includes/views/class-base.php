@@ -41,7 +41,7 @@ class Base extends View {
         if ( $this->title )
             printf(
                 '<h1 class="wp-heading-inline">%s</h1>',
-                $this->title
+                esc_html( $this->title )
             );
     }
 
@@ -54,8 +54,8 @@ class Base extends View {
 
         printf(
             '<div class="notice notice-%2$s is-dismissible"><p>%1$s</p></div>',
-            $message,
-            $message_type
+            esc_html( $message ),
+            esc_attr( $message_type )
         );
     }
 

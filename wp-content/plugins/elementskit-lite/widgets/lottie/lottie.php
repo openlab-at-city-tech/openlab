@@ -39,6 +39,9 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/lottie-animation/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
         $this->start_controls_section(
@@ -57,11 +60,11 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
                     'options'       => [
                         'file'  => [
                             'title' => esc_html__( 'JSON File', 'elementskit-lite' ),
-                            'icon' => 'far fa-file',
+                            'icon' => 'eicon-folder-o',
                         ],
                         'url'   => [
                             'title' => esc_html__( 'JSON URL', 'elementskit-lite' ),
-                            'icon' => 'fas fa-link',
+                            'icon' => 'eicon-link',
                         ],
                     ]
                 ]
@@ -98,7 +101,7 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
 					'dynamic'       => [
 						'active' => true,
 					],
-                    'placeholder'   => esc_html__( 'https://example.com/file.json', 'elementskit-lite' ),
+                    'placeholder'   => esc_html( 'https://example.com/file.json'),
                     'show_external' => false,
                     'condition'     => [
                         'ekit_lottie_type'  => 'url'
@@ -371,12 +374,11 @@ class ElementsKit_Widget_Lottie extends Widget_Base {
             $this->add_render_attribute( 'wrapper', 'data-path', $settings['ekit_lottie_url'] );
         endif;
 
-
-        if ( $settings['ekit_lottie_loop_count']['size'] ):
-            $this->add_render_attribute( 'wrapper', 'data-loop', ($settings['ekit_lottie_loop_count']['size'] - 1) );
-        else:
-            $this->add_render_attribute( 'wrapper', 'data-loop', $settings['ekit_lottie_loop'] );
-        endif;
+		if ( isset($settings['ekit_lottie_loop_count']['size']) && is_numeric($settings['ekit_lottie_loop_count']['size']) ):
+			$this->add_render_attribute( 'wrapper', 'data-loop', max(0, $settings['ekit_lottie_loop_count']['size'] - 1) );
+		else:
+			$this->add_render_attribute( 'wrapper', 'data-loop', $settings['ekit_lottie_loop'] );
+		endif;
 
 
         if ( !empty($settings['ekit_lottie_link']['url']) && $settings['ekit_lottie_link']['url'] ):

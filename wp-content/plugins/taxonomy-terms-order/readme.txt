@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, categories sort
 Requires at least: 2.8
-Tested up to: 6.5.4
-Stable tag: 1.8.2
+Tested up to: 6.6.1
+Stable tag: 1.8.6
 
 Order Categories and all custom taxonomies terms (hierarchically) using a Drag and Drop Sortable JavaScript capability. 
 
@@ -60,6 +60,17 @@ Consider upgrading to our advanced version of this plugin at a very resonable pr
 
 == Change Log ==
 
+= 1.8.6 =
+ - Fix: TTO_addons class not loaded which makes the compatibility routines not triggering. 
+
+= 1.8.5 =
+ - Temporary placeholder function to prevent fatal errors when using the Uncode theme.
+
+= 1.8.4 =
+ - Code structure improvements. 
+ - New option "Show / Hide re-order interface" - Display the Taxonomy Order interface for the specified post types
+ - WordPress 6.6.1 compatibility check and tag update 
+ 
 = 1.8.2 =
  - Polylang fix - Ignore the 'language' to avoid unnecessarily sorting.
  - Set-up the Live Preview for the plugin.

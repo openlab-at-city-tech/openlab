@@ -1,10 +1,10 @@
 === Breadcrumb ===
 	Contributors: PickPlugins
-	Donate link: https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org
+	Donate link: https://pickplugins.com/breadcrumb/
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
-	Tested up to: 6.5
-	Stable tag: 1.5.44
+	Tested up to: 6.6
+	Stable tag: 1.5.46
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,10 +15,10 @@
 Breadcrumb is easy and light-weight plugin to display breadcrumb navigation to your WordPress site, easy to customize and change style for breadcrumb. You can use filter hook and action hook to rewrite the plugin without editing the plugin code. This plugin almost working on all WordPress pages like archive, category, tags, custom taxonomies, custom post types, defult post, date, year, month, author and search page to display breadcrumb dynamically. ###
 
 ### Breadcrumb by http://pickplugins.com
-* [Buy Premium &raquo;](https://www.pickplugins.com/item/breadcrumb-awesome-breadcrumbs-style-navigation-for-wordpress/?ref=wordpress.org)
-* [Live Demo &raquo;](https://www.pickplugins.com/demo/breadcrumb/?ref=wordpress.org)
-* [Support &raquo;](https://www.pickplugins.com/support/?ref=wordpress.org)
-* [Documentation &raquo;](https://www.pickplugins.com/documentation/breadcrumb/?ref=wordpress.org)
+* [Buy Premium &raquo;](https://pickplugins.com/breadcrumb/)
+* [Live Demo &raquo;](https://www.pickplugins.com/demo/breadcrumb/)
+* [Support &raquo;](https://www.pickplugins.com/support/)
+* [Documentation &raquo;](https://www.pickplugins.com/documentation/breadcrumb/)
 
 
 **Tutorials**
@@ -122,6 +122,12 @@ use this short-code any where to display breadcrumb
 
 == Changelog ==
 
+	= 1.5.46 =
+    * 2024-09-23  - fix - Remove styles, scripts if breadcrumb is empty.
+
+	= 1.5.45 =
+    * 2024-07-27  - fix - Style broken issue fixed
+    * 2024-07-27  - fix - PHP Undefined variable issue fixed.
 
 	= 1.5.44 =
     * 2024-05-05  - fix - WP 6.5 compatibility issue checked.

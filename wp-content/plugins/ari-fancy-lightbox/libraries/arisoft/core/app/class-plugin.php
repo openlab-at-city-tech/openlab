@@ -80,7 +80,7 @@ class Plugin {
                 $ctrl_name = 'display';
                 if ( $this->options->page_prefix ) {
                     $current_page = Request::get_var( 'page' );
-                    if ( strpos( $current_page, $this->options->page_prefix ) === 0) {
+                    if ( is_string( $current_page ) && strpos( $current_page, $this->options->page_prefix ) === 0) {
                         $ctrl_name = Request::get_var( 'action', 'display' );
                     }
                 } else {
@@ -139,7 +139,7 @@ class Plugin {
 		
 		if ( $method_not_exists )
 			throw new \BadMethodCallException(
-				sprintf( 'The method \'%1$s\' does not exist.', $name )
+				sprintf( 'The method \'%1$s\' does not exist.', esc_html( $name ) )
 			);
 	}
 }

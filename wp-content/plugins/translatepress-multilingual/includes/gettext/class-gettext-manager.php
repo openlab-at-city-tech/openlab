@@ -45,7 +45,9 @@ class TRP_Gettext_Manager {
 
 			if ( in_array( $language, $this->settings['translation-languages'] ) ) {
 				$trp_translated_gettext_texts_language = $language;
-				$trp                                   = TRP_Translate_Press::get_trp_instance();
+                global $wpdb, $trp_wpdb_prefix;
+                $trp_wpdb_prefix = $wpdb->get_blog_prefix();
+                $trp             = TRP_Translate_Press::get_trp_instance();
 				if ( ! $this->trp_query ) {
 					$this->trp_query = $trp->get_component( 'query' );
 				}
@@ -501,6 +503,14 @@ class TRP_Gettext_Manager {
 				$context      = ( $current_string['context'] === 'trp_context' ) ? null : $current_string['context'];
 				$translated = '';
 				if ( $current_string['original_plural'] ) {
+
+                    /* For some domains in some languages, $translations object is not of type Translations
+                     * (but of type WP_Translations) on WP version 6.5+. So it doesn't have this method.
+                     * Todo: find an alternative to access plural forms for these cases
+                     */
+                    if ( !method_exists( $translations, 'translate_entry' ) ) {
+                        continue;
+                    }
 
 					// Insert translation for all other plural forms than the current one
 					for ( $plural_form_i = 0; $plural_form_i < $number_of_plural_forms; $plural_form_i ++ ) {

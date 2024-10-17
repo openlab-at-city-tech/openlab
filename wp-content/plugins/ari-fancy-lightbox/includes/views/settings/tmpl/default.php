@@ -11,7 +11,7 @@ $form = $data['form'];
                     $this->tabs->render();
                     ?>
 
-                    <button type="submit" class="button button-primary"><?php _e( 'Save Changes', 'ari-fancy-lightbox' ); ?></button>
+                    <button type="submit" class="button button-primary"><?php esc_html_e( 'Save Changes', 'ari-fancy-lightbox' ); ?></button>
                     <?php settings_fields( ARIFANCYLIGHTBOX_SETTINGS_GROUP ); ?>
                 </form>
             </div>

@@ -74,10 +74,9 @@ class TRP_Google_Translate_V2_Machine_Translator extends TRP_Machine_Translator 
             if ( is_array( $response ) && ! is_wp_error( $response ) && isset( $response['response'] ) &&
                 isset( $response['response']['code']) && $response['response']['code'] == 200 ) {
 
-                $this->machine_translator_logger->count_towards_quota( $new_strings_chunk );
-
                 $translation_response = json_decode( $response['body'] );
                 if ( empty( $translation_response->error ) ) {
+                    $this->machine_translator_logger->count_towards_quota( $new_strings_chunk );
 
                     /* if we have strings build the translation strings array and make sure we keep the original keys from $new_string */
                     $translations = ( empty( $translation_response->data->translations ) ) ? array() : $translation_response->data->translations;

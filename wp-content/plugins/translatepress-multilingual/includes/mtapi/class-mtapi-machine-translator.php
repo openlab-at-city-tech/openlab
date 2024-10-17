@@ -93,10 +93,10 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 			if ( is_array( $response ) && ! is_wp_error( $response ) && isset( $response['response'] ) &&
 			     isset( $response['response']['code']) && $response['response']['code'] == 200 ) {
 
-				$this->machine_translator_logger->count_towards_quota( $new_strings_chunk );
+                $translation_response = json_decode( $response['body'] );
 
-				$translation_response = json_decode( $response['body'] );
-				if ( empty( $translation_response->error ) ) {
+                if ( empty( $translation_response->exception ) ) {
+                    $this->machine_translator_logger->count_towards_quota( $new_strings_chunk );
 
 					/* if we have strings build the translation strings array and make sure we keep the original keys from $new_string */
 					$translations = ( empty( $translation_response->translations ) ) ? array() : $translation_response->translations;
@@ -258,9 +258,9 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
      */
     public function configure_api_target_language($target_language, $source_language_code, $target_language_code ){
         $exceptions_target_mapping_codes = array(
-            'zh_HK' => 'zh',
-            'zh_TW' => 'zh',
-            'zh_CN' => 'zh',
+            'zh_HK' => 'zh-hant',
+            'zh_TW' => 'zh-hant',
+            'zh_CN' => 'zh-hans',
             'pt_BR' => 'pt-br',
             'pt_PT' => 'pt-pt',
             'pt_AO' => 'pt-pt',

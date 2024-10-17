@@ -183,6 +183,8 @@ class Form {
     }
 
     public function render( $group = '', $options = array() ) {
+        // Render predefined form elements. No user input
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
         echo $this->output( $group, $options );
     }
 }

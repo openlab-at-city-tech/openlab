@@ -1,8 +1,8 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 1.0.18
-Tested up to: 6.5
+Stable tag: 1.0.20
+Tested up to: 6.6
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -140,6 +140,12 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 
 == Changelog ==
 
+= 1.0.20 =
+* [Don't drop tables on deactivation or network uninstall](https://github.com/itmaybejj/editoria11y-wp/issues/35).
+
+= 1.0.19 =
+* Fix for [expensive DB queries when updating module on large multisites](https://github.com/itmaybejj/editoria11y-wp/issues/34). Thank you [@boone](https://profiles.wordpress.org/boonebgorges/).
+
 = 1.0.18 =
 * Fix for [table constraints failing in MySQL 8 multisites](https://github.com/itmaybejj/editoria11y-wp/issues/32).
 
@@ -172,33 +178,3 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 * Experimental inline checker now highlights specific links with issues within a block.
 * Bugfix: Experimental inline checker was not appearing in some contexts.
 * Bugfix: two consecutive paragraphs starting with "A " could throw a false positive on the possible link test.
-
-= 1.0.12 =
-* "Is this a list" test can now detect emoji-based fake lists.
-* Dashboard now preserves URL protocol for local development.
-
-= 1.0.11 =
-* Bugfix for Type errors when checking HTML5 media embeds.
-
-= 1.0.10 =
-* As-you-edit highlighter now recognizes WordPress's placeholder text in image alts.
-* Inline styles are now placed on the body tag instead of the checker Root element.
-* More detailed documentation on the plugin settings page.
-
-= 1.0.9 =
-* Fix for configuration page not showing current selections for some fields.
-* Fixes for some CSS conflicts in the block editor.
-
-= 1.0.8 =
-* Adds option to restrict viewing reports to site admins.
-* Adds CSV export for site reports.
-
-= 1.0.7 =
-* Fix for bug that was preventing scrolling the outline and alt tag tabs on the main panel.
-* Improvements to alignments and colors on tips.
-
-= 1.0.6 =
-* Prevent browsers from displaying cached (out of date) results on the dashboard reports.
-
-= 1.0.5 =
-* Bugfix for live edit highlighter.

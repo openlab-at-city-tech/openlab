@@ -51,11 +51,6 @@
 		$zp_meta_xml = $zp_import_filemeta->get_request_contents( $zp_import_meta_url, true ); // Unsure about "true"
 		$zp_data_xml = $zp_import_filedata->get_request_contents( $zp_import_data_url, true ); // Unsure about "true"
 
-		// var_dump($zp_import_meta_url);
-		// var_dump($zp_import_data_url);
-		// exit;
-		// var_dump($zp_data_xml);exit;
-
 		// Determine filename based on content type
 		// $zp_filename = "download-".$zp_item_key.".";
 		// if ( strpos( $zp_content_type, "pdf" ) ) $zp_filename .= "pdf";

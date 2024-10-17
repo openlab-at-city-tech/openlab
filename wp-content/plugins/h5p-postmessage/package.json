@@ -2,7 +2,7 @@
 	"name": "h5p-postmessage",
 	"version": "1.0.0-alpha",
 	"devDependencies": {
-		"@wordpress/scripts": "^28.2.0"
+		"@wordpress/scripts": "^28.5.0"
 	},
 	"scripts": {
 		"build": "wp-scripts build assets/src/frontend.js",

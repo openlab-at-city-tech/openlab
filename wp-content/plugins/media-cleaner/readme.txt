@@ -1,11 +1,11 @@
 === Media Cleaner: Clean your WordPress! ===
 Contributors: TigrouMeow
 Tags: clean, media, files, images, library
-Donate link: https://meowapps.com/donation/
+Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.4
-Stable tag: 6.7.7
+Stable tag: 6.7.9
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,14 @@ This plugin is compatible with all media types, including retina and WebP versio
 
 == Changelog ==
 
+= 6.7.9 (2024/09/24) =
+* Update: Internal improvements to avoid some errors with low-quality servers such as OVH, GoDaddy, etc.
+* Info: We are working hard on Media Cleaner. If you want to share some love, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.7.8 (2024/08/01) =
+* Fix: Elementor parser was not working properly.
+* Add: Video Block support.
+
 = 6.7.7 (2024/06/28) =
 * Fix: Warnings with ACF.
 * Fix: Base folder for the Filesystem Scan.
@@ -59,7 +67,6 @@ This plugin is compatible with all media types, including retina and WebP versio
 
 = 6.7.5 (2024/05/24) =
 * Fix: Logging system.
-* Info: We are working hard on Media Cleaner. If you want to share some love, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.7.4 (2024/04/27) =
 * Update: Updated description for OB cleaning to enhance clarity.

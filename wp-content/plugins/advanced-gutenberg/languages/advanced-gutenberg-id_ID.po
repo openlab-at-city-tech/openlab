@@ -1,0 +1,1930 @@
+# Translation of Plugins - Gutenberg Blocks &#8211; PublishPress Blocks Gutenberg Editor Plugin - Stable (latest release) in Indonesian
+# This file is distributed under the same license as the Plugins - Gutenberg Blocks &#8211; PublishPress Blocks Gutenberg Editor Plugin - Stable (latest release) package.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - Gutenberg Blocks &#8211; PublishPress Blocks Gutenberg Editor Plugin - Stable (latest release)\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-07-17 10:36-0600\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: id\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Poedit 3.3.2\n"
+
+#: incl/pages/main.php:60
+msgid "This feature enables a submenu to manage your Synced Patterns."
+msgstr "Fitur ini mengaktifkan sebuah submenu untuk mengelola pola sinkron."
+
+#: incl/advanced-gutenberg-main.php:1870 incl/pages/main.php:59
+msgid "Synced Patterns"
+msgstr "Pola tersinkron"
+
+#: incl/pages/block-controls/controls.php:125
+msgid "Choose in which pages your blocks can be displayed."
+msgstr "Pilih dimana halaman untuk blok anda akan ditampilkan."
+
+#: incl/pages/block-controls/controls.php:94
+msgid "Choose on which taxonomies and terms archive pages your blocks can be displayed."
+msgstr "Pilih dimana taksonomi dan halaman arsip term untuk blok anda akan ditampilkan."
+
+#: incl/pages/block-controls/controls.php:83
+msgid "Term archives"
+msgstr "Arsip term"
+
+#: incl/pages/block-controls/controls.php:50
+msgid "User roles"
+msgstr "Peran Pengguna"
+
+#: incl/pages/block-controls/controls.php:42
+#: incl/pages/block-controls/controls.php:75
+#: incl/pages/block-controls/controls.php:106
+#: incl/pages/block-controls/controls.php:137
+msgid "Site Editor"
+msgstr "Editor Situs"
+
+#: incl/pages/block-controls/controls.php:40
+#: incl/pages/block-controls/controls.php:73
+#: incl/pages/block-controls/controls.php:104
+#: incl/pages/block-controls/controls.php:135
+msgid "Widgets"
+msgstr "Widget"
+
+#: incl/pages/block-controls/controls.php:36
+#: incl/pages/block-controls/controls.php:69
+#: incl/pages/block-controls/controls.php:102
+#: incl/pages/block-controls/controls.php:133
+msgid "This block control is available on:"
+msgstr "Blok kontrol ini sekarang tersedia di:"
+
+#: incl/pages/block-controls/controls.php:17
+msgid "Schedule"
+msgstr "Jadwalkan"
+
+#: incl/block-controls-main.php:977
+msgid "404"
+msgstr "404"
+
+#: incl/block-controls-main.php:969
+msgid "Archive"
+msgstr "Arsip"
+
+#: incl/block-controls-main.php:965
+msgid "Blog"
+msgstr "Blog"
+
+#: incl/pages/block-controls/controls.php:28
+msgid "Choose when to start showing and/or stop showing your blocks."
+msgstr "Pilih dimana mulai ditampilkan dan/atau berhenti menampilkan blok anda."
+
+#: incl/pages/main.php:51
+msgid "This feature adds display controls for blocks. You can schedule when blocks are shown, and add user role restrictions."
+msgstr "Fitur ini menambahkan kontrol tampilan untuk blok. Anda dapat menjadwalkan kapan blok ditampilkan, dan menambahkan pembatasan peran pengguna."
+
+#: incl/pages/block-controls/controls.php:150
+msgid "Save Controls"
+msgstr "Simpan Kontrol"
+
+#: incl/pages/block-controls/controls.php:61
+msgid "Choose which users can see your blocks."
+msgstr "Pilih pengguna mana yang dapat melihat blok Anda."
+
+#: incl/pages/block-controls/blocks.php:46
+#: incl/pages/block-controls/blocks.php:71
+msgid "Save Blocks"
+msgstr "Simpan Blok"
+
+#: incl/pages/block-controls/blocks.php:18
+msgid "Enable or disable controls for all blocks"
+msgstr "Aktifkan atau nonaktifkan kontrol untuk semua blok"
+
+#: incl/pages/block-controls.php:37
+msgid "Controls"
+msgstr "Kontrol"
+
+#: incl/pages/block-controls.php:16
+msgid "Blocks saved successfully!"
+msgstr "Blok berhasil disimpan!"
+
+#: incl/pages/block-controls.php:14
+msgid "Controls saved successfully!"
+msgstr "Kontrol berhasil disimpan!"
+
+#: incl/advanced-gutenberg-main.php:3682
+msgid "Page not found. Go to %sDashboard%s"
+msgstr "Halaman tidak ditemukan. Pergi ke %sDasbor%s"
+
+#: incl/pages/settings/recaptcha.php:151
+msgid "Save reCAPTCHA Settings"
+msgstr "Simpan pengaturan reCAPTCHA"
+
+#: incl/pages/settings/recaptcha.php:110
+msgid "Theme"
+msgstr "Tema"
+
+#: incl/pages/settings/recaptcha.php:102
+msgid "Language codes list"
+msgstr "Daftar kode bahasa"
+
+#: incl/pages/settings/recaptcha.php:85
+msgid "Language"
+msgstr "Bahasa"
+
+#: incl/pages/settings/recaptcha.php:66
+msgid "Secret key"
+msgstr "Kunci Rahasia (Secret Key)"
+
+#: incl/pages/settings/recaptcha.php:47
+msgid "Site key"
+msgstr "Kunci Situs (Site Key)"
+
+#: incl/pages/settings/maps.php:54
+msgid "Save Maps Settings"
+msgstr "Simpan pengaturan Peta"
+
+#: incl/pages/settings/images.php:122
+msgid "Save Image Settings"
+msgstr "Simpan Pengaturan Gambar"
+
+#: incl/pages/settings/images.php:106
+msgid "Set the default post thumbnail to use in Content Display blocks for posts without featured image."
+msgstr "Atur standar thumbnail artikel yang akan digunakan dalam blok Tampilan Konten untuk artikel yang tidak memiliki gambar andalan."
+
+#: incl/pages/settings/general.php:202
+msgid "Save General Settings"
+msgstr "Simpan Pengaturan Umum"
+
+#: incl/pages/settings/general.php:186
+msgid "Autop WordPress function is used to prevent unwanted paragraphs to be added"
+msgstr "Fungsi Autop WordPress digunakan untuk mencegah paragraf yang tidak diinginkan ditambahkan"
+
+#: incl/pages/settings/general.php:164
+msgid "Visual guide for PublishPress Blocks Columns block"
+msgstr "Panduan visual untuk blok Kolom PublishPress Blocks"
+
+#: incl/pages/settings/general.php:125
+msgid "Gutenberg editor width"
+msgstr "Lebar editor Gutenberg"
+
+#: incl/pages/settings/general.php:114
+msgid "Apply in admin to blocks from PublishPress Blocks plugin."
+msgstr "Terapkan di administrator untuk blok dari plugin PublishPress Blocks."
+
+#: incl/pages/settings/general.php:68
+msgid "Vertical spacing between blocks"
+msgstr "Jarak vertikal antara blok-blok."
+
+#: incl/pages/settings/forms.php:118
+msgid "Save Form Settings"
+msgstr "Simpan Pengaturan Formulir"
+
+#: incl/pages/settings/forms.php:34
+msgid "These email settings apply to messages sent through PublishPress Contact form block."
+msgstr "Pengaturan email ini berlaku untuk pesan yang dikirim melalui blok formulir kontak PublishPress."
+
+#: incl/pages/settings/data.php:64
+msgid "Data stored through Newsletter form blocks."
+msgstr "Data disimpan melalui blok formulir newsletter."
+
+#: incl/pages/settings/data.php:24
+msgid "Data stored through Contact form blocks."
+msgstr "Data disimpan melalui blok formulir kontak."
+
+#: incl/pages/settings.php:64
+msgid "License"
+msgstr "Lisensi"
+
+#: incl/pages/settings.php:54
+msgid "Data Export"
+msgstr "Ekspor Data"
+
+#: incl/pages/settings.php:50
+msgid "reCAPTCHA"
+msgstr "reCAPTCHA"
+
+#: incl/pages/settings.php:42
+msgid "Maps"
+msgstr "Peta"
+
+#: incl/pages/settings.php:38
+msgid "Images"
+msgstr "Gambar-gambar"
+
+#: incl/pages/settings.php:29
+msgid "General"
+msgstr "Umum"
+
+#: incl/pages/main.php:118
+msgid "Remove PublishPress ads and branding"
+msgstr "Hapus PublishPress iklan dan branding"
+
+#: incl/pages/main.php:117
+msgid "Feature List block"
+msgstr "Blok Daftar Fitur"
+
+#: incl/pages/main.php:116
+msgid "Pricing Table block"
+msgstr "Blok Tabel Harga"
+
+#: incl/pages/main.php:115
+msgid "Countdown block"
+msgstr "Blok Penghitung Mundur"
+
+#: incl/pages/main.php:114
+msgid "Google Fonts support"
+msgstr "Support Google Font"
+
+#: incl/pages/main.php:113
+msgid "Pro features for Advanced Image block"
+msgstr "Fitur Pro untuk blok Gambar Tingkat Lanjut"
+
+#: incl/pages/main.php:112
+msgid "Pro features for Testimonial block"
+msgstr "Fitur Pro untuk blok Testimonial"
+
+#: incl/pages/main.php:111
+msgid "Pro features for Count Up block"
+msgstr "Fitur Pro untuk blok Hitung Naik"
+
+#: incl/pages/main.php:110
+msgid "Pro features for List block"
+msgstr "Fitur Pro untuk blok Daftar"
+
+#: incl/pages/main.php:109
+msgid "Pro features for Button block"
+msgstr "Fitur Pro untuk blok Tombol"
+
+#: incl/pages/main.php:108
+msgid "Pro features for Images Slider block"
+msgstr "Fitur Pro untuk blok Gambar Slider"
+
+#: incl/pages/main.php:107
+msgid "Pro features for Content Display block"
+msgstr "Fitur Pro untuk blok Tampilan Konten"
+
+#: incl/pages/main.php:106
+msgid "Pro features for Tabs block"
+msgstr "Fitur Pro untuk blok Tabulasi"
+
+#: incl/pages/main.php:105
+msgid "Pro features for Accordion block"
+msgstr "Fitur Pro untuk blok Accordion"
+
+#: incl/pages/main.php:104
+msgid "Priority, personal support"
+msgstr "Bantuan personal dan prioritas"
+
+#: incl/pages/main.php:83
+msgid "Add Google Fonts support to core blocks including paragraphs and headings."
+msgstr "Tambahkan support Google Font untuk blok core termasuk paragraf dan judul."
+
+#: incl/pages/main.php:82
+msgid "Core Blocks Features"
+msgstr "Fitur Blok Core"
+
+#: incl/pages/main.php:73
+msgid "If some blocks are not listed in Block Permissions, try enabling this feature."
+msgstr "Jika beberapa blok tidak terdaftar di Izin Blok, coba aktifkan fitur ini."
+
+#: incl/pages/main.php:69
+msgid "Extend Supported Blocks %sBeta%s"
+msgstr "Perluas Blok Yang di Support %sBeta%s"
+
+#: incl/pages/main.php:42
+msgid "You can add your own CSS styles for your blocks. Anyone editing posts can quickly add the styles to blocks."
+msgstr "Anda dapat menambah style CSS anda sendiri ke blok anda. Siapapun yang menyunting artikel dapat dengan mudah menambahkan gaya ke blok."
+
+#: incl/pages/main.php:33
+msgid "Enable extra blocks including content displays, sliders, buttons, icons, tabs, accordions, and more."
+msgstr "Aktifkan blok ekstra termasuk tampilan konten, slider, tombol, ikon, tabulasi, accordion, dan lain sebagainya."
+
+#: incl/pages/main.php:24
+msgid "You can control who can use each block, including default WordPress blocks."
+msgstr "Anda dapat mengontrol siapa yang dapat menggunakan masing - masing blok, termasuk blok standar WordPress."
+
+#: incl/pages/custom-styles.php:57
+msgid "Class name"
+msgstr "Nama kelas"
+
+#: incl/pages/custom-styles.php:38
+msgid "Add new style"
+msgstr "Tambah style baru"
+
+#: incl/pages/block-settings.php:71
+msgid "Woo Products - PublishPress"
+msgstr "Produk Woo - PublishPress"
+
+#: incl/pages/block-settings.php:70
+msgid "Testimonial - PublishPress"
+msgstr "Testimoni - PublishPress"
+
+#: incl/pages/block-settings.php:69
+msgid "Table of Contents - PublishPress"
+msgstr "Tabel Konten - PublishPress"
+
+#: incl/pages/block-settings.php:68
+msgid "Social Links - PublishPress"
+msgstr "Tautan Sosial - PublishPress"
+
+#: incl/pages/block-settings.php:67
+msgid "Newsletter - PublishPress"
+msgstr "Buletin - PublishPress"
+
+#: incl/pages/block-settings.php:66
+msgid "Map - PublishPress"
+msgstr "Peta - PublishPress"
+
+#: incl/pages/block-settings.php:65
+msgid "Info Box - PublishPress"
+msgstr "Kotak Info - PublishPress"
+
+#: incl/pages/block-settings.php:64
+msgid "Images Slider - PublishPress"
+msgstr "Gambar Slider - PublishPress"
+
+#: incl/pages/block-settings.php:63
+msgid "Count Up - PublishPress"
+msgstr "Hitung Naik - PublishPress"
+
+#: incl/pages/block-settings.php:62
+msgid "Contact Form - PublishPress"
+msgstr "Formulir Kontak - PublishPress"
+
+#: incl/pages/block-settings.php:61
+msgid "Column - PublishPress"
+msgstr "Kolom - PublishPress"
+
+#: incl/pages/block-settings.php:60
+msgid "Columns - PublishPress"
+msgstr "Kolom kolom - PublishPress"
+
+#: incl/pages/block-settings.php:59
+msgid "Video - PublishPress"
+msgstr "Video - PublishPress"
+
+#: incl/pages/block-settings.php:58
+msgid "Tabs - PublishPress"
+msgstr "Tabulasi - PublishPress"
+
+#: incl/pages/block-settings.php:57
+msgid "Table - PublishPress"
+msgstr "Tabel - PublishPress"
+
+#: incl/pages/block-settings.php:56
+msgid "List - PublishPress"
+msgstr "Daftar - PublishPress"
+
+#: incl/pages/block-settings.php:55
+msgid "Image - PublishPress"
+msgstr "Gambar - PublishPress"
+
+#: incl/pages/block-settings.php:54
+msgid "Icon - PublishPress"
+msgstr "Ikon - PublishPress"
+
+#: incl/pages/block-settings.php:53
+msgid "Button - PublishPress"
+msgstr "Tombol - PublishPress"
+
+#: incl/pages/block-settings.php:52
+msgid "Accordion - PublishPress"
+msgstr "Accordion - PublishPress"
+
+#: incl/advanced-gutenberg-main.php:3259
+#: incl/pages/block-controls/blocks.php:56
+msgid "Loading..."
+msgstr "Memuat..."
+
+#: incl/advanced-gutenberg-main.php:2318
+msgid "Contact"
+msgstr "Kontak"
+
+#: incl/advanced-gutenberg-main.php:2315
+msgid "Contact the PublishPress team"
+msgstr "Hubungi tim PublishPress"
+
+#: incl/advanced-gutenberg-main.php:2304 incl/advanced-gutenberg-main.php:2307
+msgid "Documentation"
+msgstr "Dokumentasi"
+
+#: incl/advanced-gutenberg-main.php:2297
+msgid "About"
+msgstr "Tentang"
+
+#: incl/advanced-gutenberg-main.php:2294
+msgid "About PublishPress Blocks"
+msgstr "Tentang PublishPress Blocks"
+
+#: incl/advanced-gutenberg-main.php:2277
+msgid "If you like %sPublishPress Blocks%s please leave us a %s rating. Thank you!"
+msgstr "Jika Anda menyukai %sPublishPress Blocks%s pertimbangkan untuk meninggalkan %s rating. Terimakasih!"
+
+#: incl/advanced-gutenberg-main.php:2093 incl/advanced-gutenberg-main.php:2138
+#: incl/advanced-gutenberg-main.php:2171 incl/advanced-gutenberg-main.php:2215
+msgid "This feature is disabled. In order to use, please enable back through %sDashboard%s."
+msgstr "Fitur ini dinonaktifkan. Untuk menggunakannya, silahkan aktifkan melalui %sDasbor%s."
+
+#: incl/advanced-gutenberg-main.php:1856 incl/pages/custom-styles.php:19
+#: incl/pages/main.php:41
+msgid "Block Styles"
+msgstr "Gaya Blok"
+
+#: incl/advanced-gutenberg-main.php:1842 incl/advanced-gutenberg-main.php:2118
+#: incl/pages/main.php:23
+msgid "Block Permissions"
+msgstr "Izin Blok"
+
+#: incl/advanced-gutenberg-main.php:1436
+msgid "Error while sending the form. Please try again."
+msgstr "Terjadi eror saat mengirimkan formulir. Silakan coba lagi."
+
+#: incl/advanced-gutenberg-main.php:1283
+msgid "Error: can't edit this feature"
+msgstr "Eror: tidak dapat mengubah fitur ini"
+
+#: incl/advanced-gutenberg-main.php:1253
+msgid "Error: wrong data"
+msgstr "Eror: data salah"
+
+#: incl/advanced-gutenberg-main.php:893
+msgid "You're using PublishPress Blocks Free. The Pro version has more features and support. %sUpgrade to Pro%s"
+msgstr "Anda menggunakan PublishPress Blok versi gratis. Versi berbayar memiliki fitur tambahan dan support prioritas. %sUpgrade ke Pro%s"
+
+#: incl/advanced-gutenberg-main.php:3249 incl/advanced-gutenberg-main.php:3275
+msgid "Save %s"
+msgstr "Simpan %s"
+
+#: incl/advanced-gutenberg-main.php:3159
+msgid "%s can't be saved. Please try again."
+msgstr "%s tidak dapat disimpan. Mohon ulangi kembali."
+
+#: incl/advanced-gutenberg-main.php:3149
+msgid "%s saved successfully!"
+msgstr "%s berhasil disimpan!"
+
+#: incl/advanced-gutenberg-main.php:1863 incl/pages/block-controls.php:30
+#: incl/pages/main.php:50
+msgid "Block Controls"
+msgstr "Kontrol Blok"
+
+#: incl/advanced-gutenberg-main.php:3233 incl/advanced-gutenberg-main.php:3283
+#: incl/pages/block-controls/blocks.php:31
+#: incl/pages/block-controls/blocks.php:79
+msgid "To save this configuration, enable at least one block."
+msgstr "Untuk menyimpan konfigurasi ini, aktifkan setidaknya satu blok."
+
+#: incl/advanced-gutenberg-main.php:3220
+msgid "Enable or disable all blocks"
+msgstr "Aktifkan atau nonaktifkan semua blok"
+
+#: incl/advanced-gutenberg-main.php:1172
+msgid "copy"
+msgstr "salin"
+
+#: incl/pages/settings/recaptcha.php:128
+msgid "Invisible"
+msgstr "Tidak terlihat"
+
+#: incl/pages/settings/recaptcha.php:118
+msgid "Light"
+msgstr "Terang"
+
+#: assets/blocks/newsletter/frontend.js:66
+msgid "Submitted with success!"
+msgstr "Dikirim dengan sukses!"
+
+#: assets/blocks/newsletter/frontend.js:41
+msgid "Use a valid email address!"
+msgstr "Mohon gunakan alamat e-mail yang valid!"
+
+#: assets/blocks/newsletter/frontend.js:39
+msgid "Email is valid."
+msgstr "Email sudah valid."
+
+#: assets/blocks/newsletter/frontend.js:33
+msgid "You need to fill all fields!"
+msgstr "Anda perlu mengisi semua ruas!"
+
+#: incl/pages/settings/general.php:48
+msgid "PublishPress logo and links in the footer of the admin pages"
+msgstr "Logo PublishPress dan tautan di footer dari halaman admin"
+
+#: incl/pages/settings/general.php:47
+msgid "Display PublishPress branding"
+msgstr "Tampilkan PublishPress branding"
+
+#: incl/block-settings-main.php:960
+msgid "Table of Contents Alignment"
+msgstr "Deretan Tabel Konten"
+
+#: incl/block-settings-main.php:950
+msgid "Table of Contents header title"
+msgstr "Judul header dari Tabel Konten"
+
+#: incl/pages/block-controls.php:41
+msgid "Blocks"
+msgstr "Blok"
+
+#: incl/pages/settings/images.php:65
+msgid "Overlay"
+msgstr "Lapisan atas"
+
+#: incl/pages/settings/images.php:55
+msgid "Disabled"
+msgstr "Nonaktif"
+
+#: incl/pages/block-settings.php:133
+msgid "No blocks available. Please go to a post edit (without saving either modifying anything). Then come back to Block Settings to see the blocks list."
+msgstr "Tidak ada blok tersedia. Mohon edit artikel (tanpa menyimpan atau mengubah apapun). Lalu kembali ke pengaturan Blok untuk melihat daftar blok."
+
+#: incl/advanced-gutenberg-main.php:916 incl/pages/main.php:121
+msgid "Upgrade to Pro"
+msgstr "Upgrade ke Pro"
+
+#. Description of the plugin
+#: advanced-gutenberg.php
+msgid "PublishPress Blocks has everything you need to build professional websites with the Gutenberg editor."
+msgstr "PublishPress Blok mempunyai semua yang anda butuhkan untuk membangun situs web yang professional dengan editor Gutenberg."
+
+#: assets/blocks/recent-posts/block.php:295
+#: assets/blocks/recent-posts/block.php:1089
+#: assets/blocks/recent-posts/block.php:1102
+msgid "Updated on"
+msgstr "Diperbarui pada"
+
+#: assets/blocks/recent-posts/block.php:293
+#: assets/blocks/recent-posts/block.php:1088
+#: assets/blocks/recent-posts/block.php:1101
+msgid "Posted on"
+msgstr "Diposting pada"
+
+#: incl/pages/block-controls/controls.php:114
+msgid "Pages"
+msgstr "Laman"
+
+#: incl/pages/block-controls/controls.php:38
+#: incl/pages/block-controls/controls.php:71
+msgid "Post"
+msgstr "Postingan"
+
+#: assets/blocks/recent-posts/block.php:302
+#: assets/blocks/recent-posts/block.php:1076
+msgid "Updated"
+msgstr "Diperbarui"
+
+#: assets/blocks/recent-posts/block.php:300
+#: assets/blocks/recent-posts/block.php:302
+#: assets/blocks/recent-posts/block.php:1075
+#: assets/blocks/recent-posts/block.php:1076
+msgid "ago"
+msgstr "yang lalu"
+
+#: assets/blocks/recent-posts/block.php:300
+#: assets/blocks/recent-posts/block.php:1075
+msgid "Posted"
+msgstr "Diterbitkan"
+
+#: incl/advanced-gutenberg-main.php:3627
+msgid "Default configuration for this block is not available."
+msgstr "Konfigurasi standar untuk blok tidak tersedia."
+
+#: incl/advanced-gutenberg-main.php:1877 incl/pages/settings.php:22
+msgid "Settings"
+msgstr "Pengaturan"
+
+#: incl/pages/custom-styles.php:121
+msgid "Following Paragraph."
+msgstr "Paragraf berikutnya."
+
+#: incl/pages/custom-styles.php:118
+msgid "Example text with this style"
+msgstr "Contoh teks dengan style ini"
+
+#: incl/pages/custom-styles.php:114
+msgid "Previous Paragraph."
+msgstr "Paragraf sebelumnya."
+
+#: incl/pages/main.php:102
+msgid "PublishPress Blocks Pro"
+msgstr "PublishPress Blocks Pro"
+
+#: incl/advanced-gutenberg-main.php:2344
+msgid "PublishPress Blocks logo"
+msgstr "Logo PublishPress Blocks"
+
+#. Plugin URI of the plugin
+#: advanced-gutenberg.php
+msgid "https://publishpress.com/blocks/"
+msgstr "https://publishpress.com/blocks/"
+
+#. Plugin Name of the plugin
+#: advanced-gutenberg.php incl/advanced-gutenberg-main.php:256
+#: incl/advanced-gutenberg-main.php:1849 incl/pages/block-settings.php:90
+#: incl/pages/main.php:8 incl/pages/main.php:32
+msgid "PublishPress Blocks"
+msgstr "PublishPress Blocks"
+
+#. Author URI of the plugin
+#: advanced-gutenberg.php
+msgid "https://publishpress.com/"
+msgstr "https://publishpress.com/"
+
+#. Author of the plugin
+#: advanced-gutenberg.php
+msgid "PublishPress"
+msgstr "PublishPress"
+
+#: incl/block-settings-main.php:2002
+msgid "H6"
+msgstr "H6"
+
+#: incl/block-settings-main.php:1998
+msgid "H5"
+msgstr "H5"
+
+#: incl/block-settings-main.php:1994
+msgid "H4"
+msgstr "H4"
+
+#: incl/block-settings-main.php:1990
+msgid "H3"
+msgstr "H3"
+
+#: incl/block-settings-main.php:1986
+msgid "H2"
+msgstr "H2"
+
+#: incl/block-settings-main.php:1982
+msgid "H1"
+msgstr "H1"
+
+#: incl/block-settings-main.php:1977
+msgid "HTML Tag"
+msgstr "Tag HTML"
+
+#: incl/block-settings-main.php:1970 incl/block-settings-main.php:2081
+msgid "Line Height (px)"
+msgstr "Tinggi Baris (px)"
+
+#: incl/block-settings-main.php:1963 incl/block-settings-main.php:2074
+msgid "Font Size (px)"
+msgstr "Ukuran Huruf (px)"
+
+#: incl/block-settings-main.php:1955
+msgid "Title Settings"
+msgstr "Pengaturan judul"
+
+#: incl/block-settings-main.php:1789
+msgid "Number of icons"
+msgstr "Jumlah ikon"
+
+#: incl/block-settings-main.php:986
+msgid "Vertical"
+msgstr "Vertikal"
+
+#: incl/block-settings-main.php:982
+msgid "Horizontal"
+msgstr "Horizontal"
+
+#: incl/block-settings-main.php:977
+msgid "Tabs Style"
+msgstr "Style tabulasi"
+
+#: incl/block-settings-main.php:235 incl/block-settings-main.php:1939
+#: incl/block-settings-main.php:2050 incl/block-settings-main.php:2130
+msgid "Margin Left"
+msgstr "Margin Kiri"
+
+#: incl/block-settings-main.php:228 incl/block-settings-main.php:1932
+#: incl/block-settings-main.php:2043 incl/block-settings-main.php:2123
+msgid "Margin Bottom"
+msgstr "Margin Bawah"
+
+#: incl/block-settings-main.php:221 incl/block-settings-main.php:1946
+#: incl/block-settings-main.php:2057 incl/block-settings-main.php:2137
+msgid "Margin Right"
+msgstr "Margin Kanan"
+
+#: incl/block-settings-main.php:214 incl/block-settings-main.php:1925
+#: incl/block-settings-main.php:2036 incl/block-settings-main.php:2116
+msgid "Margin Top"
+msgstr "Margin Atas"
+
+#: incl/block-settings-main.php:211
+msgid "Margin Settings"
+msgstr "Pengaturan Margin"
+
+#: incl/advanced-gutenberg-main.php:1835
+msgid "Dashboard"
+msgstr "Dasbor"
+
+#: incl/block-controls-main.php:961
+msgid "Home"
+msgstr "Beranda"
+
+#: incl/advanced-gutenberg-main.php:4354
+msgid "Username or password is incorrect!"
+msgstr "Username atau password salah!"
+
+#: incl/advanced-gutenberg-main.php:4353
+msgid "Captcha must be checked!"
+msgstr "Captcha harus dicentang!"
+
+#: incl/advanced-gutenberg-main.php:4351
+msgid "User registration is currently not allowed."
+msgstr "Pendaftaran pengguna tidak diizinkan saat ini."
+
+#: incl/advanced-gutenberg-main.php:1537
+msgid "Captcha is empty"
+msgstr "Captcha kosong"
+
+#: incl/advanced-gutenberg-main.php:1534
+msgid "Captcha validated"
+msgstr "Captcha tervalidasi"
+
+#: incl/block-settings-main.php:1801
+msgid "Container Settings"
+msgstr "Pengaturan Kontainer"
+
+#: incl/pages/settings/general.php:138
+msgid "Large"
+msgstr "Besar"
+
+#: incl/block-settings-main.php:1763
+msgid "Text alignment"
+msgstr "Penyelarasan teks"
+
+#: incl/block-settings-main.php:1760
+msgid "Column Settings"
+msgstr "Pengaturan Kolom"
+
+#: incl/block-settings-main.php:1702
+msgid "Content Min Height"
+msgstr "Tinggi Konten"
+
+#: incl/block-settings-main.php:1695
+msgid "Content Max Width"
+msgstr "Lebar Konten"
+
+#: incl/block-settings-main.php:1689
+msgid "Footer"
+msgstr "Footer"
+
+#: incl/block-settings-main.php:1685
+msgid "Aside"
+msgstr "Di samping"
+
+#: incl/block-settings-main.php:1681
+msgid "Article"
+msgstr "Artikel"
+
+#: incl/block-settings-main.php:1677
+msgid "Main"
+msgstr "Utama"
+
+#: incl/block-settings-main.php:1673
+msgid "Section"
+msgstr "Bagian"
+
+#: incl/block-settings-main.php:1669
+msgid "Header"
+msgstr "Header"
+
+#: incl/block-settings-main.php:1665
+msgid "Div"
+msgstr "Div"
+
+#: incl/block-settings-main.php:1660
+msgid "Wrapper Tag"
+msgstr "Wrapper Tag"
+
+#: incl/block-settings-main.php:1655
+msgid "Columns Wrapped"
+msgstr "Kolom dibungkus"
+
+#: incl/block-settings-main.php:1649
+msgid "Full Height"
+msgstr "Tinggi Sepenuhnya"
+
+#: incl/block-settings-main.php:1641
+msgid "Middle"
+msgstr "Tengah"
+
+#: incl/block-settings-main.php:1629
+msgid "Row Settings"
+msgstr "Pengaturan Baris"
+
+#: incl/block-settings-main.php:1622
+msgid "Collapsed order RTL"
+msgstr "Urutan Terlipat RTL"
+
+#: incl/block-settings-main.php:1583
+msgid "Vertical space when collapsed"
+msgstr "Jarak vertikal saat terlipat"
+
+#: incl/block-settings-main.php:1577 incl/block-settings-main.php:1616
+msgid "90px"
+msgstr "90px"
+
+#: incl/block-settings-main.php:1573 incl/block-settings-main.php:1612
+msgid "70px"
+msgstr "70px"
+
+#: incl/block-settings-main.php:1569 incl/block-settings-main.php:1608
+msgid "50px"
+msgstr "50px"
+
+#: incl/block-settings-main.php:1565 incl/block-settings-main.php:1604
+msgid "40px"
+msgstr "40px"
+
+#: incl/block-settings-main.php:1561 incl/block-settings-main.php:1600
+msgid "30px"
+msgstr "30px"
+
+#: incl/block-settings-main.php:1557 incl/block-settings-main.php:1596
+msgid "20px"
+msgstr "20px"
+
+#: incl/block-settings-main.php:1553 incl/block-settings-main.php:1592
+msgid "10px"
+msgstr "10px"
+
+#: incl/block-settings-main.php:1544
+msgid "Space between column"
+msgstr "Jarak antar kolom"
+
+#: incl/block-settings-main.php:1541
+msgid "Columns Settings"
+msgstr "Pengaturan Kolom"
+
+#: incl/block-settings-main.php:1450
+msgid "Auto Height"
+msgstr "Tinggi otomatis"
+
+#: incl/block-settings-main.php:1427
+msgid "Images Settings"
+msgstr "Pengaturan Gambar"
+
+#: incl/block-settings-main.php:1325
+msgid "Last Name placeholder"
+msgstr "Placeholder Nama Belakang"
+
+#: incl/block-settings-main.php:1320
+msgid "First Name placeholder"
+msgstr "Placeholder Nama Depan"
+
+#: incl/block-settings-main.php:1308
+msgid "Form width"
+msgstr "Lebar formulir"
+
+#: incl/block-settings-main.php:1267
+msgid "Button Position"
+msgstr "Posisi tombol"
+
+#: incl/block-settings-main.php:1250 incl/block-settings-main.php:1406
+msgid "Border and Text Color"
+msgstr "Garis dan Warna Text"
+
+#: incl/block-settings-main.php:1189 incl/block-settings-main.php:1345
+msgid "Error text"
+msgstr "Teks error"
+
+#: incl/block-settings-main.php:1184 incl/block-settings-main.php:1340
+msgid "Success text"
+msgstr "Teks berhasil"
+
+#: incl/block-settings-main.php:1179 incl/block-settings-main.php:1335
+msgid "Submit label"
+msgstr "Label kirim"
+
+#: incl/block-settings-main.php:1174
+msgid "Message placeholder"
+msgstr "Pesan placeholder"
+
+#: incl/block-settings-main.php:1169 incl/block-settings-main.php:1330
+msgid "Email placeholder"
+msgstr "Placeholder e-mail"
+
+#: incl/block-settings-main.php:1164
+msgid "Name placeholder"
+msgstr "Nama placeholder"
+
+#: incl/pages/settings/general.php:153
+msgid "Enable columns visual guide"
+msgstr "Aktifkan panduan visual kolom"
+
+#: incl/pages/settings/general.php:175
+msgid "Remove autop"
+msgstr "Hapus autop"
+
+#: incl/block-settings-main.php:24
+msgid "Initial Collapsed"
+msgstr "Terlipat Awal"
+
+#: incl/pages/settings/images.php:101
+msgid "Reset to default"
+msgstr "Atur ulang ke standar"
+
+#: incl/pages/settings/images.php:82
+msgid "Default thumbnail"
+msgstr "Standar gambar mini"
+
+#: incl/block-settings-main.php:764
+msgid "Aubergine"
+msgstr "Aubergine"
+
+#: incl/block-settings-main.php:763
+msgid "Night"
+msgstr "Malam"
+
+#: incl/block-settings-main.php:762 incl/pages/settings/recaptcha.php:123
+msgid "Dark"
+msgstr "Gelap"
+
+#: incl/block-settings-main.php:761
+msgid "Retro"
+msgstr "Retro"
+
+#: incl/block-settings-main.php:760
+msgid "Silver"
+msgstr "Perak"
+
+#: incl/block-settings-main.php:756
+msgid "Map style"
+msgstr "Gaya peta"
+
+#: incl/advanced-gutenberg-main.php:1383 incl/advanced-gutenberg-main.php:1474
+#: incl/advanced-gutenberg-main.php:1526
+msgid "Cannot validate captcha"
+msgstr "Tidak dapat memvalidasi captcha"
+
+#: incl/block-settings-main.php:356
+msgid "Open link in a new tab"
+msgstr "Buka tautan di tab baru"
+
+#: incl/block-settings-main.php:346
+msgid "Open image in a lightbox"
+msgstr "Buka gambar di lightbox"
+
+#: incl/block-settings-main.php:334
+msgid "Click action"
+msgstr "Klik tindakan"
+
+#: incl/block-settings-main.php:1302
+msgid "Alternative"
+msgstr "Alternatif"
+
+#: incl/block-settings-main.php:1293
+msgid "Form style"
+msgstr "Style formulir"
+
+#: incl/block-settings-main.php:765
+msgid "Custom"
+msgstr "Kustom"
+
+#: incl/advanced-gutenberg-main.php:1388 incl/advanced-gutenberg-main.php:1479
+#: incl/advanced-gutenberg-main.php:1531
+msgid "Captcha validation error"
+msgstr "Validasi captcha eror"
+
+#: incl/advanced-gutenberg-main.php:1375 incl/advanced-gutenberg-main.php:1466
+#: incl/advanced-gutenberg-main.php:1518
+msgid "Server error. Try again later!"
+msgstr "Server eror. Coba lagi nanti!"
+
+#: incl/pages/settings/maps.php:38
+msgid "A Google API key is required to use the Map block without any warning."
+msgstr "Dibutuhkan API key dari Google untuk menggunakan blok peta tanpa peringatan."
+
+#: incl/pages/settings/images.php:71
+msgid "Display caption text on images loaded as lightbox in galleries."
+msgstr "Tampilkan teks keterangan pada gambar yang dimuat sebagai lightbox dalam galeri."
+
+#: incl/pages/settings/data.php:58
+msgid "Download Newsletter Form data"
+msgstr "Unduh data formulir Newsletter"
+
+#: incl/pages/settings/recaptcha.php:134
+msgid "We strongly recommend not using Invisible reCAPTCHA if you have more than 1 Newsletter or Contact forms block in a page."
+msgstr "Kami sangat menyarankan untuk tidak menggunakan Invisible reCAPTCHA jika Anda memiliki lebih dari 1 blok formulir Newsletter atau Kontak di satu halaman."
+
+#: incl/pages/settings/recaptcha.php:93
+msgid "Auto detect"
+msgstr "Deteksi Otomatis"
+
+#: incl/pages/settings/recaptcha.php:49 incl/pages/settings/recaptcha.php:68
+msgid "required"
+msgstr "wajib"
+
+#: incl/pages/settings/recaptcha.php:17
+msgid "Use the Google reCAPTCHA to avoid spam in PublishPress Blocks forms. Get credentials for your domain by registering %shere%s."
+msgstr "Gunakan Google reCAPTCHA untuk menghindari spam dalam formulir PublishPress Blocks. Dapatkan kredensial untuk domain Anda dengan mendaftar %sdi sini%s."
+
+#: incl/pages/settings/recaptcha.php:30
+msgid "Enable reCAPTCHA"
+msgstr "Aktifkan reCAPTCHA"
+
+#: incl/block-settings-main.php:1247 incl/block-settings-main.php:1403
+msgid "Submit Button Settings"
+msgstr "Pengaturan Tombol Kirim"
+
+#: incl/block-settings-main.php:1196 incl/block-settings-main.php:1352
+msgid "Input Color"
+msgstr "Warna Input"
+
+#: incl/block-settings-main.php:1161 incl/block-settings-main.php:1317
+msgid "Text Label"
+msgstr "Label Teks"
+
+#: incl/block-settings-main.php:1290
+msgid "Form Settings"
+msgstr "Pengaturan Formulir"
+
+#: incl/advanced-gutenberg-main.php:1428
+msgid "Message"
+msgstr "Pesan"
+
+#: incl/advanced-gutenberg-main.php:1419
+msgid "You have received a contact from your website."
+msgstr "Anda telah menerima pesan kontak dari situs web Anda."
+
+#: incl/advanced-gutenberg-main.php:1367 incl/advanced-gutenberg-main.php:1458
+#: incl/advanced-gutenberg-main.php:1510
+msgid "Bad Request!"
+msgstr "Permintaan Salah"
+
+#: incl/pages/settings/data.php:49 incl/pages/settings/data.php:89
+msgid "JSON"
+msgstr "JSON"
+
+#: incl/pages/settings/data.php:38 incl/pages/settings/data.php:78
+msgid "CSV"
+msgstr "CSV"
+
+#: incl/pages/settings/data.php:18
+msgid "Download Contacts Form data"
+msgstr "Unduh data formulir Kontak"
+
+#: incl/pages/settings/forms.php:95
+msgid "Email receiver"
+msgstr "Penerima e-mail"
+
+#: incl/pages/settings/forms.php:78
+msgid "Email title"
+msgstr "Judul e-mail"
+
+#: incl/pages/settings/forms.php:61
+msgid "Sender email"
+msgstr "Pengirim e-mail"
+
+#: incl/pages/settings/forms.php:44
+msgid "Sender name"
+msgstr "Nama pengirim"
+
+#: incl/advanced-gutenberg-main.php:1413 incl/pages/settings/forms.php:20
+msgid "Website Contact"
+msgstr "Kontak Situs Web"
+
+#: incl/pages/settings.php:46
+msgid "Email & Forms"
+msgstr "E-mail & Formulir"
+
+#: incl/block-settings-main.php:1150
+msgid "Number of Products"
+msgstr "Jumlah produk"
+
+#: incl/block-settings-main.php:1140
+msgid "Layout Settings"
+msgstr "Pengaturan Layout"
+
+#: incl/block-settings-main.php:1479
+msgid "Hover Color"
+msgstr "Warna Hover"
+
+#: incl/block-settings-main.php:1469
+msgid "Always show overlay"
+msgstr "Selalu tampilkan lapisan atas"
+
+#: incl/block-settings-main.php:1439
+msgid "Open custom link"
+msgstr "Buka tautan kustom"
+
+#: incl/block-settings-main.php:1632
+msgid "Vertical Align"
+msgstr "Perataan Vertikal"
+
+#: incl/block-settings-main.php:429 incl/block-settings-main.php:1518
+msgid "Horizontal Alignment"
+msgstr "Perataan Horisontal"
+
+#: incl/block-settings-main.php:350
+msgid "Open custom URL"
+msgstr "Buka URL kustom"
+
+#: incl/block-settings-main.php:1435
+msgid "Open image in lightbox"
+msgstr "Buka gambar di lightbox"
+
+#: incl/block-settings-main.php:337 incl/block-settings-main.php:1430
+msgid "Action on click"
+msgstr "Aksi saat diklik"
+
+#: incl/block-settings-main.php:1716
+msgid "Border style"
+msgstr "Gaya batas"
+
+#: incl/block-settings-main.php:17
+msgid "Bottom spacing"
+msgstr "Spasi Bawah"
+
+#: incl/block-settings-main.php:14
+msgid "Accordion Settings"
+msgstr "Pengaturan Accordion"
+
+#: assets/blocks/recent-posts/block.php:413
+msgid "Read More"
+msgstr "Selengkapnya"
+
+#: install.php:24
+msgid "Install Gutenberg Now!"
+msgstr "Install Gutenberg Sekarang!"
+
+#: install.php:23
+msgid "Gutenberg is not detected! Activate it or"
+msgstr "Gutenberg tidak terdeteksi! Aktifkan atau"
+
+#: incl/pages/settings/general.php:99
+msgid "Blocks icon color"
+msgstr "Warna blok ikon"
+
+#: incl/advanced-gutenberg-main.php:1426
+msgid "Date"
+msgstr "Tanggal"
+
+#: incl/block-controls-main.php:973
+msgid "Search"
+msgstr "Cari"
+
+#: incl/advanced-gutenberg-main.php:3215
+#: incl/pages/block-controls/blocks.php:13 incl/pages/block-settings.php:97
+msgid "Search blocks"
+msgstr "Cari blok"
+
+#: incl/pages/custom-styles.php:111
+msgid "Preview"
+msgstr "Pratinjau"
+
+#: incl/pages/block-settings.php:123 incl/pages/settings/images.php:99
+msgid "Edit"
+msgstr "Sunting"
+
+#: incl/pages/custom-styles.php:34
+msgid "Delete"
+msgstr "Hapus"
+
+#: incl/pages/custom-styles.php:33
+msgid "Copy"
+msgstr "Salin"
+
+#: incl/pages/custom-styles.php:12
+msgid "Your styles have been saved!"
+msgstr "Style Anda telah disimpan!"
+
+#: incl/pages/block-settings/block-config.php:18
+msgid "block"
+msgstr "blok"
+
+#: incl/advanced-gutenberg-main.php:4087
+msgid "Type field not defined"
+msgstr "Tipe ruas tidak terdefinisikan"
+
+#: incl/block-settings-main.php:1126
+msgid "Position Color"
+msgstr "Posisi Warna"
+
+#: incl/block-settings-main.php:1121
+msgid "Name Color"
+msgstr "Nama Warna"
+
+#: incl/block-settings-main.php:1109
+msgid "Avatar Size"
+msgstr "Ukuran Avatar"
+
+#: incl/block-settings-main.php:1095
+msgid "Border Radius (%)"
+msgstr "Radius Border (%)"
+
+#: incl/block-settings-main.php:1082
+msgid "Avatar Settings"
+msgstr "Pengaturan Avatar"
+
+#: incl/block-settings-main.php:1073 incl/block-settings-main.php:1143
+msgid "Columns"
+msgstr "Kolom"
+
+#: incl/block-settings-main.php:1004
+msgid "Active Tab Settings"
+msgstr "Pengaturan Tabulasi Aktif"
+
+#: incl/block-settings-main.php:974
+msgid "Tab Settings"
+msgstr "Pengaturan Tabulasi"
+
+#: incl/block-settings-main.php:955
+msgid "Anchor color"
+msgstr "Warna anchor"
+
+#: incl/block-settings-main.php:945
+msgid "Load minimized"
+msgstr "Muatkan yang diminimalkan"
+
+#: incl/block-settings-main.php:931
+msgid "Icon Space"
+msgstr "Spasi Ikon"
+
+#: incl/block-settings-main.php:914
+msgid "Icon Alignment"
+msgstr "Perataan Ikon"
+
+#: incl/block-settings-main.php:870
+msgid "Icon 3 Settings"
+msgstr "Pengaturan Ikon 3"
+
+#: incl/block-settings-main.php:829
+msgid "Icon 2 Settings"
+msgstr "Pengaturan Ikon 2"
+
+#: incl/block-settings-main.php:822 incl/block-settings-main.php:863
+#: incl/block-settings-main.php:904
+msgid "Icon Link"
+msgstr "Tautan Ikon"
+
+#: incl/block-settings-main.php:817 incl/block-settings-main.php:858
+#: incl/block-settings-main.php:899 incl/block-settings-main.php:1861
+msgid "Icon Color"
+msgstr "Warna Ikon"
+
+#: incl/block-settings-main.php:813 incl/block-settings-main.php:854
+#: incl/block-settings-main.php:895
+msgid "Youtube"
+msgstr "YouTube"
+
+#: incl/block-settings-main.php:812 incl/block-settings-main.php:853
+#: incl/block-settings-main.php:894
+msgid "Vimeo"
+msgstr "Vimeo"
+
+#: incl/block-settings-main.php:811 incl/block-settings-main.php:852
+#: incl/block-settings-main.php:893
+msgid "Twitter"
+msgstr "Twitter"
+
+#: incl/block-settings-main.php:810 incl/block-settings-main.php:851
+#: incl/block-settings-main.php:892
+msgid "Tumblr"
+msgstr "Tumblr"
+
+#: incl/block-settings-main.php:807 incl/block-settings-main.php:848
+#: incl/block-settings-main.php:889
+msgid "Sound Cloud"
+msgstr "Sound Cloud"
+
+#: incl/block-settings-main.php:805 incl/block-settings-main.php:846
+#: incl/block-settings-main.php:887
+msgid "Skype"
+msgstr "Skype"
+
+#: incl/block-settings-main.php:804 incl/block-settings-main.php:845
+#: incl/block-settings-main.php:886
+msgid "Reddit"
+msgstr "Reddit"
+
+#: incl/block-settings-main.php:803 incl/block-settings-main.php:844
+#: incl/block-settings-main.php:885
+msgid "Pinterest"
+msgstr "Pinterest"
+
+#: incl/block-settings-main.php:802 incl/block-settings-main.php:843
+#: incl/block-settings-main.php:884
+msgid "Picasa"
+msgstr "Picasa"
+
+#: incl/block-settings-main.php:800 incl/block-settings-main.php:841
+#: incl/block-settings-main.php:882
+msgid "LinkedIn"
+msgstr "LinkedIn"
+
+#: incl/block-settings-main.php:799 incl/block-settings-main.php:840
+#: incl/block-settings-main.php:881
+msgid "Instagram"
+msgstr "Instagram"
+
+#: incl/block-settings-main.php:798 incl/block-settings-main.php:839
+#: incl/block-settings-main.php:880
+msgid "Google Plus"
+msgstr "Google Plus"
+
+#: incl/block-settings-main.php:797 incl/block-settings-main.php:838
+#: incl/block-settings-main.php:879
+msgid "Flickr"
+msgstr "Flickr"
+
+#: incl/block-settings-main.php:796 incl/block-settings-main.php:837
+#: incl/block-settings-main.php:878
+msgid "Facebook"
+msgstr "Facebook"
+
+#: incl/block-settings-main.php:795 incl/block-settings-main.php:836
+#: incl/block-settings-main.php:877
+msgid "Blogger"
+msgstr "Blogger"
+
+#: incl/advanced-gutenberg-main.php:4073 incl/pages/settings/general.php:133
+msgid "Default"
+msgstr "Standar"
+
+#: incl/block-settings-main.php:791 incl/block-settings-main.php:832
+#: incl/block-settings-main.php:873
+msgid "Icon"
+msgstr "Ikon"
+
+#: incl/block-settings-main.php:788
+msgid "Icon 1 Settings"
+msgstr "Pengaturan Ikon 1"
+
+#: incl/block-settings-main.php:779
+msgid "Marker Description"
+msgstr "Deskripsi Penanda"
+
+#: incl/block-settings-main.php:774
+msgid "Marker Title"
+msgstr "Judul Penanda"
+
+#: incl/block-settings-main.php:771
+msgid "Marker Settings"
+msgstr "Pengaturan Penanda"
+
+#: incl/block-settings-main.php:742
+msgid "Zoom Level"
+msgstr "Tingkat Zoom"
+
+#: incl/block-settings-main.php:739
+msgid "Map Settings"
+msgstr "Pengaturan Peta"
+
+#: incl/block-settings-main.php:730
+msgid "Longitude"
+msgstr "Garis bujur"
+
+#: incl/block-settings-main.php:723
+msgid "Latitude"
+msgstr "Garis lintang"
+
+#: incl/block-settings-main.php:715
+msgid "Location Settings"
+msgstr "Pengaturan Lokasi"
+
+#: incl/block-settings-main.php:704
+msgid "Count Up Number Size"
+msgstr "Ukuran Angka Hitung Naik"
+
+#: incl/block-settings-main.php:701
+msgid "Count Up Settings"
+msgstr "Pengaturan Hitung Naik"
+
+#: incl/block-settings-main.php:694 incl/block-settings-main.php:1131
+msgid "Description Color"
+msgstr "Deskripsi Warna"
+
+#: incl/block-settings-main.php:689
+msgid "Count Up Color"
+msgstr "Warna Hitung Naik"
+
+#: incl/block-settings-main.php:684
+msgid "Header Color"
+msgstr "Warna Header"
+
+#: incl/block-settings-main.php:681 incl/block-settings-main.php:1476
+msgid "Color Settings"
+msgstr "Pengaturan Warna"
+
+#: incl/block-settings-main.php:672
+msgid "Number of columns"
+msgstr "Jumlah kolom"
+
+#: incl/block-settings-main.php:669 incl/block-settings-main.php:911
+#: incl/block-settings-main.php:942 incl/block-settings-main.php:1070
+#: incl/block-settings-main.php:1786
+msgid "General Settings"
+msgstr "Pengaturan Umum"
+
+#: incl/block-settings-main.php:660
+msgid "Button Color"
+msgstr "Warna Tombol"
+
+#: incl/block-settings-main.php:653
+msgid "Button Size"
+msgstr "Ukuran Tombol"
+
+#: incl/block-settings-main.php:647
+msgid "Star Sticker"
+msgstr "Stiker Bintang"
+
+#: incl/block-settings-main.php:643
+msgid "Filled Square"
+msgstr "Kotak Terisi"
+
+#: incl/block-settings-main.php:639
+msgid "Video Camera"
+msgstr "Video Kamera"
+
+#: incl/block-settings-main.php:635
+msgid "Outline Circle"
+msgstr "Lingkaran Garis Luar"
+
+#: incl/block-settings-main.php:631
+msgid "Filled Circle"
+msgstr "Lingkaran Terisi"
+
+#: incl/block-settings-main.php:627 incl/block-settings-main.php:1298
+msgid "Normal"
+msgstr "Normal"
+
+#: incl/block-settings-main.php:622
+msgid "Button Icon"
+msgstr "Ikon Tombol"
+
+#: incl/block-settings-main.php:619
+msgid "Play Button Settings"
+msgstr "Pengaturan Tombol Putar"
+
+#: incl/block-settings-main.php:612
+msgid "Overlay color"
+msgstr "Warna overlay"
+
+#: incl/block-settings-main.php:605
+msgid "Video Height"
+msgstr "Tinggi Video"
+
+#: incl/block-settings-main.php:598
+msgid "Video Width"
+msgstr "Lebar Video"
+
+#: incl/block-settings-main.php:588
+msgid "Open video in lightbox"
+msgstr "Buka video di lightbox"
+
+#: incl/block-settings-main.php:585
+msgid "Video Settings"
+msgstr "Pengaturan Video"
+
+#: incl/block-settings-main.php:574
+msgid "Max width"
+msgstr "Lebar Maksimal"
+
+#: incl/block-settings-main.php:571
+msgid "Table Settings"
+msgstr "Pengaturan Tabel"
+
+#: incl/block-settings-main.php:560
+msgid "Padding"
+msgstr "Padding"
+
+#: incl/block-settings-main.php:553
+msgid "Margin"
+msgstr "Margin"
+
+#: incl/block-settings-main.php:546
+msgid "Line Height"
+msgstr "Tinggi Baris"
+
+#: incl/block-settings-main.php:539 incl/block-settings-main.php:924
+#: incl/block-settings-main.php:1866
+msgid "Icon Size"
+msgstr "Ukuran Ikon"
+
+#: incl/block-settings-main.php:534
+msgid "Icon color"
+msgstr "Warna ikon"
+
+#: incl/block-settings-main.php:528
+msgid "Circle"
+msgstr "Lingkaran"
+
+#: incl/block-settings-main.php:524
+msgid "Info"
+msgstr "Info"
+
+#: incl/block-settings-main.php:520
+msgid "Help"
+msgstr "Bantuan"
+
+#: incl/block-settings-main.php:516
+msgid "Warning"
+msgstr "Peringatan"
+
+#: incl/block-settings-main.php:512
+msgid "X Cross"
+msgstr "X Cross"
+
+#: incl/block-settings-main.php:508
+msgid "Arrow Right"
+msgstr "Panah Kanan"
+
+#: incl/block-settings-main.php:504
+msgid "Play"
+msgstr "Putar"
+
+#: incl/block-settings-main.php:496
+msgid "Minus"
+msgstr "Kurang"
+
+#: incl/block-settings-main.php:492
+msgid "Checkmark"
+msgstr "Tanda Centang"
+
+#: incl/block-settings-main.php:488
+msgid "Star"
+msgstr "Bintang"
+
+#: incl/block-settings-main.php:484
+msgid "Flag"
+msgstr "Bendera"
+
+#: incl/block-settings-main.php:476
+msgid "Pushpin"
+msgstr "Pin Penekan"
+
+#: incl/block-settings-main.php:342 incl/block-settings-main.php:472
+#: incl/block-settings-main.php:1549 incl/block-settings-main.php:1588
+#: incl/block-settings-main.php:1721
+msgid "None"
+msgstr "Tidak ada"
+
+#: incl/block-settings-main.php:467
+msgid "Icon style"
+msgstr "Gaya Ikon"
+
+#: incl/block-settings-main.php:464 incl/block-settings-main.php:1858
+msgid "Icon Settings"
+msgstr "Pengaturan Ikon"
+
+#: incl/block-settings-main.php:452 incl/block-settings-main.php:1118
+#: incl/block-settings-main.php:2066
+msgid "Text Settings"
+msgstr "Pengaturan Teks"
+
+#: incl/block-settings-main.php:442 incl/block-settings-main.php:920
+#: incl/block-settings-main.php:966 incl/block-settings-main.php:1280
+#: incl/block-settings-main.php:1531 incl/block-settings-main.php:1776
+msgid "Right"
+msgstr "Kanan"
+
+#: incl/block-settings-main.php:434 incl/block-settings-main.php:918
+#: incl/block-settings-main.php:964 incl/block-settings-main.php:1276
+#: incl/block-settings-main.php:1523 incl/block-settings-main.php:1768
+msgid "Left"
+msgstr "Kiri"
+
+#: incl/block-settings-main.php:423 incl/block-settings-main.php:1512
+#: incl/block-settings-main.php:1645 incl/pages/settings/images.php:60
+msgid "Bottom"
+msgstr "Bawah"
+
+#: incl/block-settings-main.php:419 incl/block-settings-main.php:438
+#: incl/block-settings-main.php:919 incl/block-settings-main.php:965
+#: incl/block-settings-main.php:1272 incl/block-settings-main.php:1508
+#: incl/block-settings-main.php:1527 incl/block-settings-main.php:1772
+msgid "Center"
+msgstr "Tengah"
+
+#: incl/block-settings-main.php:415 incl/block-settings-main.php:1504
+#: incl/block-settings-main.php:1637
+msgid "Top"
+msgstr "Atas"
+
+#: incl/block-settings-main.php:410 incl/block-settings-main.php:1499
+msgid "Vertical Alignment"
+msgstr "Perataan Vertikal"
+
+#: incl/block-settings-main.php:407 incl/block-settings-main.php:1496
+msgid "Text Alignment"
+msgstr "Perataan Teks"
+
+#: incl/block-settings-main.php:400
+msgid "Overlay Color"
+msgstr "Warna Overlay"
+
+#: incl/block-settings-main.php:395
+msgid "Subtitle Color"
+msgstr "Warna Subjudul"
+
+#: incl/block-settings-main.php:390 incl/block-settings-main.php:1484
+#: incl/block-settings-main.php:1958
+msgid "Title Color"
+msgstr "Warna judul"
+
+#: incl/block-settings-main.php:387 incl/block-settings-main.php:2069
+msgid "Color"
+msgstr "Warna"
+
+#: incl/block-settings-main.php:378 incl/block-settings-main.php:1455
+msgid "Width"
+msgstr "Lebar"
+
+#: incl/block-settings-main.php:371 incl/block-settings-main.php:749
+#: incl/block-settings-main.php:1462
+msgid "Height"
+msgstr "Tinggi"
+
+#: incl/block-settings-main.php:366 incl/block-settings-main.php:593
+#: incl/block-settings-main.php:1445 incl/pages/settings/general.php:143
+msgid "Full width"
+msgstr "Lebar penuh"
+
+#: incl/block-settings-main.php:363
+msgid "Image Size"
+msgstr "Ukuran gambar"
+
+#: incl/block-settings-main.php:323
+msgid "Transition Speed"
+msgstr "Kecepatan Transisi"
+
+#: incl/block-settings-main.php:316
+msgid "Shadow Spread"
+msgstr "Sebaran Bayangan"
+
+#: incl/block-settings-main.php:309
+msgid "Shadow Blur"
+msgstr "Blur Bayangan"
+
+#: incl/block-settings-main.php:302
+msgid "Shadow V Offset"
+msgstr "Offset V Bayangan"
+
+#: incl/block-settings-main.php:295
+msgid "Shadow H Offset"
+msgstr "Offset H Bayangan"
+
+#: incl/block-settings-main.php:290
+msgid "Shadow Color"
+msgstr "Warna Bayangan"
+
+#: incl/block-settings-main.php:277
+msgid "Hover Settings"
+msgstr "Pengaturan Hover"
+
+#: incl/block-settings-main.php:268 incl/block-settings-main.php:1842
+#: incl/block-settings-main.php:1911 incl/block-settings-main.php:2022
+#: incl/block-settings-main.php:2102
+msgid "Padding Left"
+msgstr "Padding Kiri"
+
+#: incl/block-settings-main.php:261 incl/block-settings-main.php:1835
+#: incl/block-settings-main.php:1904 incl/block-settings-main.php:2015
+#: incl/block-settings-main.php:2095
+msgid "Padding Bottom"
+msgstr "Padding Bawah"
+
+#: incl/block-settings-main.php:254 incl/block-settings-main.php:1849
+#: incl/block-settings-main.php:1918 incl/block-settings-main.php:2029
+#: incl/block-settings-main.php:2109
+msgid "Padding Right"
+msgstr "Padding Kanan"
+
+#: incl/block-settings-main.php:247 incl/block-settings-main.php:1828
+#: incl/block-settings-main.php:1897 incl/block-settings-main.php:2008
+#: incl/block-settings-main.php:2088
+msgid "Padding Top"
+msgstr "Padding Atas"
+
+#: incl/block-settings-main.php:244
+msgid "Padding Settings"
+msgstr "Pengaturan Padding"
+
+#: incl/block-settings-main.php:149 incl/block-settings-main.php:455
+msgid "Text Size"
+msgstr "Ukuran Teks"
+
+#: incl/block-settings-main.php:146
+msgid "Text and Color"
+msgstr "Teks dan Warna"
+
+#: incl/block-settings-main.php:135 incl/block-settings-main.php:202
+#: incl/block-settings-main.php:1059 incl/block-settings-main.php:1238
+#: incl/block-settings-main.php:1260 incl/block-settings-main.php:1394
+#: incl/block-settings-main.php:1416 incl/block-settings-main.php:1751
+#: incl/block-settings-main.php:1821 incl/block-settings-main.php:1890
+msgid "Border Radius"
+msgstr "Radius Batas"
+
+#: incl/block-settings-main.php:128 incl/block-settings-main.php:195
+#: incl/block-settings-main.php:1052 incl/block-settings-main.php:1102
+#: incl/block-settings-main.php:1744 incl/block-settings-main.php:1814
+#: incl/block-settings-main.php:1883
+msgid "Border Width"
+msgstr "Lebar Batas"
+
+#: incl/block-settings-main.php:123 incl/block-settings-main.php:190
+#: incl/block-settings-main.php:1047 incl/block-settings-main.php:1090
+#: incl/block-settings-main.php:1214 incl/block-settings-main.php:1370
+#: incl/block-settings-main.php:1739 incl/block-settings-main.php:1809
+#: incl/block-settings-main.php:1878
+msgid "Border Color"
+msgstr "Warna Batas"
+
+#: incl/block-settings-main.php:117 incl/block-settings-main.php:184
+#: incl/block-settings-main.php:1043 incl/block-settings-main.php:1232
+#: incl/block-settings-main.php:1388 incl/block-settings-main.php:1729
+msgid "Dotted"
+msgstr "Bertitik"
+
+#: incl/block-settings-main.php:113 incl/block-settings-main.php:180
+#: incl/block-settings-main.php:1042 incl/block-settings-main.php:1228
+#: incl/block-settings-main.php:1384 incl/block-settings-main.php:1733
+msgid "Dashed"
+msgstr "Bergaris"
+
+#: incl/block-settings-main.php:109 incl/block-settings-main.php:176
+#: incl/block-settings-main.php:1041 incl/block-settings-main.php:1224
+#: incl/block-settings-main.php:1380 incl/block-settings-main.php:1725
+msgid "Solid"
+msgstr "Solid"
+
+#: incl/block-settings-main.php:104 incl/block-settings-main.php:171
+#: incl/block-settings-main.php:1037 incl/block-settings-main.php:1219
+#: incl/block-settings-main.php:1375
+msgid "Border Style"
+msgstr "Gaya Batas"
+
+#: incl/block-settings-main.php:101 incl/block-settings-main.php:168
+#: incl/block-settings-main.php:1034 incl/block-settings-main.php:1211
+#: incl/block-settings-main.php:1367 incl/block-settings-main.php:1713
+msgid "Border Settings"
+msgstr "Pengaturan Batas"
+
+#: incl/block-settings-main.php:86 incl/block-settings-main.php:1019
+msgid "Body Settings"
+msgstr "Pengaturan Isi Konten"
+
+#: incl/block-settings-main.php:79
+msgid "Header Icon Color"
+msgstr "Warna Ikon Header"
+
+#: incl/block-settings-main.php:73
+msgid "Arrow Down"
+msgstr "Panah Bawah"
+
+#: incl/block-settings-main.php:69
+msgid "Horizontal Dots"
+msgstr "Tanda Titik Horizontal"
+
+#: incl/block-settings-main.php:65
+msgid "Unfold Arrow"
+msgstr "Panah Terlipat"
+
+#: incl/block-settings-main.php:61
+msgid "Plus Square Outline"
+msgstr "Kotak Plus Garis Luar"
+
+#: incl/block-settings-main.php:57
+msgid "Plus Circle Outline"
+msgstr "Lingkaran Plus Garis Luar"
+
+#: incl/block-settings-main.php:53
+msgid "Plus Circle"
+msgstr "Lingkaran Plus"
+
+#: incl/block-settings-main.php:49 incl/block-settings-main.php:500
+msgid "Plus"
+msgstr "Plus"
+
+#: incl/block-settings-main.php:44
+msgid "Header Icon"
+msgstr "Ikon Header"
+
+#: incl/block-settings-main.php:39 incl/block-settings-main.php:94
+#: incl/block-settings-main.php:156 incl/block-settings-main.php:280
+#: incl/block-settings-main.php:997 incl/block-settings-main.php:1012
+#: incl/block-settings-main.php:1027 incl/block-settings-main.php:1204
+#: incl/block-settings-main.php:1360 incl/block-settings-main.php:1489
+msgid "Text Color"
+msgstr "Warna Teks"
+
+#: incl/block-settings-main.php:34 incl/block-settings-main.php:89
+#: incl/block-settings-main.php:161 incl/block-settings-main.php:285
+#: incl/block-settings-main.php:992 incl/block-settings-main.php:1007
+#: incl/block-settings-main.php:1022 incl/block-settings-main.php:1085
+#: incl/block-settings-main.php:1199 incl/block-settings-main.php:1255
+#: incl/block-settings-main.php:1355 incl/block-settings-main.php:1411
+#: incl/block-settings-main.php:1804 incl/block-settings-main.php:1873
+msgid "Background Color"
+msgstr "Warna Latar belakang"
+
+#: incl/block-settings-main.php:31
+msgid "Header Settings"
+msgstr "Pengaturan Header"
+
+#: incl/advanced-gutenberg-main.php:3570 incl/advanced-gutenberg-main.php:3571
+msgid "Block Config"
+msgstr "Konfigurasi Blok"
+
+#: incl/advanced-gutenberg-main.php:1121 incl/advanced-gutenberg-main.php:1249
+#: incl/advanced-gutenberg-main.php:1303 incl/advanced-gutenberg-main.php:1362
+#: incl/advanced-gutenberg-main.php:1453
+msgid "Invalid nonce token!"
+msgstr "Token Nonce Tidak Valid!"
+
+#: incl/advanced-gutenberg-main.php:1114 incl/advanced-gutenberg-main.php:1238
+#: incl/advanced-gutenberg-main.php:1297
+msgid "No permission!"
+msgstr "Tidak ada izin!"
+
+#: incl/pages/settings/general.php:57
+msgid "Enable blocks spacing"
+msgstr "Aktifkan jarak antar blok"
+
+#: incl/pages/settings/general.php:79
+msgid "Blocks spacing"
+msgstr "Jarak blok"
+
+#: incl/pages/settings/maps.php:31
+msgid "How to create a Google API Key"
+msgstr "Bagaimana cara membuat kunci Google API?"
+
+#: incl/pages/settings/maps.php:15
+msgid "Google API key"
+msgstr "Kunci Google API"
+
+#: install.php:35
+msgid "Please update Gutenberg then comeback later!"
+msgstr "Silakan perbarui Gutenberg lalu kembali lagi nanti!"
+
+#: install.php:33
+msgid "We require at least Gutenberg version "
+msgstr "Kita membutuhkan setidaknya versi Gutenberg "
+
+#: incl/pages/custom-styles.php:105
+msgid "Save styles"
+msgstr "Simpan gaya"
+
+#: incl/pages/custom-styles.php:92
+msgid "Hint: Use \"Ctrl + Space\" for auto completion"
+msgstr "Petunjuk: Gunakan \"Ctrl + Spasi\" untuk melengkapi secara otomatis"
+
+#: incl/pages/custom-styles.php:86
+msgid "Custom CSS"
+msgstr "CSS Kustom"
+
+#: incl/pages/custom-styles.php:72
+msgid "Identification color"
+msgstr "Warna identifikasi"
+
+#: incl/pages/custom-styles.php:66
+msgid ""
+"This option help you identify specific custom styles in the list\n"
+"                                            (usually set this same as the custom style's background color)"
+msgstr ""
+"Pilihina ini untuk membantu anda mengenali spesifik style kustom di daftar\n"
+"                                            (Biasanya diatur sama dengan warna latar belakang gaya kustom)"
+
+#: incl/advanced-gutenberg-main.php:1138 incl/pages/custom-styles.php:49
+msgid "Style title"
+msgstr "Gaya Judul"
+
+#: incl/pages/settings/images.php:47
+msgid "Image caption"
+msgstr "Keterangan Gambar"
+
+#: incl/pages/settings/images.php:25
+msgid "Open galleries in lightbox"
+msgstr "Buka galeri di lightbox"
+
+#: incl/pages/settings/images.php:36
+msgid "Open gallery images as a lightbox style popup"
+msgstr "Buka gambar galeri sebagai popup lightbox"
+
+#: incl/block-settings-main.php:480
+msgid "Configuration"
+msgstr "Konfigurasi"
+
+#: incl/pages/block-controls.php:18 incl/pages/settings.php:15
+msgid "Settings saved successfully!"
+msgstr "Pengaturan berhasil disimpan!"
+
+#: incl/pages/block-settings/block-config.php:14
+#: incl/pages/block-settings/block-config.php:30
+msgid "Save"
+msgstr "Simpan"
+
+#: incl/advanced-gutenberg-main.php:1424 incl/block-settings-main.php:801
+#: incl/block-settings-main.php:842 incl/block-settings-main.php:883
+msgid "Email"
+msgstr "Email"
+
+#: incl/advanced-gutenberg-main.php:1422
+msgid "Name"
+msgstr "Nama"

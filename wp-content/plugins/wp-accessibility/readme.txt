@@ -1,11 +1,11 @@
 === WP Accessibility ===
 Contributors: joedolson
-Donate link: http://www.joedolson.com/donate/
+Donate link: https://www.joedolson.com/donate/
 Tags: accessibility, wcag, a11y, section508, alt text
 Requires at least: 4.9
 Tested up to: 6.6
 Requires PHP: 7.0
-Stable tag: 2.1.10
+Stable tag: 2.1.12
 Text Domain: wp-accessibility
 License: GPLv2 or later
 
@@ -81,6 +81,22 @@ WP Accessibility includes a statistics collection feature to help you identify h
 = Future =
 
 [Suggest a change!](https://github.com/joedolson/wp-accessibility/issues/)
+
+= 2.1.12 =
+
+* Bug fix: Update editor styles to have less impact on block editor styles.
+* Bug fix: Log out text was not internationalized.
+* Bug fix: Default CSS toggle broken.
+* Add: Support for classic editor galleries with alt text warnings.
+* Change: Update URLs in various locations to https references.
+* Change: New setting to disable admin logout link.
+* Update: Misc. minor admin settings design changes.
+
+= 2.1.11 =
+
+* Bug fix: Don't strip target=_blank on Facebook links.
+* Change: Minor text change in accessibility stats settings.
+* Accessibility: auto-scroll if focus lands on element obsucred by toolbar.
 
 = 2.1.10 =
 

@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Category Order and Taxonomy Terms Order\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-29 12:16+0200\n"
-"PO-Revision-Date: 2023-12-29 12:16+0200\n"
+"POT-Creation-Date: 2024-09-04 16:42+0300\n"
+"PO-Revision-Date: 2024-09-04 16:42+0300\n"
 "Last-Translator: NspCode <contact@nsp-code.com>\n"
 "Language-Team: nsp-code <electronice_delphi@yahoo.com>\n"
 "Language: en_US\n"
@@ -13,136 +13,137 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-KeywordsList: _;gettext;__;_e\n"
 "X-Poedit-Basepath: ..\n"
-"X-Generator: Poedit 3.4\n"
+"X-Generator: Poedit 3.5\n"
+"X-Poedit-SourceCharset: UTF-8\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: include/functions.php:74
+#: include/class.functions.php:74
 msgid ""
 "Did you find this plugin useful? Please support our work with a donation or "
 "write an article about this plugin in your blog with a link to our site"
 msgstr ""
 
-#: include/functions.php:75
+#: include/class.functions.php:75
 msgid "Did you know there is an Advanced Version of this plug-in?"
 msgstr ""
 
-#: include/functions.php:75
+#: include/class.functions.php:75
 msgid "Read more"
 msgstr ""
 
-#: include/functions.php:76 include/functions.php:77
+#: include/class.functions.php:76 include/class.functions.php:77
 msgid "Check our"
 msgstr ""
 
-#: include/functions.php:76
+#: include/class.functions.php:76
 msgid "plugin which allows to custom sort all posts, pages, custom post types"
 msgstr ""
 
-#: include/functions.php:77
+#: include/class.functions.php:77
 msgid ""
 "plugin which allows to custom sort categories and custom taxonomies terms "
 "per post basis"
 msgstr ""
 
-#: include/interface.php:42 taxonomy-terms-order.php:147
-#: taxonomy-terms-order.php:149 taxonomy-terms-order.php:151
+#: include/class.interface.php:42 include/class.to.php:107
+#: include/class.to.php:109 include/class.to.php:111
 msgid "Taxonomy Order"
 msgstr ""
 
-#: include/interface.php:50
+#: include/class.interface.php:50
 msgid ""
 "This plugin can't work without javascript, because it's use drag and drop "
 "and AJAX."
 msgstr ""
 
-#: include/interface.php:104
+#: include/class.interface.php:104
 msgid "Taxonomies"
 msgstr ""
 
-#: include/interface.php:108
+#: include/class.interface.php:108
 msgid "Taxonomy Title"
 msgstr ""
 
-#: include/interface.php:108
+#: include/class.interface.php:108
 msgid "Total Posts"
 msgstr ""
 
-#: include/interface.php:160
+#: include/class.interface.php:160
 msgid "Update"
 msgstr ""
 
-#: include/options.php:17
+#: include/class.options.php:20
 msgid "Settings Saved"
 msgstr ""
 
-#: include/options.php:25
+#: include/class.options.php:28
 msgid "General Settings"
 msgstr ""
 
-#: include/options.php:31
+#: include/class.options.php:34
 msgid "General"
 msgstr ""
 
-#: include/options.php:36
+#: include/class.options.php:39
 msgid "Minimum Level to use this plugin"
 msgstr ""
 
-#: include/options.php:39
+#: include/class.options.php:42
 msgid "Subscriber"
 msgstr ""
 
-#: include/options.php:40
+#: include/class.options.php:43
 msgid "Contributor"
 msgstr ""
 
-#: include/options.php:41
+#: include/class.options.php:44
 msgid "Author"
 msgstr ""
 
-#: include/options.php:42
+#: include/class.options.php:45
 msgid "Editor"
 msgstr ""
 
-#: include/options.php:43
+#: include/class.options.php:46
 msgid "Administrator"
 msgstr ""
 
-#: include/options.php:51
+#: include/class.options.php:54
 msgid "Auto Sort"
 msgstr ""
 
-#: include/options.php:54 include/options.php:65
+#: include/class.options.php:57 include/class.options.php:68
 msgid "OFF"
 msgstr ""
 
-#: include/options.php:55 include/options.php:66
+#: include/class.options.php:58 include/class.options.php:69
 msgid "ON"
 msgstr ""
 
-#: include/options.php:57
+#: include/class.options.php:60
 msgid "global setting"
 msgstr ""
 
-#: include/options.php:57 include/options.php:68
+#: include/class.options.php:60 include/class.options.php:71
 msgid "Additional description and details at "
 msgstr ""
 
-#: include/options.php:57 include/options.php:68
+#: include/class.options.php:60 include/class.options.php:71
 msgid "Auto Sort Description"
 msgstr ""
 
-#: include/options.php:62
+#: include/class.options.php:65
 msgid "Admin Sort"
 msgstr ""
 
-#: include/options.php:68
+#: include/class.options.php:71
 msgid "This will change the order of terms within the admin interface"
 msgstr ""
 
-#: include/options.php:79
+#: include/class.options.php:82
 msgid "Save Settings"
 msgstr ""
 
-#: taxonomy-terms-order.php:110
+#: include/class.to.php:70
 msgid "Taxonomy Terms Order"
 msgstr ""

@@ -200,6 +200,10 @@ class CMTT_Glossary_Index {
 					'path'      => self::$jsPath . 'modernizr.min.js',
 					'in_footer' => $inFooter,
 				),
+                'cm-purify-js'     => array(
+					'path'      => self::$jsPath . 'purify.min.js',
+					'in_footer' => $inFooter,
+				),
 				'tooltip-frontend-js' => array(
 					'path'      => self::$jsPath . 'tooltip' . $miniSuffix . '.js',
 					'deps'      => $tooltipFrontendJsDeps,

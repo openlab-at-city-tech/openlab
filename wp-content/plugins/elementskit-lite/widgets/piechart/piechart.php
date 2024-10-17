@@ -40,6 +40,9 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/pie-chart/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 
@@ -655,7 +658,7 @@ class ElementsKit_Widget_Piechart extends Widget_Base {
             $this->add_render_attribute( 'pieechart', 'class', $settings['ekit_piechart_content_type'] );
         }
 
-        if($settings['ekit_piechart_flip_background_group_background'] == 'gradient'){
+        if(isset($settings['ekit_piechart_flip_background_group_background']) && $settings['ekit_piechart_flip_background_group_background'] == 'gradient'){
             $this->add_render_attribute( 'pieechart', 'class', $settings['ekit_piechart_content_type'].' '.'flip-gradient-color' );
         }
 

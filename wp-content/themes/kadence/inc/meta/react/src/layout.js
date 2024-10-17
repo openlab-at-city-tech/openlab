@@ -209,7 +209,7 @@ class KadenceThemeLayout extends Component {
 				>
 					<div className="kadence-sidebar-container components-panel__body is-opened">
 						<RadioIconComponent
-							label={ __( 'Transparent Header' ) }
+							label={ __( 'Transparent Header', 'kadence' ) }
 							value={ ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_transparent && '' !== this.props.meta._kad_post_transparent ? this.props.meta._kad_post_transparent : 'default' ) }
 							customClass="three-col-short"
 							options={ transparentOptions }
@@ -300,7 +300,7 @@ class KadenceThemeLayout extends Component {
 						{ ( ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_layout && '' !== this.props.meta._kad_post_layout && ( 'left' === this.props.meta._kad_post_layout || 'right' === this.props.meta._kad_post_layout ) ) || ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_layout && 'default' === this.props.meta._kad_post_layout && ( 'left' === kadenceMetaParams.sidebar || 'right' === kadenceMetaParams.sidebar ) ) || ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_layout && '' === this.props.meta._kad_post_layout && ( 'left' === kadenceMetaParams.sidebar || 'right' === kadenceMetaParams.sidebar ) ) ) && (
 							<div className="kadence-control-field kadence-select-control">
 								<div className="kadence-title-control-bar">
-									<span className="customize-control-title">{ capitalizeFirstLetter( kadenceMetaParams.post_type ) + ' ' + __( 'sidebar' )  }</span>
+									<span className="customize-control-title">{ capitalizeFirstLetter( kadenceMetaParams.post_type ) + ' ' + __( 'sidebar', 'kadence' )  }</span>
 								</div>
 								<SelectControl
 									value={ ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_sidebar_id && '' !== this.props.meta._kad_post_sidebar_id ? this.props.meta._kad_post_sidebar_id : 'default' ) }
@@ -338,7 +338,7 @@ class KadenceThemeLayout extends Component {
 							} }
 						/>
 						<RadioIconComponent
-							label={ __( 'Content Vertical Padding', 'kadence' ) }
+							label={ __( 'Content Vertical Spacing', 'kadence' ) }
 							value={ ( undefined !== this.props.meta && undefined !== this.props.meta._kad_post_vertical_padding && '' !== this.props.meta._kad_post_vertical_padding ? this.props.meta._kad_post_vertical_padding : 'default' ) }
 							options={ paddingOptions }
 							customClass="three-col-short"

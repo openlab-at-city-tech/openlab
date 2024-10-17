@@ -76,8 +76,14 @@ class MetaSlider_Themes
             (isset($new_install)  && 'new' == $new_install)
         ) {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
+            
+            // Add theme base customization settings
+            $themes = $this->add_base_customize_settings( $themes );
         } else {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest-legacy.php');
+            
+            // Add theme base customization settings
+            $themes = $this->add_base_customize_settings( $themes );
         }
 
         // If is not Pro, let's include some Premium themes with upgrade link
@@ -115,6 +121,54 @@ class MetaSlider_Themes
         }
 
         return $themes;
+    }
+
+    /**
+     * Add customize array key to each theme that have its own customize.php file
+     * 
+     * @since 3.91.0
+     * 
+     * @param array $themes Themes array from manifest file
+     * 
+     * @return array 
+     */
+    public function add_base_customize_settings( $themes )
+    {
+        foreach ( $themes as $item ) {
+            $folder         = $item['folder'];
+            $customize_file = METASLIDER_THEMES_PATH . $folder . '/customize.php';
+            
+            if ( file_exists( $customize_file ) ) {
+                $customize_settings = ( include $customize_file );
+                $themes[$folder]['customize'] = $this->merge_theme_customizations( $customize_settings );
+            }
+            
+        }
+
+        return $themes;
+    }
+
+    /**
+     * Get customize settings from a specific theme
+     * 
+     * @since 3.91.0
+     * 
+     * @param string $theme Theme slug in lowercase. Use the theme's folder name actually.
+     * 
+     * return array
+     */
+    public function add_base_customize_settings_single($theme)
+    {
+        $customize_file = METASLIDER_THEMES_PATH . $theme . '/customize.php';
+        
+        if (file_exists($customize_file)) {
+            $customize_settings = (include $customize_file);
+            $data = $this->merge_theme_customizations($customize_settings);
+        } else {
+            $data = array();
+        }
+
+        return $data;
     }
 
     /**
@@ -310,7 +364,7 @@ return $theme;
         // If the theme isn't set, then they attempted to remove the theme
         if (!isset($theme['folder']) || is_wp_error($theme)) {
             $settings['theme'] = 'none';
-            //$settings['theme_customize'] = array();
+            $settings['theme_customize'] = array();
             update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
             return update_post_meta($slideshow_id, 'metaslider_slideshow_theme', 'none');
         }
@@ -327,11 +381,65 @@ return $theme;
             update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
 
             // Save the customizations defaults
-            //$this->save_theme_customizations( $slideshow_id, $theme );
+            $this->save_theme_customizations( $slideshow_id, $theme );
+        }
+
+        // We don't want to store customization manifest in metaslider_slideshow_theme postmeta
+        if (isset($theme['customize'])) {
+            unset($theme['customize']);
         }
 
         // This will return false if the data is the same, unfortunately
         return (bool) update_post_meta($slideshow_id, 'metaslider_slideshow_theme', $theme);
+    }
+
+    /**
+     * Merge base theme customizations with specific theme customizations
+     * 
+     * @since 3.91.0
+     * 
+     * @param array $customizations Theme customizations
+     * 
+     * @return array
+     */
+    public function merge_theme_customizations( $customizations )
+    {
+        $base_customizations = ( include METASLIDER_THEMES_PATH . 'customize.php' );
+
+        return array_merge( $base_customizations, $customizations );
+    }
+
+    /**
+     * Save theme customizations
+     * 
+     * @since 3.91.0
+     * 
+     * @param int $slideshow_id Slideshow ID
+     * @param array $theme Theme with all the props including folder and customize
+     * 
+     * @return void
+     */
+    public function save_theme_customizations( $slideshow_id, $theme )
+    {
+        $theme_settings = array();
+        $customizations = $theme['customize'];
+
+        /** 
+         * Just save name => default/value
+         *
+         * array(
+         *     'background' => '#000',
+         *     'color' => '#feb123',
+         * )
+         */
+        foreach ( $customizations as $index => $value ) {
+            $theme_settings[$customizations[$index]['name']] = $customizations[$index]['default'];
+        }
+
+        $slideshow_settings = get_post_meta( $slideshow_id, 'ml-slider_settings', true );
+        $slideshow_settings['theme_customize'] = $theme_settings;
+
+        update_post_meta( $slideshow_id, 'ml-slider_settings', $slideshow_settings );
     }
 
     /**

@@ -38,6 +38,9 @@ class ElementsKit_Widget_Back_To_Top extends Widget_Base {
 	public function get_script_depends() {
 		return ['animate-circle'];
 	}
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
         /* 

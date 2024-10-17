@@ -1,10 +1,10 @@
 === Translate Wordpress with GTranslate ===
 Contributors: edo888
 Author: Translate AI Multilingual Solutions
-Tags: translate, translate wordpress, multilingual, translation, translate language, bilingual, localization, translation proxy, localisation, multilanguage, google translate
+Tags: translate, translator, multilingual, translation, multilanguage
 Requires at least: 2.8.1
-Tested up to: 6.5
-Stable tag: 3.0.6
+Tested up to: 6.6
+Stable tag: 3.0.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://gtranslate.io/?xyz=998#pricing
@@ -96,8 +96,7 @@ You can turn on Floating language selector option from Settings &rarr; GTranslat
 You can select from the list of available menus in which menu the language selector should appear.
 
 **3. Shortcode in Menu**
-You can create a new Custom Link menu item with URL = #, Link Text = English and add the following shortcode in the Description:
-`[gt-link lang="en" label="English" widget_look="flags_name"]`
+You can create a new Custom Link menu item with URL = #, Link Text = English and add the following shortcode in the Description: `[gt-link lang="en" label="English" widget_look="flags_name"]`
 Where widget_look can be one of the following: `flags`, `flags_code`, `flags_name`, `lang_codes`, `lang_names`
 
 **4. Use GTranslate shortcode**
@@ -123,9 +122,9 @@ GTranslate can translate your website into multiple languages and make it multil
 * Multilingual solution makes your website available to the world
 * One click translation helps visitors to read your site in their native language
 * Free automatic translation translates your site instantly upon installation
-* Professional translation by a human being is available 24/7
+* Professional translation by a human being is available
 * Customizable language switcher lets you choose the suitable layout for your site
-* Analytics with Google provides insight into your audience and user activity
+* Analytics provides insight into your audience and user activity
 
 [vimeo http://vimeo.com/30132555]
 
@@ -248,6 +247,9 @@ If you want us to translate your website professionally or provide you a proofre
 8. User Dashboard (paid)
 
 == Changelog ==
+= 3.0.7 =
+* Added "gtranslate" into LiteSpeed cache delayed exclude list
+
 = 3.0.6 =
 * Added email translation support for emails sent by WP SMTP MAIL plugin
 * Added "gtranslate" into LiteSpeed cache exclude list

@@ -74,9 +74,12 @@
 		margin-bottom: 2em;
 		display: inline-block;
 		margin-top: 0;
-		padding: 0.625em 1.5em 0.625em 1em;
+		padding: 1em 1em 1em 1em;
 		border-radius: 0.25rem;
 		border-color: var(--global-gray-400);
+		&:has( > legend) {
+			padding-top: 0.625em;
+		}
 		legend {
 			padding: 0 0.5em;
 			color: var(--global-palette5);
@@ -87,10 +90,11 @@
 			padding: 0;
 			display: flex;
 			flex-wrap:wrap;
+			gap:0.5em;
 		}
 		li {
-			margin-left:0.5em;
-			margin-bottom:0.5em;
+			display: inline-flex;
+			margin:0;
 		}
 		.payment-custom-img {
 			max-height: 30px;

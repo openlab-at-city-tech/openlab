@@ -1,9 +1,7 @@
 .metaslider.ms-theme-clarity {
 
 	&:not(.has-carousel-mode) .flexslider {
-
 		// Animation fade out
-		.caption-wrap .caption,
 		.youtube .play_button,
 		.vjs-big-play-button {
 			animation-name: clarity_fadeOut;
@@ -14,7 +12,6 @@
 
 		// Animation fade in
 		.flex-active-slide {
-
 			.caption-wrap .caption,
 			.youtube .play_button,
 			.vjs-big-play-button {
@@ -50,6 +47,7 @@
 		.caption-wrap {
 			background: #fff;
 			border: 1px solid #d5d5d5;
+			box-sizing: border-box;
 			color: #000;
 			display: flex;
 			flex: 1;
@@ -71,30 +69,32 @@
 			}
 		}
 
-		.flex-direction-nav li a {
-			height: 50px;
-			width: 50px;
-			background-repeat: no-repeat;
-			background-position: center;
-			background-color: #fff;
-			background-size: 24px auto;
-			border: 1px solid #888;
-			box-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
-			border-radius: 100%;
-			
-			&:focus {
-				background-color: #d7d7d7;
-				outline: none;
-			}
+		.flex-direction-nav li{
+			a {
+				height: 50px;
+				width: 50px;
+				background-repeat: no-repeat;
+				background-position: center;
+				background-color: #fff;
+				background-size: 24px auto;
+				border: 1px solid #888;
+				box-shadow: 1px 1px 2px rgba(0,0,0,0.3) !important;
+				border-radius: 100%;
+				
+				&:focus {
+					background-color: #d7d7d7;
+					outline: none;
+				}
 
-			&.flex-prev {
-				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z' fill='%234c5459'/%3E%3C/svg%3E");
-    			left: -60px;
-			}
+				&.flex-prev {
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z' fill='%234c5459'/%3E%3C/svg%3E");
+					left: -60px;
+				}
 
-			&.flex-next {
-				background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z' fill='%234c5459'/%3E%3C/svg%3E");
-    			right: -60px;
+				&.flex-next {
+					background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 512'%3E%3Cpath d='M278.6 233.4c12.5 12.5 12.5 32.8 0 45.3l-160 160c-12.5 12.5-32.8 12.5-45.3 0s-12.5-32.8 0-45.3L210.7 256 73.4 118.6c-12.5-12.5-12.5-32.8 0-45.3s32.8-12.5 45.3 0l160 160z' fill='%234c5459'/%3E%3C/svg%3E");
+					right: -60px;
+				}
 			}
 		}
 
@@ -137,6 +137,22 @@
 		.flex-control-paging li a {
 			width: 20px;
 			height: 20px;
+		}
+	}
+
+	&.has-onhover-arrows {
+		.flex-direction-nav li {
+			opacity: 0;
+		}
+		&:hover {
+			.flex-direction-nav {
+				li {
+					opacity: 1;
+				}
+				a {
+					opacity: 1;
+				}
+			}
 		}
 	}
 }

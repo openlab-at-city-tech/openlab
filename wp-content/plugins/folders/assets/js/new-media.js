@@ -109,3 +109,27 @@ jQuery(document).on("click", "#custom-folder-media-popup-form", function (e) {
 jQuery(document).on("click", ".media-popup-form", function (e) {
     e.stopPropagation();
 });
+
+jQuery(document).on("click", ".dismiss.button-link", function (e) {
+    e.stopPropagation();
+    jQuery(this).closest(".media-item").slideUp(function() {
+        jQuery(this).remove();
+    });
+});
+
+var oldXHR = window.XMLHttpRequest;
+
+function newXHR() {
+    var realXHR = new oldXHR();
+    realXHR.addEventListener("readystatechange", function() {
+        if(realXHR.readyState==4){
+            var response_string = realXHR.responseText;
+            if(response_string.indexOf(".svg") != -1 && response_string.indexOf("error-div error") != -1) {
+                var success_msg = '<div class="media-item"><div class="error-div error"><button type="button" class="dismiss button-link" onclick="jQuery(this).parents(\'div.media-item\').slideUp(200, function(){jQuery(this).remove();});">Dismiss</button><strong>'+folders_media_options.lang.pro_message+'</strong><br /><a href="'+folders_media_options.activate_url+'" target="_blank"> '+folders_media_options.lang.activate_key+' 🎉</a></div></div>';
+                jQuery("#media-items").append(success_msg);
+            }
+        }
+    }, false);
+    return realXHR;
+}
+window.XMLHttpRequest = newXHR;

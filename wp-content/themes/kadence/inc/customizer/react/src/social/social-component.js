@@ -52,8 +52,8 @@ class SocialComponent extends Component {
 					'url': '',
 					'imageid': '',
 					'width': 24,
-					'icon': 'twitter',
-					'label': 'Twitter',
+					'icon': 'twitterAlt2',
+					'label': 'X',
 					'svg': '',
 				}
 			],
@@ -70,7 +70,7 @@ class SocialComponent extends Component {
 			'group' : 'social_item_group',
 			'options': [
 				{ value: 'facebook', label: __( 'Facebook', 'kadence' ) },
-				{ value: 'twitter', label: __( 'Twitter', 'kadence' ) },
+				{ value: 'twitter', label: __( 'X formerly Twitter', 'kadence' ) },
 				{ value: 'instagram', label: __( 'Instagram', 'kadence' ) },
 				{ value: 'threads', label: __( 'Threads', 'kadence' ) },
 				{ value: 'youtube', label: __( 'YouTube', 'kadence' ) },

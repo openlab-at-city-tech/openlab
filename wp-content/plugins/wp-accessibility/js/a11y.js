@@ -105,4 +105,23 @@ function eraseCookie(name) {
 		return false;
 	});
 
+	var focusable = document.querySelectorAll('input,a,select,textarea,button');
+	focusable.forEach((el) => {
+		el.addEventListener( 'focus', function() {
+			var bounds  = el.getBoundingClientRect();
+			var toolbar = document.querySelector( '.a11y-toolbar' ).getBoundingClientRect();
+
+			var overlap = !(
+				bounds.top > toolbar.bottom ||
+				bounds.right < toolbar.left ||
+				bounds.bottom < toolbar.top ||
+				bounds.left > toolbar.right
+			);
+			if ( overlap ) {
+				var diff = bounds.bottom - toolbar.top;
+				window.scrollBy( 0, diff );
+			}
+		});
+	});
+
 } )( jQuery );

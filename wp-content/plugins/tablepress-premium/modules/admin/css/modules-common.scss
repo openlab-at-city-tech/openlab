@@ -1,0 +1,196 @@
+/**
+ * Common CSS code for Premium Modules on the "Edit" screen.
+ *
+ * @package TablePress
+ * @subpackage Modules
+ * @author Tobias Bäthge
+ * @since 2.0.0
+ */
+
+details {
+	summary {
+		cursor: pointer;
+	}
+
+	> div {
+		margin: 1em 0 0.2em 0.5em;
+
+		> table {
+			margin-top: -0.5em;
+		}
+	}
+}
+
+.input-field-box {
+	$color-active: #2271b1;
+	$color-inactive: #cccccc;
+
+	display: inline-block;
+	position: relative;
+	box-sizing: border-box;
+	width: 110px;
+	height: 110px;
+	vertical-align: top;
+	margin: 10px 14px 10px 0;
+
+	> label {
+		box-sizing: border-box;
+		height: 100%;
+		display: block;
+		background: #ffffff;
+		border: 2px solid $color-inactive;
+		border-radius: 4px;
+		padding: 10px;
+		position: relative;
+
+		.box-title {
+			font-size: 15px;
+			font-weight: bold;
+		}
+
+		.description {
+			line-height: normal;
+		}
+	}
+
+	> input.control-input {
+		position: absolute;
+		left: -9999px;
+		width: 0;
+		height: 0;
+		appearance: none;
+
+		+ label {
+			cursor: pointer;
+		}
+
+		&:disabled + label {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+
+		&:checked:not(:disabled) + label {
+			border-color: $color-active;
+
+			&:after {
+				$size: 18px;
+				position: absolute;
+				top: -10px;
+				right: -10px;
+				width: $size;
+				height: $size;
+				line-height: $size;
+				border-radius: 100%;
+				border: 2px solid $color-active;
+				background-color: #ffffff;
+				color: $color-active;
+				font-weight: bold;
+				font-size: 15px;
+				text-align: center;
+				content: "\25cf";
+			}
+		}
+
+		&:focus + label,
+		&:not(:disabled) + label:hover {
+			border-color: $color-inactive;
+			box-shadow: 0 0 0 1px $color-inactive;
+			outline: 2px solid transparent;
+		}
+
+		&:checked:focus + label,
+		&:checked:not(:disabled) + label:hover {
+			&,
+			&:after {
+				border-color: $color-active;
+				box-shadow: 0 0 0 1px $color-active;
+				outline: 2px solid transparent;
+			}
+		}
+	}
+
+	> input.control-input[type="checkbox"] {
+		&:checked:not(:disabled) + label:after {
+			border-radius: 4px;
+			content: "\2713";
+		}
+	}
+}
+
+.drag-box {
+	$color-active: #2271b1;
+	$color-inactive: #cccccc;
+	-webkit-user-select: none;
+	user-select: none;
+
+	&,
+	&-placeholder {
+		display: inline-block;
+		box-sizing: border-box;
+		min-width: 66px;
+		height: 28px;
+		vertical-align: top;
+		margin: 5px 8px;
+	}
+
+	&-placeholder {
+		border: 3px dotted $color-inactive;
+		border-radius: 4px;
+	}
+
+	> div {
+		background: #ffffff;
+		border: 2px solid $color-inactive;
+		border-radius: 4px;
+		padding: 2px 10px;
+		text-align: center;
+		font-size: 14px;
+		font-weight: bold;
+	}
+
+	> input {
+		+ div {
+			cursor: move;
+		}
+
+		&:disabled + div {
+			cursor: not-allowed;
+			opacity: 0.5;
+		}
+
+		&:not(:disabled) + div:hover {
+			border-color: $color-inactive;
+			box-shadow: 0 0 0 1px $color-inactive;
+			outline: 2px solid transparent;
+		}
+
+		#datatables-buttons-drag-box-wrapper-active &:not(:disabled) + div {
+			border-color: $color-active;
+
+			&:hover {
+				box-shadow: 0 0 0 1px $color-active;
+				outline: 2px solid transparent;
+			}
+		}
+	}
+
+	&-section-wrapper {
+		display: flex;
+		align-items: center;
+	}
+
+	&-wrapper {
+		box-sizing: border-box;
+		width: 100%;
+		max-width: 600px;
+		min-height: 52px;
+		margin: 8px;
+		border: 2px dotted $color-inactive;
+		border-radius: 4px;
+		padding: 5px 0;
+
+		&-label {
+			min-width: 120px;
+		}
+	}
+}

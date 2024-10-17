@@ -7,7 +7,10 @@
             
             var $CPTO;
             
-            
+            /**
+            * Constructor
+            * 
+            */
             function __construct()
                 {
                     
@@ -17,6 +20,10 @@
                     
                 }
             
+            /**
+            * Check the options update
+            * 
+            */
             function check_options_update()
                 {
                     
@@ -45,7 +52,11 @@
                     
                 }
                 
-                
+            
+            /**
+            * Admin save notice
+            *     
+            */
             function admin_save_notice()
                 {
 
@@ -54,6 +65,10 @@
                 }
             
             
+            /**
+            * Output the Options interface
+            * 
+            */
             function plugin_options_interface()
                 {
                     $options    =   $this->CPTO->functions->get_options();
@@ -100,8 +115,8 @@
                                                 ?>
                                                 <p class="pt-item"><label>
                                                     <select name="show_reorder_interfaces[<?php echo esc_attr($post_type_name) ?>]">
-                                                        <option value="show" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] == 'show') {echo ' selected="selected"';} ?>><?php esc_html_e( "Show", 'post-types-order' ) ?></option>
-                                                        <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] == 'hide') {echo ' selected="selected"';} ?>><?php esc_html_e( "Hide", 'post-types-order' ) ?></option>
+                                                        <option value="show" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] === 'show') {echo ' selected="selected"';} ?>><?php esc_html_e( "Show", 'post-types-order' ) ?></option>
+                                                        <option value="hide" <?php if(isset($options['show_reorder_interfaces'][$post_type_name]) && $options['show_reorder_interfaces'][$post_type_name] === 'hide') {echo ' selected="selected"';} ?>><?php esc_html_e( "Hide", 'post-types-order' ) ?></option>
                                                     </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
                                                 </label><br />&nbsp;</p>
                                                 <?php  } ?>
@@ -113,11 +128,11 @@
                                             <th scope="row" style="text-align: right;"><label><?php esc_html_e('Minimum Level to use this plugin', 'post-types-order') ?></label></th>
                                             <td>
                                                 <select id="role" name="capability">
-                                                    <option value="read" <?php if (isset($options['capability']) && $options['capability'] == "read") echo 'selected="selected"'?>><?php esc_html_e('Subscriber', 'post-types-order') ?></option>
-                                                    <option value="edit_posts" <?php if (isset($options['capability']) && $options['capability'] == "edit_posts") echo 'selected="selected"'?>><?php esc_html_e('Contributor', 'post-types-order') ?></option>
-                                                    <option value="publish_posts" <?php if (isset($options['capability']) && $options['capability'] == "publish_posts") echo 'selected="selected"'?>><?php esc_html_e('Author', 'post-types-order') ?></option>
-                                                    <option value="publish_pages" <?php if (isset($options['capability']) && $options['capability'] == "publish_pages") echo 'selected="selected"'?>><?php esc_html_e('Editor', 'post-types-order') ?></option>
-                                                    <option value="manage_options" <?php if (!isset($options['capability']) || empty($options['capability']) || (isset($options['capability']) && $options['capability'] == "manage_options")) echo 'selected="selected"'?>><?php esc_html_e('Administrator', 'post-types-order') ?></option>
+                                                    <option value="read" <?php if (isset($options['capability']) && $options['capability'] === "read") echo 'selected="selected"'?>><?php esc_html_e('Subscriber', 'post-types-order') ?></option>
+                                                    <option value="edit_posts" <?php if (isset($options['capability']) && $options['capability'] === "edit_posts") echo 'selected="selected"'?>><?php esc_html_e('Contributor', 'post-types-order') ?></option>
+                                                    <option value="publish_posts" <?php if (isset($options['capability']) && $options['capability'] === "publish_posts") echo 'selected="selected"'?>><?php esc_html_e('Author', 'post-types-order') ?></option>
+                                                    <option value="publish_pages" <?php if (isset($options['capability']) && $options['capability'] === "publish_pages") echo 'selected="selected"'?>><?php esc_html_e('Editor', 'post-types-order') ?></option>
+                                                    <option value="manage_options" <?php if (!isset($options['capability']) || empty($options['capability']) || (isset($options['capability']) && $options['capability'] === "manage_options")) echo 'selected="selected"'?>><?php esc_html_e('Administrator', 'post-types-order') ?></option>
                                                     <?php do_action('pto/admin/plugin_options/capability') ?>
                                                 </select>
                                             </td>
@@ -186,8 +201,8 @@
                                                 ?>
                                                 <p class="pt-item"><label>
                                                     <select name="allow_reorder_default_interfaces[<?php echo esc_attr($post_type_name) ?>]">
-                                                        <option value="yes" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'yes') {echo ' selected="selected"';} ?>><?php esc_html_e( "Yes", 'post-types-order' ) ?></option>
-                                                        <option value="no" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] == 'no') {echo ' selected="selected"';} ?>><?php esc_html_e( "No", 'post-types-order' ) ?></option>
+                                                        <option value="yes" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] === 'yes') {echo ' selected="selected"';} ?>><?php esc_html_e( "Yes", 'post-types-order' ) ?></option>
+                                                        <option value="no" <?php if(isset($options['allow_reorder_default_interfaces'][$post_type_name]) && $options['allow_reorder_default_interfaces'][$post_type_name] === 'no') {echo ' selected="selected"';} ?>><?php esc_html_e( "No", 'post-types-order' ) ?></option>
                                                     </select> &nbsp;&nbsp;<?php echo esc_html ( $post_type_data->labels->singular_name ); ?>
                                                 </label><br />&nbsp;</p>
                                                 <?php  } ?>
@@ -223,5 +238,3 @@
                     
                 }
         }
-
-?>

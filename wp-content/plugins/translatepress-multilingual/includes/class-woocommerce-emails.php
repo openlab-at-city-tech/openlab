@@ -142,7 +142,14 @@ class TRP_Woocommerce_Emails{
     public function trp_woo_setup_locale( $bool, $wc_email ) {
         global $TRP_LANGUAGE;
         $is_customer_email  = $wc_email->is_customer_email();
-        $recipients         = explode( ',', $wc_email->get_recipient() );
+        $recipients         = $wc_email->get_recipient();
+
+        if ( $recipients === null || $recipients === '' ) {
+            $recipients = [];
+        } elseif ( !is_array($recipients) ) {
+            $recipients = explode( ',', $recipients );
+        }
+
         $language           = $TRP_LANGUAGE;
         $user_id            = 0;
 
@@ -159,7 +166,7 @@ class TRP_Woocommerce_Emails{
             }
         }
         else{
-            if( count( $recipients ) == 1 ){
+            if( ! empty( $recipients ) && count( $recipients ) == 1 ){
                 $registered_user = get_user_by( 'email', $recipients[0] );
                 if( $registered_user ){
                     $language = $registered_user->locale;
@@ -168,7 +175,7 @@ class TRP_Woocommerce_Emails{
         }
 
         $language = apply_filters( 'trp_woo_email_language', $language, $is_customer_email, $recipients, $user_id );
-        trp_switch_language($language);
+        trp_switch_language( $language );
 
         WC()->load_plugin_textdomain();
 
@@ -177,7 +184,6 @@ class TRP_Woocommerce_Emails{
         $wc_email->init_settings();
 
         return false;
-
     }
 
 

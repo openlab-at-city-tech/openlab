@@ -6,10 +6,10 @@
 
     <?php
     // re-direct to courses page if user does not have permissions for course creation page
-    $account_type = openlab_get_user_member_type( get_current_user_id() );
+	$member_type = cboxol_get_user_member_type( bp_loggedin_user_id() );
     $group_type = isset($_GET['type']) ? $_GET['type'] : 'club';
-    if ('course' === $group_type && !is_super_admin() && $account_type !== "faculty") {
-        wp_redirect(home_url('courses'));
+    if ( 'course' === $group_type && ! openlab_user_can_create_courses() ) {
+        wp_redirect( home_url( 'courses' ) );
     }
 
     global $bp;

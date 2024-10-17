@@ -281,7 +281,7 @@ class ATPManager {
 	}
 
 	public function is_new_or_edit_post_screen() {
-		return preg_match( '/\/wp-admin\/(post|post-new)\.php$/', $_SERVER['SCRIPT_NAME'] );
+		return preg_match( '/\/wp-admin\/(post|post-new|site-editor)\.php$/', $_SERVER['SCRIPT_NAME'] );
 	}
 
 	public function can_use_tinymce() {

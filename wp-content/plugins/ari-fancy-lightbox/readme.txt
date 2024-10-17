@@ -1,14 +1,14 @@
-=== ARI Fancy Lightbox - WordPress Popup ===
+=== ARI Fancy Lightbox - Popup for WordPress ===
 Contributors: arisoft
 Donate link: http://wp-quiz.ari-soft.com/plugins/wordpress-fancy-lightbox.html
 Tags: lightbox, fancybox3, popup, video lightbox, fancybox
 Requires at least: 3.4
-Tested up to: 6.3.2
-Stable tag: 1.3.13
+Tested up to: 6.6.1
+Stable tag: 1.3.18
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Lightbox for WordPress with social and viral features. Mobile friendly. Show photos, gallery, PDF, videos, WooCommerce images, inline content, Google Maps links.
+Lightbox for WordPress with social and viral features. Show photos, gallery, PDF, videos, WooCommerce images, inline content, Google Maps links.
 
 == Description ==
 
@@ -88,7 +88,7 @@ Easy to use, no need any additional modification of HTML code. Just select media
 More information can be found in [user's guide](http://www.ari-soft.com/docs/wordpress/ari-fancy-lightbox/v1/en/index.html).
 
 > #### Featured In The Media
-> We've been featured in [10 Best WordPress Lightbox Plugins for 2017](http://wpdean.com/wordpress-lightbox-plugins/) and [Best WordPress Lightbox Plugins](https://www.wpbuffs.com/wordpress-image-lightbox-plugins-for-photo-galleries/#7).
+> We've been featured in [10 Best WordPress Lightbox Plugins for 2017](http://wpdean.com/wordpress-lightbox-plugins/) and [Best WordPress Lightbox Plugins](https://www.wpbuffs.com/wordpress-image-lightbox-plugins-for-photo-galleries/#8).
 
 **Have any idea how to improve the plugin?** Don't hesitate to share it [here](http://www.ari-soft.com/ARI-Fancy-Lightbox/) and we will try to implement it in future versions of the plugin.
 
@@ -132,6 +132,26 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 
 
 == Changelog ==
+
+= 1.3.18 =
+
+* Fix potential XSS security issue
+
+= 1.3.17 =
+
+* Fix PHP version check. It was not possible to activate the plugin
+
+= 1.3.16 =
+
+* Follow Plugin Check recommendations
+
+= 1.3.15 =
+
+* Update PDFJS library to fix security issue
+
+= 1.3.14 =
+
+* Better support of latest PHP versions
 
 = 1.3.13 =
 
@@ -257,8 +277,10 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 = 1.1.2 =
 * Add "Google Maps -> Show marker" parameter
 
-= 1.1.1 =
+= 1.1.1a =
 * Add actions: ari-fancybox-options-setup, ari-fancybox-enqueue-scripts, ari-fancybox-loaded
+
+= 1.1.1 =
 * Add filters: ari-fancybox-default-settings, ari-fancybox-options, ari-fancybox-tabs-options, ari-fancybox-tab-integration-groups, ari-fancybox-tab-lightbox-groups, ari-fancybox-tab-style-groups, ari-fancybox-tab-advanced-groups
 
 = 1.1.0 =
@@ -412,8 +434,10 @@ Sure, it is available [here](http://www.ari-soft.com/docs/wordpress/ari-fancy-li
 = 1.1.2 =
 * Add "Google Maps -> Show marker" parameter
 
-= 1.1.1 =
+= 1.1.1a =
 * Add actions: ari-fancybox-options-setup, ari-fancybox-enqueue-scripts, ari-fancybox-loaded
+
+= 1.1.1 =
 * Add filters: ari-fancybox-default-settings, ari-fancybox-options, ari-fancybox-tabs-options, ari-fancybox-tab-integration-groups, ari-fancybox-tab-lightbox-groups, ari-fancybox-tab-style-groups, ari-fancybox-tab-advanced-groups
 
 = 1.1.0 =

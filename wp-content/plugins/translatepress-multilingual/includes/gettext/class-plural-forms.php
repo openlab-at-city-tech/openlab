@@ -132,7 +132,7 @@ class TRP_Plural_Forms {
     }
 
 	/**
-	 * Copied from wp-includes/pomo/translated and adaptaed to allow input for plural form ($index) instead of $count
+	 * Copied from wp-includes/pomo/translated and adapted to allow input for plural form ($index) instead of $count
 	 *
 	 * @param $singular
 	 * @param $plural

@@ -10,6 +10,7 @@
  * @license     http://opensource.org/licenses/gpl-3.0.php GNU Public License
  * @since       3.3.0
  */
+
 namespace ThemeisleSDK\Modules;
 
 use ThemeisleSDK\Common\Abstract_Module;
@@ -153,7 +154,7 @@ class Announcements extends Abstract_Module {
 				// Banners urgency text.
 				$remaining_time                                   = $this->get_remaining_time_for_event( $dates['end'] );
 				$announcements[ $announcement ]['remaining_time'] = $remaining_time;
-				$announcements[ $announcement ]['urgency_text']   = ! empty( $remaining_time ) ? 'Hurry up! Only ' . $remaining_time . ' left.' : '';
+				$announcements[ $announcement ]['urgency_text']   = ! empty( $remaining_time ) ? sprintf( Loader::$labels['announcements']['hurry_up'], $remaining_time ) : '';
 			}
 		}
 
@@ -202,6 +203,7 @@ class Announcements extends Abstract_Module {
 	 * Get the remaining time for the event in a human readable format.
 	 *
 	 * @param string $end_date The end date for event.
+	 *
 	 * @return string Remaining time for the event.
 	 */
 	public function get_remaining_time_for_event( $end_date ) {
@@ -209,31 +211,8 @@ class Announcements extends Abstract_Module {
 			return '';
 		}
 
-		try {
-			$end_date     = new \DateTime( $end_date, new \DateTimeZone( 'GMT' ) );
-			$current_date = new \DateTime( 'now', new \DateTimeZone( 'GMT' ) );
-			$diff         = $end_date->diff( $current_date );
+		return human_time_diff( time(), strtotime( $end_date ) );
 
-			if ( $diff->days > 0 ) {
-				return $diff->days === 1 ? $diff->format( '%a day' ) : $diff->format( '%a days' );
-			}
-
-			if ( $diff->h > 0 ) {
-				return $diff->h === 1 ? $diff->format( '%h hour' ) : $diff->format( '%h hours' );
-			}
-
-			if ( $diff->i > 0 ) {
-				return $diff->i === 1 ? $diff->format( '%i minute' ) : $diff->format( '%i minutes' );
-			}
-
-			return $diff->s === 1 ? $diff->format( '%s second' ) : $diff->format( '%s seconds' );
-		} catch ( \Exception $e ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-				error_log( $e->getMessage() ); // phpcs:ignore
-			}
-		}
-
-		return '';
 	}
 
 	/**
@@ -314,24 +293,28 @@ class Announcements extends Abstract_Module {
 		<style>
 			.themeisle-sale {
 				display: flex;
+				align-items: center;
 			}
 		</style>
 		<div class="themeisle-sale notice notice-info is-dismissible" data-announcement="black_friday">
-			<img src="<?php echo esc_url_raw( $this->get_sdk_uri() . 'assets/images/themeisle-logo.svg' ); ?>" />
+			<img width="24" src="<?php echo esc_url_raw( $this->get_sdk_uri() . 'assets/images/themeisle-logo.png' ); ?>"/>
 			<p>
-				<strong>Themeisle Black Friday Sale is Live!</strong> - Enjoy Maximum Savings on <?php echo esc_html( implode( ', ', $product_names ) ); ?>.
-				<a href="<?php echo esc_url_raw( tsdk_utmify( 'https://themeisle.com/blackfriday/', 'bfcm24', 'globalnotice' ) ); ?>" target="_blank">Learn more</a>
+				<strong><?php echo esc_html( Loader::$labels['announcements']['sale_live'] ); ?> ></strong>
+				- <?php echo sprintf( esc_html( Loader::$labels['announcements']['max_savings'] ), esc_html( implode( ', ', $product_names ) ) ); ?>
+				.
+				<a href="<?php echo esc_url_raw( tsdk_utmify( 'https://themeisle.com/blackfriday/', 'bfcm24', 'globalnotice' ) ); ?>"
+				   target="_blank"><?php echo esc_html( Loader::$labels['announcements']['learn_more'] ); ?>></a>
 				<span class="themeisle-sale-error"></span>
 			</p>
 		</div>
 		<script type="text/javascript" data-origin="themeisle-sdk">
 			window.document.addEventListener('DOMContentLoaded', () => {
 				const observer = new MutationObserver((mutationsList, observer) => {
-					for(let mutation of mutationsList) {
+					for (let mutation of mutationsList) {
 						if (mutation.type === 'childList') {
 							const container = document.querySelector('.themeisle-sale.notice');
 							const button = container?.querySelector('button');
-							if ( button ) {
+							if (button) {
 								button.addEventListener('click', e => {
 									e.preventDefault();
 									fetch('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', {
@@ -345,24 +328,24 @@ class Announcements extends Abstract_Module {
 											announcement: container.dataset.announcement
 										})
 									})
-									.then(response => response.text())
-									.then(response => {
-										if (!response?.includes('success')) {
-											document.querySelector('.themeisle-sale-error').innerHTML = response;
-											return;
-										}
+										.then(response => response.text())
+										.then(response => {
+											if (!response?.includes('success')) {
+												document.querySelector('.themeisle-sale-error').innerHTML = response;
+												return;
+											}
 
-										document.querySelectorAll('.themeisle-sale.notice').forEach(el => {
-											el.classList.add('hidden');
-											setTimeout(() => {
-												el.remove();
-											}, 800);
+											document.querySelectorAll('.themeisle-sale.notice').forEach(el => {
+												el.classList.add('hidden');
+												setTimeout(() => {
+													el.remove();
+												}, 800);
+											});
+										})
+										.catch(error => {
+											console.error('Error:', error);
+											document.querySelector('.themeisle-sale-error').innerHTML = error;
 										});
-									})
-									.catch(error => {
-										console.error('Error:', error);
-										document.querySelector('.themeisle-sale-error').innerHTML = error;
-									});
 								});
 								observer.disconnect();
 								break;
@@ -371,7 +354,7 @@ class Announcements extends Abstract_Module {
 					}
 				});
 
-				observer.observe(document.body, { childList: true, subtree: true });
+				observer.observe(document.body, {childList: true, subtree: true});
 			});
 		</script>
 		<?php

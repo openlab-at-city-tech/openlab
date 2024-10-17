@@ -35,6 +35,9 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/dual-button/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 
@@ -174,7 +177,7 @@ class ElementsKit_Widget_Dual_Button extends Widget_Base {
                 [
                     'label' => esc_html__( 'Link', 'elementskit-lite' ),
                     'type' => Controls_Manager::URL,
-                    'placeholder' => esc_html__( 'https://wpmet.com', 'elementskit-lite' ),
+                    'placeholder' => esc_html( 'https://wpmet.com'),
                     'show_external' => true,
                     'default' => [
                         'url' => '#',

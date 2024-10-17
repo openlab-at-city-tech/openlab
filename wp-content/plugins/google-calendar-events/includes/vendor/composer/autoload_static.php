@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9d019ce85fea2d43bd0e023f8283498b
+class ComposerStaticInit96d90f3111c99da9fdf20cd062f3c1bc
 {
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
@@ -37,6 +37,7 @@ class ComposerStaticInit9d019ce85fea2d43bd0e023f8283498b
         'SimpleCalendar\\Admin\\Metaboxes\\Upgrade_To_Premium' => __DIR__ . '/../..' . '/admin/metaboxes/upgrade-to-premium.php',
         'SimpleCalendar\\Admin\\Notice' => __DIR__ . '/../..' . '/admin/notice.php',
         'SimpleCalendar\\Admin\\Notices' => __DIR__ . '/../..' . '/admin/notices.php',
+        'SimpleCalendar\\Admin\\Oauth_Ajax' => __DIR__ . '/../..' . '/oauthhelper/oauth-service-actions.php',
         'SimpleCalendar\\Admin\\Pages' => __DIR__ . '/../..' . '/admin/pages.php',
         'SimpleCalendar\\Admin\\Pages\\Add_Ons' => __DIR__ . '/../..' . '/admin/pages/add-ons.php',
         'SimpleCalendar\\Admin\\Pages\\Advanced' => __DIR__ . '/../..' . '/admin/pages/advanced.php',
@@ -59,6 +60,7 @@ class ComposerStaticInit9d019ce85fea2d43bd0e023f8283498b
         'SimpleCalendar\\Events\\Events' => __DIR__ . '/../..' . '/events/events.php',
         'SimpleCalendar\\Feeds\\Admin\\Google_Admin' => __DIR__ . '/../..' . '/feeds/admin/google-admin.php',
         'SimpleCalendar\\Feeds\\Admin\\Grouped_Calendars_Admin' => __DIR__ . '/../..' . '/feeds/admin/grouped-calendars-admin.php',
+        'SimpleCalendar\\Feeds\\Auth_Service_Helpers' => __DIR__ . '/../..' . '/oauthhelper/class-oauth-service.php',
         'SimpleCalendar\\Feeds\\Google' => __DIR__ . '/../..' . '/feeds/google.php',
         'SimpleCalendar\\Feeds\\Grouped_Calendars' => __DIR__ . '/../..' . '/feeds/grouped-calendars.php',
         'SimpleCalendar\\Installation' => __DIR__ . '/../..' . '/installation.php',
@@ -78,7 +80,7 @@ class ComposerStaticInit9d019ce85fea2d43bd0e023f8283498b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInit9d019ce85fea2d43bd0e023f8283498b::$classMap;
+            $loader->classMap = ComposerStaticInit96d90f3111c99da9fdf20cd062f3c1bc::$classMap;
 
         }, null, ClassLoader::class);
     }

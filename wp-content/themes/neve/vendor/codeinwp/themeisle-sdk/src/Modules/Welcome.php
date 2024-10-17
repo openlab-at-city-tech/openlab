@@ -25,6 +25,7 @@ namespace ThemeisleSDK\Modules;
 
 // Exit if accessed directly.
 use ThemeisleSDK\Common\Abstract_Module;
+use ThemeisleSDK\Loader;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -140,7 +141,7 @@ class Welcome extends Abstract_Module {
 		// if we arrived here we will have at least one welcome upsell
 		$all_notifications = array_filter(
 			$all_notifications,
-			function( $notification ) {
+			function ( $notification ) {
 				return strpos( $notification['id'], '_welcome_upsell_flag' ) !== false;
 			}
 		);
@@ -153,10 +154,10 @@ class Welcome extends Abstract_Module {
 
 		$link = $offer['cta_link'];
 
-		$message = apply_filters( $this->product->get_key() . '_welcome_upsell_message', '<p>You\'ve been using <b>{product}</b> for 7 days now and we appreciate your loyalty! We also want to make sure you\'re getting the most out of our product. That\'s why we\'re offering you a special deal - upgrade to <b>{pro_product}</b> in the next 5 days and receive a discount of <b>up to 30%</b>. <a href="{cta_link}" target="_blank">Upgrade now</a> and unlock all the amazing features of <b>{pro_product}</b>!</p>' );
+		$message = apply_filters( $this->product->get_key() . '_welcome_upsell_message', Loader::$labels['welcome']['message'] );
 
-		$button_submit = apply_filters( $this->product->get_key() . '_feedback_review_button_do', 'Upgrade Now!' );
-		$button_cancel = apply_filters( $this->product->get_key() . '_feedback_review_button_cancel', 'No, thanks.' );
+		$button_submit = apply_filters( $this->product->get_key() . '_feedback_review_button_do', Loader::$labels['welcome']['ctay'] );
+		$button_cancel = apply_filters( $this->product->get_key() . '_feedback_review_button_cancel', Loader::$labels['welcome']['ctan'] );
 		$message       = str_replace(
 			[ '{product}', '{pro_product}', '{cta_link}' ],
 			[

@@ -20,55 +20,57 @@ $kses_allow_link_href = array(
 		<?php } ?>
 		<?php if ( ! empty( $notices ) ) { ?>
 			<?php foreach ( $notices as $notice ) { ?>
-				<?php Akismet::view( 'notice', $notice ); ?>
+				<?php Akismet::view( 'notice', array_merge( $notice, array( 'parent_view' => $name ) ) ); ?>
 			<?php } ?>
 		<?php } ?>
 
-		<div class="akismet-card">
-			<div class="akismet-section-header">
-				<h2 class="akismet-section-header__label">
-					<span><?php esc_html_e( 'Statistics', 'akismet' ); ?></span>
-				</h2>
+		<?php if ( isset( $stat_totals['all'] ) && isset( $stat_totals['6-months'] ) ) : ?>
+			<div class="akismet-card">
+				<div class="akismet-section-header">
+					<h2 class="akismet-section-header__label">
+						<span><?php esc_html_e( 'Statistics', 'akismet' ); ?></span>
+					</h2>
 
-				<div class="akismet-section-header__actions">
-					<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>">
-						<?php esc_html_e( 'Detailed stats', 'akismet' ); ?>
-					</a>
-				</div>
-			</div> <!-- close akismet-section-header -->
+					<div class="akismet-section-header__actions">
+						<a href="<?php echo esc_url( Akismet_Admin::get_page_url( 'stats' ) ); ?>">
+							<?php esc_html_e( 'Detailed stats', 'akismet' ); ?>
+						</a>
+					</div>
+				</div> <!-- close akismet-section-header -->
 
-			<div class="akismet-new-snapshot">
-				<?php /* name attribute on iframe is used as a cache-buster here to force Firefox to load the new style charts: https://bugzilla.mozilla.org/show_bug.cgi?id=356558 */ ?>
-				<div class="akismet-new-snapshot__chart">
-					<iframe id="stats-iframe" allowtransparency="true" scrolling="no" frameborder="0" style="width: 100%; height: 220px; overflow: hidden;" src="<?php echo esc_url( sprintf( 'https://tools.akismet.com/1.0/snapshot.php?blog=%s&token=%s&height=200&locale=%s&is_redecorated=1', rawurlencode( get_option( 'home' ) ), rawurlencode( Akismet::get_access_token() ), get_locale() ) ); ?>" name="<?php echo esc_attr( 'snapshot-' . filemtime( __FILE__ ) ); ?>" title="<?php echo esc_attr__( 'Akismet stats' ); ?>"></iframe>
-				</div>
-				<ul class="akismet-new-snapshot__list">
-					<li class="akismet-new-snapshot__item">
-						<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'Past six months', 'akismet' ); ?></h3>
-						<span class="akismet-new-snapshot__number"><?php echo number_format( $stat_totals['6-months']->spam ); ?></span>
-						<span class="akismet-new-snapshot__text"><?php echo esc_html( _n( 'Spam blocked', 'Spam blocked', $stat_totals['6-months']->spam, 'akismet' ) ); ?></span>
-					</li>
-					<li class="akismet-new-snapshot__item">
-						<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'All time', 'akismet' ); ?></h3>
-						<span class="akismet-new-snapshot__number"><?php echo number_format( $stat_totals['all']->spam ); ?></span>
-						<span class="akismet-new-snapshot__text"><?php echo esc_html( _n( 'Spam blocked', 'Spam blocked', $stat_totals['all']->spam, 'akismet' ) ); ?></span>
-					</li>
-					<li class="akismet-new-snapshot__item">
-						<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'Accuracy', 'akismet' ); ?></h3>
-						<span class="akismet-new-snapshot__number"><?php echo floatval( $stat_totals['all']->accuracy ); ?>%</span>
-						<span class="akismet-new-snapshot__text">
-						<?php
-						/* translators: %s: number of spam missed by Akismet */
-						echo esc_html( sprintf( _n( '%s missed spam', '%s missed spam', $stat_totals['all']->missed_spam, 'akismet' ), number_format( $stat_totals['all']->missed_spam ) ) ) . ', ';
-						/* translators: %s: number of false positive spam flagged by Akismet */
-						echo esc_html( sprintf( _n( '%s false positive', '%s false positives', $stat_totals['all']->false_positives, 'akismet' ), number_format( $stat_totals['all']->false_positives ) ) );
-						?>
-						</span>
-					</li>
-				</ul>
-			</div> <!-- close akismet-new-snapshot -->
+				<div class="akismet-new-snapshot">
+					<?php /* name attribute on iframe is used as a cache-buster here to force Firefox to load the new style charts: https://bugzilla.mozilla.org/show_bug.cgi?id=356558 */ ?>
+					<div class="akismet-new-snapshot__chart">
+						<iframe id="stats-iframe" allowtransparency="true" scrolling="no" frameborder="0" style="width: 100%; height: 220px; overflow: hidden;" src="<?php echo esc_url( sprintf( 'https://tools.akismet.com/1.0/snapshot.php?blog=%s&token=%s&height=200&locale=%s&is_redecorated=1', rawurlencode( get_option( 'home' ) ), rawurlencode( Akismet::get_access_token() ), get_locale() ) ); ?>" name="<?php echo esc_attr( 'snapshot-' . filemtime( __FILE__ ) ); ?>" title="<?php echo esc_attr__( 'Akismet stats' ); ?>"></iframe>
+					</div>
 
-		</div> <!-- close akismet-card -->
+					<ul class="akismet-new-snapshot__list">
+						<li class="akismet-new-snapshot__item">
+							<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'Past six months', 'akismet' ); ?></h3>
+							<span class="akismet-new-snapshot__number"><?php echo number_format( $stat_totals['6-months']->spam ); ?></span>
+							<span class="akismet-new-snapshot__text"><?php echo esc_html( _n( 'Spam blocked', 'Spam blocked', $stat_totals['6-months']->spam, 'akismet' ) ); ?></span>
+						</li>
+						<li class="akismet-new-snapshot__item">
+							<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'All time', 'akismet' ); ?></h3>
+							<span class="akismet-new-snapshot__number"><?php echo number_format( $stat_totals['all']->spam ); ?></span>
+							<span class="akismet-new-snapshot__text"><?php echo esc_html( _n( 'Spam blocked', 'Spam blocked', $stat_totals['all']->spam, 'akismet' ) ); ?></span>
+						</li>
+						<li class="akismet-new-snapshot__item">
+							<h3 class="akismet-new-snapshot__header"><?php esc_html_e( 'Accuracy', 'akismet' ); ?></h3>
+							<span class="akismet-new-snapshot__number"><?php echo floatval( $stat_totals['all']->accuracy ); ?>%</span>
+							<span class="akismet-new-snapshot__text">
+							<?php
+							/* translators: %s: number of spam missed by Akismet */
+							echo esc_html( sprintf( _n( '%s missed spam', '%s missed spam', $stat_totals['all']->missed_spam, 'akismet' ), number_format( $stat_totals['all']->missed_spam ) ) ) . ', ';
+							/* translators: %s: number of false positive spam flagged by Akismet */
+							echo esc_html( sprintf( _n( '%s false positive', '%s false positives', $stat_totals['all']->false_positives, 'akismet' ), number_format( $stat_totals['all']->false_positives ) ) );
+							?>
+							</span>
+						</li>
+					</ul>
+				</div> <!-- close akismet-new-snapshot -->
+			</div> <!-- close akismet-card -->
+		<?php endif; ?>
 
 		<?php if ( $akismet_user ) : ?>
 			<div class="akismet-card">

@@ -5,7 +5,7 @@
  * Plugin Name: Classic Editor
  * Plugin URI:  https://wordpress.org/plugins/classic-editor/
  * Description: Enables the WordPress classic editor and the old-style Edit Post screen with TinyMCE, Meta Boxes, etc. Supports the older plugins that extend this screen.
- * Version:     1.6.3
+ * Version:     1.6.5
  * Author:      WordPress Contributors
  * Author URI:  https://github.com/WordPress/classic-editor/
  * License:     GPLv2 or later
@@ -57,12 +57,17 @@ class Classic_Editor {
 			if ( $settings['allow-users'] ) {
 				// User settings.
 				add_action( 'personal_options_update', array( __CLASS__, 'save_user_settings' ) );
+				add_action( 'edit_user_profile_update', array( __CLASS__, 'save_user_settings' ) );
 				add_action( 'profile_personal_options', array( __CLASS__, 'user_settings' ) );
+				add_action( 'edit_user_profile', array( __CLASS__, 'user_settings') );
 			}
 		}
 
 		// Always remove the "Try Gutenberg" dashboard widget. See https://core.trac.wordpress.org/ticket/44635.
 		remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
+		
+		// Fix for Safari 18 negative horizontal margin on floats.
+		add_action( 'admin_print_styles', array( __CLASS__, 'safari_18_temp_fix' ) );
 
 		if ( ! $block_editor && ! $gutenberg  ) {
 			return;
@@ -198,7 +203,7 @@ class Classic_Editor {
 
 	}
 
-	private static function get_settings( $refresh = 'no' ) {
+	private static function get_settings( $refresh = 'no', $user_id = 0 ) {
 		/**
 		 * Can be used to override the plugin's settings. Always hides the settings UI when used (as users cannot change the settings).
 		 *
@@ -207,7 +212,7 @@ class Classic_Editor {
 		 *   'editor' => 'classic', // Accepted values: 'classic', 'block'.
 		 *   'allow-users' => false,
 		 *
-		 * @param boolean To override the settings return an array with the above keys.
+		 * @param boolean To override the settings return an array with the above keys. Default false.
 		 */
 		$settings = apply_filters( 'classic_editor_plugin_settings', false );
 
@@ -270,7 +275,8 @@ class Classic_Editor {
 
 		// Override the defaults with the user options.
 		if ( ( ! isset( $GLOBALS['pagenow'] ) || $GLOBALS['pagenow'] !== 'options-writing.php' ) && $allow_users ) {
-			$user_options = get_user_option( 'classic-editor-settings' );
+
+			$user_options = get_user_option( 'classic-editor-settings', $user_id );
 
 			if ( $user_options === 'block' || $user_options === 'classic' ) {
 				$editor = $user_options;
@@ -402,8 +408,8 @@ class Classic_Editor {
 		return 'disallow';
 	}
 
-	public static function settings_1() {
-		$settings = self::get_settings( 'refresh' );
+	public static function settings_1( $user_id = 0 ) {
+		$settings = self::get_settings( 'refresh', $user_id );
 
 		?>
 		<div class="classic-editor-options">
@@ -446,17 +452,18 @@ class Classic_Editor {
 	/**
 	 * Shown on the Profile page when allowed by admin.
 	 */
-	public static function user_settings() {
+	public static function user_settings( $user = null ) {
 		global $user_can_edit;
 		$settings = self::get_settings( 'update' );
 
-		if (
-			! defined( 'IS_PROFILE_PAGE' ) ||
-			! IS_PROFILE_PAGE ||
-			! $user_can_edit ||
-			! $settings['allow-users']
-		) {
+		if ( ! $user_can_edit || ! $settings['allow-users'] ) {
 			return;
+		}
+		
+		if ( $user instanceof WP_User ) {
+			$user_id = (int) $user->ID;
+		} else {
+			$user_id = 0;
 		}
 
 		?>
@@ -465,7 +472,7 @@ class Classic_Editor {
 				<th scope="row"><?php _e( 'Default Editor', 'classic-editor' ); ?></th>
 				<td>
 				<?php wp_nonce_field( 'allow-user-settings', 'classic-editor-user-settings' ); ?>
-				<?php self::settings_1(); ?>
+				<?php self::settings_1( $user_id ); ?>
 				</td>
 			</tr>
 		</table>
@@ -969,6 +976,28 @@ class Classic_Editor {
 
 		delete_option( 'classic-editor-replace' );
 		delete_option( 'classic-editor-allow-users' );
+	}
+	
+	/**
+	 * Temporary fix for Safari 18 negative horizontal margin on floats.
+	 * See: https://core.trac.wordpress.org/ticket/62082 and
+	 * https://bugs.webkit.org/show_bug.cgi?id=280063.
+	 * TODO: Remove when Safari is fixed.
+	 */
+	public static function safari_18_temp_fix() {
+		global $current_screen;
+		
+		if ( isset( $current_screen->base ) && 'post' === $current_screen->base ) {
+			$clear = is_rtl() ? 'right' : 'left';
+			
+			?>
+			<style id="classic-editor-safari-18-temp-fix">
+			_::-webkit-full-page-media, _:future, :root #post-body #postbox-container-2 {
+				clear: <?php echo $clear; ?>;
+			}
+			</style>
+			<?php
+		}
 	}
 }
 

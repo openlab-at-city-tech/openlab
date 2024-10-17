@@ -31,10 +31,6 @@ class Script_Loader extends Abstract_Module {
 	 * @return bool Should we load ?
 	 */
 	public function can_load( $product ) {
-		if ( apply_filters( 'themeisle_sdk_ran_promos', false ) === true ) {
-			return false;
-		}
-
 		if ( $this->is_from_partner( $product ) ) {
 			return false;
 		}
@@ -56,11 +52,18 @@ class Script_Loader extends Abstract_Module {
 	}
 
 	/**
-	 * Setup actions.
+	 * Setup actions. Once for all products.
 	 */
 	private function setup_actions() {
+
+		if ( apply_filters( 'themeisle_sdk_script_setup', false ) ) {
+			return;
+		}
+
 		add_filter( 'themeisle_sdk_dependency_script_handler', [ $this, 'get_script_handler' ], 10, 1 );
 		add_action( 'themeisle_sdk_dependency_enqueue_script', [ $this, 'enqueue_script' ], 10, 1 );
+
+		add_filter( 'themeisle_sdk_script_setup', '__return_true' );
 	}
 
 	/**

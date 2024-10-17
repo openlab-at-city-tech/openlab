@@ -93,7 +93,7 @@ class MetaSlider_Slideshow_Settings
             'carouselMargin' => 5,
             'firstSlideFadeIn' => false,
             'easing' => 'linear',
-            'autoPlay' => false,
+            'autoPlay' => true,
             'thumb_width' => 150,
             'thumb_height' => 100,
             'responsive_thumbs' => true,

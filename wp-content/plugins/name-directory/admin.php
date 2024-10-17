@@ -652,12 +652,18 @@ function name_directory_names()
             . "</strong></p></div>";
     }
 
-    $directory_id = intval($_GET['dir']);
-
     $wp_file = admin_url('admin.php');
     $wp_page = $_GET['page'];
     $wp_sub  = $_GET['sub'];
     $overview_url = sprintf("%s?page=%s", $wp_file, $wp_page);
+
+    if(! array_key_exists('dir', $_GET)) {
+        echo "<script>window.location.href = '" . $overview_url . "';</script>";
+        exit;
+    }
+
+    $directory_id = intval($_GET['dir']);
+
     $wp_url_path = sprintf("%s?page=%s&sub=%s&dir=%d", $wp_file, $wp_page, $wp_sub, $directory_id);
     $wp_ndir_path = sprintf("%s?page=%s&sub=%s&dir=%d", $wp_file, $wp_page, 'manage-directory', $directory_id);
     $name_directory_settings = get_option('name_directory_general_option');
@@ -850,11 +856,11 @@ function name_directory_names()
             echo '<br><br><p class="search-box">';
             if(empty($directory['name_term']))
             {
-                echo sprintf(__('There are %d names in this directory containing the search term %s.', 'name-directory'), $num_names, "<em><strong>" . $search_value . "</strong></em>");
+                echo sprintf(__('There are %d names in this directory containing the search term %s.', 'name-directory'), $num_names, "<em><strong>" . esc_html($search_value) . "</strong></em>");
             }
             else
             {
-                echo sprintf(__('There are %d %s in this directory containing the search term %s.', 'name-directory'), $num_names, $directory['name_term'], "<em><strong>" . $search_value . "</strong></em>");
+                echo sprintf(__('There are %d %s in this directory containing the search term %s.', 'name-directory'), $num_names, $directory['name_term'], "<em><strong>" . esc_html($search_value) . "</strong></em>");
             }
             echo ' <a href="' . $wp_ndir_path . '"><strong><em>' . __('Clear results', 'name-directory') . '</em></strong></a>';
             echo "</p>";
@@ -1258,6 +1264,11 @@ function name_directory_export()
  */
 function name_directory_ajax_switch_name_published_status()
 {
+    if(! name_directory_is_control_allowed() )
+    {
+        wp_die( __('You do not have sufficient permissions to access this page.', 'name-directory') );
+    }
+
     $name_id = intval($_POST['name_id']);
     if( ! empty($name_id) )
     {

@@ -182,6 +182,7 @@ jQuery(document).ready(function()
 
 					// Reset item numbering
 					zpItemNum = 1;
+					console.log(tempCurrentTerm, tempCurrentTerm, zpLastTerm);
 
 					if ( zpItemsFlag == true
 							|| ( tempCurrentTerm && tempCurrentTerm != zpLastTerm ) )

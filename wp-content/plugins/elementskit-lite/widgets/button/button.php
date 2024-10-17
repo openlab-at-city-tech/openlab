@@ -35,6 +35,9 @@ class ElementsKit_Widget_Button extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/button/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 

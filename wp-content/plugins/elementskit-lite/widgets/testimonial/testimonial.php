@@ -38,7 +38,9 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/how-to-create-testimonials-in-wordpress/';
     }
-
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
     protected function register_controls() {
 
         $this->start_controls_section(
@@ -403,6 +405,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
         $repeater->add_control(
             'use_hover_logo', [
 				'label' => esc_html__( 'Display different logo on hover?', 'elementskit-lite' ),
+				'description' => esc_html__( 'This option only work for style 1 & 2', 'elementskit-lite' ),
 				'type' => Controls_Manager::SWITCHER,
 				'label_on' => esc_html__( 'Yes', 'elementskit-lite' ),
 				'label_off' => esc_html__( 'No', 'elementskit-lite' ),

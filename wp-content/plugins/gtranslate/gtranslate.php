@@ -3,7 +3,7 @@
 Plugin Name: GTranslate
 Plugin URI: https://gtranslate.io/?xyz=998
 Description: Translate your website and make it multilingual. For support visit <a href="https://wordpress.org/support/plugin/gtranslate">GTranslate Support Forum</a>.
-Version: 3.0.6
+Version: 3.0.7
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
 Text Domain: gtranslate
@@ -2715,7 +2715,7 @@ function cache_exclude_js_gtranslate($excluded_js) {
 
 // LiteSpeed Cache
 add_filter('litespeed_optimize_js_excludes', 'cache_exclude_js_gtranslate');
-//todo: add_filter('litespeed_optm_js_defer_exc', '');
+add_filter('litespeed_optm_js_defer_exc', 'cache_exclude_js_gtranslate');
 
 // WP Rocket
 add_filter('rocket_exclude_js', 'cache_exclude_js_gtranslate');

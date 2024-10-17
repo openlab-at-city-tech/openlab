@@ -303,10 +303,15 @@ function zp_date_format ($date) {
  *
  * Used by: shortcode.php, shortcode.intextbib.php
  *
+ * @param obj $wpdb WP DB object.
+ * @param arr Shortcode attributes.
+ * @param bool Whether library shortcode or not.
+ * 
  * @return string Array with the processed variables.
  */
-function Zotpress_prep_ajax_request_vars($atts=false) {
+function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 
+	// var_dump($atts);exit;
 	$zpr = array();
 
 	// Deal with empty atts, assume $_GET
@@ -314,17 +319,30 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 		$atts = $_GET;
 
 	$zpr["api_user_id"] = false;
-	if ( isset ($atts['api_user_id']) )
+	if ( isset($atts['api_user_id']) && $atts['api_user_id'] !== false )
 		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['api_user_id'] )));
-	elseif ( isset($atts['user_id']) )
+	elseif ( isset($atts['user_id']) && $atts['user_id'] !== false )
 		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['user_id'] )));
-	elseif ( isset($atts['userid']) )
+	elseif ( isset($atts['userid']) && $atts['userid'] !== false )
 		$zpr["api_user_id"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['userid'] )));
-	
+
+	// 7.3.13: We don't want to set a default at this stage ...
+	// // 7.3.12: Did something change with how WP hands shortcode atts? Doesn't remember defaults
+	// if ( get_option("Zotpress_DefaultAccount") !== false ) {
+
+	// 	$zpr["api_user_id"] = get_option("Zotpress_DefaultAccount");
+	// }
+	// else { // When all else fails ... assume one account 
+
+	// 	$zp_account_temp = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress LIMIT 1", OBJECT);
+	// 	$zpr["api_user_id"] = $zp_account_temp->api_user_id;
+	// 	unset($zp_account_temp);
+	// }
+
 	$zpr['nickname'] = false;
-	if ( isset($atts['nickname']) )
+	if ( isset($atts['nickname']) && $atts['nickname'] !== false )
 		$zpr["nickname"] = zp_clean_param(zp_clean_param( $atts['nickname'] ));
-    if ( isset($atts['nick']) )
+    else if ( isset($atts['nick']) && $atts['nick'] !== false )
 		$zpr["nickname"] = zp_clean_param(zp_clean_param( $atts['nick'] ));
 
 	$zpr["limit"] = 50; // max 100, 22 seconds
@@ -334,11 +352,25 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	// Deal with incoming variables
 	// 7.3.9: Added sanitize_text_field()
 	// 7.3.10: Added wp_strip_all_tags()
-	$zpr["type"] = "basic";
-	if ( isset($atts['type']) 
-			&& $atts['type'] != "" )
-		$zpr["type"] = sanitize_text_field($atts['type']);
+	// 7.3.11: Account for ZotpressLib
+	if ( ! $is_zplib ) {
+
+		$zpr["type"] = "basic";
+		if ( isset($atts['type']) 
+				&& $atts['type'] != "" )
+			$zpr["type"] = sanitize_text_field($atts['type']);
+		else
+			$zpr["type"] = "basic";	
 	
+	// Deal with ZotpressLib
+	} else {
+
+		$zpr["type"] = "dropdown";
+		if ( isset($atts['type']) 
+				&& $atts['type'] != "" )
+			$zpr["type"] = sanitize_text_field($atts['type']);
+	}
+
 	$zpr["item_type"] = "items";
 	if ( isset($atts['item_type']) 
 			&& $atts['item_type'] != "" )
@@ -386,7 +418,8 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 		$zpr["item_key"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['item'])));
 
 	// Deal with multiple items
-	if ( strpos($zpr["item_key"], ", ") > 0 )
+	// if ( strpos($zpr["item_key"], ", ") > 0 )
+	if ( strpos($zpr["item_key"], ", ") !== false )
 		$zpr["item_key"] = str_replace(', ', ',', $zpr["item_key"]); // remove spces after commas
 	// $item_key = str_replace(" ", "", $item_key ); // remove any spaces ... not needed?
 
@@ -396,9 +429,16 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	// BIB FORMATS:
 	// [zotpress item="GMGCJU34"]
 	// [zotpress items="GMGCJU34,U9Z5JTKC"]
-	if ( $zpr["item_key"] != false
+
+	// 7.3.13: Not sure why there's a : added ...
+	if ( strpos($zpr["item_key"], "{:") !== false ) {
+		$zpr["item_key"] = str_replace('{:', '', $zpr["item_key"]);
+		$zpr["item_key"] = str_replace('}', '', $zpr["item_key"]);
+	}
+	
+	if ( $zpr["item_key"] !== false
 			&& strpos( $zpr["item_key"], ":" ) == false ) {
-		
+				
 		$temp_reformatted = "";
 		$temp_items = explode( ",", $zpr["item_key"] );
 
@@ -407,6 +447,7 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 
 		$zpr["item_key"] = rtrim( $temp_reformatted, ',' );
 	}
+	// var_dump($zpr["item_key"]);exit;
 
 	$zpr["itemtype"] = false;
 	if ( isset($atts['itemtype'])
@@ -487,6 +528,11 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	elseif ( isset($atts['zpcollection'])
 			&& ( $atts['zpcollection'] != "false" && $atts['zpcollection'] !== false && $atts['zpcollection'] !== '' ) )
 		$zpr["collection_id"] = sanitize_text_field(wp_strip_all_tags($atts['zpcollection']));
+	elseif ( isset($_GET['subcollection_id'])
+			&& ( $_GET['subcollection_id'] != "false" && $_GET['subcollection_id'] !== false && $_GET['subcollection_id'] !== '' ) )
+	// && preg_match("/^[a-zA-Z0-9]+$/", $_GET['subcollection_id']) )
+		$zpr["collection_id"] = zp_clean_param( $_GET['subcollection_id'] );
+
 	// $collection_id = str_replace(" ", "", $collection_id );
 
 	// 7.3.10: Originally in shortcode.php but doesn't make sense here ...
@@ -517,9 +563,13 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	elseif ( isset($atts['zptag'])
 			&& ( $atts['zptag'] != "false" && $atts['zptag'] !== false && $atts['zptag'] !== '' ) )
 		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($atts['zptag']));
+	elseif ( isset($_GET['lib_tag'])
+			&& ( $_GET['lib_tag'] != "false" && $_GET['lib_tag'] !== false && $_GET['lib_tag'] !== '' ) )
+		$zpr["tag_id"] = sanitize_text_field(wp_strip_all_tags($_GET['lib_tag']));
 
 	// Deal with plus sign as space
-	$zpr["tag_id"] = str_replace("+", "", $zpr["tag_id"]);
+	if ( $zpr["tag_id"] !== false )
+		$zpr["tag_id"] = str_replace("+", "", $zpr["tag_id"]);
 
 	// 7.3.10: Originally in shortcode.php but doesn't make sense here ...
 	// // Deal with multiple tags
@@ -553,7 +603,7 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	// Deal with multiple years:
 	if ( strpos($zpr["year"], ",") > 0 )
 		$zpr["year"] = explode(",", $zpr["year"]);
-	
+
 	$zpr["style"] = zp_Get_Default_Style();
 	if ( isset($atts['style']) 
 			&& $atts['style'] != "false" && $atts['style'] != "" && $atts['style'] != "default" )
@@ -581,10 +631,12 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 
 	// Max tags, max results
 	$zpr["maxtags"] = false;
+	if ( $is_zplib) $zpr["maxtags"] = 100;
 	if ( isset($atts['maxtags']) )
 		$zpr["maxtags"] = (int) sanitize_text_field(wp_strip_all_tags($atts['maxtags']));
 
 	$zpr["maxresults"] = false;
+	if ( $is_zplib) $zpr["maxresults"] = 50;
 	if ( isset($atts['maxresults']) )
 		$zpr["maxresults"] = (int) sanitize_text_field(wp_strip_all_tags($atts['maxresults']));
 
@@ -601,18 +653,6 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	$zpr["sortby"] = false;
 	$zpr["order"] = false;
 	$zpr["item_keys_order"] = array();
-
-	// Lib toplevel
-	// Set UNLESS there's a tag
-	$zpr["toplevel"] = false;
-	if ( isset($atts['toplevel'])
-			&& $zpr["tag_id"] === false ) {
-
-		$zpr["toplevel"] = sanitize_text_field(wp_strip_all_tags($atts['toplevel']));
-		// $zpr["collection_id"] = false;
-	}
-	if ( $zpr["collection_id"] == "toplevel" )
-		$zpr["collection_id"] = false;
 
 	// SPECIAL SETTINGS
 	if ( isset($atts['sortby']) ) {
@@ -643,11 +683,14 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 
 	// Show images, show tags, downloadable, inclusive, notes, abstracts, citeable
 	$zpr["showimage"] = false;
-	if ( isset($atts['showimage']) )
+	if ( isset($atts['showimage']) 
+			&& ( $atts['showimage'] == "yes" || $atts['showimage'] == "true" || $atts['showimage'] === true || $atts['showimage'] == 1 ) )
 		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['showimage']));
-	elseif ( isset($atts['image']) )
+	elseif ( isset($atts['image']) 
+			&& ( $atts['image'] == "yes" || $atts['image'] == "true" || $atts['image'] === true || $atts['image'] == 1 ) )
 		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['image']));
-	elseif ( isset($atts['images']) )
+	elseif ( isset($atts['images']) 
+			&& ( $atts['images'] == "yes" || $atts['images'] == "true" || $atts['images'] === true || $atts['images'] == 1 ) )
 		$zpr["showimage"] = sanitize_text_field(wp_strip_all_tags($atts['images']));
 
 	// Set value
@@ -658,7 +701,7 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 		elseif ( $zpr['showimage'] == "openlib" )
 			$zpr["showimage"] = "openlib";
 		else
-		$zpr["showimage"] = false;
+			$zpr["showimage"] = false;
 
 	$zpr["showtags"] = false;
 	if ( isset($atts['showtags'])
@@ -735,6 +778,54 @@ function Zotpress_prep_ajax_request_vars($atts=false) {
 	if ( isset($atts['forcenumber'])
 			&& ( $atts['forcenumber'] == "yes" || $atts['forcenumber'] == "true" || $atts['forcenumber'] === true || $atts['forcenumber'] == 1 ) )
 		$zpr["forcenumber"] = true;
+
+
+
+	// Special attributes for ZotpressLib //
+
+	// Lib toplevel: Set UNLESS there's a tag
+	$zpr["toplevel"] = false;
+	if ( isset($atts['toplevel'])
+			&& $zpr["tag_id"] === false ) {
+
+		$zpr["toplevel"] = sanitize_text_field(wp_strip_all_tags($atts['toplevel']));
+		// $zpr["collection_id"] = false;
+	}
+	if ( $zpr["collection_id"] == "toplevel" )
+		$zpr["collection_id"] = false;
+
+	$zpr["searchby"] = false;
+	if ( isset($atts['searchby']) 
+			&& $atts['searchby'] != "false" && $atts['searchby'] != "" )
+		$zpr["searchby"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
+
+	$zpr["minlength"] = 3;
+	if ( isset($atts['minlength']) 
+			&& $atts['minlength'] != "false" && $atts['minlength'] != "" )
+		$zpr["minlength"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['minlength'] )));
+
+	$zpr["maxperpage"] = 10;
+	if ( isset($atts['maxperpage']) 
+			&& $atts['maxperpage'] != "false" && $atts['maxperpage'] != "" )
+		$zpr["maxperpage"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['maxperpage'] )));
+
+	$zpr["searchby"] = false;
+	if ( isset($atts['searchby']) 
+			&& $atts['searchby'] != "false" && $atts['searchby'] != "" )
+		$zpr["searchby"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags( $atts['searchby'] )));
+
+	// Note: Default is true
+	$zpr["browsebar"] = true;
+	if ( isset($atts['browsebar'])
+			// && ( $atts['browsebar'] == "no" || $atts['browsebar'] == "false" || $atts['browsebar'] === false || $atts['browsebar'] == 0 ) )
+			&& ( $atts['browsebar'] != "yes" || $atts['browsebar'] != "true" || $atts['browsebar'] !== true ) )
+		$zpr["browsebar"] = false;
+	// else
+	// 	$zpr["browsebar"] = true;
+	
+	// Special attributes for ZotpressLib //
+
+
 
 	$zpr["request_start"] = 0;
 	if ( isset($atts['request_start']) )

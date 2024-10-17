@@ -25,6 +25,13 @@ $kadence_flush_button = ob_get_clean();
 
 Theme_Customizer::add_settings(
 	array(
+		'microdata' => array(
+			'control_type' => 'kadence_switch_control',
+			'sanitize'     => 'kadence_sanitize_toggle',
+			'section'      => 'general_performance',
+			'default'      => kadence()->default( 'microdata' ),
+			'label'        => esc_html__( 'Enable Microdata Schema', 'kadence' ),
+		),
 		'theme_json_mode' => array(
 			'control_type' => 'kadence_switch_control',
 			'sanitize'     => 'kadence_sanitize_toggle',

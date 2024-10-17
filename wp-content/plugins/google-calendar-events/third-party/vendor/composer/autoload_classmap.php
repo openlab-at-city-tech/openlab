@@ -53,7 +53,7 @@ return array(
     'SimpleCalendar\\plugin_deps\\Carbon\\Language' => $baseDir . '/nesbot/carbon/src/Carbon/Language.php',
     'SimpleCalendar\\plugin_deps\\Carbon\\Laravel\\ServiceProvider' => $baseDir . '/nesbot/carbon/src/Carbon/Laravel/ServiceProvider.php',
     'SimpleCalendar\\plugin_deps\\Carbon\\LazyTranslator' => $baseDir . '/nesbot/carbon/lazy/Carbon/TranslatorWeakType.php',
-    'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\LazyMessageFormatter' => $baseDir . '/nesbot/carbon/lazy/Carbon/MessageFormatter/MessageFormatterMapperWeakType.php',
+    'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\LazyMessageFormatter' => $baseDir . '/nesbot/carbon/lazy/Carbon/MessageFormatter/MessageFormatterMapperStrongType.php',
     'SimpleCalendar\\plugin_deps\\Carbon\\MessageFormatter\\MessageFormatterMapper' => $baseDir . '/nesbot/carbon/src/Carbon/MessageFormatter/MessageFormatterMapper.php',
     'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\AbstractMacro' => $baseDir . '/nesbot/carbon/src/Carbon/PHPStan/AbstractMacro.php',
     'SimpleCalendar\\plugin_deps\\Carbon\\PHPStan\\AbstractReflectionMacro' => $baseDir . '/nesbot/carbon/lazy/Carbon/PHPStan/AbstractMacroBuiltin.php',

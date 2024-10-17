@@ -12,10 +12,10 @@ class Control_Type_Background extends CT_Base {
 		
 		$ret .= "\t\t\t\t'fields_options' => [";
 		$ret .= "\n\t\t\t\t\t'background' => [";
-		$ret .= "\n\t\t\t\t\t\t'label' => esc_html('" . esc_html( $conf->label ) . "', 'elementskit-lite'),";
+		$ret .= "\n\t\t\t\t\t\t'label' => '" . esc_html( $conf->label ) . "',";
 		
 		if ( ! empty( $conf->description ) ) {
-			$ret .= "\n\t\t\t\t\t\t'description' => esc_html('" . esc_html( $conf->description ) . "', 'elementskit-lite'),";
+			$ret .= "\n\t\t\t\t\t\t'description' => '" . esc_html( $conf->description ) . "',";
 		}
 
 		if ( isset( $conf->show_label ) ) {

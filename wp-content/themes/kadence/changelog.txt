@@ -1,3 +1,40 @@
+== 1.2.9 | 20th August 2024 ==
+* Fix: Header settings not showing in customizer.
+
+== 1.2.8 | 19th August 2024 ==
+* Update: Header logic to work with upcoming optional block based header builder.
+* Fix: Styling with Woocommerce.
+* Fix: Styling with LifterLMS 7.7.
+* Fix: Related post order and order by settings.
+
+== 1.2.7 | 23rd July 2024 ==
+* Add: Order, orderby and title to related posts section.
+* Fix: Alt text in archive featured images.
+
+== 1.2.6 | 26th June 2024 ==
+* Add: Settings to adjust off canvas width.
+* Add: Option to disable microdata schema.
+* Add: Google Pay and Strip Link payment icons for products.
+* Update: Visa Payment Icon.
+* Update: Pro Customizer upgrade button.
+* Update: Google font options.
+* Fix: Link styles in group block.
+
+== 1.2.5 | 20th May 2024 ==
+* Add: Support for AVIF images in theme gallery.
+* Fix: Issue with footer builder covering footer.
+* Fix: Issue with content width and page title top margin in editor.
+* Fix: Typo in customizer settings
+* Fix: Issue with post title alignment on tablet.
+
+== 1.2.4 | 10th April 2024 ==
+* Add: Option for transparent header on events archive.
+* Update: Google Font choices.
+* Update: Default icons for social, X and Instagram. 
+* Fix: CSS with with payments on product pages.
+* Fix: CSS with TEC single events.
+* Fix: Editor width in unboxed mode.
+
 == 1.2.3 | 21st March 2024 ==
 * Fix: CSS determining content width.
 

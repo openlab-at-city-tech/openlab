@@ -714,3 +714,7 @@
 .rtl .woocommerce form .form-row.form-row-first {
     float: right;
 }
+.content-style-boxed .wp-site-blocks .wp-block-woocommerce-cart.alignwide, .wp-site-blocks .wp-block-woocommerce-cart.alignwide, .wp-site-blocks .wp-block-woocommerce-checkout.alignwide, .content-style-boxed .wp-site-blocks .wp-block-woocommerce-checkout.alignwide {
+    margin-left: 0;
+    margin-right: 0;
+}

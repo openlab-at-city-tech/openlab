@@ -38,6 +38,15 @@ return array(
         'tags' => array(),
         'description' => __('Draxler is a minimalist theme.', 'ml-slider')
     ),
+    'nexus' => array(
+        'folder' => 'nexus',
+        'title' => 'Nexus',
+        'type' => 'free',
+        'supports' => array( 'flex' ),
+        'tags' => array(),
+        'description' => __('Featuring a built-in button with custom link, Nexus seamlessly integrates key points and interactive elements, making your presentation both engaging and navigable.', 'ml-slider'),
+        'instructions' => __('To add a button to the Nexus theme, enter the URL and the button text into the "Link" tab.', 'ml-slider'),
+    ),
     'cubic' => array(
         'folder' => 'cubic',
         'title' => 'Cubic',

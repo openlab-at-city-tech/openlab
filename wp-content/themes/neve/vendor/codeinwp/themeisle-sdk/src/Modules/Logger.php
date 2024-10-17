@@ -126,15 +126,15 @@ class Logger extends Abstract_Module {
 	 */
 	public function add_notification( $all_notifications ) {
 
-		$message = apply_filters( $this->product->get_key() . '_logger_heading', 'Do you enjoy <b>{product}</b>? Become a contributor by opting in to our anonymous data tracking. We guarantee no sensitive data is collected.' );
+		$message = apply_filters( $this->product->get_key() . '_logger_heading', Loader::$labels['logger']['notice'] );
 
 		$message       = str_replace(
 			array( '{product}' ),
 			$this->product->get_friendly_name(),
 			$message
 		);
-		$button_submit = apply_filters( $this->product->get_key() . '_logger_button_submit', 'Sure, I would love to help.' );
-		$button_cancel = apply_filters( $this->product->get_key() . '_logger_button_cancel', 'No, thanks.' );
+		$button_submit = apply_filters( $this->product->get_key() . '_logger_button_submit', Loader::$labels['logger']['cta_y'] );
+		$button_cancel = apply_filters( $this->product->get_key() . '_logger_button_cancel', Loader::$labels['logger']['cta_n'] );
 
 		$all_notifications[] = [
 			'id'      => $this->product->get_key() . '_logger_flag',
@@ -188,7 +188,7 @@ class Logger extends Abstract_Module {
 
 	/**
 	 * Load telemetry.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function load_telemetry() {
@@ -198,35 +198,35 @@ class Logger extends Abstract_Module {
 			$all_products                               = Loader::get_products();
 			$all_products[ $this->product->get_slug() ] = $this->product; // Add current product to the list of products to check for telemetry.
 
+			// Register telemetry params for eligible products.
 			foreach ( $all_products as $product_slug => $product ) {
-				
-				// Ignore pro products.
+
+				// Ignore PRO products.
 				if ( false !== strstr( $product_slug, 'pro' ) ) {
 					continue;
 				}
 
-				$default = 'no';
+				$pro_slug   = $product->get_pro_slug();
+				$logger_key = $product->get_key() . '_logger_flag';
 
-				if ( ! $product->is_wordpress_available() ) {
-					$default = 'yes';
-				} else {
-					$pro_slug = $product->get_pro_slug();
+				// If the product is not available in the WordPress store, or it's PRO version is installed, activate the logger if it was not initialized -- Pro users are opted in by default.
+				if ( ! $product->is_wordpress_available() || ( ! empty( $pro_slug ) && isset( $all_products[ $pro_slug ] ) ) ) {
+					$logger_flag = get_option( $logger_key );
 
-					if ( ! empty( $pro_slug ) && isset( $all_products[ $pro_slug ] ) ) {
-						$default = 'yes';
+					if ( false === $logger_flag ) {
+						update_option( $logger_key, 'yes' );
 					}
 				}
 
-				if ( 'yes' === get_option( $product->get_key() . '_logger_flag', $default ) ) {
+				if ( 'yes' === get_option( $product->get_key() . '_logger_flag', 'no' ) ) {
 
 					$main_slug  = explode( '-', $product_slug );
 					$main_slug  = $main_slug[0];
-					$pro_slug   = $product->get_pro_slug();
 					$track_hash = Licenser::create_license_hash( str_replace( '-', '_', ! empty( $pro_slug ) ? $pro_slug : $product_slug ) );
 
 					// Check if product was already tracked.
 					$active_telemetry = false;
-					foreach ( $products_with_telemetry as &$product_with_telemetry ) {
+					foreach ( $products_with_telemetry as $product_with_telemetry ) {
 						if ( $product_with_telemetry['slug'] === $main_slug ) {
 							$active_telemetry = true;
 							break;
@@ -236,7 +236,7 @@ class Logger extends Abstract_Module {
 					if ( $active_telemetry ) {
 						continue;
 					}
-					
+
 					$products_with_telemetry[] = array(
 						'slug'      => $main_slug,
 						'trackHash' => $track_hash ? $track_hash : 'free',
@@ -251,7 +251,6 @@ class Logger extends Abstract_Module {
 				return;
 			}
 
-
 			$tracking_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'tracking' );
 			if ( ! empty( $tracking_handler ) ) {
 				do_action( 'themeisle_sdk_dependency_enqueue_script', 'tracking' );
@@ -265,10 +264,6 @@ class Logger extends Abstract_Module {
 				);
 			}
 		} catch ( \Exception $e ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
-				error_log( $e->getMessage() ); // phpcs:ignore
-			}
-		} catch ( \Error $e ) {
 			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && defined( 'WP_DEBUG_LOG' ) && WP_DEBUG_LOG ) {
 				error_log( $e->getMessage() ); // phpcs:ignore
 			}

@@ -191,7 +191,27 @@ function openlab_invite_anyone_screen_one_content() {
 
 							<input class="form-control" type="text" id="invite-anyone-group-list-autocomplete" placeholder="Begin typing to select from your groups." />
 
-							<ul id="invite-anyone-group-list" class=""></ul>
+							<?php
+							$preselected_group = null;
+							$preselected_group_avatar = '';
+							if ( bp_is_action_variable( 'group-invites', 0 ) && bp_action_variable( 1 ) ) {
+								$preselected_group_id = bp_action_variable( 1 );
+
+								// Only allow this group to be selected if the user is a member.
+								if ( current_user_can( 'bp_moderate' ) || groups_is_user_member( bp_loggedin_user_id(), $preselected_group_id ) ) {
+									$preselected_group = groups_get_group( array( 'group_id' => $preselected_group_id ) );
+									$preselected_group_avatar = bp_get_group_avatar( [ 'type' => 'thumb' ], $preselected_group );
+								}
+							}
+							?>
+
+							<ul id="invite-anyone-group-list" class="">
+								<?php if ( $preselected_group ) : ?>
+									<li class="ia-group-for-invite" data-groupid="<?php echo esc_attr( $preselected_group->id ); ?>">
+										<a class="remove-group"><span class="screen-reader-text">Remove group invitation</span>x</a> <?php echo $preselected_group_avatar; ?><span><?php echo esc_html( $preselected_group->name ); ?></span><input type="hidden" name="invite_anyone_groups[]" value="<?php echo esc_attr( $preselected_group->id ); ?>" />
+									</li>
+								<?php endif; ?>
+							</ul>
 						</li>
                     <?php endif; ?>
 

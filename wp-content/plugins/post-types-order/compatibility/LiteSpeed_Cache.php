@@ -10,6 +10,10 @@
     class PTO_LiteSpeed_Cache
         {
                         
+            /**
+            * Constructor
+            * 
+            */
             function __construct()
                 {
                     if( !   $this->is_plugin_active())
@@ -19,6 +23,10 @@
                 }
                 
             
+            /**
+            * Check if the plugin is active
+            * 
+            */
             function is_plugin_active()
                 {
                     include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
@@ -28,7 +36,11 @@
                         else
                         return FALSE;
                 }
-                
+            
+            /**
+            * On order update completed
+            *     
+            */
             function order_update_complete()
                 {
                     

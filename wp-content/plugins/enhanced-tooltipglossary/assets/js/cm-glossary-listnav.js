@@ -1070,7 +1070,8 @@ if ( !Array.prototype.indexOf ) {
 						}
 					);
 
-					var noAjax = tile.hasClass( 'glossary-term-listnav' ) || window.cmtt_listnav_data.noAjax;
+					//var noAjax = tile.hasClass( 'glossary-term-listnav' ) || window.cmtt_listnav_data.noAjax;
+					var noAjax = false;
 					if ( noAjax ) {
 						var redirect = thiz.attr( 'href' ) || window.cmtt_listnav_data.glossary_page_link;
 						$.redirect( redirect, data );

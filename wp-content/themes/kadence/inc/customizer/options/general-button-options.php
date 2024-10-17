@@ -198,7 +198,7 @@ Theme_Customizer::add_settings(
 			'control_type' => 'kadence_measure_control',
 			'section'      => 'general_buttons',
 			'priority'     => 10,
-			'default'      => kadence()->default( 'buttons_margin' ),
+			'default'      => kadence()->default( 'buttons_padding' ),
 			'label'        => esc_html__( 'Padding', 'kadence' ),
 			'live_method'     => array(
 				array(

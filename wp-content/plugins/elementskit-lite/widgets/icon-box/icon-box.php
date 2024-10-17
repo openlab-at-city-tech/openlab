@@ -35,6 +35,9 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/icon-box-4/';
     }
+    protected function is_dynamic_content(): bool {
+        return false;
+    }
 
     protected function register_controls() {
 

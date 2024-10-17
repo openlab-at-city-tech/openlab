@@ -45,7 +45,7 @@ export default {
                             const tinymce_data = metaslider.tinymce.find(obj => obj.type === slide_type);
 
                             if (typeof tinymce_data === 'undefined') {
-                                console.error(`${slide_type} was not found in metaslider.tinymce object!`);
+                                console.log(`${slide_type} was not found in metaslider.tinymce object or is disabled in MetaSlider settings!`);
                             } else {
                                 $(this).attr('disabled', false);
                                 tinymce.init({ 

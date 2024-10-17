@@ -1752,3 +1752,41 @@ p.kt-box-shadow-title {
 .kadence-background-picker-wrap .components-popover.kadence-popover-color >.components-popover__content {
     overflow: visible;
 }
+.kadence-sorter-item-panel-content .components-form-toggle {display:flex}
+
+.control-section-kadence_section_pro h3 {
+    margin: 0 0 8px 0;
+    padding: 1px 0;
+    border: 0;
+    position: relative;
+	a {
+		background: #fff;
+		display: block;
+		padding: 11px 10px 12px 14px;
+		text-decoration: none;
+		border-left: 4px solid #fff;
+		transition: background-color ease-in-out, .15s border-color ease-in-out;
+		&:after {
+			content: "\f345";
+			position: absolute;
+			top: 11px;
+			right: 10px;
+			z-index: 1;
+			float: right;
+			border: none;
+			background: 0 0;
+			font: normal 20px / 1 dashicons;
+			speak: none;
+			display: block;
+			padding: 0;
+			text-indent: 0;
+			text-align: center;
+			-webkit-font-smoothing: antialiased;
+			-moz-osx-font-smoothing: grayscale;
+		}
+		&:hover {
+			background: #f6f7f7;
+			border-left-color: transparent;
+		}
+	}
+}

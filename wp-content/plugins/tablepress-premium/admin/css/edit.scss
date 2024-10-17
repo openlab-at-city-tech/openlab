@@ -1,0 +1,302 @@
+/**
+ * CSS code for the "Edit" screen
+ *
+ * @package TablePress
+ * @subpackage Views CSS
+ * @author Tobias Bäthge
+ * @since 1.0.0
+ */
+
+/* Import spinner and alert box styling. */
+@import "spinner-alert";
+
+/* Container for Table Preview, Advanced Editor, and Help Box dialogs. */
+.hidden-container {
+	display: none;
+}
+
+.help-box {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+/* Positioning of the "Help" button in the header section of a postbox. */
+.postbox-header .handle-actions {
+	.button-module-help {
+		margin-right: 10px;
+
+		@media screen and (max-width: 782px) {
+			line-height: 2.18181818;
+			vertical-align: top;
+			min-height: auto;
+			margin-bottom: 0;
+		}
+	}
+
+	/* Backward compatibility with WP < 6.5. */
+	.handle-order-higher,
+	.handle-order-lower,
+	.handlediv {
+		height: 1.62rem;
+	}
+}
+
+/* Allow wide postboxes to scroll sideways. */
+body,
+div#post-body.metabox-holder.columns-1 {
+	overflow: visible !important;
+}
+
+/* Add space between the screen options fieldsets. */
+#tablepress-screen-options {
+	margin-top: 20px;
+}
+
+/* Move backdrop of the wpLink dialog above the "Advanced Editor" dialog. */
+body #wp-link-backdrop {
+	z-index: 100103;
+}
+
+/* Table Preview (CSS for actual preview is directly in the preview HTML). */
+#table-preview {
+	padding: 0;
+
+	&-iframe {
+		width: 100%;
+		height: 100%;
+	}
+}
+
+/* Styling and positioning of buttons in wpdialogs. */
+.ui-dialog {
+	.button {
+		box-shadow: none;
+	}
+	.ui-dialog-buttonset {
+		width: 100%;
+	}
+	.button-cancel,
+	.button-cancel:hover {
+		color: #b32d2e;
+		border-color: transparent;
+		background-color: transparent;
+		text-decoration: underline;
+	}
+	.button-ok {
+		float: right;
+	}
+}
+
+/* Content of the Advanced Editor wpdialog */
+#advanced-editor {
+	padding: 5px;
+
+	.wp-editor-container {
+		border: none;
+	}
+}
+
+#tablepress-page #tablepress_edit-table-data {
+	display: inline-block; /* Stretch to the width of the table. */
+	min-width: 99.9%; /* but use the full width, minus approx. 1px as the box is wider than the others otherwise. */
+}
+
+/* Button positioning inside tables in postboxes, like "Table Manipulation". */
+.tablepress-postbox-table .button {
+	vertical-align: middle;
+}
+
+#table-id-shortcode-wrapper {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	width: 99%;
+	gap: 5px 0;
+}
+#table-information-shortcode {
+	margin: 0 -1px 0 1px;
+}
+
+#tablepress_edit-table-manipulation .column-1,
+#tablepress_edit-table-manipulation .column-2 {
+	width: 50%;
+}
+
+/* Align with checkbox labels */
+.checkbox-left {
+	display: inline-block;
+	padding-left: 1.25rem; /* Checkboxes are 1rem wide + 0.25rem margin. */
+	padding-top: 8px;
+}
+
+#table-editor {
+	font-size: 14px;
+}
+
+/* Jspreadsheet CSS * /
+
+/* Minimum row height, using :after to keep resize animation */
+.jexcel > tbody > tr:after {
+	content: "";
+	display: inline-block;
+	min-height: 22px;
+}
+
+.jexcel > thead > tr > td {
+	text-align: center !important;
+	z-index: 22; /* Prevent drag corner from floating above fixed header. */
+
+	/* Use custom sorting arrow icons. */
+	&:not(:first-child,.dragging,.dragging-left,.dragging-right) {
+		/* stylelint-disable-next-line function-url-quotes */
+		background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill='%23999' d='M1408 1088q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45zm0-384q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z'/%3E%3C/svg%3E");
+		background-position: center right 10px;
+		background-repeat: no-repeat;
+	}
+	&.arrow-up:not(.dragging,.dragging-left,.dragging-right) {
+		/* stylelint-disable-next-line function-url-quotes */
+		background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1408 1088q0 26-19 45l-448 448q-19 19-45 19t-45-19l-448-448q-19-19-19-45t19-45 45-19h896q26 0 45 19t19 45z'/%3E%3C/svg%3E");
+	}
+	&.arrow-down:not(.dragging,.dragging-left,.dragging-right) {
+		/* stylelint-disable-next-line function-url-quotes */
+		background-image: url("data:image/svg+xml,%3Csvg width='14' height='14' viewBox='0 0 1792 1792' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1408 704q0 26-19 45t-45 19h-896q-26 0-45-19t-19-45 19-45l448-448q19-19 45-19t45 19l448 448q19 19 19 45z'/%3E%3C/svg%3E");
+	}
+}
+
+/* Override default opacity, to not have text shine through when the header row/column is fixed to the top/left of the screen. */
+.jexcel > thead > tr > td.dragging,
+.jexcel > tbody > tr.dragging > td {
+	background-color: #ffffff;
+	opacity: 1;
+}
+
+.jexcel > tbody > tr > td {
+	vertical-align: top;
+	word-break: break-word;
+	padding: 0;
+
+	&:first-child {
+		padding: 4px;
+	}
+
+	/* Show all lines of text in an edited cell. */
+	&.editing {
+		--table-editor-line-clamp-editing: 0;
+	}
+
+	> div {
+		display: -webkit-box;
+		-webkit-line-clamp: var(--table-editor-line-clamp-editing, var(--table-editor-line-clamp));
+		-webkit-box-orient: vertical;
+		overflow: hidden;
+		padding: 4px;
+	}
+}
+
+/* Fixed header. */
+@media screen and (min-width: 601px) {
+	.admin-bar .jexcel > thead > tr > td {
+		top: calc(var(--wp-admin--admin-bar--height) - 1px) /* 1px offset to remove top cell border. */;
+	}
+}
+
+/* Fixed left column, taking into account the width of the admin bar. */
+.jexcel > tbody > tr > .jexcel_row {
+	body & {
+		position: sticky;
+		z-index: 21; /* Prevent drag corner from floating above fixed left column. */
+		left: 160px;
+	}
+	body.folded & {
+		left: 36px;
+	}
+	body.auto-fold & {
+		@media only screen and (max-width: 960px) {
+			left: 36px;
+		}
+		@media screen and (max-width: 782px) {
+			left: 0;
+		}
+	}
+}
+
+.jexcel tbody tr:nth-child(even) td:not(.jexcel_row) {
+	background-color: #f9f9f9;
+}
+
+.jexcel_container .jexcel tbody tr td.highlight {
+	background-color: rgba(0, 94, 255, 0.05);
+}
+
+.jexcel_container .jexcel tbody tr.head-row td:not(.jexcel_row):not(.column-hidden),
+.jexcel_container .jexcel tbody tr.foot-row td:not(.jexcel_row):not(.column-hidden) {
+	background-color: #d9edf7;
+}
+
+.jexcel_container .jexcel tbody tr.row-hidden td:not(.jexcel_row),
+.jexcel_container .jexcel tbody tr td.column-hidden {
+	background-color: rgba(255, 224, 224, 0.7);
+}
+
+.jexcel > tbody > tr > .highlight {
+	&-top {
+		border-top: 1px solid rgb(82, 146, 247);
+	}
+	&-left {
+		border-left: 1px solid rgb(82, 146, 247);
+	}
+	&-right {
+		border-right: 1px solid rgb(82, 146, 247);
+	}
+	&-bottom {
+		border-bottom: 1px solid rgb(82, 146, 247);
+	}
+}
+
+.jexcel_corner {
+	background-color: rgb(82, 146, 247);
+}
+
+.jexcel > tbody > tr > td > textarea {
+	font-size: inherit;
+	box-shadow: none;
+	padding: 3px !important;
+	line-height: 1 !important;
+}
+
+/* Fullscreen mode. */
+.admin-bar .jexcel_container.fullscreen .jexcel > thead > tr > td {
+	top: 0;
+}
+.jexcel_container.fullscreen {
+	z-index: 99999;
+}
+
+/* Context menu. */
+.jcontextmenu {
+	margin: 1px; /* Don't trigger actions by accident */
+	z-index: 99999; /* Hover above WP Admin bar */
+
+	> div.header {
+		display: none !important;
+	}
+	> div a {
+		color: #111111;
+		font-size: 14px;
+	}
+	> div {
+		padding: 4px 4px 4px 16px;
+	}
+	> .jcontextmenu-disabled,
+	> .jcontextmenu-disabled a {
+		color: #999999;
+		cursor: default;
+	}
+	> div.jcontextmenu-disabled:hover {
+		background: transparent;
+	}
+}
+/* WP Feature Pointers */
+.pointer-tp21_edit_screen_options .wp-pointer-arrow {
+	left: 225px;
+}
