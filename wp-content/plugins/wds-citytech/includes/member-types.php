@@ -164,3 +164,52 @@ function openlab_user_can_create_courses( $user_id = null ) {
 
 	return $member_type && $member_type->get_can_create_courses();
 }
+
+/**
+ * Adds singular_name and plural_name properties to the member type object.
+ *
+ * @param stdClass[] $member_types Member type objects.
+ * @return stdClass[]
+ */
+function openlab_member_types_add_names( $member_types ) {
+	foreach ( $member_types as $member_type ) {
+		$member_type->labels['singular_name'] = $member_type->name;
+		$member_type->labels['name']          = $member_type->name;
+	}
+
+	return $member_types;
+}
+add_filter( 'bp_get_member_types', 'openlab_member_types_add_names' );
+
+/**
+ * Manipulate POST values when saving member type metabox.
+ *
+ * This is a workaround for a limitation in BuddyPress such that BP will only save
+ * these changes if the member types are sent in all lowercase.
+ */
+function openlab_save_member_type_metabox() {
+	if ( empty( $_POST['bp-members-profile-member-type'] ) ) {
+		return;
+	}
+
+	add_filter( 'bp_get_member_types', 'openlab_member_types_convert_keys_to_lowercase', 999 );
+}
+add_action( 'bp_members_admin_load', 'openlab_save_member_type_metabox', 5 );
+
+/**
+ * Convert keys in member types array to lowercase.
+ *
+ * @param stdClass[] $member_types Member type objects.
+ * @return stdClass[]
+ */
+function openlab_member_types_convert_keys_to_lowercase( $member_types ) {
+	$new_member_types = [];
+
+	foreach ( $member_types as $slug => $member_type ) {
+		$new_member_types[ sanitize_title( $slug ) ] = $member_type;
+	}
+
+	remove_filter( 'bp_get_member_types', 'openlab_member_types_convert_keys_to_lowercase', 999 );
+
+	return $new_member_types;
+}
