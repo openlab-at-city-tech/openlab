@@ -179,7 +179,7 @@ function openlab_member_types_add_names( $member_types ) {
 
 	return $member_types;
 }
-//add_filter( 'bp_get_member_types', 'openlab_member_types_add_names' );
+add_filter( 'bp_get_member_types', 'openlab_member_types_add_names' );
 
 /**
  * Manipulate POST values when saving member type metabox.
@@ -194,7 +194,7 @@ function openlab_save_member_type_metabox() {
 
 	add_filter( 'bp_get_member_types', 'openlab_member_types_convert_keys_to_lowercase', 999 );
 }
-//add_action( 'bp_members_admin_load', 'openlab_save_member_type_metabox', 5 );
+add_action( 'bp_members_admin_load', 'openlab_save_member_type_metabox', 5 );
 
 /**
  * Convert keys in member types array to lowercase.
