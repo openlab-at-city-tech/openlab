@@ -5,10 +5,10 @@
  *
  * Plugin Name:       Editoria11y Accessibility Checker
  * Plugin URI:        https://wordpress.org/plugins/editoria11y-accessibility-checker/
- * Version:           1.0.20
+ * Version:           1.0.21
  * Requires PHP:      7.2
  * Requires at least: 6.0
- * Tested up to:      6.6
+ * Tested up to:      6.7
  * Author:            Princeton University, WDS
  * Author URI:        https://wds.princeton.edu/team
  * License:           GPL v2 or later
