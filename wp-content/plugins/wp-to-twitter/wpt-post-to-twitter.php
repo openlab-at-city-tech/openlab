@@ -85,7 +85,7 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 		// if in staging mode, we'll behave as if the Tweet succeeded, but not send it.
 		$connection = true;
 		$http_code  = 200;
-		$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ';
+		$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ' . $status['text'];
 		$tweet_id   = false;
 	} else {
 		/**

@@ -9,15 +9,15 @@
  *
  * @wordpress-plugin
  * Plugin Name: XPoster - Share to X and Mastodon
- * Plugin URI:  http://www.joedolson.com/wp-to-twitter/
+ * Plugin URI:  https://www.joedolson.com/wp-to-twitter/
  * Description: Posts a status update when you update your WordPress blog or post a link, using your URL shortener. Many options to customize and promote your statuses.
- * Author:      Joseph C Dolson
- * Author URI:  http://www.joedolson.com
+ * Author:      Joe Dolson
+ * Author URI:  https://www.joedolson.com
  * Text Domain: wp-to-twitter
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     4.2.4
+ * Version:     4.2.5
  */
 
 /*
@@ -69,7 +69,7 @@ require_once plugin_dir_path( __FILE__ ) . 'wpt-truncate.php';
 require_once plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php';
 
 global $wpt_version;
-$wpt_version = '4.2.4';
+$wpt_version = '4.2.5';
 
 add_action( 'init', 'wpt_load_textdomain' );
 /**
@@ -1214,7 +1214,18 @@ function wpt_twit_link( $link_id ) {
 		if ( mb_strlen( $sentence ) > 118 ) {
 			$sentence = mb_substr( $sentence, 0, 114 ) . '...';
 		}
-
+		/**
+		 * Customize the URL shortening of a link in the link manager.
+		 *
+		 * @hook wptt_shorten_link
+		 *
+		 * @param {string} $thispostlink The passed bookmark link.
+		 * @param {string} $thislinkname The provided link title.
+		 * @param {bool}   $post_ID False, because links don't have post IDs.
+		 * @param {bool}   $test 'link' to indicate a link is being shortened.
+		 *
+		 * @return {string}
+		 */
 		$shrink = apply_filters( 'wptt_shorten_link', $thispostlink, $thislinkname, false, 'link' );
 		if ( false === stripos( $sentence, '#url#' ) ) {
 			$sentence = $sentence . ' ' . $shrink;
@@ -1743,7 +1754,6 @@ function wpt_admin_scripts() {
 	}
 }
 
-
 add_action( 'wp_ajax_wpt_tweet', 'wpt_ajax_tweet' );
 /**
  * Handle updates sent via Ajax Update Now/Schedule Update buttons.
@@ -1787,9 +1797,7 @@ function wpt_ajax_tweet() {
 		$media          = ( '1' === $upload ) ? false : true; // this is correct; the boolean logic is reversed. Blah.
 
 		foreach ( $authors as $auth ) {
-
 			$auth = ( 'main' === $auth ) ? false : $auth;
-
 			switch ( $action ) {
 				case 'tweet':
 					wpt_post_to_service( $sentence, $auth, $post_ID, $media );

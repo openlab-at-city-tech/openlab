@@ -41,7 +41,7 @@
 			let tag      = el.innerText;
 			templateText = ( customText ) ? customText : templateText;
 			if ( 'true' === pressed ) {
-				let newText = templateText.replace( tag, '' ).trim();
+				let newText  = templateText.replace( tag, '' ).trim();
 				templateText = newText;
 				custom.value = newText;
 				el.setAttribute( 'aria-pressed', 'false' );

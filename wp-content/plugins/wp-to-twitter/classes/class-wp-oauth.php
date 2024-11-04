@@ -30,17 +30,18 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 	/**
 	 * Create Consumer key
 	 */
+	#[AllowDynamicProperties]
 	class WPOAuthConsumer {
 		/**
 		 * Contains the user's Consumer key.
 		 *
-		 * @var consumer key
+		 * @var string $key
 		 */
 		public $key;
 		/**
 		 * Contains the user's consumer secret.
 		 *
-		 * @var secret
+		 * @var string $secret
 		 */
 		public $secret;
 
@@ -72,13 +73,13 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Access token
 		 *
-		 * @var token
+		 * @var string $key
 		 */
 		public $key;
 		/**
 		 * Access secret.
 		 *
-		 * @var secret
+		 * @var string $secret
 		 */
 		public $secret;
 
@@ -104,7 +105,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		}
 
 		/**
-		 * Return string.
+		 * @return string.
 		 */
 		public function __toString() {
 			return $this->to_string();
@@ -327,42 +328,42 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Query parameters
 		 *
-		 * @var parameters
+		 * @var array $parameters
 		 */
 		private $parameters;
 
 		/**
 		 * HTTP query method.
 		 *
-		 * @var http_method
+		 * @var string $http_method
 		 */
 		private $http_method;
 
 		/**
 		 * Target URL
 		 *
-		 * @var http_url
+		 * @var string $http_url
 		 */
 		private $http_url;
 
 		/**
 		 * Base string - base for signature string.
 		 *
-		 * @var base_string
+		 * @var string $base_string
 		 */
 		public $base_string;
 
 		/**
 		 * Version.
 		 *
-		 * @var version
+		 * @var string $version
 		 */
 		public static $version = '1.0';
 
 		/**
 		 * POST input - source of input.
 		 *
-		 * @var post_input
+		 * @var string $post_input
 		 */
 		public static $post_input = 'php://input';
 
@@ -720,7 +721,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Storage variable.
 		 *
-		 * @var $data_store
+		 * @var object $data_store
 		 */
 		protected $data_store;
 

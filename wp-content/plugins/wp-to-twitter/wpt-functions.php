@@ -210,6 +210,15 @@ function wpt_mask_attr( $value ) {
  * Show the last Tweet attempt as admin notice.
  */
 function wpt_show_last_tweet() {
+	/**
+	 * Disable the admin notice that shows the last sent update.
+	 *
+	 * @hook wpt_show_last_tweet
+	 *
+	 * @param {bool} $show true to show; false to hide.
+	 *
+	 * @return {bool}
+	 */
 	if ( apply_filters( 'wpt_show_last_tweet', true ) ) {
 		$log = wpt_get_log( 'wpt_status_message', 'last' );
 		if ( ! empty( $log ) && is_array( $log ) ) {
@@ -538,10 +547,11 @@ if ( ! function_exists( 'mb_strrpos' ) ) {
 	 * @param string $haystack String.
 	 * @param string $needle String.
 	 * @param int    $offset integer: optional start position.
+	 * @param string $encoding Character encoding expected.
 	 *
 	 * @return int
 	 */
-	function mb_strrpos( $haystack, $needle, $offset = 0 ) {
+	function mb_strrpos( $haystack, $needle, $offset = 0, $encoding ) {
 		$needle = preg_quote( $needle, '/' );
 
 		$ar = array();

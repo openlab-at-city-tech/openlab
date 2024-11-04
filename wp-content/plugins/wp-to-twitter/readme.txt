@@ -3,11 +3,11 @@ Contributors: joedolson
 Donate link: https://xposterpro.com
 Tags: twitter, post, social, sharing, tweet
 Requires at least: 6.0
-Tested up to: 6.5
+Tested up to: 6.6
 Requires PHP: 7.4
 License: GPLv2 or later
 Text Domain: wp-to-twitter
-Stable tag: 4.2.4
+Stable tag: 4.2.5
 
 Posts to X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -57,6 +57,14 @@ Translating my plug-ins is always appreciated. Work on XPoster translations at <
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 4.2.5 =
+
+* Bug fix: Fatal error thrown on PHP 8+ if removing stray characters from tag boundaries due to obsolete argument usage in `mb_strrpos()`. Props @toru.
+* Bug fix: Update classes to allow dynamic properties following PHP 8.2 dynamic prop deprecation.
+* Bug fix: If template tags were re-ordered in the `wpt_tags` filter, they were not also reordered in values.
+* Change: Add fallback call to post title if not in post info array.
+* Filter: add `wpt_custom_tag` filter to manage the value of custom tags added in `wpt_tags`.
 
 = 4.2.4 =
 
