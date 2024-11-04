@@ -1033,7 +1033,7 @@ class TRP_Query{
         if ( !is_array( $original_array ) || count ( $original_array ) == 0 ){
             return array();
         }
-        $query = "SELECT tt.id, tt.original as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field( $this->get_gettext_table_name( $language_code ) )  . "` AS tt LEFT JOIN `" . sanitize_text_field( $this->get_table_name_for_gettext_original_strings() ) . "` AS ot ON tt.original_id = ot.id WHERE CASE WHEN ot.original is NULL THEN tt.original ELSE NULL END IN ";
+        $query = "SELECT tt.id, tt.original as tt_original, tt.translated, tt.domain AS tt_domain, tt.plural_form, tt.status, ot.original, ot.domain, ot.context FROM `" . sanitize_text_field( $this->get_gettext_table_name( $language_code ) )  . "` AS tt LEFT JOIN `" . sanitize_text_field( $this->get_table_name_for_gettext_original_strings() ) . "` AS ot ON tt.original_id = ot.id WHERE ot.original IN ";
 
         $placeholders = array();
         $values = array();

@@ -636,7 +636,7 @@ class TRP_Plugin_Updater{
             }
 
             set_transient( 'trp_checked_licence', 'yes', DAY_IN_SECONDS );
-            
+
         }
 
         return $transient_data;
@@ -671,6 +671,8 @@ class TRP_Plugin_Updater{
             if( ! check_admin_referer( 'trp_license_nonce', 'trp_license_nonce' ) )
                 return; // get out if we didn't click the Activate button
 
+            if( !current_user_can( 'manage_options' ) )
+                return;
 
             if ( isset( $_POST['trp_license_key'] ) && preg_match('/^[*]+$/', $_POST['trp_license_key']) && strlen( $_POST['trp_license_key'] ) > 5 ) { //phpcs:ignore
                 // pressed submit without altering the existing license key (containing only * as outputted by default)
@@ -784,6 +786,9 @@ class TRP_Plugin_Updater{
             // run a quick security check
             if( ! check_admin_referer( 'trp_license_nonce', 'trp_license_nonce' ) )
                 return; // get out if we didn't click the Activate button
+
+            if( !current_user_can( 'manage_options' ) )
+                return;
 
             // retrieve the license from the database
             $license = trim( $this->get_option( 'trp_license_key' ) );

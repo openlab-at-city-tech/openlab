@@ -105,6 +105,33 @@ function trp_x( $text, $context, $domain, $language ) {
 }
 
 /**
+ * updated function that gets the translation for a string with context directly from a .po file
+ * @TODO the initial trp_x function was returning the translation in english  for the slugs I tried to search even if they were translation for them
+ * the trp_x function also searches the .mo file witch doesn't seem to be the right file, but the .po file instead
+ */
+function trp_x_updated( $original_text, $context, $domain, $language ){
+    // Define the base path to the plugin's languages directory
+    $basePath = WP_CONTENT_DIR . '/languages/plugins/';
+
+    // Form the path to the .po file
+    $poFilePath = $basePath . $domain . '-' . $language . '.po';
+
+    if (!file_exists($poFilePath)) {
+        return $original_text;
+    }
+
+    $poContent = file_get_contents($poFilePath);
+
+    $pattern = '/msgctxt\s+"'.preg_quote($context, '/').'"\s+msgid\s+"'.preg_quote($original_text, '/').'"\s+msgstr\s+"(.*?)"/s';
+
+    if (preg_match($pattern, $poContent, $matches)) {
+        return stripslashes($matches[1]);
+    }
+
+    return $original_text;
+    }
+
+/**
  * Function that tries to find the path for a translation file defined by textdomain and language
  * @param $domain the textdomain of the string that you want the translation for
  * @param $language the language in which you want the translation

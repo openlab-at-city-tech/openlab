@@ -260,6 +260,7 @@ class TRP_String_Translation {
 	        'sort_by_column'             => esc_html__( 'Click to sort strings by this column', 'translatepress-multilingual' ),
 	        'filter_by_language_tooltip' => esc_html__( 'Language in which the translation status filter applies. Leave unselected for the translation status to apply to ANY language', 'translatepress-multilingual' ),
             'search_placeholder'         => esc_html__('Search', 'translatepress-multilingual'),
+            'other_slugs_tooltip'        => esc_html__( 'Slugs that are not found in either one of the other categories.', 'translatepress-multilingual')
         );
         return apply_filters( 'trp_st_editor_strings', $st_editor_strings );
     }

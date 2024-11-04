@@ -75,11 +75,14 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
 
 		$translated_strings = array();
 
-		/* split our strings that need translation in chunks of maximum 50 strings due to limit of TranslatePress AI*/
-		$new_strings_chunks = array_chunk( $new_strings, 50, true );
+        /* apply filter to allow modification of chunk size, default is 50 */
+        $chunk_size = apply_filters( 'trp_mtapi_chunk_size', 50 );
 
-		foreach( $new_strings_chunks as $new_strings_chunk ){
-			$response = $this->send_request( $source_language, $target_language, $new_strings_chunk, $formality );
+        /* split our strings that need translation in chunks of maximum $chunk_size strings due to limit of TranslatePress AI*/
+        $new_strings_chunks = array_chunk( $new_strings, $chunk_size, true );
+
+        foreach( $new_strings_chunks as $new_strings_chunk ){
+            $response = $this->send_request( $source_language, $target_language, $new_strings_chunk, $formality );
 
 			// this is run only if "Log machine translation queries." is set to Yes.
 			$this->machine_translator_logger->log(array(

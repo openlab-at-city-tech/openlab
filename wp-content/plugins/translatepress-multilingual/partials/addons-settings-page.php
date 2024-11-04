@@ -20,10 +20,17 @@
     //Add Advanced section
     $trp_addons_listing->section_header = array( 'title' => __('Advanced Add-ons', 'translatepress-multilingual' ), 'description' => __('These addons extend your translation plugin and are available in the Developer, Business and Personal plans.', 'translatepress-multilingual')  );
     $trp_addons_listing->section_versions = array( 'TranslatePress - Dev', 'TranslatePress - Personal', 'TranslatePress - Business', 'TranslatePress - Developer' );
+
+    $seo_pack_name = __('SEO Pack', 'translatepress-multilingual');
+    $option = get_option( 'trp_advanced_settings', true );
+    if ( isset( $option['load_legacy_seo_pack'] ) && $option['load_legacy_seo_pack'] === 'yes' ){
+        $seo_pack_name = __('SEO Pack (Legacy)', 'translatepress-multilingual');
+    }
+
     $trp_addons_listing->items = array(
         array(  'slug' => 'tp-add-on-seo-pack/tp-seo-pack.php',
             'type' => 'add-on',
-            'name' => __( 'SEO Pack', 'translatepress-multilingual' ),
+            'name' => $seo_pack_name,
             'description' => __( 'SEO support for page slug, page title, description and facebook and twitter social graph information. The HTML lang attribute is properly set.', 'translatepress-multilingual' ),
             'icon' => 'seo_icon_translatepress.png',
             'doc_url' => 'https://translatepress.com/docs/addons/seo-pack/?utm_source=wpbackend&utm_medium=clientsite&utm_content=add-on-page&utm_campaign=TRP',

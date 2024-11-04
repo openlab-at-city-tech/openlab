@@ -382,9 +382,13 @@ class TRP_Settings{
             'url-slugs'                            => array( 'en_US' => 'en', '' ),
         );
 
-        if ( 'not_set' == $settings_option ){
+        if ( 'not_set' == $settings_option || is_string($settings_option) ){
+            if ( is_string($settings_option) ){
+                error_log( 'Invalid trp_settings: ' . json_encode($settings_option) );
+            }
             update_option ( 'trp_settings', $default_settings );
             $settings_option = $default_settings;
+
         }else{
             // Add any missing default option for trp_setting
             foreach ( $default_settings as $key_default_setting => $value_default_setting ){
