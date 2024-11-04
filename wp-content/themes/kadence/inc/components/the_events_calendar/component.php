@@ -99,7 +99,7 @@ class Component implements Component_Interface {
 		$css->add_property( '--tec-color-text-event-title', 'var(--global-palette3)' );
 		$css->add_property( '--tec-color-text-events-title', 'var(--global-palette3)' );
 		$css->add_property( '--tec-color-background-view-selector-list-item-hover', 'var(--global-palette7)' );
-		$css->add_property( '--tec-color-background-secondary', 'var(--global-palette7)' );
+		$css->add_property( '--tec-color-background-secondary', 'var(--global-palette8)' );
 		$css->add_property( '--tec-color-link-primary', 'var(--global-palette3)' );
 		$css->add_property( '--tec-color-icon-active', 'var(--global-palette3)' );
 		$css->add_property( '--tec-color-day-marker-month', 'var(--global-palette4)' );
@@ -211,8 +211,159 @@ class Component implements Component_Interface {
 		$css->render_background( kadence()->sub_option( 'tribe_events_archive_content_background', 'mobile' ), $css );
 		$css->stop_media_query();
 
+		$new_styles   = [];
+		$css->set_selector( '#primary .tribe-events, #primary .tribe-events-single' );
+		// Events Bar.
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_text_color' ) ) {
+			$text_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_text_color' );
+			// Text color.
+			if ( ! empty( $text_color ) ) {
+				$css->add_property( '--tec-color-text-events-bar-input', $text_color);
+				$css->add_property( '--tec-color-text-events-bar-input-placeholder', $text_color);
+				$css->add_property( '--tec-color-text-view-selector-list-item', $text_color);
+				$css->add_property( '--tec-color-text-view-selector-list-item-hover', $text_color);
+			}
+		}
+
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'find_events_button_text_color' ) ) {
+			$button_text_color     = $this->get_tribe_option( 'tec_events_bar', 'find_events_button_text_color' );
+			if ( ! empty( $button_text_color ) ) {
+				$css->add_property( '--tec-color-text-events-bar-submit-button', $button_text_color);
+			}
+		}
+
+
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_icon_color_choice' ) ) {
+			if ( 'custom' === $this->get_tribe_option( 'tec_events_bar', 'events_bar_icon_color_choice' ) ) {
+				$icon_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_icon_color' );
+			} elseif (
+				'accent' === $this->get_tribe_option( 'tec_events_bar', 'events_bar_icon_color_choice' )
+				&& $this->should_include_tribe_setting_css( 'global_elements', 'accent_color' )
+			) {
+				$icon_color = $this->get_tribe_option( 'global_elements', 'accent_color' );
+			}
+
+			if ( ! empty( $icon_color ) ) {
+				$css->add_property( '--tec-color-icon-events-bar', $icon_color);
+				$css->add_property( '--tec-color-icon-events-bar-hover', $icon_color);
+				$css->add_property( '--tec-color-icon-events-bar-active', $icon_color);
+			}
+		}
+
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'find_events_button_color_choice' ) ) {
+			$button_color     = $this->get_tribe_option( 'tec_events_bar', 'find_events_button_color' );
+			$button_color_rgb = $css->hex2rgb( $button_color );
+		} elseif ( $this->should_include_tribe_setting_css( 'global_elements', 'accent_color' ) ) {
+			$button_color     = $this->get_tribe_option( 'global_elements', 'accent_color' );
+			$button_color_rgb = $css->hex2rgb( $button_color );
+		}
+
+		if ( ! empty( $button_color ) ) {
+			$css->add_property( '--tec-color-background-events-bar-submit-button', $button_color);
+			//$new_styles[] = "--tec-color-background-events-bar-submit-button: {$button_color};";
+		}
+
+		if ( ! empty( $button_color_rgb ) ) {
+			$css->add_property( '--tec-color-background-events-bar-submit-button-hover', 'rgba( ' . $button_color_rgb . ', 0.8)');
+			$css->add_property( '--tec-color-background-events-bar-submit-button-active', 'rgba( ' . $button_color_rgb . ', 0.9)');
+
+		}
+
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_background_color_choice' ) ) {
+			if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_background_color' ) ) {
+				if ( 'custom' == $this->get_tribe_option( 'tec_events_bar', 'events_bar_background_color_choice' ) ) {
+					$background_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_background_color' );
+				} elseif (
+					'global_background' == $this->get_tribe_option( 'tec_events_bar', 'events_bar_background_color_choice' )
+					&& $this->should_include_tribe_setting_css( 'global_elements', 'background_color' )
+				) {
+					$background_color = $this->get_tribe_option( 'global_elements', 'background_color' );
+				}
+			}
+
+			if ( ! empty( $background_color ) ) {
+				$css->add_property( '--tec-color-background-events-bar', $background_color);
+				$css->add_property( '--tec-color-background-events-bar-tabs', $background_color);
+			}
+		}
+
+		if ( $this->should_include_tribe_setting_css( 'tec_events_bar', 'events_bar_border_color_choice' ) ) {
+			$border_color = $this->get_tribe_option( 'tec_events_bar', 'events_bar_border_color' );
+			if ( ! empty( $border_color ) ) {
+				$css->add_property( '--tec-color-border-events-bar', $border_color);
+			}
+		}
+		// Event Title overrides.
+		if ( $this->should_include_tribe_setting_css( 'global_elements', 'event_title_color' ) ) {
+			$title_color  = $this->get_tribe_option( 'global_elements', 'event_title_color' );
+			$css->add_property( '--tec-color-text-events-title', $title_color);
+			$css->add_property( '--tec-color-text-event-title', $title_color);
+		}
+		if (
+			$this->should_include_tribe_setting_css( 'month_view', 'multiday_event_bar_color_choice' )
+			&& $this->should_include_tribe_setting_css( 'month_view', 'multiday_event_bar_color' )
+		) {
+			$bar_color     = $this->get_tribe_option( 'month_view', 'multiday_event_bar_color' );
+			$bar_color_rgb = $css->hex2rgb( $bar_color );
+			$css->add_property( '--tec-color-background-primary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)');
+			$css->add_property( '--tec-color-background-primary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)');
+			$css->add_property( '--tec-color-background-primary-multiday-active', 'rgba( ' . $bar_color_rgb . ', 0.34)');
+			$css->add_property( '--tec-color-background-secondary-multiday', 'rgba( ' . $bar_color_rgb . ', 0.24)');
+			$css->add_property( '--tec-color-background-secondary-multiday-hover', 'rgba( ' . $bar_color_rgb . ', 0.34)');
+		}
+		if ( $this->should_include_tribe_setting_css( 'month_view', 'date_marker_color' )  ) {
+			$date_marker_color = $this->get_tribe_option( 'month_view', 'date_marker_color' );
+			$css->add_property( '--tec-color-day-marker-month', $date_marker_color);
+			$css->add_property( '--tec-color-day-marker-past-month', $date_marker_color);
+		}
+		if ( $this->should_include_tribe_setting_css( 'month_view', 'days_of_week_color' )  ) {
+			$days_of_week_color = $this->get_tribe_option( 'month_view', 'days_of_week_color' );$css->add_property( '--tec-color-text-day-of-week-month', $days_of_week_color);
+		}
+
 		self::$google_fonts = $css->fonts_output();
 		return $css->css_output();
+	}
+	/**
+	 * Function to simplify getting an option value.
+	 *
+	 * @since 4.13.3
+	 *
+	 * @param string $setting The setting slug, like 'grid_lines_color'.
+	 *
+	 * @return string The setting value;
+	 */
+	public function get_tribe_option( $section, $setting ) {
+		if ( empty( $setting ) || empty( $section ) ) {
+			return '';
+		}
+		if ( ! function_exists( 'tribe' ) ) {
+			return '';
+		}
+
+		return tribe( 'customizer' )->get_option( array( $section, $setting ) );
+	}
+	/**
+	 * Check if a setting should be included in the CSS output by making sure it's not the default.
+	 *
+	 * @param string $section_slug The slug for the section.
+	 * @param string $setting The setting slug.
+	 *
+	 * @return boolean If the setting should be added to the style template.
+	 */
+	public function should_include_tribe_setting_css( $section_slug, $setting ) {
+		if ( empty( $setting ) || empty( $section_slug ) ) {
+			return false;
+		}
+		if ( ! function_exists( 'tribe' ) ) {
+			return false;
+		}
+		$setting_value = tribe( 'customizer' )->get_option( array( $section_slug, $setting ) );
+		$section       = tribe( 'customizer' )->get_section( $section_slug );
+		// Something has gone wrong and we can't get the section.
+		if ( false === $section ) {
+			return false;
+		}
+		return ! empty( $setting_value ) && $section->get_default( $setting ) !== $setting_value;
 	}
 	/**
 	 * Outputs the theme wrappers.

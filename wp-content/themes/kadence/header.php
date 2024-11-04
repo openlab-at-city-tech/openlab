@@ -51,7 +51,7 @@ do_action( 'kadence_before_wrapper' );
 	do_action( 'kadence_after_header' );
 	?>
 
-	<div id="inner-wrap" class="wrap hfeed kt-clear">
+	<div id="inner-wrap" class="wrap kt-clear">
 		<?php
 		/**
 		 * Hook for top of inner wrap.

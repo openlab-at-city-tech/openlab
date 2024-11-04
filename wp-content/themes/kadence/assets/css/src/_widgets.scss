@@ -39,7 +39,7 @@
 	margin-right: 0;
 }
 
-.widget li {
+.widget li:not(.kb-table-of-content-list li) {
 	line-height: 1.8;
 }
 
