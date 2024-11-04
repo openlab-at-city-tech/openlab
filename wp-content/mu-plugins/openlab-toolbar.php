@@ -1115,9 +1115,6 @@ HTML;
 		}
 
 		$link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
-		if ( bp_is_active( 'groups' ) ) {
-			$link .= trailingslashit( bp_get_groups_slug() );
-		}
 
 		// "Go to Inbox" Makes sense that users should always see this
 		$wp_admin_bar->add_node(
