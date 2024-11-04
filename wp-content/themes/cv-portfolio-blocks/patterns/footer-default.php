@@ -82,5 +82,11 @@ return array(
 
 <p class="has-text-align-center has-link-color has-background-color has-text-color has-medium-font-size"><a href="https://www.wpradiant.net/products/free-portfolio-wordpress-theme/">'. esc_html('Portfolio WordPress Theme ','cv-portfolio-blocks') .'</a> By <a href="https://www.wpradiant.net/">'. esc_html('WP Radiant','cv-portfolio-blocks') .'</a> | '. esc_html('Proudly powered by','cv-portfolio-blocks') .' <a href="https://wordpress.org/">'. esc_html('WordPress','cv-portfolio-blocks') .'</a></p>
 <!-- /wp:paragraph --></div>
-<!-- /wp:group -->',
+<!-- /wp:group -->
+
+<!-- wp:buttons -->
+<div class="wp-block-buttons"><!-- wp:button {"className":"scroll-top-button"} -->
+<div class="wp-block-button scroll-top-button"><a class="wp-block-button__link wp-element-button"><span class="dashicons dashicons-arrow-up-alt"></span></a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->',
 );

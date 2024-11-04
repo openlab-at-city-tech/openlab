@@ -1,0 +1,587 @@
+# Copyright (C) 2024 WP Radiant
+# This file is distributed under the GNU General Public License v3 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: CV Portfolio Blocks 1.1.8\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/cv-portfolio-blocks\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-10-08T12:38:05+05:30\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.10.0\n"
+"X-Domain: cv-portfolio-blocks\n"
+
+#. Theme Name of the theme
+#: style.css
+#: inc/customizer.php:17
+msgid "CV Portfolio Blocks"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.wpradiant.net/products/free-portfolio-wordpress-theme/"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you. Demo: https://preview.wpradiant.net/cv-portfolio-blocks/"
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "WP Radiant"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.wpradiant.net/"
+msgstr ""
+
+#: get-started/getstart.php:8
+msgid "https://wordpress.org/support/theme/cv-portfolio-blocks/"
+msgstr ""
+
+#: get-started/getstart.php:9
+msgid "https://wordpress.org/support/theme/cv-portfolio-blocks/reviews/#new-post"
+msgstr ""
+
+#: get-started/getstart.php:10
+#: get-started/notice.php:3
+msgid "https://www.wpradiant.net/products/cv-wordpress-theme/"
+msgstr ""
+
+#: get-started/getstart.php:11
+msgid "https://preview.wpradiant.net/tutorial/cv-portfolio-blocks/"
+msgstr ""
+
+#: get-started/getstart.php:12
+msgid "https://preview.wpradiant.net/cv-portfolio-blocks/"
+msgstr ""
+
+#: get-started/getstart.php:13
+msgid "https://preview.wpradiant.net/tutorial/cv-portfolio-blocks-pro/"
+msgstr ""
+
+#: get-started/getstart.php:57
+msgid "Buy Now"
+msgstr ""
+
+#: get-started/getstart.php:60
+msgid "Demo"
+msgstr ""
+
+#: get-started/getstart.php:63
+msgid "Documentation"
+msgstr ""
+
+#: get-started/getstart.php:84
+msgid "Secondary menu"
+msgstr ""
+
+#: get-started/getstart.php:85
+msgid "About"
+msgstr ""
+
+#: get-started/getstart.php:87
+msgid "Compare free Vs Pro"
+msgstr ""
+
+#: get-started/getstart.php:89
+msgid "Changelog"
+msgstr ""
+
+#: get-started/getstart.php:110
+msgid "Free Theme Directives"
+msgstr ""
+
+#: get-started/getstart.php:113
+msgid "This article will walk you through the different phases of setting up and handling your WordPress website."
+msgstr ""
+
+#: get-started/getstart.php:117
+msgid "Free Documentation"
+msgstr ""
+
+#: get-started/getstart.php:124
+msgid "Full Site Editing"
+msgstr ""
+
+#: get-started/getstart.php:127
+msgid "We have used Full Site Editing which will help you preview your changes live and fast."
+msgstr ""
+
+#: get-started/getstart.php:131
+msgid "Use Site Editor"
+msgstr ""
+
+#: get-started/getstart.php:138
+msgid "Leave us a review"
+msgstr ""
+
+#: get-started/getstart.php:140
+msgid "We would love to hear your feedback."
+msgstr ""
+
+#: get-started/getstart.php:144
+msgid "Review"
+msgstr ""
+
+#: get-started/getstart.php:152
+msgid "Help &amp; Support"
+msgstr ""
+
+#: get-started/getstart.php:155
+msgid "If you have any question/feedback regarding theme, please post in our official support forum."
+msgstr ""
+
+#: get-started/getstart.php:159
+msgid "Get Support"
+msgstr ""
+
+#: get-started/getstart.php:177
+msgid "Want to know whats been happening with the latest changes?"
+msgstr ""
+
+#: get-started/getstart.php:238
+msgid "Compare Free Vs Pro"
+msgstr ""
+
+#: get-started/getstart.php:242
+msgid "Theme Features"
+msgstr ""
+
+#: get-started/getstart.php:243
+msgid "Free Theme"
+msgstr ""
+
+#: get-started/getstart.php:244
+msgid "Pro Theme"
+msgstr ""
+
+#: get-started/getstart.php:249
+msgid "Responsive Design"
+msgstr ""
+
+#: get-started/getstart.php:254
+msgid "Painless Setup"
+msgstr ""
+
+#: get-started/getstart.php:259
+msgid "Color Options"
+msgstr ""
+
+#: get-started/getstart.php:264
+msgid "Premium site demo"
+msgstr ""
+
+#: get-started/getstart.php:269
+msgid "Multiple Block Layout"
+msgstr ""
+
+#: get-started/getstart.php:274
+msgid "Premium Patterns"
+msgstr ""
+
+#: get-started/getstart.php:279
+msgid "Multiple Fonts"
+msgstr ""
+
+#: get-started/getstart.php:284
+msgid "Slider Block"
+msgstr ""
+
+#: get-started/getstart.php:289
+msgid "Post Listing Block"
+msgstr ""
+
+#: get-started/getstart.php:294
+msgid "WooCommerce Filter Block"
+msgstr ""
+
+#: get-started/getstart.php:299
+msgid "Gallery Block"
+msgstr ""
+
+#: get-started/getstart.php:304
+msgid "Post Carousel Block"
+msgstr ""
+
+#: get-started/getstart.php:311
+msgid "Buy It Now"
+msgstr ""
+
+#: get-started/notice.php:5
+msgid "https://www.wpradiant.net/products/wordpress-theme-bundle/"
+msgstr ""
+
+#: get-started/notice.php:47
+msgid "Welcome to CV Portfolio Blocks"
+msgstr ""
+
+#: get-started/notice.php:48
+msgid "Enhance Your Website Development with Radiant Blocks!!"
+msgstr ""
+
+#: get-started/notice.php:51
+msgid "Effortlessly craft websites for any niche with Radiant Blocks! Experience seamless functionality and stunning responsiveness as you enhance your digital presence with Block WordPress Themes. Start building your ideal website today!"
+msgstr ""
+
+#: get-started/notice.php:53
+msgid "Getting started"
+msgstr ""
+
+#: get-started/notice.php:55
+msgid "Buy Now "
+msgstr ""
+
+#: get-started/notice.php:57
+msgid "Get Bundle"
+msgstr ""
+
+#: inc/block-pattern.php:61
+msgid "CV Portfolio Blocks Patterns"
+msgstr ""
+
+#: inc/block-style.php:27
+msgid "Borders"
+msgstr ""
+
+#: inc/customizer.php:18
+msgid "Upgrade Pro"
+msgstr ""
+
+#: patterns/404-page.php
+msgctxt "Pattern title"
+msgid "404 Page"
+msgstr ""
+
+#: patterns/404-page.php:11
+msgid "404 Page"
+msgstr ""
+
+#: patterns/banner.php
+msgctxt "Pattern title"
+msgid "Banner"
+msgstr ""
+
+#: patterns/banner.php:11
+msgid "Banner"
+msgstr ""
+
+#: patterns/footer-default.php
+msgctxt "Pattern title"
+msgid "Footer Default"
+msgstr ""
+
+#: patterns/footer-default.php:11
+msgid "Footer Default"
+msgstr ""
+
+#: patterns/post-category-section.php
+msgctxt "Pattern title"
+msgid "Post Category Section"
+msgstr ""
+
+#: patterns/post-category-section.php:11
+msgid "Post Category Section"
+msgstr ""
+
+#: patterns/primary-sidebar.php
+msgctxt "Pattern title"
+msgid "Primary Sidebar"
+msgstr ""
+
+#: patterns/primary-sidebar.php:11
+msgid "Sidebar Section"
+msgstr ""
+
+#: patterns/search-header.php
+msgctxt "Pattern title"
+msgid "Search Header"
+msgstr ""
+
+#: patterns/search-header.php:11
+msgid "Search Header"
+msgstr ""
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "Search"
+msgstr ""
+
+#: patterns/search.php:11
+msgid "Search"
+msgstr ""
+
+#: styles/blue.json
+msgctxt "Style variation name"
+msgid "Lite Green"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "Accent"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "Fourground"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secbackground"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "primary"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "Secondary"
+msgstr ""
+
+#: styles/blue.json
+#: styles/dark-green.json
+#: styles/green.json
+#: styles/purple.json
+#: styles/red.json
+#: theme.json
+msgctxt "Color name"
+msgid "tertiary"
+msgstr ""
+
+#: styles/dark-green.json
+msgctxt "Style variation name"
+msgid "Yellow"
+msgstr ""
+
+#: styles/green.json
+msgctxt "Style variation name"
+msgid "Red"
+msgstr ""
+
+#: styles/purple.json
+msgctxt "Style variation name"
+msgid "Purple"
+msgstr ""
+
+#: styles/red.json
+msgctxt "Style variation name"
+msgid "Lite Pink"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar Products"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Post (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Post (Sidebar on Right)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single post (No Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (Sidebar on Right)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "primary and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "primary and secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "primary and tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical secondary to tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical secondary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical tertiary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to primary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal secondary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal background to secondary"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal tertiary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal background to tertiary"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Poppins"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Roboto"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Lato"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Jost"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Marhey"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Upper Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Content Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra large (Recent Post Title)"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge (Display)"
+msgstr ""
