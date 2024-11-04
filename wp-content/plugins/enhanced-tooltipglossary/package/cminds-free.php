@@ -1,9 +1,9 @@
 <?php
 
-namespace com\cminds\package\free\v1_1_4;
+namespace com\cminds\package\free\v1_1_5;
 
 if (!defined(__NAMESPACE__ . '\PLATFORM_VERSION')) {
-    define(__NAMESPACE__ . '\PLATFORM_VERSION', '1_1_4');
+    define(__NAMESPACE__ . '\PLATFORM_VERSION', '1_1_5');
 }
 if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
 
@@ -2178,7 +2178,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                                 Discounts have been refreshed.
                             </span>
                         <?php else : ?>
-                            You haven't refreshed the discounts for <?php echo $days_since_last_refresh . ' ' . _n('day', 'days', $days_since_last_refresh); ?>. <a class="cminds-ads-refresh-button" href="<?php echo add_query_arg(array('cminds_ad_refresh' => 1)); ?>"><strong>Refresh now!</strong></a>
+                            You haven't refreshed the discounts for <?php echo $days_since_last_refresh . ' ' . _n('day', 'days', $days_since_last_refresh); ?>. <a class="cminds-ads-refresh-button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_ad_refresh' => 1))); ?>"><strong>Refresh now!</strong></a>
                         <?php endif; ?>
                     </div>
                 <?php else: ?>
