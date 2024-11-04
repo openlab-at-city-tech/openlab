@@ -561,6 +561,10 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						// REVIEW: Does this account for all citation styles?
 						/* chicago-author-date */ $item->bib = str_ireplace( htmlentities($item->data->url."."), "", $item->bib ); // Note the period
 						/* APA */ $item->bib = str_ireplace( htmlentities($item->data->url), "", $item->bib );
+						
+						// 7.3.14 (@timtom): Fix APA citation by removing the last part of the "Retrieved from" text
+						$item->bib = preg_replace('/(Retrieved \w+ \d+, \d+)(, from)/','${1}.',$item->bib);
+						
 						$item->bib = str_ireplace( " Retrieved from ", "", $item->bib );
 						$item->bib = str_ireplace( " Available from: ", "", $item->bib );
 
@@ -618,7 +622,8 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 							"\xE2\x80\x9E" => '"',	// U+201E double low-9 quotation mark
 							"\xE2\x80\x9F" => '"',	// U+201F double high-reversed-9 quotation mark
 							"\xE2\x80\xB9" => "'",	// U+2039 single left-pointing angle quotation mark
-							"\xE2\x80\xBA" => "'"	// U+203A single right-pointing angle quotation mark
+							"\xE2\x80\xBA" => "'",	// U+203A single right-pointing angle quotation mark
+							"\xE2\x80\xAF" => " "   // 7.3.14 (@timtom): U+206F nominal digit shapes
 						);
 						$chr = array_keys( $chr_map );
 						$rpl = array_values( $chr_map );
@@ -637,7 +642,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						// If wrapping title, wrap it:
 						$item->bib = str_ireplace(
 								$item->data->title,
-								"<a ".$zp_target_output."href='".$item->data->url."'>".$item->data->title."</a>",
+								"<a class='zp-ItemURL' ".$zp_target_output."href='".$item->data->url."'>".$item->data->title."</a>",
 								$item->bib
 							);
 
@@ -650,7 +655,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					{
 						$item->bib = str_ireplace(
 								htmlentities($item->data->url),
-								"<a ".$zp_target_output."href='".$item->data->url."'>".$item->data->url."</a>",
+								"<a class='zp-ItemURL' ".$zp_target_output."href='".$item->data->url."'>".$item->data->url."</a>",
 								$item->bib
 							);
 					}
@@ -667,7 +672,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					{
          				$item->bib = str_ireplace(
    								"doi:" . $item->data->DOI,
-   								"<a ".$zp_target_output."href='http://doi.org/".$item->data->DOI."'>http://doi.org/".$item->data->DOI."</a>",
+   								"<a class='zp-DOIURL' ".$zp_target_output."href='http://doi.org/".$item->data->DOI."'>http://doi.org/".$item->data->DOI."</a>",
    								$item->bib
    							);
      				}
@@ -677,7 +682,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					{
          				$item->bib = str_ireplace(
    								"http://doi.org/" . $item->data->DOI,
-   								"<a ".$zp_target_output."href='http://doi.org/".$item->data->DOI."'>http://doi.org/".$item->data->DOI."</a>",
+   								"<a class='zp-DOIURL' ".$zp_target_output."href='http://doi.org/".$item->data->DOI."'>http://doi.org/".$item->data->DOI."</a>",
    								$item->bib
    							);
 					}
@@ -687,7 +692,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					{
          				$item->bib = str_ireplace(
    								"https://doi.org/" . $item->data->DOI,
-   								"<a ".$zp_target_output."href='https://doi.org/".$item->data->DOI."'>https://doi.org/".$item->data->DOI."</a>",
+   								"<a class='zp-DOIURL' ".$zp_target_output."href='https://doi.org/".$item->data->DOI."'>https://doi.org/".$item->data->DOI."</a>",
    								$item->bib
    							);
  					}

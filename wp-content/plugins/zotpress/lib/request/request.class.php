@@ -307,7 +307,7 @@ if ( ! class_exists('ZotpressRequest') )
 
                 if ( is_wp_error($response) )
                     $this->request_error = $response->get_error_message();
-                // New in 7.3.13: No collection error
+                // 7.3.13: No collection and tag error reporting:
                 else if ( $response["body"] == "Collection not found"
                         || $response["body"] == "Tag not found" )
                     $this->request_error = $response["body"];
