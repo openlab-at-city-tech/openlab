@@ -2,7 +2,6 @@
 /**
  * dynwid_class.php - Dynamic Widgets Classes loader (PHP5)
  *
- * @version $Id: dynwid_class.php 1095126 2015-02-20 12:59:35Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

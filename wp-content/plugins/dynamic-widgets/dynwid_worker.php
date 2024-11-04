@@ -2,7 +2,6 @@
 /**
  * dynwid_worker.php - The worker does the actual work.
  *
- * @version $Id: dynwid_worker.php 2164836 2019-09-28 10:54:30Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

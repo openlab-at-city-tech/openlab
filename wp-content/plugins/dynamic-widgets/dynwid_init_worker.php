@@ -2,7 +2,6 @@
 /**
  * dynwid_init_worker.php
  *
- * @version $Id: dynwid_init_worker.php 1698398 2017-07-18 19:34:08Z qurl $
  * @copyright 2011 Jacco Drabbe
  */
 

@@ -2,7 +2,6 @@
 	/**
 	 * dynwid_admin_save.php - Saving options to the database
 	 *
-	 * @version $Id: dynwid_admin_save.php 2624427 2021-11-04 10:33:06Z qurl $
 	 * @copyright 2011 Jacco Drabbe
 	 */
 

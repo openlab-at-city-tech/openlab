@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Dynamic Widgets
  * Description: Dynamic Widgets gives you full control on which pages your widgets will appear. It lets you dynamicly show or hide widgets on WordPress pages.
- * Version: 1.6.3
+ * Version: 1.6.5
  * Requires at least: 3.0.0
  * Requires PHP: 5.2.7
  * Author: vivwebs
@@ -16,7 +16,6 @@
  *
  * Released under the GPL v.2, http://www.gnu.org/copyleft/gpl.html
  *
- * @version $Id: dynamic-widgets.php 2829573 2022-12-06 18:56:07Z vivwebs $
  * @copyright 2017 Jacco Drabbe
  *
  * Thanks to Alexis Nomine for the contribution of the French (fr_FR) language files, several L10N fixes and change of the edit options UI.
@@ -86,7 +85,7 @@
 	define('DW_PLUGIN', dirname(__FILE__) . '/' . 'plugin/');
 	define('DW_TIME_LIMIT', 86400);				// 1 day
 	define('DW_URL_AUTHOR', 'https://profiles.wordpress.org/vivwebs/');
-	define('DW_VERSION', '1.6.3');
+	define('DW_VERSION', '1.6.5');
 	define('DW_WPML_API', '/inc/wpml-api.php');			// WPML Plugin support - API file relative to ICL_PLUGIN_PATH
 	define('DW_WPML_ICON', 'img/wpml_icon.png');	// WPML Plugin support - WPML icon
 
@@ -483,7 +482,9 @@
 	function dynwid_admin_dump() {
 		/** @var $DW DynWid */
 		global $DW;
-
+		if(empty($_GET['dynwid_dump']) || !wp_verify_nonce($_GET['dynwid_dump'],'dynwid_dump')){
+			die('busted 5');
+		}
 		header('Content-Description: File Transfer');
 		header('Content-Disposition: attachment; filename=dynwid_dump_' . date('Ymd') . '.txt' );
 		header('Content-Type: text/plain');
@@ -508,6 +509,9 @@
 	 * @since 1.4.0
 	 */
 	function dynwid_admin_wpec_dump() {
+		if(empty($_GET['wpec_dump']) || !wp_verify_nonce($_GET['wpec_dump'],'wpec_dump')){
+			die('busted 4');
+		}
 		$DW = &$GLOBALS['DW'];
 		$wpdb = &$GLOBALS['wpdb'];
 		$dump = array();
@@ -838,7 +842,7 @@
 	function dynwid_term_tree() {
 		global $DW;
 		if ( empty($_POST['nonce']) || ! wp_verify_nonce( $_POST['nonce'], 'ajax-nonce' ) ) {
-			die ( 'Busted!');
+			die ( 'Busted! 0');
 		}
 		include_once(DW_MODULES . 'custompost_module.php');
 		
@@ -866,6 +870,10 @@
 	 */
 	function dynwid_uninstall() {
 		global $wpdb;
+
+		if(empty($_GET['dynwid_uninstall']) || !wp_verify_nonce($_GET['dynwid_uninstall'],'dynwid_uninstall')){
+			die('busted 1');
+		}
 
 		$dbtable = $wpdb->prefix . DW_DB_TABLE;
 
