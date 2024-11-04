@@ -47,53 +47,10 @@ class DKPDF_Settings {
 		// main menu
 		$page = add_menu_page( 'DK PDF', 'DK PDF', 'manage_options', 'dkpdf' . '_settings',  array( $this, 'settings_page' ) );
 
-		// Addons submenu
-		add_submenu_page( 'dkpdf' . '_settings', 'Addons', 'Addons', 'manage_options', 'dkpdf-addons', array( $this, 'dkpdf_addons_screen' ));
-
-		// support
-		add_submenu_page( 'dkpdf' . '_settings', 'Support', 'Support', 'manage_options', 'dkpdf-support', array( $this, 'dkpdf_support_screen' ));
-
 		// settings assets
 		add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
 
 	}
-
-	public function dkpdf_support_screen() { ?>
-
-		<div class="wrap">
-			<h2 style="float:left;width:100%;">DK PDF Support</h2>
-
-			<div class="dkpdf-item">
-				<h3>Documentation</h3>
-				<p>Everything you need to know for getting DK PDF up and running.</p>
-				<p><a href="http://wp.dinamiko.com/demos/dkpdf/documentation/" target="_blank">Go to Documentation</a></p>
-			</div>
-
-			<div class="dkpdf-item">
-				<h3>Support</h3>
-				<p>Having trouble? don't worry, create a ticket in the support forum.</p>
-				<p><a href="https://wordpress.org/support/plugin/dk-pdf" target="_blank">Go to Support</a></p>
-			</div>
-		</div>
-
-		<?php do_action( 'dkpdf_after_support' );?>
-
-	<?php }
-
-	public function dkpdf_addons_screen() { ?>
-
-		<div class="wrap">
-			<h2>DK PDF Addons</h2>
-
-			<div class="dkpdf-item">
-				<h3>DK PDF Generator</h3>
-				<p>Allows creating PDF documents with your selected WordPress content, also allows adding a Cover and a Table of contents.</p>
-				<p><a href="http://codecanyon.net/item/dk-pdf-generator/13530581" target="_blank">Go to DK PDF Generator</a></p>
-			</div>
-
-		</div>
-
-	<?php }
 
 	/**
 	 * Load settings JS & CSS
@@ -329,7 +286,7 @@ class DKPDF_Settings {
 				array(
 					'id' 			=> 'pdf_custom_css',
 					'label'			=> __( 'PDF Custom CSS' , 'dkpdf' ),
-					'description'	=> __( '', 'dkpdf' ),
+					'description'	=> '',
 					'type'			=> 'textarea_code',
 					'default'		=> '',
 					'placeholder'	=> ''
@@ -359,11 +316,15 @@ class DKPDF_Settings {
 
 			// Check posted/selected tab
 			$current_section = '';
-			if ( isset( $_POST['tab'] ) && $_POST['tab'] ) {
-				$current_section = $_POST['tab'];
+            // phpcs:ignore
+            $tab = sanitize_text_field(wp_unslash($_POST['tab'] ?? ''));
+            if ( $tab) {
+				$current_section = $tab;
 			} else {
-				if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
-					$current_section = $_GET['tab'];
+                // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+                $get_tab = sanitize_text_field(wp_unslash($_GET['tab'] ?? ''));
+                if ( $get_tab) {
+					$current_section = $get_tab;
 				}
 			}
 
@@ -396,7 +357,9 @@ class DKPDF_Settings {
 	}
 
 	public function settings_section ( $section ) {
-		$html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
+		$html = '<p> ' . esc_html($this->settings[ $section['id'] ]['description']) . '</p>' . "\n";
+
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -405,10 +368,10 @@ class DKPDF_Settings {
 	 * @return void
 	 */
 	public function settings_page () {
-
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if( isset( $_GET['settings-updated']) ) { ?>
 		    <div id="message" class="updated">
-		        <p><?php _e('Settings saved.', 'dkpdf');?></p>
+		        <p><?php esc_html_e('Settings saved.', 'dkpdf');?></p>
 		    </div>
 		<?php }
 
@@ -416,9 +379,12 @@ class DKPDF_Settings {
 		$html = '<div class="wrap" id="' . 'dkpdf' . '_settings">' . "\n";
 			$html .= '<h2>' . __( 'DK PDF Settings' , 'dkpdf' ) . '</h2>' . "\n";
 
-			$tab = '';
-			if ( isset( $_GET['tab'] ) && $_GET['tab'] ) {
-				$tab .= $_GET['tab'];
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $tab = '';
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+        $tab2 = sanitize_text_field(wp_unslash($_GET['tab'] ?? ''));
+        if ( $tab2) {
+				$tab .= $tab2;
 			}
 
 			// Show page tabs
@@ -431,18 +397,19 @@ class DKPDF_Settings {
 
 					// Set tab class
 					$class = 'nav-tab';
-					if ( ! isset( $_GET['tab'] ) ) {
+					if ( ! isset($tab2) ) {
 						if ( 0 == $c ) {
 							$class .= ' nav-tab-active';
 						}
 					} else {
-						if ( isset( $_GET['tab'] ) && $section == $_GET['tab'] ) {
+						if ( isset($tab2) && $section == $tab2) {
 							$class .= ' nav-tab-active';
 						}
 					}
 
 					// Set tab link
-					$tab_link = add_query_arg( array( 'tab' => $section ) );
+					$tab_link = esc_attr( add_query_arg( array( 'tab' => $section ) ) );
+                    // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					if ( isset( $_GET['settings-updated'] ) ) {
 						$tab_link = remove_query_arg( 'settings-updated', $tab_link );
 					}
@@ -472,6 +439,7 @@ class DKPDF_Settings {
 
 		$html .= '</div>' . "\n";
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 	}
 
@@ -489,14 +457,16 @@ class DKPDF_Settings {
 	 * Cloning is forbidden.
 	 */
 	public function __clone () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?' ), $this->parent->_version );
 	} // End __clone()
 
 	/**
 	 * Unserializing instances of this class is forbidden.
 	 */
 	public function __wakeup () {
-		_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?' ), $this->parent->_version );
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		_doing_it_wrong( __FUNCTION__, esc_attr__( 'Cheatin&#8217; huh?' ), $this->parent->_version );
 	} // End __wakeup()
 
 }
