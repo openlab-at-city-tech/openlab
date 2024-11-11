@@ -5,8 +5,8 @@ parameters:
     - wp-content/plugins/wds-citytech
     - wp-content/themes/openlab
   excludePaths:
-    - wp-content/mu-plugins/bbg-mail-debug.php
-    - wp-content/plugins/wds-citytech/node_modules
+    - wp-content/mu-plugins/bbg-mail-debug.php (?)
+    - wp-content/plugins/wds-citytech/node_modules (?)
   scanDirectories:
     - wp-content/plugins/ambrosite-nextprevious-post-link-plus
     - wp-content/plugins/bbpress
