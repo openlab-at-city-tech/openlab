@@ -111,6 +111,8 @@ function openlab_ass_group_subscribe_settings() {
                         <input type="hidden" name="ass_group_id" value="<?php echo $group->id; ?>"/>
                         <?php wp_nonce_field('ass_subscribe'); ?>
 
+						<?php wp_nonce_field( 'bpges_subscribe', 'bpges-subscribe-nonce' ); ?>
+
 						<p>Choose your email subscription options.</p>
 
 						<div class="radio email-sub">
