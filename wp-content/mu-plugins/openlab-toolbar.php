@@ -1114,7 +1114,7 @@ HTML;
 			}
 		}
 
-		$link = trailingslashit( bp_loggedin_user_domain() . bp_get_activity_slug() );
+		$link = trailingslashit( bp_loggedin_user_domain() . 'my-activity' );
 
 		// "Go to Inbox" Makes sense that users should always see this
 		$wp_admin_bar->add_node(
