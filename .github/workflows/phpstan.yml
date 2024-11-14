@@ -17,8 +17,8 @@ jobs:
 
       - uses: php-actions/composer@v6
 
+      - name: Install PHPStan
+        run: composer require --dev phpstan/phpstan
+
       - name: PHPStan Static Analysis
-        uses: php-actions/phpstan@v3
-        with:
-          php_version: 8.0
-          configuration: phpstan.neon
+        run: vendor/bin/phpstan --memory-limit=1G --error-format=github
