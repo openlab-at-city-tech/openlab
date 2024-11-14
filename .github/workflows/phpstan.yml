@@ -17,8 +17,11 @@ jobs:
 
       - uses: php-actions/composer@v6
 
-      - name: Install PHPStan
-        run: composer require --dev phpstan/phpstan
+      - name: Clear Composer Cache
+        run: composer clear-cache
+
+      - name: Install Composer dependencies
+        run: composer install --no-interaction
 
       - name: PHPStan Static Analysis
         run: vendor/bin/phpstan --memory-limit=1G --error-format=github
