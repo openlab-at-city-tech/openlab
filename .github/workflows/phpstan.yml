@@ -22,4 +22,4 @@ jobs:
         run: composer install --no-interaction
 
       - name: PHPStan Static Analysis
-        run: vendor/bin/phpstan --memory-limit=1G --error-format=github
+        run: vendor/bin/phpstan --memory-limit=2G --error-format=github --no-parallel
