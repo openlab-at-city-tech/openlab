@@ -607,7 +607,9 @@ function Zotpress_prep_ajax_request_vars($wpdb, $atts=false, $is_zplib=false) {
 	$zpr["style"] = zp_Get_Default_Style();
 	if ( isset($atts['style']) 
 			&& $atts['style'] != "false" && $atts['style'] != "" && $atts['style'] != "default" )
-		$zpr["style"] = sanitize_text_field(wp_strip_all_tags($atts['style']));
+		// $zpr["style"] = sanitize_text_field(wp_strip_all_tags($atts['style']));
+		// 7.3.14: Need to remove any special quotes, etc.
+		$zpr["style"] = zp_clean_param(sanitize_text_field(wp_strip_all_tags($atts['style'])));
 
 	// NOTE: With PHP 8, watch for URL params that are strings but need to be ints
 	// 7.3.10: CHECK: Ignore if 50

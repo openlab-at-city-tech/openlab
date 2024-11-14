@@ -174,7 +174,8 @@ class TRP_Translation_Manager {
                     'tooltip_text_default' => esc_html__( 'Text on this page is %s% translated into all languages.', 'translatepress-multilingual'),
                     'tooltip_text_general' => esc_html__( '%1$s% of text on this page is translated into %2$s.', 'translatepress-multilingual'),
                     'minibar_text'         => esc_html__('This page is %1$s% translated into %2$s.', 'translatepress-multilingual')
-                )
+                ),
+                'multiple_types_alert'              => esc_html__( "The slug that you are trying to edit is present in other slug types:%s%.\nEditing it will replace each occurrence, regardless of the current type.", 'translatepress-multilingual')
             );
     }
 
@@ -468,6 +469,7 @@ class TRP_Translation_Manager {
             'user_meta'                   => $this->get_editor_user_meta(),
             'upgraded_gettext'            => ! ( ( get_option( 'trp_updated_database_gettext_original_id_update', 'yes' ) == 'no' ) ),
             'notice_upgrade_gettext'      => $this->display_notice_to_upgrade_gettext_in_editor(''),
+            'notice_upgrade_slugs'        => $this->display_notice_to_upgrade_slugs_in_editor(''),
             'upsale_slugs'                => $this->is_seo_pack_inactive(),
             'upsale_slugs_text'           => $this->upsale_slugs_text(),
             'license_notice_content'      => $this->get_license_notice_content()
@@ -796,6 +798,25 @@ class TRP_Translation_Manager {
 
 		return $trp_editor_notices;
 	}
+
+    public function display_notice_to_upgrade_slugs_in_editor( $trp_editor_notices ) {
+        if (  ( get_option( 'trp_migrate_old_slug_to_new_parent_and_translate_slug_table_term_meta_284', 'not_set' ) == 'no' ) ){
+            $url = add_query_arg( array(
+                'page'                      => 'trp_update_database',
+            ), site_url('wp-admin/admin.php') );
+
+            $html = "<div class='trp-notice trp-notice-warning'>";
+            $html .= '<p><strong>' . esc_html__( 'TranslatePress data update', 'translatepress-multilingual' ) . '</strong> &#8211; ' . esc_html__( 'We need to update your translations database to the latest version.', 'translatepress-multilingual' ) . '</p>';
+            $html .= '<p>' . esc_html__( 'Updating will allow editing translations of slugs. Existing translation will still work as expected.', 'translatepress-multilingual' ) . '</p>';
+
+            $html .= '<p><a class="trp-button-primary" target="_blank" href="' . esc_url( $url ) . '" onclick="return confirm( \'' . __( 'IMPORTANT: It is strongly recommended to first backup the database!\nAre you sure you want to continue?', 'translatepress-multilingual' ) . '\');" class="button-primary">' . esc_html__( 'Run the updater', 'translatepress-multilingual' ) . '</a></p>';
+            $html .= '</div>';
+
+            $trp_editor_notices = $html;
+        }
+
+        return $trp_editor_notices;
+    }
 
     /**
      * Receives and returns the date format in which a date (eg publish date) is presented on the frontend

@@ -34,4 +34,12 @@ else
         <a class="nav-item <?php if ($tagpage == "help") echo "nav-tab-active"; ?>" href="admin.php?page=Zotpress&amp;help=true"><?php _e('Help', 'zotpress'); ?></a>
     </div>
 
+    <?php if ( current_user_can('edit_others_posts')
+                && in_array( $tagpage, array( "accounts", "options" ) ) ) { ?>
+    <div class="zp-Nav-Access">
+        <span class="accessible-by">Accessible by:</span>
+        <span class="access-level">Editors &amp; Admins</span>
+    </div>
+    <?php } ?>
+
 </div><!-- #zp-Zotpress-Navigation -->

@@ -423,7 +423,7 @@ function TRP_Advanced_Settings_Tabs() {
             jQuery("." + first_settings).show();
         } else if (!window.location.href.includes('#')) {
             var trp_tab = trp_current_url.split('tab');
-            var trp_tab_value = trp_tab[1].split('=');
+            var trp_tab_value = trp_tab[1].split(/[=&]/);
 
             jQuery('.trp_advanced_tab_content_table_item .' + trp_tab_value[1]).css({
                 'border-bottom': '4px solid #2271b1',

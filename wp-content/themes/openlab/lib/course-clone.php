@@ -928,6 +928,29 @@ class Openlab_Clone_Course_Site {
 			openlab_add_widget_to_main_sidebar( 'openlab_shareable_content_widget' );
 		}
 
+		// Replace old URLs with new ones in header-related theme mods.
+		$old_url = get_blog_option( $this->source_site_id, 'home' );
+		$new_url = get_option( 'home' );
+
+		$header_image_theme_mod = get_theme_mod( 'header_image' );
+		if ( $header_image_theme_mod ) {
+			$header_image_theme_mod = str_replace( $old_url, $new_url, $header_image_theme_mod );
+			set_theme_mod( 'header_image', $header_image_theme_mod );
+		}
+
+		$header_image_data_theme_mod = get_theme_mod( 'header_image_data' );
+		if ( $header_image_data_theme_mod && is_object( $header_image_data_theme_mod ) ) {
+			if ( isset( $header_image_data_theme_mod->url ) ) {
+				$header_image_data_theme_mod->url = str_replace( $old_url, $new_url, $header_image_data_theme_mod->url );
+			}
+
+			if ( isset( $header_image_data_theme_mod->thumbnail_url ) ) {
+				$header_image_data_theme_mod->thumbnail_url = str_replace( $old_url, $new_url, $header_image_data_theme_mod->thumbnail_url );
+			}
+
+			set_theme_mod( 'header_image_data', $header_image_data_theme_mod );
+		}
+
 		restore_current_blog();
 	}
 

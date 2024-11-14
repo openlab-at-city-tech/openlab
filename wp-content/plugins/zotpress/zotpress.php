@@ -6,7 +6,7 @@
     Plugin URI: http://katieseaborn.com/plugins
     Description: Bringing Zotero and scholarly blogging to your WordPress website.
     Author: Katie Seaborn
-    Version: 7.3.13
+    Version: 7.3.14
     Author URI: http://katieseaborn.com
     Text Domain: zotpress
     Domain Path: /languages/
@@ -72,7 +72,7 @@ if ( ! defined( 'ABSPATH' ) ) {
     define('ZOTPRESS_PLUGIN_FILE',  __FILE__ );
     define('ZOTPRESS_PLUGIN_URL', plugin_dir_url( ZOTPRESS_PLUGIN_FILE ));
     define('ZOTPRESS_PLUGIN_DIR', dirname( __FILE__ ));
-    define('ZOTPRESS_VERSION', '7.3.13' );
+    define('ZOTPRESS_VERSION', '7.3.14' );
 
     // NOTE: Remember to set to TRUE after dev and before version release
     define('ZOTPRESS_LIVEMODE', true );
@@ -457,7 +457,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // ZOTPRESS NOTIFICATIONS 	------------------------------------------------------------------------
 
-    if ( in_array( ZOTPRESS_VERSION, array( "6.2.1", "6.2.2", "7.1.1", "7.1.2", "7.1.3", "7.1.4" ) ) )
+    if ( in_array( ZOTPRESS_VERSION, array( "6.2.1", "6.2.2", "7.1.1", "7.1.2", "7.1.3", "7.1.4", "7.3.13", "7.3.14" ) ) )
     {
         function Zotpress_plugin_update_message( $data, $response ) {
         	printf(
@@ -468,7 +468,7 @@ if ( ! defined( 'ABSPATH' ) ) {
         add_action( 'in_plugin_update_message-zotpress/zotpress.php', 'Zotpress_plugin_update_message', 10, 2 );
     }
 
-    if ( in_array( ZOTPRESS_VERSION, array( "6.2.1", "6.2.2", "7.1.4" ) ) )
+    if ( in_array( ZOTPRESS_VERSION, array( "6.2.1", "6.2.2", "7.1.4", "7.3.13", "7.3.14" ) ) )
     {
         if ( zp_get_total_accounts() > 0
                 && ! get_option( 'Zotpress_update_notice_dismissed' ) )

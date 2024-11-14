@@ -169,6 +169,7 @@ class DKPDF_Admin_API {
 
 			case 'color':
 				?><div class="color-picker" style="position:relative;">
+                    <?php // phpcs:ignore WordPress.WP.I18n.NonSingularStringLiteralText ?>
 			        <input type="text" name="<?php esc_attr_e( $option_name ); ?>" class="color" value="<?php esc_attr_e( $data ); ?>" />
 			        <div style="position:absolute;background:#FFF;z-index:99;border-radius:100%;" class="colorpicker"></div>
 			    </div>
@@ -202,6 +203,7 @@ class DKPDF_Admin_API {
 			return $html;
 		}
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $html;
 
 	}
@@ -269,7 +271,7 @@ class DKPDF_Admin_API {
 			}
 
 			if ( in_array( $args['id'], $field['metabox'] ) ) {
-				$this->display_meta_box_field( $field, $post );
+				$this->display_meta_box_field( $post, $field );
 			}
 
 		}
@@ -280,16 +282,17 @@ class DKPDF_Admin_API {
 
 	/**
 	 * Dispay field in metabox
+     * @param object $post Post object
 	 * @param  array  $field Field data
-	 * @param  object $post  Post object
 	 * @return void
 	 */
-	public function display_meta_box_field ( $field = array(), $post ) {
+	public function display_meta_box_field ( $post, $field = array()) {
 
 		if ( ! is_array( $field ) || 0 == count( $field ) ) return;
 
-		$field = '<p class="form-field"><label for="' . $field['id'] . '">' . $field['label'] . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
+		$field = '<p class="form-field"><label for="' . esc_attr($field['id']) . '">' . esc_attr($field['label']) . '</label>' . $this->display_field( $field, $post, false ) . '</p>' . "\n";
 
+        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $field;
 	}
 
@@ -301,7 +304,6 @@ class DKPDF_Admin_API {
 	public function save_meta_boxes ( $post_id = 0 ) {
 
 		if ( ! $post_id ) return;
-
 		$post_type = get_post_type( $post_id );
 
 		$fields = apply_filters( $post_type . '_custom_fields', array(), $post_type );
@@ -309,9 +311,11 @@ class DKPDF_Admin_API {
 		if ( ! is_array( $fields ) || 0 == count( $fields ) ) return;
 
 		foreach ( $fields as $field ) {
+            // phpcs:disable WordPress.Security.NonceVerification.Recommended
 			if ( isset( $_REQUEST[ $field['id'] ] ) ) {
-				update_post_meta( $post_id, $field['id'], $this->validate_field( $_REQUEST[ $field['id'] ], $field['type'] ) );
-			} else {
+				update_post_meta( $post_id, $field['id'], $this->validate_field( sanitize_text_field(wp_unslash($_REQUEST[ $field['id'] ])), $field['type'] ) );
+                // phpcs:enable
+            } else {
 				update_post_meta( $post_id, $field['id'], '' );
 			}
 		}

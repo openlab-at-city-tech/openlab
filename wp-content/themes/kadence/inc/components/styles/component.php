@@ -2049,7 +2049,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				$css->add_property( 'background', 'var(--global-palette-btn-bg-hover)' );
 			}
 		}
-		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button' );
+		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button, .wc-block-components-checkout-place-order-button, .wc-block-cart__submit' );
 		$css->render_font( kadence()->option( 'buttons_typography' ), $css );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_border_radius' ), 'desktop' ) );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_padding' ), 'desktop' ) );
@@ -2058,7 +2058,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_shadow' ), kadence()->default( 'buttons_shadow' ) ) );
 		$css->set_selector( '.wp-block-button.is-style-outline .wp-block-button__link' );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_padding' ), 'desktop' ) );
-		$css->set_selector( 'button:hover, button:focus, button:active, .button:hover, .button:focus, .button:active, .wp-block-button__link:hover, .wp-block-button__link:focus, .wp-block-button__link:active, input[type="button"]:hover, input[type="button"]:focus, input[type="button"]:active, input[type="reset"]:hover, input[type="reset"]:focus, input[type="reset"]:active, input[type="submit"]:hover, input[type="submit"]:focus, input[type="submit"]:active, .elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus, .elementor-button-wrapper .elementor-button:active' );
+		$css->set_selector( 'button:hover, button:focus, button:active, .button:hover, .button:focus, .button:active, .wp-block-button__link:hover, .wp-block-button__link:focus, .wp-block-button__link:active, input[type="button"]:hover, input[type="button"]:focus, input[type="button"]:active, input[type="reset"]:hover, input[type="reset"]:focus, input[type="reset"]:active, input[type="submit"]:hover, input[type="submit"]:focus, input[type="submit"]:active, .elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus, .elementor-button-wrapper .elementor-button:active, .wc-block-cart__submit:hover' );
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_border_colors', 'hover' ) ) );
 		$css->add_property( 'box-shadow', $css->render_shadow( kadence()->option( 'buttons_shadow_hover' ), kadence()->default( 'buttons_shadow_hover' ) ) );
 		$css->set_selector( '.kb-button.kb-btn-global-outline.kb-btn-global-inherit' );
@@ -2079,7 +2079,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			}
 		}
 		$css->start_media_query( $media_query['tablet'] );
-		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button' );
+		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button, .wc-block-components-checkout-place-order-button, .wc-block-cart__submit' );
 		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_border' ), 'tablet' ) );
 		$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'buttons_border_colors', 'color' ) ) );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_border_radius' ), 'tablet' ) );
@@ -2108,7 +2108,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		}
 		$css->stop_media_query();
 		$css->start_media_query( $media_query['mobile'] );
-		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button' );
+		$css->set_selector( 'button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button, .wc-block-components-checkout-place-order-button, .wc-block-cart__submit' );
 		$css->add_property( 'padding', $this->render_responsive_measure( kadence()->option( 'buttons_padding' ), 'mobile' ) );
 		$css->add_property( 'border-radius', $this->render_range( kadence()->option( 'buttons_border_radius' ), 'mobile' ) );
 		$css->add_property( 'border', $css->render_responsive_border( kadence()->option( 'buttons_border' ), 'mobile' ) );

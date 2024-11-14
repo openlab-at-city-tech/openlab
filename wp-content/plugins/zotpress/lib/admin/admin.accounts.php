@@ -126,7 +126,7 @@ if ( current_user_can('edit_others_posts') )
 
 	} /* OAuth check */
 
-} // !current_user_can('edit_others_posts')
+} // ! current_user_can('edit_others_posts')
 
 else
 {

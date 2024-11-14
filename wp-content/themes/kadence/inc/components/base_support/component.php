@@ -792,6 +792,10 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	 * @return array Filtered body classes.
 	 */
 	public function filter_body_classes_add_hfeed( array $classes ) : array {
+		// Check if we should add the hfeed class.
+		if ( ! kadence()->option( 'microdata' ) || ! apply_filters( 'kadence_microdata', true, 'body-class' ) ) {
+			return $classes;
+		}
 		if ( ! is_singular() ) {
 			$classes[] = 'hfeed';
 		}

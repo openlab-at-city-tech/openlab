@@ -22,6 +22,7 @@ if ( ! class_exists( 'Wpt_TwitterOAuth' ) ) {
 	/**
 	 * X.com WPOAuth class
 	 */
+	#[AllowDynamicProperties]
 	class Wpt_TwitterOAuth {
 		/**
 		 * Contains the last HTTP status code returned

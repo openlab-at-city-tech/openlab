@@ -2,7 +2,6 @@
 /**
  * dynwid_admin.php - Startpage for admin
  *
- * @version $Id: dynwid_admin.php 2971998 2023-09-26 21:24:42Z vivalex $
  * @copyright 2011 Jacco Drabbe
  */
  

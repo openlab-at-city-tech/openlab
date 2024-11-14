@@ -153,7 +153,7 @@ jQuery(document).ready(function()
 
 					console.log('zp: autocomplete search starts');
 					//  for', tempCurrentTerm, zpSearchBarParams);
-										
+					
 					// TODO: Is this BROKEN!??
 					// Check if update needed:
 					jQuery.ajax({

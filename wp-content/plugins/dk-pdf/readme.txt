@@ -1,10 +1,11 @@
 === DK PDF ===
 Contributors: dinamiko
-Tags: wp to pdf, wordpress to pdf, acrobat, pdf, post to pdf, generate pdf, mpdf, generate, convert, create, convert pdf, create pdf
+Tags: wp to pdf, wordpress to pdf, acrobat, pdf, post to pdf
 Requires at least: 3.9.6
-Tested up to: 4.9
-Requires PHP: 5.6
-Stable tag: 1.9.6
+Tested up to: 6.6
+Requires PHP: 8.0
+Stable tag: 1.9.9
+License: MIT
 
 WordPress to PDF made easy.
 
@@ -13,7 +14,6 @@ WordPress to PDF made easy.
 DK PDF allows site visitors convert posts and pages to PDF using a button.
 
 [vimeo https://vimeo.com/148082260]
-<a href="http://wp.dinamiko.com/demos/dkpdf" target="_blank">See Demo</a>
 
 = Features =
 
@@ -23,15 +23,8 @@ DK PDF allows site visitors convert posts and pages to PDF using a button.
 * Multiple shortcodes: [dkpdf-button], [dkpdf-pagebreak], [dkpdf-remove], and more..
 * Add custom fonts to the PDF.
 
-= Addons =
-* Do you need to create a PDF with a selection of your articles?
-<a href="http://codecanyon.net/item/dk-pdf-generator/13530581" target="_blank">DK PDF Generator</a> is the perfect tool for you.
-
 = Documentation =
-* <a href="http://wp.dinamiko.com/demos/dkpdf/documentation" target="_blank">See Documentation</a>
-
-= Collaborate in Github =
-* <a href="https://github.com/Dinamiko/dk-pdf" target="_blank">https://github.com/Dinamiko/dk-pdf</a>
+* <a href="https://github.com/Dinamiko/dk-pdf/wiki" target="_blank">https://github.com/Dinamiko/dk-pdf/wiki</a>
 
 == Installation ==
 
@@ -61,6 +54,17 @@ Font Awesome, the iconic font and CSS toolkit
 http://fortawesome.github.io/Font-Awesome/
 
 == Changelog ==
+
+= 1.9.9 =
+* Fix - Plugin templates not displaying CSS correctly.
+
+= 1.9.8 =
+* Fix - Add custom namespace to avoid issues with third party composer packages.
+* Fix - Disable deprecated dynamic property message.
+
+= 1.9.7 =
+* Enhancement - Update plugin requirements and mpdf library to PHP 8+
+* Fix - Reflected Cross-Site Scripting security issue
 
 = 1.9.6 =
 * Update mPDF library to latest version.

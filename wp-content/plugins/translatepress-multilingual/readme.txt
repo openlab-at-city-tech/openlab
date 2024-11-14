@@ -3,9 +3,9 @@ Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
 Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.6.1
+Tested up to: 6.6.2
 Requires PHP: 5.6.20
-Stable tag: 2.8.3
+Stable tag: 2.8.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,34 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
+= 2.8.8 =
+* Fixed compatibility with CTX Feed plugin
+* Improved security by doing a capability check on activating/deactivating license
+* Added new parameter to hook trp_translate_this_href
+
+= 2.8.7 =
+* Fixed url slug handling. It's recommended to back-up your database before updating
+* Fixed admin notices text
+
+= 2.8.6 =
+* Fixed version difference between TranslatePress plugins causing infinite loop and php errors when having specific settings
+* Fixed some cases of grayed out translation input box in String Translation Regular tab
+* Fixed showing Run the update notice in various cases
+* Fixed Translation Editor translation boxes showing incorrect values after saving translations in some cases
+* Fixed JS error in Advanced tab
+
+= 2.8.5 =
+* Fixed url slug handling
+* Fixed pencil icon not showing in correct place for some themes
+* Added filter trp_mtapi_chunk_size to change the number of string sent in one batch to TP AI
+* Added correct flag for Kurdish(Sorani) language
+* Fixed edge case issue with trp_settings db option saved incorrectly leading to php errors
+* Fixed PHP 8 deprecated notice when calling rtrim
+
+= 2.8.4 =
+* Major refactoring of url slugs handling. It's recommended to back-up your database before updating
+* Numerous fixes including support for WooCommerce custom permalinks, custom post permalinks, permalinks without base category
+
 = 2.8.3 =
 * Fixed errors in Multisite leading to targeting incorrect subsite tables for some strings
 * Fixed TranslatePress Editor pencil icon's incorrect placement in some cases

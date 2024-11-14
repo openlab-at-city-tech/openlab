@@ -508,6 +508,9 @@ jQuery(document).ready(function()
 									console.log("zp: done");
 									console.log("---");
 
+									// 7.3.14: Add class to indicate done updating
+									jQuery("#"+zp_items.instance+" .zp-List").addClass("done-updating");
+
 									// zp_bib_reformat( $instance, zp_items, params );
 								}
 							}

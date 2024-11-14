@@ -118,8 +118,9 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 	// order matters; arrays have to be ordered the same way.
 	$tags   = array_map( 'wpt_make_tag', wpt_tags() );
 	$values = wpt_create_values( $post, $post_ID, $ref );
-
+	// Replace the template tags with their corresponding values.
 	$post_tweet = str_ireplace( $tags, $values, $tweet );
+
 	// check total length.
 	$str_length = mb_strlen( urldecode( wpt_normalize( $post_tweet ) ), $encoding );
 
@@ -202,7 +203,7 @@ function jd_truncate_tweet( $tweet, $post, $post_ID, $retweet = false, $ref = fa
 							} else {
 								$new_value = $old_value;
 								while ( ( mb_strlen( $old_value ) - $trim ) < mb_strlen( $new_value ) ) {
-									$new_value = trim( mb_substr( $new_value, 0, mb_strrpos( $new_value, '#', $encoding ) - 1 ) );
+									$new_value = trim( mb_substr( $new_value, 0, mb_strrpos( $new_value, '#', 0, $encoding ) - 1 ) );
 								}
 							}
 							// Just flat out truncate everything else cold.
@@ -353,6 +354,7 @@ function wpt_tags() {
 	 * Add a new template tag placeholder.
 	 *
 	 * @hook wpt_tags
+	 *
 	 * @param {array} $tags Array of strings for each tag, e.g. 'blog' for #blog#.
 	 *
 	 * @return {array}
@@ -381,10 +383,24 @@ function wpt_make_tag( $value ) {
  * @return array of values.
  */
 function wpt_create_values( $post, $post_ID, $ref ) {
-	$shrink = ( '' !== $post['shortUrl'] && false !== $post['shortUrl'] ) ? $post['shortUrl'] : apply_filters( 'wptt_shorten_link', $post['postLink'], $post['postTitle'], $post_ID, false );
+	/**
+	 * Run filters that shorten links.
+	 *
+	 * @hook wptt_shorten_link
+	 *
+	 * @param {string} $permalink The post permalink.
+	 * @param {string} $title The post title.
+	 * @param {int}    $post_ID The post ID.
+	 * @param {bool}   $test False because this is not a test cycle.
+	 *
+	 * @return {string}
+	 */
+	$shortlink = apply_filters( 'wptt_shorten_link', $post['postLink'], $post['postTitle'], $post_ID, false );
+	$shrink    = ( '' !== $post['shortUrl'] && false !== $post['shortUrl'] ) ? $post['shortUrl'] : $shortlink;
 	// generate template variable values.
 	$auth         = $post['authId'];
 	$title        = trim( apply_filters( 'wpt_status', $post['postTitle'], $post_ID, 'title' ) );
+	$title        = ( ! $title ) ? get_the_title( $post_ID ) : $title;
 	$blogname     = trim( $post['blogTitle'] );
 	$excerpt      = trim( apply_filters( 'wpt_status', $post['postExcerpt'], $post_ID, 'post' ) );
 	$thisposturl  = trim( $shrink );
@@ -427,7 +443,8 @@ function wpt_create_values( $post, $post_ID, $ref ) {
 		$reference = '';
 	}
 
-	$return = array(
+	// If this order is changed, changes must also be replicated in `wpt_tags()`.
+	$values = array(
 		'url'         => $thisposturl,
 		'title'       => $title,
 		'blog'        => $blogname,
@@ -445,6 +462,27 @@ function wpt_create_values( $post, $post_ID, $ref ) {
 		'cat_desc'    => $cat_desc,
 		'longurl'     => $post['postLink'],
 	);
+	// If tags array has been changed by a filter, update the order here, as well.
+	$tags   = wpt_tags();
+	$return = array();
+	foreach ( $tags as $key ) {
+		// If this key doesn't exist in the default values array, this was added in `wpt_tags` filter.
+		if ( ! isset( $values[ $key ] ) ) {
+			/**
+			 * Filter the value of a custom template tag.
+			 *
+			 * @hook wpt_custom_tag
+			 *
+			 * @param {string} $tag_value The output for a custom tag. Default empty.
+			 * @param {int}     $post_ID The post ID.
+			 *
+			 * @return {string}
+			 */
+			$return[ $key ] = trim( apply_filters( 'wpt_custom_tag', '', $post_ID ) );
+		} else {
+			$return[ $key ] = trim( $values[ $key ] );
+		}
+	}
 
 	return $return;
 }

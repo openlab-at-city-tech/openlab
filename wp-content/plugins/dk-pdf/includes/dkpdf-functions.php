@@ -1,5 +1,9 @@
 <?php
 
+use Dinamiko\DKPDF\Vendor\Mpdf\Config\ConfigVariables;
+use Dinamiko\DKPDF\Vendor\Mpdf\Config\FontVariables;
+use Dinamiko\DKPDF\Vendor\Mpdf\Mpdf;
+
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
@@ -10,10 +14,11 @@ function dkpdf_display_pdf_button( $content ) {
   // if is generated pdf don't show pdf button
   $pdf = get_query_var( 'pdf' );
 
+  // phpcs:disable WordPress.Security.NonceVerification.Missing
   if( apply_filters( 'dkpdf_hide_button_isset', isset( $_POST['dkpdfg_action_create'] ) ) ) {
 
     if ( $pdf || apply_filters( 'dkpdf_hide_button_equal', $_POST['dkpdfg_action_create'] == 'dkpdfg_action_create' )  ) {
-
+        // phpcs:enable
         remove_shortcode('dkpdf-button');
         $content = str_replace( "[dkpdf-button]", "", $content );
 
@@ -138,10 +143,10 @@ function dkpdf_output_pdf( $query ) {
       $dkpdf_margin_header = get_option( 'dkpdf_margin_header', '15' );
 
       // fonts
-      $mpdf_default_config = (new Mpdf\Config\ConfigVariables())->getDefaults();
+      $mpdf_default_config = (new ConfigVariables())->getDefaults();
       $dkpdf_mpdf_font_dir = apply_filters('dkpdf_mpdf_font_dir',$mpdf_default_config['fontDir']);
 
-      $mpdf_default_font_config = (new Mpdf\Config\FontVariables())->getDefaults();
+      $mpdf_default_font_config = (new FontVariables())->getDefaults();
       $dkpdf_mpdf_font_data = apply_filters('dkpdf_mpdf_font_data',$mpdf_default_font_config['fontdata']);
 
       // temp directory
@@ -161,7 +166,7 @@ function dkpdf_output_pdf( $query ) {
       ]);
 
       // creating and setting the pdf
-      $mpdf = new \Mpdf\Mpdf( $mpdf_config );
+      $mpdf = new Mpdf( $mpdf_config );
 
       // encrypts and sets the PDF document permissions
       // https://mpdf.github.io/reference/mpdf-functions/setprotection.html

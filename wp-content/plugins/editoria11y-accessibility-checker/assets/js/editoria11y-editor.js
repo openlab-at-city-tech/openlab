@@ -44,6 +44,7 @@ let ed11yUpdateButton = function(count) {
     Ed11y.wpIssueToggle = document.createElement('button');
     Ed11y.wpIssueToggle.classList.add('components-button', 'is-secondary', 'hidden');
     Ed11y.wpIssueToggle.setAttribute('id', 'ed11y-issue-link');
+    Ed11y.wpIssueToggle.setAttribute('title', 'Accessibility checker alerts');
     Ed11y.wpIssueToggle.setAttribute('aria-describedby', 'ed11y-button-description');
     Ed11y.wpIssueToggle.addEventListener('click', function () {
       if (ed11yOpen) {
@@ -68,8 +69,13 @@ let ed11yUpdateButton = function(count) {
 
     });
     Ed11y.wpIssueToggle.textContent = '0';
-
-    ed11yButtonWrapper.prepend(Ed11y.wpIssueToggle);
+    if (ed11yButtonWrapper.matches('.editor-header__center')) {
+      ed11yButtonWrapper.append(Ed11y.wpIssueToggle);
+      Ed11y.wpIssueToggle.style.marginLeft = '.5rem';
+      Ed11y.wpIssueToggle.style.marginRight = '.75rem';
+    } else {
+      ed11yButtonWrapper.prepend(Ed11y.wpIssueToggle);
+    }
     Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yButtonDescription);
 
     let ed11yStyle = document.createElement('div');
@@ -109,7 +115,7 @@ let ed11yUpdateButton = function(count) {
  </style>`;
     Ed11y.wpIssueToggle.insertAdjacentElement('afterend', ed11yStyle);
   }
-  let buttonText = ed11yOpen ? 'Hide alerts' : `${count} issue${count > 1 ? 's' : ''}`;
+  let buttonText = ed11yOpen ? 'Hide alerts' : `${count}`;
   Ed11y.wpIssueToggle.textContent = buttonText;
   if ((ed11yOptions['liveCheck'] === 'all') && Ed11y.totalCount === 0 || ed11yOptions['liveCheck'] === 'errors' && Ed11y.errorCount === 0) {
     Ed11y.wpIssueToggle.classList.add('hidden');
@@ -388,7 +394,7 @@ let ed11yFindCompatibleEditor = function () {
     return;
   case 'onPage':
   case 'outsideIframe':
-    ed11yButtonWrapper = ed11yButtonWrapper ? ed11yButtonWrapper : document.querySelector('.edit-post-header__settings, .edit-site-layout__header-container');
+    ed11yButtonWrapper = ed11yButtonWrapper ? ed11yButtonWrapper : document.querySelector('.edit-post-header__settings, .editor-header__center, .edit-site-layout__header-container');
   }
   if (!!ed11yButtonWrapper && !!ed11yOptions) {
     if (ed11yScriptIs === 'onPage') {
