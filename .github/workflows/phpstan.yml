@@ -15,8 +15,6 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           submodules: recursive
 
-      - uses: php-actions/composer@v6
-
       - name: Clear Composer Cache
         run: composer clear-cache
 
