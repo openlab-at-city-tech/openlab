@@ -1,0 +1,197 @@
+[dir=rtl] {
+  /* Shared
+  --------------------------------------------------------------*/
+  /* Public
+  --------------------------------------------------------------*/
+  /* Category Archive Version 3
+  Since @ version: 11.10.0
+  Note: We will NOT be using any v3 suffix. But using no suffix for V3
+  --------------------------------------------------------------*/
+  /*#eckb-archive-page-container {
+      #eckb-archive-body {
+          .eckb-article-cat-layout-list-reset {
+              ul, ol, li {
+                  @include CSS_reset_rtl();
+
+                  a {
+                      @include CSS_reset_rtl();
+                  }
+              }
+          }
+      }
+  }*/
+  /* Category Page styles
+  --------------------------------------------------------------*/
+}
+[dir=rtl] #epkb-main-page-container.epkb-css-full-reset h1, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset h2, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset h3, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset h4, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset h5, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset h6, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset p, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset a, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset div, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset span, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset strong, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset b, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset i, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset ol, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset ul, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset li, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset section, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset nav, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset menu, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset header, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset form, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset input, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset button, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset img, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset legend, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset label, [dir=rtl] #epkb-main-page-container.epkb-css-full-reset fieldset {
+  text-align: right;
+}
+[dir=rtl] .epkb-doc-search-container h1, [dir=rtl] .epkb-doc-search-container h2, [dir=rtl] .epkb-doc-search-container h3, [dir=rtl] .epkb-doc-search-container h4, [dir=rtl] .epkb-doc-search-container h5, [dir=rtl] .epkb-doc-search-container h6, [dir=rtl] .epkb-doc-search-container p, [dir=rtl] .epkb-doc-search-container a, [dir=rtl] .epkb-doc-search-container div, [dir=rtl] .epkb-doc-search-container span, [dir=rtl] .epkb-doc-search-container strong, [dir=rtl] .epkb-doc-search-container b, [dir=rtl] .epkb-doc-search-container i, [dir=rtl] .epkb-doc-search-container ol, [dir=rtl] .epkb-doc-search-container ul, [dir=rtl] .epkb-doc-search-container li, [dir=rtl] .epkb-doc-search-container section, [dir=rtl] .epkb-doc-search-container nav, [dir=rtl] .epkb-doc-search-container menu, [dir=rtl] .epkb-doc-search-container header, [dir=rtl] .epkb-doc-search-container form, [dir=rtl] .epkb-doc-search-container input, [dir=rtl] .epkb-doc-search-container button, [dir=rtl] .epkb-doc-search-container img, [dir=rtl] .epkb-doc-search-container legend, [dir=rtl] .epkb-doc-search-container label, [dir=rtl] .epkb-doc-search-container fieldset {
+  text-align: right;
+}
+[dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset ul, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset ol, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset li, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset span, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset div {
+  text-align: right;
+}
+[dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset ul a, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset ol a, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset li a, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset span a, [dir=rtl] #eckb-archive-page-container #eckb-archive-body .eckb-article-cat-layout-list-reset div a {
+  text-align: right;
+}
+[dir=rtl] #eckb-archive-page-container #eckb-archive-content .eckb-article-list-container .eckb-article-container .epkb-article__text {
+  margin-left: 0;
+  margin-right: 30px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 {
+  text-align: right;
+  /*
+    // ARCHIVE BODY ---------------------------------------/
+    #eckb-categories-archive__body {
+        grid-template-rows: auto;
+        align-items: stretch;
+    }
+*/
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-header {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-right-archive-main,
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-main {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-breadcrumb {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-breadcrumb .eckb-breadcrumb-label {
+  float: right;
+  margin-left: 10px;
+  margin-right: 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-breadcrumb .eckb-breadcrumb-nav {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-breadcrumb .eckb-breadcrumb-nav li {
+  float: right;
+  padding-right: 0;
+  padding-left: 10px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-breadcrumb .eckb-breadcrumb-link-icon {
+  margin-left: 0;
+  margin-right: 6px;
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-1 .eckb-article-container {
+  padding: 0 50px 10px 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-1 .eckb-article-container .eckb-article-header .eckb-article-title .eckb-article-title-icon {
+  left: auto;
+  right: -50px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container {
+  padding: 0 50px 30px 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-header .eckb-article-title .eckb-article-title-icon {
+  right: -50px;
+  left: 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-header .eckb-article-metadata {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-header .eckb-article-metadata ul {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li {
+  float: right;
+  margin-left: 10px;
+  padding-left: 10px;
+  margin-right: 0;
+  padding-right: 0;
+  border-left: solid 1px #ddd;
+  border-right: none;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li:last-child {
+  border-left: none;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-text {
+  margin: 10px 0 0 10px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-2 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-icon {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container {
+  padding: 0 50px 30px 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-header .eckb-article-title .eckb-article-title-icon {
+  left: 0;
+  right: -50px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-header .eckb-article-metadata {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-header .eckb-article-metadata ul {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li {
+  float: right;
+  margin-right: 0;
+  padding-right: 0;
+  border-right: none;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: solid 1px #ddd;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li:last-child {
+  border-left: none;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-text {
+  margin: 10px 0 0 10px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-3 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-icon {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-title h2 {
+  padding-left: 0;
+  padding-right: 35px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-title .eckb-article-title-icon {
+  left: auto;
+  right: 0;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-metadata {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-metadata ul {
+  float: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li {
+  float: right;
+  margin-right: 0;
+  padding-right: 0;
+  border-right: none;
+  margin-left: 10px;
+  padding-left: 10px;
+  border-left: solid 1px #ddd;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-header .eckb-article-metadata ul li:last-child {
+  border-left: none;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-text {
+  margin: 10px 0 0 10px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-4 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-icon {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-5 .eckb-article-container .eckb-article-body {
+  text-align: right;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-5 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-text {
+  margin: 10px 0 0 10px;
+}
+[dir=rtl] #eckb-categories-archive-container-v2 .eckb-category-archive-style-5 .eckb-article-container .eckb-article-body .eckb-article-read-more .eckb-article-read-more-icon {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+}
+[dir=rtl] .eckb-category-archive-reset h1, [dir=rtl] .eckb-category-archive-reset h2, [dir=rtl] .eckb-category-archive-reset h3, [dir=rtl] .eckb-category-archive-reset h4, [dir=rtl] .eckb-category-archive-reset h5, [dir=rtl] .eckb-category-archive-reset h6, [dir=rtl] .eckb-category-archive-reset p, [dir=rtl] .eckb-category-archive-reset a, [dir=rtl] .eckb-category-archive-reset div, [dir=rtl] .eckb-category-archive-reset span, [dir=rtl] .eckb-category-archive-reset strong, [dir=rtl] .eckb-category-archive-reset b, [dir=rtl] .eckb-category-archive-reset i, [dir=rtl] .eckb-category-archive-reset ol, [dir=rtl] .eckb-category-archive-reset ul, [dir=rtl] .eckb-category-archive-reset li, [dir=rtl] .eckb-category-archive-reset section, [dir=rtl] .eckb-category-archive-reset nav, [dir=rtl] .eckb-category-archive-reset menu, [dir=rtl] .eckb-category-archive-reset header, [dir=rtl] .eckb-category-archive-reset form, [dir=rtl] .eckb-category-archive-reset input, [dir=rtl] .eckb-category-archive-reset button, [dir=rtl] .eckb-category-archive-reset img {
+  text-align: right;
+}

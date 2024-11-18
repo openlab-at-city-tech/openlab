@@ -1,0 +1,52 @@
+.epkb-js-error-notice {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    max-width:  460px;
+    background: #ffd9d9;
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 10px;
+    padding-right: 25px;
+    z-index: 999999999;
+}
+
+.epkb-js-error-close {
+    position: absolute;
+    right: 5px;
+    top: 0px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.epkb-js-error-title {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.epkb-js-error-body {
+    font-style: italic;
+    margin-bottom: 5px;
+}
+
+.epkb-js-error-about {
+    font-size: 10px;
+}
+
+.epkb-js-error-btn {
+    position: absolute;
+    right: 30px;
+    top: 8px;
+}
+.epkb-js-error-btn a{
+    background: #c9302c;
+    padding: 5px;
+    border-radius: 3px;
+    color: #fff;
+    text-decoration: none;
+}
+.epkb-js-error-btn a:hover{
+    background: #c9302c;
+    color: #fff;
+    text-decoration: none;
+}

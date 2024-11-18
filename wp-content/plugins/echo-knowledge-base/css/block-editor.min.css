@@ -1,0 +1,35 @@
+.epkb-component-number-with-units .components-button-group{display:flex;flex-direction:row}
+.epkb-component-number-with-units .components-base-control{margin-bottom:0;margin-right:5px;display:flex;flex-direction:row;flex-grow:1;width:100%}
+.epkb-component-number-with-units .components-base-control .components-base-control__field{display:flex;flex-grow:1;flex-direction:row;width:100%}
+.epkb-component-number-with-units .components-base-control .components-base-control__field .components-input-base{width:100%}
+.epkb-inspector-control-wrapper{grid-column:1/-1;padding:5%}
+.epkb-button-group{display:flex;flex-wrap:wrap;gap:10px;justify-content:flex-start}
+.epkb-block-editor-controls .epkb-block-editor-tabpanel .components-tab-panel__tabs button{flex-grow:1;font-size:20px}
+.epkb-block-editor-controls .block-editor-panel-color-gradient-settings{padding:0;border:none!important;box-shadow:none!important;background-color:transparent!important}
+.epkb-block-editor-controls .block-editor-panel-color-gradient-settings .block-editor-tools-panel-color-gradient-settings__item>div>button{padding-left:0;background-color:transparent!important;box-shadow:none!important}
+.epkb-block-editor-controls .block-editor-panel-color-gradient-settings>div{border:none!important}
+.epkb-block-editor-controls .block-editor-panel-color-gradient-settings .components-tools-panel-item{margin-top:0}
+.epkb-block-editor-controls .components-font-size-picker .components-base-control{margin-bottom:0}
+.epkb-block-editor-controls .components-tools-panel{padding-left:0;padding-right:0;margin-bottom:29px}
+.epkb-block-editor-controls .components-tools-panel.epkb-typography-controls{padding-bottom:0;padding-top:0;border-top:none}
+.epkb-block-editor-controls .components-tools-panel.epkb-typography-controls .components-custom-select-control{margin-bottom:0}
+.epkb-block-editor-controls .components-grid{margin-bottom:29px}
+.epkb-block-editor-controls .components-base-control.components-input-control.component-box-control__unit-control{margin-bottom:0}
+.epkb-block-editor-controls .components-base-control.components-range-control{margin-bottom:29px}
+.epkb-block-editor-controls .components-base-control.components-range-control:last-child{margin-bottom:0}
+.epkb-block-editor-controls .epkb-block-ui-section>.components-panel__body-title{background-color:#e6e6fa;margin-bottom:24px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-text-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-number-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-color-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-color-control:has(+.epkb-block-ui-color-control){margin-bottom:14px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-select-buttons-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-toggle-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-range-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-custom-dropdown-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-dropdown-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-box-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-box-combined-control{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-typography-controls{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section:last-child .epkb-typography-controls:last-child{margin-bottom:160px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-section-description{margin-bottom:29px}
+.epkb-block-editor-controls .epkb-block-ui-section .epkb-block-ui-section-description a{margin-left:5px}

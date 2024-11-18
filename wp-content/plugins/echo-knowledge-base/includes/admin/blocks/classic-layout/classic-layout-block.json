@@ -1,0 +1,152 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "echo-knowledge-base/classic-layout",
+	"textdomain": "echo-knowledge-base",
+	"title": "KB Classic Layout",
+	"icon": "editor-table",
+	"description": "",
+	"category": "echo-knowledge-base",
+	"keywords": [
+		"knowledge-base",
+		"categories",
+		"articles",
+		"TODO"
+	],
+	"supports": {
+		"html": false,
+		"align": true,
+		"reusable": false,
+		"customClassName": false
+	},
+	"attributes": {
+		"kb_id": {
+			"type": "number"
+		},
+		"nof_columns": {
+			"type": "string"
+		},
+		"section_desc_text_on": {
+			"type": "string"
+		},
+		"section_box_height_mode": {
+			"type": "string"
+		},
+		"category_empty_msg": {
+			"type": "string"
+		},
+		"section_head_typography_controls": {
+			"type": "object"
+		},
+		"section_head_category_icon_location": {
+			"type": "string"
+		},
+		"section_head_category_icon_size": {
+			"type": "number"
+		},
+		"section_head_font_color": {
+			"type": "string"
+		},
+		"section_head_description_typography_controls": {
+			"type": "object"
+		},
+		"section_head_description_font_color": {
+			"type": "string"
+		},
+		"section_category_font_color": {
+			"type": "string"
+		},
+		"section_head_category_icon_color": {
+			"type": "string"
+		},
+		"section_box_expand_hover_color": {
+			"type": "string"
+		},
+		"section_subcategory_typography_controls": {
+			"type": "object"
+		},
+		"section_border_radius": {
+			"type": "number"
+		},
+		"section_border_width": {
+			"type": "number"
+		},
+		"section_border_color": {
+			"type": "string"
+		},
+		"section_body_height": {
+			"type": "number"
+		},
+		"section_category_icon_color": {
+			"type": "string"
+		},
+		"article_typography_controls": {
+			"type": "object"
+		},
+		"article_collapse_message_typography_controls": {
+			"type": "object"
+		},
+		"article_icon_color": {
+			"type": "string"
+		},
+		"article_icon_toggle": {
+			"type": "string"
+		},
+		"article_list_spacing": {
+			"type": "number"
+		},
+		"article_font_color": {
+			"type": "string"
+		},
+		"ml_categories_articles_sidebar_toggle": {
+			"type": "string"
+		},
+		"ml_categories_articles_sidebar_location": {
+			"type": "string"
+		},
+		"ml_categories_articles_sidebar_desktop_width": {
+			"type": "number"
+		},
+		"ml_categories_articles_sidebar_position_1": {
+			"type": "string"
+		},
+		"ml_categories_articles_sidebar_position_2": {
+			"type": "string"
+		},
+		"ml_articles_list_nof_articles_displayed": {
+			"type": "number"
+		},
+		"ml_articles_list_popular_articles_msg": {
+			"type": "string"
+		},
+		"ml_articles_list_newest_articles_msg": {
+			"type": "string"
+		},
+		"ml_articles_list_recent_articles_msg": {
+			"type": "string"
+		},
+		"ml_categories_articles_top_category_icon_bg_color_toggle": {
+			"type": "string"
+		},
+		"ml_categories_articles_top_category_icon_bg_color": {
+			"type": "string"
+		},
+		"ml_categories_articles_category_title_html_tag": {
+			"type": "string"
+		},
+		"ml_categories_articles_collapse_categories": {
+			"type": "string"
+		},
+		"ml_categories_articles_article_text": {
+			"type": "string"
+		},
+		"ml_categories_articles_articles_text": {
+			"type": "string"
+		},
+		"custom_css_class": {
+			"type": "string"
+		}
+	},
+	"editorScript": "echo-knowledge-base-classic-layout-block",
+	"editorStyle": "echo-knowledge-base-block-editor"
+}
