@@ -43,6 +43,7 @@ function openlab_hide_plugins( $plugins ) {
 		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'echo-knowledge-base/echo-knowledge-base.php', // #3455
 		'edge-suite/edge-suite.php',
 		'elasticpress/elasticpress.php',
 		'elasticpress-buddypress/elasticpress-buddypress.php',
