@@ -1,0 +1,779 @@
+# Copyright (C) 2024 Creta Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: FSE Freelancer Portfolio 2.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fse-freelancer-"
+"portfolio\n"
+"POT-Creation-Date: 2024-11-20T17:30:40+05:30\n"
+"PO-Revision-Date: 2024-11-20 17:31+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_ES\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.0.1\n"
+"X-Domain: fse-freelancer-portfolio\n"
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.cretathemes.com/products/free-freelancer-wordpress-theme"
+msgstr "https://www.cretathemes.com/products/free-freelancer-wordpress-theme"
+
+#. Description of the theme
+#: style.css
+msgid ""
+"FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress "
+"theme designed specifically for freelancers, creative professionals, "
+"freelance services, creative freelancers, resume writing, graphic designers, "
+"web developers, freelance designers, digital creators, resume design, web "
+"development services, freelance opportunities, creative professionals, "
+"portfolio development, freelance projects, UX/UI designers, freelance web "
+"developers, design portfolios, resume consulting, web design experts, "
+"digital marketing freelancers, freelance graphic design, resumes, designers, "
+"web developers, and individuals looking to showcase their work and services "
+"online. With a modern and elegant design, FSE Freelancer Portfolio offers a "
+"user-friendly experience, enabling users to effortlessly create a "
+"captivating online portfolio. The theme provides a range of customizable "
+"blocks and layouts that are tailored to present various types of content, "
+"such as project galleries, testimonials, blog posts, and service offerings. "
+"It offers an intuitive drag-and-drop interface for building and editing "
+"content. Key features of the FSE Freelancer Portfolio theme include "
+"responsive design, ensuring that websites look and function well across "
+"different devices and screen sizes. The theme also supports high-quality "
+"media presentation, enabling users to display their visual work, such as "
+"images and videos, in a polished and impactful manner. FSE Freelancer "
+"Portfolio emphasises user engagement by offering easy navigation, clear "
+"calls-to-action, and integration with social media platforms. This helps "
+"freelancers and creative professionals connect with potential clients and "
+"audiences effectively. The theme’s focus on elegant design, customization "
+"options, and content showcase capabilities make it a valuable tool for "
+"freelancers to effectively display their skills, attract clients, and leave "
+"a lasting impression on their website visitors."
+msgstr ""
+"FSE Freelancer Portfolio es un tema de WordPress visualmente atractivo y "
+"rico en características, diseñado específicamente para freelancers, "
+"profesionales creativos, servicios freelance, freelancers creativos, "
+"redacción de currículums, diseñadores gráficos, desarrolladores web, "
+"diseñadores freelance, creadores digitales, diseño de currículums, "
+"servicios de desarrollo web, oportunidades freelance, profesionales "
+"creativos, desarrollo de portafolios, proyectos freelance, diseñadores "
+"UX/UI, desarrolladores web freelance, portafolios de diseño, "
+"consultoría de currículums, expertos en diseño web, freelancers de "
+"marketing digital, diseño gráfico freelance, currículums, diseñadores, "
+"desarrolladores web y personas que buscan exhibir su trabajo y servicios "
+"en línea. Con un diseño moderno y elegante, FSE Freelancer Portfolio "
+"ofrece una experiencia fácil de usar, permitiendo a los usuarios crear "
+"sin esfuerzo un cautivador portafolio en línea. El tema proporciona "
+"una variedad de bloques y diseños personalizables que están diseñados "
+"para presentar diferentes tipos de contenido, como galerías de proyectos, "
+"testimonios, publicaciones de blog y ofertas de servicios. Ofrece "
+"una interfaz intuitiva de arrastrar y soltar para construir y editar "
+"contenido. Las características clave del tema FSE Freelancer Portfolio "
+"incluyen diseño responsivo, asegurando que los sitios web se vean y "
+"funcionen bien en diferentes dispositivos y tamaños de pantalla. El "
+"tema también admite la presentación de medios de alta calidad, "
+"permitiendo a los usuarios mostrar su trabajo visual, como imágenes "
+"y videos, de manera pulida e impactante. FSE Freelancer Portfolio "
+"enfatiza el compromiso del usuario al ofrecer una navegación fácil, "
+"llamadas a la acción claras e integración con plataformas de redes "
+"sociales. Esto ayuda a los freelancers y profesionales creativos a "
+"conectar eficazmente con clientes potenciales y audiencias. El enfoque "
+"del tema en un diseño elegante, opciones de personalización y "
+"capacidades de exhibición de contenido lo convierte en una herramienta "
+"valiosa para que los freelancers muestren eficazmente sus habilidades, "
+"atraigan clientes y dejen una impresión duradera en los visitantes "
+"de su sitio web."
+
+#. Author of the theme
+#: style.css
+msgid "Creta Themes"
+msgstr "Creta Themes"
+
+#. Author URI of the theme
+#: style.css
+msgid "https://cretathemes.com/"
+msgstr "https://cretathemes.com/"
+
+#: functions.php:49
+msgid "https://www.cretathemes.com/products/portfolio-wordpress-theme"
+msgstr "https://www.cretathemes.com/products/portfolio-wordpress-theme"
+
+#: functions.php:50
+msgid "https://pattern.cretathemes.com/fse-freelancer-portfolio/"
+msgstr "https://pattern.cretathemes.com/fse-freelancer-portfolio/"
+
+#: functions.php:51 functions.php:52
+msgid "https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/"
+msgstr "https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/"
+
+#: functions.php:53
+msgid "https://wordpress.org/support/theme/fse-freelancer-portfolio/"
+msgstr "https://wordpress.org/support/theme/fse-freelancer-portfolio/"
+
+#: functions.php:54
+msgid ""
+"https://wordpress.org/support/theme/fse-freelancer-portfolio/reviews/#new-"
+"post"
+msgstr ""
+"https://wordpress.org/support/theme/fse-freelancer-portfolio/reviews/#new-"
+"post"
+
+#: functions.php:92
+msgid "Hey, Thank you for installing FSE Freelancer Portfolio Theme!"
+msgstr "¡Hola, gracias por instalar el tema FSE Freelancer Portfolio!"
+
+#: functions.php:93
+msgid "Navigate Getstart"
+msgstr "Navegar Comenzar"
+
+#: functions.php:93 inc/get-started/get-started.php:58
+msgid "Site Editor"
+msgstr "Editor del sitio"
+
+#: functions.php:94
+msgid "Dismiss"
+msgstr "Descartar"
+
+#: inc/block-patterns.php:12
+msgid "Pages"
+msgstr "Páginas"
+
+#: inc/block-styles.php:17
+msgid "No Padding"
+msgstr "Sin Espaciado"
+
+#: inc/block-styles.php:26 inc/block-styles.php:44 inc/block-styles.php:53
+#: inc/block-styles.php:63 inc/block-styles.php:73 inc/block-styles.php:82
+msgid "Theme Style"
+msgstr "Estilo del Tema"
+
+#: inc/block-styles.php:35
+msgid "Plain"
+msgstr "Simple"
+
+#: inc/customizer.php:84
+msgid "FSE Freelancer Portfolio Pro"
+msgstr "FSE Freelancer Portfolio Pro"
+
+#: inc/customizer.php:85
+msgid "GET PRO"
+msgstr "OBTENER PRO"
+
+#: inc/get-started/get-started.php:4
+msgid "Get Started"
+msgstr "Comenzar"
+
+#: inc/get-started/get-started.php:22
+msgid "Free Full Site Editing WordPress Theme"
+msgstr "Tema de WordPress de Edición Completa Gratuito"
+
+#: inc/get-started/get-started.php:24
+msgid "Theme Documentation"
+msgstr "Documentación del Tema"
+
+#: inc/get-started/get-started.php:39
+msgid "Leave Us A Review"
+msgstr "Déjanos una Reseña"
+
+#: inc/get-started/get-started.php:40
+msgid "Are you enjoying our theme? We would love to hear your feedback."
+msgstr "¿Estás disfrutando de nuestro tema? Nos encantaría escuchar tus comentarios."
+
+#: inc/get-started/get-started.php:42
+msgid "Rate Us"
+msgstr "Valóranos"
+
+#: inc/get-started/get-started.php:47
+msgid "Need Help?"
+msgstr "¿Necesitas Ayuda?"
+
+#: inc/get-started/get-started.php:48
+msgid "Go to our support forum to help you out in case of queries."
+msgstr "Ve a nuestro foro de soporte para ayudarte en caso de dudas."
+
+#: inc/get-started/get-started.php:50
+msgid "Get Support"
+msgstr "Obtener Soporte"
+
+#: inc/get-started/get-started.php:55
+msgid "Theme Customization"
+msgstr "Personalización del Tema"
+
+#: inc/get-started/get-started.php:56
+msgid "Effortlessly modify and maintain your site using editor."
+msgstr "Modifica y mantén tu sitio sin esfuerzo utilizando el editor."
+
+#: inc/get-started/get-started.php:66
+msgid "Go For Premium"
+msgstr "Opta por Premium"
+
+#: inc/get-started/get-started.php:67
+msgid "Are you exited for our theme? Proceed for pro version of theme."
+msgstr "¿Estás emocionado por nuestro tema? Procede a la versión pro del tema."
+
+#: inc/get-started/get-started.php:69
+msgid "Pro Documentation"
+msgstr "Documentación Pro"
+
+#: inc/get-started/get-started.php:70
+msgid "Buy Pro"
+msgstr "Comprar Pro"
+
+#: inc/get-started/get-started.php:71
+msgid "Pro Demo"
+msgstr "Demo Pro"
+
+#: inc/get-started/get-started.php:74
+msgid "Responsive Design"
+msgstr "Diseño Responsivo"
+
+#: inc/get-started/get-started.php:75
+msgid "Demo Content Import"
+msgstr "Importación de Contenido de Demostración"
+
+#: inc/get-started/get-started.php:76
+msgid "Aditional plugins"
+msgstr "Plugins Adicionales"
+
+#: inc/get-started/get-started.php:77
+msgid "Background sliders"
+msgstr "Deslizadores de Fondo"
+
+#: inc/get-started/get-started.php:78
+msgid "Video popups"
+msgstr "Ventanas emergentes de video"
+
+#: inc/get-started/get-started.php:79
+msgid "More Fonts and Colors"
+msgstr "Más Fuentes y Colores"
+
+#: inc/get-started/get-started.php:80
+msgid "Multiple templates"
+msgstr "Múltiples plantillas"
+
+#: inc/get-started/get-started.php:81
+msgid "Multiple front page sections"
+msgstr "Múltiples secciones en la página de inicio"
+
+#: inc/get-started/get-started.php:82
+msgid "Woocommerce support"
+msgstr "Soporte para Woocommerce"
+
+#: inc/get-started/get-started.php:83
+msgid "Premium support"
+msgstr "Soporte Premium"
+
+#: inc/get-started/get-started.php:84
+msgid "SEO optimization"
+msgstr "Optimización SEO"
+
+#: inc/get-started/get-started.php:85
+msgid "Speed optimization"
+msgstr "Optimización de Velocidad"
+
+#: inc/get-started/get-started.php:86
+msgid "Browser compatibility"
+msgstr "Compatibilidad con Navegadores"
+
+#: inc/icon-function.php:26
+msgid "Please define default parameters in the form of an array."
+msgstr "Por favor, define los parámetros predeterminados en forma de array."
+
+#: inc/icon-function.php:31
+msgid "Please define an SVG icon filename."
+msgstr "Por favor, define un nombre de archivo para el ícono SVG."
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404 Page"
+msgstr "Página 404"
+
+#: patterns/404.php:12
+msgid "Oops! That page cannot be found"
+msgstr "¡Ups! No se puede encontrar esa página"
+
+#: patterns/archive-header-with-background.php
+msgctxt "Pattern title"
+msgid "Archive Header With Background"
+msgstr "Encabezado de Archivo Con Fondo"
+
+#: patterns/default-header.php
+msgctxt "Pattern title"
+msgid "Default Header"
+msgstr "Encabezado Predeterminado"
+
+#: patterns/footer-columns.php
+msgctxt "Pattern title"
+msgid "Footer Columns"
+msgstr "Columnas del Pie de Página"
+
+#: patterns/footer-columns.php:19 patterns/main-banner.php:23
+msgid ""
+"Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, "
+"when an unknown printer took a galley of type and scrambled it to make a "
+"type specimen book."
+msgstr ""
+"Lorem Ipsum ha sido el texto de marcador de posición estándar de la industria desde el siglo XVI, "
+"cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer un "
+"libro de muestras tipográficas."
+
+#: patterns/footer-columns.php:36
+msgid "Shop"
+msgstr "Tienda"
+
+#: patterns/footer-columns.php:54
+msgid "Quick Links"
+msgstr "Enlaces Rápidos"
+
+#: patterns/footer-columns.php:74
+msgid "Get In Touch"
+msgstr "Ponte en Contacto"
+
+#: patterns/footer-columns.php:83
+msgid "support@example.com"
+msgstr "support@example.com"
+
+#: patterns/footer-columns.php:103
+msgid "Mon - Fri 8:00 AM to 5:00 PM SUNDAY -"
+msgstr "Lun - Vie 8:00 AM a 5:00 PM DOMINGO -"
+
+#: patterns/footer-columns.php:103
+msgid "CLOSED"
+msgstr "CERRADO"
+
+#: patterns/footer-columns.php:116
+msgid "All Rights Reserved."
+msgstr "Todos los Derechos Reservados."
+
+#: patterns/main-banner.php
+msgctxt "Pattern title"
+msgid "Header Media"
+msgstr "Medios del Encabezado"
+
+#: patterns/main-banner.php:15
+msgid "Hello, I am"
+msgstr "Hola, soy"
+
+#: patterns/main-banner.php:19
+msgid "Dana Smith"
+msgstr "Dana Smith"
+
+#: patterns/main-banner.php:28
+msgid "Download CV"
+msgstr "Descargar CV"
+
+#: patterns/main-header.php
+msgctxt "Pattern title"
+msgid "Main Header"
+msgstr "Encabezado Principal"
+
+#: patterns/main-header.php:35
+msgid "CONNECT"
+msgstr "CONÉCTATE"
+
+#: patterns/post-header-with-background.php
+msgctxt "Pattern title"
+msgid "Post Header With Background"
+msgstr "Encabezado de Publicación con Fondo"
+
+#: patterns/recent-blog.php
+msgctxt "Pattern title"
+msgid "Recent Blog"
+msgstr "Blog Reciente"
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "Search"
+msgstr "Buscar"
+
+#: patterns/search.php:42
+msgid "Sorry Nothing Found. Try searching..!!"
+msgstr "Lo siento, no se encontró nada. ¡Intenta buscar de nuevo!"
+
+#: patterns/services.php
+msgctxt "Pattern title"
+msgid "Services"
+msgstr "Servicios"
+
+#: patterns/services.php:16
+msgid "Work"
+msgstr "Trabajo"
+
+#: patterns/services.php:16
+msgid "History"
+msgstr "Historia"
+
+#: patterns/services.php:20
+msgid ""
+"Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, "
+"when an unknown printer took a galley."
+msgstr ""
+"Lorem Ipsum ha sido el texto de marcador de posición estándar de la industria desde el siglo XVI, "
+"cuando un impresor desconocido tomó una galera."
+
+#: patterns/services.php:25 patterns/services.php:51 patterns/services.php:77
+#: patterns/services.php:105 patterns/services.php:131
+#: patterns/services.php:157
+msgid "Read More"
+msgstr "Leer Más"
+
+#: patterns/services.php:38 patterns/services.php:64 patterns/services.php:92
+#: patterns/services.php:118 patterns/services.php:144
+msgid "UI/UX Designer"
+msgstr "Diseñador UI/UX"
+
+#: patterns/services.php:42 patterns/services.php:68 patterns/services.php:96
+#: patterns/services.php:122 patterns/services.php:148
+msgid "Company Name"
+msgstr "Nombre de la Empresa"
+
+#: patterns/services.php:46 patterns/services.php:72 patterns/services.php:100
+#: patterns/services.php:126 patterns/services.php:152
+msgid ""
+"Lorem Ipsum has been the industrys standard dummy text ever since the 1500s."
+msgstr "Lorem Ipsum ha sido el texto de marcador de posición estándar de la industria desde el siglo XVI."
+
+#: patterns/sidebar.php
+msgctxt "Pattern title"
+msgid "Sidebar"
+msgstr "Barra Lateral"
+
+#: patterns/sidebar.php:10
+msgid "Search"
+msgstr "Buscar"
+
+#: patterns/sidebar.php:18
+msgid "About"
+msgstr "Acerca de"
+
+#: patterns/sidebar.php:22
+msgid ""
+"Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, "
+"when an unknown prmontserrat took a galley of type and scrambled it to make "
+"a type specimen book."
+msgstr ""
+"Lorem Ipsum ha sido el texto de marcador de posición estándar de la industria desde el siglo XVI, "
+"cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer "
+"un libro de muestras tipográficas."
+
+#: patterns/sidebar.php:26
+msgid ""
+"Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, "
+"when an unknown prmontserrat took a galley of type and scrambled it to make "
+"a type specimen book. It has survived not only five centuries, but also the "
+"leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+"Lorem Ipsum ha sido el texto de marcador de posición estándar de la industria desde el siglo XVI, "
+"cuando un impresor desconocido tomó una galera de tipos y la desordenó para hacer "
+"un libro de muestras tipográficas. Ha sobrevivido no solo cinco siglos, sino también el "
+"salto a la composición tipográfica electrónica, permaneciendo esencialmente inalterado."
+
+#: patterns/sidebar.php:32
+msgid "Archive"
+msgstr "Archivo"
+
+#: patterns/sidebar.php:40
+msgid "Categories"
+msgstr "Categorías"
+
+#: patterns/sidebar.php:48
+msgid "Recent Posts"
+msgstr "Publicaciones Recientes"
+
+#: patterns/sidebar.php:56
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: patterns/sidebar.php:64
+msgid "Social Icons"
+msgstr "Íconos Sociales"
+
+#: patterns/sidebar.php:82
+msgid "Gallery"
+msgstr "Galería"
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr "Oscuro"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr "Primario"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Heading"
+msgstr "Encabezado"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Body Text"
+msgstr "Texto del Cuerpo"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Tertiary Text Color"
+msgstr "Color de Texto Terciario"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Tertiary Bg Color"
+msgstr "Color de Fondo Terciario"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Border Color"
+msgstr "Color del Borde"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr "Fondo"
+
+#: styles/dark.json styles/green.json styles/orange.json styles/pink.json
+#: styles/purple.json theme.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr "Primer Plano"
+
+#: styles/green.json
+msgctxt "Style variation name"
+msgid "Green"
+msgstr "Verde"
+
+#: styles/orange.json
+msgctxt "Style variation name"
+msgid "Orange"
+msgstr "Naranja"
+
+#: styles/pink.json
+msgctxt "Style variation name"
+msgid "Pink"
+msgstr "Rosa"
+
+#: styles/purple.json
+msgctxt "Style variation name"
+msgid "Purple"
+msgstr "Morado"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Poppins"
+msgstr "Poppins"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Noto Sans"
+msgstr "Noto Sans"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Grape Nuts"
+msgstr "Grape Nuts"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Lemon"
+msgstr "Lemon"
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Montserrat"
+msgstr "Montserrat"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr "Pequeño"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr "Extra Pequeño"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr "Pequeño"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr "Mediano"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Upper Heading"
+msgstr "Encabezado Superior"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr "Normal"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Content Heading"
+msgstr "Encabezado de Contenido"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Site Title"
+msgstr Título del Sitio"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Post Title"
+msgstr "Título de la Publicación"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr "Grande"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra large"
+msgstr "Extra Grande"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Semi Huge"
+msgstr "Semi Gigante"
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge (Display)"
+msgstr "Gigante (Visualización)"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr "Primer Plano y Fondo"
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and Heading"
+msgstr "Primario y Encabezado"
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical foreground to background"
+msgstr "Primer plano vertical a fondo"
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical background to foreground"
+msgstr "Fondo vertical a primer plano"
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to foreground"
+msgstr "Diagonal primario a primer plano"
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to background"
+msgstr "Diagonal primario a fondo"
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to heading"
+msgstr "Diagonal primario a encabezado"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr "Encabezado"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Main Header"
+msgstr "Encabezado Principal"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr "Pie de Página"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer Columns"
+msgstr "Columnas del Pie de Página"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Post Content"
+msgstr "Contenido de la Publicación"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Page Content"
+msgstr "Contenido de la Página"
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar"
+msgstr "Barra Lateral"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr "En Blanco"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (Sidebar on Right)"
+msgstr "Publicación Única (Barra Lateral a la Derecha)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (Sidebar on Left)"
+msgstr "Publicación Única (Barra Lateral a la Izquierda)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (No Sidebar)"
+msgstr "Publicación Única (Sin Barra Lateral)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Right)"
+msgstr "Página Única (Barra Lateral a la Derecha)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Left)"
+msgstr "Página Única (Barra Lateral a la Izquierda)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (No Title / Feature Image)"
+msgstr "Página (Sin Título / Imagen Destacada)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Right Sidebar)"
+msgstr "Página de Blog (Barra Lateral Derecha)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Left Sidebar)"
+msgstr "Página de Blog (Barra Lateral Izquierda)"
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (No Sidebar)"
+msgstr "Página de Blog (Sin Barra Lateral)"

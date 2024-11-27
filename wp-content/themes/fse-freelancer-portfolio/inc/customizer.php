@@ -83,7 +83,7 @@ final class Fse_Freelancer_Portfolio_Customize {
 					'priority'   => 9,
 					'title'    => esc_html__( 'FSE Freelancer Portfolio Pro', 'fse-freelancer-portfolio' ),
 					'pro_text' => esc_html__( 'GET PRO', 'fse-freelancer-portfolio' ),
-					'pro_url'  => esc_url( 'https://www.cretathemes.com/products/portfolio-wordpress-theme/', 'fse-freelancer-portfolio' ),
+					'pro_url'  => esc_url( 'https://www.cretathemes.com/products/portfolio-wordpress-theme', 'fse-freelancer-portfolio' ),
 				)
 			)
 		);

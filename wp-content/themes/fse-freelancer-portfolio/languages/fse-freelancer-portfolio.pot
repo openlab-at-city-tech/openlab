@@ -1,0 +1,745 @@
+# Copyright (C) 2024 Creta Themes
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: FSE Freelancer Portfolio 2.0.6\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/fse-freelancer-portfolio\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-20T17:30:40+05:30\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: fse-freelancer-portfolio\n"
+
+#. Theme Name of the theme
+#: style.css
+#: inc/block-patterns.php:11
+#: patterns/footer-columns.php:116
+msgid "FSE Freelancer Portfolio"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://www.cretathemes.com/products/free-freelancer-wordpress-theme"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress theme designed specifically for freelancers, creative professionals, freelance services, creative freelancers, resume writing, graphic designers, web developers, freelance designers, digital creators, resume design, web development services, freelance opportunities, creative professionals, portfolio development, freelance projects, UX/UI designers, freelance web developers, design portfolios, resume consulting, web design experts, digital marketing freelancers, freelance graphic design, resumes, designers, web developers, and individuals looking to showcase their work and services online. With a modern and elegant design, FSE Freelancer Portfolio offers a user-friendly experience, enabling users to effortlessly create a captivating online portfolio. The theme provides a range of customizable blocks and layouts that are tailored to present various types of content, such as project galleries, testimonials, blog posts, and service offerings. It offers an intuitive drag-and-drop interface for building and editing content. Key features of the FSE Freelancer Portfolio theme include responsive design, ensuring that websites look and function well across different devices and screen sizes. The theme also supports high-quality media presentation, enabling users to display their visual work, such as images and videos, in a polished and impactful manner. FSE Freelancer Portfolio emphasises user engagement by offering easy navigation, clear calls-to-action, and integration with social media platforms. This helps freelancers and creative professionals connect with potential clients and audiences effectively. The theme’s focus on elegant design, customization options, and content showcase capabilities make it a valuable tool for freelancers to effectively display their skills, attract clients, and leave a lasting impression on their website visitors."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "Creta Themes"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://cretathemes.com/"
+msgstr ""
+
+#: functions.php:49
+msgid "https://www.cretathemes.com/products/portfolio-wordpress-theme"
+msgstr ""
+
+#: functions.php:50
+msgid "https://pattern.cretathemes.com/fse-freelancer-portfolio/"
+msgstr ""
+
+#: functions.php:51
+#: functions.php:52
+msgid "https://pattern.cretathemes.com/pro-guide/fse-freelancer-portfolio/"
+msgstr ""
+
+#: functions.php:53
+msgid "https://wordpress.org/support/theme/fse-freelancer-portfolio/"
+msgstr ""
+
+#: functions.php:54
+msgid "https://wordpress.org/support/theme/fse-freelancer-portfolio/reviews/#new-post"
+msgstr ""
+
+#: functions.php:92
+msgid "Hey, Thank you for installing FSE Freelancer Portfolio Theme!"
+msgstr ""
+
+#: functions.php:93
+msgid "Navigate Getstart"
+msgstr ""
+
+#: functions.php:93
+#: inc/get-started/get-started.php:58
+msgid "Site Editor"
+msgstr ""
+
+#: functions.php:94
+msgid "Dismiss"
+msgstr ""
+
+#: inc/block-patterns.php:12
+msgid "Pages"
+msgstr ""
+
+#: inc/block-styles.php:17
+msgid "No Padding"
+msgstr ""
+
+#: inc/block-styles.php:26
+#: inc/block-styles.php:44
+#: inc/block-styles.php:53
+#: inc/block-styles.php:63
+#: inc/block-styles.php:73
+#: inc/block-styles.php:82
+msgid "Theme Style"
+msgstr ""
+
+#: inc/block-styles.php:35
+msgid "Plain"
+msgstr ""
+
+#: inc/customizer.php:84
+msgid "FSE Freelancer Portfolio Pro"
+msgstr ""
+
+#: inc/customizer.php:85
+msgid "GET PRO"
+msgstr ""
+
+#: inc/get-started/get-started.php:4
+msgid "Get Started"
+msgstr ""
+
+#: inc/get-started/get-started.php:22
+msgid "Free Full Site Editing WordPress Theme"
+msgstr ""
+
+#: inc/get-started/get-started.php:24
+msgid "Theme Documentation"
+msgstr ""
+
+#: inc/get-started/get-started.php:39
+msgid "Leave Us A Review"
+msgstr ""
+
+#: inc/get-started/get-started.php:40
+msgid "Are you enjoying our theme? We would love to hear your feedback."
+msgstr ""
+
+#: inc/get-started/get-started.php:42
+msgid "Rate Us"
+msgstr ""
+
+#: inc/get-started/get-started.php:47
+msgid "Need Help?"
+msgstr ""
+
+#: inc/get-started/get-started.php:48
+msgid "Go to our support forum to help you out in case of queries."
+msgstr ""
+
+#: inc/get-started/get-started.php:50
+msgid "Get Support"
+msgstr ""
+
+#: inc/get-started/get-started.php:55
+msgid "Theme Customization"
+msgstr ""
+
+#: inc/get-started/get-started.php:56
+msgid "Effortlessly modify and maintain your site using editor."
+msgstr ""
+
+#: inc/get-started/get-started.php:66
+msgid "Go For Premium"
+msgstr ""
+
+#: inc/get-started/get-started.php:67
+msgid "Are you exited for our theme? Proceed for pro version of theme."
+msgstr ""
+
+#: inc/get-started/get-started.php:69
+msgid "Pro Documentation"
+msgstr ""
+
+#: inc/get-started/get-started.php:70
+msgid "Buy Pro"
+msgstr ""
+
+#: inc/get-started/get-started.php:71
+msgid "Pro Demo"
+msgstr ""
+
+#: inc/get-started/get-started.php:74
+msgid "Responsive Design"
+msgstr ""
+
+#: inc/get-started/get-started.php:75
+msgid "Demo Content Import"
+msgstr ""
+
+#: inc/get-started/get-started.php:76
+msgid "Aditional plugins"
+msgstr ""
+
+#: inc/get-started/get-started.php:77
+msgid "Background sliders"
+msgstr ""
+
+#: inc/get-started/get-started.php:78
+msgid "Video popups"
+msgstr ""
+
+#: inc/get-started/get-started.php:79
+msgid "More Fonts and Colors"
+msgstr ""
+
+#: inc/get-started/get-started.php:80
+msgid "Multiple templates"
+msgstr ""
+
+#: inc/get-started/get-started.php:81
+msgid "Multiple front page sections"
+msgstr ""
+
+#: inc/get-started/get-started.php:82
+msgid "Woocommerce support"
+msgstr ""
+
+#: inc/get-started/get-started.php:83
+msgid "Premium support"
+msgstr ""
+
+#: inc/get-started/get-started.php:84
+msgid "SEO optimization"
+msgstr ""
+
+#: inc/get-started/get-started.php:85
+msgid "Speed optimization"
+msgstr ""
+
+#: inc/get-started/get-started.php:86
+msgid "Browser compatibility"
+msgstr ""
+
+#: inc/icon-function.php:26
+msgid "Please define default parameters in the form of an array."
+msgstr ""
+
+#: inc/icon-function.php:31
+msgid "Please define an SVG icon filename."
+msgstr ""
+
+#: patterns/404.php
+msgctxt "Pattern title"
+msgid "404 Page"
+msgstr ""
+
+#: patterns/404.php:12
+msgid "Oops! That page cannot be found"
+msgstr ""
+
+#: patterns/archive-header-with-background.php
+msgctxt "Pattern title"
+msgid "Archive Header With Background"
+msgstr ""
+
+#: patterns/default-header.php
+msgctxt "Pattern title"
+msgid "Default Header"
+msgstr ""
+
+#: patterns/footer-columns.php
+msgctxt "Pattern title"
+msgid "Footer Columns"
+msgstr ""
+
+#: patterns/footer-columns.php:19
+#: patterns/main-banner.php:23
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/footer-columns.php:36
+msgid "Shop"
+msgstr ""
+
+#: patterns/footer-columns.php:54
+msgid "Quick Links"
+msgstr ""
+
+#: patterns/footer-columns.php:74
+msgid "Get In Touch"
+msgstr ""
+
+#: patterns/footer-columns.php:83
+msgid "support@example.com"
+msgstr ""
+
+#: patterns/footer-columns.php:103
+msgid "Mon - Fri 8:00 AM to 5:00 PM SUNDAY -"
+msgstr ""
+
+#: patterns/footer-columns.php:103
+msgid "CLOSED"
+msgstr ""
+
+#: patterns/footer-columns.php:116
+msgid "All Rights Reserved."
+msgstr ""
+
+#: patterns/main-banner.php
+msgctxt "Pattern title"
+msgid "Header Media"
+msgstr ""
+
+#: patterns/main-banner.php:15
+msgid "Hello, I am"
+msgstr ""
+
+#: patterns/main-banner.php:19
+msgid "Dana Smith"
+msgstr ""
+
+#: patterns/main-banner.php:28
+msgid "Download CV"
+msgstr ""
+
+#: patterns/main-header.php
+msgctxt "Pattern title"
+msgid "Main Header"
+msgstr ""
+
+#: patterns/main-header.php:35
+msgid "CONNECT"
+msgstr ""
+
+#: patterns/post-header-with-background.php
+msgctxt "Pattern title"
+msgid "Post Header With Background"
+msgstr ""
+
+#: patterns/recent-blog.php
+msgctxt "Pattern title"
+msgid "Recent Blog"
+msgstr ""
+
+#: patterns/search.php
+msgctxt "Pattern title"
+msgid "Search"
+msgstr ""
+
+#: patterns/search.php:42
+msgid "Sorry Nothing Found. Try searching..!!"
+msgstr ""
+
+#: patterns/services.php
+msgctxt "Pattern title"
+msgid "Services"
+msgstr ""
+
+#: patterns/services.php:16
+msgid "Work"
+msgstr ""
+
+#: patterns/services.php:16
+msgid "History"
+msgstr ""
+
+#: patterns/services.php:20
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley."
+msgstr ""
+
+#: patterns/services.php:25
+#: patterns/services.php:51
+#: patterns/services.php:77
+#: patterns/services.php:105
+#: patterns/services.php:131
+#: patterns/services.php:157
+msgid "Read More"
+msgstr ""
+
+#: patterns/services.php:38
+#: patterns/services.php:64
+#: patterns/services.php:92
+#: patterns/services.php:118
+#: patterns/services.php:144
+msgid "UI/UX Designer"
+msgstr ""
+
+#: patterns/services.php:42
+#: patterns/services.php:68
+#: patterns/services.php:96
+#: patterns/services.php:122
+#: patterns/services.php:148
+msgid "Company Name"
+msgstr ""
+
+#: patterns/services.php:46
+#: patterns/services.php:72
+#: patterns/services.php:100
+#: patterns/services.php:126
+#: patterns/services.php:152
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s."
+msgstr ""
+
+#: patterns/sidebar.php
+msgctxt "Pattern title"
+msgid "Sidebar"
+msgstr ""
+
+#: patterns/sidebar.php:10
+msgid "Search"
+msgstr ""
+
+#: patterns/sidebar.php:18
+msgid "About"
+msgstr ""
+
+#: patterns/sidebar.php:22
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/sidebar.php:26
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown prmontserrat took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged."
+msgstr ""
+
+#: patterns/sidebar.php:32
+msgid "Archive"
+msgstr ""
+
+#: patterns/sidebar.php:40
+msgid "Categories"
+msgstr ""
+
+#: patterns/sidebar.php:48
+msgid "Recent Posts"
+msgstr ""
+
+#: patterns/sidebar.php:56
+msgid "Tags"
+msgstr ""
+
+#: patterns/sidebar.php:64
+msgid "Social Icons"
+msgstr ""
+
+#: patterns/sidebar.php:82
+msgid "Gallery"
+msgstr ""
+
+#: styles/dark.json
+msgctxt "Style variation name"
+msgid "Dark"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Primary"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Heading"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Body Text"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary Text Color"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Tertiary Bg Color"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Border Color"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Background"
+msgstr ""
+
+#: styles/dark.json
+#: styles/green.json
+#: styles/orange.json
+#: styles/pink.json
+#: styles/purple.json
+#: theme.json
+msgctxt "Color name"
+msgid "Foreground"
+msgstr ""
+
+#: styles/green.json
+msgctxt "Style variation name"
+msgid "Green"
+msgstr ""
+
+#: styles/orange.json
+msgctxt "Style variation name"
+msgid "Orange"
+msgstr ""
+
+#: styles/pink.json
+msgctxt "Style variation name"
+msgid "Pink"
+msgstr ""
+
+#: styles/purple.json
+msgctxt "Style variation name"
+msgid "Purple"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Poppins"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Noto Sans"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Grape Nuts"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Lemon"
+msgstr ""
+
+#: theme.json
+msgctxt "Font family name"
+msgid "Montserrat"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Tiny"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Upper Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Normal"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Content Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Site Title"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Post Title"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Semi Huge"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Huge (Display)"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Foreground and background"
+msgstr ""
+
+#: theme.json
+msgctxt "Duotone name"
+msgid "Primary and Heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical foreground to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Vertical background to foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to foreground"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to background"
+msgstr ""
+
+#: theme.json
+msgctxt "Gradient name"
+msgid "Diagonal primary to heading"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Main Header"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Footer Columns"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Post Content"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Page Content"
+msgstr ""
+
+#: theme.json
+msgctxt "Template part name"
+msgid "Sidebar"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blank"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (Sidebar on Right)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Post (No Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Right)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single Page (Sidebar on Left)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Page (No Title / Feature Image)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Right Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (Left Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Blog Page (No Sidebar)"
+msgstr ""

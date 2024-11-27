@@ -1,7 +1,7 @@
 === FSE Freelancer Portfolio ===
 Contributors: cretathemes
 Requires at least: 5.9
-Tested up to: 6.4
+Tested up to: 6.7
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -9,7 +9,7 @@ Tags: blog, portfolio, photography, one-column, two-columns, left-sidebar, right
 
 == Description ==
 
-FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress theme designed specifically for freelancers, creative professionals, resumes, designers, web developers,  and individuals looking to showcase their work and services online. With a modern and elegant design, FSE Freelancer Portfolio offers a user-friendly experience, enabling users to effortlessly create a captivating online portfolio. The theme provides a range of customizable blocks and layouts that are tailored to present various types of content, such as project galleries, testimonials, blog posts, and service offerings. It offers an intuitive drag-and-drop interface for building and editing content. Key features of the FSE Freelancer Portfolio theme include responsive design, ensuring that websites look and function well across different devices and screen sizes. The theme also supports high-quality media presentation, enabling users to display their visual work, such as images and videos, in a polished and impactful manner. FSE Freelancer Portfolio emphasises user engagement by offering easy navigation, clear calls-to-action, and integration with social media platforms. This helps freelancers and creative professionals connect with potential clients and audiences effectively. The theme’s focus on elegant design, customization options, and content showcase capabilities make it a valuable tool for freelancers to effectively display their skills, attract clients, and leave a lasting impression on their website visitors.
+FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress theme designed specifically for freelancers, creative professionals, freelance services, creative freelancers, resume writing, graphic designers, web developers, freelance designers, digital creators, resume design, web development services, freelance opportunities, creative professionals, portfolio development, freelance projects, UX/UI designers, freelance web developers, design portfolios, resume consulting, web design experts, digital marketing freelancers, freelance graphic design, resumes, designers, web developers, and individuals looking to showcase their work and services online. With a modern and elegant design, FSE Freelancer Portfolio offers a user-friendly experience, enabling users to effortlessly create a captivating online portfolio. The theme provides a range of customizable blocks and layouts that are tailored to present various types of content, such as project galleries, testimonials, blog posts, and service offerings. It offers an intuitive drag-and-drop interface for building and editing content. Key features of the FSE Freelancer Portfolio theme include responsive design, ensuring that websites look and function well across different devices and screen sizes. The theme also supports high-quality media presentation, enabling users to display their visual work, such as images and videos, in a polished and impactful manner. FSE Freelancer Portfolio emphasises user engagement by offering easy navigation, clear calls-to-action, and integration with social media platforms. This helps freelancers and creative professionals connect with potential clients and audiences effectively. The theme’s focus on elegant design, customization options, and content showcase capabilities make it a valuable tool for freelancers to effectively display their skills, attract clients, and leave a lasting impression on their website visitors.
 
 == Changelog ==
 
@@ -120,6 +120,60 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 = 1.1.7 (Released: May 16, 2024) =
 * Changed Links
 
+= 1.1.8 (Released: May 13, 2024) =
+* Updated getstart.
+* Added editor css.
+* Updated inner pages.
+
+= 1.1.9 (Released: June 7, 2024) =
+* Added front page hover effects.
+* Updated comment textarea css.
+* Updated 404 page css.
+* Updated search page css.
+* Updated single page templates.
+* Updated page-content.html file.
+* Updated single post templates.
+* Updated post-content.html file.
+
+= 2.0.0 (Released: June 27, 2024) =
+* Updated search.html file.
+* Updated sidebar css.
+* Updated blog css.
+* Updated tag widget css.
+* Updated index.html file.
+* Updated home.html file.
+
+= 2.0.1 (Released: July 20, 2024) =
+* Added blog page template.
+* Updated footer.
+
+= 2.0.2 (Released: August 8, 2024) =
+* Added blog page Left Sidebar template.
+* Added blog page No Sidebar template.
+* Footer responsive.
+
+= 2.0.3 (Released: August 25, 2024) =
+* Added back to top.
+* Updated comment button css.
+* Removed unused css.
+* Added submenus styling.
+* Added responsive menu css.
+
+= 2.0.4 (Released: September 28, 2024) =
+* Added style variation.
+* Added pot file.
+* Updated description.
+
+= 2.0.5 (Released: October 26, 2024) =
+* Resolved skiplink issue.
+* Added dashicons theme support.
+* Added spanish translation file.
+
+= 2.0.6 (Released: November 20, 2024) =
+* Added rtl css.
+* Added rtl language support tag.
+* Added no result query in search page.
+
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023
@@ -129,20 +183,6 @@ FSE Freelancer Portfolio is based on Catch Bells WordPress Theme, 2012-2023
 Catch Bells is distributed under the terms of the GNU GPL.
 
 == Resources ==
-
-= WOW JS =
-* Matthieu Aussaguel
-* Copyright 2016, Matthieu Aussaguel
-* https://github.com/matthieua/WOW
-* License: GPLv3
-* https://github.com/matthieua/WOW/blob/master/README.md
-
-= Animate CSS =
-* Daniel Eden
-* Copyright 2021 Daniel Eden
-* https://github.com/animate-css/animate.css
-* License: 2.1
-* https://github.com/animate-css/animate.css/blob/main/LICENSE
 
 Google Web Fonts ( Poppins ) By Google - https://google.com
 * Poppins, This is the normal family, Licensed under Open Font License, https://fonts.google.com/specimen/Poppins?query=poppins

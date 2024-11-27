@@ -1,19 +1,19 @@
 <!-- wp:template-part {"slug":"main-header","theme":"fse-freelancer-portfolio","tagName":"header"} /-->
 
-<!-- wp:pattern {"slug":"fse-freelancer-portfolio/404-header"} /-->
+<!-- wp:group -->
+<div class="wp-block-group">
 
-<!-- wp:group {"tagName":"main"} -->
-<main class="wp-block-group">
-  <!-- wp:group {"tagName":"div"} -->
-  <div class="wp-block-group">
-    <!-- wp:group {"layout":{"inherit":true}} -->
-    <div class="wp-block-group">
-      <!-- wp:pattern {"slug":"fse-freelancer-portfolio/404-header-with-background"} /-->
-    </div>
-    <!-- /wp:group -->
-  </div>
+  <!-- wp:pattern {"slug":"fse-freelancer-portfolio/default-header"} /-->
+
+  <!-- wp:group {"tagName":"main","layout":{"type":"default"}} -->
+  <main class="wp-block-group"><!-- wp:heading {"textAlign":"center","className":"error-heading","style":{"typography":{"fontSize":"300px","fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"0","bottom":"0","left":"0","right":"0"}}}} -->
+
+  <!-- wp:pattern {"slug":"fse-freelancer-portfolio/404"} /-->
+    
+  </main>
   <!-- /wp:group -->
-</main>
+
+</div>
 <!-- /wp:group -->
 
 <!-- wp:template-part {"slug":"footer-columns","theme":"fse-freelancer-portfolio","tagName":"footer"} /-->

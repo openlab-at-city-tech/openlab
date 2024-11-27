@@ -49,6 +49,14 @@ function fse_freelancer_portfolio_block_wrapper( $block_content, $block ) {
 			}
 			return $block_content;
 		}
+		if ( 'core/post-date' === $block['blockName'] ) {
+            $block_content = str_replace( '<div class="wp-block-post-date">', '<div class="wp-block-post-date flex">' . fse_freelancer_portfolio_get_svg( array( 'icon' => 'calendar' ) ), $block_content );
+            return $block_content;
+        }
+        if ( 'core/post-author' === $block['blockName'] ) {
+            $block_content = str_replace( '<div class="wp-block-post-author">', '<div class="wp-block-post-author flex">' . fse_freelancer_portfolio_get_svg( array( 'icon' => 'user' ) ), $block_content );
+            return $block_content;
+        }
 
 	}
     return $block_content;
