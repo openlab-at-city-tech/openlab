@@ -1,7 +1,7 @@
 <?php
 
     if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
-    
+            
     class Post_Types_Order_Walker extends Walker 
         {
 
@@ -10,33 +10,7 @@
                                         'id' => 'ID'
                                         );
 
-
-            /**
-            * Start level
-            * 
-            * @param mixed $output
-            * @param mixed $depth
-            * @param mixed $args
-            */
-            function start_lvl(&$output, $depth = 0, $args = array()) 
-                {
-                    $indent = str_repeat("\t", $depth);
-                    $output .= "\n$indent<ul class='children'>\n";
-                }
-
-
-            /**
-            * End level
-            * 
-            * @param mixed $output
-            * @param mixed $depth
-            * @param mixed $args
-            */
-            function end_lvl(&$output, $depth = 0, $args = array()) 
-                {
-                    $indent = str_repeat("\t", $depth);
-                    $output .= "$indent</ul>\n";
-                }
+        
 
 
             /**
@@ -48,8 +22,10 @@
             * @param mixed $args
             * @param mixed $id
             */
-            function start_el(&$output, $page, $depth = 0, $args = array(), $id = 0) 
-                {
+            function start_el( &$output, $object, $depth = 0, $args = array(), $id = 0) 
+                {                   
+                    $options    =   CptoFunctions::get_options();
+                    
                     if ( $depth )
                         $indent = str_repeat("\t", $depth);
                     else
@@ -57,14 +33,21 @@
 
                     extract($args, EXTR_SKIP);
 
-                    $item_details   =   apply_filters( 'the_title', $page->post_title, $page->ID );
+                    $item_title     =   apply_filters( 'the_title', $object->post_title, $object->ID );
                     
-                    //Deprecated, rely on pto/interface_itme_data
-                    $item_details   =   apply_filters('cpto/interface_itme_data', $item_details, $page);
-                    
-                    $item_details   =   apply_filters('pto/interface_item_data', $item_details, $page);
+                    $item_details   =   apply_filters('pto/interface_item_data', '', $object );
                                     
-                    $output .= $indent . '<li id="item_'.$page->ID.'"><span>'. $item_details .'</span>';
+                                        
+                    $output        .=   $indent . '<tr id="item_' . $object->ID . '">
+                                                    <td>
+                                                        <strong><a class="row-title" href="'. get_edit_post_link( $object ) .'">' . $item_title .'</a> ' . $item_details .'</strong>';
+                    
+                    if ( $options['edit_view_links']    ===  1 )
+                        $output .=  '<div class="row-actions"><span class="edit"><a href="' . get_edit_post_link( $object ) .'">Edit</a> | </span><span class="view"><a target="_blank" href="'. get_permalink( $object ) .'">View</a></span></div>';
+                    
+                    $output .=  '</td>';
+                    
+                    $output .=  apply_filters( 'pto/interface/table/tbody', '', $object );
                
                 }
 
@@ -79,7 +62,7 @@
             */
             function end_el(&$output, $page, $depth = 0, $args = array()) 
                 {
-                    $output .= "</li>\n";
+                    $output .= "</tr>\n";
                 }
 
         }
