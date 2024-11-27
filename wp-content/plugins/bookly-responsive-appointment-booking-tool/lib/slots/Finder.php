@@ -735,7 +735,7 @@ class Finder
             // Service special days.
             $special_days = Lib\Proxy\SpecialDays::getServiceSchedule(
                 $parent_service_id ?: $service_id,
-                $this->start_dp->value(),
+                DatePoint::now()->value(),
                 $this->end_dp->value()
             ) ?: array();
             foreach ( $special_days as $day ) {

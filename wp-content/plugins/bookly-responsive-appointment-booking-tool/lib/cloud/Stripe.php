@@ -106,7 +106,7 @@ class Stripe extends Base
         if ( $response ) {
             return $response['data'];
         } else {
-            throw new \Exception();
+            throw new \Exception( current( $this->api->getErrors() ) );
         }
     }
 

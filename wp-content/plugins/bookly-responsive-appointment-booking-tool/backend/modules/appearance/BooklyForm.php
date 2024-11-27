@@ -44,7 +44,6 @@ class BooklyForm extends Lib\Base\Component
             'saved' => __( 'Settings saved.', 'bookly' ),
             'intlTelInput' => array(
                 'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
-                'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                 'country' => get_option( 'bookly_cst_phone_default_country' ),
             ),
         ) );

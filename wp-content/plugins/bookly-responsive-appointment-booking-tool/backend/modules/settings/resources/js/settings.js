@@ -1,4 +1,4 @@
-jQuery(function($) {
+jQuery(function ($) {
     let container = {
             $calendar: $('#bookly_settings_calendar'),
         },
@@ -41,47 +41,47 @@ jQuery(function($) {
     Ladda.bind('button[type=submit]', {timeout: 2000});
 
     // Customers tab.
-    $.each(window.intlTelInputGlobals.getCountryData(), function (index, value) {
+    $.each(window.booklyIntlTelInput.getCountryData(), function (index, value) {
         $defaultCountry.append('<option value="' + value.iso2 + '" data-code="' + value.dialCode + '">' + value.name + ' +' + value.dialCode + '</option>');
     });
     $defaultCountry.val(BooklyL10n.default_country);
-    $defaultCountry.on('change', function() {
+    $defaultCountry.on('change', function () {
         $defaultCountryCode.val($defaultCountry.find('option:selected').data('code'));
     });
-    $('.bookly-js-drag-container').each(function() {
+    $('.bookly-js-drag-container').each(function () {
         Sortable.create(this, {
             handle: '.bookly-js-draghandle'
         });
     });
 
-    $('#bookly-customer-reset').on('click', function(event) {
+    $('#bookly-customer-reset').on('click', function (event) {
         $defaultCountry.val($defaultCountry.data('country'));
     });
 
     $icsCustomer.data('default', $icsCustomer.val());
     let icsCustomerEditor = $('#bookly-ics-customer-editor').booklyAceEditor();
-    icsCustomerEditor.booklyAceEditor('onChange', function() {
+    icsCustomerEditor.booklyAceEditor('onChange', function () {
         $icsCustomer.val(icsCustomerEditor.booklyAceEditor('getValue'));
     });
 
     $icsStaff.data('default', $icsStaff.val());
     let icsStaffEditor = $('#bookly-ics-staff-editor').booklyAceEditor();
-    icsStaffEditor.booklyAceEditor('onChange', function() {
+    icsStaffEditor.booklyAceEditor('onChange', function () {
         $icsStaff.val(icsStaffEditor.booklyAceEditor('getValue'));
     });
 
     $customerAddress.data('default', $customerAddress.val());
     let customerAddressEditor = $('#bookly-settings-customers-editor').booklyAceEditor();
-    customerAddressEditor.booklyAceEditor('onChange', function() {
+    customerAddressEditor.booklyAceEditor('onChange', function () {
         $customerAddress.val(customerAddressEditor.booklyAceEditor('getValue'));
     });
 
-    $('#bookly_settings_customers button[type="reset"]').on('click', function() {
+    $('#bookly_settings_customers button[type="reset"]').on('click', function () {
         customerAddressEditor.booklyAceEditor('setValue', $customerAddress.data('default'));
     });
 
     // Google Calendar tab.
-    $gcSyncMode.on('change', function() {
+    $gcSyncMode.on('change', function () {
         $gcLimitEvents.closest('.form-group').toggle(this.value == '1.5-way');
         $gcFullSyncOffset.closest('.form-group').toggle(this.value == '2-way');
         $gcFullSyncTitles.closest('.form-group').toggle(this.value == '2-way');
@@ -90,16 +90,16 @@ jQuery(function($) {
 
     $gcDescription.data('default', $gcDescription.val());
     let gcDescriptionEditor = $('#bookly_gc_event_description').booklyAceEditor();
-    gcDescriptionEditor.booklyAceEditor('onChange', function() {
+    gcDescriptionEditor.booklyAceEditor('onChange', function () {
         $gcDescription.val(gcDescriptionEditor.booklyAceEditor('getValue'));
     });
 
-    $('#bookly_settings_google_calendar button[type="reset"]').on('click', function() {
+    $('#bookly_settings_google_calendar button[type="reset"]').on('click', function () {
         gcDescriptionEditor.booklyAceEditor('setValue', $gcDescription.data('default'));
     });
 
     // Outlook Calendar tab.
-    $ocSyncMode.on('change', function() {
+    $ocSyncMode.on('change', function () {
         $ocLimitEvents.closest('.form-group').toggle(this.value == '1.5-way');
         $ocFullSyncOffset.closest('.form-group').toggle(this.value == '2-way');
         $ocFullSyncTitles.closest('.form-group').toggle(this.value == '2-way');
@@ -107,22 +107,22 @@ jQuery(function($) {
 
     $ocDescription.data('default', $ocDescription.val());
     let ocDescriptionEditor = $('#bookly_oc_event_description').booklyAceEditor();
-    ocDescriptionEditor.booklyAceEditor('onChange', function() {
+    ocDescriptionEditor.booklyAceEditor('onChange', function () {
         $ocDescription.val(ocDescriptionEditor.booklyAceEditor('getValue'));
     });
 
-    $('#bookly_settings_outlook_calendar button[type="reset"]').on('click', function() {
+    $('#bookly_settings_outlook_calendar button[type="reset"]').on('click', function () {
         ocDescriptionEditor.booklyAceEditor('setValue', $ocDescription.data('default'));
     });
 
     // Calendar tab.
-    $participants.on('change', function() {
+    $participants.on('change', function () {
         $('#bookly_cal_one_participant').hide();
         $('#bookly_cal_many_participants').hide();
         $('#' + this.value).show();
     }).trigger('change');
-    $('#bookly_settings_calendar button[type=reset]').on('click', function() {
-        setTimeout(function() {
+    $('#bookly_settings_calendar button[type=reset]').on('click', function () {
+        setTimeout(function () {
             $participants.trigger('change');
         }, 50);
     });
@@ -130,16 +130,16 @@ jQuery(function($) {
     $calOneParticipant.data('default', $calOneParticipant.val());
     $calManyParticipants.data('default', $calManyParticipants.val());
     let calendarEditorOneParticipant = $('#bookly_cal_editor_one_participant').booklyAceEditor();
-    calendarEditorOneParticipant.booklyAceEditor('onChange', function() {
+    calendarEditorOneParticipant.booklyAceEditor('onChange', function () {
         $calOneParticipant.val(calendarEditorOneParticipant.booklyAceEditor('getValue'));
     });
 
     let calendarEditorManyParticipants = $('#bookly_cal_editor_many_participants').booklyAceEditor();
-    calendarEditorManyParticipants.booklyAceEditor('onChange', function() {
+    calendarEditorManyParticipants.booklyAceEditor('onChange', function () {
         $calManyParticipants.val(calendarEditorManyParticipants.booklyAceEditor('getValue'));
     });
 
-    $('#bookly_settings_calendar button[type="reset"]').on('click', function() {
+    $('#bookly_settings_calendar button[type="reset"]').on('click', function () {
         calendarEditorOneParticipant.booklyAceEditor('setValue', $calOneParticipant.data('default'));
         calendarEditorManyParticipants.booklyAceEditor('setValue', $calManyParticipants.data('default'));
     });
@@ -147,28 +147,28 @@ jQuery(function($) {
     // Woocommerce tab.
     $woocommerceInfo.data('default', $woocommerceInfo.val());
     let woocommerceEditor = $('#bookly_wc_cart_info').booklyAceEditor();
-    woocommerceEditor.booklyAceEditor('onChange', function() {
+    woocommerceEditor.booklyAceEditor('onChange', function () {
         $woocommerceInfo.val(woocommerceEditor.booklyAceEditor('getValue'));
     });
 
-    $('#bookly_settings_woo_commerce button[type="reset"]').on('click', function() {
+    $('#bookly_settings_woo_commerce button[type="reset"]').on('click', function () {
         woocommerceEditor.booklyAceEditor('setValue', $woocommerceInfo.data('default'));
     });
 
     // Company tab.
-    $companyLogo.find('.bookly-js-delete').on('click', function() {
+    $companyLogo.find('.bookly-js-delete').on('click', function () {
         let $thumb = $companyLogo.find('.bookly-js-image');
         $thumb.attr('style', '');
         $companyLogo.find('[name=bookly_co_logo_attachment_id]').val('');
         $companyLogo.find('.bookly-thumb').removeClass('bookly-thumb-with-image');
         $(this).hide();
     });
-    $companyLogo.find('.bookly-js-edit').on('click', function() {
+    $companyLogo.find('.bookly-js-edit').on('click', function () {
         let frame = wp.media({
             library: {type: 'image'},
             multiple: false
         });
-        frame.on('select', function() {
+        frame.on('select', function () {
             let selection = frame.state().get('selection').toJSON(),
                 img_src
             ;
@@ -179,7 +179,10 @@ jQuery(function($) {
                     img_src = selection[0].url;
                 }
                 $companyLogo.find('[name=bookly_co_logo_attachment_id]').val(selection[0].id);
-                $companyLogo.find('.bookly-js-image').css({'background-image': 'url(' + img_src + ')', 'background-size': 'cover'});
+                $companyLogo.find('.bookly-js-image').css({
+                    'background-image': 'url(' + img_src + ')',
+                    'background-size': 'cover'
+                });
                 $companyLogo.find('.bookly-js-delete').show();
                 $companyLogo.find('.bookly-thumb').addClass('bookly-thumb-with-image');
                 $(this).hide();
@@ -188,7 +191,7 @@ jQuery(function($) {
 
         frame.open();
     });
-    $('#bookly-company-reset').on('click', function() {
+    $('#bookly-company-reset').on('click', function () {
         var $div = $('#bookly-js-company-logo .bookly-js-image'),
             $input = $('[name=bookly_co_logo_attachment_id]');
         $div.attr('style', $div.data('style'));
@@ -198,16 +201,16 @@ jQuery(function($) {
     // Payments tab.
     Sortable.create($('#bookly-payment-systems')[0], {
         handle: '.bookly-js-draghandle',
-        onChange: function() {
+        onChange: function () {
             let order = [];
-            $('#bookly_settings_payments .card[data-gateway]').each(function() {
+            $('#bookly_settings_payments .card[data-gateway]').each(function () {
                 order.push($(this).data('gateway'));
             });
             $('#bookly_settings_payments [name="bookly_pmt_order"]').val(order.join(','));
         },
     });
-    $currency.on('change', function() {
-        $formats.find('option').each(function() {
+    $currency.on('change', function () {
+        $formats.find('option').each(function () {
             var decimals = this.value.match(/{price\|(\d)}/)[1],
                 price = BooklyL10n.sample_price
             ;
@@ -228,33 +231,33 @@ jQuery(function($) {
         });
     }).trigger('change');
 
-    $('#bookly_paypal_enabled').change(function() {
+    $('#bookly_paypal_enabled').change(function () {
         $('.bookly-paypal-express-checkout').toggle(this.value == 'ec');
         $('.bookly-paypal-ps').toggle(this.value == 'ps');
         $('.bookly-paypal-checkout').toggle(this.value == 'checkout');
         $('.bookly-paypal').toggle(this.value != '0');
     }).change();
 
-    $('#bookly-payments-reset').on('click', function(event) {
-        setTimeout(function() {
+    $('#bookly-payments-reset').on('click', function (event) {
+        setTimeout(function () {
             $('#bookly_pmt_currency,#bookly_paypal_enabled,#bookly_authorize_net_enabled,#bookly_stripe_enabled,#bookly_2checkout_enabled,#bookly_payu_biz_enabled,#bookly_payu_latam_enabled,#bookly_payson_enabled,#bookly_mollie_enabled,#bookly_payu_biz_sandbox,#bookly_payu_latam_sandbox,#bookly_cloud_stripe_enabled').change();
             $('#bookly-cloud-stripe-metadata').html('');
-            $.each(BooklyL10n.stripeCloudMetadata, function(index, meta) {
+            $.each(BooklyL10n.stripeCloudMetadata, function (index, meta) {
                 addCloudStripeMetadata(meta.name, meta.value);
             })
             $cloudStripeCustomMetadata.change();
         }, 0);
     });
 
-    $('#bookly-cloud-stripe-add-metadata').on('click', function() {
+    $('#bookly-cloud-stripe-add-metadata').on('click', function () {
         addCloudStripeMetadata('', '');
     });
 
-    $.each(BooklyL10n.stripeCloudMetadata, function(index, meta) {
+    $.each(BooklyL10n.stripeCloudMetadata, function (index, meta) {
         addCloudStripeMetadata(meta.name, meta.value);
     })
 
-    $cloudStripeMetadata.on('click', '.bookly-js-delete-metadata', function() {
+    $cloudStripeMetadata.on('click', '.bookly-js-delete-metadata', function () {
         $(this).closest('.bookly-js-metadata-row').remove();
     });
 
@@ -275,7 +278,7 @@ jQuery(function($) {
     if ($finalStepUrl.find('input').val()) {
         $finalStepUrlMode.val(1);
     }
-    $finalStepUrlMode.change(function() {
+    $finalStepUrlMode.change(function () {
         if (this.value == 0) {
             $finalStepUrl.hide().find('input').val('');
         } else {
@@ -301,7 +304,7 @@ jQuery(function($) {
         repeat: BooklyL10n.repeat,
         close: BooklyL10n.close
     });
-    $('.bookly-js-jCalBtn').on('click', function(e) {
+    $('.bookly-js-jCalBtn').on('click', function (e) {
         e.preventDefault();
         var trigger = $(this).data('trigger');
         $('.bookly-js-annual-calendar').find($(trigger)).trigger('click');
@@ -309,7 +312,7 @@ jQuery(function($) {
 
     // Business Hours tab.
     $('.bookly-js-parent-range-start', $businessHours)
-        .on('change', function() {
+        .on('change', function () {
             var $parentRangeStart = $(this),
                 $rangeRow = $parentRangeStart.parents('.bookly-js-range-row');
             if ($parentRangeStart.val() == '') {
@@ -320,21 +323,21 @@ jQuery(function($) {
             }
         }).trigger('change');
     // Reset.
-    $('#bookly-hours-reset', $businessHours).on('click', function() {
-        $('.bookly-js-parent-range-start', $businessHours).each(function() {
+    $('#bookly-hours-reset', $businessHours).on('click', function () {
+        $('.bookly-js-parent-range-start', $businessHours).each(function () {
             $(this).val($(this).data('default_value')).trigger('change');
         });
     });
 
     // Change link to Help page according to activated tab.
     let help_link = $helpBtn.attr('href');
-    $('#bookly-sidebar a[data-toggle="bookly-pill"]').on('shown.bs.tab', function(e) {
+    $('#bookly-sidebar a[data-toggle="bookly-pill"]').on('shown.bs.tab', function (e) {
         $helpBtn.attr('href', help_link + e.target.getAttribute('href').substring(1).replace(/_/g, '-'));
     });
 
     // Tab calendar
     $coloringMode
-        .on('change', function() {
+        .on('change', function () {
             $colorsBy.hide();
             $('.bookly-js-colors-' + this.value).show()
         }).trigger('change');
@@ -343,23 +346,23 @@ jQuery(function($) {
 
     function initColorPicker($jquery_collection) {
         $jquery_collection.wpColorPicker();
-        $jquery_collection.each(function() {
+        $jquery_collection.each(function () {
             $(this).data('last-color', $(this).val());
             $('.wp-color-result-text', $(this).closest('.bookly-color-picker')).text($(this).data('title'));
         });
     }
 
     $('#bookly-calendar-reset', container.$calendar)
-        .on('click', function(event) {
-            $colorPicker.each(function() {
+        .on('click', function (event) {
+            $colorPicker.each(function () {
                 $(this).wpColorPicker('color', $(this).data('last-color'));
             });
-            setTimeout(function() {
+            setTimeout(function () {
                 $coloringMode.trigger('change')
             }, 0);
         });
 
-    $('[data-expand]').on('change', function() {
+    $('[data-expand]').on('change', function () {
         let selector = '.' + this.id + '-expander';
         this.value == $(this).data('expand')
             ? $(selector).show()

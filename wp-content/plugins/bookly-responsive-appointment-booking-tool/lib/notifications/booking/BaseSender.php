@@ -9,6 +9,7 @@ use Bookly\Lib\Notifications\Assets\Item\Attachments;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Base;
 use Bookly\Lib\Notifications\WPML;
+use Bookly\Lib\Proxy;
 use Bookly\Backend\Components\Dialogs\Queue\NotificationList;
 
 abstract class BaseSender extends Base\Sender
@@ -85,9 +86,11 @@ abstract class BaseSender extends Base\Sender
                         break;
                 }
                 if ( $send ) {
-                    static::sendToStaff( $sub_item->getStaff(), $notification, $codes, $attachments, $reply_to, $queue );
-                    static::sendToAdmins( $notification, $codes, $attachments, $reply_to, $queue );
-                    static::sendToCustom( $notification, $codes, $attachments, $reply_to, $queue );
+                    if ( ! Proxy\RecurringAppointments::notifyStaffAndAdmins( false, $sub_item->getStaff(), $notification, $codes, $attachments, $reply_to, $queue ) ) {
+                        static::sendToStaff( $sub_item->getStaff(), $notification, $codes, $attachments, $reply_to, $queue );
+                        static::sendToAdmins( $notification, $codes, $attachments, $reply_to, $queue );
+                        static::sendToCustom( $notification, $codes, $attachments, $reply_to, $queue );
+                    }
                 }
             }
             if ( $queue === null ) {

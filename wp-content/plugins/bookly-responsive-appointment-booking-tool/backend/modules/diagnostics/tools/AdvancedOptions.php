@@ -23,7 +23,8 @@ class AdvancedOptions extends Tool
     );
 
     protected $white_list = array(
-        'cron'
+        'cron',
+        'active_plugins'
     );
 
     public function __construct()

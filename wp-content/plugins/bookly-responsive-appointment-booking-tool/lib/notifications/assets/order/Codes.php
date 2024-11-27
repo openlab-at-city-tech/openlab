@@ -26,7 +26,8 @@ class Codes extends Base\Codes
     public $client_birthday;
     public $client_full_birthday;
     public $deposit_value;
-    public $invoice_number;     // payment_id
+    public $payment_id;
+    public $invoice_number;
     public $payment_type;
     public $payment_status;
     public $total_price;
@@ -61,7 +62,8 @@ class Codes extends Base\Codes
             $this->amount_due = $order->getPayment()->getTotal() - $order->getPayment()->getPaid();
             $this->total_price = $order->getPayment()->getTotal();
             $this->total_tax = $order->getPayment()->getTax();
-            $this->invoice_number = $order->getPayment()->getId();
+            $this->payment_id = $order->getPayment()->getId();
+            $this->invoice_number = $order->getPayment()->getInvoiceNumber();
             $this->payment_status = $order->getPayment()->getStatus();
             $this->payment_type = $order->getPayment()->getType();
         }

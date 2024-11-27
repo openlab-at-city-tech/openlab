@@ -90,6 +90,11 @@ abstract class Item
         return $this->type === self::TYPE_GIFT_CARD;
     }
 
+    public function isAppointment()
+    {
+        return $this->isSimple() || $this->isCollaborative() || $this->isCompound() || $this->isSeries();
+    }
+
     /**
      * Set parent item
      *
@@ -167,6 +172,8 @@ abstract class Item
 
         return $item;
     }
+
+    abstract public function getLocationId();
 
     /**
      * Get appointment.

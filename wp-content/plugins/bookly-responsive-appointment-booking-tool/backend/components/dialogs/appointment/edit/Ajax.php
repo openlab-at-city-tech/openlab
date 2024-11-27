@@ -164,7 +164,7 @@ class Ajax extends Lib\Base\Ajax
                 $result['customers'][] = array(
                     'id' => (int) $customer->getId(),
                     'name' => $name,
-                    'group_id' => $customer->getGroupId(),
+                    'group_id' => Lib\Config::customerGroupsActive() ? $customer->getGroupId() : 0,
                     'timezone' => Lib\Proxy\Pro::getLastCustomerTimezone( $customer->getId() ),
                 );
             }

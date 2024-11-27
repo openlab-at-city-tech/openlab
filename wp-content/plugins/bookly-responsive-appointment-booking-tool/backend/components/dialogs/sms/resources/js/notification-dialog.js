@@ -47,16 +47,16 @@ jQuery(function ($) {
         }
 
         $modalNotification
-        .on('show.bs.modal.first', function () {
-            $notificationType.trigger('change');
-            $modalNotification.unbind('show.bs.modal.first');
-            if (useTinyMCE) {
-                tinymce.init(tinyMCEPreInit);
-            }
-            containers.message.siblings('a[data-toggle=bookly-collapse]').html(BooklyNotificationDialogL10n.title.container);
-            $('.bookly-js-services', containers.settings).booklyDropdown();
-            $('.modal-title', $modalNotification).html(BooklyNotificationDialogL10n.title.edit);
-        });
+            .on('show.bs.modal.first', function () {
+                $notificationType.trigger('change');
+                $modalNotification.unbind('show.bs.modal.first');
+                if (useTinyMCE) {
+                    tinymce.init(tinyMCEPreInit);
+                }
+                containers.message.siblings('a[data-toggle=bookly-collapse]').html(BooklyNotificationDialogL10n.title.container);
+                $('.bookly-js-services', containers.settings).booklyDropdown();
+                $('.modal-title', $modalNotification).html(BooklyNotificationDialogL10n.title.edit);
+            });
 
         if (useTinyMCE) {
             $('a[data-toggle="bookly-tab"]').on('shown.bs.tab', function (e) {
@@ -75,88 +75,88 @@ jQuery(function ($) {
          * Notification
          */
         $notificationType
-        .on('change', function () {
-            if ($(':selected', $notificationType).length == 0) {
-                // Un supported notification type (without Pro)
-                $notificationType.val('new_booking');
-            }
-            var $modalBody        = $(this).closest('.modal-body'),
-                $attach           = $modalBody.find('.bookly-js-attach'),
-                $selected         = $(':selected', $notificationType),
-                set               = $selected.data('set').split(' '),
-                recipients        = $selected.data('recipients'),
-                showAttach        = $selected.data('attach') || [],
-                hideServices      = true,
-                hideStatuses      = true,
-                notification_type = $selected.val()
-            ;
+            .on('change', function () {
+                if ($(':selected', $notificationType).length == 0) {
+                    // Un supported notification type (without Pro)
+                    $notificationType.val('new_booking');
+                }
+                var $modalBody = $(this).closest('.modal-body'),
+                    $attach = $modalBody.find('.bookly-js-attach'),
+                    $selected = $(':selected', $notificationType),
+                    set = $selected.data('set').split(' '),
+                    recipients = $selected.data('recipients'),
+                    showAttach = $selected.data('attach') || [],
+                    hideServices = true,
+                    hideStatuses = true,
+                    notification_type = $selected.val()
+                ;
 
-            $helpType.hide();
-            $offsets.hide();
+                $helpType.hide();
+                $offsets.hide();
 
-            switch (notification_type) {
-                case 'appointment_reminder':
-                case 'ca_status_changed':
-                case 'ca_status_changed_recurring':
-                    hideStatuses = false;
-                    hideServices = false;
-                    break;
-                case 'customer_birthday':
-                case 'customer_new_wp_user':
-                case 'last_appointment':
-                    break;
-                case 'new_booking':
-                case 'new_booking_recurring':
-                    hideStatuses = false;
-                    hideServices = false;
-                    break;
-                case 'new_booking_combined':
-                    $helpType.filter('.' + notification_type).show();
-                    break;
-                case 'new_package':
-                case 'package_deleted':
-                    break;
-                case 'staff_day_agenda':
-                    $("input[name='notification[settings][option]'][value=3]", containers.settings).prop('checked', true);
-                    break;
-                case 'staff_waiting_list':
-                    break;
-            }
+                switch (notification_type) {
+                    case 'appointment_reminder':
+                    case 'ca_status_changed':
+                    case 'ca_status_changed_recurring':
+                        hideStatuses = false;
+                        hideServices = false;
+                        break;
+                    case 'customer_birthday':
+                    case 'customer_new_wp_user':
+                    case 'last_appointment':
+                        break;
+                    case 'new_booking':
+                    case 'new_booking_recurring':
+                        hideStatuses = false;
+                        hideServices = false;
+                        break;
+                    case 'new_booking_combined':
+                        $helpType.filter('.' + notification_type).show();
+                        break;
+                    case 'new_package':
+                    case 'package_deleted':
+                        break;
+                    case 'staff_day_agenda':
+                        $("input[name='notification[settings][option]'][value=3]", containers.settings).prop('checked', true);
+                        break;
+                    case 'staff_waiting_list':
+                        break;
+                }
 
-            containers.statuses.toggle(!hideStatuses);
-            containers.services.toggle(!hideServices);
+                containers.statuses.toggle(!hideStatuses);
+                containers.services.toggle(!hideServices);
 
-            switch (set[0]) {
-                case 'bidirectional':
-                    $labelSend.show();
-                    $('.bookly-js-offsets', $offsetBidirectional).each(function () {
-                        $(this).toggle($(this).hasClass('bookly-js-' + set[1]));
-                    });
-                    if (set[1] !== 'full') {
-                        $('.bookly-js-' + set[1] + ' input:radio', $offsetBidirectional).prop('checked', true);
-                    }
-                    $offsetBidirectional.show();
-                    break;
-                case 'before':
-                    $offsetBefore.show();
-                    $labelSend.show();
-                    break;
-            }
+                switch (set[0]) {
+                    case 'bidirectional':
+                        $labelSend.show();
+                        $('.bookly-js-offsets', $offsetBidirectional).each(function () {
+                            $(this).toggle($(this).hasClass('bookly-js-' + set[1]));
+                        });
+                        if (set[1] !== 'full') {
+                            $('.bookly-js-' + set[1] + ' input:radio', $offsetBidirectional).prop('checked', true);
+                        }
+                        $offsetBidirectional.show();
+                        break;
+                    case 'before':
+                        $offsetBefore.show();
+                        $labelSend.show();
+                        break;
+                }
 
-            // Hide/un hide recipient
-            $.each(['customer', 'staff', 'admin', 'custom'], function (index, value) {
-                $("[name$='[to_" + value + "]']:checkbox", containers.recipient).closest('.custom-control').toggle(recipients.indexOf(value) != -1);
-            });
+                // Hide/un hide recipient
+                $.each(['customer', 'staff', 'admin', 'custom'], function (index, value) {
+                    $("[name$='[to_" + value + "]']:checkbox", containers.recipient).closest('.custom-control').toggle(recipients.indexOf(value) != -1);
+                });
 
-            // Hide/un hide attach
-            $attach.hide();
-            $.each(showAttach, function (index, value) {
-                $('.bookly-js-' + value, containers.attach).show();
-            });
-            $codes.hide();
-            $codes.filter('.bookly-js-codes-' + notification_type).show();
-            useAceEditor && aceEditor.booklyAceEditor('setCodes', BooklyNotificationDialogL10n.codes[notification_type]);
-        })
+                // Hide/un hide attach
+                $attach.hide();
+                $.each(showAttach, function (index, value) {
+                    $('.bookly-js-' + value, containers.attach).show();
+                });
+                $codes.hide();
+                $codes.filter('.bookly-js-codes-' + notification_type).show();
+                useAceEditor && aceEditor.booklyAceEditor('setCodes', BooklyNotificationDialogL10n.codes[notification_type]);
+            })
             .booklySelect2({
                 minimumResultsForSearch: -1,
                 width: '100%',
@@ -168,49 +168,52 @@ jQuery(function ($) {
                 escapeMarkup: function (m) {
                     return m;
                 }
-        });
+            });
 
         $('.bookly-js-services', $modalNotification).booklyDropdown({});
 
         $btnNewNotification.off()
-        .on('click', function () {
-            showNotificationDialog();
-        });
+            .on('click', function () {
+                showNotificationDialog(this);
+            });
 
         $btnSaveNotification.off()
-        .on('click', function () {
-            if (useTinyMCE && $('a[data-toggle="bookly-tab"][data-tinymce].active').length) {
-                tinyMCE.triggerSave();
-            } else if (useAceEditor) {
-                $('[name=notification\\[message\\]]').val(aceEditor.booklyAceEditor('getValue'));
-            }
-            var data = booklySerialize.form($modalNotification),
-                ladda = Ladda.create(this);
-            ladda.start();
-
-            $.ajax({
-                url: ajaxurl,
-                type: 'POST',
-                data: booklySerialize.buildRequestData('bookly_save_notification', data),
-                dataType: 'json',
-                success: function (response) {
-                    ladda.stop();
-                    if (response.success) {
-                        $notificationList.DataTable().ajax.reload();
-                        $modalNotification.booklyModal('hide');
-                    }
+            .on('click', function () {
+                if (useTinyMCE && $('a[data-toggle="bookly-tab"][data-tinymce].active').length) {
+                    tinyMCE.triggerSave();
+                } else if (useAceEditor) {
+                    $('[name=notification\\[message\\]]').val(aceEditor.booklyAceEditor('getValue'));
                 }
+                var data = booklySerialize.form($modalNotification),
+                    ladda = Ladda.create(this);
+                ladda.start();
+
+                $.ajax({
+                    url: ajaxurl,
+                    type: 'POST',
+                    data: booklySerialize.buildRequestData('bookly_save_notification', data),
+                    dataType: 'json',
+                    success: function (response) {
+                        ladda.stop();
+                        if (response.success) {
+                            $notificationList.DataTable().ajax.reload();
+                            $modalNotification.booklyModal('hide');
+                        }
+                    }
+                });
             });
-        });
 
         $notificationList
-        .on('click', '[data-action=edit]', function () {
-            var row  = $notificationList.DataTable().row($(this).closest('td')),
-                data = row.data();
-            showNotificationDialog(data.id);
-        });
+            .on('click', '[data-action=edit]', function () {
+                let row = $notificationList.DataTable().row($(this).closest('td')),
+                    data = row.data();
+                showNotificationDialog(this, data.id);
+            });
 
-        function showNotificationDialog(id) {
+        function showNotificationDialog(button, id) {
+            let ladda = Ladda.create(button);
+            ladda.start();
+
             $('.bookly-js-loading:first-child', $modalNotification).addClass('bookly-loading').removeClass('bookly-collapse');
             $('.bookly-js-loading:last-child', $modalNotification).addClass('bookly-collapse');
 
@@ -223,7 +226,7 @@ jQuery(function ($) {
                     data: booklySerialize.buildRequestData('bookly_get_whatsapp_templates'),
                     dataType: 'json',
                     async: false,
-                    success: function(response) {
+                    success: function (response) {
                         if (response.success) {
                             BooklyNotificationDialogL10n.templates = response.data.list;
                         } else {
@@ -231,6 +234,7 @@ jQuery(function ($) {
                             booklyAlert({error: [response.data.message]});
                         }
                         renderTemplatesList();
+                        ladda.stop();
                     }
                 });
             }
@@ -238,6 +242,7 @@ jQuery(function ($) {
             if (id === undefined) {
                 setNotificationData(BooklyNotificationDialogL10n.defaultNotification);
                 $modalNotification.booklyModal('show');
+                ladda.stop();
             } else {
                 $.ajax({
                     url: ajaxurl,
@@ -251,6 +256,7 @@ jQuery(function ($) {
                     success: function (response) {
                         setNotificationData(response.data);
                         $modalNotification.booklyModal('show');
+                        ladda.stop();
                     }
                 });
             }
@@ -281,7 +287,10 @@ jQuery(function ($) {
                 } else {
                     var custom_status = data.settings.status.charAt(0).toUpperCase() + data.settings.status.slice(1);
 
-                    $status.append($("<option></option>", {value: data.settings.status, text: custom_status.replace(/\-/g, ' ')})).val(data.settings.status);
+                    $status.append($("<option></option>", {
+                        value: data.settings.status,
+                        text: custom_status.replace(/\-/g, ' ')
+                    })).val(data.settings.status);
                 }
             }
 
@@ -302,9 +311,9 @@ jQuery(function ($) {
             $("input[name='notification[to_admin]']", containers.settings).prop('checked', data.to_admin == '1');
             $("input[name='notification[to_custom]']", containers.settings).prop('checked', data.to_custom == '1');
             $("input[name='notification[to_custom]']", containers.settings)
-            .on('change', function () {
-                $('.bookly-js-custom-recipients', containers.settings).toggle(this.checked)
-            }).trigger('change');
+                .on('change', function () {
+                    $('.bookly-js-custom-recipients', containers.settings).toggle(this.checked)
+                }).trigger('change');
             $("[name='notification[custom_recipients]']", containers.settings).val(data.custom_recipients);
 
             // Message
@@ -335,8 +344,8 @@ jQuery(function ($) {
         if (BooklyNotificationDialogL10n.gateway === 'whatsapp') {
             let $whatsapTemplates = $('#bookly-js-templates', containers.message);
             containers['variables'] = {
-                header: $('#bookly-js-notification-subject-variables',containers.message),
-                body: $('#bookly-js-notification-body-variables',containers.message),
+                header: $('#bookly-js-notification-subject-variables', containers.message),
+                body: $('#bookly-js-notification-body-variables', containers.message),
             }
 
             function renderTemplatesList() {
@@ -357,7 +366,7 @@ jQuery(function ($) {
                 const regex = /{{\d+}}/gm;
                 let m, variables = [];
                 while ((m = regex.exec(str)) !== null) {
-                    m.forEach(function(match) {
+                    m.forEach(function (match) {
                         if (variables.indexOf(match) === -1) {
                             variables.push(match);
                         }
@@ -376,12 +385,16 @@ jQuery(function ($) {
                     variables = extractVariables(text);
                 containers.variables[target].toggle(variables.length > 0);
                 $list.html('');
-                variables.forEach(function(key, position) {
-                    let $input = $('<input>', {class: 'form-control', type: 'text', name: 'notification[settings][whatsapp][' + target + '][]'});
+                variables.forEach(function (key, position) {
+                    let $input = $('<input>', {
+                        class: 'form-control',
+                        type: 'text',
+                        name: 'notification[settings][whatsapp][' + target + '][]'
+                    });
                     if (whatsAppSettings.hasOwnProperty(target)) {
                         $input.val(whatsAppSettings[target][position]);
                     }
-                    $list.append( $('<div>', {class: 'row'})
+                    $list.append($('<div>', {class: 'row'})
                         .append($('<div>', {class: 'col'})
                             .append($('<div>', {class: 'input-group mb-1'})
                                 .append($('<div>', {class: 'input-group-prepend'})
@@ -395,7 +408,7 @@ jQuery(function ($) {
             }
 
             $whatsapTemplates
-                .on('change', function() {
+                .on('change', function () {
                     let exists = BooklyNotificationDialogL10n.templates.hasOwnProperty(this.value),
                         tpl;
                     if (exists) {
@@ -411,15 +424,15 @@ jQuery(function ($) {
         }
 
         $(document)
-        // Required because Bootstrap blocks all focusin calls from elements outside the dialog
-        .on('focusin', function (e) {
-            if ($(e.target).closest(".ui-autocomplete-input").length) {
-                e.stopImmediatePropagation();
-            }
-            if ($(e.target).closest("#link-selector").length) {
-                e.stopImmediatePropagation();
-            }
-        });
+            // Required because Bootstrap blocks all focusin calls from elements outside the dialog
+            .on('focusin', function (e) {
+                if ($(e.target).closest(".ui-autocomplete-input").length) {
+                    e.stopImmediatePropagation();
+                }
+                if ($(e.target).closest("#link-selector").length) {
+                    e.stopImmediatePropagation();
+                }
+            });
 
         // source: https://github.com/andymantell/node-wpautop
         function _autop_newline_preservation_helper(matches) {

@@ -1,6 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Settings\Selects;
+use Bookly\Backend\Components\Controls;
 use Bookly\Lib\Utils\DateTime;
 use Bookly\Lib\Utils\Log;
 
@@ -56,47 +57,51 @@ use Bookly\Lib\Utils\Log;
                         <th><?php echo esc_html( $datatables['logs']['titles'][ $column ] ) ?></th>
                     <?php endif ?>
                 <?php endforeach ?>
+                <?php if ( $debug ) : ?>
+                    <th width="16"><?php Controls\Inputs::renderCheckBox( null, null, null, array( 'id' => 'bookly-check-all' ) ) ?></th>
+                <?php endif ?>
             </tr>
             </thead>
         </table>
         <div class="text-right mt-3">
-            <?php Buttons::renderDelete( 'bookly-delete-logs', 'mr-2', __( 'Clear logs', 'bookly' ) ) ?>
+            <?php Buttons::renderDelete( 'bookly-delete-logs', 'mr-2', __( 'Clear all logs', 'bookly' ) ) ?>
+            <?php Buttons::renderDefault( 'bookly-logs-restore', 'mr-2', __( 'Restore records', 'bookly' ) ) ?>
         </div>
     </div>
     <?php
     Selects::renderSingle( 'bookly_logs_expire', __( 'Keep logs', 'bookly' ), null, array( array( '7', sprintf( _n( '%s day', '%s days', 7, 'bookly' ), 7 ) ), array( '30', sprintf( _n( '%s day', '%s days', 30, 'bookly' ), 30 ) ), array( '90', sprintf( _n( '%s day', '%s days', 90, 'bookly' ), 90 ) ), array( '365', sprintf( _n( '%s day', '%s days', 365, 'bookly' ), 365 ) ) ) );
     ?>
-    <?php if ( self::hasParameter( 'debug' ) ): ?>
-    <div class="row">
-        <?php foreach ( $options as $option_name ): ?>
-            <?php $option = get_option( $option_name ) ?>
-            <div class="bookly-js-optional-logs-entry col-auto" data-option="<?php echo esc_attr( $option_name ) ?>">
-                <div class="mb-2">
-                    <strong><?php echo ucfirst( Log::getLogOptionTitle( $option_name ) ) ?> logs</strong>
-                    <span class="text-success <?php if ( ! $option ) : ?> bookly-collapse<?php endif ?> bookly-js-optional-logs-active"> Active until <span class="bookly-js-optional-logs-until"><?php if ( $option ) echo DateTime::formatDate( $option ) ?></span></span>
+    <?php if ( $debug ): ?>
+        <div class="row">
+            <?php foreach ( $options as $option_name ): ?>
+                <?php $option = get_option( $option_name ) ?>
+                <div class="bookly-js-optional-logs-entry col-auto" data-option="<?php echo esc_attr( $option_name ) ?>">
+                    <div class="mb-2">
+                        <strong><?php echo ucfirst( Log::getLogOptionTitle( $option_name ) ) ?> logs</strong>
+                        <span class="text-success <?php if ( ! $option ) : ?> bookly-collapse<?php endif ?> bookly-js-optional-logs-active"> Active until <span class="bookly-js-optional-logs-until"><?php if ( $option ) echo DateTime::formatDate( $option ) ?></span></span>
+                    </div>
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-default bookly-js-enable-optional-logs" data-period="7" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">Enable logs</button>
+                        <button type="button" class="btn btn-default bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
+                        <ul class="bookly-dropdown-menu bookly-dropdown-menu-compact overflow-hidden bookly-js-tables-dropdown">
+                            <li class="bookly-dropdown-header">Select log period</li>
+                            <li class="bookly-dropdown-divider my-0 py-0"></li>
+                            <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="1" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
+                                <?php printf( _n( '%d day', '%d days', 1, 'bookly' ), 1 ) ?>
+                            </li>
+                            <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="7" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
+                                <?php printf( _n( '%d day', '%d days', 5, 'bookly' ), 7 ) ?>
+                            </li>
+                            <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="30" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
+                                <?php printf( _n( '%d day', '%d days', 30, 'bookly' ), 30 ) ?>
+                            </li>
+                            <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="0" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
+                                <?php esc_html_e( 'Disable', 'bookly' ) ?>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="btn-group">
-                    <button type="button" class="btn btn-default bookly-js-enable-optional-logs" data-period="7" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">Enable logs</button>
-                    <button type="button" class="btn btn-default bookly-dropdown-toggle bookly-dropdown-toggle-split" data-toggle="bookly-dropdown" aria-haspopup="true" aria-expanded="false"></button>
-                    <ul class="bookly-dropdown-menu bookly-dropdown-menu-compact overflow-hidden bookly-js-tables-dropdown">
-                        <li class="bookly-dropdown-header">Select log period</li>
-                        <li class="bookly-dropdown-divider my-0 py-0"></li>
-                        <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="1" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
-                            <?php printf( _n( '%d day', '%d days', 1, 'bookly' ), 1 ) ?>
-                        </li>
-                        <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="7" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
-                            <?php printf( _n( '%d day', '%d days', 5, 'bookly' ), 7 ) ?>
-                        </li>
-                        <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="30" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
-                            <?php printf( _n( '%d day', '%d days', 30, 'bookly' ), 30 ) ?>
-                        </li>
-                        <li class="bookly-dropdown-item bookly-js-ladda bookly-js-enable-optional-logs" data-period="0" data-spinner-size="40" data-style="zoom-in" data-spinner-color="#666666">
-                            <?php esc_html_e( 'Disable', 'bookly' ) ?>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        <?php endforeach ?>
-    </div>
+            <?php endforeach ?>
+        </div>
     <?php endif ?>
 </div>

@@ -52,6 +52,8 @@ class Dialog extends Lib\Base\Component
                 'due' => __( 'Due', 'bookly' ),
                 'group_discount' => __( 'Group discount', 'bookly' ),
                 'manual_adjustment' => __( 'Manual adjustment', 'bookly' ),
+                'invoice_number' => __( 'Invoice number', 'bookly' ),
+                'invoice_number_exists' => __( 'This invoice number is already in use', 'bookly' ),
                 'na' => __( 'N/A', 'bookly' ),
                 'paid' => __( 'Paid', 'bookly' ),
                 'payment' => __( 'Payment', 'bookly' ),

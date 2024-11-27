@@ -15,7 +15,6 @@ jQuery(function ($) {
         $download_invoice = $('#bookly-download-invoices'),
         urlParts = document.URL.split('#'),
         columns = [],
-        order = [],
         pickers = {
             dateFormat: 'YYYY-MM-DD',
             creationDate: {
@@ -191,15 +190,6 @@ jQuery(function ($) {
 
     columns[0].responsivePriority = 0;
 
-    $.each(BooklyL10n.datatables.payments.settings.order, function (_, value) {
-        const index = columns.findIndex(function (c) {
-            return c.data === value.column;
-        });
-        if (index !== -1) {
-            order.push([index, value.order]);
-        }
-    });
-
     function getFilter() {
         return {
             id: $id_filter.val(),
@@ -215,39 +205,26 @@ jQuery(function ($) {
     /**
      * Init DataTables.
      */
-    var dt = $payments_list.DataTable({
-        order: order,
-        info: false,
-        searching: false,
-        lengthChange: false,
-        processing: true,
-        responsive: true,
-        pageLength: 25,
-        pagingType: 'numbers',
-        serverSide: true,
-        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
+    var dt = booklyDataTables.init($payments_list, BooklyL10n.datatables.payments.settings, {
         ajax: {
             url: ajaxurl,
-            type: 'POST',
-            data: function (d) {
+            method: 'POST',
+            data: function(d) {
                 return $.extend({}, d, {
                     action: 'bookly_get_payments',
                     csrf_token: BooklyL10nGlobal.csrf_token,
                     filter: getFilter()
                 });
             },
-            dataSrc: function (json) {
+            dataSrc: function(json) {
                 $payment_total.html(json.total);
 
                 return json.data;
             }
         },
-        columns: columns,
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing
-        }
+        columns: columns
     });
+
     dt.on('order', function () {
         let order = [];
         dt.order().forEach(function (data) {
@@ -354,7 +331,7 @@ jQuery(function ($) {
 
             $.ajax({
                 url: ajaxurl,
-                type: 'POST',
+                method: 'POST',
                 data: {
                     action: 'bookly_delete_payments',
                     csrf_token: BooklyL10nGlobal.csrf_token,
@@ -376,7 +353,7 @@ jQuery(function ($) {
         if ($(this).hasClass('bookly-js-download-all-invoices')) {
             $.ajax({
                 url: ajaxurl,
-                type: 'POST',
+                method: 'POST',
                 data: {
                     action: 'bookly_get_payment_ids',
                     csrf_token: BooklyL10nGlobal.csrf_token,

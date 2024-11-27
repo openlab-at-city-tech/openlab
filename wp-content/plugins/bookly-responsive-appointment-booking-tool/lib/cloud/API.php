@@ -341,7 +341,9 @@ class API extends Cache
      */
     private function _handleResponse( $response )
     {
-        $response = json_decode( $response, true );
+        if ( $response !== null ) {
+            $response = json_decode( $response, true );
+        }
 
         if ( $response !== null && array_key_exists( 'success', $response ) ) {
             if ( $response['success'] ) {

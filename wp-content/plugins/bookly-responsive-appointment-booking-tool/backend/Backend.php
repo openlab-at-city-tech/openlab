@@ -14,7 +14,7 @@ abstract class Backend
 
         add_action( 'admin_menu', array( __CLASS__, 'addAdminMenu' ) );
 
-        add_action( 'all_admin_notices', function () use ( $bookly_page ) {
+        add_action( 'all_admin_notices', function() use ( $bookly_page ) {
             if ( ! Lib\Config::setupMode() ) {
                 if ( $bookly_page ) {
                     // Subscribe notice.
@@ -41,7 +41,7 @@ abstract class Backend
 
         // for Site Health
         // Close current session, for fixing loopback request
-        add_filter( 'site_status_tests', function ( $tests ) {
+        add_filter( 'site_status_tests', function( $tests ) {
             session_write_close();
 
             return $tests;
@@ -53,11 +53,11 @@ abstract class Backend
         }
 
         // Elementor hooks
-        add_action( 'elementor/elements/categories_registered', function ( $elements_manager ) {
+        add_action( 'elementor/elements/categories_registered', function( $elements_manager ) {
             /** @var \Elementor\Elements_Manager $elements_manager */
             $elements_manager->add_category( 'bookly', array( 'title' => 'Bookly' ) );
         } );
-        add_action( 'elementor/editor/before_enqueue_scripts', function () {
+        add_action( 'elementor/editor/before_enqueue_scripts', function() {
             wp_register_style(
                 'bookly-elementor',
                 plugins_url( '/backend/components/elementor/resources/css/elementor.css', __DIR__ ),
@@ -103,7 +103,7 @@ abstract class Backend
             }
             if ( Lib\Config::setupMode() ) {
                 $setup = __( 'Initial setup', 'bookly' );
-                add_submenu_page( 'bookly-menu', $setup, $setup, $required_capability, Modules\Setup\Page::pageSlug(), function () { Modules\Setup\Page::render(); } );
+                add_submenu_page( 'bookly-menu', $setup, $setup, $required_capability, Modules\Setup\Page::pageSlug(), function() { Modules\Setup\Page::render(); } );
             } elseif ( Lib\Proxy\Pro::graceExpired() ) {
                 Lib\Proxy\Pro::addLicenseBooklyMenuItem();
                 if ( isset ( $_GET['page'] ) && $_GET['page'] == 'bookly-diagnostics' ) {
@@ -124,11 +124,11 @@ abstract class Backend
                 $billing = __( 'Billing', 'bookly' );
 
                 add_submenu_page( 'bookly-menu', $dashboard, $dashboard, $required_capability,
-                    Modules\Dashboard\Page::pageSlug(), function () { Modules\Dashboard\Page::render(); } );
+                    Modules\Dashboard\Page::pageSlug(), function() { Modules\Dashboard\Page::render(); } );
                 Modules\Calendar\Page::addBooklyMenuItem( $calendar_badge );
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
                     add_submenu_page( 'bookly-menu', $appointments, $appointments, 'read',
-                        Modules\Appointments\Page::pageSlug(), function () { Modules\Appointments\Page::render(); } );
+                        Modules\Appointments\Page::pageSlug(), function() { Modules\Appointments\Page::render(); } );
                 }
                 Lib\Proxy\Locations::addBooklyMenuItem();
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
@@ -136,37 +136,37 @@ abstract class Backend
                 }
                 if ( $current_user->has_cap( $required_capability ) ) {
                     add_submenu_page( 'bookly-menu', $staff_members, $staff_members, $required_capability,
-                        Modules\Staff\Page::pageSlug(), function () { Modules\Staff\Page::render(); } );
+                        Modules\Staff\Page::pageSlug(), function() { Modules\Staff\Page::render(); } );
                 } elseif ( $is_staff ) {
                     if ( get_option( 'bookly_gen_allow_staff_edit_profile' ) == 1 ) {
                         add_submenu_page( 'bookly-menu', __( 'Profile', 'bookly' ), __( 'Profile', 'bookly' ), 'read',
-                            Modules\Staff\Page::pageSlug(), function () { Modules\Staff\Page::render(); } );
+                            Modules\Staff\Page::pageSlug(), function() { Modules\Staff\Page::render(); } );
                     }
                 }
                 add_submenu_page( 'bookly-menu', $services, $services, $required_capability,
-                    Modules\Services\Page::pageSlug(), function () { Modules\Services\Page::render(); } );
+                    Modules\Services\Page::pageSlug(), function() { Modules\Services\Page::render(); } );
                 Lib\Proxy\Taxes::addBooklyMenuItem();
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
                     add_submenu_page( 'bookly-menu', $customers, $customers, 'read',
-                        Modules\Customers\Page::pageSlug(), function () { Modules\Customers\Page::render(); } );
+                        Modules\Customers\Page::pageSlug(), function() { Modules\Customers\Page::render(); } );
                 }
                 Lib\Proxy\CustomerInformation::addBooklyMenuItem();
                 Lib\Proxy\CustomerGroups::addBooklyMenuItem();
                 Lib\Proxy\Discounts::addBooklyMenuItem();
                 add_submenu_page( 'bookly-menu', $notifications, $notifications, $required_capability,
-                    Modules\Notifications\Page::pageSlug(), function () { Modules\Notifications\Page::render(); } );
+                    Modules\Notifications\Page::pageSlug(), function() { Modules\Notifications\Page::render(); } );
                 Modules\CloudSms\Page::addBooklyMenuItem();
                 if ( $current_user->has_cap( $required_capability ) || $current_user->has_cap( 'manage_bookly_appointments' ) ) {
                     add_submenu_page( 'bookly-menu', $payments, $payments, 'read',
-                        Modules\Payments\Page::pageSlug(), function () { Modules\Payments\Page::render(); } );
+                        Modules\Payments\Page::pageSlug(), function() { Modules\Payments\Page::render(); } );
                 }
                 add_submenu_page( 'bookly-menu', $appearance, $appearance, $required_capability,
-                    Modules\Appearance\Page::pageSlug(), function () { Modules\Appearance\Page::render(); } );
+                    Modules\Appearance\Page::pageSlug(), function() { Modules\Appearance\Page::render(); } );
                 Lib\Proxy\Coupons::addBooklyMenuItem();
                 Lib\Proxy\CustomFields::addBooklyMenuItem();
                 add_submenu_page(
                     'bookly-menu', $settings, $settings, $required_capability,
-                    Modules\Settings\Page::pageSlug(), function () { Modules\Settings\Page::render(); }
+                    Modules\Settings\Page::pageSlug(), function() { Modules\Settings\Page::render(); }
                 );
                 Modules\Diagnostics\Page::addBooklyMenuItem();
                 Modules\News\Page::addBooklyMenuItem();
@@ -186,7 +186,7 @@ abstract class Backend
                 add_menu_page( $page_title, $menu_title, $required_capability, 'bookly-cloud-menu', '',
                     plugins_url( 'resources/images/menu_cloud.png', __FILE__ ), $dynamic_position );
                 add_submenu_page( 'bookly-cloud-menu', $products, $products, $required_capability,
-                    Modules\CloudProducts\Page::pageSlug(), function () { Modules\CloudProducts\Page::render(); } );
+                    Modules\CloudProducts\Page::pageSlug(), function() { Modules\CloudProducts\Page::render(); } );
                 if ( $cloud->getToken() ) {
                     foreach ( $cloud->general->getProducts() as $product ) {
                         if ( $cloud->account->productActive( $product['id'] ) ) {
@@ -212,9 +212,9 @@ abstract class Backend
                         }
                     }
                     add_submenu_page( 'bookly-cloud-menu', $billing, $billing, $required_capability,
-                        Modules\CloudBilling\Page::pageSlug(), function () { Modules\CloudBilling\Page::render(); } );
+                        Modules\CloudBilling\Page::pageSlug(), function() { Modules\CloudBilling\Page::render(); } );
                     add_submenu_page( 'bookly-cloud-menu', $settings, $settings, $required_capability,
-                        Modules\CloudSettings\Page::pageSlug(), function () { Modules\CloudSettings\Page::render(); } );
+                        Modules\CloudSettings\Page::pageSlug(), function() { Modules\CloudSettings\Page::render(); } );
                 }
             }
 

@@ -69,6 +69,34 @@ class Ajax extends Lib\Base\Ajax
     }
 
     /**
+     * Resend sms notification
+     *
+     * @return void
+     */
+    public static function resendSms()
+    {
+        $sms = Lib\Entities\SmsLog::query()->where( 'ref_id', self::parameter( 'id' ) )->findOne();
+        if ( $sms ) {
+            $cloud = Lib\Cloud\API::getInstance();
+            $response = array(
+                'success' => $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms(
+                    $sms->getPhone(),
+                    $sms->getMessage(),
+                    $sms->getImpersonalMessage(),
+                    $sms->getTypeId()
+                ),
+            );
+
+            if ( $response['success'] ) {
+                $response['message'] = __( 'SMS has been sent successfully.', 'bookly' );
+            } else {
+                $response['message'] = implode( ' ', $cloud->getErrors() );
+            }
+            wp_send_json( $response );
+        }
+    }
+
+    /**
      * Get Sender IDs list.
      */
     public static function getSenderIdsList()

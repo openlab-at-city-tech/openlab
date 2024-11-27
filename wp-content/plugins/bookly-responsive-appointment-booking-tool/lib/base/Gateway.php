@@ -57,9 +57,9 @@ abstract class Gateway
     public function getMetaData()
     {
         $meta = $this->getInternalMetaData();
-        foreach ( $meta as $value ) {
+        foreach ( $meta as $key => $value ) {
             if ( is_string( $value ) && preg_match( '/{[^}]*}/', $value ) ) {
-                return $this->applyCodes( $meta );
+                $meta[ $key ] = $this->applyCode( $value );
             }
         }
 
@@ -176,6 +176,7 @@ abstract class Gateway
             $this->request->getUserData()->setPaymentStatus( $status )
                 ->sessionSave();
         }
+
         return $status;
     }
 
@@ -215,28 +216,28 @@ abstract class Gateway
             $order = BooklyLib\DataHolders\Booking\Order::createFromOrderId( $order_id );
 
             if ( $order ) {
-                $type = current( $order->getItems() )->getType();
-                if ( $type !== BooklyLib\DataHolders\Booking\Item::TYPE_PACKAGE ) {
-                    current( $order->getItems() )->getCA()->setJustCreated( true );
-                    BooklyLib\Notifications\Cart\Sender::send( $order );
-                }
                 list( $sync, $gc, $oc ) = Config::syncCalendars();
-                foreach ( $order->getFlatItems() as $item ) {
-                    if ( $item->getType() === BooklyLib\DataHolders\Booking\Item::TYPE_PACKAGE ) {
-                        Payment\Proxy\Shared::complete( $item );
-                    } elseif ( $sync ) {
-                        if ( $gc && $item->getAppointment()->getGoogleEventId() !== null ) {
-                            BooklyLib\Proxy\Pro::syncGoogleCalendarEvent( $item->getAppointment() );
-                        }
-                        if ( $oc && $item->getAppointment()->getOutlookEventId() !== null ) {
-                            BooklyLib\Proxy\OutlookCalendar::syncEvent( $item->getAppointment() );
+                foreach ( $order->getItems() as $item ) {
+                    if ( $item->getCA() ) {
+                        $item->getCA()->setJustCreated( true );
+                        $items = $item->getItems() ?: array( $item );
+                        if ( $sync ) {
+                            foreach ( $items as $sub_item ) {
+                                if ( $gc && $sub_item->getAppointment()->getGoogleEventId() !== null ) {
+                                    BooklyLib\Proxy\Pro::syncGoogleCalendarEvent( $sub_item->getAppointment() );
+                                }
+                                if ( $oc && $sub_item->getAppointment()->getOutlookEventId() !== null ) {
+                                    BooklyLib\Proxy\OutlookCalendar::syncEvent( $sub_item->getAppointment() );
+                                }
+                            }
                         }
                     }
                 }
+                BooklyLib\Notifications\Cart\Sender::send( $order );
             }
         }
 
-        if ( $this->request->isBookingForm() ) {
+        if ( $this->request->isBookingForm() && $this->getType() !== Entities\Payment::TYPE_WOOCOMMERCE ) {
             $this->request->getUserData()->setPaymentStatus( self::STATUS_COMPLETED )->sessionSave();
         }
     }
@@ -248,7 +249,20 @@ abstract class Gateway
      */
     public function fail()
     {
-        $this->getPayment() && $this->removeCascade( $this->getPayment() );
+        $payment = $this->getPayment();
+        if ( $payment ) {
+            $path = explode( '\\', get_class( $this ) );
+            if ( $payment->getStatus() === Entities\Payment::STATUS_COMPLETED ) {
+                BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail for completed payment' );
+                return;
+            }
+
+            Payment\Proxy\Shared::rollbackPayment( $payment );
+
+            BooklyLib\Utils\Log::put( BooklyLib\Utils\Log::ACTION_DEBUG, array_pop( $path ), null, json_encode( $_REQUEST, JSON_PRETTY_PRINT ), $_SERVER['REMOTE_ADDR'], 'call fail' );
+            $this->removeCascade( $payment );
+        }
+
         if ( $this->request->isBookingForm() ) {
             foreach ( $this->request->getUserData()->cart->getItems() as $cart_item ) {
                 // Appointment was deleted
@@ -419,7 +433,13 @@ abstract class Gateway
     private function removeCascade( Entities\Payment $payment )
     {
         if ( $payment->getId() ) {
-            foreach ( Entities\CustomerAppointment::query()->where( 'payment_id', $payment->getId() )->find() as $ca ) {
+            $query = Entities\CustomerAppointment::query()->where( 'payment_id', $payment->getId() );
+            // The payment can not have an order_id (is null)
+            if ( $payment->getOrderId() ) {
+                $query->where( 'order_id', $payment->getOrderId(), 'OR' );
+            }
+
+            foreach ( $query->find() as $ca ) {
                 $ca->deleteCascade();
             }
             Payment\Proxy\Packages::deleteCascade( $payment );
@@ -428,21 +448,18 @@ abstract class Gateway
     }
 
     /**
-     * @param array $data
-     * @return array
+     * @param string $text
+     * @return string
      */
-    private function applyCodes( array $data )
+    private function applyCode( $text )
     {
-        if ( $data ) {
+        if ( $text ) {
             $codes = $this->getCodes();
-            foreach ( $data as $key => $text ) {
-                $data[ $key ] = is_array( $text )
-                    ? $this->applyCodes( $text )
-                    : Codes::replace( $text, $codes, false );
-            }
+
+            return Codes::replace( $text, $codes, false );
         }
 
-        return $data;
+        return $text;
     }
 
     /**

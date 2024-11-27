@@ -8,11 +8,11 @@ msgstr ""
 "Language: nl_NL\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 12:55+0000\n"
-"PO-Revision-Date: 2024-07-01 14:45+0000\n"
+"POT-Creation-Date: 2024-10-18 06:42+0000\n"
+"PO-Revision-Date: 2024-10-21 06:25+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Dutch\n"
-"X-Loco-Version: 2.3.1; wp-6.3.1"
+"X-Loco-Version: 2.3.1; wp-6.6.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Factuur #{invoice_number} voor uw afspraak"
@@ -102,6 +102,29 @@ msgstr ""
 "facturen. Als het voorvoegsel voor de bestandsnaam bijvoorbeeld \"myfile_\" "
 "is, wordt uw PDF-bestand gedownload met de naam \"myfile_1.pdf\"."
 
+msgid "Sequential numbering"
+msgstr "Opeenvolgende nummering"
+
+msgid ""
+"If enabled, invoices will be numbered sequentially. If disabled, invoice "
+"numbers will match the corresponding payment numbers."
+msgstr ""
+"Als deze optie is ingeschakeld, worden facturen opeenvolgend genummerd. Als "
+"dit uitgeschakeld is, komen de factuurnummers overeen met de overeenkomstige "
+"betalingsnummers."
+
+msgid "Initial invoice number"
+msgstr "Eerste factuurnummer"
+
+msgid ""
+"Enter the starting number for your invoices. For example, if you set it to "
+"1000, the first invoice will be numbered 1000, the second 1001, the third "
+"1002, and so on."
+msgstr ""
+"Voer het startnummer voor je facturen in. Als u dit bijvoorbeeld instelt op "
+"1000, krijgt de eerste factuur het nummer 1000, de tweede 1001, de derde "
+"1002, enzovoort."
+
 msgid "Show manual adjustments"
 msgstr "Handmatige aanpassingen tonen"
 
@@ -181,6 +204,9 @@ msgstr "Subtotaal"
 msgid "Coupon discount"
 msgstr "Kortingsbon"
 
+msgid "Gift card discount"
+msgstr "Cadeaubon korting"
+
 msgid "Tips"
 msgstr "Fooien"
 
@@ -214,124 +240,13 @@ msgstr "Telefoon"
 msgid "Instructions"
 msgstr "Instructies"
 
-msgid ""
-"Important: Your website must use <b>HTTPS</b>. The Outlook Calendar API will "
-"not work with your website if there is no valid SSL certificate installed on "
-"your web server."
-msgstr ""
-"Belangrijk: Uw website moet <b>HTTPS</b> gebruiken. De Outlook Kalender API "
-"zal niet werken met uw website als er geen geldig SSL certificaat op uw web "
-"server is geïnstalleerd."
-
-msgid "To find your Application ID and Application Secret, do the following:"
-msgstr ""
-"Om uw Applicatie ID en Applicatie Geheim te vinden, doet u het volgende:"
-
 #, php-format
 msgid ""
-"Sign in to the <a href=\"%s\" target=\"_blank\">Azure portal</a> using "
-"either a work or school account or a personal Microsoft account."
+"To setup %s integration, follow the instruction in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
 msgstr ""
-"Log in op uw <a href=\"%s\" target=\"_blank\">Azure portaal</a> door middel "
-"van een werk- of schoolaccount of een persoonlijk Microsoft account."
-
-msgid ""
-"If your account gives you access to more than one tenant, select your "
-"account in the top right corner, and set your portal session to the Azure AD "
-"tenant that you want."
-msgstr ""
-"Als uw account u toegang geeft tot meer dan één huurder, selecteert u uw "
-"account in de rechterbovenhoek en stelt u uw portaalsessie in op de gewenste "
-"Azure AD huurder."
-
-msgid ""
-"In the left-hand navigation panel, select <b>Microsoft Entra ID</b>. Then "
-"select <b>Add > App registration</b>."
-msgstr ""
-"Selecteer <b>Microsoft Entra ID</b> in het linker navigatiepaneel. Selecteer "
-"vervolgens <b>Toevoegen > App-registratie</b>."
-
-msgid ""
-"When the <b>Register an application</b> page appears, enter your "
-"application's <b>Name</b> and <b>Redirect URI</b> found below on this page."
-msgstr ""
-"Wanneer de pagina <b>Een toepassing registreren</b> wordt weergegeven, voert "
-"u de <b>Naam</b> en <b>Omleidings-URI</b> van uw toepassing in die u "
-"hieronder op deze pagina vindt."
-
-msgid ""
-"Under the <b>Redirect URI</b>, in <b>Select a platform</b> field, choose <b>"
-"Web</b>."
-msgstr ""
-"Kies <b>Web</b> onder de <b>URI doorsturen</b> in het veld <b>Selecteer een "
-"platform</b>."
-
-msgid ""
-"Make sure that the <b>Supported account types</b> is set to <b>Accounts in "
-"any organizational directory (Any Microsoft Entra ID tenant - Multitenant) "
-"and personal Microsoft accounts (e.g. Skype, Xbox)</b>."
-msgstr ""
-"Zorg ervoor dat de <b>Ondersteunde accounttypes</b> is ingesteld op <b>"
-"Accounts in elke organisatiemap (Elke Microsoft Entra ID tenant - "
-"Multitenant) en persoonlijke Microsoft-accounts (bijv. Skype, Xbox)</b>."
-
-msgid "When finished, select <b>Register</b>."
-msgstr "Als u klaar bent, selecteert u <b>Registreren</b>."
-
-msgid ""
-"Azure AD assigns a unique application (client) ID to your app, and you're "
-"taken to the Home page. Find your application in <b>App registrations > All "
-"applications</b>, and select it."
-msgstr ""
-"Azure AD wijst een unieke applicatie (client) ID toe aan uw app, en u wordt "
-"naar de startpagina geleid. Zoek uw applicatie in <b>App registraties > Alle "
-"applicaties</b> en selecteer deze."
-
-msgid ""
-"Copy the <b>Application (client) ID</b> and insert it into the form below on "
-"this page."
-msgstr ""
-"Kopieer de <b>Applicatie (client) ID</b> en vul deze in onderstaand "
-"formulier op deze pagina in."
-
-msgid ""
-"Under <b>Certificates & secrets</b>, choose <b>New client secret</b>, set <b>"
-"Expires</b> to <b>24 months</b>, add description and click <b>Add</b>."
-msgstr ""
-"Kies onder <b>Certificaten & geheimen</b> <b>Nieuw klantgeheim</b>, stel <b>"
-"Verlopen</b> in op <b>24 maanden</b>, voeg een beschrijving toe en klik op "
-"<b>Toevoegen</b>."
-
-msgid ""
-"Copy the app secret value from the <b>Client secrets</b> list before leaving "
-"the page."
-msgstr ""
-"Kopieer de geheime waarde van de app uit de lijst <b>Geheim klant</b> "
-"voordat u de pagina verlaat."
-
-msgid "Insert the secret into the form below on this page."
-msgstr "Vul het geheim in op het formulier hieronder op deze pagina."
-
-msgid ""
-"Under <b>API permissions</b>, choose <b>Add a permission</b>, and select <b>"
-"Microsoft Graph &gt; Delegated permissions</b>. In <b>Select permissions</b> "
-"find <b>Calendars.ReadWrite</b>, select it and click <b>Add permissions</b> "
-"button."
-msgstr ""
-"Kies onder <b>API-machtigingen</b> <b>Een machtiging toevoegen</b> en "
-"selecteer <b>Microsoft Graph &gt; Gedelegeerde machtigingen</b>. In <b>"
-"Machtigingen selecteren</b> zoek<b> Kalenders.LezenSchrijven</b>, selecteer "
-"deze en klik op de knop <b>Machtigingen toevoegen</b>."
-
-msgid "<b>Save</b> your changes."
-msgstr "<b>Bewaar</b> uw wijzigingen."
-
-msgid ""
-"Go to Staff Members, select a staff member. On the <b>Advanced</b> tab, "
-"click <b>Sign in with Microsoft</b>."
-msgstr ""
-"Ga naar Medewerkers, selecteer een medewerker. Klik op het tabblad <b>"
-"Geavanceerd</b> op <b>Aanmelden met Microsoft</b>."
+"Volg de instructies in <a href=\"%s\" target=\"_blank\">onze documentatie</a>"
+" om de %s-integratie in te stellen."
 
 msgid "Application ID"
 msgstr "Applicatie ID"
@@ -1725,6 +1640,9 @@ msgstr "Voeg Personeelsplanning toe"
 msgid "Add Staff Days Off"
 msgstr "Voeg personeel vrije dag toe"
 
+msgid "Add Staff Appointments"
+msgstr "Personeelsafspraken toevoegen"
+
 msgid ""
 "Hide this field if you want to hide the list of WP users from your staff "
 "members."
@@ -1743,6 +1661,9 @@ msgstr "Schakel dienst update uit"
 
 msgid "Disable price update"
 msgstr "Schakel prijs update uit"
+
+msgid "Hide create appointment button"
+msgstr "Verberg de knop Afspraak maken"
 
 msgid "Insert"
 msgstr "Invoegen"
@@ -1794,6 +1715,12 @@ msgid "A custom block for displaying staff days off"
 msgstr ""
 "Een aangepast blok voor het weergeven van de vrije dagen van het personeel"
 
+msgid "Appointments"
+msgstr "Afspraken"
+
+msgid "A custom block for displaying staff appointments"
+msgstr "Een aangepast blok voor het weergeven van personeelsafspraken"
+
 msgid "Capacity"
 msgstr "Capaciteit"
 
@@ -1805,6 +1732,42 @@ msgstr "Speciale uren"
 
 msgid "Fields"
 msgstr "Velden"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created at any time"
+msgstr "Aangemaakt op elk moment"
+
+msgid "Customer"
+msgstr "Klant"
+
+msgid "All statuses"
+msgstr "Alle statussen"
+
+msgid "No status selected"
+msgstr "Geen status geselecteerd"
+
+msgid "New appointment"
+msgstr "Nieuwe Afspraak"
+
+msgid "Any time"
+msgstr "Elk moment"
+
+msgid "No appointments for selected period."
+msgstr "Geen afspraken in de geselecteerde periode."
+
+msgid "Processing..."
+msgstr "Verwerken..."
+
+msgid "No result found"
+msgstr "Geen resultaten gevonden"
+
+msgid "Searching"
+msgstr "Zoeken"
+
+msgid "Attachments"
+msgstr "Bijlagen"
 
 msgid "Repeat every year"
 msgstr "Herhaal ieder jaar"
@@ -1947,9 +1910,6 @@ msgstr "API Login ID"
 msgid "API Transaction Key"
 msgstr "API Transactie Sleutel"
 
-msgid "ID"
-msgstr "ID"
-
 msgid "Title"
 msgstr "Titel"
 
@@ -1987,9 +1947,6 @@ msgstr "Belasting bewerken"
 
 msgid "No taxes found."
 msgstr "Geen belastingen gevonden."
-
-msgid "Processing..."
-msgstr "Verwerken..."
 
 msgid "Service tax amount"
 msgstr "Service belastingbedrag"
@@ -2291,14 +2248,8 @@ msgstr "Tijdzone"
 msgid "Employee"
 msgstr "Medewerker"
 
-msgid "Appointments"
-msgstr "Afspraken"
-
 msgid "Profile"
 msgstr "Profiel"
-
-msgid "Any time"
-msgstr "Elk moment"
 
 msgid "WP user"
 msgstr "WP gebruiker"
@@ -2389,6 +2340,12 @@ msgstr "Telefoonnummer is leeg."
 msgid "%d min"
 msgstr "%d min"
 
+msgid "Out of credit"
+msgstr "Geen krediet"
+
+msgid "Country out of service"
+msgstr "Land buiten dienst"
+
 msgid "Purchase code is not valid"
 msgstr "Aankoopcode is niet geldig"
 
@@ -2452,8 +2409,8 @@ msgstr "Onjuist e-mailadres of wachtwoord."
 msgid "Invalid email."
 msgstr "Ongeldig e-mailadres."
 
-msgid "Low balance."
-msgstr "Laag saldo."
+msgid "Recharge your account with one of the standard amounts"
+msgstr ""
 
 msgid "Pending sender ID already exists."
 msgstr "In afwachting van de afzender ID bestaat al."
@@ -2515,12 +2472,6 @@ msgstr "Kon SMS niet versturen."
 
 msgid "Queued"
 msgstr "In de wachtrij"
-
-msgid "Out of credit"
-msgstr "Geen krediet"
-
-msgid "Country out of service"
-msgstr "Land buiten dienst"
 
 msgid "Blocked"
 msgstr "Geblokkeerd"
@@ -3129,12 +3080,12 @@ msgstr "Lijst"
 msgid "All day"
 msgstr "De hele dag"
 
-msgid "No appointments for selected period."
-msgstr "Geen afspraken in de geselecteerde periode."
-
 #, php-format
 msgid "+%d more"
 msgstr "+%d meer"
+
+msgid "Timeline"
+msgstr "Tijdlijn"
 
 msgid "Education"
 msgstr "Onderwijs"
@@ -3450,9 +3401,6 @@ msgstr "Staat"
 msgid "Subject"
 msgstr "Onderwerp"
 
-msgid "Customer"
-msgstr "Klant"
-
 msgid "Start at"
 msgstr "Start om"
 
@@ -3727,27 +3675,6 @@ msgstr "Facturatie"
 msgid "Get Bookly Pro"
 msgstr "Koop Bookly Pro"
 
-msgid "New appointment"
-msgstr "Nieuwe Afspraak"
-
-msgid "Created at any time"
-msgstr "Aangemaakt op elk moment"
-
-msgid "All statuses"
-msgstr "Alle statussen"
-
-msgid "No status selected"
-msgstr "Geen status geselecteerd"
-
-msgid "No result found"
-msgstr "Geen resultaten gevonden"
-
-msgid "Searching"
-msgstr "Zoeken"
-
-msgid "Attachments"
-msgstr "Bijlagen"
-
 msgid "Archived"
 msgstr "Gearchiveerd"
 
@@ -3775,39 +3702,6 @@ msgstr ""
 msgid "No records."
 msgstr "Geen records."
 
-msgid "1 - 9 employees"
-msgstr "1 - 9 werknemers"
-
-msgid "10 - 19 employees"
-msgstr "10 - 19 werknemers"
-
-msgid "20 - 49 employees"
-msgstr "20 - 49 werknemers"
-
-msgid "50 - 249 employees"
-msgstr "50 - 249 werknemers"
-
-msgid "250 or more employees"
-msgstr "250 of meer werknemers"
-
-msgid "Company name"
-msgstr "Bedrijfsnaam"
-
-msgid "Industry"
-msgstr "Industrie"
-
-msgid "Select industry"
-msgstr "Selecteer bedrijfstak"
-
-msgid "Company size"
-msgstr "Bedrijfsgrootte"
-
-msgid "Select company size"
-msgstr "Selecteer bedrijfsgrootte"
-
-msgid "Company owner email"
-msgstr "E-mail bedrijfseigenaar"
-
 msgid "Add service"
 msgstr "Voeg dienst toe"
 
@@ -3820,46 +3714,189 @@ msgstr "Afronden"
 msgid "Skip"
 msgstr "Overslaan"
 
-msgid "Company"
-msgstr "Bedrijfsnaam"
-
-msgid "Congratulations, the initial setup is complete!"
-msgstr "Gefeliciteerd, de eerste installatie is voltooid!"
-
-#, php-format
-msgid "Shortcode of your form is %s"
-msgstr "De korte code van uw formulier is %s"
+msgid "Welcome to Bookly!"
+msgstr "Welkom bij Bookly!"
 
 msgid ""
-"Open the page you want to add the booking form to in edit mode and paste "
-"this shortcode into a free block."
+"As the ultimate appointment booking plugin for online scheduling, Bookly is "
+"designed to help you effortlessly manage your booking calendar, services, "
+"and client base."
 msgstr ""
-"Open de pagina waaraan u het boekingsformulier wilt toevoegen in de "
-"bewerkmodus en plak deze korte code in een vrije blok."
+"Bookly is de ultieme plugin voor het maken van online afspraken en is "
+"ontworpen om u moeiteloos te helpen bij het beheren van uw agenda, diensten "
+"en klantenbestand."
+
+msgid ""
+"This introduction will guide you through the essential configuration steps "
+"to get you started quickly. "
+msgstr ""
+"Deze inleiding leidt u door de essentiële configuratiestappen zodat u snel "
+"aan de slag kunt. "
 
 #, php-format
 msgid ""
-"You can find more detailed instructions for publishing Bookly form in our %s"
+"You can optionally skip this wizard and refer to %s or watch our %s to learn "
+"the basics and get the most out of Bookly."
 msgstr ""
-"Meer gedetailleerde instructies voor het publiceren van Bookly formulieren "
-"vindt u in onze %s"
+"U kunt deze wizard overslaan en %s raadplegen of onze %s bekijken om de "
+"basis te leren en het meeste uit Bookly te halen."
+
+msgid "Bookly Help Center"
+msgstr "Bookly helpcentrum"
+
+msgid "Video Tutorials"
+msgstr "Video-handleidingen"
+
+msgid ""
+"Set your company business hours. This schedule will serve as a template for "
+"all new staff members."
+msgstr ""
+"Stel de openingstijden van uw bedrijf in. Dit schema dient als sjabloon voor "
+"alle nieuwe medewerkers."
+
+msgid ""
+"Select a time interval to be used as a step when creating all time slots in "
+"the system."
+msgstr ""
+"Selecteer een tijdsinterval dat moet worden gebruikt als stap bij het "
+"aanmaken van alle tijdsloten in het systeem."
+
+msgid "Select the currency for the prices of your services."
+msgstr "Selecteer de valuta voor de prijzen van uw diensten."
+
+msgid ""
+"In Bookly, 'staff' refers to any employee or resource that provides services "
+"to your clients, such as a consultant, therapist, or any other service "
+"provider. Adding staff members allows you to manage their schedules, assign "
+"services to them, and track their appointments."
+msgstr ""
+"In Bookly verwijst 'personeel' naar elke werknemer of resource die diensten "
+"verleent aan uw klanten, zoals een consultant, therapeut of andere "
+"dienstverlener. Door medewerkers toe te voegen kunt u hun agenda's beheren, "
+"diensten aan hen toewijzen en hun afspraken bijhouden."
+
+msgid ""
+"In Bookly, a 'service' refers to the various offerings or activities your "
+"business provides to clients, such as consultations, treatments, classes, or "
+"other services. By adding services, you can manage their duration, cost, and "
+"assign them to specific employees."
+msgstr ""
+"In Bookly verwijst een 'dienst' naar de verschillende aanbiedingen of "
+"activiteiten die uw bedrijf aanbiedt aan klanten, zoals consulten, "
+"behandelingen, lessen of andere diensten. Door diensten toe te voegen, kunt "
+"u de duur en kosten ervan beheren en ze toewijzen aan specifieke medewerkers."
+
+msgid ""
+"Bookly Cloud is an integral part of the Bookly booking system, offering a "
+"range of additional products and features for efficient appointment "
+"management and automation."
+msgstr ""
+"Bookly Cloud is een integraal onderdeel van het boekingssysteem van Bookly "
+"en biedt een reeks aanvullende producten en functies voor efficiënt "
+"afspraakbeheer en automatisering."
+
+msgid ""
+"Features like SMS Notifications, Zapier integration, Stripe and Square "
+"Payments, Gift Cards, Voice and WhatsApp Notifications are designed to "
+"enhance your operations and boost your online business."
+msgstr ""
+"Functies zoals sms-berichten, Zapier-integratie, Stripe- en Square-"
+"betalingen, cadeaubonnen, spraak- en WhatsApp-meldingen zijn ontworpen om uw "
+"activiteiten te verbeteren en uw online bedrijf een boost te geven."
+
+#, php-format
+msgid ""
+"Discover the full range of <a href=\"%s\" target=\"_blank\">powerful tools "
+"here</a>."
+msgstr ""
+"Ontdek hier het volledige aanbod <a href=\"%s\" target=\"_blank\">krachtige "
+"tools</a>."
+
+msgid "Sign up today and enjoy a welcome bonus! "
+msgstr "Meld u vandaag nog aan en profiteer van een welkomstbonus! "
+
+msgid "Create an account"
+msgstr "Maak een account aan"
+
+msgid "Already registered"
+msgstr "Reeds geregistreerd"
+
+msgid "Password"
+msgstr "Wachtwoord"
+
+#, php-format
+msgid ""
+"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
+"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
+msgstr ""
+"Ik accepteer de <a href=\"%1$s\" target=\"_blank\">Servicevoorwaarden</a> en "
+"het <a href=\"%2$s\" target=\"_blank\">Privacy Beleid</a>"
+
+msgid "Forgot password"
+msgstr "Wachtwoord vergeten"
+
+msgid "Send recovery code"
+msgstr "Herstelcode verzenden"
+
+msgid "Verify recovery code"
+msgstr "Herstelcode verifiëren"
+
+msgid "Set new password"
+msgstr "Nieuw wachtwoord instellen"
+
+msgid "Recovery code"
+msgstr "Herstelcode"
+
+msgid "You are currently logged into Bookly Cloud with the account"
+msgstr "U bent momenteel aangemeld bij Bookly Cloud met het account"
+
+msgid "Greetings"
+msgstr "Gegroet"
+
+msgid "Cloud"
+msgstr "Cloud"
+
+msgid ""
+"The initial setup is complete, and you can now continue using Bookly in the "
+"admin panel."
+msgstr ""
+"De eerste installatie is voltooid en u kunt Bookly nu verder gebruiken in "
+"het beheerderspaneel."
+
+msgid ""
+"You can create staff members and services, add appointments to the calendar, "
+"and manage them directly from the backend."
+msgstr ""
+"U kunt medewerkers en diensten aanmaken, afspraken aan de agenda toevoegen "
+"en deze direct vanuit de backend beheren."
+
+msgid ""
+"To start receiving appointments via the front-end booking form, follow these "
+"steps:"
+msgstr ""
+"Volg deze stappen om afspraken te ontvangen via de front-end van het "
+"boekingsformulier:"
+
+msgid "Create a new page in WordPress."
+msgstr "Maak een nieuwe pagina in WordPress."
+
+#, php-format
+msgid "Insert the following shortcode: %s"
+msgstr "Voeg de volgende verkorte code in: %s"
+
+msgid "Save the page and visit it to see your booking form in action."
+msgstr ""
+"Sla de pagina op en bezoek deze om uw boekingsformulier in actie te zien."
+
+#, php-format
+msgid "Have questions? Visit our %s or reach out to our %s."
+msgstr "Hebt u vragen? Bezoek onze %s of neem contact op met onze %s."
 
 msgid "Help center"
 msgstr "Helpcentrum"
 
-#, php-format
-msgid ""
-"Bookly can boost your sales and scale together with your business. Get more "
-"features and remove the limits by upgrading to the paid version with the %s, "
-"which allows you to use a vast number of additional features and settings "
-"for online scheduling, install other add-ons for Bookly, and includes six "
-"months of customer support."
-msgstr ""
-"Bookly kan uw verkoop stimuleren en schaalt mee met uw bedrijf. Krijg meer "
-"functies en verwijder de beperkingen door te upgraden naar de betaalde "
-"versie met de %s, waarmee u een groot aantal extra functies en instellingen "
-"voor online plannen kunt gebruiken, andere add-ons voor Bookly kunt "
-"installeren en zes maanden klantenondersteuning krijgt."
+msgid "Support Team"
+msgstr "Ondersteuningsteam"
 
 msgid "Staff members order"
 msgstr "Volgorde medewerkers"
@@ -3882,11 +3919,41 @@ msgstr "volgende dag"
 msgid "Reorder"
 msgstr "Herschikken"
 
+msgid "1 - 9 employees"
+msgstr "1 - 9 werknemers"
+
+msgid "10 - 19 employees"
+msgstr "10 - 19 werknemers"
+
+msgid "20 - 49 employees"
+msgstr "20 - 49 werknemers"
+
+msgid "50 - 249 employees"
+msgstr "50 - 249 werknemers"
+
+msgid "250 or more employees"
+msgstr "250 of meer werknemers"
+
+msgid "Select company size"
+msgstr "Selecteer bedrijfsgrootte"
+
 msgid "Image"
 msgstr "Afbeelding"
 
+msgid "Company name"
+msgstr "Bedrijfsnaam"
+
 msgid "Website"
 msgstr "Website"
+
+msgid "Industry"
+msgstr "Industrie"
+
+msgid "Select industry"
+msgstr "Selecteer bedrijfstak"
+
+msgid "Company size"
+msgstr "Bedrijfsgrootte"
 
 msgid "Bookly data upon deleting Bookly items"
 msgstr "Bookly gegevens bij het verwijderen van Bookly items"
@@ -4040,9 +4107,6 @@ msgstr "Poort"
 msgid "Username"
 msgstr "Gebruikersnaam"
 
-msgid "Password"
-msgstr "Wachtwoord"
-
 msgid "Secure"
 msgstr "Beveiligd"
 
@@ -4054,6 +4118,9 @@ msgstr "Dienst ter plaatse betalen"
 
 msgid "URL Settings"
 msgstr "URL Instellingen"
+
+msgid "Company"
+msgstr "Bedrijfsnaam"
 
 msgid "Google Calendar"
 msgstr "Google Kalender"
@@ -4556,6 +4623,12 @@ msgstr "Afzender ID verzoek is verzonden."
 
 msgid "Sender ID is reset to default."
 msgstr "Afzender ID is teruggezet naar de standaardinstelling."
+
+msgid "No matching records found"
+msgstr ""
+
+msgid "No data available in table"
+msgstr ""
 
 msgid "enable"
 msgstr "inschakelen"
@@ -5681,19 +5754,8 @@ msgstr "Inloggen"
 msgid "Registration"
 msgstr "Registreren"
 
-msgid "Forgot password"
-msgstr "Wachtwoord vergeten"
-
 msgid "Repeat password"
 msgstr "Herhaal wachtwoord"
-
-#, php-format
-msgid ""
-"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
-"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
-msgstr ""
-"Ik accepteer de <a href=\"%1$s\" target=\"_blank\">Servicevoorwaarden</a> en "
-"het <a href=\"%2$s\" target=\"_blank\">Privacy Beleid</a>"
 
 msgid "Enter code from email"
 msgstr "Voer de per e-mail toegestuurde code in"
@@ -6085,11 +6147,11 @@ msgstr "Bevestig betaling"
 msgid "Complete payment"
 msgstr "Volledige betaling"
 
-msgid "Gift card discount"
-msgstr "Cadeaubon korting"
-
 msgid "Manual adjustment"
 msgstr "Handmatige aanpassing"
+
+msgid "This invoice number is already in use"
+msgstr "Dit factuurnummer is al in gebruik"
 
 msgid "Payment is not found."
 msgstr "Betaling niet gevonden."
@@ -6229,6 +6291,10 @@ msgstr "Limiet overschreden"
 
 msgid "This text can be inserted into notifications with {client_note} code"
 msgstr "Deze tekst kan worden ingevoegd in meldingen met {client_note} code"
+
+#, php-format
+msgid "This WP user is already connected to another customer: %s"
+msgstr "Deze WP-gebruiker is al gekoppeld aan een andere klant: %s"
 
 msgid "Delete customers"
 msgstr "Verwijder klanten"
@@ -6415,6 +6481,9 @@ msgstr "Tabel instellingen"
 
 msgid "Column"
 msgstr "Kolom"
+
+msgid "Entries per page"
+msgstr ""
 
 msgid "Attach ICS file"
 msgstr "ICS bestand bijvoegen"
@@ -7186,6 +7255,15 @@ msgstr ""
 msgid "Life Time"
 msgstr "Levenslang"
 
+msgid "Days from the first booking"
+msgstr ""
+
+msgid "Days from the creation"
+msgstr ""
+
+msgid "Number of days"
+msgstr ""
+
 msgid "The period in days when the customer can use a package of services."
 msgstr ""
 "De periode in dagen wanneer de klant een pakket of dienst kan gebruiken."
@@ -7707,6 +7785,9 @@ msgstr "Een aangepast blok voor het tonen van een services formulier"
 msgid "A custom block for displaying staff form"
 msgstr "Een aangepast blok voor de weergave van het personeelsformulier"
 
+msgid "The calendar list is not available"
+msgstr ""
+
 msgid "no limit"
 msgstr "geen limiet"
 
@@ -7998,84 +8079,6 @@ msgstr ""
 "Als u de code {cart_info} gebruikt in meldingen, kunt u de kolommen "
 "selecteren die u wilt weergeven en hier de volgorde van de velden instellen. "
 "Schakel het selectievakje uit om de kolom te verbergen."
-
-msgid "To find your client ID and client secret, do the following:"
-msgstr "Om uw klant ID en klant geheim te vinden, doet u het volgende:"
-
-msgid ""
-"Go to the <a href=\"https://console.developers.google.com/\" "
-"target=\"_blank\">Google Cloud Platform</a>."
-msgstr ""
-"Ga naar het <a href=\"https://console.developers.google.com/\" "
-"target=\"_blank\">Google Cloud Platform</a>."
-
-msgid "Select a project or create a new one."
-msgstr "Selecteer een project of maak een nieuw project aan."
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <b>Library</b>. In the list of APIs look "
-"for <b>Calendar API</b> or click <a href=\"%s\" target=\"_blank\">this "
-"link</a> to go directly to Calendar API and make sure it is enabled."
-msgstr ""
-"Selecteer in de zijbalk aan de linkerkant <b>Bibliotheek</b>. Zoek in de "
-"lijst van API's naar <b>Kalender API</b> of klik op <a href=\"%s\" "
-"target=\"_blank\">deze link</a> om direct naar de Kalender API te gaan en "
-"ervoor te zorgen dat deze is ingeschakeld."
-
-msgid ""
-"Click <b>OAuth consent screen</b> tab, select user type and provide the "
-"necessary information (App name, User support email and Developer contact "
-"information). Then click <b>Save and continue</b>. You can leave the "
-"following settings unchanged."
-msgstr ""
-"Klik op het <b>OAuth toestemmingsscherm</b> tabblad, selecteer "
-"gebruikerstype en geef de nodige informatie (Naam app, gebruikers "
-"ondersteuning e-mail en Ontwikkelaar contactinformatie). Klik vervolgens op "
-"<b>Opslaan en doorgaan</b>. U kunt de volgende instellingen ongewijzigd "
-"laten."
-
-msgid ""
-"We recommend to change the publishing status of your app to <b>In "
-"production</b> by clicking <b>Publish app</b> button."
-msgstr ""
-"Wij raden u aan de publicatiestatus van uw app te wijzigen in <b>In "
-"productie</b> door te klikken op de knop <b>Publiceer app</b>."
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <a href=\"%s\" target=\"_blank\">"
-"Credentials</a>, and in <b>Create credentials</b> drop-down menu select <b>"
-"OAuth client ID</b>."
-msgstr ""
-"Selecteer in de zijbalk aan de linkerkant <a href=\"%s\" target=\"_blank\">"
-"Inloggegevens</a>, en in het keuzemenu <b>Inloggegevens aanmaken</b> "
-"selecteer <b>OAuth client ID</b>."
-
-msgid ""
-"Select <b>Web application</b> and create your project's <b>OAuth 2.0 "
-"credentials</b> by providing the necessary information. For <b>Authorized "
-"redirect URIs</b> enter the <b>Redirect URI</b> found below on this page. "
-"Click <b>Create</b>."
-msgstr ""
-"Selecteer <b>Web applicatie</b> en maak de <b>OAuth 2.0 inloggegevens</b> "
-"van uw project door de nodige informatie in te voeren. Voor <b>Geautoriseerd "
-"doorstuur URI's</b> voert u de <b>Doorstuur URI</b> hieronder op de pagina "
-"in. Klik op <b>Maken</b>."
-
-msgid ""
-"In the popup window look for the <b>Client ID</b> and <b>Client secret</b>. "
-"Use them in the form below on this page."
-msgstr ""
-"In het pop-upvenster zoek naar de <b>Client ID</b> en <b>Client secret</b>. "
-"Gebruik ze in het formulier onderaan deze pagina."
-
-msgid ""
-"Go to <b>Staff Members</b>, select a staff member and enable the connection "
-"with Google Calendar on the <b>Advanced</b> tab."
-msgstr ""
-"Ga naar <b>Personeelsleden</b>, selecteer een personeelslid en activeer de "
-"verbinding met Google Agenda op het tabblad <b>Geavanceerd</b>."
 
 msgid "The client ID obtained from the Google Cloud Platform"
 msgstr "De client-ID verkregen van het Google Cloud Platform"
@@ -8651,6 +8654,21 @@ msgstr "Data zonder beschikbare timeslots uitschakelen"
 
 msgid "Show stepper"
 msgstr "Stepper tonen"
+
+msgid "Cards with Any staff"
+msgstr "Kaarten met Alle medewerkers"
+
+msgid "Don't show"
+msgstr "Niet tonen"
+
+msgid "Show only with Any staff"
+msgstr "Toon alleen met Alle medewerkers"
+
+msgid "Show staff member rating before employee name"
+msgstr "Toon personeelslid beoordeling voor naam medewerker"
+
+msgid "Skip step"
+msgstr "Stap overslaan"
 
 msgid "Add new form"
 msgstr "Nieuw formulier toevoegen"
@@ -10475,9 +10493,6 @@ msgstr "Beoordeling pagina URL"
 msgid "Set the URL of a page with a rating and comment form."
 msgstr ""
 "Stel de URL van en pagina in met een beoordeling en opmerking formulier."
-
-msgid "Show staff member rating before employee name"
-msgstr "Toon personeelslid beoordeling voor naam medewerker"
 
 msgid "URL of the page for staff rating"
 msgstr "URL van de pagina voor personeelsbeoordeling"

@@ -5,28 +5,28 @@ use Bookly\Lib;
 
 class Service extends Lib\Base\Entity
 {
-    const TYPE_SIMPLE        = 'simple';
+    const TYPE_SIMPLE = 'simple';
     const TYPE_COLLABORATIVE = 'collaborative';
-    const TYPE_COMPOUND      = 'compound';
-    const TYPE_PACKAGE       = 'package';
+    const TYPE_COMPOUND = 'compound';
+    const TYPE_PACKAGE = 'package';
 
-    const PREFERRED_ORDER                     = 'order';
-    const PREFERRED_LEAST_OCCUPIED            = 'least_occupied';
-    const PREFERRED_MOST_OCCUPIED             = 'most_occupied';
+    const PREFERRED_ORDER = 'order';
+    const PREFERRED_LEAST_OCCUPIED = 'least_occupied';
+    const PREFERRED_MOST_OCCUPIED = 'most_occupied';
     const PREFERRED_LEAST_OCCUPIED_FOR_PERIOD = 'least_occupied_for_period';
-    const PREFERRED_MOST_OCCUPIED_FOR_PERIOD  = 'most_occupied_for_period';
-    const PREFERRED_LEAST_EXPENSIVE           = 'least_expensive';
-    const PREFERRED_MOST_EXPENSIVE            = 'most_expensive';
+    const PREFERRED_MOST_OCCUPIED_FOR_PERIOD = 'most_occupied_for_period';
+    const PREFERRED_LEAST_EXPENSIVE = 'least_expensive';
+    const PREFERRED_MOST_EXPENSIVE = 'most_expensive';
 
-    const VISIBILITY_PUBLIC      = 'public';
-    const VISIBILITY_PRIVATE     = 'private';
+    const VISIBILITY_PUBLIC = 'public';
+    const VISIBILITY_PRIVATE = 'private';
     const VISIBILITY_GROUP_BASED = 'group';
 
     const START_TIME_REQUIRED = 'required';
     const START_TIME_OPTIONAL = 'optional';
-    const START_TIME_OFF      = 'off';
+    const START_TIME_OFF = 'off';
 
-    const SLOT_LENGTH_DEFAULT             = 'default';
+    const SLOT_LENGTH_DEFAULT = 'default';
     const SLOT_LENGTH_AS_SERVICE_DURATION = 'as_service_duration';
 
     /** @var  int */
@@ -67,6 +67,8 @@ class Service extends Lib\Base\Entity
     protected $end_time_info;
     /** @var  int */
     protected $package_life_time;
+    /** @var  string */
+    protected $package_life_time_type = 'first_booking';
     /** @var  int */
     protected $package_size;
     /** @var  bool */
@@ -137,6 +139,7 @@ class Service extends Lib\Base\Entity
         'start_time_info' => array( 'format' => '%s' ),
         'end_time_info' => array( 'format' => '%s' ),
         'package_life_time' => array( 'format' => '%d' ),
+        'package_life_time_type' => array( 'format' => '%s' ),
         'package_size' => array( 'format' => '%d' ),
         'package_unassigned' => array( 'format' => '%d' ),
         'appointments_limit' => array( 'format' => '%d' ),
@@ -557,6 +560,7 @@ class Service extends Lib\Base\Entity
                     $collaborative_max_duration = $duration;
                 }
             }
+
             return $collaborative_max_duration;
         }
 
@@ -894,6 +898,29 @@ class Service extends Lib\Base\Entity
     public function setPackageLifeTime( $package_life_time )
     {
         $this->package_life_time = $package_life_time;
+
+        return $this;
+    }
+
+    /**
+     * Gets package_life_time_type
+     *
+     * @return string
+     */
+    public function getPackageLifeTimeType()
+    {
+        return $this->package_life_time_type;
+    }
+
+    /**
+     * Sets package_life_time_type
+     *
+     * @param string $package_life_time_type
+     * @return $this
+     */
+    public function setPackageLifeTimeType( $package_life_time_type )
+    {
+        $this->package_life_time_type = $package_life_time_type;
 
         return $this;
     }
@@ -1440,6 +1467,10 @@ class Service extends Lib\Base\Entity
      */
     public function save()
     {
+        if ( $this->getId() === null && $this->type === self::TYPE_PACKAGE && $this->package_life_time === null ) {
+            $this->package_life_time = 30;
+        }
+
         if ( is_array( $this->recurrence_frequencies ) ) {
             $this->recurrence_frequencies = implode( ',', $this->recurrence_frequencies );
         }

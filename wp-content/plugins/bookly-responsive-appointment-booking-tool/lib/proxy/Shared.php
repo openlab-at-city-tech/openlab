@@ -36,6 +36,7 @@ use Bookly\Lib;
  * @method static array  prepareL10nGlobal( array $obj ) Extend BooklyL10Global JavaScript object
  * @method static array  prepareColorsStatuses( array $statuses ) Prepare colors for statuses.
  * @method static Lib\CartInfo prepareCartInfo( Lib\CartInfo $cart_info, Lib\CartItem $item )
+ * @method static Lib\DataHolders\Booking\Order addItemsInOrder( $order, $order_id )
  */
 abstract class Shared extends Lib\Base\Proxy
 {

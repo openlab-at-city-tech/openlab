@@ -55,9 +55,12 @@ class Ajax extends Lib\Base\Ajax
         $table = self::parameter( 'table' );
 
         $meta = get_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', true ) ?: array();
+        if ( self::hasParameter( 'page_length' ) ) {
+            $meta['page_length'] = self::parameter( 'page_length' );
+        }
         if ( in_array( $table, self::$tables ) ) {
             $meta['columns'] = self::parameter( 'columns', array() );
-            array_walk( $meta['columns'], function ( &$show ) { $show = (bool) $show; } );
+            array_walk( $meta['columns'], function( &$show ) { $show = (bool) $show; } );
             update_user_meta( get_current_user_id(), 'bookly_' . $table . '_table_settings', $meta );
         }
 

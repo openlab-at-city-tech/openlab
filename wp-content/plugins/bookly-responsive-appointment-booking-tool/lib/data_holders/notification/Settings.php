@@ -200,7 +200,7 @@ class Settings
     /**
      * @param Service $service
      * @param string  $status customer appointment status
-     * @param Service $parent if set send staff notification for non simple service.
+     * @param Service|null $parent if set send staff notification for non simple service.
      * @return bool
      */
     public function allowedServiceWithStatus( Service $service, $status, $parent = null )

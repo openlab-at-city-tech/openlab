@@ -5,13 +5,10 @@ use Bookly\Lib;
 
 class Dialog extends Lib\Base\Component
 {
-    /**
-     * Render notifications queue dialog.
-     */
     public static function render()
     {
         self::enqueueStyles( array(
-            'backend'  => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ) ),
+            'backend' => array( 'css/fontawesome-all.min.css' => array( 'bookly-backend-globals' ) ),
         ) );
 
         self::enqueueScripts( array(

@@ -7,8 +7,7 @@ class Widget extends Lib\Base\Component
 {
     public static function init()
     {
-        /** @var \WP_User $current_user */
-        global $current_user;
+        $current_user = wp_get_current_user();
 
         if ( $current_user && $current_user->has_cap( Lib\Utils\Common::getRequiredCapability() ) ) {
             $class = __CLASS__;

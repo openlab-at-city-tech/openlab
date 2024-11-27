@@ -8,8 +8,10 @@ Plugin URI: https://www.booking-wp-plugin.com/?utm_source=bookly_admin&utm_mediu
 Version: <?php echo Lib\Plugin::getVersion() ?>
 -->
 <?php include '_css.php' ?>
-<div id="bookly-form-<?php echo esc_attr( $form_id ) ?>" class="bookly-form bookly-tailwind-container" data-form_id="<?php echo esc_attr( $form_id ) ?>" aria-live="polite">
-    <div style="text-align: center"><img src="<?php echo includes_url( 'js/tinymce/skins/lightgray/img/loader.gif' ) ?>" alt="<?php esc_attr_e( 'Loading...', 'bookly' ) ?>"/></div>
+<div class="bookly-css-root">
+    <div id="bookly-form-<?php echo esc_attr( $form_id ) ?>" class="bookly-form" data-form_id="<?php echo esc_attr( $form_id ) ?>" aria-live="polite">
+        <div style="text-align: center"><img src="<?php echo includes_url( 'js/tinymce/skins/lightgray/img/loader.gif' ) ?>" alt="<?php esc_attr_e( 'Loading...', 'bookly' ) ?>"/></div>
+    </div>
 </div>
 <?php if ( get_option( 'bookly_gen_show_powered_by' ) ) : ?>
     <div class="powered-by-bookly"><?php esc_html_e( 'Powered by', 'bookly' ) ?>

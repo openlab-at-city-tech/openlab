@@ -16,25 +16,30 @@ abstract class Common extends Lib\Base\Cache
     public static function getAdminEmails()
     {
         global $wpdb;
+        static $emails = null;
 
-        // Add to filter capability manage_options or manage_bookly
-        $meta_query = array(
-            'relation' => 'OR',
-            array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"manage_options"', ),
-            array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"manage_bookly"', ),
-        );
-        $roles = new \WP_Roles();
-        // Find roles with capabilities manage_options or manage_bookly
-        foreach ( $roles->role_objects as $role ) {
-            if ( $role->has_cap( 'manage_options' ) || $role->has_cap( 'manage_bookly' ) ) {
-                $meta_query[] = array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"' . $role->name . '"', );
+        if ( $emails === null ) {
+            // Add to filter capability manage_options or manage_bookly
+            $meta_query = array(
+                'relation' => 'OR',
+                array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"manage_options"', ),
+                array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"manage_bookly"', ),
+            );
+            $roles = new \WP_Roles();
+            // Find roles with capabilities manage_options or manage_bookly
+            foreach ( $roles->role_objects as $role ) {
+                if ( $role->has_cap( 'manage_options' ) || $role->has_cap( 'manage_bookly' ) ) {
+                    $meta_query[] = array( 'key' => $wpdb->prefix . 'capabilities', 'compare' => 'LIKE', 'value' => '"' . $role->name . '"', );
+                }
             }
+
+            $emails = array_map(
+                function( $a ) { return $a->data->user_email; },
+                get_users( compact( 'meta_query' ) )
+            );
         }
 
-        return array_map(
-            function ( $a ) { return $a->data->user_email; },
-            get_users( compact( 'meta_query' ) )
-        );
+        return $emails;
     }
 
     /**
@@ -395,10 +400,10 @@ abstract class Common extends Lib\Base\Cache
      */
     public static function arrayMapRecursive( callable $func, array $arr )
     {
-        array_walk_recursive( $arr, function ( &$v ) use ( $func ) {
+        array_walk_recursive( $arr, function( &$v ) use ( $func ) {
             $v = $func( $v );
         } );
-        
+
         return $arr;
     }
 
@@ -625,6 +630,7 @@ abstract class Common extends Lib\Base\Cache
             'allDay' => __( 'All day', 'bookly' ),
             'noEvents' => __( 'No appointments for selected period.', 'bookly' ),
             'more' => __( '+%d more', 'bookly' ),
+            'timeline' => __( 'Timeline', 'bookly' ),
         );
     }
 

@@ -275,4 +275,8 @@ class Simple extends Item
         return new static( $ca );
     }
 
+    public function getLocationId()
+    {
+        return $this->getAppointment()->getLocationId();
+    }
 }

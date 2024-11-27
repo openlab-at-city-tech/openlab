@@ -8,11 +8,11 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 12:47+0000\n"
-"PO-Revision-Date: 2024-07-01 14:56+0000\n"
+"POT-Creation-Date: 2024-10-18 06:42+0000\n"
+"PO-Revision-Date: 2024-10-18 06:42+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.3.1; wp-6.3.1"
+"X-Loco-Version: 2.3.1; wp-6.6.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "您預約的發票＃{invoice_number}"
@@ -97,6 +97,23 @@ msgid ""
 "downloaded with the \"myfile_1.pdf\" name"
 msgstr "為將用於發票的文件名設置前綴。例如，如果文件名稱前綴為\"myfile_\"，則PDF文件將以\"myfile_1.pdf\"名稱下載"
 
+msgid "Sequential numbering"
+msgstr "按順序編號"
+
+msgid ""
+"If enabled, invoices will be numbered sequentially. If disabled, invoice "
+"numbers will match the corresponding payment numbers."
+msgstr "如果開啟，則發票將按照順序編號。如果禁用，則發票號碼將匹配相應的付款編號。"
+
+msgid "Initial invoice number"
+msgstr "初始發票編號"
+
+msgid ""
+"Enter the starting number for your invoices. For example, if you set it to "
+"1000, the first invoice will be numbered 1000, the second 1001, the third "
+"1002, and so on."
+msgstr "輸入發票的起始編號。例如，如果您將其設置為1000，則第一張發票的編號為1000，第二張為1001，第三張為1002，如此類推。"
+
 msgid "Show manual adjustments"
 msgstr "顯示手動調整"
 
@@ -175,6 +192,9 @@ msgstr "小計"
 msgid "Coupon discount"
 msgstr "優惠券折扣"
 
+msgid "Gift card discount"
+msgstr "禮品卡折扣"
+
 msgid "Tips"
 msgstr "小費"
 
@@ -208,98 +228,11 @@ msgstr "電話號碼"
 msgid "Instructions"
 msgstr "使用說明"
 
-msgid ""
-"Important: Your website must use <b>HTTPS</b>. The Outlook Calendar API will "
-"not work with your website if there is no valid SSL certificate installed on "
-"your web server."
-msgstr ""
-"重要提示：您的網站必須使用<b>HTTPS</b>。如果您的網路服務器上沒有安裝有效的SSL證書，則Outlook日曆API將不適用於您的網站。"
-
-msgid "To find your Application ID and Application Secret, do the following:"
-msgstr "要查找您的Application ID和Application Secret，請執行以下操作："
-
 #, php-format
 msgid ""
-"Sign in to the <a href=\"%s\" target=\"_blank\">Azure portal</a> using "
-"either a work or school account or a personal Microsoft account."
+"To setup %s integration, follow the instruction in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
 msgstr ""
-"使用工作或學校帳戶或個人Microsoft帳戶登錄<a href=\"%s\" target=\"_blank\"> Azure平台</a>。"
-
-msgid ""
-"If your account gives you access to more than one tenant, select your "
-"account in the top right corner, and set your portal session to the Azure AD "
-"tenant that you want."
-msgstr "如果您的帳戶允許您訪問多個租戶，請在右上角選擇您的帳戶，然後將平台設為所需的Azure AD租戶。"
-
-msgid ""
-"In the left-hand navigation panel, select <b>Microsoft Entra ID</b>. Then "
-"select <b>Add > App registration</b>."
-msgstr "在左側的導航面板中選擇<b>Microsoft Entra ID</b>。然後選擇<b>新增 > 應用程式註冊</b>。"
-
-msgid ""
-"When the <b>Register an application</b> page appears, enter your "
-"application's <b>Name</b> and <b>Redirect URI</b> found below on this page."
-msgstr "在<b>註冊一個應用程式</b>頁面出現時，輸入您的應用程式<b>名稱</b>并在本頁面下方找到<b>重新導向 URI</b>。"
-
-msgid ""
-"Under the <b>Redirect URI</b>, in <b>Select a platform</b> field, choose <b>"
-"Web</b>."
-msgstr "在<b>重新導向URI</b>下，在<b>選擇一個平台</b>欄目中，選擇<b>Web</b>。"
-
-msgid ""
-"Make sure that the <b>Supported account types</b> is set to <b>Accounts in "
-"any organizational directory (Any Microsoft Entra ID tenant - Multitenant) "
-"and personal Microsoft accounts (e.g. Skype, Xbox)</b>."
-msgstr ""
-"確保<b>支持的帳戶類型</b>設置為<b>任何組織目錄中的帳戶（任何Microsoft Entra "
-"ID租使用者——多租使用者）和個人Microsoft帳戶（如Skype、Xbox）</b>。"
-
-msgid "When finished, select <b>Register</b>."
-msgstr "在完成后，選擇<b>註冊</b>。"
-
-msgid ""
-"Azure AD assigns a unique application (client) ID to your app, and you're "
-"taken to the Home page. Find your application in <b>App registrations > All "
-"applications</b>, and select it."
-msgstr ""
-"Azure AD為您的應用程式分配一個唯一應用（用戶端）ID，然後您將被帶到主頁。在<b>應用程式註冊 > 所有應用程式</b>中找到您的應用，並選擇。"
-
-msgid ""
-"Copy the <b>Application (client) ID</b> and insert it into the form below on "
-"this page."
-msgstr "複製<b>應用程式（客戶）ID </b>，並將其插入此頁面下方的表格中。"
-
-msgid ""
-"Under <b>Certificates & secrets</b>, choose <b>New client secret</b>, set <b>"
-"Expires</b> to <b>24 months</b>, add description and click <b>Add</b>."
-msgstr ""
-"在<b>Certificates & secrets</b>下，選擇<b>新增客戶端密碼</b>，設置<b>到期</b>為<b>24個月</b>"
-"，新增描述並點擊<b>新增</b>。"
-
-msgid ""
-"Copy the app secret value from the <b>Client secrets</b> list before leaving "
-"the page."
-msgstr "在離開頁面之前，從<b>客戶秘密</b>列表中複製應用機密值。"
-
-msgid "Insert the secret into the form below on this page."
-msgstr "在本頁面下方的表單中插入該祕密"
-
-msgid ""
-"Under <b>API permissions</b>, choose <b>Add a permission</b>, and select <b>"
-"Microsoft Graph &gt; Delegated permissions</b>. In <b>Select permissions</b> "
-"find <b>Calendars.ReadWrite</b>, select it and click <b>Add permissions</b> "
-"button."
-msgstr ""
-"在<b> API權限</b>下，選擇<b>添加權限</b>，然後選擇<b> Microsoft Graph &gt; 委派的權限</b>。在<b>"
-"選擇權限</b>中找出和選擇<b> Calendars.ReadWrite </b>，然後單擊<b>添加權限</b>按鈕。"
-
-msgid "<b>Save</b> your changes."
-msgstr "儲存您的改變。"
-
-msgid ""
-"Go to Staff Members, select a staff member. On the <b>Advanced</b> tab, "
-"click <b>Sign in with Microsoft</b>."
-msgstr "前往\"員工\"，選擇一名員工。在<b>高級</b>選項卡中，點擊<b>使用Microsoft登入</b>。"
 
 msgid "Application ID"
 msgstr "應用程式號"
@@ -1605,6 +1538,9 @@ msgstr "添加員工日程"
 msgid "Add Staff Days Off"
 msgstr "添加員工休息日"
 
+msgid "Add Staff Appointments"
+msgstr "新增員工預約"
+
 msgid ""
 "Hide this field if you want to hide the list of WP users from your staff "
 "members."
@@ -1621,6 +1557,9 @@ msgstr "禁用更新服務"
 
 msgid "Disable price update"
 msgstr "禁用更新價錢"
+
+msgid "Hide create appointment button"
+msgstr "隱藏創建預約按鈕"
 
 msgid "Insert"
 msgstr "插入"
@@ -1664,6 +1603,12 @@ msgstr "休息日"
 msgid "A custom block for displaying staff days off"
 msgstr "用於顯示員工休息的自定義塊"
 
+msgid "Appointments"
+msgstr "預約"
+
+msgid "A custom block for displaying staff appointments"
+msgstr "用於顯示員工預約的自定義塊"
+
 msgid "Capacity"
 msgstr "容量"
 
@@ -1675,6 +1620,42 @@ msgstr "特別時間"
 
 msgid "Fields"
 msgstr "欄目"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created at any time"
+msgstr "在任何時間建立"
+
+msgid "Customer"
+msgstr "客戶"
+
+msgid "All statuses"
+msgstr "所有狀態"
+
+msgid "No status selected"
+msgstr "無選定狀態"
+
+msgid "New appointment"
+msgstr "建立預約"
+
+msgid "Any time"
+msgstr "任何時間"
+
+msgid "No appointments for selected period."
+msgstr "選擇時間沒有預約。"
+
+msgid "Processing..."
+msgstr "處理..."
+
+msgid "No result found"
+msgstr "找不到結果"
+
+msgid "Searching"
+msgstr "搜索"
+
+msgid "Attachments"
+msgstr "附件"
 
 msgid "Repeat every year"
 msgstr "每年重複"
@@ -1809,9 +1790,6 @@ msgstr "API登入碼"
 msgid "API Transaction Key"
 msgstr "API交易金鑰"
 
-msgid "ID"
-msgstr "ID"
-
 msgid "Title"
 msgstr "標題"
 
@@ -1846,9 +1824,6 @@ msgstr "編輯稅"
 
 msgid "No taxes found."
 msgstr "找不到稅收。"
-
-msgid "Processing..."
-msgstr "處理..."
 
 msgid "Service tax amount"
 msgstr "服務稅額"
@@ -2129,14 +2104,8 @@ msgstr "時區"
 msgid "Employee"
 msgstr "員工"
 
-msgid "Appointments"
-msgstr "預約"
-
 msgid "Profile"
 msgstr "簡介"
-
-msgid "Any time"
-msgstr "任何時間"
 
 msgid "WP user"
 msgstr "WP 用戶"
@@ -2218,6 +2187,12 @@ msgstr "沒有輸入電話號碼。"
 msgid "%d min"
 msgstr "%d 分"
 
+msgid "Out of credit"
+msgstr "信用額度已全用"
+
+msgid "Country out of service"
+msgstr "國家暫停服務"
+
 msgid "Purchase code is not valid"
 msgstr "購買代碼無效"
 
@@ -2275,8 +2250,8 @@ msgstr "郵件信箱或密碼錯誤"
 msgid "Invalid email."
 msgstr "無效的郵件地址。"
 
-msgid "Low balance."
-msgstr "低餘額。"
+msgid "Recharge your account with one of the standard amounts"
+msgstr ""
 
 msgid "Pending sender ID already exists."
 msgstr "待發件人ID已經存在。"
@@ -2331,12 +2306,6 @@ msgstr "傳送SMS短訊失敗。"
 
 msgid "Queued"
 msgstr "排列"
-
-msgid "Out of credit"
-msgstr "信用額度已全用"
-
-msgid "Country out of service"
-msgstr "國家暫停服務"
 
 msgid "Blocked"
 msgstr "不可選"
@@ -2934,12 +2903,12 @@ msgstr "列表"
 msgid "All day"
 msgstr "全天"
 
-msgid "No appointments for selected period."
-msgstr "選擇時間沒有預約。"
-
 #, php-format
 msgid "+%d more"
 msgstr "+%d更多"
+
+msgid "Timeline"
+msgstr "時間軸"
 
 msgid "Education"
 msgstr "教育"
@@ -3255,9 +3224,6 @@ msgstr "州"
 msgid "Subject"
 msgstr "主題"
 
-msgid "Customer"
-msgstr "客戶"
-
 msgid "Start at"
 msgstr "開始於"
 
@@ -3508,27 +3474,6 @@ msgstr "收費"
 msgid "Get Bookly Pro"
 msgstr "獲得Bookly Pro"
 
-msgid "New appointment"
-msgstr "建立預約"
-
-msgid "Created at any time"
-msgstr "在任何時間建立"
-
-msgid "All statuses"
-msgstr "所有狀態"
-
-msgid "No status selected"
-msgstr "無選定狀態"
-
-msgid "No result found"
-msgstr "找不到結果"
-
-msgid "Searching"
-msgstr "搜索"
-
-msgid "Attachments"
-msgstr "附件"
-
 msgid "Archived"
 msgstr "已存檔"
 
@@ -3553,39 +3498,6 @@ msgstr "您將刪除訪問令牌。請注意，令牌將被自動撤銷，因此
 msgid "No records."
 msgstr "沒有記錄。"
 
-msgid "1 - 9 employees"
-msgstr "1 - 9 名員工"
-
-msgid "10 - 19 employees"
-msgstr "10 - 19 名員工"
-
-msgid "20 - 49 employees"
-msgstr "20 - 49 名員工"
-
-msgid "50 - 249 employees"
-msgstr "50 - 249 名員工"
-
-msgid "250 or more employees"
-msgstr "250 名或以上員工"
-
-msgid "Company name"
-msgstr "公司名稱"
-
-msgid "Industry"
-msgstr "行業"
-
-msgid "Select industry"
-msgstr "選擇行業"
-
-msgid "Company size"
-msgstr "公司規模"
-
-msgid "Select company size"
-msgstr "選擇公司規模"
-
-msgid "Company owner email"
-msgstr "公司所有者電子郵箱"
-
 msgid "Add service"
 msgstr "添加服務"
 
@@ -3598,38 +3510,157 @@ msgstr "完成"
 msgid "Skip"
 msgstr "跳過"
 
-msgid "Company"
-msgstr "公司"
-
-msgid "Congratulations, the initial setup is complete!"
-msgstr "恭喜您，初始設定已經完成！"
-
-#, php-format
-msgid "Shortcode of your form is %s"
-msgstr "您表單的短代碼是%s"
+msgid "Welcome to Bookly!"
+msgstr "歡迎來到Bookly！"
 
 msgid ""
-"Open the page you want to add the booking form to in edit mode and paste "
-"this shortcode into a free block."
-msgstr "以編輯模式打開要添加預訂表單的頁面，並將此短代碼粘貼到空區塊中。"
+"As the ultimate appointment booking plugin for online scheduling, Bookly is "
+"designed to help you effortlessly manage your booking calendar, services, "
+"and client base."
+msgstr "作為線上日程安排的最終預約插件，Bookly旨在幫助您輕鬆管理您的預訂日曆、服務和客戶群。"
+
+msgid ""
+"This introduction will guide you through the essential configuration steps "
+"to get you started quickly. "
+msgstr "本介紹將引導您完成基本的配置步驟，以便快速入門。"
 
 #, php-format
 msgid ""
-"You can find more detailed instructions for publishing Bookly form in our %s"
-msgstr "您可以在我們的%s中找到關於發佈Bookly表單的更多詳細說明"
+"You can optionally skip this wizard and refer to %s or watch our %s to learn "
+"the basics and get the most out of Bookly."
+msgstr "您可以選擇跳過此引導並參考%s或觀看我們的%s，以學習基礎知識並充分利用Bookly。"
+
+msgid "Bookly Help Center"
+msgstr "Bookly幫助中心"
+
+msgid "Video Tutorials"
+msgstr "教學影片"
+
+msgid ""
+"Set your company business hours. This schedule will serve as a template for "
+"all new staff members."
+msgstr "設定您公司的營業時間。該日程將作為所有新員工的模板。"
+
+msgid ""
+"Select a time interval to be used as a step when creating all time slots in "
+"the system."
+msgstr "在系統創建所有時段時，請選擇一個時間間隔作為步長。"
+
+msgid "Select the currency for the prices of your services."
+msgstr "為您的服務價格選擇貨幣。"
+
+msgid ""
+"In Bookly, 'staff' refers to any employee or resource that provides services "
+"to your clients, such as a consultant, therapist, or any other service "
+"provider. Adding staff members allows you to manage their schedules, assign "
+"services to them, and track their appointments."
+msgstr ""
+"在Bookly中，“員工”指的是為您的客戶提供服務的任何員工或資源，比如諮詢師、治療師或任何其他服務提供者。添加員工允許您管理他們的日程安排，為他們分配服務，並跟蹤他們的預約。"
+
+msgid ""
+"In Bookly, a 'service' refers to the various offerings or activities your "
+"business provides to clients, such as consultations, treatments, classes, or "
+"other services. By adding services, you can manage their duration, cost, and "
+"assign them to specific employees."
+msgstr ""
+"在Bookly中，“服務”指的是您的公司為客戶提供的各種產品或活動，如諮詢、治療、課程或其他服務。通過添加服務，您可以管理服務的持續時間、費用，並將其分配給特定的員工。"
+
+msgid ""
+"Bookly Cloud is an integral part of the Bookly booking system, offering a "
+"range of additional products and features for efficient appointment "
+"management and automation."
+msgstr "Bookly Cloud是Bookly預訂系統的必要部分，為高效預約管理和自動化提供一系列額外產品和功能。"
+
+msgid ""
+"Features like SMS Notifications, Zapier integration, Stripe and Square "
+"Payments, Gift Cards, Voice and WhatsApp Notifications are designed to "
+"enhance your operations and boost your online business."
+msgstr "SMS通知、Zapier集成、Stripe和Square支付、禮品卡、語音和WhatsApp通知等功能旨在提升您的運營並促進您的線上業務。"
+
+#, php-format
+msgid ""
+"Discover the full range of <a href=\"%s\" target=\"_blank\">powerful tools "
+"here</a>."
+msgstr "探索所有<a href=\"%s\" target=\"_blank\">強大工具</a>。"
+
+msgid "Sign up today and enjoy a welcome bonus! "
+msgstr "立即註冊，享受迎新獎金！"
+
+msgid "Create an account"
+msgstr "創建一個賬戶"
+
+msgid "Already registered"
+msgstr "已註冊"
+
+msgid "Password"
+msgstr "密碼"
+
+#, php-format
+msgid ""
+"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
+"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
+msgstr ""
+"我接受<a href=\"%1$s\" target=\"_blank\">服務條款</a>和<a href=\"%2$s\" "
+"target=\"_blank\">隱私政策</a>"
+
+msgid "Forgot password"
+msgstr "忘記密碼"
+
+msgid "Send recovery code"
+msgstr "發送恢復代碼"
+
+msgid "Verify recovery code"
+msgstr "驗證恢復代碼"
+
+msgid "Set new password"
+msgstr "設定新密碼"
+
+msgid "Recovery code"
+msgstr "恢復代碼"
+
+msgid "You are currently logged into Bookly Cloud with the account"
+msgstr "您目前已使用該賬戶登入Bookly Cloud"
+
+msgid "Greetings"
+msgstr "你好"
+
+msgid "Cloud"
+msgstr "雲端"
+
+msgid ""
+"The initial setup is complete, and you can now continue using Bookly in the "
+"admin panel."
+msgstr "初始設定已完成，現在您可以在管理面板中繼續使用Bookly。"
+
+msgid ""
+"You can create staff members and services, add appointments to the calendar, "
+"and manage them directly from the backend."
+msgstr "您可以創建員工和服務，向日曆添加預約，並直接從後端管理它們。"
+
+msgid ""
+"To start receiving appointments via the front-end booking form, follow these "
+"steps:"
+msgstr "透过前端預訂表格開始接受预约，请按如下步骤进行："
+
+msgid "Create a new page in WordPress."
+msgstr "在WordPress中創建一個新頁面。"
+
+#, php-format
+msgid "Insert the following shortcode: %s"
+msgstr "插入如下短代码：%s"
+
+msgid "Save the page and visit it to see your booking form in action."
+msgstr "保存該頁面並訪問它，以查看您的預訂表格。"
+
+#, php-format
+msgid "Have questions? Visit our %s or reach out to our %s."
+msgstr "有問題嗎？請訪問我們的%s或聯繫我們的%s。"
 
 msgid "Help center"
 msgstr "幫助中心"
 
-#, php-format
-msgid ""
-"Bookly can boost your sales and scale together with your business. Get more "
-"features and remove the limits by upgrading to the paid version with the %s, "
-"which allows you to use a vast number of additional features and settings "
-"for online scheduling, install other add-ons for Bookly, and includes six "
-"months of customer support."
-msgstr ""
-"Bookly可以促進您的業務銷售量和擴大業務規模。通過升級到帶%s的付費版本獲得更多功能並移除限制，這可允許您使用大量額外功能和在線預訂設置，為Bookly安裝其他附加組件，並包含6個月客戶支持。"
+msgid "Support Team"
+msgstr "支援團隊"
 
 msgid "Staff members order"
 msgstr "員工次序"
@@ -3652,11 +3683,41 @@ msgstr "第二天"
 msgid "Reorder"
 msgstr "重新排序"
 
+msgid "1 - 9 employees"
+msgstr "1 - 9 名員工"
+
+msgid "10 - 19 employees"
+msgstr "10 - 19 名員工"
+
+msgid "20 - 49 employees"
+msgstr "20 - 49 名員工"
+
+msgid "50 - 249 employees"
+msgstr "50 - 249 名員工"
+
+msgid "250 or more employees"
+msgstr "250 名或以上員工"
+
+msgid "Select company size"
+msgstr "選擇公司規模"
+
 msgid "Image"
 msgstr "圖片"
 
+msgid "Company name"
+msgstr "公司名稱"
+
 msgid "Website"
 msgstr "網站"
+
+msgid "Industry"
+msgstr "行業"
+
+msgid "Select industry"
+msgstr "選擇行業"
+
+msgid "Company size"
+msgstr "公司規模"
 
 msgid "Bookly data upon deleting Bookly items"
 msgstr "刪除Bookly項目時的數據"
@@ -3787,9 +3848,6 @@ msgstr "端口"
 msgid "Username"
 msgstr "使用者名稱"
 
-msgid "Password"
-msgstr "密碼"
-
 msgid "Secure"
 msgstr "安全"
 
@@ -3801,6 +3859,9 @@ msgstr "即場支付"
 
 msgid "URL Settings"
 msgstr "URL 設定"
+
+msgid "Company"
+msgstr "公司"
 
 msgid "Google Calendar"
 msgstr "Google日曆"
@@ -4241,6 +4302,12 @@ msgstr "發件人ID發送請求。"
 
 msgid "Sender ID is reset to default."
 msgstr "發件人ID被重置為默認值。"
+
+msgid "No matching records found"
+msgstr ""
+
+msgid "No data available in table"
+msgstr ""
 
 msgid "enable"
 msgstr "啟用"
@@ -5256,19 +5323,8 @@ msgstr "登入"
 msgid "Registration"
 msgstr "注册"
 
-msgid "Forgot password"
-msgstr "忘記密碼"
-
 msgid "Repeat password"
 msgstr "重覆密碼"
-
-#, php-format
-msgid ""
-"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
-"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
-msgstr ""
-"我接受<a href=\"%1$s\" target=\"_blank\">服務條款</a>和<a href=\"%2$s\" "
-"target=\"_blank\">隱私政策</a>"
 
 msgid "Enter code from email"
 msgstr "從電郵輸入代碼"
@@ -5636,11 +5692,11 @@ msgstr "綁定付款"
 msgid "Complete payment"
 msgstr "完成付款"
 
-msgid "Gift card discount"
-msgstr "禮品卡折扣"
-
 msgid "Manual adjustment"
 msgstr "手動調整"
+
+msgid "This invoice number is already in use"
+msgstr "此發票編號已在使用"
 
 msgid "Payment is not found."
 msgstr "找不到付款"
@@ -5768,6 +5824,10 @@ msgstr "已超過限制"
 
 msgid "This text can be inserted into notifications with {client_note} code"
 msgstr "該文本可通過{client_note}代碼插入通知中"
+
+#, php-format
+msgid "This WP user is already connected to another customer: %s"
+msgstr "此WP用戶已連接至另一客戶：%s"
 
 msgid "Delete customers"
 msgstr "删除客戶"
@@ -5935,6 +5995,9 @@ msgstr "桌面設定"
 
 msgid "Column"
 msgstr "欄"
+
+msgid "Entries per page"
+msgstr ""
 
 msgid "Attach ICS file"
 msgstr "附加ICS文件"
@@ -6649,6 +6712,15 @@ msgstr "啟用此設置，客戶在未指定特定供應商的情況下，顯示
 msgid "Life Time"
 msgstr "終生"
 
+msgid "Days from the first booking"
+msgstr ""
+
+msgid "Days from the creation"
+msgstr ""
+
+msgid "Number of days"
+msgstr ""
+
 msgid "The period in days when the customer can use a package of services."
 msgstr "客戶可以使用服務包的天數。"
 
@@ -7144,6 +7216,9 @@ msgstr "用於顯示服務表單的自定義塊"
 msgid "A custom block for displaying staff form"
 msgstr "用於顯示員工表單的自定義塊"
 
+msgid "The calendar list is not available"
+msgstr ""
+
 msgid "no limit"
 msgstr "無限制"
 
@@ -7388,70 +7463,6 @@ msgid ""
 "that you want to display and set the order of fields here. Uncheck the box "
 "to hide the column."
 msgstr "如果在通知中使用{cart_info}代碼，則可以選擇要顯示的列，並在此處設置字段順序。取消選中該框可隱藏該列。"
-
-msgid "To find your client ID and client secret, do the following:"
-msgstr "要查找您的client ID和client secret，請執行以下操作："
-
-msgid ""
-"Go to the <a href=\"https://console.developers.google.com/\" "
-"target=\"_blank\">Google Cloud Platform</a>."
-msgstr ""
-"前往<a href=\"https://console.developers.google.com/\" target=\"_blank\">"
-"Google Cloud平台</a>。"
-
-msgid "Select a project or create a new one."
-msgstr "選擇一個項目或創建一個新項目。"
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <b>Library</b>. In the list of APIs look "
-"for <b>Calendar API</b> or click <a href=\"%s\" target=\"_blank\">this "
-"link</a> to go directly to Calendar API and make sure it is enabled."
-msgstr ""
-"在左側的工具欄中，選擇<b>庫</b>。在API列表中尋找<b>日曆API</b>或點擊<a href=\"%s\" target=\"_blank\">"
-"此鏈接</a>直接前往日曆API，並確保其已開啟。"
-
-msgid ""
-"Click <b>OAuth consent screen</b> tab, select user type and provide the "
-"necessary information (App name, User support email and Developer contact "
-"information). Then click <b>Save and continue</b>. You can leave the "
-"following settings unchanged."
-msgstr ""
-"點擊<b>OAuth同意屏幕</b>標籤，選擇用戶類型並提供必要的信息（應用名稱、用戶支持郵箱和開發者聯繫方式）。然後單擊<b>保存並繼續</b>"
-"。接下來的設置可保持不變。"
-
-msgid ""
-"We recommend to change the publishing status of your app to <b>In "
-"production</b> by clicking <b>Publish app</b> button."
-msgstr "我們建議您通過點擊<b>發佈應用</b>按鈕，將您的應用發佈狀態更改為<b>製作中</b> 。"
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <a href=\"%s\" target=\"_blank\">"
-"Credentials</a>, and in <b>Create credentials</b> drop-down menu select <b>"
-"OAuth client ID</b>."
-msgstr ""
-"在左側的工具欄中，選擇<a href=\"%s\" target=\"_blank\">憑證</a>，並在<b>創建憑證</b>下拉菜單選擇<b>"
-"OAuth客戶ID</b>。"
-
-msgid ""
-"Select <b>Web application</b> and create your project's <b>OAuth 2.0 "
-"credentials</b> by providing the necessary information. For <b>Authorized "
-"redirect URIs</b> enter the <b>Redirect URI</b> found below on this page. "
-"Click <b>Create</b>."
-msgstr ""
-"選擇<b>Web應用</b>並通過提供必要的信息來創建您的項目<b>OAuth 2.0憑證</b>。對於<b>已授權的重定向URIs</b>"
-"，可在本頁面下方進入<b>重定向URI</b>。點擊<b>創建</b>。"
-
-msgid ""
-"In the popup window look for the <b>Client ID</b> and <b>Client secret</b>. "
-"Use them in the form below on this page."
-msgstr "在彈出的網頁查找<b>Client ID</b>和<b>Client secret</b> 。把它們放在這個頁面以下的表格。"
-
-msgid ""
-"Go to <b>Staff Members</b>, select a staff member and enable the connection "
-"with Google Calendar on the <b>Advanced</b> tab."
-msgstr "前往<b>員工</b>，選擇一名員工並在<b>高級</b>標籤上開啟與Google Calendar的連接。"
 
 msgid "The client ID obtained from the Google Cloud Platform"
 msgstr "從Google Cloud平台獲取的客戶ID"
@@ -7953,6 +7964,21 @@ msgstr "禁用無可用時段的日期"
 
 msgid "Show stepper"
 msgstr "显示步驟"
+
+msgid "Cards with Any staff"
+msgstr "任何員工的卡"
+
+msgid "Don't show"
+msgstr "不顯示"
+
+msgid "Show only with Any staff"
+msgstr "僅顯示任何員工"
+
+msgid "Show staff member rating before employee name"
+msgstr "在員工姓名前顯示員工評級"
+
+msgid "Skip step"
+msgstr "跳過步驟"
 
 msgid "Add new form"
 msgstr "添加新表單"
@@ -9609,9 +9635,6 @@ msgstr "評分頁面網址"
 
 msgid "Set the URL of a page with a rating and comment form."
 msgstr "設置評分和評論表單頁面的URL。"
-
-msgid "Show staff member rating before employee name"
-msgstr "在員工姓名前顯示員工評級"
 
 msgid "URL of the page for staff rating"
 msgstr "員工評級頁面的URL"

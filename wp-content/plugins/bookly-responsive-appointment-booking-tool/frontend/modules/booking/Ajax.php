@@ -203,6 +203,8 @@ class Ajax extends Lib\Base\Ajax
             if ( Lib\Config::showCalendar() ) {
                 $last_date = $last_date->modify( Lib\Config::getMaximumAvailableDaysForBooking() . ' days' );
             }
+            $first_date = new Lib\Slots\DatePoint( date_create( 'today' ) );
+            $first_date = $first_date->modify( 'first day of this month' );
 
             $show_blocked_slots = Lib\Config::showBlockedTimeSlots();
             $finder = new Lib\Slots\Finder( $userData, null, null, null, array(), null, Lib\Config::showSingleTimeSlotPerDay() );
@@ -252,13 +254,18 @@ class Ajax extends Lib\Base\Ajax
                     if ( $select_next_month ) {
                         // Couldn't find any slots for current month for Time step
                         $next_month = new Lib\Slots\DatePoint( date_create( $finder->getSelectedDate() ) );
-                        $next_month = $next_month->modify( 'first day of next month' );
-                        if ( $last_date->gte( $next_month ) ) {
-                            // Looking for slots in the next month
-                            $finder->setSelectedDate( $next_month->format( 'Y-m-d' ) );
+                        if ( self::parameter( 'dir' ) !== 'prev' ) {
+                            $next_month = $next_month->modify( 'first day of next month' );
+                            if ( $last_date->lt( $next_month ) ) {
+                                break;
+                            }
                         } else {
-                            break;
+                            $next_month = $next_month->modify( 'first day of previous month' );
+                            if ( $first_date->gt( $next_month ) ) {
+                                break;
+                            }
                         }
+                        $finder->setSelectedDate( $next_month->format( 'Y-m-d' ) );
                     } else {
                         break;
                     }
@@ -516,7 +523,6 @@ class Ajax extends Lib\Base\Ajax
                 'update_details_dialog' => (int) get_option( 'bookly_cst_show_update_details_dialog' ),
                 'intlTelInput' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled' ? array(
                     'enabled' => 1,
-                    'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                     'country' => get_option( 'bookly_cst_phone_default_country' ),
                 ) : array(
                     'enabled' => 0,

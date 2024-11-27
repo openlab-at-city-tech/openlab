@@ -29,6 +29,7 @@ class Service extends Lib\Base\Form
             'padding_left',
             'padding_right',
             'package_life_time',
+            'package_life_time_type',
             'package_size',
             'package_unassigned',
             'appointments_limit',

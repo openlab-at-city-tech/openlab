@@ -221,7 +221,7 @@ abstract class Plugin
             if ( ! function_exists( 'get_plugin_data' ) ) {
                 require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
             }
-            $plugin_data = get_plugin_data( static::getMainFile() );
+            $plugin_data = get_plugin_data( static::getMainFile(), false, false );
             static::$version = $plugin_data['Version'];
             static::$title = $plugin_data['Name'];
             static::$text_domain = $plugin_data['TextDomain'];
@@ -241,7 +241,7 @@ abstract class Plugin
             if ( ! function_exists( 'get_plugin_data' ) ) {
                 require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
             }
-            $plugin_data = get_plugin_data( static::getMainFile() );
+            $plugin_data = get_plugin_data( static::getMainFile(), false, false );
             static::$version = $plugin_data['Version'];
             static::$title = $plugin_data['Name'];
             static::$text_domain = $plugin_data['TextDomain'];

@@ -22,7 +22,6 @@ use Bookly\Backend\Components;
                 <?php Proxy\Shared::renderMenuItem() ?>
                 <?php Proxy\Pro::renderMenuItem( __( 'Online Meetings', 'bookly' ), 'online_meetings' ) ?>
                 <?php Proxy\Pro::renderMenuItem( __( 'User Permissions', 'bookly' ), 'user_permissions' ) ?>
-                <?php Proxy\WaitingList::renderWaitingListMenuItem(); ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Payments', 'bookly' ), 'payments' ) ?>
                 <?php Proxy\Pro::renderMenuItem( __( 'Additional', 'bookly' ), 'additional' ) ?>
                 <?php Components\Settings\Menu::renderItem( __( 'Business Hours', 'bookly' ), 'business_hours' ) ?>
@@ -59,7 +58,6 @@ use Bookly\Backend\Components;
                     <div class="tab-pane" id="bookly_settings_payments">
                         <?php include '_paymentsForm.php' ?>
                     </div>
-                    <?php Proxy\WaitingList::renderWaitingListTab() ?>
                     <div class="tab-pane" id="bookly_settings_business_hours">
                         <?php include '_hoursForm.php' ?>
                     </div>

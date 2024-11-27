@@ -32,7 +32,7 @@ use Bookly\Backend\Modules\Settings\Proxy;
             Selects::renderSingle( 'bookly_gen_session_type', __( 'Session storage mode', 'bookly' ), __( 'Select where to store session data', 'bookly' ), array( array( 'php', 'PHP', 0 ), array( 'db', 'Database', 0 ) ), array( 'data-expand' => 'php' ) );
             ?>
             <div
-                class="border-left mt-3 ml-4 pl-3 bookly_gen_session_type-expander"<?php if ( get_option( 'bookly_gen_session_type', 'db' ) === 'db' ) : ?> style="display:none;"<?php endif ?>>
+                    class="border-left mt-3 ml-4 pl-3 bookly_gen_session_type-expander"<?php if ( get_option( 'bookly_gen_session_type', 'db' ) === 'db' ) : ?> style="display:none;"<?php endif ?>>
                 <?php
                 Selects::renderSingle( 'bookly_gen_prevent_session_locking', __( 'Prevent PHP session locking', 'bookly' ), __( 'Enable this option to make Bookly close the PHP session as soon as it is done with it. This should prevent locking the session, which could cause various other processes to timeout or fail', 'bookly' ) );
                 ?>

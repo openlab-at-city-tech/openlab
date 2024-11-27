@@ -19,16 +19,66 @@
             },
         });
         let existsAppointmentForm = typeof BooklyAppointmentDialog !== 'undefined'
+
+        let viewTypes = {
+            dayGridMonth: 'resourceTimelineMonth',
+            timeGridWeek: 'resourceTimelineWeek',
+            resourceTimeGridDay: 'resourceTimelineDay'
+        }
         // Settings for Event Calendar
         let settings = {
             view: 'timeGridWeek',
+            customButtons: {
+                timeline: {
+                    active: true,
+                    text: {html: '<i class="far fa-fw fa-check-square"></i> ' + obj.options.l10n.timeline},
+                    click: function (e) {
+                        let headerToolbar = calendar.getOption('headerToolbar'),
+                            view = calendar.getOption('view');
+                        headerToolbar.end = 'dayGridMonth,timeGridWeek,resourceTimeGridDay,grid listWeek'
+                        calendar.setOption('headerToolbar', headerToolbar);
+                        let _viewTypes = Object.values(viewTypes);
+                        if (_viewTypes.includes(view)) {
+                            // Change view
+                            Object.keys(viewTypes).forEach(function (key) {
+                                if (viewTypes[key] === view) {
+                                    calendar.setOption('view', key);
+                                }
+                            });
+                        } else if (view === 'listWeek') {
+                            setCookie('bookly_cal_view', 'listWeek');
+                        }
+                    }
+                },
+                grid: {
+                    text: {html: '<i class="far fa-fw fa-square"></i> ' + obj.options.l10n.timeline},
+                    click: function () {
+                        let headerToolbar = calendar.getOption('headerToolbar'),
+                            view = calendar.getOption('view');
+                        headerToolbar.end = 'resourceTimelineMonth,resourceTimelineWeek,resourceTimelineDay,timeline listWeek'
+                        calendar.setOption('headerToolbar', headerToolbar);
+                        if (viewTypes.hasOwnProperty(view)) {
+                            // Change view
+                            calendar.setOption('view', viewTypes[view]);
+                        } else if (view === 'listWeek') {
+                            setCookie('bookly_cal_view', 'listWeekTimeline');
+                        }
+                    }
+                },
+            },
             views: {
                 dayGridMonth: {
                     dayHeaderFormat: function (date) {
                         return moment(date).locale('bookly').format('ddd');
                     },
                     displayEventEnd: true,
-                    dayMaxEvents: obj.options.l10n.monthDayMaxEvents === '1'
+                    dayMaxEvents: obj.options.l10n.monthDayMaxEvents === '1',
+                    theme: function (theme) {
+                        if (obj.options.l10n.monthDayMaxEvents === '1') {
+                            theme.view += ' ec-minimalistic';
+                        }
+                        return theme;
+                    }
                 },
                 timeGridDay: {
                     dayHeaderFormat: function (date) {
@@ -37,7 +87,10 @@
                     pointer: true
                 },
                 timeGridWeek: {pointer: true},
-                resourceTimeGridDay: {pointer: true}
+                resourceTimeGridDay: {pointer: true},
+                resourceTimelineDay: {pointer: true, displayEventEnd: true, slotWidth: 180},
+                resourceTimelineWeek: {pointer: true, displayEventEnd: true, slotWidth: 180},
+                resourceTimelineMonth: {pointer: true, displayEventEnd: true, slotWidth: 180}
             },
             nowIndicator: true,
             hiddenDays: obj.options.l10n.hiddenDays,
@@ -57,8 +110,12 @@
             slotLabelFormat: function (date) {
                 return moment(date).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
             },
-            eventTimeFormat: function (date) {
-                return moment(date).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
+            eventTimeFormat: function (start, end) {
+                if (start.getTime() === end.getTime()) {
+                    return moment(start).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
+                } else {
+                    return moment(start).locale('bookly').format(obj.options.l10n.mjsTimeFormat) + ' - ' + moment(end).locale('bookly').format(obj.options.l10n.mjsTimeFormat);
+                }
             },
             dayHeaderFormat: function (date) {
                 return moment(date).locale('bookly').format('ddd, D');
@@ -74,6 +131,9 @@
                 timeGridWeek: obj.options.l10n.week,
                 timeGridDay: obj.options.l10n.day,
                 resourceTimeGridDay: obj.options.l10n.day,
+                resourceTimelineMonth: obj.options.l10n.month,
+                resourceTimelineWeek: obj.options.l10n.week,
+                resourceTimelineDay: obj.options.l10n.day,
                 listWeek: obj.options.l10n.list
             },
             noEventsContent: obj.options.l10n.noEvents,
@@ -232,7 +292,7 @@
             },
             dateClick: function (arg) {
                 let staff_id, visible_staff_id;
-                if (arg.view.type === 'resourceTimeGridDay') {
+                if (['resourceTimeGridDay', 'resourceTimelineMonth', 'resourceTimelineWeek', 'resourceTimelineDay'].includes(arg.view.type)) {
                     staff_id = arg.resource.id;
                     visible_staff_id = 0;
                 } else {
@@ -291,58 +351,58 @@
             if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="fas fa-fw fa-link">')
-                    .attr('title', obj.options.l10n.recurring_appointments.title)
-                    .on('click', function (e) {
-                        e.stopPropagation();
-                        BooklySeriesDialog.showDialog({
-                            series_id: props.series_id,
-                            done: function () {
-                                calendar.refetchEvents();
-                            }
-                        });
-                    })
+                        .attr('title', obj.options.l10n.recurring_appointments.title)
+                        .on('click', function (e) {
+                            e.stopPropagation();
+                            BooklySeriesDialog.showDialog({
+                                series_id: props.series_id,
+                                done: function () {
+                                    calendar.refetchEvents();
+                                }
+                            });
+                        })
                 );
             }
             if (obj.options.l10n.waiting_list.active == '1' && props.waitlisted > 0) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-list-alt">')
-                    .attr('title', obj.options.l10n.waiting_list.title)
+                        .attr('title', obj.options.l10n.waiting_list.title)
                 );
             }
             if (obj.options.l10n.packages.active == '1' && props.package_id > 0) {
                 $buttons.append(
                     $('<a class="btn btn-default btn-sm mr-1">').append('<i class="far fa-fw fa-calendar-alt">')
-                    .attr('title', obj.options.l10n.packages.title)
-                    .on('click', function (e) {
-                        e.stopPropagation();
-                        if (obj.options.l10n.packages.active == '1' && props.package_id) {
-                            $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
-                                calendar.refetchEvents();
-                            }]);
-                        }
-                    })
+                        .attr('title', obj.options.l10n.packages.title)
+                        .on('click', function (e) {
+                            e.stopPropagation();
+                            if (obj.options.l10n.packages.active == '1' && props.package_id) {
+                                $(document.body).trigger('bookly_packages.schedule_dialog', [props.package_id, function () {
+                                    calendar.refetchEvents();
+                                }]);
+                            }
+                        })
                 );
             }
             $buttons.append(
                 $('<a class="btn btn-danger btn-sm text-white">').append('<i class="far fa-fw fa-trash-alt">')
-                .attr('title', obj.options.l10n.delete)
-                .on('click', function (e) {
-                    e.stopPropagation();
-                    // Localize contains only string values
-                    if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
-                        $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
-                    } else {
-                        new BooklyConfirmDeletingAppointment({
-                                action: 'bookly_delete_appointment',
-                                appointment_id: arg.event.id,
-                                csrf_token: BooklyL10nGlobal.csrf_token
-                            },
-                            function (response) {
-                                calendar.removeEventById(arg.event.id);
-                            }
-                        );
-                    }
-                })
+                    .attr('title', obj.options.l10n.delete)
+                    .on('click', function (e) {
+                        e.stopPropagation();
+                        // Localize contains only string values
+                        if (obj.options.l10n.recurring_appointments.active == '1' && props.series_id) {
+                            $(document.body).trigger('recurring_appointments.delete_dialog', [calendar, arg.event]);
+                        } else {
+                            new BooklyConfirmDeletingAppointment({
+                                    action: 'bookly_delete_appointment',
+                                    appointment_id: arg.event.id,
+                                    csrf_token: BooklyL10nGlobal.csrf_token
+                                },
+                                function (response) {
+                                    calendar.removeEventById(arg.event.id);
+                                }
+                            );
+                        }
+                    })
             );
 
             return $buttons;
@@ -382,6 +442,19 @@
             }
         }
 
+
+        /**
+         * Set cookie.
+         *
+         * @param key
+         * @param value
+         */
+        function setCookie(key, value) {
+            var expires = new Date();
+            expires.setFullYear(expires.getFullYear() + 3);
+            document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+        }
+
         let dateSetFromDatePicker = false;
 
         calendar = new window.EventCalendar($container.get(0), $.extend(true, {}, settings, obj.options.calendar));
@@ -400,19 +473,12 @@
             locale: obj.options.l10n.datePicker
         }, function (start) {
             dateSetFromDatePicker = true;
-            if (calendar.view.type !== 'timeGridDay' && calendar.view.type !== 'resourceTimeGridDay') {
-                calendar.setOption('highlightedDates', [start.toDate()]);
-            }
+            calendar.setOption('highlightedDates', [start.toDate()]);
             calendar.setOption('date', start.toDate());
         });
 
         // Export calendar
         this.ec = calendar;
-        if (obj.options.l10n.monthDayMaxEvents == '1') {
-            let theme = this.ec.getOption('theme');
-            theme.month += ' ec-minimalistic';
-            this.ec.setOption('theme', theme);
-        }
     };
 
     var locationChanged = false;

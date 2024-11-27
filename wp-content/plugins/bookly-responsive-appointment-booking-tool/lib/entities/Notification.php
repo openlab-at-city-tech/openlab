@@ -338,10 +338,10 @@ class Notification extends Lib\Base\Entity
      * Check whether notification settings match given order item for staff.
      *
      * @param Item    $item
-     * @param Service $parent
+     * @param Service|null $parent
      * @return bool
      */
-    public function matchesItemForStaff( Item $item, $parent )
+    public function matchesItemForStaff( Item $item, $parent = null )
     {
         return $item->isSeries() == in_array( $this->getType(), array( self::TYPE_NEW_BOOKING_RECURRING, self::TYPE_CUSTOMER_APPOINTMENT_STATUS_CHANGED_RECURRING ) ) &&
                $this->getSettingsObject()->allowedServiceWithStatus( $item->getService(), $item->getCA()->getStatus(), $parent );

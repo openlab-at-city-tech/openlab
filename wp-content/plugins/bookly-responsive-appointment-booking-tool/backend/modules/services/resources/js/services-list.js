@@ -8,8 +8,7 @@ jQuery(function($) {
         $deleteButton = $('#bookly-delete'),
         $deleteModal = $('.bookly-js-delete-cascade-confirm'),
         urlParts = document.URL.split('#'),
-        columns = [],
-        order = []
+        columns = []
     ;
 
     $('.bookly-js-select').val(null);
@@ -119,29 +118,14 @@ jQuery(function($) {
                 '</div>';
         }
     });
-    $.each(BooklyL10n.datatables.services.settings.order, function(_, value) {
-        const index = columns.findIndex(function(c) { return c.data === value.column; });
-        if (index !== -1) {
-            order.push([index, value.order]);
-        }
-    });
 
     /**
      * Init DataTables.
      */
-    var dt = $servicesList.DataTable({
-        order: order,
-        info: false,
-        searching: false,
-        lengthChange: false,
-        processing: true,
-        responsive: true,
-        pageLength: 25,
-        pagingType: 'numbers',
-        serverSide: true,
+    var dt = booklyDataTables.init($servicesList, BooklyL10n.datatables.services.settings, {
         ajax: {
             url: ajaxurl,
-            type: 'POST',
+            method: 'POST',
             data: function(d) {
                 let data = $.extend({action: 'bookly_get_services', csrf_token: BooklyL10nGlobal.csrf_token, filter: {}}, d);
                 Object.keys(filters).map(function(filter) {data.filter[filter] = filters[filter].val();});
@@ -155,11 +139,6 @@ jQuery(function($) {
                 $(row).addClass('text-muted');
             }
         },
-        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing
-        }
     });
 
     /**
