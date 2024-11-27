@@ -44,13 +44,13 @@ __webpack_require__.d(__webpack_exports__, {
   withI18n: () => (/* binding */ withI18n)
 });
 
-;// CONCATENATED MODULE: external ["wp","element"]
+;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
+;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: external "ReactJSXRuntime"
+;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// CONCATENATED MODULE: ./packages/react-i18n/build-module/index.js
+;// ./packages/react-i18n/build-module/index.js
 /**
  * External dependencies
  */

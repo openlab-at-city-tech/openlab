@@ -42,30 +42,36 @@ if ( ! class_exists( 'WP_Style_Engine_Gutenberg' ) ) {
 		 */
 		const BLOCK_STYLE_DEFINITIONS_METADATA = array(
 			'background' => array(
-				'backgroundImage'    => array(
+				'backgroundImage'      => array(
 					'property_keys' => array(
 						'default' => 'background-image',
 					),
 					'value_func'    => array( self::class, 'get_url_or_value_css_declaration' ),
 					'path'          => array( 'background', 'backgroundImage' ),
 				),
-				'backgroundPosition' => array(
+				'backgroundPosition'   => array(
 					'property_keys' => array(
 						'default' => 'background-position',
 					),
 					'path'          => array( 'background', 'backgroundPosition' ),
 				),
-				'backgroundRepeat'   => array(
+				'backgroundRepeat'     => array(
 					'property_keys' => array(
 						'default' => 'background-repeat',
 					),
 					'path'          => array( 'background', 'backgroundRepeat' ),
 				),
-				'backgroundSize'     => array(
+				'backgroundSize'       => array(
 					'property_keys' => array(
 						'default' => 'background-size',
 					),
 					'path'          => array( 'background', 'backgroundSize' ),
+				),
+				'backgroundAttachment' => array(
+					'property_keys' => array(
+						'default' => 'background-attachment',
+					),
+					'path'          => array( 'background', 'backgroundAttachment' ),
 				),
 			),
 			'color'      => array(
@@ -418,8 +424,15 @@ if ( ! class_exists( 'WP_Style_Engine_Gutenberg' ) ) {
 						continue;
 					}
 
-					$parsed_styles['classnames']   = array_merge( $parsed_styles['classnames'], static::get_classnames( $style_value, $style_definition ) );
-					$parsed_styles['declarations'] = array_merge( $parsed_styles['declarations'], static::get_css_declarations( $style_value, $style_definition, $options ) );
+					$classnames = static::get_classnames( $style_value, $style_definition );
+					if ( ! empty( $classnames ) ) {
+						$parsed_styles['classnames'] = array_merge( $parsed_styles['classnames'], $classnames );
+					}
+
+					$css_declarations = static::get_css_declarations( $style_value, $style_definition, $options );
+					if ( ! empty( $css_declarations ) ) {
+						$parsed_styles['declarations'] = array_merge( $parsed_styles['declarations'], $css_declarations );
+					}
 				}
 			}
 

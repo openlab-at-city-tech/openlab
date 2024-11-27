@@ -43,6 +43,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isBlobURL: () => (/* binding */ isBlobURL),
 /* harmony export */   revokeBlobURL: () => (/* binding */ revokeBlobURL)
 /* harmony export */ });
+/* wp:polyfill */
 const cache = {};
 
 /**

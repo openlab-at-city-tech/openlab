@@ -32,7 +32,7 @@ function gutenberg_render_block_core_post_time_to_read( $attributes, $content, $
 	$minutes_to_read = max( 1, (int) round( wp_word_count( $content, $word_count_type ) / $average_reading_rate ) );
 
 	$minutes_to_read_string = sprintf(
-		/* translators: %s is the number of minutes the post will take to read. */
+		/* translators: %s: the number of minutes to read the post. */
 		_n( '%s minute', '%s minutes', $minutes_to_read ),
 		$minutes_to_read
 	);

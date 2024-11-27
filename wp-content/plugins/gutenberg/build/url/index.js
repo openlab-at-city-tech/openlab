@@ -1,7 +1,7 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 4793:
+/***/ 9681:
 /***/ ((module) => {
 
 var characterMap = {
@@ -581,6 +581,7 @@ __webpack_require__.d(__webpack_exports__, {
   getQueryString: () => (/* reexport */ getQueryString),
   hasQueryArg: () => (/* reexport */ hasQueryArg),
   isEmail: () => (/* reexport */ isEmail),
+  isPhoneNumber: () => (/* reexport */ isPhoneNumber),
   isURL: () => (/* reexport */ isURL),
   isValidAuthority: () => (/* reexport */ isValidAuthority),
   isValidFragment: () => (/* reexport */ isValidFragment),
@@ -595,7 +596,8 @@ __webpack_require__.d(__webpack_exports__, {
   safeDecodeURIComponent: () => (/* reexport */ safeDecodeURIComponent)
 });
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-url.js
+;// ./packages/url/build-module/is-url.js
+/* wp:polyfill */
 /**
  * Determines whether the given string looks like a URL.
  *
@@ -622,7 +624,7 @@ function isURL(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-email.js
+;// ./packages/url/build-module/is-email.js
 const EMAIL_REGEXP = /^(mailto:)?[a-z0-9._%+-]+@[a-z0-9][a-z0-9.-]*\.[a-z]{2,63}$/i;
 
 /**
@@ -641,7 +643,28 @@ function isEmail(email) {
   return EMAIL_REGEXP.test(email);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-protocol.js
+;// ./packages/url/build-module/is-phone-number.js
+const PHONE_REGEXP = /^(tel:)?(\+)?\d{6,15}$/;
+
+/**
+ * Determines whether the given string looks like a phone number.
+ *
+ * @param {string} phoneNumber The string to scrutinize.
+ *
+ * @example
+ * ```js
+ * const isPhoneNumber = isPhoneNumber('+1 (555) 123-4567'); // true
+ * ```
+ *
+ * @return {boolean} Whether or not it looks like a phone number.
+ */
+function isPhoneNumber(phoneNumber) {
+  // Remove any seperator from phone number.
+  phoneNumber = phoneNumber.replace(/[-.() ]/g, '');
+  return PHONE_REGEXP.test(phoneNumber);
+}
+
+;// ./packages/url/build-module/get-protocol.js
 /**
  * Returns the protocol part of the URL.
  *
@@ -662,7 +685,7 @@ function getProtocol(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-protocol.js
+;// ./packages/url/build-module/is-valid-protocol.js
 /**
  * Tests if a url protocol is valid.
  *
@@ -683,7 +706,7 @@ function isValidProtocol(protocol) {
   return /^[a-z\-.\+]+[0-9]*:$/i.test(protocol);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-authority.js
+;// ./packages/url/build-module/get-authority.js
 /**
  * Returns the authority part of the URL.
  *
@@ -704,7 +727,7 @@ function getAuthority(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-authority.js
+;// ./packages/url/build-module/is-valid-authority.js
 /**
  * Checks for invalid characters within the provided authority.
  *
@@ -725,7 +748,7 @@ function isValidAuthority(authority) {
   return /^[^\s#?]+$/.test(authority);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-path.js
+;// ./packages/url/build-module/get-path.js
 /**
  * Returns the path part of the URL.
  *
@@ -746,7 +769,7 @@ function getPath(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-path.js
+;// ./packages/url/build-module/is-valid-path.js
 /**
  * Checks for invalid characters within the provided path.
  *
@@ -767,7 +790,8 @@ function isValidPath(path) {
   return /^[^\s#?]+$/.test(path);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-query-string.js
+;// ./packages/url/build-module/get-query-string.js
+/* wp:polyfill */
 /**
  * Returns the query string part of the URL.
  *
@@ -790,7 +814,7 @@ function getQueryString(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/build-query-string.js
+;// ./packages/url/build-module/build-query-string.js
 /**
  * Generates URL-encoded query string using input query data.
  *
@@ -847,7 +871,7 @@ function buildQueryString(data) {
   return string.substr(1);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-query-string.js
+;// ./packages/url/build-module/is-valid-query-string.js
 /**
  * Checks for invalid characters within the provided query string.
  *
@@ -868,7 +892,7 @@ function isValidQueryString(queryString) {
   return /^[^\s#?\/]+$/.test(queryString);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-path-and-query-string.js
+;// ./packages/url/build-module/get-path-and-query-string.js
 /**
  * Internal dependencies
  */
@@ -900,7 +924,7 @@ function getPathAndQueryString(url) {
   return value;
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-fragment.js
+;// ./packages/url/build-module/get-fragment.js
 /**
  * Returns the fragment part of the URL.
  *
@@ -921,7 +945,7 @@ function getFragment(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/is-valid-fragment.js
+;// ./packages/url/build-module/is-valid-fragment.js
 /**
  * Checks for invalid characters within the provided fragment.
  *
@@ -942,7 +966,7 @@ function isValidFragment(fragment) {
   return /^#[^\s#?\/]*$/.test(fragment);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri-component.js
+;// ./packages/url/build-module/safe-decode-uri-component.js
 /**
  * Safely decodes a URI component with `decodeURIComponent`. Returns the URI component unmodified if
  * `decodeURIComponent` throws an error.
@@ -959,7 +983,7 @@ function safeDecodeURIComponent(uriComponent) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-query-args.js
+;// ./packages/url/build-module/get-query-args.js
 /**
  * Internal dependencies
  */
@@ -1047,7 +1071,7 @@ function getQueryArgs(url) {
   }, Object.create(null));
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/add-query-args.js
+;// ./packages/url/build-module/add-query-args.js
 /**
  * Internal dependencies
  */
@@ -1089,7 +1113,7 @@ function addQueryArgs(url = '', args) {
   return baseUrl + '?' + buildQueryString(args);
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-query-arg.js
+;// ./packages/url/build-module/get-query-arg.js
 /**
  * Internal dependencies
  */
@@ -1120,7 +1144,7 @@ function getQueryArg(url, arg) {
   return getQueryArgs(url)[arg];
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/has-query-arg.js
+;// ./packages/url/build-module/has-query-arg.js
 /**
  * Internal dependencies
  */
@@ -1143,7 +1167,7 @@ function hasQueryArg(url, arg) {
   return getQueryArg(url, arg) !== undefined;
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/remove-query-args.js
+;// ./packages/url/build-module/remove-query-args.js
 /**
  * Internal dependencies
  */
@@ -1175,7 +1199,7 @@ function removeQueryArgs(url, ...args) {
   return queryString ? baseURL + '?' + queryString : baseURL;
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/prepend-http.js
+;// ./packages/url/build-module/prepend-http.js
 /**
  * Internal dependencies
  */
@@ -1205,7 +1229,7 @@ function prependHTTP(url) {
   return url;
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/safe-decode-uri.js
+;// ./packages/url/build-module/safe-decode-uri.js
 /**
  * Safely decodes a URI with `decodeURI`. Returns the URI unmodified if
  * `decodeURI` throws an error.
@@ -1227,7 +1251,7 @@ function safeDecodeURI(uri) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/filter-url-for-display.js
+;// ./packages/url/build-module/filter-url-for-display.js
 /**
  * Returns a URL for display.
  *
@@ -1277,9 +1301,9 @@ function filterURLForDisplay(url, maxLength = null) {
 }
 
 // EXTERNAL MODULE: ./node_modules/remove-accents/index.js
-var remove_accents = __webpack_require__(4793);
+var remove_accents = __webpack_require__(9681);
 var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
-;// CONCATENATED MODULE: ./packages/url/build-module/clean-for-slug.js
+;// ./packages/url/build-module/clean-for-slug.js
 /**
  * External dependencies
  */
@@ -1318,7 +1342,8 @@ function cleanForSlug(string) {
   .replace(/(^-+)|(-+$)/g, '');
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/get-filename.js
+;// ./packages/url/build-module/get-filename.js
+/* wp:polyfill */
 /**
  * Returns the filename part of the URL.
  *
@@ -1345,7 +1370,7 @@ function getFilename(url) {
   }
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/normalize-path.js
+;// ./packages/url/build-module/normalize-path.js
 /**
  * Given a path, returns a normalized path where equal query parameter values
  * will be treated as identical, regardless of order they appear in the original
@@ -1381,7 +1406,7 @@ function normalizePath(path) {
   .join('&');
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/prepend-https.js
+;// ./packages/url/build-module/prepend-https.js
 /**
  * Internal dependencies
  */
@@ -1414,7 +1439,8 @@ function prependHTTPS(url) {
   return url.replace(/^http:/, 'https:');
 }
 
-;// CONCATENATED MODULE: ./packages/url/build-module/index.js
+;// ./packages/url/build-module/index.js
+
 
 
 

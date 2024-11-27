@@ -62,11 +62,11 @@ __webpack_require__.d(actions_namespaceObject, {
   __experimentalUpdateAnnotationRange: () => (__experimentalUpdateAnnotationRange)
 });
 
-;// CONCATENATED MODULE: external ["wp","richText"]
+;// external ["wp","richText"]
 const external_wp_richText_namespaceObject = window["wp"]["richText"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
+;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: ./packages/annotations/build-module/store/constants.js
+;// ./packages/annotations/build-module/store/constants.js
 /**
  * The identifier for the data store.
  *
@@ -74,7 +74,7 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
  */
 const STORE_NAME = 'core/annotations';
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/format/annotation.js
+;// ./packages/annotations/build-module/format/annotation.js
 /**
  * WordPress dependencies
  */
@@ -248,7 +248,7 @@ const annotation = {
   }
 };
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/format/index.js
+;// ./packages/annotations/build-module/format/index.js
 /**
  * WordPress dependencies
  */
@@ -264,11 +264,11 @@ const {
 } = annotation;
 (0,external_wp_richText_namespaceObject.registerFormatType)(format_name, settings);
 
-;// CONCATENATED MODULE: external ["wp","hooks"]
+;// external ["wp","hooks"]
 const external_wp_hooks_namespaceObject = window["wp"]["hooks"];
-;// CONCATENATED MODULE: external ["wp","data"]
+;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
-;// CONCATENATED MODULE: ./packages/annotations/build-module/block/index.js
+;// ./packages/annotations/build-module/block/index.js
 /**
  * WordPress dependencies
  */
@@ -300,7 +300,7 @@ const addAnnotationClassName = OriginalComponent => {
 };
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockListBlock', 'core/annotations', addAnnotationClassName);
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/store/reducer.js
+;// ./packages/annotations/build-module/store/reducer.js
 /**
  * Filters an array based on the predicate, but keeps the reference the same if
  * the array hasn't changed.
@@ -402,7 +402,7 @@ function annotations(state = {}, action) {
 }
 /* harmony default export */ const reducer = (annotations);
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/store/selectors.js
+;// ./packages/annotations/build-module/store/selectors.js
 /**
  * WordPress dependencies
  */
@@ -482,7 +482,7 @@ function __experimentalGetAnnotations(state) {
   return Object.values(state).flat();
 }
 
-;// CONCATENATED MODULE: ./packages/annotations/node_modules/uuid/dist/esm-browser/rng.js
+;// ./packages/annotations/node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
 // generators (like Math.random()).
@@ -502,9 +502,9 @@ function rng() {
 
   return getRandomValues(rnds8);
 }
-;// CONCATENATED MODULE: ./packages/annotations/node_modules/uuid/dist/esm-browser/regex.js
+;// ./packages/annotations/node_modules/uuid/dist/esm-browser/regex.js
 /* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
-;// CONCATENATED MODULE: ./packages/annotations/node_modules/uuid/dist/esm-browser/validate.js
+;// ./packages/annotations/node_modules/uuid/dist/esm-browser/validate.js
 
 
 function validate(uuid) {
@@ -512,7 +512,7 @@ function validate(uuid) {
 }
 
 /* harmony default export */ const esm_browser_validate = (validate);
-;// CONCATENATED MODULE: ./packages/annotations/node_modules/uuid/dist/esm-browser/stringify.js
+;// ./packages/annotations/node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
@@ -543,7 +543,7 @@ function stringify(arr) {
 }
 
 /* harmony default export */ const esm_browser_stringify = (stringify);
-;// CONCATENATED MODULE: ./packages/annotations/node_modules/uuid/dist/esm-browser/v4.js
+;// ./packages/annotations/node_modules/uuid/dist/esm-browser/v4.js
 
 
 
@@ -568,7 +568,7 @@ function v4(options, buf, offset) {
 }
 
 /* harmony default export */ const esm_browser_v4 = (v4);
-;// CONCATENATED MODULE: ./packages/annotations/build-module/store/actions.js
+;// ./packages/annotations/build-module/store/actions.js
 /**
  * External dependencies
  */
@@ -669,7 +669,7 @@ function __experimentalRemoveAnnotationsBySource(source) {
   };
 }
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/store/index.js
+;// ./packages/annotations/build-module/store/index.js
 /**
  * WordPress dependencies
  */
@@ -701,7 +701,7 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
 });
 (0,external_wp_data_namespaceObject.register)(store);
 
-;// CONCATENATED MODULE: ./packages/annotations/build-module/index.js
+;// ./packages/annotations/build-module/index.js
 /**
  * Internal dependencies
  */

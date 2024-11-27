@@ -26,6 +26,7 @@ var __webpack_exports__ = {};
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ TokenList)
 /* harmony export */ });
+/* wp:polyfill */
 /**
  * A set of tokens.
  *
@@ -206,6 +207,7 @@ class TokenList {
     return true;
   }
 
+  /* eslint-disable @typescript-eslint/no-unused-vars */
   /**
    * Returns true if `token` is in the associated attribute’s supported
    * tokens. Returns false otherwise.
@@ -220,6 +222,7 @@ class TokenList {
   supports(_token) {
     return true;
   }
+  /* eslint-enable @typescript-eslint/no-unused-vars */
 }
 
 (window.wp = window.wp || {}).tokenList = __webpack_exports__["default"];

@@ -48,7 +48,7 @@ __webpack_require__.d(__webpack_exports__, {
   isValidAttributeName: () => (/* binding */ isValidAttributeName)
 });
 
-;// CONCATENATED MODULE: ./packages/escape-html/build-module/escape-greater.js
+;// ./packages/escape-html/build-module/escape-greater.js
 /**
  * Returns a string with greater-than sign replaced.
  *
@@ -65,7 +65,7 @@ function __unstableEscapeGreaterThan(value) {
   return value.replace(/>/g, '&gt;');
 }
 
-;// CONCATENATED MODULE: ./packages/escape-html/build-module/index.js
+;// ./packages/escape-html/build-module/index.js
 /**
  * Internal dependencies
  */
