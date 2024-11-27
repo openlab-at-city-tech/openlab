@@ -254,11 +254,14 @@ class Meow_WPMC_Core {
 		// Proposal/fix by @copytrans
 		// Discussion: https://wordpress.org/support/topic/bug-in-core-php/#post-11647775
 		// Modified by Jordy again in 2021 for those who don't have MB enabled
-		if ( function_exists( 'mb_convert_encoding' ) ) {
-			$html = mb_convert_encoding( $html, 'HTML-ENTITIES', 'UTF-8' );
+		if ( function_exists( 'htmlspecialchars' ) ) {
+			$html = htmlspecialchars( $html, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
 		}
-		else {
-			$html = htmlspecialchars_decode( utf8_decode( htmlentities( $html, ENT_COMPAT, 'utf-8', false ) ) );
+		else if ( function_exists( 'mb_encode_numericentity' ) ) {
+			$convmap = array( 0x80, 0xFFFF, 0, 0xFFFF );
+			$html = mb_encode_numericentity( $html, $convmap, 'UTF-8' );
+		} else {
+			$html = htmlentities( $html, ENT_COMPAT, 'UTF-8' );
 		}
 
 		// Resolve src-set and shortcodes
@@ -913,6 +916,14 @@ class Meow_WPMC_Core {
 		if ( empty( $repair ) ) {
 			return false;
 		}
+
+		// If $repair->path is null or empty return false
+		if ( empty( $repair->path ) ) {
+			$this->log( "🚫 Repair #{$id} does not have a path. Cannot repair this." );
+			return false;
+		}
+
+
 		$repair->id = (int)$repair->id;
 		$regex = "^(.*)(\\s\\(\\+.*)$";
 		$repair->path = preg_replace( '/' . $regex . '/i', '$1', stripslashes( $repair->path ) );
@@ -1609,6 +1620,15 @@ class Meow_WPMC_Core {
 			file_put_contents( WPMC_PATH . '/logs/media-cleaner.log', '' );
 		}
 	}
+
+	function is_image_extension( $ext ) {
+		$ext = strtolower( $ext );
+		$valid = apply_filters( 'wpmc_valid_image_extensions', array( 'jpg', 'jpeg', 'png', 'gif', 'bmp', 'tiff', 'ico', 'webp', 'avif' ) );
+
+		return in_array( $ext, $valid );
+
+	}
+		
 
 	function reset_references() {
 		global $wpdb;

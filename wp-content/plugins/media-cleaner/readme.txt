@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, media, files, images, library
 Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 6.7.9
+Stable tag: 6.8.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,9 +47,25 @@ This plugin is compatible with all media types, including retina and WebP versio
 
 == Changelog ==
 
+= 6.8.3 (2024/11/27) =
+* Fix: MetaBox parser was not working properly.
+* Fix: The free version of Media Cleaner was not properly displaying the incompatible plugins.
+* Info: We are working hard on Media Cleaner. If you want to share some love, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
+
+= 6.8.2 (2024/11/14) =
+* Update: Enhanced the UI in many little ways.
+* Update: Don't show the thumbnails for non-image files.
+* Fix: Better parser for Avada.
+
+= 6.8.1 (2024/11/04) =
+* Add: Check for empty path in repair mode.
+* Add: Introduction tutorial.
+
+= 6.8.0 (2024/10/17) =
+* Fix: Search in References (Cleaner Dashboard).
+
 = 6.7.9 (2024/09/24) =
 * Update: Internal improvements to avoid some errors with low-quality servers such as OVH, GoDaddy, etc.
-* Info: We are working hard on Media Cleaner. If you want to share some love, write a simple and nice review [here](https://wordpress.org/support/plugin/media-cleaner/reviews/?rate=5#new-post). Thank you so much! 💖
 
 = 6.7.8 (2024/08/01) =
 * Fix: Elementor parser was not working properly.
