@@ -2,15 +2,19 @@
 /**
  * @package Akismet
  */
+
+// We plan to gradually remove all of the disabled lint rules below.
+// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
+
 class Akismet_Widget extends WP_Widget {
 
 	function __construct() {
 		load_plugin_textdomain( 'akismet' );
-		
+
 		parent::__construct(
 			'akismet_widget',
-			__( 'Akismet Widget' , 'akismet'),
-			array( 'description' => __( 'Display the number of spam comments Akismet has caught' , 'akismet') )
+			__( 'Akismet Widget', 'akismet' ),
+			array( 'description' => __( 'Display the number of spam comments Akismet has caught', 'akismet' ) )
 		);
 
 		if ( is_active_widget( false, false, $this->id_base ) ) {
@@ -19,7 +23,7 @@ class Akismet_Widget extends WP_Widget {
 	}
 
 	function css() {
-?>
+		?>
 
 <style type="text/css">
 .a-stats {
@@ -58,28 +62,27 @@ class Akismet_Widget extends WP_Widget {
 }
 </style>
 
-<?php
+		<?php
 	}
 
 	function form( $instance ) {
 		if ( $instance && isset( $instance['title'] ) ) {
 			$title = $instance['title'];
+		} else {
+			$title = __( 'Spam Blocked', 'akismet' );
 		}
-		else {
-			$title = __( 'Spam Blocked' , 'akismet' );
-		}
-?>
+		?>
 
 		<p>
-		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:' , 'akismet'); ?></label>
+		<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php esc_html_e( 'Title:', 'akismet' ); ?></label>
 		<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>" />
 		</p>
 
-<?php
+		<?php
 	}
 
 	function update( $new_instance, $old_instance ) {
-		$instance = array();
+		$instance          = array();
 		$instance['title'] = strip_tags( $new_instance['title'] );
 		return $instance;
 	}
@@ -88,7 +91,7 @@ class Akismet_Widget extends WP_Widget {
 		$count = get_option( 'akismet_spam_count' );
 
 		if ( ! isset( $instance['title'] ) ) {
-			$instance['title'] = __( 'Spam Blocked' , 'akismet' );
+			$instance['title'] = __( 'Spam Blocked', 'akismet' );
 		}
 
 		echo $args['before_widget'];
@@ -97,7 +100,7 @@ class Akismet_Widget extends WP_Widget {
 			echo esc_html( $instance['title'] );
 			echo $args['after_title'];
 		}
-?>
+		?>
 
 	<div class="a-stats">
 		<a href="https://akismet.com" target="_blank" rel="noopener" title="">
@@ -125,7 +128,7 @@ class Akismet_Widget extends WP_Widget {
 		</a>
 	</div>
 
-<?php
+		<?php
 		echo $args['after_widget'];
 	}
 }
