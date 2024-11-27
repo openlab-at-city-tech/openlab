@@ -31,16 +31,26 @@ class MetaSliderImageHelper
     public $image_id;
 
     /**
+     * Make image double size? (Retina display)
+     * 
+     * @var bool
+     */
+    private $crop_multiply = 1;
+
+    /**
      * Constructor
      *
+     * @since 3.93 - Added $crop_multiply param
+     * 
      * @param integer $slide_id         - The ID of the current slide
      * @param integer $width            - Required width of image
      * @param integer $height           - Required height of image
      * @param string  $crop_type        - The method used for cropping
      * @param bool    $use_image_editor - Whether to use the image editor
      * @param integer $image_id         - used when the slide in admin is a looped item (i.e. post type)
+     * @param integer $crop_multiply    - Supported values: 1 to 4. Make image 1x, 2x, 3x... size? (Retina display)
      */
-    public function __construct($slide_id, $width, $height, $crop_type, $use_image_editor = true, $image_id = null)
+    public function __construct($slide_id, $width, $height, $crop_type, $use_image_editor = true, $image_id = null, $crop_multiply = 1)
     {
         // There's a chance that $slide_id might be an $image_id 
         // if the user has an older version of the pro plugin (<2.7)
@@ -48,12 +58,12 @@ class MetaSliderImageHelper
 $image_id = $slide_id; 
         }
 
+        $this->crop_multiply = $this->set_crop_multiply($crop_multiply);
         $this->image_id = !is_null($image_id) ? $image_id : get_post_thumbnail_id($slide_id);
         $this->slide_id = $slide_id;
         $this->url = apply_filters("metaslider_attachment_url", wp_get_attachment_url($this->image_id), $this->image_id);
         $this->path = get_attached_file($this->image_id);
-        $this->container_width = $width;
-        $this->container_height = $height;
+        $this->set_container_size($width, $height, $crop_type);
         $this->use_image_editor = $use_image_editor;
         $this->set_crop_type($crop_type);
         $meta = wp_get_attachment_metadata($this->image_id);
@@ -62,7 +72,6 @@ $image_id = $slide_id;
             $this->use_image_editor = false;
         }
     }
-
 
     /**
      * Add in backwards compatibility for old versions of MS Pro
@@ -91,6 +100,43 @@ $image_id = $slide_id;
         }
     }
 
+    /**
+     * Decides if width and height should be multiplied for 1x, 2x, 3x or 4x
+     *
+     * @since 3.93
+     * 
+     * @param integer $width    
+     * @param integer $height
+     * @param string $crop_type Crop type
+     * 
+     * @return void
+     */
+    private function set_container_size($width, $height, $crop_type)
+    {
+        $should_multiply = $this->crop_multiply > 1 && in_array($crop_type, ['true', 'false']);
+    
+        $this->container_width  = $should_multiply && absint($width) > 0 
+                                ? $width * $this->crop_multiply : $width;
+        $this->container_height = $should_multiply && absint($height) > 0 
+                                ? $height * $this->crop_multiply : $height;
+    }
+
+    /**
+     * Validate Crop multiply setting
+     * 
+     * @since 3.93
+     * 
+     * @param integer $crop_multiply
+     * 
+     * @return integer
+     */
+    private function set_crop_multiply($crop_multiply)
+    {
+        $crop_multiply  = absint($crop_multiply);
+        $allowed        = array(1, 2, 3, 4); // Only support 1x, 2x, 3x, 4x
+
+        return in_array($crop_multiply, $allowed) ? $crop_multiply : 1;
+    }
 
     /**
      * Return the crop dimensions.

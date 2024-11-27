@@ -6,6 +6,14 @@
  * The type should be free, premium, or bonus
  */
 return array(
+    'default-base' => array(
+        'folder' => 'default-base',
+        'title' => 'Base',
+        'type' => 'free',
+        'supports' => array('flex'),
+        'tags' => array(),
+        'description' => __('This is the default MetaSlider theme.', 'ml-slider')
+    ),
     'bitono' => array(
         'folder' => 'bitono',
         'title' => 'Bitono',
@@ -28,7 +36,7 @@ return array(
         'type' => 'free',
         'supports' => array( 'flex' ),
         'tags' => array(),
-        'description' => __('Databold is a minimalist theme recommended for Image, External Image and Post feed slides.', 'ml-slider')
+        'description' => __('Databold is a modern, business theme with lots of room for your captions. Databold is recommended for Image, External Image, and Post Feed slides.', 'ml-slider')
     ),
     'draxler' => array(
         'folder' => 'draxler',
@@ -36,7 +44,7 @@ return array(
         'type' => 'free',
         'supports' => array( 'flex' ),
         'tags' => array(),
-        'description' => __('Draxler is a minimalist theme.', 'ml-slider')
+        'description' => __('Draxler is a stylish theme that places the navigation arrows in the top-right corner. There\'s also plenty of room for your captions.', 'ml-slider')
     ),
     'nexus' => array(
         'folder' => 'nexus',
@@ -52,7 +60,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo', 'coin'),
         'tags' => array('light', 'square', 'bold', 'flat'),
-        'description' => __('A simple, slick square design that looks good on darker images.', 'ml-slider'),
+        'description' => __('A standard slideshow layout with a modern design and large, clear arrows.', 'ml-slider'),
         'images' => array('andre-benz-631450-unsplash.jpg', 'etienne-beauregard-riverin-48305-unsplash.jpg', 'wabi-jayme-578762-unsplash.jpg', 'dorigo-wu-14676-unsplash.jpg', 'olav-ahrens-rotne-1087667-unsplash.jpg')
     ),
     'outline' => array(
@@ -79,7 +87,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo', 'coin'),
         'tags' => array('dark', 'minimalist'),
-        'description' => __('A minimalistic, no-frills design that was built to blend in with most themes.', 'ml-slider'),
+        'description' => __('A smart, contemporary design that is built to blend seamlessly into any theme.', 'ml-slider'),
         'images' => array(
             array(
                 'filename' => 'etienne-beauregard-riverin-48305-unsplash.jpg',
@@ -120,7 +128,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo', 'coin'),
         'tags' => array('light', 'bold', 'square'),
-        'description' => __('A futuristic and linear design that goes will with a dark background.', 'ml-slider'),
+        'description' => __('A futuristic and linear design that has a unique, horizontal navigation.', 'ml-slider'),
         'images' => array('artem-bali-680991-unsplash.jpg', 'manki-kim-269196-unsplash.jpg', 'danny-howe-361436-unsplash.jpg', 'victoria-shes-1096105-unsplash.jpg', 'ella-olsson-1094090-unsplash.jpg')
     ),
     'blend' => array(
@@ -129,7 +137,7 @@ return array(
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo', 'coin'),
         'tags' => array('light', 'minimalist', 'lines'),
-        'description' => __('A simple theme that neatly blends into any existing website.', 'ml-slider'),
+        'description' => __('This lightweight design uses numbers for the navigation. The navigation, caption, and arrows are share the same line.', 'ml-slider'),
         'images' => array('manki-kim-269196-unsplash.jpg', 'dorigo-wu-14676-unsplash.jpg', 'artem-bali-680991-unsplash.jpg', 'fabio-mangione-236846-unsplash.jpg', 'olav-ahrens-rotne-1087667-unsplash.jpg')
     ),
     'precognition' => array(

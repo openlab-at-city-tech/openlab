@@ -261,6 +261,10 @@ export default {
 						.attr('data-width', $this.attr('data-width'))
 						.attr('data-height', $this.attr('data-height'))
 				})
+				$('select.cropMultiply').each(function() {
+					let $this = $(this);
+					$this.attr('data-value', $this.val());
+				});
 			})
 		},
 		cancelTour() {
@@ -274,7 +278,7 @@ export default {
 				})
 		},
 		// NOTE: this doesn't permanently delete, just move to trash
-		deleteSlideshow() {
+		deleteSlideshow(event) {
 			Swal.queue([{
 				icon: 'warning',
 				iconHtml: '<div class="dashicons dashicons-warning" style="transform: scale(3.5);"></div>',
@@ -287,10 +291,22 @@ export default {
 				showLoaderOnConfirm: true,
 				allowOutsideClick: () => !Swal.isLoading(),
 				preConfirm: () => {
+					const nonce = event.target.getAttribute('data-nonce');
+
+					if (!nonce) {
+						Swal.insertQueueStep({
+							icon: 'error',
+							title: this.__('Invalid nonce token', 'ml-slider'),
+							confirmButtonText: this.__('OK', 'ml-slider'),
+							text: this.__('Unable to proceed due to invalid nonce token.', 'ml-slider')
+						})
+					}
+
 					// TODO: Refactor to use api object
 					return Axios.post('slideshow/delete', QS.stringify({
 						action: 'ms_delete_slideshow',
-						slideshow_id: this.current.id
+						slideshow_id: this.current.id,
+						nonce: nonce
 					})).then(response => {
 						console.log('MetaSlider:', response.data.data)
 					}).catch(error => {
@@ -310,7 +326,7 @@ export default {
 					// use replace because the resource is deleted
 					window.location.replace(
 						this.current.id 
-							? this.metasliderPage + '&action=delete&slideshows=' + this.current.id
+							? this.metasliderPage + '&action=delete-notify&slideshows=' + this.current.id
 							: this.metasliderPage
 					);
 				}

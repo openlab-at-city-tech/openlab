@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: Plugins - Slider, Gallery, and Carousel by MetaSlider "
 "&#8211; Responsive WordPress Slideshows - Stable (latest release)\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/project\n"
-"POT-Creation-Date: 2024-06-13T13:40:12+00:00\n"
-"PO-Revision-Date: 2024-06-16 00:41+0200\n"
+"POT-Creation-Date: 2024-10-23T13:53:21+00:00\n"
+"PO-Revision-Date: 2024-10-23 18:51+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: fr\n"
@@ -37,7 +37,7 @@ msgstr ""
 "MetaSlider vous permet de créer un magnifique diaporama, un carrousel ou une "
 "galerie sur votre site WordPress."
 
-#: admin/Notices.php:95
+#: admin/Notices.php:98
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
 msgid ""
 "Like MetaSlider? Please help us by giving a positive review at WordPress.org"
@@ -45,14 +45,14 @@ msgstr ""
 "Vous aimez MetaSlider ? Aidez-nous en donnant un avis positif sur WordPress."
 "org"
 
-#: admin/Notices.php:105
+#: admin/Notices.php:108
 msgid ""
 "Spice up your site with animated layers and video slides with MetaSlider Pro"
 msgstr ""
 "Ajoutez de la vie à votre site grâce à des couches animées et des "
 "diapositives vidéo avec MetaSlider Pro."
 
-#: admin/Notices.php:116
+#: admin/Notices.php:119
 msgid ""
 "Increase your revenue and conversion with video slides and many more "
 "MetaSlider Pro features"
@@ -60,134 +60,134 @@ msgstr ""
 "Augmentez vos revenus et vos conversions grâce aux diapositives vidéo et "
 "bien d’autres fonctionnalités de MetaSlider Pro"
 
-#: admin/Notices.php:127
+#: admin/Notices.php:130
 msgid ""
 "Can you translate? Want to improve MetaSlider for speakers of your language?"
 msgstr ""
 "Pouvez-vous traduire ? Vous souhaitez améliorer MetaSlider pour les "
 "internautes parlant votre langue ?"
 
-#: admin/Notices.php:317
+#: admin/Notices.php:320
 msgid "weeks"
 msgstr "semaines"
 
-#: admin/Notices.php:337
+#: admin/Notices.php:340
 msgid "Let's Start &rarr;"
 msgstr "Commençons &rarr;"
 
-#: admin/Notices.php:338
+#: admin/Notices.php:341
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
 msgid "Review MetaSlider &rarr;"
 msgstr "Avis sur MetaSlider &rarr;"
 
-#: admin/Notices.php:339
+#: admin/Notices.php:342
 msgid "Find out more &rarr;"
 msgstr "En savoir plus →"
 
-#: admin/Notices.php:340
+#: admin/Notices.php:343
 msgid "Get MetaSlider Pro &rarr;"
 msgstr "Obtenez MetaSlider Pro &rarr;"
 
-#: admin/Notices.php:341
+#: admin/Notices.php:344
 msgid "Sign up &rarr;"
 msgstr "S’inscrire &rarr;"
 
-#: admin/Notices.php:342
+#: admin/Notices.php:345
 msgid "Go there &rarr;"
 msgstr "Allez-y &rarr;"
 
-#: admin/Notices.php:344
+#: admin/Notices.php:347
 msgid "Read more"
 msgstr "En savoir plus"
 
-#: admin/Notices.php:358 admin/support/Analytics.php:66
-#: inc/slide/metaslide.class.php:141 inc/slide/metaslide.image.class.php:124
-#: inc/slide/metaslide.image.class.php:228
-#: inc/slide/metaslide.image.class.php:349 ml-slider.php:870 ml-slider.php:952
-#: ml-slider.php:1064 ml-slider.php:2509 ml-slider.php:2550
+#: admin/Notices.php:361 admin/support/Analytics.php:66
+#: inc/slide/metaslide.class.php:141 inc/slide/metaslide.image.class.php:125
+#: inc/slide/metaslide.image.class.php:229
+#: inc/slide/metaslide.image.class.php:350 ml-slider.php:821 ml-slider.php:903
+#: ml-slider.php:1015 ml-slider.php:2508 ml-slider.php:2549
 msgid "The security check failed. Please refresh the page and try again."
 msgstr ""
 "Le contrôle de sécurité a échoué. Veuillez recharger la page et réessayer."
 
-#: admin/Notices.php:366 admin/routes/api.php:139
-#: inc/slide/metaslide.class.php:149 inc/slide/metaslide.image.class.php:132
-#: inc/slide/metaslide.image.class.php:151
-#: inc/slide/metaslide.image.class.php:236 ml-slider.php:878 ml-slider.php:960
-#: ml-slider.php:1072 ml-slider.php:2517 ml-slider.php:2558
+#: admin/Notices.php:369 admin/routes/api.php:140
+#: inc/slide/metaslide.class.php:149 inc/slide/metaslide.image.class.php:133
+#: inc/slide/metaslide.image.class.php:152
+#: inc/slide/metaslide.image.class.php:237 ml-slider.php:829 ml-slider.php:911
+#: ml-slider.php:1023 ml-slider.php:2516 ml-slider.php:2557
 msgid "Access denied. Sorry, you do not have permission to complete this task."
 msgstr ""
 "Accès refusé. Désolé, vous n’avez pas le droit de terminer cette tâche."
 
-#: admin/Notices.php:374 inc/slide/metaslide.class.php:158
-#: inc/slide/metaslide.image.class.php:141
-#: inc/slide/metaslide.image.class.php:245
-#: inc/slide/metaslide.image.class.php:367 ml-slider.php:887 ml-slider.php:969
-#: ml-slider.php:1081 ml-slider.php:2526 ml-slider.php:2567
+#: admin/Notices.php:377 inc/slide/metaslide.class.php:158
+#: inc/slide/metaslide.image.class.php:142
+#: inc/slide/metaslide.image.class.php:246
+#: inc/slide/metaslide.image.class.php:368 ml-slider.php:838 ml-slider.php:920
+#: ml-slider.php:1032 ml-slider.php:2525 ml-slider.php:2566
 msgid "Bad request"
 msgstr "Requête incorrecte"
 
-#: admin/Notices.php:382
+#: admin/Notices.php:385
 msgid "This item does not exist. Please refresh the page and try again."
 msgstr "Cet élément n’existe pas. Veuillez recharger la page et réessayer."
 
-#: admin/Notices.php:395
+#: admin/Notices.php:398
 msgid "The option was successfully updated"
 msgstr "L’option a été mise à jour avec succès"
 
-#: admin/Notices.php:461
+#: admin/Notices.php:464
 msgid "The requested data does not exist."
 msgstr "Les données demandées n’existent pas."
 
-#: admin/Notices.php:486
+#: admin/Notices.php:489
 msgid "The attempt to update the option failed."
 msgstr "La tentative de mise à jour de l’option a échoué."
 
-#: admin/Pages.php:130
+#: admin/Pages.php:136
 msgid "URL"
 msgstr "URL"
 
-#: admin/Pages.php:131 admin/assets/dist/js/app.js:2
+#: admin/Pages.php:137 admin/assets/dist/js/app.js:2
 msgid "Caption"
 msgstr "Légende"
 
-#: admin/Pages.php:132
+#: admin/Pages.php:138
 msgid "New Window"
 msgstr "Nouvelle fenêtre"
 
-#: admin/Pages.php:133
+#: admin/Pages.php:139
 msgid "Please confirm that you would like to delete this slideshow."
 msgstr "Veuillez confirmer que vous souhaitez supprimer ce diaporama."
 
-#: admin/Pages.php:134
+#: admin/Pages.php:140
 msgid "Undo"
 msgstr "Annuler"
 
-#: admin/Pages.php:135
+#: admin/Pages.php:141
 msgid "Slide restored"
 msgstr "Diapositive restaurée"
 
-#: admin/Pages.php:136
+#: admin/Pages.php:142
 msgid "Slide deleted"
 msgstr "Diapositive supprimée"
 
-#: admin/Pages.php:137 admin/assets/dist/js/app.js:2
+#: admin/Pages.php:143 admin/assets/dist/js/app.js:2
 #: admin/assets/js/app/globals.js:105
 msgid "Success"
 msgstr "Succès"
 
-#: admin/Pages.php:138
+#: admin/Pages.php:144
 msgid "Item was copied to your clipboard"
 msgstr "L’élément a été copié dans votre presse-papiers"
 
-#: admin/Pages.php:139
+#: admin/Pages.php:145
 msgid "Press to undo"
 msgstr "Cliquez pour annuler"
 
-#: admin/Pages.php:141
+#: admin/Pages.php:147
 msgid "Select replacement image"
 msgstr "Sélectionnez l’image de remplacement"
 
-#: admin/Pages.php:151
+#: admin/Pages.php:157
 msgid ""
 "Caution: This setting is for advanced developers only. If you're unsure, "
 "leave it checked."
@@ -195,47 +195,47 @@ msgstr ""
 "Attention : ce réglage est uniquement réservé aux développeurs. Si vous "
 "n’êtes pas sur(e), laissez-le coché."
 
-#: admin/routes/api.php:419
+#: admin/routes/api.php:455
 msgid "The request format was not valid."
 msgstr "Le format de la demande n’était pas valide."
 
-#: admin/routes/api.php:427 admin/routes/api.php:549
+#: admin/routes/api.php:463 admin/routes/api.php:595
 msgid "This slideshow is no longer available."
 msgstr "Ce diaporama n’est plus disponible."
 
-#: admin/routes/api.php:514
+#: admin/routes/api.php:550
 msgid "Nothing to import."
 msgstr "Il y a rien à importer."
 
-#: admin/routes/api.php:556
+#: admin/routes/api.php:602
 msgid "This was not a slideshow, so we cannot delete it."
 msgstr "Ce n’était pas un diaporama, nous ne pouvons donc pas le supprimer."
 
-#: admin/routes/api.php:769
+#: admin/routes/api.php:815
 msgid "This was not a slideshow, so we cannot update the setting."
 msgstr ""
 "Il ne s’agissait pas d’un diaporama, nous ne pouvons donc pas mettre à jour "
 "le réglage."
 
-#: admin/routes/api.php:878
+#: admin/routes/api.php:924
 msgid "The title cannot be empty."
 msgstr "Le titre ne peut pas être vide."
 
-#: admin/routes/api.php:882 admin/routes/api.php:1069
+#: admin/routes/api.php:928 admin/routes/api.php:1115
 msgid "The field (%s) cannot be empty"
 msgstr "Le champ (%s) ne peut pas être vide"
 
-#: admin/routes/api.php:1059 admin/assets/dist/js/app.js:2
+#: admin/routes/api.php:1105 admin/assets/dist/js/app.js:2
 msgid "Maximum Number of Custom Field in Post Feed Sliders"
 msgstr ""
 "Nombre maximum de champs personnalisés dans les diaporamas du flux de "
 "publications"
 
-#: admin/routes/api.php:1165
+#: admin/routes/api.php:1211
 msgid "Import slug not found"
 msgstr "Le slug d’importation n’a pas été trouvé"
 
-#: admin/routes/api.php:1181
+#: admin/routes/api.php:1227
 msgid "Import data could not be processed"
 msgstr "Les données d’importation n’ont pas pu être traitées"
 
@@ -247,12 +247,11 @@ msgstr "Nous n’avons pu trouver aucune image à importer."
 msgid "New Slideshow"
 msgstr "Nouveau diaporama"
 
-#: admin/slideshows/Settings.php:85 inc/slider/metaslider.class.php:143
+#: admin/slideshows/Settings.php:85 inc/slider/metaslider.class.php:127
 msgid "Previous"
 msgstr "Précédent"
 
-#: admin/slideshows/Settings.php:86 inc/slider/metaslider.class.php:144
-#: themes/radix/v1.0.0/theme.php:40
+#: admin/slideshows/Settings.php:86 inc/slider/metaslider.class.php:128
 msgid "Next"
 msgstr "Suivante"
 
@@ -260,7 +259,7 @@ msgstr "Suivante"
 msgid "No themes found."
 msgstr "Aucun thème trouvé."
 
-#: admin/slideshows/Themes.php:277
+#: admin/slideshows/Themes.php:331
 msgid ""
 "We removed your selected theme as it could not be found. Was the folder "
 "deleted?"
@@ -268,62 +267,66 @@ msgstr ""
 "Nous avons retiré le thème que vous avez sélectionné car il n’a pu être "
 "trouvé. Son dossier a-t-il est supprimé ?"
 
-#: admin/Table.php:38
+#: admin/Table.php:99
 msgid ""
 "You don't have any slideshows yet. Click %shere%s to create a new slideshow."
 msgstr ""
 "Vous n’avez pas encore de diaporama. Cliquez sur %sici%s pour créer un "
 "nouveau diaporama."
 
-#: admin/Table.php:55
+#: admin/Table.php:116
 msgid "Published"
 msgstr "Publié"
 
-#: admin/Table.php:59 admin/Table.php:87 admin/Table.php:337
+#: admin/Table.php:120 admin/Table.php:149 admin/Table.php:292
 msgid "Trash"
 msgstr "Corbeille"
 
-#: admin/Table.php:69 admin/views/pages/parts/toolbar.php:44
+#: admin/Table.php:144 admin/Table.php:277 inc/slide/metaslide.class.php:406
+msgid "Restore"
+msgstr "Restaurer"
+
+#: admin/Table.php:145 admin/Table.php:278 inc/slide/metaslide.class.php:416
+msgid "Delete Permanently"
+msgstr "Supprimer définitivement"
+
+#: admin/Table.php:160 admin/views/pages/parts/toolbar.php:44
 #: admin/assets/dist/js/app.js:2
 msgid "Preview"
 msgstr "Prévisualisation"
 
-#: admin/Table.php:70 admin/assets/dist/js/app.js:2
+#: admin/Table.php:161 admin/assets/dist/js/app.js:2
 msgid "Title"
 msgstr "Titre"
 
-#: admin/Table.php:71
+#: admin/Table.php:162
+msgid "Type of Slides"
+msgstr "Type de diapositives"
+
+#: admin/Table.php:163
+msgid "Number of Slides"
+msgstr "Nombre de diapositives"
+
+#: admin/Table.php:164
 msgid "Created"
 msgstr "Créé"
 
-#: admin/Table.php:72 admin/views/pages/parts/slider-settings-legacy.php:946
-#: admin/views/pages/parts/slider-settings.php:747
+#: admin/Table.php:165 admin/views/pages/parts/slider-settings-legacy.php:962
+#: admin/views/pages/parts/slider-settings.php:763
 msgid "Shortcode"
 msgstr "Code court"
 
-#: admin/Table.php:82 admin/Table.php:322 inc/slide/metaslide.class.php:406
-msgid "Restore"
-msgstr "Restaurer"
-
-#: admin/Table.php:83 admin/Table.php:323 inc/slide/metaslide.class.php:416
-msgid "Delete Permanently"
-msgstr "Supprimer définitivement"
-
-#: admin/Table.php:131 admin/views/pages/parts/shortcode.php:11
-msgid "Click to copy shortcode."
-msgstr "Cliquez pour copier le code court"
-
-#: admin/Table.php:336
+#: admin/Table.php:291
 msgid "Edit"
 msgstr "Modifier"
+
+#: admin/Table.php:323 admin/views/pages/parts/shortcode.php:11
+msgid "Click to copy shortcode."
+msgstr "Cliquez pour copier le code court"
 
 #: admin/views/notices/header-notice.php:8
 msgid "Logo"
 msgstr "Logo"
-
-#: admin/views/notices/header-notice.php:21
-msgid "Dismiss"
-msgstr "Ignorer"
 
 #: admin/views/pages/dashboard.php:8 admin/assets/dist/js/app.js:2
 msgid "Slideshows"
@@ -333,11 +336,11 @@ msgstr "Diaporamas"
 msgid "Add New"
 msgstr "Ajouter un nouveau"
 
-#: admin/views/pages/dashboard.php:28
+#: admin/views/pages/dashboard.php:30
 msgid "Slideshows permanently deleted."
 msgstr "Les diaporamas sont définitivement supprimés."
 
-#: admin/views/pages/dashboard.php:36
+#: admin/views/pages/dashboard.php:38
 msgid "Search"
 msgstr "Rechercher"
 
@@ -373,7 +376,7 @@ msgid "Main Options"
 msgstr "Options principales"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:30
-#: admin/views/pages/parts/slider-settings-legacy.php:676
+#: admin/views/pages/parts/slider-settings-legacy.php:692
 #: admin/views/pages/parts/slider-settings.php:34
 msgid "Width"
 msgstr "Largeur"
@@ -387,15 +390,15 @@ msgstr "Largeur du diaporama"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:33
 #: admin/views/pages/parts/slider-settings-legacy.php:46
-#: admin/views/pages/parts/slider-settings-legacy.php:546
+#: admin/views/pages/parts/slider-settings-legacy.php:562
 #: admin/views/pages/parts/slider-settings.php:37
 #: admin/views/pages/parts/slider-settings.php:50
-#: admin/views/pages/parts/slider-settings.php:475
+#: admin/views/pages/parts/slider-settings.php:491
 msgid "px"
 msgstr "px"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:43
-#: admin/views/pages/parts/slider-settings-legacy.php:692
+#: admin/views/pages/parts/slider-settings-legacy.php:708
 #: admin/views/pages/parts/slider-settings.php:47
 msgid "Height"
 msgstr "Hauteur"
@@ -416,8 +419,8 @@ msgid "This animation is used when changing slides."
 msgstr "Cette animation est utilisée lors du changement de diapositive."
 
 #: admin/views/pages/parts/slider-settings-legacy.php:68
-#: admin/views/pages/parts/slider-settings-legacy.php:564
-#: admin/views/pages/parts/slider-settings.php:493
+#: admin/views/pages/parts/slider-settings-legacy.php:580
+#: admin/views/pages/parts/slider-settings.php:509
 msgid "Random"
 msgstr "Aléatoire"
 
@@ -497,72 +500,95 @@ msgstr "Défilement"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:147
 #: admin/views/pages/parts/slider-settings.php:83
+#: themes/bitono/customize.php:10 themes/clarity/customize.php:10
+#: themes/databold/customize.php:10 themes/draxler/customize.php:10
+#: themes/nexus/customize.php:10
 msgid "Arrows"
 msgstr "Flèches"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:152
-#: admin/views/pages/parts/slider-settings.php:88
+#: admin/views/pages/parts/slider-settings-legacy.php:150
+#: admin/views/pages/parts/slider-settings.php:86
 msgid "Show the Previous / Next arrows."
 msgstr "Afficher les flèches précedent/suivant."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:166
-#: admin/views/pages/parts/slider-settings.php:102
+#: admin/views/pages/parts/slider-settings-legacy.php:156
+#: admin/views/pages/parts/slider-settings-legacy.php:187
+#: admin/views/pages/parts/slider-settings.php:92
+#: admin/views/pages/parts/slider-settings.php:123
+#: admin/assets/dist/js/app.js:2
+msgid "Hidden"
+msgstr "Masqué"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:159
+#: admin/views/pages/parts/slider-settings.php:95
+msgid "Visible"
+msgstr "Visible"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:162
+#: admin/views/pages/parts/slider-settings.php:98
+msgid "Visible On Hover"
+msgstr "Visible au survol"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:178
+#: admin/views/pages/parts/slider-settings.php:114
+#: themes/bitono/customize.php:24 themes/clarity/customize.php:38
+#: themes/databold/customize.php:24 themes/draxler/customize.php:24
+#: themes/nexus/customize.php:24 admin/assets/dist/js/app.js:2
 msgid "Navigation"
 msgstr "Navigation"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:169
-#: admin/views/pages/parts/slider-settings.php:105
+#: admin/views/pages/parts/slider-settings-legacy.php:181
+#: admin/views/pages/parts/slider-settings.php:117
 msgid "Show navigation options so that users can browse the slides."
 msgstr ""
 "Afficher les options de navigation afin que les utilisateurs/utilisatrices "
 "puissent parcourir les diapositives."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:175
-#: admin/views/pages/parts/slider-settings.php:111
-msgid "Hidden"
-msgstr "Masqué"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:178
-#: admin/views/pages/parts/slider-settings.php:114
+#: admin/views/pages/parts/slider-settings-legacy.php:190
+#: admin/views/pages/parts/slider-settings.php:126
+#: admin/assets/dist/js/app.js:2
 msgid "Dots"
 msgstr "Points"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:181
+#: admin/views/pages/parts/slider-settings-legacy.php:193
+#: admin/assets/dist/js/app.js:2
 msgid "Thumbnail"
 msgstr "Miniature"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:185
+#: admin/views/pages/parts/slider-settings-legacy.php:197
+#: admin/assets/dist/js/app.js:2
 msgid "Filmstrip"
 msgstr "Bande de film"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:211
-#: admin/views/pages/parts/slider-settings.php:147
-msgid "100% width"
-msgstr "100% de largeur"
+#: admin/views/pages/parts/slider-settings-legacy.php:223
+#: admin/views/pages/parts/slider-settings.php:159
+#: admin/assets/dist/js/app.js:2
+msgid "100% Width"
+msgstr "Largeur 100%"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:216
-#: admin/views/pages/parts/slider-settings.php:152
-msgid "Stretch the slideshow output to fill it's parent container."
+#: admin/views/pages/parts/slider-settings-legacy.php:228
+#: admin/views/pages/parts/slider-settings.php:164
+msgid "Stretch the slideshow output to fill its parent container."
 msgstr ""
 "Étirer le diaporama pour qu’il remplisse la largeur de son conteneur parent."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:238
-#: admin/views/pages/parts/slider-settings.php:168
+#: admin/views/pages/parts/slider-settings-legacy.php:250
+#: admin/views/pages/parts/slider-settings.php:180
 msgid "Theme"
 msgstr "Thème"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:273
-#: admin/views/pages/parts/slider-settings.php:202
+#: admin/views/pages/parts/slider-settings-legacy.php:285
+#: admin/views/pages/parts/slider-settings.php:214
 msgid "Mobile Options"
 msgstr "Options mobile"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:278
-#: admin/views/pages/parts/slider-settings.php:207
-msgid "Hide arrows on"
+#: admin/views/pages/parts/slider-settings-legacy.php:290
+#: admin/views/pages/parts/slider-settings.php:219
+msgid "Hide Arrows On"
 msgstr "Masquer les flèches sur"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:283
-#: admin/views/pages/parts/slider-settings.php:212
+#: admin/views/pages/parts/slider-settings-legacy.php:295
+#: admin/views/pages/parts/slider-settings.php:224
 msgid ""
 "When enabled this setting will hide the arrows on screen widths less than "
 "%spx."
@@ -570,10 +596,10 @@ msgstr ""
 "Si activé, ce réglage masque les flèches lorsque la largeur de l’écran est "
 "inférieure à %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:293
-#: admin/views/pages/parts/slider-settings-legacy.php:304
-#: admin/views/pages/parts/slider-settings.php:222
-#: admin/views/pages/parts/slider-settings.php:233
+#: admin/views/pages/parts/slider-settings-legacy.php:305
+#: admin/views/pages/parts/slider-settings-legacy.php:316
+#: admin/views/pages/parts/slider-settings.php:234
+#: admin/views/pages/parts/slider-settings.php:245
 msgid ""
 "When enabled this setting will hide the arrows on screen widths of %1$spx to "
 "%2$spx."
@@ -581,8 +607,8 @@ msgstr ""
 "Si activé, ce réglage masque les flèches sur les écrans d’une largeur "
 "comprise entre %1$spx et %2$spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:315
-#: admin/views/pages/parts/slider-settings.php:244
+#: admin/views/pages/parts/slider-settings-legacy.php:327
+#: admin/views/pages/parts/slider-settings.php:256
 msgid ""
 "When enabled this setting will hide the arrows on screen widths equal to or "
 "greater than %spx."
@@ -590,13 +616,13 @@ msgstr ""
 "Si activé, ce réglage masque les flèches lorsque la largeur de l’écran est "
 "supérieure ou égale à %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:327
-#: admin/views/pages/parts/slider-settings.php:256
-msgid "Hide navigation on"
+#: admin/views/pages/parts/slider-settings-legacy.php:339
+#: admin/views/pages/parts/slider-settings.php:268
+msgid "Hide Navigation On"
 msgstr "Masquer la navigation sur"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:332
-#: admin/views/pages/parts/slider-settings.php:261
+#: admin/views/pages/parts/slider-settings-legacy.php:344
+#: admin/views/pages/parts/slider-settings.php:273
 msgid ""
 "When enabled this setting will hide the navigation on screen widths less "
 "than %spx."
@@ -604,10 +630,10 @@ msgstr ""
 "Si activé, ce réglage masque la navigation lorsque la largeur de l’écran est "
 "inférieure à %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:342
-#: admin/views/pages/parts/slider-settings-legacy.php:353
-#: admin/views/pages/parts/slider-settings.php:271
-#: admin/views/pages/parts/slider-settings.php:282
+#: admin/views/pages/parts/slider-settings-legacy.php:354
+#: admin/views/pages/parts/slider-settings-legacy.php:365
+#: admin/views/pages/parts/slider-settings.php:283
+#: admin/views/pages/parts/slider-settings.php:294
 msgid ""
 "When enabled this setting will hide the navigation on screen widths of "
 "%1$spx to %2$spx."
@@ -615,8 +641,8 @@ msgstr ""
 "Si activé, ce réglage masque la navigation sur les écrans d’une largeur "
 "comprise entre %1$spx et %2$spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:364
-#: admin/views/pages/parts/slider-settings.php:293
+#: admin/views/pages/parts/slider-settings-legacy.php:376
+#: admin/views/pages/parts/slider-settings.php:305
 msgid ""
 "When enabled this setting will hide the navigation on screen widths equal to "
 "or greater than %spx."
@@ -624,105 +650,105 @@ msgstr ""
 "Si activé, ce réglage masque la navigation lorsque la largeur de l’écran est "
 "égale ou supérieure à %spx."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:389
-#: admin/views/pages/parts/slider-settings.php:318
+#: admin/views/pages/parts/slider-settings-legacy.php:401
+#: admin/views/pages/parts/slider-settings.php:330
 msgid "Advanced Options"
 msgstr "Réglages avancés"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:394
-#: admin/views/pages/parts/slider-settings.php:323
-msgid "Center align"
-msgstr "Alignement central"
+#: admin/views/pages/parts/slider-settings-legacy.php:406
+#: admin/views/pages/parts/slider-settings.php:335
+msgid "Center Align"
+msgstr "Aligner au centre"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:399
-#: admin/views/pages/parts/slider-settings.php:328
+#: admin/views/pages/parts/slider-settings-legacy.php:411
+#: admin/views/pages/parts/slider-settings.php:340
 msgid "Center align the slideshow in the available space on your website."
 msgstr "Aligner le diaporama au centre de l’espace disponible sur votre site."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:407
-#: admin/views/pages/parts/slider-settings.php:336
-msgid "Auto play"
-msgstr "Lecture auto"
+#: admin/views/pages/parts/slider-settings-legacy.php:419
+#: admin/views/pages/parts/slider-settings.php:348
+#: admin/assets/dist/js/app.js:2
+msgid "Auto Play"
+msgstr "Lecture automatique"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:412
-#: admin/views/pages/parts/slider-settings.php:341
+#: admin/views/pages/parts/slider-settings-legacy.php:424
+#: admin/views/pages/parts/slider-settings.php:353
 msgid "Transition between slides automatically."
 msgstr "Transition automatique entre les diapositives."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:420
-#: admin/views/pages/parts/slider-settings.php:349
+#: admin/views/pages/parts/slider-settings-legacy.php:432
+#: admin/views/pages/parts/slider-settings.php:361
 msgid "Play / Pause Button"
-msgstr "Bouton Lecture/pause"
+msgstr "Bouton lecture/pause"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:425
-#: admin/views/pages/parts/slider-settings.php:354
+#: admin/views/pages/parts/slider-settings-legacy.php:437
+#: admin/views/pages/parts/slider-settings.php:366
 msgid "This allows user to pause or resume Auto Play on the slideshow."
 msgstr ""
 "Ceci permet à l’utilisateur/utilisatrice de mettre en pause ou de reprendre "
 "la lecture automatique du diaporama."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:433
-#: admin/views/pages/parts/slider-settings.php:362
+#: admin/views/pages/parts/slider-settings-legacy.php:445
+#: admin/views/pages/parts/slider-settings.php:374
 msgid "Loop"
 msgstr "Boucle"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:435
-#: admin/views/pages/parts/slider-settings.php:364
+#: admin/views/pages/parts/slider-settings-legacy.php:447
+#: admin/views/pages/parts/slider-settings.php:376
 msgid ""
 "If you choose \"Loop continuously\", the slides will loop infinitely. If you "
-"choose \"Stop on first slide\", the slideshow will stop on the first slide "
-"after showing all the items. If you choose \"Stop on last slide\", the "
-"slides will stop on the last slide."
+"choose \"Stop on first slide after looping\", the slideshow will stop on the "
+"first slide after showing all the items. If you choose \"Stop on last "
+"slide\", the slides will stop on the last slide."
 msgstr ""
-"Si vous choisissez « En continu », les diapositives tourneront en boucle à "
-"l’infini. Si vous choisissez « Arrêter à la première diapositive », le "
-"diaporama s’arrêtera à la première diapositive après avoir montré tous les "
-"éléments. Si vous choisissez « Arrêter à la dernière diapositive », le "
-"diaporama s’arrêtera à la dernière diapositive."
+"Si vous choisissez « Boucle en continu », les diapositives tourneront en "
+"boucle à l’infini. Si vous choisissez « Arrêter à la première diapositive "
+"après la boucle », le diaporama s’arrêtera à la première diapositive après "
+"avoir montré tous les éléments. Si vous choisissez « Arrêter à la dernière "
+"diapositive », le diaporama s’arrêtera à la dernière diapositive."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:438
-#: admin/views/pages/parts/slider-settings.php:367
-msgid "Loop continuously"
+#: admin/views/pages/parts/slider-settings-legacy.php:450
+#: admin/views/pages/parts/slider-settings.php:379
+msgid "Loop Continuously"
 msgstr "Boucle en continu"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:439
-#: admin/views/pages/parts/slider-settings.php:368
-msgid "Stop on last slide"
-msgstr "Arrêter sur la dernière diapositive"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:440
-#: admin/views/pages/parts/slider-settings.php:369
-#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:489
-msgid "Stop on first slide"
-msgstr "Arrêter sur la première diapositive"
-
-#: admin/views/pages/parts/slider-settings-legacy.php:446
-#: admin/views/pages/parts/slider-settings.php:375
-msgid "Image Crop"
-msgstr "Recadrage de l’image"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:451
 #: admin/views/pages/parts/slider-settings.php:380
-msgid "Smart Crop"
-msgstr "Recadrage intelligent"
+msgid "Stop On Last Slide"
+msgstr "Arrêter à la dernière diapositive"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:452
+#: admin/views/pages/parts/slider-settings.php:381
+msgid "Stop On First Slide After Looping"
+msgstr "Arrêter à la première diapositive après la boucle"
 
 #: admin/views/pages/parts/slider-settings-legacy.php:458
 #: admin/views/pages/parts/slider-settings.php:387
+msgid "Image Crop"
+msgstr "Recadrage de l’image"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:463
+#: admin/views/pages/parts/slider-settings.php:392
+msgid "Smart Crop"
+msgstr "Recadrage intelligent"
+
+#: admin/views/pages/parts/slider-settings-legacy.php:470
+#: admin/views/pages/parts/slider-settings.php:399
 msgid "Standard"
 msgstr "Standard"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:465
-#: admin/views/pages/parts/slider-settings.php:394
+#: admin/views/pages/parts/slider-settings-legacy.php:477
+#: admin/views/pages/parts/slider-settings.php:406
 msgid "Disabled"
 msgstr "Désactivé"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:472
-#: admin/views/pages/parts/slider-settings.php:401
+#: admin/views/pages/parts/slider-settings-legacy.php:484
+#: admin/views/pages/parts/slider-settings.php:413
 msgid "Disabled (Smart Pad)"
 msgstr "Désactivé (Smart Pad)"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:479
-#: admin/views/pages/parts/slider-settings.php:408
+#: admin/views/pages/parts/slider-settings-legacy.php:491
+#: admin/views/pages/parts/slider-settings.php:420
 msgid ""
 "Smart Crop ensures your responsive slides are cropped to a ratio that "
 "results in a consistent slideshow size."
@@ -731,23 +757,23 @@ msgstr ""
 "recadrés à un ratio qui aboutit à une taille compatible avec celle du "
 "diaporama."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:487
-#: admin/views/pages/parts/slider-settings.php:416
+#: admin/views/pages/parts/slider-settings-legacy.php:499
+#: admin/views/pages/parts/slider-settings.php:428
 msgid "Smooth Height"
 msgstr "Hauteur douce"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:492
-#: admin/views/pages/parts/slider-settings.php:421
+#: admin/views/pages/parts/slider-settings-legacy.php:504
+#: admin/views/pages/parts/slider-settings.php:433
 msgid "Allow navigation to follow the slide's height smoothly."
 msgstr ""
 "Autoriser la navigation à suivre la hauteur de la diapositive en douceur."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:500
-#: admin/views/pages/parts/slider-settings.php:429
-msgid "Carousel mode"
+#: admin/views/pages/parts/slider-settings-legacy.php:512
+#: admin/views/pages/parts/slider-settings.php:441
+msgid "Carousel Mode"
 msgstr "Mode carrousel"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:505
+#: admin/views/pages/parts/slider-settings-legacy.php:517
 msgid ""
 "Display multiple slides at once. Slideshow output will be 100% wide. "
 "Carousel Mode only uses the \"Slide\" Effect."
@@ -755,13 +781,13 @@ msgstr ""
 "Afficher plusieurs diapositives à la fois. La largeur du diaporama sera de "
 "100 %. Le mode carrousel n’utilise que l’effet « Glisser »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:523
-#: admin/views/pages/parts/slider-settings.php:452
+#: admin/views/pages/parts/slider-settings-legacy.php:539
+#: admin/views/pages/parts/slider-settings.php:468
 msgid "Loop Carousel Continuously"
 msgstr "Boucle du carrousel en continu"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:528
-#: admin/views/pages/parts/slider-settings.php:457
+#: admin/views/pages/parts/slider-settings-legacy.php:544
+#: admin/views/pages/parts/slider-settings.php:473
 msgid ""
 "Infinite loop of slides when Carousel Mode is enabled. This option disables "
 "arrows and navigation."
@@ -769,23 +795,23 @@ msgstr ""
 "Boucle infinie de diapositives lorsque le mode « Carrousel » est activé. "
 "Cette option désactive les flèches et la navigation."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:539
-#: admin/views/pages/parts/slider-settings.php:468
-msgid "Carousel margin"
+#: admin/views/pages/parts/slider-settings-legacy.php:555
+#: admin/views/pages/parts/slider-settings.php:484
+msgid "Carousel Margin"
 msgstr "Marge du carrousel"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:542
-#: admin/views/pages/parts/slider-settings.php:471
+#: admin/views/pages/parts/slider-settings-legacy.php:558
+#: admin/views/pages/parts/slider-settings.php:487
 msgid "Pixel margin between slides in carousel."
 msgstr "Marge en pixels entre les diapositives dans le carrousel."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:551
-#: admin/views/pages/parts/slider-settings.php:480
-msgid "Fade in"
+#: admin/views/pages/parts/slider-settings-legacy.php:567
+#: admin/views/pages/parts/slider-settings.php:496
+msgid "Fade In"
 msgstr "Fondu en avant"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:556
-#: admin/views/pages/parts/slider-settings.php:485
+#: admin/views/pages/parts/slider-settings-legacy.php:572
+#: admin/views/pages/parts/slider-settings.php:501
 msgid ""
 "This adds an animation when the slideshow loads. It only uses the \"Fade\" "
 "transition effect."
@@ -793,18 +819,18 @@ msgstr ""
 "Ceci ajoute une animation au chargement du diaporama. Il n’utilise que "
 "l’effet de transition « Fondu »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:569
-#: admin/views/pages/parts/slider-settings.php:498
-msgid "Randomise the order of the slides."
+#: admin/views/pages/parts/slider-settings-legacy.php:585
+#: admin/views/pages/parts/slider-settings.php:514
+msgid "Randomize the order of the slides."
 msgstr "Randomiser l’ordre des diapositives."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:577
-#: admin/views/pages/parts/slider-settings.php:506
-msgid "Hover pause"
+#: admin/views/pages/parts/slider-settings-legacy.php:593
+#: admin/views/pages/parts/slider-settings.php:522
+msgid "Hover Pause"
 msgstr "Pause au survol"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:582
-#: admin/views/pages/parts/slider-settings.php:511
+#: admin/views/pages/parts/slider-settings-legacy.php:598
+#: admin/views/pages/parts/slider-settings.php:527
 msgid ""
 "Pause the slideshow when hovering over slider, then resume when no longer "
 "hovering."
@@ -812,55 +838,55 @@ msgstr ""
 "Mettre le diaporama en pause au survol, puis reprendre lorsqu’il ne l’est "
 "plus."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:590
-#: admin/views/pages/parts/slider-settings.php:519
+#: admin/views/pages/parts/slider-settings-legacy.php:606
+#: admin/views/pages/parts/slider-settings.php:535
 msgid "Reverse"
 msgstr "Inverser"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:595
-#: admin/views/pages/parts/slider-settings.php:524
+#: admin/views/pages/parts/slider-settings-legacy.php:611
+#: admin/views/pages/parts/slider-settings.php:540
 msgid "Reverse the animation direction."
 msgstr "Inverser le sens de l’animation."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:603
-#: admin/views/pages/parts/slider-settings.php:532
+#: admin/views/pages/parts/slider-settings-legacy.php:619
+#: admin/views/pages/parts/slider-settings.php:548
 msgid "Touch Swipe"
 msgstr "Toucher balayage"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:608
-#: admin/views/pages/parts/slider-settings.php:537
+#: admin/views/pages/parts/slider-settings-legacy.php:624
+#: admin/views/pages/parts/slider-settings.php:553
 msgid "Allow touch swipe navigation of the slider on touch-enabled devices."
 msgstr ""
 "Permettre la navigation par balayage tactile du diaporama sur les appareils "
 "dotés d’un écran tactile."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:621
-#: admin/views/pages/parts/slider-settings.php:550
-msgid "Slide delay"
+#: admin/views/pages/parts/slider-settings-legacy.php:637
+#: admin/views/pages/parts/slider-settings.php:566
+msgid "Slide Delay"
 msgstr "Délai entre les diapositives"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:623
-#: admin/views/pages/parts/slider-settings.php:552
+#: admin/views/pages/parts/slider-settings-legacy.php:639
+#: admin/views/pages/parts/slider-settings.php:568
 msgid "How long to display each slide, in milliseconds."
 msgstr "Durée d’affichage de chaque diapositive, en millisecondes."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:627
-#: admin/views/pages/parts/slider-settings-legacy.php:647
-#: admin/views/pages/parts/slider-settings-legacy.php:776
-#: admin/views/pages/parts/slider-settings-legacy.php:808
-#: admin/views/pages/parts/slider-settings.php:556
-#: admin/views/pages/parts/slider-settings.php:576
+#: admin/views/pages/parts/slider-settings-legacy.php:643
+#: admin/views/pages/parts/slider-settings-legacy.php:663
+#: admin/views/pages/parts/slider-settings-legacy.php:792
+#: admin/views/pages/parts/slider-settings-legacy.php:824
+#: admin/views/pages/parts/slider-settings.php:572
+#: admin/views/pages/parts/slider-settings.php:592
 msgctxt "Short for milliseconds"
 msgid "ms"
 msgstr "ms"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:641
-#: admin/views/pages/parts/slider-settings.php:570
+#: admin/views/pages/parts/slider-settings-legacy.php:657
+#: admin/views/pages/parts/slider-settings.php:586
 msgid "Transition Speed"
 msgstr "Vitesse d’animation"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:643
-#: admin/views/pages/parts/slider-settings.php:572
+#: admin/views/pages/parts/slider-settings-legacy.php:659
+#: admin/views/pages/parts/slider-settings.php:588
 msgid ""
 "Choose the speed of the animation in milliseconds. You can select the "
 "animation in the \"Effect\" field."
@@ -868,25 +894,28 @@ msgstr ""
 "Choisir la vitesse de l’animation en millisecondes. Vous pouvez sélectionner "
 "l’animation dans le champ « Effet »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:661
-#: admin/views/pages/parts/slider-settings-legacy.php:663
-msgid "Number of slices"
+#: admin/views/pages/parts/slider-settings-legacy.php:677
+#: admin/views/pages/parts/slider-settings-legacy.php:679
+msgid "Number of Slices"
 msgstr "Nombre de tranches"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:673
-#: admin/views/pages/parts/slider-settings-legacy.php:678
 #: admin/views/pages/parts/slider-settings-legacy.php:689
+#: admin/views/pages/parts/slider-settings-legacy.php:705
+msgid "Number of Squares"
+msgstr "Nombre de carrés"
+
 #: admin/views/pages/parts/slider-settings-legacy.php:694
+#: admin/views/pages/parts/slider-settings-legacy.php:710
 msgid "Number of squares"
 msgstr "Nombre de carrés"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:700
-#: admin/views/pages/parts/slider-settings.php:585
-msgid "Slide direction"
-msgstr "Sens du défilement"
+#: admin/views/pages/parts/slider-settings-legacy.php:716
+#: admin/views/pages/parts/slider-settings.php:601
+msgid "Slide Direction"
+msgstr "Direction de la diapositive"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:702
-#: admin/views/pages/parts/slider-settings.php:587
+#: admin/views/pages/parts/slider-settings-legacy.php:718
+#: admin/views/pages/parts/slider-settings.php:603
 msgid ""
 "Select the direction that slides will move. Vertical will not work if "
 "\"Carousel mode\" is enabled or \"Effect\" is set to \"Fade\"."
@@ -895,23 +924,23 @@ msgstr ""
 "mode vertical ne fonctionne pas si le « Mode carrousel » est activé ou si "
 "l’« Effet » est réglé sur « Fondu »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:709
-#: admin/views/pages/parts/slider-settings.php:594
+#: admin/views/pages/parts/slider-settings-legacy.php:725
+#: admin/views/pages/parts/slider-settings.php:610
 msgid "Horizontal"
 msgstr "Horizontal"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:716
-#: admin/views/pages/parts/slider-settings.php:601
+#: admin/views/pages/parts/slider-settings-legacy.php:732
+#: admin/views/pages/parts/slider-settings.php:617
 msgid "Vertical"
 msgstr "Vertical"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:727
-#: admin/views/pages/parts/slider-settings.php:612
-msgid "Easing"
-msgstr "Easing"
+#: admin/views/pages/parts/slider-settings-legacy.php:743
+#: admin/views/pages/parts/slider-settings.php:628
+msgid "Image Animation"
+msgstr "Animation de l’image"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:729
-#: admin/views/pages/parts/slider-settings.php:614
+#: admin/views/pages/parts/slider-settings-legacy.php:745
+#: admin/views/pages/parts/slider-settings.php:630
 msgid ""
 "Easing adds gradual acceleration and deceleration to slide transitions, "
 "rather than abrupt starts and stops. Easing only uses the \"Slide\" Effect."
@@ -920,78 +949,78 @@ msgstr ""
 "aux transitions de diapositives, plutôt que des démarrages et des arrêts "
 "brusques. L’assouplissement n’utilise que l’effet « Diapositive »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:739
-msgid "Previous text"
-msgstr "Précédent"
+#: admin/views/pages/parts/slider-settings-legacy.php:755
+msgid "Previous Text"
+msgstr "Texte « Précédente »"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:741
+#: admin/views/pages/parts/slider-settings-legacy.php:757
 msgid "Set the text for the \"previous\" direction item."
 msgstr "Définir le texte pour l’élément de direction « précédent »."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:752
-msgid "Next text"
-msgstr "Suivant"
+#: admin/views/pages/parts/slider-settings-legacy.php:768
+msgid "Next Text"
+msgstr "Texte « Suivante »"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:754
+#: admin/views/pages/parts/slider-settings-legacy.php:770
 msgid "Set the text for the \"next\" direction item."
 msgstr "Définir le texte pour l’élément de direction « suivant »"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:770
-msgid "Square delay"
+#: admin/views/pages/parts/slider-settings-legacy.php:786
+msgid "Square Delay"
 msgstr "Délai entre les carrés"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:772
+#: admin/views/pages/parts/slider-settings-legacy.php:788
 msgid "Delay between squares in ms."
 msgstr "Délai entre les carrés en ms."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:786
+#: admin/views/pages/parts/slider-settings-legacy.php:802
 msgid "Opacity"
 msgstr "Opacité"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:788
+#: admin/views/pages/parts/slider-settings-legacy.php:804
 msgid "Opacity of title and navigation, between 0 and 1."
 msgstr "Opacité du titre et de la navigation, entre 0 et 1."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:802
-msgid "Caption speed"
+#: admin/views/pages/parts/slider-settings-legacy.php:818
+msgid "Caption Speed"
 msgstr "Vitesse de la légende"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:804
+#: admin/views/pages/parts/slider-settings-legacy.php:820
 msgid "Set the fade in speed of the caption."
 msgstr "Définir la vitesse du fondu de la légende."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:817
-#: admin/views/pages/parts/slider-settings.php:624
+#: admin/views/pages/parts/slider-settings-legacy.php:833
+#: admin/views/pages/parts/slider-settings.php:640
 msgid "Accessibility Options"
 msgstr "Options d’accessibilité"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:823
-#: admin/views/pages/parts/slider-settings.php:630
+#: admin/views/pages/parts/slider-settings-legacy.php:839
+#: admin/views/pages/parts/slider-settings.php:646
 msgid "Keyboard Controls"
 msgstr "Contrôles au clavier"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:828
-#: admin/views/pages/parts/slider-settings.php:635
+#: admin/views/pages/parts/slider-settings-legacy.php:844
+#: admin/views/pages/parts/slider-settings.php:651
 msgid "Use arrow keys to get to the next slide."
 msgstr "Utiliser les touches fléchées pour passer à la diapositive suivante."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:836
-#: admin/views/pages/parts/slider-settings.php:643
-msgid "Tabindex for navigation"
+#: admin/views/pages/parts/slider-settings-legacy.php:852
+#: admin/views/pages/parts/slider-settings.php:659
+msgid "Tabindex For Navigation"
 msgstr "Tabindex pour la navigation"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:841
-#: admin/views/pages/parts/slider-settings.php:648
+#: admin/views/pages/parts/slider-settings-legacy.php:857
+#: admin/views/pages/parts/slider-settings.php:664
 msgid "This helps make the slideshow navigation more accessible."
 msgstr "Cela permet de rendre la navigation du diaporama plus accessible."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:849
-#: admin/views/pages/parts/slider-settings.php:656
+#: admin/views/pages/parts/slider-settings-legacy.php:865
+#: admin/views/pages/parts/slider-settings.php:672
 msgid "ARIA Live"
 msgstr "Aria live"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:854
-#: admin/views/pages/parts/slider-settings.php:661
+#: admin/views/pages/parts/slider-settings-legacy.php:870
+#: admin/views/pages/parts/slider-settings.php:677
 msgid ""
 "If Autoplay is enabled, this causes screen readers to announce that the "
 "slides are changing."
@@ -999,13 +1028,13 @@ msgstr ""
 "Si la lecture automatique est activée, les lecteurs d’écran annoncent que "
 "les diapositives sont en train de changer."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:862
-#: admin/views/pages/parts/slider-settings.php:669
+#: admin/views/pages/parts/slider-settings-legacy.php:878
+#: admin/views/pages/parts/slider-settings.php:685
 msgid "ARIA Current"
 msgstr "ARIA actuel"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:867
-#: admin/views/pages/parts/slider-settings.php:674
+#: admin/views/pages/parts/slider-settings-legacy.php:883
+#: admin/views/pages/parts/slider-settings.php:690
 msgid ""
 "This is used on the navigation button for the active slide. It helps screen "
 "readers understand which slide is active."
@@ -1013,18 +1042,18 @@ msgstr ""
 "Ceci est utilisé sur le bouton de navigation de la diapositive active. Il "
 "aide les lecteurs d’écran à comprendre quelle diapositive est active."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:875
-#: admin/views/pages/parts/slider-settings.php:682
+#: admin/views/pages/parts/slider-settings-legacy.php:891
+#: admin/views/pages/parts/slider-settings.php:698
 msgid "Developer Options"
 msgstr "Options pour les développeurs"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:881
-#: admin/views/pages/parts/slider-settings.php:688
-msgid "CSS classes"
+#: admin/views/pages/parts/slider-settings-legacy.php:897
+#: admin/views/pages/parts/slider-settings.php:704
+msgid "CSS Classes"
 msgstr "Classes CSS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:883
-#: admin/views/pages/parts/slider-settings.php:690
+#: admin/views/pages/parts/slider-settings-legacy.php:899
+#: admin/views/pages/parts/slider-settings.php:706
 msgid ""
 "Enter custom CSS classes to apply to the slider wrapper. Separate multiple "
 "classes with a space."
@@ -1032,55 +1061,57 @@ msgstr ""
 "Saisissez les classes CSS personnalisées à appliquer au conteneur du "
 "diaporama. Séparez plusieurs classes par un espace."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:894
-#: admin/views/pages/parts/slider-settings.php:701
+#: admin/views/pages/parts/slider-settings-legacy.php:910
+#: admin/views/pages/parts/slider-settings.php:717
 msgid "Print CSS"
 msgstr "Imprimer CSS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:899
-#: admin/views/pages/parts/slider-settings.php:706
+#: admin/views/pages/parts/slider-settings-legacy.php:915
+#: admin/views/pages/parts/slider-settings.php:722
 msgid "Uncheck this if you would like to include your own CSS."
 msgstr "Décocher ceci si vous souhaitez inclure votre propre CSS."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:907
-#: admin/views/pages/parts/slider-settings.php:714
+#: admin/views/pages/parts/slider-settings-legacy.php:923
+#: admin/views/pages/parts/slider-settings.php:730
 msgid "Print JS"
 msgstr "Imprimer JS"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:912
-#: admin/views/pages/parts/slider-settings.php:719
+#: admin/views/pages/parts/slider-settings-legacy.php:928
+#: admin/views/pages/parts/slider-settings.php:735
 msgid "Uncheck this if you would like to include your own Javascript."
 msgstr "Décocher ceci si vous souhaitez inclure votre propre Javascript."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:920
-#: admin/views/pages/parts/slider-settings.php:727
-msgid "No conflict mode"
+#: admin/views/pages/parts/slider-settings-legacy.php:936
+#: admin/views/pages/parts/slider-settings.php:743
+msgid "No Conflict Mode"
 msgstr "Mode sans conflit"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:925
-#: admin/views/pages/parts/slider-settings.php:732
+#: admin/views/pages/parts/slider-settings-legacy.php:941
+#: admin/views/pages/parts/slider-settings.php:748
 msgid "Delay adding the flexslider class to the slideshow."
 msgstr "Retard ajouté à la classe flexslider au diaporama."
 
-#: admin/views/pages/parts/slider-settings-legacy.php:969
-#: admin/views/pages/parts/slider-settings.php:769
-msgid "Trashed slides"
+#: admin/views/pages/parts/slider-settings-legacy.php:985
+#: admin/views/pages/parts/slider-settings.php:785 ml-slider.php:1765
+msgid "Trashed Slides"
 msgstr "Diapositives mises à la corbeille"
 
-#: admin/views/pages/parts/slider-settings-legacy.php:991
-#: admin/views/pages/parts/slider-settings.php:779
+#: admin/views/pages/parts/slider-settings-legacy.php:1007
+#: admin/views/pages/parts/slider-settings.php:795
 msgid "View trashed slides"
 msgstr "Voir les diapositives de la corbeille"
 
-#: admin/views/pages/parts/slider-settings.php:117
+#: admin/views/pages/parts/slider-settings.php:129
+#: admin/assets/dist/js/app.js:2
 msgid "Thumbnail (Pro)"
 msgstr "Miniature (Pro)"
 
-#: admin/views/pages/parts/slider-settings.php:121
+#: admin/views/pages/parts/slider-settings.php:133
+#: admin/assets/dist/js/app.js:2
 msgid "Filmstrip (Pro)"
 msgstr "Bande de film (Pro)"
 
-#: admin/views/pages/parts/slider-settings.php:434
+#: admin/views/pages/parts/slider-settings.php:446
 msgid ""
 "Display multiple slides at once. Slideshow output will be 100% wide. "
 "Carousel Mode only uses the 'Slide' Effect."
@@ -1139,7 +1170,7 @@ msgstr "Enregistrer le diaporama"
 msgid "Save"
 msgstr "Enregistrer"
 
-#: admin/views/pages/parts/toolbar.php:125 ml-slider.php:1870
+#: admin/views/pages/parts/toolbar.php:125 ml-slider.php:1836
 msgid "Return to Published Slides"
 msgstr "Retourner aux diapositives publiées"
 
@@ -1184,12 +1215,14 @@ msgid "Open Media Library"
 msgstr "Abrir la médiathèque"
 
 #: admin/views/pages/start.php:52
-msgid "Create a slideshow with sample images"
-msgstr "Créer un diaporama avec des exemples d’images"
+msgid "Import a demo slideshow"
+msgstr "Importer un diaporama de démonstration"
 
 #: admin/views/pages/start.php:55
-msgid "Create a demo slideshow."
-msgstr "Créer un diaporama de démonstration."
+msgid "Use sample slides to quickly create a new slideshow."
+msgstr ""
+"Utiliser les diapositives d’exemple pour créer rapidement un nouveau "
+"diaporama."
 
 #: admin/views/pages/start.php:62
 msgid "Blank Slideshow"
@@ -1561,7 +1594,7 @@ msgstr "Titre :"
 msgid "Select Slider:"
 msgstr "Sélectionnez un diaporama :"
 
-#: inc/metaslider.widget.class.php:125 ml-slider.php:2012
+#: inc/metaslider.widget.class.php:125 ml-slider.php:1971
 #: admin/assets/dist/js/app.js:2
 msgid "No slideshows found"
 msgstr "Aucun diaporama trouvé"
@@ -1589,8 +1622,8 @@ msgstr ""
 msgid "Trash slide"
 msgstr "Mettre à la corbeille la diapositive"
 
-#: inc/slide/metaslide.class.php:428 inc/slide/metaslide.class.php:683
-#: inc/slide/metaslide.class.php:684
+#: inc/slide/metaslide.class.php:428 inc/slide/metaslide.class.php:684
+#: inc/slide/metaslide.class.php:685
 msgid "Update slide image"
 msgstr "Mettre à jour l’image de diapositive"
 
@@ -1598,58 +1631,58 @@ msgstr "Mettre à jour l’image de diapositive"
 msgid "Duplicate slide"
 msgstr "Dupliquer diaporama"
 
-#: inc/slide/metaslide.image.class.php:88
+#: inc/slide/metaslide.image.class.php:89
 msgid "This isn't a valid image format. Please try again."
 msgstr "Ce format d’image n’est pas valide. Veuillez réessayer."
 
-#: inc/slide/metaslide.image.class.php:357
+#: inc/slide/metaslide.image.class.php:358
 msgid "Access denied"
 msgstr "Accès refusé"
 
-#: inc/slide/metaslide.image.class.php:390
+#: inc/slide/metaslide.image.class.php:391
 msgid "Image Slide"
 msgstr "Image de la diapo"
 
-#: inc/slide/metaslide.image.class.php:472
+#: inc/slide/metaslide.image.class.php:473
 msgid "Warning: The image data does not exist. Please re-upload the image."
 msgstr ""
 "Avertissement : les données d’image n’existent pas. Veuillez re-téléverser "
 "l’image."
 
-#: inc/slide/metaslide.image.class.php:487
+#: inc/slide/metaslide.image.class.php:488
 msgid "General"
 msgstr "Général"
 
-#: inc/slide/metaslide.image.class.php:491
+#: inc/slide/metaslide.image.class.php:492
 msgid "Link"
 msgstr "Lien"
 
-#: inc/slide/metaslide.image.class.php:495
+#: inc/slide/metaslide.image.class.php:496
 msgid "SEO"
 msgstr "SEO"
 
-#: inc/slide/metaslide.image.class.php:511
+#: inc/slide/metaslide.image.class.php:512
 msgid "Mobile"
 msgstr "Mobile"
 
-#: inc/slide/metaslide.image.class.php:528
+#: inc/slide/metaslide.image.class.php:529
 msgid "Crop"
 msgstr "Recadrage"
 
-#: inc/slide/metaslide.image.class.php:540
+#: inc/slide/metaslide.image.class.php:541
 msgid "Schedule"
 msgstr "Planifier"
 
-#: inc/slider/metaslider.class.php:273
+#: inc/slider/metaslider.class.php:257
 msgid "Click the \"Add Slide\" button to create your slideshow"
 msgstr ""
 "Cliquer sur le bouton « Ajouter une diapositive » pour créer votre diaporama."
 
-#: inc/slider/metaslider.class.php:316
+#: inc/slider/metaslider.class.php:300
 msgid "Edit Slideshow"
 msgstr "Modifier le diaporama"
 
-#: ml-slider.php:312
+#: ml-slider.php:262
 msgid ""
 "MetaSlider Pro is installed but is out of date. You may update it %shere%s. "
 "Learn more about this notice %shere%s"
@@ -1657,99 +1690,107 @@ msgstr ""
 "MetaSlider Pro est installé mais n’est pas à jour. Vous pouvez le mettre à "
 "jour %sici%s. En savoir plus sur cet avis %sici%s"
 
-#: ml-slider.php:540
+#: ml-slider.php:490
 msgid "Home"
 msgstr "Accueil"
 
-#: ml-slider.php:541
+#: ml-slider.php:491
 msgid "Quick Start"
 msgstr "Démarrage rapide"
 
-#: ml-slider.php:542
+#: ml-slider.php:492
 msgid "Settings & Help"
 msgstr "Réglages & aide"
 
-#: ml-slider.php:545
+#: ml-slider.php:495
 msgid "Upgrade to Pro"
 msgstr "Passer en version Pro"
 
-#: ml-slider.php:582 ml-slider.php:585
+#: ml-slider.php:532 ml-slider.php:535
 msgid "All Slideshows"
 msgstr "Tous les diaporamas"
 
-#: ml-slider.php:593 ml-slider.php:596
+#: ml-slider.php:543 ml-slider.php:546
 msgid "Create Slideshow"
 msgstr "Créer un diaporama"
 
-#: ml-slider.php:730
+#: ml-slider.php:680
 msgid "Image"
 msgstr "Image"
 
-#: ml-slider.php:731
+#: ml-slider.php:681
 msgid "Add to slideshow"
 msgstr "Ajouter au diaporama"
 
-#: ml-slider.php:771
+#: ml-slider.php:721
 msgid "Post Feed"
 msgstr "Flux de publications"
 
-#: ml-slider.php:772
+#: ml-slider.php:722
 msgid "Vimeo"
 msgstr "Vimeo"
 
-#: ml-slider.php:773
+#: ml-slider.php:723
 msgid "YouTube"
 msgstr "YouTube"
 
-#: ml-slider.php:774
+#: ml-slider.php:724
 msgid "Layer Slide"
 msgstr "Diapositive de couches"
 
-#: ml-slider.php:775
+#: ml-slider.php:725
 msgid "External URL"
 msgstr "URL externe"
 
-#: ml-slider.php:776
+#: ml-slider.php:726
 msgid "Local Video"
 msgstr "Vidéo locale"
 
-#: ml-slider.php:777
+#: ml-slider.php:727
 msgid "External Video"
 msgstr "Vidéo externe"
 
-#: ml-slider.php:902
+#: ml-slider.php:728
+msgid "Tiktok"
+msgstr "Tiktok"
+
+#: ml-slider.php:853
 msgid "The slide was successfully restored"
 msgstr "La diapositive a bien été restaurée"
 
-#: ml-slider.php:925
+#: ml-slider.php:876
 msgid "The attempt to restore the slide failed."
 msgstr "La tentative de restauration de la diapositive a échoué."
 
-#: ml-slider.php:984
+#: ml-slider.php:935
 msgid "The slide was successfully trashed"
 msgstr "La diapositive a bien été mise à la corbeille"
 
-#: ml-slider.php:1096
+#: ml-slider.php:1047
 msgid "The slide was permanently deleted"
 msgstr "Cette diapositive a été définitivement supprimée"
 
-#: ml-slider.php:1789
+#: ml-slider.php:1748
 msgid "Slide permanently deleted."
 msgstr "Diapositive supprimée définitivement."
 
-#: ml-slider.php:1792
+#: ml-slider.php:1751
 msgid "Slide restored."
 msgstr "Diapositive restaurée."
 
-#: ml-slider.php:1806
-msgid "Trashed Slides"
-msgstr "Diapositives mises à la corbeille"
-
-#: ml-slider.php:1832
+#: ml-slider.php:1793
 msgid "Loading... Please wait!"
 msgstr "Chargement... Veuillez patienter !"
 
-#: ml-slider.php:1860
+#: ml-slider.php:1796
+msgid ""
+"Loading... Please wait! This may take some minutes due we're downloading "
+"sample Local videos."
+msgstr ""
+"Chargement... Veuillez patienter ! Cela peut prendre quelques minutes car "
+"nous sommes en train de télécharger des exemples de vidéos locales."
+
+#: ml-slider.php:1826
 msgid ""
 "You are viewing slides that have been trashed, which will be automatically "
 "deleted in %s days."
@@ -1757,34 +1798,34 @@ msgstr ""
 "Vous visualisez des diapositives qui ont été mises à la corbeille et qui "
 "seront automatiquement supprimées dans %s jours."
 
-#: ml-slider.php:1914
+#: ml-slider.php:1872
 msgid "Move slideshow to trash"
 msgstr "Mettre le diaporama à la corbeille"
 
-#: ml-slider.php:1961
+#: ml-slider.php:1920
 msgid "Add slideshow"
 msgstr "Ajouter un diaporama"
 
-#: ml-slider.php:1991
+#: ml-slider.php:1950
 msgctxt "Keep the plugin name \"MetaSlider\" when possible"
 msgid "Select slideshow to insert into post"
 msgstr "Sélectionner le diaporama à insérer dans la publication"
 
-#: ml-slider.php:1997
+#: ml-slider.php:1956
 msgid "Choose slideshow"
 msgstr "Sélectionner un diaporama"
 
-#: ml-slider.php:2007
+#: ml-slider.php:1966
 msgid "Insert slideshow"
 msgstr "Insérer un diaporama"
 
-#: ml-slider.php:2042
+#: ml-slider.php:2001
 msgid "Create slides by adding text, videos and more to your images"
 msgstr ""
 "Créez des diapositives en ajoutant du texte, des vidéos et d’autres éléments "
 "à vos images"
 
-#: ml-slider.php:2046
+#: ml-slider.php:2005
 msgid ""
 "With Layer slides, you can create beautiful, stylish layers of different "
 "elements."
@@ -1792,7 +1833,7 @@ msgstr ""
 "Avec les diapositives de couches, vous pouvez créer de belles couches "
 "élégantes de différents éléments."
 
-#: ml-slider.php:2050
+#: ml-slider.php:2009
 msgid ""
 "You start with an image and then can add text, video, colors, animations, "
 "more images, and even shortcodes."
@@ -1801,24 +1842,24 @@ msgstr ""
 "vidéo, des couleurs, des animations, d’autres images et même des codes "
 "courts."
 
-#: ml-slider.php:2056 ml-slider.php:2097 ml-slider.php:2138 ml-slider.php:2181
-#: ml-slider.php:2224 ml-slider.php:2267 ml-slider.php:2310
+#: ml-slider.php:2015 ml-slider.php:2056 ml-slider.php:2097 ml-slider.php:2140
+#: ml-slider.php:2183 ml-slider.php:2226 ml-slider.php:2269 ml-slider.php:2308
 #: admin/assets/dist/js/app.js:2
 msgid "Find out more about MetaSlider Pro"
 msgstr "En savoir plus sur MetaSlider Pro"
 
-#: ml-slider.php:2085
+#: ml-slider.php:2044
 msgid "Create slideshows with your Vimeo videos"
 msgstr "Créez des diaporamas avec vos vidéos Vimeo"
 
-#: ml-slider.php:2089
+#: ml-slider.php:2048
 msgid ""
 "With Vimeo slides, you can build beautiful slideshows with your Vimeo videos."
 msgstr ""
 "Avec les diapositives Vimeo, vous pouvez créer de superbes diaporamas avec "
 "vos vidéos Vimeo."
 
-#: ml-slider.php:2093
+#: ml-slider.php:2052
 msgid ""
 "Vimeo slides will display your videos with auto play, mute, the ability to "
 "hide controls, and much more."
@@ -1827,11 +1868,11 @@ msgstr ""
 "désactivation du son, chargement paresseux, possibilité de masquer les "
 "contrôles, et bien plus encore."
 
-#: ml-slider.php:2126
+#: ml-slider.php:2085
 msgid "Create slideshows with your YouTube videos"
 msgstr "Créez des diaporamas avec vos vidéos YouTube"
 
-#: ml-slider.php:2130
+#: ml-slider.php:2089
 msgid ""
 "With YouTube slides, you can build beautiful slideshows with your YouTube "
 "videos."
@@ -1839,7 +1880,7 @@ msgstr ""
 "Avec les diapositives YouTube, vous pouvez créer de superbes diaporamas avec "
 "vos vidéos YouTube."
 
-#: ml-slider.php:2134
+#: ml-slider.php:2093
 msgid ""
 "YouTube slides will display your videos with auto play, mute, lazy load, the "
 "ability to hide controls, and much more."
@@ -1848,11 +1889,11 @@ msgstr ""
 "désactivation du son, chargement paresseux, possibilité de masquer les "
 "contrôles, et bien plus encore."
 
-#: ml-slider.php:2167
+#: ml-slider.php:2126
 msgid "Create slideshows with your posts"
 msgstr "Créez des diaporamas avec vos publications"
 
-#: ml-slider.php:2171
+#: ml-slider.php:2130
 msgid ""
 "With Post Feed slides, you can build slideshows with your latest posts, "
 "events, or WooCommerce products."
@@ -1861,7 +1902,7 @@ msgstr ""
 "diaporamas avec vos dernières publications, événements ou produits "
 "WooCommerce."
 
-#: ml-slider.php:2175
+#: ml-slider.php:2134
 msgid ""
 "Post Feed slides will automatically display your posts with images, text, "
 "custom fields, and much more."
@@ -1870,13 +1911,13 @@ msgstr ""
 "publications avec des images, du texte, des champs personnalisés et bien "
 "plus encore."
 
-#: ml-slider.php:2210
+#: ml-slider.php:2169
 msgid "Create slideshows with images stored outside of WordPress"
 msgstr ""
 "Vous pouvez créer des diaporamas avec des images stockées en dehors de "
 "WordPress"
 
-#: ml-slider.php:2214
+#: ml-slider.php:2173
 msgid ""
 "With External URL slides, you can load images directly from non-WordPress "
 "sources such as CDNs or image hosts."
@@ -1885,7 +1926,7 @@ msgstr ""
 "directement à partir de sources autres que WordPress, telles que des CDN ou "
 "des hébergeurs d’images."
 
-#: ml-slider.php:2218
+#: ml-slider.php:2177
 msgid ""
 "External URL slides give you all the power of MetaSlider, using images "
 "stored anywhere you want."
@@ -1893,11 +1934,11 @@ msgstr ""
 "Les diapositives à URL externe vous offrent toute la puissance de "
 "MetaSlider, en utilisant des images stockées où vous le souhaitez."
 
-#: ml-slider.php:2253
+#: ml-slider.php:2212
 msgid "Create slideshows with videos in your media library"
 msgstr "Créez des diaporamas avec les vidéos de votre médiathèque"
 
-#: ml-slider.php:2257
+#: ml-slider.php:2216
 msgid ""
 "With Local Video slides, you can build beautiful slideshows with videos in "
 "your WordPress media library."
@@ -1905,7 +1946,7 @@ msgstr ""
 "Avec les diapositives des vidéos locales, vous pouvez créer de magnifiques "
 "diaporamas avec les vidéos de votre médiathèque WordPress."
 
-#: ml-slider.php:2261
+#: ml-slider.php:2220
 msgid ""
 "Local Video slides will display your MP4, WebM, and MOV videos with cover "
 "images, auto play, mute, lazy load, the ability to hide controls, and much "
@@ -1916,13 +1957,13 @@ msgstr ""
 "chargement paresseux, la possibilité de masquer les contrôles, et bien plus "
 "encore."
 
-#: ml-slider.php:2296
+#: ml-slider.php:2255
 msgid "Create slideshows with videos stored outside of WordPress"
 msgstr ""
 "Vous pouvez créer des diaporamas avec des vidéos stockées en dehors de "
 "WordPress"
 
-#: ml-slider.php:2300
+#: ml-slider.php:2259
 msgid ""
 "With External Video slides, you can add videos directly from non-WordPress "
 "sources."
@@ -1930,7 +1971,7 @@ msgstr ""
 "Avec les diapositives vidéos externes, vous pouvez ajouter des vidéos "
 "directement à partir de sources autres que WordPress."
 
-#: ml-slider.php:2304
+#: ml-slider.php:2263
 msgid ""
 "External Video Slides will display your MP4, WebM, and MOV videos. Features "
 "include text captions, cover images, auto play, mute, lazy load, the ability "
@@ -1941,25 +1982,96 @@ msgstr ""
 "en sourdine, le chargement paresseux, la possibilité de masquer les "
 "contrôles, et bien plus encore."
 
-#: ml-slider.php:2347
+#: ml-slider.php:2298
+msgid "Create slideshows with Tiktok Videos"
+msgstr "Créer des diaporamas avec des vidéos Tiktok"
+
+#: ml-slider.php:2302
+msgid ""
+"A TikTok Slide will display a video in your slideshow directly from TikTok."
+"com."
+msgstr ""
+"Une diapositive TikTok affichera une vidéo dans votre diaporama directement "
+"depuis TikTok.com."
+
+#: ml-slider.php:2346
 msgid "Premium Support"
 msgstr "Support Premium"
 
-#: ml-slider.php:2353
+#: ml-slider.php:2352
 msgid "MetaSlider Pro"
 msgstr "MetaSlider Pro"
 
-#: ml-slider.php:2357
+#: ml-slider.php:2356
 msgid "Support"
 msgstr "Support"
 
-#: ml-slider.php:2362
+#: ml-slider.php:2361
 msgid "Documentation"
 msgstr "Documentation"
 
-#: ml-slider.php:2366
+#: ml-slider.php:2365
 msgid "Leave a review"
 msgstr "Laissez un avis"
+
+#: themes/bitono/customize.php:17 themes/clarity/customize.php:17
+#: themes/databold/customize.php:17 themes/draxler/customize.php:17
+#: themes/nexus/customize.php:17
+msgid "Arrows Hover"
+msgstr "Flèches au survol"
+
+#: themes/bitono/customize.php:31 themes/clarity/customize.php:45
+#: themes/databold/customize.php:31 themes/draxler/customize.php:31
+#: themes/nexus/customize.php:31
+msgid "Navigation Hover"
+msgstr "Navigation au survol"
+
+#: themes/bitono/customize.php:38 themes/clarity/customize.php:52
+#: themes/draxler/customize.php:38 themes/nexus/customize.php:38
+msgid "Navigation Active"
+msgstr "Navigation active"
+
+#: themes/bitono/customize.php:45 themes/clarity/customize.php:59
+#: themes/databold/customize.php:38 themes/draxler/customize.php:45
+#: themes/nexus/customize.php:45
+msgid "Caption background"
+msgstr "Arrière-plan de la légende"
+
+#: themes/bitono/customize.php:51 themes/clarity/customize.php:65
+#: themes/databold/customize.php:44 themes/draxler/customize.php:51
+#: themes/nexus/customize.php:51
+msgid "Caption text"
+msgstr "Texte de la légende"
+
+#: themes/bitono/customize.php:57 themes/clarity/customize.php:71
+#: themes/databold/customize.php:50 themes/draxler/customize.php:57
+#: themes/nexus/customize.php:57
+msgid "Caption links"
+msgstr "Liens de la légende"
+
+#: themes/clarity/customize.php:24
+msgid "Arrows Icon"
+msgstr "Icône de flèches"
+
+#: themes/clarity/customize.php:31
+msgid "Arrows Icon Hover"
+msgstr "Icône de flèches au survol"
+
+#: themes/customize.php:7
+msgid "Play Button"
+msgstr "Bouton de lecture"
+
+#: themes/customize.php:14
+msgid "Play Button Hover"
+msgstr "Bouton de lecture au survol"
+
+#: themes/customize.php:21
+msgid "Play Button Icon"
+msgstr "Icône du bouton de lecture"
+
+#: themes/customize.php:28
+msgid "Play Button Icon Hover"
+msgstr "Icône du bouton de lecture au survol"
 
 #: themes/manifest-legacy.php:15 themes/manifest.php:15
 msgid ""
@@ -1979,28 +2091,44 @@ msgstr ""
 
 #: themes/manifest-legacy.php:31 themes/manifest.php:31
 msgid ""
-"Databold is a minimalist theme recommended for Image, External Image and "
-"Post feed slides."
+"Databold is a modern, business theme with lots of room for your captions. "
+"Databold is recommended for Image, External Image, and Post Feed slides."
 msgstr ""
-"Databold est un thème minimaliste recommandé pour les diapositives d’images, "
-"d’images externes et de flux de publication."
+"Databold est un thème moderne et professionnel avec beaucoup d’espace pour "
+"vos légendes. Databold est recommandé pour les diapositives d’images, "
+"d’images externes et de flux de publications."
 
 #: themes/manifest-legacy.php:39 themes/manifest.php:39
-msgid "Draxler is a minimalist theme."
-msgstr "Draxler est un thème minimaliste."
+msgid ""
+"Draxler is a stylish theme that places the navigation arrows in the top-"
+"right corner. There's also plenty of room for your captions."
+msgstr ""
+"Draxler est un thème élégant qui place les flèches de navigation dans le "
+"coin supérieur droit. Il y a également beaucoup de place pour vos légendes."
 
 #: themes/manifest-legacy.php:47 themes/manifest.php:47
-msgid "A simple, slick square design that looks good on darker images."
+msgid ""
+"Featuring a built-in button with custom link, Nexus seamlessly integrates "
+"key points and interactive elements, making your presentation both engaging "
+"and navigable."
 msgstr ""
-"Un design carré simple et élégant qui convient aux images plus sombres."
+"Doté d’un bouton native avec un lien personnalisé, Nexus intègre de manière "
+"transparente les points clés et les éléments interactifs, rendant votre "
+"présentation à la fois attrayante et navigable."
 
-#: themes/manifest-legacy.php:56 themes/manifest.php:56
+#: themes/manifest-legacy.php:55 themes/manifest.php:56
+msgid ""
+"A standard slideshow layout with a modern design and large, clear arrows."
+msgstr ""
+"Un diaporama standard au design moderne avec de grandes flèches claires."
+
+#: themes/manifest-legacy.php:64 themes/manifest.php:65
 msgid "A clean, subtle theme that features block arrows and bold design."
 msgstr ""
 "Un thème propre et subtil qui comporte des flèches encadrées et un design "
 "audacieux."
 
-#: themes/manifest-legacy.php:65 themes/manifest.php:65
+#: themes/manifest-legacy.php:73 themes/manifest.php:74
 msgid ""
 "A fun, circular design to brighten up your site. This theme works well with "
 "dark images"
@@ -2008,26 +2136,33 @@ msgstr ""
 "Un design amusant et circulaire pour égayer votre site. Ce thème fonctionne "
 "bien avec des images sombres"
 
-#: themes/manifest-legacy.php:74 themes/manifest.php:74
+#: themes/manifest-legacy.php:82 themes/manifest.php:83
 msgid ""
-"A minimalistic, no-frills design that was built to blend in with most themes."
+"A smart, contemporary design that is built to blend seamlessly into any "
+"theme."
 msgstr ""
-"Un design minimaliste, sans superflu, qui a été conçu pour s’intégrer à la "
-"plupart des thèmes."
+"Un design élégant et contemporain, conçu pour s’intégrer parfaitement à "
+"n’importe quel thème."
 
-#: themes/manifest-legacy.php:106 themes/manifest.php:106
+#: themes/manifest-legacy.php:114 themes/manifest.php:114
 msgid "This theme places the controls vertically for a unique look."
 msgstr "Ce thème place les contrôles verticalement pour un look unique."
 
-#: themes/manifest-legacy.php:115 themes/manifest.php:115
-msgid "A futuristic and linear design that goes will with a dark background."
-msgstr "Un design futuriste et linéaire qui se marie bien avec un fond sombre."
+#: themes/manifest-legacy.php:123 themes/manifest.php:123
+msgid ""
+"A futuristic and linear design that has a unique, horizontal navigation."
+msgstr ""
+"Un design futuriste et linéaire avec une navigation horizontale unique."
 
-#: themes/manifest-legacy.php:124 themes/manifest.php:124
-msgid "A simple theme that neatly blends into any existing website."
-msgstr "Un thème simple qui s’intègre parfaitement à tout site existant."
+#: themes/manifest-legacy.php:132 themes/manifest.php:132
+msgid ""
+"This lightweight design uses numbers for the navigation. The navigation, "
+"caption, and arrows are share the same line."
+msgstr ""
+"Ce design léger utilise des chiffres pour la navigation. La navigation, la "
+"légende et les flèches sont sur la même ligne."
 
-#: themes/manifest-legacy.php:133 themes/manifest.php:133
+#: themes/manifest-legacy.php:141 themes/manifest.php:141
 msgid ""
 "This theme has a special additional functionality that uses image titles as "
 "the slide navigation. "
@@ -2035,7 +2170,7 @@ msgstr ""
 "Ce thème dispose d’une fonctionnalité supplémentaire spéciale qui utilise "
 "les titres des images comme navigation des diapositives. "
 
-#: themes/manifest-legacy.php:134 themes/manifest.php:134
+#: themes/manifest-legacy.php:142 themes/manifest.php:142
 msgid ""
 "If you would like to use the image titles as the navigation, you will need "
 "to use FlexSlider. Additionally, to change the slide navigation label, edit "
@@ -2046,17 +2181,17 @@ msgstr ""
 "navigation du diaporama, modifiez le titre de l’image dans la médiathèque ou "
 "manuellement sur le diaporama (onglet SEO)."
 
-#: themes/manifest-legacy.php:164 themes/manifest.php:164
+#: themes/manifest-legacy.php:172 themes/manifest.php:172
 msgid "This theme has a unique design that gives it a sophisticated look."
 msgstr ""
 "Ce thème possède un design unique qui lui confère un aspect sophistiqué."
 
-#: themes/manifest-legacy.php:173 themes/manifest.php:173
+#: themes/manifest-legacy.php:181 themes/manifest.php:181
 msgid "A bold and clear design that works well on a darker images."
 msgstr ""
 "Un design audacieux et clair qui fonctionne bien sur des images plus sombres."
 
-#: themes/manifest-legacy.php:182 themes/manifest.php:182
+#: themes/manifest-legacy.php:190 themes/manifest.php:190
 msgid ""
 "A minimalist theme that gets out of the way so you can showcasing your "
 "beautiful pictures. Best used with Image Slides."
@@ -2064,7 +2199,7 @@ msgstr ""
 "Un thème minimaliste qui s’efface pour vous permettre de mettre en valeur "
 "vos belles photos. A utiliser de préférence avec les diapositives d’images."
 
-#: themes/manifest-legacy.php:191
+#: themes/manifest-legacy.php:199
 msgid ""
 "The Nivo Light theme included here for legacy purposes. Note: only works "
 "with Nivo Slider"
@@ -2072,7 +2207,7 @@ msgstr ""
 "Le thème Nivo Light est inclus ici à des fins d’héritage. Note : ne "
 "fonctionne qu’avec Nivo Slider"
 
-#: themes/manifest-legacy.php:199
+#: themes/manifest-legacy.php:207
 msgid ""
 "The Nivo Bar theme included here for legacy purposes. Note: only works with "
 "Nivo Slider"
@@ -2080,7 +2215,7 @@ msgstr ""
 "Le thème Nivo Bar est inclus ici à des fins d’héritage. Note : ne fonctionne "
 "qu’avec Nivo Slider"
 
-#: themes/manifest-legacy.php:207
+#: themes/manifest-legacy.php:215
 msgid ""
 "The Nivo Dark theme included here for legacy purposes. Note: only works with "
 "Nivo Slider"
@@ -2103,7 +2238,7 @@ msgstr "Un thème minimaliste à 2 colonnes pour diviser vos images et légendes
 #: themes/manifest-premium.php:18
 msgid ""
 "Image, External URL and Post Feed slides are displayed in 2 columns, while "
-"the rest of slide types in 1 column."
+"the others slide types are displayed in 1 column."
 msgstr ""
 "Les diapositives d’image, d’URL externe et de flux de publications sont "
 "affichées sur deux colonnes, tandis que les autres types de diapositives "
@@ -2114,7 +2249,6 @@ msgid "videos"
 msgstr "vidéos"
 
 #: themes/manifest-premium.php:28
-#| msgid "Vertical"
 msgid "vertical"
 msgstr "vertical"
 
@@ -2127,6 +2261,45 @@ msgid "Ideal for Images, Post Feed slides, YouTube and Vimeo vertical videos."
 msgstr ""
 "Idéal pour les images, les diapositives des flux de publications, les vidéos "
 "verticales de YouTube et Vimeo."
+
+#: themes/manifest-premium.php:38
+msgid ""
+"A dynamic slideshow theme that emphasizes the active slide by scaling it "
+"larger than the surrounding slides, creating a hero-like focal point that "
+"draws the viewer's attention."
+msgstr ""
+"Un thème de diaporama dynamique qui met l’accent sur la diapositive active "
+"en l’agrandissant par rapport aux diapositives environnantes, créant ainsi "
+"un point focal en forme de héros qui attire l’attention de l’internaute."
+
+#: themes/manifest-premium.php:39
+msgid ""
+"This is the Beta version of the Hero Theme and currently it must be full-"
+"width. It should also be used with Carousel Mode disabled."
+msgstr ""
+"Il s’agit de la version bêta du thème Hero et elle doit actuellement être en "
+"pleine largeur. Elle doit également être utilisée avec le mode carrousel "
+"désactivé."
+
+#: themes/manifest.php:48
+msgid ""
+"To add a button to the Nexus theme, enter the URL and the button text into "
+"the \"Link\" tab."
+msgstr ""
+"Pour ajouter un bouton au thème Nexus, saisir l’URL et le texte du bouton "
+"dans l’onglet « Lien »."
+
+#: themes/nexus/customize.php:63
+msgid "Button"
+msgstr "Bouton"
+
+#: themes/nexus/customize.php:69
+msgid "Button Hover"
+msgstr "Bouton survol"
+
+#: themes/nexus/v1.0.0/theme.php:47
+msgid "Click Here"
+msgstr "Cliquer ici"
 
 #: themes/simply-dark/v1.0.0/theme.php:24
 msgid "Previous Slide"
@@ -2141,7 +2314,7 @@ msgid "Preparing 1 slide..."
 msgstr "Préparation d’une diapositive..."
 
 #: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:149
-#: admin/assets/js/admin.js:1002
+#: admin/assets/js/admin.js:1088
 msgid "1 slide added successfully"
 msgstr "1 diapositive ajoutée avec succès"
 
@@ -2160,6 +2333,16 @@ msgstr "Mise à jour de la diapositive..."
 #: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:342
 msgid "Slide updated successfully"
 msgstr "La diapositive a été mise à jour avec succès"
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:575
+msgid "Stop on first slide after looping"
+msgstr "Arrêter à la première diapositive après la boucle"
+
+#: admin/assets/dist/js/admin.js:1 admin/assets/js/admin.js:1100
+msgid "Mobile options are enabled for this slide. Adjust using the Mobile tab."
+msgstr ""
+"Les options mobiles sont activées pour cette diapositive. Ajustez-les à "
+"l’aide de l’onglet « Mobile »."
 
 #: admin/assets/dist/js/app.js:2
 msgid "CSS Manager notice opened"
@@ -2297,12 +2480,20 @@ msgid "Confirm"
 msgstr "Confirmer"
 
 #: admin/assets/dist/js/app.js:2
-msgid "Something went wrong"
-msgstr "Il y a eu un problème"
+msgid "Invalid nonce token"
+msgstr "Jeton nonce invalide"
 
 #: admin/assets/dist/js/app.js:2
 msgid "OK"
 msgstr "OK"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Unable to proceed due to invalid nonce token."
+msgstr "Impossible de poursuivre en raison d’un jeton nonce invalide."
+
+#: admin/assets/dist/js/app.js:2
+msgid "Something went wrong"
+msgstr "Il y a eu un problème"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Preparing slideshow for duplication..."
@@ -2357,12 +2548,9 @@ msgid "Change"
 msgstr "Modifier"
 
 #: admin/assets/dist/js/app.js:2
-msgid ""
-"Change the look and feel of your slideshow with one of our custom-built "
-"MetaSlider themes!"
+msgid "Change the design your slideshow with a stylish MetaSlider theme!"
 msgstr ""
-"Changez l’aspect et la présentation de votre diaporama avec l’un de nos "
-"thèmes MetaSlider personnalisés !"
+"Modifier la conception de votre diaporama avec un thème MetaSlider élégant !"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Select a custom theme"
@@ -2436,6 +2624,15 @@ msgid ""
 msgstr ""
 "Sélectionnez un thème sur la gauche pour l’utiliser dans ce diaporama. "
 "Cliquez sur le thème pour plus de détails."
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"MetaSlider Pro gives you access to extra themes. You can also create "
+"completely new themes that can easily be added to new slideshows."
+msgstr ""
+"MetaSlider Pro vous donne accès à des thèmes supplémentaires. Vous pouvez "
+"également créer des thèmes entièrement nouveaux qui peuvent être facilement "
+"ajoutés à de nouveaux diaporamas."
 
 #: admin/assets/dist/js/app.js:2
 msgid "Error: No themes were found."
@@ -2956,10 +3153,6 @@ msgstr ""
 "largeur est de 100 %, la hauteur sera mise à l’échelle en conséquence."
 
 #: admin/assets/dist/js/app.js:2
-msgid "100% Width"
-msgstr "Largeur 100%"
-
-#: admin/assets/dist/js/app.js:2
 msgid ""
 "While the width and height defined above will be used for cropping (if "
 "enabled) and the base slideshow dimensions, you may also set the slideshow "
@@ -2968,6 +3161,23 @@ msgstr ""
 "Alors que la largeur et la hauteur définies ci-dessus seront utilisées pour "
 "le recadrage (s’il est activé) et les dimensions de base du diaporama, vous "
 "pouvez également définir le diaporama pour qu’il s’étende à son conteneur."
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Change the default navigation when creating a new slideshow. Show options so "
+"that users can browse the slides."
+msgstr ""
+"Modifier la navigation par défaut lors de la création d’un nouveau "
+"diaporama. Afficher les options permettant aux utilisateurs/utilisatrices de "
+"parcourir les diapositives."
+
+#: admin/assets/dist/js/app.js:2
+msgid ""
+"Change the default transition between slides automatically when creating a "
+"new slideshow."
+msgstr ""
+"Modifier automatiquement la transition par défaut entre les diapositives "
+"lors de la création d’un nouveau diaporama."
 
 #: admin/assets/dist/js/app.js:2
 msgid "Global Settings"
@@ -3083,6 +3293,54 @@ msgstr "Désactiver le widget ancien"
 #: admin/assets/dist/js/app.js:2
 msgid "This setting allows you to disable the legacy MetaSlider widget."
 msgstr "Ce réglage vous permet de désactiver l’ancien widget MetaSlider."
+
+#: admin/assets/dist/js/app.js:2
+msgid "Enable TinyMCE"
+msgstr "Activer TinyMCE"
+
+#: admin/assets/dist/js/app.js:2
+msgid "TinyMCE is a WYSIWYG editor you can use in slide captions."
+msgstr ""
+"TinyMCE est un éditeur WYSIWYG que vous pouvez utiliser dans les légendes "
+"des diapositives."
+
+#: admin/assets/dist/js/app.js:2
+msgid "Dashboard Settings"
+msgstr "Réglages du tableau de bord"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Set default sorting options and items per page for your Dashboard."
+msgstr ""
+"Définir les options de tri par défaut et les éléments par page pour votre "
+"tableau de bord."
+
+#: admin/assets/dist/js/app.js:2
+msgid "Slideshow ID"
+msgstr "ID du diaporama"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Date Created"
+msgstr "Date de création"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Sort Slideshows By"
+msgstr "Trier le diaporama par"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Ascending"
+msgstr "Croissant"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Descending"
+msgstr "Décroissant"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Order By"
+msgstr "Trier par"
+
+#: admin/assets/dist/js/app.js:2
+msgid "Items Per Page"
+msgstr "Éléments par page"
 
 #: admin/assets/dist/js/app.js:2
 msgid "Pro Settings"
@@ -3487,6 +3745,31 @@ msgstr "diaporama"
 msgid "gallery"
 msgstr "galerie"
 
+#~ msgid "Create a slideshow with sample images"
+#~ msgstr "Créer un diaporama avec des exemples d’images"
+
+#~ msgid "Draxler is a minimalist theme."
+#~ msgstr "Draxler est un thème minimaliste."
+
+#~ msgid "A simple, slick square design that looks good on darker images."
+#~ msgstr ""
+#~ "Un design carré simple et élégant qui convient aux images plus sombres."
+
+#~ msgid "A simple theme that neatly blends into any existing website."
+#~ msgstr "Un thème simple qui s’intègre parfaitement à tout site existant."
+
+#~ msgid "Dismiss"
+#~ msgstr "Ignorer"
+
+#~ msgid "100% width"
+#~ msgstr "100% de largeur"
+
+#~ msgid "Easing"
+#~ msgstr "Easing"
+
+#~ msgid "Trashed slides"
+#~ msgstr "Diapositives mises à la corbeille"
+
 #~ msgid "Show the slide navigation bullets"
 #~ msgstr "Afficher les puces de navigation"
 
@@ -3876,9 +4159,6 @@ msgstr "galerie"
 
 #~ msgid "Image alt attribute"
 #~ msgstr "Attribut alt de l’image"
-
-#~ msgid "Image Settings"
-#~ msgstr "Réglages de l’image"
 
 #~ msgid ""
 #~ "This gallery extention is in active development, so check back soon for "

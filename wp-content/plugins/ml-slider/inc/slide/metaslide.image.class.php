@@ -27,6 +27,7 @@ class MetaImageSlide extends MetaSlide
         add_action('metaslider_save_image_slide', array($this, 'save_slide' ), 5, 3);
         add_action('wp_ajax_create_image_slide', array($this, 'ajax_create_image_slides'));
         add_action('wp_ajax_resize_image_slide', array($this, 'ajax_resize_slide'));
+        add_action('wp_ajax_crop_position_image_slide', array($this, 'ajax_crop_position_image_slide'));
         add_action('wp_ajax_duplicate_slide', array( $this, 'ajax_duplicate_slide' ));
     }
 
@@ -270,6 +271,55 @@ class MetaImageSlide extends MetaSlide
     }
 
     /**
+     * Ajax wrapper to save crop position for a given slide image.
+     *
+     * @since 3.93
+     * 
+     * @return string The status message
+     */
+    public function ajax_crop_position_image_slide()
+    {
+        if (! isset($_REQUEST['_wpnonce']) || ! wp_verify_nonce(sanitize_key($_REQUEST['_wpnonce']), 'metaslider_resize')) {
+            wp_send_json_error(array(
+                'message' => __('The security check failed. Please refresh the page and try again.', 'ml-slider')
+            ), 401);
+        }
+
+        $capability = apply_filters('metaslider_capability', MetaSliderPlugin::DEFAULT_CAPABILITY_EDIT_SLIDES);
+        if (! current_user_can($capability)) {
+            wp_send_json_error(
+                [
+                    'message' => __('Access denied. Sorry, you do not have permission to complete this task.', 'ml-slider')
+                ],
+                403
+            );
+        }
+
+        if (! isset($_POST['crop_position']) || ! isset($_POST['slide_id'])) {
+            wp_send_json_error(
+                [
+                    'message' => __('Bad request', 'ml-slider'),
+                ],
+                400
+            );
+        }
+
+        $result = update_post_meta(
+            absint($_POST['slide_id']), 
+            'ml-slider_crop_position', 
+            sanitize_text_field($_POST['crop_position'])
+        );
+
+        if (is_wp_error($result)) {
+            wp_send_json_error(array(
+                'messages' => $result->get_error_messages()
+            ), 409);
+        }
+
+        wp_send_json_success($result, 200);
+    }
+    
+    /**
      * Function to create new cropped images.
      *
      * @param string $slide_id     - The id of the slide being cropped
@@ -297,7 +347,9 @@ class MetaImageSlide extends MetaSlide
             isset($settings['width']) ? $settings['width'] : 0,
             isset($settings['height']) ? $settings['height'] : 0,
             isset($settings['smartCrop']) ? $settings['smartCrop'] : 'false',
-            $this->use_wp_image_editor()
+            $this->use_wp_image_editor(),
+            null,
+            isset($settings['cropMultiply']) ? absint($settings['cropMultiply']) : 1
         );
 
         $url = $imageHelper->get_image_url(true);
@@ -587,7 +639,6 @@ class MetaImageSlide extends MetaSlide
      */
     protected function get_public_slide()
     {
-
         // get the image url (and handle cropping)
         // disable wp_image_editor if metadata does not exist for the slide
         $imageHelper = new MetaSliderImageHelper(
@@ -595,7 +646,9 @@ class MetaImageSlide extends MetaSlide
             $this->settings['width'],
             $this->settings['height'],
             isset($this->settings['smartCrop']) ? $this->settings['smartCrop'] : 'false',
-            $this->use_wp_image_editor()
+            $this->use_wp_image_editor(),
+            null,
+            isset($this->settings['cropMultiply']) ? absint($this->settings['cropMultiply']) : 1
         );
 
         $thumb = $imageHelper->get_image_url();

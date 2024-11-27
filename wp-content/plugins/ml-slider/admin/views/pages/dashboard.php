@@ -13,7 +13,9 @@ if (!defined('ABSPATH')) {
                 } else {
                     $count = 1;
                 }
-                if ('delete' === $listtable->current_action()) {
+
+                // @todo - These notifications should require nonce, except delete-notify action
+                if ('delete' === $listtable->current_action() || 'delete-notify' === $listtable->current_action()) {
                     echo '<div class="updated below-h2" id="message"><p>' . sprintf( esc_html( _n('%d slideshow moved to the Trash.', '%d slideshows moved to the Trash.', $count), 'ml-slider'), esc_html($count) ) . '</p></div>';
                 }
                 if ('restore' === $listtable->current_action()) {

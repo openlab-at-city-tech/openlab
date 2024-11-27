@@ -76,14 +76,8 @@ class MetaSlider_Themes
             (isset($new_install)  && 'new' == $new_install)
         ) {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest.php');
-            
-            // Add theme base customization settings
-            $themes = $this->add_base_customize_settings( $themes );
         } else {
             $themes = (include METASLIDER_THEMES_PATH . 'manifest-legacy.php');
-            
-            // Add theme base customization settings
-            $themes = $this->add_base_customize_settings( $themes );
         }
 
         // If is not Pro, let's include some Premium themes with upgrade link
@@ -92,7 +86,16 @@ class MetaSlider_Themes
             $themes = array_merge($themes, $premium_themes);
         }
         
-        // Let theme developers or others define a folder to check for themes
+        /**
+         * Check if we have extra themes/ folders added from external sources,
+         * including MetaSlider Pro 
+         * 
+         * e.g. 
+         * array(
+         *  '/path/to/wp-content/plugins/ml-slider-pro/themes/',
+         *  '/path/to/wp-content/themes/my-theme/ms-themes/'
+         * )
+         */
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
             // Make sure there is a manifest
@@ -101,15 +104,20 @@ class MetaSlider_Themes
 
                 // Make sure each theme has an existing folder, title, description
                 foreach ($manifest as $data) {
-                    if (
-                        file_exists(trailingslashit($location) . $data['folder'])
+                    if (isset($data['folder'])
+                        && file_exists($folder = trailingslashit($location) . $data['folder'])
                         && isset($data['title']) 
                         && isset($data['description'])
                         && isset($data['screenshot_dir'])
                     ) {
-                        // Identify this as an external theme
-                        $data['type'] = 'external';
+                        // Adjust type
+                        $data['type'] = isset($data['type']) ? $data['type'] : 'external';
                         
+                        // Set a temporary array key to pass the customize.php file location
+                        if (file_exists($customize = trailingslashit($folder) . 'customize.php')) {
+                            $data['theme_customize_temp_'] = $customize;
+                        }
+
                         // Add a key to the theme array
                         $data = array( $data['folder'] => $data );
 
@@ -119,6 +127,9 @@ class MetaSlider_Themes
                 }
             }
         }
+
+        // Add theme customization settings
+        $themes = $this->add_base_customize_settings($themes);
 
         return $themes;
     }
@@ -132,17 +143,25 @@ class MetaSlider_Themes
      * 
      * @return array 
      */
-    public function add_base_customize_settings( $themes )
+    public function add_base_customize_settings($themes)
     {
         foreach ( $themes as $item ) {
-            $folder         = $item['folder'];
-            $customize_file = METASLIDER_THEMES_PATH . $folder . '/customize.php';
+            $folder = $item['folder'];
+
+            // Check if we use a different customize.php file (e.g. is an external theme) for this theme or default
+            $customize_file = isset($item['theme_customize_temp_']) ? $item['theme_customize_temp_'] : METASLIDER_THEMES_PATH . $folder . '/customize.php';
             
-            if ( file_exists( $customize_file ) ) {
-                $customize_settings = ( include $customize_file );
-                $themes[$folder]['customize'] = $this->merge_theme_customizations( $customize_settings );
+            if (in_array($item['type'], array('free', 'premium', 'external')) 
+                && file_exists($customize_file)
+            ) {
+                $customize_settings = (include $customize_file);
+                $themes[$folder]['customize'] = $this->merge_theme_customizations($customize_settings);
             }
-            
+
+            // Remove temporary array keys
+            if (isset($themes[$folder]['theme_customize_temp_'])) {
+                unset($themes[$folder]['theme_customize_temp_']);
+            }
         }
 
         return $themes;
@@ -152,14 +171,20 @@ class MetaSlider_Themes
      * Get customize settings from a specific theme
      * 
      * @since 3.91.0
+     * @since 3.93 - Added $alt_customize_file param
      * 
-     * @param string $theme Theme slug in lowercase. Use the theme's folder name actually.
+     * @param string $theme                     Theme slug in lowercase. Use the theme's folder name actually.
+     * @param bool|string $alt_customize_file   Alternative customize.php location
+     *                                          Use cases: if is a Pro theme or a custom theme.
+     *                                          e.g. 'path/to/another/themes/my-theme/customize.php'
      * 
      * return array
      */
-    public function add_base_customize_settings_single($theme)
+    public function add_base_customize_settings_single($theme, $alt_customize_file = false)
     {
-        $customize_file = METASLIDER_THEMES_PATH . $theme . '/customize.php';
+        $customize_file = $alt_customize_file 
+                        ? $alt_customize_file 
+                        : METASLIDER_THEMES_PATH . $theme . '/customize.php';
         
         if (file_exists($customize_file)) {
             $customize_settings = (include $customize_file);
@@ -169,6 +194,22 @@ class MetaSlider_Themes
         }
 
         return $data;
+    }
+
+    /**
+     * Get single theme data from manifest file
+     * 
+     * @since 3.93.0
+     * 
+     * @param string $theme Theme slug in lowercase. Use the theme's folder name actually.
+     * 
+     * return array
+     */
+    public function get_single_theme($theme)
+    {
+        $all_themes = $this->get_all_free_themes();
+
+        return $all_themes[$theme];
     }
 
     /**
@@ -311,7 +352,16 @@ return false;
 return $theme;
         }
 
-        // If the theme exists via outside source
+        /**
+         * Check if we have extra themes/ folders added from external sources,
+         * including MetaSlider Pro 
+         * 
+         * e.g. 
+         * array(
+         *  '/path/to/wp-content/plugins/ml-slider-pro/themes/',
+         *  '/path/to/wp-content/themes/my-theme/ms-themes/'
+         * )
+         */
         $extra_themes = apply_filters('metaslider_extra_themes', array());
         foreach ($extra_themes as $location) {
             if (file_exists(trailingslashit($location) . trailingslashit($theme['folder']) . trailingslashit($theme['version']) . 'theme.php')) {
@@ -406,7 +456,7 @@ return $theme;
     {
         $base_customizations = ( include METASLIDER_THEMES_PATH . 'customize.php' );
 
-        return array_merge( $base_customizations, $customizations );
+        return array_merge( $customizations, $base_customizations );
     }
 
     /**
@@ -425,15 +475,35 @@ return $theme;
         $customizations = $theme['customize'];
 
         /** 
-         * Just save name => default/value
+         * Just save name => default/value of each array inside 'fields' from customize.php manifest
          *
+         * In customize.php as:
          * array(
-         *     'background' => '#000',
-         *     'color' => '#feb123',
+         *      array(
+         *          'label' => 'Arrows',
+         *          'fields' => array(
+         *              array(
+         *                  'label' => 'Normal',
+         *                  'name' => 'arrows_color',
+         *                  'type' => 'color',
+         *                  'default' => '#336699',
+         *                  'css' => '%s .lorem { color: %s }'
+         *              ),
+         *              // More arrays ...
+         *          )
+         *      )
+         * )
+         * 
+         * Stored in db as:
+         * array(
+         *     'arrows_color' => '#336699',
+         *     'another_setting' => '#feb123',
          * )
          */
-        foreach ( $customizations as $index => $value ) {
-            $theme_settings[$customizations[$index]['name']] = $customizations[$index]['default'];
+        foreach ( $customizations as $row_item ) {
+            foreach ($row_item['fields'] as $field_item) {
+                $theme_settings[$field_item['name']] = $field_item['default'];
+            }
         }
 
         $slideshow_settings = get_post_meta( $slideshow_id, 'ml-slider_settings', true );
@@ -489,7 +559,16 @@ return $theme;
             $theme_dir = METASLIDER_THEMES_PATH . $theme['folder'];
         }
 
-        // Let theme developers or others define a folder to check for themes (this lets them override our themes)
+        /**
+         * Check if we have extra themes/ folders added from external sources,
+         * including MetaSlider Pro 
+         * 
+         * e.g. 
+         * array(
+         *  '/path/to/wp-content/plugins/ml-slider-pro/themes/',
+         *  '/path/to/wp-content/themes/my-theme/ms-themes/'
+         * )
+         */
         $extra_themes = apply_filters('metaslider_extra_themes', array(), $slideshow_id);
         foreach ($extra_themes as $location) {
             if (file_exists(trailingslashit($location) . $theme['folder'])) {

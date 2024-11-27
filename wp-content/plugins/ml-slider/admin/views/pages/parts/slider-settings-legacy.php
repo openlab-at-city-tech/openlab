@@ -491,6 +491,35 @@
                     'helptext' => esc_html__(
                         "Smart Crop ensures your responsive slides are cropped to a ratio that results in a consistent slideshow size.",
                         "ml-slider"
+                    ),
+                    'dependencies' => array(
+                        array(
+                            'show' => 'cropMultiply', // Show Image double size
+                            'when' => array( // When Image crop is 'true' or 'false'
+                                'true',
+                                'false'
+                            )
+                        )
+                    )
+                ),
+                'cropMultiply' => array(
+                    'priority' => 34,
+                    'type' => 'select',
+                    'label' => __("Image Crop Size", "ml-slider"),
+                    'class' => 'option flex',
+                    'value' => $this->slider->get_setting('cropMultiply'),
+                    'options' => array(
+                        1 => array('label' => '1x'),
+                        2 => array('label' => '2x'),
+                        3 => array('label' => '3x'),
+                        4 => array('label' => '4x')
+                    ),
+                    'helptext' => __(
+                        "This will increase the size of the images in your slideshow. Larger images are higher quality. Smaller images load more quickly.",
+                        "ml-slider"
+                    ),
+                    'extra_attrs' => array(
+                        'data-value' => $this->slider->get_setting('cropMultiply')
                     )
                 ),
                 'smoothHeight' => array(
@@ -526,6 +555,10 @@
                         array(
                             'show' => 'loop', // Show Loop
                             'when' => false // When carouselMode is false
+                        ),
+                        array(
+                            'show' => 'carouselMargin',
+                            'when' => true
                         )
                     )
                 ),

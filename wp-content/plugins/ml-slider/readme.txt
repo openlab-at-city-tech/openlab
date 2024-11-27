@@ -1,14 +1,14 @@
-=== Slider, Gallery, and Carousel by MetaSlider - Responsive WordPress Image Sliders ===
+=== Slider, Gallery, and Carousel by MetaSlider - Image Slider, Video Slider ===
 Contributors: andergmartins, htmgarcia, publishpress, stevejburge, rochdesigns
-Tags: slider, slider, image slider, carousel slider, gallery
+Tags: slider, video slider, image slider, carousel slider, gallery
 Requires at least: 5.0
-Stable tag: 3.91.0
+Stable tag: 3.93.0
 Requires PHP: 7.0
-Tested up to: 6.6.1
+Tested up to: 6.7
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-The best slider, gallery, carousel plugin for WordPress. Build your image slider, video slider, post slider, or WooCommerce product slider.
+Slider, gallery, carousel plugin for WordPress. Build your image slider, video slider, post slider, YouTube slider, or WooCommerce product slider.
 
 == Description ==
 
@@ -319,6 +319,50 @@ Yes, you can build Elementor slides and Beaver Builder slideshows. You can creat
 
 The format is based on [Keep a Changelog recommendations](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
+
+= [3.93.0] - 14 Nov, 2024 =
+
+* ADDED: Execute crop feature when changing crop position, #997;
+* ADDED: Add back the "Theme" column to "Home", #1329;
+* ADDED: Allow theme customizations for pro and external themes, #1351, #1369;
+* ADDED: Image crop size from 1x to 4x, #1048, #1364, #1365;
+* ADDED: Add the color pickers to all free FlexSlider themes, #1220;
+* CHANGED: Create "Base Theme" and set by default for new slideshows, #944, #1247, #1360;
+* CHANGED: Convert theme's arrow icons into SVG, #1322;
+* CHANGED: Make theme customize settings shorter, #1308;
+* CHANGED: Optimize dynamic CSS from theme customize, #1301;
+* FIXED: Issue with Post Feed and no images, #1356;
+* FIXED: Validate JS for logged out users, #1315;
+* FIXED: Theme settings: navigation, active vs inactive, #1249;
+* FIXED: Italian, Spanish and French translation updates, #1335;
+* FIXED: JS translations are not being outputted, #1326;
+* FIXED: Wrong message when trash section is empty, #1321;
+* FIXED: Sometimes color picker is cropped, #1325;
+* FIXED: Theme customize navigation should be visible only when Navigation uses 'Dots', #1323;
+* FIXED: Play button theme customize settings are showing even though Play / Pause button is disabled, #1362;
+
+= [3.92.1] - 23 Oct, 2024 =
+
+* FIXED: Verify nonce on slideshow trash, restore and delete, #1316;
+* FIXED: Main admin page loads slowly or generates error 500, #1327;
+
+= [3.92.0] - 09 Oct, 2024 =
+
+* ADDED: Customize colors for the new themes, #1258, #1298, #1306;
+* ADDED: New sorting / filtering options for /admin.php?page=metaslider, #1178;
+* ADDED: Make the the table headers clickable in main admin page, #1297;
+* CHANGED: Improve theme texts, #1241, #1242, #1243, #1246, #1239, #1244, #1245, #1300;
+* CHANGED: Update "Create a slideshow with sample images", #1251;
+* CHANGED: Move general theme customization settings to the bottom, #1296;
+* FIXED: Retain saved theme color customizations from older plugin versions, #1305;
+* FIXED: __ is not defined (admin.js), #1291;
+* FIXED: Odd text display when you hover over the "Upgrade" area when choosing a theme, #1240;
+* FIXED: Italian, Spanish and French translation updates, #1266;
+* FIXED: Toggle settings can't be disabled, #1286;
+* FIXED: Add number of slides and Type of Slides, #1151;
+* FIXED: Disable copying settings from previous slide, #1262;
+* FIXED: Quickstart options skips the arrows and navigation, #1281;
+* FIXED: Hide "Carousel margin" when "Carousel mode" is disabled, #1171;
 
 = [3.91.0] - 09 Sep, 2024 =
 

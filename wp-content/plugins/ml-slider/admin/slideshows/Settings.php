@@ -87,6 +87,7 @@ class MetaSlider_Slideshow_Settings
             'slices' => 15,
             'center' => false,
             'smartCrop' => true,
+            'cropMultiply' => 1,
             'smoothHeight' => false,
             'carouselMode' => false,
             'infiniteLoop' => false,
@@ -116,5 +117,44 @@ class MetaSlider_Slideshow_Settings
         $defaults = apply_filters('metaslider_default_parameters', $defaults);
         $overrides = get_option('metaslider_default_settings');
         return is_array($overrides) ? array_merge($defaults, $overrides) : $defaults;
+    }
+
+    /**
+     * Convert 'on' or 'off' to boolean values
+     * 
+     * @since 3.92
+     * 
+     * @param array $settings Slideshow settings
+     * 
+     * @return array
+     */
+    public static function adjust_settings($settings)
+    {
+        // Convert submitted checkbox values from 'on' or 'off' to boolean values in string format (e.g. true becomes 'true')
+        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs', 'keyboard', 'touch', 'infiniteLoop',  'mobileArrows_smartphone', 'mobileArrows_tablet','mobileArrows_laptop', 'mobileArrows_desktop', 'mobileNavigation_smartphone', 'mobileNavigation_tablet', 'mobileNavigation_laptop', 'mobileNavigation_desktop', 'ariaLive', 'tabIndex', 'pausePlay','ariaCurrent'));
+
+        foreach ($checkboxes as $checkbox) {
+            $settings[$checkbox] = (isset($settings[$checkbox]) && 'on' == $settings[$checkbox]) ? 'true' : 'false';
+        }
+
+        /* Convert submitted dropdown values from 'on' or 'off' to boolean values in string format (e.g. true becomes 'true') 
+         * Reason is these settings have true/false + string options, so is better to handle all as strings
+         * Keep original value if is different to 'on' and 'off'. 
+         * We include actual booleans in $map just in case. */
+        $dropdowns = apply_filters("metaslider_dropdown_settings", array('links', 'navigation', 'smartCrop'));
+
+        foreach ($dropdowns as $dropdown) {
+            if (isset($settings[$dropdown])) {
+                $map = array(
+                    'on' => 'true', 
+                    'off' => 'false',
+                    true => 'true',
+                    false => 'false'
+                );
+                $settings[$dropdown] = $map[$settings[$dropdown]] ?? $settings[$dropdown];
+            }            
+        }
+
+        return $settings;
     }
 }

@@ -59,14 +59,6 @@ class MetaSlider_Slideshows
      */
     public static function create()
     {
-
-        // Duplicate settings from their recently modified slideshow, or use defaults.
-        $last_modified =  self::get_last_modified();
-        $last_modified_id = !empty($last_modified) ? $last_modified['id'] : null;
-        // TODO: next branch, refactor to slideshow object and extract controller type methods.
-        // TODO: I want to be able to do $last_modified->settings()
-        $last_modified_settings = new MetaSlider_Slideshow_Settings($last_modified_id);
-        $last_modified_settings = $last_modified_settings->get_settings();
         $default_settings = MetaSlider_Slideshow_Settings::defaults();
 
         $new_id = wp_insert_post(array(
@@ -85,52 +77,34 @@ class MetaSlider_Slideshows
         if (is_wp_error($new_id)) {
             return $new_id;
         }
-
-        $overrides = get_option('metaslider_default_settings');
-        $last_modified_settings = is_array($overrides) ? array_merge($last_modified_settings, $overrides) : $last_modified_settings;
-
-        $last_modified_settings['keyboard'] = true;
-
-        // Force these always by default - @since 3.70
-        $last_modified_settings['printJs'] = true;
-        $last_modified_settings['printCss'] = true;
-        $last_modified_settings['noConflict'] = true;
-        $last_modified_settings['effect'] = 'slide';
-
-        // @since 3.91 - Use saved settings or defaults depending the case
-        $last_modified_settings['autoPlay'] = $default_settings['autoPlay'];
         
-        // @since 3.91 - Use saved settings or defaults depending the case
-        if (is_bool($default_settings['navigation'])) {
-            // Is boolean (hidden or dots)
-            $last_modified_settings['navigation'] = $default_settings['navigation'] ? 'true' : 'false';
-        } else {
-            // Is a string (thumbs or filmstrip)
-            $last_modified_settings['navigation'] = $default_settings['navigation'];
-        }
+        $overrides = get_option('metaslider_default_settings');
+        $new_settings = is_array($overrides) ? array_merge($default_settings, $overrides) : $default_settings;
 
         /* Make sure we set a default theme if available - Pro set '_theme_default' 
          * to bypass $last_modified_settings['theme'] that takes the last saved theme configuration 
          * 
+         * @TODO - Allow to set a regular theme, not just a custom theme
+         * by using too MetaSlider_Themes::get_instance()->set($new_id, $theme_data_array);
+         * 
          * @since 3.62 */
         $default_theme = apply_filters( 'metaslider_default_theme', '' );
         if ( $default_theme ) {
-            $last_modified_settings['theme'] = $default_theme;
+            $new_settings['theme'] = $default_theme;
+        } elseif (!metaslider_pro_is_active()) {
+            // @since 3.93 - Only in Free
+            $themes_ = MetaSlider_Themes::get_instance();
+            $themes_->set($new_id, $themes_->get_single_theme('default-base'));
         }
-        
-        add_post_meta($new_id, 'ml-slider_settings', $last_modified_settings, true);
 
-        // TODO: next branch, refactor to slideshow object and extract controller type methods.
-        // TODO: I want to be able to do $last_modified->theme()
-        // Get the latest slideshow used
-        $theme = get_post_meta($last_modified, 'metaslider_slideshow_theme', true);
+        add_post_meta($new_id, 'ml-slider_settings', $new_settings, true);
 
         // Lets users set their own default theme
         if ( $default_theme ) {
             $themes = MetaSlider_Themes::get_instance();
             $theme = $themes->get_theme_object( null, $default_theme );
         }
-
+        
         // Set the theme if we found something
         if (isset($theme['folder'])) {
             update_post_meta($new_id, 'metaslider_slideshow_theme', $theme);
@@ -152,20 +126,15 @@ class MetaSlider_Slideshows
      */
     public function save($slideshow_id, $new_settings)
     {
-
         // TODO: This is old code copied over and should eventually be refactored to not require hard-coded values
         $old_settings = get_post_meta($slideshow_id, 'ml-slider_settings', true);
 
-        // convert submitted checkbox values from 'on' or 'off' to boolean values
-        $checkboxes = apply_filters("metaslider_checkbox_settings", array('noConflict', 'fullWidth', 'hoverPause', 'reverse', 'random', 'printCss', 'printJs', 'smoothHeight', 'center', 'carouselMode', 'autoPlay', 'firstSlideFadeIn', 'responsive_thumbs', 'keyboard', 'touch', 'infiniteLoop',  'mobileArrows_smartphone', 'mobileArrows_tablet','mobileArrows_laptop', 'mobileArrows_desktop', 'mobileNavigation_smartphone', 'mobileNavigation_tablet', 'mobileNavigation_laptop', 'mobileNavigation_desktop', 'ariaLive', 'tabIndex', 'pausePlay','ariaCurrent'));
+        // Convert submitted checkbox and dropdowns values from 'on' or 'off' to boolean values
+        $new_settings = MetaSlider_Slideshow_Settings::adjust_settings($new_settings);
 
-        foreach ($checkboxes as $checkbox) {
-            $new_settings[$checkbox] = (isset($new_settings[$checkbox]) && 'on' == $new_settings[$checkbox]) ? 'true' : 'false';
-        }
+        $new_settings = array_merge((array) $old_settings, $new_settings);
 
-        $settings = array_merge((array) $old_settings, $new_settings);
-
-        update_post_meta($slideshow_id, 'ml-slider_settings', $settings);
+        update_post_meta($slideshow_id, 'ml-slider_settings', $new_settings);
 
         return $slideshow_id;
     }
@@ -412,7 +381,10 @@ class MetaSlider_Slideshows
                             $new_slide_id,
                             $settings['width'],
                             $settings['height'],
-                            isset($settings['smartCrop']) ? $settings['smartCrop'] : 'false'
+                            isset($settings['smartCrop']) ? $settings['smartCrop'] : 'false',
+                            true,
+                            null,
+                            isset($settings['cropMultiply']) ? absint($settings['cropMultiply']) : 1
                         );
                         // This crops even though it doesn't sounds like it
                         $image_cropper->get_image_url();
