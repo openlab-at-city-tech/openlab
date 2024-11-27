@@ -2,18 +2,21 @@
 /**
  * @package Simple Pull Quote
  * @author Toby Cryns
- * @version 1.5
+ * @version 1.6.3
  */
 /*
-Plugin Name: Simple Pull Quote
-Plugin URI: http://www.themightymo.com/simple-pull-quote
-Description: Easily add pull quotes to blog posts using shortcode.
-Author: Toby Cryns
-Version: 1.5
-Author URI: http://www.themightymo.com/updates
+	* @wordpress-plugin
+	* Plugin Name: Simple Pull Quote
+	* Version: 1.6.3
+	* Plugin URI: http://www.themightymo.com/simple-pull-quote
+	* Description: Easily add pull quotes to blog posts using shortcode.
+	* Author: Toby Cryns
+	* Author URI: https://tobycryns.com
+	* License: GPL v3
+	* Requires PHP: 7.2.5
 */
 
-/*  Copyright 2009  Toby Cryns  (email : toby at themightymo dot com)
+/*  Copyright 2009-2024 Toby Cryns  (email : toby at themightymo dot com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -29,6 +32,8 @@ Author URI: http://www.themightymo.com/updates
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+
 
 // Load the TinyMCE Stuff
 require_once (dirname(__FILE__) . '/simple-pull-quote_tinymce.php');
@@ -65,15 +70,23 @@ add_action( 'admin_enqueue_scripts', 'specific_enqueue' );
 
 // v1.5 with help from https://developer.wordpress.org/plugins/shortcodes/shortcodes-with-parameters/
 function getSimplePullQuote( $atts, $content = null ) {
-    $output = '';
+    // Set default attributes
     $pull_quote_atts = shortcode_atts( array(
-        //'quote' => 'My Quote',
         'class' => 'right',
     ), $atts );
-	$content = wpautop(trim($content));
-    return '<div class="simplePullQuote ' . wp_kses_post( $pull_quote_atts[ 'class' ] ) . '">'. do_shortcode($content) .'</div>';
+
+    // Clean up and process content
+    $content = wpautop(trim($content));
+
+    // Create the output with the appropriate class and content
+    $output = '<div class="simplePullQuote ' . sanitize_html_class($pull_quote_atts['class']) . '">';
+    $output .= do_shortcode($content);
+    $output .= '</div>';
+
+    return $output;
 }
 add_shortcode('pullquote', 'getSimplePullQuote');
+
 
 
 // LEGACY CODE for Version < 0.2.4
