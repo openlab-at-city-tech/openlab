@@ -7,10 +7,18 @@ Description: A unique template featuring sliding images in the header.  Uses a C
 Author: Wayne Connor
 
 Author URI:http://macintoshhowto.com/about
-Text Domain: sliding-door
-Version: 3.3
 
-Tags: three-columns, theme-options, threaded-comments, sticky-post
+Version: 3.6
+
+Text Domain: sliding-door
+
+Tested up to: 6.4.3
+
+Requires PHP: 5.6
+
+ 
+Tags: one-column, custom-colors, custom-menu, custom-logo,featured-images, sticky-post,  translation-ready, , blog, portfolio, news
+
 License: GNU General Public License v2.0
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 This theme is licensed under the GPL.Use it to make something cool, have fun, and share what you've learned with others.*/

@@ -52,6 +52,7 @@ else
 </head>
 
 <body <?php body_class(); ?>>
+  <?php wp_body_open(); ?>
 <div id="wrapper" class="hfeed">
 	<div id="header">
 		<div id="masthead">
@@ -68,7 +69,8 @@ if ( $img_src = get_header_image ()  ) :
 <?php $heading_tag = ( is_home() || is_front_page() ) ? 'h1' : 'div'; ?>
 				<<?php echo $heading_tag; ?> id="site-title">
 					<span>
-						<a href="<?php echo home_url( '/' ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+	                    <a href="<?php echo esc_url( home_url( '/' ) ); ?>" title="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" rel="home"><?php bloginfo( 'name' ); ?></a>
+
 					</span>
 				</<?php echo $heading_tag; ?>>
 				<div id="site-description"><?php bloginfo( 'description' ); ?></div>
