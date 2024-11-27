@@ -43,10 +43,6 @@ class Translations extends Abstract_Module {
 			return false;
 		}
 
-		if ( ! $product->is_plugin() ) {
-			return false;
-		}
-
 		return apply_filters( $product->get_slug() . '_sdk_enable_private_translations', false );
 	}
 
@@ -61,7 +57,12 @@ class Translations extends Abstract_Module {
 
 		$this->product = $product;
 
-		add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'add_translations' ], 11 );
+		if ( $this->product->is_plugin() ) {
+			add_filter( 'pre_set_site_transient_update_plugins', [ $this, 'add_plugin_translations' ], 11 );
+		} else {
+			add_filter( 'pre_set_site_transient_update_themes', [ $this, 'add_theme_translations' ], 11 );
+		}
+
 		add_filter( 'http_request_host_is_external', [ $this, 'allow_translations_api' ], 10, 3 );
 
 		return $this;
@@ -73,6 +74,7 @@ class Translations extends Abstract_Module {
 	 * @param bool   $external Whether the host is external.
 	 * @param string $host The host being checked.
 	 * @param string $url The URL being checked.
+	 *
 	 * @return bool
 	 */
 	public function allow_translations_api( $external, $host, $url ) {
@@ -125,13 +127,14 @@ class Translations extends Abstract_Module {
 	}
 
 	/**
-	 * Append translations that are available via API.
+	 * Add translations to the transient data.
 	 *
-	 * @param array $_transient_data The transient data.
+	 * @param array  $_transient_data incoming transient data.
+	 * @param string $type plugins or themes.
 	 *
-	 * @return mixed
+	 * @return array
 	 */
-	public function add_translations( $_transient_data ) {
+	public function add_translations( $_transient_data, $type = 'plugins' ) {
 		$translations = $this->get_api_translations();
 
 		if ( ! is_array( $translations ) ) {
@@ -142,12 +145,17 @@ class Translations extends Abstract_Module {
 			return $_transient_data;
 		}
 
-		$installed_translations = wp_get_installed_translations( 'plugins' );
+		if ( ! in_array( $type, [ 'plugins', 'themes' ] ) ) {
+			return $_transient_data;
+		}
+
+		$installed_translations = wp_get_installed_translations( $type );
 
 		foreach ( $translations as $translation ) {
 			$translation = (array) $translation;
 
-			if ( ! $this->is_valid_translation( $translation ) ) {
+
+			if ( ! $this->is_valid_translation( $translation, $type ) ) {
 				continue;
 			}
 
@@ -174,6 +182,29 @@ class Translations extends Abstract_Module {
 	}
 
 	/**
+	 * Add theme translations to the transient.
+	 *
+	 * @param array $_transient_data incoming transient data.
+	 *
+	 * @return array
+	 */
+	public function add_theme_translations( $_transient_data ) {
+		return $this->add_translations( $_transient_data, 'theme' );
+	}
+
+
+	/**
+	 * Add plugin translations to the transient.
+	 *
+	 * @param array $_transient_data The transient data.
+	 *
+	 * @return array
+	 */
+	public function add_plugin_translations( $_transient_data ) {
+		return $this->add_translations( $_transient_data );
+	}
+
+	/**
 	 * Get the option key for storing translations.
 	 *
 	 * @param array $translation the translation data from the API.
@@ -191,15 +222,19 @@ class Translations extends Abstract_Module {
 	 *
 	 * @return bool
 	 */
-	private function is_valid_translation( $translation ) {
-		$locales = apply_filters( 'plugins_update_check_locales', array_values( get_available_languages() ) );
+	private function is_valid_translation( $translation, $type = 'plugins' ) {
+		if ( ! isset( $translation['slug'] ) || $translation['slug'] !== $this->product->get_slug() ) {
+			return false;
+		}
+
+		$locales = apply_filters( $type . '_update_check_locales', array_values( get_available_languages() ) );
 
 		if ( ! is_array( $locales ) ) {
 			return false;
 		}
 		$locales = array_unique( $locales );
 
-		if ( ! isset( $translation['language'], $translation['slug'], $translation['updated'] ) ) {
+		if ( ! isset( $translation['language'], $translation['updated'] ) ) {
 			return false;
 		}
 

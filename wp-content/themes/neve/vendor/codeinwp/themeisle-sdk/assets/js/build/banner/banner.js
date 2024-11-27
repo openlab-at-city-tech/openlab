@@ -1,0 +1,1 @@
+document.addEventListener("DOMContentLoaded",(()=>{document.dispatchEvent(new Event("themeisle:banner:init"))})),document.addEventListener("themeisle:banner:init",(()=>{!function(){if(void 0===window.tsdk_banner_data)return;const n=document.getElementById("tsdk_banner");n&&(n.innerHTML=window.tsdk_banner_data.content)}()}));
