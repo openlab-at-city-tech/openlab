@@ -158,6 +158,20 @@ body.rtl {
 		text-align: right;
 	}
 }
+// fixes rtl mobile layout for single product pages
+@media screen and (max-width: 719px) {
+	.rtl.woocommerce.single-product div.product div.images,
+	.rtl.woocommerce.single-product div.product div.summary,
+	.rtl.woocommerce.single-product #content div.product div.images,
+	.rtl.woocommerce.single-product #content div.product div.summary,
+	.rtl.woocommerce-page.single-product div.product div.images,
+	.rtl.woocommerce-page.single-product div.product div.summary,
+	.rtl.woocommerce-page.single-product #content div.product div.images,
+	.rtl.woocommerce-page.single-product #content div.product div.summary {
+		float: none;
+		width: 100%;
+	}
+}
 
 //blocks
 .rtl {

@@ -2,9 +2,9 @@
 Contributors: britner
 Tags: translation-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
 Requires at least: 6.3
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.2.10
+Stable tag: 1.2.12
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,13 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+== 1.2.12 | 19th November 2024 ==
+* Fix: Possible issue with woocommerce product image sizes.
+
+== 1.2.11 | 14th November 2024 ==
+* Fix: Issue with buttons vertical alignment in rows
+* Fix: WooCommerce single product pages on mobile RTL
 
 == 1.2.10 | 16th October 2024 ==
 * Update: Improve integration with TEC customizer settings.
