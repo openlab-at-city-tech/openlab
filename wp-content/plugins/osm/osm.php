@@ -3,13 +3,13 @@
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
-Version: 6.0.2
+Version: 6.1.6
 Author: MiKa
 Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
 */
 
-/*  (c) Copyright 2023  MiKa (www.hyumika.com)
+/*  (c) Copyright 2024  MiKa (www.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -27,7 +27,7 @@ Minimum WordPress Version Required: 3.0
 */
 load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V6.0.2");
+define ("PLUGIN_VER", "V6.1.6");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -110,50 +110,99 @@ define ("Osm_TraceLevel", DEBUG_ERROR);
 // If the function exists this file is called as upload_mimes.
 // We don't do anything then.
 if ( ! function_exists( 'osm_restrict_mime_types' ) ) {
-  add_filter( 'upload_mimes', 'osm_restrict_mime_types' );
-  /**
-  * Retrun allowed mime types
-  *
-  * @see function get_allowed_mime_types in wp-includes/functions.php
-  * @param array Array of mime types
-  * @return array Array of mime types keyed by the file extension regex corresponding to those types.
-  */
-  function osm_restrict_mime_types( $mime_types ) {
-    $mime_types['gpx'] = 'text/gpx';
-    $mime_types['kml'] = 'text/kml';
-    return $mime_types;
-  }
-}
+    //
+    // Return allowed mime types
+    //
+    // @see function get_allowed_mime_types in wp-includes/functions.php
+    // @param array $mime_types Array of mime types
+    // @return array Array of mime types keyed by the file extension regex corresponding to those types.
+    //
+    function osm_restrict_mime_types( $mime_types ) {
+        // Logging der aktuellen MIME-Typen, die erlaubt sind
+        // error_log('Called osm_restrict_mime_types filter.');
+        
+        // Füge gpx und kml zu den erlaubten MIME-Typen hinzu
+        $mime_types['gpx'] = 'application/gpx+xml';
+        $mime_types['kml'] = 'application/vnd.google-earth.kml+xml';
 
+        // Logge die Liste der erlaubten MIME-Typen nach dem Hinzufügen
+        // error_log('Allowed MIME types after modification: ' . print_r($mime_types, true));
 
-function saveGeotagAndPic(){
-
-  $latlon  = sanitize_text_field( $_POST['lat']).','.sanitize_text_field( $_POST['lon']);
-  $icon    = sanitize_text_field( $_POST['icon']);
-  $post_id = sanitize_text_field( $_POST['post_id']);
-  $nonce   = sanitize_text_field( $_POST['geotag_nonce']);
-
-
-  if (!wp_verify_nonce($nonce, 'osm_geotag_nonce')){
-    echo "Error: Bad ajax request";
-  }
-  else {
-    echo "<br>";
-    _e('Location (geotag) saved successfully, you can use it at [Map & Locations]!','OSM');
-    echo "<br><b>";
-    _e('TIPP: ','OSM');
-    echo "</b>";
-    _e('There is an OSM widget that shows a map with your location automatically on your post/page!','OSM');
-    $CustomField =  get_option('osm_custom_field','OSM_geo_data');
-    delete_post_meta($post_id, $CustomField);
-    delete_post_meta($post_id, "OSM_geo_icon");
-    add_post_meta($post_id, $CustomField, $latlon, true );
-    if ($icon != ""){
-      add_post_meta($post_id, "OSM_geo_icon", $icon, true );
+        return $mime_types;
     }
-  }
-  wp_die();
+
+    function allow_osm_upload( $data, $file, $filename, $mimes ) {
+        // Logging des Dateinamens und der empfangenen Mimetypen
+        // error_log('Called allow_osm_upload for file: ' . $filename);
+        // error_log('File MIME types received: ' . print_r($mimes, true));
+
+        // Hole die Dateiendung (unabhängig von Groß-/Kleinschreibung)
+        $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+
+        // Logge die erkannte Dateiendung
+        // error_log('Detected file extension: ' . $ext);
+
+        // Prüfe auf kml oder gpx und setze den entsprechenden MIME-Typ
+        if ( $ext === 'kml' ) {
+            // error_log('Processing KML file.');
+            $data['ext']  = 'kml';
+            $data['type'] = 'application/vnd.google-earth.kml+xml';
+            $data['proper_filename'] = $filename;
+        } elseif ( $ext === 'gpx' ) {
+            // error_log('Processing GPX file.');
+            $data['ext']  = 'gpx';
+            $data['type'] = 'application/gpx+xml';
+            $data['proper_filename'] = $filename;
+        } else {
+            // Logge, wenn die Dateiendung nicht unterstützt wird
+            error_log('Unsupported file extension: ' . $ext);
+        }
+
+        // Logge die finalen Dateiinformationen, bevor sie zurückgegeben werden
+        // error_log('File data to be returned: ' . print_r($data, true));
+        return $data;
+    }
+
+    // Filter einbinden, um zusätzliche MIME-Typen (gpx und kml) zu erlauben
+    add_filter( 'upload_mimes', 'osm_restrict_mime_types' );
+    add_filter( 'wp_check_filetype_and_ext', 'allow_osm_upload', 10, 4 );
 }
+
+function saveGeotagAndPic() {
+    if ( isset( $_POST['lat'], $_POST['lon'], $_POST['icon'], $_POST['post_id'], $_POST['geotag_nonce'] ) ) {
+        $latlon  = sanitize_text_field( wp_unslash( $_POST['lat'] ) ) . ',' . sanitize_text_field( wp_unslash( $_POST['lon'] ) );
+        $icon    = sanitize_text_field( wp_unslash( $_POST['icon'] ) );
+        $post_id = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
+        $nonce   = sanitize_text_field( wp_unslash( $_POST['geotag_nonce'] ) );
+
+        if ( ! wp_verify_nonce( $nonce, 'osm_geotag_nonce' ) ) {
+            echo "Error: Bad ajax request";
+        } else {
+            echo "<br>";
+            _e( 'Location (geotag) saved successfully, you can use it at [Map & Locations]!', 'OSM' );
+            echo "<br><b>";
+            _e( 'TIPP: ', 'OSM' );
+            echo "</b>";
+            _e( 'There is an OSM widget that shows a map with your location automatically on your post/page!', 'OSM' );
+
+            // Custom Field update
+            $CustomField = get_option( 'osm_custom_field', 'OSM_geo_data' );
+            delete_post_meta( $post_id, $CustomField );
+            delete_post_meta( $post_id, "OSM_geo_icon" );
+            add_post_meta( $post_id, $CustomField, $latlon, true );
+            if ( $icon != "" ) {
+                add_post_meta( $post_id, "OSM_geo_icon", $icon, true );
+            }
+        }
+    } else {
+        // Fehler, wenn die erwarteten POST-Variablen fehlen
+        echo "Error: Required data is missing.";
+    }
+
+    wp_die();
+}
+
+
 
 function osm_add_action_links ( $actions ) {
    $mylinks = array(
@@ -164,38 +213,56 @@ function osm_add_action_links ( $actions ) {
 }    
 
 
-function savePostMarker(){
-  $MarkerId = sanitize_text_field( $_POST['MarkerId'] );
-  $MarkerLatLon  = sanitize_text_field( $_POST['MarkerLat'] ).','.sanitize_text_field( $_POST['MarkerLon'] );
-  $MarkerIcon      = sanitize_text_field( $_POST['MarkerIcon']);
-  $MarkerName   = sanitize_text_field( $_POST['MarkerName']);
-  $post_id = sanitize_text_field( $_POST['post_id']);
-  $nonce   = sanitize_text_field( $_POST['marker_nonce']); 
- 
-  $allowed_html = array(
-    'a' => array('href' => array(),),
-    'br' => array(),
-    'b' => array(),
-    'i' => array(),
-  );
-  $MarkerText      = wp_kses( $_POST['MarkerText'], $allowed_html);
-  
-  if (!wp_verify_nonce($nonce, 'osm_marker_nonce')){
-    echo "Error: Bad ajax request";
-  }
-  else {
-    delete_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Name');
-    delete_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_LatLon');
-    delete_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Icon');
-    delete_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Text');
-    add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Name', $MarkerName, true );
-    add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_LatLon', $MarkerLatLon, true );
-    add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Icon', $MarkerIcon, true );
-    add_post_meta($post_id, 'OSM_Marker_0'.$MarkerId.'_Text', $MarkerText, true );
+function savePostMarker() {
+    if ( isset( $_POST['MarkerId'], $_POST['MarkerLat'], $_POST['MarkerLon'], $_POST['MarkerIcon'], $_POST['MarkerName'], $_POST['post_id'], $_POST['marker_nonce'], $_POST['MarkerText'] ) ) {
 
-  }
-  wp_die();
+        $MarkerId      = sanitize_text_field( wp_unslash( $_POST['MarkerId'] ) );
+        $MarkerLatLon  = sanitize_text_field( wp_unslash( $_POST['MarkerLat'] ) ) . ',' . sanitize_text_field( wp_unslash( $_POST['MarkerLon'] ) );
+        $MarkerIcon    = sanitize_text_field( wp_unslash( $_POST['MarkerIcon'] ) );
+        $MarkerName    = sanitize_text_field( wp_unslash( $_POST['MarkerName'] ) );
+        $post_id       = sanitize_text_field( wp_unslash( $_POST['post_id'] ) );
+        $nonce         = sanitize_text_field( wp_unslash( $_POST['marker_nonce'] ) );
+        
+        $allowed_html  = array(
+            'a'  => array( 'href' => array() ),
+            'br' => array(),
+            'b'  => array(),
+            'i'  => array(),
+        );
+        $MarkerText    = wp_kses( wp_unslash( $_POST['MarkerText'] ), $allowed_html );
+
+        // Überprüfung des Nonce-Wertes
+        if ( ! wp_verify_nonce( $nonce, 'osm_marker_nonce' ) ) {
+            echo "Error: Bad ajax request";
+        } else {
+            // Löschen und Hinzufügen von Meta-Daten
+            delete_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Name' );
+            delete_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_LatLon' );
+            delete_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Icon' );
+            delete_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Text' );
+            add_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Name', $MarkerName, true );
+            add_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_LatLon', $MarkerLatLon, true );
+            add_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Icon', $MarkerIcon, true );
+            add_post_meta( $post_id, 'OSM_Marker_0' . $MarkerId . '_Text', $MarkerText, true );
+        }
+    } else {
+       // Fehlende Felder debuggen
+        $missing_fields = array();
+        if ( ! isset( $_POST['MarkerId'] ) ) $missing_fields[] = 'MarkerId';
+        if ( ! isset( $_POST['MarkerLat'] ) ) $missing_fields[] = 'MarkerLat';
+        if ( ! isset( $_POST['MarkerLon'] ) ) $missing_fields[] = 'MarkerLon';
+        if ( ! isset( $_POST['MarkerIcon'] ) ) $missing_fields[] = 'MarkerIcon';
+        if ( ! isset( $_POST['MarkerName'] ) ) $missing_fields[] = 'MarkerName';
+        if ( ! isset( $_POST['post_id'] ) ) $missing_fields[] = 'post_id';
+        if ( ! isset( $_POST['marker_nonce'] ) ) $missing_fields[] = 'marker_nonce';
+        if ( ! isset( $_POST['MarkerText'] ) ) $missing_fields[] = 'MarkerText';
+
+        echo "Error: Required data is missing: " . implode( ', ', $missing_fields );
+        echo "Error: Required data is missing.";
+    }
+    wp_die();
 }
+
 
 
 // If the function exists this file is called as post-upload-ui.
@@ -227,11 +294,44 @@ include('osm_map_v3/osm-oljs3.php');
 include('osm_map/osm-icon.php');
 include('osm-icon-class.php');
 
+
+
+function load_osm_map_v3_scripts($hook) {
+    //for osm_map_v3
+    wp_enqueue_style('osm-ol3-css', Osm_OL_3_CSS);
+    wp_enqueue_style('osm-ol3-ext-css', Osm_OL_3_Ext_CSS);
+    wp_enqueue_style('osm-map-css', Osm_map_CSS);
+    wp_enqueue_script('osm-polyfill', OSM_PLUGIN_URL . 'js/polyfill/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL');
+    wp_enqueue_script('osm-ol3-library', Osm_OL_3_LibraryLocation);
+    wp_enqueue_script('osm-ol3-ext-library', Osm_OL_3_Ext_LibraryLocation);
+    wp_enqueue_script('osm-ol3-metabox-events', Osm_OL_3_MetaboxEvents_LibraryLocation);
+    wp_enqueue_script('osm-map-startup', Osm_map_startup_LibraryLocation);
+    
+}
+
+function load_osm_map_scripts($hook) {
+    wp_enqueue_script(array ('jquery'));
+    
+    //for osm_map
+    wp_enqueue_style('osm-map-css', Osm_map_CSS);  
+    wp_enqueue_script('osm-ol-library', Osm_OL_LibraryLocation);
+    wp_enqueue_script('osm-osm-library', Osm_OSM_LibraryLocation);
+    wp_enqueue_script('osm-harbours-library', Osm_harbours_LibraryLocation);
+    wp_enqueue_script('osm-map-utils-library', Osm_map_utils_LibraryLocation);
+    wp_enqueue_script('osm-utilities-library', Osm_utilities_LibraryLocation);
+    wp_enqueue_script('OsmScript',OSM_PLUGIN_JS_URL.'osm-plugin-lib.js');
+    //wp_enqueue_script('OsnScript',Osm_GOOGLE_LibraryLocation);
+    define ('OSM_LIBS_LOADED', 1);
+    define ('OL_LIBS_LOADED', 1);
+    define ('GOOGLE_LIBS_LOADED', 1);
+}
+
 // let's be unique ...
 // with this namespace
 class Osm
 {
   static $OSM_ErrorMsg;
+  private $localizionName;
   
   function __construct(){
   $this->localizionName = 'OSM';
@@ -245,7 +345,8 @@ class Osm
     add_action('wp_head', array(&$this, 'wp_head'));
     add_action('admin_head', array(&$this, 'admin_head'));
     add_action('admin_menu', array(&$this, 'admin_menu'));
-    add_action('wp_print_scripts',array(&$this, 'show_enqueue_script'));
+    add_action('wp_enqueue_scripts', 'load_osm_map_scripts');
+    add_action('wp_enqueue_scripts', 'load_osm_map_v3_scripts');
     add_action('widgets_init', 'register_osm_widget' );
     add_action('wp_ajax_act_saveGeotag', 'saveGeotagAndPic');
     add_action('wp_ajax_act_saveMarker', 'savePostMarker');
@@ -253,7 +354,6 @@ class Osm
     // add the WP shortcode
     add_shortcode('osm_map',array(&$this, 'sc_showMap'));
     add_shortcode('osm_map_v3',array(&$this, 'sc_OL3JS'));
-    add_shortcode('osm_image',array(&$this, 'sc_showImage'));
     add_shortcode('osm_info',array(&$this, 'sc_info'));
     
     add_filter( 'plugin_action_links_' . plugin_basename(__FILE__), 'osm_add_action_links' );
@@ -291,62 +391,73 @@ class Osm
   }
 
   // add it to the Settings page
-  static function options_page_osm()
-  {
-      
+static function options_page_osm() {
     // 0 = no error;
-    // 1 = error occured
+    // 1 = error occurred
     $Option_Error = 0;
 
-    // name of the custom field to store Long and Lat
-    // for the geodata of the post
-    $osm_custom_field  = get_option('osm_custom_field','OSM_geo_data');
-           
-    //default map values 
-    $osm_default_lat=get_option('osm_default_lat',OSM_default_lat);  
-    $osm_default_lon=get_option('osm_default_lon',OSM_default_lon);  
-    $osm_default_zoom=get_option('osm_default_zoom',OSM_default_zoom); 
-    // update default maps values
-    if (isset($_POST['osm_default_lat']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
-        $temp_lat=(float) $_POST['osm_default_lat'];
-        if ($temp_lat>LAT_MAX || $temp_lat<LAT_MIN) {
-          $Option_Error = 1;
-          Osm::traceText(DEBUG_ERROR, "e_default_lat_range");   
-        } else {
-          $osm_default_lat=$temp_lat;   
-          update_option('osm_default_lat',$temp_lat); 
-        }
-    } 
-    if (isset($_POST['osm_default_lon']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
-        $temp_lon=(float) $_POST['osm_default_lon'];
-        if ($temp_lon>LON_MAX || $temp_lon<LON_MIN) {
-          $Option_Error = 1;
-          Osm::traceText(DEBUG_ERROR, "e_default_lon_range");   
-        } else {
-          $osm_default_lon=$temp_lon;   
-          update_option('osm_default_lon',$temp_lon);  
-          }
-     } 
-    if (isset($_POST['osm_default_zoom']) && wp_verify_nonce( $_POST['osm_options'], 'update_options' )) {
-        $temp_zoom=(int) $_POST['osm_default_zoom'];
-        if ($temp_zoom>19 || $temp_zoom<1) {
-          $Option_Error = 1;
-          Osm::traceText(DEBUG_ERROR, "e_default_zoom_range");   
-        } else {
-          $osm_default_zoom=$temp_zoom;
-          update_option('osm_default_zoom',$temp_zoom);
-        }
-     } 
-     // Let the user know whether all was fine or not
-     if ($Option_Error  == 0){
-        Osm::traceText(DEBUG_INFO, "i_options_updated");
-     }
-     else {
-        Osm::traceText(DEBUG_ERROR, "e_options_not_updated");
-     }
+    // Name des benutzerdefinierten Felds für Längen- und Breitengrad
+    $osm_custom_field  = get_option('osm_custom_field', 'OSM_geo_data');
+    
+    // Standardwerte für die Karte
+    $osm_default_lat  = get_option('osm_default_lat', OSM_default_lat);  
+    $osm_default_lon  = get_option('osm_default_lon', OSM_default_lon);  
+    $osm_default_zoom = get_option('osm_default_zoom', OSM_default_zoom); 
 
+    // Überprüfung, ob das Formular gesendet wurde und der Nonce korrekt ist
+    if (isset($_POST['osm_options']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['osm_options'])), 'update_options')) {
+
+        // Prüfen und verarbeiten der Default Latitude
+        if (isset($_POST['osm_default_lat'])) {
+            $temp_lat = (float) sanitize_text_field(wp_unslash($_POST['osm_default_lat']));
+            if ($temp_lat > LAT_MAX || $temp_lat < LAT_MIN) {
+                $Option_Error = 1;
+                Osm::traceText(DEBUG_ERROR, "e_default_lat_range");
+            } else {
+                update_option('osm_default_lat', $temp_lat);
+            }
+        }
+
+        // Prüfen und verarbeiten der Default Longitude
+        if (isset($_POST['osm_default_lon'])) {
+            $temp_lon = (float) sanitize_text_field(wp_unslash($_POST['osm_default_lon']));
+            if ($temp_lon > LON_MAX || $temp_lon < LON_MIN) {
+                $Option_Error = 1;
+                Osm::traceText(DEBUG_ERROR, "e_default_lon_range");
+            } else {
+                update_option('osm_default_lon', $temp_lon);
+            }
+        }
+
+        // Prüfen und verarbeiten der Default Zoom
+        if (isset($_POST['osm_default_zoom'])) {
+            $temp_zoom = (int) sanitize_text_field(wp_unslash($_POST['osm_default_zoom']));
+            if ($temp_zoom > 19 || $temp_zoom < 1) {
+                $Option_Error = 1;
+                Osm::traceText(DEBUG_ERROR, "e_default_zoom_range");
+            } else {
+                update_option('osm_default_zoom', $temp_zoom);
+            }
+        }
+
+        // Erfolgs- oder Fehlermeldung
+        if ($Option_Error == 0) {
+            Osm::traceText(DEBUG_INFO, "i_options_updated");
+        } else {
+            Osm::traceText(DEBUG_ERROR, "e_options_not_updated");
+        }
+
+    } else {
+        // Fehler bei der Nonce-Überprüfung
+        if (isset($_POST['osm_options'])) {
+            Osm::traceText(DEBUG_ERROR, "e_nonce_verification_failed");
+        }
+    }
+
+    // Einbinden der Optionen-Seite
     include('osm-options.php');
-  }
+}
+
 
   // put meta tags into the head section
   function wp_head($not_used)
@@ -382,7 +493,7 @@ var HTTP_GET_VARS = [];
 </script>';
 
     if(is_single() && ($lat != '') && ($lon != '')){
-      $title = convert_chars(strip_tags(get_bloginfo("name")))." - ".$wp_query->post->post_title;
+      $title = convert_chars(wp_strip_all_tags(get_bloginfo("name")))." - ".$wp_query->post->post_title;
       Osm::traceText(HTML_COMMENT, 'OSM plugin '.PLUGIN_VER.': adding geo meta tags:');
     }
     else{
@@ -455,156 +566,173 @@ var HTTP_GET_VARS = [];
     @param $a_custom_taxonomy only for geotag
     @return list of markers
   */
-  static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name,  $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_taxonomy)
-  {
-     Osm::traceText(DEBUG_INFO, "OL3_createMarkerList(".$a_import.",".$a_import_osm_cat_incl_name.",".$a_import_osm_cat_excl_name.",".$a_post_type.",".$a_import_osm_custom_tax_incl_name.",".$a_taxonomy.")");
-     global $post;
-     $post_org = $post;
+static function OL3_createMarkerList($a_import, $a_import_osm_cat_incl_name, $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_taxonomy) {
+    Osm::traceText(DEBUG_INFO, "OL3_createMarkerList(".$a_import.",".$a_import_osm_cat_incl_name.",".$a_import_osm_cat_excl_name.",".$a_post_type.",".$a_import_osm_custom_tax_incl_name.",".$a_taxonomy.")");
+    
+    global $post;
+    $post_org = $post;
+    
+    // Initialize $pageposts
+    $pageposts = [];
 
-     /**++++++++++++++++++++++++++++++++++++++++++
-     + posts or pages with geotags              +
-     +++++++++++++++++++++++++++++++++++++++++++*/
-     if ($a_import == 'osm' || $a_import == 'osm_l'){
-       $CustomFieldName = get_option('osm_custom_field','OSM_geo_data');
-       // let's see which posts are using our geo data ...
-       //+++
-       global $wpdb;
-       global $post_type;
+    // Posts or pages with geotags
+    if ($a_import == 'osm' || $a_import == 'osm_l') {
+        $CustomFieldName = get_option('osm_custom_field', 'OSM_geo_data');
+        global $wpdb;
 
-       $post_type = esc_sql($a_post_type);
-       $CustomFieldName     = esc_sql($CustomFieldName);
+        // Sanitize input
+        $post_type = sanitize_key($a_post_type);
+        $CustomFieldName = sanitize_text_field($CustomFieldName);
 
-       if ($a_import_osm_cat_incl_name == "osm_all" ){
-         $querystr = "
-         SELECT DISTINCT wposts.*
-         FROM $wpdb->posts wposts
-	       LEFT JOIN $wpdb->postmeta wpostmeta ON wposts.ID = wpostmeta.post_id
-	       LEFT JOIN $wpdb->term_relationships ON (wposts.ID = $wpdb->term_relationships.object_id)
-	       LEFT JOIN $wpdb->term_taxonomy ON ($wpdb->term_relationships.term_taxonomy_id = $wpdb->term_taxonomy.term_taxonomy_id)
-         WHERE wpostmeta.meta_key = '$CustomFieldName'
-         AND wposts.post_status = 'publish'
-         AND wposts.post_type = '$post_type'
-         ";
-       }
-       else {
-        $querystr = "
-        SELECT wposts.*
-        FROM $wpdb->posts wposts
-          JOIN $wpdb->postmeta wpostmeta ON (wpostmeta.post_id = wposts.ID)
-          JOIN $wpdb->term_relationships tr ON (tr.object_id = wposts.ID)
-          JOIN $wpdb->term_taxonomy tt ON (tt.term_taxonomy_id = tr.term_taxonomy_id)
-          JOIN $wpdb->terms t ON tt.term_id = t.term_id
-        WHERE wpostmeta.meta_key = '$CustomFieldName'
-        AND wposts.post_status = 'publish'
-        AND wposts.post_type = '$post_type'
-        AND tt.taxonomy = '$a_taxonomy'
-        AND t.name = '$a_import_osm_cat_incl_name'
-        ";
-       }
-       $pageposts = $wpdb->get_results($querystr, OBJECT);
+        // Query depending on category inclusion or exclusion
+        if ($a_import_osm_cat_incl_name == "osm_all") {
+            // Execute the query with placeholders inside get_results
+            $pageposts = $wpdb->get_results(
+                $wpdb->prepare("
+                    SELECT DISTINCT wposts.*
+                    FROM {$wpdb->posts} wposts
+                    LEFT JOIN {$wpdb->postmeta} wpostmeta ON wposts.ID = wpostmeta.post_id
+                    LEFT JOIN {$wpdb->term_relationships} tr ON (wposts.ID = tr.object_id)
+                    LEFT JOIN {$wpdb->term_taxonomy} tt ON (tr.term_taxonomy_id = tt.term_taxonomy_id)
+                    WHERE wpostmeta.meta_key = %s
+                    AND wposts.post_status = 'publish'
+                    AND wposts.post_type = %s
+                ", $CustomFieldName, $post_type), 
+                OBJECT
+            );
+        } else {
+            // Execute the query with placeholders inside get_results
+            $pageposts = $wpdb->get_results(
+                $wpdb->prepare("
+                    SELECT wposts.*
+                    FROM {$wpdb->posts} wposts
+                    JOIN {$wpdb->postmeta} wpostmeta ON (wpostmeta.post_id = wposts.ID)
+                    JOIN {$wpdb->term_relationships} tr ON (tr.object_id = wposts.ID)
+                    JOIN {$wpdb->term_taxonomy} tt ON (tt.term_taxonomy_id = tr.term_taxonomy_id)
+                    JOIN {$wpdb->terms} t ON tt.term_id = t.term_id
+                    WHERE wpostmeta.meta_key = %s
+                    AND wposts.post_status = 'publish'
+                    AND wposts.post_type = %s
+                    AND tt.taxonomy = %s
+                    AND t.name = %s
+                ", $CustomFieldName, $post_type, $a_taxonomy, $a_import_osm_cat_incl_name), 
+                OBJECT
+            );            
+        }
 
+        if ($pageposts) {
+            $MarkerArray = [];
+            foreach ($pageposts as $post) {
+                setup_postdata($post);
+                $Data = get_post_meta($post->ID, $CustomFieldName, true);
+                // Remove spaces before and after commas
+                $Data = preg_replace('/\s*,\s*/', ',', $Data);
+                $GeoData_Array = explode(' ', $Data);
+                list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
+                $PostMarker = get_post_meta($post->ID, 'OSM_geo_icon', true);
+                $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
 
-       if ($pageposts){
-         foreach ($pageposts as $post){
-           setup_postdata($post);
-           $Data = get_post_meta($post->ID, $CustomFieldName, true);
-           // remove space before and after comma
-           $Data = preg_replace('/\s*,\s*/', ',',$Data);
-           $GeoData_Array = explode( ' ', $Data );
-  	   list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
-           $PostMarker = get_post_meta($post->ID, 'OSM_geo_icon', true);
-           $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
+                // Create the marker text
+                $Marker_Txt = '<a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'</a><br>';
+                $MarkerArray[] = array(
+                    'lat' => $temp_lat,
+                    'lon' => $temp_lon,
+                    'popup_height' => '100',
+                    'popup_width' => '150',
+                    'marker' => $PostMarker,
+                    'text' => $Marker_Txt,
+                    'Marker' => $PostMarker
+                );
+            }
+            wp_reset_postdata(); // Reset global post data
+            $post = $post_org;  // Restore original post
+            Osm::traceText(DEBUG_INFO, "[OL3_createMarkerList]: Found Marker " . count($MarkerArray));
+            return $MarkerArray;
+        } else {
+            Osm::traceText(DEBUG_ERROR, "[OL3_createMarkerList]: No posts/pages with geotag found!");
+            Osm::traceText(DEBUG_ERROR, "CustomFieldName: " . $CustomFieldName);
+            Osm::traceText(DEBUG_ERROR, "tagged_type: " . $post_type);
+            Osm::traceText(DEBUG_ERROR, "tagged_filter_type: " . $a_taxonomy);
+            Osm::traceText(DEBUG_ERROR, "tagged_filter: " . $a_import_osm_cat_incl_name);
+        }
+    }
 
-           $Marker_Txt = '<a href="'.get_permalink($post->ID).'">'.get_the_title($post->ID).'  </a><br>';
-           //$Marker_Txt .= get_the_excerpt($post->ID);  <= not supported anymore ....
-           /** picture of article
-           $Marker_Txt .= get_the_post_thumbnail( $post->ID , 'medium');
-           removed since it produce some empty maps at some pages - to be analysed */
+    // Handle single post marker (marker_id between 1 and 9)
+    elseif (($a_import > 0) && ($a_import < 10)) {
+        $PostMarkerCFN_LatLon = OSM::getPostMarkerCFN($a_import,"LatLon");
+        $PostMarkerCFN_Icon_Name = OSM::getPostMarkerCFN($a_import,"Icon");
+        $PostMarkerCFN_Name = OSM::getPostMarkerCFN($a_import,"Name");
+        $PostMarkerCFN_Text = OSM::getPostMarkerCFN($a_import,"Text");
 
+        $metapostLatLon = get_post_meta($post->ID, $PostMarkerCFN_LatLon, true);
+        $metapostIcon_name = get_post_meta($post->ID, $PostMarkerCFN_Icon_Name, true);
+        $metapostmarker_name = get_post_meta($post->ID, $PostMarkerCFN_Name, true);
+        $metapostmarker_text = get_post_meta($post->ID, $PostMarkerCFN_Text, true);
 
-           $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
-         }
-         $post = $post_org;
-         Osm::traceText(DEBUG_INFO, "[OL3_createMarkerList]: Found Marker ".count($MarkerArray));
-         return $MarkerArray;
-       }
-       else{
-         Osm::traceText(DEBUG_ERROR, "[OL3_createMarkerList]: No posts/pages with geotag found! ");
-         $Text = "CustomField: ".$CustomFieldName;
-         Osm::traceText(DEBUG_ERROR, $Text);
-         $Text = "PostType: ".$post_type;
-         Osm::traceText(DEBUG_ERROR, $Text);
-         $Text = "Tagged_Filter: ".$a_import_osm_cat_incl_name;
-         Osm::traceText(DEBUG_ERROR, $Text);
-       }
-     }
-     /**++++++++++++++++++++++++++++++++++++++++++
-     + a single postmarker                       +
-     +++++++++++++++++++++++++++++++++++++++++++*/
-     else if (($a_import > 0) && ($a_import < 10)){
-       $PostMarkerCFN_LatLon = OSM::getPostMarkerCFN($a_import,"LatLon");
-       $PostMarkerCFN_Icon_Name = OSM::getPostMarkerCFN($a_import,"Icon");
-       $PostMarkerCFN_Name = OSM::getPostMarkerCFN($a_import,"Name");
-       $PostMarkerCFN_Text = OSM::getPostMarkerCFN($a_import,"Text");
+        // Check lat lon
+        $metapostLatLon = preg_replace('/\s*,\s*/', ',', $metapostLatLon);
+        $GeoData_Array = explode(' ', $metapostLatLon);
+        list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
 
-       $metapostLatLon = get_post_meta($post->ID, $PostMarkerCFN_LatLon, true);
-       $metapostIcon_name = get_post_meta($post->ID, $PostMarkerCFN_Icon_Name, true);
-       $metapostmarker_name = get_post_meta($post->ID, $PostMarkerCFN_Name, true);
-       $metapostmarker_text = get_post_meta($post->ID, $PostMarkerCFN_Text, true);
+        list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker', $temp_lat, $temp_lon, 'no');
+        if (($temp_lat != 0) || ($temp_lon != 0)) {
+            $PostMarker = Osm_icon::replaceOldIcon($metapostIcon_name);
+            $Marker_Txt = '<p>' . $metapostmarker_text . '</p>';
+            $MarkerArray[] = array(
+                'lat' => $temp_lat,
+                'lon' => $temp_lon,
+                'popup_height' => '100',
+                'popup_width' => '150',
+                'marker' => $PostMarker,
+                'text' => $Marker_Txt,
+                'Marker' => $PostMarker
+            );
+        }
+        $post = $post_org;
+        return $MarkerArray;
+    }
 
-       // check lat lon
-       $metapostLatLon = preg_replace('/\s*,\s*/', ',',$metapostLatLon);
-       // get pairs of coordination
-       $GeoData_Array = explode( ' ', $metapostLatLon );
-       list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
-       $DoPopUp = 'false';
+    // Handle all post markers
+    elseif ($a_import == "all") {
+        $MarkerArray = [];
+        for ($Counter = 1; $Counter < 10; $Counter++) {
+            $PostMarkerCFN_LatLon = OSM::getPostMarkerCFN($Counter, "LatLon");
+            $PostMarkerCFN_Icon_Name = OSM::getPostMarkerCFN($Counter, "Icon");
+            $PostMarkerCFN_Name = OSM::getPostMarkerCFN($Counter, "Name");
+            $PostMarkerCFN_Text = OSM::getPostMarkerCFN($Counter, "Text");
 
-       list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon,'no');
-       if (($temp_lat != 0) || ($temp_lon != 0)){
-         $PostMarker = $metapostIcon_name;
-         $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
+            $metapostLatLon = get_post_meta($post->ID, $PostMarkerCFN_LatLon, true);
+            $metapostIcon_name = get_post_meta($post->ID, $PostMarkerCFN_Icon_Name, true);
+            $metapostmarker_name = get_post_meta($post->ID, $PostMarkerCFN_Name, true);
+            $metapostmarker_text = get_post_meta($post->ID, $PostMarkerCFN_Text, true);
 
-	     $Marker_Txt = '<p>'.$metapostmarker_text.'</p>';
-         $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
-       }
-       $post = $post_org;
-       return $MarkerArray;
-     }
+            // Check lat lon
+            $metapostLatLon = preg_replace('/\s*,\s*/', ',', $metapostLatLon);
+            $GeoData_Array = explode(' ', $metapostLatLon);
+            list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
 
-     /**++++++++++++++++++++++++++++++++++++++++++
-     + all postmarkers                           +
-     +++++++++++++++++++++++++++++++++++++++++++*/
-     else if ($a_import == "all"){
-     for ($Counter = 1; $Counter < 10; $Counter++){
-       $PostMarkerCFN_LatLon = OSM::getPostMarkerCFN($Counter,"LatLon");
-       $PostMarkerCFN_Icon_Name = OSM::getPostMarkerCFN($Counter,"Icon");
-       $PostMarkerCFN_Name = OSM::getPostMarkerCFN($Counter,"Name");
-       $PostMarkerCFN_Text = OSM::getPostMarkerCFN($Counter,"Text");
-
-       $metapostLatLon = get_post_meta($post->ID, $PostMarkerCFN_LatLon, true);
-       $metapostIcon_name = get_post_meta($post->ID, $PostMarkerCFN_Icon_Name, true);
-       $metapostmarker_name = get_post_meta($post->ID, $PostMarkerCFN_Name, true);
-       $metapostmarker_text = get_post_meta($post->ID, $PostMarkerCFN_Text, true);
-
-       // check lat lon
-       $metapostLatLon = preg_replace('/\s*,\s*/', ',',$metapostLatLon);
-       // get pairs of coordination
-       $GeoData_Array = explode( ' ', $metapostLatLon );
-       list($temp_lat, $temp_lon) = explode(',', $GeoData_Array[0]);
-       $DoPopUp = 'false';
-
-       list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker',$temp_lat, $temp_lon,'no');
-       if (($temp_lat != 0) || ($temp_lon != 0)){
-         $PostMarker = $metapostIcon_name;
-         $PostMarker = Osm_icon::replaceOldIcon($PostMarker);
-         $Marker_Txt = $metapostmarker_text.'  </a><br>';
-         $MarkerArray[] = array('lat'=> $temp_lat,'lon'=>$temp_lon,'popup_height'=>'100', 'popup_width'=>'150', 'marker'=>$PostMarker, 'text'=>$Marker_Txt, 'Marker'=>$PostMarker);
-       }
-     }
-     $post = $post_org;
-     return $MarkerArray;
-   }
+            list($temp_lat, $temp_lon) = Osm::checkLatLongRange('Marker', $temp_lat, $temp_lon, 'no');
+            if (($temp_lat != 0) || ($temp_lon != 0)) {
+                $PostMarker = Osm_icon::replaceOldIcon($metapostIcon_name);
+                $Marker_Txt = $metapostmarker_text . '  </a><br>';
+                $MarkerArray[] = array(
+                    'lat' => $temp_lat,
+                    'lon' => $temp_lon,
+                    'popup_height' => '100',
+                    'popup_width' => '150',
+                    'marker' => $PostMarker,
+                    'text' => $Marker_Txt,
+                    'Marker' => $PostMarker
+                );
+            }
+        }
+        $post = $post_org;
+        return $MarkerArray;
+    }
 }
+  
+
+
 
   function createMarkerList($a_import, $a_import_UserName, $a_Customfield, $a_import_osm_cat_incl_name,  $a_import_osm_cat_excl_name, $a_post_type, $a_import_osm_custom_tax_incl_name, $a_custom_taxonomy)
   {
@@ -896,12 +1024,6 @@ var HTTP_GET_VARS = [];
   }
 
   // shortcode for image OpenLayers 2
-  function sc_showImage($atts) {
-    include('osm-sc-osm_image.php');
-    return $output;
-  }
-
-  // shortcode for image OpenLayers 2
   function sc_info($atts) {
     include('osm-sc-info.php');
     return $output;
@@ -914,29 +1036,6 @@ var HTTP_GET_VARS = [];
     add_options_page(__('OpenStreetMap Manager', 'Osm'), __('OSM', 'Osm'), 'manage_options', basename(__FILE__), array('Osm', 'options_page_osm'));
   }
 
-  // ask WP to handle the loading of scripts
-  // if it is not admin area
-  function show_enqueue_script() {
-    wp_enqueue_script(array ('jquery'));
-
-	if (Osm_LoadLibraryMode == SERVER_EMBEDDED){
-      // it is loaded when the map is displayed
-	}
-	elseif (Osm_LoadLibraryMode == SERVER_WP_ENQUEUE){
-      //wp_enqueue_script('OlScript', 'http://www.openlayers.org/api/OpenLayers.js');
-      //wp_enqueue_script('OsnScript', 'http://www.openstreetmap.org/openlayers/OpenStreetMap.js');
-	  wp_enqueue_script('OlScript',Osm_OL_LibraryLocation);
-      wp_enqueue_script('OsnScript',Osm_OSM_LibraryLocation);
-      wp_enqueue_script('OsnScript',Osm_GOOGLE_LibraryLocation);
-      wp_enqueue_script('OsmScript',OSM_PLUGIN_JS_URL.'osm-plugin-lib.js');
-      define ('OSM_LIBS_LOADED', 1);
-      define ('OL_LIBS_LOADED', 1);
-      define ('GOOGLE_LIBS_LOADED', 1);
-	}
-	 else{
-	  // Errormsg is traced at another place
-	}
-  }
 }	// End class Osm
 
 include('osm-widget.php');

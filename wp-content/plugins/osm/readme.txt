@@ -1,9 +1,9 @@
 ﻿=== OSM - OpenStreetMap ===
 Contributors: MiKa
-Tags: map, OpenStreetMap, geo, KML, GPX, geotag, geolocation, OSM, OpenLayers, marker, POI, geocode, geotagging, location, Tracks, OpenSeaMap, stamen, basemap, thunderforest
+Tags: map, OpenStreetMap, KML, GPX, OpenSeaMap
 Requires at least: 3.0
-Tested up to: 6.4.0
-Stable tag: 6.0.2
+Tested up to: 6.6.1
+Stable tag: 6.1.6
 License: GPLv2
 Requires PHP: 5.3
 
@@ -46,11 +46,12 @@ Languages - thanks to:
 
 * [OpenLayers](http://openlayers.org): Open Source JavaScript, released under the 2-clause BSD
 
-Licenses of the maps:
-
 !! IMPORTANT !!
 The WordPress Plugin Review Team required us to provide opt-in feature to display attribution since it is part of [WordPress Plugin Guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/#10-plugins-may-not-embed-external-links-or-credits-on-the-public-site-without-explicitly-asking-the-user%e2%80%99s-permission). So you have to enable the checkbox "Display attribution (credit) in the map." at the WP OSM Plugin Shortcode generater or add the attribution manually to your map. Otherwise it may violate the map or data license, eg [OpenStreetMap](https://www.openstreetmap.org/copyright).
 
+This plugin enables GPX and KML upload!
+
+Licenses of the maps:
 * OpenStreetMap: [OpenStreetMap License](https://www.openstreetmap.org/copyright)
 * OpenTopoMap: [OpenTopoMap License](https://opentopomap.org/about)
 * Stamen Maps: [Stamen License](http://maps.stamen.com)

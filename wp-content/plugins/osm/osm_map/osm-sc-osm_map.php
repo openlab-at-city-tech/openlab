@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2021  MiKa (wp-osm-plugin.Hyumika.com)
+/*  (c) Copyright 2024  MiKa (wp-osm-plugin.Hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,8 +15,9 @@
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+    define('DEFAULT_ICON_SIZE', 24);
     // let's get the shortcode arguments
-  	extract(shortcode_atts(array(
+    extract(shortcode_atts(array(
     // size of the map
     'width'     => '450', 'height' => '300', 
     // address of the center in the map
@@ -84,11 +85,31 @@
 
 	  ), $atts));
    
+    //CVE-2022-4676
+    $map_border = sanitize_text_field($map_border);
+    $semicolon_position = strpos($map_border, ';');
+    if ($semicolon_position !== false) {
+      $map_border = substr($map_border, 0, $semicolon_position);
+    } 
+    
+    $width = sanitize_text_field($width);
+    $semicolon_position = strpos($width, ';');
+    if ($semicolon_position !== false) {
+      $width = substr($width, 0, $semicolon_position);
+    } 
+    
+    $height = sanitize_text_field($height);
+    $semicolon_position = strpos($height, ';');
+    if ($semicolon_position !== false) {
+      $height = substr($height, 0, $semicolon_position);
+    } 
+
     $map_spec_zoom_level_max = ZOOM_LEVEL_MAX;
     if ($type == 'GooglePhysical' || $type == 'GoogleStreet' || $type == 'GoogleHybrid' || $type == 'GoogleSatellite'){
       $map_spec_zoom_level_max = ZOOM_LEVEL_GOOGLE_MAX;
     }
     if (($zoom < ZOOM_LEVEL_MIN || $zoom > $map_spec_zoom_level_max) && ($zoom != 'auto')){
+      /* translators: %s: zoom level */ 
       Osm::traceText(DEBUG_ERROR, (sprintf(__(' zoom =  %s is out of range!'), $zoom)));
       $zoom = 0;   
     }
@@ -96,6 +117,7 @@
     $pos = strpos($width, "%");
     if ($pos == false) {
       if ($width < 1){
+        /* translators: %s: width in pixel */ 
         Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [pix]!'), $width)));
         $width = 450;
       }
@@ -104,6 +126,7 @@
     else {// it's 30%
       $width_perc = substr($width, 0, $pos ); // make it 30 
       if (($width_perc < 1) || ($width_perc >100)){
+        /* translators: %s: width in percentage */ 
         Osm::traceText(DEBUG_ERROR, (sprintf(__(' width =  %s is out of range [perc]!'), $width)));
         $width = "100%";
       }
@@ -113,6 +136,7 @@
     $pos = strpos($height, "%");
     if ($pos == false) {
       if ($height < 1){
+        /* translators: %s: height in pixel */ 
         Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [pix]!'), $height)));
         $height = 300;
       }
@@ -120,6 +144,7 @@
     } else {// it's 30%
       $height_perc = substr($height, 0, $pos ); // make it 30 
       if (($height_perc < 1) || ($height_perc >100)){
+       /* translators: %s: height in percentage */ 
         Osm::traceText(DEBUG_ERROR, (sprintf(__(' height =  %s is out of range [perc]!'), $height)));
         $height = "100%";
       }
@@ -175,8 +200,8 @@
       }
       if ($Icon["height"] == 0 || $Icon["width"] == 0){
         Osm::traceText(DEBUG_WARNING, "e_marker_size"); //<= ToDo
-        $Icon["height"] = 24;
-        $Icon["width"]  = 24;
+        $Icon["height"] = DEFAULT_ICON_SIZE;
+        $Icon["width"]  = DEFAULT_ICON_SIZE;
       }
     }
 
@@ -212,7 +237,6 @@
       
     // if we came up to here, let's load the map
     $output = '';	
-    $output .= '<link rel="stylesheet" type="text/css" href="'.OSM_PLUGIN_URL.'/css/osm_map.css" />';
     $output .= '<style type="text/css">';
     if ($z_index != 'none'){ // fix for NextGen-Gallery
       $output .= '.entry, .olMapViewport, img {z-index: '.$z_index.' !important;}';   
@@ -224,52 +248,9 @@ box-shadow: none;}';
     $output .= '#'.$MapName.' img{clear: both; padding: 0px; margin: 0px; border: 0px; width: 100%; height: 100%; position: absolute; margin-top:0px; margin-right:0px;margin-left:0px; margin-bottom:0px; border-radius:0px;
 box-shadow: none;}';
     $output .= '</style>';
+    // CVE-2022-4676
+    $output .= '<div id="'.$MapName.'" class="OSM_Map" style="width:'.esc_html($width_str).'; height:'.esc_html($height_str).'; overflow:hidden;padding:0px;border:'.esc_html($map_border).';">';
 
-    $output .= '<div id="'.$MapName.'" class="OSM_Map" style="width:'.$width_str.'; height:'.$height_str.'; overflow:hidden;padding:0px;border:'.$map_border.';">';
-
-    
-	if (Osm_LoadLibraryMode == SERVER_EMBEDDED){
-          if(!defined('OL_LIBS_LOADED')) {
-            $output .= '<script type="text/javascript" src="'.Osm_OL_LibraryLocation.'"></script>';
-            define ('OL_LIBS_LOADED', 1);
-        }
-  
-      if ($type == 'Mapnik' || $type == 'mapnik_ssl' || $type == 'Osmarender' || $type == 'basemap_at' || $type == 'stamen_watercolor' || $type == 'stamen_toner' || $type == 'CycleMap' || $type == 'OSMRoadsMap' || $type == 'AllOsm' || $type == 'Ext'){
-        if(!defined('OSM_LIBS_LOADED')) {
-          $output .= '<script type="text/javascript" src="'.Osm_OSM_LibraryLocation.'"></script>';
-          define ('OSM_LIBS_LOADED', 1);
-        }
-      }
-      elseif ($type == 'OpenSeaMap'){
-        if(!defined('OSM_LIBS_LOADED')) {
-          $output .= '<script type="text/javascript" src="'.Osm_OSM_LibraryLocation.'"></script>';
-          $output .= '<script type="text/javascript" src="'.Osm_harbours_LibraryLocation.'"></script>';
-          $output .= '<script type="text/javascript" src="'.Osm_map_utils_LibraryLocation.'"></script>';
-          $output .= '<script type="text/javascript" src="'.Osm_utilities_LibraryLocation.'"></script>';
-          define ('OSM_LIBS_LOADED', 1);
-        }
-      }
-      elseif ($type == 'OpenWeatherMap'){
-      	if(!defined('OSM_LIBS_LOADED'))  {
-      	  $output .= '<script type="text/javascript" src="'.Osm_OSM_LibraryLocation.'"></script>';
-      	  $output .= '<script type="text/javascript" src="'.Osm_openweather_LibraryLocation.'"></script>';
-          define ('OSM_LIBS_LOADED', 1);
-      	}
-      }
-      if ($type == 'GooglePhysical' || $type == 'GoogleStreet' || $type == 'GoogleHybrid' || $type == 'GoogleSatellite' || $type == 'AllGoogle' || $type == 'Ext'){
-	    if(!defined('GOOGLE_LIBS_LOADED')) {
-          $output .= '<script type="text/javascript" src="'.Osm_GOOGLE_LibraryLocation.'"></script>';
-          define ('GOOGLE_LIBS_LOADED', 1);
-        }
-      }
-      $output .= '<script type="text/javascript" src="'.OSM_PLUGIN_JS_URL.'osm-plugin-lib.js"></script>';
-    }
-      elseif (Osm_LoadLibraryMode == SERVER_WP_ENQUEUE){
-      // registered and loaded by WordPress
-      }
-      else{
-        Osm::traceText(DEBUG_ERROR, "e_library_config");
-      }
       $output .= '<script type="text/javascript">';
       $output .= '/* <![CDATA[ */';
       $output .= '(function($) {';

@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2022  MiKa (http://wp-osm-plugin.Hyumika.com)
+/*  (c) Copyright 2024  MiKa (http://wp-osm-plugin.Hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -39,8 +39,8 @@
   <li><?php _e('post an article about ','OSM') ?><a target="_new" href="http://www.OpenStreetMap.org">OpenStreetMap</a><?php _e(' on your blog.','OSM') ?></li>
 </ol>
 <form method="post">   
+<h3> Shortcodegenerator Settings:</h3>
 <table>
- <tr> <h3> Shortcodegenerator Settings:</h3> </tr>
  <tr>
   <td><label for="osm_zoom_level"><?php _e('Default Latitude for maps','OSM') ?>:</label></td>
   <td><input type="text" name="osm_default_lat" value="<?php echo esc_attr($osm_default_lat) ?>" /></td>

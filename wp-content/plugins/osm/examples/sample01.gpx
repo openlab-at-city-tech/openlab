@@ -16,6 +16,8 @@
   <sym>Start</sym>
  </wpt>
 <trk>
+<name>Meine aufgezeichnete Route</name>
+<desc>Dies ist eine aufgezeichnete Wanderung durch die Berge.</desc>
 <trkseg>
 		<trkpt lat="52.551325" lon="5.45782">
 			<time>2013-07-11T07:03:37Z</time>

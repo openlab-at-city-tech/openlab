@@ -22,12 +22,12 @@ class OSM_Tagged_Widget extends WP_Widget {
     $border_col   = $instance['border_col'];
 
     if ((OSM_isGeotagged()) && (is_singular())){ 
-      echo $args['before_widget'];
+      echo wp_kses_post($args['before_widget']);
       if ( ! empty( $title ) ){
-        echo $args['before_title'] . $title . $args['after_title'];
+        echo wp_kses_post($args['before_title']) . esc_html($title) . wp_kses_post($args['after_title']);
       } 
       echo do_shortcode('[osm_map_v3 type="'.$map_type.'" map_center="0,0" zoom="'.$zoom.'" width="99%" height="'.$height.'"  marker_latlon="osm_geotag" map_border="2px solid '.$border_col.'" marker_name="'.$marker.'" theme="'.$ctrl_theme.'"]');
-      echo $args['after_widget'];
+      echo wp_kses_post($args['after_widget']);
     }
   }
 
@@ -52,11 +52,13 @@ class OSM_Tagged_Widget extends WP_Widget {
     }
     ?>
     <p>
-    <label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:' ); ?></label> 
-    <input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" type="text" value="<?php echo esc_attr( $title ); ?>">
+    <label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Title:', 'OSM'); ?></label>
+    <input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>">
     </p>
-
-    <p>
+    <p>        
+    <label for="<?php echo esc_attr($this->get_field_id('height')); ?>"><?php esc_html_e('Height:', 'OSM'); ?></label>
+    <input class="widefat" id="<?php echo esc_attr($this->get_field_id('height')); ?>" name="<?php echo esc_attr($this->get_field_name('height')); ?>" type="text" value="<?php echo esc_attr($height); ?>">
+     
     <label for="<?php echo $this->get_field_id( 'height' ); ?>"><?php _e('Height of map:', 'OSM-plugin'); ?></label>
     <input id="<?php echo $this->get_field_id( 'height' ); ?>" name="<?php echo $this->get_field_name( 'height' ); ?>" value="<?php echo $instance['height']; ?>" style="width:100%;" />
     </p>
@@ -135,13 +137,13 @@ class OSM_Tagged_Widget extends WP_Widget {
 
   public function update( $new_instance, $old_instance ) {
     $instance = array();
-    $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? strip_tags( $new_instance['title'] ) : '';
-    $instance['height'] = strip_tags( $new_instance['height'] );
-    $instance['marker'] = strip_tags( $new_instance['marker'] );
+    $instance['title'] = ( ! empty( $new_instance['title'] ) ) ? wp_strip_all_tags( $new_instance['title'] ) : '';
+    $instance['height'] = wp_strip_all_tags( $new_instance['height'] );
+    $instance['marker'] = wp_strip_all_tags( $new_instance['marker'] );
     $instance['zoom'] = $new_instance['zoom'];
     $instance['map_type'] = $new_instance['map_type'];
     $instance['ctrl_theme'] = $new_instance['ctrl_theme'];
-    $instance['border_col'] = strip_tags( $new_instance['border_col'] );
+    $instance['border_col'] = wp_strip_all_tags( $new_instance['border_col'] );
     return $instance;
   }
 
