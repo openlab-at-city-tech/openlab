@@ -52,6 +52,7 @@ class Pages extends Block_Abstract {
 	protected function get_block_support() {
 		return apply_filters( 'advanced-sidebar-menu/blocks/pages/supports', [
 			'anchor' => true,
+			'html'   => false,
 		] );
 	}
 

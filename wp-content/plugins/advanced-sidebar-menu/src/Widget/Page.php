@@ -7,27 +7,34 @@ use Advanced_Sidebar_Menu\Menus\Page as PageMenu;
 use Advanced_Sidebar_Menu\Utils;
 
 /**
- * Advanced_Sidebar_Menu_Widgets_Page
- *
  * Parent child menu based on pages.
  *
- * @author OnPoint Plugins
+ * @author   OnPoint Plugins
  *
  * @phpstan-import-type PAGE_SETTINGS from PageMenu
- * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ * @phpstan-import-type WIDGET_ARGS from Widget
  *
- * @phpstan-type DEFAULTS \Required<\Pick<PAGE_SETTINGS, 'display_all'|'exclude'|'include_childless_parent'|'include_parent'|'levels'|'order_by'|'title'>>
+ * @formatter:off
+ * @phpstan-type DEFAULTS \Required<\Pick<PAGE_SETTINGS,'display_all'|'exclude'|'include_childless_parent'|'include_parent'|'levels'|'order_by'|'title'>>
+ * @formatter:on
  *
- * @implements Widget<PAGE_SETTINGS, DEFAULTS>
- * @extends Widget_Abstract<PAGE_SETTINGS>
+ * @implements WidgetWithId<PAGE_SETTINGS, DEFAULTS>
+ * @extends Widget_Abstract<PAGE_SETTINGS, DEFAULTS>
  */
-class Page extends Widget_Abstract implements Widget {
+class Page extends Widget_Abstract implements WidgetWithId {
+	/**
+	 * @use Checkbox<PAGE_SETTINGS>
+	 */
+	use Checkbox;
+
 	/**
 	 * Shared widget instance logic.
 	 *
-	 * @phpstan-use Instance<PAGE_SETTINGS, DEFAULTS>
+	 * @use Instance<PAGE_SETTINGS, DEFAULTS>
 	 */
 	use Instance;
+
+	use WidgetIdAccess;
 
 	public const NAME = 'advanced_sidebar_menu';
 
@@ -104,7 +111,7 @@ class Page extends Widget_Abstract implements Widget {
 	 * @since 8.2.0
 	 *
 	 * @param PAGE_SETTINGS $instance - Widget settings.
-	 * @param bool  $single   - Singular label or plural.
+	 * @param bool          $single   - Singular label or plural.
 	 *
 	 * @return string
 	 */
@@ -223,10 +230,10 @@ class Page extends Widget_Abstract implements Widget {
 	/**
 	 * Order options.
 	 *
-	 * @phpstan-param PAGE_SETTINGS          $instance
+	 * @phpstan-param PAGE_SETTINGS $instance
 	 *
-	 * @param array                          $instance - Widget settings.
-	 * @param Page $widget - Registered widget arguments.
+	 * @param array                 $instance - Widget settings.
+	 * @param Page                  $widget   - Registered widget arguments.
 	 *
 	 * @return void
 	 */
@@ -257,10 +264,10 @@ class Page extends Widget_Abstract implements Widget {
 	/**
 	 * Exclude options.
 	 *
-	 * @phpstan-param PAGE_SETTINGS          $instance
+	 * @phpstan-param PAGE_SETTINGS $instance
 	 *
-	 * @param array                          $instance - Widget settings.
-	 * @param Page $widget - Registered widget arguments.
+	 * @param array                 $instance - Widget settings.
+	 * @param Page                  $widget   - Registered widget arguments.
 	 *
 	 * @return void
 	 */
@@ -332,8 +339,8 @@ class Page extends Widget_Abstract implements Widget {
 	 * @phpstan-param PAGE_SETTINGS $new_instance
 	 * @phpstan-param PAGE_SETTINGS $old_instance
 	 *
-	 * @param array $new_instance - New widget settings.
-	 * @param array $old_instance - Old widget settings.
+	 * @param array                 $new_instance - New widget settings.
+	 * @param array                 $old_instance - Old widget settings.
 	 *
 	 * @return PAGE_SETTINGS
 	 */

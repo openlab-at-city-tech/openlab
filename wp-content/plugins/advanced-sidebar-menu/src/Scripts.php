@@ -48,6 +48,10 @@ class Scripts {
 	public const GUTENBERG_HANDLE     = 'advanced-sidebar-menu/gutenberg';
 	public const GUTENBERG_CSS_HANDLE = 'advanced-sidebar-menu/gutenberg-css';
 
+	public const FILE_BLOCK_EDITOR = 'advanced-sidebar-menu-block-editor';
+	public const FILE_ADMIN        = 'advanced-sidebar-menu-admin';
+	public const FILE_DEBUG        = 'advanced-sidebar-menu-debug';
+
 
 	/**
 	 * Add various scripts to the queue.
@@ -94,7 +98,7 @@ class Scripts {
 	 * @return void
 	 */
 	public function register_gutenberg_scripts() {
-		wp_register_script( static::GUTENBERG_HANDLE, $this->get_dist_file( 'advanced-sidebar-menu-block-editor', 'js' ), [
+		wp_register_script( static::GUTENBERG_HANDLE, $this->get_dist_file( self::FILE_BLOCK_EDITOR, 'js' ), [
 			'jquery',
 			'lodash',
 			'react',
@@ -111,7 +115,7 @@ class Scripts {
 		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, true );
 
 		if ( ! $this->is_webpack_enabled() ) {
-			wp_register_style( static::GUTENBERG_CSS_HANDLE, $this->get_dist_file( 'advanced-sidebar-menu-block-editor', 'css' ), [
+			wp_register_style( static::GUTENBERG_CSS_HANDLE, $this->get_dist_file( self::FILE_BLOCK_EDITOR, 'css' ), [
 				'dashicons',
 			], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 		}
@@ -135,11 +139,11 @@ class Scripts {
 	 * @return void
 	 */
 	public function admin_scripts() {
-		wp_enqueue_script( static::ADMIN_SCRIPT, $this->get_dist_file( 'advanced-sidebar-menu-admin', 'js' ), [
+		wp_enqueue_script( static::ADMIN_SCRIPT, $this->get_dist_file( self::FILE_ADMIN, 'js' ), [
 			'jquery',
 		], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, false );
 		if ( ! $this->is_webpack_enabled() ) {
-			wp_enqueue_style( static::ADMIN_STYLE, $this->get_dist_file( 'advanced-sidebar-menu-admin', 'css' ), [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
+			wp_enqueue_style( static::ADMIN_STYLE, $this->get_dist_file( self::FILE_ADMIN, 'css' ), [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION );
 		}
 		/**
 		 * Fire action when admin scripts are being loaded.
@@ -234,9 +238,9 @@ class Scripts {
 			],
 			'error'         => apply_filters( 'advanced-sidebar-menu/scripts/js-config/error', '' ),
 			'features'      => Notice::instance()->get_features(),
-			'isPostEdit' => isset( $GLOBALS['pagenow'] ) && 'post.php' === $GLOBALS['pagenow'],
+			'isPostEdit'    => isset( $GLOBALS['pagenow'] ) && 'post.php' === $GLOBALS['pagenow'],
 			'isPro'         => false,
-			'isWidgets'  => isset( $GLOBALS['pagenow'] ) && 'widgets.php' === $GLOBALS['pagenow'],
+			'isWidgets'     => isset( $GLOBALS['pagenow'] ) && 'widgets.php' === $GLOBALS['pagenow'],
 			'pages'         => [
 				'orderBy' => Page::get_order_by_options(),
 			],
@@ -277,14 +281,17 @@ class Scripts {
 	/**
 	 * Translate a file slug to its location based on the current context.
 	 *
-	 * @since 9.2.2
+	 * @since    9.2.2
 	 *
-	 * @param string $file_slug - The file slug.
-	 * @param string $extension - The file extension.
+	 * @phpstan-param self::FILE_* $file_slug
+	 * @phpstan-param 'js'|'css'   $extension
+	 *
+	 * @param string               $file_slug - The file slug.
+	 * @param string               $extension - The file extension.
 	 *
 	 * @return string
 	 */
-	protected function get_dist_file( string $file_slug, string $extension ): string {
+	public function get_dist_file( string $file_slug, string $extension ): string {
 		$js_dir = apply_filters( 'advanced-sidebar-menu/js-dir', ADVANCED_SIDEBAR_MENU_URL . 'js/dist/' );
 		$file_slug = $this->is_script_debug_enabled() ? $file_slug : "{$file_slug}.min";
 		return "{$js_dir}{$file_slug}.{$extension}";

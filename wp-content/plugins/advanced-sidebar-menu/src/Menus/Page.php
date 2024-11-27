@@ -4,14 +4,14 @@ namespace Advanced_Sidebar_Menu\Menus;
 
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\List_Pages;
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget\Widget;
 
 /**
  * Page menu.
  *
  * @author OnPoint Plugins
  *
- * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @phpstan-type PAGE_SETTINGS array{
  *      exclude: string,
@@ -31,18 +31,18 @@ class Page extends Menu_Abstract implements Menu {
 	public const WIDGET = 'page';
 
 	/**
-	 * The current post
-	 *
-	 * @var null|\WP_Post
-	 */
-	protected $post;
-
-	/**
 	 * Store current menu instance.
 	 *
 	 * @var ?Page
 	 */
 	protected static $current_menu;
+
+	/**
+	 * The current post
+	 *
+	 * @var null|\WP_Post
+	 */
+	protected $post;
 
 
 	/**
@@ -166,22 +166,6 @@ class Page extends Menu_Abstract implements Menu {
 
 
 	/**
-	 * Do we have child pages at all on this menu?
-	 *
-	 * Return false if all we have is the top parent page
-	 * Return true if we have at least a second level
-	 *
-	 * @return bool
-	 */
-	public function has_pages(): bool {
-		$list_pages = List_Pages::factory( $this );
-		$children = $list_pages->get_child_pages( $this->get_top_parent_id(), true );
-
-		return \count( $children ) > 0;
-	}
-
-
-	/**
 	 * Gets the number of levels to display when doing 'Always display'
 	 *
 	 * @return int
@@ -193,16 +177,6 @@ class Page extends Menu_Abstract implements Menu {
 			$levels = ( (int) $this->instance[ static::LEVELS ] ) - 1;
 		}
 		return (int) apply_filters( 'advanced-sidebar-menu/menus/page/levels', $levels, $this->args, $this->instance, $this );
-	}
-
-
-	/**
-	 * Get the post type of this menu.
-	 *
-	 * @return string
-	 */
-	public function get_post_type(): string {
-		return (string) apply_filters( 'advanced-sidebar-menu/menus/page/post-type', 'page', $this->args, $this->instance, $this );
 	}
 
 
@@ -238,6 +212,32 @@ class Page extends Menu_Abstract implements Menu {
 
 		echo $this->args['after_widget'];
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+
+	/**
+	 * Do we have child pages at all on this menu?
+	 *
+	 * Return false if all we have is the top parent page
+	 * Return true if we have at least a second level
+	 *
+	 * @return bool
+	 */
+	public function has_pages(): bool {
+		$list_pages = List_Pages::factory( $this );
+		$children = $list_pages->get_child_pages( $this->get_top_parent_id(), true );
+
+		return \count( $children ) > 0;
+	}
+
+
+	/**
+	 * Get the post type of this menu.
+	 *
+	 * @return string
+	 */
+	public function get_post_type(): string {
+		return (string) apply_filters( 'advanced-sidebar-menu/menus/page/post-type', 'page', $this->args, $this->instance, $this );
 	}
 
 

@@ -5,14 +5,14 @@ namespace Advanced_Sidebar_Menu\Menus;
 use Advanced_Sidebar_Menu\Core;
 use Advanced_Sidebar_Menu\Traits\Memoize;
 use Advanced_Sidebar_Menu\Walkers\Category_Walker;
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget\Widget;
 
 /**
  * Category menu.
  *
  * @author OnPoint Plugins
  *
- * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @phpstan-type CATEGORY_SETTINGS array{
  *     'display-posts'?: string,
@@ -42,18 +42,18 @@ class Category extends Menu_Abstract implements Menu {
 	public const EACH_WIDGET = 'widget';
 
 	/**
-	 * Top_level_term.
-	 *
-	 * @var ?\WP_Term
-	 */
-	public $top_level_term;
-
-	/**
 	 * Store current menu instance.
 	 *
 	 * @var ?Category
 	 */
 	protected static $current_menu;
+
+	/**
+	 * Top_level_term.
+	 *
+	 * @var ?\WP_Term
+	 */
+	public $top_level_term;
 
 
 	/**
@@ -126,9 +126,9 @@ class Category extends Menu_Abstract implements Menu {
 	 *
 	 * @since 8.8.0
 	 *
-	 * @return array
+	 * @return int[]
 	 */
-	public function get_current_ancestors() {
+	public function get_current_ancestors(): array {
 		return $this->once( function() {
 			$included = $this->get_included_term_ids();
 			$ancestors = [];
@@ -141,7 +141,7 @@ class Category extends Menu_Abstract implements Menu {
 				$ancestors[] = $term_ancestors;
 			}
 
-			if ( empty( $ancestors ) ) {
+			if ( [] === $ancestors ) {
 				return [];
 			}
 
@@ -203,76 +203,6 @@ class Category extends Menu_Abstract implements Menu {
 		}
 
 		return apply_filters( 'advanced-sidebar-menu/menus/category/levels', $depth, $this->args, $this->instance, $this );
-	}
-
-
-	/**
-	 * Get the top-level terms for the current page.
-	 * Could be multiple if on a single.
-	 * This will be one if on an archive.
-	 *
-	 * @return \WP_Term[]
-	 */
-	public function get_top_level_terms() {
-		$top_level_term_ids = \array_filter( \array_map( function( $term_id ) {
-			$top = $this->get_highest_parent( $term_id );
-			return $this->is_excluded( $top ) ? null : $top;
-		}, $this->get_included_term_ids() ) );
-
-		$top_level_term_ids = apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
-
-		$terms = [];
-		if ( ! empty( $top_level_term_ids ) ) {
-			$terms = get_terms(
-				[
-					'include'    => \array_unique( \array_filter( $top_level_term_ids ) ),
-					'hide_empty' => false,
-					'orderby'    => $this->get_order_by(),
-					'order'      => $this->get_order(),
-				]
-			);
-
-			if ( is_wp_error( $terms ) ) {
-				return [];
-			}
-		}
-
-		return $terms;
-	}
-
-
-	/**
-	 * Get the term ids for either the current term archive,
-	 * or the terms attached to the current post
-	 *
-	 * @return array
-	 */
-	public function get_included_term_ids() {
-		$term_ids = [];
-		if ( is_singular() ) {
-			$id = get_the_ID();
-			if ( false !== $id ) {
-				$term_ids = wp_get_post_terms( $id, $this->get_taxonomy(), [ 'fields' => 'ids' ] );
-			}
-		} elseif ( $this->is_tax() ) {
-			$term = get_queried_object();
-			if ( $term instanceof \WP_Term ) {
-				$term_ids[] = $term->term_id;
-			}
-		}
-
-		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/included-term-ids', $term_ids, $this->args, $this->instance, $this );
-	}
-
-
-	/**
-	 * Get this menu's taxonomy.
-	 * Defaults to 'category'.
-	 *
-	 * @return string
-	 */
-	public function get_taxonomy() {
-		return apply_filters( 'advanced-sidebar-menu/menus/category/taxonomy', 'category', $this->args, $this->instance, $this );
 	}
 
 
@@ -346,221 +276,12 @@ class Category extends Menu_Abstract implements Menu {
 
 
 	/**
-	 * Is this term, and it's children displayed
-	 *
-	 * 1. If children not empty we always display (or at least let the view handle it).
-	 * 2. If children empty and not include a parent we don't display.
-	 * 3. If children empty and not include a childless parent we don't display.
-	 * 4. If children empty, and the top parent is excluded we don't display.
-	 *
-	 * @param \WP_Term $term - Current top level term.
-	 *
-	 * @return bool
-	 */
-	public function is_term_displayed( $term ) {
-		if ( ! $this->has_children( $term ) ) {
-			if ( ! $this->checked( static::INCLUDE_PARENT ) || ! $this->checked( static::INCLUDE_CHILDLESS_PARENT ) ) {
-				return false;
-			}
-			$top = $this->get_top_parent_id() ?? - 1;
-			if ( $this->is_excluded( $top ) ) {
-				return false;
-			}
-		}
-
-		return true;
-	}
-
-
-	/**
-	 * Simplified way to verify if we are on a taxonomy archive.
-	 *
-	 * @return bool
-	 */
-	public function is_tax() {
-		$taxonomy = $this->get_taxonomy();
-		if ( 'category' === $taxonomy ) {
-			return is_category();
-		}
-
-		return is_tax( $taxonomy );
-	}
-
-
-	/**
-	 * Is a term our current top level term?
-	 *
-	 * @since 8.8.0
-	 *
-	 * @param \WP_Term $term - Term to check against.
-	 *
-	 * @return bool
-	 */
-	public function is_current_top_level_term( \WP_Term $term ): bool {
-		if ( null === $this->top_level_term ) {
-			return false;
-		}
-		return $term->term_id === $this->top_level_term->term_id;
-	}
-
-
-	/**
 	 * Get list of excluded ids from widget settings.
 	 *
 	 * @return array<int>
 	 */
 	public function get_excluded_ids(): array {
 		return \array_map( '\intval', (array) apply_filters( 'advanced-sidebar-menu/menus/category/excluded', parent::get_excluded_ids(), $this->args, $this->instance, $this ) );
-	}
-
-
-	/**
-	 * Removes the closing </li> tag from a list item to allow for child menus inside of it
-	 *
-	 * @param string|false $item - An <li></li> item.
-	 *
-	 * @return string|false
-	 */
-	public function openListItem( $item = false ) {
-		if ( false === $item ) {
-			return false;
-		}
-
-		return \substr( \trim( $item ), 0, - 5 );
-	}
-
-
-	/**
-	 * Retrieve the highest level term_id based on the given
-	 * term's ancestors.
-	 *
-	 * Track the latest call's ancestors on the class for use
-	 * on the single term's archive.
-	 *
-	 * @param int $term_id - Provided term's id.
-	 *
-	 * @return int
-	 */
-	public function get_highest_parent( $term_id ) {
-		$ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
-		// Use current term if no ancestors available.
-		$ancestors[] = $term_id;
-
-		return reset( $ancestors );
-	}
-
-
-	/**
-	 * Add various classes to category item to define it among levels
-	 * as well as current item state.
-	 *
-	 * @param array    $classes  - List of classes added to category list item.
-	 * @param \WP_Term $category - Current category.
-	 *
-	 * @filter category_css_class 11 2
-	 *
-	 * @return array
-	 */
-	public function add_list_item_classes( $classes, $category ) {
-		$classes[] = 'menu-item';
-		if ( $this->has_children( $category ) ) {
-			$classes[] = 'has_children';
-		}
-
-		if ( $this->is_current_term( $category ) ) {
-			$classes[] = 'current-menu-item';
-		} else {
-			$current = $this->get_current_term();
-			if ( null !== $current ) {
-				if ( $current->parent === $category->term_id ) {
-					$classes[] = 'current-menu-parent';
-					$classes[] = 'current-menu-ancestor';
-				} elseif ( $this->is_current_term_ancestor( $current ) ) {
-					$classes[] = 'current-menu-ancestor';
-				}
-			}
-		}
-
-		return \array_unique( $classes );
-	}
-
-
-	/**
-	 * 1. Is this term's parent our top_parent_id?
-	 * 2. Is this term not excluded?
-	 * 3. Does the filter allow this term?
-	 *
-	 * When looping through the view via the terms from $this->get_child_terms()
-	 * the term->parent conditions will most likely always be true.
-	 *
-	 * @param \WP_Term $term - Category or term.
-	 *
-	 * @return bool
-	 */
-	public function is_first_level_term( \WP_Term $term ): bool {
-		$return = false;
-		if ( ! $this->is_excluded( $term->term_id ) && $term->parent === $this->get_top_parent_id() ) {
-			$return = true;
-		}
-
-		return apply_filters( 'advanced-sidebar-menu/menus/category/is-first-level-term', $return, $term, $this );
-	}
-
-
-	/**
-	 * Is a term the currently viewed term?
-	 *
-	 * @since 8.8.0
-	 *
-	 * @param \WP_Term $term - Term to check against.
-	 *
-	 * @return bool
-	 */
-	public function is_current_term( \WP_Term $term ) {
-		if ( ! $this->is_tax() ) {
-			return false;
-		}
-		return get_queried_object_id() === $term->term_id;
-	}
-
-
-	/**
-	 * Is this term an ancestor of the current term?
-	 * Does this term have children?
-	 *
-	 * @param \WP_Term $term - Category or term.
-	 *
-	 * @return mixed
-	 */
-	public function is_current_term_ancestor( \WP_Term $term ) {
-		$return = false;
-
-		if ( $this->is_current_top_level_term( $term ) || \in_array( $term->term_id, $this->get_current_ancestors(), true ) ) {
-			$children = get_term_children( $term->term_id, $this->get_taxonomy() );
-			if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
-				$return = true;
-			}
-		}
-
-		return apply_filters( 'advanced-sidebar-menu/menus/category/is-current-term-ancestor', $return, $term, $this );
-	}
-
-
-	/**
-	 * Does this term have children?
-	 *
-	 * @param \WP_Term $term - Current category or term.
-	 *
-	 * @return mixed
-	 */
-	public function has_children( \WP_Term $term ) {
-		$return = false;
-		$children = get_term_children( $term->term_id, $this->get_taxonomy() );
-		if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
-			$return = true;
-		}
-
-		return apply_filters( 'advanced-sidebar-menu/menus/category/has-children', $return, $term, $this );
 	}
 
 
@@ -639,6 +360,286 @@ class Category extends Menu_Abstract implements Menu {
 		if ( ! $close_menu && $menu_open ) {
 			$this->close_menu( $output );
 		}
+	}
+
+
+	/**
+	 * Get the top-level terms for the current page.
+	 * Could be multiple if on a single.
+	 * This will be one if on an archive.
+	 *
+	 * @return \WP_Term[]
+	 */
+	public function get_top_level_terms() {
+		$top_level_term_ids = \array_filter( \array_map( function( $term_id ) {
+			$top = $this->get_highest_parent( $term_id );
+			return $this->is_excluded( $top ) ? null : $top;
+		}, $this->get_included_term_ids() ) );
+
+		$top_level_term_ids = apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
+
+		$terms = [];
+		if ( ! empty( $top_level_term_ids ) ) {
+			$terms = get_terms(
+				[
+					'include'    => \array_unique( \array_filter( $top_level_term_ids ) ),
+					'hide_empty' => false,
+					'orderby'    => $this->get_order_by(),
+					'order'      => $this->get_order(),
+				]
+			);
+
+			if ( is_wp_error( $terms ) ) {
+				return [];
+			}
+		}
+
+		return $terms;
+	}
+
+
+	/**
+	 * Get the term ids for either the current term archive,
+	 * or the terms attached to the current post
+	 *
+	 * @return array
+	 */
+	public function get_included_term_ids() {
+		$term_ids = [];
+		if ( is_singular() ) {
+			$id = get_the_ID();
+			if ( false !== $id ) {
+				$term_ids = wp_get_post_terms( $id, $this->get_taxonomy(), [ 'fields' => 'ids' ] );
+			}
+		} elseif ( $this->is_tax() ) {
+			$term = get_queried_object();
+			if ( $term instanceof \WP_Term ) {
+				$term_ids[] = $term->term_id;
+			}
+		}
+
+		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/included-term-ids', $term_ids, $this->args, $this->instance, $this );
+	}
+
+
+	/**
+	 * Get this menu's taxonomy.
+	 * Defaults to 'category'.
+	 *
+	 * @return string
+	 */
+	public function get_taxonomy() {
+		return apply_filters( 'advanced-sidebar-menu/menus/category/taxonomy', 'category', $this->args, $this->instance, $this );
+	}
+
+
+	/**
+	 * Is this term, and it's children displayed
+	 *
+	 * 1. If children not empty we always display (or at least let the view handle it).
+	 * 2. If children empty and not include a parent we don't display.
+	 * 3. If children empty and not include a childless parent we don't display.
+	 * 4. If children empty, and the top parent is excluded we don't display.
+	 *
+	 * @param \WP_Term $term - Current top level term.
+	 *
+	 * @return bool
+	 */
+	public function is_term_displayed( $term ) {
+		if ( ! $this->has_children( $term ) ) {
+			if ( ! $this->checked( static::INCLUDE_PARENT ) || ! $this->checked( static::INCLUDE_CHILDLESS_PARENT ) ) {
+				return false;
+			}
+			$top = $this->get_top_parent_id() ?? - 1;
+			if ( $this->is_excluded( $top ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+
+	/**
+	 * Simplified way to verify if we are on a taxonomy archive.
+	 *
+	 * @return bool
+	 */
+	public function is_tax() {
+		$taxonomy = $this->get_taxonomy();
+		if ( 'category' === $taxonomy ) {
+			return is_category();
+		}
+
+		return is_tax( $taxonomy );
+	}
+
+
+	/**
+	 * Is a term our current top level term?
+	 *
+	 * @since 8.8.0
+	 *
+	 * @param \WP_Term $term - Term to check against.
+	 *
+	 * @return bool
+	 */
+	public function is_current_top_level_term( \WP_Term $term ): bool {
+		if ( null === $this->top_level_term ) {
+			return false;
+		}
+		return $term->term_id === $this->top_level_term->term_id;
+	}
+
+
+	/**
+	 * Removes the closing </li> tag from a list item to allow for child menus inside of it
+	 *
+	 * @param string|false $item - An <li></li> item.
+	 *
+	 * @return string|false
+	 */
+	public function openListItem( $item = false ) {
+		if ( false === $item ) {
+			return false;
+		}
+
+		return \substr( \trim( $item ), 0, - 5 );
+	}
+
+
+	/**
+	 * Retrieve the highest level term_id based on the given
+	 * term's ancestors.
+	 *
+	 * Track the latest call's ancestors on the class for use
+	 * on the single term's archive.
+	 *
+	 * @param int $term_id - Provided term's id.
+	 *
+	 * @return int
+	 */
+	public function get_highest_parent( $term_id ) {
+		$ancestors = \array_reverse( get_ancestors( $term_id, $this->get_taxonomy(), 'taxonomy' ) );
+		// Use current term if no ancestors available.
+		$ancestors[] = $term_id;
+
+		return reset( $ancestors );
+	}
+
+
+	/**
+	 * Add various classes to category item to define it among levels
+	 * as well as current item state.
+	 *
+	 * @param string[] $classes  - List of classes added to category list item.
+	 * @param \WP_Term $category - Current category.
+	 *
+	 * @filter category_css_class 11 2
+	 *
+	 * @return string[]
+	 */
+	public function add_list_item_classes( array $classes, \WP_Term $category ): array {
+		$classes[] = 'menu-item';
+		if ( $this->has_children( $category ) ) {
+			$classes[] = 'has_children';
+		}
+
+		if ( $this->is_current_term( $category ) ) {
+			$classes[] = 'current-menu-item';
+		} else {
+			$current = $this->get_current_term();
+			if ( null !== $current ) {
+				if ( $current->parent === $category->term_id ) {
+					$classes[] = 'current-menu-parent';
+					$classes[] = 'current-menu-ancestor';
+				} elseif ( $this->is_current_term_ancestor( $category ) ) {
+					$classes[] = 'current-menu-ancestor';
+				}
+			}
+		}
+
+		return \array_unique( $classes );
+	}
+
+
+	/**
+	 * 1. Is this term's parent our top_parent_id?
+	 * 2. Is this term not excluded?
+	 * 3. Does the filter allow this term?
+	 *
+	 * When looping through the view via the terms from $this->get_child_terms()
+	 * the term->parent conditions will most likely always be true.
+	 *
+	 * @param \WP_Term $term - Category or term.
+	 *
+	 * @return bool
+	 */
+	public function is_first_level_term( \WP_Term $term ): bool {
+		$return = false;
+		if ( ! $this->is_excluded( $term->term_id ) && $term->parent === $this->get_top_parent_id() ) {
+			$return = true;
+		}
+
+		return apply_filters( 'advanced-sidebar-menu/menus/category/is-first-level-term', $return, $term, $this );
+	}
+
+
+	/**
+	 * Is a term the currently viewed term?
+	 *
+	 * @since 8.8.0
+	 *
+	 * @param \WP_Term $term - Term to check against.
+	 *
+	 * @return bool
+	 */
+	public function is_current_term( \WP_Term $term ) {
+		if ( ! $this->is_tax() ) {
+			return false;
+		}
+		return get_queried_object_id() === $term->term_id;
+	}
+
+
+	/**
+	 * Both are required to be considered an ancestor.
+	 * - Is this term an ancestor of the current term?
+	 * - Does this term have children?
+	 *
+	 * @param \WP_Term $term - Category or term.
+	 *
+	 * @return mixed
+	 */
+	public function is_current_term_ancestor( \WP_Term $term ) {
+		$is_ancestor = false;
+
+		if ( $this->is_current_top_level_term( $term ) || \in_array( $term->term_id, $this->get_current_ancestors(), true ) ) {
+			$children = get_term_children( $term->term_id, $this->get_taxonomy() );
+			if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
+				$is_ancestor = true;
+			}
+		}
+
+		return apply_filters( 'advanced-sidebar-menu/menus/category/is-current-term-ancestor', $is_ancestor, $term, $this );
+	}
+
+
+	/**
+	 * Does this term have children?
+	 *
+	 * @param \WP_Term $term - Current category or term.
+	 *
+	 * @return mixed
+	 */
+	public function has_children( \WP_Term $term ) {
+		$return = false;
+		$children = get_term_children( $term->term_id, $this->get_taxonomy() );
+		if ( ! is_wp_error( $children ) && \count( $children ) > 0 ) {
+			$return = true;
+		}
+
+		return apply_filters( 'advanced-sidebar-menu/menus/category/has-children', $return, $term, $this );
 	}
 
 

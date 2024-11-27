@@ -2,7 +2,7 @@
 
 namespace Advanced_Sidebar_Menu\Menus;
 
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget\Widget;
 
 /**
  * Rules for a Menu class.
@@ -12,7 +12,7 @@ use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
  * @author OnPoint Plugins
  * @since  9.5.0
  *
- * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ * @phpstan-import-type WIDGET_ARGS from Widget
  * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
  * @phpstan-template INTERFACED_CLASS
  */

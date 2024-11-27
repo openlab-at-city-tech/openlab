@@ -9,20 +9,20 @@ namespace Advanced_Sidebar_Menu\Widget;
  * - Working to move from inheritance to composition.
  * - Supports passing in the settings and defaults.
  *
- * @since 9.5.0
+ * @since                 9.5.0
  *
- * @todo  Once the required basic version it 9.5.0, switch PRO Navigation widget to this trait.
- *
- * @phpstan-template SETTINGS of array
- * @phpstan-template DEFAULTS of array<key-of<SETTINGS>, string|int|array<string, string|int>>
+ * @template SETTINGS of array<string, mixed>
+ * @template DEFAULTS of array<key-of<SETTINGS>, mixed>
  */
 trait Instance {
 	/**
 	 * The current widget instance
 	 *
-	 * @var \Required<SETTINGS, DEFAULTS>
+	 * @phpstan-var \Required<SETTINGS, key-of<DEFAULTS>>
+	 *
+	 * @var array
 	 */
-	protected $widget_settings;
+	protected array $widget_settings;
 
 
 	/**

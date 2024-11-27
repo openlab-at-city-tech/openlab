@@ -2,7 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 560:
+/***/ 501:
 /*!********************************!*\
   !*** ./js/src/pcss/admin.pcss ***!
   \********************************/
@@ -17,7 +17,7 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
-/***/ 232:
+/***/ 1669:
 /*!*************************!*\
   !*** external "jQuery" ***!
   \*************************/
@@ -84,14 +84,12 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be isolated against other modules in the chunk.
-(() => {
-/*!*************************!*\
-  !*** ./js/src/admin.ts ***!
-  \*************************/
+/*!********************************!*\
+  !*** ./js/src/widget-admin.ts ***!
+  \********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 560);
-/* provided dependency */ var $ = __webpack_require__(/*! jquery */ 232);
+/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 501);
+/* provided dependency */ var $ = __webpack_require__(/*! jquery */ 1669);
 
 
 /**
@@ -206,8 +204,6 @@ window.advancedSidebarMenuAdmin = {
 $(document).on('widget-added', function () {
   window.advancedSidebarMenuAdmin.init();
 });
-})();
-
 /******/ })()
 ;
 //# sourceMappingURL=advanced-sidebar-menu-admin.js.map
