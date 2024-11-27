@@ -2082,8 +2082,8 @@ class C_Gallery_Storage extends C_Component
                         $possible_quality = $img->getImageCompressionQuality();
                     }
                 }
-                // ImageMagick wasn't available so we guess it from the dimensions and filesize
-                if ($possible_quality === null) {
+                // ImageMagick wasn't available or quality is zero so we guess it from the dimensions and filesize
+                if (null === $possible_quality || 0 === $possible_quality) {
                     $filesize = filesize($image_path);
                     $possible_quality = 101 - $width * $height * 3 / $filesize;
                 }

@@ -343,4 +343,49 @@ class I18N {
 
 		return \array_merge_recursive( $allowedtags, $our_keys );
 	}
+
+	/**
+	 * NGG allow html tags for images alt/title/desc.
+	 *
+	 * @param  string $content content.
+	 * @return string Sanitized content.
+	 */
+	public static function ngg_allowed_html_tags_for_images( $content ) {
+		// Decode HTML entities to ensure we work with raw HTML.
+		$content = html_entity_decode( $content, ENT_QUOTES | ENT_HTML5 );
+
+		// Allowed HTML tags.
+		$allowed_tags = [
+				'a'      => [
+						'href'   => [],
+						'title'  => [],
+						'target' => [],
+				],
+				'b'      => [],
+				'i'      => [],
+				'u'      => [],
+				'em'     => [],
+				'strong' => [],
+				'p'      => [],
+				'br'     => [],
+				'ul'     => [],
+				'ol'     => [],
+				'li'     => [],
+		];
+
+		// First, sanitize using wp_kses to allow only the permitted HTML tags.
+		$sanitized_input = wp_kses( $content, $allowed_tags );
+
+		// Strip backslashes that may have been added by wp_kses or other functions.
+		$sanitized_input = stripslashes( $sanitized_input );
+
+		// Enhanced regex to remove any event handler attributes, including malformed or encoded ones.
+		// It handles cases like: onload="alert(1)", onload='alert(1)', onload = 'alert(1)'
+		$sanitized_input = preg_replace( '/\s*on\w+\s*=\s*(["\'].*?["\']|[^ >]+)/i', '', $sanitized_input );
+
+		// Remove JavaScript expressions in attributes, like: href="javascript:alert(1)"
+		$sanitized_input = preg_replace( '/\s*(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*/i', '', $sanitized_input );
+
+		return $sanitized_input;
+	}
 }

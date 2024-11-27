@@ -2,7 +2,7 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 3.59.5
+Stable tag: 3.59.6
 Tested up to: 6.6
 License: GPLv3
 Requires PHP: 7.0
@@ -195,6 +195,13 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+= V3.59.6 - 11.05.2024 =
+* Fixed: Title and captions escaping
+* Added: Onboarding wizard
+* Added: Optional usage tracking
+* Fixed: Blurry images on cropping
+
+
 = V3.59.5 - 09.24.2024 =
 * Fixed: Improved security
 

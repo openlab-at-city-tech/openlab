@@ -240,8 +240,8 @@ class nggManageGallery {
 	}
 
 	public function render_image_column_5( $output = '', $picture = [] ) {
-		$alttext = esc_attr( stripslashes( $picture->alttext ) );
-		$desc    = esc_html( stripslashes( $picture->description ) );
+		$alttext = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $picture->alttext );
+		$desc    = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $picture->description );
 
 		$output = [];
 
@@ -965,13 +965,13 @@ class nggManageGallery {
 				if ( ( $image = $image_mapper->find( $pid ) ) ) {
 					// Strip slashes from title/description/alttext fields.
 					if ( isset( $data['description'] ) ) {
-						$data['description'] = wp_kses_post( $data['description'] );
+						$data['description'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['description'] );
 					}
 					if ( isset( $data['alttext'] ) ) {
-						$data['alttext'] = wp_kses_post( $data['alttext'] );
+						$data['alttext'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['alttext'] );
 					}
 					if ( isset( $data['title'] ) ) {
-						$data['title'] = wp_kses_post( $data['title'] );
+						$data['title'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['title'] );
 					}
 
 					// Generate new slug if the alttext has changed.
