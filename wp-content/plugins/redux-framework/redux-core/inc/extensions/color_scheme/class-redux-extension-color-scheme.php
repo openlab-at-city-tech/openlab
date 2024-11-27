@@ -7,6 +7,8 @@
  * @class   Redux_Extension_Color_Scheme
  *
  * @version 4.4.10
+ *
+ * @noinspection PhpIgnoredClassAliasDeclaration
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,7 +33,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		 *
 		 * @var string
 		 */
-		public $extension_name = 'Color Schemes';
+		public string $extension_name = 'Color Schemes';
 
 		/**
 		 * Field ID.
@@ -45,14 +47,14 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		 *
 		 * @var bool
 		 */
-		public $output_transparent = false;
+		public bool $output_transparent = false;
 
 		/**
 		 * Extension field name.
 		 *
 		 * @var string
 		 */
-		public $field_name = '';
+		public string $field_name = '';
 
 		/**
 		 * Class Constructor. Defines the args for the extensions class
@@ -562,13 +564,13 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		/**
 		 * Save Scheme. Saved an individual scheme to JSON scheme file.
 		 *
-		 * @param       object $redux ReduxFramework object.
+		 * @param ReduxFramework $redux ReduxFramework object.
 		 *
+		 * @return      void
 		 * @since       1.0.0
 		 * @access      private
-		 * @return      void
 		 */
-		private function save_scheme( $redux ) {
+		private function save_scheme( ReduxFramework $redux ) {
 			Redux_Color_Scheme_Functions::$parent   = $redux;
 			Redux_Color_Scheme_Functions::$field_id = $this->field_id;
 
@@ -613,13 +615,13 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		/**
 		 * Delete Scheme. Delete individual scheme from JSON scheme file.
 		 *
-		 * @param       object $redux ReduxFramework object.
+		 * @param ReduxFramework $redux ReduxFramework object.
 		 *
+		 * @return      void
 		 * @since       1.0.0
 		 * @access      private
-		 * @return      void
 		 */
-		private function delete_scheme( $redux ) {
+		private function delete_scheme( ReduxFramework $redux ) {
 
 			// Get deleted scheme ID.
 			if ( isset( $_REQUEST['scheme_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
@@ -680,13 +682,13 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 		/**
 		 * Gets the new scheme based on selection.
 		 *
-		 * @param       object $redux ReduxFramework object.
+		 * @param ReduxFramework $redux ReduxFramework object.
 		 *
+		 * @return      void
 		 * @since       1.0.0
 		 * @access      private
-		 * @return      void
 		 */
-		private function get_scheme_html( $redux ) {
+		private function get_scheme_html( ReduxFramework $redux ) {
 			if ( isset( $_POST['scheme_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 
 				// Get the selected scheme name.
@@ -731,7 +733,6 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 			$def_opts = $this->parent->options_defaults[ $this->field_id ];
 
 			if ( isset( $def_opts['color_scheme_name'] ) ) {
-				// error_log(print_r($def_opts,true));
 				return array();
 			}
 

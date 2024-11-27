@@ -2,7 +2,7 @@
 /**
  * Redux Framework is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
+ * the Free Software Foundation, either version 3 of the License or
  * any later version.
  *
  * Redux Framework is distributed in the hope that it will be useful,
@@ -10,7 +10,7 @@
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  * You should have received a copy of the GNU General Public License
- * along with Redux Framework. If not, see <http://www.gnu.org/licenses/>.
+ * along with Redux Framework. If not, see <https://www.gnu.org/licenses/>.
  *
  * The addition of the noinspection tags is because there are devs writing their
  * in-house extensions improperly, and we have to compensate for that.
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/class-redux-core.php';
 
-Redux_Core::$version    = '4.4.18';
+Redux_Core::$version    = '4.5.0';
 Redux_Core::$redux_path = __DIR__;
 Redux_Core::instance();
 
@@ -902,7 +902,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		}
 
 		/**
-		 * ->get(); This is used to return and option value from the option array
+		 * →get(); This is used to return and option value from the option array
 		 *
 		 * @since       1.0.0
 		 * @access      public
@@ -917,7 +917,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		}
 
 		/**
-		 * ->set(); This is used to set an arbitrary option in the option array
+		 * →set(); This is used to set an arbitrary option in the option array
 		 *
 		 * @since       1.0.0
 		 * @access      public

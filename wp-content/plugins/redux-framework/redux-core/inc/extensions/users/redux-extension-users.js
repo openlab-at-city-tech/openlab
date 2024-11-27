@@ -7,70 +7,66 @@
 
 /* global redux */
 
-jQuery(
-	function ( $ ) {
-		'use strict';
+( function ( $ ) {
+	'use strict';
 
-		$.reduxUsers = $.reduxUsers || {};
+	$.reduxUsers = $.reduxUsers || {};
 
-		$( document ).ready(
-			function () {
-				$.reduxUsers.init();
-			}
-		);
+	document.addEventListener(
+		'DOMContentLoaded',
+		function () {
+			$.reduxUsers.init();
+		}
+	);
 
-		$.reduxUsers.init = function () {
-			var reduxObject;
-			var optName = $( '.redux-ajax-security' ).data( 'opt-name' );
+	$.reduxUsers.init = function () {
+		let reduxObject;
 
-			if ( undefined === optName ) {
-				reduxObject = redux.optName;
-			} else {
-				reduxObject = redux;
-			}
+		$.redux.getOptName();
 
-			$.reduxUsers.notLoaded = true;
-			$.redux.initFields();
+		reduxObject = redux.optName;
 
-			reduxObject.args.ajax_save         = 0;
-			reduxObject.args.disable_save_warn = true;
-		};
+		$.reduxUsers.notLoaded = true;
+		$.redux.initFields();
 
-		// Check for a successful element added since WP ajax doesn't have a callback.
-		$.reduxUsers.editCount = $( '#the-list tr' );
+		reduxObject.args.ajax_save         = 0;
+		reduxObject.args.disable_save_warn = true;
+	};
 
-		$.reduxUsers.editCheck = function () {
-			var len;
+	// Check for a successful element added since WP ajax doesn't have a callback.
+	$.reduxUsers.editCount = $( '#the-list tr' );
 
-			if ( $( '#ajax-response .error' ).length ) {
-				return false;
-			}
+	$.reduxUsers.editCheck = function () {
+		let len;
 
-			len = $( '#the-list tr' ).length;
+		if ( $( '#ajax-response .error' ).length ) {
+			return false;
+		}
 
-			if ( len > $.reduxUsers.editCount ) {
-				window.location.reload();
-				return false;
-			}
+		len = $( '#the-list tr' ).length;
 
-			setTimeout( $.reduxUsers.editCheck, 100 );
+		if ( len > $.reduxUsers.editCount ) {
+			window.location.reload();
+			return false;
+		}
 
-			$.reduxUsers.editCount = len;
-		};
+		setTimeout( $.reduxUsers.editCheck, 100 );
 
-		$( '#submit' ).on(
-			'click',
-			function () {
-				window.onbeforeunload = null;
+		$.reduxUsers.editCount = len;
+	};
 
-				$.reduxUsers.editCount = $( '#the-list tr' ).length;
+	$( '#submit' ).on(
+		'click',
+		function () {
+			window.onbeforeunload = null;
 
-				$( document ).ajaxSuccess(
-					function () {
-						$.reduxUsers.editCheck();
-					}
-				);
-			}
-		);
-	}
-);
+			$.reduxUsers.editCount = $( '#the-list tr' ).length;
+
+			$( document ).ajaxSuccess(
+				function () {
+					$.reduxUsers.editCheck();
+				}
+			);
+		}
+	);
+} )( jQuery );
