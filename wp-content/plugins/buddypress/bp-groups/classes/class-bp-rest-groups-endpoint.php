@@ -21,6 +21,8 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Groups_REST_Controller' );
+
 		$this->namespace = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base = buddypress()->groups->id;
 	}
@@ -929,7 +931,7 @@ class BP_REST_Groups_Endpoint extends WP_REST_Controller {
 		// Remove group type(s).
 		if ( isset( $prepared_group->group_id ) && ! empty( $request->get_param( 'remove_types' ) ) ) {
 			array_map(
-				function( $type ) use ( $prepared_group ) {
+				function ( $type ) use ( $prepared_group ) {
 					bp_groups_remove_group_type( $prepared_group->group_id, $type );
 				},
 				$request->get_param( 'remove_types' )

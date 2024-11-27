@@ -205,7 +205,7 @@ function bp_message_thread_excerpt() {
 		 *
 		 * @param string $value Excerpt of the current thread in the loop.
 		 */
-		return apply_filters( 'bp_get_message_thread_excerpt', strip_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) );
+		return apply_filters( 'bp_get_message_thread_excerpt', wp_strip_all_tags( bp_create_excerpt( $messages_template->thread->last_message_content, 75 ) ) );
 	}
 
 /**
@@ -827,7 +827,7 @@ function bp_message_thread_avatar( $args = '' ) {
 /**
  * Output the unread messages count for the current inbox.
  *
- * @since 2.6.x Added the `$user_id` paremeter.
+ * @since 2.6.x Added the `$user_id` parameter.
  *
  * @param int $user_id The user ID.
  */
@@ -837,7 +837,7 @@ function bp_total_unread_messages_count( $user_id = 0 ) {
 	/**
 	 * Get the unread messages count for the current inbox.
 	 *
-	 * @since 2.6.x Added the `$user_id` paremeter.
+	 * @since 2.6.x Added the `$user_id` parameter.
 	 *
 	 * @param int $user_id The user ID.
 	 *
@@ -1051,7 +1051,7 @@ function bp_messages_content_value() {
 	echo esc_textarea( bp_get_messages_content_value() );
 }
 	/**
-	 * Get the default value fo the Compose content field.
+	 * Get the default value for the Compose content field.
 	 *
 	 * Will get a value out of $_POST['content'] if available (ie after a
 	 * failed submission).
@@ -1982,7 +1982,7 @@ function bp_the_thread_recipients_list() {
 
 		$recipient_links = array();
 
-		foreach( (array) $thread_template->thread->recipients as $recipient ) {
+		foreach ( (array) $thread_template->thread->recipients as $recipient ) {
 			if ( (int) $recipient->user_id !== bp_loggedin_user_id() ) {
 				$recipient_link = bp_core_get_userlink( $recipient->user_id );
 

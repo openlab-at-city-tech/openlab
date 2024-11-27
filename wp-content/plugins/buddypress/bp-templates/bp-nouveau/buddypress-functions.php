@@ -83,10 +83,7 @@ class BP_Nouveau extends BP_Theme_Compat {
 		$this->includes_dir   = trailingslashit( $this->dir ) . 'includes/';
 		$this->directory_nav  = new BP_Core_Nav( bp_get_root_blog_id() );
 		$this->is_block_theme = false;
-
-		if ( bp_is_running_wp( '5.9.0', '>=' ) ) {
-			$this->is_block_theme = wp_is_block_theme();
-		}
+		$this->is_block_theme = wp_is_block_theme();
 	}
 
 	/**
@@ -105,7 +102,7 @@ class BP_Nouveau extends BP_Theme_Compat {
 
 		// Load AJAX code only on AJAX requests.
 		} else {
-			add_action( 'admin_init', function() {
+			add_action( 'admin_init', function () {
 				if ( defined( 'DOING_AJAX' ) && true === DOING_AJAX ) {
 					require bp_nouveau()->includes_dir . 'ajax.php';
 				}
@@ -123,6 +120,12 @@ class BP_Nouveau extends BP_Theme_Compat {
 				},
 				0
 			);
+
+			// When BP Classic is activated, regular themes need this filter. 
+			if ( function_exists( 'bp_classic' ) ) {
+				// Set the BP Uri for the Ajax customizer preview.
+				add_filter( 'bp_uri', array( $this, 'customizer_set_uri' ), 10, 1 );
+			}
 		} elseif ( wp_using_themes() && ! isset( $_GET['bp_customizer'] ) ) {
 			remove_action( 'customize_register', 'bp_customize_register', 20 );
 		}
@@ -696,32 +699,31 @@ class BP_Nouveau extends BP_Theme_Compat {
 	 * Set the BP Uri for the customizer in case of Ajax requests.
 	 *
 	 * @since 3.0.0
-	 * @deprecated 12.0.0
+	 * @since 12.0.0 Only fired for regular themes when BP Classic is activated.
 	 *
 	 * @param  string $path The BP Uri.
-	 * @return string       The BP Uri.
+	 * @return string
 	 */
 	public function customizer_set_uri( $path ) {
-		_deprecated_function( __METHOD__, '12.0.0' );
 
 		if ( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) {
 			return $path;
 		}
 
-		$uri = parse_url( $path );
+		$uri = wp_parse_url( $path );
 
-		if ( false === strpos( $uri['path'], 'customize.php' ) ) {
+		if ( ! str_contains( $uri['path'], 'customize.php' ) || empty( $uri['query'] ) ) {
 			return $path;
-		} else {
-			$vars = bp_parse_args(
-				$uri['query'],
-				array(),
-				'customizer_set_uri'
-			);
+		}
 
-			if ( ! empty( $vars['url'] ) ) {
-				$path = str_replace( get_site_url(), '', urldecode( $vars['url'] ) );
-			}
+		$vars = bp_parse_args(
+			$uri['query'],
+			array(),
+			'customizer_set_uri'
+		);
+
+		if ( ! empty( $vars['url'] ) ) {
+			$path = str_replace( get_site_url(), '', urldecode( $vars['url'] ) );
 		}
 
 		return $path;

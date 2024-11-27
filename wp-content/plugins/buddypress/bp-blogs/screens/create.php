@@ -15,7 +15,7 @@
 function bp_blogs_screen_create_a_blog() {
 
 	if ( ! is_multisite() || ! bp_is_blogs_component() || ! bp_is_current_action( 'create' ) || ! is_user_logged_in() || ! bp_blog_signup_enabled() ) {
-		return false;
+		return;
 	}
 
 	/**

@@ -15,11 +15,11 @@
 function groups_screen_group_admin_manage_members() {
 
 	if ( 'manage-members' != bp_get_group_current_admin_tab() ) {
-		return false;
+		return;
 	}
 
 	if ( ! bp_is_item_admin() ) {
-		return false;
+		return;
 	}
 
 	$bp       = buddypress();
@@ -35,7 +35,7 @@ function groups_screen_group_admin_manage_members() {
 
 			// Check the nonce first.
 			if ( ! check_admin_referer( 'groups_promote_member' ) ) {
-				return false;
+				return;
 			}
 
 			// Promote a user.
@@ -46,14 +46,15 @@ function groups_screen_group_admin_manage_members() {
 			}
 
 			/**
-			 * Fires before the redirect after a group member has been promoted.
+			 * Fires before the redirect.
 			 *
 			 * @since 1.0.0
+			 * @deprecated 14.0.0
 			 *
 			 * @param int $user_id ID of the user being promoted.
-			 * @param int $id      ID of the group user is promoted within.
+			 * @param int $id      ID of the group is promoted within.
 			 */
-			do_action( 'groups_promoted_member', $user_id, $bp->groups->current_group->id );
+			do_action_deprecated( 'groups_promoted_member', array( $user_id, $bp->groups->current_group->id ), '14.0.0', 'group_member_promoted' );
 
 			bp_core_redirect( $redirect );
 		}
@@ -65,7 +66,7 @@ function groups_screen_group_admin_manage_members() {
 
 			// Check the nonce first.
 			if ( ! check_admin_referer( 'groups_demote_member' ) ) {
-				return false;
+				return;
 			}
 
 			// Stop sole admins from abandoning their group.
@@ -84,11 +85,12 @@ function groups_screen_group_admin_manage_members() {
 			 * Fires before the redirect after a group member has been demoted.
 			 *
 			 * @since 1.0.0
+			 * @deprecated 14.0.0
 			 *
 			 * @param int $user_id ID of the user being demoted.
-			 * @param int $id      ID of the group user is demoted within.
+			 * @param int $id      ID of the group is demoted within.
 			 */
-			do_action( 'groups_demoted_member', $user_id, $bp->groups->current_group->id );
+			do_action_deprecated( 'groups_demoted_member', array( $user_id, $bp->groups->current_group->id ), '14.0.0', 'group_member_demoted' );
 
 			bp_core_redirect( $redirect );
 		}
@@ -98,7 +100,7 @@ function groups_screen_group_admin_manage_members() {
 
 			// Check the nonce first.
 			if ( ! check_admin_referer( 'groups_ban_member' ) ) {
-				return false;
+				return;
 			}
 
 			// Ban a user.
@@ -112,11 +114,12 @@ function groups_screen_group_admin_manage_members() {
 			 * Fires before the redirect after a group member has been banned.
 			 *
 			 * @since 1.0.0
+			 * @deprecated 14.0.0
 			 *
 			 * @param int $user_id ID of the user being banned.
 			 * @param int $id      ID of the group user is banned from.
 			 */
-			do_action( 'groups_banned_member', $user_id, $bp->groups->current_group->id );
+			do_action_deprecated( 'groups_banned_member', array( $user_id, $bp->groups->current_group->id ), '14.0.0', 'group_member_banned' );
 
 			bp_core_redirect( $redirect );
 		}
@@ -126,7 +129,7 @@ function groups_screen_group_admin_manage_members() {
 
 			// Check the nonce first.
 			if ( ! check_admin_referer( 'groups_unban_member' ) ) {
-				return false;
+				return;
 			}
 
 			// Remove a ban for user.
@@ -140,11 +143,12 @@ function groups_screen_group_admin_manage_members() {
 			 * Fires before the redirect after a group member has been unbanned.
 			 *
 			 * @since 1.0.0
+			 * @deprecated 14.0.0
 			 *
 			 * @param int $user_id ID of the user being unbanned.
 			 * @param int $id      ID of the group user is unbanned from.
 			 */
-			do_action( 'groups_unbanned_member', $user_id, $bp->groups->current_group->id );
+			do_action_deprecated( 'groups_unbanned_member', array( $user_id, $bp->groups->current_group->id ), '14.0.0', 'group_member_unbanned' );
 
 			bp_core_redirect( $redirect );
 		}
@@ -154,7 +158,7 @@ function groups_screen_group_admin_manage_members() {
 
 			// Check the nonce first.
 			if ( ! check_admin_referer( 'groups_remove_member' ) ) {
-				return false;
+				return;
 			}
 
 			// Remove a user.
@@ -168,11 +172,12 @@ function groups_screen_group_admin_manage_members() {
 			 * Fires before the redirect after a group member has been removed.
 			 *
 			 * @since 1.2.6
+			 * @deprecated 14.0.0
 			 *
 			 * @param int $user_id ID of the user being removed.
 			 * @param int $id      ID of the group the user is removed from.
 			 */
-			do_action( 'groups_removed_member', $user_id, $bp->groups->current_group->id );
+			do_action_deprecated( 'groups_removed_member', array( $user_id, $bp->groups->current_group->id ), '14.0.0', 'group_member_removed' );
 
 			bp_core_redirect( $redirect );
 		}
@@ -187,13 +192,18 @@ function groups_screen_group_admin_manage_members() {
 	 */
 	do_action( 'groups_screen_group_admin_manage_members', $bp->groups->current_group->id );
 
-	/**
-	 * Filters the template to load for a group's manage members page.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $value Path to a group's manage members template.
-	 */
-	bp_core_load_template( apply_filters( 'groups_template_group_admin_manage_members', 'groups/single/home' ) );
+	$templates = array(
+		/**
+		 * Filters the template to load for a group's manage members page.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $value Path to a group's manage members template.
+		 */
+		apply_filters( 'groups_template_group_admin_manage_members', 'groups/single/home' ),
+		'groups/single/index',
+	);
+
+	bp_core_load_template( $templates );
 }
 add_action( 'bp_screens', 'groups_screen_group_admin_manage_members' );

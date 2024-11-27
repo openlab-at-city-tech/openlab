@@ -8,15 +8,13 @@
  */
 
 // Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 class BP_Members_Invitations_Component extends BP_Component {
 
 	function __construct() {
 		parent::start(
 			'members_invitations',
-			__( 'Members Invitations', 'buddypress' ),
+			'Members Invitations',
 			'',
 			array()
 		);

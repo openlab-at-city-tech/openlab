@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 function bp_get_default_options() {
 
 	// Default options.
-	$options = array (
+	$options = array(
 
 		/* Components ********************************************************/
 
@@ -61,6 +61,9 @@ function bp_get_default_options() {
 
 		// Group Cover image uploads.
 		'bp-disable-group-cover-image-uploads' => false,
+
+		// Allow Group Activity Deletions.
+		'bp-disable-group-activity-deletions'  => false,
 
 		// Allow users to delete their own accounts.
 		'bp-disable-account-deletion'          => false,
@@ -253,7 +256,7 @@ function bp_get_option( $option_name, $default = '' ) {
  *
  * @param string $option_name The option key to be set.
  * @param mixed  $value       The value to be set.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_add_option( $option_name, $value ) {
 	return add_blog_option( bp_get_root_blog_id(), $option_name, $value );
@@ -270,7 +273,7 @@ function bp_add_option( $option_name, $value ) {
  *
  * @param string $option_name The option key to be set.
  * @param mixed  $value       The value to be set.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_update_option( $option_name, $value ) {
 	return update_blog_option( bp_get_root_blog_id(), $option_name, $value );
@@ -286,7 +289,7 @@ function bp_update_option( $option_name, $value ) {
  * @since 1.5.0
  *
  * @param string $option_name The option key to be deleted.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_delete_option( $option_name ) {
 	return delete_blog_option( bp_get_root_blog_id(), $option_name );
@@ -308,7 +311,7 @@ function bp_delete_option( $option_name ) {
  */
 function bp_core_activate_site_options( $keys = array() ) {
 
-	if ( !empty( $keys ) && is_array( $keys ) ) {
+	if ( ! empty( $keys ) && is_array( $keys ) ) {
 		$bp = buddypress();
 
 		$errors = false;
@@ -317,7 +320,7 @@ function bp_core_activate_site_options( $keys = array() ) {
 			if ( empty( $bp->site_options[ $key ] ) ) {
 				$bp->site_options[ $key ] = bp_get_option( $key, $default );
 
-				if ( !bp_update_option( $key, $bp->site_options[ $key ] ) ) {
+				if ( ! bp_update_option( $key, $bp->site_options[ $key ] ) ) {
 					$errors = true;
 				}
 			}
@@ -361,7 +364,7 @@ function bp_core_get_root_options() {
 
 	if ( false === $root_blog_options_meta ) {
 		$blog_options_keys      = "'" . join( "', '", (array) $root_blog_option_keys ) . "'";
-		$blog_options_table	    = bp_is_multiblog_mode() ? $wpdb->options : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'options';
+		$blog_options_table     = bp_is_multiblog_mode() ? $wpdb->options : $wpdb->get_blog_prefix( bp_get_root_blog_id() ) . 'options';
 		$blog_options_query     = "SELECT option_name AS name, option_value AS value FROM {$blog_options_table} WHERE option_name IN ( {$blog_options_keys} )";
 		$root_blog_options_meta = $wpdb->get_results( $blog_options_query );
 
@@ -375,12 +378,15 @@ function bp_core_get_root_options() {
 			 *
 			 * @param array $value Array of multisite options from sitemeta table.
 			 */
-			$network_options = apply_filters( 'bp_core_network_options', array(
-				'tags_blog_id'       => '0',
-				'sitewide_tags_blog' => '',
-				'registration'       => '0',
-				'fileupload_maxk'    => '1500'
-			) );
+			$network_options = apply_filters(
+				'bp_core_network_options',
+				array(
+					'tags_blog_id'       => '0',
+					'sitewide_tags_blog' => '',
+					'registration'       => '0',
+					'fileupload_maxk'    => '1500',
+				)
+			);
 
 			$current_site           = get_current_site();
 			$network_option_keys    = array_keys( $network_options );
@@ -394,7 +400,7 @@ function bp_core_get_root_options() {
 
 		// Loop through our results and make them usable.
 		foreach ( $root_blog_options_meta as $root_blog_option ) {
-			$root_blog_options[$root_blog_option->name] = $root_blog_option->value;
+			$root_blog_options[ $root_blog_option->name ] = $root_blog_option->value;
 		}
 
 		// Copy the options no the return val.
@@ -586,25 +592,47 @@ function bp_disable_group_cover_image_uploads( $default = false ) {
 }
 
 /**
+ * Are group activity deletions disabled?
+ *
+ * @since 14.0.0
+ *
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: false.
+ * @return bool True if group activity deletions are disabled, otherwise false.
+ */
+function bp_disable_group_activity_deletions( $retval = false ) {
+
+	/**
+	 * Filters whether or not group creator, group admin or group mod are able to delete group activity posts.
+	 *
+	 * @since 14.0.0
+	 *
+	 * @param bool $disable_group_deletions Whether or not group creator,
+	 *                                      group admin or group mod are able to delete group activity post.
+	 */
+	return (bool) apply_filters( 'bp_disable_group_activity_deletions', (bool) bp_get_option( 'bp-disable-group-activity-deletions', $retval ) );
+}
+
+/**
  * Are members able to delete their own accounts?
  *
  * @since 1.6.0
  *
- * @param bool $default Optional. Fallback value if not found in the database.
- *                      Default: true.
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: true.
  * @return bool True if users are able to delete their own accounts, otherwise
  *              false.
  */
-function bp_disable_account_deletion( $default = false ) {
+function bp_disable_account_deletion( $retval = false ) {
 
 	/**
 	 * Filters whether or not members are able to delete their own accounts.
 	 *
 	 * @since 1.6.0
 	 *
-	 * @param bool $value Whether or not members are able to delete their own accounts.
+	 * @param bool $disable_account_deletion Whether or not members are able to delete their own accounts.
 	 */
-	return apply_filters( 'bp_disable_account_deletion', (bool) bp_get_option( 'bp-disable-account-deletion', $default ) );
+	return apply_filters( 'bp_disable_account_deletion', (bool) bp_get_option( 'bp-disable-account-deletion', $retval ) );
 }
 
 /**
@@ -614,21 +642,21 @@ function bp_disable_account_deletion( $default = false ) {
  *
  * @todo split and move into blog and forum components.
  *
- * @param bool $default Optional. Fallback value if not found in the database.
- *                      Default: false.
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: false.
  * @return bool True if activity comments are disabled for blog and forum
  *              items, otherwise false.
  */
-function bp_disable_blogforum_comments( $default = false ) {
+function bp_disable_blogforum_comments( $retval = false ) {
 
 	/**
 	 * Filters whether or not blog and forum activity stream comments are disabled.
 	 *
 	 * @since 1.6.0
 	 *
-	 * @param bool $value Whether or not blog and forum activity stream comments are disabled.
+	 * @param bool $disable_blog_forum_comments Whether or not blog and forum activity stream comments are disabled.
 	 */
-	return (bool) apply_filters( 'bp_disable_blogforum_comments', (bool) bp_get_option( 'bp-disable-blogforum-comments', $default ) );
+	return (bool) apply_filters( 'bp_disable_blogforum_comments', (bool) bp_get_option( 'bp-disable-blogforum-comments', $retval ) );
 }
 
 /**
@@ -638,20 +666,20 @@ function bp_disable_blogforum_comments( $default = false ) {
  *
  * @todo Move into groups component.
  *
- * @param bool $default Optional. Fallback value if not found in the database.
- *                      Default: true.
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: true.
  * @return bool True if group creation is restricted, otherwise false.
  */
-function bp_restrict_group_creation( $default = true ) {
+function bp_restrict_group_creation( $retval = true ) {
 
 	/**
 	 * Filters whether or not group creation is turned off.
 	 *
 	 * @since 1.6.0
 	 *
-	 * @param bool $value Whether or not group creation is turned off.
+	 * @param bool $group_creation Whether or not group creation is turned off.
 	 */
-	return (bool) apply_filters( 'bp_restrict_group_creation', (bool) bp_get_option( 'bp_restrict_group_creation', $default ) );
+	return (bool) apply_filters( 'bp_restrict_group_creation', (bool) bp_get_option( 'bp_restrict_group_creation', $retval ) );
 }
 
 /**
@@ -659,20 +687,20 @@ function bp_restrict_group_creation( $default = true ) {
  *
  * @since 1.6.0
  *
- * @param bool $default Optional. Fallback value if not found in the database.
- *                      Default: true.
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: true.
  * @return bool True if Akismet is enabled, otherwise false.
  */
-function bp_is_akismet_active( $default = true ) {
+function bp_is_akismet_active( $retval = true ) {
 
 	/**
 	 * Filters whether or not Akismet is enabled.
 	 *
 	 * @since 1.6.0
 	 *
-	 * @param bool $value Whether or not Akismet is enabled.
+	 * @param bool $akismet Whether or not Akismet is enabled.
 	 */
-	return (bool) apply_filters( 'bp_is_akismet_active', (bool) bp_get_option( '_bp_enable_akismet', $default ) );
+	return (bool) apply_filters( 'bp_is_akismet_active', (bool) bp_get_option( '_bp_enable_akismet', $retval ) );
 }
 
 /**
@@ -680,20 +708,20 @@ function bp_is_akismet_active( $default = true ) {
  *
  * @since 2.0.0
  *
- * @param bool $default Optional. Fallback value if not found in the database.
- *                      Default: true.
+ * @param bool $retval Optional. Fallback value if not found in the database.
+ *                     Default: true.
  * @return bool True if Heartbeat refresh is enabled, otherwise false.
  */
-function bp_is_activity_heartbeat_active( $default = true ) {
+function bp_is_activity_heartbeat_active( $retval = true ) {
 
 	/**
 	 * Filters whether or not Activity Heartbeat refresh is enabled.
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param bool $value Whether or not Activity Heartbeat refresh is enabled.
+	 * @param bool $heartbeat_active Whether or not Activity Heartbeat refresh is enabled.
 	 */
-	return (bool) apply_filters( 'bp_is_activity_heartbeat_active', (bool) bp_get_option( '_bp_enable_heartbeat_refresh', $default ) );
+	return (bool) apply_filters( 'bp_is_activity_heartbeat_active', (bool) bp_get_option( '_bp_enable_heartbeat_refresh', $retval ) );
 }
 
 /**
@@ -701,18 +729,18 @@ function bp_is_activity_heartbeat_active( $default = true ) {
  *
  * @since 1.7.0
  *
- * @param string $default Optional. Fallback value if not found in the database.
- *                        Default: 'legacy'.
+ * @param string $package_id Optional. Fallback value if not found in the database.
+ *                           Default: 'legacy'.
  * @return string ID of the theme package.
  */
-function bp_get_theme_package_id( $default = 'legacy' ) {
+function bp_get_theme_package_id( $package_id = 'legacy' ) {
 
 	/**
 	 * Filters the current theme package ID.
 	 *
 	 * @since 1.7.0
 	 *
-	 * @param string $value The current theme package ID.
+	 * @param string $package_id The current theme package ID.
 	 */
-	return apply_filters( 'bp_get_theme_package_id', bp_get_option( '_bp_theme_package_id', $default ) );
+	return apply_filters( 'bp_get_theme_package_id', (string) bp_get_option( '_bp_theme_package_id', $package_id ) );
 }

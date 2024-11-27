@@ -24,6 +24,8 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Blogs_REST_Controller' );
+
 		$this->namespace = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base = buddypress()->blogs->id;
 	}
@@ -165,6 +167,17 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'blogs' ) ) ) {
+			$retval = true;
+		}
 
 		/**
 		 * Filter the blogs `get_items` permissions check.
@@ -174,7 +187,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
-		return apply_filters( 'bp_rest_blogs_get_items_permissions_check', true, $request );
+		return apply_filters( 'bp_rest_blogs_get_items_permissions_check', $retval, $request );
 	}
 
 	/**
@@ -229,6 +242,17 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 	 * @return true|WP_Error
 	 */
 	public function get_item_permissions_check( $request ) {
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'blogs' ) ) ) {
+			$retval = true;
+		}
 
 		/**
 		 * Filter the blog `get_item` permissions check.
@@ -238,7 +262,7 @@ class BP_REST_Blogs_Endpoint extends WP_REST_Controller {
 		 * @param true|WP_Error   $retval  Returned value.
 		 * @param WP_REST_Request $request The request sent to the API.
 		 */
-		return apply_filters( 'bp_rest_blogs_get_item_permissions_check', true, $request );
+		return apply_filters( 'bp_rest_blogs_get_item_permissions_check', $retval, $request );
 	}
 
 	/**

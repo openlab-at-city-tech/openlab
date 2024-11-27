@@ -18,11 +18,6 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
 	require ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
-// The per_page screen option. Has to be hooked in extremely early.
-if ( is_admin() && ! empty( $_REQUEST['page'] ) && 'bp-groups' == $_REQUEST['page'] ) {
-	add_filter( 'set-screen-option', 'bp_groups_admin_screen_options', 10, 3 );
-}
-
 /**
  * Register the Groups component admin screen.
  *
@@ -52,7 +47,7 @@ add_action( bp_core_admin_hook(), 'bp_groups_add_admin_menu' );
  */
 function bp_group_site_admin_network_admin_redirect() {
 	wp_safe_redirect( add_query_arg( 'page', 'bp-groups', network_admin_url( 'admin.php' ) ) );
-	exit();
+	exit;
 }
 
 /**
@@ -285,7 +280,7 @@ function bp_groups_admin_load() {
 
 		// If the group doesn't exist, just redirect back to the index.
 		if ( empty( $group->slug ) ) {
-			wp_redirect( $redirect_to );
+			wp_safe_redirect( $redirect_to );
 			exit;
 		}
 
@@ -360,7 +355,7 @@ function bp_groups_admin_load() {
 				bp_groups_defer_group_members_count( true );
 			}
 
-			foreach( array_values( $user_names ) as $user_name ) {
+			foreach ( array_values( $user_names ) as $user_name ) {
 				$un = trim( $user_name );
 
 				// Make sure the user exists before attempting
@@ -512,39 +507,15 @@ function bp_groups_admin_load() {
 		 *
 		 * @param string $redirect_to URL to redirect user to.
 		 */
-		wp_redirect( apply_filters( 'bp_group_admin_edit_redirect', $redirect_to ) );
+		wp_safe_redirect( apply_filters( 'bp_group_admin_edit_redirect', $redirect_to ) );
 		exit;
 
 
 	// If a referrer and a nonce is supplied, but no action, redirect back.
 	} elseif ( ! empty( $_GET['_wp_http_referer'] ) ) {
-		wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), stripslashes( $_SERVER['REQUEST_URI'] ) ) );
+		wp_safe_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), stripslashes( $_SERVER['REQUEST_URI'] ) ) );
 		exit;
 	}
-}
-
-/**
- * Handle save/update of screen options for the Groups component admin screen.
- *
- * @since 1.7.0
- *
- * @param string $value     Will always be false unless another plugin filters it first.
- * @param string $option    Screen option name.
- * @param string $new_value Screen option form value.
- * @return string|int Option value. False to abandon update.
- */
-function bp_groups_admin_screen_options( $value, $option, $new_value ) {
-	if ( 'toplevel_page_bp_groups_per_page' != $option && 'toplevel_page_bp_groups_network_per_page' != $option ) {
-		return $value;
-	}
-
-	// Per page.
-	$new_value = (int) $new_value;
-	if ( $new_value < 1 || $new_value > 999 ) {
-		return $value;
-	}
-
-	return $new_value;
 }
 
 /**
@@ -1468,8 +1439,8 @@ function bp_groups_admin_process_group_type_bulk_changes( $doaction ) {
 		$redirect = add_query_arg( array( 'updated' => 'group-type-change-success' ), wp_get_referer() );
 	}
 
-	wp_redirect( $redirect );
-	exit();
+	wp_safe_redirect( $redirect );
+	exit;
 }
 add_action( 'bp_groups_admin_load', 'bp_groups_admin_process_group_type_bulk_changes' );
 
@@ -1504,7 +1475,7 @@ add_action( bp_core_admin_hook(), 'bp_groups_admin_groups_type_change_notice' );
  *
  * @param  boolean $exists  True if the group type already exists. False otherwise.
  * @param  string  $type_id The group type identifier.
- * @return boolean          True if the group type already exists. False otherwise.
+ * @return bool          True if the group type already exists. False otherwise.
  */
 function bp_groups_type_admin_type_exists( $exists = false, $type_id = '' ) {
 	if ( ! $type_id ) {

@@ -24,6 +24,8 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Friends_REST_Controller' );
+
 		$this->namespace = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base = buddypress()->friends->id;
 	}
@@ -552,7 +554,6 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 		// Remove a friendship.
 		if ( true === $request->get_param( 'force' ) ) {
 			$deleted = friends_remove_friend( $friendship->initiator_user_id, $friendship->friend_user_id );
-		} else {
 
 			/**
 			 * If this change is being initiated by the initiator,
@@ -560,15 +561,14 @@ class BP_REST_Friends_Endpoint extends WP_REST_Controller {
 			 *
 			 * This is the user who requested the friendship, and is doing the withdrawing.
 			 */
-			if ( bp_loggedin_user_id() === $friendship->initiator_user_id ) {
-				$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
-			} else {
-				/**
-				 * Otherwise, this change is being initiated by the user, friend,
-				 * who received the friendship reject.
-				 */
-				$deleted = friends_reject_friendship( $friendship->id );
-			}
+		} elseif ( bp_loggedin_user_id() === $friendship->initiator_user_id ) {
+			$deleted = friends_withdraw_friendship( $friendship->initiator_user_id, $friendship->friend_user_id );
+		} else {
+			/**
+			 * Otherwise, this change is being initiated by the user, friend,
+			 * who received the friendship reject.
+			 */
+			$deleted = friends_reject_friendship( $friendship->id );
 		}
 
 		if ( false === $deleted ) {

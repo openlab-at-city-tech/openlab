@@ -90,6 +90,8 @@ class BP_Activity_Feed {
 	 *
 	 * @since 1.8.0
 	 *
+	 * @global WP_Query $wp_query WordPress query object.
+	 *
 	 * @param array $args Optional.
 	 */
 	public function __construct( $args = array() ) {
@@ -198,11 +200,11 @@ class BP_Activity_Feed {
 	 */
 	protected function setup_properties() {
 		$this->id               = sanitize_title( $this->id );
-		$this->title            = strip_tags( $this->title );
+		$this->title            = wp_strip_all_tags( $this->title );
 		$this->link             = esc_url_raw( $this->link );
-		$this->description      = strip_tags( $this->description );
+		$this->description      = wp_strip_all_tags( $this->description );
 		$this->ttl              = (int) $this->ttl;
-		$this->update_period    = strip_tags( $this->update_period );
+		$this->update_period    = wp_strip_all_tags( $this->update_period );
 		$this->update_frequency = (int) $this->update_frequency;
 		$this->activity_args    = bp_parse_args(
 			$this->activity_args,
@@ -330,6 +332,8 @@ class BP_Activity_Feed {
 	 * Most of this class method is derived from {@link WP::send_headers()}.
 	 *
 	 * @since 1.9.0
+	 *
+	 * @global WP_Query $wp_query WordPress query object.
 	 */
 	protected function http_headers() {
 		// Set up some additional headers if not on a directory page

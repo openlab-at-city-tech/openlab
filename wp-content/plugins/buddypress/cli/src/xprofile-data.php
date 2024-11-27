@@ -16,13 +16,13 @@ class XProfile_Data extends BuddyPressCommand {
 	 *
 	 * @var array
 	 */
-	protected $obj_fields = array(
+	protected $obj_fields = [
 		'id',
 		'field_id',
 		'user_id',
 		'value',
 		'last_updated',
-	);
+	];
 
 	/**
 	 * Set profile data for a user.
@@ -38,12 +38,20 @@ class XProfile_Data extends BuddyPressCommand {
 	 * --value=<value>
 	 * : Value to set.
 	 *
+	 * [--silent]
+	 * : Whether to silent the success message.
+	 *
 	 * ## EXAMPLE
 	 *
-	 *     $ wp bp xprofile data set --user-id=45 --field-id=120 --value=teste
-	 *     Success: Updated XProfile field "Field Name" (ID 120) with value  "teste" for user user_login (ID 45).
+	 *     # Set profile data for a user.
+	 *     $ wp bp xprofile data set --user-id=45 --field-id=120 --value=test
+	 *     Success: Updated XProfile field "Field Name" (ID 120) with value  "test" for user user_login (ID 45).
+	 *
+	 * @alias set
+	 * @alias add
+	 * @alias update
 	 */
-	public function set( $args, $assoc_args ) {
+	public function create( $args, $assoc_args ) {
 		$user     = $this->get_user_id_from_identifier( $assoc_args['user-id'] );
 		$field_id = $this->get_field_id( $assoc_args['field-id'] );
 		$field    = new \BP_XProfile_Field( $field_id );
@@ -59,6 +67,11 @@ class XProfile_Data extends BuddyPressCommand {
 		}
 
 		$updated = xprofile_set_field_data( $field->id, $user->ID, $value );
+
+		// Silent it before it errors.
+		if ( WP_CLI\Utils\get_flag_value( $assoc_args, 'silent' ) ) {
+			return;
+		}
 
 		if ( ! $updated ) {
 			WP_CLI::error( 'Could not set profile data.' );
@@ -94,7 +107,8 @@ class XProfile_Data extends BuddyPressCommand {
 	 * options:
 	 *   - table
 	 *   - json
-	 *   - haml
+	 *   - csv
+	 *   - yaml
 	 * ---
 	 *
 	 * [--multi-format=<value>]
@@ -108,7 +122,10 @@ class XProfile_Data extends BuddyPressCommand {
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Get profile data for a user.
 	 *     $ wp bp xprofile data get --user-id=45 --field-id=120
+	 *
+	 *     # Get profile data for a user, formatting the data.
 	 *     $ wp bp xprofile data see --user-id=user_test --field-id=Hometown --multi-format=comma
 	 *
 	 * @alias see
@@ -121,7 +138,7 @@ class XProfile_Data extends BuddyPressCommand {
 			WP_CLI::print_value( $data, $assoc_args );
 		} else {
 			$data           = \BP_XProfile_ProfileData::get_all_for_user( $user->ID );
-			$formatted_data = array();
+			$formatted_data = [];
 
 			foreach ( $data as $field_name => $field_data ) {
 				// Omit WP core fields.
@@ -129,19 +146,19 @@ class XProfile_Data extends BuddyPressCommand {
 					continue;
 				}
 
-				$formatted_data[] = array(
+				$formatted_data[] = [
 					'field_id'   => $field_data['field_id'],
 					'field_name' => $field_name,
 					'value'      => wp_json_encode( maybe_unserialize( $field_data['field_data'] ) ),
-				);
+				];
 			}
 
 			$format_args           = $assoc_args;
-			$format_args['fields'] = array(
+			$format_args['fields'] = [
 				'field_id',
 				'field_name',
 				'value',
-			);
+			];
 
 			$this->get_formatter( $format_args )->display_items( $formatted_data );
 		}
@@ -166,13 +183,16 @@ class XProfile_Data extends BuddyPressCommand {
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Delete a specific XProfile field data.
 	 *     $ wp bp xprofile data delete --user-id=45 --field-id=120 --yes
 	 *     Success: XProfile data removed.
 	 *
+	 *     # Delete all XProfile data for a user.
 	 *     $ wp bp xprofile data remove --user-id=user_test --delete-all --yes
 	 *     Success: XProfile data removed.
 	 *
 	 * @alias remove
+	 * @alias trash
 	 */
 	public function delete( $args, $assoc_args ) {
 		$user = $this->get_user_id_from_identifier( $assoc_args['user-id'] );

@@ -21,6 +21,8 @@ class BP_REST_Sitewide_Notices_Endpoint extends WP_REST_Controller {
 	 * @since 9.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Messages_Sitewide_Notices_REST_Controller' );
+
 		$this->namespace = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base = 'sitewide-notices';
 	}
@@ -268,17 +270,15 @@ class BP_REST_Sitewide_Notices_Endpoint extends WP_REST_Controller {
 						'status' => 404,
 					)
 				);
-			} else {
-				if ( bp_current_user_can( 'bp_moderate' ) ) {
+			} elseif ( bp_current_user_can( 'bp_moderate' ) ) {
 					$retval = true;
+			} else {
+				// Non-admin users can only see the active notice.
+				$is_active = isset( $notice->is_active ) ? $notice->is_active : false;
+				if ( ! $is_active ) {
+					$retval = $error;
 				} else {
-					// Non-admin users can only see the active notice.
-					$is_active = isset( $notice->is_active ) ? $notice->is_active : false;
-					if ( ! $is_active ) {
-						$retval = $error;
-					} else {
-						$retval = true;
-					}
+					$retval = true;
 				}
 			}
 		}

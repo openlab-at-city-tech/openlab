@@ -14,11 +14,8 @@
 defined( 'ABSPATH' ) || exit;
 
 // Include WP's list table class.
-if ( ! class_exists( 'WP_List_Table' ) ) require( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
-
-// Per_page screen option. Has to be hooked in extremely early.
-if ( is_admin() && ! empty( $_REQUEST['page'] ) && 'bp-activity' == $_REQUEST['page'] ) {
-	add_filter( 'set-screen-option', 'bp_activity_admin_screen_options', 10, 3 );
+if ( ! class_exists( 'WP_List_Table' ) ) {
+	require ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 /**
@@ -138,28 +135,6 @@ function bp_activity_admin_reply() {
 	exit();
 }
 add_action( 'wp_ajax_bp-activity-admin-reply', 'bp_activity_admin_reply' );
-
-/**
- * Handle save/update of screen options for the Activity component admin screen.
- *
- * @since 1.6.0
- *
- * @param string $value     Will always be false unless another plugin filters it first.
- * @param string $option    Screen option name.
- * @param string $new_value Screen option form value.
- * @return string|int Option value. False to abandon update.
- */
-function bp_activity_admin_screen_options( $value, $option, $new_value ) {
-	if ( 'toplevel_page_bp_activity_per_page' != $option && 'toplevel_page_bp_activity_network_per_page' != $option )
-		return $value;
-
-	// Per page.
-	$new_value = (int) $new_value;
-	if ( $new_value < 1 || $new_value > 999 )
-		return $value;
-
-	return $new_value;
-}
 
 /**
  * Hide the advanced edit meta boxes by default, so we don't clutter the screen.
@@ -475,7 +450,7 @@ function bp_activity_admin_load() {
 		 *
 		 * @param string $redirect_to URL to redirect to.
 		 */
-		wp_redirect( apply_filters( 'bp_activity_admin_action_redirect', $redirect_to ) );
+		wp_safe_redirect( apply_filters( 'bp_activity_admin_action_redirect', $redirect_to ) );
 		exit;
 
 
@@ -495,7 +470,7 @@ function bp_activity_admin_load() {
 
 		// If the activity doesn't exist, just redirect back to the index.
 		if ( empty( $activity->component ) ) {
-			wp_redirect( $redirect_to );
+			wp_safe_redirect( $redirect_to );
 			exit;
 		}
 
@@ -607,13 +582,13 @@ function bp_activity_admin_load() {
 		 *
 		 * @param string $redirect_to URL to redirect to.
 		 */
-		wp_redirect( apply_filters( 'bp_activity_admin_edit_redirect', $redirect_to ) );
+		wp_safe_redirect( apply_filters( 'bp_activity_admin_edit_redirect', $redirect_to ) );
 		exit;
 
 
 	// If a referrer and a nonce is supplied, but no action, redirect back.
 	} elseif ( ! empty( $_GET['_wp_http_referer'] ) ) {
-		wp_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), stripslashes( $_SERVER['REQUEST_URI'] ) ) );
+		wp_safe_redirect( remove_query_arg( array( '_wp_http_referer', '_wpnonce' ), stripslashes( $_SERVER['REQUEST_URI'] ) ) );
 		exit;
 	}
 }

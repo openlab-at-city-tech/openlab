@@ -196,7 +196,7 @@ function bp_core_screen_signup() {
 				 * @param string $value     Error message wrapped in html.
 				 * @param string $fieldname The name of the signup field.
 				 */
-				add_action( 'bp_' . $fieldname . '_errors', function() use ( $error_message, $fieldname ) {
+				add_action( 'bp_' . $fieldname . '_errors', function () use ( $error_message, $fieldname ) {
 					echo wp_kses(
 						/**
 						 * Filter here to edit the error message about the invalid field value.
@@ -297,8 +297,11 @@ function bp_core_screen_signup() {
 	 *
 	 * @since 1.5.0
 	 *
-	 * @param string $value Path to the Member registration template to load.
+	 * @param string[] $value Path to the list of Member registration templates to load.
 	 */
-	bp_core_load_template( apply_filters( 'bp_core_template_register', array( 'register', 'registration/register' ) ) );
+	$templates   = apply_filters( 'bp_core_template_register', array( 'register', 'registration/register' ) );
+	$templates[] = 'members/register';
+
+	bp_core_load_template( $templates );
 }
 add_action( 'bp_screens', 'bp_core_screen_signup' );

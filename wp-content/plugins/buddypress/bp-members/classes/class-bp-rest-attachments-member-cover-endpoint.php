@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 6.0.0
  */
 class BP_REST_Attachments_Member_Cover_Endpoint extends WP_REST_Controller {
-
 	use BP_REST_Attachments;
 
 	/**
@@ -52,6 +51,8 @@ class BP_REST_Attachments_Member_Cover_Endpoint extends WP_REST_Controller {
 	 * @since 6.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Members_Cover_REST_Controller' );
+
 		$this->namespace           = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base           = 'members';
 		$this->attachment_instance = new BP_Attachment_Cover_Image();
@@ -152,7 +153,7 @@ class BP_REST_Attachments_Member_Cover_Endpoint extends WP_REST_Controller {
 	public function get_item_permissions_check( $request ) {
 		$retval = new WP_Error(
 			'bp_rest_authorization_required',
-			__( 'Sorry, you cannot view member details.', 'buddypress' ),
+			__( 'Sorry, you are not authorized to perform this action.', 'buddypress' ),
 			array(
 				'status' => rest_authorization_required_code(),
 			)

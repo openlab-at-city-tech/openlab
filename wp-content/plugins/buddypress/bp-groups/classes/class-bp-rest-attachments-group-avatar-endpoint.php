@@ -14,7 +14,6 @@ defined( 'ABSPATH' ) || exit;
  * @since 5.0.0
  */
 class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
-
 	use BP_REST_Attachments;
 
 	/**
@@ -59,6 +58,8 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Groups_Avatar_REST_Controller' );
+
 		$this->namespace       = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base       = buddypress()->groups->id;
 		$this->groups_endpoint = new BP_REST_Groups_Endpoint();
@@ -178,13 +179,12 @@ class BP_REST_Attachments_Group_Avatar_Endpoint extends WP_REST_Controller {
 		);
 
 		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'groups' ) ) ) {
-			$retval      = new WP_Error(
+			$retval = new WP_Error(
 				'bp_rest_group_invalid_id',
 				__( 'Invalid group ID.', 'buddypress' ),
-				array(
-					'status' => 404,
-				)
+				array( 'status' => 404 )
 			);
+
 			$this->group = $this->groups_endpoint->get_group_object( $request );
 
 			if ( false !== $this->group ) {

@@ -3,7 +3,7 @@
  * Common functions
  *
  * @since 3.0.0
- * @version 12.3.0
+ * @version 14.0.0
  */
 
 // Exit if accessed directly.
@@ -520,14 +520,14 @@ function bp_nouveau_parse_hooked_options( $hook = '', $filters = array() ) {
 }
 
 /**
- * Get Dropdawn filters for the current component of the one passed in params
+ * Get Dropdown filters for the current component of the one passed in params.
  *
  * @since 3.0.0
  *
- * @param string $context   'directory', 'user' or 'group'
- * @param string $component The BuddyPress component ID
+ * @param string $context   'directory', 'user' or 'group'.
+ * @param string $component The BuddyPress component ID.
  *
- * @return array the dropdown filters
+ * @return array the dropdown filters.
  */
 function bp_nouveau_get_component_filters( $context = '', $component = '' ) {
 	$filters = array();
@@ -1430,7 +1430,7 @@ function bp_nouveau_get_submit_button( $action = '' ) {
  * @param array  $order       A list of slugs ordered (eg: array( 'profile', 'activity', etc..) )
  * @param string $parent_slug A parent slug if it's a secondary nav we are reordering (case of the Groups single item)
  *
- * @return bool True on success. False otherwise.
+ * @return bool False otherwise.
  */
 function bp_nouveau_set_nav_item_order( $nav = null, $order = array(), $parent_slug = '' ) {
 	if ( ! is_object( $nav ) || empty( $order ) || ! is_array( $order ) ) {
@@ -1665,8 +1665,8 @@ function bp_nouveau_get_theme_layout_widths() {
 		);
 	}
 
-	// `wp_get_global_settings()` has been introduced in WordPress 5.9
-	if ( function_exists( 'wp_get_global_settings' ) ) {
+	// Use Block Theme global settings for Block Themes.
+	if ( wp_is_block_theme() ) {
 		$theme_layouts = wp_get_global_settings( array( 'layout' ) );
 
 		if ( isset( $theme_layouts['wideSize'] ) && $theme_layouts['wideSize'] ) {

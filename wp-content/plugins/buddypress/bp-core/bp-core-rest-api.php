@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 5.0.0
  *
- * @return boolean True if the BP REST plugin is active. False otherwise.
+ * @return bool True if the BP REST plugin is active. False otherwise.
  */
 function bp_rest_is_plugin_active() {
 	return (bool) has_action( 'bp_rest_api_init', 'bp_rest' );
@@ -43,7 +43,7 @@ function bp_rest_in_buddypress() {
  *
  * @since 5.0.0
  *
- * @return boolean True if the BP REST API is available. False otherwise.
+ * @return bool True if the BP REST API is available. False otherwise.
  */
 function bp_rest_api_is_available() {
 
@@ -220,7 +220,7 @@ function bp_rest_sanitize_member_types( $value ) {
  * @since 5.0.0
  *
  * @param  mixed $value Mixed value.
- * @return WP_Error|boolean
+ * @return WP_Error|bool
  */
 function bp_rest_validate_member_types( $value ) {
 	if ( empty( $value ) ) {
@@ -301,15 +301,15 @@ function bp_rest_validate_group_types( $value ) {
  *
  * @since 5.0.0
  *
- * @param array|string $list List of strings.
+ * @param array|string $collection List of strings.
  * @return array Sanitized array of strings.
  */
-function bp_rest_sanitize_string_list( $list ) {
-	if ( ! is_array( $list ) ) {
-		$list = preg_split( '/[\s,]+/', $list );
+function bp_rest_sanitize_string_list( $collection ) {
+	if ( ! is_array( $collection ) ) {
+		$collection = preg_split( '/[\s,]+/', $collection );
 	}
 
-	return array_unique( array_map( 'sanitize_text_field', $list ) );
+	return array_unique( array_map( 'sanitize_text_field', $collection ) );
 }
 
 /**
@@ -318,7 +318,7 @@ function bp_rest_sanitize_string_list( $list ) {
  * @since 5.0.0
  *
  * @param int $user_id Supplied user ID.
- * @return WP_User|boolean
+ * @return WP_User|bool
  */
 function bp_rest_get_user( $user_id ) {
 	if ( (int) $user_id <= 0 ) {

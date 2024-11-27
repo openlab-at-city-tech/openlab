@@ -190,17 +190,12 @@ function bp_setup_nav() {
  * @since 1.5.0
  */
 function bp_setup_admin_bar() {
-	if ( bp_use_wp_admin_bar() ) {
-
-		/**
-		 * Fires inside the 'bp_setup_admin_bar' function, where plugins should add items to the WP admin bar.
-		 *
-		 * This hook will only fire if bp_use_wp_admin_bar() returns true.
-		 *
-		 * @since 1.5.0
-		 */
-		do_action( 'bp_setup_admin_bar', array() );
-	}
+	/**
+	 * Fires inside the 'bp_setup_admin_bar' function, where plugins should add items to the WP admin bar.
+	 *
+	 * @since 1.5.0
+	 */
+	do_action( 'bp_setup_admin_bar', array() );
 }
 
 /**
@@ -800,7 +795,7 @@ function bp_post_request() {
 	 *
 	 * @param string $action The action being run.
 	 */
-	do_action( 'bp_post_request',   $action );
+	do_action( 'bp_post_request', $action );
 }
 
 /**
@@ -842,5 +837,5 @@ function bp_get_request() {
 	 *
 	 * @param string $action The action being run.
 	 */
-	do_action( 'bp_get_request',   $action );
+	do_action( 'bp_get_request', $action );
 }

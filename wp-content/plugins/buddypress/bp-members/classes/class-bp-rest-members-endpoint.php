@@ -24,6 +24,8 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @since 5.0.0
 	 */
 	public function __construct() {
+		_deprecated_class( __CLASS__, '15.0.0', 'BP_Members_REST_Controller' );
+
 		$this->namespace = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base = 'members';
 	}
@@ -201,7 +203,17 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 * @return true|WP_Error
 	 */
 	public function get_items_permissions_check( $request ) {
-		$retval = bp_current_user_can( 'bp_view', array( 'bp_component' => 'members' ) );
+		$retval = new WP_Error(
+			'bp_rest_authorization_required',
+			__( 'Sorry, you are not allowed to perform this action.', 'buddypress' ),
+			array(
+				'status' => rest_authorization_required_code(),
+			)
+		);
+
+		if ( bp_current_user_can( 'bp_view', array( 'bp_component' => 'members' ) ) ) {
+			$retval = true;
+		}
 
 		/**
 		 * Filter the members `get_items` permissions check.
@@ -714,11 +726,14 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 		}
 
 		if ( 'edit' === $context && current_user_can( 'list_users' ) ) {
-			$data['registered_date']     = bp_rest_prepare_date_response( $user->data->user_registered, get_date_from_gmt( $user->data->user_registered ) );
-			$data['registered_date_gmt'] = bp_rest_prepare_date_response( $user->data->user_registered );
-			$data['roles']               = (array) array_values( $user->roles );
-			$data['capabilities']        = (array) array_keys( $user->allcaps );
-			$data['extra_capabilities']  = (array) array_keys( $user->caps );
+			if ( isset( $user->data ) ) {
+				$data['registered_date']     = bp_rest_prepare_date_response( $user->data->user_registered, get_date_from_gmt( $user->data->user_registered ) );
+				$data['registered_date_gmt'] = bp_rest_prepare_date_response( $user->data->user_registered );
+			}
+
+			$data['roles']              = isset( $user->roles ) ? array_values( (array) $user->roles ) : array();
+			$data['capabilities']       = isset( $user->allcaps ) ? array_keys( (array) $user->allcaps ) : array();
+			$data['extra_capabilities'] = isset( $user->caps ) ? array_keys( (array) $user->caps ) : array();
 		}
 
 		// The name used for that user in @-mentions.
@@ -880,19 +895,19 @@ class BP_REST_Members_Endpoint extends WP_REST_Users_Controller {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param WP_User         $object  The WordPress user object.
+	 * @param WP_User         $user    The WordPress user object.
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return bool|WP_Error True on success, WP_Error object if a field cannot be updated.
 	 */
-	protected function update_additional_fields_for_object( $object, $request ) {
-		if ( ! isset( $object->data ) ) {
+	protected function update_additional_fields_for_object( $user, $request ) {
+		if ( ! isset( $user->data ) ) {
 			return new WP_Error(
 				'invalid_user',
 				__( 'The data for the user was not found.', 'buddypress' )
 			);
 		}
 
-		$member     = $object->data;
+		$member     = $user->data;
 		$member->id = $member->ID;
 
 		return parent::update_additional_fields_for_object( $member, $request );
