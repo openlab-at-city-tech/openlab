@@ -74,6 +74,14 @@ function wpcf7_special_mail_tag( $output, $name, $html, $mail_tag = null ) {
 		return count( $submission->get_invalid_fields() );
 	}
 
+	if ( '_contact_form_title' === $name ) {
+		$contact_form = $submission->get_contact_form();
+
+		return $html
+			? esc_html( $contact_form->title() )
+			: $contact_form->title();
+	}
+
 	return $output;
 }
 
@@ -188,6 +196,21 @@ function wpcf7_site_related_smt( $output, $name, $html, $mail_tag = null ) {
 
 	if ( '_site_url' === $name ) {
 		return get_bloginfo( 'url', $filter );
+	}
+
+	if ( '_site_domain' === $name ) {
+		$url = get_bloginfo( 'url', $filter );
+		$host = wp_parse_url( $url, PHP_URL_HOST );
+
+		if ( null === $host ) {
+			return '';
+		}
+
+		if ( str_starts_with( $host, 'www.' ) ) {
+			$host = substr( $host, 4 );
+		}
+
+		return $host;
 	}
 
 	if ( '_site_admin_email' === $name ) {

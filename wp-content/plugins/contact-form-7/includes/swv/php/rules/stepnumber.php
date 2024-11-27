@@ -2,9 +2,9 @@
 
 namespace Contactable\SWV;
 
-class MinLengthRule extends Rule {
+class StepNumberRule extends Rule {
 
-	const rule_name = 'minlength';
+	const rule_name = 'stepnumber';
 
 	public function matches( $context ) {
 		if ( false === parent::matches( $context ) ) {
@@ -24,23 +24,27 @@ class MinLengthRule extends Rule {
 		$input = wpcf7_strip_whitespaces( $input );
 		$input = wpcf7_exclude_blank( $input );
 
-		if ( empty( $input ) ) {
+		$base = floatval( $this->get_property( 'base' ) );
+		$interval = floatval( $this->get_property( 'interval' ) );
+
+		if ( ! ( 0 < $interval ) ) {
 			return true;
 		}
-
-		$total = 0;
 
 		foreach ( $input as $i ) {
-			$total += wpcf7_count_code_units( $i );
-		}
+			$remainder = fmod( floatval( $i ) - $base, $interval );
 
-		$threshold = (int) $this->get_property( 'threshold' );
+			if (
+				0.0 === round( abs( $remainder ), 6 ) or
+				0.0 === round( abs( $remainder - $interval ), 6 )
+			) {
+				continue;
+			}
 
-		if ( $threshold <= $total ) {
-			return true;
-		} else {
 			return $this->create_error();
 		}
+
+		return true;
 	}
 
 }
