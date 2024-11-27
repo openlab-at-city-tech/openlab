@@ -51,6 +51,8 @@ class DLM_Admin_Media_Insert {
 		wp_enqueue_style( 'wp-admin' );
 		wp_enqueue_style( 'colors' );
 		wp_enqueue_script( 'plupload-all' );
+		// Do not print emojies.
+		remove_action( 'admin_print_styles', 'print_emoji_styles' );
 
 		echo '<!DOCTYPE html><html lang="en"><head><title>' . esc_html__( 'Insert Download', 'download-monitor' ) . '</title><meta charset="utf-8" />';
 
@@ -123,7 +125,7 @@ class DLM_Admin_Media_Insert {
 					// File Manager
 					$file_manager = new DLM_File_Manager();
 					
-					list( $file_path )  = $file_manager->get_secure_path( $url, true );
+					list( $file_path )  = $file_manager->get_secure_path( $url );
 
 					// Meta
 					update_post_meta( $file_id, '_version', $version );

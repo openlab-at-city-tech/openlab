@@ -87,6 +87,10 @@ class DLM_Review {
 	public function ajax() {
 
 		check_ajax_referer( 'download-monitor-review', 'security' );
+		// Check permissions
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( __( 'You do not have permission to do this', 'download-monitor' ) );
+		}
 
 		if ( ! isset( $_POST['check'] ) ) {
 			wp_die( 'ok' );
@@ -94,17 +98,16 @@ class DLM_Review {
 
 		$time = get_option( 'download-monitor-rate-time' );
 
-		if ( 'download-monitor-rate' == $_POST['check'] ) {
+		if ( 'download-monitor-rate' === $_POST['check'] ) {
 			$time = time() + YEAR_IN_SECONDS * 1;
-		}elseif ( 'download-monitor-later' == ['check'] ) {
+		}elseif ( 'download-monitor-later' === $_POST['check'] ) {
 			$time = time() + WEEK_IN_SECONDS;
-		}elseif ( 'download-monitor-no-rate' == $_POST['check'] ) {
+		}elseif ( 'download-monitor-no-rate' === $_POST['check'] ) {
 			$time = time() + YEAR_IN_SECONDS * 1;
 		}
 		
 		update_option( 'download-monitor-rate-time', $time );
 		wp_die( 'ok' );
-
 	}
 
 	public function enqueue() {

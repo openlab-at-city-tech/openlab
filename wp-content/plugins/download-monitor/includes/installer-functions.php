@@ -16,44 +16,42 @@ function _download_monitor_install( $network_wide = false ) {
 	// Let's delete the extensions transient so that it's refreshed when plugin is installed/activated, this is to ensure
 	// that the extensions list is always up-to-date.
 	delete_transient( 'dlm_extension_json' );
+	delete_transient( 'dlm_pro_extensions' );
 
-	// DLM Installer
+	// DLM Installer.
 	$installer = new DLM_Installer();
 
-	// check if
+	// check if.
 	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
 		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
 	}
 
-	// check if it's multisite
-	if ( is_multisite() && true == $network_wide ) {
+	// check if it's multisite.
+	if ( is_multisite() && true === $network_wide ) {
 
 		// get websites
-		$sites = wp_get_sites();
+		//$sites = wp_get_sites(); // Deprecated since 4.6.
+		$sites = get_sites();
 
 		// loop
 		if ( count( $sites ) > 0 ) {
 			foreach ( $sites as $site ) {
 
-				// switch to blog
-				switch_to_blog( $site['blog_id'] );
+				// switch to blog.
+				switch_to_blog( $site->blog_id );
 
-				// run installer on blog
+				// run installer on blog.
 				$installer->install();
 
-				// restore current blog
+				// restore current blog.
 				restore_current_blog();
 			}
 		}
-
 	} else {
-		// no multisite so do normal install
+		// no multisite so do normal install.
 		$installer->install();
 	}
-
-	WP_DLM::handle_plugin_action( 'activate' );
 }
-
 
 /**
  * Run installer for new blogs on multisite when plugin is network activated
@@ -83,6 +81,7 @@ function _download_monitor_mu_new_blog( $blog_id, $user_id, $domain, $path, $sit
 		restore_current_blog();
 	}
 }
+
 /**
  * Delete DLM log table on multisite when blog is deleted
  *
@@ -130,4 +129,47 @@ function download_monitor_delete_cached_scripts() {
 	if ( function_exists( 'wp_cache_clear_cache' ) ) {
 		wp_cache_clear_cache();
 	}
+}
+
+/**
+ * Check if the Download Monitor tables are installed
+ *
+ * return bool
+ *
+ * @since 5.0.0
+ *
+ */
+function dlm_check_tables() {
+	global $wpdb;
+	$transient = get_transient( 'dlm_tables_check' );
+	if ( get_transient( 'dlm_tables_check' ) ) {
+		return $transient;
+	}
+	$return = true;
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}download_log'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}dlm_reports_log'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}dlm_downloads'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}dlm_cookies'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}dlm_cookiemeta'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	$tables = $wpdb->get_results( "SHOW TABLES LIKE '{$wpdb->prefix}dlm_api_keys'" );
+	if ( empty( $tables ) ) {
+		$return = false;
+	}
+	set_transient( 'dlm_tables_check', $return, 30 * DAY_IN_SECONDS );
+	return $return;
 }

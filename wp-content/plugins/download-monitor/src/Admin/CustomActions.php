@@ -17,10 +17,7 @@ class DLM_Custom_Actions {
 		add_action( 'quick_edit_custom_box',  array( $this, 'quick_edit' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'bulk_and_quick_edit_save_post' ), 10, 2 );
 
-		// duplicate download
-		add_filter( 'post_row_actions', array( $this, 'row_actions' ), 10, 2 );
 		add_action( 'wp_ajax_dlm_download_duplicator_duplicate', array( $this, 'ajax_duplicate_download' ) );
-		add_action( 'wp_ajax_dlm_update_downloads_path', array( $this, 'update_downloads_path' ) );
 
 		// duplicate Admin Notice
 		if ( isset( $_GET['dlm-download-duplicator-success'] ) ) {
@@ -243,6 +240,7 @@ class DLM_Custom_Actions {
 				<label for="_featured"><input type="checkbox" name="_featured" id="_featured" value="1"/><?php echo esc_html__( 'Featured download', 'download-monitor' ); ?></label>
 				<label for="_members_only"><input type="checkbox" name="_members_only" id="_members_only" value="1"/><?php echo esc_html__( 'Members only', 'download-monitor' ); ?></label>
 				<label for="_redirect_only"><input type="checkbox" name="_redirect_only" id="_redirect_only" value="1"/><?php echo esc_html__( 'Redirect to file', 'download-monitor' ); ?></label>
+				<label for="_dlm_tc_locked"><input type="checkbox" name="_dlm_tc_locked" id="_dlm_tc_locked" value="1"/><?php echo esc_html__( 'Terms & Conditions required', 'download-monitor' ); ?></label>
 				<?php do_action( 'dlm_extra_quick_bulk_fields' ); ?>
 			</div>
 		</fieldset>
@@ -281,7 +279,6 @@ class DLM_Custom_Actions {
 
 		// handle bulk
 		if ( isset( $_REQUEST['dlm_bulk_edit_nonce'] ) ) {
-
 			// check nonce
 			// phpcs:ignore
 			if ( ! wp_verify_nonce( $_REQUEST['dlm_bulk_edit_nonce'], 'dlm_bulk_edit_nonce' ) ) {
@@ -303,6 +300,10 @@ class DLM_Custom_Actions {
 				update_post_meta( $post_id, '_redirect_only', 'yes' );
 			}
 
+			// set terms and conditions locked.
+			if ( isset( $_REQUEST['_dlm_tc_locked'] ) ) {
+				update_post_meta( $post_id, '_dlm_tc_locked', 'yes' );
+			}
 		}
 
 		// handle quick
@@ -334,29 +335,17 @@ class DLM_Custom_Actions {
 			} else {
 				update_post_meta( $post_id, '_redirect_only', 'no' );
 			}
+
+			// set terms and conditions.
+			if ( isset( $_REQUEST['_dlm_tc_locked'] ) ) {
+				update_post_meta( $post_id, '_dlm_tc_locked', 'yes' );
+			} else {
+				update_post_meta( $post_id, '_dlm_tc_locked', 'no' );
+			}
 		}
 
 		return $post_id;
 	}
-
-	/**
-	 * Add 'Duplicate Download' to row actions
-	 *
-	 * @param $actions
-	 * @param $post
-	 *
-	 * @return array
-	 */
-	public function row_actions( $actions, $post ) {
-
-		// Only for downloads
-		if ( 'dlm_download' === $post->post_type && 'trash' !== $post->post_status ) {
-			$actions['dlm_duplicate_download'] = '<a href="javascript:;" class="dlm-duplicate-download" rel="' . $post->ID . '" data-value="' . wp_create_nonce( 'dlm_duplicate_download_nonce' ) . '">' . __( 'Duplicate Download', 'download-monitor' ) . '</a>';
-		}
-
-		return $actions;
-	}
-
 
 	/**
 	 * AJAX callback, duplicate download
@@ -365,6 +354,11 @@ class DLM_Custom_Actions {
 
 		// Check AJAX nonce
 		check_ajax_referer( 'dlm_duplicate_download_nonce', 'nonce' );
+
+		// Check permissions
+		if ( ! current_user_can( 'manage_downloads' ) ) {
+			wp_send_json_error( array( 'result' => 'false' ) );
+		}
 
 		// Download ID
 		$download_id = absint( $_POST['download_id'] );
@@ -461,20 +455,5 @@ class DLM_Custom_Actions {
 	 */
 	public function admin_notice() {
 		echo '<div class="updated"><p>' . esc_html__( 'Download succesfully duplicated!', 'download-monitor' ) . '</p></div>' . PHP_EOL;
-	}
-
-	/**
-	 * Update downloads path.
-	 *
-	 * @return void
-	 * @since 4.8.0
-	 */
-	public function update_downloads_path() {
-		check_ajax_referer( 'dlm-ajax-nonce', 'security' );
-		if ( ! isset( $_POST['path'] ) ) {
-			wp_send_json_error( array( 'message' => __( 'No path provided', 'download-monitor' ) ) );
-		}
-		update_option( 'dlm_downloads_path', sanitize_text_field( $_POST['path'] ) );
-		wp_send_json_success( array( 'message' => __( 'Path updated', 'download-monitor' ) ) );
 	}
 }

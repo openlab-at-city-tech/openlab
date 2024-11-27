@@ -1,3 +1,83 @@
+= 5.0.14 - 29.10.2024 =
+Fixed: Session performance problems
+Added: No Access modal for the Members lock functionality
+
+= 5.0.13 - 22.10.2024 =
+Fixed: Bulk editing download paths was deleting the paths ( [#1574](https://github.com/WPChill/download-monitor/issues/1574) )
+Fixed: Enabling paths from Download edit not working in some conditions ( [#1576](https://github.com/WPChill/download-monitor/issues/1576) )
+Fixed: Paths conflicts ( [#1566](https://github.com/WPChill/download-monitor/issues/1566) )
+Fixed: Quick edit for terms & conditions ( [#1565](https://github.com/WPChill/download-monitor/issues/1565) )
+Changed: Upsells ( [#1567](https://github.com/WPChill/download-monitor/issues/1567) )
+Fixed: Security issue for Key Generation ( thanks to @truonghuuphuc )
+Added: Extra notices for access permissions
+
+= 5.0.12 - 25.09.2024 =
+Fixed: Error on simple site approved download path deletion
+
+= 5.0.11 - 25.09.2024 =
+Fixed: Critical error when no paths ( [#1558](https://github.com/WPChill/download-monitor/issues/1558) )
+Fixed: REST API Version creation order ( [#1557](https://github.com/WPChill/download-monitor/issues/1557) )
+Fixed: Allow network admin to quick add paths from Download edit screen ( [#1559](https://github.com/WPChill/download-monitor/issues/1559) )
+
+= 5.0.10 - 24.09.2024 =
+Fixed: Check user capability when enabling Shop ( thanks to @truonghuuphuc for reporting ) ( [#1551](https://github.com/WPChill/download-monitor/issues/1551) )
+Fixed: Double slash for home url ( [#1533](https://github.com/WPChill/download-monitor/issues/1533) )
+Changed: Downloadable file URLs format on save ( [#1536](https://github.com/WPChill/download-monitor/issues/1536) )
+Fixed: PHP Error ( [#1534](https://github.com/WPChill/download-monitor/issues/1534) )
+Changed: Downloads Paths for multisite, now on each site ( only network admin can add them ) ( [#1538](https://github.com/WPChill/download-monitor/issues/1538) )
+Fixed: Database error when installing tables on multisite ( [#1540](https://github.com/WPChill/download-monitor/issues/1540) )
+Added: Terms & Conditions quick edit action in admin list ( [#1510](https://github.com/WPChill/download-monitor/issues/1510) )
+Fixed: New untitled Download fatal error ( [#1541](https://github.com/WPChill/download-monitor/issues/1541) )
+Fixed: Plugin conflict with Event Espresso ( [#1548](https://github.com/WPChill/download-monitor/issues/1548) )
+Fixed: Main site in multisite incorrect route ( [#1549](https://github.com/WPChill/download-monitor/issues/1549) )
+Fixed: Printing emoji in Insert in Editor action ( [#1504](https://github.com/WPChill/download-monitor/issues/1504) )
+Fixed: Creating API Keys on Firefox & Firefox like browsers ( [#1553](https://github.com/WPChill/download-monitor/issues/1553) )
+
+= 5.0.9 - 29.08.2024 =
+Fixed: Security update when exporting single Download CPT
+
+= 5.0.8 - 28.08.2024 =
+Fixed: Logging bug in some conditions ( [#1527](https://github.com/WPChill/download-monitor/issues/1527) )
+Fixed: Legacy importer null content bug ( [#1528](https://github.com/WPChill/download-monitor/issues/1528) )
+
+= 5.0.7 - 27.08.2024 =
+Fixed: Versions order not following menu order ( [#1511](https://github.com/WPChill/download-monitor/issues/1511) )
+Fixed: Undefined variable ( [#1523](https://github.com/WPChill/download-monitor/issues/1523) )
+Fixed: Not logging downloads in some conditions ( [#1522](https://github.com/WPChill/download-monitor/issues/1522) )
+
+= 5.0.5 - 22.08.2024 =
+Fixed: Dev bugfixes
+
+= 5.0.4 - 22.08.2024 =
+Fixed: Dev files included
+
+= 5.0.0 - 21.08.2024 =
+Fixed: File Browser not working on installations that return '//' ( double slashed ) paths. ( [#1412](https://github.com/WPChill/download-monitor/issues/1412) )
+Fixed: File Browser no longer displays cross-site folders in multisite environments. ( [#1402](https://github.com/WPChill/download-monitor/issues/1402) )
+Fixed: Performance issues that were affecting websites with a large number of downloads or a large postmeta table. ( [#1421](https://github.com/WPChill/download-monitor/issues/1421) )( [#1425](https://github.com/WPChill/download-monitor/issues/1425) )
+Fixed: Error when trying to delete files on Download deletion ( [#1468](https://github.com/WPChill/download-monitor/issues/1468) )
+Fixed: When using XHR to download files, some browsers would block redirecting a Download file in a new tab ( [#1467](https://github.com/WPChill/download-monitor/issues/1467) )
+Fixed: Incompatibility with the WPML plugin ( [#1453](https://github.com/WPChill/download-monitor/issues/1453) )
+Fixed: Certain UI bugs in the admin area
+Fixed: Filetype was not showing the icon ( [#1426](https://github.com/WPChill/download-monitor/issues/1426) )
+Fixed: Multiple downloads bug when on the same page using the "Button" template ( [#1449](https://github.com/WPChill/download-monitor/issues/1449) )
+Fixed: PayPal payment gateway PHP 8.x compatibility
+Fixed: UUID column from download_log can not be null ( [#1506](https://github.com/WPChill/download-monitor/issues/1506) )
+Fixed: External file Downloads might not register downloads ( [#1508](https://github.com/WPChill/download-monitor/issues/1508) )
+Changed: Admin download edit view ( [#1398](https://github.com/WPChill/download-monitor/issues/1398) )
+Changed: Enhanced display of settings descriptions. ( [#1444](https://github.com/WPChill/download-monitor/issues/1444) )
+Changed: Major change, multiple allowed uploads paths and setting redesign ( [#1447](https://github.com/WPChill/download-monitor/issues/1447) )
+Changed: Major change, switched to DLM-globaly used cookie for Download Monitor and its extensions ( [#1384](https://github.com/WPChill/download-monitor/issues/1384) )
+Changed: File restriction, search and placement now based on allowed paths, and now is absolute
+Chaged: Removed Twitter Lock upsells, extension meets the end of life ( [#1497](https://github.com/WPChill/download-monitor/issues/1497) )
+Added: File type & location column to the admin list table ( [#1450](https://github.com/WPChill/download-monitor/issues/1450) )
+Added: REST API endpoints for creating, updating, and deleting downloads and versions ( [#1215](https://github.com/WPChill/download-monitor/issues/1215) )
+Added: REST API Keys, to allow access to the REST API endpoint functionality
+Added: Included the Terms and Conditions premium plugin in the LITE version ( [#1445](https://github.com/WPChill/download-monitor/issues/1445) )
+Added: Download debug export metabox ( [#1387](https://github.com/WPChill/download-monitor/issues/1387) )
+Added: Possibility in Multisite to specify the uploads folder for each site ( [#1403](https://github.com/WPChill/download-monitor/issues/1403) )
+Added: Directories access restriction ( [#1401](https://github.com/WPChill/download-monitor/issues/1401) )
+
 = 4.9.14 - 27.05.2024 =
 Fixed: Security issue, thanks to Arkadiusz Hydzik for reporting it.
 
