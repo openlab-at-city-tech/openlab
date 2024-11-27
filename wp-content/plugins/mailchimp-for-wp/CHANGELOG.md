@@ -1,6 +1,11 @@
 Changelog
 =========
 
+#### 4.9.19 - Nov 11, 2024
+
+- Add integration with [Prosopo](https://prosopo.io/), a GDPR compliant anti-spam solution for protecting your sign-up forms against bot sign-ups. Thanks [Maxim Akimov](https://github.com/light-source)!
+
+
 #### 4.9.18 - Oct 21, 2024
 
 - Bump required PHP version to 7.2.
@@ -109,7 +114,7 @@ This drops support for some very old browsers, but results in smaller bundle siz
 
 #### 4.9.2 - Mar 21, 2023
 
-- Add support for a field named `MARKETING_PERMISSIONS` to enable GDPR fields configured in Mailchimp. A [sample code snippet can be found here](https://github.com/ibericode/mailchimp-for-wordpress/blob/master/sample-code-snippets/forms/gdpr-marketing-permissions.md).
+- Add support for a field named `MARKETING_PERMISSIONS` to enable GDPR fields configured in Mailchimp. A [sample code snippet can be found here](https://github.com/ibericode/mailchimp-for-wordpress/blob/main/sample-code-snippets/forms/gdpr-marketing-permissions.md).
 - Remove Google reCaptcha feature. This was already disabled if you were not already using it.
 
 

@@ -65,7 +65,7 @@ defined('ABSPATH') or exit;
                             ?>
                         </td>
 
-                    </tr>
+					</tr>
 
                 </table>
 
