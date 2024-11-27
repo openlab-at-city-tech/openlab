@@ -2,7 +2,7 @@
 Contributors: Anlino
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=anders%40andersnoren%2ese&lc=US&item_name=Free%20WordPress%20Themes%20from%20Anders%20Noren&currency_code=USD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted
 Requires at least: 4.5
-Tested up to: 6.1
+Tested up to: 6.4
 Requires PHP: 5.4
 Stable tag: trunk
 License: GPLv2 or later
@@ -45,6 +45,22 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 4. Click the blue "Publish" button. The search toggle in the sidebar/mobile menu will now be hidden.
 
 
+== Copyright ==
+
+Koji WordPress Theme, (C) 2024 Anders Norén.
+Koji is distributed under the terms of the GNU GPL.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+
 == Licenses ==
 
 Images in screenshot.png from Pexels
@@ -75,6 +91,17 @@ Source: https://feathericons.com
 
 
 == Changelog ==
+
+Version 2.1 (2024-02-23)
+-------------------------
+- Updated FontAwesome to 6.5.1. Added social icons:
+	- Phone
+	- Email
+	- TikTok
+	- X
+- Changed Unsplash from generic camera icon to Unsplash logo.
+- Updated "Tested up to" to 6.4.
+- Added copyright details to readme.txt to meet WordPress.org theme directory requirements.
 
 Version 2.0.12 (2023-02-17)
 -------------------------
