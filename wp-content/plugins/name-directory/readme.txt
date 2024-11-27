@@ -7,7 +7,7 @@ Tags: glossary, dictionary, index, directory, names
 Requires at least: 3.0.1
 Requires PHP: 5.3
 Tested up to: 6.7
-Stable tag: 1.29.1
+Stable tag: 1.29.2
 
 Name directory (glossary) with many options like multiple directories, integrated search, non-latin characters, recaptcha, HTML editor and many more.
 
@@ -186,10 +186,7 @@ Since v1.8, yes you can! This export is also compatible with the import-function
 Yes, every now and then I come across an installed version of the plugin. Here is an incomplete list.
 
 1. [Dutch Budgie website - How to name your bird](https://www.parkietenvilla.nl/namenlijst/)
-1. [French website - Kitchen-terms](https://goutu.org/lexique-de-cuisine/)
 1. [Dutch website - How to name your pet rat](http://ratten.nl/fun/namenlijst/)
-1. [Dutch website Pieckbon - (participating enterpreneurs lists)](https://www.pieckbon.nl/deelnemers-pieckbon/)
-1. [Dutch Pregnancy - Term List](https://allesoverzwanger.nl/woordenlijst/)
 1. [Alabama Orthopaedic Society - Member list](https://aosdocs.com/find-an-orthopaedist/)
 1. [Convertus - Paid Search Terms](https://www.convertus.com/search-glossary/)
 1. [SBS ShopRI - Vendor List](http://sbsshopri.com/vendors/vendor-listing-2018/)
@@ -197,7 +194,6 @@ Yes, every now and then I come across an installed version of the plugin. Here i
 1. [Venlo's Waordeboek (Dutch Limburgian Dialect Dictionary)](https://veldekevenlo.nl/waordebook/)
 1. [Dutch Winetasting Terms](https://www.winesessions.nl/proefterminologie/)
 1. [Certficate Holders in Ghana](https://idmcghana.com/index.php/certificat-directory/)
-1. [Preston County Commission](https://prestoncountywv.gov/directories/)
 1. [Tuscany Cookie Class Terms](https://tuscany-cooking-class.com/italian-to-english-cooking-dictionary/)
 
 If you see a dead link, would you please [let me know](https://wordpress.org/support/plugin/name-directory)?
@@ -268,6 +264,10 @@ The Patchstack team helps validate, triage and handle any security vulnerabiliti
 
 
 == Changelog ==
+
+= 1.29.2 | November 9, 2024 =
+ * Enhancement: Tested with WordPress 6.7
+ * Bugfix: strip search term on frontend from leading and trailing spaces
 
 = 1.29.1 | August 14, 2024 =
  * Enhancement: Tested with WordPress 6.6
