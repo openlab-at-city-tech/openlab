@@ -32,6 +32,13 @@
 	      ]
 	    },
 	    {
+            "name": "blog-grid-layout",
+            "title": "Grid Layout(Archieve posts)",
+            "postTypes": [
+            	"post"
+            ]           
+        },
+	    {
 	      "name": "single-post-no-sidebar",
 	      "title": "Single post (No Sidebar)",
 	      "postTypes": [

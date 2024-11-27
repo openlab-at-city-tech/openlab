@@ -1,0 +1,6 @@
+#customize-theme-controls .accordion-section-title:after{
+  display: none;
+}
+.customize-pane-parent{
+  overflow-x: hidden !important;
+}
