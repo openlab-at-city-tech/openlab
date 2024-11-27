@@ -234,6 +234,11 @@ class Tribe__Admin__Notices {
 			// Return the rendered HTML.
 			$html = $this->render( $slug, $content, false, $wrap );
 
+			// If the notice is dismissible, we need to check if it has been dismissed before removing it.
+			if ( $notice->dismiss ) {
+				return $html;
+			}
+
 			// Remove the notice and the transient (if any) since it's been rendered.
 			$this->remove( $slug );
 			$this->remove_transient( $slug );
@@ -286,6 +291,8 @@ class Tribe__Admin__Notices {
 		if ( $notice->inline ) {
 			$classes[] = 'inline';
 		}
+
+		$content ??= $notice->content;
 
 		// Prevents Empty Notices
 		if ( empty( $content ) ) {
@@ -404,21 +411,6 @@ class Tribe__Admin__Notices {
 		}
 
 		return true;
-	}
-
-	/**
-	 * Checks if a given user has dismissed a given notice.
-	 *
-	 * @since      4.3
-	 * @deprecated 4.13.0 Deprecated in favor of correcting the typo.
-	 *
-	 * @param string   $slug    The Name of the Notice
-	 * @param int|null $user_id The user ID
-	 *
-	 * @return boolean
-	 */
-	public function has_user_dimissed( $slug, $user_id = null ) {
-		return $this->has_user_dismissed( $slug, $user_id );
 	}
 
 	/**
@@ -808,6 +800,8 @@ class Tribe__Admin__Notices {
 	protected function set_transients( $notices ) {
 		$transient = self::$transient_notices_name;
 		set_transient( $transient, $notices, MONTH_IN_SECONDS );
+		// Manually memoize the value so we don't have to fetch it again.
+		tribe( 'cache' )['transient_admin_notices'] = $notices;
 	}
 
 	/**

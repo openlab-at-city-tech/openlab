@@ -2,8 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\DB\QueryBuilder\Clauses;
@@ -15,6 +14,7 @@ use InvalidArgumentException;
  * @since 1.0.0
  */
 class Where {
+
 	/**
 	 * @var string
 	 */
@@ -36,13 +36,8 @@ class Where {
 	public $logicalOperator;
 
 	/**
-	 * @var string|null
-	 */
-	public $type;
-
-	/**
 	 * @param  string  $column
-	 * @param  string  $value
+	 * @param  mixed  $value
 	 * @param  string  $comparisonOperator
 	 * @param  string|null  $logicalOperator
 	 */

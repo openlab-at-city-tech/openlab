@@ -1,11 +1,5 @@
 <?php
 /**
- * @license GPL-2.0-or-later
- *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
- */
-/**
  * View: Install button.
  *
  * @since 1.0.0

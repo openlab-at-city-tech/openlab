@@ -2,8 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Schema\Tables;
@@ -81,7 +80,7 @@ class Collection implements \ArrayAccess, \Countable, \Iterator {
 	 * @return Filters\Group_FilterIterator
 	 */
 	public function get_by_group( $groups, $iterator = null ): Filters\Group_FilterIterator {
-		return new Filters\Group_FilterIterator( $groups, $iterator ?: $this );
+		return new Filters\Group_FilterIterator( (array) $groups, $iterator ?: $this );
 	}
 
 	/**

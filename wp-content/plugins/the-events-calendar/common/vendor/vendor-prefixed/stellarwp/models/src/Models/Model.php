@@ -2,8 +2,7 @@
 /**
  * @license GPL-3.0-or-later
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Models;
@@ -131,6 +130,31 @@ abstract class Model implements ModelInterface, Arrayable, JsonSerializable {
 	}
 
 	/**
+	 * Whether the property is set or not. This is different from isset() because this considers a `null` value as
+	 * being set. Defaults are considered set as well.
+	 *
+	 * @since 1.2.2
+	 *
+	 * @return boolean
+	 */
+	public function isSet( string $key ): bool {
+		return array_key_exists( $key, $this->attributes ) || $this->hasDefault( $key );
+	}
+
+	/**
+	 * Check if there is a default value for a property.
+	 *
+	 * @since 1.2.2
+	 *
+	 * @param string $key Property name.
+	 *
+	 * @return bool
+	 */
+	protected function hasDefault( string $key ): bool {
+		return is_array( $this->properties[ $key ] ) && array_key_exists( 1, $this->properties[ $key ] );
+	}
+
+	/**
 	 * Returns the default value for a property if one is provided, otherwise null.
 	 *
 	 * @since 1.0.0
@@ -140,9 +164,11 @@ abstract class Model implements ModelInterface, Arrayable, JsonSerializable {
 	 * @return mixed|null
 	 */
 	protected function getPropertyDefault( string $key ) {
-		return is_array( $this->properties[ $key ] ) && isset( $this->properties[ $key ][1] )
-			? $this->properties[ $key ][1]
-			: null;
+		if ( $this->hasDefault( $key ) ) {
+			return $this->properties[ $key ][1];
+		}
+
+		return null;
 	}
 
 	/**
@@ -155,7 +181,9 @@ abstract class Model implements ModelInterface, Arrayable, JsonSerializable {
 	protected function getPropertyDefaults() : array {
 		$defaults = [];
 		foreach ( array_keys( $this->properties ) as $property ) {
-			$defaults[ $property ] = $this->getPropertyDefault( $property );
+			if ( $this->hasDefault( $property ) ) {
+				$defaults[ $property ] = $this->getPropertyDefault( $property );
+			}
 		}
 
 		return $defaults;
@@ -305,6 +333,10 @@ abstract class Model implements ModelInterface, Arrayable, JsonSerializable {
 				return is_bool( $value );
 			case 'array':
 				return is_array( $value );
+			case 'float':
+				return is_float( $value );
+			case 'number':
+				return is_int( $value ) || is_float( $value );
 			default:
 				return $value instanceof $type;
 		}

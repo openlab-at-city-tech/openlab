@@ -2,8 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\DB\QueryBuilder\Types;

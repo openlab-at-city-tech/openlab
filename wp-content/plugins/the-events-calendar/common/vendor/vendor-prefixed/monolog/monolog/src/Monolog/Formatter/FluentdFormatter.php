@@ -8,8 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Formatter;
@@ -28,9 +27,9 @@ namespace TEC\Common\Monolog\Formatter;
  *
  * Monolog setup:
  *
- * $logger = new TEC\Common\Monolog\Logger('fluent.tag');
- * $fluentHandler = new TEC\Common\Monolog\Handler\SocketHandler('unix:///var/run/td-agent/td-agent.sock');
- * $fluentHandler->setFormatter(new TEC\Common\Monolog\Formatter\FluentdFormatter());
+ * $logger = new \TEC\Common\Monolog\Logger('fluent.tag');
+ * $fluentHandler = new \TEC\Common\Monolog\Handler\SocketHandler('unix:///var/run/td-agent/td-agent.sock');
+ * $fluentHandler->setFormatter(new \TEC\Common\Monolog\Formatter\FluentdFormatter());
  * $logger->pushHandler($fluentHandler);
  *
  * @author Andrius Putna <fordnox@gmail.com>
