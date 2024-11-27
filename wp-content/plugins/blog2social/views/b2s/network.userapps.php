@@ -120,6 +120,22 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
     <input type="hidden" id="b2s-user-license" value="<?php echo $isPremium ?>">
 
 
+    <div class="modal fade" id="b2sXViolationModal" tabindex="-1" role="dialog" aria-labelledby="b2sXViolationModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2sXViolationModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><?php esc_html_e('Important Notice: X has changed its policy', 'blog2social') ?></h4>
+                </div>
+                <div class="modal-body">
+                    <p>                     
+                        <?php esc_html_e('Due to a recent policy change, X (formerly Twitter) no longer permits the integration of personal API keys for social media management through any third-party tools, including Blog2Social. We are actively working on alternative solutions for your X access and will provide further information as soon as possible.', 'blog2social'); ?>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <div class="modal fade" id="b2sAddUserAppModal" tabindex="-1" role="dialog" aria-labelledby="b2sAddUserAppModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
@@ -135,14 +151,14 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                     <div class="row">
                         <div class="col-md-12">
                             <p class="network-app-info" data-network-id="2" class="b2s-padding-bottom-5" style="display:none;">
-                                <?php echo sprintf(__('The App Key and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your X (Twitter) account via <a href="%s">OAuth</a>.', 'blog2social'), esc_url('https://developer.twitter.com/en/docs/authentication/oauth-1-0a/api-key-and-secret')); ?>
+                                <?php esc_html_e('The APP-ID and Secret are needed to set up and authenticate a secure connection to your X (Twitter) account. Our guide will lead you through the process of obtaining your own App Key, the ID and the secret.', 'blog2social'); ?>
                                 <br>
-                                <?php echo sprintf(__('For get your App Key and Sercet, you can use the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))); ?>
+                                <?php echo sprintf(__('To obtain your App Key and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))); ?>
                             </p>
                             <p class="network-app-info" data-network-id="6" class="b2s-padding-bottom-5" style="display:none;">
-                                <?php echo sprintf(__('The App-Id and Secret are essentially the username and password for your App. They will be used to authenticate and set up a safe and secure connection to your Pinterest account via <a href="%s">OAuth</a>.', 'blog2social'), esc_url('https://developers.pinterest.com/docs/getting-started/authentication/')); ?>
+                                <?php esc_html_e('The APP-ID and Secret are needed to set up and authenticate a secure connection to your Pinterest account. Our guide will lead you through the process of obtaining your own App Key, the ID and the secret.', 'blog2social'); ?>
                                 <br>
-                                <?php echo sprintf(__('For get your App-Id and Sercet, you can use the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_faq'))); ?>
+                                <?php echo sprintf(__('To obtain your App-Id and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_faq'))); ?>
                             </p>
 
 

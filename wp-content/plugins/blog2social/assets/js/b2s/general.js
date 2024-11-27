@@ -21,6 +21,9 @@ jQuery(window).on("load", function () {
     if(jQuery('#b2s-final-trail-modal').length > 0) {
         jQuery('#b2s-final-trail-modal').modal('show');
     }
+    if (jQuery('.b2s-changelog-body').length > 0) {
+        jQuery('#b2s-changelog-modal').modal('show');
+    }
 });
 
 jQuery(document).on('click', '.b2s-show-feedback-modal', function () {

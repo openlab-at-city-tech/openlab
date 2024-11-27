@@ -57,6 +57,10 @@
     opacity: 0.2;
 }
 
+.b2s-curation-preview-header{
+    display:flex;
+    margin-left: 0px !important;
+}
 
 .b2s-post-item-area {
     width: 100%;
@@ -267,6 +271,10 @@
 
 .b2s-curation-preview-body-account {
     font-size:12pt;
+}
+
+#b2s-curation-preview-body-account-post {
+    padding-left:10px;
 }
 
 .b2s-curation-preview-body-text {

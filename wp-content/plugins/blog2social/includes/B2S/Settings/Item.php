@@ -34,8 +34,7 @@ class B2S_Settings_Item {
     public function getGeneralSettingsHtml() {
 
         $isCheckedAllowShortcode = (get_option('B2S_PLUGIN_USER_ALLOW_SHORTCODE_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
-        $isCheckedUsePermalink =  (get_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
-
+        $isCheckedUsePermalink = (get_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
 
         $optionUserTimeZone = $this->options->_getOption('user_time_zone');
         $optionUserTimeFormat = $this->options->_getOption('user_time_format');
@@ -103,7 +102,7 @@ class B2S_Settings_Item {
             $content .= '</span>';
             $content .= '<br>';
         }
-        $isProBadge = (B2S_PLUGIN_USER_VERSION  < 2) ? ' <span class="label label-success">'. esc_html__('Pro', 'blog2social') .'</span>' : '';
+        $isProBadge = (B2S_PLUGIN_USER_VERSION < 2) ? ' <span class="label label-success">' . esc_html__('Pro', 'blog2social') . '</span>' : '';
         $isDisabled = !empty($isProBadge) ? 'disabled' : '';
 
         $content .= '<br>';
@@ -111,9 +110,8 @@ class B2S_Settings_Item {
         $content .= '<input type="checkbox" value="' . esc_attr($isCheckedAllowShortcode) . '" id="b2s-user-network-settings-allow-shortcode" ' . (($isCheckedAllowShortcode == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('allow shortcodes in my post', 'blog2social');
         $content .= '<br>';
         $content .= '<br>';
-        $content .= '<strong>' . esc_html__('Use custom permalinks for scheduled posts', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoUsePermalinksModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> '. $isProBadge .'<br>';
-        $content .= '<input type="checkbox" '.$isDisabled.' value="' . esc_attr($isCheckedUsePermalink) . '" id="b2s-user-network-settings-use-permalinks" ' . (($isCheckedUsePermalink == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('This feature lets you use personalized permalinks when scheduling social media posts for unpublished WordPress articles, replacing the default WordPress-generated link (e.g., "yourwebsite.com/?p=123"). Be sure to review the explanation before activating this option.', 'blog2social');
-
+        $content .= '<strong>' . esc_html__('Use custom permalinks for scheduled posts', 'blog2social') . '</strong> <a href="#" class="b2s-info-btn del-padding-left b2sInfoUsePermalinksModalBtn">' . esc_html__('Info', 'Blog2Social') . '</a> ' . $isProBadge . '<br>';
+        $content .= '<input type="checkbox" ' . $isDisabled . ' value="' . esc_attr($isCheckedUsePermalink) . '" id="b2s-user-network-settings-use-permalinks" ' . (($isCheckedUsePermalink == 1) ? 'checked="checked"' : '') . ' /> ' . esc_html__('This feature lets you use personalized permalinks when scheduling social media posts for unpublished WordPress articles, replacing the default WordPress-generated link (e.g., "yourwebsite.com/?p=123"). Be sure to review the explanation before activating this option.', 'blog2social');
 
         if (current_user_can('administrator')) {
             $content .= '<br>';
@@ -251,14 +249,14 @@ class B2S_Settings_Item {
             $content .= '<hr></div>';
         }
 
-        foreach (array(1, 2, 3, 12, 19, 17, 24, 43) as $n => $networkId) { //FB,TW,LI,IN
+        foreach (array(1, 2, 3, 12, 19, 17, 24, 43, 44) as $n => $networkId) { //FB,TW,LI,IN
             $type = ($networkId == 1 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3 || $networkId == 19) ? array(0, 1) : (($networkId == 12) ? array(1) : array(0)));
             foreach ($type as $t => $typeId) { //Profile,Page,Group
                 if ($networkId == 17) {
                     $postFormat = 1;
                 } else {
                     if (!isset($optionPostFormat[$networkId][$typeId]['format'])) {
-                        $postFormat = $defaultPostFormat[$networkId][$typeId]['format'];
+                        $postFormat = isset($defaultPostFormat[$networkId][$typeId]['format']) ? $defaultPostFormat[$networkId][$typeId]['format'] : 0;
                     } else {
                         $postFormat = $optionPostFormat[$networkId][$typeId]['format'];
                     }
@@ -308,7 +306,7 @@ class B2S_Settings_Item {
         }
         $optionPostFormat = $this->options->_getOption('post_template');
         $content = "<input type='hidden' class='b2sNetworkSettingsPostFormatText' value='" . json_encode(array('post' => array(__('Link Post', 'blog2social'), __('Image Post', 'blog2social')), 'image' => array(__('Image with frame'), __('Image cut out')))) . "'/>";
-        foreach (array(1, 2, 3, 12, 19, 15, 17, 24, 43) as $n => $networkId) { //FB,TW,LI,IN
+        foreach (array(1, 2, 3, 12, 19, 15, 17, 24, 43, 44) as $n => $networkId) { //FB,TW,LI,IN
             $postFormatType = ($networkId == 12) ? 'image' : 'post';
             $type = ($networkId == 1 || $networkId == 17) ? array(0, 1, 2) : (($networkId == 3 || $networkId == 19) ? array(0, 1) : (($networkId == 12) ? array(1) : array(0)));
             foreach ($type as $t => $typeId) { //Profile,Page,Group                
@@ -326,5 +324,4 @@ class B2S_Settings_Item {
         }
         return $content;
     }
-
 }

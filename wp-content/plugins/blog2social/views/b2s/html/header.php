@@ -421,32 +421,19 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
 <?php } ?>
 <!--Header-->
 
-<?php if (isset($_GET['page']) && $_GET['page'] != 'blog2social-video' && $_GET['page'] != 'blog2social-onboarding' && $_GET['page'] != 'blog2social-curation' && $_GET['page'] != 'blog2social-ship') { ?>
-    <?php
-    $showDashboard = true;
-    if (isset($_GET['page']) && $_GET['page'] == 'blog2social') {
-        $optionsOnboarding = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
-        $onboardingval = $optionsOnboarding->_getOption('onboarding_active');
 
-        if (!$onboardingval || (int) $onboardingval == 1) {
-            if (!defined('B2S_PLUGIN_TRAIL_END') && B2S_PLUGIN_USER_VERSION == 0) {
-                $showDashboard = false;
-            }
-        }
-    }
-    if ($showDashboard) {
-        ?>
-        <h1>
-            <?php
-            if ((isset($getPages[$_GET['page']]) && !empty($getPages[$_GET['page']]))) {
-                echo wp_kses($getPages[sanitize_text_field(wp_unslash($_GET['page']))], array('span' => array('class' => array()), 'a' => array('href' => array(), 'target' => array(), 'class' => array()), 'button' => array('class' => array())));
-            } else if (!empty($curPageTitle)) {
-                echo esc_html($curPageTitle);
-            }
-            ?>
-        </h1> 
+<?php
+if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], unserialize(B2S_PLUGIN_REMOVE_PAGE_TITLE))) {
+    ?> <h1>
         <?php
-    }
+        if ((isset($getPages[$_GET['page']]) && !empty($getPages[$_GET['page']]))) {
+            echo wp_kses($getPages[sanitize_text_field(wp_unslash($_GET['page']))], array('span' => array('class' => array()), 'a' => array('href' => array(), 'target' => array(), 'class' => array()), 'button' => array('class' => array())));
+        } else if (!empty($curPageTitle)) {
+            echo esc_html($curPageTitle);
+        }
+        ?>
+    </h1>
+    <?php
 }
 ?>
 
@@ -599,192 +586,256 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
     <div class="modal fade" id="b2s-trial-seven-day-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-trial-seven-day-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
         <div class="modal-dialog">
             <div class="modal-content modal-lg">
-                <div class="modal-body text-center" style="background-color: #f4f4f4;">
+                <div class="modal-body" style="background-color: #f4f4f4;">
                     <button type="button" class="close b2s-trial-seven-day-modal-close" data-dismiss="modal">&times;</button>
-                    <img src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial_popup.png', B2S_PLUGIN_FILE)); ?>" style="width: 80px; float: right; margin-left: -65px;" alt="blog2social">
                     <br>
-                    <div class="col-md-8 col-md-push-2">
-                        <h3 class="b2s-bold"><?php echo sprintf(__('Your free trial of Blog2Social Premium expires in %d days. Don’t miss to upgrade before your trial expires to keep all your benefits and individual settings.', 'blog2social'), esc_html($trial_days)); ?></h3>
-                    </div>
-                    <div class="clearfix"></div>
-                    <br>
-                    <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn btn-lg btn-success b2s-bold" target="_blank"><?php esc_html_e('Upgrade to Blog2Social Premium now', 'blog2social'); ?></a>
-                    <br>
-                    <br>
-                    <?php esc_html_e('You can now track the performance of your post directly in Blog2Social, and you can test it exclusively and for free!', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('What do you like best of Blog2Social Premium?', 'blog2social'); ?>
-                    <br>
-                    <?php esc_html_e('Did you try all options on how to organize your social media scheduling and sharing tasks even more easily and automatically with Blog2Social Premium, for example:', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <div class="col-md-6 padding-lr-40">
-                        <ul style="list-style: disc; text-align: left;">
-                            <li><?php esc_html_e('The Auto-Poster, to automatically share your posts immediately or at a later time.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('Tailoring options like individual images for each post, different post formats (link and image post), emojis, hashtags, handles and GIFs for your social media posts to to diversify the appearance your social media posts', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('Social media templates to turn your social media posts automatically into tailored posts for each network and community by customizing your post layout with a unique structure. Define the sequence of variables for the title, excerpt, content, keywords as hashtags, author and WooCommer price.', 'blog2social'); ?></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6 padding-lr-40">
-                        <ul style="list-style: disc; text-align: left;">
-                            <li><?php esc_html_e('Creating social media posts from other sources, such as text, images, videos, and links to add more content variety and manage all your social media posts from one place.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The Best Time Manager to reach your followers when they are most active on each social network and increase your reach.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The social media calendar to keep track of your scheduled social media posts. Add social media posts, edit or change the date per drag & drop.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The team and user management settings to organize multiple users and licenses and to collaborate on the social media calendar, and much more.', 'blog2social'); ?></li>
-                        </ul>
-                    </div>
-                    <div class="clearfix"></div>
-                    <br>
-                    <br>
-                    <?php esc_html_e('To keep all these benefits from all advanced features for automated scheduling and sharing and to keep all your individual settings und scheduling, don’t forget to upgrade to Blog2Social Premium before your trial expires. You can also upgrade at any time later, but please note that your Premium settings and your scheduling will be lost by then. To keep all your settings, upgrade to Blog2Social Premium now.', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="b2s-bold b2s-text-black" target="_blank"><?php esc_html_e('Upgrade to Blog2Social Premium now.', 'blog2social'); ?></a>
+                    <div class="row b2s-d-flex">
+                        <div class="col-md-6 col-sm-12">
+                            <h2 class="b2s-bold"><?php echo sprintf(__('Your test licence expires in %d days.', 'blog2social'), esc_html($trial_days)); ?></h2>
+                            <span><?php esc_html_e('While you\'re enjoying the trial, there is so much more that Blog2Social has to offer. Please upgrade to keep access to your premium features and benefit from:', 'blog2social'); ?></span>
+                            <br>
+                            <ul class="b2s-header-trial-modal-list">
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Advanced scheduling capabilities for optimal posting times across multiple channels', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Automated posting and resharing to save time and maintain a consistent content stream', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Customizable templates for optimized social media presentation', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Flexible user and account settings and add-ons for efficient social media management', 'blog2social'); ?></li>
+                            </ul>
+                            <span><?php esc_html_e('These exclusive features can help you reach more people in less time. Unlock the full power of Blog2Social for your social media success.', 'blog2social'); ?></span>
+                            <br>
+                            <br>
+                            <span><?php esc_html_e('Find the perfect plan to suit your needs.', 'blog2social'); ?></span>
+                            <br>
+                            <br>
+                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn b2s-btn-success-new" target="_blank"><?php esc_html_e('Upgrade Blog2Social', 'blog2social'); ?></a>
+                            <br>
+                            <button type="button" class="btn btn-link b2s-continue-trial-btn"><small><?php esc_html_e('permanently hide', 'blog2social'); ?></small></button>
+                            <br>
                         </div>
-                        <div class="col-md-4">
-                            <a href="#" class="b2s-bold b2s-text-black b2s-continue-trial-btn"><?php esc_html_e('I would like to continue with my trial.', 'blog2social'); ?></a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_license_advice')); ?>" class="b2s-bold b2s-text-black" target="_blank"><?php esc_html_e('I need advice on finding the right license.', 'blog2social'); ?></a>
+                        <div class="col-md-6 col-sm-12 b2s-p-0 hidden-xs hidden-sm b2s-header-trial-image-container">
+                            <img class="b2s-header-trial-image" src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social">
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<?php } ?>
+    <?php } ?>
 
-<?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < strtotime(gmdate('Y-m-d H:i:s')) && defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION == 0 && !$hideFinalTrailModal) { ?>
-    <div class="modal fade" id="b2s-final-trail-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-final-trail-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
-        <div class="modal-dialog">
-            <div class="modal-content modal-lg">
-                <div class="modal-body text-center" style="background-color: #f4f4f4;">
-                    <button type="button" class="close b2s-final-trail-modal-close" data-dismiss="modal">&times;</button>
-                    <img src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial_popup.png', B2S_PLUGIN_FILE)); ?>" style="width: 80px; float: right; margin-left: -65px;" alt="blog2social">
-                    <br>
-                    <div class="col-md-8 col-md-push-2">
-                        <h3 class="b2s-bold"><?php esc_html_e('Your free trial of Blog2Social Premium has expired. We hope you explored and enjoyed all the Premium options.', 'blog2social'); ?></h3>
-                    </div>
-                    <div class="clearfix"></div>
-                    <br>
-                    <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn btn-lg btn-success b2s-bold" target="_blank"><?php esc_html_e('Upgrade to Blog2Social Premium now', 'blog2social'); ?></a>
-                    <br>
-                    <br>
-                    <?php esc_html_e('With Blog2Social Premium you have all the options you need to promote your content on your social media channels successfully and time-savingly.', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('Upgrade now to keep all benefits of Blog2Social Premium:', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <div class="col-md-6 padding-lr-40">
-                        <ul style="list-style: disc; text-align: left;">
-                            <li><?php esc_html_e('The Auto-Poster, to automatically share your posts immediately or at a later time.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('Tailoring options like individual images for each post, different post formats (link and image post), emojis, hashtags, handles and GIFs for your social media posts to to diversify the appearance your social media posts', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('Social media templates to turn your social media posts automatically into tailored posts for each network and community by customizing your post layout with a unique structure. Define the sequence of variables for the title, excerpt, content, keywords as hashtags, author and WooCommer price.', 'blog2social'); ?></li>
-                        </ul>
-                    </div>
-                    <div class="col-md-6 padding-lr-40">
-                        <ul style="list-style: disc; text-align: left;">
-                            <li><?php esc_html_e('Creating social media posts from other sources, such as text, images, videos, and links to add more content variety and manage all your social media posts from one place.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The Best Time Manager to reach your followers when they are most active on each social network and increase your reach.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The social media calendar to keep track of your scheduled social media posts. Add social media posts, edit or change the date per drag & drop.', 'blog2social'); ?></li>
-                            <li><?php esc_html_e('The team and user management settings to organize multiple users and licenses and to collaborate on the social media calendar, and much more.', 'blog2social'); ?></li>
-                        </ul>
-                    </div>
-                    <br>
-                    <div class="clearfix"></div>
-                    <br>
-                    <?php esc_html_e('Save a lot of time for your social media tasks!', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <hr class="b2s-dash">
-                    <i><?php esc_html_e('"Blog2Social is the master tool any blogger or marketer needs to automate your social media activity. It removes so much work and stress that\'s involved in posting to your networks manually. Also, the scheduling and reposting features are terrific. Blog2Social simplifies my life immensely!"', 'blog2social'); ?></i>
-                    - <?php esc_html_e('jerryj1 per WordPress', 'blog2social') ?>
-                    <hr class="b2s-dash">
-                    <?php echo sprintf(__('Interested in reading more reviews? <a href="%s" target="_blank">Check out what others think about Blog2Social.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('b2s_reviews'))); ?>
-                    <br>
-                    <br>
-                    <?php esc_html_e('Get all Premium benefits starting from just $7 per month.', 'blog2social'); ?>
-                    <br>
-                    <br>
-                    <div class="row">
-                        <div class="col-md-4">
-                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="b2s-bold b2s-text-black" target="_blank"><?php esc_html_e('Upgrade to Blog2Social Premium now', 'blog2social'); ?></a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_license_advice')); ?>" class="b2s-bold b2s-text-black" target="_blank"><?php esc_html_e('I need advice on finding the right license', 'blog2social'); ?></a>
-                        </div>
-                        <div class="col-md-4">
-                            <a href="#" class="b2s-bold b2s-text-black b2s-hide-final-trial-btn"><?php esc_html_e('Hide this notification.', 'blog2social'); ?></a>
+    <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < strtotime(gmdate('Y-m-d H:i:s')) && defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION == 0 && !$hideFinalTrailModal) { ?>
+        <div class="modal fade" id="b2s-final-trail-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-final-trail-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
+            <div class="modal-dialog">
+                <div class="modal-content modal-lg">
+                    <div class="modal-body" style="background-color: #f4f4f4;">
+                        <button type="button" class="close b2s-final-trail-modal-close" data-dismiss="modal">&times;</button>
+                        <br>
+                        <div class="row b2s-d-flex">
+                            <div class="col-md-6 col-sm-12">
+                                <h2 class="b2s-bold"><?php esc_html_e('Your test licence has expired.', 'blog2social'); ?></h2>
+                                <span><?php esc_html_e('While you enjoyed the trial, there is so much more that Blog2Social has to offer. Please upgrade now to regain access to your premium features and benefit from:', 'blog2social'); ?></span>
+                                <br>
+                                <ul class="b2s-header-trial-modal-list">
+                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Advanced scheduling capabilities for optimal posting times across multiple channels', 'blog2social'); ?></li>
+                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Automated posting and resharing to save time and maintain a consistent content stream', 'blog2social'); ?></li>
+                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Customizable templates for optimized social media presentation', 'blog2social'); ?></li>
+                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Flexible user and account settings and add-ons for efficient social media management', 'blog2social'); ?></li>
+                                </ul>
+                                <span><?php esc_html_e('These exclusive features can help you reach more people in less time. Unlock the full power of Blog2Social for your social media success.', 'blog2social'); ?></span>
+                                <br>
+                                <br>
+                                <span><?php esc_html_e('Find the perfect plan to suit your needs.', 'blog2social'); ?></span>
+                                <br>
+                                <br>
+                                <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn b2s-btn-success-new" target="_blank"><?php esc_html_e('Upgrade Blog2Social', 'blog2social'); ?></a>
+                                <br>
+                                <button type="button" class="btn btn-link b2s-hide-final-trial-btn"><small><?php esc_html_e('permanently hide', 'blog2social'); ?></small></button>
+                                <br>
+                            </div>
+                            <div class="col-md-6 col-sm-12 b2s-p-0 hidden-xs hidden-sm b2s-header-trial-image-container">
+                                <img class="b2s-header-trial-image" src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-<?php } ?>
+        <?php } ?>
 
-<div class="modal fade" id="b2sAiTextGeneratorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAiTextGeneratorModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+        <div class="modal fade b2sAssAuthModal" class="b2sAssAuthModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssAuthModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header b2s-modal-border-none">
+                        <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                        <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name=".b2sAssAuthModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="b2s-stepwizard">
+                                <div class="b2s-stepwizard-row setup-panel">
+                                    <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
+                                        <a href="#step-1" type="button" class="btn btn-danger b2s-ass-color b2s-stepwizard-btn-circle" disabled="disabled">1</a>
+                                        <p><?php esc_html_e('Enter email address', 'blog2social') ?></p>
+                                    </div>
+                                    <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
+                                        <a href="#step-2" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">2</a>
+                                        <p><?php esc_html_e('Verify email address', 'blog2social') ?></p>
+                                    </div>
+                                    <div class="b2s-stepwizard-step">
+                                        <a href="#step-3" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">3</a>
+                                        <p><?php esc_html_e('Ready to go!', 'blog2social') ?></p>
+                                    </div>
+                                </div>
+                            </div>    
+                        </div>
+                        <div class="row">
+                            <div class="b2s-ass-auth-step-1-content">
+                                <h2><?php esc_html_e('Connect AI assistant', 'blog2social') ?></h2>
+                                <p><?php esc_html_e('Connect with the AI assistant to get started.', 'blog2social') ?></p>
+                                <br>
+                                <p><b><?php esc_html_e('Use this email for verification', 'blog2social') ?></b></p>
+                                <div>
+                                    <input type="radio" value="0" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-own" data-auth-email="<?php echo $this->blogUserData->user_email; ?>" name="b2s-ass-auth-email" checked />
+                                    <label for="b2s-ass-auth-email-own"> <?php echo $this->blogUserData->user_email; ?></label>
+                                    <br>
+                                    <input type="radio" value="1" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-other" name="b2s-ass-auth-email">
+                                    <label for="b2s-ass-auth-email-other"> <?php esc_html_e('Use different email for verification', 'blog2social') ?></label>
+                                </div>
+                                <div class="pull-right"> 
+                                    <button id="b2s-ass-auth-step1-btn" data-url="<?php echo B2S_PLUGIN_SERVER_URL . '/auth/assistini.php?b2s_token=' . B2S_PLUGIN_TOKEN . '&sprache=' . substr(B2S_LANGUAGE, 0, 2) ?>" data-auth-title="<?php echo esc_attr('Assistini Authorization', 'blog2social'); ?>" class="btn b2s-ass-btn"><?php esc_html_e('Send verification code', 'blog2social') ?></button>
+                                </div>
+                            </div>
+                            <div class="b2s-ass-auth-step-3-content" style="display:none;">
+                                <h2><?php esc_html_e('Connection established', 'blog2social') ?></h2>
+                                <p><?php esc_html_e('Congrats! You can now start using Assistini AI to optimize your social media posts.', 'blog2social') ?></p>
+                                <br>
+                                <div class="pull-right"> 
+                                    <button id="b2s-ass-auth-step3-btn" class="btn b2s-ass-btn"><?php esc_html_e('Start now', 'blog2social') ?></button>
+                                </div>
+                            </div>
+                        </div>                
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+<div class="modal fade" id="b2sAssSettingsModal" class="b2sAssSettingsModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssSettingsModal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header b2s-modal-border-none">
+        <div class="modal-header b2s-modal-border-none">
                 <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAiTextGeneratorModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssSettingsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-7">
-                        <h3 class="b2s-text-xl">                           
-                            <?php esc_html_e('Welcome to Assistini - the smart AI text generator!', 'blog2social'); ?>             
-                        </h3>
-                        <p>
-                            <?php esc_html_e('Assistini is an intuitive AI text generator that helps you create high-quality texts. Whether blog posts, press releases, SEO texts or social media posts - Assistini helps you create them in the shortest possible time.', 'blog2Social'); ?></p>
-                        <br>
-                        <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Try Assistini for free', 'blog2Social'); ?></a>
-                        <?php esc_html_e('or', 'blog2social'); ?> <a class="btn-link b2s-text-underline" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('Visit Website', 'blog2Social'); ?></a>
-                        
-                        <p class="b2s-text-sm b2s-padding-top-20"><?php esc_html_e('Exciting News: The integration of Assistini into the Blog2Social Plugin is on its way!', 'blog2Social'); ?></p>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex b2s-pb-2">
+                    <img class="b2s-pr-1 b2s-ass-img-settings" src="<?php echo esc_url(plugins_url('/assets/images/ass/pr-automatisierung.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini Settings">
+                    <div>
+                        <h2><?php esc_html_e('AI Settings', 'blog2social') ?></h2>
+                        <p><?php esc_html_e('Set up your AI assistant.', 'blog2social') ?></p>
+                        <div class="b2s-pt-1">
+                            <input type="checkbox" id="b2s-ass-settings-checkbox-1" />
+                            <label for="b2s-ass-settings-checkbox-1"><?php esc_html_e('Apply post templates', 'blog2social') ?></label>
+                            <br>
+                            <input type="checkbox" id="b2s-ass-settings-checkbox-2" />
+                            <label for="b2s-ass-settings-checkbox-2"><?php esc_html_e('Exclude emojis', 'blog2social') ?></label>
+                            <br>
+                            <input type="checkbox" id="b2s-ass-settings-checkbox-3" />
+                            <label for="b2s-ass-settings-checkbox-3"><?php esc_html_e('Generate Hashtags', 'blog2social') ?></label>
+                        </div>
                     </div>
-                    <div class="col-md-5">
-                        <img class="b2s-ass-img-welcome hidden-sm hidden-xs" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                    </div>
+                </div>
+                <div class="b2s-d-flex-end"> 
+                    <button id="b2s-ass-settings-save-btn" class="btn b2s-ass-btn"><?php esc_html_e('Save', 'blog2social') ?></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-
-<div class="modal fade" id="b2sKiAssistiniAuthModal" tabindex="-1" role="dialog" aria-labelledby="b2sKiAssistiniAuthModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+<div class="modal fade" id="b2sAssLimitModal" class="b2sAssLimitModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssLimitModal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header b2s-modal-border-none">
                 <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sKiAssistiniAuthModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssLimitModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-7">
-                        <h3 class="b2s-text-xl">                           
-                            <?php esc_html_e('Welcome to Assistini - the smart AI text generator!', 'blog2social'); ?>             
-                        </h3>
-                        <p>
-                            <?php esc_html_e('Assistini is an intuitive AI text generator that helps you create high-quality texts. Whether blog posts, press releases, SEO texts or social media posts - Assistini helps you create them in the shortest possible time.', 'blog2Social'); ?></p>
-                        <br>
-                        <a class="b2s-ass-register-btn" target="_blank" href="https://b2s.li/wp-plugin-assistini-login"><?php esc_html_e('Try Assistini for free', 'blog2Social'); ?></a>
-                        <?php esc_html_e('or', 'blog2social'); ?> <a class="btn-link b2s-text-underline" target="_blank" href="https://b2s.li/wp-plugin-assistini-website"><?php esc_html_e('Visit Website', 'blog2Social'); ?></a>
-                        
-                        <p class="b2s-text-sm b2s-padding-top-20"><?php esc_html_e('Exciting News: The integration of Assistini into the Blog2Social Plugin is on its way!', 'blog2Social'); ?></p>
-                    </div>
-                    <div class="col-md-5">
-                        <img class="b2s-ass-img-welcome hidden-sm hidden-xs" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-welcome.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                    </div>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex text-center b2s-pb-1">
+                    <h2 class="b2s-text-bold"><?php esc_html_e('You reached the maximum of generated words for your plan.', 'blog2social') ?></h2>
+                </div>
+                <div class="text-center b2s-pb-1"> 
+                    <a href="https://app.assistini.com/?screen=Plan" target="_blank" id="b2s-ass-limit-upgrade-btn" class="btn b2s-ass-btn b2s-w-80"><?php esc_html_e('Upgrade your plan', 'blog2social') ?></a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
+<div class="modal fade" id="b2sAssNoContentModal" class="b2sAssNoContentModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssNoContentModal" aria-hidden="true" data-backdrop="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssNoContentModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex b2s-justify-content-center b2s-pb-1">
+                    <h2 class="b2s-text-bold"><?php esc_html_e('The content of your Wordpress post is empty!', 'blog2social') ?></h2>
+                </div>
+                <div class="b2s-d-flex text-center b2s-pb-1">
+                    <h4 class="alert alert-warning"><?php esc_html_e('Enter a content of your Wordpress post. Alternatively, you can enter content directly into the  input field. Assistini AI will then create suggestions for your social media post.', 'blog2social') ?></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sAssNoContentVideoModal" class="b2sAssNoContentVideoModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssNoContentVideoModal" aria-hidden="true" data-backdrop="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssNoContentVideoModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex b2s-justify-content-center b2s-pb-1">
+                    <h2 class="b2s-text-bold"><?php esc_html_e('Your video description is empty!', 'blog2social') ?></h2>
+                </div>
+                <div class="b2s-d-flex text-center b2s-pb-1">
+                    <h4 class="alert alert-warning"><?php esc_html_e('Enter a description for your video in the Media Library. Alternatively, you can enter content directly into the  input field. Assistini AI will then create suggestions for your social media post.', 'blog2social') ?></h4>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sAssDefaultErrorModal" class="b2sAssDefaultErrorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssDefaultErrorModal" aria-hidden="true" data-backdrop="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssDefaultErrorModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex text-center b2s-pb-1">
+                    <h2 class="b2s-text-bold"><?php esc_html_e('An error has occurred. Please re-authorize and try again.', 'blog2social') ?></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="b2sAssNoTextErrorModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssNoTextErrorModal" aria-hidden="true" data-backdrop="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none b2s-pb-0">
+                <button type="button" class="b2s-modal-close close b2s-padding-15 b2s-pb-0" data-modal-name="#b2sAssNoTextErrorModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body b2s-pt-0">
+                <div class="b2s-d-flex text-center b2s-pb-1">
+                    <h2 class="b2s-text-bold"><?php esc_html_e('Please enter a text that you want to re-generate.', 'blog2social') ?></h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

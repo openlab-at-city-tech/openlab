@@ -4,8 +4,8 @@ Requires PHP: 5.5.3
 Tags: social media tool, social media automation, auto-post, social media plugin, auto repost
 Donate link: https://paypal.me/adenion
 Requires at least: 4.7.0
-Tested up to: 6.6
-Stable tag: 7.5.5
+Tested up to: 6.7
+Stable tag: 8.1.2
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,7 +18,7 @@ Blog2Social automatically creates social media posts for your content and auto-p
 
 _Compatible with WooCommerce, Gutenberg Editor, Hummingbird, Bitly, Rebrand.ly, Sniply, WP Automatic Plugin, Page Builder & RSS Importer._
 
-* New: Network **Bluesky** and **Humhub** Integration
+* New: Threads integration
 
 Download Blog2Social today to make your social media marketing easier than ever for your WordPress site or blog. Blog2Social is a freemium plugin, with a free comprehensive basic version and premium plans offering more advanced features. To ensure compliance with the high quality standards of the new networks’ API rules and community guidelines, some functions of the auto-poster are premium features and not part of the free version. 
 The Blog2Social free version offers you a wide range of features. ([See what’s included in the free version](https://wordpress.org/plugins/blog2social/#faq "Blog2Social Free Features")). 
@@ -32,6 +32,7 @@ To benefit from all the advanced features for automatic sharing and scheduling y
 * **LinkedIn** - Post to your profile (Free) or page (Premium)
 * **XING** - Post to your profile (Free) and page (Premium) 
 * **Instagram** - Post to your Business Account (Premium)
+* **Threads** - Post to your Account (Premium)
 * **Pinterest** - Post to all your different Pinboards (Free)
 * **Flickr** - Post to your Flickr profile (Free)
 * **Reddit** - Post to your subreddits (Free)
@@ -68,6 +69,7 @@ BLOG2SOCIAL FREE
 * Automatically generate hashtags from the tags of your posts.
 * Edit the meta tag information of your blog posts and pages.
 * Use the [free Blog2Social Extension for Firefox and Chrome](https://www.blog2social.com/en/webapp/extension/ "Blog2Social Browser Extension") to save links while browsing and share them whenever you want.
+* Let AI write, refine and optimize your social media posts for you
 
 All these features are included in Blog2Social free. If you want to take your social media marketing to the next level with more advanced sharing and scheduling options for auto-posting and cross-promoting your content you can upgrade to Premium any time. 
 Try Blog2Social Premium with [free 30-day-trial](https://www.blog2social.com/en/plugin/wordpress/premium-trial/ "Try Blog2Social Premium for free") (without any obligations, no automatic subscription). 
@@ -75,7 +77,7 @@ Try Blog2Social Premium with [free 30-day-trial](https://www.blog2social.com/en/
 
 BLOG2SOCIAL PREMIUM
 
-* Share your content on over 20 networks: Facebook (profiles, pages and groups), X (formerly Twitter), LinkedIn (profiles and pages), XING (profiles and groups). VK, Pinterest, Instagram, TikTok, YouTube, Vimeo, VK, Reddit, Torial, Medium, Tumblr, Flickr, Bloglovin’, Diigo, Google Business Profile, Telegram, Ravelry, Discord, Instapaper and Mastodon.
+* Share your content on over 20 networks: Facebook (profiles, pages and groups), X (formerly Twitter), LinkedIn (profiles and pages), XING (profiles and groups). VK, Pinterest, Instagram, TikTok, YouTube, Vimeo, VK, Reddit, Torial, Medium, Tumblr, Flickr, Bloglovin’, Diigo, Google Business Profile, Telegram, Ravelry, Discord, Instapaper and Mastodon, Bluesky and HumHub.
 * Schedule your posts and publish them at any time you’d like.
 * Automatically create, schedule and publish posts from content from your website.
 * Create stunning posts using image galleries or videos.
@@ -90,6 +92,7 @@ BLOG2SOCIAL PREMIUM
 * View all your social media posts in one single place.
 * Automatically generate hashtags from the tags of your posts.
 * Edit the meta tag information of your blog posts and pages.
+* Let AI write, refine and optimize your social media posts for you
 
 10 REASONS FOR CHOOSING BLOG2SOCIAL PREMIUM
 
@@ -107,11 +110,11 @@ Blog2Social automatically turns your content into an adapted format for each soc
 Edit, add or change scheduled posts per drag & drop in the built-in social media calendar. **Keep track of your shared posts and scheduling plan** and filter your posts per network. Posts from other users will be displayed in different colors.
 
 
-**#4 Social Media Auto-Poster** – Switch your social media marketing on auto-pilot
+**#4 Social Media Autoposting** – Switch your social media marketing on auto-pilot
 
-Activate the autoposter to **automatically share your new and updated posts** on social media. No extra steps required!
-**Assign the autoposter settings** to other WordPress users within the same Business license to share posts automatically on connected or assigned social media networks.
-**Auto-post imported content** schedule and share posts from imported RSS-files, use filters to specify content for sharing.
+Activate autoposting to **automatically share your new and updated posts** on social media. No extra steps required!
+**Assign autoposting settings** to other WordPress users within the same Business license to share posts automatically on connected or assigned social media networks.
+**Autopost imported content** schedule and share posts from imported RSS-files, use filters to specify content for sharing.
 
 **#5 Create and share content from any source**  –  Create unique social media posts from text, links, images or videos from any source. 
 
@@ -268,8 +271,20 @@ To get started with the basics of Blog2Social and maybe find some useful tips an
 
 
 == Changelog ==
-= 7.5.5 =
-Usability Optimization and Bugfix
+= 8.1.2 =
+Usability Optimization
+= 8.1.1 =
+Usability Optimization
+= 8.1.0 =
+Threads Integration
+= 8.0.3 =
+Usability Optimization
+= 8.0.2 =
+Usability Optimization
+= 8.0.1 =
+Usability Optimization
+= 8.0.0 =
+Integration AI Text Assistent Assistini
 = 7.5.4 =
 Usability Optimization
 = 7.5.3 =
@@ -322,6 +337,22 @@ Bugfix: Autoposting
 Publish and share videos
 
 == Upgrade Notice ==
+= 8.1.2 =
+Usability Optimization
+= 8.1.1 =
+Usability Optimization
+= 8.1.0 =
+Threads Integration
+= 8.0.3 =
+Usability Optimization
+= 8.0.2 =
+Usability Optimization
+= 8.0.2 =
+Usability Optimization
+= 8.0.1 =
+Usability Optimization
+= 8.0.0 =
+Integration AI Text Assistent Assistini
 = 7.5.4 =
 Usability Optimization
 = 7.5.3 =

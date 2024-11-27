@@ -624,3 +624,17 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="b2s-changelog-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-changelog-modal" aria-hidden="true" data-backdrop="false" style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="b2s-changelog-header">
+                    <span class="b2s-text-bold"><?php esc_html_e('Update news', 'blog2social'); ?></span>
+                    <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-changelog-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <?php echo B2S_Changelog::getChangelogContent(); ?>
+            </div>
+        </div>
+    </div>
+</div>

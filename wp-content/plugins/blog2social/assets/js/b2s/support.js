@@ -54,6 +54,17 @@ jQuery(document).ready(function () {
 //}
 
 
+jQuery(document).on('click', '#chatbotBtn', function () {
+    wop(jQuery(this).attr('data-url'), 'Blog2Social Chat');
+    return true;
+});
+
+function wop(url, name) {
+    var location = window.location.protocol + '//' + window.location.hostname;
+    url = encodeURI(url + '&location=' + location);
+    window.open(url, name, "width=650,height=800,scrollbars=yes,toolbar=no,status=no,resizable=no,menubar=no,location=no,directories=no,top=20,left=20");
+}
+
 function base64EncodeUnicode(str) {
     var utf8Bytes = encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, function (match, p1) {
         return String.fromCharCode('0x' + p1);
@@ -63,7 +74,7 @@ function base64EncodeUnicode(str) {
 }
 
 jQuery(document).on('click', '.b2s-support-check-sytem', function () {
-    
+
     var heartbeat_status = true;
     if (typeof wp.heartbeat == "undefined") {
         heartbeat_status = false;
@@ -140,38 +151,38 @@ jQuery(document).on('click', '#b2s-reload-debug-btn', function () {
     }
 });
 
-jQuery(document).on('click', '#b2s-community-register', function() {
+jQuery(document).on('click', '#b2s-community-register', function () {
     jQuery('#b2s-community-username').removeClass('error');
     jQuery('#b2s-community-email').removeClass('error');
     jQuery('#b2s-community-password').removeClass('error');
-    if(jQuery('#b2s-community-username').val().length < 1) {
+    if (jQuery('#b2s-community-username').val().length < 1) {
         jQuery('#b2s-community-username').addClass('error');
         return false;
     }
-    if(jQuery('#b2s-community-email').val().length < 1) {
+    if (jQuery('#b2s-community-email').val().length < 1) {
         jQuery('#b2s-community-email').addClass('error');
         return false;
     }
-    if(jQuery('#b2s-community-password').val().length < 1) {
+    if (jQuery('#b2s-community-password').val().length < 1) {
         jQuery('#b2s-community-password').addClass('error');
         return false;
     }
-    
+
     jQuery('.b2s-community-register-loading').show();
     jQuery('.b2s-community-register-form').hide();
     jQuery('.b2s-community-error').hide();
     var username = jQuery('#b2s-community-username').val();
     var email = jQuery('#b2s-community-email').val();
     var password = jQuery('#b2s-community-password').val();
-    
-    if(password.length < 8) {
+
+    if (password.length < 8) {
         jQuery('.b2s-community-error[data-error-type="invalid_password"]').show();
         jQuery('#b2s-community-password').addClass('error');
         jQuery('.b2s-community-register-loading').hide();
         jQuery('.b2s-community-register-form').show();
         return false;
     }
-    
+
     jQuery.ajax({
         url: ajaxurl,
         type: "POST",
@@ -196,12 +207,12 @@ jQuery(document).on('click', '#b2s-community-register', function() {
                 jQuery('.b2s-community-register-success').show();
                 return true;
             } else {
-                if(typeof data.error_reason == 'undefined' || data.error_reason.length < 1) {
+                if (typeof data.error_reason == 'undefined' || data.error_reason.length < 1) {
                     jQuery('.b2s-community-error[data-error-type="invalid_data"]').show();
-                } else if(data.error_reason == 'nonce') {
+                } else if (data.error_reason == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
                 } else {
-                    jQuery('.b2s-community-error[data-error-type="'+data.error_reason+'"]').show();
+                    jQuery('.b2s-community-error[data-error-type="' + data.error_reason + '"]').show();
                 }
             }
             jQuery('.b2s-community-register-loading').hide();
@@ -209,11 +220,11 @@ jQuery(document).on('click', '#b2s-community-register', function() {
             return false;
         }
     });
-    
+
 });
 
-jQuery(document).on('change', '#b2s-community-terms', function() {
-    if(jQuery(this).is(':checked')) {
+jQuery(document).on('change', '#b2s-community-terms', function () {
+    if (jQuery(this).is(':checked')) {
         jQuery('#b2s-community-register').prop("disabled", false);
     } else {
         jQuery('#b2s-community-register').prop("disabled", true);

@@ -1,16 +1,8 @@
-.b2s-dashboard-h4{
-    font-weight: 700;
-    font-size: 24px !important;
-}
 .b2s-dashboard-h5{
     font-size: 24px;  
     margin-left: 22px;
     color: #72777c !important;
 }
-.b2s-dashboard-h6{
-    font-size: 18px;  
-}
-
 .form-inline{
     margin-bottom: 0px !important;
 }
@@ -62,14 +54,6 @@ body .form-inline{
     cursor:pointer
 }
 
-.fc-showall-button{
-    color: #fff !important;
-    background-color: #337ab7 !important;
-    border-color: #204d74 !important;
-    text-decoration: none !important;
-}
-
-
 @media(max-width: 530px)
 {
     .b2s-widget-block-image-content{
@@ -98,45 +82,180 @@ body .form-inline{
     }
 }
 
-ul.b2s-sort-result-item-area{
-    margin-bottom: 0;
+#b2s-mail-update-input, .b2s-mail-btn {
+    z-index: 0 !important;
 }
 
-.b2sDetailsSchedPostBtn{
-    display: none !important;
+/*new layout 202410 */
+.b2s-panel-bg-body{
+    background-color: #334155 !important;
+}
+.b2s-panel-bg-footer{
+    background-color: #273446 !important;
+}
+.b2s-font-color-green{
+    color: #79b331 !important;
+}
+.b2s-font-color-white{
+    color: #ffffff !important;
+}
+.panel-footer{
+    border: none !important;
+}
+.b2s-panel-header-addon{
+    background-color: #334155 !important;
+    padding: 5px;
+}
+.b2s-panel-body-dashboard{
+    height: 275px !important;
+}
+.b2s-panel-body-dashboard-premium{
+    height: 225px !important;
 }
 
-/* Aktivität */
-#b2s-activity-date-picker{
-    width: 85px;
-    border-radius: 5px;
-    border: 1px solid #ddd;
+.b2s-btn-dashboard-outline {
+    border-style:solid !important;
+    border-width:1px !important;
+    border-color:#79b331 !important;
+    color: #79b331 !important;
+    background-color:white !important;
+    border-radius:25px !important;
 }
 
-.b2s-activity-search-content{
-    padding-top: 15px;
-    padding-left:10px;
+.b2s-btn-dashboard-filled {
+    border-style:solid !important;
+    border-width:0px !important;
+    border-color:#79b331 !important;
+    color: #ffffff !important;
+    background-color:#79b331 !important;
+    border-radius:25px !important;
+}
+
+.b2s-list-dashboard li {
+    display: block;
+    color: #fff;
+    margin:10px;
+}
+
+.b2s-list-dashboard li:before {
+    content: "\2714";
+    font-size: 15px;
+    float: left;
+    color: #79b331 !important;
+    padding-right: 5px;
+}
+
+.b2s-panel-dashboard-footer{
+    background-color: #273446 !important;
+}
+
+.b2s-panel-height-300{
+    height:300px !important;
+}
+
+/*wigdet calender*/
+.b2sdatepicker--cell.-selected-,
+.b2sdatepicker--cell.-selected-.-current- {
+    border-style:solid !important;
+    border-width:1px !important;
+    border-color:#79b331 !important;
+    color: #79b331 !important;
+    background-color:white !important;
+    border-radius: 50% !important;
+}
+
+.b2sdatepicker--nav-action svg {
+    border-style:solid !important;
+    border-width:1px !important;
+    border-color:#79b331 !important;
+    color: #79b331 !important;
+    background-color:white !important;
+    border-radius:50% !important;
+}
+
+.b2sdatepicker--nav-action path {
+    stroke: black !important;
+}
+
+.b2sdatepicker--nav-title {
+    font-weight: bold !important;
+    font-size: large !important;
+    align-items: center !important;
+}
+
+.b2sdatepicker--nav-title i {
+    font-size: medium !important;
+    font-weight: normal !important;
+}
+
+.b2sdatepicker {
+    border: none !important;
+    width: 100% !important;
+}
+
+.b2sdatepicker--day-name {
+    color: #554d5d !important;
+    font-weight: 600 !important;
+}
+
+.b2sdatepicker--cell.-current- {
+    color: black;
     font-weight: 600;
 }
 
-.b2sSortForm.form-inline{
-    margin-bottom: 0px !important;
+.b2sdatepicker--highlight {
+    display: flex;
+    flex-direction: column !important;
+    align-items: center;
 }
 
-.fc-day-grid-event{
-    cursor: pointer;   
+.b2sdatepicker--color-circle {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-top: 3px;
 }
 
-.fc-left > h2 {
-    margin-left: 20px !important;
-    color: #72777c !important;
-}
-body .fc-state-default{
-    color: #000;
-    background-color: #fff;
-    border-color: #ccc;
+.b2sdatepicker--color-container {
+    display: flex;
+    gap: 2px;
+    margin-top: 0px;
 }
 
-#b2s-mail-update-input, .b2s-mail-btn {
-    z-index: 0 !important;
+.b2sdatepicker--day-number {
+    display: flex;
+    align-items: end;
+    height: 100%;
+}
+
+/*widget activity*/
+ul.b2s-timeline {
+    list-style-type: none;
+    position: relative;
+}
+ul.b2s-timeline:before {
+    content: ' ';
+    background: #d4d9df;
+    display: inline-block;
+    position: absolute;
+    left: 5px;
+    width: 2px;
+    height: 100%;
+    z-index: 400;
+}
+ul.b2s-timeline > li {
+    margin: 20px 0;
+    padding-left: 20px;
+}
+ul.b2s-timeline > li:before {
+    content: ' ';
+    background: white;
+    display: inline-block;
+    position: absolute;
+    border-radius: 50%;
+    border: 3px solid #22c0e8;
+    left: -4px;
+    width: 20px;
+    height: 20px;
+    z-index: 400;
 }

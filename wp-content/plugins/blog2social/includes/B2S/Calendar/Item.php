@@ -33,6 +33,7 @@ class B2S_Calendar_Item {
     private $errorText = null;
     private $multi_images = null;
     private $errorTextList = null;
+    private $post_id = null;
 
     public function __construct(\StdClass $data = null) {
         $this->errorTextList = unserialize(B2S_PLUGIN_NETWORK_ERROR);

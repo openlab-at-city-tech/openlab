@@ -33,16 +33,8 @@
                                 <div class="row">
                                     <div class="col-md-12">
                                         <div class="col-md-12">
-                                            <form action="<?php echo esc_url(B2S_Tools::getSupportLink('faq_direct')); ?>" method="GET" target="_blank">
-                                                <input type="hidden" name="action" value="search" />
-                                                <h4 class="b2s-text-bold"><?php esc_html_e('How can we help?', 'blog2social') ?></h4>
-                                                <div class="input-group">
-                                                    <input type="text" name="search" placeholder="<?php esc_html_e('Enter your question or keyword here', 'blog2social') ?>" class="form-control">
-                                                    <span class="input-group-btn">
-                                                        <button class="btn btn-primary"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
-                                                    </span>
-                                                </div>
-                                            </form>
+                                            <br>   
+                                            <button id="chatbotBtn" data-url="https://service.blog2social.com/chat/?s=<?php echo time(); ?>" class="btn btn-primary"><i class="glyphicon glyphicon-modal-window"></i> <?php esc_html_e('Request Support', 'blog2social') ?></button>
                                         </div>
                                         <div class="clearfix"></div>
                                         <br>
@@ -51,12 +43,12 @@
                                                 <h4 class="b2s-bold"><?php esc_html_e('Couldn\'t find your answer?', 'blog2social') ?></h4>
                                                 <p class="b2s-gray-text"><?php echo sprintf(__('To get technical help, please create your account to access the Blog2Social support community to find more answers or to ask your question. (<a href="%s" target="_blank">Info</a>)', 'blog2social'), 'https://community.blog2social.com/register'); ?></p>
                                                 <br>
-                                                <?php 
-                                                    require_once B2S_PLUGIN_DIR . 'includes/Options.php';
-                                                    $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
-                                                    $registerdCommunity = $options->_getOption('registered_community');
-                                                    if($registerdCommunity == false) {
-                                                ?>
+                                                <?php
+                                                require_once B2S_PLUGIN_DIR . 'includes/Options.php';
+                                                $options = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID);
+                                                $registerdCommunity = $options->_getOption('registered_community');
+                                                if ($registerdCommunity == false) {
+                                                    ?>
                                                     <div class="b2s-community-register-form">
                                                         <h5 class="b2s-bold"><?php esc_html_e('Create your support account to ask questions and get help', 'blog2social'); ?></h5>
                                                         <div class="alert alert-danger b2s-community-error" data-error-type="invalid_data" style="display: none;"><?php esc_html_e('Unknown error has occurred. Please try again.', 'blog2social') ?></div>
@@ -94,7 +86,7 @@
                                                     <br>
                                                 <?php } ?>
                                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('community')) ?>" class="btn btn-success b2s-community-btn"><?php esc_html_e('Browse the Blog2Social support community', 'blog2social') ?></a>
-                                                <?php if($registerdCommunity == false) { ?>
+                                                <?php if ($registerdCommunity == false) { ?>
                                                     <br><br>
                                                     <p><?php echo sprintf(__('<b>Already registered?</b> <a href="%s" target="_blank">Login to your support account</a> to ask questions or join the discussion.', 'blog2social'), 'https://community.blog2social.com/'); ?></p>
                                                     <br>

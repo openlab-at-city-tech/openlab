@@ -59,18 +59,14 @@ class B2S_Curation_View {
         $authContent = '';
         $content = '<br>';
         $content .='<div class="row">';
-        $content .='<div class="col-xs-12 col-sm-5 col-lg-3">';
+        $content .='<div class="col-xs-12 col-sm-6 col-lg-4">';
         $content .='<label for="b2s-curation-ship-type">' . esc_html__('Share your post', 'blog2social') . '</label>';
         $content .='<select style="width:100%;" id="b2s-post-curation-ship-type" class="b2s-select" data-user-version="' . B2S_PLUGIN_USER_VERSION . '" name="ship_type">';
         $content .='<option value="0">' . esc_html__('immediately', 'blog2social') . '</option>';
         $content .='<option value="1">' . esc_html__('at scheduled times', 'blog2social') . ' ' . $isPremium . '</option>';
         $content .= '</select>';
         $content .='</div>';
-        $content .='<div class="col-xs-12 col-sm-5 col-lg-3 b2s-post-curation-ship-date-area">';
-        $content .='<label for="b2s-post-curation-ship-date">' . esc_html__('Date', 'blog2social') . '</label>';
-        $content .='<input type = "text" placeholder = "' . esc_html__('Date', 'blog2social') . '" name = "ship_date"  id="b2s-post-curation-ship-date" class = "b2s-post-curation-ship-date form-control b2s-input" disabled = "disabled" readonly  data-timepicker="true" data-language="' . esc_attr(substr(B2S_LANGUAGE, 0, 2)) . '" data-time-format="' . esc_attr($timeFormat) . '" data-date-format="' . esc_attr($dateFormat) . '">';
-        $content .='</div>';
-        $content .='<div class="col-xs-12 col-sm-5 col-lg-3">';
+        $content .='<div class="col-xs-12 col-sm-6 col-lg-4">';
         $content .='<label for="b2s-curation-profile-select">' . esc_html__('Select network collection:', 'blog2social') . '</label><a class="pull-right b2s-network-info-modal-btn" href="#">' . esc_html__('Info', 'blog2social') . '</a>';
         $content .='<select style="width:100%;" id="b2s-post-curation-profile-select" class="b2s-select" name="profile_select">';
         foreach ($mandant as $k => $m) {
@@ -80,6 +76,7 @@ class B2S_Curation_View {
         }
         $content .= '</select>';
         $content .='</div>';
+        
         $content .= $authContent;
 
         //TOS Twitter 032018 - none multiple Accounts - User select once
@@ -94,7 +91,7 @@ class B2S_Curation_View {
             }
         }
         if (!empty($twitterContent)) {
-            $content .='<div class="col-xs-12 col-sm-5 col-lg-3 b2s-curation-twitter-area">';
+            $content .='<div class="col-xs-12 col-sm-6 col-lg-4 b2s-curation-twitter-area">';
             $content .='<label for="b2s-curation-twitter-select">' . esc_html__('Select Twitter profile:', 'blog2social') . '</label>';
             $content .='<select style="width:100%;" id="b2s-post-curation-twitter-select" class="b2s-select" name="twitter_select">';
             $content .=$twitterContent;
@@ -102,15 +99,26 @@ class B2S_Curation_View {
             $content .='</div>';
         }
         $content .='</div>';
+        
+        $content .= '<br>';
+        $content .='<div class="row">';
+        $content .='<div class="col-xs-12 col-sm-6 col-lg-4 b2s-post-curation-ship-date-area">';
+        $content .='<label for="b2s-post-curation-ship-date">' . esc_html__('Date', 'blog2social') . '</label>';
+        $content .='<input type = "text" placeholder = "' . esc_html__('Date', 'blog2social') . '" name = "ship_date"  id="b2s-post-curation-ship-date" class = "b2s-post-curation-ship-date form-control b2s-input" disabled = "disabled" readonly  data-timepicker="true" data-language="' . esc_attr(substr(B2S_LANGUAGE, 0, 2)) . '" data-time-format="' . esc_attr($timeFormat) . '" data-date-format="' . esc_attr($dateFormat) . '">';
+        $content .='</div>';
+        $content .='</div>';
+        
+        
+        
         $content .= '<br>';
         $content .='<hr>';
         $content .='<input type="hidden" class="b2s-post-curation-action" name="action" value="">';
         $content .='<div class="row">';
-        $content .='<div class="col-xs-12 col-sm-8">';
+        $content .='<div class="col-sm-12 col-md-8">';
         $content .= '<button class="btn btn-primary pull-left" type="submit" id="b2s-btn-curation-customize">' . esc_html__('Customize & Schedule', 'blog2social') . '</button>';
         $content .= '<button class="btn btn-primary pull-left" type="submit" id="b2s-btn-curation-draft">' . esc_html__('Save as Draft', 'blog2social') . '</button>';
         $content .='</div>';
-        $content .='<div class="col-xs-12 col-sm-4">';
+        $content .='<div class="col-sm-12 col-md-4">';
         $content .= '<button class="btn btn-success pull-right" type="submit" id="b2s-btn-curation-share">' . esc_html__('Share', 'blog2social') . '</button>';
         $content .='</div>';
         $content .='</div>';

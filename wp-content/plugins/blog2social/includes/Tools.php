@@ -16,7 +16,13 @@ class B2S_Tools {
             delete_option('B2S_PLUGIN_PRIVACY_POLICY_USER_ACCEPT_' . B2S_PLUGIN_BLOG_USER_ID);
 
             $currentDate = new DateTime("now", wp_timezone());
-            $version = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getUserDetails', 'blog_user_id' => $blog_user_id, 'blog_url' => $blog_url, 'email' => $email, 'current_date' => $currentDate->format('Y-m-d'), 'token' => B2S_PLUGIN_TOKEN, 'version' => B2S_PLUGIN_VERSION), 30));
+            $version = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getUserDetails', 
+                'blog_user_id' => $blog_user_id, 
+                'blog_url' => $blog_url, 
+                'email' => $email, 
+                'current_date' => $currentDate->format('Y-m-d'), 
+                'token' => B2S_PLUGIN_TOKEN, 
+                'version' => B2S_PLUGIN_VERSION), 30));
 
             $tokenInfo = array();
             $tokenInfo['B2S_PLUGIN_USER_VERSION'] = (isset($version->version) ? $version->version : 0);
@@ -153,6 +159,11 @@ class B2S_Tools {
         if ($type == 'faq') {
             return 'https://service.blog2social.com/support?url=' . get_option('home') . '&token=' . B2S_PLUGIN_TOKEN;
         }
+        
+        if($type == 'faq_license_key'){
+            return 'https://www.blog2social.com/en/faq/content/7/48/en/where-do-i-find-my-license-key.html';
+        }
+        
         if ($type == 'faq_direct') {
             return 'https://www.blog2social.com/' . (($lang == 'en') ? 'en' : 'de') . "/faq/";
         }
@@ -182,10 +193,19 @@ class B2S_Tools {
             return 'https://www.blog2social.com/' . (($lang == 'en') ? 'en/privacy-policy' : 'de/datenschutz');
         }
 
+        if($type == 'ass_account'){
+            return 'https://app.assistini.com/?screen=Plan';
+        }
+        
         if ($type == 'pinterest_app_tos_spam') {
             return 'https://developers.pinterest.com/docs/reference/spam/';
         }
 
+        if( $type == 'dashboard-video-posting-addon-info'){
+            return ($lang == 'en') ? 'https://en.blog2social.com/video-posting/' : 'https://de.blog2social.com/video-posting/';
+        }
+        
+        
         if ($type == 'userTimeSettings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=5&id=32&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=5&id=43&artlang=de';
         }
@@ -457,6 +477,9 @@ class B2S_Tools {
         if ($type == 'network_guide_link_39') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1208' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1205';
         }
+        if ($type == 'network_guide_link_44') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1251' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1246';
+        }
         if ($type == 'TOKEN') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1181' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1175';
         }
@@ -529,6 +552,12 @@ class B2S_Tools {
         if ($type == "addon_video") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=video&token=' . B2S_PLUGIN_TOKEN;
         }
+        if ($type == "addon_social_account") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network&token=' . B2S_PLUGIN_TOKEN;
+        }
+        if ($type == "addon_user_licence") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=user&token=' . B2S_PLUGIN_TOKEN;
+        }
         if ($type == "twitter_threads") {
             return ($lang == "de") ? 'https://www.blog2social.com/de/faq/index.php?solution_id=1149' : 'https://www.blog2social.com/en/faq/index.php?solution_id=1152';
         }
@@ -588,10 +617,10 @@ class B2S_Tools {
                     if (isset($userDetails['B2S_PLUGIN_USER_VERSION']) && (int) $userDetails['B2S_PLUGIN_USER_VERSION'] > 0) {
                         $userVersion = $userDetails['B2S_PLUGIN_USER_VERSION'];
                         if (is_array($b2sVersionType) && isset($b2sVersionType[$userVersion]) && !empty($b2sVersionType[$userVersion])) {
-                            $ver = " (Blog2Social " . esc_html__('License', 'blog2social') . ": " . esc_html($b2sVersionType[$userVersion]) . ")";
+                            $ver = ", " . esc_html__('Current license', 'blog2social') . ": " . esc_html($b2sVersionType[$userVersion]);
                         }
                     }
-                    $options .= '<option value="' . esc_attr($user->data->ID) . '" ' . (($user->data->ID == $selectId) ? "selected" : "") . '>' . esc_html($user->data->display_name) . " (" . esc_html($user->data->user_email) . ")" . $ver . '</option>';
+                    $options .= '<option value="' . esc_attr($user->data->ID) . '" ' . (($user->data->ID == $selectId) ? "selected" : "") . '>' . esc_html($user->data->display_name) . " (".esc_html__('Email', 'blog2social') .': '. esc_html($user->data->user_email)  . $ver . ')</option>';
                 }
             }
         }

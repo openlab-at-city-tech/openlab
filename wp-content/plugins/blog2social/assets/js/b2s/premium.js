@@ -1,11 +1,18 @@
 jQuery.noConflict();
 
+jQuery(document).ready(function () {
+    if (jQuery('#b2s-user-current-version-id').val() <= 2) {
+        jQuery('#b2s_license_user_select_chosen').css('opacity', 0.5);
+    }
+});
+
+
 jQuery("#b2s-license-user-select").chosen({
     no_results_text: jQuery('#b2s-no-user-found').val(),
     search_contains: true
 });
 
-jQuery('.chosen-search input').attr('placeholder', 'Search for blog user');
+jQuery('.chosen-search input').attr('placeholder', 'Search for a team member');
 
 jQuery("#b2s-license-user-select").change(function () {
     jQuery('#b2s-license-user').val(jQuery('#b2s-license-user-select').val());
@@ -15,6 +22,12 @@ jQuery("#b2s-license-user-select").change(function () {
 var current_chosen_search = "";
 var current_chosen_search_count = 0;
 jQuery('.chosen-search input').on('keyup', function () {
+
+    if (jQuery('#b2s-user-current-version-id').val() <= 2) {
+        jQuery('#b2s-premium-info-team-management-modal').modal('show');
+        return false;
+    }
+
     if (this.value != current_chosen_search) {
         current_chosen_search = this.value;
         if (current_chosen_search.length >= 3) {

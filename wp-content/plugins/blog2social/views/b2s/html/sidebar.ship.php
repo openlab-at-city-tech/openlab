@@ -30,10 +30,10 @@ $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : fal
                         <?php } ?>
                     </div>
                 </div>
-                <br>
+
                 <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LICENSE', B2S_PLUGIN_ADMIN)) { ?> 
                     <div class="row">
-                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10">
+                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10 b2s-margin-top-8">
                             <div class="panel-body b2s-padding-10">
                                 <div class="media d-flex">
                                     <div class="align-self-center">
@@ -132,6 +132,25 @@ $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : fal
                                 </div>
                             </div>
                         </div>
+
+                        <div class="b2s-ass-sidebar-account panel panel-default b2s-margin-right-10 b2s-margin-bottom-10" style="display:none;">
+                            <div class="panel-body b2s-padding-10">
+                                <div class="media d-flex align">
+                                    <div class="align-self-center">
+                                        <img class="float-left" style="margin-top:-4px;" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo-face-small.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini">
+                                        <span class="b2s-sidebar-ass-title"><?php esc_html_e("Assistini AI", "blog2social") ?></span>
+                                        <button id="b2s-sidebar-ship-ass-logout-btn" class="pull-right btn-link b2s-p-0"><?php esc_html_e("log out", "blog2social") ?></button>
+                                        <hr class="b2s-margin-bottom-10">
+                                        <div class="media-body b2s-font-size-11">
+                                            <span id="b2s-sidebar-ship-ass-words" class="b2s-span-float-left"><span id="sidebar_ship_ass_words_open" class="b2s-text-bold">0</span> <?php esc_html_e("remaining from", "blog2social") ?> <span id="sidebar_ship_ass_words_total" class="b2s-text-bold">0</span> <?php esc_html_e("words", "blog2social"); ?></span>
+                                            <span id="b2s-sidebar-ship-ass-account" class="b2s-span-float-right"><a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('ass_account')); ?>"><?php esc_html_e("Manage Account", "blog2social") ?></a></span>
+                                            <div class="clearfix"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 <?php } ?>
             </div>
