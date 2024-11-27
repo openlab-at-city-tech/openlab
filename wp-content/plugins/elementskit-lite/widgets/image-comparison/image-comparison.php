@@ -648,13 +648,16 @@ class ElementsKit_Widget_Image_Comparison extends Widget_Base {
 			$this->add_render_attribute( 'image_comparison_wrapper', 'class', 'elementskit-image-comparison image-comparison-container');
 		endif;
 
+		$label_after = \ElementsKit_Lite\Utils::remove_special_chars($settings['ekit_img_comparison_label_after']);
+		$label_before = \ElementsKit_Lite\Utils::remove_special_chars($settings['ekit_img_comparison_label_before']);
+
 		$this->add_render_attribute(
 			'image_comparison_wrapper',
 			[
 				'data-offset' => esc_attr($settings['ekit_img_comparison_offset']['size'] / 100),
 				'data-overlay' => esc_attr($settings['ekit_img_comparison_overlay']),
-				'data-label_after' => esc_attr($settings['ekit_img_comparison_label_after']),
-				'data-label_before' => esc_attr($settings['ekit_img_comparison_label_before']),
+				'data-label_after' => esc_attr($label_after),
+				'data-label_before' => esc_attr($label_before),
 				'data-move_slider_on_hover' => esc_attr($settings['ekit_img_comparison_move_slider_on_hover']),
 				'data-click_to_move' => esc_attr($settings['ekit_img_comparison_click_to_move']),
 			]

@@ -1138,6 +1138,11 @@ class ElementsKit_Widget_Video extends Widget_Base {
 		if (isset($ekit_video_self_external_url) && filter_var($ekit_video_self_external_url, FILTER_VALIDATE_URL)) {
 			$clean_url = $ekit_video_self_external_url;
 		}
+
+		$clean_url = ($ekit_video_self_url === 'yes' && $clean_url !== '') 
+		? $clean_url 
+		: (isset($ekit_video_player_self_hosted['url']) ? esc_url($ekit_video_player_self_hosted['url']) : '#');
+		
 		?>
 		<div class="video-content" data-video-player="<?php echo esc_attr(wp_json_encode($features)); ?>" data-video-setting="<?php echo esc_attr(wp_json_encode($video_settings)); ?>">
 			<?php if($ekit_video_popup_video_type === 'vimeo' || $ekit_video_popup_video_type === 'youtube') :

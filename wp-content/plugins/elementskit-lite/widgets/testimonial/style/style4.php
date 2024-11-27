@@ -20,12 +20,21 @@
 								<?php if (isset($testimonial['client_photo']) && !empty($testimonial['client_photo']['url']) && sizeof($testimonial['client_photo']) > 0) {  ?>
 									
 									<?php if ( !empty( $testimonial['client_photo']['url'] ) ): ?>
-									<div class="elementskit-commentor-image ekit-testimonial--avatar">
-										<?php echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full', [
-											'height'	=> esc_attr($ekit_testimonial_client_image_size['size']),
-											'width'	=> esc_attr($ekit_testimonial_client_image_size['size'])
-										]), \ElementsKit_Lite\Utils::get_kses_array());?>
-									</div>
+										<div class="elementskit-commentor-image ekit-testimonial--avatar">
+											<?php
+											$client_image_size = isset($ekit_testimonial_client_image_size) ? $ekit_testimonial_client_image_size : '';
+
+											if (is_array($client_image_size) && isset($client_image_size['size'])) {
+												echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full', [
+													'height' => esc_attr($client_image_size['size']),
+													'width' => esc_attr($client_image_size['size'])
+												]), \ElementsKit_Lite\Utils::get_kses_array());
+											} else {
+												// Handle the case where $client_image_size is not an array or 'size' is not set
+												echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full'), \ElementsKit_Lite\Utils::get_kses_array());
+											}
+											?>
+										</div>
 									<?php endif; ?>
 								<?php } ?>
 								<span class="elementskit-profile-info">
@@ -52,8 +61,6 @@
 											}
 										?>
 									</span>
-
-									
 
 								<?php endif;?>
 								<?php if ( isset($testimonial['review']) && !empty($testimonial['review'])) : ?>

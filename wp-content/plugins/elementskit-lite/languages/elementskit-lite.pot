@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the ElementsKit Lite package.
 msgid ""
 msgstr ""
-"Project-Id-Version: ElementsKit Lite 3.2.8\n"
+"Project-Id-Version: ElementsKit Lite 3.3.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/elementskit-lite\n"
-"POT-Creation-Date: 2024-09-22 10:21:51+00:00\n"
+"POT-Creation-Date: 2024-11-17 06:12:59+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -747,7 +747,7 @@ msgstr ""
 #: widgets/header-search/header-search.php:612 widgets/heading/heading.php:458
 #: widgets/heading/heading.php:639 widgets/heading/heading.php:783
 #: widgets/icon-box/icon-box.php:801 widgets/icon-box/icon-box.php:841
-#: widgets/icon-box/icon-box.php:1669
+#: widgets/icon-box/icon-box.php:1667
 #: widgets/image-accordion/image-accordion.php:492
 #: widgets/image-box/image-box.php:1206 widgets/image-box/image-box.php:1293
 #: widgets/image-comparison/image-comparison.php:287
@@ -1323,7 +1323,7 @@ msgstr ""
 #: widgets/header-offcanvas/header-offcanvas.php:98
 #: widgets/header-offcanvas/header-offcanvas.php:169
 #: widgets/icon-box/icon-box.php:79 widgets/icon-box/icon-box.php:260
-#: widgets/icon-box/icon-box.php:947 widgets/image-box/image-box.php:352
+#: widgets/icon-box/icon-box.php:946 widgets/image-box/image-box.php:352
 #: widgets/mail-chimp/mail-chimp.php:199 widgets/mail-chimp/mail-chimp.php:299
 #: widgets/mail-chimp/mail-chimp.php:397 widgets/mail-chimp/mail-chimp.php:477
 #: widgets/mail-chimp/mail-chimp.php:1089 widgets/nav-menu/nav-menu.php:250
@@ -1343,7 +1343,7 @@ msgid "Icon"
 msgstr ""
 
 #: modules/megamenu/views/options-menu-item.php:11
-#: widgets/icon-box/icon-box.php:433 widgets/icon-box/icon-box.php:1619
+#: widgets/icon-box/icon-box.php:433 widgets/icon-box/icon-box.php:1617
 msgid "Badge"
 msgstr ""
 
@@ -1489,7 +1489,7 @@ msgstr ""
 #: widgets/icon-box/icon-box.php:97 widgets/icon-box/icon-box.php:187
 #: widgets/icon-box/icon-box.php:199 widgets/icon-box/icon-box.php:249
 #: widgets/icon-box/icon-box.php:295 widgets/icon-box/icon-box.php:340
-#: widgets/icon-box/icon-box.php:1490 widgets/icon-box/icon-box.php:1533
+#: widgets/icon-box/icon-box.php:1488 widgets/icon-box/icon-box.php:1531
 #: widgets/image-accordion/image-accordion.php:59
 #: widgets/image-accordion/image-accordion.php:97
 #: widgets/image-accordion/image-accordion.php:141
@@ -1553,7 +1553,7 @@ msgstr ""
 #: widgets/icon-box/icon-box.php:98 widgets/icon-box/icon-box.php:188
 #: widgets/icon-box/icon-box.php:200 widgets/icon-box/icon-box.php:250
 #: widgets/icon-box/icon-box.php:296 widgets/icon-box/icon-box.php:341
-#: widgets/icon-box/icon-box.php:1491 widgets/icon-box/icon-box.php:1534
+#: widgets/icon-box/icon-box.php:1489 widgets/icon-box/icon-box.php:1532
 #: widgets/image-accordion/image-accordion.php:60
 #: widgets/image-accordion/image-accordion.php:98
 #: widgets/image-accordion/image-accordion.php:142
@@ -2285,8 +2285,8 @@ msgstr ""
 #: widgets/header-offcanvas/header-offcanvas.php:780
 #: widgets/header-search/header-search.php:350 widgets/heading/heading.php:617
 #: widgets/icon-box/icon-box.php:569 widgets/icon-box/icon-box.php:654
-#: widgets/icon-box/icon-box.php:1358 widgets/icon-box/icon-box.php:1422
-#: widgets/icon-box/icon-box.php:1682
+#: widgets/icon-box/icon-box.php:1356 widgets/icon-box/icon-box.php:1420
+#: widgets/icon-box/icon-box.php:1680
 #: widgets/image-accordion/image-accordion.php:673
 #: widgets/image-box/image-box.php:576 widgets/image-box/image-box.php:695
 #: widgets/image-box/image-box.php:889 widgets/image-box/image-box.php:941
@@ -2351,7 +2351,7 @@ msgstr ""
 #: widgets/header-search/header-search.php:166
 #: widgets/header-search/header-search.php:593
 #: widgets/header-search/header-search.php:623
-#: widgets/icon-box/icon-box.php:1050
+#: widgets/icon-box/icon-box.php:1049
 #: widgets/image-accordion/image-accordion.php:890
 #: widgets/mail-chimp/mail-chimp.php:1345
 #: widgets/mail-chimp/mail-chimp.php:1381
@@ -2440,9 +2440,9 @@ msgstr ""
 #: widgets/funfact/funfact.php:679 widgets/funfact/funfact.php:1124
 #: widgets/header-search/header-search.php:385 widgets/heading/heading.php:503
 #: widgets/heading/heading.php:1266 widgets/icon-box/icon-box.php:604
-#: widgets/icon-box/icon-box.php:684 widgets/icon-box/icon-box.php:997
-#: widgets/icon-box/icon-box.php:1063 widgets/icon-box/icon-box.php:1368
-#: widgets/icon-box/icon-box.php:1432
+#: widgets/icon-box/icon-box.php:684 widgets/icon-box/icon-box.php:996
+#: widgets/icon-box/icon-box.php:1062 widgets/icon-box/icon-box.php:1366
+#: widgets/icon-box/icon-box.php:1430
 #: widgets/image-accordion/image-accordion.php:422
 #: widgets/image-accordion/image-accordion.php:690
 #: widgets/image-accordion/image-accordion.php:701
@@ -2535,9 +2535,9 @@ msgstr ""
 #: widgets/funfact/funfact.php:689 widgets/funfact/funfact.php:1132
 #: widgets/header-search/header-search.php:533 widgets/heading/heading.php:727
 #: widgets/icon-box/icon-box.php:628 widgets/icon-box/icon-box.php:691
-#: widgets/icon-box/icon-box.php:1007 widgets/icon-box/icon-box.php:1078
-#: widgets/icon-box/icon-box.php:1375 widgets/icon-box/icon-box.php:1439
-#: widgets/icon-box/icon-box.php:1650
+#: widgets/icon-box/icon-box.php:1006 widgets/icon-box/icon-box.php:1077
+#: widgets/icon-box/icon-box.php:1373 widgets/icon-box/icon-box.php:1437
+#: widgets/icon-box/icon-box.php:1648
 #: widgets/image-accordion/image-accordion.php:430
 #: widgets/image-accordion/image-accordion.php:725
 #: widgets/image-accordion/image-accordion.php:783
@@ -2607,7 +2607,7 @@ msgstr ""
 #: widgets/dual-button/dual-button.php:922 widgets/funfact/funfact.php:512
 #: widgets/funfact/funfact.php:549 widgets/funfact/funfact.php:1116
 #: widgets/icon-box/icon-box.php:596 widgets/icon-box/icon-box.php:676
-#: widgets/icon-box/icon-box.php:1692 widgets/image-box/image-box.php:586
+#: widgets/icon-box/icon-box.php:1690 widgets/image-box/image-box.php:586
 #: widgets/image-box/image-box.php:880 widgets/image-box/image-box.php:932
 #: widgets/mail-chimp/mail-chimp.php:703 widgets/mail-chimp/mail-chimp.php:939
 #: widgets/nav-menu/nav-menu.php:1018 widgets/page-list/page-list.php:374
@@ -2667,8 +2667,8 @@ msgstr ""
 #: widgets/header-search/header-search.php:511 widgets/heading/heading.php:689
 #: widgets/heading/heading.php:812 widgets/icon-box/icon-box.php:577
 #: widgets/icon-box/icon-box.php:662 widgets/icon-box/icon-box.php:781
-#: widgets/icon-box/icon-box.php:1145 widgets/icon-box/icon-box.php:1281
-#: widgets/icon-box/icon-box.php:1631
+#: widgets/icon-box/icon-box.php:1143 widgets/icon-box/icon-box.php:1279
+#: widgets/icon-box/icon-box.php:1629
 #: widgets/image-accordion/image-accordion.php:397
 #: widgets/image-accordion/image-accordion.php:572
 #: widgets/image-accordion/image-accordion.php:623
@@ -2749,7 +2749,7 @@ msgstr ""
 #: widgets/header-search/header-search.php:257
 #: widgets/header-search/header-search.php:436 widgets/heading/heading.php:891
 #: widgets/heading/heading.php:955 widgets/heading/heading.php:1144
-#: widgets/icon-box/icon-box.php:1210
+#: widgets/icon-box/icon-box.php:1208
 #: widgets/image-accordion/image-accordion.php:807
 #: widgets/image-box/image-box.php:552 widgets/image-box/image-box.php:608
 #: widgets/image-box/image-box.php:856 widgets/image-box/image-box.php:908
@@ -2794,7 +2794,7 @@ msgstr ""
 #: widgets/category-list/category-list.php:380
 #: widgets/client-logo/client-logo.php:844
 #: widgets/fluent-forms/fluent-forms.php:938 widgets/funfact/funfact.php:704
-#: widgets/icon-box/icon-box.php:1099 widgets/page-list/page-list.php:740
+#: widgets/icon-box/icon-box.php:1098 widgets/page-list/page-list.php:740
 #: widgets/post-list/post-list.php:904 widgets/pricing/pricing.php:1251
 msgid "Size"
 msgstr ""
@@ -2835,7 +2835,7 @@ msgstr ""
 #: widgets/heading/heading.php:801 widgets/heading/heading.php:917
 #: widgets/heading/heading.php:981 widgets/heading/heading.php:1120
 #: widgets/heading/heading.php:1197 widgets/icon-box/icon-box.php:765
-#: widgets/icon-box/icon-box.php:873 widgets/icon-box/icon-box.php:1292
+#: widgets/icon-box/icon-box.php:873 widgets/icon-box/icon-box.php:1290
 #: widgets/image-accordion/image-accordion.php:410
 #: widgets/image-box/image-box.php:631
 #: widgets/image-comparison/image-comparison.php:315
@@ -3026,7 +3026,7 @@ msgstr ""
 #: widgets/fluent-forms/fluent-forms.php:2551
 #: widgets/fluent-forms/fluent-forms.php:2583 widgets/funfact/funfact.php:851
 #: widgets/funfact/funfact.php:996 widgets/header-info/header-info.php:173
-#: widgets/icon-box/icon-box.php:1305 widgets/icon-box/icon-box.php:1701
+#: widgets/icon-box/icon-box.php:1303 widgets/icon-box/icon-box.php:1699
 #: widgets/image-accordion/image-accordion.php:644
 #: widgets/image-box/image-box.php:1189 widgets/image-box/image-box.php:1276
 #: widgets/image-box/image-box.php:1356 widgets/mail-chimp/mail-chimp.php:618
@@ -3102,8 +3102,8 @@ msgstr ""
 #: widgets/fluent-forms/fluent-forms.php:2353 widgets/funfact/funfact.php:486
 #: widgets/funfact/funfact.php:591 widgets/header-search/header-search.php:118
 #: widgets/header-search/header-search.php:575
-#: widgets/icon-box/icon-box.php:562 widgets/icon-box/icon-box.php:961
-#: widgets/icon-box/icon-box.php:1337 widgets/icon-box/icon-box.php:1550
+#: widgets/icon-box/icon-box.php:562 widgets/icon-box/icon-box.php:960
+#: widgets/icon-box/icon-box.php:1335 widgets/icon-box/icon-box.php:1548
 #: widgets/image-accordion/image-accordion.php:654
 #: widgets/image-accordion/image-accordion.php:860
 #: widgets/image-box/image-box.php:406 widgets/image-box/image-box.php:794
@@ -3167,8 +3167,8 @@ msgstr ""
 #: widgets/header-offcanvas/header-offcanvas.php:599
 #: widgets/header-search/header-search.php:148
 #: widgets/header-search/header-search.php:605
-#: widgets/icon-box/icon-box.php:647 widgets/icon-box/icon-box.php:1027
-#: widgets/icon-box/icon-box.php:1402 widgets/icon-box/icon-box.php:1567
+#: widgets/icon-box/icon-box.php:647 widgets/icon-box/icon-box.php:1026
+#: widgets/icon-box/icon-box.php:1400 widgets/icon-box/icon-box.php:1565
 #: widgets/image-accordion/image-accordion.php:318
 #: widgets/image-accordion/image-accordion.php:740
 #: widgets/image-accordion/image-accordion.php:903
@@ -3625,7 +3625,7 @@ msgstr ""
 
 #: widgets/blog-posts/blog-posts.php:1171
 #: widgets/blog-posts/blog-posts.php:1255
-#: widgets/header-info/header-info.php:190 widgets/icon-box/icon-box.php:968
+#: widgets/header-info/header-info.php:190 widgets/icon-box/icon-box.php:967
 #: widgets/image-box/image-box.php:436 widgets/image-box/image-box.php:480
 #: widgets/pricing/pricing.php:277 widgets/tab/tab.php:773
 #: widgets/tab/tab.php:846 widgets/team/team.php:2080
@@ -3654,7 +3654,7 @@ msgstr ""
 #: widgets/fluent-forms/fluent-forms.php:1429
 #: widgets/fluent-forms/fluent-forms.php:2051 widgets/funfact/funfact.php:1206
 #: widgets/header-search/header-search.php:275 widgets/heading/heading.php:996
-#: widgets/heading/heading.php:1170 widgets/icon-box/icon-box.php:1192
+#: widgets/heading/heading.php:1170 widgets/icon-box/icon-box.php:1190
 #: widgets/image-box/image-box.php:413
 #: widgets/image-comparison/image-comparison.php:434
 #: widgets/nav-menu/nav-menu.php:1488 widgets/page-list/page-list.php:520
@@ -3707,14 +3707,14 @@ msgstr ""
 
 #: widgets/blog-posts/blog-posts.php:1720
 #: widgets/client-logo/client-logo.php:596 widgets/funfact/funfact.php:366
-#: widgets/funfact/funfact.php:409 widgets/icon-box/icon-box.php:1590
+#: widgets/funfact/funfact.php:409 widgets/icon-box/icon-box.php:1588
 #: widgets/image-box/image-box.php:711
 msgid "From Left"
 msgstr ""
 
 #: widgets/blog-posts/blog-posts.php:1724
 #: widgets/client-logo/client-logo.php:608 widgets/funfact/funfact.php:370
-#: widgets/funfact/funfact.php:413 widgets/icon-box/icon-box.php:1598
+#: widgets/funfact/funfact.php:413 widgets/icon-box/icon-box.php:1596
 #: widgets/image-box/image-box.php:719
 msgid "From Right"
 msgstr ""
@@ -3796,7 +3796,7 @@ msgstr ""
 #: widgets/dual-button/dual-button.php:168
 #: widgets/dual-button/dual-button.php:297
 #: widgets/fluent-forms/fluent-forms.php:2133
-#: widgets/icon-box/icon-box.php:1271
+#: widgets/icon-box/icon-box.php:1269
 #: widgets/image-accordion/image-accordion.php:615
 #: widgets/image-box/image-box.php:290 widgets/image-box/image-box.php:1333
 #: widgets/mail-chimp/mail-chimp.php:891 widgets/pricing/pricing.php:354
@@ -3828,8 +3828,8 @@ msgstr ""
 #: widgets/fluent-forms/fluent-forms.php:2372
 #: widgets/fluent-forms/fluent-forms.php:2478
 #: widgets/fluent-forms/fluent-forms.php:2528
-#: widgets/header-info/header-info.php:149 widgets/icon-box/icon-box.php:1344
-#: widgets/icon-box/icon-box.php:1409
+#: widgets/header-info/header-info.php:149 widgets/icon-box/icon-box.php:1342
+#: widgets/icon-box/icon-box.php:1407
 #: widgets/image-accordion/image-accordion.php:661
 #: widgets/image-accordion/image-accordion.php:747
 #: widgets/image-box/image-box.php:1392 widgets/image-box/image-box.php:1457
@@ -4021,7 +4021,7 @@ msgstr ""
 #: widgets/countdown-timer/countdown-timer.php:288
 #: widgets/countdown-timer/countdown-timer.php:1687
 #: widgets/header-search/header-search.php:293
-#: widgets/icon-box/icon-box.php:1229 widgets/page-list/page-list.php:674
+#: widgets/icon-box/icon-box.php:1227 widgets/page-list/page-list.php:674
 #: widgets/post-list/post-list.php:842 widgets/social/social.php:619
 #: widgets/social-share/social-share.php:575 widgets/team/team.php:1167
 #: widgets/team/team.php:1768 widgets/team/team.php:2294
@@ -4314,11 +4314,11 @@ msgid "Overlay Direction"
 msgstr ""
 
 #: widgets/client-logo/client-logo.php:600 widgets/funfact/funfact.php:1243
-#: widgets/icon-box/icon-box.php:1594
+#: widgets/icon-box/icon-box.php:1592
 msgid "From Top"
 msgstr ""
 
-#: widgets/client-logo/client-logo.php:604 widgets/icon-box/icon-box.php:1602
+#: widgets/client-logo/client-logo.php:604 widgets/icon-box/icon-box.php:1600
 msgid "From Bottom"
 msgstr ""
 
@@ -4766,7 +4766,7 @@ msgstr ""
 
 #: widgets/fluent-forms/fluent-forms.php:749
 #: widgets/fluent-forms/fluent-forms.php:1974 widgets/funfact/funfact.php:860
-#: widgets/funfact/funfact.php:904 widgets/icon-box/icon-box.php:1125
+#: widgets/funfact/funfact.php:904 widgets/icon-box/icon-box.php:1123
 #: widgets/image-box/image-box.php:1168 widgets/image-box/image-box.php:1255
 #: widgets/nav-menu/nav-menu.php:742 widgets/ninja-forms/ninja-forms.php:211
 #: widgets/ninja-forms/ninja-forms.php:448
@@ -4952,7 +4952,7 @@ msgid "Framed"
 msgstr ""
 
 #: widgets/funfact/funfact.php:140 widgets/heading/heading.php:384
-#: widgets/icon-box/icon-box.php:126 widgets/icon-box/icon-box.php:1500
+#: widgets/icon-box/icon-box.php:126 widgets/icon-box/icon-box.php:1498
 #: widgets/image-box/image-box.php:56
 #: widgets/image-comparison/image-comparison.php:83
 #: widgets/image-comparison/image-comparison.php:116
@@ -5041,7 +5041,7 @@ msgstr ""
 msgid "Hover Border Bottom Color"
 msgstr ""
 
-#: widgets/funfact/funfact.php:362 widgets/icon-box/icon-box.php:1586
+#: widgets/funfact/funfact.php:362 widgets/icon-box/icon-box.php:1584
 #: widgets/image-box/image-box.php:707
 msgid "Hover Direction"
 msgstr ""
@@ -5054,7 +5054,7 @@ msgstr ""
 msgid "Border Direction"
 msgstr ""
 
-#: widgets/funfact/funfact.php:557 widgets/icon-box/icon-box.php:1464
+#: widgets/funfact/funfact.php:557 widgets/icon-box/icon-box.php:1462
 #: widgets/pricing/pricing.php:1100
 msgid "Animation"
 msgstr ""
@@ -5075,7 +5075,7 @@ msgstr ""
 msgid "Secondary Color"
 msgstr ""
 
-#: widgets/funfact/funfact.php:767 widgets/icon-box/icon-box.php:1161
+#: widgets/funfact/funfact.php:767 widgets/icon-box/icon-box.php:1159
 #: widgets/pricing/pricing.php:1314
 msgid "Rotate"
 msgstr ""
@@ -5103,7 +5103,7 @@ msgstr ""
 msgid "Vertical Position"
 msgstr ""
 
-#: widgets/funfact/funfact.php:1145 widgets/icon-box/icon-box.php:1531
+#: widgets/funfact/funfact.php:1145 widgets/icon-box/icon-box.php:1529
 msgid "Enable Overlay"
 msgstr ""
 
@@ -5253,8 +5253,8 @@ msgid "Icon Left Position (px)"
 msgstr ""
 
 #: widgets/header-search/header-search.php:473
-#: widgets/icon-box/icon-box.php:1519 widgets/icon-box/icon-box.php:1558
-#: widgets/icon-box/icon-box.php:1575
+#: widgets/icon-box/icon-box.php:1517 widgets/icon-box/icon-box.php:1556
+#: widgets/icon-box/icon-box.php:1573
 msgid "Background Overlay Color"
 msgstr ""
 
@@ -5587,7 +5587,7 @@ msgstr ""
 msgid "Icon Box Container"
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:702 widgets/icon-box/icon-box.php:1071
+#: widgets/icon-box/icon-box.php:702 widgets/icon-box/icon-box.php:1070
 #: widgets/piechart/piechart.php:621 widgets/pricing/pricing.php:1240
 #: widgets/team/team.php:612
 msgid "Hover Animation"
@@ -5614,28 +5614,28 @@ msgstr ""
 msgid "Water Mark Font Size"
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:984 widgets/team/team.php:2095
+#: widgets/icon-box/icon-box.php:983 widgets/team/team.php:2095
 msgid "Icon BG Color"
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:1034
+#: widgets/icon-box/icon-box.php:1033
 msgid "Icon Hover Color"
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:1248 widgets/team/team.php:2316
+#: widgets/icon-box/icon-box.php:1246 widgets/team/team.php:2316
 msgid "Vertical Position "
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:1312 widgets/image-box/image-box.php:504
+#: widgets/icon-box/icon-box.php:1310 widgets/image-box/image-box.php:504
 #: widgets/image-box/image-box.php:1363
 msgid "Icon Font Size"
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:1480
+#: widgets/icon-box/icon-box.php:1478
 msgid "Background Overlay "
 msgstr ""
 
-#: widgets/icon-box/icon-box.php:1488
+#: widgets/icon-box/icon-box.php:1486
 msgid "Enable Image Overlay"
 msgstr ""
 

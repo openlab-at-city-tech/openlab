@@ -939,7 +939,8 @@ return array(
 	'icon icon-volume-low-dark'                   	  => 'icon icon-volume-low-dark',
 	'icon icon-volume-mute'                   	      => 'icon icon-volume-mute',
 	'icon icon-youtube-feed'                   		  => 'icon icon-youtube-feed',
-
+	'icon icon-interactive-link'					  => 'icon icon-interactive-link',
+	
 	'fa fa-500px'                                     => 'fa fa-500px',
 	'fa fa-address-book'                              => 'fa fa-address-book',
 	'fa fa-address-book-o'                            => 'fa fa-address-book-o',

@@ -1583,12 +1583,12 @@ class ElementsKit_Widget_Nav_Menu extends Widget_Base {
         }
 
 		?>
-		<div class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>" 
+		<nav class="ekit-wid-con <?php echo esc_attr($settings['elementskit_responsive_breakpoint']); ?>" 
 			data-hamburger-icon="<?php echo esc_attr($hamburger_icon_value); ?>" 
 			data-hamburger-icon-type="<?php echo esc_attr($hamburger_icon_type); ?>" 
 			data-responsive-breakpoint="<?php echo esc_attr($responsive_menu_breakpoint); ?>">
 			<?php $this->render_raw(); ?>
-		</div>
+        </nav>
 		<?php
     }
 

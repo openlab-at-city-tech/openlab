@@ -2,9 +2,9 @@
 Contributors: xpeedstudio, Ataurr, emranio
 Tags: Elementor addons, mega menu builder,  header footer builder, elementor addon, elementor widgets
 Requires at least: 5.0
-Tested up to: 6.6
+Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 3.2.8
+Stable tag: 3.3.2
 License: GPLv3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -26,7 +26,7 @@ Besides Exclusive features **ElementsKit Elementor addon** has unique and powerf
 
 == = KEY FEATURES == ==
 
-🔥 All time **downloads of ELementsKit : 20,199,390** (20 million all time downloads).
+🔥 All time **downloads of ELementsKit : 24,912,532** (20 million+ all time downloads).
 - 90+ Free and Premium Widgets
 - 18+ Exclusive Modules
 - 45+ Pre-designed Header & Footer Templates
@@ -440,6 +440,25 @@ Visit  [wpmet](https://wpmet.com/)  to learn more about how to get the best of W
 
 
 == Changelog ==
+ElementsKit Elementor Addons Version: 3.3.2 (2024-11-17)
+Improved: Countdown timer on expiry title sanitization
+
+ElementsKit Elementor Addons Version: 3.3.1 (2024-10-26)
+Added: `Interactive link` icon
+Improved: Use `<nav>` element instead of `<div>` in nav menu widget
+
+ElementsKit Elementor Addons Version: 3.3.0 (2024-10-20)
+Fixed: Hover watermark SVG icon not working in the icon box widget
+Fixed: Percent background not working for tooltip rounded and stripe style in progress bar widget
+Improved: Icon alignment for icon box widget
+Improved: Sanitize after and before fields in image comparison widget
+
+ElementsKit Elementor Addons Version: 3.2.9 (2024-10-16)
+Fixed: Sticky menu jumping to random sections when hovering over megamenu items
+Fixed: Conflict between ElementsKit and `Zoom In` motion effect in SCSS keyframes
+Fixed: Testimonial style six to correctly display client photos
+Fixed: Undefined array key warnings in `PHP 8.3`
+
 ElementsKit Elementor Addons Version: 3.2.8 (2024-09-22)
 Fixed: Addressed the URL vulnerability issue in the video widget
 Fixed: Responsive click behavior in the nav menu widget
@@ -1301,3 +1320,6 @@ No, you can work seamlessly with this Elementor addons.
 It's due to your servers' PHP settings. Increase your server PHP memory limit from the wp-config.php file or php.ini file. For help, please contact your hosting provider and ask to increase
 * PHP memory_limit = 512M
 * max_execution_time = 300
+
+= How can I report security bugs? =
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/elementskit-lite)
