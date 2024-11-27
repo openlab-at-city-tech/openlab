@@ -26,7 +26,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_post_archive_structure_dynamic_css
  */
 function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 
-	$current_post_type    = strval( get_post_type() );
+	$current_post_type    = astra_get_post_type();
 	$supported_post_types = Astra_Posts_Structure_Loader::get_supported_post_types();
 
 	if ( is_search() || ! in_array( $current_post_type, $supported_post_types ) ) {
@@ -357,27 +357,42 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 					 * @psalm-suppress InvalidGlobal
 					 */
 					// @codingStandardsIgnoreEnd
-					$overlay_color = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-featured-overlay', '' );
-					$taxonomy      = $wp_query->get_queried_object();
-					if ( is_callable( 'is_shop' ) && is_shop() && '' !== $overlay_color ) {
-						$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background'] = $overlay_color;
+					$overlay_color  = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-featured-overlay', '' );
+					$taxonomy       = $wp_query->get_queried_object();
+					$feat_image_src = '';
+				
+					// Checking if the is_shop function and wc_get_page_id are callable.
+					if ( is_callable( 'is_shop' ) && is_shop() && is_callable( 'wc_get_page_id' ) ) {
+						$shop_page_id = wc_get_page_id( 'shop' );
+
+						// Retrieving the featured image URL of the shop page.
+						$feat_image_src = get_the_post_thumbnail_url( $shop_page_id );
 					}
+				
+					// Checking if we are in a taxonomy (category/archive) page.
 					if ( ! empty( $taxonomy->term_id ) ) {
 						$thumbnail_id   = get_term_meta( $taxonomy->term_id, 'thumbnail_id', true );
 						$feat_image_src = wp_get_attachment_url( $thumbnail_id );
-						if ( $feat_image_src ) {
-							$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ] = array(
-								'background'            => 'url( ' . esc_url( $feat_image_src ) . ' )',
-								'background-repeat'     => 'no-repeat',
-								'background-attachment' => 'scroll',
-								'background-position'   => 'center center',
-								'background-size'       => 'cover',
-							);
-							if ( '' !== $overlay_color ) {
-								$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background']            = 'url( ' . esc_url( $feat_image_src ) . ' ) ' . $overlay_color;
-								$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background-blend-mode'] = 'multiply';
-							}
+					}
+
+					// Apply the background if a featured image is set.
+					if ( $feat_image_src ) {
+						$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ] = array(
+							'background'            => 'url( ' . esc_url( $feat_image_src ) . ' )',
+							'background-repeat'     => 'no-repeat',
+							'background-attachment' => 'scroll',
+							'background-position'   => 'center center',
+							'background-size'       => 'cover',
+						);
+
+						// Apply overlay if set.
+						if ( '' !== $overlay_color ) {
+							$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background']            = 'url( ' . esc_url( $feat_image_src ) . ' ) ' . $overlay_color;
+							$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background-blend-mode'] = 'multiply';
 						}
+					} elseif ( '' !== $overlay_color ) {
+						// If no featured image is set, apply only the overlay color.
+						$css_output_desktop[ $selector . '[data-banner-background-type="featured"]' ]['background'] = $overlay_color;
 					}
 				}
 			}

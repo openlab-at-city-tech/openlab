@@ -3,8 +3,6 @@
  * Related Posts for Astra theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2021, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 3.5.0
  */
@@ -71,7 +69,7 @@ class Astra_Related_Posts_Markup {
 	public function astra_get_related_posts() {
 		global $post;
 		$post_id                   = $post->ID;
-		$related_posts_title       = astra_get_option( 'related-posts-title' );
+		$related_posts_title       = astra_get_i18n_option( 'related-posts-title', _x( '%astra%', 'Single Blog/Post Related Posts: Title', 'astra' ) );
 		$related_post_meta         = astra_get_option( 'related-posts-meta-structure' );
 		$related_post_structure    = astra_get_option_meta( 'related-posts-structure' );
 		$exclude_ids               = apply_filters( 'astra_related_posts_exclude_post_ids', array( $post_id ), $post_id );
@@ -217,7 +215,7 @@ class Astra_Related_Posts_Markup {
 
 		$target = apply_filters( 'astra_related_post_cta_target', '_self' );
 
-		$cta_text = apply_filters( 'astra_related_post_read_more_text', astra_get_option( 'blog-read-more-text' ) );
+		$cta_text = apply_filters( 'astra_related_post_read_more_text', astra_get_i18n_option( 'blog-read-more-text', _x( '%astra%', 'Blogs: Read More Text', 'astra' ) ) );
 
 		$blog_read_more_as_button = astra_get_option( 'blog-read-more-as-button' );
 		$show_read_more_as_button = apply_filters( 'astra_related_post_read_more_as_button', $blog_read_more_as_button );
@@ -352,8 +350,9 @@ class Astra_Related_Posts_Markup {
 					'open'  => '<a %s>',
 					'echo'  => false,
 					'attrs' => array(
-						'class' => '',
-						'href'  => esc_url( get_permalink() ),
+						'class'      => '',
+						'aria-label' => sprintf( __( 'Read more about %s', 'astra' ), esc_attr( get_the_title( $current_post_id ) ) ),
+						'href'       => esc_url( get_permalink() ),
 					),
 				)
 			);

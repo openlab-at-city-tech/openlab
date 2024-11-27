@@ -3,8 +3,6 @@
  * Astra Theme Customizer Configuration Base.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 2.6.0
  */

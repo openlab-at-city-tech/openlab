@@ -3,8 +3,6 @@
  * Loader Functions
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -26,7 +24,6 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 		/**
 		 * Class styles.
 		 *
-		 * @access public
 		 * @var $styles Enqueued styles.
 		 */
 		public static $styles;
@@ -34,7 +31,6 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 		/**
 		 * Class scripts.
 		 *
-		 * @access public
 		 * @var $scripts Enqueued scripts.
 		 */
 		public static $scripts;
@@ -385,6 +381,7 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				'is_scroll_to_id'                 => astra_get_option( 'enable-scroll-to-id' ),
 				'is_scroll_to_top'                => astra_get_option( 'scroll-to-top-enable' ),
 				'is_header_footer_builder_active' => Astra_Builder_Helper::$is_header_footer_builder_active,
+				'responsive_cart_click'           => astra_get_option( 'responsive-cart-click-action' ),
 			);
 
 			wp_localize_script( 'astra-theme-js', 'astra', apply_filters( 'astra_theme_js_localize', $astra_localize ) );
@@ -398,7 +395,8 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 			wp_localize_script( 'astra-add-to-cart-quantity-btn', 'astra_qty_btn', apply_filters( 'astra_qty_btn_js_localize', $astra_qty_btn_localize ) );
 
 			$astra_cart_localize_data = array(
-				'desktop_layout' => astra_get_option( 'woo-header-cart-click-action' ),    // WooCommerce sidebar flyout desktop.
+				'desktop_layout'        => astra_get_option( 'woo-header-cart-click-action' ),    // WooCommerce sidebar flyout desktop.
+				'responsive_cart_click' => astra_get_option( 'responsive-cart-click-action' ),    // WooCommerce responsive devices flyout.
 			);
 
 			wp_localize_script( 'astra-mobile-cart', 'astra_cart', apply_filters( 'astra_cart_js_localize', $astra_cart_localize_data ) );
@@ -542,11 +540,14 @@ if ( ! class_exists( 'Astra_Enqueue_Scripts' ) ) {
 				'var(--ast-global-color-7)'     => $astra_global_palette_instance->get_color_by_palette_variable( 'var(--ast-global-color-7)' ),
 				'var(--ast-global-color-8)'     => $astra_global_palette_instance->get_color_by_palette_variable( 'var(--ast-global-color-8)' ),
 				'ast_wp_version_higher_6_3'     => astra_wp_version_compare( '6.2.99', '>' ),
+				'ast_wp_version_higher_6_4'     => astra_wp_version_compare( '6.4.99', '>' ),
 				'apply_content_bg_fullwidth'    => astra_apply_content_background_fullwidth_layouts(),
 				'customizer_content_bg_obj'     => $content_bg_obj,
 				'customizer_site_bg_obj'        => $site_bg_obj,
 				'is_astra_pro_colors_activated' => $is_astra_pro_colors_activated,
 				'site_builder_url'              => $site_builder_url,
+				'mobile_logo'                   => astra_get_option( 'mobile-header-logo' ),
+				'mobile_logo_state'             => astra_get_option( 'different-mobile-logo' ),
 			);
 
 			wp_localize_script( 'astra-block-editor-script', 'astraColors', apply_filters( 'astra_theme_root_colors', $astra_colors ) );

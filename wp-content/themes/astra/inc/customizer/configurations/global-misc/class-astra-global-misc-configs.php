@@ -3,8 +3,6 @@
  * Global Misc Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2022, Astra
  * @link        https://wpastra.com/
  * @since       Astra  4.0.0
  */

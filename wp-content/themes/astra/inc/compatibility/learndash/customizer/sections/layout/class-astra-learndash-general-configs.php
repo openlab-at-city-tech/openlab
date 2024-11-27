@@ -3,8 +3,6 @@
  * LifterLMS General Options for our theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       1.3.0
  */

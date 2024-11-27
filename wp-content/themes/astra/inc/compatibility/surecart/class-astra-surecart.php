@@ -50,10 +50,31 @@ class Astra_SureCart {
 		add_action( 'astra_entry_top', array( $this, 'revert_surecart_support' ) );
 		add_filter( 'astra_page_layout', array( $this, 'sc_shop_sidebar_layout' ) );
 		add_filter( 'astra_get_content_layout', array( $this, 'sc_shop_content_layout' ) );
+		add_action( 'wp', array( $this, 'remove_navigation_for_sc_product' ) );
 
 		// Boxed layout support.
 		add_filter( 'astra_is_content_layout_boxed', array( $this, 'sc_shop_content_boxed_layout' ) );
 		add_filter( 'astra_is_sidebar_layout_boxed', array( $this, 'sc_shop_sidebar_boxed_layout' ) );
+		add_action( 'customize_register', array( $this, 'customize_register' ), 2 );
+		add_filter( 'astra_theme_defaults', array( $this, 'astra_surecart_default_options' ) );
+		add_filter( 'astra_archive_post_title', array( $this, 'customize_surecart_archive_title_area' ), 10, 2 );
+		add_filter( 'astra_single_post_title', array( $this, 'customize_surecart_single_title_area' ), 10, 2 );
+		add_action( 'admin_bar_menu', array( $this, 'customize_admin_bar' ), 999 );
+	}
+
+		/**
+		 * Register Customizer sections and panel for SureCart.
+		 *
+		 * @since 4.6.13
+		 * @param WP_Customize_Manager $wp_customize Theme Customizer object.
+		 */
+	public function customize_register( $wp_customize ) {
+
+		// @codingStandardsIgnoreStart WPThemeReview.CoreFunctionality.FileInclude.FileIncludeFound
+		/**
+		 * Register Sections & Panels
+		 */
+		require ASTRA_THEME_DIR . 'inc/compatibility/surecart/customizer/class-astra-customizer-register-surecart-section.php';		
 	}
 
 	/**
@@ -187,14 +208,17 @@ class Astra_SureCart {
 		add_filter( 'astra_banner_elements_prefix', array( $this, 'update_astra_banner_elements_prefix' ) );
 		add_filter( 'the_title', array( $this, 'update_the_title' ), 10, 2 );
 
-		if ( 'layout-2' === $banner_layout ) {
-			$astra_banner_hook = apply_filters( 'astra_banner_hook', 'astra_content_before' );
-			add_action( $astra_banner_hook, array( $this, 'astra_surecart_hero_section' ), 20 );
-		} else {
-			add_filter( 'astra_single_layout_one_banner_visibility', '__return_false' );
-			add_filter( 'astra_apply_hero_header_banner', '__return_false' );
-			add_action( 'astra_primary_content_top', array( $this, 'astra_force_render_banner_layout_1' ) );
-		}
+		$title_area_enabled = astra_get_option( 'ast-archive-sc_product-title' );
+		if ( $title_area_enabled ) {
+			if ( 'layout-2' === $banner_layout ) {
+				$astra_banner_hook = apply_filters( 'astra_banner_hook', 'astra_content_before' );
+				add_action( $astra_banner_hook, array( $this, 'astra_surecart_hero_section' ), 20 );
+			} else {
+				add_filter( 'astra_single_layout_one_banner_visibility', '__return_false' );
+				add_filter( 'astra_apply_hero_header_banner', '__return_false' );
+				add_action( 'astra_primary_content_top', array( $this, 'astra_force_render_banner_layout_1' ) );
+			}
+		}		
 	}
 
 	/**
@@ -293,6 +317,17 @@ class Astra_SureCart {
 	}
 
 	/**
+	 * Removed Astra's navigation markup from SureCart single product page.
+	 *
+	 * @since 4.8.2
+	 */
+	public function remove_navigation_for_sc_product() {
+		if ( is_singular( 'sc_product' ) ) {
+			remove_action( 'astra_entry_after', 'astra_single_post_navigation_markup' );
+		}
+	}
+
+	/**
 	 * Revert SureCart Support, after banner loaded.
 	 *
 	 * @since 4.4.0
@@ -309,6 +344,139 @@ class Astra_SureCart {
 		remove_filter( 'astra_banner_elements_post_type', array( $this, 'update_astra_banner_elements_post_type' ) );
 		remove_filter( 'astra_banner_elements_prefix', array( $this, 'update_astra_banner_elements_prefix' ) );
 		remove_filter( 'the_title', array( $this, 'update_the_title' ), 10 );
+	}
+
+	/**
+	 * Astra SureCart default options.
+	 *
+	 * @param array $defaults Array of Astra's options.
+	 * @return array Filtered options array.
+	 *
+	 * @since 4.7.3
+	 */
+	public function astra_surecart_default_options( $defaults ) {
+		$surecart_post_types = array( 'sc_product', 'sc_collection', 'sc_upsell' );
+
+		// Remove the default left and right padding to make it align properly.
+		$surecart_banner_padding = Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' );
+		if ( isset( $surecart_banner_padding['desktop']['right'] ) ) {
+			$surecart_banner_padding['desktop']['right'] = 0;
+		}
+		if ( isset( $surecart_banner_padding['desktop']['left'] ) ) {
+			$surecart_banner_padding['desktop']['left'] = 0;
+		}
+
+		foreach ( $surecart_post_types as $post_type ) {
+			$defaults['ast-archive-' . $post_type . '-title']         = false;
+			$defaults['ast-single-' . $post_type . '-title']          = false;
+			$defaults['single-' . $post_type . '-ast-content-layout'] = 'normal-width-container';
+			$defaults['single-' . $post_type . '-sidebar-layout']     = 'no-sidebar';
+			$defaults['ast-dynamic-archive-' . $post_type . '-banner-padding'] = $surecart_banner_padding;
+		}
+		return $defaults;
+	}
+
+	/**
+	 * Method to customize SureCart single title area.
+	 *
+	 * @param string  $title     Title Area label.
+	 * @param string  $post_type Current post type.
+	 * @param boolean $singular  Whether singular or plural.
+	 *
+	 * @since 4.7.3
+	 * @return string Returns customized label for title area.
+	 */
+	public function customize_surecart_title_area( $title, $post_type, $singular = false ) {
+		$surecart_titles = array(
+			'sc_product'  => array(
+				'single'  =>  __( 'Product', 'astra' ),
+				'archive' => __( 'Products', 'astra' ),
+			),
+			'sc_collection' => array(
+				'single'  =>  __( 'Collection', 'astra' ),
+				'archive' => __( 'Collections', 'astra' ),
+			),
+			'sc_upsell'   => array(
+				'single'  =>  __( 'Upsell', 'astra' ),
+				'archive' => __( 'Upsells', 'astra' ),
+			),
+		);
+
+		$type = $singular ? 'single' : 'archive';
+		// Check for SureCart's post types and customize the title.
+		if ( isset( $surecart_titles[ $post_type ][ $type ] ) ) {
+			$title_area_suffix = ' ' . __( 'Title Area', 'astra' );
+			return $surecart_titles[ $post_type ][ $type ] . $title_area_suffix;
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Method to customize SureCart archive title area.
+	 *
+	 * @param string $title     Title Area label.
+	 * @param string $post_type Current post type.
+	 *
+	 * @since 4.7.3
+	 * @return string Returns customized label for archive title area.
+	 */
+	public function customize_surecart_archive_title_area( $title, $post_type ) {
+		return $this->customize_surecart_title_area( $title, $post_type );
+	}
+
+	/**
+	 * Method to customize SureCart single title area.
+	 *
+	 * @param string $title     Title Area label.
+	 * @param string $post_type Current post type.
+	 *
+	 * @since 4.7.3
+	 * @return string Returns customized label for single title area.
+	 */
+	public function customize_surecart_single_title_area( $title, $post_type ) {
+		return $this->customize_surecart_title_area( $title, $post_type, true );
+	}
+
+	/**
+	 * Method to add autoFocus query parameter to customize link.
+	 *
+	 * @param WP_Admin_Bar $wp_admin_bar The WP_Admin_Bar instance.
+	 *
+	 * @since 4.7.3
+	 * @return void
+	 */
+	public function customize_admin_bar( $wp_admin_bar ) {
+		if ( is_admin() || ! is_admin_bar_showing() ) {
+			return;
+		}
+
+		// Show only when the user is a member of this site, or they're a super admin.
+		if ( ! is_user_member_of_blog() && ! is_super_admin() ) {
+			return;
+		}
+
+		// Get the customize node by ID.
+		$node = $wp_admin_bar->get_node( 'customize' );
+	
+		if ( $node ) {
+			$post_type = get_post_type();
+			$page      = is_singular() ? 'single' : 'archive';
+
+			// If the current page is SureCart shop page.
+			if ( 'page' === $post_type && get_the_ID() == get_option( 'surecart_shop_page_id' ) ) {
+				$page      = 'archive';
+				$post_type = 'sc_product';
+			}
+
+			// Check for surecart post type.
+			if ( in_array( $post_type, array( 'sc_product', 'sc_collection', 'sc_upsell' ) ) ) {	
+				// Add custom parameter to the URL.
+				$node->href = add_query_arg( 'autofocus[section]', "{$page}-posttype-{$post_type}", $node->href );
+				// Update the node with the modified URL.
+				$wp_admin_bar->add_node( (array) $node );
+			}
+		}
 	}
 }
 

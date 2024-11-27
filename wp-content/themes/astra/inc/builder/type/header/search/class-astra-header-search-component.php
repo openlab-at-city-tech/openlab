@@ -3,8 +3,6 @@
  * Search for Astra theme.
  *
  * @package     astra-builder
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */
@@ -62,6 +60,16 @@ class Astra_Header_Search_Component {
 				'paged'          => 1,
 				's'              => ! empty( $args['s'] ) ? $args['s'] : '',
 			);
+
+			if ( in_array( 'product', $search_post_types ) ) {
+				// Added product visibility checks, excluding hidden or shop-only visibility types.
+				$args['tax_query'][] = array(
+					'taxonomy' => 'product_visibility',
+					'field'    => 'slug',
+					'terms'    => array( 'exclude-from-search' ),
+					'operator' => 'NOT IN',
+				);
+			}
 		}
 
 		return $args;

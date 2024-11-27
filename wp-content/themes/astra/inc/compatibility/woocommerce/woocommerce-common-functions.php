@@ -5,8 +5,6 @@
  * Eventually, some of the functionality here could be replaced by core features.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.1.0
  */
@@ -55,7 +53,7 @@ if ( ! function_exists( 'astra_woo_shop_parent_category' ) ) :
 				global $product;
 				$product_categories = function_exists( 'wc_get_product_category_list' ) ? wc_get_product_category_list( get_the_ID(), ';', '', '' ) : $product->get_categories( ';', '', '' );
 
-				$product_categories = htmlspecialchars_decode( wp_strip_all_tags( $product_categories ) );
+				$product_categories = wp_strip_all_tags( $product_categories );
 				if ( $product_categories ) {
 					list( $parent_cat ) = explode( ';', $product_categories );
 					echo apply_filters( 'astra_woo_shop_product_categories', esc_html( $parent_cat ), get_the_ID() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -341,8 +339,7 @@ function astra_has_pro_woocommerce_addon() {
  */
 function astra_cart_color_default_icon_old_header() {
 	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['can-reflect-cart-color-in-old-header'] = isset( $astra_settings['can-reflect-cart-color-in-old-header'] ) ? false : true;
-	return apply_filters( 'astra_support_default_cart_color_in_old_header', $astra_settings['can-reflect-cart-color-in-old-header'] ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+	return apply_filters( 'astra_support_default_cart_color_in_old_header', isset( $astra_settings['can-reflect-cart-color-in-old-header'] ) ? false : true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 }
 
 /**
@@ -365,16 +362,15 @@ if ( ! function_exists( 'astra_get_wc_endpoints_title' ) ) {
 	 *
 	 * @param string $title for MyAccount title endpoint.
 	 * @return string
-	 * 
+	 *
 	 * @since 4.3.0
 	 */
 	function astra_get_wc_endpoints_title( $title ) {
 		if ( class_exists( 'WooCommerce' ) && is_wc_endpoint_url() && is_account_page() ) {
-			$endpoint         = WC()->query->get_current_endpoint();
-			$action           = isset( $_GET['action'] ) ? $_GET['action'] : '';
-			$sanitized_action = is_string( $action ) ? sanitize_text_field( wp_unslash( $action ) ) : '';
+			$endpoint = WC()->query->get_current_endpoint();
+			$action   = isset( $_GET['action'] ) && is_string( $_GET['action'] ) ? sanitize_text_field( wp_unslash( $_GET['action'] ) ) : '';
 
-			$ep_title = $endpoint ? WC()->query->get_endpoint_title( $endpoint, $sanitized_action ) : '';
+			$ep_title = $endpoint ? WC()->query->get_endpoint_title( $endpoint, $action ) : '';
 
 			if ( $ep_title ) {
 				return $ep_title;
@@ -385,4 +381,23 @@ if ( ! function_exists( 'astra_get_wc_endpoints_title' ) ) {
 	}
 
 	add_filter( 'astra_the_title', 'astra_get_wc_endpoints_title' );
+}
+
+if ( ! function_exists( 'astra_woocommerce_get_cart_url' ) ) {
+	/**
+	 * Filters and returns the WooCommerce cart URL for compatibility with WooCommerce 9.3.0.
+	 *
+	 * @param string $cart_url WooCommerce cart page URL.
+	 *
+	 * @return string Returns the filtered WooCommerce cart page URL.
+	 *
+	 * @since 4.8.3
+	 */
+	function astra_woocommerce_get_cart_url( $cart_url ) {
+		// Check if WooCommerce function exists.
+		if ( function_exists( 'wc_get_page_permalink' ) ) {
+			$cart_url = wc_get_page_permalink( 'cart' );
+		}
+		return $cart_url;
+	}
 }

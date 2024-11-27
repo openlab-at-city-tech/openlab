@@ -422,10 +422,12 @@ if ( ! function_exists( 'astra_post_author' ) ) {
 		ob_start();
 
 		echo '<span ';
-			echo astra_attr(
-				'post-meta-author',
-				array(
-					'class' => 'posted-by vcard author',
+			echo wp_kses_post(
+				astra_attr(
+					'post-meta-author',
+					array(
+						'class' => 'posted-by author',
+					)
 				)
 			);
 		echo '>';
@@ -433,20 +435,24 @@ if ( ! function_exists( 'astra_post_author' ) ) {
 			<a title="<?php printf( esc_attr__( 'View all posts by %1$s', 'astra' ), esc_attr( strval( get_the_author() ) ) ); ?>"
 				href="<?php echo esc_url( get_author_posts_url( $author_id ) ); ?>" rel="author"
 				<?php
-					echo astra_attr(
-						'author-url',
-						array(
-							'class' => 'url fn n',
+					echo wp_kses_post(
+						astra_attr(
+							'author-url',
+							array(
+								'class' => 'url fn n',
+							)
 						)
 					);
 				?>
 				>
 				<span
 				<?php
-					echo astra_attr(
-						'author-name',
-						array(
-							'class' => 'author-name',
+					echo wp_kses_post(
+						astra_attr(
+							'author-name',
+							array(
+								'class' => 'author-name',
+							)
 						)
 					);
 				?>
@@ -488,7 +494,7 @@ if ( ! function_exists( 'astra_post_link' ) ) {
 			return $output_filter;
 		}
 
-		$more_label        = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? __( 'Read Post »', 'astra' ) : __( 'Read More »', 'astra' );
+		$more_label        = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? esc_html__( 'Read Post »', 'astra' ) : esc_html__( 'Read More »', 'astra' );
 		$read_more_text    = apply_filters( 'astra_post_read_more', $more_label );
 		$read_more_classes = apply_filters( 'astra_post_read_more_class', array() );
 

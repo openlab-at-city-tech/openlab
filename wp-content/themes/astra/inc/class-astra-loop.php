@@ -24,7 +24,6 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 		 *
 		 * @since 1.2.7
 		 *
-		 * @access private
 		 * @var object Class object.
 		 */
 		private static $instance;
@@ -266,6 +265,10 @@ if ( ! class_exists( 'Astra_Loop' ) ) :
 		 * @return void
 		 */
 		public function comment_layout_adjustments() {
+			// Bail early if it is the WooCommerce product page, as on the WooCommerce product page reviews are shown in tabs.
+			if ( class_exists( 'WooCommerce' ) && 'product' == get_post_type() ) {
+				return;
+			}
 			$comments_section_placement = astra_get_option( 'comments-box-placement', '' );
 			if ( '' !== $comments_section_placement ) {
 				remove_action( 'astra_page_template_parts_content', array( $this, 'template_parts_comments' ), 15 );

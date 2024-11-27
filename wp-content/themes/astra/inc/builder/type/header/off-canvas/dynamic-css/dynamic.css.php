@@ -295,6 +295,7 @@ function astra_off_canvas_static_css() {
 		}
 		.ast-mobile-popup-drawer.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle {
 			right: calc( 20px - 0.907em);
+			width: fit-content;
 		}
 		.ast-mobile-popup-drawer .ast-mobile-popup-content .ast-search-menu-icon,
 		.ast-mobile-popup-drawer .ast-mobile-popup-content .ast-search-menu-icon.slide-search,
@@ -384,6 +385,7 @@ function astra_off_canvas_static_css() {
 		}
 		.ast-mobile-popup-drawer.content-align-flex-end .main-header-bar-navigation .menu-item-has-children > .ast-menu-toggle {
 			left: calc( 20px - 0.907em);
+			width: fit-content;
 		}
 		.ast-mobile-popup-drawer .ast-mobile-popup-content .ast-search-menu-icon,
 		.ast-mobile-popup-drawer .ast-mobile-popup-content .ast-search-menu-icon.slide-search,

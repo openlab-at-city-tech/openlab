@@ -3,8 +3,6 @@
  * Customizer Control: description
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.0.0
  */
@@ -22,7 +20,6 @@ class Astra_Control_Description extends WP_Customize_Control {
 	/**
 	 * The control type.
 	 *
-	 * @access public
 	 * @var string
 	 */
 	public $type = 'ast-description';
@@ -30,7 +27,6 @@ class Astra_Control_Description extends WP_Customize_Control {
 	/**
 	 * The control type.
 	 *
-	 * @access public
 	 * @var string
 	 */
 	public $help = '';

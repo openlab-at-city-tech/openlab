@@ -92,9 +92,11 @@ function astra_old_header_custom_menu_css( $dynamic_css ) {
 
 		}  
 
-		$static_css .= '
+		$search_box_type = astra_get_option( 'header-main-rt-section-search-box-type' );
+		$show_icon       = 'full-screen' === $search_box_type || 'header-cover' === $search_box_type ? 'block' : 'none';
+		$static_css     .= "
         .ast-header-break-point.ast-header-custom-item-inside .main-header-bar .main-header-bar-navigation .ast-search-icon {
-            display: none;
+            display: $show_icon;
         }
         .ast-header-break-point.ast-header-custom-item-inside .main-header-bar .ast-search-menu-icon .search-form {
             padding: 0;
@@ -124,7 +126,7 @@ function astra_old_header_custom_menu_css( $dynamic_css ) {
         }
         .ast-header-custom-item-inside.ast-header-break-point .button-custom-menu-item .menu-link {
             display: block;
-        }';
+        }";
 		if ( is_rtl() ) {
 			$static_css .= '
             .ast-header-break-point.ast-header-custom-item-outside .main-header-bar .ast-search-icon {

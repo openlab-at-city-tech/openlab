@@ -3,8 +3,6 @@
  * General Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -155,6 +153,7 @@ if ( ! class_exists( 'Astra_Site_Container_Layout_Configs' ) ) {
 						'name'     => ASTRA_THEME_SETTINGS . '[ast-site-layout-button-link]',
 						'type'     => 'control',
 						'control'  => 'ast-upgrade',
+						'campaign' => 'global',
 						'renderAs' => 'list',
 						'choices'  => array(
 							'one'   => array(

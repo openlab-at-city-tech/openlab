@@ -19,7 +19,7 @@
 			var id = location.hash.substring( 1 ),
 				element;
 
-			if ( ! ( /^[A-z0-9_-]+$/.test( id ) ) ) {
+			if ( ! ( /^[a-zA-Z0-9_-]+$/.test( id ) ) ) {
 				return;
 			}
 

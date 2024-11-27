@@ -1,0 +1,14 @@
+{
+	"compilerOptions": {
+		"baseUrl": ".", // This makes the root directory of your project the base for relative paths
+		"paths": {
+			"@astra-utils/*": [ "assets/utils/*" ],
+			"@astra-components/*": [ "assets/components/*" ],
+			"@DashboardApp/*": [ "assets/src/dashboard-app/*" ],
+			"@Admin/*": [ "assets/src/*" ],
+			"@Utils/*": [ "assets/src/utils/*" ],
+			"@Skeleton/*": [ "assets/src/common/skeleton/*" ],
+			"@Common/*": [ "assets/src/common/*" ]
+		}
+	}
+}

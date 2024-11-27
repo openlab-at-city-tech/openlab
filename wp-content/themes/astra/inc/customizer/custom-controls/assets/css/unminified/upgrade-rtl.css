@@ -85,7 +85,7 @@ a.ast-upgrade-trigger:focus, a.ast-upgrade-trigger:active {
     fill: var(--ast-customizer-color-1);
 }
 .ast-pro-upgrade-item span {
-    display: inline-block;
+    display: inline;
 }
 .ast-upgrade-list-description {
     margin: 5px 20px 0 0;

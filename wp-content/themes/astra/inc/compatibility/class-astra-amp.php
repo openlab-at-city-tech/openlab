@@ -3,8 +3,6 @@
  * AMP Compatibility.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2018, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -1052,7 +1050,7 @@ if ( ! class_exists( 'Astra_AMP' ) ) :
 					'line-height' => '3',
 					'text-align'  => 'left',
 				),
-				'.ast-amp #ast-site-header-cart .widget_shopping_cart' => array(
+				'.ast-amp .ast-site-header-cart .widget_shopping_cart' => array(
 					'display' => 'none',
 				),
 				'.ast-theme.ast-woocommerce-cart-menu .ast-site-header-cart' => array(

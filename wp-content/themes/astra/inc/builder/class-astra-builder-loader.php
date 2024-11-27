@@ -25,6 +25,13 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 		private static $instance = null;
 
 		/**
+		 * Variable to hold menu locations rendered on the site.
+		 *
+		 * @var array Menu locations array
+		 */
+		private static $menu_locations = array();
+
+		/**
 		 *  Initiator
 		 */
 		public static function get_instance() {
@@ -126,6 +133,12 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 			foreach ( $result as $post_id => $post_data ) {
 				$post_type = get_post_type();
 
+				// Get the display devices condition for the post.
+				$display_devices = get_post_meta( $post_id, 'ast-advanced-display-device', true );
+				if ( ! is_array( $display_devices ) ) {
+					$display_devices = array( 'desktop', 'tablet', 'mobile' );
+				}
+
 				if ( ASTRA_ADVANCED_HOOKS_POST_TYPE !== $post_type ) {
 
 					$layout = get_post_meta( $post_id, 'ast-advanced-hook-layout', false );
@@ -145,6 +158,15 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 					} elseif ( isset( $layout[0] ) && 'header' == $layout[0] && 0 == $header_counter ) {
 						// Remove default site's header.
 						remove_action( 'astra_header', array( Astra_Builder_Header::get_instance(), 'header_builder_markup' ) );
+						// Check if the post has 'ast-advanced-hook-enabled' meta key is not set to 'no'.
+						$is_enabled = 'no' !== get_post_meta( $post_id, 'ast-advanced-hook-enabled', true );
+						// Check if the custom header is enabled for all devices.
+						$is_all_devices = 3 === count( $display_devices );
+
+						if ( $is_enabled && $is_all_devices ) {
+							// Prevent Off-Canvas markup on custom header rendering.
+							add_filter( 'astra_disable_mobile_popup_markup', '__return_true' );
+						}
 						$header_counter++;
 					} elseif ( isset( $layout[0] ) && 'footer' == $layout[0] && 0 == $footer_counter ) {
 						// Remove default site's footer.
@@ -153,6 +175,30 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 					}
 				}
 			}
+		}
+
+		/**
+		 * Method to add rel="nofollow" for markup
+		 *
+		 * @param string $theme_location Theme location for key.
+		 * @param string $markup         Markup.
+		 * @return string Menu markup with rel="nofollow".
+		 * @since 4.6.14
+		 */
+		public function nofollow_markup( $theme_location, $markup ) {
+			$nofollow_disabled = apply_filters( 'astra_disable_nofollow_markup', true );
+
+			if ( $nofollow_disabled ) {
+				return $markup;
+			}
+
+			if ( isset( self::$menu_locations[ $theme_location ] ) ) {
+				$markup = str_replace( 'href="', 'rel="nofollow" href="', $markup );
+			} else {
+				self::$menu_locations[ $theme_location ] = true;
+			}
+
+			return $markup;
 		}
 	}
 

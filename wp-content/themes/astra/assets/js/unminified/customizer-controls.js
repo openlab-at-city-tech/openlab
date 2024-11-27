@@ -36,7 +36,6 @@
 		 * when a setting changes.
 		 *
 		 * @since 1.0.0
-		 * @access private
 		 * @method _initToggles
 		 */
 		_initToggles: function()
@@ -105,7 +104,6 @@
 		 * when a setting changes.
 		 *
 		 * @since x.x.x
-		 * @access private
 		 * @method _initSubControlsToggle
 		 * @return void
 		 */

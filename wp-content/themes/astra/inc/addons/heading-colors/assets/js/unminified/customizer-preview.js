@@ -36,7 +36,7 @@
 			WidthTitleSupport = ',' + slug + '.widget-title';
 		}
 
-		astra_generate_outside_font_family_css( 'astra-settings[font-family-'+ slug +']', slug + ', .entry-content ' + slug + anchorSupport );
+		astra_generate_outside_font_family_css( 'astra-settings[font-family-'+ slug +']', slug + ', .entry-content ' + slug + anchorSupport, true, '.ast-sg-typo-field[data-for="' + slug + '"] .ast-sg-font-family' );
 		astra_generate_font_weight_css( 'astra-settings[font-family-'+ slug +']', 'astra-settings[font-weight-'+ slug +']', 'font-weight', slug + ', .entry-content ' + slug + anchorSupport + WidthTitleSupport );
 
 		wp.customize( 'astra-settings[font-extras-'+ slug +']', function( value ) {
@@ -56,6 +56,14 @@
 						dynamicStyle += globalSelectorLineHeight + '{';
 						dynamicStyle += 'line-height : ' + data['line-height'] + data['line-height-unit'] + ';' ;
 						dynamicStyle += '}';
+
+						let styleGuideUpdatedEvent = new CustomEvent('AstraStyleGuideElementUpdated', {
+							'detail': {
+								'value': data['line-height'] + data['line-height-unit'],
+								'selector': '.ast-sg-typo-field[data-for="' + slug + '"] .ast-sg-line-height'
+							}
+						});
+						document.dispatchEvent(styleGuideUpdatedEvent);
 					}
 
 					const globalSelector = slug +', .entry-content ' + slug + anchorSupport;

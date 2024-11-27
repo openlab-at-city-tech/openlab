@@ -164,11 +164,15 @@ function astra_hb_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' ) {
 				'border-bottom-right-radius' => astra_responsive_spacing( $sub_menu_border_radius_fields, 'bottom', 'desktop' ),
 				'border-bottom-left-radius'  => astra_responsive_spacing( $sub_menu_border_radius_fields, 'left', 'desktop' ),
 			),
+			// Fix submenu top offset when above border is assigned.
+			$selector . ' .sub-menu .sub-menu'           => array(
+				'top' => astra_get_css_value( strval( -1 * intval( $sub_menu_border_top ) ), 'px' ),
+			),
 			$selector . ' .main-header-menu > .menu-item > .sub-menu, ' . $selector . ' .main-header-menu > .menu-item > .astra-full-megamenu-wrapper' => array(
 				'margin-top' => astra_get_css_value( $sub_menu_top_offset, 'px' ),
 			),
 			'.ast-desktop ' . $selector . ' .main-header-menu > .menu-item > .sub-menu:before, .ast-desktop ' . $selector . ' .main-header-menu > .menu-item > .astra-full-megamenu-wrapper:before' => array(
-				'height' => astra_calculate_spacing( $sub_menu_top_offset . 'px', '+', '5', 'px' ),
+				'height' => astra_calculate_spacing( $sub_menu_top_offset . 'px', '+', intval( $sub_menu_border_top ) . 'px + 5', 'px' ),
 			),
 			$selector . ' .menu-item.menu-item-has-children > .ast-menu-toggle' => array(
 				'top'   => astra_responsive_spacing( $menu_spacing, 'top', 'desktop' ),

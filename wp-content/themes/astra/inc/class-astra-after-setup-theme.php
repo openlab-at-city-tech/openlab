@@ -16,8 +16,6 @@
  * via a child theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -262,12 +260,10 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 					'wistia.net',
 					'spotify.com',
 					'soundcloud.com',
-					'twitter.com',
 					'animoto.com',
 					'cloudup.com',
 					'poll.fm',
 					'dai.ly',
-					'flickr.com',
 					'mixcloud.com',
 					'pca.st',
 					'reddit.com',
@@ -279,20 +275,21 @@ if ( ! class_exists( 'Astra_After_Setup_Theme' ) ) {
 					'wordpress.org',
 					'wordpress.tv',
 					'imgur.com',
-					'pinterest.com',
 					'ted.com',
 				)
 			);
 
-			if ( $core_yt_block ) {
-				if ( astra_strposa( $url, $allowed_providers ) && $add_astra_oembed_wrapper ) {
+			if ( astra_strposa( $url, $allowed_providers ) && $add_astra_oembed_wrapper ) {
+				if ( $core_yt_block ) {
 					$embed_html = wp_oembed_get( $url );
 					$html       = false !== $embed_html ? '<div class="wp-block-embed__wrapper"> <div class="ast-oembed-container ' . esc_attr( $ast_embed_wrapper_class ) . '" style="height: 100%;">' . $embed_html . '</div> </div>' : '';
-				}
-			} else {
-				if ( astra_strposa( $url, $allowed_providers ) && $add_astra_oembed_wrapper ) {
+				} else {
 					$html = ( '' !== $html ) ? '<div class="ast-oembed-container ' . esc_attr( $ast_embed_wrapper_class ) . '" style="height: 100%;">' . $html . '</div>' : '';
 				}
+			} elseif ( '' === $html || $url === trim( $html ) ) {
+				$embed_html = wp_oembed_get( $url, array( 'width' => 600 ) );
+				$html       = $embed_html ? $embed_html : $url;
+				wp_maybe_enqueue_oembed_host_js( $html );
 			}
 
 			return $html;

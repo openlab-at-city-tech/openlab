@@ -2,9 +2,7 @@
 /**
  * Off canvas Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -61,7 +59,7 @@ function astra_header_off_canvas_configuration() {
 				'full-width' => __( 'Full-Screen', 'astra' ),
 				'dropdown'   => __( 'Dropdown', 'astra' ),
 			),
-			'transport'  => 'postMessage',
+			'transport'  => 'refresh',
 			'context'    => Astra_Builder_Helper::$general_tab,
 			'renderAs'   => 'text',
 			'responsive' => false,

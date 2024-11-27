@@ -3,8 +3,6 @@
  * WooCommerce Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.1.0
  */
@@ -630,6 +628,7 @@ if ( ! class_exists( 'Astra_Woo_Shop_Single_Layout_Configs' ) ) {
 						'name'     => ASTRA_THEME_SETTINGS . '[ast-woo-single-product-pro-items]',
 						'type'     => 'control',
 						'control'  => 'ast-upgrade',
+						'campaign' => 'woocommerce',
 						'renderAs' => 'list',
 						'choices'  => array(
 							'two'   => array(

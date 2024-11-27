@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -122,6 +120,11 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 							'operator' => '!=',
 							'value'    => 0,
 						),
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '!=',
+							'value'    => '',
+						),
 						Astra_Builder_Helper::$general_tab_config,
 					),
 					'priority'          => 5.5,
@@ -194,6 +197,106 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 							'operator' => 'in',
 							'value'    => array( 'tablet', 'mobile' ),
 						),
+					),
+				),
+
+				/**
+				 * Option: Use Logo SVG Icon.
+				 */
+				array(
+					'name'      => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+					'default'   => astra_get_option( 'use-logo-svg-icon' ),
+					'type'      => 'control',
+					'control'   => 'ast-toggle-control',
+					'divider'   => array( 'ast_class' => 'ast-top-section-divider' ),
+					'section'   => $_section,
+					'title'     => __( 'Use Logo SVG Icon', 'astra' ),
+					'priority'  => 6,
+					'transport' => 'postMessage',
+					'partial'   => array(
+						'selector'            => '.site-branding',
+						'container_inclusive' => true,
+						'render_callback'     => 'Astra_Builder_UI_Controller::render_site_identity',
+						'fallback_refresh'    => false,
+					),
+					'context'   => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						Astra_Builder_Helper::$general_tab_config,
+					),
+				),
+
+				/**
+				 * Option: Logo SVG Icon
+				 */
+				array(
+					'name'              => ASTRA_THEME_SETTINGS . '[logo-svg-icon]',
+					'type'              => 'control',
+					'control'           => 'ast-logo-svg-icon',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_logo_svg_icon' ),
+					'section'           => $_section,
+					'default'           => astra_get_option( 'logo-svg-icon' ),
+					'description'       => __( 'When using Custom SVG code, do not include few attributes such as "width", "height", and "fill" in your custom svg code to utilize existing customizer controls.', 'astra' ),
+					'priority'          => 6,
+					'title'             => __( 'Logo SVG Icon', 'astra' ),
+					'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),
+					'transport'         => 'postMessage',
+					'partial'           => array(
+						'selector'            => '.site-branding',
+						'container_inclusive' => true,
+						'render_callback'     => 'Astra_Builder_UI_Controller::render_site_identity',
+						'fallback_refresh'    => false,
+					),
+					'context'           => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+							'operator' => '==',
+							'value'    => true,
+						),
+						Astra_Builder_Helper::$general_tab_config,
+					),
+				),
+
+				/**
+				 * Option: Logo SVG Gap
+				 */
+				array(
+					'name'              => ASTRA_THEME_SETTINGS . '[logo-svg-site-title-gap]',
+					'type'              => 'control',
+					'control'           => 'ast-responsive-slider',
+					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
+					'section'           => $_section,
+					'transport'         => 'postMessage',
+					'default'           => astra_get_option( 'logo-svg-site-title-gap' ),
+					'priority'          => 7,
+					'title'             => __( 'Logo SVG Gap', 'astra' ),
+					'suffix'            => 'px',
+					'input_attrs'       => array(
+						'min'  => 0,
+						'step' => 1,
+						'max'  => 600,
+					),
+					'divider'           => array( 'ast_class' => 'ast-top-section-divider' ),
+					'context'           => array(
+						array(
+							'setting'  => 'custom_logo',
+							'operator' => '==',
+							'value'    => false,
+						),
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+							'operator' => '==',
+							'value'    => true,
+						),
+						Astra_Builder_Helper::$general_tab_config,
 					),
 				),
 
@@ -309,6 +412,84 @@ if ( ! class_exists( 'Astra_Site_Identity_Configs' ) ) {
 						'transport' => 'postMessage',
 						'title'     => __( 'Normal', 'astra' ),
 						'context'   => Astra_Builder_Helper::$design_tab,
+					),
+
+					// Color Group control for Logo SVG Icon Colors.
+					array(
+						'name'       => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'default'    => astra_get_option( 'logo-svg-icon-color-group' ),
+						'type'       => 'control',
+						'control'    => 'ast-color-group',
+						'title'      => __( 'Logo SVG Icon Color', 'astra' ),
+						'section'    => $_section,
+						'responsive' => false,
+						'transport'  => 'postMessage',
+						'priority'   => 8,
+						'context'    => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
+					),
+
+					// Option: Logo SVG Icon Color.
+					array(
+						'name'      => 'logo-svg-icon-color',
+						'parent'    => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'section'   => 'title_tagline',
+						'type'      => 'sub-control',
+						'control'   => 'ast-color',
+						'priority'  => 5,
+						'default'   => astra_get_option( 'logo-svg-icon-color' ),
+						'title'     => __( 'Normal', 'astra' ),
+						'transport' => 'postMessage',
+						'context'   => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
+					),
+
+					// Option: Logo SVG Icon Hover Color.
+					array(
+						'name'      => 'logo-svg-icon-hover-color',
+						'parent'    => ASTRA_THEME_SETTINGS . '[logo-svg-icon-color-group]',
+						'section'   => 'title_tagline',
+						'type'      => 'sub-control',
+						'control'   => 'ast-color',
+						'priority'  => 10,
+						'default'   => astra_get_option( 'logo-svg-icon-hover-color' ),
+						'title'     => __( 'Hover', 'astra' ),
+						'transport' => 'postMessage',
+						'context'   => array(
+							array(
+								'setting'  => 'custom_logo',
+								'operator' => '==',
+								'value'    => false,
+							),
+							array(
+								'setting'  => ASTRA_THEME_SETTINGS . '[use-logo-svg-icon]',
+								'operator' => '==',
+								'value'    => true,
+							),
+							Astra_Builder_Helper::$design_tab_config,
+						),
 					),
 
 					// Option: Site Title Hover Color.

@@ -31,7 +31,6 @@ function astra_single_post_css( $dynamic_css ) {
 
 	$static_css = '
 		:root {
-			--ast-post-nav-space: 0;
 			--ast-single-post-border: #e1e8ed;
 		}
 		.entry-content h1, .entry-content h2, .entry-content h3, .entry-content h4, .entry-content h5, .entry-content h6 {

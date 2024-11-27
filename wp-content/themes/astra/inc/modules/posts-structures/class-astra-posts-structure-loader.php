@@ -3,8 +3,6 @@
  * Post Structures loader for Astra theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2022, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 4.0.0
  */
@@ -57,6 +55,7 @@ class Astra_Posts_Structure_Loader {
 				'background-attachment' => 'scroll',
 				'overlay-type'          => '',
 				'overlay-color'         => '',
+				'overlay-opacity'       => '',
 				'overlay-gradient'      => '',
 				'background-type'       => '',
 				'background-media'      => '',
@@ -70,6 +69,7 @@ class Astra_Posts_Structure_Loader {
 				'background-attachment' => 'scroll',
 				'overlay-type'          => '',
 				'overlay-color'         => '',
+				'overlay-opacity'       => '',
 				'overlay-gradient'      => '',
 				'background-type'       => '',
 				'background-media'      => '',
@@ -83,6 +83,7 @@ class Astra_Posts_Structure_Loader {
 				'background-attachment' => 'scroll',
 				'overlay-type'          => '',
 				'overlay-color'         => '',
+				'overlay-opacity'       => '',
 				'overlay-gradient'      => '',
 				'background-type'       => '',
 				'background-media'      => '',

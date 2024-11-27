@@ -75,6 +75,7 @@ function astra_related_posts_css( $dynamic_css ) {
 		$custom_scale_height   = astra_get_option( 'related-posts-image-custom-scale-height', 9 );
 		$aspect_ratio          = astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height );
 		$with_aspect_img_width = 'predefined' === $aspect_ratio_type || 'custom' === $aspect_ratio_type ? '100%' : '';
+		$object_fit            = 'custom' === $aspect_ratio_type ? 'cover' : '';
 
 		$css_desktop_output = array(
 			'.ast-single-related-posts-container .ast-related-posts-wrapper' => array(
@@ -127,6 +128,7 @@ function astra_related_posts_css( $dynamic_css ) {
 			'.ast-related-post-content .post-thumb-img-content img' => array(
 				'aspect-ratio' => $aspect_ratio,
 				'width'        => $with_aspect_img_width,
+				'object-fit'   => $object_fit, // setting it to 'cover' for custom ratio option same as blogs archive page.
 			),
 			'.ast-related-post-content .ast-author-avatar' => array(
 				'--ast-author-avatar-size' => astra_get_css_value( $author_avatar_size, 'px' ),

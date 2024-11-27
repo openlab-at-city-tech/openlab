@@ -76,11 +76,10 @@
   margin-top: 15px;
 }
 
-.components-base-control .components-base-control__field {
+#customize-controls .components-base-control .components-base-control__field {
   margin-bottom: 0;
 }
-
-.components-base-control .components-base-control__field .components-input-control__backdrop {
+#customize-controls .components-base-control .components-base-control__field .components-input-control__backdrop {
   border-color: #D1D5DB !important;
 }
 
@@ -110,6 +109,16 @@
 
 .customize-control .ast-control-tooltip:hover {
     color: var(--ast-customizer-color-1);
+}
+
+.customize-control.customize-control-ast-responsive-background .ast-control-tooltip {
+  top: 50%;
+  left: 36px;
+  transform: translateY(-50%);
+}
+
+.customize-control.customize-control-ast-responsive-background:has(.ast-color-btn-reset-wrap) .ast-control-tooltip {
+  left: 60px;
 }
 
 .customize-control.customize-control-ast-toggle-control .ast-control-tooltip {
@@ -282,6 +291,11 @@ input[type="text"].select2-search__field {
   border-bottom: 1px solid var(--ast-customizer-color-7);
 }
 
+/* To remove extra spacing for customizer button */
+#customize-theme-controls .accordion-section-title button.accordion-trigger {
+  max-height: fit-content;
+}
+
 .wp-core-ui #customize-controls .control-section:hover > .accordion-section-title,
 .wp-core-ui #customize-controls .control-section .accordion-section-title:hover,
 .wp-core-ui #customize-controls .control-section .accordion-section-title:focus,
@@ -381,4 +395,112 @@ li[ID*="accordion-section-ast-dynamic-archive-"].control-section-ast_section,
 li#accordion-section-section-search-page-title.control-section-ast_section,
 li[ID*="accordion-section-ast-sub-section-"].control-section-ast_section {
   display: none !important;
+}
+
+.item-customizer-focus svg {
+    min-width: 12px;
+    min-height: 12px;
+    width: 12px;
+    height: 12px;
+    fill: #fff;
+    margin-right: -1px;
+}
+
+/* Customizer - Adjusting Style Guide Trigger Button */
+.wp-full-overlay-sidebar #customize-header-actions {
+    padding-right: 6px;
+    padding-left: 6px;
+}
+#customize-header-actions button#astra-tour {
+    display: block;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 48px;
+    width: 45px;
+    margin-top: 0 !important;
+    padding: 0;
+    background: #f0f0f1;
+    border: none;
+    border-radius: 0;
+    border-top: 4px solid #f0f0f1;
+    border-left: 1px solid #dcdcde;
+    color: #3c434a;
+    fill: #3c434a;
+    stroke: #3c434a;
+}
+#customize-header-actions button#astra-tour:hover, #customize-header-actions button#astra-tour:focus {
+    background: #fff;
+	color: #2271b1;
+    fill: #2271b1;
+    stroke: #2271b1;
+    border-top-color: #2271b1;
+    box-shadow: none;
+    outline: 1px solid transparent;
+}
+#customize-header-actions button#astra-tour svg {
+    margin-top: 7px;
+    margin-right: 3px;
+    width: 16px;
+    height: 16px;
+}
+@media screen and (max-width: 640px) {
+    #customize-header-actions button#astra-tour {
+	    right: 153px;
+    }
+}
+
+/* To highlight style guide option */
+.indicator-dot {
+  z-index: 1000;
+  position: relative;
+  height: 5px;
+  width: 5px;
+  background-color: red;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 80px;
+  margin-bottom: 15px;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+      transform: scale(1);
+      opacity: 1;
+  }
+  50% {
+      transform: scale(1.5);
+      opacity: 0.7;
+  }
+  100% {
+      transform: scale(1);
+      opacity: 1;
+  }
+}
+
+/* Styling for the tooltip */
+.ast-style-guide-tooltip {
+  display: none;
+  position: absolute;
+  right: 50%;
+  transform: translateX(50%);
+  margin-bottom: 5px;
+  background-color: #e5e5e5;
+  color: #494948;
+  border-radius: 3px;
+  white-space: nowrap;
+  font-size: 12px;
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity .3s ease;
+  padding: 0 8px;
+  top: 45px;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+}
+
+/* Show the ast-style-guide-tooltip on hover */
+#astra-tour:hover .ast-style-guide-tooltip {
+  display: block;
+  opacity: 1;
 }

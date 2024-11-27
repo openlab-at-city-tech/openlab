@@ -3,8 +3,6 @@
  * Below Header Loader.
  *
  * @package     astra-builder
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       3.0.0
  */

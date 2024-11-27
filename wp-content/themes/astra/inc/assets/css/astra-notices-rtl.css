@@ -92,10 +92,15 @@
 	margin: 4px -1px 0px 5px;
 }
 
+.wp-core-ui .astra-notice-wrapper:has(.ast-welcome-banner) {
+    padding-left: 0;
+}
 .ast-welcome-banner {
+	width: 100%;
 	display: flex;
-	gap: 50px;
+	gap: 40px;
 	justify-content: center;
+	overflow: hidden;
 }
 .ast-col-left {
 	width: 50%;
@@ -103,20 +108,19 @@
 	flex-direction: column;
 	align-items: flex-start;
 	justify-content: center;
-	padding: 38px 53px 38px 0px;
+	padding: 40px 28px 40px 0px;
 }
 .ast-col-right {
 	width: 50%;
 	display: flex;
-	flex-direction: column;
-	align-items: flex-end;
-	align-self: flex-end;
+	position: relative;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .ast-col-right > img {
 	width: 100%;
 	position: relative;
-	left: 30px;
-	top: 10px;
 }
 .ast-welcome-banner .notice-title {
 	color: #1e293b;
@@ -130,7 +134,7 @@
 }
 .ast-welcome-banner .description {
 	color: #475569;
-	font-size: 18px;
+	font-size: 16px;
 	line-height: 28px;
 	margin-top: 0px;
 	margin-bottom: 32px;
@@ -139,7 +143,7 @@
 #astra-sites-on-active .astra-notice-container .notice-actions > button {
 	border-radius: 6px;
 	background: #046bd2;
-	padding: 10px 16px;
+	padding: 12px 24px;
 	/* shadow/sm */
 	color: white;
 	box-shadow: none;
@@ -152,11 +156,64 @@
 	display: flex;
 	flex-direction: column;
 	align-self: stretch;
-	color: #046bd2;
+	color: #646970;
 	font-size: 14px;
 	line-height: 22px;
 	margin: 0;
 	padding: 0;
+}
+.astra-notice-container:has(.ast-welcome-banner) {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+.ast-welcome-banner .notice-actions button {
+    font-size: 14px;
+    line-height: 22px;
+    font-weight: 500;
+    padding: 12px 24px;
+}
+p.sub-notice-description {
+    color: #475569;
+    font-size: 13px;
+    line-height: 20px;
+    text-decoration: underline;
+    cursor: pointer;
+    margin: 0;
+    padding: 16px 0 0;
+}
+.ast-st-sites-cta {
+	border: 1px solid #fff;
+    border-radius: 9999px;
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    box-shadow: 0px 16px 40px -16px #00000040;
+    z-index: 9;
+    padding: 12px;
+    position: absolute;
+    bottom: 40px;
+    background: rgb(228 228 228 / 50%);
+    backdrop-filter: blur(4px);
+}
+
+.ast-st-sites-cta .ast-page-builder-ico {
+    padding: 8px;
+    background: #fff;
+    border-radius: 24px;
+    width: 20px;
+    height: 20px;
+}
+.ast-st-sites-cta span {
+	font-size: 16px;
+    line-height: 20px;
+    color: #0F172A;
+    font-weight: 700;
+    width: 100px;
+    text-align: center;
+    padding-left: 6px;
+    border-left: 1px solid #fff;
 }
 #astra-sites-on-active {
 	padding: 0;
@@ -173,15 +230,14 @@
 	#astra-sites-on-active .astra-notice-container .notice-actions > button {
 		width: 100%;
 	}
-	.ast-welcome-banner .description {
-		margin-bottom: 25px;
-	}
 }
 @media screen and (max-width: 782px) {
 	.ast-col-left {
 		width: 100%;
 		font-size: 14px;
 		align-items: unset;
+		padding-right: 15px;
+		padding-left: 15px;
 	}
 	#astra-sites-on-active .astra-notice-container .notice-actions > button {
 		font-size: 14px;
@@ -190,11 +246,10 @@
 	.ast-welcome-banner .notice-title {
 		font-size: 22px;
 	}
-	.ast-welcome-banner .sub-notice-title {
-		font-size: 14px;
-	}
+	.ast-welcome-banner .sub-notice-title,
 	.ast-welcome-banner .description {
 		font-size: 14px;
+		line-height: 24px;
 	}
 }
 
@@ -206,18 +261,16 @@
 		width: 45%;
 	}
 	.ast-col-right {
-		width: 60%;
+		width: 65%;
 	}
 	#astra-sites-on-active .astra-notice-container .notice-actions > button {
 		font-size: 14px;
 	}
 	.ast-welcome-banner .notice-title {
-		font-size: 25px;
+		font-size: 24px;
+		line-height: 36px;
 	}
 	.ast-welcome-banner .sub-notice-title {
-		font-size: 15px;
-	}
-	.ast-welcome-banner .description {
-		font-size: 15px;
+		font-size: 13px;
 	}
 }

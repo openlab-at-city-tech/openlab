@@ -121,6 +121,12 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'color'      => $menu_resp_color_hover_desktop,
 			'background' => $menu_resp_bg_color_hover_desktop,
 		),
+
+		'.ast-builder-menu-mobile .menu-item:hover > .menu-link, ' . $selector . ' .inline-on-mobile .menu-item:hover > .ast-menu-toggle' => array(
+			'color'      => $menu_resp_color_hover_desktop,
+			'background' => $menu_resp_bg_color_hover_desktop,
+		),
+		
 		$selector . ' .menu-item:hover > .ast-menu-toggle' => array(
 			'color' => $menu_resp_color_hover_desktop,
 		),
@@ -161,7 +167,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'padding-left'   => astra_responsive_spacing( $menu_spacing, 'left', 'tablet' ),
 			'padding-right'  => astra_responsive_spacing( $menu_spacing, 'right', 'tablet' ),
 		),
-		$selector . ' .menu-item > .ast-menu-toggle'       => array(
+		$selector . ' .main-header-menu .menu-item > .ast-menu-toggle' => array(
 			'color' => $menu_resp_color_tablet,
 		),
 		$selector . ' .menu-item:hover > .menu-link, ' . $selector . ' .inline-on-mobile .menu-item:hover > .ast-menu-toggle' => array(
@@ -198,7 +204,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 
 	$css_output_mobile = array(
 
-		$selector                                     => array(
+		$selector        => array(
 			'font-size' => astra_get_font_css_value( $menu_font_size_mobile, $menu_font_size_mobile_unit ),
 		),
 		$selector . ' .main-header-menu .menu-item > .menu-link' => array(
@@ -208,7 +214,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'padding-left'   => astra_responsive_spacing( $menu_spacing, 'left', 'mobile' ),
 			'padding-right'  => astra_responsive_spacing( $menu_spacing, 'right', 'mobile' ),
 		),
-		$selector . ' .menu-item  > .ast-menu-toggle' => array(
+		$selector . ' .main-header-menu .menu-item  > .ast-menu-toggle' => array(
 			'color' => $menu_resp_color_mobile,
 		),
 		$selector . ' .menu-item:hover > .menu-link, ' . $selector . ' .inline-on-mobile .menu-item:hover > .ast-menu-toggle' => array(
@@ -230,7 +236,7 @@ function astra_hb_mobile_menu_dynamic_css( $dynamic_css, $dynamic_css_filtered =
 			'right' => astra_calculate_spacing( astra_responsive_spacing( $menu_spacing, 'right', 'mobile' ), '-', '0.907', 'em' ),
 		),
 		// Margin CSS.
-		$margin_selector                              => array(
+		$margin_selector => array(
 			'margin-top'    => astra_responsive_spacing( $margin, 'top', 'mobile' ),
 			'margin-bottom' => astra_responsive_spacing( $margin, 'bottom', 'mobile' ),
 			'margin-left'   => astra_responsive_spacing( $margin, 'left', 'mobile' ),

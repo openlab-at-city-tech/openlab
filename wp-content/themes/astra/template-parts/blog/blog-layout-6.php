@@ -3,23 +3,23 @@
  * Template for Blog Layout 6
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       Astra 4.6.0
  */
 
 ?>
 <div <?php astra_blog_layout_class( 'blog-layout-6' ); ?>>
-	<div class="post-content <?php echo astra_attr( 'ast-grid-common-col' ); ?>" >
+	<div class="post-content <?php echo wp_kses_post( astra_attr( 'ast-grid-common-col' ) ); ?>" >
 		<?php astra_blog_post_thumbnail_and_title_order(); ?>
 		<div class="entry-content clear"
 		<?php
-				echo astra_attr(
-					'article-entry-content-blog-layout',
-					array(
-						'class' => '',
-					)
+				echo wp_kses_post(
+					astra_attr(
+						'article-entry-content-blog-layout',
+						array(
+							'class' => '',
+						)
+					) 
 				);
 				?>
 		>

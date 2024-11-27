@@ -121,20 +121,24 @@ if ( ! function_exists( 'astra_theme_comment' ) ) {
 								astra_markup_open( 'ast-comment-data-wrap' );
 								astra_markup_open( 'ast-comment-meta-wrap' );
 								echo '<header ';
-								echo astra_attr(
-									'commen-meta-author',
-									array(
-										'class' => 'ast-comment-meta ast-row ast-comment-author vcard capitalize',
+								echo wp_kses_post(
+									astra_attr(
+										'commen-meta-author',
+										array(
+											'class' => 'ast-comment-meta ast-row ast-comment-author capitalize',
+										)
 									)
 								);
 								echo '>';
 
 									printf(
-										astra_markup_open(
-											'ast-comment-cite-wrap',
-											array(
-												'open'  => '<div %s>',
-												'class' => 'ast-comment-cite-wrap',
+										esc_attr(
+											astra_markup_open(
+												'ast-comment-cite-wrap',
+												array(
+													'open' => '<div %s>',
+													'class' => 'ast-comment-cite-wrap',
+												)
 											)
 										) . '<cite><b class="fn">%1$s</b> %2$s</cite></div>',
 										get_comment_author_link(),
@@ -230,7 +234,7 @@ function astra_adjacent_post_links_title( $output, $format, $link, $post, $adjac
 	/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	if ( ! empty( $post->post_title ) ) {
 		/** @psalm-suppress PossiblyInvalidPropertyFetch */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$output = str_replace( 'href="', 'title="' . esc_attr( $post->post_title ) . '"' . 'href="', $output );
+		$output = str_replace( 'href="', 'title="' . esc_attr( $post->post_title ) . '" ' . 'href="', $output );
 	}
 	return $output;
 }

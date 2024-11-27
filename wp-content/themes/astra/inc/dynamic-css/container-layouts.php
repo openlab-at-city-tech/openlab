@@ -22,6 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 function astra_check_any_page_builder_is_active( $post_id ) {
 	$post = get_post( $post_id );
 
+	if ( ! $post ) {
+		return false; // Prevent further execution if $post is null.
+	}
+
 	if ( class_exists( '\Elementor\Plugin' ) ) {
 		/** @psalm-suppress UndefinedClass */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$document = Elementor\Plugin::$instance->documents->get( $post_id ); // phpcs:ignore PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ns_separatorFound

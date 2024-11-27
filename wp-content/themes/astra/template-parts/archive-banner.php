@@ -8,7 +8,7 @@
  * @since 4.0.0
  */
 
-$astra_post_type      = ! empty( $args ) && ! empty( $args['post_type'] ) ? $args['post_type'] : strval( get_post_type() );
+$astra_post_type      = ! empty( $args ) && ! empty( $args['post_type'] ) ? $args['post_type'] : astra_get_post_type();
 $astra_banner_control = 'ast-dynamic-archive-' . esc_attr( $astra_post_type );
 
 // If description is the only meta available in structure & its blank then no need to render banner markup.

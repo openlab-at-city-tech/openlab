@@ -3,8 +3,6 @@
  * Schema markup.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 2.1.3
  */

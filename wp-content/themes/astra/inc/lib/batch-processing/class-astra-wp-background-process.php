@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		 * (default value: 'background_process')
 		 *
 		 * @var string
-		 * @access protected
 		 */
 		protected $action = 'background_process';
 
@@ -31,7 +30,6 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		 * (default value: 0)
 		 *
 		 * @var int
-		 * @access protected
 		 */
 		protected $start_time = 0;
 
@@ -39,7 +37,6 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		 * Cron_hook_identifier
 		 *
 		 * @var mixed
-		 * @access protected
 		 */
 		protected $cron_hook_identifier;
 
@@ -47,7 +44,6 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		 * Cron_interval_identifier
 		 *
 		 * @var mixed
-		 * @access protected
 		 */
 		protected $cron_interval_identifier;
 
@@ -67,7 +63,6 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		/**
 		 * Dispatch
 		 *
-		 * @access public
 		 * @return void
 		 */
 		public function dispatch() {
@@ -146,6 +141,7 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		 * @return string
 		 */
 		protected function generate_key( $length = 64 ) {
+			// file deepcode ignore InsecureHash: This is the external library.
 			$unique  = md5( microtime() . rand() );
 			$prepend = $this->identifier . '_batch_';
 
@@ -187,21 +183,17 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		protected function is_queue_empty() {
 			global $wpdb;
 
-			$table  = $wpdb->options;
-			$column = 'option_name';
+			$wpdb->ast_db_table  = $wpdb->options;
+			$wpdb->ast_db_column = 'option_name';
 
 			if ( is_multisite() ) {
-				$table  = $wpdb->sitemeta;
-				$column = 'meta_key';
+				$wpdb->ast_db_table  = $wpdb->sitemeta;
+				$wpdb->ast_db_column = 'meta_key';
 			}
 
 			$key = $wpdb->esc_like( $this->identifier . '_batch_' ) . '%';
 
-			$count = $wpdb->get_var( $wpdb->prepare( "
-			SELECT COUNT(*)
-			FROM {$table}
-			WHERE {$column} LIKE %s
-		", $key ) );
+			$count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->ast_db_table} WHERE {$wpdb->ast_db_column} LIKE %s ", $key ) );
 
 			return ( $count > 0 ) ? false : true;
 		}
@@ -258,30 +250,24 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		protected function get_batch() {
 			global $wpdb;
 
-			$table        = $wpdb->options;
-			$column       = 'option_name';
-			$key_column   = 'option_id';
-			$value_column = 'option_value';
+			$wpdb->ast_db_table        = $wpdb->options;
+			$wpdb->ast_db_column       = 'option_name';
+			$wpdb->ast_db_key_column   = 'option_id';
+			$value_column              = 'option_value';
 
 			if ( is_multisite() ) {
-				$table        = $wpdb->sitemeta;
-				$column       = 'meta_key';
-				$key_column   = 'meta_id';
-				$value_column = 'meta_value';
+				$wpdb->ast_db_table        = $wpdb->sitemeta;
+				$wpdb->ast_db_column       = 'meta_key';
+				$wpdb->ast_db_key_column   = 'meta_id';
+				$value_column              = 'meta_value';
 			}
 
 			$key = $wpdb->esc_like( $this->identifier . '_batch_' ) . '%';
 
-			$query = $wpdb->get_row( $wpdb->prepare( "
-			SELECT *
-			FROM {$table}
-			WHERE {$column} LIKE %s
-			ORDER BY {$key_column} ASC
-			LIMIT 1
-		", $key ) );
+			$query = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$wpdb->ast_db_table} WHERE {$wpdb->ast_db_column} LIKE %s ORDER BY {$wpdb->ast_db_key_column} ASC LIMIT 1", $key ) );
 
 			$batch       = new stdClass();
-			$batch->key  = $query->$column;
+			$batch->key  = $query->{$wpdb->ast_db_column};
 			$batch->data = maybe_unserialize( $query->$value_column );
 
 			return $batch;
@@ -406,9 +392,8 @@ if ( ! class_exists( 'Astra_WP_Background_Process' ) ) {
 		}
 
 		/**
-		 * Schedule cron healthcheck
+		 * Schedule cron health check
 		 *
-		 * @access public
 		 * @param mixed $schedules Schedules.
 		 * @return mixed
 		 */

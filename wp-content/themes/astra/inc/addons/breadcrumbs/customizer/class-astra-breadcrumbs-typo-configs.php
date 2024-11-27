@@ -3,8 +3,6 @@
  * Typography - Breadcrumbs Options for theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 1.7.0
  */
@@ -51,7 +49,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 					'default'   => astra_get_option( 'section-breadcrumb-typo' ),
 					'type'      => 'control',
 					'control'   => 'ast-settings-group',
-					'title'     => __( 'Content Font', 'astra' ),
+					'title'     => esc_html__( 'Content Font', 'astra' ),
 					'section'   => 'section-breadcrumb',
 					'transport' => 'postMessage',
 					'priority'  => 71,
@@ -78,7 +76,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 					'section'   => 'section-breadcrumb',
 					'control'   => 'ast-font',
 					'font_type' => 'ast-font-family',
-					'title'     => __( 'Font Family', 'astra' ),
+					'title'     => esc_html__( 'Font Family', 'astra' ),
 					'connect'   => 'breadcrumb-font-weight',
 					'priority'  => 5,
 					'divider'   => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
@@ -96,7 +94,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 					'font_type'         => 'ast-font-weight',
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_font_weight' ),
 					'default'           => astra_get_option( 'breadcrumb-font-weight' ),
-					'title'             => __( 'Font Weight', 'astra' ),
+					'title'             => esc_html__( 'Font Weight', 'astra' ),
 					'connect'           => 'breadcrumb-font-family',
 					'priority'          => 10,
 					'divider'           => array( 'ast_class' => 'ast-sub-bottom-dotted-divider' ),
@@ -114,7 +112,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
 					'section'           => 'section-breadcrumb',
 					'transport'         => 'postMessage',
-					'title'             => __( 'Font Size', 'astra' ),
+					'title'             => esc_html__( 'Font Size', 'astra' ),
 					'priority'          => 10,
 					'default'           => astra_get_option( 'breadcrumb-font-size' ),
 					'suffix'            => array( 'px', 'em', 'vw', 'rem' ),
@@ -153,7 +151,7 @@ if ( ! class_exists( 'Astra_Breadcrumbs_Typo_Configs' ) ) {
 					'section'  => 'section-breadcrumb',
 					'priority' => 25,
 					'default'  => astra_get_option( 'breadcrumb-font-extras' ),
-					'title'    => __( 'Line Height', 'astra' ),
+					'title'    => esc_html__( 'Line Height', 'astra' ),
 				),
 
 			);

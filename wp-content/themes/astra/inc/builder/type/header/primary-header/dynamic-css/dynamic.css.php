@@ -152,7 +152,37 @@ function astra_primary_header_breakpoint_style( $dynamic_css, $dynamic_css_filte
 	$parse_css .= astra_parse_css( $border_responsive_style );
 	$parse_css .= astra_parse_css( $border_desktop_style, astra_get_tablet_breakpoint( '', 1 ) );
 
-	$header_bg_obj = astra_get_option( 'hb-header-bg-obj-responsive' );
+	// Header background colours.
+	$header_bg_obj     = astra_get_option( 'hb-header-bg-obj-responsive' );
+	$hba_header_bg_obj = astra_get_option( 'hba-header-bg-obj-responsive' );
+	$hbb_header_bg_obj = astra_get_option( 'hbb-header-bg-obj-responsive' );
+
+	// Handle style guide logo background cases inside the customizer.
+	if ( is_customize_preview() ) {
+		$header_items = astra_get_option( 'header-desktop-items', array() );
+	
+		$header_main_color = array(
+			'.ast-sg-element-wrap.ast-sg-logo-section' => astra_get_responsive_background_obj( $header_bg_obj, 'desktop' ),
+		);
+
+		$sections = array(
+			'above'   => $hba_header_bg_obj,
+			'primary' => $header_bg_obj,
+			'below'   => $hbb_header_bg_obj,
+		);
+	
+		foreach ( $sections as $section => $bg_obj ) {
+			if ( isset( $header_items[ $section ] ) && astra_is_logo_in_section( $header_items[ $section ] ) ) {
+				$header_main_color = array(
+					'.ast-sg-element-wrap.ast-sg-logo-section' => astra_get_responsive_background_obj( $bg_obj, 'desktop' ),
+				);
+				break;
+			}
+		}
+	
+		// Parse the CSS
+		$parse_css .= astra_parse_css( $header_main_color );
+	}   
 
 	/**
 	 * Responsive Colors options

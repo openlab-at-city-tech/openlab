@@ -227,7 +227,7 @@ if ( ! class_exists( 'Astra_Builder_Footer' ) ) {
 
 			$theme_author = astra_get_theme_author_details();
 
-			$content = astra_get_option( 'footer-copyright-editor' );
+			$content = astra_get_i18n_option( 'footer-copyright-editor', _x( '%astra%', 'Footer Builder: Copyright Editor Text', 'astra' ) );
 			if ( $content || is_customize_preview() ) {
 				echo '<div class="ast-footer-copyright">';
 						$content = str_replace( '[copyright]', '&copy;', $content );

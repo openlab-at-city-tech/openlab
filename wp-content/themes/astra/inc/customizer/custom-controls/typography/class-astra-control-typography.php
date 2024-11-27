@@ -3,8 +3,6 @@
  * Customizer Control: typography.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       1.0.0
  */
@@ -159,8 +157,6 @@ final class Astra_Control_Typography extends WP_Customize_Control {
 	 * export custom variables by overriding {@see WP_Customize_Control::to_json()}.
 	 *
 	 * @see WP_Customize_Control::print_template()
-	 *
-	 * @access protected
 	 */
 	protected function content_template() {
 

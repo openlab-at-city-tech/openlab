@@ -115,6 +115,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -126,6 +127,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -137,6 +139,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -191,6 +194,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -202,6 +206,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -213,6 +218,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -291,6 +297,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -302,6 +309,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -313,6 +321,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -447,6 +456,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -458,6 +468,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -469,6 +480,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -482,6 +494,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -493,6 +506,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -504,6 +518,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -517,6 +532,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -528,6 +544,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -539,6 +556,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -583,6 +601,11 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 		'mobile'  => 'full',
 	);
 
+	/**
+	 * Primary Footer Default Height.
+	 */
+	$defaults['hb-primary-footer-height'] = '';
+
 	$defaults['hba-footer-layout-width'] = 'content';
 	$defaults['hb-footer-layout-width']  = 'content';
 	$defaults['hbb-footer-layout-width'] = 'content';
@@ -601,6 +624,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -612,6 +636,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -623,6 +648,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -788,6 +814,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 		'background-attachment' => 'scroll',
 		'overlay-type'          => '',
 		'overlay-color'         => '',
+		'overlay-opacity'       => '',
 		'overlay-gradient'      => '',
 	);
 	$defaults['off-canvas-close-color']             = '#3a3a3a';
@@ -809,6 +836,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -820,6 +848,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -831,6 +860,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -1017,6 +1047,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -1028,6 +1059,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -1039,6 +1071,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);
@@ -1114,6 +1147,7 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 	 * Woo-Cart.
 	 */
 	$defaults['woo-header-cart-click-action']              = 'default';
+	$defaults['responsive-cart-click-action']              = 'flyout';
 	$defaults['woo-slide-in-cart-width']                   = array(
 		'desktop'      => 35,
 		'tablet'       => '',
@@ -1220,20 +1254,22 @@ function astra_hf_builder_customizer_defaults( $defaults ) {
 	/**
 	 * Account element.
 	*/
-	$defaults['header-account-type']            = 'default';
-	$defaults['header-account-login-style']     = 'icon';
-	$defaults['header-account-action-type']     = 'link';
-	$defaults['header-account-link-type']       = 'default';
-	$defaults['header-account-logout-style']    = 'icon';
-	$defaults['header-account-logged-out-text'] = __( 'Log In', 'astra' );
-	$defaults['header-account-logged-in-text']  = __( 'My Account', 'astra' );
-	$defaults['header-account-logout-action']   = 'link';
-	$defaults['header-account-image-width']     = array(
+	$defaults['header-account-type']                                  = 'default';
+	$defaults['header-account-login-style']                           = 'icon';
+	$defaults['header-account-login-style-extend-text-profile-type']  = 'default';
+	$defaults['header-account-action-type']                           = 'link';
+	$defaults['header-account-link-type']                             = 'default';
+	$defaults['header-account-logout-style']                          = 'icon';
+	$defaults['header-account-logout-style-extend-text-profile-type'] = 'default';
+	$defaults['header-account-logged-out-text']                       = __( 'Log In', 'astra' );
+	$defaults['header-account-logged-in-text']                        = __( 'My Account', 'astra' );
+	$defaults['header-account-logout-action']                         = 'link';
+	$defaults['header-account-image-width']                           = array(
 		'desktop' => '40',
 		'tablet'  => '',
 		'mobile'  => '',
 	);
-	$defaults['header-account-icon-size']       = array(
+	$defaults['header-account-icon-size']                             = array(
 		'desktop' => 18,
 		'tablet'  => 18,
 		'mobile'  => 18,
@@ -2098,6 +2134,7 @@ function astra_prepare_menu_defaults( $defaults, $index ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'tablet'  => array(
@@ -2109,6 +2146,7 @@ function astra_prepare_menu_defaults( $defaults, $index ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 		'mobile'  => array(
@@ -2120,6 +2158,7 @@ function astra_prepare_menu_defaults( $defaults, $index ) {
 			'background-attachment' => 'scroll',
 			'overlay-type'          => '',
 			'overlay-color'         => '',
+			'overlay-opacity'       => '',
 			'overlay-gradient'      => '',
 		),
 	);

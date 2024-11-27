@@ -3,8 +3,6 @@
  * Navigation Menu customizations.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.5.4
  */
@@ -73,7 +71,7 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 			if ( isset( $args['pages_with_children'][ $page->ID ] ) ) {
 				$css_class[] = 'menu-item-has-children';
 				$icon        = Astra_Icons::get_icons( 'arrow' );
-				$icon        = '<span role="presentation" class="dropdown-menu-toggle">' . $icon . '</span>';
+				$icon        = '<span role="presentation" class="dropdown-menu-toggle ast-header-navigation-arrow" tabindex="0">' . $icon . '</span>';
 				// Add toggle button if menu is from Astra.
 				if ( true === is_object( $args ) ) {
 					if ( isset( $args->theme_location ) &&
