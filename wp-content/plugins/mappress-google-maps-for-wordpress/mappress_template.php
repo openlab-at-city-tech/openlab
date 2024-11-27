@@ -41,7 +41,7 @@ class Mappress_Template extends Mappress_Obj {
 			'title' => __('Title', 'mappress-google-maps-for-wordpress'),
 			'url' => __('URL', 'mappress-google-maps-for-wordpress'),
 			'props.myfield' => __('Custom field', 'mappress-google-maps-for-wordpress'),
-			'props.mydata' => __('POI data', 'mappress-google-maps-for-wordpress')
+			'data.myfield' => __('POI data field', 'mappress-google-maps-for-wordpress')
 		);
 
 		self::$user_tokens = array(

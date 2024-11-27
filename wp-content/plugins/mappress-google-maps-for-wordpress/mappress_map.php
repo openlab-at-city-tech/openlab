@@ -273,49 +273,7 @@ class Mappress_Map extends Mappress_Obj {
 			$div++;
 		}
 
-		if (Mappress::$options->webComponent)
-			return $this->display_web_component(null, $in_iframe);
-
-		// iframe container
-		if (Mappress::$options->iframes && !$in_iframe) {
-			// Convert booleans to strings
-			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
-
-			// No POIs in URL.  Programmatic maps get a transient
-			if ($this->query || $this->mapid) {
-				unset($args['pois']);
-			} else {
-				$transient = 'mapp-iframe-' . md5(json_encode($this));
-				set_transient($transient, $this, 30);
-				$args = array('transient' => $transient);
-			}
-
-			$home_url = get_home_url();            
-			$url = $home_url . ((stristr($home_url, '?') === false) ? '?' : '&') . 'mappress=embed&' . http_build_query($args);
-			
-			// Width + height attributes are required for Google AMP
-			$iframe = "<iframe height='100%' width='100%' class='mapp-iframe' src='$url' scrolling='no' loading='lazy'></iframe>";
-			return $this->get_layout($iframe);
-		}
-
-		// Prepare POIs
-		$this->prepare();
-
-		// Last chance to alter map before display
-		do_action('mappress_map_display', $this);
-
-		// Map data
-		$script = Mappress::script(
-			"window.mapp = window.mapp || {}; mapp.data = mapp.data || [];\r\n"
-			. "mapp.data.push( " . json_encode($this) . " ); \r\nif (typeof mapp.load != 'undefined') { mapp.load(); };"
-		);
-
-		if ($in_iframe) {
-			return "<div id='{$this->name}' class='mapp-content'></div>". $script;
-		} else {
-			Mappress::scripts_enqueue();
-			return $this->get_layout() . $script;
-		}
+		return $this->display_web_component(null, $in_iframe);
 	}
 
 	/**
@@ -335,6 +293,8 @@ class Mappress_Map extends Mappress_Obj {
 		if (Mappress::$options->iframes && !$in_iframe) {
 			// Convert booleans to strings for iframe atts
 			$args = array_map(function($arg) { if (is_bool($arg)) return ($arg) ? "true" : "false"; else return $arg; }, (array) $this);
+			
+			unset($args['title']);  // Not needed in frontend
 			
 			// Query or mapid - no POIs in iframe URL
 			if ($this->query || $this->mapid) {
@@ -587,7 +547,7 @@ class Mappress_Map extends Mappress_Obj {
 		$maps_table = $wpdb->prefix . 'mapp_maps';
 
 		// Filter out poi field data that is no longer present in settings
-		foreach($this->pois as &$poi) {
+		foreach($this->pois as &$poi) {		
 			if (Mappress::$options->poiFields) {
 				$keys = array_map(function($entry) { return $entry['key']; }, Mappress::$options->poiFields);
 				$data = (array) $poi->data;

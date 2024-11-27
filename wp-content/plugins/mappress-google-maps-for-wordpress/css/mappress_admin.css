@@ -482,12 +482,12 @@
 */
 
 .mapp-settings {
-	overflow: hidden;
+	overflow: auto;
 }
 
 .mapp-settings-row {
 	display: flex;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 .mapp-settings-title {
@@ -641,6 +641,7 @@ button.mapp-query-refresh {
 
 .mapp-poi-tabs .mapp-tab-content {
 	gap: 10px;
+	overflow: auto;
 }
 
 .mapp-poi-tabs.mapp-tab-main .mapp-tab-content {
@@ -652,8 +653,8 @@ button.mapp-query-refresh {
 }
 
 .mapp-poi-header {
-	display: flex;
 	align-items: center;
+	display: flex;
 }
 
 .mapp-poi-title {
@@ -1248,19 +1249,15 @@ button.mapp-options-save {
 }
 
 .mapp-option-filter-row {
+	align-items: center;
 	display: flex;
 	flex-wrap: wrap;
-	gap: 10px 0;
+	gap: 10px;
+	margin-top: 10px;
 }
 
 .mapp-option-filter .mapp-control {
 	margin-right: 10px;
-}
-
-.mapp-option-filter-tokens {
-	display: flex;
-	flex-direction: column;
-	margin-top: 10px;
 }
 
 .mapp-option-filter .components-form-token-field__input-container {
