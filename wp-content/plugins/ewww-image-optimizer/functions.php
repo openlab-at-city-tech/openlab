@@ -11,15 +11,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Check if file exists, and that it is local rather than using a protocol like http:// or phar://
+ *
+ * @param string $file The path of the file to check.
+ * @return bool True if the file exists and is local, false otherwise.
+ */
+function ewwwio_is_file( $file ) {
+	return ewwwio()->is_file( $file );
+}
+
+/**
+ * Check filesize, and prevent errors by ensuring file exists, and that the cache has been cleared.
+ *
+ * @param string $file The name of the file.
+ * @return int The size of the file or zero.
+ */
+function ewww_image_optimizer_filesize( $file ) {
+	return ewwwio()->filesize( $file );
+}
+
+/**
  * Check the mimetype of the given file with magic mime strings/patterns.
  *
  * @param string $path The absolute path to the file.
- * @param string $type The type of file we are checking. Accepts 'i' for
+ * @param string $type The type of file we are checking. Default 'i' for
  *                     images/pdfs or 'b' for binary.
  * @return bool|string A valid mime-type or false.
  */
-function ewww_image_optimizer_mimetype( $path, $type ) {
+function ewww_image_optimizer_mimetype( $path, $type = 'i' ) {
 	return ewwwio()->mimetype( $path, $type );
+}
+
+/**
+ * Get mimetype based on file extension instead of file contents when speed outweighs accuracy.
+ *
+ * @param string $path The name of the file.
+ * @return string|bool The mime type based on the extension or false.
+ */
+function ewww_image_optimizer_quick_mimetype( $path ) {
+	return ewwwio()->quick_mimetype( $path );
 }
 
 /**

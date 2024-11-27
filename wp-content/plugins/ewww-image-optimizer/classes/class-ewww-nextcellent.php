@@ -394,7 +394,7 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 				<h1><?php esc_html_e( 'Bulk Optimize', 'ewww-image-optimizer' ); ?></h1>
 				<?php
 				if ( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) ) {
-					ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ) );
+					ewww_image_optimizer_cloud_verify( ewww_image_optimizer_get_option( 'ewww_image_optimizer_cloud_key' ), false );
 					echo '<a id="ewww-bulk-credits-available" target="_blank" class="page-title-action" style="float:right;" href="https://ewww.io/my-account/">' . esc_html__( 'Image credits available:', 'ewww-image-optimizer' ) . ' ' . esc_html( ewww_image_optimizer_cloud_quota() ) . '</a>';
 				}
 				// Retrieve the value of the 'bulk resume' option and set the button text for the form to use.
@@ -537,7 +537,7 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 				$attachments = unserialize( $attachments );
 			}
 			if ( ! is_array( $attachments ) ) {
-				$output['error'] = esc_html__( 'Error retrieving list of images' );
+				$output['error'] = esc_html__( 'Error retrieving list of images', 'ewww-image-optimizer' );
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}
@@ -600,12 +600,17 @@ if ( ! class_exists( 'EWWW_Nextcellent' ) ) {
 			$id                  = array_shift( $attachments );
 			list( $fres, $tres ) = $this->ewww_ngg_optimize( $id );
 			if ( 'exceeded' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
-				$output['error'] = '<a href="https://ewww.io/buy-credits/" target="_blank">' . esc_html__( 'License Exceeded', 'ewww-image-optimizer' ) . '</a>';
+				$output['error'] = ewww_image_optimizer_credits_exceeded();
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}
 			if ( 'exceeded quota' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
-				$output['error'] = '<a href="https://docs.ewww.io/article/101-soft-quotas-on-unlimited-plans" target="_blank">' . esc_html__( 'Soft quota reached, contact us for more', 'ewww-image-optimizer' ) . '</a>';
+				$output['error'] = ewww_image_optimizer_soft_quota_exceeded();
+				ewwwio_ob_clean();
+				wp_die( wp_json_encode( $output ) );
+			}
+			if ( 'exceeded subkey' === get_transient( 'ewww_image_optimizer_cloud_status' ) ) {
+				$output['error'] = esc_html__( 'Out of credits', 'ewww-image-optimizer' );
 				ewwwio_ob_clean();
 				wp_die( wp_json_encode( $output ) );
 			}

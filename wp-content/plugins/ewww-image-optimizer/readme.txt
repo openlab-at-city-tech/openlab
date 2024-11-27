@@ -1,11 +1,11 @@
 === EWWW Image Optimizer ===
 Contributors: nosilver4u
 Donate link: https://ewww.io/donate/
-Tags: optimize, image, convert, webp, resize, compress, lazy load, optimization, lossless, lossy, scale
-Requires at least: 6.2
-Tested up to: 6.5
-Requires PHP: 7.3
-Stable tag: 7.7.0
+Tags: compress, convert, webp, resize, lazy load
+Requires at least: 6.3
+Tested up to: 6.7
+Requires PHP: 7.4
+Stable tag: 7.9.1
 License: GPLv3
 
 Smaller Images, Faster Sites, Happier Visitors. Comprehensive image optimization that doesn't require a degree in rocket science.
@@ -139,6 +139,37 @@ That's not a question, but since I made it up, I'll answer it. See this resource
 
 * Feature requests can be viewed and submitted on our [feedback portal](https://feedback.ewww.io/b/features)
 * If you would like to help translate this plugin in your language, [join the team](https://translate.wordpress.org/projects/wp-plugins/ewww-image-optimizer/)
+
+= 7.9.1 =
+*Release Date - October 31*
+
+* changed: bulk optimizer links point to async bulk tool, if available
+* fixed: Lazy Load for iframes results in empty src attribute
+* fixed: debug actions on bulk optimizer missing nonces
+* fixed: bulk optimize scanner queries are too long for some hosts
+* fixed: Lazy Load breaks --background CSS variable
+
+= 7.9.0 =
+*Release Date - September 12, 2024*
+
+* added: conversion of BMP images to JPG format
+* changed: allow folders outside of WordPress install to be optimized via Folders to Optimize
+* changed: improve performance of ewwwio_is_file(), props @rmpel
+* changed: improve exceeded credit messages for sub-keys
+* changed: warn when db connection is not using UTF-8
+* changed: ensure all db statements are properly prepared/sanitized
+* fixed: bulk async shows start optimizing instead of resume when queues are paused
+* fixed: bulk async status refresh does not handle errors properly
+* fixed: some strings with i18n had incorrect text domain
+
+= 7.8.0 =
+*Release Date - July 25, 2024*
+
+* added: agency mode available by defining EWWWIO_WHITELABEL or using the ewwwio_whitelabel filter
+* changed: skip lazy load for LCP images based on fetchpriority when auto-scaling is disabled
+* fixed: JS WebP alters img srcset when src is non-WebP but srcset is already WebP
+* fixed: Lazy Load and Easy IO fail to decode URLs with HTML-encoded characters, which causes esc_url to break the URL
+* fixed: Easy IO fails to update CDN domain if site is re-registered while still active
 
 = 7.7.0 =
 *Release Date - June 6, 2024*

@@ -278,7 +278,6 @@ class Backup extends Base {
 	 * Restore an image from local or cloud storage.
 	 *
 	 * @global object $wpdb
-	 * @global object $ewwwdb A clone of $wpdb unless it is lacking utf8 connectivity.
 	 *
 	 * @param int|array $image The db record/ID of the image to restore.
 	 * @return bool True if the image was restored successfully.
@@ -286,15 +285,15 @@ class Backup extends Base {
 	public function restore_file( $image ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		global $wpdb;
-		if ( \strpos( $wpdb->charset, 'utf8' ) === false ) {
-			\ewww_image_optimizer_db_init();
-			global $ewwwdb;
-		} else {
-			$ewwwdb = $wpdb;
-		}
 		$this->error_message = '';
 		if ( ! \is_array( $image ) && ! empty( $image ) && \is_numeric( $image ) ) {
-			$image = $ewwwdb->get_row( "SELECT id,path,backup FROM $ewwwdb->ewwwio_images WHERE id = $image", ARRAY_A );
+			$image = $wpdb->get_row(
+				$wpdb->prepare(
+					"SELECT id,path,backup FROM $wpdb->ewwwio_images WHERE id = %d",
+					$image
+				),
+				ARRAY_A
+			);
 		}
 		if ( ! empty( $image['path'] ) ) {
 			$image['path'] = \ewww_image_optimizer_absolutize_path( $image['path'] );
@@ -412,7 +411,6 @@ class Backup extends Base {
 	 * Restore an attachment from the API or local backups.
 	 *
 	 * @global object $wpdb
-	 * @global object $ewwwdb A clone of $wpdb unless it is lacking utf8 connectivity.
 	 *
 	 * @param int    $id The attachment id number.
 	 * @param string $gallery Optional. The gallery from whence we came. Default 'media'.
@@ -422,13 +420,14 @@ class Backup extends Base {
 	public function restore_backup_from_meta_data( $id, $gallery = 'media', $meta = array() ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		global $wpdb;
-		if ( \strpos( $wpdb->charset, 'utf8' ) === false ) {
-			\ewww_image_optimizer_db_init();
-			global $ewwwdb;
-		} else {
-			$ewwwdb = $wpdb;
-		}
-		$images = $ewwwdb->get_results( "SELECT id,path,resize,backup FROM $ewwwdb->ewwwio_images WHERE attachment_id = $id AND gallery = '$gallery'", ARRAY_A );
+		$images = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT id,path,resize,backup FROM $wpdb->ewwwio_images WHERE attachment_id = %d AND gallery = %s",
+				$id,
+				$gallery
+			),
+			ARRAY_A
+		);
 		foreach ( $images as $image ) {
 			if ( ! empty( $image['path'] ) ) {
 				$image['path'] = \ewww_image_optimizer_absolutize_path( $image['path'] );
