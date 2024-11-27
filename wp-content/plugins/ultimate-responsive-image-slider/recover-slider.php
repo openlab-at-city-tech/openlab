@@ -12,7 +12,8 @@ if(isset($_POST['slider-id'])) {
 		if(is_array($uris_updated_sliders)){
 			if(count($uris_updated_sliders)) {
 				if(in_array($slider_id, $uris_updated_sliders)) {
-					echo "<p style='text-align:center; color:red; font-weight:bolder;'>ERROR!!! Entered Slider ID '$slider_id' is already recovered.</p>";
+					//echo "<p style='text-align:center; color:red; font-weight:bolder;'>ERROR!!! Entered Slider ID '$slider_id' is already recovered.</p>";
+					echo "<p style='text-align:center; color:red; font-weight:bolder;'>" . esc_html( "ERROR!!! Entered Slider ID '$slider_id' is already recovered." ) . "</p>";
 					$slider_id = 0;
 				}
 			}
@@ -41,7 +42,7 @@ if(isset($_POST['slider-id'])) {
 						// get each slide attachment id by slide URL
 						$slide_url = $URIS_Slide_Setting['rpgp_image_url'];
 						//echo "<br />";
-						if(count($attachment_id = $wpdb->get_col($wpdb->prepare("SELECT `id` FROM `$post_table_name` WHERE `guid` LIKE '%s'", $slide_url)))) {
+						if ( count( $attachment_id = $wpdb->get_col( $wpdb->prepare( "SELECT `id` FROM `$post_table_name` WHERE `guid` LIKE %s", $slide_url ) ) ) ) {
 							$slide_id = $attachment_id[0];
 							//echo "<br />";
 							// set old slide details
@@ -118,8 +119,8 @@ if(isset($_POST['slider-id'])) {
 			echo "<h3 style='color:blue;'><strong>Previously Recovered Slider IDs are:</strong></h3><hr /><p>";
 			sort($uris_updated_sliders);
 			foreach($uris_updated_sliders as $id){
-				echo $id;
-				echo ", ";
+				echo esc_html( $id );
+				echo esc_html( ", " );
 			}
 			echo '</p>';
 			echo "</div>";

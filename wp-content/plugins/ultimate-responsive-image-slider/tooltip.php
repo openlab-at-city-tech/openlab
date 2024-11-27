@@ -48,110 +48,110 @@ jQuery(document).ready( function(){
 <?php $PreviewImg = URIS_PLUGIN_URL.'assets/img/preview/'; ?>
 
 <div style="display:none;" id="s1">
-	<h4><?php _e('Display Slider Post Title', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Display Slider Post Title.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Display Slider Post Title', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."display-slider-post-title.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s2">
-	<h4><?php _e('Display Slide Title', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Display Slide Title.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Display Slide Title', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."display-slide-title.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s3">
-	<h4><?php _e('Slide Title Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slide Title Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slide Title Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slide-title-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s4">
-	<h4><?php _e('Slide Title Background Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slide Title Background Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slide Title Background Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slide-title-background-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s5">
-	<h4><?php _e('Display Slide Description', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Display Slide Description.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Display Slide Description', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."display-slide-description.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s6">
-	<h4><?php _e('Slide Description Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slide Description Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slide Description Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slide-description-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s7">
-	<h4><?php _e('Slide Description Background Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slide Description Background Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slide Description Background Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slide-description-background-color.png"); ?>" class="sprev">
 </div>
 
 <!-- 8 9 10 11 -->
 
 <div style="display:none;" id="s12">
-	<h4><?php _e('Distance Between Slide', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Distance Between Slide.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Distance Between Slide', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."distance-between-slide.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s13">
-	<h4><?php _e('Show Thumbnail', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Show Thumbnail.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Show Thumbnail', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."show-thumbnail.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s14">
-	<h4><?php _e('Thumbnail Position', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Thumbnail Position.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Thumbnail Position', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."thumbnail-position.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s15">
-	<h4><?php _e('Selected Thumbnail Style', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Selected Thumbnail Style.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Selected Thumbnail Style', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."selected-thumbnail-style.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s16">
-	<h4><?php _e('Selected Thumbnail Style Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Selected Thumbnail Style Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Selected Thumbnail Style Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."selected-thumbnail-style-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s17">
-	<h4><?php _e('Thumbnail Resize', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Thumbnail Resize.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Thumbnail Resize', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."thumbnail-resize.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s18">
-	<h4><?php _e('Slider Width', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slider Width.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slider Width', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slider-width.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s19">
-	<h4><?php _e('Slider Height', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Slider Height.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Slider Height', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."slider-height.png"); ?>" class="sprev">
 </div>
 
 <!-- 20 21 -->
 
 <div style="display:none;" id="s22">
-	<h4><?php _e('Show Navigation Arrow', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Show Navigation Arrow.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Show Navigation Arrow', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."show-navigation-arrow.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s23">
-	<h4><?php _e('Navigation Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Navigation Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Navigation Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."navigation-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s24">
-	<h4><?php _e('Show Navigation Bullets', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Show Navigation Bullets.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Show Navigation Bullets', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."show-navigation-bullets.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s25">
-	<h4><?php _e('Navigation Bullets Color', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Navigation Bullets Color.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Navigation Bullets Color', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."navigation-bullets-color.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s26">
-	<h4><?php _e('Full Screen Slide Show', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Full Screen Slide Show.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Full Screen Slide Show', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."full-screen-slide-show.png"); ?>" class="sprev">
 </div>
 
 <div style="display:none;" id="s27">
-	<h4><?php _e('Fonts', 'ultimate-responsive-image-slider'); ?></h4>
-	<img src="<?php echo esc_url($PreviewImg."Fonts.png"); ?>" class="sprev">
+	<h4><?php esc_html_e('Fonts', 'ultimate-responsive-image-slider'); ?></h4>
+	<img src="<?php echo esc_url($PreviewImg."fonts.png"); ?>" class="sprev">
 </div>

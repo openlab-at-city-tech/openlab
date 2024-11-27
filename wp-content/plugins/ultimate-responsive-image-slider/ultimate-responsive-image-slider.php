@@ -1,16 +1,19 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
-/*
-Plugin Name: Ultimate Responsive Image Slider - 3.5.14
-Plugin URI: https://wordpress.org/plugins/ultimate-responsive-image-slider/
-Description: Add unlimited image slides using Ultimate Responsive Image Slider in any Page and Post content to give an attractive mode to represent contents.
-Version: 3.5.14
-Author: FARAZFRANK
-Author URI: http://wpfrank.com/
-Text Domain: ultimate-responsive-image-slider
-Domain Path: /languages
-License: GPL2
+/**
+ * Plugin Name:       Ultimate Responsive Image Slider - 3.5.15
+ * Plugin URI:        http://wpfrank.com/
+ * Description:	  Add unlimited image slides using Ultimate Responsive Image Slider in any Page and Post content to give an attractive mode to represent contents.
+ * Version:           3.5.15
+ * Requires at least: 4.0
+ * Requires PHP:      4.0
+ * Author:            FARAZFRANK
+ * Author URI:        https://profiles.wordpress.org/farazfrank/
+ * License:           GPL v2 or later
+ * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+ * Text Domain:       ultimate-responsive-image-slider
+ * Domain Path:       /languages
 
 Ultimate Responsive Image Slider is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -27,7 +30,7 @@ along with Ultimate Responsive Image Slider. If not, see http://www.gnu.org/lice
 
 //Constant Variable
 define("URIS_PLUGIN_URL", plugin_dir_url(__FILE__));
-define("URIS_PLUGIN_VER", '3.5.14');
+define("URIS_PLUGIN_VER", '3.5.15');
 
 // Apply default settings on activation
 register_activation_hook( __FILE__, 'WRIS_DefaultSettingsPro' );
@@ -173,7 +176,7 @@ class URIS {
 	 * Translate Plugin
 	 */
 	public function URIS_Translate() {
-		load_plugin_textdomain('ultimate-responsive-image-slider', FALSE, dirname( plugin_basename(__FILE__)).'/languages/' );
+		load_plugin_textdomain( 'ultimate-responsive-image-slider', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	// Register Custom Post Type
@@ -220,9 +223,9 @@ class URIS {
 	function ris_gallery_columns( $columns ){
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
-			'title' => __( 'UR Image Slider Title' ),
-			'shortcode' => __( 'Slider Shortcode' ),
-			'date' => __( 'Date' )
+			'title' => __( 'UR Image Slider Title', 'ultimate-responsive-image-slider' ),
+			'shortcode' => __( 'Slider Shortcode', 'ultimate-responsive-image-slider' ),
+			'date' => __( 'Date', 'ultimate-responsive-image-slider' )
 		);
 		return $columns;
 	}
@@ -280,7 +283,7 @@ class URIS {
 		<div align="center">
 			<p>Please Review & Rate Us On WordPress</p>
 			<a class="upgrade-to-pro-demo urisp-rate-us" style=" text-decoration: none; height: 40px; width: 40px;" href="https://wordpress.org/support/plugin/ultimate-responsive-image-slider/reviews/#new-post" target="_blank">
-				<img loading="lazy" class="wpf_uris_fivestar" src="<?php echo $path = esc_url(URIS_PLUGIN_URL."assets/img/5star.jpg"); ?>">
+				<img loading="lazy" class="wpf_uris_fivestar" src="<?php echo esc_url( URIS_PLUGIN_URL . 'assets/img/5star.jpg' ); ?>">
 			</a>
 		</div>
 		<div class="upgrade-to-pro" style="text-align:center;margin-bottom:10px;margin-top:10px;">
@@ -307,7 +310,6 @@ class URIS {
 	 * Also loads all saved gallery photos into photo gallery
 	 */
 	public function ris_generate_add_image_meta_box_function($post) { ?>
-		<p><a href="edit.php?post_type=ris_gallery&page=uris-recover-slider" class="button button-primary button-hero">Click To Recover Old Sliders</a> ( ignore if this slider already recovered )</p>
 		<div id="uris-container" class="uris-container">
 			<input type="hidden" id="uris-save-action" name="uris-save-action" value="uris-save-settings">
 			<ul id="uris-slides-container" class="clearfix SortSlides">
@@ -342,20 +344,20 @@ class URIS {
 										<img loading="lazy" src="<?php echo esc_url($slide_medium[0]); ?>" class="uris-slide-image">
 									</p>
 									<p>
-										<label><?php _e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($slide_id); ?></label><br>
-										<label><?php _e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
+										<label><?php esc_html_e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($slide_id); ?></label><br>
+										<label><?php esc_html_e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
 										<input type="hidden" id="unique_string[]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
 										<input type="hidden" id="rpgp_image_id[]" name="rpgp_image_id[]" value="<?php echo esc_attr($slide_id); ?>">
-										<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" class="uris-slide-input-text" value="<?php echo esc_attr( $slide_title ); ?>" placeholder="<?php _e('Enter Slide Title', 'ultimate-responsive-image-slider'); ?>" >
+										<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" class="uris-slide-input-text" value="<?php echo esc_attr( $slide_title ); ?>" placeholder="<?php esc_attr_e('Enter Slide Title', 'ultimate-responsive-image-slider'); ?>" >
 									</p>
 									<p>
-										<label><?php _e('Slide Descriptions', 'ultimate-responsive-image-slider'); ?></label>
-										<textarea rows="4" cols="50" id="rpgp_image_desc[]" name="rpgp_image_desc[]" class=" urisp_richeditbox_<?php echo esc_attr($i); ?> uris-slide-input-text" placeholder="<?php _e('Enter Slide Description', 'ultimate-responsive-image-slider'); ?>"><?php echo htmlentities( $slide_description ); ?></textarea>
-										<button type="button" class="btn btn-md btn-info btn-block" data-toggle="modal" data-target="#myModal" onclick="urisp_richeditor(<?php echo esc_attr($i); ?>)"><?php _e('Use Rich Text Editor', 'ultimate-responsive-image-slider'); ?> <i class="fa fa-edit"></i></button>
+										<label><?php esc_html_e('Slide Descriptions', 'ultimate-responsive-image-slider'); ?></label>
+										<textarea rows="4" cols="50" id="rpgp_image_desc[]" name="rpgp_image_desc[]" class="urisp_richeditbox_<?php echo esc_attr( $i ); ?> uris-slide-input-text" placeholder="<?php esc_attr_e( 'Enter Slide Description', 'ultimate-responsive-image-slider' ); ?>"><?php echo esc_textarea( $slide_description ); ?></textarea>
+										<button type="button" class="btn btn-md btn-info btn-block" data-toggle="modal" data-target="#myModal" onclick="urisp_richeditor(<?php echo esc_attr($i); ?>)"><?php esc_attr_e('Use Rich Text Editor', 'ultimate-responsive-image-slider'); ?> <i class="fa fa-edit"></i></button>
 									</p>
 									<p>
-										<label><?php _e('Slide Alt Text', 'ultimate-responsive-image-slider'); ?></label>
-										<input type="text" id="rpgp_image_alt[]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php _e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
+										<label><?php esc_html_e('Slide Alt Text', 'ultimate-responsive-image-slider'); ?></label>
+										<input type="text" id="rpgp_image_alt[]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php esc_attr_e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
 									</p>
 								</div>
 							</li>
@@ -403,29 +405,29 @@ class URIS {
 		<div class="uris-control-buttons">
 		<div id="uris-add-new-slide" class="uris-add-new-slide" data-uploader_title="Upload Slide" data-uploader_button_text="Select" >
 			<div class="dashicons dashicons-plus"></div>
-			<p><?php _e('Add New Slide', 'ultimate-responsive-image-slider'); ?></p>
+			<p><?php esc_html_e('Add New Slide', 'ultimate-responsive-image-slider'); ?></p>
 		</div>
 		<div id="sort-all-slides" class="uris-clone-slider" onclick="return URISSortSlides('DESC');">
 			<div class="dashicons dashicons-sort"></div>
-			<p><?php _e("Sort Ascending by Slide ID", 'ultimate-responsive-image-slider'); ?></p>
+			<p><?php esc_html_e("Sort Ascending by Slide ID", 'ultimate-responsive-image-slider'); ?></p>
 		</div>
 		<div id="sort-all-slides" class="uris-clone-slider" onclick="return URISSortSlides('ASC');">
 			<div class="dashicons dashicons-sort"></div>
-			<p><?php _e("Sort Descending by Slide ID", 'ultimate-responsive-image-slider'); ?></p>
+			<p><?php esc_html_e("Sort Descending by Slide ID", 'ultimate-responsive-image-slider'); ?></p>
 		</div>
 		<div id="uris-clone-slider" class="uris-clone-slider" onclick="return uris_clone_run(<?php echo esc_attr($post->ID); ?>);">
 			<div class="dashicons dashicons-admin-page"></div>
 			<?php wp_nonce_field('uris_clone_nonce','uris_clone_nonce' ); ?>
-			<p><?php _e("Clone Slider", 'ultimate-responsive-image-slider'); ?></p>
+			<p><?php esc_html_e("Clone Slider", 'ultimate-responsive-image-slider'); ?></p>
 		</div>
 		
 		<div id="uris-delete-all-slide" class="uris-delete-all-slide">
 			<div class="dashicons dashicons-trash"></div>
-			<p><?php _e('Delete All Slides', 'ultimate-responsive-image-slider'); ?></p>
+			<p><?php esc_html_e('Delete All Slides', 'ultimate-responsive-image-slider'); ?></p>
 		</div>
 		
 		<div id="uris-clone-success" class="uris-clone-success">
-			<h1><?php _e('Slider clone created successfully.', 'ultimate-responsive-image-slider'); ?> <?php _e('Go to', 'ultimate-responsive-image-slider'); ?> <a href="edit.php?post_type=ris_gallery"><?php _e('All Slider', 'ultimate-responsive-image-slider'); ?></a> <?php _e('page to edit cloned slider.', 'ultimate-responsive-image-slider'); ?></h1>
+			<h1><?php esc_html_e('Slider clone created successfully.', 'ultimate-responsive-image-slider'); ?> <?php esc_html_e('Go to', 'ultimate-responsive-image-slider'); ?> <a href="edit.php?post_type=ris_gallery"><?php esc_html_e('All Slider', 'ultimate-responsive-image-slider'); ?></a> <?php esc_html_e('page to edit cloned slider.', 'ultimate-responsive-image-slider'); ?></h1>
 		</div>
 		
 		<div style="clear:left;"></div>
@@ -493,7 +495,7 @@ class URIS {
 
 		//color-picker CSS n JS
 		wp_enqueue_style('wp-color-picker');
-		wp_enqueue_script('wpfrank-uris-color-picker-custom-js', plugins_url('assets/js/wpfrank-uris-color-picker-custom.js', __FILE__ ), array( 'wp-color-picker' ), false, true );
+		wp_enqueue_script( 'wpfrank-uris-color-picker-custom-js', plugins_url( 'assets/js/wpfrank-uris-color-picker-custom.js', __FILE__ ), array( 'wp-color-picker' ), '1.0.0', true );
 
 		//code-mirror CSS & JS for custom CSS section
 		wp_enqueue_style('wpfrank-uris-code-mirror-css', URIS_PLUGIN_URL.'assets/css/codemirror/codemirror.css');
@@ -507,10 +509,10 @@ class URIS {
 	}
 	
 	public function ris_shotcode_meta_box_function() { ?>
-		<p><?php _e("Use below shortcode in any Page/Post to publish your slider", 'ultimate-responsive-image-slider');?></p>
+		<p><?php esc_html_e("Use below shortcode in any Page/Post to publish your slider", 'ultimate-responsive-image-slider');?></p>
 		<input readonly="readonly" type="text" value="<?php echo esc_attr("[URIS id=".get_the_ID()."]"); ?>" style="width:100%;">
 		
-		<p><?php _e("To embed slider in any custom theme template", 'ultimate-responsive-image-slider');?></p>
+		<p><?php esc_html_e("To embed slider in any custom theme template", 'ultimate-responsive-image-slider');?></p>
 		<?php $uris_shortcode = esc_attr("[URIS id=".get_the_ID()."]"); ?>
 		<input readonly="readonly" type="text" value="&#x3c;&#x3f;php do_shortcode&#x28; '<?php echo esc_attr("[URIS id=".get_the_ID()."]"); ?>' &#x29;; &#x3f;&#x3e;" style="width:100%;">
 		<?php
@@ -541,20 +543,20 @@ class URIS {
 					<p>
 						<img loading="lazy" src="<?php echo esc_url($slide_medium[0]); ?>" class="uris-slide-image">
 					<p>
-						<label><?php _e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($id); ?></label><br>
-						<label><?php _e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
+						<label><?php esc_html_e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($id); ?></label><br>
+						<label><?php esc_html_e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
 						<input type="hidden" id="unique_string[]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
 						<input type="hidden" id="rpgp_image_id[]" name="rpgp_image_id[]" value="<?php echo esc_attr($id); ?>">
-						<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" value="<?php echo esc_attr($slide_title); ?>" placeholder="<?php _e('Enter Slide Title Here', 'ultimate-responsive-image-slider'); ?>" class="uris-slide-input-text">
+						<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" value="<?php echo esc_attr($slide_title); ?>" placeholder="<?php esc_attr_e('Enter Slide Title Here', 'ultimate-responsive-image-slider'); ?>" class="uris-slide-input-text">
 					</p>
 					<p>
-						<label><?php _e('Slide Description', 'ultimate-responsive-image-slider'); ?></label>
-						<textarea rows="4" cols="50" id="rpgp_image_desc[]" name="rpgp_image_desc[]" placeholder="<?php _e('Enter Slide Description Here', 'ultimate-responsive-image-slider'); ?>" class="urisp_richeditbox_<?php echo esc_attr($id); ?> uris-slide-input-text"><?php echo $slide_description; ?></textarea>
-						<button type="button" class="btn btn-md btn-info btn-block" data-toggle="modal" data-target="#myModal" onclick="urisp_richeditor(<?php echo esc_attr($id); ?>)"><?php _e('Use Rich Text Editor', 'ultimate-responsive-image-slider'); ?> <i class="fa fa-edit"></i></button>
+						<label><?php esc_html_e('Slide Description', 'ultimate-responsive-image-slider'); ?></label>
+						<textarea rows="4" cols="50" id="rpgp_image_desc[]" name="rpgp_image_desc[]" placeholder="<?php esc_attr_e('Enter Slide Description Here', 'ultimate-responsive-image-slider'); ?>" class="urisp_richeditbox_<?php echo esc_attr($id); ?> uris-slide-input-text"><?php echo esc_textarea( $slide_description ); ?></textarea>
+						<button type="button" class="btn btn-md btn-info btn-block" data-toggle="modal" data-target="#myModal" onclick="urisp_richeditor(<?php echo esc_attr($id); ?>)"><?php esc_html_e('Use Rich Text Editor', 'ultimate-responsive-image-slider'); ?> <i class="fa fa-edit"></i></button>
 					</p>
 					<p>
-						<label><?php _e('Slide Alt Text', 'ultimate-responsive-image-slider'); ?></label>
-						<input type="text" id="rpgp_image_alt[]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php _e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
+						<label><?php esc_html_e('Slide Alt Text', 'ultimate-responsive-image-slider'); ?></label>
+						<input type="text" id="rpgp_image_alt[]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php esc_attr_e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
 					</p>
 				</div>
 			</li>
@@ -572,7 +574,9 @@ class URIS {
 	public function add_image_meta_box_save($PostID) {
 		if ( current_user_can( 'manage_options' ) ) {
 			if(isset($PostID) && isset($_POST['uris-save-action'])) {
-				$TotalSlideIds = count($_POST['rpgp_image_id']);
+				//$TotalSlideIds = count($_POST['rpgp_image_id']);
+				$TotalSlideIds = (isset($_POST['rpgp_image_id'])) ? sanitize_text_field( wp_unslash ( count($_POST['rpgp_image_id']) ) ) : '';
+				
 				$SlideIds = array();
 				if($TotalSlideIds) {
 					for($i=0; $i < $TotalSlideIds; $i++) {
@@ -695,7 +699,7 @@ function uris_admin_notice_resport() {
 add_action('admin_menu' , 'uris_menu_pages');
 function uris_menu_pages() {
 	if ( current_user_can( 'manage_options' ) ) {
-		add_submenu_page('edit.php?post_type=ris_gallery', 'Recover Old Sliders', 'Recover Old Sliders', 'administrator', 'uris-recover-slider', 'uris_recover_slider_page');
+		//add_submenu_page('edit.php?post_type=ris_gallery', 'Recover Old Sliders', 'Recover Old Sliders', 'administrator', 'uris-recover-slider', 'uris_recover_slider_page');
 		add_submenu_page('edit.php?post_type=ris_gallery', 'Help & Support', 'Help & Support', 'administrator', 'uris-help-page', 'uris_help_and_support_page');
 		function uris_recover_slider_page() {
 			require_once('recover-slider.php');
