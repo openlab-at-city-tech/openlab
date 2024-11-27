@@ -1,12 +1,24 @@
-=== Embed Calendly ===
-Authors: Embed Calendly, Shycoder
+=== EMC - Easily Embed Calendly Scheduling Features ===
+Authors: Simpma Solutions, Shycoder
 Plugin Page: https://wordpress.org/plugins/embed-calendly-scheduling/
 
 == Changelog ==
 
+= 4.1 - 26-11-2024 =
+
+- Verified compatibility with WordPress updates.
+- Updated readme
+
+= 4.0 - 05-11-2024 =
+
+- UI rebranding and redesign
+- Added shortcode option for prefilling current logged in user info in embedded booking form
+- Improved pro version support
+- Improved internationalization support
+
 = 3.8 - 21-03-2024 =
 
-- Fixed customizer plugin conflicts.
+- Fixed customizer plugin conflicts
 
 = 3.7 - 12-10-2023 =
 

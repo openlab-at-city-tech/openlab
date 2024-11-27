@@ -47,7 +47,7 @@ function emcs_v2api_field_cb($args)
         <div class="form-group col-md-8">
             <input id="<?php echo esc_attr($args['label_for']); ?>" name="emcs_settings[<?php echo esc_attr($args['label_for']); ?>]" placeholder="<?php echo !empty($options[$args['label_for']]) ? '*****************' : ''; ?>" class="form-control" />
             <p id="<?php echo esc_attr($args['label_for']); ?>_description">
-                Generate your personal access token on the <a href="https://calendly.com/integrations/api_webhooks" target="_blank"><em>integerations</em></a> page
+                <?php printf(esc_html__('Generate your personal access token on the %1$sintegerations%2$s page'), '<a href="https://calendly.com/integrations/api_webhooks" target="_blank"><em>', '</em></a>'); ?>
             </p>
         </div>
     </div>
@@ -63,7 +63,7 @@ function emcs_api_field_cb($args)
         <div class="form-group col-md-8">
             <input id="<?php echo esc_attr($args['label_for']); ?>" name="emcs_settings[<?php echo esc_attr($args['label_for']); ?>]" placeholder="<?php echo !empty($options[$args['label_for']]) ? '*****************' : ''; ?>" class="form-control" />
             <p id="<?php echo esc_attr($args['label_for']); ?>_description">
-                Your API Key can be found on Calendly <a href="https://calendly.com/integrations/api_webhooks" target="_blank"><em>integerations</em></a> page
+                <?php printf(esc_html__('Your API Key can be found on Calendly %1$sintegerations%2$s page'), '<a href="https://calendly.com/integrations/api_webhooks" target="_blank"><em>', '</em></a>'); ?>
             </p>
         </div>
     </div>
@@ -76,7 +76,7 @@ function emcs_settings_page()
 {
     add_submenu_page(
         'emcs-event-types',
-        __('', 'embed-calendly-scheduling'),
+        __('EMC - Settings', 'embed-calendly-scheduling'),
         __('Settings', 'embed-calendly-scheduling'),
         'manage_options',
         'emcs-settings',
@@ -103,9 +103,9 @@ function emcs_settings_page_html()
     }
 ?>
     <div class="emcs-title">
-        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="embed calendly logo" width="200px" />
+        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="200px" />
     </div>
-    <div class="emcs-subtitle">Settings</div>
+    <div class="emcs-subtitle"><?php esc_html_e('Settings', 'embed-calendly-scheduling'); ?></div>
     <?php settings_errors('emcs_messages'); ?>
     <div class="sc-wrapper">
         <div class="sc-container">
@@ -115,45 +115,43 @@ function emcs_settings_page_html()
                         <?php
                         settings_fields('emcs');
                         do_settings_sections('emcs');
-                        submit_button('Save Settings');
+                        submit_button(__('Save Settings', 'embed-calendly-scheduling'));
                         ?>
                     </form>
                 </div>
                 <div class="col-md-3 emcs-promotion-container">
                     <div class="emcs-setting-ratings-section">
-                        <h3>Like this plugin?</h3>
+                        <h3><?php esc_html_e('Like this plugin?', 'embed-calendly-scheduling'); ?></h3>
                         <p>
-                            If you find this plugin useful, please show your love and support by
-                            rating it
+                            <?php esc_html_e('If you find this plugin useful, please show your love and support by
+                            rating it', 'embed-calendly-scheduling'); ?>
                             <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
                             <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
                             <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
                             <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
                             <span class="dashicons dashicons-star-filled emcs-dashicon emcs-dashicon-rating"></span>
-                            on<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank"> WordPress.org </a>
-                            - much appreciated!
+                            <?php printf(esc_html__('on %1$sWordPress.org%2$s 
+                            - much appreciated!'), '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/reviews/#new-post" target="_blank">', '</a>'); ?>
                         </p><br>
 
                     </div>
                     <div class="emcs-promotion">
-                        <h2>Need Support?</h2>
+                        <h2><?php esc_html_e('Need Support?', 'embed-calendly-scheduling'); ?></h2>
                         <p>
-                            Please use the <a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/" target="_blank"> support forums on WordPress.org </a> to
-                            submit a support ticket or report a bug.
-                        </p>
+                            <?php printf(esc_html__('Please use the %1$ssupport%2$s forums on WordPress.org to submit a support ticket or report a bug.', 'embed-calendly-scheduling'), '<a href="https://wordpress.org/support/plugin/embed-calendly-scheduling/" target="_blank">', '</a>'); ?> </p>
                     </div>
                     <div class="emcs-thankyou" id="emcs-thankyou">
-                        <h3>Thank you for downloading Embed Calendly</h3>
+                        <h3><?php esc_html_e('Thank you for downloading EMC Scheduling Manager', 'embed-calendly-scheduling'); ?></h3>
                         <p>
-                            I built this plugin during one of the most challenging times
-                            I've been through, I was depressed and I didn't feel like my life meant much.
+                            <?php esc_html_e('I built this plugin during one of the most challenging times
+                            I\'ve been through, I was depressed and I didn\'t feel like my life meant much.
                             So I thought to try out a random personal challenge during a weekend, nothing serious,
                             then I built the plugin. I never expected it to have any downloads at all,
                             but then it started coming in; and the fact that I saw my plugin,
                             something from me, was actively used on 10 websites, then 100, 400, and 1000+,
                             gave me a different perspective about myself, it gave me more meaning
                             and that set me on a path that is changing my life.
-                            Thank you very much for your download, I sincerely appreciate it. :)
+                            Thank you very much for your download, I sincerely appreciate it. :)', 'embed-calendly-scheduling'); ?>
                             <span class="emcs-author">- Shycoder</span>
                         </p>
                     </div>
@@ -167,6 +165,12 @@ function emcs_settings_page_html()
 function emcs_sanitize_input($inputs)
 {
     $options = get_option('emcs_settings');
+    $key_fields = [
+        'emcs_v1api_key',
+        'emcs_v2api_key',
+        'emcp_license_key'
+    ];
+    $pro_reminder_email_template_field = 'emcp_email_reminder_template';
     $sanitized_input = [];
 
     foreach ($inputs as $input_key => $input_value) {
@@ -178,12 +182,22 @@ function emcs_sanitize_input($inputs)
 
             if (!empty($input_value)) {
 
-                $input_value = str_replace(' ', '', $input_value);
-                $input_value = trim(strip_tags(stripslashes($input_value)));
-                $input_value = sanitize_text_field($input_value);
-                $sanitized_input[$input_key] = emcs_encrypt_key($input_value);
-            } else {
+                // we preserve limited set of html tags for the reminder email template field 
+                if ($input_key === $pro_reminder_email_template_field) {
+                    $input_value = trim(wp_kses_post($input_value));
+                } else {
+                    $input_value = trim(strip_tags(stripslashes($input_value)));
+                    $input_value = sanitize_text_field($input_value);
+                }
 
+                // only perform encryption on fields that store keys
+                if (in_array($input_key, $key_fields)) {
+                    $input_value = str_replace(' ', '', $input_value);
+                    $sanitized_input[$input_key] = emcs_encrypt_key($input_value);
+                } else {
+                    $sanitized_input[$input_key] = $input_value;
+                }
+            } else {
                 $sanitized_input[$input_key] = false;
             }
         }

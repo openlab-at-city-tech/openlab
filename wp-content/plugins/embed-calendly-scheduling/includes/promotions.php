@@ -5,6 +5,7 @@ defined('ABSPATH') || exit;
 class EMCS_Promotions
 {
     private const PROMOTION_OPTION = 'emcs_promotion';
+    private const UI_REBRAND_NOTICE_OPTION = 'emcs_ui_rebrand_notice';
     private const STOP_PROMOTIONS_OPTION = 'emcs_stop_promotions';
     private const PROMOTION_DELAY_OPTION = 'emcs_promotion_delay';
     private const LAST_DISPLAYED_PROMOTION = 'emcs_promotion_last_displayed';
@@ -20,6 +21,7 @@ class EMCS_Promotions
             add_option(self::STOP_PROMOTIONS_OPTION, 0);
             add_option(self::PROMOTION_DELAY_OPTION, strtotime('now'));
             add_option(self::LAST_DISPLAYED_PROMOTION, 0);
+            add_option(self::UI_REBRAND_NOTICE_OPTION, 0);
         }
 
         wp_enqueue_style('emcs_calendly_css');
@@ -37,7 +39,7 @@ class EMCS_Promotions
 
             add_submenu_page(
                 'emcs-event-types',
-                __('Embed Calendly Pro License', 'embed-calendly-scheduling'),
+                __('EMC Pro License', 'embed-calendly-scheduling'),
                 __('Premium', 'embed-calendly-scheduling'),
                 'manage_options',
                 'emcs-licenses',
@@ -50,20 +52,26 @@ class EMCS_Promotions
     {
 ?>
         <div class="emcs-pro-promotion-page">
-            <h1>Unlock More Features With Embed Calendly Pro</h1>
+            <h1><?php esc_html_e('Unlock More Features With EMC Pro', 'embed-calendly-scheduling'); ?></h1>
             <ul>
                 <li>
-                    <strong>Track your calendar conversion</strong> - Understand how visitors interact with your booking page & calendar.
+                    <?php printf(esc_html__('%1$sTrack your calendar conversion%2$s - Understand how visitors interact with your booking page & calendar.', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?>
                 </li>
                 <li>
-                    <strong>View all upcoming events in WordPress</strong> - See all booked events without leaving your WordPress website.
+                    <?php printf(esc_html__('%1$sReduce no show rate with reminders%2$s - Easily send both automated and manual reminders.', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?>
                 </li>
                 <li>
-                    <strong>24/7 Premium Support</strong> - Gain access to our priority customer support.
+                    <?php printf(esc_html__('%1$sManage upcoming meetings in WordPress%2$s - View booked meetings and cancel them directly from WordPress.', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?>
+                </li>
+                <li>
+                    <?php printf(esc_html__('%1$sView and backup your contacts%2$s - It\'s now easier than ever to export all your contacts!', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?>
+                </li>
+                <li>
+                    <?php printf(esc_html__('%1$s24/7 Premium Support%2$s - Gain access to our priority customer support.', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?>
                 </li>
             </ul>
-            <h4><i>- With 14 days money back guarantee. No questions asked.</i></h4>
-            <a href="https://embedcalendly.com/pricing" class="button-primary" target="_blank">Get Embed Calendly Pro</a>
+            <h4><i><?php esc_html_e('- With 14 days money back guarantee. No questions asked.', 'embed-calendly-scheduling'); ?></i></h4>
+            <a href="https://simpma.com/emc" class="button-primary" target="_blank"><?php esc_html_e('Get EMC Pro', 'embed-calendly-scheduling'); ?></a>
         </div>
         <?php
     }
@@ -80,11 +88,24 @@ class EMCS_Promotions
                 wp_redirect(admin_url());
             }
         }
+
+        if (isset($_REQUEST[self::UI_REBRAND_NOTICE_OPTION])) {
+
+            if ($_REQUEST[self::UI_REBRAND_NOTICE_OPTION]) {
+                self::disable_ui_rebrand_notice();
+                wp_redirect(admin_url());
+            }
+        }
     }
 
     public static function disable_all_promotions()
     {
         update_option(self::STOP_PROMOTIONS_OPTION, 1);
+    }
+
+    public static function disable_ui_rebrand_notice()
+    {
+        update_option(self::UI_REBRAND_NOTICE_OPTION, 1);
     }
 
     private static function display_promotions()
@@ -104,9 +125,34 @@ class EMCS_Promotions
         }
     }
 
+    public static function ui_rebrand_notice()
+    {
+        global $pagenow;
+
+        $base_date = '2024-11-05';
+        $days_after = 30;
+        $start_date = strtotime($base_date);
+        $end_date = strtotime("+$days_after days", $start_date);
+        $current_date = current_time('timestamp');
+
+        if ($pagenow == 'index.php') {
+
+            // Check if the notice is within the 30 days period and if it hasn't been dismissed
+            if ($current_date >= $start_date && $current_date <= $end_date && !get_option(self::UI_REBRAND_NOTICE_OPTION, 0)) {
+        ?>
+                <div class="notice notice-warning is-dismissible emcs-rebrand-notice">
+                    <p><strong>Embed Calendly</strong> <?php esc_html_e('rebranded! Check out the new look', 'embed-calendly-scheduling'); ?>! >> <a href="<?php echo esc_attr(admin_url('?page=emcs-event-types')); ?>"><?php esc_html_e('Go to plugin page', 'embed-calendly-scheduling') ?></a></p>
+                    <a href="?<?php echo self::UI_REBRAND_NOTICE_OPTION; ?>=1" class=""><?php esc_html_e("Don't show again.", 'embed-calendly-scheduling'); ?></a>
+                </div>
+            <?php
+            }
+        }
+    }
+
     private static function get_promotions()
     {
-        add_action('admin_notices', 'EMCS_Promotions::get_current_promotion');
+        add_action('admin_notices', 'EMCS_Promotions::get_current_promotion', 11);
+        add_action('admin_notices', 'EMCS_Promotions::ui_rebrand_notice', 10);
     }
 
     /**
@@ -119,7 +165,7 @@ class EMCS_Promotions
         if ($current_promotion_id == 2) {
             return self::email_list_promotion();
         } else {
-            return self::optimization_promotion();
+            return self::email_list_promotion();
         }
     }
 
@@ -129,19 +175,19 @@ class EMCS_Promotions
         global $pagenow;
 
         if ($pagenow == 'index.php') {
-        ?>
+            ?>
             <div class="notice notice-info is-dismissible emcs-promotion-notice">
                 <div class="emcs-row">
                     <div class="emcs-col">
-                        <h2>Turn Your Website Into <strong>A Lead Generation Tool</strong></h2>
-                        <h3>Optimize your website to <strong><u>book more calls</u></strong> and <strong><u>land more clients</u></strong></h3>
+                        <h2><?php printf(esc_html__('Turn Your Website Into %1$sA Lead Generation Tool%2$s', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?></h2>
+                        <h3><?php printf(esc_html__('Optimize your website to %1$sbook more calls%2$s and %1$sland more clients%2$s', 'embed-calendly-scheduling'), '<strong><u>', '</strong></u>'); ?></h3>
                         <div>
-                            <a href="https://embedcalendly.com/promotion" class="button-primary" target="_blank">See how >></a>
-                            <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class="">Don't show again.</a>
+                            <a href="https://simpma.com/promotion" class="button-primary" target="_blank"><?php esc_html_e('See how >>', 'embed-calendly-scheduling'); ?></a>
+                            <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class=""><?php esc_html_e("Don't show again.", 'embed-calendly-scheduling'); ?></a>
                         </div>
                     </div>
                     <div class="emcs-col emcs-hide-col">
-                        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc.svg') ?>" alt="embed calendly logo" width="100px" />
+                        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="100px" />
                     </div>
                 </div>
             </div>
@@ -159,22 +205,22 @@ class EMCS_Promotions
             <div class="notice notice-info is-dismissible emcs-newsletter-notice">
                 <div class="emcs-row">
                     <div class="emcs-col">
-                        <h3>More cool features coming to <span class="emcs-primary-color">Embed Calendly</span> soon!</h3>
-                        <p>Be among the first to get notified.</p>
+                        <h3><?php printf(esc_html__('More cool features coming to %1$sEMC Scheduling Manager%2$s soon!', 'embed-calendly-scheduling'), '<span class="emcs-primary-color">', '</span>'); ?></h3>
+                        <p><?php esc_html_e('Be among the first to get notified.', 'embed-calendly-scheduling'); ?></p>
                         <link href="//cdn-images.mailchimp.com/embedcode/horizontal-slim-10_7.css" rel="stylesheet" type="text/css">
                         <div id="emcs_embed_signup">
                             <form action="https://embedcalendly.us6.list-manage.com/subscribe/post?u=91af9e1caa59d5bcf7df9e9ba&amp;id=a81b8045ef" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                                 <div id="mc_embed_signup_scroll">
-                                    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="Email" required>
-                                    <input type="submit" value="Get notified!" name="subscribe" id="mc-embedded-subscribe" class="button-primary">
-                                    <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class="emcs-dismiss-btn">Don't show again.</a>
+                                    <input type="email" value="" name="EMAIL" class="email" id="mce-EMAIL" placeholder="<?php esc_html_e('Email', 'embed-calendly-scheduling'); ?>" required>
+                                    <input type="submit" value="<?php esc_html_e('Get notified!', 'embed-calendly-scheduling'); ?>" name="subscribe" id="mc-embedded-subscribe" class="button-primary">
+                                    <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class="emcs-dismiss-btn"><?php esc_html_e("Don't show again.", 'embed-calendly-scheduling'); ?></a>
                                     <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_91af9e1caa59d5bcf7df9e9ba_a81b8045ef" tabindex="-1" value=""></div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="emcs-col emcs-hide-col">
-                        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc.svg') ?>" alt="embed calendly logo" width="100px" />
+                        <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="100px" />
                     </div>
                 </div>
             </div>

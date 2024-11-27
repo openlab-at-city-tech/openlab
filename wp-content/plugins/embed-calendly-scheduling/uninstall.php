@@ -27,6 +27,7 @@ function emcs_uninstall()
     delete_option('emcs_stop_promotions');
     delete_option('emcs_promotion_delay');
     delete_option('emcs_promotion_last_displayed');
+    delete_option('emcs_ui_rebrand_notice');
 }
 
 emcs_uninstall();

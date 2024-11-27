@@ -16,6 +16,14 @@ class EMCS_Embed
 
         if (isset($atts['url'])) {
 
+
+            if (isset($atts['prefill_fields'])) {
+
+                if (!empty($atts['prefill_fields'])) {
+                    $this->url = $this->prefill_fields($this->url);
+                }
+            }
+
             if (isset($atts['cookie_banner'])) {
 
                 if (!empty($atts['cookie_banner'])) {
@@ -93,6 +101,48 @@ class EMCS_Embed
         }
 
         return $sanitized_atts;
+    }
+
+    /**
+     * Autopopulate name and email fields when embedding booking form
+     * 
+     * @param string url URL to update with prefill parameters
+     */
+    private function prefill_fields($url)
+    {
+
+        if ($url) {
+
+            $current_user = wp_get_current_user();
+
+            if ($current_user) {
+
+                $updated_url = $url;
+                $name = '';
+
+                if (!empty($current_user->user_email)) {
+
+                    $email = urlencode($current_user->user_email);
+                    $updated_url .= "?email=$email";
+                }
+
+                if (!empty($current_user->first_name)) {
+                    $name .= urlencode($current_user->first_name);
+                }
+
+                if (!empty($current_user->last_name)) {
+                    $name .= '%20' . urlencode($current_user->last_name);
+                }
+
+                if (!empty($name)) {
+                    $updated_url .= "&name=$name";
+                }
+
+                return $updated_url;
+            }
+        }
+
+        return $url;
     }
 
     /**

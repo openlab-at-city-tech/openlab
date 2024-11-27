@@ -1,21 +1,21 @@
-=== Embed Calendly ===
+=== EMC - Easily Embed Calendly Scheduling Features ===
 Contributors: turn2honey
-Donate link: https://embedcalendly.com/pricing
-Tags: appointment, appointment booking, appointment scheduling, booking calendar, calendly, embed calendly
-Requires at least: 4.0
-Tested up to: 6.4.3
-Stable tag: 3.8
+Donate link: https://simpma.com/emc#pricing
+Tags: appointment, booking, embed calendar, calendly, scheduling
+Requires at least: 4.6
+Tested up to: 6.7.1
+Stable tag: 4.1
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Easy and simple way to embed Calendly scheduling pages on WordPress.
+Simplest way to embed your booking calendar and integrate Calendly scheduling features into WordPress.
 
 == Description ==
 
-[Embed Calendly](https://embedcalendly.com) helps you add Calendly scheduling pages to your WordPress website in an easy and simple way. 
+[EMC Scheduling Manager](https://simpma.com/emc) is the simplest way to embed Calendly scheduling pages in your website. 
 
-Allows visitors to easily schedule meetings *anywhere* on your WordPress website, through Calendly.
+Allows visitors to easily schedule meetings *anywhere* on your WordPress website through Calendly.
 
 With an easy to use widget customizer, design your embed widget directly from the WordPress dashboard.
 
@@ -25,19 +25,24 @@ With an easy to use widget customizer, design your embed widget directly from th
 2. Customize embed widgets via shortcode.
 3. Easy to use widget customizer for customizing and generating embed widget shortcodes.
 4. Supports inline, text popup and button popup embed options.
+5. Prefill booking fields for logged in users.
 
 == Pro Version Features ==
 
-1. View booked events from WordPress
-2. Analytics dashboard for tracking calendar conversion
-3. Import Calendly event types to WordPress
-4. Customize embed widgets via shortcode.
-5. Easy to use widget customizer for customizing and generating embed widget shortcodes.
-6. Supports inline, text popup and button popup embed options.
+1. View and cancel booked meetings from WordPress
+2. Advanced analytics dashboard for tracking booking pages conversion
+3. Automated and manual email reminder
+4. Import, view and export contacts
+5. Elementor support
+6. Analytics data exporter
+7. Import Calendly event types to WordPress
+8. Customize embed widgets via shortcode.
+9. Easy to use widget customizer for customizing and generating embed widget shortcodes.
+10. Supports inline, text popup and button popup embed options.
 
 == Shortcode ==
 
-Embed Calendly scheduling page on WordPress with:
+Add a Calendly scheduling page on WordPress with:
 
 `[calendly url="https://calendly.com/example/call" type="1"]`
 
@@ -47,7 +52,7 @@ Or
 
 == Customization == 
 
-You can customize the embed widget using the widget customizer at *Dashboard > Embed Calendly > Customizer*, or 
+You can customize the embed widget using the widget customizer at *Dashboard > EMC > Customizer*, or 
 with the following shortcode options:
 
 *   `type` - Embed form type. *1* - inline embed, *2* - popup button embed, *3* - popup text embed
@@ -68,6 +73,8 @@ with the following shortcode options:
 
 *   `branding` - true/false. Show or hide branding
 
+*   `prefill_fields` - 0(false) or 1(true). Prefill booking form user info fields, with logged in user info
+
 *   `hide_cookie_banner` - 0(false) or 1(true). Hide or show cookie settings/banner
     
 *    `hide_details` - 0(false) or 1(true). Hide or show details
@@ -82,11 +89,11 @@ Add `[calendly url="https://calendly.com/example/call" type="1"]` shortcode to a
 
 = How do I connect to Calendly? =
 
-Paste your Calendly api key in the API Key tab on Embed Calendly settings page
+Paste your Calendly api key in the API Key tab on EMC Scheduling Manager settings page
 
 = How do I style my embed widget on WordPress? =
 
-Go to * Dashboard > Embed Calendly > Customizer * and select an event type from the dropdown. Then adjust the customizer settings to suit you.
+Go to * Dashboard > EMC > Customizer * and select an event type from the dropdown. Then adjust the customizer settings to suit you.
 
 = How do I add additional CSS class to embed widgets? =
 
@@ -95,11 +102,13 @@ Example: [calendly type="1" url="https://calendly.com/example/call" style_class=
 
 == Disclaimer == 
 
+This is an unofficial plugin for integrating Calendly features into WordPress.
+
 The free version comes with optional promotion notices that can be easily disabled by clicking the "Don't show again" button, near the notice.
 
-These notices are shown in your admin dashboard, and once any of them is disabled, all other promotion notices from Embed Calendly are disabled.
+These notices are shown in your admin dashboard, and once any of them is disabled, all other promotion notices from EMC Scheduling Manager are disabled.
 
-You can upgrade to the [pro version](https://embedcalendly.com/pricing/) to automatically disable all promotion notices.
+You can upgrade to the [pro version](https://simpma.com/emc#pricing/) to automatically disable all promotion notices.
 
 Optionally, you can disable the promotions by also including the below code snippet in your theme's function.php file:
 
@@ -114,6 +123,18 @@ function emcs_show_promotions() {
 `
 
 == Changelog ==
+
+= 4.1 - 26-11-2024 =
+
+- Verified compatibility with WordPress updates.
+- Updated readme
+
+= 4.0 - 05-11-2024 =
+
+- UI rebranding and redesign
+- Added shortcode option for prefilling current logged in user info in booking forms.
+- Improved pro version support
+- Improved internationalization support
 
 = 3.8 - 21-03-2024 =
 
