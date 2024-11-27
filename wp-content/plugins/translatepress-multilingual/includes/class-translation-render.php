@@ -497,9 +497,11 @@ class TRP_Translation_Render{
         $no_auto_translate_attribute = 'data-no-auto-translation';
 
         $translateable_strings = array();
+        $translateable_strings_manual = array();
 	    $skip_machine_translating_strings = array();
         $do_not_add_this_alug_to_dictionary_table = array();
         $nodes = array();
+        $nodes_manual = array();
 
 	    $trp = TRP_Translate_Press::get_trp_instance();
 	    if ( ! $this->trp_query ) {
@@ -803,11 +805,29 @@ class TRP_Translation_Render{
 			    foreach ( $html->find( $node_accessor['selector'] ) as $k => $row ){
 			    	$current_node_accessor_selector = $node_accessor['accessor'];
 				    $trimmed_string = trp_full_trim( $row->$current_node_accessor_selector );
+                    $translate_href = false;
 			    	if ( $current_node_accessor_selector === 'href' ) {
 					    $translate_href = ( $this->is_external_link( $trimmed_string, $home_url ) || $this->url_converter->url_is_file( $trimmed_string ) || $this->url_converter->url_is_extra($trimmed_string) );
 					    $translate_href = apply_filters( 'trp_translate_this_href', $translate_href, $row, $TRP_LANGUAGE, $trimmed_string );
 					    $trimmed_string = ( $translate_href ) ? $trimmed_string : '';
 				    }
+                    // outside preview mode we build the $translateable_strings_manual array for href
+                    // the similar condition above needs to remain in place for backwords compatibility with the filter trp_translate_this_href
+                    if ( $translate_href && !$preview_mode )
+                    {
+                        $translateable_strings_manual[] = html_entity_decode( $trimmed_string );
+                        $nodes_manual[] = array('node' => $row, 'type' => $node_accessor_key);
+                        // reset the string so it's excluded from $translateable_strings (no longer inserted in the database in front-end)
+                        $trimmed_string = '';
+                    }
+
+                    // outside preview mode we build the $translateable_strings_manual array for src
+                    if ( $current_node_accessor_selector === 'src' && !$preview_mode && $trimmed_string != ''){
+                        $translateable_strings_manual[] = html_entity_decode( $trimmed_string );
+                        $nodes_manual[] = array('node' => $row, 'type' => $node_accessor_key);
+                        // reset the string so it's excluded from $translateable_strings (no longer inserted in the database in front-end)
+                        $trimmed_string = '';
+                    }
 
 				    if( $trimmed_string!=""
 				        && !$this->trp_is_numeric($trimmed_string)
@@ -865,7 +885,40 @@ class TRP_Translation_Render{
             }
         }
 
+        // serving translations, inserting strings in the database
         $translated_strings = $this->process_strings( $translateable_strings, $language_code, null, $skip_machine_translating_strings, $do_not_add_this_alug_to_dictionary_table );
+
+        // serving translations for manual strings in the front-end: hrefs, src
+        if ( !$preview_mode ){
+            $translateable_information_manual = apply_filters( 'trp_translateable_strings_manual', array( 'translateable_strings_manual' => $translateable_strings_manual, 'nodes_manual' => $nodes_manual ), $html, $no_translate_attribute, $TRP_LANGUAGE, $language_code, $this );
+            $translateable_strings_manual = $translateable_information_manual['translateable_strings_manual'];
+            $nodes_manual = $translateable_information_manual['nodes_manual'];
+
+            $translated_strings_manual_dictionary = $this->trp_query->get_existing_translations( array_values( $translateable_strings_manual ), $language_code );
+            $translated_strings_manual = array();
+            foreach ( $translateable_strings_manual as $i => $string_manual ) {
+                if ( isset( $translated_strings_manual_dictionary[ $string_manual ]->translated ) ) {
+                    $translated_strings_manual[$i] = $translated_strings_manual_dictionary[ $string_manual ]->translated;
+                }
+            }
+
+            foreach ( $nodes_manual as $i => $node_manual ) {
+                if ( !isset( $translated_strings_manual[$i] ) || !isset( $node_accessors [$node_manual['type']] ) ){
+                    continue;
+                }
+                $current_node_accessor = $node_accessors[$node_manual['type']];
+                $accessor = $current_node_accessor[ 'accessor' ];
+                if ( $current_node_accessor[ 'attribute' ] ){
+                    $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->getAttribute( $accessor ) );
+                    $node_manual['node']->setAttribute( $accessor, str_replace( $translateable_string_manual, esc_attr( $translated_strings_manual[$i] ), $node_manual['node']->getAttribute( $accessor ) ) );
+                    do_action( 'trp_set_translation_for_attribute', $node_manual['node'], $accessor, $translateable_strings_manual[$i] );
+                }else{
+                    $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->$accessor );
+                    $nodes[$i]['node']->$accessor = str_replace( $translateable_string_manual, trp_sanitize_string($translated_strings_manual[$i]), $node_manual['node']->$accessor );
+                }
+            }
+            do_action('trp_translateable_information_manual', $translateable_information_manual, $translated_strings_manual, $language_code);
+        }
 
         do_action('trp_translateable_information', $translateable_information, $translated_strings, $language_code);
 
@@ -1178,6 +1231,7 @@ class TRP_Translation_Render{
         // In case we have a gettext string which was run through rawurlencode(). See more details on iss6563
         $string = preg_replace( '/%23%21trpst%23trp-gettext(.*?)%23%21trpen%23/i', '', $string );
         $string = preg_replace( '/%23%21trpst%23%2Ftrp-gettext%23%21trpen%23/i', '', $string );
+        $string = preg_replace( '/%23%21trpst%23%5C%2Ftrp-gettext%23%21trpen%23/i', '', $string );
 
         if (!isset($_REQUEST['trp-edit-translation']) || $_REQUEST['trp-edit-translation'] != 'preview') {
             $string = preg_replace('/(<|&lt;)trp-wrap (.*?)(>|&gt;)/i', '', $string);
@@ -2089,4 +2143,27 @@ class TRP_Translation_Render{
         return false;
     }
 
+    /**
+     * Searches for strings that are emails that go through antispambot() function in wp and saves them in the db not html encoded.
+     * Hooks on the trp_translateable_strings filter defined in translate_page()
+     *
+     * @param $translateable_information
+     * @param $html
+     * @param $no_translate_attribute
+     * @param $global_TRP_LANGUAGE
+     * @param $language_code
+     * @param $instance_TRP_Translation_Render
+     * @return array
+     */
+    public function antispambot_infinite_detection_fix( $translateable_information, $html, $no_translate_attribute, $global_TRP_LANGUAGE, $language_code, $instance_TRP_Translation_Render)
+    {
+        if (!is_array($translateable_information['translateable_strings'])){
+            return $translateable_information;
+        }
+
+        foreach ($translateable_information['translateable_strings'] as $key => $string){
+            $translateable_information['translateable_strings'][$key] = is_email(html_entity_decode($string)) ? html_entity_decode($string) : $string;
+        }
+        return $translateable_information;
+    }
 }

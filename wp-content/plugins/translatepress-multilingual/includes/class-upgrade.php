@@ -1239,12 +1239,28 @@ class TRP_Upgrade {
     public function trp_get_option_based_slugs_from_db_284( $option_name ) {
         $data = get_option( $option_name, array() );
         $extracted_slugs_array = array();
+
+        $woocommerce_permalink_options = get_option( 'woocommerce_permalinks', false );
+
         foreach ( $data as $key => $values_array ) {
-            $extracted_slugs_array[ $key ]["original"] = $values_array["original"];
+            $extracted_slugs_array[ $key ]["original"] = trim( $values_array["original"], '/' );
 
             if ( $values_array['type'] == 'post-type-base-slug' || $values_array['type'] == 'post-type-base' ) {
                 $extracted_slugs_array[ $key ]["type"] = 'post-type-base';
+                if ( apply_filters( 'trp_migrate_post_type_or_tax_original_only_if_active', true, $extracted_slugs_array[ $key ]["original"], $values_array['type'] ) && (
+                    !post_type_exists( $extracted_slugs_array[ $key ]["original"] ) &&
+                    ( $woocommerce_permalink_options === false ||
+                        $extracted_slugs_array[ $key ]["original"] !== trim( $woocommerce_permalink_options['product_base'], '/' ) ) ) ) {
+                    continue;
+                }
             }else{
+                if ( apply_filters( 'trp_migrate_post_type_or_tax_original_only_if_active', true, $extracted_slugs_array[ $key ]["original"], $values_array['type'] ) && (
+                    !taxonomy_exists( $extracted_slugs_array[ $key ]["original"] ) &&
+                    ( $woocommerce_permalink_options === false || (
+                        $extracted_slugs_array[ $key ]["original"] !== $woocommerce_permalink_options['category_base'] &&
+                        $extracted_slugs_array[ $key ]["original"] !== $woocommerce_permalink_options['tag_base'] ) ) ) ) {
+                    continue;
+                }
                 $extracted_slugs_array[ $key ]["type"] = 'taxonomy';
             }
             foreach ( $values_array["translationsArray"] as $lang => $translation_element ) {

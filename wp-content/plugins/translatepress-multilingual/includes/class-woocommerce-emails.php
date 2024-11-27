@@ -14,6 +14,7 @@ class TRP_Woocommerce_Emails{
 
             // Save user language on checkout
             add_action( 'woocommerce_checkout_update_order_meta', array( $this, 'save_language_on_checkout' ), 10, 2 );
+            add_action( 'woocommerce_store_api_checkout_update_order_meta', array( $this, 'save_language_on_checkout_store_api' ), 10, 1 );
 
             // WooCommerce email notifications
             add_action( 'woocommerce_order_status_processing_to_cancelled_notification', array( $this, 'store_email_order_id' ), 5, 1 );
@@ -78,6 +79,37 @@ class TRP_Woocommerce_Emails{
     }
 
     /**
+     * Fires when the Checkout Block/Store API updates an order's meta data.
+     *
+     * @param $order
+     * @return void
+     */
+    public function save_language_on_checkout_store_api( $order ) {
+        global $TRP_LANGUAGE, $TRP_EMAIL_ORDER;
+        $user_id = $order->get_user_id();
+        $order_id = $order->get_id();
+        $TRP_EMAIL_ORDER = $order_id;
+        if( $user_id != 0 ){
+
+            $user_preferred_language = get_user_meta($user_id, 'trp_language', true);
+            $always_use_this_language = get_user_meta( $user_id, 'trp_always_use_this_language', true );
+
+            if (!empty($always_use_this_language) && $always_use_this_language == 'yes' && !empty($user_preferred_language) ){
+                update_user_meta( $user_id, 'trp_language', $user_preferred_language );
+                trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $user_preferred_language, 'update' );
+            }else {
+                update_user_meta( $user_id, 'trp_language', $TRP_LANGUAGE );
+                trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE, 'update' );
+            }
+        }
+        else{
+            trp_woo_hpos_manipulate_post_meta( $order_id, 'trp_language', $TRP_LANGUAGE, 'update' );
+        }
+    }
+
+
+
+    /**
      * Save current user language
      *
      * The hook was added on 'wp_footer' to prevent logout or backend admin actions from resetting $TRP_LANGUAGE to TRP default language
@@ -140,9 +172,24 @@ class TRP_Woocommerce_Emails{
      * @return false
      */
     public function trp_woo_setup_locale( $bool, $wc_email ) {
+        // We need to set up the $recipients ourselves in case we're dealing with an order.
+        // Otherwise, $wc_email->get_recipient() returns null and throws a PHP warning inside WooCommerce /woocommerce/includes/emails/class-wc-email.php
+        global $TRP_EMAIL_ORDER;
+        $order = false;
+
+        if ( $TRP_EMAIL_ORDER  ) {
+            $order = wc_get_order( $TRP_EMAIL_ORDER );
+        }
+
+        if ( is_a( $order, 'WC_Order' ) ) {
+            $recipients = $order->get_billing_email();
+        } else {
+            $recipients = $wc_email->get_recipient();
+        }
+
         global $TRP_LANGUAGE;
         $is_customer_email  = $wc_email->is_customer_email();
-        $recipients         = $wc_email->get_recipient();
+
 
         if ( $recipients === null || $recipients === '' ) {
             $recipients = [];
@@ -154,8 +201,6 @@ class TRP_Woocommerce_Emails{
         $user_id            = 0;
 
         if( $is_customer_email ){
-            global $TRP_EMAIL_ORDER;
-            $order = wc_get_order( $TRP_EMAIL_ORDER );
             if ( $order ) {
                 $user_id = $order->get_user_id();
                 if ( $user_id > 0 ) {
@@ -170,11 +215,17 @@ class TRP_Woocommerce_Emails{
                 $registered_user = get_user_by( 'email', $recipients[0] );
                 if( $registered_user ){
                     $language = $registered_user->locale;
+                } else {
+                    $language = trp_woo_hpos_get_post_meta( $TRP_EMAIL_ORDER, 'trp_language', true );
                 }
             }
         }
 
         $language = apply_filters( 'trp_woo_email_language', $language, $is_customer_email, $recipients, $user_id );
+
+        if ( empty( $language ) )
+            $language = $TRP_LANGUAGE;
+
         trp_switch_language( $language );
 
         WC()->load_plugin_textdomain();

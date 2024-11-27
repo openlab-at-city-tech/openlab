@@ -555,7 +555,7 @@ function trp_bulk_debug($debug = false, $logger = array()){
  * @return bool
  */
 function trp_is_paid_version() {
-	$licence = get_option( 'trp_licence_key' );
+	$licence = get_option( 'trp_license_key' );
 
 	if ( ! empty( $licence ) ) {
 		return true;
@@ -901,6 +901,8 @@ function trp_woo_hpos_get_post_meta( $order_id, $meta_key, $single = false ){
     if ( class_exists( 'Automattic\WooCommerce\Utilities\OrderUtil' ) && Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled() ) {
         $order = wc_get_order( $order_id );
 
+        if ( !$order ) return false;
+
         return $order->get_meta( $meta_key, $single );
     }
 
@@ -922,4 +924,22 @@ function is_late_dom_html_plugin_active(){
     }
 
     return apply_filters( 'trp_delay_dom_changes_script', false );
+}
+
+/**
+ * Helper function to remove a prefix from a string.
+ * If we do str_replace that will remove it from the entire string, wherever it finds it.
+ *
+ * @return string
+ */
+function trp_remove_prefix($prefix = '', $string = '') {
+    // Check if the path starts with the prefix
+    if (!empty($prefix)){
+        if (strpos($string, $prefix) === 0) {
+            // Remove the prefix from the path
+            return substr_replace($string, '', 0, strlen($prefix));
+        }
+    }
+    // If the prefix is not at the start, return the path unchanged
+    return $string;
 }

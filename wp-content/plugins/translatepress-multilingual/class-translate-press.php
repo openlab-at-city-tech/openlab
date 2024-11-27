@@ -66,7 +66,7 @@ class TRP_Translate_Press{
         define( 'TRP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'TRP_PLUGIN_BASE', plugin_basename( __DIR__ . '/index.php' ) );
         define( 'TRP_PLUGIN_SLUG', 'translatepress-multilingual' );
-        define( 'TRP_PLUGIN_VERSION', '2.8.8' );
+        define( 'TRP_PLUGIN_VERSION', '2.9.0' );
 
 	    wp_cache_add_non_persistent_groups(array('trp'));
 
@@ -354,6 +354,7 @@ class TRP_Translate_Press{
         /* handle CDATA str replacement from the content as it is messing up the renderer */
         $this->loader->add_filter( "trp_before_translate_content", $this->translation_render, 'handle_cdata', 1000 );
         $this->loader->add_action( "trp_set_translation_for_attribute", $this->translation_render, 'translate_image_srcset_attributes', 10, 3 );
+        $this->loader->add_filter( "trp_translateable_strings", $this->translation_render, 'antispambot_infinite_detection_fix', 10, 6 );
         $this->loader->add_filter( "trp_allow_machine_translation_for_string", $this->translation_render, 'allow_machine_translation_for_string', 10, 4 );
         $this->loader->add_filter( "trp_allow_machine_translation_for_string", $this->translation_render, 'skip_automatic_translation_for_no_auto_translation_selector', 10, 5 );
         $this->loader->add_action( "init", $this->translation_render, 'add_callbacks_for_translating_rest_api', 10, 4 );

@@ -3,9 +3,9 @@ Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
 Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.6.2
+Tested up to: 6.7.1
 Requires PHP: 5.6.20
-Stable tag: 2.8.8
+Stable tag: 2.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,19 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
+= 2.9.0 =
+* Improved database management by no longer inserting non-translated external URLs and images
+* Fixed detecting the same email address multiple times due to antispambot outputting it in different encodings
+* Fixed Translation Editor pencil icon positioning
+* Fixed Translation Editor when viewing in RTL language
+* Fixed php error occurring in some cases when translating WooCommerce emails
+* Fixed deprecated notice in PHP 8 regarding rtrim function
+
+= 2.8.9 =
+* Fixed WooCommerce emails being sent in default language instead of user's language when placing order as non-logged in guest on a Blocks checkout form
+* Fixed trp-gettext wrappings appearing on WooCommerce Blocks checkout form
+* Added admin notifications about Black Friday sale
+
 = 2.8.8 =
 * Fixed compatibility with CTX Feed plugin
 * Improved security by doing a capability check on activating/deactivating license

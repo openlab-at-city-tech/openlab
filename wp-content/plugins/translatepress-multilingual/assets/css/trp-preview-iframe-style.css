@@ -3,18 +3,15 @@
 */
 
 .trp-editor-action-hover-container{
-    position: absolute !important;
+    direction: ltr !important;
     display: flex !important;
     justify-content: flex-end !important;
-    top: -2px !important; /* value is the outline of .trp-highlight */
-    right:0 !important;
-    width: 130px !important;
-    height: 50px !important;
-    padding-right: 8px !important;
+    margin-top: -2px !important; /* value is the outline of .trp-highlight */
 }
 
 trp-span{
     position: absolute !important;
+    display: block !important;
 }
 
 /*
@@ -33,9 +30,6 @@ trp-span{
     line-height: 1em!important;
     font-size: 18px !important;
     z-index: 5 !important;
-    /*background: #0085ba!important;*/
-    /*-webkit-border-radius: 50% !important;*/
-    /*border-radius: 50% !important;*/
     border: 1px solid #1e1e1e !important;
     border-radius: 2px;
     background-color: #ffffff;
@@ -48,7 +42,6 @@ trp-span{
     padding: 8px !important;
     letter-spacing: normal !important;
     background-color: #FFFFFF !important;
-    margin-left: -85px !important;
 }
 
 .trp-icon:not(.trp-icon:last-child){
@@ -83,7 +76,6 @@ trp-span{
 
 .trp-gettext-pencil{
     background: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='25px' height='25px' fill='%234ab866' %3E%3Cpath d='M20.1 5.1L16.9 2 6.2 12.7l-1.3 4.4 4.5-1.3L20.1 5.1zM4 20.8h8v-1.5H4v1.5z'/%3E%3C/svg%3E") no-repeat center !important;
-    /*fill: #00ba3f !important;*/
     background-color: #FFFFFF !important;
 }
 
@@ -131,7 +123,6 @@ translate-press{
     height: 50px !important;
     background-color: #FFFFFF!important;
     padding: 8px !important;
-    margin-right: 85px !important;
 }
 
 .trp-merge:hover {
@@ -155,7 +146,6 @@ translate-press{
     height: 50px !important;
     background-color: #FFFFFF !important;
     padding: 8px !important;
-    margin-right: 85px !important;
 }
 
 .trp-icon.trp-split:hover {

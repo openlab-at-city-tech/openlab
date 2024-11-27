@@ -434,7 +434,7 @@ class TRP_Url_Converter {
         if ( $lang_from_url_string === null) {
             // these are the custom url. They don't have language
             $abs_home_considered_path = trim(str_replace( $abs_home_url_obj->getPath() !== null ? $abs_home_url_obj->getPath() : '', '', $url_obj->getPath()), '/');
-            $new_url_obj->setPath(trailingslashit(trailingslashit($abs_home_url_obj->getPath()) . trailingslashit($this->get_url_slug($language)) . $abs_home_considered_path));
+            $new_url_obj->setPath(trailingslashit(trailingslashit(strval($abs_home_url_obj->getPath())) . trailingslashit($this->get_url_slug($language)) . $abs_home_considered_path));
             $new_url = $new_url_obj->getUri();
 
             trp_bulk_debug($debug, array('url' => $url, 'new url' => $new_url, 'lang' => $language, 'url type' => 'custom url without language parameter'));
@@ -673,7 +673,7 @@ class TRP_Url_Converter {
                 $abs_home = '';
             }
             //we make sure that the path is the actual path and not a folder
-            $possible_path = str_replace( $abs_home, '', $url_obj->getPath() );
+            $possible_path = trp_remove_prefix($abs_home, $url_obj->getPath());
 
             $lang = ltrim( $possible_path,'/' );
             $lang = explode('/', $lang);
