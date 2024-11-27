@@ -37,14 +37,14 @@ class View extends Base {
 	}
 
 	public function render_body() {
-		$header      = __( 'Introducing Edit Link and Unlink features in Broken Link Checker!', 'broken-link-checker' );
-		$message     = __( 'Now you can edit links and unlink broken links directly from the new Cloud version with ease.', 'broken-link-checker' );
+		$header      = esc_html__( 'Introducing Edit Link and Unlink features in Broken Link Checker!', 'broken-link-checker' );
+		$message     = esc_html__( 'Now you can edit links and unlink broken links directly from the new Cloud version with ease.', 'broken-link-checker' );
 		$current_url = site_url() . $_SERVER['REQUEST_URI'];
-		$target_url  = add_query_arg( array(
+		$target_url  = esc_url( add_query_arg( array(
 			'highlights_shown' => true,
 			'redirect'         => urlencode( $current_url ),
 			'nonce'            => wp_create_nonce( 'blc_highlights_shown' ),
-		), $current_url );
+		), $current_url ) );
 
 		printf( '
 			<div id="activate-features-blc-notice" class="wrap wrap-blc-features-notice activate-features-blc-notice notice-info">
@@ -66,7 +66,7 @@ class View extends Base {
 			',
 			$header,
 			$message,
-			$target_url
+			$target_url	
 		);
 	}
 }

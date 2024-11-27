@@ -106,7 +106,7 @@ class Model {
 				}
 
 				if ( in_array( $key, array( 'start_time', 'end_time' ), true ) ) {
-					if ( in_array( $item, array( '-', 0 ), true ) ) {
+					if ( in_array( $item, array( '-', 0 ), true ) || empty( $item ) ) {
 						$item = '-';
 					} else {
 						$item = Utilities::timestamp_to_formatted_date( \intval( $item ), true );

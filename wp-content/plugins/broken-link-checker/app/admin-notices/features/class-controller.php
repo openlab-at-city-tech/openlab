@@ -45,22 +45,22 @@ class Controller extends Admin_Notice {
 	 * @since 2.2
 	 *
 	 */
-	public function can_boot() {
+	public function can_boot(): bool {
 		/**
 		 * Until multisites are officially supported, BLC v2 menus are disabled in subsites.
 		 * Local menus are loaded instead. Local admin notification does not need to appear on subsites at this point.
 		 */
 		if ( Utilities::is_subsite() || ! Settings::instance()->get( 'use_legacy_blc_version' ) ) {
-			return;
+			return false;
 		}
 
-		$version_highlights = Settings::instance()->get( 'version_highlights' );
+		$version_highlights       = Settings::instance()->get( 'version_highlights' );
 		$version_highlights_shown = ! empty( $version_highlights['2_2_0'] );
 
 		return Utilities::is_admin_screen( $this->admin_pages ) && ! $version_highlights_shown;
 	}
 
-	public function admin_dash_page_classes( $classes ) {
+	public function admin_dash_page_classes( ?string $classes = '' ): string {
 		return $classes . ' blc-show-features-notice';
 	}
 
@@ -76,9 +76,9 @@ class Controller extends Admin_Notice {
 		return $scripts_version;
 	}
 
-	public function set_admin_styles() {
+	public function set_admin_styles(): array {
 		return array(
-			'blc_sui'          => array(
+			'blc_sui'             => array(
 				'src' => $this->styles_dir . 'shared-ui-' . BLC_SHARED_UI_VERSION_NUMBER . '.min.css',
 				'ver' => WPMUDEV_BLC_SCIPTS_VERSION,
 			),

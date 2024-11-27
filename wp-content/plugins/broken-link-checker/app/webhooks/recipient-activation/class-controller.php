@@ -27,6 +27,13 @@ use WPMUDEV_BLC\Core\Controllers\Webhook;
  */
 class Controller extends Webhook {
 	/**
+	 * The webhook.
+	 *
+	 * @var string $webhook The webhook
+	 */
+	public $webhook = 'broken-link-checker-activation';
+
+	/**
 	 * The webhook tag.
 	 *
 	 * @var string $webhook The webhook tag

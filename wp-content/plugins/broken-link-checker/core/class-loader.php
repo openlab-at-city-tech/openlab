@@ -73,7 +73,6 @@ final class Loader extends Base {
 	 *
 	 * @since  2.0.0
 	 * @var object
-	 *
 	 */
 	public $settings;
 
@@ -82,7 +81,6 @@ final class Loader extends Base {
 	 *
 	 * @since  2.0.0
 	 * @var float
-	 *
 	 */
 	public $php_version = '7.2';
 
@@ -91,7 +89,6 @@ final class Loader extends Base {
 	 *
 	 * @since  2.0.0
 	 * @var float
-	 *
 	 */
 	public $wp_version = '5.2';
 
@@ -144,6 +141,26 @@ final class Loader extends Base {
 		// Initialize the core files and the app files.
 		// Core files are the base files that the app classes can rely on.
 		// Not all core files need to be initiated.
+
+		/**
+		 * Static var to check if app is loaded.
+		 */
+		static $loaded = false;
+
+		if ( $loaded ) {
+			return;
+		}
+
+		$loaded = true;
+
+		/**
+		 * Start Hub Connector
+		 */
+		$this->register_hub_connector();
+
+		/**
+		 * Start app functions.
+		 */
 		$this->init_app();
 
 		/*
@@ -193,10 +210,36 @@ final class Loader extends Base {
 					'Scheduled_Events',
 					'Hub_Endpoints',
 					'Options',
-					//'Hooks',
+					// 'Hooks',
 				)
 			)
 		);
+	}
+
+	/**
+	 * Register Hub connector submodule.
+	 *
+	 * @return void
+	 */
+	public function register_hub_connector() {
+		if ( ! file_exists( WPMUDEV_BLC_DIR . 'core/external/hub-connector/connector.php' ) ) {
+			return;
+		}
+
+		require_once WPMUDEV_BLC_DIR . 'core/external/hub-connector/connector.php';
+
+		$options = array(
+			'screens'    => array( 'toplevel_page_blc_dash' ),
+			'extra_args' => array(
+				'register' => array(
+					'connect_ref'  => 'blc',
+					'utm_medium'   => 'plugin',
+					'utm_campaign' => 'blc_connector_main',
+				),
+			),
+		);
+
+		\WPMUDEV\Hub\Connector::get()->set_options( 'blc', $options );
 	}
 
 	/**
@@ -236,7 +279,6 @@ final class Loader extends Base {
 	 * @since 2.0.0
 	 *
 	 * @param array $scripts An array with all scripts to be enqueued.
-	 *
 	 */
 	public function handle_scripts( $scripts = array() ) {
 		if ( ! empty( $scripts ) ) {
@@ -274,7 +316,6 @@ final class Loader extends Base {
 	 * @since 2.0.0
 	 *
 	 * @param array $styles An array with all styles to be enqueued.
-	 *
 	 */
 	public function handle_styles( $styles = array() ) {
 		if ( ! empty( $styles ) ) {
@@ -311,24 +352,24 @@ final class Loader extends Base {
 	 * @since 2.0.0
 	 *
 	 * @param string $component The component name which is the folder name that contains the component files (mvc etc).
-	 * @param string $namespace The namespace where the component belongs to. Default is App which derives from the `plugin_path/app` main folder.
+	 * @param string $namespace_prefix The namespace where the component belongs to. Default is App which derives from the `plugin_path/app` main folder.
+	 * @throws \Exception If class controller file not found.
 	 */
-	private function load_component( $component = null, $namespace = 'App' ) {
+	private function load_component( $component = null, $namespace_prefix = 'App' ) {
 		if ( ! is_null( $component ) ) {
 			$component_path_part = str_replace( '_', '-', $component );
-			$component_path      = trailingslashit( WPMUDEV_BLC_DIR ) . strtolower( trailingslashit( $namespace ) . trailingslashit( $component_path_part ) );
+			$component_path      = trailingslashit( WPMUDEV_BLC_DIR ) . strtolower( trailingslashit( $namespace_prefix ) . trailingslashit( $component_path_part ) );
 
 			if ( is_dir( $component_path ) ) {
 				$component_dir = new DirectoryIterator( $component_path );
 
 				foreach ( $component_dir as $fileinfo ) {
-
 					if ( $fileinfo->isDir() && ! $fileinfo->isDot() ) {
 						$component_item_dir = $fileinfo->getFilename();
 						$component_item     = str_replace( '-', '_', $component_item_dir );
 
 						if ( file_exists( trailingslashit( $component_path ) . trailingslashit( $component_item_dir ) . 'class-controller.php' ) ) {
-							$component_item = "WPMUDEV_BLC\\{$namespace}\\{$component}\\{$component_item}\\Controller";
+							$component_item = "WPMUDEV_BLC\\{$namespace_prefix}\\{$component}\\{$component_item}\\Controller";
 
 							try {
 								if ( method_exists( $component_item::instance(), 'init' ) ) {
@@ -337,14 +378,13 @@ final class Loader extends Base {
 									throw new \Exception( 'Method init() is missing from class ' . get_class( $component_item::instance() ) );
 								}
 							} catch ( \Exception $e ) {
+								// phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 								error_log( $e->getMessage() );
 							}
-
 						}
 					}
 				}
 			}
 		}
 	}
-
 }

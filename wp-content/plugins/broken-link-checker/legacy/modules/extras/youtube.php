@@ -28,7 +28,7 @@ class blcYouTubeChecker extends blcChecker {
 		//Throttle API requests to avoid getting blocked due to quota violation.
 		$delta = microtime_float() - $this->last_api_request;
 		if ( $delta < $this->api_grace_period ) {
-			usleep( ( $this->api_grace_period - $delta ) * 1000000 );
+			usleep( intval( $this->api_grace_period - $delta ) * 1000000 );
 		}
 
 		$result = array(

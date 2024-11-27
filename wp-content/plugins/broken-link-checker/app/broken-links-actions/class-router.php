@@ -294,8 +294,7 @@ class Router extends Base {
 					}
 				}
 
-				$params['links'][ $input_link_key ]['link'] = sanitize_url( Utilities::make_link_relative( $input_link['link'] ) );
-
+				$params['links'][ $input_link_key ]['link'] = sanitize_url( $input_link['link'] );
 			}
 		}
 

@@ -130,14 +130,25 @@ abstract class Admin_Notice extends Base {
 	 * @return string
 	 */
 	public function admin_body_classes( $classes ) {
-		$sui_classes   = explode( ' ', $classes );
-		$sui_classes[] = BLC_SHARED_UI_VERSION;
+		static $added = false;
 
-		if ( apply_filters( 'wpmudev_branding_hide_branding', false ) ) {
-			$sui_classes[] = 'wpmudev-hide-branding';
+		if ( ! $added ) {
+			$sui_classes   = explode( ' ', $classes );
+
+			if ( ! in_array( BLC_SHARED_UI_VERSION, $sui_classes, true ) ) {
+				$sui_classes[] = BLC_SHARED_UI_VERSION;
+			}
+
+			if ( apply_filters( 'wpmudev_branding_hide_branding', false ) ) {
+				$sui_classes[] = 'wpmudev-hide-branding';
+			}
+
+			$added = true;
+			$classes = join( ' ', $sui_classes );
 		}
 
-		return join( ' ', $sui_classes );
+
+		return $classes;
 	}
 
 	/**

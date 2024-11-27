@@ -26,7 +26,6 @@ use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 use WPMUDEV_BLC\Core\Utils\Utilities;
 use WPMUDEV_BLC\Core\Traits\Dashboard_API;
 use WPMUDEV_BLC\App\Scan_Models\Scan_Data;
-use WPMUDEV_Dashboard;
 
 /**
  * Class Controller
@@ -184,7 +183,7 @@ class Controller extends Base {
 		);
 
 		// No scan data. Probably no scan ever ran for this site.
-		if ( ! isset( $scan_result['start_unix_time_utc'] ) || 0 === $scan_result['start_unix_time_utc'] ) {
+		if ( empty( $scan_result['start_unix_time_utc'] ) ) {
 			$this->set_response_code( 449 );
 			$this->set_response_message( $this->error_messages( 'scan_has_no_start_time' ) );
 			Utilities::log( $this->error_messages( 'scan_has_no_start_time' ) );
@@ -281,10 +280,7 @@ class Controller extends Base {
 			);
 		}
 
-		if ( ! (bool) self::site_connected() ||
-			Settings::instance()->get( 'use_legacy_blc_version' ) ||
-			! class_exists( '\WPMUDEV_Dashboard' ) ||
-			! WPMUDEV_Dashboard::$api->has_key() ) {
+		if ( ! (bool) self::site_connected() || Settings::instance()->get( 'use_legacy_blc_version' ) ) {
 			return new WP_Error(
 				'blc-api-request-failled',
 				esc_html__(
@@ -325,7 +321,7 @@ class Controller extends Base {
 		}
 
 		// WPMUDEV_Dashboard class has been checked already in `$this->can_do_request()`.
-		$this->api_key = WPMUDEV_Dashboard::$api->get_key();
+		$this->api_key = self::get_api_key();
 	}
 
 	/**

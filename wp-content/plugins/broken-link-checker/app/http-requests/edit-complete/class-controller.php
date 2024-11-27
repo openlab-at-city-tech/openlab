@@ -18,7 +18,7 @@ use WPMUDEV_BLC\App\Broken_Links_Actions\Link;
 use WPMUDEV_BLC\Core\Models\Http_Request;
 use WPMUDEV_BLC\Core\Utils\Abstracts\Base;
 use WPMUDEV_BLC\Core\Utils\Utilities;
-use WPMUDEV_Dashboard;
+use WPMUDEV_BLC\Core\Traits\Dashboard_API;
 
 defined( 'WPINC' ) || die;
 
@@ -28,6 +28,13 @@ defined( 'WPINC' ) || die;
  * @package WPMUDEV_BLC\App\Http_Requests\Edit_Complete
  */
 class Controller extends Base {
+	/**
+	 * Use Dashboard_API Trait.
+	 *
+	 * @since 2.3.0
+	 */
+	use Dashboard_API;
+
 	/**
 	 * The BLC remote api full url.
 	 *
@@ -110,7 +117,7 @@ class Controller extends Base {
 		}
 
 		// WPMUDEV_Dashboard class has been checked already in `$this->can_do_request()`.
-		$this->api_key = WPMUDEV_Dashboard::$api->get_key();
+		$this->api_key = self::get_api_key();
 	}
 
 	/**

@@ -26,8 +26,12 @@ use WPMUDEV_BLC\App\Users\Recipients\Model as Recipients;
  * @package WPMUDEV_BLC\App\Emails\User_Review
  */
 class Controller extends Webhook {
-
-	//public $webhook = 'broken-link-checker-review';
+	/**
+	 * The webhook.
+	 *
+	 * @var string $webhook The webhook
+	 */
+	public $webhook = 'broken-link-checker-review';
 
 	/**
 	 * The webhook tag.
