@@ -7,9 +7,11 @@ h2.subtitle {font-size: 15px; font-weight: bold; padding: 20px 0 10px 0}
 #order-terms ul {list-style: none;}
 #order-terms ul.children {margin-left: 25px} 
 
-#order-terms #tto_sortable li > .item { padding: 2px 0px; margin: 4px 0px;  border: 1px solid #DDDDDD; cursor: move; -moz-border-radius:6px; background-color: #f9f9f9;}
+#order-terms #tto_sortable li > .item { padding: 2px 0px; margin: 4px 0px;  border: 1px solid #DDDDDD; cursor: move; -moz-border-radius:6px; background-color: #f9f9f9; clear: both}
 #order-terms #tto_sortable li:nth-child(2n+1) > .item {    background-color: #fff !important;}
-#order-terms #tto_sortable li span { display: block; padding: 5px 10px; color:#555; font-size:13px;}
+#order-terms #tto_sortable li span.title { display: inline-block; padding: 5px 10px; color:#555; font-size:13px;}
+#order-terms #tto_sortable li span.actions {float: right; padding: 5px 10px;}
+#order-terms #tto_sortable li span.actions a {text-decoration: none}
 #order-terms #tto_sortable li.placeholder{border: dashed 2px #ccc;height:30px; background-color: #FFF;}
 
 .wp-list-taxonomy {width: 100%}

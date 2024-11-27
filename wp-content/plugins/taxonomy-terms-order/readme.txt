@@ -3,8 +3,8 @@ Contributors: nsp-code
 Donate link: http://www.nsp-code.com/donate.php
 Tags: category order,terms order, taxonomy order, categories sort
 Requires at least: 2.8
-Tested up to: 6.6.1
-Stable tag: 1.8.6
+Tested up to: 6.7
+Stable tag: 1.8.7
 
 Order Categories and all custom taxonomies terms (hierarchically) using a Drag and Drop Sortable JavaScript capability. 
 
@@ -59,6 +59,12 @@ All ideas are welcome and i put them on my list to be implemented into the new v
 Consider upgrading to our advanced version of this plugin at a very resonable price <a target="_blank" href="http://www.nsp-code.com/premium-plugins/wordpress-plugins/advanced-taxonomy-terms-order/">Advanced Taxonomy Terms Order Order</a>
 
 == Change Log ==
+
+= 1.8.7 =
+ - CSS adjustments for span action section.
+ - Option for term edit link. 
+ - Include the term edit link on the ReOrder interface. 
+ - Wordpress 6.7 compatibility check and tag update.
 
 = 1.8.6 =
  - Fix: TTO_addons class not loaded which makes the compatibility routines not triggering. 

@@ -32,10 +32,12 @@
                         $indent = str_repeat("\t", $depth);
                     else
                         $indent = '';
-
-                    //extract($args, EXTR_SKIP);
-                    $taxonomy = get_taxonomy($term->term_taxonomy_id);
-                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span>'.apply_filters( 'to/term_title', $term->name, $term ).' </span></div>';
+                    
+                    $currentScreen = get_current_screen();
+                    
+                    $term_link  =   isset ( $currentScreen->post_type ) ?   get_edit_term_link( $term, $term->taxonomy, $currentScreen->post_type ) :   get_edit_term_link( $term );
+                    
+                    $output .= $indent . '<li class="term_type_li" id="item_'.$term->term_id.'"><div class="item"><span class="title">'.apply_filters( 'to/term_title', $term->name, $term ).' </span> <span class="actions"><a href="' . $term_link .'"><span class="dashicons dashicons-edit"></span></a></span></div>';
                 }
 
 
