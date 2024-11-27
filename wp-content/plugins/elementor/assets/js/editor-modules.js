@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -513,10 +513,11 @@ var Container = /*#__PURE__*/function (_ArgsObject) {
   }, {
     key: "render",
     value: function render() {
+      var _this$view;
       if (!this.renderer) {
         return;
       }
-      this.renderer.view.renderOnChange(this.settings);
+      this.renderer.view.renderOnChange(this.settings, (_this$view = this.view) === null || _this$view === void 0 ? void 0 : _this$view.$el);
     }
   }, {
     key: "renderUI",
@@ -1024,7 +1025,7 @@ BaseSettingsModel = Backbone.Model.extend({
       controlGlobalKey = control.groupPrefix + control.groupType;
     }
     var globalControl = controls[controlGlobalKey];
-    if (!((_globalControl$global = globalControl.global) !== null && _globalControl$global !== void 0 && _globalControl$global.active)) {
+    if (!(globalControl !== null && globalControl !== void 0 && (_globalControl$global = globalControl.global) !== null && _globalControl$global !== void 0 && _globalControl$global.active)) {
       return false;
     }
     var globalValue = (_this$attributes$__gl = this.attributes.__globals__) === null || _this$attributes$__gl === void 0 ? void 0 : _this$attributes$__gl[controlGlobalKey];

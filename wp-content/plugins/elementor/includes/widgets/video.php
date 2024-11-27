@@ -93,6 +93,20 @@ class Widget_Video extends Widget_Base {
 	}
 
 	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-video' ];
+	}
+
+	/**
 	 * Register video widget controls.
 	 *
 	 * Adds different input fields to allow the user to change and customize the widget settings.
@@ -340,21 +354,14 @@ class Widget_Video extends Widget_Base {
 			'autoplay',
 			[
 				'label' => esc_html__( 'Autoplay', 'elementor' ),
+				'description' => sprintf(
+					/* translators: 1: `<a>` opening tag, 2: `</a>` closing tag. */
+					esc_html__( 'Note: Autoplay is affected by %1$s Google’s Autoplay policy %2$s on Chrome browsers.', 'elementor' ),
+					'<a href="https://developers.google.com/web/updates/2017/09/autoplay-policy-changes" target="_blank">',
+					'</a>'
+				),
 				'type' => Controls_Manager::SWITCHER,
 				'frontend_available' => true,
-				'conditions' => [
-					'relation' => 'or',
-					'terms' => [
-						[
-							'name' => 'show_image_overlay',
-							'value' => '',
-						],
-						[
-							'name' => 'image_overlay[url]',
-							'value' => '',
-						],
-					],
-				],
 			]
 		);
 
@@ -1072,12 +1079,13 @@ class Widget_Video extends Widget_Base {
 						'type' => 'video',
 						'videoType' => $settings['video_type'],
 						'url' => $lightbox_url,
+						'autoplay' => $settings['autoplay'],
 						'modalOptions' => [
 							'id' => 'elementor-lightbox-' . $this->get_id(),
 							'entranceAnimation' => $settings['lightbox_content_animation'],
 							'entranceAnimation_tablet' => $settings['lightbox_content_animation_tablet'],
 							'entranceAnimation_mobile' => $settings['lightbox_content_animation_mobile'],
-							'videoAspectRatio' => $settings['aspect_ratio'],
+							'videoAspectRatio' => $settings['aspect_ratio'] ?? '169',
 						],
 					];
 
@@ -1134,7 +1142,7 @@ class Widget_Video extends Widget_Base {
 	/**
 	 * Render video widget as plain content.
 	 *
-	 * Override the default behavior, by printing the video URL insted of rendering it.
+	 * Override the default behavior, by printing the video URL instead of rendering it.
 	 *
 	 * @since 1.4.5
 	 * @access public

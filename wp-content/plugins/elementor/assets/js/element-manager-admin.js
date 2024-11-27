@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -2181,11 +2181,7 @@ var App = function App() {
     href: "https://go.elementor.com/wp-dash-element-manager/",
     rel: 'noreferrer',
     target: '_blank'
-  }, (0, _i18n.__)('Learn More', 'elementor'))), !noticeData.is_viewed && /*#__PURE__*/_react.default.createElement("p", {
-    style: {
-      margin: '20px -15px'
-    }
-  }, /*#__PURE__*/_react.default.createElement(_components.Notice, {
+  }, (0, _i18n.__)('Learn More', 'elementor'))), !noticeData.is_viewed && /*#__PURE__*/_react.default.createElement("p", null, /*#__PURE__*/_react.default.createElement(_components.Notice, {
     onRemove: function onRemove() {
       (0, _api.markNoticeViewed)(noticeData.notice_id);
       setNoticeData(_objectSpread(_objectSpread({}, noticeData), {}, {

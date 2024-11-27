@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -961,10 +961,10 @@ exports["default"] = ExperimentsModule;
 
 /***/ }),
 
-/***/ "../modules/conversion-center/assets/js/admin/links-pages.js":
-/*!*******************************************************************!*\
-  !*** ../modules/conversion-center/assets/js/admin/links-pages.js ***!
-  \*******************************************************************/
+/***/ "../modules/floating-buttons/assets/js/floating-buttons/admin/floating-buttons.js":
+/*!****************************************************************************************!*\
+  !*** ../modules/floating-buttons/assets/js/floating-buttons/admin/floating-buttons.js ***!
+  \****************************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -984,21 +984,27 @@ var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/run
 var _menuHandler = _interopRequireDefault(__webpack_require__(/*! elementor-admin/menu-handler */ "../assets/dev/js/admin/menu-handler.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
-var LinksPagesHandler = /*#__PURE__*/function (_AdminMenuHandler) {
-  (0, _inherits2.default)(LinksPagesHandler, _AdminMenuHandler);
-  var _super = _createSuper(LinksPagesHandler);
-  function LinksPagesHandler() {
-    (0, _classCallCheck2.default)(this, LinksPagesHandler);
+var FloatingButtonsHandler = /*#__PURE__*/function (_AdminMenuHandler) {
+  (0, _inherits2.default)(FloatingButtonsHandler, _AdminMenuHandler);
+  var _super = _createSuper(FloatingButtonsHandler);
+  function FloatingButtonsHandler() {
+    (0, _classCallCheck2.default)(this, FloatingButtonsHandler);
     return _super.apply(this, arguments);
   }
-  (0, _createClass2.default)(LinksPagesHandler, [{
+  (0, _createClass2.default)(FloatingButtonsHandler, [{
     key: "getDefaultSettings",
     value: function getDefaultSettings() {
+      var pageName = 'e-floating-buttons',
+        adminMenuSelectors = {
+          // The escaping is done because jQuery requires it for selectors.
+          contactPagesTablePage: 'a[href="edit.php?post_type=' + pageName + '"]',
+          contactPagesAddNewPage: 'a[href="edit.php?post_type=elementor_library&page=' + pageName + '"]'
+        };
       return {
         selectors: {
           addButton: '.page-title-action:first',
-          pagesMenuItemAndLink: '#menu-pages, #menu-pages > a',
-          templatesMenuItem: '#toplevel_page_e-link-pages-'
+          templatesMenuItem: '.menu-icon-elementor_library',
+          contactPagesMenuItem: "".concat(adminMenuSelectors.contactPagesTablePage, ", ").concat(adminMenuSelectors.contactPagesAddNewPage)
         }
       };
     }
@@ -1006,39 +1012,43 @@ var LinksPagesHandler = /*#__PURE__*/function (_AdminMenuHandler) {
     key: "getDefaultElements",
     value: function getDefaultElements() {
       var selectors = this.getSettings('selectors'),
-        elements = (0, _get2.default)((0, _getPrototypeOf2.default)(LinksPagesHandler.prototype), "getDefaultElements", this).call(this);
+        elements = (0, _get2.default)((0, _getPrototypeOf2.default)(FloatingButtonsHandler.prototype), "getDefaultElements", this).call(this);
       elements.$templatesMenuItem = jQuery(selectors.templatesMenuItem);
-      elements.$pagesMenuItemAndLink = jQuery(selectors.pagesMenuItemAndLink);
+      elements.$contactPagesMenuItem = jQuery(selectors.contactPagesMenuItem);
       return elements;
     }
   }, {
     key: "onInit",
     value: function onInit() {
-      (0, _get2.default)((0, _getPrototypeOf2.default)(LinksPagesHandler.prototype), "onInit", this).call(this);
+      var _elementorAdminConfig;
+      (0, _get2.default)((0, _getPrototypeOf2.default)(FloatingButtonsHandler.prototype), "onInit", this).call(this);
       var settings = this.getSettings(),
-        isLinksPagesTablePage = !!window.location.href.includes(settings.paths.linksPagesTablePage),
-        isLinksPagesTrashPage = !!window.location.href.includes(settings.paths.linksPagesTrashPage),
-        isLinksPagesCreateYourFirstPage = !!window.location.href.includes(settings.paths.linksPagesAddNewPage);
-      if (isLinksPagesTablePage || isLinksPagesTrashPage || isLinksPagesCreateYourFirstPage || settings.isLinksPageAdminEdit) {
-        var activeClasses = 'wp-has-current-submenu wp-menu-open current';
-        this.elements.$templatesMenuItem.addClass(activeClasses).removeClass('wp-not-current-submenu');
-        this.elements.$templatesMenuItem.find('li.wp-first-item').addClass('current');
+        isContactPagesTablePage = !!window.location.href.includes(settings.paths.contactPagesTablePage),
+        isContactPagesTrashPage = !!window.location.href.includes(settings.paths.contactPagesTrashPage),
+        isLContactPagesCreateYourFirstPage = !!window.location.href.includes(settings.paths.contactPagesAddNewPage);
 
-        // Overwrite the 'Add New' button at the top of the page to open in Elementor with the library module open.
-        jQuery(settings.selectors.addButton).attr('href', elementorAdminConfig.urls.addNewLinkUrl);
+      // We need this because there is a complex bug in the WordPress admin menu that causes the Contact Menu to be broken
+      // When the links page has at least one post and the contact page has none.
+      if ((_elementorAdminConfig = elementorAdminConfig.urls) !== null && _elementorAdminConfig !== void 0 && _elementorAdminConfig.viewContactPageUrl) {
+        this.elements.$templatesMenuItem.find('li.submenu-e-contact a').attr('href', elementorAdminConfig.urls.viewContactPageUrl);
+      }
+      if (isContactPagesTablePage || isContactPagesTrashPage || isLContactPagesCreateYourFirstPage) {
+        this.highlightTopLevelMenuItem(this.elements.$templatesMenuItem, this.elements.$pagesMenuItemAndLink);
+        this.highlightSubMenuItem(this.elements.$contactPagesMenuItem);
+        jQuery(settings.selectors.addButton).attr('href', elementorAdminConfig.urls.addNewLinkUrlContact);
       }
     }
   }]);
-  return LinksPagesHandler;
+  return FloatingButtonsHandler;
 }(_menuHandler.default);
-exports["default"] = LinksPagesHandler;
+exports["default"] = FloatingButtonsHandler;
 
 /***/ }),
 
-/***/ "../modules/conversion-center/assets/js/admin/module.js":
-/*!**************************************************************!*\
-  !*** ../modules/conversion-center/assets/js/admin/module.js ***!
-  \**************************************************************/
+/***/ "../modules/floating-buttons/assets/js/floating-buttons/admin/module.js":
+/*!******************************************************************************!*\
+  !*** ../modules/floating-buttons/assets/js/floating-buttons/admin/module.js ***!
+  \******************************************************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
@@ -1054,7 +1064,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "../node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "../node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "../node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
-var _linksPages = _interopRequireDefault(__webpack_require__(/*! ./links-pages */ "../modules/conversion-center/assets/js/admin/links-pages.js"));
+var _floatingButtons = _interopRequireDefault(__webpack_require__(/*! ./floating-buttons */ "../modules/floating-buttons/assets/js/floating-buttons/admin/floating-buttons.js"));
 function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2.default)(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2.default)(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2.default)(this, result); }; }
 function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
 var _default = /*#__PURE__*/function (_elementorModules$Mod) {
@@ -1072,22 +1082,19 @@ var _default = /*#__PURE__*/function (_elementorModules$Mod) {
   (0, _createClass2.default)(_default, [{
     key: "runHandler",
     value: function runHandler() {
-      var _elementorAdmin$confi, _elementorAdmin$confi2;
-      var pageName = 'e-link-pages',
+      var pageNameContact = 'e-floating-buttons',
         paths = {
-          linksPagesTablePage: 'edit.php?post_type=' + pageName,
-          linksPagesAddNewPage: 'edit.php?post_type=elementor_library&page=' + pageName,
-          linksPagesTrashPage: 'edit.php?post_status=trash&post_type=' + pageName
+          contactPagesTablePage: 'edit.php?post_type=' + pageNameContact,
+          contactPagesAddNewPage: 'edit.php?post_type=elementor_library&page=' + pageNameContact,
+          contactPagesTrashPage: 'edit.php?post_status=trash&post_type=' + pageNameContact
         },
         args = {
-          path: (_elementorAdmin$confi = elementorAdmin.config.linksPages) !== null && _elementorAdmin$confi !== void 0 && _elementorAdmin$confi.hasPages ? paths.linksPagesTablePage : paths.linksPagesAddNewPage,
-          isLinksPageAdminEdit: (_elementorAdmin$confi2 = elementorAdmin.config.linksPages) === null || _elementorAdmin$confi2 === void 0 ? void 0 : _elementorAdmin$confi2.isAdminEdit,
           paths: paths
         };
 
       // This class modifies elements in the WordPress admin that are rendered "wrong" by the WordPress core
       // and could not be modified in the backend.
-      new _linksPages.default(args);
+      new _floatingButtons.default(args);
     }
   }]);
   return _default;
@@ -2073,7 +2080,7 @@ var _events = _interopRequireDefault(__webpack_require__(/*! elementor-utils/eve
 var _filesUploadHandler = _interopRequireDefault(__webpack_require__(/*! ../editor/utils/files-upload-handler */ "../assets/dev/js/editor/utils/files-upload-handler.js"));
 var _templateControls = _interopRequireDefault(__webpack_require__(/*! ./new-template/template-controls.js */ "../assets/dev/js/admin/new-template/template-controls.js"));
 var _jsonUploadWarningMessage = __webpack_require__(/*! elementor-utils/json-upload-warning-message */ "../assets/dev/js/utils/json-upload-warning-message.js");
-var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/conversion-center/assets/js/admin/module */ "../modules/conversion-center/assets/js/admin/module.js"));
+var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/floating-buttons/assets/js/floating-buttons/admin/module */ "../modules/floating-buttons/assets/js/floating-buttons/admin/module.js"));
 (function ($) {
   var ElementorAdmin = elementorModules.ViewModule.extend({
     maintenanceMode: null,
@@ -2156,6 +2163,28 @@ var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/
           $wrapperElm.slideUp(100, function () {
             $wrapperElm.remove();
           });
+        });
+      });
+      $('.e-notice--cta.e-notice--dismissible[data-notice_id="plugin_image_optimization"] a.e-button--cta').on('click', function () {
+        elementorCommon.ajax.addRequest('elementor_image_optimization_campaign', {
+          data: {
+            source: 'io-wp-media-library-install'
+          }
+        });
+      });
+      $('.e-a-apps .e-a-item[data-plugin="image-optimization/image-optimization.php"] a.e-btn').on('click', function () {
+        elementorCommon.ajax.addRequest('elementor_image_optimization_campaign', {
+          data: {
+            source: 'io-esetting-addons-install'
+          }
+        });
+      });
+      $('.e-notice--cta.e-notice--dismissible[data-notice_id="site_mailer_promotion"] a.e-button--cta').on('click', function () {
+        var isWcNotice = $(this).closest('.e-notice').hasClass('sm-notice-wc');
+        elementorCommon.ajax.addRequest('elementor_core_site_mailer_campaign', {
+          data: {
+            source: isWcNotice ? 'sm-core-woo-install' : 'sm-core-form-install'
+          }
         });
       });
       $('#elementor-clear-cache-button').on('click', function (event) {
@@ -2317,11 +2346,6 @@ var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/
           }
         }).show();
       });
-      $('.elementor_css_print_method select').on('change', function () {
-        var $descriptions = $('.elementor-css-print-method-description');
-        $descriptions.hide();
-        $descriptions.filter('[data-value="' + $(this).val() + '"]').show();
-      }).trigger('change');
       $('.elementor_google_font select').on('change', function () {
         $('.elementor_font_display').toggle('1' === $(this).val());
       }).trigger('change');
@@ -2337,7 +2361,7 @@ var _module3 = _interopRequireDefault(__webpack_require__(/*! elementor/modules/
       if (elementorCommon.config.experimentalFeatures['landing-pages']) {
         new _module.default();
       }
-      if (elementorCommon.config.experimentalFeatures['conversion-center']) {
+      if (elementorCommon.config.experimentalFeatures.container) {
         new _module3.default();
       }
       this.templateControls = new _templateControls.default();
