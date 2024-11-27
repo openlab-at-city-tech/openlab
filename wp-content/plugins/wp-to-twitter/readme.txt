@@ -7,7 +7,7 @@ Tested up to: 6.6
 Requires PHP: 7.4
 License: GPLv2 or later
 Text Domain: wp-to-twitter
-Stable tag: 4.2.5
+Stable tag: 4.2.6
 
 Posts to X when you update your WordPress blog or add a link, with your chosen URL shortening service.
 
@@ -57,6 +57,11 @@ Translating my plug-ins is always appreciated. Work on XPoster translations at <
 Check out my <a href="https://github.com/joedolson/plugin-extensions/tree/master/wp-to-twitter">GitHub repository of plug-in extensions</a>.
 
 == Changelog ==
+
+= 4.2.6 =
+
+* Remove textdomain loader (obsolete since WP 4.6)
+* Bug fix: HTML encode title sent to X API when using backup title value.
 
 = 4.2.5 =
 
