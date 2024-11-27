@@ -326,6 +326,18 @@
     </tr>
     <tr>
         <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
+            Term Tags
+            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
+                  title="Supports adding tags to each term in the glossary page. This helps in filtering terms by tags."></span>
+        </td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
+    </tr>
+    <tr>
+        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
             Customize Term Template
             <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
                   title="Customize the glossary term page template and style it in your way."></span>
@@ -377,18 +389,6 @@
             Featured Image Support
             <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
                   title="Show the featured image which was defined in the term page inside the tooltip."></span>
-        </td>
-        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
-        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
-        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
-        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
-        <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-yes" style="color:green"></span></td>
-    </tr>
-    <tr>
-        <td style="width:25%; border-bottom: 1px solid #c0c0c0; border-right: 1px solid #c0c0c0;">
-            Term Tags
-            <span class="dashicons dashicons-info-outline cminds-package-show-tooltip" style="color:green"
-                  title="Supports adding tags to each term in the glossary page. This helps in filtering terms by tags."></span>
         </td>
         <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>
         <td style="text-align:center; width:15%; border-bottom: 1px solid #c0c0c0;"><span class="dashicons dashicons-no" style="color:red"></span></td>

@@ -3,13 +3,14 @@ ob_start();
 include plugin_dir_path(__FILE__) . 'views/plugin_compare_table.php';
 $plugin_compare_table = ob_get_contents();
 ob_end_clean();
+$activation_redirect_wizard = get_option('cmtt_options')['cmtt_addWizardMenu'] ?? false;
 $cminds_plugin_config = array(
 	'plugin-is-pro'                 => false,
 	'plugin-has-addons'             => true,
-	'plugin-version'                => '4.3.12',
+	'plugin-version'                => '4.4.1',
 	'plugin-abbrev'                 => 'cmtt',
 	'plugin-affiliate'              => '',
-	'plugin-redirect-after-install' => admin_url( 'admin.php?page=cmtt_settings' ),
+	'plugin-redirect-after-install' => $activation_redirect_wizard ? admin_url( 'admin.php?page=cmtt_setup_wizard' ) : admin_url( 'admin.php?page=cmtt_settings' ),
 	'plugin-campign'                => '?utm_source=glossary&utm_campaign=freeupgrade&upgrade=1',
 	'plugin-show-guide'             => true,
 	'plugin-show-upgrade'           => true,

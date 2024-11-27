@@ -1563,7 +1563,7 @@ class CMTT_Glossary_Index {
 			);
 
 			if ( is_numeric( $id ) ) {
-				update_option( 'cmtt_glossaryID', $id );
+                \CM\CMTT_Settings::set( 'cmtt_glossaryID', $id );
 			}
 		}
 	}

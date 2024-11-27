@@ -1,5 +1,4 @@
 <?php
-
 namespace com\cminds\package\free\v1_1_5;
 
 if (!defined(__NAMESPACE__ . '\PLATFORM_VERSION')) {
@@ -1462,7 +1461,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php else : ?>
                     <div class="cminds_guide_wrapper">
                         <div>
-                            <a class="cminds-guide-hide-button button" href="<?php echo add_query_arg(array('cminds_guide_show' => 1), remove_query_arg('cminds_guide_hide')); ?>">Show Installation Guide Box</a>
+                            <a class="cminds-guide-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_guide_show' => 1), remove_query_arg('cminds_guide_hide'))); ?>">Show Installation Guide Box</a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
@@ -1825,7 +1824,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php else : ?>
                     <div class="cminds_upgrade_wrapper">
                         <div>
-                            <a class="cminds-upgrade-hide-button button" href="<?php echo add_query_arg(array('cminds_upgrade_show' => 1), remove_query_arg('cminds_upgrade_hide')); ?>">Why you shoud have the Premium Edition>></a>
+                            <a class="cminds-upgrade-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_upgrade_show' => 1), remove_query_arg('cminds_upgrade_hide'))); ?>">Why you shoud have the Premium Edition>></a>
                         </div>
                     </div>
                     <div class="clear clearfix cmclearfix"></div>
