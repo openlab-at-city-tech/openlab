@@ -520,6 +520,10 @@ _:-ms-lang(x), .elementor-section, .panel-row-style { transform: none !important
 	margin-top: 20px;
 }
 
+.elementor-widget-athemes-posts {
+	width: 100% !important;
+}
+
 /* Smaller than standard 1200 */
 @media only screen and (max-width: 1199px) {
 	.roll-icon-list .list-item {

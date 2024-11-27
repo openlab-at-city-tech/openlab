@@ -243,7 +243,7 @@ $wp_customize->add_setting(
 $wp_customize->add_setting(
     'footer_widgets_title_color',
     array(
-        'default'           => '#212121',
+        'default'           => '',
         'sanitize_callback' => 'sydney_sanitize_hex_rgba',
         'transport'         => 'postMessage'
     )
@@ -631,7 +631,7 @@ $wp_customize->add_control(
 			'label' 				=> '',
 			'section'       		=> 'sydney_section_footer_credits',
 			'controls_general'		=> json_encode( array( '#customize-control-sydney_upsell_footer_credits','#customize-control-footer_divider_9', '#customize-control-footer_divider_8', '#customize-control-footer_credits_container', '#customize-control-footer_credits', '#customize-control-social_profiles_footer') ),
-			'controls_design'		=> json_encode( array( '#customize-control-footer_credits_divider', '#customize-control-footer_credits_divider_size', '#customize-control-footer_credits_divider_color', '#customize-control-footer_credits_divider_width', '#customize-control-footer_divider_7', '#customize-control-footer_divider_6', '#customize-control-footer_credits_padding_bottom', '#customize-control-footer_credits_padding', '#customize-control-footer_color', '#customize-control-footer_background' ) ),
+			'controls_design'		=> json_encode( array( '#customize-control-footer_credits_divider', '#customize-control-footer_credits_divider_size', '#customize-control-footer_credits_divider_color', '#customize-control-footer_credits_divider_width', '#customize-control-footer_divider_7', '#customize-control-footer_divider_6', '#customize-control-footer_credits_padding_bottom', '#customize-control-footer_credits_padding', '#customize-control-footer_color', '#customize-control-footer_copyright_font_size', '#customize-control-footer_background' ) ),
 		)
 	)
 );
@@ -750,6 +750,42 @@ $wp_customize->add_control(
         )
     )
 );
+
+$wp_customize->add_setting( 'footer_copyright_font_size_desktop', array(
+	'default'   		=> 16,
+	'transport'			=> 'postMessage',
+	'sanitize_callback' => 'absint',
+) );
+
+$wp_customize->add_setting( 'footer_copyright_font_size_tablet', array(
+	'default'   		=> 16,
+	'transport'			=> 'postMessage',
+	'sanitize_callback' => 'absint',
+) );
+
+$wp_customize->add_setting( 'footer_copyright_font_size_mobile', array(
+	'default'   		=> 16,
+	'transport'			=> 'postMessage',
+	'sanitize_callback' => 'absint',
+) );
+
+$wp_customize->add_control( new Sydney_Responsive_Slider( $wp_customize, 'footer_copyright_font_size',
+	array(
+		'label' 		=> esc_html__( 'Font size', 'sydney' ),
+		'section' 		=> 'sydney_section_footer_credits',
+		'is_responsive'	=> 1,
+		'settings' 		=> array (
+			'size_desktop' 		=> 'footer_copyright_font_size_desktop',
+			'size_tablet' 		=> 'footer_copyright_font_size_tablet',
+			'size_mobile' 		=> 'footer_copyright_font_size_mobile',
+		),
+		'input_attrs' => array (
+			'min'	=> 12,
+			'max'	=> 50,
+			'step'  => 1
+		)
+	)
+) );
 
 $wp_customize->add_setting(
 	'footer_credits_divider',

@@ -884,7 +884,7 @@ span.delete:hover {
   top: calc(100% + 5px);
   display: none;
   left: 12px;
-  width: calc(100% - 24px);
+  width: calc(90% - 24px);
   background-color: #fff;
   z-index: 99;
   border-radius: 10px;
@@ -1122,6 +1122,7 @@ li#customize-control-sydney_upsell_mobile_header {
 #customize-control-h6_title {
   margin-bottom: 5px;
 }
+#sub-accordion-section-sydney_block_templates li:not(.customize-control-sydney-text-control) .customize-control-title,
 #customize-control-blog_layout .customize-control-title,
 #sub-accordion-section-sydney_section_footer_widgets li:not(.customize-control-sydney-text-control) .customize-control-title,
 #sub-accordion-section-sydney_slider li:not(.customize-control-sydney-text-control) .customize-control-title,
@@ -1285,6 +1286,7 @@ ul[id^="sub-accordion-section-sydney_cpt_"] li:not(.customize-control-sydney-tex
 .customize-control-sydney-tab-control {
   margin-bottom: 26px;
 }
+#customize-control-enable_block_templates,
 #customize-control-button_top_bottom_padding {
   margin-top: 20px;
 }

@@ -37,7 +37,7 @@ class Sydney_Dashboard
             return;
         }
 
-        if( $this->is_themes_page() ) {
+        if( $this->is_themes_page() || $this->is_sydney_dashboard_page() ) {
             add_action('init', array($this, 'set_settings'));
             add_action('admin_enqueue_scripts', array($this, 'admin_enqueue_scripts'));
         }
@@ -52,8 +52,8 @@ class Sydney_Dashboard
 
         add_filter('woocommerce_enable_setup_wizard', '__return_false');
 
-
         add_action('admin_menu', array($this, 'add_menu_page'));
+        add_action('admin_footer', array( $this, 'add_admin_footer_internal_scripts' ));
         add_action('admin_notices', array($this, 'html_notice'));
         
         add_action('wp_ajax_sydney_notifications_read', array($this, 'ajax_notifications_read'));
@@ -86,7 +86,7 @@ class Sydney_Dashboard
      */
     public function is_sydney_dashboard_page() {
         global $pagenow;
-        return $pagenow === 'themes.php' && ( isset( $_GET[ 'page' ] ) && $_GET[ 'page' ] === 'sydney-dashboard' );
+        return $pagenow === 'admin.php' && ( isset( $_GET[ 'page' ] ) && $_GET[ 'page' ] === 'sydney-dashboard' );
     }
 
     /**
@@ -104,8 +104,97 @@ class Sydney_Dashboard
      */
     public function add_menu_page()
     {
+        // Add main 'Sydney' page
+        add_menu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_menu_page
+            esc_html__('Sydney', 'sydney'), 
+            esc_html__('Sydney', 'sydney'), 
+            'manage_options', 
+            isset( $this->settings['menu_slug'] ) ? $this->settings['menu_slug'] : 'sydney-dashboard', 
+            array( $this, 'html_dashboard' ),
+            get_template_directory_uri() . '/inc/dashboard/assets/images/logo.svg',
+            58.9
+        );
 
-        add_submenu_page('themes.php', esc_html__('Theme Dashboard', 'sydney'), esc_html__('Theme Dashboard', 'sydney'), 'manage_options', isset( $this->settings['menu_slug'] ) ? $this->settings['menu_slug'] : 'sydney-dashboard', array($this, 'html_dashboard'), 1); // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+        // Add 'Theme Dashboard' page
+        add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+            'sydney-dashboard',
+            esc_html__('Theme Dashboard', 'sydney'),
+            esc_html__('Theme Dashboard', 'sydney'),
+            'manage_options',
+            get_admin_url() . 'admin.php?page=sydney-dashboard',
+            '',
+            0
+        );
+
+        // Add 'Customize' link
+        $customize_url = add_query_arg( 'return', rawurlencode( remove_query_arg( wp_removable_query_args(), isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '' ) ), 'customize.php' );
+        add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+            'sydney-dashboard',
+            esc_html__('Customize', 'sydney'),
+            esc_html__('Customize', 'sydney'),
+            'manage_options',
+            esc_url( $customize_url ),
+            '',
+            1
+        );
+
+        // Add 'Starter Sites' link
+        add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+            'sydney-dashboard',
+            esc_html__('Starter Sites', 'sydney'),
+            esc_html__('Starter Sites', 'sydney'),
+            'manage_options',
+            get_admin_url() . 'admin.php?page=sydney-dashboard&tab=starter-sites',
+            '',
+            2
+        );
+
+        // Add 'Upgrade' link
+        if( !defined( 'SYDNEY_PRO_VERSION' ) ) {
+            add_submenu_page( // phpcs:ignore WPThemeReview.PluginTerritory.NoAddAdminPages.add_menu_pages_add_submenu_page
+                'sydney-dashboard',
+                esc_html__('Upgrade to Pro', 'sydney'),
+                esc_html__('Upgrade to Pro', 'sydney'),
+                'manage_options',
+                'https://athemes.com/sydney-upgrade?utm_source=theme_submenu_page&utm_medium=button&utm_campaign=Sydney',
+                '',
+                3
+            );
+        }
+    }
+
+    /**
+     * Admin footer style.
+     * 
+     * @return void
+     */
+    public function add_admin_footer_internal_scripts() {
+        ?>
+        <style>
+            #adminmenu .toplevel_page_sydney-dashboard .wp-submenu a[href="admin.php?page=sydney-dashboard"] {
+                display: none;
+            }
+            #adminmenu .toplevel_page_sydney-dashboard .wp-submenu a[href="https://athemes.com/sydney-upgrade?utm_source=theme_submenu_page&utm_medium=button&utm_campaign=Sydney"] {
+                color: #05d105;
+            }
+        </style>
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                const sydneyUpsellMenuItem = document.querySelector( '#adminmenu .toplevel_page_sydney-dashboard .wp-submenu a[href="https://athemes.com/sydney-upgrade?utm_source=theme_submenu_page&utm_medium=button&utm_campaign=Sydney"]' );
+
+                if ( ! sydneyUpsellMenuItem ) {
+                    return;
+                }
+
+                sydneyUpsellMenuItem.addEventListener( 'click', function( e ){
+                    e.preventDefault();
+
+                    const href = this.getAttribute( 'href' );
+                    window.open( href, '_blank' );
+                } );
+            });
+        </script>
+        <?php
     }
 
     /**

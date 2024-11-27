@@ -94,6 +94,15 @@ function sydney_setup() {
 
 	//Set the compare icon for YTIH button
 	update_option( 'yith_woocompare_button_text', sydney_get_svg_icon( 'icon-compare', false ) );
+
+	//Add theme support for appearance tools
+	add_theme_support( 'appearance-tools' );
+
+	//Add theme support for block template parts
+	$block_template_parts = get_theme_mod( 'enable_block_templates', 0 );
+	if ( $block_template_parts && Sydney_Modules::is_module_active( 'block-templates' ) ) {
+		add_theme_support( 'block-template-parts' );
+	}
 }
 endif; // sydney_setup
 add_action( 'after_setup_theme', 'sydney_setup' );
@@ -235,7 +244,7 @@ function sydney_scripts() {
 	wp_style_add_data( 'sydney-ie9', 'conditional', 'lte IE 9' );
 
 	if ( !$is_amp ) {
-		wp_enqueue_script( 'sydney-functions', get_template_directory_uri() . '/js/functions.min.js', array(), '20240307', true );
+		wp_enqueue_script( 'sydney-functions', get_template_directory_uri() . '/js/functions.min.js', array(), '20240822', true );
 		
 		//Enqueue hero slider script only if the slider is in use
 		$slider_home = get_theme_mod('front_header_type','nothing');
@@ -638,6 +647,11 @@ require get_template_directory() . '/inc/classes/class-sydney-svg-icons.php';
 require get_template_directory() . '/inc/notices/class-sydney-review.php';
 
 /**
+ * Campaign notice
+ */
+require get_template_directory() . '/inc/notices/class-sydney-campaign.php';
+
+/**
  * Schema
  */
 require get_template_directory() . '/inc/schema.php';
@@ -646,6 +660,12 @@ require get_template_directory() . '/inc/schema.php';
  * Theme update migration functions
  */
 require get_template_directory() . '/inc/theme-update.php';
+
+/**
+ * Modules
+ */
+require get_template_directory() . '/inc/modules/class-sydney-modules.php';
+require get_template_directory() . '/inc/modules/block-templates/class-sydney-block-templates.php';
 
 /**
  * Theme dashboard.

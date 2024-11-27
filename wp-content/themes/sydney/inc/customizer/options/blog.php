@@ -751,7 +751,7 @@ $wp_customize->add_setting(
 $wp_customize->add_setting(
 	'loop_post_meta_color',
 	array(
-		'default'           => '#737C8C',
+		'default'           => '#6d7685',
 		'sanitize_callback' => 'sydney_sanitize_hex_rgba',
 		'transport'         => 'postMessage'
 	)

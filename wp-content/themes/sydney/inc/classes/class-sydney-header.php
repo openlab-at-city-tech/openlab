@@ -52,10 +52,12 @@ if ( !class_exists( 'Sydney_Header' ) ) :
 		 */
 		public function header_markup() {
 			$layout = get_theme_mod( 'header_layout_desktop', 'header_layout_2' );
-			?>
+			
+			$template 	= apply_filters( 'sydney_header_layout', array( $this, $layout ) );
 
-			<?php call_user_func( array( $this, $layout ) ); ?>
-			<?php
+			if ( is_callable( $template ) ) {
+				call_user_func( $template );
+			}
 		}
 
 		/**
@@ -507,7 +509,7 @@ if ( !class_exists( 'Sydney_Header' ) ) :
 		 */
 		public function search() {
 			?>
-				<a href="#" class="header-search header-item">
+				<a href="#" class="header-search header-item" role="button">
 					<span class="screen-reader-text"><?php echo esc_html__( 'Search', 'sydney' ); ?></span>
 					<i class="sydney-svg-icon icon-search active"><?php sydney_get_svg_icon( 'icon-search', true ); ?></i>
 					<i class="sydney-svg-icon icon-cancel"><?php sydney_get_svg_icon( 'icon-cancel', true ); ?></i>

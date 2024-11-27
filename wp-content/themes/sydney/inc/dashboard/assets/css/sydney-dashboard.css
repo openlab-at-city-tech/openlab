@@ -1893,6 +1893,30 @@
   flex-wrap:wrap;
   margin-bottom:30px;
 }
+#template-builder[data-pro="false"] .template-item {
+  position: relative;
+}
+#template-builder .tb-upgrade-overlay {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  transition: all 0.3s;
+}
+#template-builder[data-pro="false"] .template-item .dashicons-lock {
+  font-size: 34px;
+}
+#template-builder[data-pro="false"] .template-item:hover .tb-upgrade-overlay {
+  opacity: 1;
+}
 .template-name {
   display: flex;
   align-items: center;

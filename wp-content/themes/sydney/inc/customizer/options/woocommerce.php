@@ -18,8 +18,10 @@ $wp_customize->get_control( 'woocommerce_shop_page_display' )->section  = 'sydne
 $wp_customize->get_control( 'woocommerce_category_archive_display' )->section  = 'sydney_section_catalog_general';
 $wp_customize->get_control( 'woocommerce_default_catalog_orderby' )->section  = 'sydney_section_catalog_general';
 
-$wp_customize->get_setting( 'woocommerce_catalog_columns' )->priority = 1;
-$wp_customize->get_setting( 'woocommerce_catalog_rows' )->priority = 1;
+if ( $wp_customize->get_setting( 'woocommerce_catalog_columns' ) !== null ) {
+	$wp_customize->get_setting( 'woocommerce_catalog_columns' )->priority = 1;
+	$wp_customize->get_setting( 'woocommerce_catalog_rows' )->priority = 1;
+}
 
 //Catalog
 $wp_customize->add_setting(

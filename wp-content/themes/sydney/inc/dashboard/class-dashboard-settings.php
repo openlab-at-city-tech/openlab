@@ -68,11 +68,8 @@ function sydney_dashboard_settings()
 	//
 	// Support.
 	//
-	if ( $settings['has_pro'] ) {
-		$settings['support_link']     = 'https://athemes.com/support/';
-	} else {
-		$settings['support_link']     = 'https://wordpress.org/support/theme/sydney/';
-	}
+	$settings['support_link']     = 'https://athemes.com/support/';
+
 	$settings['support_pro_link'] = 'https://athemes.com/sydney-upgrade?utm_source=theme_support&utm_medium=button&utm_campaign=Sydney';
 
 	//
@@ -210,7 +207,7 @@ function sydney_dashboard_settings()
 		'title'      => esc_html__('Header Options', 'sydney'),
 		'desc'       => esc_html__('Customize the header options for your theme.', 'sydney'),
 		'link_label' => esc_html__('Customize', 'sydney'),
-		'link_url'   => add_query_arg('autofocus[panel]', 'sydney_header_panel', admin_url('customize.php'))
+		'link_url'   => add_query_arg('autofocus[panel]', 'sydney_panel_header', admin_url('customize.php'))
 	);
 	
 	$settings['features'][] = array(
@@ -236,8 +233,6 @@ function sydney_dashboard_settings()
 		'link_label' => esc_html__('Customize', 'sydney'),
 		'link_url'   => add_query_arg('autofocus[section]', 'sydney_section_footer_credits', admin_url('customize.php'))
 	);
-	
-
 	//Start Pro Features
 
 	$settings['features'][] = array(
@@ -416,7 +411,7 @@ function sydney_dashboard_settings()
 		'type'        => 'pro',
 		'link_url'    => add_query_arg('autofocus[section]', 'sydney_section_html_designer', admin_url('customize.php')),
 		'link_label'  => esc_html__('Customize', 'sydney'),
-		'docs_link'   => '#',
+		'docs_link'   => 'https://docs.athemes.com/article/forms-html-module/',
 		'desc'        => __('Design options for HTML elements and forms.', 'sydney'),
 	);		
 	$settings['features'][] = array(
@@ -451,6 +446,20 @@ function sydney_dashboard_settings()
 		'docs_link'  => 'https://docs.athemes.com/article/pro-white-label-sydney/',
 		'link_label' => esc_html__('Learn More', 'sydney'),
 	);
+
+	//Register the Block Templates module only if the function exists
+	if ( function_exists( 'block_template_part' ) ) {
+		$settings['features'][] = array(
+			'category'    => 'general',
+			'module'      => 'block-templates',
+			'title'        => esc_html__('Block Templates', 'sydney'),
+			'type'        => 'free',
+			'link_url'    => add_query_arg('autofocus[section]', 'sydney_block_templates', admin_url('customize.php')),
+			'link_label'  => esc_html__('Customize', 'sydney'),
+			'docs_link'   => 'https://docs.athemes.com/article/block-templates-module/',
+			'desc'        => __('Build headers, footers etc. with the site editor.', 'sydney'),
+		);	
+	}
 
 	return $settings;
 }

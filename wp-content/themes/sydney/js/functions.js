@@ -196,6 +196,27 @@ var sydney = sydney || {};
 				menuItem.classList.toggle( 'focus' );
 			}
 		}
+
+		//handle aria-expanded for dropdowns
+		const dropdowns = document.querySelectorAll('.menu-item-has-children > a');
+
+		// Function to toggle aria-expanded
+		function toggleAriaExpanded(event) {
+			const expanded = this.getAttribute('aria-expanded') === 'true';
+			this.setAttribute('aria-expanded', !expanded);
+		}
+
+		dropdowns.forEach(dropdown => {
+			// Toggle aria-expanded on hover (mouse enter)
+			dropdown.addEventListener('mouseenter', function() {
+				this.setAttribute('aria-expanded', 'true');
+			});
+
+			// Collapse the menu when mouse leaves the menu item
+			dropdown.addEventListener('mouseleave', function() {
+				this.setAttribute('aria-expanded', 'false');
+			});
+		});		
 	},
 };
 

@@ -18,6 +18,9 @@ Hero section
 	background-repeat: no-repeat;
 	background-size: cover;
 }
+.slides-container .slide-item:only-child {
+	opacity: 1 !important;
+}
 .sliderFix {
 	display: block !important;
 }

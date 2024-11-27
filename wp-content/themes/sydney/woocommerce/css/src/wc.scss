@@ -342,12 +342,14 @@ a.shipping-calculator-button {
 	letter-spacing: 1px;
 	width: 100%;
 }
+.woocommerce-address-fields .select2-container .select2-selection__rendered,
 .shipping_address .select2-container .select2-selection__rendered,
 .woocommerce-billing-fields .select2-container .select2-selection__rendered,
 .cart_totals .select2-container .select2-selection__rendered {
 	margin-top: 8px;
 	padding: 0;
 }
+.woocommerce-address-fields .select2-container .select2-selection__arrow,
 .shipping_address .select2-container .select2-selection__arrow,
 .woocommerce-billing-fields .select2-container .select2-selection__arrow,
 .cart_totals .select2-container .select2-selection__arrow {

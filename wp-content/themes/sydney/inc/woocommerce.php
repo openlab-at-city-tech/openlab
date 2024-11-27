@@ -407,6 +407,11 @@ add_filter( 'woocommerce_output_related_products_args', 'sydney_related_products
  * Variable products button
  */
 function sydney_single_variation_add_to_cart_button() {
+
+	if ( class_exists( 'Merchant_Quick_View' ) && !is_product() ) {
+		return;
+	}
+
     global $product;
     ?>
 	<div class="woocommerce-variation-add-to-cart variations_button">

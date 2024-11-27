@@ -434,7 +434,7 @@ $wp_customize->add_setting(
 $wp_customize->add_setting(
 	'color_forms_text',
 	array(
-		'default'           => '#737C8C',
+		'default'           => '#6d7685',
 		'sanitize_callback' => 'sydney_sanitize_hex_rgba',
 		'transport'         => 'postMessage'
 	)
@@ -777,7 +777,7 @@ $wp_customize->add_setting(
 $wp_customize->add_setting(
 	'sidebar_color',
 	array(
-		'default'           => '#737C8C',
+		'default'           => '#6d7685',
 		'sanitize_callback' => 'sanitize_hex_color',
 		'transport'         => 'postMessage'
 	)

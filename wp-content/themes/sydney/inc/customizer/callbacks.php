@@ -384,3 +384,13 @@ function sydney_callback_offcanvas_link_separator() {
 		return false;
 	}
 }
+
+function sydney_block_templates_active_callback() {
+	$enable = get_theme_mod( 'enable_block_templates', 0 );
+
+	if ( $enable ) {
+		return true;
+	} else {
+		return false;
+	}
+}

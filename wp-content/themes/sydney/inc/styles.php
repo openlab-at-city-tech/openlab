@@ -192,7 +192,7 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
             $sidebar_background = get_theme_mod( 'sidebar_background', '#ffffff' );
             $custom .= "#secondary { background-color:" . esc_attr($sidebar_background) . "}"."\n";
             //Sidebar color
-            $sidebar_color = get_theme_mod( 'sidebar_color', '#737C8C' );
+            $sidebar_color = get_theme_mod( 'sidebar_color', '#6d7685' );
             $custom .= "#secondary, #secondary a:not(.wp-block-button__link) { color:" . esc_attr($sidebar_color) . "}"."\n";           
 
             //Mobile menu icon
@@ -287,7 +287,7 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 					$custom .= ".footer-widgets { border-top:" . esc_attr( $footer_widgets_divider_size ) . 'px solid ' . esc_attr( $footer_widgets_divider_color ) . ";}" . "\n";
 				}
 			}
-
+            $custom .= $this->get_font_sizes_css( 'footer_copyright_font_size', $defaults = array( 'desktop' => 16, 'tablet' => 16, 'mobile' => 16 ), '.site-info' );
 			$footer_credits_divider 		= get_theme_mod( 'footer_credits_divider', 0 );
 			$footer_credits_divider_width 	= get_theme_mod( 'footer_credits_divider_width', 'contained' );
 			$footer_credits_divider_size 	= get_theme_mod( 'footer_credits_divider_size', 0 );
@@ -312,8 +312,8 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 			$custom .= $this->get_color_css( 'footer_widgets_title_color', '', '.sidebar-column .widget .widget-title' );
 			$custom .= $this->get_color_css( 'footer_widgets_headings_color', '', '.sidebar-column .widget h1, .sidebar-column .widget h2, .sidebar-column .widget h3, .sidebar-column .widget h4, .sidebar-column .widget h5, .sidebar-column .widget h6' );
 			$custom .= $this->get_color_css( 'footer_widgets_color', '', '.sidebar-column .widget' );
-			$custom .= $this->get_color_css( 'footer_widgets_links_color', '', '.sidebar-column .widget a' );
-			$custom .= $this->get_color_css( 'footer_widgets_links_hover_color', '', '.sidebar-column .widget a:hover' );
+			$custom .= $this->get_color_css( 'footer_widgets_links_color', '', '#sidebar-footer .widget a' );
+			$custom .= $this->get_color_css( 'footer_widgets_links_hover_color', '', '#sidebar-footer .widget a:hover' );
 			$custom .= $this->get_background_color_css( 'footer_background', '', '.site-footer' );
 			$custom .= $this->get_color_css( 'footer_color', '', '.site-info, .site-info a' );
 			$custom .= $this->get_fill_css( 'footer_color', '', '.site-info .sydney-svg-icon svg' );
@@ -332,11 +332,11 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 			$button_text_transform = get_theme_mod( 'button_text_transform', 'uppercase' );
 			$custom .= "button,.roll-button,a.button,.wp-block-button__link,input[type=\"button\"],input[type=\"reset\"],input[type=\"submit\"] { text-transform:" . esc_attr( $button_text_transform ) . ";}" . "\n";
 
-			$custom .= $this->get_background_color_css( 'button_background_color', '', 'button,div.wpforms-container-full .wpforms-form input[type=submit],div.wpforms-container-full .wpforms-form button[type=submit],div.wpforms-container-full .wpforms-form .wpforms-page-button,.roll-button,a.button,.wp-block-button__link,input[type="button"],input[type="reset"],input[type="submit"]' );			
-			$custom .= $this->get_background_color_css( 'button_background_color_hover', '', 'button:hover,div.wpforms-container-full .wpforms-form input[type=submit]:hover,div.wpforms-container-full .wpforms-form button[type=submit]:hover,div.wpforms-container-full .wpforms-form .wpforms-page-button:hover,.roll-button:hover,a.button:hover,.wp-block-button__link:hover,input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover' );			
+			$custom .= $this->get_background_color_css( 'button_background_color', '', 'button,.wp-element-button,div.wpforms-container-full .wpforms-form input[type=submit],div.wpforms-container-full .wpforms-form button[type=submit],div.wpforms-container-full .wpforms-form .wpforms-page-button,.roll-button,a.button,.wp-block-button__link,input[type="button"],input[type="reset"],input[type="submit"]' );			
+			$custom .= $this->get_background_color_css( 'button_background_color_hover', '', 'button:hover,.wp-element-button:hover,div.wpforms-container-full .wpforms-form input[type=submit]:hover,div.wpforms-container-full .wpforms-form button[type=submit]:hover,div.wpforms-container-full .wpforms-form .wpforms-page-button:hover,.roll-button:hover,a.button:hover,.wp-block-button__link:hover,input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover' );			
 
-			$custom .= $this->get_color_css( 'button_color', '', 'button,div.wpforms-container-full .wpforms-form input[type=submit],div.wpforms-container-full .wpforms-form button[type=submit],div.wpforms-container-full .wpforms-form .wpforms-page-button,.checkout-button.button,a.button,.wp-block-button__link,input[type="button"],input[type="reset"],input[type="submit"]' );			
-			$custom .= $this->get_color_css( 'button_color_hover', '', 'button:hover,div.wpforms-container-full .wpforms-form input[type=submit]:hover,div.wpforms-container-full .wpforms-form button[type=submit]:hover,div.wpforms-container-full .wpforms-form .wpforms-page-button:hover,.roll-button:hover,a.button:hover,.wp-block-button__link:hover,input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover' );			
+			$custom .= $this->get_color_css( 'button_color', '', 'button,.wp-element-button,div.wpforms-container-full .wpforms-form input[type=submit],div.wpforms-container-full .wpforms-form button[type=submit],div.wpforms-container-full .wpforms-form .wpforms-page-button,.checkout-button.button,a.button,.wp-block-button__link,input[type="button"],input[type="reset"],input[type="submit"]' );			
+			$custom .= $this->get_color_css( 'button_color_hover', '', 'button:hover,.wp-element-button:hover,div.wpforms-container-full .wpforms-form input[type=submit]:hover,div.wpforms-container-full .wpforms-form button[type=submit]:hover,div.wpforms-container-full .wpforms-form .wpforms-page-button:hover,.roll-button:hover,a.button:hover,.wp-block-button__link:hover,input[type="button"]:hover,input[type="reset"]:hover,input[type="submit"]:hover' );			
 
 			$button_border_color = get_theme_mod( 'button_border_color', '' );
 			$button_border_color_hover = get_theme_mod( 'button_border_color_hover', '' );
@@ -366,7 +366,7 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
             $custom .= $this->get_font_sizes_css( 'single_post_title_size', $defaults = array( 'desktop' => 48, 'tablet' => 32, 'mobile' => 32 ), '.single .entry-header .entry-title' );
             $custom .= $this->get_color_css( 'loop_post_text_color', '#233452', '.posts-layout .entry-post' );
             $custom .= $this->get_color_css( 'loop_post_title_color', '#00102E', '.posts-layout .entry-title a' );
-            $custom .= $this->get_color_css( 'loop_post_meta_color', '#737C8C', '.posts-layout .author,.posts-layout .entry-meta a' );
+            $custom .= $this->get_color_css( 'loop_post_meta_color', '#6d7685', '.posts-layout .author,.posts-layout .entry-meta a' );
             $custom .= $this->get_font_sizes_css( 'loop_post_text_size', $defaults = array( 'desktop' => 16, 'tablet' => 16, 'mobile' => 16 ), '.posts-layout .entry-post' );
             $custom .= $this->get_font_sizes_css( 'loop_post_meta_size', $defaults = array( 'desktop' => 12, 'tablet' => 12, 'mobile' => 12 ), '.posts-layout .entry-meta' );
             $custom .= $this->get_font_sizes_css( 'loop_post_title_size', $defaults = array( 'desktop' => 32, 'tablet' => 32, 'mobile' => 32 ), '.posts-layout .entry-title' );
@@ -422,7 +422,7 @@ if ( !class_exists( 'Sydney_Custom_CSS' ) ) :
 			$custom .= $this->get_fill_css( 'main_header_bottom_color', '', '.bottom-header-row .header-item svg,.dropdown-symbol .sydney-svg-icon svg' );
 			
 			$main_header_padding 	= get_theme_mod( 'main_header_padding', 15 );
-			$custom .= ".main-header .main-header-inner, .main-header .top-header-row { padding-top:" . esc_attr( $main_header_padding ) . 'px;padding-bottom:' . esc_attr( $main_header_padding ) . "px;}" . "\n";
+			$custom .= ".main-header .site-header-inner, .main-header .top-header-row { padding-top:" . esc_attr( $main_header_padding ) . 'px;padding-bottom:' . esc_attr( $main_header_padding ) . "px;}" . "\n";
 
 			$main_header_bottom_padding = get_theme_mod( 'main_header_bottom_padding', 15 );
 			$custom .= ".bottom-header-inner { padding-top:" . esc_attr( $main_header_bottom_padding ) . 'px;padding-bottom:' . esc_attr( $main_header_bottom_padding ) . "px;}" . "\n";

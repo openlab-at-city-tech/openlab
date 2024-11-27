@@ -41,7 +41,7 @@ $disabled = !$this->settings['has_pro'] ? 'style="pointer-events:none;"' : '';
 			</ol>
 			<hr>
 			<p class="tutorial-video"><span class="dashicons dashicons-editor-help"></span> <?php esc_html_e( 'Need help?', 'sydney' ); ?> <a target="_blank" href="https://youtu.be/MhKdxFeFOd8"><?php esc_html_e( 'Watch a quick tutorial video.', 'sydney' ); ?></a></p>
-			<div id="template-builder">
+			<div id="template-builder" data-pro="<?php echo esc_attr( $this->settings['has_pro'] ? "true" : "false" ); ?>">
 				<?php 
 				$templates = array();
 				$custom_templates = get_option( 'sydney_template_builder_data' );
@@ -134,6 +134,14 @@ $disabled = !$this->settings['has_pro'] ? 'style="pointer-events:none;"' : '';
 								</div>						
 							</div>
 							<?php endforeach; ?>
+							<?php if ( !$this->settings['has_pro'] ) : ?>
+								<div class="tb-upgrade-overlay">
+									<div>
+										<span class="dashicons dashicons-lock"></span>
+										<h4><a href="<?php echo esc_url( $this->settings['upgrade_pro'] ); ?>"><?php esc_html_e( 'Upgrade to Sydney Pro', 'sydney' ); ?></a></h4>
+									</div>
+								</div>
+							<?php endif; ?>
 						</div>                
 					<?php endforeach; ?>
 				<?php endif; //check if templates is empty ?>

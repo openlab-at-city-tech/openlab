@@ -1105,14 +1105,15 @@ jQuery(document).ready(function ($) {
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Live Chat module</li>' +
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Offcanvas Content</li>' +
                  '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Mailchimp support</li>' +
-                  '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span><a href="https://athemes.com/theme/sydney/#see-all-features" target="_blank">&hellip;and many more premium features</a></li>' +
+                  '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span><a href="https://athemes.com/sydney-upgrade/#features?utm_source=theme_customizer_deep&amp;utm_medium=sydney_customizer&amp;utm_campaign=Sydney" target="_blank">&hellip;and many more premium features</a></li>' +
               '</ul><p><a href="https://athemes.com/sydney-upgrade/?utm_source=theme_customizer_deep&amp;utm_medium=sydney_customizer&amp;utm_campaign=Sydney" role="button" class="button-secondary deep-upsell-button button" target="_blank">Upgrade to Sydney Pro</a></p></div>')
 
   upsell.appendTo('#sub-accordion-panel-sydney_panel_general');
 
 
   var upsellWoo = $('<div class="sydney-upsell-feature-wrapper" style="margin:5px 15px 15px;">' +
-              '<h3><em>More WooCommerce options are available in Sydney Pro</em></h3>' +
+              '<h3><em>Take your store to the next level with Sydney Pro!</em></h3>' +
+              '<p>You’ll get access to:</p>' +
               '<ul class="sydney-upsell-features">' +
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Wishlist</li>' +
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Product Swatch</li>' +
@@ -1126,6 +1127,7 @@ jQuery(document).ready(function ($) {
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Extra single product elements</li>' +
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>Extra shop sidebar layouts</li>' +
                   '<li class="sydney-hide-control"><span class="dashicons dashicons-yes"></span>AJAX product search</li>' +
+                  '<a target="_blank" href="https://athemes.com/sydney-upgrade/#features?utm_source=theme_customizer_deep&amp;utm_medium=sydney_customizer&amp;utm_campaign=Sydney">&hellip;and many more premium features</a>' +
               '</ul><p><a href="https://athemes.com/sydney-upgrade/?utm_source=theme_customizer_deep&amp;utm_medium=sydney_customizer&amp;utm_campaign=Sydney" role="button" class="button-secondary deep-upsell-button button" target="_blank">Upgrade Now</a></p></div>')
 
   upsellWoo.appendTo('#sub-accordion-panel-woocommerce');
@@ -1238,10 +1240,6 @@ jQuery(document).ready(function($) {
             $.each(value.controls, function(index, control) {
 				$('#customize-control-' + key + ' .kirki-sortable-item[data-value="' + subKey + '"]').find('.toggle-options').show();
 
-				if ( 'login' === subKey ) {
-					$('#customize-control-' + key).parent().css('padding-bottom', '550px');
-				}
-
                 var $control = $('#customize-control-' + control);
                 if ($control.length) {
                     $control.addClass('sortable-child-hidden');
@@ -1261,6 +1259,13 @@ jQuery(document).ready(function($) {
         if ($sortableItem.hasClass('invisible')) {
             return;
         }
+
+		//Get the distance from the top of the container
+		var container 			= $sortableItem.closest('.customize-pane-child');
+		var sortableItemHeight 	= $sortableItem.outerHeight();
+		var sortableItemOffset 	= $sortableItem.get(0).offsetTop;
+		var containerOffset 	= container.get(0).offsetTop;
+		var distanceTop 		= sortableItemOffset - containerOffset + sortableItemHeight + 1;
 
         $(this).toggleClass('dashicons-arrow-down-alt2 dashicons-arrow-up-alt2');
 
@@ -1284,27 +1289,37 @@ jQuery(document).ready(function($) {
 					$(this).addClass('sortable-child-hidden');
 				});
 
+				var prevTotalHeight = 0; // Total height of previous controls
+
                 $.each(value.controls, function(index, control) {
                     var $control = $('#customize-control-' + control);
-                    var $prevControl = $control.prev();
 
+                    var $prevControl 		= $control.prev();
+					
                     if (!isToggled) {
                         $control.addClass('sortable-child-toggled');
                         $control.removeClass('sortable-child-hidden');
 
                         if (index === 0) {
                             $control.addClass('first-control');
-                            $control.position({
-                                my: 'right top',
-                                at: 'right bottom',
-                                of: $sortableItem
-                            });
+							$control.css( {
+								'top': distanceTop + 'px',
+								'right': '25px',
+							} );
                         } else {
-                            $control.position({
-                                my: 'right top',
-                                at: 'right bottom',
-                                of: $prevControl
-                            });
+							prevTotalHeight += $prevControl.outerHeight();
+
+							$control.css( {
+								'top': distanceTop + prevTotalHeight + 'px',
+								'right': '25px',
+							} );
+
+							//exceptions
+							if ( control === 'header_search_field_style' ) {
+								$control.css( {
+									'top': distanceTop + prevTotalHeight - $prevControl.outerHeight() + 'px',
+								} );
+							}
                         }
 
                         if (index === value.controls.length - 1) {

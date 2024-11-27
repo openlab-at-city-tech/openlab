@@ -410,6 +410,7 @@ a.shipping-calculator-button {
   width: 100%;
 }
 
+.woocommerce-address-fields .select2-container .select2-selection__rendered,
 .shipping_address .select2-container .select2-selection__rendered,
 .woocommerce-billing-fields .select2-container .select2-selection__rendered,
 .cart_totals .select2-container .select2-selection__rendered {
@@ -417,6 +418,7 @@ a.shipping-calculator-button {
   padding: 0;
 }
 
+.woocommerce-address-fields .select2-container .select2-selection__arrow,
 .shipping_address .select2-container .select2-selection__arrow,
 .woocommerce-billing-fields .select2-container .select2-selection__arrow,
 .cart_totals .select2-container .select2-selection__arrow {

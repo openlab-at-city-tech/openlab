@@ -691,7 +691,7 @@ $wp_customize->add_setting(
 	'global_main_header_background',
 	array(
 		'default'           => 'global_color_6',
-		'sanitize_callback' => 'sydney_sanitize_hex_rgba',
+		'sanitize_callback' => 'wp_kses_post',
 		'transport'         => 'postMessage'
 	)
 );
@@ -724,7 +724,7 @@ $wp_customize->add_setting(
 	'global_main_header_background_sticky',
 	array(
 		'default'           => '',
-		'sanitize_callback' => 'sydney_sanitize_hex_rgba',
+		'sanitize_callback' => 'wp_kses_post',
 		'transport'         => 'postMessage'
 	)
 );
