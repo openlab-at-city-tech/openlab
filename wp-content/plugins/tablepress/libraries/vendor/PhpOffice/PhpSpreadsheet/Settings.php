@@ -18,42 +18,24 @@ class Settings
 	 *
 	 * @var null|class-string<IRenderer>
 	 */
-	private static $chartRenderer;
+	private static ?string $chartRenderer = null;
 
 	/**
 	 * Default options for libxml loader.
-	 * @var int|null
 	 */
-	private static $libXmlLoaderOptions;
-
-	/**
-	 * Allow/disallow libxml_disable_entity_loader() call when not thread safe.
-	 * Default behaviour is to do the check, but if you're running PHP versions
-	 *      7.2 < 7.2.1
-	 * then you may need to disable this check to prevent unwanted behaviour in other threads
-	 * SECURITY WARNING: Changing this flag is not recommended.
-	 *
-	 * @var bool
-	 */
-	private static $libXmlDisableEntityLoader = true;
+	private static ?int $libXmlLoaderOptions = null;
 
 	/**
 	 * The cache implementation to be used for cell collection.
-	 *
-	 * @var ?CacheInterface
 	 */
-	private static $cache;
+	private static ?CacheInterface $cache = null;
 
 	/**
 	 * The HTTP client implementation to be used for network request.
-	 * @var \TablePress\Psr\Http\Client\ClientInterface|null
 	 */
-	private static $httpClient;
+	private static ?ClientInterface $httpClient = null;
 
-	/**
-	 * @var \TablePress\Psr\Http\Message\RequestFactoryInterface|null
-	 */
-	private static $requestFactory;
+	private static ?RequestFactoryInterface $requestFactory = null;
 
 	/**
 	 * Set the locale code to use for formula translations and any special formatting.
@@ -112,6 +94,8 @@ class Settings
 	 * Set default options for libxml loader.
 	 *
 	 * @param ?int $options Default options for libxml loader
+	 *
+	 * @deprecated 3.5.0 no longer needed
 	 */
 	public static function setLibXmlLoaderOptions(?int $options): int
 	{
@@ -128,39 +112,12 @@ class Settings
 	 * Defaults to LIBXML_DTDLOAD | LIBXML_DTDATTR when not set explicitly.
 	 *
 	 * @return int Default options for libxml loader
+	 *
+	 * @deprecated 3.5.0 no longer needed
 	 */
 	public static function getLibXmlLoaderOptions(): int
 	{
-		if (self::$libXmlLoaderOptions === null) {
-			return self::setLibXmlLoaderOptions(null);
-		}
-
-		return self::$libXmlLoaderOptions;
-	}
-
-	/**
-	 * Enable/Disable the entity loader for libxml loader.
-	 * Allow/disallow libxml_disable_entity_loader() call when not thread safe.
-	 * Default behaviour is to do the check, but if you're running PHP versions
-	 *      7.2 < 7.2.1
-	 * then you may need to disable this check to prevent unwanted behaviour in other threads
-	 * SECURITY WARNING: Changing this flag to false is not recommended.
-	 *
-	 * @param bool $state
-	 */
-	public static function setLibXmlDisableEntityLoader($state): void
-	{
-		self::$libXmlDisableEntityLoader = (bool) $state;
-	}
-
-	/**
-	 * Return the state of the entity loader (disabled/enabled) for libxml loader.
-	 *
-	 * @return bool $state
-	 */
-	public static function getLibXmlDisableEntityLoader(): bool
-	{
-		return self::$libXmlDisableEntityLoader;
+		return self::$libXmlLoaderOptions ?? (defined('LIBXML_DTDLOAD') ? (LIBXML_DTDLOAD | LIBXML_DTDATTR) : 0);
 	}
 
 	/**

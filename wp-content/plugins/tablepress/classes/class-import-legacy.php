@@ -27,23 +27,21 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 	 * @since 1.0.0
 	 * @var array<string, string>
 	 */
-	public $import_formats = array();
+	public array $import_formats = array();
 
 	/**
 	 * Whether HTML import support is available in the PHP installation on the server.
 	 *
 	 * @since 1.0.0
-	 * @var bool
 	 */
-	public $html_import_support_available = false;
+	public bool $html_import_support_available = false;
 
 	/**
 	 * Data to be imported.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	protected $import_data;
+	protected string $import_data;
 
 	/**
 	 * Imported table.
@@ -127,7 +125,7 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 			$this->imported_table['data'],
 			static function ( /* string|int|float|bool|null */ &$cell_content, int $col_idx ): void {
 				$cell_content = (string) $cell_content;
-			}
+			},
 		);
 
 		return $this->imported_table;
@@ -182,7 +180,7 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 		// Check if JSON could be decoded.
 		if ( is_null( $json_table ) ) {
 			$json_error = json_last_error_msg();
-			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . "</strong><br /><br />JSON error: {$json_error}<br />";
+			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . "</strong><br><br>JSON error: {$json_error}<br>";
 			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
 		}
 
@@ -262,9 +260,9 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 			foreach ( $row as &$cell ) {
 				$cell = $cell['val'];
 			}
-			unset( $cell );
+			unset( $cell ); // Unset use-by-reference parameter of foreach loop.
 		}
-		unset( $row );
+		unset( $row ); // Unset use-by-reference parameter of foreach loop.
 
 		$this->imported_table = array( 'data' => $table );
 	}
@@ -279,7 +277,7 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 		$xlsx_file = \Shuchkin\SimpleXLSX::parse( $this->import_data, true );
 
 		if ( ! $xlsx_file ) {
-			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . '</strong><br /><br />' . \Shuchkin\SimpleXLSX::parseError() . '<br />';
+			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . '</strong><br><br>' . \Shuchkin\SimpleXLSX::parseError() . '<br>';
 			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
 		}
 
@@ -322,7 +320,7 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 			$current_encoding = mb_detect_encoding( $this->import_data, 'ASCII, UTF-8, ISO-8859-1' );
 			if ( 'UTF-8' !== $current_encoding ) {
 				// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-				$data = @iconv( $current_encoding, 'UTF-8', $this->import_data ); // @phpstan-ignore-line
+				$data = @iconv( $current_encoding, 'UTF-8', $this->import_data ); // @phpstan-ignore argument.type
 				if ( false !== $data ) {
 					$this->import_data = $data;
 					return;
@@ -338,14 +336,14 @@ class TablePress_Import_Legacy extends TablePress_Import_Base {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param string[] $an_array Array in which Windows line breaks should be replaced by Unix line breaks.
+	 * @param array<int, array<int, string>> $an_array Array in which Windows line breaks should be replaced by Unix line breaks.
 	 */
 	protected function normalize_line_endings( array &$an_array ): void {
 		array_walk_recursive(
 			$an_array,
 			static function ( string &$cell_content, int $col_idx ): void {
 				$cell_content = str_replace( "\r\n", "\n", $cell_content );
-			}
+			},
 		);
 	}
 
