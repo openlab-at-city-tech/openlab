@@ -926,6 +926,9 @@ trait Comparison
         if (\preg_match('/^\\d+$/', $tester)) {
             return $this->year === (int) $tester;
         }
+        if (\preg_match('/^(?:Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i', $tester)) {
+            return $this->isSameMonth(static::parse($tester), \false);
+        }
         if (\preg_match('/^\\d{3,}-\\d{1,2}$/', $tester)) {
             return $this->isSameMonth(static::parse($tester));
         }
