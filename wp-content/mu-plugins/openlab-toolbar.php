@@ -82,6 +82,8 @@ class OpenLab_Admin_Bar {
 		// For cleaning up any plugin add-ons.
 		add_action( 'wp_before_admin_bar_render', array( $this, 'adminbar_plugin_cleanup' ), 9999 );
 
+	   remove_action( 'admin_bar_menu', 'wp_admin_bar_search_menu', 9999 );
+
 		// Logged-in only
 		if ( is_user_logged_in() ) {
 
@@ -102,7 +104,7 @@ class OpenLab_Admin_Bar {
 			}
 
 			add_action( 'admin_bar_menu', array( $this, 'add_my_openlab_menu' ), 2 );
-			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 7 );
+			add_action( 'admin_bar_menu', array( $this, 'change_howdy_to_hi' ), 9999999 );
 			add_action( 'admin_bar_menu', array( $this, 'prepend_my_to_my_openlab_items' ), 99 );
 
 			add_action( 'admin_bar_menu', array( $this, 'remove_notifications_hook' ), 5 );
@@ -685,7 +687,7 @@ HTML;
 	 * place.
 	 */
 	public function remove_notifications_hook( $wp_admin_bar ) {
-		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu', 90 );
+		remove_action( 'admin_bar_menu', 'bp_members_admin_bar_notifications_menu_priority', 6 );
 	}
 
 	/**

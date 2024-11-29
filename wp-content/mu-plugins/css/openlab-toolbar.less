@@ -189,6 +189,7 @@
 				}
 			}
 			.admin-bar-menu {
+				white-space: nowrap;
 				li {
 					font-size: 14px;
 					line-height: 19px;
@@ -1487,5 +1488,11 @@ a.cc-widget-icon-link {
 @media screen and (max-width: @block-editor-breakpoint-tablet) {
 	.edit-post-visual-editor .block-editor-block-contextual-toolbar.is-fixed {
 		top: 52px;
+	}
+}
+
+.ab-top-menu {
+	& > li {
+		white-space: nowrap;
 	}
 }
