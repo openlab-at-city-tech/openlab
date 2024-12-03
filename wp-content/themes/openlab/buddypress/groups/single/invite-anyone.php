@@ -10,7 +10,12 @@
 
 <?php do_action('bp_before_group_send_invites_content') ?>
 
-<?php $group_type = openlab_get_group_type(bp_get_current_group_id()); ?>
+<?php
+$group_type  = openlab_get_group_type( bp_get_current_group_id() );
+$member_type = openlab_get_user_member_type( bp_loggedin_user_id() );
+
+$group_type_label = openlab_get_group_type_label( 'case=upper' );
+?>
 
 <?php if ( ! bp_get_new_group_id() ) : ?>
     <form action="<?php bp_group_permalink(groups_get_current_group()) ?>/invite-anyone/send/" method="post" class="form-panel" id="send-invite-form">
@@ -117,8 +122,7 @@
 
 <?php do_action('bp_after_group_send_invites_content') ?>
 
-<?php /* @todo Should this be restricted differently? */ ?>
-<?php if ( bp_is_item_admin() && 'course' === $group_type ) : ?>
+<?php if ( bp_is_item_admin() && in_array( $group_type, [ 'course', 'project', 'club' ] ) && in_array( $member_type, [ 'faculty', 'staff' ] ) ) : ?>
 
 	<?php
 	$import_results = null;
@@ -132,7 +136,7 @@
 	<?php endif; ?>
 
 		<div class="panel panel-default">
-			<div class="panel-heading semibold">Import Members to Your Course</div>
+			<div class="panel-heading semibold">Import Members to Your <?php echo esc_html( openlab_get_group_type_label( 'case=upper' ) ); ?></div>
 			<div class="panel-body">
 
 				<?php $show_submit_border = false; ?>
@@ -220,7 +224,7 @@
 					</div>
 
 				<?php else : ?>
-					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( ucfirst( $group_type )); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your Course and will receive notification via email.</p>
+					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( $group_type_label ); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your <?php echo esc_html( $group_type_label ); ?> and will receive notification via email.</p>
 
 					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially enrolled in my course or have approved this action.</label></p>
 
