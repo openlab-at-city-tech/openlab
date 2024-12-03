@@ -35,10 +35,6 @@ class Exif {
 				}
 			} else {
 
-				if ( false === strpos( $path, '/103/' ) ) {
-					return;
-				}
-
 				$image = new Image( $path );
 
 				if ( $image->has_gps_data() ) {
