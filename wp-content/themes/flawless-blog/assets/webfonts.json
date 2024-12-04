@@ -1,0 +1,57 @@
+{
+    "kind": "webfonts#webfontList",
+    "items": [
+        {
+            "kind": "webfonts#webfont",
+            "family": "Poppins",
+            "category": "sans-serif",
+            "variants": [
+                "100",
+                "100italic",
+                "200",
+                "200italic",
+                "300",
+                "300italic",
+                "regular",
+                "italic",
+                "500",
+                "500italic",
+                "600",
+                "600italic",
+                "700",
+                "700italic",
+                "800",
+                "800italic",
+                "900",
+                "900italic"
+            ],
+            "subsets": [
+                "latin",
+                "devanagari",
+                "latin-ext"
+            ],
+            "version": "v5",
+            "lastModified": "2017-11-21",
+            "files": {
+                "100": "http://fonts.gstatic.com/s/poppins/v5/pxiGyp8kv8JHgFVrLPTedw.ttf",
+                "100italic": "http://fonts.gstatic.com/s/poppins/v5/pxiAyp8kv8JHgFVrJJLmE3tF.ttf",
+                "200": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLFj_V1s.ttf",
+                "200italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLmv1plEA.ttf",
+                "300": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLDz8V1s.ttf",
+                "300italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLm21llEA.ttf",
+                "regular": "http://fonts.gstatic.com/s/poppins/v5/pxiEyp8kv8JHgFVrFJA.ttf",
+                "italic": "http://fonts.gstatic.com/s/poppins/v5/pxiGyp8kv8JHgFVrJJLedw.ttf",
+                "500": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLGT9V1s.ttf",
+                "500italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLmg1hlEA.ttf",
+                "600": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLEj6V1s.ttf",
+                "600italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLmr19lEA.ttf",
+                "700": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLCz7V1s.ttf",
+                "700italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLmy15lEA.ttf",
+                "800": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLDD4V1s.ttf",
+                "800italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLm111lEA.ttf",
+                "900": "http://fonts.gstatic.com/s/poppins/v5/pxiByp8kv8JHgFVrLBT5V1s.ttf",
+                "900italic": "http://fonts.gstatic.com/s/poppins/v5/pxiDyp8kv8JHgFVrJJLm81xlEA.ttf"
+            }
+        }
+    ]
+}
