@@ -1,0 +1,224 @@
+.hello-agency-admin-notice {
+  padding: 0 15px;
+}
+.hello-agency-admin-notice .info-content h5 {
+  margin: 0;
+  padding: 0;
+  font-size: 12px;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: #2271b1;
+}
+.hello-agency-admin-notice .info-content h1 {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 30px;
+  text-transform: capitalize;
+  margin: 0 !important;
+}
+.hello-agency-admin-notice .info-content h5 span.theme-name span {
+  margin: 10px 0 0;
+  display: inline-block;
+  border-bottom: 1px solid;
+  font-weight: 400;
+}
+.hello-agency-admin-notice #install-activate-button {
+  background-color: #2271b1;
+  color: #fff;
+}
+.hello-agency-admin-notice #install-activate-button:hover,
+.hello-agency-admin-notice .button.admin-button.info-button:hover {
+  background: #135e96;
+  border-color: #135e96;
+  color: #fff;
+}
+.hello-agency-admin-notice .button.admin-button.info-button {
+  background: #2271b1;
+  color: #ffffff;
+  padding: 4px 10px;
+  font-weight: 600;
+}
+.hello-agency-admin-notice .admin-button.dismiss-notice.btn-notice-dismiss {
+  color: #a4a4a7;
+  display: inline-block;
+  margin: 15px;
+}
+.hello-agency-admin-notice .admin-button.dismiss-notice.btn-notice-dismiss:hover {
+  color: #d63638;
+}
+.hello-agency-admin-notice .notice-text {
+  display: inline-block;
+  width: 100%;
+  margin: 0 0 10px;
+  font-size: 15px;
+  line-height: 20px;
+}
+.dashboard-about-hello-agency {
+  padding: 30px;
+  background: #fff;
+  box-sizing: border-box;
+  width: 98.5%;
+  margin: 20px 0 0 0;
+}
+.dashboard-about-hello-agency .half-col {
+  width: 50%;
+  display: inline-block;
+}
+
+.dashboard-about-hello-agency .featured-list {
+  display: flex;
+  grid-gap: 30px;
+}
+.dashboard-about-hello-agency .half-col ul ul {
+  margin: 10px 0 20px;
+  padding: 0 0 0 30px;
+}
+.dashboard-about-hello-agency .half-col ul ul li,
+.dashboard-about-hello-agency .half-col.pro-features li {
+  position: relative;
+}
+.dashboard-about-hello-agency .half-col ul ul li:before,
+.dashboard-about-hello-agency .half-col.pro-features li:before {
+  content: "\2713";
+  background: #bdbfc2;
+  width: 13px;
+  height: 13px;
+  position: absolute;
+  left: -20px;
+  top: 2px;
+  font-size: 12px;
+  line-height: 12px;
+  text-align: center;
+  border-radius: 20px;
+  color: #fff;
+}
+.dashboard-about-hello-agency .half-col.pro-features li {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 10px 0;
+}
+.dashboard-about-hello-agency .half-col.pro-features li:before {
+  background: #04cf9c;
+}
+.dashboard-about-hello-agency .half-col.pro-features ul {
+  margin: 0;
+  padding: 0 0 0 18px;
+}
+
+.dashboard-about-hello-agency .upgrade-btn.button {
+  text-transform: uppercase;
+  background: #4261ee;
+  border-color: #4261ee;
+  color: #fff;
+  display: inline-block;
+  margin-top: 21px;
+  padding: 15px 30px;
+}
+.dashboard-about-hello-agency .upgrade-btn.button:hover {
+  background: #f39446;
+  border-color: #f39446;
+}
+.hello-agency-admin-notice .info-content h3,
+.dashboard-about-hello-agency h3,
+.hello-agency-admin-notice .info-content .hello-agency-required-plugin li h4,
+.dashboard-about-hello-agency .hello-agency-required-plugin li h4 {
+  margin: 0;
+}
+
+.hello-agency-admin-notice .info-content .hello-agency-required-plugin li,
+.dashboard-about-hello-agency .hello-agency-required-plugin li {
+  margin: 5px 0;
+}
+.hello-agency-admin-notice .info-content .hello-agency-required-plugin,
+.dashboard-about-hello-agency .hello-agency-required-plugin {
+  margin: 10px 0 30px;
+}
+.dashboard-about-hello-agency .hello-agency-baisc-guideline {
+  margin: 20px 0;
+  display: inline-block;
+  width: 100%;
+}
+.dashboard-about-hello-agency .hello-agency-baisc-guideline .featured-box {
+  padding: 5px 25px;
+  border: 1px solid #666;
+  border-radius: 6px;
+  width: 49%;
+  float: left;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+.dashboard-about-hello-agency h3.hello-agency-baisc-guideline-header {
+  width: 100%;
+  display: inline-block;
+  margin: 20px 0 0;
+}
+.dashboard-about-hello-agency .hello-agency-baisc-guideline .featured-box:nth-child(2n + 2) {
+  margin-left: 2%;
+}
+.dashboard-about-hello-agency .hello-agency-baisc-guideline .featured-box li strong {
+  width: 100%;
+  display: inline-block;
+  margin-bottom: 10px;
+  font-size: 16px;
+}
+.dashboard-about-hello-agency h3 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+.hello-agency-admin-notice {
+  display: flex;
+}
+.hello-agency-admin-notice .info-content {
+  width: 65%;
+  padding-top: 7px;
+}
+.hello-agency-admin-notice .theme-hero-screens {
+  text-align: right;
+  width: 35%;
+}
+.hello-agency-admin-notice .theme-hero-screens img {
+  max-width: 350px;
+  margin: 15px -35px -7px 0;
+}
+.dashboard-about-hello-agency p {
+  font-size: 16px;
+}
+.hello-agency-admin-notice.notice.notice-info .info-content .admin-button.info-button.processing-spinner {
+  padding-right: 50px;
+  position: relative;
+}
+/*processing-spinner*/
+.hello-agency-admin-notice.notice.notice-info .info-content .admin-button.info-button.processing-spinner:before {
+  content: "";
+  right: 5px;
+  top: 5px;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border: 4px solid #574be8;
+  display: inline-block;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: processingLocader 1s ease-in infinite;
+}
+@keyframes processingLocader {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+.installing-all-pluign.info-button {
+  background: #2271b1;
+  margin: 0 0 40px;
+  color: #fff;
+  padding: 10px 30px;
+  border-radius: 12px;
+  font-size: 18px;
+}
+p.pluginlist {
+  margin-bottom: 25px;
+}

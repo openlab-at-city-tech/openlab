@@ -1,0 +1,508 @@
+/*
+Theme Name: Hello Agency
+Theme URI: https://cozythemes.com/hello-agency/
+Author: CozyThemes
+Author URI: https://cozythemes.com/
+Description: Hello Agency is a multipurpose, block-based Full Site Editing (FSE) theme, making it incredibly flexible for all types of websites. With its 8 global styles, users can effortlessly switch between their favorite color schemes within seconds to match their brand’s identity. The theme also comes pre-designed with over 20 free ready-to-use patterns for different homepage sections, including banners, hero sections, pricing tables, about us, team showcases, testimonials, portfolios, WooCommerce integration, Call to Action elements, Recent Posts, Stats Counters, and more. For even more design possibilities Hello Agency offers 40+ premium patterns, totaling 60+ options to upgrade your website’s appearance. Whether you’re looking to create an e-commerce platform, a corporate website, or even both, Hello Agency is all you need with its WooCommerce-ready features to support your business goals. It’s a perfect choice for niche corporate businesses, agencies, law firms, insurance companies, startups, entrepreneurs, consulting services, personal brands, creative agencies, freelancers, portfolios, and any other type of business website you can imagine. Explore more about Hello Agency at https://cozythemes.com/hello-agency/.
+Tags: blog, one-column, custom-background, custom-colors, custom-logo, custom-menu, editor-style, featured-images, e-commerce, full-site-editing, block-patterns, full-width-template, rtl-language-support, threaded-comments, translation-ready, block-styles, wide-blocks
+Version: 1.0.7
+Requires at least: 5.9
+Tested up to: 6.6
+Requires PHP: 7.0
+License: GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: hello-agency
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+*/
+.wp-block-comments textarea#comment {
+  border-radius: 4px;
+}
+input[type="submit"] {
+  transition: all ease 0.23s;
+  -o-transition: all ease 0.23s;
+  -moz-transition: all ease 0.23s;
+  -webkit-transition: all ease 0.23s;
+}
+
+.wpcf7-form-control.wpcf7-text,
+.wpcf7-form-control.wpcf7-textarea,
+.wpcf7-form-control.wpcf7-number.wpcf7-validates-as-number,
+.wpcf7-form-control.wpcf7-select {
+  border-radius: 5px;
+  border: 1px solid #dad7d7;
+  padding: 15px;
+  width: 100%;
+  margin-top: 10px;
+  box-sizing: border-box;
+}
+.wpcf7-form-control.wpcf7-select {
+  appearance: none;
+  position: relative;
+}
+.wpcf7-form-control.wpcf7-select:after {
+  content: ">";
+  font-size: 20px;
+  position: absolute;
+  right: 20px;
+  top: 10px;
+}
+form.wpcf7-form *::placeholder {
+  font-size: 14px;
+}
+form.wpcf7-form *::-moz-placeholder {
+  font-size: 14px;
+}
+form.wpcf7-form *::-webkit-input-placeholder {
+  font-size: 14px;
+}
+.wpcf7-form-control.has-spinner.wpcf7-submit {
+  background: var(--wp--preset--color--heading-color);
+  color: var(--wp--preset--color--background);
+  border-radius: 0;
+  border: 0;
+  font-size: 16px;
+  padding: 15px 40px;
+}
+.wpcf7-form-control.has-spinner.wpcf7-submit:hover {
+  background: var(--wp--preset--color--primary);
+  color: var(--wp--preset--color--foreground-alt);
+}
+.wp-block-contact-form-7-contact-form-selector .wpcf7-form input,
+.wp-block-contact-form-7-contact-form-selector .wpcf7-form select,
+.wp-block-contact-form-7-contact-form-selector .wpcf7-form textarea {
+  border-radius: 0;
+  border: 1px solid var(--wp--preset--color--heading-color);
+}
+
+form.comment-form {
+  border-radius: 20px;
+  margin-top: 24px;
+}
+.wp-block-post-comments-form {
+  border-radius: 20px;
+}
+form.comment-form input[type="email"],
+form.comment-form input[type="text"],
+form.comment-form input[type="url"],
+form.comment-form textarea {
+  border-radius: 5px;
+  margin: 12px 0 25px;
+}
+form.comment-form .form-submit.wp-block-button {
+  margin-top: 25px;
+}
+.wp-block-comment-author-name {
+  font-weight: 600;
+}
+
+.wp-block-comment-date a {
+  color: var(--wp--preset--color--foregound);
+  font-size: 13px;
+}
+.wp-block-comment-template li {
+  margin-top: 50px;
+}
+.wp-block-comment-template li li {
+  margin-top: 10px;
+  padding-left: 60px;
+}
+a.comment-reply-link {
+  border: 1px solid;
+  padding: 5px 13px;
+  border-radius: 40px;
+  font-size: 13px;
+  opacity: 0.6;
+}
+.wp-block-post-comments-form {
+  margin-top: 30px;
+  display: inline-block;
+  width: 100%;
+}
+.woocommerce ul.products li.product a img {
+  border-radius: 5px;
+  height: 350px;
+  object-fit: cover;
+}
+.woocommerce ul.products li.product,
+.woocommerce-page ul.products li.product {
+  margin: 0 2.5% 2.992em 0;
+  width: 23.1%;
+}
+.woocommerce ul.products li.last,
+.woocommerce-page ul.products li.last {
+  margin-right: 0;
+}
+.woocommerce div.product .woocommerce-tabs ul.tabs li {
+  border-radius: 0;
+}
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active:before,
+.woocommerce div.product .woocommerce-tabs ul.tabs li:before,
+.woocommerce div.product .woocommerce-tabs ul.tabs li.active:after {
+  display: none;
+}
+.woocommerce div.product .woocommerce-tabs ul.tabs li:after {
+  border: 0;
+}
+.woocommerce #reviews #comments ol.commentlist {
+  padding: 0;
+  margin-top: 20px !important;
+}
+.woocommerce-page .input-text {
+  padding: 11px 30px;
+  border: 1px solid #817e7e;
+  border-radius: 5px;
+}
+.wp-block-post-excerpt__excerpt a,
+.entry-content.wp-block-post-content a,
+p a {
+  text-decoration: underline;
+}
+nav.wp-block-navigation ul li a:hover,
+.wp-block-button.is-style-outline a:hover {
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.hello-agency-navigation.wp-block-navigation li a,
+.hello-agency-footer-list li a {
+  position: relative;
+}
+.hello-agency-navigation.wp-block-navigation li a:after,
+.hello-agency-footer-list li a:after,
+.wp-block-group.hello-agency-service-box .wp-block-button__link.wp-element-button:after,
+.hello-agency-buttons .wp-block-button__link.wp-element-button:after {
+  content: "";
+  width: 100%;
+  height: 1px;
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  background: var(--wp--preset--color--foreground) !important;
+}
+.hello-agency-navigation.wp-block-navigation li a:hover:after,
+.hello-agency-buttons .wp-block-button__link.wp-element-button:hover:after,
+.hello-agency-footer-list li a:hover:after,
+.wp-block-group.hello-agency-service-box .wp-block-button__link.wp-element-button:hover:after {
+  background: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-heading.hello-agency-text-stroke {
+  -webkit-text-stroke: 1px var(--wp--preset--color--heading-color);
+  color: transparent;
+}
+.ha-cover-section .wp-block-heading.hello-agency-text-stroke {
+  -webkit-text-stroke: 1px var(--wp--preset--color--foreground-alt);
+}
+.wp-block-image.hello-agency-rotator img {
+  animation: helloRotation 9s infinite linear;
+  -webkit-animation: helloRotation 9s infinite linear;
+  transition: all ease 0.23s;
+  -webkit-transition: all ease 0.23s;
+}
+.wp-block-image.hello-agency-rotator:hover img {
+  animation-play-state: paused;
+  -webkit-animation-play-state: paused;
+}
+@keyframes helloRotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+.wp-block-group.hello-agency-service-box .wp-block-image img {
+  transition: all ease 0.23s;
+}
+.wp-block-group.hello-agency-service-box:hover .wp-block-image img {
+  filter: invert(1);
+}
+.wp-block-group.hello-agency-service-box .wp-block-button__link.wp-element-button {
+  position: relative;
+}
+.wp-block-image.team-more-rotator {
+  margin-top: -125px;
+  z-index: 2;
+}
+.wp-block-columns.hello-agency-tabs-section {
+  position: relative;
+}
+.wp-block-column.hello-agency-tabs-title {
+  position: sticky;
+  position: -webkit-sticky;
+  top: 35%;
+}
+.wp-block-column.hello-agency-tabs-title .wp-block-heading a {
+  color: var(--wp--preset--color--neutral-color) !important;
+}
+.wp-block-column.hello-agency-tabs-title .wp-block-heading a:hover,
+.wp-block-heading.hello-agency-tab-one.active a,
+.wp-block-heading.hello-agency-tab-two.active a,
+.wp-block-heading.hello-agency-tab-three.active a,
+.wp-block-heading.hello-agency-tab-four.active a {
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-cover.hello-agency-portfolio .wp-block-group.portfolio-content a {
+  color: var(--wp--preset--color--foreground-alt) !important;
+}
+.wp-block-cover.hello-agency-portfolio .wp-block-group.portfolio-content a:hover {
+  color: var(--wp--preset--color--primary) !important;
+}
+.wp-block-cover.hello-agency-portfolio .wp-block-group.portfolio-content {
+  opacity: 0;
+  transform: translateY(50px);
+  transition: all ease 0.23s;
+}
+.wp-block-cover.hello-agency-portfolio:hover .wp-block-group.portfolio-content {
+  opacity: 1;
+  transform: translateY(0px);
+}
+.wp-block-cover.hello-agency-portfolio:hover img.wp-block-cover__image-background {
+  transform: scale(1.1);
+}
+.hello-agency-marquee {
+  position: relative;
+  width: 100vw;
+  max-width: 100%;
+  height: 100px;
+  overflow-x: hidden;
+}
+
+.hello-agency-track {
+  position: absolute;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ha-marquee 10s linear infinite;
+}
+
+.hello-agency-track-right {
+  position: absolute;
+  white-space: nowrap;
+  will-change: transform;
+  animation: ha-marquee-right 10s linear infinite;
+}
+
+@keyframes ha-marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+@keyframes ha-marquee-right {
+  from {
+    transform: translateX(-50%);
+  }
+}
+.wp-block-gallery.hello-agency-brands .wp-block-image {
+  display: inline-block;
+  text-align: center;
+}
+.wp-block-gallery.hello-agency-brands .wp-block-image img {
+  max-height: 40px;
+  margin: 20px auto;
+}
+.wp-block-buttons.pricing-table-buttons .wp-block-button,
+.wp-block-buttons.pricing-table-buttons .wp-block-button a {
+  width: 100%;
+}
+.wp-block-buttons.pricing-table-buttons .wp-block-button a:hover {
+  background: transparent !important;
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-heading.pricing-table-badge {
+  position: absolute;
+  right: 0;
+}
+.wp-block-group.hello-agency-pricing-table {
+  position: relative;
+}
+
+.wp-block-heading.pricing-table-badge {
+  position: absolute;
+  right: 16px;
+  top: 16px;
+  background: var(--wp--preset--color--primary) !important;
+  border-radius: 5px;
+  padding: 6px 12px;
+}
+.wp-block-contact-form-7-contact-form-selector.hello-agency-newsletter .wpcf7-form-control {
+  background: transparent;
+  border: 1px solid var(--wp--preset--color--foreground) !important;
+  border-radius: 0;
+  height: 60px;
+  outline: 0;
+  color: var(--wp--preset--color--foreground) !important;
+  font-size: 18px;
+}
+.wp-block-contact-form-7-contact-form-selector.hello-agency-newsletter form.wpcf7-form {
+  position: relative;
+}
+.wp-block-contact-form-7-contact-form-selector.hello-agency-newsletter form.wpcf7-form .wpcf7-form-control.wpcf7-submit {
+  position: absolute;
+  top: 16px;
+  right: 6px;
+  background: var(--wp--preset--color--heading-color) !important;
+  color: var(--wp--preset--color--neutral-color) !important;
+  height: 48px;
+  padding: 0 30px;
+}
+.wp-block-contact-form-7-contact-form-selector.hello-agency-newsletter form.wpcf7-form .wpcf7-form-control.wpcf7-submit:hover {
+  background: transparent !important;
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-button__link.wp-element-button.wc-block-components-product-button__button {
+  border-radius: 4px;
+  padding: 15px 30px;
+  background: var(--wp--preset--color--heading-color) !important;
+  color: var(--wp--preset--color--background) !important;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  width: auto;
+  border: 1px solid var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-button__link.wp-element-button.wc-block-components-product-button__button:hover {
+  border-color: var(--wp--preset--color--heading-color) !important;
+  background: transparent !important;
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-gallery.hello-agency-portfolio-gallery .wp-block-image .wp-element-caption {
+  font-size: 18px;
+  font-weight: 600;
+  bottom: 0;
+  opacity: 0;
+  transition: all ease 0.23s;
+  background: transparent !important;
+  text-transform: uppercase;
+}
+.wp-block-gallery.hello-agency-portfolio-gallery .wp-block-image,
+.wp-block-group.hello-agency-products .wc-block-components-product-image,
+.hello-agency-latestposts .wp-block-post-featured-image,
+.wp-block-cover.hello-agency-team-box {
+  overflow: hidden;
+}
+.wp-block-gallery.hello-agency-portfolio-gallery .wp-block-image:hover .wp-element-caption {
+  bottom: 25px;
+  opacity: 1;
+}
+.wp-block-gallery.hello-agency-portfolio-gallery .wp-block-image img,
+.wp-block-group.hello-agency-products,
+.hello-agency-latestposts .wp-block-post-featured-image img {
+  transition: all ease 0.23s;
+}
+.wp-block-gallery.hello-agency-portfolio-gallery .wp-block-image:hover img,
+.wp-block-group.hello-agency-products:hover .wc-block-components-product-image img,
+.hello-agency-latestposts li:hover .wp-block-post-featured-image img,
+.wp-block-cover.hello-agency-team-box:hover img {
+  transform: scale(1.15);
+}
+.wp-block-group.hello-agency-products:hover,
+.wp-block-contact-form-7-contact-form-selector.hello-agency-newsletter .wpcf7-form-control:focus {
+  border-color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-group.hello-agency-pricing-table:hover,
+.wp-block-group.hello-agency-services-group .wp-block-group.hello-agency-service-box:hover {
+  background: var(--wp--preset--color--neutral-color) !important;
+  transform: translateY(-10px);
+}
+.hello-agency-buttons .wp-block-button__link.wp-element-button,
+.wp-block-gallery.has-nested-images figure.wp-block-image a {
+  position: relative;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image a:after,
+.wp-block-gallery.has-nested-images figure.wp-block-image a:before {
+  content: "";
+  width: 50px;
+  height: 1px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin: 0 0 0 -25px;
+  background: #fff;
+  z-index: 2;
+  opacity: 0;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image a:before {
+  width: 1px;
+  height: 50px;
+  margin: -25px 0 0 0;
+  transition: all ease 0.23s;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image a:after {
+  width: 1px;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image a:before {
+  height: 1px;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image:hover a:before,
+.wp-block-gallery.has-nested-images figure.wp-block-image:hover a:after {
+  opacity: 1;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image:hover a:before {
+  height: 50px;
+}
+.wp-block-gallery.has-nested-images figure.wp-block-image:hover a:after {
+  width: 50px;
+}
+.wp-block-group.hello-agency-services-group .wp-block-group.hello-agency-service-box:hover {
+  background: transparent !important;
+  border-color: var(--wp--preset--color--heading-color) !important;
+}
+.wp-block-button.hello-agency-fill-buttons .wp-block-button__link.wp-element-button:hover {
+  color: var(--wp--preset--color--heading-color) !important;
+  background: transparent !important;
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(50%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.hello-agency-fadeinup {
+  opacity: 0;
+  transform: translateY(100%);
+  animation: fadeInUp 0.7s forwards ease-out;
+}
+.hello-agency-animate {
+  transition: opacity 0.23s ease-out;
+}
+.page.woocommerce-cart.woocommerce-page table.shop_table_responsive,
+.page.woocommerce-cart.woocommerce-page table.shop_table_responsive th,
+.page.woocommerce-cart.woocommerce-page table.shop_table_responsive td {
+  border-color: var(--wp--preset--color--heading-color) !important;
+}
+.page.woocommerce-page .wp-element-button,
+.page.woocommerce-page .wp-block-button__link {
+  color: var(--wp--preset--color--heading-color) !important;
+}
+.page.woocommerce-page .wp-element-button:hover,
+.page.woocommerce-page .wp-block-button__link:hover {
+  background: var(--wp--preset--color--heading-color) !important;
+  color: var(--wp--preset--color--primary) !important;
+}
+.page.woocommerce-page .woocommerce {
+  max-width: 1180px !important;
+  margin-top: 40px;
+}
+.page.woocommerce-page .woocommerce #customer_details input,
+.page.woocommerce-page .woocommerce #customer_details select,
+.page.woocommerce-page .woocommerce #customer_details textarea {
+  border-radius: 0;
+  border: 0;
+}
+.wp-block-comments form#commentform input,
+.wp-block-comments form#commentform textarea {
+  border-color: var(--wp--preset--color--heading-color) !important;
+  border-radius: 0;
+  background: transparent;
+  color: var(--wp--preset--color--foreground) !important;
+}
+.wp-block-comments form#commentform input#submit {
+  background: var(--wp--preset--color--heading-color) !important;
+  color: var(--wp--preset--color--foreground) !important;
+}
+.wp-block-comments form#commentform input#submit:hover {
+  color: var(--wp--preset--color--heading-color) !important;
+  background: var(--wp--preset--color--primary) !important;
+}

@@ -1,0 +1,74 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/theme.json",
+  "title": "Light Blue Scheme",
+  "version": 2,
+  "settings": {
+    "color": {
+      "palette": [
+        {
+          "slug": "primary",
+          "color": "#4261EE",
+          "name": "Primary"
+        },
+        {
+          "slug": "primary-shade",
+          "color": "#909CDA",
+          "name": "Primary Shade"
+        },
+        {
+          "slug": "background",
+          "color": "#ffffff",
+          "name": "Background"
+        },
+        {
+          "slug": "foreground",
+          "color": "#808080",
+          "name": "Foreground"
+        },
+
+        {
+          "slug": "background-alt",
+          "color": "#F0F0F0",
+          "name": "Background Alt"
+        },
+        {
+          "slug": "foreground-alt",
+          "color": "#FEFEFE",
+          "name": "Foreground"
+        },
+        {
+          "slug": "heading-color",
+          "color": "#202124",
+          "name": "heading-color"
+        },
+        {
+          "slug": "neutral-color",
+          "color": "#E2E3E5",
+          "name": "Neutral Color"
+        }
+      ],
+      "duotone": [
+        {
+          "colors": ["#4261EE", "#ffffff"],
+          "slug": "primary-white",
+          "name": "Primary White"
+        },
+        {
+          "colors": ["#ffffff", "#4261EE"],
+          "slug": "white-primary",
+          "name": "White Primary"
+        },
+        {
+          "colors": ["#4261EE", "#202020"],
+          "slug": "primary-dark",
+          "name": "Primary Dark"
+        },
+        {
+          "colors": ["#202020", "#4261EE"],
+          "slug": "dark-primary",
+          "name": "Dark Primary"
+        }
+      ]
+    }
+  }
+}
