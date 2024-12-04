@@ -1,0 +1,80 @@
+{
+  "Poppins": {
+    "fontFamily": "Poppins",
+    "slug": "kubio-Poppins-400-latin",
+    "name": "Poppins",
+    "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+    "fontFace": [
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "400",
+        "fontStyle": "italic",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-400italic-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "700",
+        "fontStyle": "italic",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-700italic-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "300",
+        "fontStyle": "normal",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-300normal-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "400",
+        "fontStyle": "normal",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-400normal-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "500",
+        "fontStyle": "normal",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-500normal-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "600",
+        "fontStyle": "normal",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-600normal-latin.woff2"
+        ]
+      },
+      {
+        "fontFamily": "Poppins",
+        "fontWeight": "700",
+        "fontStyle": "normal",
+        "unicodeRange": "U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD",
+        "subset": "latin",
+        "src": [
+          "Poppins-700normal-latin.woff2"
+        ]
+      }
+    ]
+  }
+}
