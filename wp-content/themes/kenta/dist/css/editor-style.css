@@ -1,0 +1,649 @@
+figure {
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+:root {
+  /*
+  1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+  2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+  */
+  /*
+  1. Use a consistent sensible line-height in all browsers.
+  2. Prevent adjustments of font size after orientation changes in iOS.
+  3. Use a more readable tab size.
+  4. Use the user's configured `sans` font-family by default.
+  */
+  /*
+  1. Remove the margin in all browsers.
+  2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+  */
+  /**
+    Smooth scroll
+   */
+  /**
+    Css selection colors
+   */
+  /* Classic List Widget -------------------------- */
+}
+:root *,
+:root ::before,
+:root ::after {
+  box-sizing: border-box; /* 1 */
+  border-width: 0; /* 2 */
+  border-style: solid; /* 2 */
+  border-color: #e5e7eb; /* 2 */
+}
+:root ::before,
+:root ::after {
+  --tw-content: "";
+}
+:root html {
+  line-height: 1.5; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+  -moz-tab-size: 4; /* 3 */
+  -o-tab-size: 4;
+  tab-size: 4; /* 3 */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+}
+:root body {
+  margin: 0; /* 1 */
+  line-height: inherit; /* 2 */
+}
+:root :root {
+  scroll-behavior: smooth;
+}
+:root ::-moz-selection {
+  color: var(--kb-base-color);
+  background-color: var(--kb-primary-color);
+}
+:root ::-moz-selection,
+:root ::selection {
+  color: var(--kb-base-color);
+  background-color: var(--kb-primary-color);
+}
+:root [data-kenta-theme=light] {
+  --kenta-primary-color: var(--kenta-light-primary-color);
+  --kenta-primary-active: var(--kenta-light-primary-active);
+  --kenta-accent-color: var(--kenta-light-accent-color);
+  --kenta-accent-active: var(--kenta-light-accent-active);
+  --kenta-base-color: var(--kenta-light-base-color);
+  --kenta-base-100: var(--kenta-light-base-100);
+  --kenta-base-200: var(--kenta-light-base-200);
+  --kenta-base-300: var(--kenta-light-base-300);
+}
+:root [data-kenta-theme=light] .kenta-theme-switch .dark-mode {
+  display: inline;
+}
+:root [data-kenta-theme=light] .kenta-theme-switch .light-mode {
+  display: none;
+}
+:root [data-kenta-theme=dark] {
+  --kenta-primary-color: var(--kenta-dark-primary-color, var(--kenta-light-primary-color));
+  --kenta-primary-active: var(--kenta-dark-primary-active, var(--kenta-light-primary-active));
+  --kenta-accent-color: var(--kenta-dark-accent-color, var(--kenta-light-accent-color));
+  --kenta-accent-active: var(--kenta-dark-accent-active, var(--kenta-light-accent-active));
+  --kenta-base-color: var(--kenta-dark-base-color, var(--kenta-light-base-color));
+  --kenta-base-100: var(--kenta-dark-base-100, var(--kenta-light-base-100));
+  --kenta-base-200: var(--kenta-dark-base-200, var(--kenta-light-base-200));
+  --kenta-base-300: var(--kenta-dark-base-300, var(--kenta-light-base-300));
+}
+:root [data-kenta-theme=dark] .kenta-theme-switch .light-mode {
+  display: inline;
+}
+:root [data-kenta-theme=dark] .kenta-theme-switch .dark-mode {
+  display: none;
+}
+:root .kenta-widget {
+  position: relative;
+  margin-bottom: var(--kenta-widgets-spacing, 0);
+  color: var(--kenta-widgets-text-color);
+}
+:root .kenta-widget ul,
+:root .kenta-widget ol {
+  margin: 0;
+  padding: 0;
+  list-style: outside none none;
+}
+:root .kenta-widget li, :root .kenta-widget ul > li, :root .kenta-widget ol > li {
+  padding: 0;
+}
+:root .kenta-widget a {
+  transition: all ease 0.25s;
+  color: var(--kenta-widgets-link-initial, var(--kenta-primary-color));
+}
+:root .kenta-widget a:hover {
+  color: var(--kenta-widgets-link-hover, var(--kenta-primary-active));
+}
+:root .kenta-widget .widget-title {
+  margin: 0px;
+  margin-bottom: 12px;
+}
+:root .kenta-widget [type=text],
+:root .kenta-widget [type=email],
+:root .kenta-widget [type=url],
+:root .kenta-widget [type=password],
+:root .kenta-widget [type=number],
+:root .kenta-widget [type=date],
+:root .kenta-widget [type=datetime-local],
+:root .kenta-widget [type=month],
+:root .kenta-widget [type=search],
+:root .kenta-widget [type=tel],
+:root .kenta-widget [type=time],
+:root .kenta-widget [type=week],
+:root .kenta-widget [multiple],
+:root .kenta-widget textarea,
+:root .kenta-widget select {
+  display: block;
+  width: 100%;
+  transition: all ease 0.25s;
+  border-radius: var(--kenta-form-control-radius, 2px);
+  border: 1px solid var(--kenta-form-border-color, var(--kenta-base-200));
+  background-color: transparent;
+}
+:root .kenta-widget [type=text]:focus,
+:root .kenta-widget [type=email]:focus,
+:root .kenta-widget [type=url]:focus,
+:root .kenta-widget [type=password]:focus,
+:root .kenta-widget [type=number]:focus,
+:root .kenta-widget [type=date]:focus,
+:root .kenta-widget [type=datetime-local]:focus,
+:root .kenta-widget [type=month]:focus,
+:root .kenta-widget [type=search]:focus,
+:root .kenta-widget [type=tel]:focus,
+:root .kenta-widget [type=time]:focus,
+:root .kenta-widget [type=week]:focus,
+:root .kenta-widget [multiple]:focus,
+:root .kenta-widget textarea:focus,
+:root .kenta-widget select:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--kenta-form-active-color, var(--kenta-primary-color));
+}
+:root .widget_tag_cloud a,
+:root .wp-block-tag-cloud a,
+:root .widget_product_tag_cloud a {
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+  padding: 0.25em 1em;
+  transition: all ease 0.25s;
+  border-radius: 2px;
+  color: var(--kenta-tag-cloud-text-initial, var(--kenta-accent-color));
+  background-color: var(--kenta-tag-cloud-background-initial, var(--kenta-base-color));
+  border: 1px solid var(--kenta-tag-cloud-border-initial-color, var(--kenta-base-200));
+}
+:root .widget_tag_cloud a:hover,
+:root .wp-block-tag-cloud a:hover,
+:root .widget_product_tag_cloud a:hover {
+  color: var(--kenta-tag-cloud-text-hover, var(--kenta-base-color));
+  background-color: var(--kenta-tag-cloud-background-hover, var(--kenta-primary-color));
+  border-color: var(--kenta-tag-cloud-border-hover-color, var(--kenta-primary-color));
+}
+:root .widget_rss .widget-title a.rsswidget:first-of-type {
+  display: none;
+}
+:root .widget_rss li {
+  margin-bottom: 12px;
+}
+:root .gallery {
+  margin-bottom: 10px;
+  overflow: hidden;
+  list-style: none !important;
+  display: flex;
+  flex-wrap: wrap;
+}
+:root .gallery-item {
+  position: relative;
+}
+:root .gallery-item img {
+  width: 100%;
+  margin: 0;
+}
+:root .gallery-item * {
+  display: block;
+  height: 100%;
+}
+:root .wp-caption {
+  position: relative;
+}
+:root figcaption,
+:root .wp-caption figcaption,
+:root .wp-caption-text,
+:root .gallery-caption,
+:root .wp-caption-text {
+  width: 100%;
+  margin-top: 0;
+}
+:root body:not(.elementor-page) .gallery-item {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 !important;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+:root .gallery-columns-1 .gallery-item {
+  float: none !important;
+  width: 100%;
+}
+:root .gallery-columns-2 .gallery-item {
+  width: calc((100% - 5px) / 2 - 1px);
+}
+:root .gallery-columns-3 .gallery-item {
+  width: calc((100% - 10px) / 3 - 1px);
+}
+:root .gallery-columns-4 .gallery-item {
+  width: calc((100% - 15px) / 4 - 1px);
+}
+:root .gallery-columns-5 .gallery-item {
+  width: calc((100% - 20px) / 5 - 1px);
+}
+:root .gallery-columns-6 .gallery-item {
+  width: calc((100% - 25px) / 6 - 1px);
+}
+:root .gallery-columns-7 .gallery-item {
+  width: calc((100% - 30px) / 7 - 1px);
+}
+:root .gallery-columns-8 .gallery-item {
+  width: calc((100% - 35px) / 8 - 1px);
+}
+:root .gallery-columns-9 .gallery-item {
+  width: calc((100% - 40px) / 9 - 1px);
+}
+:root .gallery-columns-2 .gallery-item:nth-child(2n+2),
+:root .gallery-columns-3 .gallery-item:nth-child(3n+3),
+:root .gallery-columns-4 .gallery-item:nth-child(4n+4),
+:root .gallery-columns-5 .gallery-item:nth-child(5n+5),
+:root .gallery-columns-6 .gallery-item:nth-child(6n+6),
+:root .gallery-columns-7 .gallery-item:nth-child(7n+7),
+:root .gallery-columns-8 .gallery-item:nth-child(8n+8),
+:root .gallery-columns-9 .gallery-item:nth-child(9n+9) {
+  margin-right: 0 !important;
+}
+:root .gallery-columns-2 .gallery-item:nth-child(2n+2) + li,
+:root .gallery-columns-3 .gallery-item:nth-child(3n+3) + li,
+:root .gallery-columns-4 .gallery-item:nth-child(4n+4) + li,
+:root .gallery-columns-5 .gallery-item:nth-child(5n+5) + li,
+:root .gallery-columns-6 .gallery-item:nth-child(6n+6) + li,
+:root .gallery-columns-7 .gallery-item:nth-child(7n+7) + li,
+:root .gallery-columns-8 .gallery-item:nth-child(8n+8) + li,
+:root .gallery-columns-9 .gallery-item:nth-child(9n+9) + li {
+  clear: both;
+}
+:root .kenta-widget.widget_search label {
+  display: block;
+}
+:root .kenta-widget.widget_search button[type=submit] {
+  height: 100%;
+}
+:root .kenta-widget form.search-form {
+  position: relative;
+}
+:root .kenta-widget form.search-form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+:root .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) {
+  list-style: none;
+  padding: 0;
+}
+:root .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) > li {
+  padding: var(--widget-list-pt, 0.2rem) var(--widget-list-pr, 1rem) var(--widget-list-pb, 0.2rem) var(--widget-list-pl, 1.4rem);
+  position: relative;
+}
+:root .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) li a {
+  position: static;
+}
+:root .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) li:not(.menu-item-has-children)::before {
+  content: "\f02b";
+  display: inline-block;
+  font-size: 0.6rem;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -0.3rem;
+  color: var(--kenta-primary-color);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: var(--fa-display, inline-block);
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+:root .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) .sub-menu {
+  padding-left: 1rem;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-archives li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_archive ul li::before {
+  content: "\f0c6" !important;
+  font-size: 13px;
+  top: 9px;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-categories li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_categories ul li::before {
+  content: "\f07c" !important;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-page-list li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_pages ul li::before {
+  content: "\f15b" !important;
+}
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_meta ul li::before {
+  content: "\f0c1" !important;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-latest-comments li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_recent_comments ul li::before {
+  content: "\f086" !important;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-latest-posts li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_recent_entries ul li::before {
+  content: "\f02b" !important;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-rss li .wp-block-rss__item-title {
+  margin: 0;
+}
+:root .kenta-widget:not(.woocommerce) ul.wp-block-rss li::before,
+:root .kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_rss ul li::before {
+  content: "\f09e" !important;
+}
+:root .rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li {
+  padding-left: 0;
+  padding-right: 1.4rem;
+}
+:root .rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li:not(.menu-item-has-children)::before {
+  left: auto;
+  right: 0;
+}
+:root .rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li:not(.menu-item-has-children) a::after {
+  right: auto;
+  left: 0;
+  content: "\f053";
+}
+:root .woocommerce a.button,
+:root .wp-block-button,
+:root .kenta-button {
+  font-size: 0.75rem;
+  line-height: 1;
+  --kenta-button-border: 1px solid var(--kenta-primary-color);
+  --kenta-button-padding: 0.85em 1.25em;
+  --kenta-button-height: 32px;
+  --kenta-button-initial-color: var(--kenta-primary-color);
+  --kenta-button-hover-color: var(--kenta-accent-color);
+  --kenta-button-text-initial-color: var(--kenta-base-color);
+  --kenta-button-text-hover-color: var(--kenta-base-color);
+  --kenta-button-radius: 2px;
+}
+:root .woocommerce a.button .has-text-align-center,
+:root .wp-block-button .has-text-align-center,
+:root .kenta-button .has-text-align-center {
+  justify-content: center;
+}
+:root .woocommerce a.button .has-text-align-right,
+:root .wp-block-button .has-text-align-right,
+:root .kenta-button .has-text-align-right {
+  justify-content: flex-end;
+}
+:root .woocommerce a.button .has-text-align-left,
+:root .wp-block-button .has-text-align-left,
+:root .kenta-button .has-text-align-left {
+  justify-content: flex-start;
+}
+:root .woocommerce #respond input#submit,
+:root .woocommerce #respond input#submit.alt,
+:root .woocommerce .page-content .widget_price_filter .button,
+:root .woocommerce .page-content .woocommerce-message .button,
+:root .woocommerce .page-content a.button.alt,
+:root .woocommerce .page-content button.button.alt,
+:root .woocommerce .page-content .woocommerce-message .button,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button,
+:root .woocommerce a.button,
+:root .woocommerce a.button.alt,
+:root .woocommerce button.button,
+:root .woocommerce button.button.alt,
+:root .woocommerce input.button,
+:root .woocommerce input.button.alt,
+:root .widget_search [type=submit],
+:root .wp-block-search__button,
+:root .wc-block-product-search__button,
+:root div:not(.is-style-outline) > .wp-block-button__link,
+:root .wp-block-button.is-style-outline .wp-block-button__link,
+:root .kenta-form [type=submit],
+:root .kenta-raw-html [type=submit],
+:root .kenta-article-content button,
+:root .kenta-article-content [type=submit],
+:root .kenta-button {
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  min-height: var(--kenta-button-height);
+  padding: var(--kenta-button-padding);
+  border-radius: var(--kenta-button-radius);
+  color: var(--kenta-button-text-initial-color);
+  background-color: var(--kenta-button-initial-color);
+  border-color: var(--lotta-border-initial-color);
+  transition: all ease 0.2s;
+  border: var(--kenta-button-border, none);
+  box-shadow: var(--kenta-button-shadow, none);
+}
+:root .woocommerce #respond input#submit:disabled,
+:root .woocommerce #respond input#submit.alt:disabled,
+:root .woocommerce .page-content .widget_price_filter .button:disabled,
+:root .woocommerce .page-content .woocommerce-message .button:disabled,
+:root .woocommerce .page-content a.button.alt:disabled,
+:root .woocommerce .page-content button.button.alt:disabled,
+:root .woocommerce .page-content .woocommerce-message .button:disabled,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button:disabled,
+:root .woocommerce a.button:disabled,
+:root .woocommerce a.button.alt:disabled,
+:root .woocommerce button.button:disabled,
+:root .woocommerce button.button.alt:disabled,
+:root .woocommerce input.button:disabled,
+:root .woocommerce input.button.alt:disabled,
+:root .widget_search [type=submit]:disabled,
+:root .wp-block-search__button:disabled,
+:root .wc-block-product-search__button:disabled,
+:root div:not(.is-style-outline) > .wp-block-button__link:disabled,
+:root .wp-block-button.is-style-outline .wp-block-button__link:disabled,
+:root .kenta-form [type=submit]:disabled,
+:root .kenta-raw-html [type=submit]:disabled,
+:root .kenta-article-content button:disabled,
+:root .kenta-article-content [type=submit]:disabled,
+:root .kenta-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+:root .woocommerce #respond input#submit:not(:disabled):hover,
+:root .woocommerce #respond input#submit.alt:not(:disabled):hover,
+:root .woocommerce .page-content .widget_price_filter .button:not(:disabled):hover,
+:root .woocommerce .page-content .woocommerce-message .button:not(:disabled):hover,
+:root .woocommerce .page-content a.button.alt:not(:disabled):hover,
+:root .woocommerce .page-content button.button.alt:not(:disabled):hover,
+:root .woocommerce .page-content .woocommerce-message .button:not(:disabled):hover,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button:not(:disabled):hover,
+:root .woocommerce a.button:not(:disabled):hover,
+:root .woocommerce a.button.alt:not(:disabled):hover,
+:root .woocommerce button.button:not(:disabled):hover,
+:root .woocommerce button.button.alt:not(:disabled):hover,
+:root .woocommerce input.button:not(:disabled):hover,
+:root .woocommerce input.button.alt:not(:disabled):hover,
+:root .widget_search [type=submit]:not(:disabled):hover,
+:root .wp-block-search__button:not(:disabled):hover,
+:root .wc-block-product-search__button:not(:disabled):hover,
+:root div:not(.is-style-outline) > .wp-block-button__link:not(:disabled):hover,
+:root .wp-block-button.is-style-outline .wp-block-button__link:not(:disabled):hover,
+:root .kenta-form [type=submit]:not(:disabled):hover,
+:root .kenta-raw-html [type=submit]:not(:disabled):hover,
+:root .kenta-article-content button:not(:disabled):hover,
+:root .kenta-article-content [type=submit]:not(:disabled):hover,
+:root .kenta-button:not(:disabled):hover {
+  color: var(--kenta-button-text-hover-color);
+  background-color: var(--kenta-button-hover-color);
+  border-color: var(--lotta-border-hover-color);
+  box-shadow: var(--kenta-button-shadow-active, none);
+}
+:root .woocommerce #respond input#submit.kenta-button-right,
+:root .woocommerce #respond input#submit.alt.kenta-button-right,
+:root .woocommerce .page-content .widget_price_filter .button.kenta-button-right,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right,
+:root .woocommerce .page-content a.button.alt.kenta-button-right,
+:root .woocommerce .page-content button.button.alt.kenta-button-right,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right,
+:root .woocommerce a.button.kenta-button-right,
+:root .woocommerce a.button.alt.kenta-button-right,
+:root .woocommerce button.button.kenta-button-right,
+:root .woocommerce button.button.alt.kenta-button-right,
+:root .woocommerce input.button.kenta-button-right,
+:root .woocommerce input.button.alt.kenta-button-right,
+:root .widget_search [type=submit].kenta-button-right,
+:root .wp-block-search__button.kenta-button-right,
+:root .wc-block-product-search__button.kenta-button-right,
+:root div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right,
+:root .wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right,
+:root .kenta-form [type=submit].kenta-button-right,
+:root .kenta-raw-html [type=submit].kenta-button-right,
+:root .kenta-article-content button.kenta-button-right,
+:root .kenta-article-content [type=submit].kenta-button-right,
+:root .kenta-button.kenta-button-right {
+  flex-direction: row-reverse;
+}
+:root .woocommerce #respond input#submit.kenta-button-right i, :root .woocommerce #respond input#submit.kenta-button-right svg,
+:root .woocommerce #respond input#submit.alt.kenta-button-right i,
+:root .woocommerce #respond input#submit.alt.kenta-button-right svg,
+:root .woocommerce .page-content .widget_price_filter .button.kenta-button-right i,
+:root .woocommerce .page-content .widget_price_filter .button.kenta-button-right svg,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right i,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right svg,
+:root .woocommerce .page-content a.button.alt.kenta-button-right i,
+:root .woocommerce .page-content a.button.alt.kenta-button-right svg,
+:root .woocommerce .page-content button.button.alt.kenta-button-right i,
+:root .woocommerce .page-content button.button.alt.kenta-button-right svg,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right i,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-right svg,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right i,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right svg,
+:root .woocommerce a.button.kenta-button-right i,
+:root .woocommerce a.button.kenta-button-right svg,
+:root .woocommerce a.button.alt.kenta-button-right i,
+:root .woocommerce a.button.alt.kenta-button-right svg,
+:root .woocommerce button.button.kenta-button-right i,
+:root .woocommerce button.button.kenta-button-right svg,
+:root .woocommerce button.button.alt.kenta-button-right i,
+:root .woocommerce button.button.alt.kenta-button-right svg,
+:root .woocommerce input.button.kenta-button-right i,
+:root .woocommerce input.button.kenta-button-right svg,
+:root .woocommerce input.button.alt.kenta-button-right i,
+:root .woocommerce input.button.alt.kenta-button-right svg,
+:root .widget_search [type=submit].kenta-button-right i,
+:root .widget_search [type=submit].kenta-button-right svg,
+:root .wp-block-search__button.kenta-button-right i,
+:root .wp-block-search__button.kenta-button-right svg,
+:root .wc-block-product-search__button.kenta-button-right i,
+:root .wc-block-product-search__button.kenta-button-right svg,
+:root div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right i,
+:root div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right svg,
+:root .wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right i,
+:root .wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right svg,
+:root .kenta-form [type=submit].kenta-button-right i,
+:root .kenta-form [type=submit].kenta-button-right svg,
+:root .kenta-raw-html [type=submit].kenta-button-right i,
+:root .kenta-raw-html [type=submit].kenta-button-right svg,
+:root .kenta-article-content button.kenta-button-right i,
+:root .kenta-article-content button.kenta-button-right svg,
+:root .kenta-article-content [type=submit].kenta-button-right i,
+:root .kenta-article-content [type=submit].kenta-button-right svg,
+:root .kenta-button.kenta-button-right i,
+:root .kenta-button.kenta-button-right svg {
+  margin-left: 0.75em;
+}
+:root .woocommerce #respond input#submit.kenta-button-left i, :root .woocommerce #respond input#submit.kenta-button-left svg,
+:root .woocommerce #respond input#submit.alt.kenta-button-left i,
+:root .woocommerce #respond input#submit.alt.kenta-button-left svg,
+:root .woocommerce .page-content .widget_price_filter .button.kenta-button-left i,
+:root .woocommerce .page-content .widget_price_filter .button.kenta-button-left svg,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-left i,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-left svg,
+:root .woocommerce .page-content a.button.alt.kenta-button-left i,
+:root .woocommerce .page-content a.button.alt.kenta-button-left svg,
+:root .woocommerce .page-content button.button.alt.kenta-button-left i,
+:root .woocommerce .page-content button.button.alt.kenta-button-left svg,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-left i,
+:root .woocommerce .page-content .woocommerce-message .button.kenta-button-left svg,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-left i,
+:root .woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-left svg,
+:root .woocommerce a.button.kenta-button-left i,
+:root .woocommerce a.button.kenta-button-left svg,
+:root .woocommerce a.button.alt.kenta-button-left i,
+:root .woocommerce a.button.alt.kenta-button-left svg,
+:root .woocommerce button.button.kenta-button-left i,
+:root .woocommerce button.button.kenta-button-left svg,
+:root .woocommerce button.button.alt.kenta-button-left i,
+:root .woocommerce button.button.alt.kenta-button-left svg,
+:root .woocommerce input.button.kenta-button-left i,
+:root .woocommerce input.button.kenta-button-left svg,
+:root .woocommerce input.button.alt.kenta-button-left i,
+:root .woocommerce input.button.alt.kenta-button-left svg,
+:root .widget_search [type=submit].kenta-button-left i,
+:root .widget_search [type=submit].kenta-button-left svg,
+:root .wp-block-search__button.kenta-button-left i,
+:root .wp-block-search__button.kenta-button-left svg,
+:root .wc-block-product-search__button.kenta-button-left i,
+:root .wc-block-product-search__button.kenta-button-left svg,
+:root div:not(.is-style-outline) > .wp-block-button__link.kenta-button-left i,
+:root div:not(.is-style-outline) > .wp-block-button__link.kenta-button-left svg,
+:root .wp-block-button.is-style-outline .wp-block-button__link.kenta-button-left i,
+:root .wp-block-button.is-style-outline .wp-block-button__link.kenta-button-left svg,
+:root .kenta-form [type=submit].kenta-button-left i,
+:root .kenta-form [type=submit].kenta-button-left svg,
+:root .kenta-raw-html [type=submit].kenta-button-left i,
+:root .kenta-raw-html [type=submit].kenta-button-left svg,
+:root .kenta-article-content button.kenta-button-left i,
+:root .kenta-article-content button.kenta-button-left svg,
+:root .kenta-article-content [type=submit].kenta-button-left i,
+:root .kenta-article-content [type=submit].kenta-button-left svg,
+:root .kenta-button.kenta-button-left i,
+:root .kenta-button.kenta-button-left svg {
+  margin-right: 0.75em;
+}
+:root .wp-block-button.is-style-outline .wp-block-button__link,
+:root .wp-block-button.is-style-outline .wp-block-button__link:not(.has-background),
+:root .wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color) {
+  border-width: 2px;
+  border-style: solid;
+  color: var(--kenta-button-initial-color);
+  border-color: var(--kenta-button-initial-color);
+  background-color: transparent;
+}
+:root .components-button.is-primary {
+  background: var(--wp-admin-theme-color) !important;
+}

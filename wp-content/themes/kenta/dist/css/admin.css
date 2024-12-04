@@ -1,0 +1,571 @@
+/**
+    Color palettes
+ */
+/**
+    Spacing
+ */
+.kenta-button svg {
+  margin-right: 6px;
+}
+
+.kenta-admin-page .kenta-button,
+.kenta-icon-button,
+.kenta-button {
+  display: inline-block;
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  outline: none;
+  padding: 0.75em 1.25em;
+  cursor: pointer;
+  border-radius: 2px;
+  line-height: 16px;
+  font-size: 14px;
+  vertical-align: center;
+  transition: all ease 0.2s;
+  background: var(--kenta-button-background-initial);
+  color: var(--kenta-button-text-initial);
+  border: 2px solid var(--kenta-button-border-initial);
+  text-decoration: none;
+}
+.kenta-admin-page .kenta-button *,
+.kenta-icon-button *,
+.kenta-button * {
+  vertical-align: middle;
+}
+.kenta-admin-page .kenta-button svg,
+.kenta-icon-button svg,
+.kenta-button svg {
+  width: 16px;
+  height: 16px;
+  fill: var(--kenta-button-text-initial);
+}
+.kenta-admin-page .kenta-button:not(:disabled):focus, .kenta-admin-page .kenta-button:not(:disabled):hover,
+.kenta-icon-button:not(:disabled):focus,
+.kenta-icon-button:not(:disabled):hover,
+.kenta-button:not(:disabled):focus,
+.kenta-button:not(:disabled):hover {
+  background: var(--kenta-button-background-hover);
+  color: var(--kenta-button-text-hover);
+  border: 2px solid var(--kenta-button-border-hover);
+}
+.kenta-admin-page .kenta-button:not(:disabled):focus svg, .kenta-admin-page .kenta-button:not(:disabled):hover svg,
+.kenta-icon-button:not(:disabled):focus svg,
+.kenta-icon-button:not(:disabled):hover svg,
+.kenta-button:not(:disabled):focus svg,
+.kenta-button:not(:disabled):hover svg {
+  fill: var(--kenta-button-text-hover);
+}
+.kenta-admin-page .kenta-button:disabled,
+.kenta-icon-button:disabled,
+.kenta-button:disabled {
+  opacity: 0.75;
+}
+
+.kenta-icon-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border-radius: 9999px;
+}
+
+.kenta-button-solid {
+  --kenta-button-text-initial: #ffffff;
+  --kenta-button-text-hover: #ffffff;
+  --kenta-button-background-initial: #0258c7;
+  --kenta-button-background-hover: #0e80e8;
+  --kenta-button-border-initial: #0258c7;
+  --kenta-button-border-hover: #0e80e8;
+}
+
+.kenta-button-outline {
+  --kenta-button-text-initial: #0258c7;
+  --kenta-button-text-hover: #ffffff;
+  --kenta-button-background-initial: transparent;
+  --kenta-button-background-hover: #0e80e8;
+  --kenta-button-border-initial: #0258c7;
+  --kenta-button-border-hover: #0e80e8;
+}
+
+#kenta-welcome-panel {
+  position: relative;
+  overflow: auto;
+  font-size: 16px;
+  line-height: 1.3;
+  clear: both;
+  margin: 10px 20px 0 2px;
+}
+#kenta-welcome-panel .text-sm {
+  font-size: 12px !important;
+}
+#kenta-welcome-panel .kenta-notice-dismiss {
+  display: inline-block;
+  position: absolute !important;
+  right: 24px;
+  bottom: 24px;
+  line-height: 1;
+  z-index: 999;
+}
+#kenta-welcome-panel .panel-header {
+  position: relative;
+  width: 100%;
+  background-color: #181f28;
+  color: #fff;
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='70' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M-4.8 4.44L4 16.59 16.14 7.8M32 30.54l-13.23 7.07 7.06 13.23M-9 38.04l-3.81 14.5 14.5 3.81M65.22 4.44L74 16.59 86.15 7.8M61 38.04l-3.81 14.5 14.5 3.81'  stroke-linecap='square' stroke-width='1' stroke='hsla(259, 59%, 59%, 0.11)' fill='none'/><path d='M59.71 62.88v3h3M4.84 25.54L2.87 27.8l2.26 1.97m7.65 16.4l-2.21-2.03-2.03 2.21m29.26 7.13l.56 2.95 2.95-.55'  stroke-linecap='square' stroke-width='1' stroke='hsla(340, 82%, 52%, 0.17)' fill='none'/><path d='M58.98 27.57l-2.35-10.74-10.75 2.36M31.98-4.87l2.74 10.65 10.65-2.73M31.98 65.13l2.74 10.66 10.65-2.74'  stroke-linecap='square' stroke-width='1' stroke='hsla(199, 98%, 48%, 0.13)' fill='none'/><path d='M8.42 62.57l6.4 2.82 2.82-6.41m33.13-15.24l-4.86-5.03-5.03 4.86m-14-19.64l4.84-5.06-5.06-4.84'  stroke-linecap='square' stroke-width='1' stroke='hsla(47, 81%, 61%, 0.07)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+  box-sizing: border-box;
+  padding: 12px 48px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#kenta-welcome-panel .panel-header .panel-header-content {
+  text-align: center;
+  box-sizing: border-box;
+}
+#kenta-welcome-panel .panel-header * {
+  color: inherit;
+  position: relative;
+}
+#kenta-welcome-panel .panel-header .kenta-logo {
+  width: 72px;
+  height: 72px;
+  margin-right: 24px;
+}
+#kenta-welcome-panel .panel-header h2 {
+  font-size: 1.75em;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+#kenta-welcome-panel .panel-header p {
+  opacity: 0.7;
+  font-size: 1em;
+  font-weight: 500;
+}
+#kenta-welcome-panel .panel-header .kenta-demo-screenshot {
+  display: none;
+  text-align: center;
+}
+#kenta-welcome-panel .panel-header .kenta-demo-screenshot img {
+  display: block;
+  height: 146px;
+}
+#kenta-welcome-panel .panel-header .kenta-demo-screenshot span {
+  display: none;
+  font-size: 12px;
+}
+#kenta-welcome-panel .panel-body {
+  box-sizing: border-box;
+  width: 100%;
+  clear: both;
+  z-index: 1;
+  padding: 24px 48px;
+  align-self: flex-end;
+  background: #fff;
+  position: relative;
+}
+#kenta-welcome-panel .panel-body .panel-column {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 48px;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-icon {
+  background: #181f28;
+  padding: 12px;
+  line-height: 0;
+  display: inline-block;
+  border-radius: 4px;
+  margin-right: 24px;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-icon svg {
+  fill: #FFFFFF;
+  width: 24px;
+  height: 24px;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content > * {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content > *:last-child {
+  margin-bottom: 0;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content h3 {
+  font-size: 1.25em;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content p {
+  font-size: 0.875em;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content .panel-column-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+#kenta-welcome-panel .panel-body .panel-column .panel-column-content .panel-column-actions .kenta-button {
+  flex-grow: 1;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+@media screen and (max-width: 782px) {
+  #kenta-welcome-panel {
+    clear: both;
+    margin-right: 12px;
+    margin-left: 0;
+  }
+}
+@media screen and (min-width: 1280px) {
+  #kenta-welcome-panel .panel-header {
+    justify-content: space-between;
+  }
+  #kenta-welcome-panel .panel-header .panel-header-content {
+    display: flex;
+    text-align: left;
+  }
+  #kenta-welcome-panel .panel-header .kenta-demo-screenshot {
+    display: inline-block;
+  }
+  #kenta-welcome-panel .panel-body {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+  }
+  #kenta-welcome-panel .panel-body .panel-column {
+    margin-bottom: 0;
+  }
+}
+.kenta-base-notice {
+  display: flex;
+  padding-left: 0;
+  border: 2px solid #d63638;
+}
+.kenta-base-notice h1, .kenta-base-notice h2, .kenta-base-notice h3 {
+  font-weight: bold;
+}
+.kenta-base-notice p {
+  font-size: 16px;
+}
+.kenta-base-notice .kenta-theme-notice-logo {
+  padding: 24px;
+  background: #fbf3f3;
+}
+.kenta-base-notice .kenta-theme-notice-content {
+  padding: 24px;
+}
+.kenta-base-notice .notice-action {
+  font-weight: bold;
+  background: #0258c7;
+  color: #ffffff;
+  border-radius: 4px;
+  display: inline-block;
+  padding: 4px 12px;
+  margin: 0 2px;
+  text-decoration: none;
+  line-height: 1;
+}
+.kenta-base-notice .notice-action i {
+  margin-right: 4px;
+}
+.kenta-base-notice .notice-action:hover {
+  background: #0e80e8;
+}
+
+.kenta-admin-page {
+  color: #181f28;
+  background: #f8fafc;
+  box-shadow: 0 0 10px 0 #dedede;
+  border-radius: 3px;
+}
+.kenta-admin-page .notice {
+  display: none;
+}
+.kenta-admin-page .container {
+  max-width: 100%;
+  margin: 0 auto;
+}
+.kenta-admin-page h1, .kenta-admin-page h2, .kenta-admin-page h3, .kenta-admin-page h4, .kenta-admin-page h5, .kenta-admin-page h6 {
+  color: #334155;
+}
+.kenta-admin-page a {
+  color: #181f28;
+  text-decoration: underline;
+  outline-color: #0258c7;
+}
+.kenta-admin-page a:focus {
+  box-shadow: 0 0 1px 0 #0258c7;
+}
+.kenta-admin-page a:hover {
+  color: #0258c7;
+}
+.kenta-admin-page, .kenta-admin-page div, .kenta-admin-page a {
+  box-sizing: border-box;
+}
+.kenta-admin-page svg {
+  width: 14px;
+  height: 14px;
+  fill: #181f28;
+}
+.kenta-admin-page .page-body {
+  padding: 24px;
+  margin-top: -48px;
+  margin-bottom: 48px;
+  background-color: #ffffff;
+  border-radius: 4px;
+  box-shadow: 0 0 3px 0 #e2e8f0;
+}
+.kenta-admin-page .page-body .page-tabs-container {
+  padding: 0 12px;
+  margin-bottom: 12px;
+}
+.kenta-admin-page .page-body .page-tabs {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  border-bottom: 3px solid #f1f5f9;
+}
+.kenta-admin-page .page-body .page-tabs li {
+  font-size: 18px;
+  font-weight: 500;
+  padding: 0;
+  margin: 0 0 -3px;
+  display: inline-block;
+}
+.kenta-admin-page .page-body .page-tabs a {
+  display: inline-block;
+  text-decoration: none;
+  padding: 12px 16px;
+  border-bottom: 3px solid transparent;
+}
+.kenta-admin-page .page-body .page-tabs a.active {
+  border-color: #0258c7;
+}
+.kenta-admin-page .page-body .page-main {
+  display: flex;
+  flex-wrap: wrap;
+}
+.kenta-admin-page .page-body .page-sidebar,
+.kenta-admin-page .page-body .page-content {
+  flex-shrink: 0;
+  width: 100%;
+}
+.kenta-admin-page .page-body .page-sidebar {
+  padding: 12px;
+}
+.kenta-admin-page .page-widgets {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+.kenta-admin-page .page-widgets .page-widget {
+  padding: 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+.kenta-admin-page .page-widgets .page-widget, .kenta-admin-page .page-widgets .page-widget p {
+  font-size: 15px;
+}
+.kenta-admin-page .page-widgets .page-widget:last-child {
+  border-bottom: none;
+}
+.kenta-admin-page .page-widgets .page-widget .widget-title {
+  margin-top: 0;
+}
+.kenta-admin-page .page-widgets .page-widget .links .link-item {
+  display: flex;
+  align-items: center;
+  padding: 4px 0;
+}
+.kenta-admin-page .page-widgets .page-widget .links .link-item svg {
+  width: 16px;
+  height: 16px;
+  margin-right: 12px;
+}
+.kenta-admin-page .page-header {
+  background-color: #181f28;
+  padding: 48px 24px 96px 24px;
+  background-image: url("data:image/svg+xml,<svg id='patternId' width='100%' height='100%' xmlns='http://www.w3.org/2000/svg'><defs><pattern id='a' patternUnits='userSpaceOnUse' width='70' height='70' patternTransform='scale(2) rotate(0)'><rect x='0' y='0' width='100%' height='100%' fill='hsla(0, 0%, 100%, 0)'/><path d='M-4.8 4.44L4 16.59 16.14 7.8M32 30.54l-13.23 7.07 7.06 13.23M-9 38.04l-3.81 14.5 14.5 3.81M65.22 4.44L74 16.59 86.15 7.8M61 38.04l-3.81 14.5 14.5 3.81'  stroke-linecap='square' stroke-width='1' stroke='hsla(259, 59%, 59%, 0.11)' fill='none'/><path d='M59.71 62.88v3h3M4.84 25.54L2.87 27.8l2.26 1.97m7.65 16.4l-2.21-2.03-2.03 2.21m29.26 7.13l.56 2.95 2.95-.55'  stroke-linecap='square' stroke-width='1' stroke='hsla(340, 82%, 52%, 0.17)' fill='none'/><path d='M58.98 27.57l-2.35-10.74-10.75 2.36M31.98-4.87l2.74 10.65 10.65-2.73M31.98 65.13l2.74 10.66 10.65-2.74'  stroke-linecap='square' stroke-width='1' stroke='hsla(199, 98%, 48%, 0.13)' fill='none'/><path d='M8.42 62.57l6.4 2.82 2.82-6.41m33.13-15.24l-4.86-5.03-5.03 4.86m-14-19.64l4.84-5.06-5.06-4.84'  stroke-linecap='square' stroke-width='1' stroke='hsla(47, 81%, 61%, 0.07)' fill='none'/></pattern></defs><rect width='800%' height='800%' transform='translate(0,0)' fill='url(%23a)'/></svg>");
+}
+.kenta-admin-page .page-header .page-header-content {
+  padding: 0 36px;
+  text-align: center;
+}
+.kenta-admin-page .page-header .page-header-content .nav-tab-wrapper {
+  border-bottom: none !important;
+}
+.kenta-admin-page .page-header .page-header-content a {
+  text-decoration: none;
+}
+.kenta-admin-page .page-header .kenta-logo {
+  width: 72px;
+  height: 72px;
+  margin-bottom: 24px;
+}
+.kenta-admin-page .page-header h1, .kenta-admin-page .page-header p {
+  color: #ffffff;
+}
+.kenta-admin-page .page-header h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 18px;
+}
+.kenta-admin-page .page-header p {
+  opacity: 0.7;
+  font-size: 18px;
+  font-weight: 500;
+}
+.kenta-admin-page .page-footer {
+  background-color: #f8fafc;
+  padding-bottom: 24px;
+}
+.kenta-admin-page .page-footer .container {
+  padding: 24px;
+  margin-bottom: 48px;
+  background: #ffffff;
+  box-shadow: 0 0 3px 0 #e2e8f0;
+  text-align: center;
+}
+.kenta-admin-page .page-footer .container p {
+  max-width: 1024px;
+  margin: 0 auto 24px;
+  font-size: 16px;
+  font-weight: 500;
+}
+.kenta-admin-page .upgrade-tips {
+  padding: 48px 24px;
+  text-align: center;
+  font-weight: 500;
+  max-width: 720px;
+  margin: 0 auto;
+}
+.kenta-admin-page .upgrade-tips h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-top: 0;
+}
+.kenta-admin-page .upgrade-tips p {
+  font-size: 16px;
+  margin-bottom: 1em;
+}
+.kenta-admin-page .upgrade-tips code {
+  background-color: #0258c7;
+  color: #ffffff;
+  border-radius: 3px;
+}
+.kenta-admin-page .upgrade-tips .kenta-button {
+  margin-top: 2em;
+  padding: 12px 48px;
+  text-transform: uppercase;
+}
+@media screen and (min-width: 1024px) {
+  .kenta-admin-page .page-body .page-content {
+    width: 70%;
+  }
+  .kenta-admin-page .page-body .page-sidebar {
+    width: 30%;
+  }
+}
+@media screen and (min-width: 1366px) {
+  .kenta-admin-page .container {
+    max-width: 1280px;
+  }
+}
+
+.kenta-admin-page .customizer-items {
+  display: flex;
+  flex-wrap: wrap;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap {
+  width: 50%;
+  flex-shrink: 0;
+  padding: 12px;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 2px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 15px;
+  height: 100%;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item:hover {
+  border-color: #0258c7;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item:hover svg {
+  fill: #0258c7;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item > * {
+  margin-bottom: 24px;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item > *:last-child {
+  margin-bottom: 0;
+}
+.kenta-admin-page .customizer-items .customizer-item-wrap .customizer-item .customizer-item-icon svg {
+  width: 36px;
+  height: 36px;
+}
+@media screen and (min-width: 1366px) {
+  .kenta-admin-page .customizer-items .customizer-item-wrap {
+    width: 25%;
+  }
+}
+
+.kenta-admin-page .recommend-plugins {
+  padding: 12px;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin {
+  display: flex;
+  align-items: flex-start;
+  padding: 24px;
+  gap: 24px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin img {
+  width: 98px;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin:not(:last-child) {
+  border-bottom: 0;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-title a {
+  text-decoration: none;
+  color: #334155;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-title a:hover {
+  color: #0e80e8;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-actions .kenta-button {
+  margin-right: 12px;
+}
+.kenta-admin-page .recommend-plugins .recommend-plugin .plugin-actions .kenta-button:last-child {
+  margin-right: 0;
+}
+
+.kenta-admin-page .kenta-starter-sites-placeholder {
+  max-width: 720px;
+  margin: 0 auto;
+  text-align: center;
+}
+.kenta-admin-page .kenta-starter-sites-placeholder h3, .kenta-admin-page .kenta-starter-sites-placeholder p {
+  font-size: 24px;
+}
