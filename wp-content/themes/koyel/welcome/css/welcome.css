@@ -1,0 +1,722 @@
+/**
+ *
+ * Welcome Page Styles
+ *
+**/
+
+.clearfix:after,
+.clearfix:before{
+    content: "";
+    display: table;
+}
+
+.clearfix:after{
+    clear: both;
+}
+
+.welcome-section {
+    
+}
+
+.welcome-section.recommended_plugins {
+    margin: -15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.welcome-section .plugin-wrap {
+    width: 33.33%;
+    padding: 15px;
+}
+
+.welcome-section .plugin-wrapin {
+    background: #fff;
+}
+
+.welcome-section .plugin-wrap .content {
+    display: flex;
+    padding: 10px 20px;
+    background: #39395d;
+    align-items: center;
+    justify-content: space-between;
+    color: #fff;
+}
+
+.welcome-wrap *{
+    box-sizing: border-box;
+}
+
+.welcome-wrap{
+    position: relative;
+    margin: 25px 40px 0 20px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #555d66
+}
+
+.welcome-wrap p{
+    font-size: 15px;
+    line-height: 1.5;
+    color: #555d66
+}
+
+.welcome-main-content,
+.welcome-footer-content{
+    background: #FFF;
+    margin-bottom: 50px;
+}
+
+.welcome-footer-content{
+    margin-bottom: 0;
+}
+
+/** Welcome Header **/
+.welcome-header {
+    padding: 50px;
+    border-bottom: 30px solid #f0f9fc;
+    background: #39395d;
+    color: #e6e6fb;
+}
+
+.welcome-intro {
+    width: 65%;
+    float: left;
+    font-size: 18px;
+}
+
+.welcome-intro h2 {
+    font-size: 34px;
+    margin: 0 0 20px;
+    color: #fff;
+}
+
+.free-pro-demos{
+    margin-top: 20px;
+}
+
+.free-pro-demos a.button{
+    padding: 0 20px;
+    line-height: 42px;
+    font-weight: bold;
+    margin-right: 20px;
+    background: #8BC34A;
+    border-color: #8BC34A;
+}
+
+.free-pro-demos a.button .dashicons,
+.free-pro-demos a.button .icofont-eye-alt {
+    height: auto;
+    width: auto;
+    line-height: 42px;
+    margin-right: 8px;
+}
+
+.welcome-promo-banner {
+    width: 20%;
+    background: #fff;
+    border: 1px solid #EEE;
+    padding: 1px;
+    float: right;
+    text-align: center;
+    overflow: hidden;
+    height: 220px;
+}
+
+.welcome-promo-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.welcome-promo-banner p {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.welcome-promo-banner a.upgrade-btn {
+    display: block !important;
+    width: 100%;
+    padding: 10px 20px;
+    font-weight: bold;
+    white-space: normal;
+}
+
+.welcome-promo-offer {
+    display: block !important;
+    margin-bottom: 15px;
+    padding: 15px;
+    border: 2px dashed #dad5d5;
+    background: #f4fcff;
+    text-decoration: none;
+    font-size: 16px;
+    line-height: 1.8em;
+}
+
+/** Nav **/
+.welcome-body {
+    display: flex;
+    background: #f0f9fc;
+    padding-bottom: 50px;
+}
+
+.welcome-nav-wrapper {
+    display: flex;
+    flex-flow: column;
+    margin-bottom: 50px;
+    width: 26%;
+    padding-left: 30px;
+}
+
+.welcome-section-wrapper {
+    width: 74%;
+    padding: 0 30px;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab {
+    padding: 40px 30px;
+    text-decoration: none;
+    background: #FFF;
+    color: #333;
+    text-transform: uppercase;
+    font-weight: bold;
+    box-shadow: none;
+    transition: all 0.4s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    letter-spacing: 0.4px;
+    border-bottom: 2px solid #f0f9fc;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab:hover{
+    color: #0B1236;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab.welcome-nav-tab-active, .welcome-nav-wrapper .welcome-nav-tab:hover {
+    background: #d0e9f1;
+    color: #39395d;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab .label span:last-child {
+    display: block;
+    text-transform: none;
+    color: #848484;
+    font-weight: 400;
+    font-size: 14px;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab i {
+    font-size: 18px;
+    background: #f0f9fc;
+    padding: 12px;
+    color: #39395d;
+    border-radius: 50%;
+    transition: all 0.5s ease;
+}
+
+.welcome-nav-wrapper .welcome-nav-tab.welcome-nav-tab-active > i, .welcome-nav-wrapper .welcome-nav-tab:hover > i {
+    margin-right: -50px;
+    background: #39395d;
+    color: #f0f9fc;
+    transform: rotate(
+360deg
+);
+}
+
+.install-plugin-notice {
+    border: none;
+    padding: 30px;
+}
+
+.demo_import .install-plugin-notice {
+    width: 100%;
+}
+
+/** Getting Started **/
+.welcome-manual-setup, .welcome-demo-import {
+    padding: 0 15px;
+    width: 50%;
+}
+
+.welcome-manual-setupin, .welcome-demo-importin {
+    width: 100%;
+    padding: 30px;
+    border: 1px solid #EEE;
+    box-shadow: 4px 4px 4px rgb(0 0 0 / 4%);
+    margin-bottom: 40px;
+    background: #fff;
+}
+
+.welcome-getting-started {
+    width: 100%;
+    display: flex;
+    margin: 0 -15px;
+}
+
+.welcome-getting-started h3{
+    margin: 0 0 20px;
+    font-size: 18px;
+    border-bottom: 1px solid #eee;
+    padding: 0 0 20px;
+    line-height: 30px;
+}
+
+.welcome-getting-started ol{
+    margin: 0 0 20px 20px;
+}
+
+.welcome-getting-started p{
+    margin: 0 0 20px;
+}
+
+.welcome-demo-import h3{
+    display: flex;
+    justify-content: space-between;
+}
+
+.welcome-theme-thumb{
+    padding-bottom: 50%;
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.welcome-theme-thumb img{
+    position: absolute;
+    left: 0;
+    top: 0;
+    object-fit: cover;
+    height: 100%;
+    width: 100%;
+    object-position: top center;
+}
+
+/** Recommende Plugins **/
+.recommended_plugins h3{
+    margin: 0 0 15px;
+}
+
+.recomended-plugin-wrap{
+    display: flex;
+    flex-wrap: wrap;
+    margin-left: -4%;
+    margin-top: -20px;
+}
+
+.recommended-plugins {
+    background: #fff;
+    border: 1px solid #EEE;
+    width: 45%;
+    float: left;
+    margin-left: 4%;
+}
+
+.plugin-image {
+    height: 230px;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.plugin-image img {
+    width: 40%;
+    height: auto;
+    object-fit: cover;
+    object-position: center;
+}
+
+.plugin-title-wrap{
+    position: relative;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 26px;
+    padding: 10px 15px;
+    border-top: 1px solid #EEE;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.plugin-btn-wrapper{
+    transition: opacity .1s ease-in-out;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    height: 46px;
+    padding: 10px 20px;
+    background: rgba(244,244,244,.7);
+    border-left: 1px solid rgba(0,0,0,.05);
+}
+
+/** Support **/
+.support-wrap{
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -15px;
+}
+
+.support-wrap .support-col {
+    width: 50%;
+    padding: 30px;
+    margin: 0 15px;
+    box-shadow: 4px 4px 4px rgb(0 0 0 / 4%);
+    background: #fff;
+}
+
+.support-wrap .support-col h3{
+    margin-top: 0;
+}
+
+/** Free VS Pro **/
+.free-vs-pro-info-wrap{
+    display: flex;
+    margin: 0 -15px 40px;
+}
+
+.free-vs-pro-info{
+    border: 1px solid #EEE;
+    padding: 20px;
+    flex-grow: 1;
+    flex-basis: 0;
+    margin: 0 15px;
+    text-align: center;
+    box-shadow: 4px 4px 4px rgba(0,0,0,.04);
+}
+
+.free-vs-pro-info h4{
+    font-weight: bold;
+    margin: 0 0 10px;
+}
+
+.free-vs-pro-info p{
+    margin: 0;
+}
+
+table.comparison-table {
+    border:#EEE 1px solid;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.comparison-table th,
+table.comparison-table td{
+    border:1px solid #EEE;
+    padding: 15px;
+    text-align: left;
+}
+
+table.comparison-table th:nth-child(2),
+table.comparison-table td:nth-child(2),
+table.comparison-table th:nth-child(3),
+table.comparison-table td:nth-child(3){
+    text-align: center;
+    width: 140px;
+}
+
+table.comparison-table th {
+    background: #F6F6F6;
+    font-size: 20px;
+    padding: 25px 15px;
+}
+
+table.comparison-table th p:last-child,
+table.comparison-table td p:last-child{
+    margin-bottom: 0;
+}
+
+table.comparison-table td span{
+    font-weight: bold;
+}
+
+table.comparison-table tr:hover{
+    background: #F6F6F6;
+}
+
+table.comparison-table td:nth-child(2) img,
+table.comparison-table td:nth-child(3) img{
+    width: 40px;
+}
+
+a.buy-pro-btn {
+    display: block;
+    background: #b92424;
+    color: #fff;
+    text-decoration: none;
+    padding: 15px 20px;
+    text-align: center;
+    white-space: nowrap;
+}
+
+a.buy-pro-btn:hover{
+    background: #981f1f
+}
+
+/** Upgrade Section **/
+.welcome-upgrade-header{
+    text-align: center;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.welcome-upgrade-header h3{
+    margin: 0 0 10px;
+}
+
+.welcome-upgrade-header p{
+    font-size: 18px;
+}
+
+.welcome-upgrade-box{
+    border: 2px dashed #DDD;
+    padding: 40px 100px;
+    text-align: center;
+    margin-top: 50px;
+    background: #F6F6F6;
+}
+
+.upgrade-box-text h3{
+    font-size: 26px;
+    margin: 0 0 20px;
+}
+
+.upgrade-box-text p{
+    font-size: 16px;
+    margin: 0 0 20px;
+}
+
+.welcome-upgrade-box .upgrade-button{
+    display: inline-block;
+    padding: 14px 30px;
+    background: #0185ba;
+    color: #FFF;
+    text-transform: uppercase;
+    text-decoration: none;
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/** Welcome Notice **/
+.koyel-welcome-notice-wrap{
+    position: relative;
+    padding: 20px;
+}
+
+.koyel-welcome-notice-wrap h2{
+    font-size: 20px;
+    margin: 0 0 5px;
+}
+
+.notice .koyel-welcome-notice-wrap > p{
+    font-size: 16px;
+    margin: 0 0 25px;
+}
+
+.koyel-welcome-info{
+    display: flex;
+}
+
+.koyel-welcome-info .koyel-welcome-thumb{
+    width: 200px;
+    margin-right: 40px;
+}
+
+.koyel-welcome-info > .koyel-welcome-import,
+.koyel-welcome-info > .koyel-welcome-getting-started{
+    margin-right: 40px;
+}
+
+.koyel-welcome-thumb img{
+    width: 100%;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.koyel-welcome-info h3{
+    margin: 0 0 15px;
+}
+
+.notice .koyel-welcome-info p{
+    margin: 0 0 20px;
+}
+
+.koyel-welcome-info .button{
+    margin: 0;
+    padding: 12px 36px;
+    height: auto;
+    line-height: 1.5;
+    white-space: normal;
+    text-transform: uppercase;
+}
+
+.koyel-welcome-info .button-primary.updating-message:before{
+    margin: 0px 5px 0 0;
+    height: auto;
+    font-size: 18px;
+}
+
+.koyel-welcome-notice-wrap .notice-close{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 10px 15px 10px 21px;
+    font-size: 13px;
+    line-height: 1.2;
+    text-decoration: none;
+}
+
+.koyel-welcome-notice-wrap .notice-close:before{
+    position: absolute;
+    top: 8px;
+    left: 0;
+    transition: all .1s ease-in-out;
+    color: #72777c;
+    content: "\f153";
+    display: block;
+    font: normal 16px/20px dashicons;
+    speak: none;
+    height: 20px;
+    text-align: center;
+    width: 20px;
+}
+
+.koyel-welcome-notice-wrap .notice-close:hover,
+.koyel-welcome-notice-wrap .notice-close:hover:before{
+    color: #FF0000;
+}
+
+/** Footer Review **/
+body.appearance_page_koyel-welcome #wpfooter {
+    position: fixed;
+    background: #23282e;
+    color: #FFF;
+    max-width: 1110px;
+    left: 40px;
+    margin: 0 auto;
+}
+
+body.appearance_page_koyel-welcome #wpfooter a{
+    color: #FFF;
+}
+
+@media screen and (max-width:782px){
+
+    .welcome-wrap{
+        margin: 30px 30px 0 20px;
+    }
+
+    .welcome-main-content, 
+    .welcome-footer-content{
+        padding: 20px;
+    }
+
+    .welcome-intro,
+    .welcome-promo-banner{
+        width: auto;
+        float: none;
+    }
+
+    .welcome-intro{
+        margin-bottom: 40px;
+    }
+
+    .welcome-nav-wrapper{
+        display: block;
+        padding-bottom: 15px;
+    }
+
+    .welcome-nav-wrapper .welcome-nav-tab{
+        display: block;
+        margin: 0 0 5px;
+        border-radius: 4px;
+        text-align: center;
+    }
+
+    .recommended-plugins{
+        width: 46%;
+        margin-top: 30px;
+    }
+    
+    .plugin-title-wrap{
+        padding: 16px 15px;
+    }
+    
+    .plugin-btn-wrapper{
+        height: 58px;
+    }
+
+    .welcome-upgrade-box{
+        padding: 40px;
+    }
+    
+    .koyel-welcome-info .koyel-welcome-thumb{
+        display: none;
+    }
+
+}
+
+@media screen and (max-width:580px){
+    .welcome-getting-started{
+        display: block;
+    }
+
+    .welcome-manual-setup, 
+    .welcome-demo-import{
+        width: auto;
+        padding: 20px;
+    }
+
+    .welcome-manual-setup{
+        margin-bottom: 40px;
+    }
+
+    .recomended-plugin-wrap{
+        margin-left: 0;
+    }
+
+    .recommended-plugins{
+        width: auto;
+        float: none;
+        max-width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .support-wrap,
+    .free-vs-pro-info-wrap{
+        display: block;
+    }
+
+    .support-wrap .support-col,
+    .free-vs-pro-info{
+        width: auto;
+        margin-bottom: 40px;
+    }
+
+    .support-wrap .support-col:last-child,
+    .free-vs-pro-info:last-child{
+        margin-bottom: 0;
+    }
+
+    table.comparison-table th, 
+    table.comparison-table td{
+        display: block;
+        width: 100% !important;
+        text-align: left !important;
+    }
+    
+    .koyel-welcome-info{
+        display: block;
+    }
+    
+    .koyel-welcome-info > .koyel-welcome-import, 
+    .koyel-welcome-info > .koyel-welcome-getting-started{
+        width: auto;
+        margin: 0 0 30px;
+    }
+    
+    .koyel-welcome-info > .koyel-welcome-getting-started{
+        margin-bottom: 0;
+    }
+}
