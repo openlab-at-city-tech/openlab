@@ -226,9 +226,9 @@ $group_type_label = openlab_get_group_type_label( 'case=upper' );
 				<?php else : ?>
 					<p class="invite-copy">Add OpenLab members to your <?php echo esc_html( $group_type_label ); ?> in bulk by entering a list of email addresses below. OpenLab members corresponding to this list will be added automatically to your <?php echo esc_html( $group_type_label ); ?> and will receive notification via email.</p>
 
-					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially enrolled in my course or have approved this action.</label></p>
+					<p class="invite-copy import-acknowledge"><label><input type="checkbox" name="import-acknowledge-checkbox" id="import-acknowledge-checkbox" value="1" /> I acknowledge that the following individuals are officially associated with this <?php echo esc_html( $group_type_label ); ?> or have approved this action.</label></p>
 
-					<label class="sr-only" for="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( ucfirst( $group_type ) ); ?></label>
+					<label class="sr-only" for="email-addresses-to-import">Enter email addresses to import members to this <?php echo esc_html( $group_type_label ); ?></label>
 					<textarea name="email-addresses-to-import" id="email-addresses-to-import" class="form-control" placeholder="Add an @mail.citytech.cuny.edu or @citytech.cuny.edu email addresses using a comma-separated list and/or one address per line."></textarea>
 
 					<p><input type="submit" class="btn btn-primary no-deco" value="Import" /></p>
