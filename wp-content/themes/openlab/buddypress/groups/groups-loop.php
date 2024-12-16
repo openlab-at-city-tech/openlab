@@ -324,8 +324,8 @@ if ( openlab_is_my_groups_directory() ) {
 }
 
 if ( $is_open ) {
-	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
-	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_is_open_group_query_callback', 10 );
+	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_is_open_group_query_callback', 10 );
 }
 ?>
 
