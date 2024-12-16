@@ -99,13 +99,8 @@ if ( $is_cloneable ) {
 
 $is_open = openlab_get_current_filter( 'is_open' );
 if ( $is_open ) {
-	$meta_query['blog_public'] = array(
-		'key'      => 'blog_public',
-		'value'    => [ '1', '0' ],
-		'operator' => 'IN',
-	);
-
-	$group_args['status'] = 'public';
+	add_filter( 'bp_groups_get_paged_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
+	add_filter( 'bp_groups_get_total_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
 }
 
 $active_status = openlab_get_current_filter( 'active-status' );
@@ -326,6 +321,11 @@ do_action( 'openlab_before_groups_loop' );
 if ( openlab_is_my_groups_directory() ) {
 	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_active_status', 10 );
 	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_active_status', 10 );
+}
+
+if ( $is_open ) {
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
+	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_is_open_group_query_callback', 10, 3 );
 }
 ?>
 

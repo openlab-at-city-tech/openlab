@@ -419,6 +419,50 @@ function openlab_filter_groups_query_for_active_status( $sql, $sql_clauses, $r )
 }
 
 /**
+ * Implementation of 'is_open' parameter for groups_get_groups().
+ *
+ * @param string $groups_sql  The SQL query.
+ * @param array  $sql_clauses The SQL clauses.
+ * @param array  $r           The query parameters.
+ */
+function openlab_is_open_group_query_callback( $groups_sql, $sql_clauses, $r ) {
+	$is_open = openlab_get_current_filter( 'is_open' );
+	if ( ! $is_open ) {
+		return $groups_sql;
+	}
+
+	$original_where_clause = $sql_clauses['where'];
+
+	$where_clauses = explode( 'AND', $sql_clauses['where'] );
+
+	// Remove the existing g.status clause.
+	$where_clauses = array_filter(
+		$where_clauses,
+		function( $clause ) {
+			return 0 !== strpos( $clause, 'g.status' );
+		}
+	);
+
+	$where_clauses[] = "(g.status = 'public' OR gm_blog_public.meta_value = 1)";
+
+	$groups_sql = str_replace(
+		$original_where_clause,
+		implode( ' AND ', $where_clauses ),
+		$groups_sql
+	);
+
+	$bp = buddypress();
+
+	$groups_sql = str_replace(
+		$sql_clauses['from'],
+		$sql_clauses['from'] . " LEFT JOIN {$bp->groups->table_name_groupmeta} gm_blog_public ON (g.id = gm_blog_public.group_id AND gm_blog_public.meta_key = 'blog_public')",
+		$groups_sql
+	);
+
+	return $groups_sql;
+}
+
+/**
  * Unhooks group join button if it's disabled for the group.
  */
 add_action(
