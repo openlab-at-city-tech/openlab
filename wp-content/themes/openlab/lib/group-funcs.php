@@ -443,7 +443,7 @@ function openlab_is_open_group_query_callback( $groups_sql, $sql_clauses, $r ) {
 		}
 	);
 
-	$where_clauses[] = "(g.status = 'public' OR gm_blog_public.meta_value = 1)";
+	$where_clauses[] = "(g.status = 'public' OR gm_blog_public.meta_value IN (1,0))";
 
 	$groups_sql = str_replace(
 		$original_where_clause,
