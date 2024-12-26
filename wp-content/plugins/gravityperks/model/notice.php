@@ -4,6 +4,7 @@ class GWNotice {
 
 	public $class;
 	public $message;
+	public $wrap;
 
 	function __construct( $message, $args = array() ) {
 

@@ -2,14 +2,14 @@
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""
-"Project-Id-Version: Gravity Perks 2.3.8\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-UQYEIKyG-\n"
+"Project-Id-Version: Gravity Perks 2.3.14\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/cloned-perk-CG4kBhQP3j\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-06-27T15:25:54+00:00\n"
+"POT-Creation-Date: 2024-12-10T02:52:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: gravityperks\n"
@@ -342,6 +342,14 @@ msgstr ""
 msgid "Does this page look strange? Your PHP version is out-of-date. <strong>Please upgrade.</strong>"
 msgstr ""
 
+#: includes/class-gwapi.php:213
+msgid "<strong>Important Note!</strong> GP Google Sheets has been converted to GC Google Sheets"
+msgstr ""
+
+#: includes/class-gwapi.php:217
+msgid "GC Google Sheets has been activated."
+msgstr ""
+
 #: model/perk.php:95
 msgid "The file for this perk does not exist."
 msgstr ""
@@ -350,26 +358,15 @@ msgstr ""
 msgid "There is no class for this perk."
 msgstr ""
 
-#. translators: placeholder is required WordPress plugin name
-#: model/perk.php:342
-msgid "Required WordPress plugin is missing: %s."
-msgstr ""
-
-#. translators: placeholder is required WordPress plugin name, second placeholder is required version
-#: model/perk.php:348
-msgid "Required WordPress plugin is missing: %1$s (%2$s)."
-msgstr ""
-
-#. translators: placeholders are plugin name, current plugin version, plugin name, and required version respectively
-#: model/perk.php:356
-msgid "Current %1$s version (%2$s) does not meet minimum %1$s version requirement (%3$s)."
+#: model/perk.php:136
+msgid "%s is not a perk."
 msgstr ""
 
 #. translators: placeholder is perk name
-#: model/perk.php:418
+#: model/perk.php:371
 msgid "Uh-oh! <strong>%s</strong> needs your attention."
 msgstr ""
 
-#: model/perk.php:799
+#: model/perk.php:748
 msgid "There was an issue deleting this perk. The perk directory was not available."
 msgstr ""

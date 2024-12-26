@@ -412,7 +412,7 @@ class GWPerksPage {
 				$actions['deactivate'] = '<a href="' . $perk->get_link_for( 'deactivate' ) . '" class="deactivate">' . __( 'Deactivate', 'gravityperks' ) . '</a>';
 			}
 
-			if ( $perk->has_method( 'settings', '' ) ) {
+			if ( $perk->method_is_overridden( 'settings' ) ) {
 				$actions['settings'] = sprintf( '<a class="thickbox settings" title="Gravity Perks Settings" href="%s">%s</a>', $perk->get_link_for( 'settings' ), __( 'Settings', 'gravityperks' ) );
 			}
 		} else {

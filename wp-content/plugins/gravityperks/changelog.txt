@@ -1,6 +1,30 @@
 
 # Changelog
 
+## 2.3.14 | December 10, 2024
+
+- Added support for displaying perk icons/banners in updates list.
+
+## 2.3.13 | November 27, 2024
+
+- Updated requirement checking logic to be simpler and to not load translations too early.
+
+## 2.3.12 | September 19, 2024
+
+- Improved support for non-generic perk objects.
+
+## 2.3.11 | September 11, 2024
+
+- Added automated upgrade path from GP Google Sheets to GC Google Sheets.
+
+## 2.3.10 | September 5, 2024
+
+- Fixed issue where GC Google Sheets was getting detected as a perk due to its backwards compatibility class which could then cause errors in Gravity Perks.
+
+## 2.3.9 | August 14, 2024
+
+- Fixed issue where notices in perk global settings were misaligned.
+
 ## 2.3.8 | June 26, 2024
 
 - Fixed issue where the plugin updater API response for perks included the changelog property, which could prevent plugin updates from showing up in some situations.

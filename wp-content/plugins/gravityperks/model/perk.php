@@ -128,8 +128,12 @@ class GP_Perk {
 			$perk = new $perk_class( $perk_file );
 		}
 
-		if ( ! is_a( $perk, 'GP_Perk' ) ) {
+		if ( ! is_a( $perk, 'GP_Perk' ) && isset( $perk->perk ) ) {
 			$perk = $perk->perk;
+		}
+
+		if ( ! is_a( $perk, 'GP_Perk' ) ) {
+			return new WP_Error( 'not_a_perk', sprintf( __( '%s is not a perk.', 'gravityperks' ), $perk_file ) );
 		}
 
 		return $perk;
@@ -308,57 +312,6 @@ class GP_Perk {
 		}
 
 		return $failed_requirements;
-	}
-
-	/**
-	* Adds support for version checking for 'plugins' in GFAddOn::minimum_requirements()
-	*
-	* This is a monkey patch until Gravity Forms implements this into core.
-	*/
-	public function check_gf_requirements_plugins_array() {
-
-		$requirements       = $this->parent->minimum_requirements();
-		$meets_requirements = array();
-
-		foreach ( rgar( $requirements, 'plugins', array() ) as $plugin_path => $plugin_requirement ) {
-
-			if ( ! is_array( $plugin_requirement ) ) {
-				continue;
-			}
-
-			$name    = rgar( $plugin_requirement, 'name' );
-			$version = rgar( $plugin_requirement, 'version' );
-
-			if ( ! $name || ! $version ) {
-				continue;
-			}
-
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
-			if ( ! is_plugin_active( $plugin_path ) ) {
-				$meets_requirements['meets_requirements'] = false;
-
-				if ( ! $version ) {
-					// translators: placeholder is required WordPress plugin name
-					$meets_requirements['errors'][] = sprintf( esc_html__( 'Required WordPress plugin is missing: %s.', 'gravityperks' ), $name );
-
-					continue;
-				}
-
-				// translators: placeholder is required WordPress plugin name, second placeholder is required version
-				$meets_requirements['errors'][] = sprintf( esc_html__( 'Required WordPress plugin is missing: %1$s (%2$s).', 'gravityperks' ), $name, $version );
-				continue;
-			}
-
-			$plugin_data = get_plugin_data( trailingslashit( WP_PLUGIN_DIR ) . $plugin_path );
-
-			if ( version_compare( rgar( $plugin_data, 'Version' ), $version, '<' ) ) {
-				// translators: placeholders are plugin name, current plugin version, plugin name, and required version respectively
-				$meets_requirements['errors'][] = sprintf( esc_html__( 'Current %1$s version (%2$s) does not meet minimum %1$s version requirement (%3$s).', 'gravityperks' ), $name, rgar( $plugin_data, 'Version' ), $version );
-			}
-		}
-
-		return $meets_requirements;
-
 	}
 
 	public function check_requirements() {
@@ -717,11 +670,7 @@ class GP_Perk {
 
 	function get_settings() {
 		ob_start();
-		if ( ! $this->is_old_school() ) {
-			$this->parent->perk_settings( $this );
-		} else {
-			$this->settings();
-		}
+		$this->settings();
 		return ob_get_clean();
 	}
 

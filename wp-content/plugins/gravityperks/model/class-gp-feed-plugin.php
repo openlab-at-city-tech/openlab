@@ -39,12 +39,6 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 
 		parent::pre_init();
 
-		// Since pre_init() is called from the __construct() and checking for add-on-specific requirements will call the
-		// constructor again, we can't check for requirements in pre_init(). Recursion is coming for us all.
-		if ( ! has_filter( 'init', array( $this, 'disable_init_when_requirements_unmet' ) ) ) {
-			add_action( 'init', array( $this, 'disable_init_when_requirements_unmet' ), 1 );
-		}
-
 		/**
 		 * Exporting happens prior to init, hence the need to add these hooks during pre_init.
 		 *
@@ -54,16 +48,6 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 		add_filter( 'gform_export_form', array( $this, 'export_feeds' ) );
 		add_action( 'gform_forms_post_import', array( $this, 'import_feeds' ) );
 
-	}
-
-	/**
-	 * Prevent plugin from initializing if requirements are not met.
-	 */
-	public function disable_init_when_requirements_unmet() {
-		if ( ! $this->check_requirements() ) {
-			$priority = GravityPerks::is_gf_version_gte( '2.5-beta-2' ) ? 15 : 10;
-			remove_action( 'init', array( $this, 'init' ), $priority );
-		}
 	}
 
 	public function init() {
@@ -78,33 +62,6 @@ abstract class GP_Feed_Plugin extends GFFeedAddOn {
 
 		$this->perk->init();
 
-	}
-
-	public function check_requirements() {
-
-		$requirements   = $this->minimum_requirements();
-		$min_gf_version = rgars( $requirements, 'gravityforms/version' );
-
-		if ( $min_gf_version ) {
-			$this->_min_gravityforms_version = $min_gf_version;
-		}
-
-		return $this->perk->check_requirements();
-
-	}
-
-	public function meets_minimum_requirements() {
-
-		$callable = version_compare( PHP_VERSION, '8.0', '>=' ) ? parent::class . '::meets_minimum_requirements' : 'parent::meets_minimum_requirements';
-
-		$min = is_callable( $callable ) ? parent::meets_minimum_requirements() : array();
-
-		return array_merge_recursive( $min, $this->perk->check_gf_requirements_plugins_array() );
-
-	}
-
-	public function minimum_requirements() {
-		return array();
 	}
 
 	public function log( $message, $is_error = false ) {
