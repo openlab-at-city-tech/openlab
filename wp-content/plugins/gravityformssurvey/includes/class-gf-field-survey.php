@@ -33,6 +33,19 @@ class GF_Field_Survey extends GF_Field {
 	}
 
 	/**
+	 * Returns the field's form editor icon.
+	 *
+	 * This could be an icon url or a gform-icon class.
+	 *
+	 * @since 4.1.0
+	 *
+	 * @return string
+	 */
+	public function get_form_editor_field_icon() {
+		return 'gform-icon--survey';
+	}
+
+	/**
 	 * Return the settings which should be available on the field in the form editor.
 	 *
 	 * @return array

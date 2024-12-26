@@ -12,7 +12,7 @@ Theme dependencies:
 - Gravity Forms Theme Foundation for Survey Add-On: theme-foundation.css
 
 Gravity Forms is a Rocketgenius project
-copyright 2008-2023 Rocketgenius Inc.
+copyright 2008-2024 Rocketgenius Inc.
 https://www.rocketgenius.com
 this may not be re-distributed without the
 express written permission of the author.
@@ -61,32 +61,14 @@ AND ANY CHANGES MADE HERE WILL BE OVERWRITTEN.
  *
  * ----------------------------------------------------------------------------- */
 
-/*
-NOTE:
-Within the var() functions below, when two custom properties are specified, the first
-value is the updated Theme Framework CSS API property and the second value is the
-deprecated CSS API property.
-
-Deprecated version (core): 2.8
-End of support version (core): 2.9
-Deprecated version (survey): 3.8.1
-*/
-
 .gform-theme--framework table.gsurvey-likert .gsurvey-likert-choice-label, .gform-theme--framework table.gsurvey-likert .gsurvey-likert-row-label {
-			color: var(--gform-theme-control-label-color-primary);
-			color: var(--gf-ctrl-label-color-primary, var(--gform-theme-control-label-color-primary));
-			font-family: var(--gform-theme-control-label-font-family-primary);
-			font-family: var(--gf-ctrl-label-font-family-primary, var(--gform-theme-control-label-font-family-primary));
-			font-size: var(--gform-theme-control-label-font-size-primary);
-			font-size: var(--gf-ctrl-label-font-size-primary, var(--gform-theme-control-label-font-size-primary));
-			font-style: var(--gform-theme-control-label-font-style-primary);
-			font-style: var(--gf-ctrl-label-font-style-primary, var(--gform-theme-control-label-font-style-primary));
-			font-weight: var(--gform-theme-control-label-font-weight-primary);
-			font-weight: var(--gf-ctrl-label-font-weight-primary, var(--gform-theme-control-label-font-weight-primary));
-			letter-spacing: var(--gform-theme-control-label-letter-spacing-primary);
-			letter-spacing: var(--gf-ctrl-label-letter-spacing-primary, var(--gform-theme-control-label-letter-spacing-primary));
-			line-height: var(--gform-theme-control-label-line-height-primary);
-			line-height: var(--gf-ctrl-label-line-height-primary, var(--gform-theme-control-label-line-height-primary));
+			color: var(--gf-ctrl-label-color-primary);
+			font-family: var(--gf-ctrl-label-font-family-primary);
+			font-size: var(--gf-ctrl-label-font-size-primary);
+			font-style: var(--gf-ctrl-label-font-style-primary);
+			font-weight: var(--gf-ctrl-label-font-weight-primary);
+			letter-spacing: var(--gf-ctrl-label-letter-spacing-primary);
+			line-height: var(--gf-ctrl-label-line-height-primary);
 		}
 
 .gform-theme--framework table.gsurvey-likert tbody tr:nth-child(odd) {
@@ -98,55 +80,39 @@ Deprecated version (survey): 3.8.1
 				}
 
 .gform-theme--framework table.gsurvey-likert td:first-child {
-				border-bottom-left-radius: min(var(--gform-theme-control-border-radius), 15px);
-				border-bottom-left-radius: min(var(--gf-radius, var(--gform-theme-control-border-radius)), 15px);
-				border-top-left-radius: min(var(--gform-theme-control-border-radius), 15px);
-				border-top-left-radius: min(var(--gf-radius, var(--gform-theme-control-border-radius)), 15px);
+				border-bottom-left-radius: min(var(--gf-radius), 15px);
+				border-top-left-radius: min(var(--gf-radius), 15px);
 			}
 
 .gform-theme--framework table.gsurvey-likert td:last-child {
-				border-bottom-right-radius: min(var(--gform-theme-control-border-radius), 15px);
-				border-bottom-right-radius: min(var(--gf-radius, var(--gform-theme-control-border-radius)), 15px);
-				border-top-right-radius: min(var(--gform-theme-control-border-radius), 15px);
-				border-top-right-radius: min(var(--gf-radius, var(--gform-theme-control-border-radius)), 15px);
+				border-bottom-right-radius: min(var(--gf-radius), 15px);
+				border-top-right-radius: min(var(--gf-radius), 15px);
 			}
 
 @media only screen and (max-width: 761px), (min-device-width: 768px) and (max-device-width: 1024px) {
 
 			.gform-theme--framework table.gsurvey-likert tr {
-				border-radius: min(var(--gform-theme-control-border-radius), 15px);
-				border-radius: min(var(--gf-radius, var(--gform-theme-control-border-radius)), 15px);
-				-webkit-padding-after: 4px;
-				        padding-block-end: 4px;
+				border-radius: min(var(--gf-radius), 15px);
+				padding-block-end: 4px;
 				padding-inline: 12px;
 			}
 
 			.gform-theme--framework table.gsurvey-likert td::after {
-				color: var(--gform-theme-control-label-color-primary);
-				color: var(--gf-ctrl-label-color-primary, var(--gform-theme-control-label-color-primary));
-				font-family: var(--gform-theme-control-label-font-family-primary);
-				font-family: var(--gf-ctrl-label-font-family-primary, var(--gform-theme-control-label-font-family-primary));
-				font-size: var(--gform-theme-control-label-font-size-primary);
-				font-size: var(--gf-ctrl-label-font-size-primary, var(--gform-theme-control-label-font-size-primary));
-				font-style: var(--gform-theme-control-label-font-style-primary);
-				font-style: var(--gf-ctrl-label-font-style-primary, var(--gform-theme-control-label-font-style-primary));
-				font-weight: var(--gform-theme-control-label-font-weight-primary);
-				font-weight: var(--gf-ctrl-label-font-weight-primary, var(--gform-theme-control-label-font-weight-primary));
-				letter-spacing: var(--gform-theme-control-label-letter-spacing-primary);
-				letter-spacing: var(--gf-ctrl-letter-spacing-primary, var(--gform-theme-control-label-letter-spacing-primary));
-				line-height: var(--gform-theme-control-label-line-height-primary);
-				line-height: var(--gf-ctrl-label-line-height-primary, var(--gform-theme-control-label-line-height-primary));
-				-webkit-padding-start: 8px;
-				        padding-inline-start: 8px;
+				color: var(--gf-ctrl-label-color-primary);
+				font-family: var(--gf-ctrl-label-font-family-primary);
+				font-size: var(--gf-ctrl-label-font-size-primary);
+				font-style: var(--gf-ctrl-label-font-style-primary);
+				font-weight: var(--gf-ctrl-label-font-weight-primary);
+				letter-spacing: var(--gf-ctrl-letter-spacing-primary);
+				line-height: var(--gf-ctrl-label-line-height-primary);
+				padding-inline-start: 8px;
 				position: relative;
 				top: 2px;
 			}
 
 			.gform-theme--framework table.gsurvey-likert .gsurvey-likert-row-label {
-				-webkit-padding-after: 4px;
-				        padding-block-end: 4px;
-				-webkit-padding-start: 0;
-				        padding-inline-start: 0;
+				padding-block-end: 4px;
+				padding-inline-start: 0;
 			}
 		}
 
@@ -155,8 +121,7 @@ Deprecated version (survey): 3.8.1
 		background-position: 0 center;
 		background-repeat: no-repeat;
 		background-size: 14px 14px;
-		-webkit-padding-start: 27px;
-		        padding-inline-start: 27px;
+		padding-inline-start: 27px;
 	}
 
 html[dir="rtl"] .gform-theme--framework .gsurvey-rank-choice, body.rtl .gform-theme--framework .gsurvey-rank-choice {

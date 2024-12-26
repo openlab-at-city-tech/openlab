@@ -166,19 +166,19 @@ function gsurveyLikertGetFieldPreviewMarkup(field) {
         displayRows = numRows > 5 ? 5 : numRows;
 
     m = "<table class='gsurvey-likert'>";
-    m += '<tr>';
+    m += '<thead>';
     if (field.gsurveyLikertEnableMultipleRows)
         m += "<td class='gsurvey-likert-row-label'></td>";
     for (var i = 0; i < field.choices.length; i++) {
         var id = 'choice_' + field.id + '_' + i;
-        m += "<td class='gsurvey-likert-choice-label'><label for='" + id + "'>" + field.choices[i].text + '</label></td>';
+        m += "<th class='gsurvey-likert-choice-label'><label for='" + id + "'>" + field.choices[i].text + '</label></th>';
     }
-    m += '</tr>';
+    m += '</thead>';
 
     for (var r = 1; r <= displayRows; r++) {
         m += '<tr>';
         if (field.gsurveyLikertEnableMultipleRows)
-            m += '<td>' + field.gsurveyLikertRows[r - 1].text + '</td>';
+            m += '<td class="gsurvey-likert-row-label">' + field.gsurveyLikertRows[r - 1].text + '</td>';
         for (var i = 0; i < field.choices.length; i++) {
             m += "<td class='gsurvey-likert-choice'><input type='radio' disabled='disabled'></td>";
         }
@@ -454,7 +454,7 @@ function gsurveyRankGetFieldPreviewMarkup(field) {
     for (var i = 0; i < field.choices.length; i++) {
         var id = 'choice_' + field.id + '_' + i;
         if (i < 5)
-            m += "<li class='gsurvey-rank-choice'><label for='" + id + "'>" + field.choices[i].text + "</label></li>";
+            m += "<li class='gform-field-label gform-field-label--type-inline gsurvey-rank-choice'>" + field.choices[i].text + "</li>";
     }
     if (field.choices.length > 5)
         m += "<li class='gchoice_total'>" + gf_vars['editToViewAll'].replace('%d', field.choices.length) + '</li>';
@@ -514,18 +514,21 @@ jQuery(document).bind('gform_load_field_choices', function (event, field) {
             field.reversed = true;
         }
 
-        var fieldPreviewMarkup = gsurveyRatingGetFieldPreviewMarkup(field);
-        jQuery('.field_selected .gsurvey-rating').html(fieldPreviewMarkup);
+        if( gsurveyVars.refreshPreview ) {
+            var fieldPreviewMarkup = gsurveyRatingGetFieldPreviewMarkup(field);
+            jQuery('.field_selected .gsurvey-rating').html(fieldPreviewMarkup);
+        }
+
     }
 
 });
 
 function gsurveyRatingGetFieldPreviewMarkup(field) {
-    var m = "<div class='gsurvey-rating'>";
+    var m = "";
     for (var i = 0; i < field.choices.length; i++) {
         var id = 'choice_' + field.id + '_' + i;
         var checked = field.choices[i].isSelected ? 'checked' : '';
-        m += "<input type='radio' " + checked + " id='" + id + "' disabled='disabled'><label for='" + id + "'>" + field.choices[i].text + '</label>';
+        m += "<input name='input_" + field.id + "' type='radio' " + checked + " id='" + id + "' disabled='disabled'/><label for='" + id + "'><span>" + field.choices[i].text + '</span></label>';
     }
 
     return m;

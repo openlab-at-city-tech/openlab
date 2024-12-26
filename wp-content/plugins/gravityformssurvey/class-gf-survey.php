@@ -21,6 +21,7 @@ class GFSurvey extends GFAddOn {
 	protected $_short_title = 'Survey';
 	protected $_enable_rg_autoupgrade = true;
 	protected $_enable_theme_layer = true;
+	protected $_asset_min;
 
 	/**
 	 * Whether this add-on has access to the Gravity Forms settings renderer.
@@ -53,6 +54,10 @@ class GFSurvey extends GFAddOn {
 	public static function get_instance() {
 		if ( self::$_instance == null ) {
 			self::$_instance = new GFSurvey();
+
+			if ( ! isset( self::$_instance->_asset_min ) ) {
+				self::$_instance->_asset_min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+			}
 		}
 
 		return self::$_instance;
@@ -163,14 +168,14 @@ class GFSurvey extends GFAddOn {
 	 * @return array
 	 */
 	public function scripts() {
-
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$base_url = $this->get_base_url();
+		$version  = $this->_version;
 
 		$scripts = array(
 			array(
 				'handle'   => 'gsurvey_form_editor_js',
-				'src'      => $this->get_base_url() . "/js/gsurvey_form_editor{$min}.js",
-				'version'  => $this->_version,
+				'src'      => $base_url . "/js/gsurvey_form_editor{$this->_asset_min}.js",
+				'version'  => $version,
 				'deps'     => array( 'jquery' ),
 				'callback' => array( $this, 'localize_scripts' ),
 				'enqueue'  => array(
@@ -179,14 +184,12 @@ class GFSurvey extends GFAddOn {
 			),
 			array(
 				'handle'  => 'gsurvey_js',
-				'src'     => $this->get_base_url() . "/js/gsurvey{$min}.js",
-				'version' => $this->_version,
+				'src'     => $base_url . "/js/gsurvey{$this->_asset_min}.js",
+				'version' => $version,
 				'deps'    => array( 'jquery', 'jquery-ui-sortable', 'jquery-touch-punch' ),
 				'enqueue' => array(
-					array( $this, 'should_enqueue_gravity_theme' ),
-					array(
-						'field_types' => array( 'survey' )
-					),
+					array( 'admin_page'  => array( 'form_editor', 'block_editor' ) ),
+					array( 'field_types' => array( 'survey' ) ),
 				),
 			),
 		);
@@ -196,8 +199,8 @@ class GFSurvey extends GFAddOn {
 		if ( ! empty( $merge_tags ) ) {
 			$scripts[] = array(
 				'handle'  => 'gform_survey_merge_tags',
-				'src'     => $this->get_base_url() . "/js/gsurvey_merge_tags{$min}.js",
-				'version' => $this->_version,
+				'src'     => $base_url . "/js/gsurvey_merge_tags{$this->_asset_min}.js",
+				'version' => $version,
 				'deps'    => array( 'jquery' ),
 				'enqueue' => array(
 					array( 'admin_page' => array( 'form_settings' ) ),
@@ -217,14 +220,14 @@ class GFSurvey extends GFAddOn {
 	 * @return array
 	 */
 	public function styles() {
-
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG || isset( $_GET['gform_debug'] ) ? '' : '.min';
+		$base_url = $this->get_base_url();
+		$version  = $this->_version;
 
 		$styles = array(
 			array(
 				'handle'  => 'gsurvey_admin',
-				'src'     => $this->get_base_url() . "/assets/css/dist/admin{$min}.css",
-				'version' => $this->_version,
+				'src'     => $base_url . "/assets/css/dist/admin{$this->_asset_min}.css",
+				'version' => $version,
 				'enqueue' => array(
 					array( 'admin_page' => array( 'form_editor' ) ),
 					array(
@@ -233,91 +236,87 @@ class GFSurvey extends GFAddOn {
 					),
 				),
 			),
-			array(
-				'handle'  => 'gsurvey_css',
-				'src'     => $this->get_base_url() . "/assets/css/dist/theme{$min}.css",
-				'version' => $this->_version,
-				'media'   => 'screen',
-				'enqueue' => array(
-					array( $this, 'should_enqueue_gravity_theme' ),
-					array(
-						'field_types' => array( 'survey' )
-					),
-				),
-			),
-			array(
-				'handle'  => 'gsurvey-theme-foundation',
-				'src'     => $this->get_base_url() . "/assets/css/dist/theme-foundation{$min}.css",
-				'version' => $this->_version,
-				'media'   => 'screen',
-				'enqueue' => array(
-					array( $this, 'should_enqueue_theme_framework' ),
-				),
-			),
-			array(
-				'handle'  => 'gsurvey-theme-framework',
-				'src'     => $this->get_base_url() . "/assets/css/dist/theme-framework{$min}.css",
-				'version' => $this->_version,
-				'media'   => 'screen',
-				'enqueue' => array(
-					array( $this, 'should_enqueue_theme_framework' ),
-				),
-			),
 		);
+
+		if ( ! $this->supports_theme_enqueuing() ) {
+			$styles[] = array(
+				'handle'  => 'gsurvey_css',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme{$this->_asset_min}.css",
+				'version' => $this->_version,
+				'enqueue' => array(
+					array( 'admin_page'  => array( 'form_editor', 'block_editor' ) ),
+					array( 'field_types' => array( 'survey' ) ),
+				),
+			);
+			$styles[] = array(
+				'handle'  => 'gsurvey-theme-foundation',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme-foundation{$this->_asset_min}.css",
+				'version' => $this->_version,
+				'enqueue' => array(
+					array( 'admin_page'  => array( 'form_editor', 'block_editor' ) ),
+					array( 'field_types' => array( 'survey' ) ),
+				),
+			);
+			$styles[] = array(
+				'handle'  => 'gsurvey-theme-framework',
+				'src'     => $this->get_base_url() . "/assets/css/dist/theme-framework{$this->_asset_min}.css",
+				'version' => $this->_version,
+				'enqueue' => array(
+					array( 'admin_page'  => array( 'form_editor', 'block_editor' ) ),
+					array( 'field_types' => array( 'survey' ) ),
+				),
+			);
+		}
 
 		return array_merge( parent::styles(), $styles );
 	}
 
-
 	/**
-	 * Returns true if the Gravity Theme css file should be enqueued on this page. Returns false otherwise.
+	 * An array of styles to enqueue.
 	 *
-	 * @since 3.8
+	 * @since 1.6
 	 *
-	 * @param array $form Current form object.
-	 * @param bool  $is_ajax Whether form is being embedded with ajax enabled.
+	 * @param $form
+	 * @param $ajax
+	 * @param $settings
+	 * @param $block_settings
 	 *
-	 * @return bool Returns true if the Gravity Theme css file should be enqueued on this page. Returns false otherwise.
+	 * @return array|\string[][]
 	 */
-	public function should_enqueue_gravity_theme( $form, $is_ajax ) {
-		// Always enqueue in the form editor.
-		if ( GFCommon::is_form_editor() ) {
-			return true;
-		}
-
-		// In 2.7 and above, enqueue in the block editor
-		if ( $this->is_gravityforms_supported( '2.7-RC-1' ) ) {
-			return GFCommon::is_block_editor_page();
-		}
-
-		return false;
+	public function theme_layer_styles( $form, $ajax, $settings, $embed_settings = array() ) {
+		return $this->supports_theme_enqueuing() ? $this->get_theme_layer_styles( $form, 'survey' ) : array();
 	}
 
 	/**
-	 * Returns true if the theme framework css files should be enqueued on this page. Returns false otherwise.
+	 * Get the themes that should be enqueued for the add-on. Uses the base class method and adds theme.css on the results page for forms with a survey field.
 	 *
-	 * @since 3.8
+	 * @since 4.1.0
 	 *
-	 * @param array $form Current form object.
-	 * @param bool  $is_ajax Whether or not form is being embedded with ajax enabled.
+	 * @param array        $form        The current form object to enqueue styles for.
+	 * @param string|array $field_types The field type associated with the add-on. Themes will only be enqueued on the frontend if the form has a field with the specified field type.
 	 *
-	 * @return bool Returns true if the theme framework css files should be enqueued on this page. Returns false otherwise.
+	 * @return array Returns and array of theme slugs to enqueue.
 	 */
-	public function should_enqueue_theme_framework( $form, $is_ajax ) {
-		if ( ! $this->is_gravityforms_supported( '2.7-RC-1' ) ) {
-			return false;
+	public function get_themes_to_enqueue ( $form, $field_types = '' ) {
+		$themes = parent::get_themes_to_enqueue( $form, $field_types );
+
+		// Adding gravity theme on the results page if the form has a survey field.
+		if ( GFForms::get_page() === 'results' ) {
+			$form = GFAPI::get_form( rgget( 'id' ) );
+			if ( GFCommon::get_fields_by_type( $form, $field_types ) ) {
+				$themes[] = 'gravity-theme';
+			}
 		}
+		return $themes;
+	}
 
-		// Always enqueue on block editor page.
-		if ( GFCommon::is_block_editor_page() ) {
-			return true;
-		}
-
-		// Enqueues theme framework when there is a survey field on a non-admin or preview page.
-		$has_survey_field = (bool) GFCommon::get_fields_by_type( $form, 'survey' );
-		$is_gf_admin_page = GFForms::get_page();
-
-		return $has_survey_field && ! $is_gf_admin_page && ! $this->is_preview();
+	/**
+	 * Whether the Base Add-on class supports theme enqueuing logic (only available in Gravity Forms 2.9+)
+	 *
+	 * @since 4.1.0
+	 */
+	public function supports_theme_enqueuing() {
+		return is_callable( array( $this, 'get_theme_layer_styles' ) );
 	}
 
 	/**
@@ -329,9 +328,10 @@ class GFSurvey extends GFAddOn {
 		$protocol = isset( $_SERVER['HTTPS'] ) ? 'https://' : 'http://';
 		// Output admin-ajax.php URL with same protocol as current page
 		$params = array(
-			'ajaxurl'   => admin_url( 'admin-ajax.php', $protocol ),
-			'imagesUrl' => $this->get_base_url() . '/images',
-			'strings'   => array(
+			'ajaxurl'        => admin_url( 'admin-ajax.php', $protocol ),
+			'imagesUrl'      => $this->get_base_url() . '/images',
+			'refreshPreview' => ! $this->is_gravityforms_supported( '2.9.0-beta-1' ),
+			'strings'        => array(
 				'untitledSurveyField' => wp_strip_all_tags( __( 'Untitled Survey Field', 'gravityformssurvey' ) ),
 			),
 		);
@@ -874,6 +874,10 @@ class GFSurvey extends GFAddOn {
 	 * @return bool
 	 */
 	public function is_value_match_rank( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+
+		if ( ! $source_field ) {
+			return $is_match;
+		}
 
 		if ( $source_field->type == 'survey' && $source_field->inputType == 'rank' ) {
 			if ( '' === $target_value ) {

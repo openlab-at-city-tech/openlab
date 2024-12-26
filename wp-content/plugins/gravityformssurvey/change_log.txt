@@ -1,3 +1,16 @@
+### 4.1.1
+- Updated Survey to be released with minified and non-minified assets.
+- Fixed a bug that causes the Rating choices to not be saved when navigating between pages or failing validation.
+- Fixed a bug that can cause PHP errors in the dashboard.
+
+
+### 4.1.0 | 2024-10-02
+- Added the form editor icon for compact view.
+- Removed the ability to clear default choices in the choices flyout.
+- Updated the survey fields to support the Orbital form theme in the form editor.
+- API: Removed the deprecated form Theme Framework global CSS API properties.
+
+
 ### 4.0.0 | 2024-01-11
 - Added support for conditional logic to Survey fields.
 - Fixed a bug that prevents Rank choices from being draggable on iPads.
