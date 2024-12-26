@@ -481,7 +481,7 @@ HTML;
 				'id'    => 'my-account',
 				'title' => sprintf( 'Hi, %s', $bp->loggedin_user->userdata->display_name ),
 				'meta'  => array(
-					'class' => 'user-display-name',
+					'class' => 'user-display-name hidden-xs',
 				),
 			)
 		);
