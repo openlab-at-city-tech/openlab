@@ -33,8 +33,6 @@ class BP_REST_Group_Invites_Endpoint extends WP_REST_Controller {
 	 * @since 5.0.0
 	 */
 	public function __construct() {
-		_deprecated_class( __CLASS__, '15.0.0', 'BP_Groups_Invite_REST_Controller' );
-
 		$this->namespace              = bp_rest_namespace() . '/' . bp_rest_version();
 		$this->rest_base              = buddypress()->groups->id . '/invites';
 		$this->groups_endpoint        = new BP_REST_Groups_Endpoint();
