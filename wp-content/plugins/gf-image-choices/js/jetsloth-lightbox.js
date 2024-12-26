@@ -8,10 +8,7 @@
 {
 	'use strict';
 
-$.fn.jetslothLightbox = function( options )
-{
-
-	var options = $.extend({
+	window.jetslothLightboxDefaults = gform.applyFilters('gfic_lightbox_defaults', {
 		sourceAttr: 'href',
 		overlay: true,
 		spinner: true,
@@ -33,6 +30,7 @@ $.fn.jetslothLightbox = function( options )
 		animationSpeed: 250,
 		preloading: true,
 		enableKeyboard: true,
+		enableSwipe: true,
 		loop: true,
 		rel: false,
 		docClose: true,
@@ -48,9 +46,12 @@ $.fn.jetslothLightbox = function( options )
 		additionalHtml: false,
 		history: true,
 		throttleInterval: 0
-	}, options);
+	});
 
-	//console.log('lightbox options', options);
+$.fn.jetslothLightbox = function( options )
+{
+
+	var options = $.extend(window.jetslothLightboxDefaults, options);
 
 	// global variables
 	var touchDevice	= ( 'ontouchstart' in window ),
@@ -359,54 +360,59 @@ $.fn.jetslothLightbox = function( options )
 				mousedown = false,
 				imageLeft = 0;
 
-			image
-			.on( 'touchstart.'+prefix+' mousedown.'+prefix, function(e)
-			{
-				if(mousedown) return true;
-				if( canTransisions ) imageLeft = parseInt( image.css( 'left' ) );
-				mousedown = true;
-				swipeDiff = 0;
-				swipeYDiff = 0;
-				swipeStart = e.originalEvent.pageX || e.originalEvent.touches[ 0 ].pageX;
-				swipeYStart = e.originalEvent.pageY || e.originalEvent.touches[ 0 ].pageY;
-				return false;
-			})
-			.on( 'touchmove.'+prefix+' mousemove.'+prefix+' pointermove MSPointerMove', function(e)
-			{
-				if(!mousedown) return true;
-				e.preventDefault();
-				swipeEnd = e.originalEvent.pageX || e.originalEvent.touches[ 0 ].pageX;
-				swipeYEnd = e.originalEvent.pageY || e.originalEvent.touches[ 0 ].pageY;
-				swipeDiff = swipeStart - swipeEnd;
-				swipeYDiff = swipeYStart - swipeYEnd;
-				if( options.animationSlide ) {
-					if( canTransisions ) slide( 0, -swipeDiff + 'px' );
-					else image.css( 'left', imageLeft - swipeDiff + 'px' );
-				}
-			})
-			.on( 'touchend.'+prefix+' mouseup.'+prefix+' touchcancel.'+prefix+' mouseleave.'+prefix+' pointerup pointercancel MSPointerUp MSPointerCancel',function(e)
-			{
-				if(mousedown){
-					mousedown = false;
-					var possibleDir = true;
-					if(!options.loop) {
-						if(index === 0 && swipeDiff < 0){ possibleDir = false; }
-						if(index >= objects.length -1 && swipeDiff > 0) { possibleDir = false; }
-					}
-					if( Math.abs( swipeDiff ) > options.swipeTolerance && possibleDir ) {
-						loadImage( swipeDiff > 0 ? 1 : -1 );
-					}
-					else if( options.animationSlide )
-					{
-						if( canTransisions ) slide( options.animationSpeed / 1000, 0 + 'px' );
-						else image.animate({ 'left': imageLeft + 'px' }, options.animationSpeed / 2 );
-					}
+			if ( options.enableSwipe ) {
 
-					if( options.swipeClose && Math.abs(swipeYDiff) > 50 && Math.abs( swipeDiff ) < options.swipeTolerance) {
-						close();
-					}
-				}
-			});
+				image
+					.on( 'touchstart.'+prefix+' mousedown.'+prefix, function(e)
+					{
+						if(mousedown) return true;
+						if( canTransisions ) imageLeft = parseInt( image.css( 'left' ) );
+						mousedown = true;
+						swipeDiff = 0;
+						swipeYDiff = 0;
+						swipeStart = e.originalEvent.pageX || e.originalEvent.touches[ 0 ].pageX;
+						swipeYStart = e.originalEvent.pageY || e.originalEvent.touches[ 0 ].pageY;
+						return false;
+					})
+					.on( 'touchmove.'+prefix+' mousemove.'+prefix+' pointermove MSPointerMove', function(e)
+					{
+						if(!mousedown) return true;
+						e.preventDefault();
+						swipeEnd = e.originalEvent.pageX || e.originalEvent.touches[ 0 ].pageX;
+						swipeYEnd = e.originalEvent.pageY || e.originalEvent.touches[ 0 ].pageY;
+						swipeDiff = swipeStart - swipeEnd;
+						swipeYDiff = swipeYStart - swipeYEnd;
+						if( options.animationSlide ) {
+							if( canTransisions ) slide( 0, -swipeDiff + 'px' );
+							else image.css( 'left', imageLeft - swipeDiff + 'px' );
+						}
+					})
+					.on( 'touchend.'+prefix+' mouseup.'+prefix+' touchcancel.'+prefix+' mouseleave.'+prefix+' pointerup pointercancel MSPointerUp MSPointerCancel',function(e)
+					{
+						if(mousedown){
+							mousedown = false;
+							var possibleDir = true;
+							if(!options.loop) {
+								if(index === 0 && swipeDiff < 0){ possibleDir = false; }
+								if(index >= objects.length -1 && swipeDiff > 0) { possibleDir = false; }
+							}
+							if( Math.abs( swipeDiff ) > options.swipeTolerance && possibleDir ) {
+								loadImage( swipeDiff > 0 ? 1 : -1 );
+							}
+							else if( options.animationSlide )
+							{
+								if( canTransisions ) slide( options.animationSpeed / 1000, 0 + 'px' );
+								else image.animate({ 'left': imageLeft + 'px' }, options.animationSpeed / 2 );
+							}
+
+							if( options.swipeClose && Math.abs(swipeYDiff) > 50 && Math.abs( swipeDiff ) < options.swipeTolerance) {
+								close();
+							}
+						}
+					});
+
+			}
+
 		},
 		removeEvents = function(){
 			nav.off('click', 'button');
