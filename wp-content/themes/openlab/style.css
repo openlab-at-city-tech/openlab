@@ -8289,6 +8289,7 @@ a:hover .cyan-circle {
 body .field-contains-last-name-error.error {
   background: #63dfd2 !important;
   font-weight: 700 !important;
+  padding: 15px !important;
 }
 body .no-gutter.no-gutter-right {
   padding-right: 0;
