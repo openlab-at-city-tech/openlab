@@ -22,7 +22,7 @@ abstract class Anthologizer {
 
 	public $output;
 
-	function __construct($api) {
+	function __construct( $api ) {
 		$this->api = $api;
 		$this->init();
 		$this->appendFront();
@@ -32,7 +32,6 @@ abstract class Anthologizer {
 		$this->appendBack();
 
 		$this->finish();
-
 	}
 
 	/*
@@ -75,18 +74,17 @@ abstract class Anthologizer {
 	 *
 	 */
 
-	abstract function appendPart($section, $partNumber);
+	abstract function appendPart( $section, $partNumber );
 
-	abstract function appendItem($section, $partNumber, $itemNumber);
+	abstract function appendItem( $section, $partNumber, $itemNumber );
 
 	abstract function finish();
 
 	abstract function output();
 
-	protected function writeItemContent($section, $partNo, $itemNo) {
-		//override this method to do additional processing
-		$html = $this->api->getSectionPartItemContent($section, $partNo, $itemNo);
+	protected function writeItemContent( $section, $partNo, $itemNo ) {
+		// override this method to do additional processing
+		$html = $this->api->getSectionPartItemContent( $section, $partNo, $itemNo );
 		return $html;
 	}
-
 }

@@ -1,8 +1,8 @@
 ******************************
-Minimal set of PEAR core files
+Base Exception class from PEAR core 
 ******************************
 
-This repository provides a set of files from ``pear-core``
+This repository provides just the base PEAR_Exceptoin class from ``pear-core``
 that are often used in PEAR packages.
 
 It follows the `pear-core`__ repository and gets updated whenever a new
@@ -15,7 +15,4 @@ __ https://github.com/pear/pear-core
 ==============
 Included files
 ==============
-- ``OS/Guess.php``
-- ``PEAR.php``
-- ``PEAR/ErrorStack.php``
-- ``System.php``
+- ``PEAR/Exception.php``

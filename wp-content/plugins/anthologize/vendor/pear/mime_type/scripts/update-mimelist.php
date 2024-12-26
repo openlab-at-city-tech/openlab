@@ -116,7 +116,7 @@ function loadMapFromUrl($url)
         exit(2);
     }
     foreach ($lines as $line) {
-        if ($line[ 0 ] == '#') {
+        if ($line{0} == '#') {
             continue;
         }
         $line = preg_replace("#\\s+#", ' ', trim($line));

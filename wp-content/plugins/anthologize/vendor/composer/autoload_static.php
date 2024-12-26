@@ -6,6 +6,10 @@ namespace Composer\Autoload;
 
 class ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907
 {
+    public static $files = array (
+        '3a54891577c1fcd59708f668caaf7766' => __DIR__ . '/..' . '/php5friends/polyfill-create_function/create_function.php',
+    );
+
     public static $prefixesPsr0 = array (
         'M' => 
         array (
@@ -30,16 +34,17 @@ class ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907
         ),
     );
 
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/..' . '/pear/pear-core-minimal/src',
-    );
-
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Datamatrix' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/datamatrix.php',
+        'OS_Guess' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/OS/Guess.php',
         'PDF417' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/pdf417.php',
+        'PEAR' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_Error' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR.php',
+        'PEAR_ErrorStack' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/PEAR/ErrorStack.php',
         'PEAR_Exception' => __DIR__ . '/..' . '/pear/pear_exception/PEAR/Exception.php',
         'QRcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/include/barcodes/qrcode.php',
+        'System' => __DIR__ . '/..' . '/pear/pear-core-minimal/src/System.php',
         'TCPDF' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf.php',
         'TCPDF2DBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_2d.php',
         'TCPDFBarcode' => __DIR__ . '/..' . '/tecnickcom/tcpdf/tcpdf_barcodes_1d.php',
@@ -57,7 +62,6 @@ class ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907
     {
         return \Closure::bind(function () use ($loader) {
             $loader->prefixesPsr0 = ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907::$prefixesPsr0;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInit501aa75ebf158ec1f2e2eb0383b6f907::$classMap;
 
         }, null, ClassLoader::class);

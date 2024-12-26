@@ -1,0 +1,11 @@
+{
+    "name": "php5friends/polyfill-create_function",
+    "description": "Polyfill of create_function()",
+    "license": "FSFAP",
+    "autoload": {
+        "files": ["create_function.php"]
+    },
+    "require": {
+        "php": ">=5.3.0"
+    }
+}
