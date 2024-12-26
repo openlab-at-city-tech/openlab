@@ -1000,7 +1000,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		if ( is_array( $inputs ) ) {
 			$value = array();
 			foreach ( $inputs as $input ) {
-				$value[ strval( $input['id'] ) ] = $this->get_input_value_submission( 'input_' . str_replace( '.', '_', strval( $input['id'] ) ), RGForms::get( 'name', $input ), $field_values, $get_from_post_global_var );
+				$value[ strval( $input['id'] ) ] = $this->get_input_value_submission( 'input_' . str_replace( '.', '_', strval( $input['id'] ) ), rgar( $input, 'name' ), $field_values, $get_from_post_global_var );
 			}
 		} else {
 			$value = $this->get_input_value_submission( 'input_' . $this->id, $this->inputName, $field_values, $get_from_post_global_var );
@@ -2249,7 +2249,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 		}
 
 		foreach ( $this->choices as $choice ) {
-			if ( $choice['text'] === $value ) {
+			if ( ! rgblank( $choice['text'] ) && $choice['text'] === $value ) {
 				return $choice['value'];
 			}
 		}
@@ -2655,7 +2655,7 @@ class GF_Field extends stdClass implements ArrayAccess {
 	 */
 	public function get_allowable_tags( $form_id = null ) {
 		if ( empty( $form_id ) ) {
-			$form_id = $this->form_id;
+			$form_id = $this->formId;
 		}
 		$form_id    = absint( $form_id );
 		$allow_html = $this->allow_html();
