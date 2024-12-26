@@ -1,3 +1,8 @@
+### 4.2.1
+- Updated Quiz to be released with minified and non-minified assets.
+- Added support for displaying instant feedback on more than one form on the same page.
+
+
 ### 4.2.0 | 2024-07-29
 - Updated the feedback icons to be visible on all background colors.
 - Fixed PHP deprecation notices when using PHP 8+.
