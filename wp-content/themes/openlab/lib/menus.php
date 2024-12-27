@@ -568,11 +568,11 @@ function openlab_group_forum_submenu() {
     $base_url = bp_get_group_permalink( groups_get_current_group() ) . 'forum';
 
     $menu_list = [
-        $base_url                   => 'All Topics'
+        $base_url => 'All Topics'
     ];
 
     $current_item = $base_url;
-    if( bp_action_variable() == 'topic' ) {
+    if ( bp_is_action_variable( 'topic', 0 ) ) {
         $menu_list += [
             $base_url . '#new-post' => 'New Topic'
         ];
@@ -580,19 +580,21 @@ function openlab_group_forum_submenu() {
         $bbp = bbpress();
 
         // Forum data
-        $offset = 0;
-        $forum_ids = bbp_get_group_forum_ids(bp_get_current_group_id());
-        $forum_id = array_shift($forum_ids);
+        $forum_ids = bbp_get_group_forum_ids( bp_get_current_group_id() );
+        $forum_id  = array_shift( $forum_ids );
+
         $bbp->current_forum_id = $forum_id;
 
-        bbp_set_query_name('bbp_single_forum');
+        bbp_set_query_name( 'bbp_single_forum' );
 
         // Get the topic
-        bbp_has_topics(array(
-            'name' => bp_action_variable($offset + 1),
-            'posts_per_page' => 1,
-            'show_stickies' => false
-        ));
+        bbp_has_topics(
+			[
+				'name'           => bp_action_variable( 1 ),
+				'posts_per_page' => 1,
+				'show_stickies'  => false
+			]
+		);
 
         if( bbp_topics() ) {
             bbp_the_topic();
@@ -609,7 +611,7 @@ function openlab_group_forum_submenu() {
         ];
     }
 
-    if( isset( $_GET['bbp_search'] ) ) {
+    if ( isset( $_GET['bbp_search'] ) ) {
         $menu_list += [
             $base_url . '?bbp_search=' . esc_attr( sanitize_text_field( wp_unslash( $_GET['bbp_search'] ) ) ) => 'Search Results'
         ];
