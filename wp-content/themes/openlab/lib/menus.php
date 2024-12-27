@@ -571,12 +571,14 @@ function openlab_group_forum_submenu() {
         $base_url => 'All Topics'
     ];
 
+	if ( is_user_logged_in() ) {
+		$menu_list += [
+			$base_url . '#new-post' => 'New Topic'
+		];
+	}
+
     $current_item = $base_url;
     if ( bp_is_action_variable( 'topic', 0 ) ) {
-        $menu_list += [
-            $base_url . '#new-post' => 'New Topic'
-        ];
-
         $bbp = bbpress();
 
         // Forum data
@@ -605,10 +607,6 @@ function openlab_group_forum_submenu() {
 
             $current_item = bbp_get_topic_permalink();
         }
-    } else {
-        $menu_list += [
-            '#new-post' => 'New Topic'
-        ];
     }
 
     if ( isset( $_GET['bbp_search'] ) ) {
