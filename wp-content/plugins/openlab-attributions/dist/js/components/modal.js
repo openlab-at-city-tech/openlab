@@ -78,15 +78,21 @@ class AttributionModal extends Component {
 				input.focus();
 			}
 
-			// Prevent Block Editor's default up/down arrow key behavior.
+			// Prevent Block Editor's default up/down arrow as well as Enter key behavior.
 			const focusableElements = this.getFocusableElements();
 			focusableElements.forEach( ( element ) => {
 				element.addEventListener( 'keydown', ( event ) => {
-					if ( 40 !== event.keyCode && 38 !== event.keyCode ) {
-						return;
-					}
+					switch ( event.keyCode ) {
+						case 13:
+							event.preventDefault();
+							event.stopPropagation();
+						break;
 
-					event.preventDefault();
+						case 40:
+						case 38:
+							event.preventDefault();
+						break;
+					}
 				} )
 			} )
 		}, 100 )
