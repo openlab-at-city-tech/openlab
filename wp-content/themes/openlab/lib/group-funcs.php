@@ -1986,6 +1986,26 @@ function openlab_group_request_user_link() {
 }
 
 /**
+ * Ignore 'can_be_granted' feature in OpenLab Badges.
+ */
+add_action(
+	'pre_get_terms',
+	function( $term_query ) {
+		$taxonomy = (array) $term_query->query_vars['taxonomy'] ?? [];
+		if ( ! in_array( 'openlab_badge', $taxonomy, true ) ) {
+			return;
+		}
+
+		// Don't allow the 'can_be_granted' meta query clause.
+		$meta_query = (array) $term_query->query_vars['meta_query'] ?? [];
+		if ( isset( $meta_query['grantable'] ) ) {
+			unset( $meta_query['grantable'] );
+			$term_query->query_vars['meta_query'] = $meta_query;
+		}
+	}
+);
+
+/**
  * Adds a Badges link under group avatars on single group headers.
  */
 function openlab_add_badge_button_to_profile() {
