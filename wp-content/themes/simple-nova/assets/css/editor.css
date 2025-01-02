@@ -1,8 +1,0 @@
-/* Editor style */
-body.block-editor-iframe__body.editor-styles-wrapper.post-type-page,
-body.block-editor-iframe__body.editor-styles-wrapper.post-type-post {
-    padding: 0px 30px;
-}
-.editor-styles-wrapper {
-    padding: 0px 60px !important;
-}
