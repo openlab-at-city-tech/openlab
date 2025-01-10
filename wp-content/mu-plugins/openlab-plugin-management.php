@@ -78,7 +78,7 @@ function openlab_hide_plugins( $plugins ) {
 		'pagemash/pagemash.php',
 		'page-tagger/page-tagger.php',
 		'papercite/papercite-wp-plugin.php',
-		'password-policy-manager/miniorange-password-policy-settings.php', // #3483
+		'password-policy-manager/miniorange-password-policy-setting.php', // #3483
 		'pdf-embedder/pdf_embedder.php',
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
