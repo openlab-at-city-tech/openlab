@@ -1,4 +1,4 @@
-jQuery(function($) {
+jQuery(function ($) {
     'use strict';
     let tabs = {
             $settings: $('#settings')
@@ -13,51 +13,36 @@ jQuery(function($) {
 
     var $phone_input = $('#admin_phone');
     if (BooklyL10n.intlTelInput.enabled) {
-        $phone_input.intlTelInput({
+        window.booklyIntlTelInput($phone_input.get(0), {
             preferredCountries: [BooklyL10n.intlTelInput.country],
             initialCountry: BooklyL10n.intlTelInput.country,
-            geoIpLookup: function(callback) {
-                $.get('https://ipinfo.io', function() {}, 'jsonp').always(function(resp) {
+            geoIpLookup: function (callback) {
+                $.get('https://ipinfo.io', function () {}, 'jsonp').always(function (resp) {
                     var countryCode = (resp && resp.country) ? resp.country : '';
                     callback(countryCode);
                 });
-            },
-            utilsScript: BooklyL10n.intlTelInput.utils
+            }
         });
     }
 
     $('[data-action=save-administrator-phone]')
-        .on('click', function(e) {
+        .on('click', function (e) {
             e.preventDefault();
             $.ajax({
                 url: ajaxurl,
                 method: 'POST',
                 data: {
                     action: 'bookly_save_administrator_phone',
-                    bookly_sms_administrator_phone: getPhoneNumber(),
+                    bookly_sms_administrator_phone: BooklyL10n.intlTelInput.enabled ? booklyGetPhoneNumber($phone_input.get(0)) : $phone_input.val(),
                     csrf_token: BooklyL10nGlobal.csrf_token
                 },
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         booklyAlert({success: [BooklyL10n.settingsSaved]});
                     }
                 }
             });
         });
-
-    function getPhoneNumber() {
-        var phone_number;
-        try {
-            phone_number = BooklyL10n.intlTelInput.enabled ? $phone_input.intlTelInput('getNumber') : $phone_input.val();
-            if (phone_number == '') {
-                phone_number = $phone_input.val();
-            }
-        } catch (error) {  // In case when intlTelInput can't return phone number.
-            phone_number = $phone_input.val();
-        }
-
-        return phone_number;
-    }
 
     /**
      * Date range pickers options.
@@ -74,7 +59,7 @@ jQuery(function($) {
     /**
      * WhatsApp Details Tab.
      */
-    $('[href="#details"]').one('click', function() {
+    $('[href="#details"]').one('click', function () {
         var $date_range = $('#whatsapp_date_range');
         $date_range.daterangepicker(
             {
@@ -85,7 +70,7 @@ jQuery(function($) {
                 showDropdowns: true,
                 linkedCalendars: false,
             },
-            function(start, end) {
+            function (start, end) {
                 var format = 'YYYY-MM-DD';
                 $date_range
                     .data('date', start.format(format) + ' - ' + end.format(format))
@@ -99,13 +84,13 @@ jQuery(function($) {
          */
         let columns = [];
 
-        $.each(BooklyL10n.datatables.whatsapp_details.settings.columns, function(column, show) {
+        $.each(BooklyL10n.datatables.whatsapp_details.settings.columns, function (column, show) {
             if (show) {
                 switch (column) {
                     case 'status':
                         columns.push({
                             data: column,
-                            render: function(data, type, row, meta) {
+                            render: function (data, type, row, meta) {
                                 return BooklyL10n.status.hasOwnProperty(data)
                                     ? BooklyL10n.status[data]
                                     : (data.charAt(0).toUpperCase() + data.slice(1)).replaceAll('-', ' ');
@@ -129,7 +114,7 @@ jQuery(function($) {
                 responsive: true,
                 ajax: {
                     url: ajaxurl,
-                    data: function(d) {
+                    data: function (d) {
                         return {
                             action: 'bookly_get_messages_list',
                             csrf_token: BooklyL10nGlobal.csrf_token,
@@ -142,20 +127,26 @@ jQuery(function($) {
                 language: {
                     zeroRecords: BooklyL10n.zeroRecords,
                     processing: BooklyL10n.processing
+                },
+                layout: {
+                    bottomStart: 'paging',
+                    bottomEnd: null
                 }
             });
+
             function onChangeFilter() {
                 dt.ajax.reload();
             }
+
             $date_range.on('apply.daterangepicker', onChangeFilter);
-            $(this).on('click', function() {
+            $(this).on('click', function () {
                 dt.ajax.reload(null, false);
             });
         }
     });
 
     $('#bookly-save', tabs.$settings)
-        .on('click', function(e) {
+        .on('click', function (e) {
             let ladda = Ladda.create(this);
             ladda.start();
 
@@ -168,7 +159,7 @@ jQuery(function($) {
                     business_account_id: $('[name=business_account_id]', tabs.$settings).val(),
                 }),
                 dataType: 'json',
-                success: function(response) {
+                success: function (response) {
                     if (response.success) {
                         booklyAlert({success: [BooklyL10n.settingsSaved]});
                     } else {

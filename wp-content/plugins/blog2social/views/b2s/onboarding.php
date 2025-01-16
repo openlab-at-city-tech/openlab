@@ -71,7 +71,7 @@ $onboarding->startOnboarding();
                     <div class="text-center b2s-onboarding-title"><?php esc_html_e("Try Blog2Social Premium with more awesome features for scheduling and sharing 30-days for free.", "blog2social") ?></div>
                     <div class="row text-center b2s-onboarding-features">
                         <div class="col-sm-2 b2s-onboarding-features-box shadow-sm rounded">
-                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/best-time-scheduling.png', B2S_PLUGIN_FILE)) ?>">
+                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/calendar-icon.png', B2S_PLUGIN_FILE)) ?>">
                             <br>
                             <?php esc_html_e("Best Time Manager", "blog2social") ?>
                             <div class="b2s-onboarding-features-text">
@@ -80,7 +80,7 @@ $onboarding->startOnboarding();
                             </div>
                         </div>
                         <div class="col-sm-2 b2s-onboarding-features-box shadow-sm rounded">
-                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/automation.png', B2S_PLUGIN_FILE)) ?>">
+                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/automatic-icon.png', B2S_PLUGIN_FILE)) ?>">
                             <br>
                             <?php esc_html_e("Auto Posting", "blog2social") ?>
                             <div class="b2s-onboarding-features-text">
@@ -89,7 +89,7 @@ $onboarding->startOnboarding();
                             </div>
                         </div>
                         <div class="col-sm-2 b2s-onboarding-features-box shadow-sm rounded">
-                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/post-templates.png', B2S_PLUGIN_FILE)) ?>">
+                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/lamp-icon.png', B2S_PLUGIN_FILE)) ?>">
                             <br>
                             <?php esc_html_e("Post Templates", "blog2social") ?>
                             <div class="b2s-onboarding-features-text">
@@ -98,7 +98,7 @@ $onboarding->startOnboarding();
                             </div>
                         </div>
                         <div class="col-sm-2 b2s-onboarding-features-box shadow-sm rounded">
-                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/video-function.png', B2S_PLUGIN_FILE)) ?>">
+                            <img class="b2s-onboarding-features-img" src="<?php echo esc_url(plugins_url('/assets/images/features/megafon-icon.png', B2S_PLUGIN_FILE)) ?>">
                             <br>
                             <?php esc_html_e("Share Video Files", "blog2social") ?>
                             <div class="b2s-onboarding-features-text">

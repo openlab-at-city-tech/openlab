@@ -108,6 +108,7 @@ abstract class Config
                 'min_capacity' => (int) $row['min_capacity'],
                 'max_capacity' => (int) $row['max_capacity'],
                 'has_extras' => (int) Proxy\ServiceExtras::findByServiceId( $row['id'] ),
+                'service_info' => $row['info'] === '' ? '' : Utils\Common::getTranslatedString( 'service_' . $row['id'] . '_info', $row['info'] ),
                 'info' => self::getServiceInfoCodes( $row ),
                 'type' => $row['type'],
                 'pos' => (int) $row['position'],
@@ -194,6 +195,7 @@ abstract class Config
                     'img' => $staff_image_url,
                     'services' => array(),
                     'pos' => (int) $row['position'],
+                    'staff_info' => $staff_info,
                     'info' => nl2br( Codes::replace( Utils\Common::getTranslatedOption( 'bookly_l10n_step_service_staff_info' ), $staff_codes, false ) ),
                 );
             }
@@ -448,6 +450,14 @@ abstract class Config
     public static function twoCheckoutActive()
     {
         return self::__callStatic( '2checkoutActive', array() );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getTimeSlotLengthOptions()
+    {
+        return array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 );
     }
 
     /**

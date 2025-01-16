@@ -2,9 +2,7 @@
 /**
  * Header Builder Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -234,12 +232,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'priority'    => 25,
 			'default'     => astra_get_option( 'header-desktop-items' ),
 			'choices'     => Astra_Builder_Helper::$header_desktop_items,
-			'transport'   => 'postMessage',
-			'partial'     => array(
-				'selector'            => '#masthead',
-				'container_inclusive' => true,
-				'render_callback'     => array( Astra_Builder_Header::get_instance(), 'header_builder_markup' ),
-			),
+			'transport'   => 'refresh',
 			'input_attrs' => array(
 				'group'  => ASTRA_THEME_SETTINGS . '[header-desktop-items]',
 				'rows'   => array( 'popup', 'above', 'primary', 'below' ),
@@ -283,6 +276,216 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			),
 		),
 
+		array(
+			'name'      => ASTRA_THEME_SETTINGS . '[header-preset-style]',
+			'default'   => astra_get_option( 'header-preset-style' ),
+			'type'      => 'control',
+			'control'   => 'ast-header-presets',
+			'section'   => 'section-header-builder-layout',
+			'priority'  => 10,
+			'title'     => __( 'Header Presets', 'astra' ),
+			'options'   => array(
+				'preset_1' => array(
+					'src'     => 'header-preset-1',
+					'options' => array(
+						'header-desktop-items' => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu' ) ),
+							'above'   => array(
+								'above_left'         => array(),
+								'above_left_center'  => array(),
+								'above_center'       => array(),
+								'above_right_center' => array(),
+								'above_right'        => array(),
+							),
+							'primary' => array(
+								'primary_left'         => array( 'logo' ),
+								'primary_left_center'  => array(),
+								'primary_center'       => array(),
+								'primary_right_center' => array(),
+								'primary_right'        => array( 'menu-1', 'social-icons-1' ),
+							),
+							'below'   => array(
+								'below_left'         => array(),
+								'below_left_center'  => array(),
+								'below_center'       => array(),
+								'below_right_center' => array(),
+								'below_right'        => array(),
+							),
+						),
+						'header-mobile-items'  => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu', 'social-icons-1' ) ),
+							'above'   => array(
+								'above_left'   => array(),
+								'above_center' => array(),
+								'above_right'  => array(),
+							),
+							'primary' => array(
+								'primary_left'   => array( 'logo' ),
+								'primary_center' => array(),
+								'primary_right'  => array( 'mobile-trigger' ),
+							),
+							'below'   => array(
+								'below_left'   => array(),
+								'below_center' => array(),
+								'below_right'  => array(),
+							),
+						),
+					),
+				),
+				'preset_2' => array(
+					'src'     => 'header-preset-2',
+					'options' => array(
+						'header-desktop-items' => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu' ) ),
+							'above'   => array(
+								'above_left'         => array(),
+								'above_left_center'  => array(),
+								'above_center'       => array(),
+								'above_right_center' => array(),
+								'above_right'        => array(),
+							),
+							'primary' => array(
+								'primary_left'         => array( 'logo' ),
+								'primary_left_center'  => array(),
+								'primary_center'       => array(),
+								'primary_right_center' => array(),
+								'primary_right'        => array( 'menu-1', 'button-1' ),
+							),
+							'below'   => array(
+								'below_left'         => array(),
+								'below_left_center'  => array(),
+								'below_center'       => array(),
+								'below_right_center' => array(),
+								'below_right'        => array(),
+							),
+						),
+						'header-mobile-items'  => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu', 'button-1' ) ),
+							'above'   => array(
+								'above_left'   => array(),
+								'above_center' => array(),
+								'above_right'  => array(),
+							),
+							'primary' => array(
+								'primary_left'   => array( 'logo' ),
+								'primary_center' => array(),
+								'primary_right'  => array( 'mobile-trigger' ),
+							),
+							'below'   => array(
+								'below_left'   => array(),
+								'below_center' => array(),
+								'below_right'  => array(),
+							),
+						),
+					),
+				),
+				'preset_3' => array(
+					'src'     => 'header-preset-3',
+					'options' => array(
+						'header-desktop-items' => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu' ) ),
+							'above'   => array(
+								'above_left'         => array(),
+								'above_left_center'  => array(),
+								'above_center'       => array(),
+								'above_right_center' => array(),
+								'above_right'        => array(),
+							),
+							'primary' => array(
+								'primary_left'         => array( 'logo', 'menu-1' ),
+								'primary_left_center'  => array(),
+								'primary_center'       => array(),
+								'primary_right_center' => array(),
+								'primary_right'        => array( 'html-1', 'button-1' ),
+							),
+							'below'   => array(
+								'below_left'         => array(),
+								'below_left_center'  => array(),
+								'below_center'       => array(),
+								'below_right_center' => array(),
+								'below_right'        => array(),
+							),
+						),
+						'header-mobile-items'  => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu', 'html-1', 'button-1' ) ),
+							'above'   => array(
+								'above_left'   => array(),
+								'above_center' => array(),
+								'above_right'  => array(),
+							),
+							'primary' => array(
+								'primary_left'   => array( 'logo' ),
+								'primary_center' => array(),
+								'primary_right'  => array( 'mobile-trigger' ),
+							),
+							'below'   => array(
+								'below_left'   => array(),
+								'below_center' => array(),
+								'below_right'  => array(),
+							),
+						),
+						'header-html-1'        => '<a href="#">' . esc_html__( 'Log in', 'astra' ) . '</a>',
+						'header-button1-text'  => esc_html__( 'Sign up', 'astra' ),
+					),
+				),
+				'preset_4' => array(
+					'src'     => 'header-preset-4',
+					'options' => array(
+						'hba-header-separator' => '0',
+						'hb-header-height'     => array(
+							'desktop' => 80,
+							'tablet'  => '',
+							'mobile'  => '',
+						),
+						'header-desktop-items' => array(
+							'popup'   => array( 'popup_content' => array( 'mobile-menu' ) ),
+							'above'   => array(
+								'above_left'         => array(),
+								'above_left_center'  => array(),
+								'above_center'       => array( 'logo' ),
+								'above_right_center' => array(),
+								'above_right'        => array(),
+							),
+							'primary' => array(
+								'primary_left'         => array(),
+								'primary_left_center'  => array(),
+								'primary_center'       => array( 'menu-1' ),
+								'primary_right_center' => array(),
+								'primary_right'        => array(),
+							),
+							'below'   => array(
+								'below_left'         => array(),
+								'below_left_center'  => array(),
+								'below_center'       => array(),
+								'below_right_center' => array(),
+								'below_right'        => array(),
+							),
+						),
+						'header-mobile-items'  => array(
+							'popup'   => array( 'popup_content' => array( 'search', 'mobile-menu' ) ),
+							'above'   => array(
+								'above_left'   => array(),
+								'above_center' => array(),
+								'above_right'  => array(),
+							),
+							'primary' => array(
+								'primary_left'   => array( 'logo' ),
+								'primary_center' => array(),
+								'primary_right'  => array( 'mobile-trigger' ),
+							),
+							'below'   => array(
+								'below_left'   => array(),
+								'below_center' => array(),
+								'below_right'  => array(),
+							),
+						),
+					),
+				),
+			),
+			'transport' => 'postMessage',
+			'divider'   => array( 'ast_class' => 'ast-section-spacing' ),
+		),
+
 		/**
 		 * Header Desktop Available draggable items.
 		 */
@@ -306,7 +509,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 					'value'   => 'general',
 				),
 			),
-			'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
+			'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
 		/**
@@ -321,12 +524,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'priority'    => 35,
 			'default'     => astra_get_option( 'header-mobile-items' ),
 			'choices'     => Astra_Builder_Helper::$header_mobile_items,
-			'transport'   => 'postMessage',
-			'partial'     => array(
-				'selector'            => '#masthead',
-				'container_inclusive' => true,
-				'render_callback'     => array( Astra_Builder_Header::get_instance(), 'header_builder_markup' ),
-			),
+			'transport'   => 'refresh',
 			'input_attrs' => array(
 				'group'  => ASTRA_THEME_SETTINGS . '[header-mobile-items]',
 				'rows'   =>
@@ -389,6 +587,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 					'value'   => 'general',
 				),
 			),
+			'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
 		),
 
 		/**
@@ -502,6 +701,7 @@ function astra_header_header_builder_configuration( $configurations = array() ) 
 			'name'     => ASTRA_THEME_SETTINGS . '[header-builder-pro-items]',
 			'type'     => 'control',
 			'control'  => 'ast-upgrade',
+			'campaign' => 'header-builder',
 			'renderAs' => 'list',
 			'choices'  => array(
 				'one'   => array(

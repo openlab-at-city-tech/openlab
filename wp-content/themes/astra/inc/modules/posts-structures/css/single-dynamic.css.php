@@ -178,6 +178,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 	$custom_scale_width  = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-custom-scale-width', 16 );
 	$custom_scale_height = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-custom-scale-height', 9 );
 	$aspect_ratio        = astra_get_dynamic_image_aspect_ratio( $aspect_ratio_type, $predefined_scale, $custom_scale_width, $custom_scale_height );
+	$object_fit_style    = 'custom' === $aspect_ratio_type ? 'cover' : '';
 
 	// Remove featured image padding.
 	$remove_featured_image_padding = astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-remove-featured-padding', false ) && 'layout-1' === $layout_type && 'none' === astra_get_option( 'ast-dynamic-single-' . $current_post_type . '-article-featured-image-position-layout-1' ) ? true : false;
@@ -211,6 +212,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 				'aspect-ratio' => $aspect_ratio,
 				'width'        => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
 				'height'       => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
+				'object-fit'   => $object_fit_style,
 			),
 		);
 
@@ -336,6 +338,7 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 				'aspect-ratio' => $aspect_ratio,
 				'width'        => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
 				'height'       => Astra_Dynamic_CSS::astra_4_6_0_compatibility() && 'default' !== $aspect_ratio_type ? '100%' : '',
+				'object-fit'   => $object_fit_style,
 			),
 			$selector . ' .ast-container > *:last-child'  => array(
 				'margin-bottom' => '0',
@@ -488,6 +491,17 @@ function astra_post_single_structure_dynamic_css( $dynamic_css, $dynamic_css_fil
 			.site-header-focus-item .ast-container div.customize-partial-edit-shortcut,
 			.site-header-focus-item .ast-container button.item-customizer-focus {
 				font-size: inherit;
+			}
+		';
+	}
+
+	$margin_top = astra_responsive_spacing( $margin, 'top', 'desktop' );
+
+	// To add top spacing for SureCart shop page default title.
+	if ( class_exists( 'SureCart' ) && $margin_top && 0 === intval( $margin_top ) && get_the_ID() === intval( get_option( 'surecart_shop_page_id' ) ) ) {
+		$dynamic_css .= '
+			.page .entry-header {
+				margin-top: 3em;
 			}
 		';
 	}

@@ -71,6 +71,12 @@ function nggallery_admin_overview() {
 				<div class="about-text"><strong><?php printf( __( "Congrats! You're now running the most popular WordPress gallery plugin of all time.", 'nggallery' ) ); ?></strong><br><?php printf( __( 'To get started, watch our two minute intro below.', 'nggallery' ) ); ?>
 				</div>
 
+				<div class="about-text">
+					<a href="<?php echo get_admin_url(get_current_blog_id(), '/index.php?page=nextgen-gallery-setup-wizard');?>" class="button-primary ngg-pro-upgrade" style="background-color: #9ebc1b">
+						<?php esc_html_e( 'Launch Setup Wizard', 'nggallery' ); ?>
+					</a>
+				</div>
+
 				<div class="headline-feature feature-video">
 				<iframe width="1050"
 					height="590"

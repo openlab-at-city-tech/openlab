@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
+class ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -27,8 +27,13 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Events\\Admin\\Help_Hub\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Help_Hub/Provider.php',
+        'TEC\\Events\\Admin\\Help_Hub\\TEC_Hub_Resource_Data' => __DIR__ . '/../..' . '/src/Events/Admin/Help_Hub/TEC_Hub_Resource_Data.php',
         'TEC\\Events\\Admin\\Notice\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Provider.php',
         'TEC\\Events\\Admin\\Notice\\Rest_Api' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Rest_Api.php',
+        'TEC\\Events\\Admin\\Settings\\Community_Upsell' => __DIR__ . '/../..' . '/src/Events/Admin/Settings/Community_Upsell.php',
+        'TEC\\Events\\Admin\\Settings\\Filter_Bar_Upsell' => __DIR__ . '/../..' . '/src/Events/Admin/Settings/Filter_Bar_Upsell.php',
+        'TEC\\Events\\Admin\\Settings\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Settings/Provider.php',
         'TEC\\Events\\Block_Templates\\Archive_Events\\Archive_Block_Template' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Archive_Events/Archive_Block_Template.php',
         'TEC\\Events\\Block_Templates\\Block_Template_Contract' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Block_Template_Contract.php',
         'TEC\\Events\\Block_Templates\\Controller' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Controller.php',
@@ -213,6 +218,7 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
         'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
         'TEC\\Events\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Events/Telemetry/Telemetry.php',
+        'TEC\\Events\\Traits\\Development_Mode' => __DIR__ . '/../..' . '/src/Events/Traits/Development_Mode.php',
         'TEC\\Events\\Views\\Modifiers\\Hide_End_Time_Modifier' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Hide_End_Time_Modifier.php',
         'TEC\\Events\\Views\\Modifiers\\Visibility_Modifier_Abstract' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Visibility_Modifier_Abstract.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
@@ -272,6 +278,7 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Month_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Month_View.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Section\\Single_Event' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Section/Single_Event.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Service_Provider.php',
+        'Tribe\\Events\\Views\\V2\\Hide_End_Time_Provider' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Hide_End_Time_Provider.php',
         'Tribe\\Events\\Views\\V2\\Hooks' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Hooks.php',
         'Tribe\\Events\\Views\\V2\\Implementation_Error' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Implementation_Error.php',
         'Tribe\\Events\\Views\\V2\\Index' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Index.php',
@@ -348,9 +355,9 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9341b32032f5c2c14ff1f117a6964efc::$classMap;
 
         }, null, ClassLoader::class);
     }

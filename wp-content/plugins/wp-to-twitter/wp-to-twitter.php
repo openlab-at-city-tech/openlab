@@ -17,7 +17,7 @@
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
  * Domain Path: lang
- * Version:     4.2.5
+ * Version:     4.2.6
  */
 
 /*
@@ -69,15 +69,7 @@ require_once plugin_dir_path( __FILE__ ) . 'wpt-truncate.php';
 require_once plugin_dir_path( __FILE__ ) . 'wpt-rate-limiting.php';
 
 global $wpt_version;
-$wpt_version = '4.2.5';
-
-add_action( 'init', 'wpt_load_textdomain' );
-/**
- * Set up text domain for XPoster.
- */
-function wpt_load_textdomain() {
-	load_plugin_textdomain( 'wp-to-twitter' );
-}
+$wpt_version = '4.2.6';
 
 /**
  * Check for OAuth configuration
@@ -723,10 +715,7 @@ function wpt_is_ssl( $url ) {
  * @return array Post data used in status update functions.
  */
 function wpt_post_info( $post_ID ) {
-	$encoding = get_option( 'blog_charset', '' );
-	if ( '' === $encoding ) {
-		$encoding = 'UTF-8';
-	}
+	$encoding     = get_option( 'blog_charset', 'UTF-8' );
 	$post         = get_post( $post_ID );
 	$category_ids = array();
 	$values       = array();

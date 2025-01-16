@@ -192,6 +192,7 @@ ed11yReady(
     if (!!ed11yOpts && window.location.href.indexOf('elementor-preview') === -1) {
       ed11yOptions = JSON.parse(ed11yOpts.innerHTML);
       ed11yOptions.customTests = 1;
+      ed11yOptions.panelNoCover = '#edac-highlight-panel'; // Accessibility Checker module
 
       ed11yOptions.linkStringsNewWindows = ed11yOptions.linkStringsNewWindows ? new RegExp(ed11yOptions.linkStringsNewWindows, 'g') : /window|\stab|download/g;
       if (ed11yOptions.title.length < 3) {
@@ -212,12 +213,5 @@ ed11yReady(
       ed11yCustomTests();
       ed11ySync();
     }
-	// Equalize checker overlaps and blocks.
-	let shiftPanel = document.createElement('style');
-	shiftPanel.textContent = `
-	.edac-highlight-panel ~ ed11y-element-panel {
-		margin: 0 9px 66px 0;
-		}`;
-	document.querySelector('body')?.append(shiftPanel);
   }
 );

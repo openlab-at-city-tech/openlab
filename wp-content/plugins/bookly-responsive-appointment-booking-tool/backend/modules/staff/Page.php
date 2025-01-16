@@ -15,12 +15,9 @@ class Page extends Lib\Base\Component
         ) );
 
         self::enqueueScripts( array(
-            'module' => array(
-                'js/staff-list.js' => array( 'bookly-backend-globals' )
-            ),
-            'backend' => array(
-                'js/nav-scrollable.js' => array( 'bookly-backend-globals' ),
-            ),
+            'module' => array( 'js/staff-list.js' => array( 'bookly-backend-globals' ) ),
+            'backend' => array( 'js/nav-scrollable.js' => array( 'bookly-backend-globals' ), ),
+            'frontend' => array( 'js/intlTelInput.min.js' => array( 'jquery' ) ),
         ) );
 
         // Allow add-ons to enqueue their assets.

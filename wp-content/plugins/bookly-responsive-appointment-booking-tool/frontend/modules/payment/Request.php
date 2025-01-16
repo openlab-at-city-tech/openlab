@@ -115,7 +115,7 @@ class Request extends Lib\Base\Component
                     $this->userData
                         ->setCouponCode( $coupon )
                         ->setGiftCode( $gift_card )
-                        ->setModernFormCustomer( $customer );
+                        ->setModernFormCustomer( $customer, $this->getSettings() );
 
                     $client_fields = array();
                     if ( in_array( 'address', $this->getSettings()->get( 'details_fields_show' ) ) ) {
@@ -126,6 +126,9 @@ class Request extends Lib\Base\Component
                     }
                     if ( in_array( 'notes', $this->getSettings()->get( 'details_fields_show' ) ) ) {
                         $client_fields[] = 'notes';
+                    }
+                    if ( in_array( 'birthday', $this->getSettings()->get( 'details_fields_show' ) ) ) {
+                        $client_fields[] = 'birthday';
                     }
                     foreach ( $client_fields as $field ) {
                         if ( array_key_exists( $field, $customer ) ) {
@@ -138,6 +141,8 @@ class Request extends Lib\Base\Component
                         $this->userData->setDepositFull( ! self::parameter( 'deposit' ) );
                     }
 
+                    $bookly_recurring_appointments_payment = get_option( 'bookly_recurring_appointments_payment' ) === 'first';
+                    $processed_series = array( 0 );
                     $slots = array();
                     foreach ( self::parameter( 'cart' ) as $item ) {
                         $service_id = $item['service_id'];
@@ -160,6 +165,12 @@ class Request extends Lib\Base\Component
                                     ? $item['slot']['slot']
                                     : array( array( $service_id, $staff_id, null, $location_id ?: null ) );
                                 $slots[] = $slot;
+                                $series_id = isset( $item['seriesId'] ) ? $item['seriesId'] : 0;
+                                $first_in_series = false;
+                                if ( $bookly_recurring_appointments_payment && isset( $item['seriesId'] ) && ! in_array( $series_id, $processed_series ) ) {
+                                    $processed_series[] = $series_id;
+                                    $first_in_series = true;
+                                }
 
                                 $custom_fields = isset( $item['custom_fields'] ) ? $item['custom_fields'] : array();
                                 $custom_fields = array_map( function( $id, $value ) {
@@ -167,15 +178,16 @@ class Request extends Lib\Base\Component
                                 }, array_keys( $custom_fields ), $custom_fields );
 
                                 $cart_item
-                                    ->setStaffIds( array( $staff_id ) )
+                                    ->setStaffIds( is_array( $staff_id ) ? $staff_id : array( $staff_id ) )
                                     ->setServiceId( $service_id )
                                     ->setNumberOfPersons( $nop )
                                     ->setLocationId( $location_id )
                                     ->setUnits( $units )
                                     ->setExtras( $extras )
                                     ->setCustomFields( $custom_fields )
-                                    ->setSeriesUniqueId( isset( $item['seriesId'] ) ? $item['seriesId'] : 0 )
-                                    ->setSlots( $slot );
+                                    ->setSeriesUniqueId( $series_id )
+                                    ->setSlots( $slot )
+                                    ->setFirstInSeries( $first_in_series );
                                 break;
                             default:
                                 $cart_item->setCartTypeId( $item['gift_card_type'] );
@@ -215,11 +227,13 @@ class Request extends Lib\Base\Component
                     if ( $payment ) {
                         $this->gateway = $this->getGatewayByName( $payment->getType() );
                         $this->gateway->setPayment( $payment );
-                    } else {
+                    } elseif ( Entities\Order::query()->where( 'token', $this->get( 'bookly_order' ) )->fetchVar( 'id' ) !== null ) {
                         $this->gateway = new Lib\Payment\ZeroGateway( $this );
                         if ( $this->getCartInfo()->getPayNow() > 0 ) {
                             throw new \Exception( __( 'Incorrect payment data', 'bookly' ) );
                         }
+                    } else {
+                        throw new \Exception( 'There is no order, the payment may have been canceled by webhook' );
                     }
                 } else {
                     $this->gateway = $this->getGatewayByName( $gateway );

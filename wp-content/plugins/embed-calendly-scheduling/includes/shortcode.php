@@ -7,13 +7,14 @@ include_once(EMCS_DIR . 'includes/embed.php');
 
 class EMCS_Shortcode
 {
-    public static function register_shortcode($atts) {
+    public static function register_shortcode($atts)
+    {
         return self::load_view($atts);
     }
 
     public static function load_view($atts)
     {
-    
+
         $atts = array_change_key_case((array) $atts, CASE_LOWER);
 
         if (empty($atts) || empty($atts['url'])) {
@@ -23,7 +24,7 @@ class EMCS_Shortcode
         // enqueue style and script on demand
         wp_enqueue_style('emcs_calendly_css');
         wp_enqueue_script('emcs_calendly_js');
-        
+
         $atts = self::prepare_attributes($atts);
         $emcs_embed = new EMCS_Embed($atts);
 
@@ -45,23 +46,25 @@ class EMCS_Shortcode
         $branding = (!empty($atts['branding'])) ? sanitize_text_field($atts['branding']) : 'false';
         $hide_details = (!empty($atts['hide_details'])) ? sanitize_text_field($atts['hide_details']) : '0';
         $cookie_banner = (!empty($atts['hide_cookie_banner'])) ? sanitize_text_field($atts['hide_cookie_banner']) : '0';
+        $autopopulate_fields = (!empty($atts['prefill_fields'])) ? sanitize_text_field($atts['prefill_fields']) : '0';
         $url = esc_url_raw($atts['url']);
 
         return [
-            'url'           => $url, 
-            'embed_type'    => $embed_type, 
-            'text'          => $text, 
-            'text_color'    => $text_color, 
-            'text_size'     => $text_size, 
+            'url'           => $url,
+            'embed_type'    => $embed_type,
+            'text'          => $text,
+            'text_color'    => $text_color,
+            'text_size'     => $text_size,
             'form_height'   => $form_height,
             'form_width'    => $form_width,
-            'button_color'  => $button_color, 
+            'button_color'  => $button_color,
             'button_style'  => $button_style,
-            'button_size'   => $button_size,  
-            'style_class'   => $class, 
+            'button_size'   => $button_size,
+            'style_class'   => $class,
             'branding'      => $branding,
             'hide_details'  => $hide_details,
-            'cookie_banner' => (int) $cookie_banner
+            'cookie_banner' => (int) $cookie_banner,
+            'prefill_fields' => (int) $autopopulate_fields
         ];
     }
 }

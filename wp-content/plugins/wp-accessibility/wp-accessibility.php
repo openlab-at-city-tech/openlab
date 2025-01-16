@@ -17,7 +17,7 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 2.1.12
+ * Version: 2.1.13
  */
 
 /*
@@ -51,14 +51,6 @@ if ( 'off' !== get_option( 'wpa_track_stats' ) ) {
 }
 
 register_activation_hook( __FILE__, 'wpa_install' );
-
-add_action( 'plugins_loaded', 'wpa_load_textdomain' );
-/**
- * Load internationalization.
- */
-function wpa_load_textdomain() {
-	load_plugin_textdomain( 'wp-accessibility' );
-}
 
 add_action( 'admin_notices', 'wpa_status_notice', 10 );
 /**
@@ -94,7 +86,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '2.1.12';
+	$wpa_version = '2.1.13';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );

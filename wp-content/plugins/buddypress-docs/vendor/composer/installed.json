@@ -2,20 +2,20 @@
         "packages": [
                 {
                         "name": "hard-g/buddypress-12.0-url-polyfills",
-                        "version": "1.0.1",
-                        "version_normalized": "1.0.1.0",
+                        "version": "1.0.2",
+                        "version_normalized": "1.0.2.0",
                         "source": {
                                 "type": "git",
                                 "url": "https://github.com/hard-g/buddypress-12.0-url-polyfills.git",
-                                "reference": "e61685bec96f2673b6b225510eec8b74c3d6a2cf"
+                                "reference": "b09dc593f40c5b7163c1126377d991be62f0a9cf"
                         },
                         "dist": {
                                 "type": "zip",
-                                "url": "https://api.github.com/repos/hard-g/buddypress-12.0-url-polyfills/zipball/e61685bec96f2673b6b225510eec8b74c3d6a2cf",
-                                "reference": "e61685bec96f2673b6b225510eec8b74c3d6a2cf",
+                                "url": "https://api.github.com/repos/hard-g/buddypress-12.0-url-polyfills/zipball/b09dc593f40c5b7163c1126377d991be62f0a9cf",
+                                "reference": "b09dc593f40c5b7163c1126377d991be62f0a9cf",
                                 "shasum": ""
                         },
-                        "time": "2023-10-30T23:18:59+00:00",
+                        "time": "2024-02-29T22:09:11+00:00",
                         "type": "library",
                         "installation-source": "dist",
                         "autoload": {
@@ -36,7 +36,7 @@
                         "description": "Polyfills for URL-related functions introduced in BuddyPress 12.0.",
                         "support": {
                                 "issues": "https://github.com/hard-g/buddypress-12.0-url-polyfills/issues",
-                                "source": "https://github.com/hard-g/buddypress-12.0-url-polyfills/tree/1.0.1"
+                                "source": "https://github.com/hard-g/buddypress-12.0-url-polyfills/tree/1.0.2"
                         },
                         "install-path": "../hard-g/buddypress-12.0-url-polyfills"
                 }

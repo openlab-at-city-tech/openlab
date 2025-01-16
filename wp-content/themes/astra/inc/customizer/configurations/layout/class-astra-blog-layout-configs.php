@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -282,7 +280,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 						),
 						'read-more'  => array(
 							'clone'       => false,
-							'is_parent'   => defined( 'ASTRA_EXT_VER' ) ? true : false,
+							'is_parent'   => $if_astra_addon ? true : false,
 							'main_index'  => 'read-more',
 							'clone_limit' => 1,
 							'title'       => __( 'Read More', 'astra' ),
@@ -436,7 +434,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 					'section'  => 'section-blog',
 					'priority' => 14,
 					'label'    => '',
-					'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="https://www.digitalrebellion.com/webapps/aspectcalc" target="_blank">', '</a>' ),
+					'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="' . esc_url( 'https://www.digitalrebellion.com/webapps/aspectcalc' ) . '" target="_blank">', '</a>' ), 
 				),
 
 				/**
@@ -487,7 +485,7 @@ if ( ! class_exists( 'Astra_Blog_Layout_Configs' ) ) {
 				array(
 					'name'     => ASTRA_THEME_SETTINGS . '[blog-post-color-divider]',
 					'section'  => 'section-blog',
-					'title'    => __( 'Post Cards', 'astra-addon' ),
+					'title'    => __( 'Post Cards', 'astra' ),
 					'type'     => 'control',
 					'control'  => 'ast-heading',
 					'priority' => 1,

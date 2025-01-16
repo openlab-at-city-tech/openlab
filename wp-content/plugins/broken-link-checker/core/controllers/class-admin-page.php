@@ -296,6 +296,29 @@ abstract class Admin_Page extends Base {
 	}
 
 	/**
+	 * Admin page url.
+	 *
+	 * @since 2.3.0
+	 *
+	 * @return string The url of the admin page.
+	 */
+	public function admin_page_url( array $args = array() ): string {
+		$args['page'] = $this->menu_slug;
+		/**
+		 * Filters site connected result.
+		 *
+		 * @since 2.3.0
+		 */
+		return apply_filters( 
+			'wpmudev_blc_admin_page_url',
+			add_query_arg(
+				$args,
+				admin_url( 'admin.php' )
+			)
+		);
+	}
+
+	/**
 	 * Checks if admin page actions/scripts should load in current screen.
 	 *
 	 * @since 2.0.0
@@ -331,14 +354,25 @@ abstract class Admin_Page extends Base {
 	 * @return string
 	 */
 	public function admin_body_classes( $classes ) {
-		$sui_classes   = explode( ' ', $classes );
-		$sui_classes[] = BLC_SHARED_UI_VERSION;
+		static $added = false;
 
-		if ( apply_filters( 'wpmudev_branding_hide_branding', false ) ) {
-			$sui_classes[] = 'wpmudev-hide-branding';
+		if ( ! $added ) {
+			$sui_classes   = explode( ' ', $classes );
+
+			if ( ! in_array( BLC_SHARED_UI_VERSION, $sui_classes, true ) ) {
+				$sui_classes[] = BLC_SHARED_UI_VERSION;
+			}
+
+			if ( apply_filters( 'wpmudev_branding_hide_branding', false ) && ! in_array( 'wpmudev-hide-branding', $sui_classes, true ) ) {
+				$sui_classes[] = 'wpmudev-hide-branding';
+			}
+
+			$added = true;
+			$classes = join( ' ', $sui_classes );
 		}
 
-		return join( ' ', $sui_classes );
+
+		return $classes;
 	}
 
 	/**

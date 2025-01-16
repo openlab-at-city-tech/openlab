@@ -5,6 +5,7 @@ class B2S_AutoPost_Item {
     private $options;
     private $postTypesData;
     private $postCategoriesData;
+    private $postTaxonomiesData;
     private $networkAuthData = array();
     private $networkAutoPostData;
     private $networkMandantData = array();

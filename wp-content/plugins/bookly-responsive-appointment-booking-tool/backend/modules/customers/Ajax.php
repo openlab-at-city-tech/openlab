@@ -159,7 +159,10 @@ class Ajax extends Lib\Base\Ajax
         $page = self::parameter( 'page' );
         $query = Lib\Entities\Customer::query( 'c' );
 
-        $query->select( 'SQL_CALC_FOUND_ROWS c.id, c.group_id, c.full_name AS text, c.email, c.phone' );
+        $query->select( 'SQL_CALC_FOUND_ROWS c.id, c.full_name AS text, c.email, c.phone' );
+        Lib\Config::customerGroupsActive()
+            ? $query->addSelect( 'c.group_id' )
+            : $query->addSelect( '0 AS group_id' );
 
         if ( $filter != '' ) {
             $search_value = '%' . Lib\Query::escape( $filter ) . '%';

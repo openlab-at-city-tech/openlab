@@ -1,132 +1,212 @@
-/*GET START CSS*/
-.appearance_page_fse_freelancer_portfolio_guide #wpwrap{
-    background: #fff;
-    color: #333;
+/*GET START*/
+.wrapper-outer {
+    margin: 10px auto;
+    padding: 40px;
 }
-.col-left{
-    width: 40%;
+/*top banner*/
+.intro {
+    display: grid;
+    max-width: 100%;
+    justify-content: center;
+    padding: 40px;
+    margin: 0 0 30px 0;
+    text-align: center;
+    background: linear-gradient(105deg, #b3c5f9, #b1f5d9);
+}
+.intro h3{
+    margin: 0;
+    color: #000;
+    font-size: 3rem;
+    line-height: 1.2;
+}
+.banner-buttons {
+    text-align: center;
+    padding-top: 20px;
+}
+.banner-buttons a{
+    text-decoration: none;
+    color: #fff;
+    font-size: 16px;
+    padding: 15px 10px;
+    background: #80669d;
+    border-radius: 3px;
+
+}
+.banner-buttons a:hover,.support-button .button:hover,
+.button.buy-btn:hover,.button.demo-btn:hover,.button.doc-btn:hover{
+    background: #000;
+    border-color: #000;
+}
+/*columns*/
+.left-main-box{
     float: left;
-    padding: 0 20px;
+    width: 65%;
+}
+.right-main-box{
+    float: right;
+    width: 28%;
+    background-color: #F5E8DD;
+    padding: 30px
+
+}
+/*description box*/
+.about-wrapper{
+    background-color: #f8f8f8;
+    display: grid;
+    grid-template-columns: 7fr 3fr;
+    gap: 20px;
+    padding: clamp(15px, 5vw, 25px);
+}
+.col-left p{
+   font-size: 12px; 
 }
 .col-right{
-    width: 56%;
-    float: right;
+    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 .col-right img{
     width: 100%;
-}
-.wrapper-info h3 {
-    color: #fa4612;
-    font-size: 25px;
-}
-.wrapper-info h4 {
-    margin: 0;
-    color: #333;
-    font-size: 16px;
-}
-.wrapper-info a {
-    text-decoration: none;
-}
-#wpcontent, #wpfooter {
-    margin-right: 20px;
-}
-.centerbold a {
-    color: #fff;
-    padding: 9px 12px;
-    text-decoration: none;
-    font-size: 14px;
-    background: #fa4612;
-    transition: 0.3s;
+    max-width: 350px;
     display: inline-block;
-    font-weight: 500;
-    letter-spacing: 1px;
+    align-self: center;
 }
-a.bg-color{
-    color: #fff;
-    padding: 9px 12px;
-    text-decoration: none;
-    font-size: 14px;
-    background: #6664e4;
-    transition: 0.3s;
-    display: inline-block;
-    font-weight: 500;
-    letter-spacing: 1px; 
+/*support box*/
+.support-wrapper{
+    display: grid;
+    grid-gap: 30px;
+    margin: 30px 0;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 1fr;
 }
-.centerbold a:hover {
-    background: #2e2e2e;
+.review-box,.support-box,.editor-box{
+    padding: 30px;
+    background-color: #e5e6f6;
 }
-.intro {
+.support-wrapper i ,.pro-box i{
+    background: #fff;
+    height: 60px;
+    width: 60px;
     display: flex;
-    gap: 20px;
-    padding: 20px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-size: 33px;
+    border: 1px solid #ebe2e2;
+    box-shadow: 0 0 10px #c8c2c2;
 }
-.intro p {
-    font-size: 16px;
-    font-weight: 600;
-    align-self: flex-end;
+.support-wrapper h4 ,.pro-box h4{
+    font-size: 20px;
+    color: #000;
 }
-.col-left p {
-    color: #2e2e2e;
+.support-wrapper p,.pro-box p{
     font-size: 14px;
-    text-align: justify;
 }
-hr {
-    margin: 20px 0;
+.support-button .button{
+    background: #80669d;
+    border-color: #80669d;
 }
-.col-left-inner img {
-    width: 100%;
-    margin-bottom: 15px;
-    border: solid 1px #ccc;
+/*pro box*/
+.button.buy-btn{
+    background: #f94c30;
+    border-color: #f94c30;
 }
-.started {
-    float: left;
-    width: 100%;
+.button.doc-btn{
+    background: #17B169;
+    border-color: #17B169;
 }
-img.table-img {
-    width: 100%;
+.button.demo-btn{
+    background: #6664e4;
+    border-color: #6664e4;
 }
-.col-left-inner {
-    width: 100%;
-    float: left;
+ul.pro-list{
+    padding-left: 24px;
 }
-.col-right-inner {
-    width: 100%;
-    float: right;
-}
-.feature{
-    float: left;
-    width: 100%;
-}
-.col-md-4 {
-    width: 33.33%;
-    float: left;
-}
-.started ul {
-    list-style: disc;
+.pro-list li{
+    color: #000;
     font-size: 15px;
-    margin-left: 30px;
-}
-.color_bg_blue {
-    background-color: #fa4612;
-    display: block;
-    float: left;
-    padding: 15px 0 35px 35px;
-    width: 95%;
-}
-.color_bg_blue p {
-    color: #fff;
-}
-.color_bg_blue h4 {
-    color: #fff;
-    margin-bottom: 25px;
+    list-style-type: circle;
 }
 
+/*media*/
+@media screen and (max-width:1434px){
+   .support-wrapper h4{
+    line-height: 1.2;
+   } 
+}
+@media screen and (max-width:1304px){
+    .pro-buttons{
+        display: grid;
+        text-align: center;
+    }
+    .left-main-box{
+        width: 70%;
+    }
+    .right-main-box{
+        width: 20%;
+    }
+    .button.buy-btn,.button.demo-btn{
+        margin-top: 15px;
+    }
+    .col-left p{
+        font-size: 12px;
+    }
+    .wrapper-outer{
+        padding: 20px;
+    }
+}
+@media screen and (max-width:1100px){
+    .pro-list li {
+        font-size: 13px;
+    }
+    ul.pro-list{
+        padding: 17px;
+    }
+    .support-wrapper,.about-wrapper{
+        display: block;
+    }
+    .review-box, .support-box, .editor-box{
+        margin-bottom: 10px;
+    }
+    .col-right{
+        justify-content: center;
+    }
+}
+@media screen and (max-width:1000px){
+    .left-main-box,.right-main-box{
+        width: 100%;
+        float: none;
+        padding: 0;
+    }
+    .pro-box {
+        padding: 30px;
+    }
+    .pro-buttons{
+        display: block;
+        text-align: left;
+    }
+    .button.buy-btn, .button.demo-btn{
+        margin-top: 0;
+    }
+    .button.buy-btn,.button.demo-btn{
+        margin-top: 15px;
+    }
+}   
+@media screen and (max-width:445px){
+    .wrapper-outer {
+        padding: 13px;
+    }
+    .pro-buttons{
+        display: grid;
+        text-align: center;
+    }
+
+}
 /* theme activation*/
 .welcome a{
     font-size: 21px;
     padding: 8px 17px 38px;
 }
-
 .notice p.dismiss-link {
     position: absolute;
     top: 10px;
@@ -136,4 +216,7 @@ img.table-img {
 }
 .notice {
     position: relative;
+}
+.site-edit{
+    margin-left: 15px !important;
 }

@@ -133,9 +133,25 @@ class DLM_WordPress_Log_Item_Repository implements DLM_Log_Item_Repository {
 	 * @return bool
 	 */
 	public function persist( $log_item ) {
+		// Don't log if admin hit does not need to be logged
+		if ( DLM_Logging::ignore_admin_log() ) {
+			return;
+		}
+
+		$logging = DLM_Logging::get_instance();
 		global $wpdb;
 		$download_id = $log_item->get_download_id();
 		$version_id  = $log_item->get_version_id();
+		$url         = $log_item->get_current_url();
+		// Don't count if only unique IPs are counted and the IP has already downloaded the version.
+		if ( $logging->is_count_unique_ips_only() && true === $logging->has_uuid_downloaded_version( absint( $version_id ) ) ) {
+			return;
+		}
+		// Don't count if in the admin area.
+		if ( false !== strpos( $url, admin_url() ) ) {
+			return;
+		}
+
 		// allow filtering of log item.
 		$log_item = apply_filters( 'dlm_log_item', $log_item, $download_id, $version_id );
 

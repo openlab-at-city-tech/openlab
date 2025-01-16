@@ -3,6 +3,7 @@ namespace Bookly\Lib;
 
 use Bookly\Frontend\Modules\Booking\Proxy as BookingProxy;
 use Bookly\Lib\Proxy\Pro;
+use Bookly\Lib\Utils\Collection;
 
 class UserBookingData
 {
@@ -14,6 +15,8 @@ class UserBookingData
     protected $time_zone;
     /** @var int */
     protected $time_zone_offset;
+    /** @var int */
+    protected $wp_user_id;
 
     // Step service
     /** @var string Y-m-d */
@@ -165,11 +168,10 @@ class UserBookingData
     public $chain;
 
     /**
-     * Constructor.
-     *
-     * @param $form_id
+     * @param string $form_id
+     * @param int|null $current_user_id
      */
-    public function __construct( $form_id )
+    public function __construct( $form_id, $current_user_id = null )
     {
         $this->form_id = $form_id;
         $this->cart = new Cart( $this );
@@ -180,10 +182,14 @@ class UserBookingData
         }
 
         // If logged in then set name, email and if existing customer then also phone.
-        $current_user = wp_get_current_user();
+        $current_user = $current_user_id === null
+            ? wp_get_current_user()
+            : get_userdata( $current_user_id );
+        $this->wp_user_id = 0;
         if ( $current_user && $current_user->ID ) {
+            $this->wp_user_id = $current_user->ID;
             $customer = new Entities\Customer();
-            if ( $customer->loadBy( array( 'wp_user_id' => $current_user->ID ) ) ) {
+            if ( $customer->loadBy( array( 'wp_user_id' => $this->wp_user_id ) ) ) {
                 if ( $customer->getBirthday() ) {
                     $date = explode( '-', $customer->getBirthday() );
                     $this->setBirthday( array(
@@ -485,8 +491,8 @@ class UserBookingData
                     }
                 }
             }
-
         }
+
         foreach ( $cart_items_repeats[ $first_visit_repeat ] as $cart_item ) {
             /** @var CartItem $cart_item */
             $cart_item->setFirstInSeries( true );
@@ -665,7 +671,7 @@ class UserBookingData
         Proxy\Pro::createWPUser( $customer );
 
         $customer->save();
-        Proxy\Files::attachCIFiles( $this->getInfoFields(), $customer );
+        Proxy\Files::attachCIFiles( $this->getInfoFields() ?: array(), $customer );
 
         // Order.
         $order = DataHolders\Booking\Order::create( $customer );
@@ -681,20 +687,11 @@ class UserBookingData
         if ( get_option( 'bookly_cst_remember_in_cookie' ) ) {
 
             $expire = time() + YEAR_IN_SECONDS;
-
-            setcookie( 'bookly-customer-full-name', $customer->getFullName(), $expire, '/' );
-            setcookie( 'bookly-customer-first-name', $customer->getFirstName(), $expire, '/' );
-            setcookie( 'bookly-customer-last-name', $customer->getLastName(), $expire, '/' );
-            setcookie( 'bookly-customer-phone', $customer->getPhone(), $expire, '/' );
-            setcookie( 'bookly-customer-email', $customer->getEmail(), $expire, '/' );
-            setcookie( 'bookly-customer-birthday', $customer->getBirthday() ?: '', $expire, '/' );
-            setcookie( 'bookly-customer-country', $customer->getCountry(), $expire, '/' );
-            setcookie( 'bookly-customer-state', $customer->getState(), $expire, '/' );
-            setcookie( 'bookly-customer-postcode', $customer->getPostcode(), $expire, '/' );
-            setcookie( 'bookly-customer-city', $customer->getCity(), $expire, '/' );
-            setcookie( 'bookly-customer-street', $customer->getStreet(), $expire, '/' );
-            setcookie( 'bookly-customer-street-number', $customer->getStreetNumber(), $expire, '/' );
-            setcookie( 'bookly-customer-additional-address', $customer->getAdditionalAddress(), $expire, '/' );
+            $fields = $customer->getFields();
+            $keys = array( 'full_name', 'first_name', 'last_name', 'phone', 'email', 'birthday', 'country', 'state', 'postcode', 'city', 'street', 'street_number', 'additional_address', );
+            foreach ( $keys as $key ) {
+                $fields[ $key ] != '' && setcookie( 'bookly-customer-' . str_replace( '_', '-', $key ), $fields[ $key ], $expire, '/' );
+            }
             if ( Config::customerInformationActive() ) {
                 setcookie( 'bookly-customer-info-fields', $customer->getInfoFields(), $expire, '/' );
             }
@@ -733,10 +730,9 @@ class UserBookingData
         if ( $this->customer === null ) {
             // Find or create customer.
             $this->customer = new Entities\Customer();
-            $user_id = get_current_user_id();
-            if ( $user_id > 0 ) {
+            if ( $this->wp_user_id > 0 ) {
                 // Try to find customer by WP user ID.
-                $this->customer->loadBy( array( 'wp_user_id' => $user_id ) );
+                $this->customer->loadBy( array( 'wp_user_id' => $this->wp_user_id ) );
             }
             if ( ! $this->customer->isLoaded() ) {
                 $customer = BookingProxy\Pro::getCustomerByFacebookId( $this->getFacebookId() );
@@ -787,34 +783,73 @@ class UserBookingData
 
     /**
      * @param array $customer_data
+     * @param Collection $appearance
      * @return $this
      */
-    public function setModernFormCustomer( $customer_data )
+    public function setModernFormCustomer( $customer_data, Collection $appearance )
     {
         if ( $this->customer === null ) {
             // Find or create customer.
             $this->customer = new Entities\Customer();
             $customer_data['phone'] = isset( $customer_data['phone_formatted'] ) ? $customer_data['phone_formatted'] : $customer_data['phone'];
-            $customer_fields = array( 'first_name', 'last_name', 'full_name', 'email', 'phone' );
-            $user_id = get_current_user_id();
-            if ( $user_id > 0 ) {
-                // Try to find customer by WP user ID.
-                $this->customer->loadBy( array( 'wp_user_id' => $user_id ) );
-                if ( Config::allowDuplicates() ) {
-                    $fields = array();
-                    foreach ( $customer_fields as $field ) {
-                        if ( $customer_data[ $field ] ) {
-                            $fields['field'] = $customer_data[ $field ];
-                        }
-                    }
-                    $this->customer->loadBy( $fields );
-                } else if ( $customer_data['phone'] && ! $this->customer->loadBy( array( 'phone' => $customer_data['phone'] ) ) ) {
-                    $this->customer->loadBy( array( 'email' => $customer_data['email'] ) );
+            $customer_fields = array( 'email', 'phone' );
+            $show = $appearance->get( 'details_fields_show' );
+            foreach ( array( 'first_name', 'last_name', 'full_name' ) as $field ) {
+                if ( in_array( $field, $show ) ) {
+                    $customer_fields[] = $field;
                 }
-            } else {
-                $this->customer->loadBy( array( 'email' => $customer_data['email'], 'phone' => $customer_data['phone'] ) );
+            }
+            $search_criteria = array();
+            if ( get_current_user_id() > 0 ) {
+                $search_criteria = array(
+                    array(
+                        'wp_user_id' => get_current_user_id(),
+                    ),
+                );
             }
 
+            $search_criteria[] = array(
+                'phone' => $customer_data['phone'],
+                'email' => $customer_data['email'],
+                'wp_user_id' => null,
+            );
+
+            $verify_credentials = $appearance->get( 'verify_credentials' );
+            if ( $verify_credentials === 'phone' || $verify_credentials === 'email' ) {
+                $search_criteria[] = array_filter( array(
+                    $verify_credentials => $customer_data[ $verify_credentials ],
+                    'wp_user_id' => null,
+                ) );
+            } else {
+                $search_criteria[] = array_filter( array(
+                    'phone' => $customer_data['phone'],
+                    'wp_user_id' => null,
+                ) );
+                $search_criteria[] = array_filter( array(
+                    'email' => $customer_data['email'],
+                    'wp_user_id' => null,
+                ) );
+            }
+            $search_criteria = array_filter( $search_criteria );
+
+            foreach ( $search_criteria as $criteria ) {
+                foreach ( $criteria as $field ) {
+                    if ( $field === '' ) {
+                        continue 2;
+                    }
+                }
+                if ( $this->customer->loadBy( $criteria ) ) {
+                    break;
+                }
+            }
+            if ( $this->customer->isLoaded() && Config::allowDuplicates() ) {
+                $fields = $this->customer->getFields();
+                foreach ( $customer_fields as $field ) {
+                    if ( $fields[ $field ] != $customer_data[ $field ] ) {
+                        $this->customer->setId( null );
+                    }
+                }
+            }
             foreach ( $customer_fields as $field ) {
                 $this->fillData( array( $field => $customer_data[ $field ] ?: '' ) );
                 $this->customer->setFields( array( $field => $customer_data[ $field ] ?: '' ) );
@@ -1543,6 +1578,8 @@ class UserBookingData
         $date = '';
         if ( is_array( $this->birthday ) ) {
             $date = sprintf( '%04d-%02d-%02d', $this->birthday['year'], $this->birthday['month'], $this->birthday['day'] );
+        } else if ( is_string( $this->birthday ) ) {
+            $date = $this->birthday;
         }
 
         return Utils\DateTime::validateDate( $date ) ? $date : '';

@@ -11,7 +11,7 @@
 		</div>
 	</div>
 	<div class="akismet-lower">
-		<?php Akismet_Admin::display_status();?>
+		<?php Akismet_Admin::display_status(); ?>
 		<div class="akismet-boxes">
 			<?php
 

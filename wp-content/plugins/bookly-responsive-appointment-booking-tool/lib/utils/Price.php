@@ -86,6 +86,7 @@ abstract class Price
         'SCR' => array( 'symbol' => '₨', 'format' => '{symbol} {price|2}' ),
         'SEK' => array( 'symbol' => 'kr', 'format' => '{price|2} {symbol}' ),
         'SGD' => array( 'symbol' => '$', 'format' => '{symbol}{price|2}' ),
+        'SRD' => array( 'symbol' => 'Sur$', 'format' => '{symbol}{price|2}' ),
         'THB' => array( 'symbol' => '฿', 'format' => '{price|2} {symbol}' ),
         'TJS' => array( 'symbol' => 'SM', 'format' => '{price|2} {symbol}' ),
         'TND' => array( 'symbol' => 'TD', 'format' => '{price|2} {symbol}' ),

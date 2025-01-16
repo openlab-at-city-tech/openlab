@@ -357,15 +357,7 @@ final class Utilities {
 	 * @return string
 	 */
 	public static function hub_scan_url() {
-		$url = null;
-
-		if ( self::get_dashboard_api() instanceof WPMUDEV_Dashboard_Api ) {
-			$site_id = self::site_id();
-
-			$url = apply_filters( 'wpmudev_blc_hub_scan_url', self::hub_home_url() . '?start-scan=1' );
-		}
-
-		return $url;
+		return apply_filters( 'wpmudev_blc_hub_scan_url', self::hub_home_url() . '?start-scan=1' );
 	}
 
 	/**
@@ -374,13 +366,8 @@ final class Utilities {
 	 * @return string
 	 */
 	public static function hub_home_url() {
-		$url = null;
-
-		if ( self::get_dashboard_api() instanceof WPMUDEV_Dashboard_Api ) {
-			$site_id = self::site_id();
-
-			$url = apply_filters( 'wpmudev_blc_hub_home_url', untrailingslashit( self::wpmudev_base_url() . "hub2/site/{$site_id}/blc" ) );
-		}
+		$site_id = self::site_id();
+		$url     = apply_filters( 'wpmudev_blc_hub_home_url', untrailingslashit( self::wpmudev_base_url() . "hub2/site/{$site_id}/blc" ) );
 
 		return $url;
 	}
@@ -468,17 +455,13 @@ final class Utilities {
 	 * @return string|null
 	 */
 	public static function hub_api_scan_url() {
-		$url = null;
-
-		if ( self::get_dashboard_api() instanceof WPMUDEV_Dashboard_Api ) {
-			$url = add_query_arg(
-				array(
-					'domain'  => untrailingslashit( self::schemaless_url() ),
-					'site_id' => self::site_id(),
-				),
-				self::wpmudev_base_url() . 'api/blc/v1/scan'
-			);
-		}
+		$url = add_query_arg(
+			array(
+				'domain'  => untrailingslashit( self::schemaless_url() ),
+				'site_id' => self::site_id(),
+			),
+			self::wpmudev_base_url() . 'api/blc/v1/scan'
+		);
 
 		return apply_filters( 'wpmudev_blc_api_scan_url', $url );
 	}
@@ -519,17 +502,13 @@ final class Utilities {
 	 * @return string|null
 	 */
 	public static function hub_api_sync_url() {
-		$url = null;
-
-		if ( self::get_dashboard_api() instanceof WPMUDEV_Dashboard_Api ) {
-			$url = add_query_arg(
-				array(
-					'domain'  => untrailingslashit( self::schemaless_url() ),
-					'site_id' => self::site_id(),
-				),
-				self::wpmudev_base_url() . 'api/blc/v1/result'
-			);
-		}
+		$url = add_query_arg(
+			array(
+				'domain'  => untrailingslashit( self::schemaless_url() ),
+				'site_id' => self::site_id(),
+			),
+			self::wpmudev_base_url() . 'api/blc/v1/result'
+		);
 
 		return apply_filters( 'result_api_sync_url', $url );
 	}

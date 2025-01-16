@@ -56,6 +56,9 @@ nbproject/*
 
 wp-config.php
 
+# Great job
+wp-content/themes/astra/auth.json
+
 #hiding vendor files
 wp-content/themes/*/node_modules/
 wp-content/themes/*/nbproject/

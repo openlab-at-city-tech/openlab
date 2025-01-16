@@ -14,7 +14,7 @@
             $staff_color = $('.bookly-js-color-picker', $container);
 
         if (obj.options.intlTelInput.enabled) {
-            $staff_phone.intlTelInput({
+            window.booklyIntlTelInput($staff_phone.get(0), {
                 preferredCountries: [obj.options.intlTelInput.country],
                 initialCountry: obj.options.intlTelInput.country,
                 geoIpLookup: function (callback) {
@@ -23,8 +23,7 @@
                         var countryCode = (resp && resp.country) ? resp.country : '';
                         callback(countryCode);
                     });
-                },
-                utilsScript: obj.options.intlTelInput.utils
+                }
             });
         }
 
@@ -59,8 +58,11 @@
                             } else {
                                 img_src = selection[0].url;
                             }
-                            $('[name=attachment_id]',$form).val(selection[0].id).trigger('change');
-                            $('#bookly-js-staff-avatar', $form).find('.bookly-js-image').css({'background-image': 'url(' + img_src + ')', 'background-size': 'cover'});
+                            $('[name=attachment_id]', $form).val(selection[0].id).trigger('change');
+                            $('#bookly-js-staff-avatar', $form).find('.bookly-js-image').css({
+                                'background-image': 'url(' + img_src + ')',
+                                'background-size': 'cover'
+                            });
                             $('.bookly-thumb-delete', $form).show();
                             $('.bookly-thumb', $form).addClass('bookly-thumb-with-image');
                             $(this).hide();
@@ -74,9 +76,9 @@
             .on('click', '.bookly-thumb-delete', function () {
                 var $thumb = $(this).parents('.bookly-js-image');
                 $thumb.attr('style', '');
-                $('[name=attachment_id]',$form).val('').trigger('change');
-                $('.bookly-thumb',$form).removeClass('bookly-thumb-with-image');
-                $('.bookly-thumb-delete',$form).hide();
+                $('[name=attachment_id]', $form).val('').trigger('change');
+                $('.bookly-thumb', $form).removeClass('bookly-thumb-with-image');
+                $('.bookly-thumb-delete', $form).hide();
             })
             // Save staff member details.
             .on('click', '#bookly-details-save', function (e) {
@@ -90,15 +92,7 @@
                 // When button disabled, listeners don't process
                 $(this).removeAttr('disabled');
 
-                try {
-                    phone = obj.options.intlTelInput.enabled ? $staff_phone.intlTelInput('getNumber') : $staff_phone.val();
-                    if (phone == '') {
-                        phone = $staff_phone.val();
-                    }
-                } catch (error) {  // In case when intlTelInput can't return phone number.
-                    phone = $staff_phone.val();
-                }
-                data.phone = phone;
+                data.phone = obj.options.intlTelInput.enabled ? booklyGetPhoneNumber($staff_phone.get(0)) : $staff_phone.val();
                 $.ajax({
                     type: 'POST',
                     url: ajaxurl,

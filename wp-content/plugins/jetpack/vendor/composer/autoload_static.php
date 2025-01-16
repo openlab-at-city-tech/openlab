@@ -4,11 +4,13 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
+class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ14_0
 {
     public static $files = array (
         '3773ef3f09c37da5478d578e32b03a4b' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-assets/actions.php',
+        '7372b7fb88a9723cf5b76d456eb0b738' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/actions.php',
         'd4eb94df91a729802d18373ee8cdc79f' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-backup/actions.php',
+        'd9927a8ddcd8b3a40fb28c24213827ff' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/actions.php',
         'e6f7f640a6586216432b53e5c9d1b472' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/social-image-generator/utilities.php',
         '3d45c7e6a7f0e71849e33afe4b3b3ede' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/cli.php',
     );
@@ -39,10 +41,10 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'AhoCorasick\\MultiStringMatcher' => __DIR__ . '/..' . '/wikimedia/aho-corasick/src/MultiStringMatcher.php',
         'AhoCorasick\\MultiStringReplacer' => __DIR__ . '/..' . '/wikimedia/aho-corasick/src/MultiStringReplacer.php',
         'Automattic\\Jetpack\\A8c_Mc_Stats' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-a8c-mc-stats/src/class-a8c-mc-stats.php',
-        'Automattic\\Jetpack\\Abtest' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-abtest/src/class-abtest.php',
         'Automattic\\Jetpack\\Admin_UI\\Admin_Menu' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-admin-ui/src/class-admin-menu.php',
         'Automattic\\Jetpack\\Assets' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-assets/src/class-assets.php',
         'Automattic\\Jetpack\\Assets\\Logo' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-logo/src/class-logo.php',
+        'Automattic\\Jetpack\\Assets\\Script_Data' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-assets/src/class-script-data.php',
         'Automattic\\Jetpack\\Assets\\Semver' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-assets/src/class-semver.php',
         'Automattic\\Jetpack\\Autoloader\\AutoloadFileWriter' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/AutoloadFileWriter.php',
         'Automattic\\Jetpack\\Autoloader\\AutoloadGenerator' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/AutoloadGenerator.php',
@@ -77,14 +79,16 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Boost_Speed_Score\\Speed_Score_Graph_History_Request' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-boost-speed-score/src/class-speed-score-graph-history-request.php',
         'Automattic\\Jetpack\\Boost_Speed_Score\\Speed_Score_History' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-boost-speed-score/src/class-speed-score-history.php',
         'Automattic\\Jetpack\\Boost_Speed_Score\\Speed_Score_Request' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-boost-speed-score/src/class-speed-score-request.php',
-        'Automattic\\Jetpack\\Calypsoify\\Jetpack_Calypsoify' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-calypsoify/src/class-jetpack-calypsoify.php',
         'Automattic\\Jetpack\\Classic_Theme_Helper\\Featured_Content' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-classic-theme-helper/src/class-featured-content.php',
+        'Automattic\\Jetpack\\Classic_Theme_Helper\\Jetpack_Portfolio' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-classic-theme-helper/src/custom-post-types/class-jetpack-portfolio.php',
         'Automattic\\Jetpack\\Classic_Theme_Helper\\Main' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-classic-theme-helper/src/class-main.php',
+        'Automattic\\Jetpack\\Classic_Theme_Helper\\Social_Links' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-classic-theme-helper/src/class-social-links.php',
         'Automattic\\Jetpack\\Composer\\Manager' => __DIR__ . '/..' . '/automattic/jetpack-composer-plugin/src/class-manager.php',
         'Automattic\\Jetpack\\Composer\\Plugin' => __DIR__ . '/..' . '/automattic/jetpack-composer-plugin/src/class-plugin.php',
         'Automattic\\Jetpack\\Config' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-config/src/class-config.php',
         'Automattic\\Jetpack\\Connection\\Authorize_Json_Api' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-authorize-json-api.php',
         'Automattic\\Jetpack\\Connection\\Client' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-client.php',
+        'Automattic\\Jetpack\\Connection\\Connection_Assets' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-connection-assets.php',
         'Automattic\\Jetpack\\Connection\\Connection_Notice' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-connection-notice.php',
         'Automattic\\Jetpack\\Connection\\Error_Handler' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-error-handler.php',
         'Automattic\\Jetpack\\Connection\\Initial_State' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-initial-state.php',
@@ -119,6 +123,8 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Device_Detection\\User_Agent_Info' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-device-detection/src/class-user-agent-info.php',
         'Automattic\\Jetpack\\Error' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-error/src/class-error.php',
         'Automattic\\Jetpack\\Errors' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-status/src/class-errors.php',
+        'Automattic\\Jetpack\\ExPlat' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-explat/src/class-explat.php',
+        'Automattic\\Jetpack\\ExPlat\\REST_Controller' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-explat/src/class-rest-controller.php',
         'Automattic\\Jetpack\\Extensions\\Contact_Form\\Contact_Form_Block' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-forms/src/blocks/contact-form/class-contact-form-block.php',
         'Automattic\\Jetpack\\Files' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-status/src/class-files.php',
         'Automattic\\Jetpack\\Forms\\ContactForm\\Admin' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-forms/src/contact-form/class-admin.php',
@@ -136,12 +142,6 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Forms\\Service\\Google_Drive' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-forms/src/service/class-google-drive.php',
         'Automattic\\Jetpack\\Forms\\Service\\Post_To_Url' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-forms/src/service/class-post-to-url.php',
         'Automattic\\Jetpack\\Forms\\WPCOM_REST_API_V2_Endpoint_Forms' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-forms/src/class-wpcom-rest-api-v2-endpoint-forms.php',
-        'Automattic\\Jetpack\\Google_Analytics\\AMP_Analytics' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-amp-analytics.php',
-        'Automattic\\Jetpack\\Google_Analytics\\GA_Manager' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-ga-manager.php',
-        'Automattic\\Jetpack\\Google_Analytics\\Legacy' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-legacy.php',
-        'Automattic\\Jetpack\\Google_Analytics\\Options' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-options.php',
-        'Automattic\\Jetpack\\Google_Analytics\\Universal' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-universal.php',
-        'Automattic\\Jetpack\\Google_Analytics\\Utils' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-google-analytics/src/class-utils.php',
         'Automattic\\Jetpack\\Heartbeat' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-heartbeat.php',
         'Automattic\\Jetpack\\IP\\Utils' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-ip/src/class-utils.php',
         'Automattic\\Jetpack\\IdentityCrisis\\Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/identity-crisis/class-exception.php',
@@ -192,7 +192,6 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Masterbar\\Inline_Help' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/inline-help/class-inline-help.php',
         'Automattic\\Jetpack\\Masterbar\\Jetpack_Admin_Menu' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/admin-menu/class-jetpack-admin-menu.php',
         'Automattic\\Jetpack\\Masterbar\\Main' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/class-main.php',
-        'Automattic\\Jetpack\\Masterbar\\Masterbar' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/masterbar/class-masterbar.php',
         'Automattic\\Jetpack\\Masterbar\\P2_Admin_Menu' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/admin-menu/class-p2-admin-menu.php',
         'Automattic\\Jetpack\\Masterbar\\Posts_List_Page_Notification' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/wp-posts-list/class-posts-list-page-notification.php',
         'Automattic\\Jetpack\\Masterbar\\WPCOM_Additional_CSS_Manager' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-masterbar/src/nudges/additional-css/class-wpcom-additional-css-manager.php',
@@ -227,6 +226,7 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\My_Jetpack\\REST_Product_Data' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-rest-product-data.php',
         'Automattic\\Jetpack\\My_Jetpack\\REST_Products' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-rest-products.php',
         'Automattic\\Jetpack\\My_Jetpack\\REST_Purchases' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-rest-purchases.php',
+        'Automattic\\Jetpack\\My_Jetpack\\REST_Recommendations_Evaluation' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-rest-recommendations-evaluation.php',
         'Automattic\\Jetpack\\My_Jetpack\\REST_Zendesk_Chat' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-rest-zendesk-chat.php',
         'Automattic\\Jetpack\\My_Jetpack\\Wpcom_Products' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-my-jetpack/src/class-wpcom-products.php',
         'Automattic\\Jetpack\\Partner' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-partner.php',
@@ -239,16 +239,27 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Plugins_Installer' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-plugins-installer/src/class-plugins-installer.php',
         'Automattic\\Jetpack\\Post_List\\Post_List' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-post-list/src/class-post-list.php',
         'Automattic\\Jetpack\\Post_List\\Post_Thumbnail' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-post-list/src/class-post-thumbnail.php',
-        'Automattic\\Jetpack\\Publicize\\Auto_Conversion\\REST_Settings_Controller' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/auto-conversion-settings/class-rest-settings-controller.php',
-        'Automattic\\Jetpack\\Publicize\\Auto_Conversion\\Settings' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/auto-conversion-settings/class-settings.php',
+        'Automattic\\Jetpack\\Protect_Models' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-models/src/class-protect-models.php',
+        'Automattic\\Jetpack\\Protect_Models\\Extension_Model' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-models/src/class-extension-model.php',
+        'Automattic\\Jetpack\\Protect_Models\\History_Model' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-models/src/class-history-model.php',
+        'Automattic\\Jetpack\\Protect_Models\\Status_Model' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-models/src/class-status-model.php',
+        'Automattic\\Jetpack\\Protect_Models\\Threat_Model' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-models/src/class-threat-model.php',
+        'Automattic\\Jetpack\\Protect_Status\\Plan' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-status/src/class-plan.php',
+        'Automattic\\Jetpack\\Protect_Status\\Protect_Status' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-status/src/class-protect-status.php',
+        'Automattic\\Jetpack\\Protect_Status\\REST_Controller' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-status/src/class-rest-controller.php',
+        'Automattic\\Jetpack\\Protect_Status\\Scan_Status' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-status/src/class-scan-status.php',
+        'Automattic\\Jetpack\\Protect_Status\\Status' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-protect-status/src/class-status.php',
         'Automattic\\Jetpack\\Publicize\\Connections_Post_Field' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-connections-post-field.php',
         'Automattic\\Jetpack\\Publicize\\Jetpack_Social_Settings\\Dismissed_Notices' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/jetpack-social-settings/class-dismissed-notices.php',
         'Automattic\\Jetpack\\Publicize\\Jetpack_Social_Settings\\Settings' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/jetpack-social-settings/class-settings.php',
         'Automattic\\Jetpack\\Publicize\\Keyring_Helper' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-keyring-helper.php',
         'Automattic\\Jetpack\\Publicize\\Publicize' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize.php',
+        'Automattic\\Jetpack\\Publicize\\Publicize_Assets' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-assets.php',
         'Automattic\\Jetpack\\Publicize\\Publicize_Base' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-base.php',
+        'Automattic\\Jetpack\\Publicize\\Publicize_Script_Data' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-script-data.php',
         'Automattic\\Jetpack\\Publicize\\Publicize_Setup' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-setup.php',
         'Automattic\\Jetpack\\Publicize\\Publicize_UI' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-ui.php',
+        'Automattic\\Jetpack\\Publicize\\Publicize_Utils' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize-utils.php',
         'Automattic\\Jetpack\\Publicize\\REST_Controller' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-rest-controller.php',
         'Automattic\\Jetpack\\Publicize\\Share_Limits' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-share-limits.php',
         'Automattic\\Jetpack\\Publicize\\Social_Image_Generator\\Post_Settings' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/social-image-generator/class-post-settings.php',
@@ -396,6 +407,7 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Jetpack\\Waf\\File_System_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/exceptions/class-file-system-exception.php',
         'Automattic\\Jetpack\\Waf\\REST_Controller' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-rest-controller.php',
         'Automattic\\Jetpack\\Waf\\Rules_API_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/exceptions/class-rules-api-exception.php',
+        'Automattic\\Jetpack\\Waf\\Waf_Blocklog_Manager' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-waf-blocklog-manager.php',
         'Automattic\\Jetpack\\Waf\\Waf_Compatibility' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-compatibility.php',
         'Automattic\\Jetpack\\Waf\\Waf_Constants' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-waf-constants.php',
         'Automattic\\Jetpack\\Waf\\Waf_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/exceptions/class-waf-exception.php',
@@ -420,6 +432,7 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
         'Automattic\\Woocommerce_Analytics\\Universal' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/woocommerce-analytics/src/class-universal.php',
         'Automattic\\Woocommerce_Analytics\\Woo_Analytics_Trait' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/woocommerce-analytics/src/class-woo-analytics-trait.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'Jetpack_Customize_Control_Title' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-classic-theme-helper/src/content-options/customizer.php',
         'Jetpack_IXR_Client' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/legacy/class-jetpack-ixr-client.php',
         'Jetpack_IXR_ClientMulticall' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/legacy/class-jetpack-ixr-clientmulticall.php',
         'Jetpack_Modules_Overrides' => __DIR__ . '/../..' . '/src/class-jetpack-modules-overrides.php',
@@ -493,9 +506,9 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ13_6::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ14_0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ14_0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ14_0::$classMap;
 
         }, null, ClassLoader::class);
     }

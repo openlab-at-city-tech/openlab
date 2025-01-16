@@ -31,10 +31,10 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                         <?php } ?>
                     </div>
                 </div>
-                <br>
+                
                 <?php if (!B2S_System::isblockedArea('B2S_MENU_ITEM_LICENSE', B2S_PLUGIN_ADMIN)) { ?> 
                     <div class="row">
-                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10">
+                        <div class="panel panel-default b2s-margin-right-10 b2s-margin-bottom-10 b2s-margin-top-8">
                             <div class="panel-body b2s-padding-10">
                                 <div class="media d-flex">
                                     <div class="align-self-center">
@@ -150,7 +150,7 @@ $getPage = (isset($_GET['page']) && !empty($_GET['page'])) ? sanitize_text_field
                                 <i class="glyphicon glyphicon-star glyphicon-success"></i> <a href="admin.php?page=blog2social-favorites" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-favorites') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Favorites", "blog2social") ?></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
-                                <i class="glyphicon glyphicon-asterisk glyphicon-success"></i> <a href="#" class="b2s-sidebar-menu-item b2sAiTextGeneratorModalBtn"><?php esc_html_e("AI Text Generator", "blog2social") ?> <span class="label label-success"><?php esc_html_e("NEW", "blog2social"); ?></span></a> 
+                                <i class="glyphicon glyphicon-asterisk glyphicon-success"></i> <a href="admin.php?page=blog2social-ai-content-creator" class="b2s-sidebar-menu-item"><?php esc_html_e("AI Assistant", "blog2social") ?> <span class="label label-success"><?php esc_html_e("NEW", "blog2social"); ?></span></a> 
                             </li>
                             <li class="b2s-list-margin-left-10">
                                 <i class="glyphicon glyphicon-th-list glyphicon-success"></i> <a href="admin.php?page=blog2social-draft-post" class="b2s-sidebar-menu-item <?php echo (($getPage == 'blog2social-draft-post') ? ' b2s-text-bold' : '') ?>"><?php esc_html_e("Drafts", "blog2social") ?></a> 

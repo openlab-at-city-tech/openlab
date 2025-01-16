@@ -3,8 +3,8 @@ Contributors: icc0rz, fnoks, falcon28, underhaug
 Donate link: http://h5p.org
 Tags: editor, video, quiz, slider, education
 Requires at least: 3.8.1
-Tested up to: 6.4.4
-Stable tag: 1.15.8
+Tested up to: 6.6.2
+Stable tag: 1.16.0
 License: MIT
 License URI: http://opensource.org/licenses/MIT
 
@@ -486,7 +486,14 @@ Fix permission check for installing recommended libraries only. Thanks Otacke.
 Improved narrow data views. Thanks Otacke.
 Fix potential memory issue. Thanks Otacke.
 Fix not storing empty content state (resume) for some content types.
-Updated translations
+Updated translations.
 
 = 1.15.8 =
 Improve file upload
+Updated translations.
+
+= 1.16.0 =
+Upgraded to CKEditor5 in editor.
+Added new expand-collapse feature to the editor.
+Added support for Echo360 video provider.
+Updated translations.

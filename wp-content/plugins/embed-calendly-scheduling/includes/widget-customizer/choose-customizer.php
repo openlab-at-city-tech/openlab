@@ -8,7 +8,7 @@ defined('ABSPATH') || exit;
         <div class="sc-container">
             <form action="<?php echo esc_url(admin_url('admin.php?page=emcs-customizer')); ?>" method="POST">
                 <div class="form-group">
-                    <label for="choose-customizer">Choose Event Type</label>
+                    <label for="choose-customizer"><?php esc_html_e('Choose Event Type', 'embed-calendly-scheduling'); ?></label>
                 </div>
                 <div class="form-group">
                     <select name="emcs-choose-customizer-select" class="emcs-choose-customizer-select">
@@ -21,7 +21,7 @@ defined('ABSPATH') || exit;
                         }
                         ?>
                     </select>
-                    <button type="submit" name="emcs-choose-customizer" class="button button-primary emcs-button-primary">Start customizing</button>
+                    <button type="submit" name="emcs-choose-customizer" class="button button-primary emcs-button-primary"><?php esc_html_e('Start customizing', 'embed-calendly-scheduling'); ?></button>
                 </div>
             </form>
         </div>

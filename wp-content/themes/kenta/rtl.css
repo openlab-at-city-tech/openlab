@@ -1,0 +1,120 @@
+/**
+Theme Name: Kenta
+
+Adding support for languages written in a Right To Left (RTL) direction is easy,
+it's just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+
+https://codex.wordpress.org/Right-to-Left_Language_Support
+*/
+
+/* Reset */
+body {
+    direction: rtl;
+    unicode-bidi: embed;
+}
+
+/* Accessibility */
+.screen-reader-text:focus {
+    left: auto;
+    right: 5px;
+}
+
+/* Text align */
+.text-left {
+    text-align: right;
+}
+
+.text-right {
+    text-align: left;
+}
+
+/* Float */
+.float-right {
+    float: left;
+}
+
+.float-left {
+    float: right;
+}
+
+/* Wordpress alignment */
+.alignleft {
+    float: right;
+    margin-left: 24px;
+    margin-right: 0;
+}
+
+.alignright {
+    float: left;
+    margin-right: 24px;
+    margin-left: 0;
+}
+
+/* Generic builder */
+.kenta-builder-column-desktop-dir-row > [data-builder-element],
+.kenta-builder-column-tablet-dir-row > [data-builder-element],
+.kenta-builder-column-mobile-dir-row > [data-builder-element] {
+    margin-right: unset;
+    margin-left: var(--kenta-builder-elements-gap, 12px);
+}
+
+.kenta-builder-column-desktop-dir-row > [data-builder-element]:last-child,
+.kenta-builder-column-tablet-dir-row > [data-builder-element]:last-child,
+.kenta-builder-column-mobile-dir-row > [data-builder-element]:last-child {
+    margin-right: unset;
+    margin-left: 0;
+}
+
+/* Menu Element */
+.kenta-menu.kenta-menu-has-arrow .menu-item-has-children > a > .kenta-menu-icon {
+    margin-left: 0;
+    margin-right: 0.5em;
+}
+
+/* Socials Element  */
+.kenta-socials .kenta-social-link {
+    margin-right: 0;
+    margin-left: var(--kenta-social-icons-spacing, 0);
+}
+
+.kenta-socials .kenta-social-link:last-of-type {
+    margin-left: 0;
+}
+
+/* Logo Element  */
+.kenta-site-branding[data-logo="left"] .site-logo {
+    margin-right: 0;
+    margin-left: var(--logo-spacing);
+}
+
+.kenta-site-branding[data-logo="right"] .site-logo {
+    margin-left: 0;
+    margin-right: var(--logo-spacing);
+}
+
+/* Sidebars */
+@media (min-width: 1024px) {
+    .kenta-right-sidebar .kenta-sidebar {
+        margin-left: auto;
+        margin-right: var(--kenta-sidebar-gap, 0);
+    }
+
+    .kenta-left-sidebar .kenta-sidebar {
+        margin-right: auto;
+        margin-left: var(--kenta-sidebar-gap, 0);
+    }
+}
+
+/* Buttons */
+.woocommerce a.button .has-text-align-right,
+.kenta-button .has-text-align-right,
+.wp-block-button .has-text-align-right {
+    justify-content: flex-start;
+}
+
+.woocommerce a.button .has-text-align-left,
+.kenta-button .has-text-align-left,
+.wp-block-button .has-text-align-left {
+    justify-content: flex-end;
+}

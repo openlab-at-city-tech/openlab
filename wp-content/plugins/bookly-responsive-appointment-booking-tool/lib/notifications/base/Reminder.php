@@ -15,7 +15,7 @@ abstract class Reminder
 {
     const RECIPIENT_ADMINS = 'admins';
     const RECIPIENT_CLIENT = 'client';
-    const RECIPIENT_STAFF  = 'staff';
+    const RECIPIENT_STAFF = 'staff';
 
     const SEND_AS_HTML = 'html';
     const SEND_AS_TEXT = 'text';
@@ -293,7 +293,7 @@ abstract class Reminder
      * @param string $recipient
      * @param string|array $to_email
      * @param Notification $notification
-     * @param Codes $codes ,
+     * @param Codes $codes
      * @param Attachments $attachments
      * @param array $reply_to
      * @param string $force_send_as
@@ -313,7 +313,8 @@ abstract class Reminder
         $force_from = null,
         $queue_data = array(),
         $queue = null
-    ) {
+    )
+    {
         if ( empty ( $to_email ) ) {
             return false;
         }
@@ -329,9 +330,6 @@ abstract class Reminder
             $subject = $notification->getTranslatedSubject();
             $message = $notification->getTranslatedMessage();
         } else {
-            if ( Proxy\RecurringAppointments::sendToStaff( false, $notification, $codes, $attachments, $reply_to, $queue ) ) {
-                return true;
-            }
             $subject = $notification->getSubject();
             $message = Proxy\Pro::prepareNotificationMessage( $notification->getMessage(), $recipient, 'email' );
         }
@@ -366,7 +364,7 @@ abstract class Reminder
      * @param string $phone
      * @param Notification $notification
      * @param Codes $codes
-     * @param array $queue_data ,
+     * @param array $queue_data
      * @param NotificationList|null $queue
      * @return bool
      */
@@ -446,6 +444,7 @@ abstract class Reminder
         $message = $codes->replaceForWhatsApp( $notification );
         if ( $queue ) {
             $queue->add( $notification, $message, $phone, $queue_data );
+
             return true;
         }
 

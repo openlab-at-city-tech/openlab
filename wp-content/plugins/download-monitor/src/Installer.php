@@ -10,7 +10,6 @@ class DLM_Installer {
 	 * Install all requirements for Download Monitor
 	 */
 	public function install() {
-
 		// Init User Roles
 		$this->init_user_roles();
 
@@ -30,7 +29,6 @@ class DLM_Installer {
 
 		// No Access Page
 		$this->add_no_access_page();
-
 		// Add endpoints
 		$dlm_download_handler = new DLM_Download_Handler();
 		$dlm_download_handler->add_endpoint();
@@ -60,7 +58,7 @@ class DLM_Installer {
 		add_rewrite_endpoint( 'download-id', EP_ALL );
 
 		// flush rewrite rules
-		flush_rewrite_rules(false);
+		flush_rewrite_rules( false );
 		flush_rewrite_rules();
 		do_action( 'dlm_after_install_setup', $first_install );
 	}
@@ -82,6 +80,10 @@ class DLM_Installer {
 			$wp_roles->add_cap( 'administrator', 'manage_downloads' );
 			$wp_roles->add_cap( 'administrator', 'dlm_manage_logs' );
 			$wp_roles->add_cap( 'administrator', 'dlm_view_reports' );
+			$wp_roles->add_cap( 'administrator', 'dlm_use_rest_api_get' );
+			$wp_roles->add_cap( 'administrator', 'dlm_use_rest_api_post' );
+			$wp_roles->add_cap( 'administrator', 'dlm_use_rest_api_patch' );
+			$wp_roles->add_cap( 'administrator', 'dlm_use_rest_api_delete' );
 		}
 	}
 
@@ -100,7 +102,6 @@ class DLM_Installer {
 
 		$tables_sql = array();
 
-		// order table
 		$tables_sql[] = "
 		CREATE TABLE IF NOT EXISTS `{$table_prefix}dlm_order` (
 		  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
@@ -109,10 +110,10 @@ class DLM_Installer {
 		  `date_modified` DATETIME NULL,
 		  `currency` VARCHAR(5) NOT NULL,
 		  `hash` VARCHAR(255) NOT NULL,
-		  PRIMARY KEY (`id`))
-		ENGINE = InnoDB {$collate};";
+		  PRIMARY KEY (`id`)
+		  ) ENGINE = InnoDB {$collate};";
 
-		// order customer
+		// order customer.
 		$tables_sql[] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}dlm_order_customer` (
 		  `first_name` VARCHAR(255) NULL,
 		  `last_name` VARCHAR(255) NULL,
@@ -127,16 +128,15 @@ class DLM_Installer {
 		  `phone` VARCHAR(50) NULL,
 		  `ip_address` VARCHAR(50) NULL,
 		  `order_id` INT UNSIGNED NOT NULL,
-		  INDEX `fk_order_customer_order_idx` (`order_id` ASC),
 		  PRIMARY KEY (`order_id`),
-		  CONSTRAINT `fk_order_customer_order`
+		  CONSTRAINT `{$table_prefix}fk_order_customer_order`
 		    FOREIGN KEY (`order_id`)
 		    REFERENCES `{$table_prefix}dlm_order` (`id`)
 		    ON DELETE NO ACTION
-		    ON UPDATE NO ACTION)
-		ENGINE = InnoDB {$collate};";
+		    ON UPDATE NO ACTION
+			) ENGINE = InnoDB {$collate};";
 
-		// transaction table
+		// transaction table.
 		$tables_sql[] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}dlm_order_transaction` (
 		  `id` INT NOT NULL AUTO_INCREMENT,
 		  `date_created` DATETIME NULL,
@@ -149,15 +149,14 @@ class DLM_Installer {
 		  `processor_status` VARCHAR(255) NULL,
 		  `order_id` INT UNSIGNED NOT NULL,
 		  PRIMARY KEY (`id`),
-		  INDEX `fk_transaction_order1_idx` (`order_id` ASC),
-		  CONSTRAINT `fk_transaction_order1`
+		  CONSTRAINT `{$table_prefix}fk_transaction_order1`
 		    FOREIGN KEY (`order_id`)
 		    REFERENCES `{$table_prefix}dlm_order` (`id`)
 		    ON DELETE NO ACTION
-		    ON UPDATE NO ACTION)
-		ENGINE = InnoDB {$collate};";
+		    ON UPDATE NO ACTION
+			) ENGINE = InnoDB {$collate};";
 
-		// order items
+		// order items.
 		$tables_sql[] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}dlm_order_item` (
 		  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT,
 		  `order_id` INT UNSIGNED NOT NULL,
@@ -168,28 +167,27 @@ class DLM_Installer {
 		  `tax_total` INT NULL,
 		  `subtotal` INT NULL,
 		  `total` INT NULL,
-		  INDEX `fk_order_item_order1_idx` (`order_id` ASC),
 		  PRIMARY KEY (`id`),
-		  CONSTRAINT `fk_order_item_order1`
+		  CONSTRAINT `{$table_prefix}fk_order_item_order1`
 		    FOREIGN KEY (`order_id`)
 		    REFERENCES `{$table_prefix}dlm_order` (`id`)
 		    ON DELETE NO ACTION
-		    ON UPDATE NO ACTION)
-		ENGINE = InnoDB {$collate};";
+		    ON UPDATE NO ACTION
+			) ENGINE = InnoDB {$collate};";
 
-		// session
+		// session.
 		$tables_sql[] = "CREATE TABLE IF NOT EXISTS `{$table_prefix}dlm_session` (
-		  `key` VARCHAR(190) NOT NULL,
-		  `hash` VARCHAR(190) NOT NULL,
+		  `key` VARCHAR(150) NOT NULL,
+		  `hash` VARCHAR(150) NOT NULL,
 		  `expiry` DATETIME NOT NULL,
 		  `data` LONGTEXT NOT NULL,
-		  PRIMARY KEY (`key`))
-		ENGINE = InnoDB {$collate};";
+		  PRIMARY KEY (`key`)
+		  )
+	ENGINE = InnoDB {$collate};";
 
 		foreach ( $tables_sql as $sql ) {
-			$wpdb->query( $sql );
+			dbDelta( $sql );
 		}
-
 	}
 
 	/**
@@ -220,7 +218,6 @@ class DLM_Installer {
 	 * @return void
 	 */
 	private function install_tables() {
-		
 		global $wpdb;
 
 		$wpdb->hide_errors();
@@ -268,9 +265,50 @@ class DLM_Installer {
 		 				KEY attribute_name (download_id)
 		 				) $collate;";
 
+		/**
+		 * Cookies table
+		 */
+		$dlm_cookie = "CREATE TABLE `{$wpdb->prefix}dlm_cookies` (
+		 	ID bigint(20) NOT NULL auto_increment,
+			hash longtext NULL,
+			creation_date datetime DEFAULT NULL,
+			expiration_date datetime DEFAULT NULL,
+			PRIMARY KEY  (ID),
+			KEY attribute_name (ID)
+            ) $collate;";
+
+		/**
+		 * Cookie meta table
+		 */
+		$dlm_cookie_meta = "CREATE TABLE `{$wpdb->prefix}dlm_cookiemeta` (
+		 	ID bigint(20) NOT NULL auto_increment,
+			cookie_id bigint(20) NULL,
+			meta_key longtext NULL,
+			meta_data longtext NULL,
+			PRIMARY KEY  (ID),
+			KEY attribute_name (ID)
+            ) $collate;";
+
+		/**
+		 * Cookie meta table
+		 */
+		$api_table = "CREATE TABLE `{$wpdb->prefix}dlm_api_keys` (
+		 	ID bigint(20) NOT NULL auto_increment,
+			user_id bigint(20) NULL,
+			public_key longtext NULL,
+			token longtext NULL,
+			secret_key longtext NULL,
+			create_date datetime DEFAULT NULL,
+			PRIMARY KEY  (ID),
+			KEY attribute_name (ID)
+            ) $collate;";
+
 		dbDelta( $dlm_log );
 		dbDelta( $dlm_reports );
 		dbDelta( $dlm_downloads );
+		dbDelta( $dlm_cookie );
+		dbDelta( $dlm_cookie_meta );
+		dbDelta( $api_table );
 
 		// install shop tables.
 		$this->create_shop_tables();
@@ -283,7 +321,6 @@ class DLM_Installer {
 	 * @return void
 	 */
 	public function directory_protection() {
-
 		// Install files and folders for uploading files and prevent hotlinking
 		$upload_dir = wp_upload_dir();
 
@@ -327,12 +364,11 @@ class DLM_Installer {
 	 * @access public
 	 * @return void
 	 *
-	 * @since 4.8.7
+	 * @since  4.8.7
 	 */
 	public function add_no_access_page() {
-
 		if ( 0 === absint( get_option( 'dlm_no_access_page', 0 ) ) ) {
-			$pc          = new WPChill\DownloadMonitor\Util\PageCreator();
+			$pc = new WPChill\DownloadMonitor\Util\PageCreator();
 			$pc->create_no_access_page();
 		}
 	}
@@ -349,5 +385,14 @@ class DLM_Installer {
 			update_option( 'dlm_invoice_prefix', $paypal_invoice );
 			delete_option( 'gateway_paypal_invoice_prefix' );
 		}
+	}
+
+	/**
+	 * Recreate tables in case plugin activation did not work as expected
+	 *
+	 * @since 5.0.0
+	 */
+	public function recreate_tables(){
+		$this->install_tables();
 	}
 }

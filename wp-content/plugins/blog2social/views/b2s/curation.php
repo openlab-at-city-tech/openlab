@@ -55,7 +55,7 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION < 2) ? ' <span class="label label-success
                         </div>
                         <div class="b2s-curation-area">
                             <div class="row">
-                                <div class="col-sm-8">
+                                <div class="col-md-8 col-sm-12">
                                     <form id="b2s-curation-post-form" method="post">
                                         <div class="b2s-loading-area" style="display:none">
                                             <br>
@@ -150,22 +150,21 @@ $isImagePro = (B2S_PLUGIN_USER_VERSION < 2) ? ' <span class="label label-success
                                     <input type="hidden" id="b2sMaxSchedDate" value="<?php echo date('Y-m-d', strtotime("+ 3 years")) ?>">
 
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-md-4 hidden-sm">
                                     <div id="b2s-curation-preview" class="b2s-curation-preview">
                                         <div id="b2s-curation-preview-header" class="b2s-bold">
 
                                         </div>
                                         <div id="b2s-curation-preview-body" class="b2s-curation-preview-body">
-                                            <div class="row">
-                                                <div id="b2s-curation-preview-body-account-img" class="col-sm-2 b2s-curation-preview-body-account-img">
+                                            <div class="row b2s-curation-preview-header">
+                                                <div id="b2s-curation-preview-body-account-img" class="b2s-curation-preview-body-account-img">
                                                     <img src="<?php echo esc_url(plugins_url('/assets/images/b2s_icon.png', B2S_PLUGIN_FILE)); ?>" alt="Blog2Social">
                                                 </div>
-                                                <div id="b2s-curation-preview-body-account-post" class="col-sm-10">
+                                                <div id="b2s-curation-preview-body-account-post">
                                                     <div id="b2s-curation-preview-body-account" class="b2s-curation-preview-body-account">
                                                         <?php esc_html_e('Blog2Social', 'blog2social') ?>
                                                     </div>
                                                     <div id="b2s-curation-preview-body-post-data" class="b2s-curation-preview-body-post-data">
-
                                                     </div>
                                                 </div>
                                             </div>

@@ -114,7 +114,7 @@ function ed11y_setting_sections_fields() {
 	// Add live check field.
 	add_settings_field(
 		'ed11y_livecheck',
-		esc_html__( 'Highlight issues while editing content', 'editoria11y' ),
+		esc_html__( 'Check inside the block editor', 'editoria11y' ),
 		'ed11y_livecheck_field',
 		'ed11y',
 		'ed11y_basic',
@@ -259,15 +259,12 @@ function ed11y_livecheck_field() {
 	?>
 
 	<select name="ed11y_plugin_settings[ed11y_livecheck]" id="ed11y-livecheck" name="ed11y_livecheck" class="form-select" aria-describedby="livecheck_description">
-		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">All issues</option>
-		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Only definite errors</option>
-		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">None</option>
+		<option <?php echo 'all' === $settings ? 'selected="true"' : ''; ?>value="all">Check while editing, and always show tips</option>
+		<option <?php echo 'errors' === $settings ? 'selected="true"' : ''; ?>value="errors">Check while editing</option>
+		<option <?php echo 'none' === $settings ? 'selected="true"' : ''; ?>value="none">Do not check while editing</option>
 	</select>
 	<p id="livecheck_description">
-		Editoria11y's full tips with details and dismissal options appear when viewing published or preview pages.
-	</p>
-	<p>
-		Simplified alerts can also be injected into the block editor, as highlights around the affected block. Adjust this to reduce or remove those highlights.
+		Activates when editing posts or pages in the default block editor (Gutenberg).
 	</p>
 	<?php
 }

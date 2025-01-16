@@ -94,13 +94,13 @@ class Codes extends Order\Codes
     public function prepareForItem( Item $item, $recipient )
     {
         $lang = WPML::getLang();
-
+        $ca = $item->getCA();
         if (
             $this->item === $item &&
             $this->lang == $lang &&
             (
                 $this->recipient == $recipient || (
-                    $item->getCA()->getTimeZoneOffset() === null && $item->getStaff()->getTimeZone( false ) === null
+                    $ca && $ca->getTimeZoneOffset() === null && $item->getStaff()->getTimeZone( false ) === null
                 )
             )
         ) {
@@ -111,24 +111,27 @@ class Codes extends Order\Codes
         $this->lang = $lang;
         $this->recipient = $recipient;
         $service_category = $item->getService()->getCategoryId() ? Category::find( $item->getService()->getCategoryId() ) : false;
+        if ( $item->isAppointment() ) {
+            $this->appointment_id = $item->getAppointment()->getId();
+            $this->appointment_start = $this->tz( $item->getAppointment()->getStartDate() );
+            $this->booking_number = Config::groupBookingActive() ? $item->getAppointment()->getId() . '-' . $item->getCA()->getId() : $item->getCA()->getId();
+            $this->client_locale = $ca->getLocale();
+            $this->appointment_token = $ca->getToken();
+            $this->appointment_notes = $ca->getNotes();
+            $this->number_of_persons = $ca->getNumberOfPersons();
+            $this->client_timezone = $ca->getTimeZone()
+                ?: ( $ca->getTimeZoneOffset() !== null
+                    ? 'UTC' . Utils\DateTime::formatOffset( - $ca->getTimeZoneOffset() * 60 )
+                    : '' );
+            $this->internal_note = $item->getAppointment()->getInternalNote();
+        }
 
         $this->appointment_end = $item->getTotalEnd() ? $this->tz( $item->getTotalEnd()->format( 'Y-m-d H:i:s' ) ) : null;
         $this->appointment_end_info = $item->getService()->getEndTimeInfo();
-        $this->appointment_id = $item->getAppointment()->getId();
-        $this->appointment_notes = $item->getCA()->getNotes();
-        $this->appointment_start = $this->tz( $item->getAppointment()->getStartDate() );
         $this->appointment_start_info = $item->getService()->getStartTimeInfo();
-        $this->appointment_token = $item->getCA()->getToken();
-        $this->booking_number = Config::groupBookingActive() ? $item->getAppointment()->getId() . '-' . $item->getCA()->getId() : $item->getCA()->getId();
         $this->category_name = $item->getService()->getTranslatedCategoryName();
         $this->category_info = $service_category ? $service_category->getTranslatedInfo() : '';
         $this->category_image = $service_category ? $service_category->getImageUrl() : '';
-        $this->client_timezone = $item->getCA()->getTimeZone()
-            ?: ( $item->getCA()->getTimeZoneOffset() !== null
-                ? 'UTC' . Utils\DateTime::formatOffset( - $item->getCA()->getTimeZoneOffset() * 60 )
-                : '' );
-        $this->client_locale = $item->getCA()->getLocale() ?: '';
-        $this->number_of_persons = $item->getCA()->getNumberOfPersons();
         $this->service_duration = $item->getServiceDuration();
         $this->service_info = $item->getService()->getTranslatedInfo();
         $this->service_name = $item->getService()->getTranslatedTitle();
@@ -140,7 +143,6 @@ class Codes extends Order\Codes
         $this->staff_photo = $item->getStaff()->getImageUrl();
         $this->service_image = $item->getService()->getImageUrl();
         $this->staff_timezone = $item->getStaff()->getTimeZone( false );
-        $this->internal_note = $item->getAppointment()->getInternalNote();
         if ( ! $this->order->hasPayment() ) {
             $this->total_price = $item->getTotalPrice();
             $this->total_tax = $item->getTax();

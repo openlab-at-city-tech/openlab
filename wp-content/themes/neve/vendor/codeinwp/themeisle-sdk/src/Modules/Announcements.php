@@ -36,6 +36,17 @@ class Announcements extends Abstract_Module {
 	);
 
 	/**
+	 * Mark is a banner for a product was already loaded.
+	 *
+	 * @var array
+	 */
+	private static $banner_loaded = array();
+
+	const PLUGIN_PAGE   = 'https://themeisle.com/plugins';
+	const THEME_PAGE    = 'https://themeisle.com/themes';
+	const REVIVE_SOCIAL = 'https://revive.social/plugins';
+
+	/**
 	 * Holds the option prefix for the announcements.
 	 *
 	 * This is used to store the dismiss date for each announcement.
@@ -50,6 +61,17 @@ class Announcements extends Abstract_Module {
 	 * @var string
 	 */
 	public $time = '';
+
+	/**
+	 * Constructor for the Announcements module.
+	 *
+	 * @param array $timeline Optional. An array representing the timeline of announcements. Default is an empty array.
+	 */
+	public function __construct( $timeline = array() ) {
+		if ( is_array( $timeline ) && ! empty( $timeline ) ) {
+			self::$timeline = $timeline;
+		}
+	}
 
 	/**
 	 * Check if the module can be loaded.
@@ -83,6 +105,7 @@ class Announcements extends Abstract_Module {
 		add_action( 'admin_init', array( $this, 'load_announcements' ) );
 		add_filter( 'themeisle_sdk_active_announcements', array( $this, 'get_active_announcements' ) );
 		add_filter( 'themeisle_sdk_announcements', array( $this, 'get_announcements_for_plugins' ) );
+		add_action( 'themeisle_sdk_load_banner', array( $this, 'load_dashboard_banner_renderer' ) );
 	}
 
 	/**
@@ -143,9 +166,18 @@ class Announcements extends Abstract_Module {
 				$announcements[ $announcement ]['active'] = $this->is_active( $dates );
 
 				// Dashboard banners URLs.
-				$announcements[ $announcement ]['feedzy_dashboard_url'] = tsdk_utmify( 'https://themeisle.com/plugins/feedzy-rss-feeds/blackfriday/', 'bfcm24', 'dashboard' );
-				$announcements[ $announcement ]['neve_dashboard_url']   = tsdk_utmify( 'https://themeisle.com/themes/neve/blackfriday/', 'bfcm24', 'dashboard' );
-				$announcements[ $announcement ]['otter_dashboard_url']  = tsdk_utmify( 'https://themeisle.com/plugins/otter-blocks/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['neve_dashboard_url']       = tsdk_utmify( self::THEME_PAGE . '/neve/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['hestia_dashboard_url']     = tsdk_utmify( self::THEME_PAGE . '/hestia/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['feedzy_dashboard_url']     = tsdk_utmify( self::PLUGIN_PAGE . '/feedzy-rss-feeds/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['otter_dashboard_url']      = tsdk_utmify( self::PLUGIN_PAGE . '/otter-blocks/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['mpg_dashboard_url']        = tsdk_utmify( self::PLUGIN_PAGE . '/multi-pages-generator/blackfriday', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['ppom_dashboard_url']       = tsdk_utmify( self::PLUGIN_PAGE . '/ppom-pro/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['rfc7r_dashboard_url']      = tsdk_utmify( self::PLUGIN_PAGE . '/wpcf7-redirect/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['hyve_dashboard_url']       = tsdk_utmify( self::PLUGIN_PAGE . '/hyve/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['spc_dashboard_url']        = tsdk_utmify( self::PLUGIN_PAGE . '/super-page-cache-pro/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['visualizer_dashboard_url'] = tsdk_utmify( self::PLUGIN_PAGE . '/visualizer-charts-and-graphs/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['feedzy_dashboard_url']     = tsdk_utmify( self::PLUGIN_PAGE . '/feedzy-rss-feeds/blackfriday/', 'bfcm24', 'dashboard' );
+				$announcements[ $announcement ]['rop_dashboard_url']        = tsdk_utmify( self::REVIVE_SOCIAL . '/revive-old-post/', 'bfcm24', 'dashboard' );
 
 				// Customizer banners URLs.
 				$announcements[ $announcement ]['hestia_customizer_url'] = tsdk_utmify( 'https://themeisle.com/black-friday/', 'bfcm24', 'hestiacustomizer' );
@@ -155,6 +187,22 @@ class Announcements extends Abstract_Module {
 				$remaining_time                                   = $this->get_remaining_time_for_event( $dates['end'] );
 				$announcements[ $announcement ]['remaining_time'] = $remaining_time;
 				$announcements[ $announcement ]['urgency_text']   = ! empty( $remaining_time ) ? sprintf( Loader::$labels['announcements']['hurry_up'], $remaining_time ) : '';
+
+				$announcements[ $announcement ]['feedzy_banner_src']     = defined( 'FEEDZY_ABSURL' ) ? FEEDZY_ABSURL . 'img/black-friday.jpg' : '';
+				$announcements[ $announcement ]['visualizer_banner_src'] = defined( 'VISUALIZER_ABSURL' ) ? VISUALIZER_ABSURL . 'images/black-friday.jpg' : '';
+				$announcements[ $announcement ]['ppom_banner_src']       = defined( 'PPOM_URL' ) ? PPOM_URL . '/images/black-friday.jpg' : '';
+				$announcements[ $announcement ]['mpg_banner_src']        = defined( 'MPG_BASE_IMG_PATH' ) ? MPG_BASE_IMG_PATH . '/black-friday.jpg' : '';
+				$announcements[ $announcement ]['spc_banner_src']        = defined( 'SWCFPC_PLUGIN_URL' ) ? SWCFPC_PLUGIN_URL . 'assets/img/black-friday.jpg' : '';
+				$announcements[ $announcement ]['hestia_banner_src']     = defined( 'HESTIA_ASSETS_URL' ) ? HESTIA_ASSETS_URL . 'img/black-friday.jpg' : '';
+				$announcements[ $announcement ]['hyve_banner_src']       = defined( 'HYVE_LITE_URL' ) ? HYVE_LITE_URL . 'assets/images/black-friday.jpg' : '';
+				$announcements[ $announcement ]['rfc7r_banner_src']      = defined( 'WPCF7_PRO_REDIRECT_ASSETS_PATH' ) ? WPCF7_PRO_REDIRECT_ASSETS_PATH . 'images/black-friday.jpg' : '';
+				$announcements[ $announcement ]['rop_banner_src']        = defined( 'ROP_LITE_URL' ) ? ROP_LITE_URL . 'assets/img/black-friday.jpg' : '';
+
+				foreach ( $announcements[ $announcement ] as $key => $value ) {
+					if ( strpos( $key, '_url' ) !== false ) {
+						$announcements[ $announcement ][ $key ] = tsdk_translate_link( $value );
+					}
+				}
 			}
 		}
 
@@ -277,9 +325,9 @@ class Announcements extends Abstract_Module {
 		foreach ( Loader::get_products() as $product ) {
 			$slug = $product->get_slug();
 
-			// Do not add if the contains the string 'pro'.
-			if ( strpos( $slug, 'pro' ) !== false ) {
-				continue;
+			// NOTE: No notice if the user has at least one Pro product.
+			if ( $product->requires_license() ) {
+				return;
 			}
 
 			$product_names[] = $product->get_name();
@@ -299,11 +347,10 @@ class Announcements extends Abstract_Module {
 		<div class="themeisle-sale notice notice-info is-dismissible" data-announcement="black_friday">
 			<img width="24" src="<?php echo esc_url_raw( $this->get_sdk_uri() . 'assets/images/themeisle-logo.png' ); ?>"/>
 			<p>
-				<strong><?php echo esc_html( Loader::$labels['announcements']['sale_live'] ); ?> ></strong>
-				- <?php echo sprintf( esc_html( Loader::$labels['announcements']['max_savings'] ), esc_html( implode( ', ', $product_names ) ) ); ?>
-				.
+				<strong><?php echo esc_html( Loader::$labels['announcements']['sale_live'] ); ?></strong>
+				- <?php echo sprintf( esc_html( Loader::$labels['announcements']['max_savings'] ), esc_html( implode( ', ', $product_names ) ) ); ?>.
 				<a href="<?php echo esc_url_raw( tsdk_utmify( 'https://themeisle.com/blackfriday/', 'bfcm24', 'globalnotice' ) ); ?>"
-				   target="_blank"><?php echo esc_html( Loader::$labels['announcements']['learn_more'] ); ?>></a>
+				   target="_blank"><?php echo esc_html( Loader::$labels['announcements']['learn_more'] ); ?></a>
 				<span class="themeisle-sale-error"></span>
 			</p>
 		</div>
@@ -358,5 +405,93 @@ class Announcements extends Abstract_Module {
 			});
 		</script>
 		<?php
+	}
+
+	/**
+	 * Load the dashboard banner renderer.
+	 *
+	 * @param string $product_key The product key.
+	 *
+	 * @return void
+	 */
+	public function load_dashboard_banner_renderer( $product_key ) {
+
+		$banner_handler = apply_filters( 'themeisle_sdk_dependency_script_handler', 'banner' );
+
+		if ( empty( $banner_handler ) ) {
+			return;
+		}
+
+		if ( isset( self::$banner_loaded[ $product_key ] ) && true === self::$banner_loaded[ $product_key ] ) {
+			return;
+		}
+		self::$banner_loaded[ $product_key ] = true;
+
+		$banner_data = array();
+
+		// Get the first active banner.
+		foreach ( $this->get_announcements_for_plugins() as $announcement ) {
+			if ( false === $announcement['active'] ) {
+				continue;
+			}
+
+			$cta_key        = $product_key . '_dashboard_url';
+			$banner_src_key = $product_key . '_banner_src';
+
+			if (
+				! isset( $announcement[ $cta_key ] ) ||
+				! isset( $announcement[ $banner_src_key ] ) ||
+				empty( $announcement[ $banner_src_key ] ) ||
+				! isset( $announcement['urgency_text'] )
+			) {
+				continue;
+			}
+
+			$banner_data = array(
+				'content' => $this->render_banner(
+					array(
+						'cta_url'      => $announcement[ $cta_key ],
+						'img_src'      => $announcement[ $banner_src_key ],
+						'urgency_text' => $announcement['urgency_text'],
+					)
+				),
+			);
+
+			break;
+		}
+
+		if ( empty( $banner_data ) ) {
+			return;
+		}
+
+		do_action( 'themeisle_sdk_dependency_enqueue_script', 'banner' );
+		wp_localize_script( $banner_handler, 'tsdk_banner_data', $banner_data );
+	}
+
+	/**
+	 * Renders a banner with the provided settings.
+	 *
+	 * @param array $settings {
+	 *     Optional. An array of settings for the banner.
+	 *
+	 *     @type string $cta_url       The URL for the call-to-action link.
+	 *     @type string $img_src       The source URL for the banner image.
+	 *     @type string $urgency_text  The urgency text to display on the banner.
+	 * }
+	 * @return string The HTML output of the banner.
+	 */
+	public function render_banner( $settings = array() ) {
+		if ( empty( $settings ) ) {
+			return '';
+		}
+
+		return wp_kses_post(
+			wp_sprintf(
+				'<a href="%s" target="_blank" class="tsdk-banner-cta"><img src="%s" class="tsdk-banner-img"><div class="tsdk-banner-urgency-text">%s</div></a>',
+				esc_url_raw( $settings['cta_url'] ),
+				esc_url_raw( $settings['img_src'] ),
+				sanitize_text_field( $settings['urgency_text'] )
+			)
+		);
 	}
 }

@@ -90,7 +90,6 @@ class GF_Field_Rating extends GF_Field {
 			}
 
 			$choice_id = 0;
-			$count     = 1;
 
 			$logic_event = version_compare( GFForms::$version, '2.4-beta-1', '<' ) ? $this->get_conditional_logic_event( 'click' ) : '';
 
@@ -105,9 +104,11 @@ class GF_Field_Rating extends GF_Field {
 				$choice_label = $choice['text'];
 				$field_value  = ! empty( $choice['value'] ) || $this->enableChoiceValue ? $choice['value'] : $choice['text'];
 
-				if ( rgblank( $value ) && RG_CURRENT_VIEW != 'entry' ) {
+				if ( rgblank( $value ) && GFForms::get_page() !== 'entry_detail' ) {
 					$checked = rgar( $choice, 'isSelected' ) ? "checked='checked'" : '';
-				} else {
+				} elseif ( $is_form_editor ) {
+					$checked = '';
+				} else  {
 					$checked = RGFormsModel::choice_value_match( $this, $choice, $value ) ? "checked='checked'" : '';
 				}
 
@@ -125,11 +126,6 @@ class GF_Field_Rating extends GF_Field {
 					$choice_label
 				);
 
-				if ( $is_form_editor && $count >= 5 ) {
-					break;
-				}
-
-				$count ++;
 			}
 		}
 

@@ -1886,6 +1886,10 @@ function openlab_social_media_fields() {
 			'title'    => 'Behance',
 			'field_id' => 0,
 		],
+		'bluesky' => [
+			'title'    => 'Bluesky',
+			'field_id' => 0,
+		],
 		'cuny-academic-commons' => [
 			'title'    => 'CUNY Academic Commons',
 			'field_id' => 0,
@@ -2094,6 +2098,11 @@ function openlab_format_social_media_field( $value, $slug ) {
 		$text    = $value;
 	} else {
 		switch ( $slug ) {
+			case 'bluesky' :
+				$do_link = true;
+				$url     = 'https://bsky.app/profile/' . $sanitize_cb( $value );
+				break;
+
 			case 'cuny-academic-commons' :
 				$do_link = true;
 				$url     = 'https://commons.gc.cuny.edu/members/' . $sanitize_cb( $value ) . '/';

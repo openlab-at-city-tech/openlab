@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -416,7 +416,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _emotion_memoize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @emotion/memoize */ "../node_modules/@emotion/memoize/dist/emotion-memoize.esm.js");
 
 
-var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
+// eslint-disable-next-line no-undef
+var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
 
 var isPropValid = /* #__PURE__ */(0,_emotion_memoize__WEBPACK_IMPORTED_MODULE_0__["default"])(function (prop) {
   return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
@@ -8568,7 +8569,7 @@ function ImportComplete() {
       referrer: referrer
     })
   }, /*#__PURE__*/_react.default.createElement(_wizardStep.default, {
-    image: elementorAppConfig.assets_url + 'images/go-pro.svg',
+    image: elementorAppConfig.assets_url + 'images/kit-is-live.svg',
     heading: __('Your kit is now live on your site!', 'elementor'),
     description: __('You’ve imported and applied the following to your site:', 'elementor'),
     notice: /*#__PURE__*/_react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/_react.default.createElement(_inlineLink.default, {
@@ -9928,6 +9929,14 @@ var _useImportActions2 = _interopRequireDefault(__webpack_require__(/*! ../hooks
 var _useImportKitLibraryApplyAllPlugins = __webpack_require__(/*! ../import-kit/hooks/use-import-kit-library-apply-all-plugins */ "../app/modules/import-export/assets/js/pages/import/import-kit/hooks/use-import-kit-library-apply-all-plugins.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
+function isValidRedirectUrl(url) {
+  try {
+    var parsedUrl = new URL(url);
+    return parsedUrl.hostname === window.location.hostname;
+  } catch (e) {
+    return false;
+  }
+}
 function ImportProcess() {
   var sharedContext = (0, _react.useContext)(_sharedContextProvider.SharedContext),
     importContext = (0, _react.useContext)(_importContextProvider.ImportContext),
@@ -9948,6 +9957,10 @@ function ImportProcess() {
     _useState8 = (0, _slicedToArray2.default)(_useState7, 2),
     plugins = _useState8[0],
     setPlugins = _useState8[1],
+    _useState9 = (0, _react.useState)(''),
+    _useState10 = (0, _slicedToArray2.default)(_useState9, 2),
+    returnTo = _useState10[0],
+    setReturnTo = _useState10[1],
     missing = (0, _useImportKitLibraryApplyAllPlugins.useImportKitLibraryApplyAllPlugins)(plugins),
     _useKit = (0, _useKit2.default)(),
     kitState = _useKit.kitState,
@@ -9959,6 +9972,7 @@ function ImportProcess() {
     fileURL = _useQueryParams$getAl.file_url,
     actionType = _useQueryParams$getAl.action_type,
     nonce = _useQueryParams$getAl.nonce,
+    returnToParam = _useQueryParams$getAl.return_to,
     _ref = sharedContext.data || {},
     includes = _ref.includes,
     selectedCustomPostTypes = _ref.selectedCustomPostTypes,
@@ -10053,6 +10067,9 @@ function ImportProcess() {
         payload: actionType
       });
     }
+    if (returnToParam) {
+      setReturnTo(returnToParam);
+    }
     if (fileURL && !file) {
       // When the starting point of the app is the import/process screen and importing via file_url.
       uploadKit();
@@ -10110,6 +10127,10 @@ function ImportProcess() {
     if (KIT_STATUS_MAP.INITIAL !== kitState.status || isResolvedData && 'apply-all' === importContext.data.actionType) {
       if (importedData) {
         // After kit upload.
+        if (returnTo && isValidRedirectUrl(decodeURIComponent(returnTo))) {
+          window.location.href = decodeURIComponent(returnTo);
+          return;
+        }
         navigate('/import/complete');
       } else if ('apply-all' === importContext.data.actionType) {
         var _kitState$data3, _kitState$data3$manif, _importContext$data$u2;
@@ -10121,7 +10142,11 @@ function ImportProcess() {
           });
         }
         if (uploadedData.conflicts && Object.keys(uploadedData.conflicts).length && !isResolvedData) {
-          navigate('/import/resolver');
+          if (returnTo) {
+            navigate('/import/resolver?return_to=' + returnTo);
+          } else {
+            navigate('/import/resolver');
+          }
         } else {
           // The kitState must be reset due to staying in the same page, so that the useEffect will be re-triggered.
           kitActions.reset();
@@ -10137,7 +10162,7 @@ function ImportProcess() {
         navigate('/import/plugins');
       }
     }
-  }, [uploadedData, importedData, importContext.data.pluginsState]);
+  }, [uploadedData, importedData, importContext.data.pluginsState, returnTo]);
   (0, _react.useEffect)(function () {
     if ((missing === null || missing === void 0 ? void 0 : missing.length) > 0) {
       importContext.dispatch({
@@ -10395,6 +10420,7 @@ var _inlineLink = _interopRequireDefault(__webpack_require__(/*! elementor-app/u
 var _button = _interopRequireDefault(__webpack_require__(/*! elementor-app/ui/molecules/button */ "../app/assets/js/ui/molecules/button.js"));
 var _box = _interopRequireDefault(__webpack_require__(/*! elementor-app/ui/atoms/box */ "../app/assets/js/ui/atoms/box.js"));
 var _list = _interopRequireDefault(__webpack_require__(/*! elementor-app/ui/molecules/list */ "../app/assets/js/ui/molecules/list.js"));
+var _useQueryParams = _interopRequireDefault(__webpack_require__(/*! elementor-app/hooks/use-query-params */ "../app/assets/js/hooks/use-query-params.js"));
 var _appsEventTracking = __webpack_require__(/*! elementor-app/event-track/apps-event-tracking */ "../app/assets/js/event-track/apps-event-tracking.js");
 __webpack_require__(/*! ./import-resolver.scss */ "../app/modules/import-export/assets/js/pages/import/import-resolver/import-resolver.scss");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
@@ -10408,6 +10434,8 @@ function ImportResolver() {
     _ref = sharedContext.data || {},
     referrer = _ref.referrer,
     currentPage = _ref.currentPage,
+    _useQueryParams$getAl = (0, _useQueryParams.default)().getAll(),
+    returnToParam = _useQueryParams$getAl.return_to,
     eventTracking = function eventTracking(command) {
       var sitePart = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
       if ('kit-library' === referrer) {
@@ -10434,6 +10462,9 @@ function ImportResolver() {
         onClick: function onClick() {
           eventTracking('kit-library/approve-selection');
           var url = importContext.data.plugins.length ? 'import/plugins-activation' : 'import/process';
+          if ('import/process' === url && returnToParam) {
+            url += '?return_to=' + returnToParam;
+          }
           importContext.dispatch({
             type: 'SET_IS_RESOLVED',
             payload: true
@@ -16273,7 +16304,7 @@ try {
 /******/ 			// return url for filenames not based on template
 /******/ 			if (chunkId === "vendors-node_modules_react-query_devtools_index_js") return "a730ee9caa710006b307.bundle.js";
 /******/ 			if (chunkId === "kit-library") return "" + chunkId + ".ac1a4cd5deae5526ce49.bundle.js";
-/******/ 			if (chunkId === "onboarding") return "" + chunkId + ".d6ea272a04bd56212e9d.bundle.js";
+/******/ 			if (chunkId === "onboarding") return "" + chunkId + ".5ceee1b219b66e943cb0.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

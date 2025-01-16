@@ -58,6 +58,7 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 	$selector = '.site-primary-footer-wrap[data-section="section-primary-footer-builder"]';
 
 	$footer_bg               = astra_get_option( 'hb-footer-bg-obj-responsive' );
+	$footer_height           = astra_get_option( 'hb-primary-footer-height' );
 	$footer_top_border_size  = astra_get_option( 'hb-footer-main-sep' );
 	$footer_top_border_color = astra_get_option( 'hb-footer-main-sep-color' );
 	$footer_width            = astra_get_option( 'hb-footer-layout-width' );
@@ -96,6 +97,8 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 
 	);
 
+	$css_output_desktop[ $selector ]['min-height'] = astra_get_css_value( $footer_height, 'px' );
+
 	if ( isset( $footer_top_border_size ) && 1 <= $footer_top_border_size ) {
 
 		$css_output_desktop[ $selector ]['border-style'] = 'solid';
@@ -110,6 +113,7 @@ function astra_fb_primary_footer_dynamic_css( $dynamic_css, $dynamic_css_filtere
 	if ( isset( $footer_width ) && 'content' === $footer_width ) {
 
 		$css_output_desktop[ $selector . ' .ast-builder-grid-row' ]['max-width']    = astra_get_css_value( $content_width, 'px' );
+		$css_output_desktop[ $selector . ' .ast-builder-grid-row' ]['min-height']   = astra_get_css_value( $footer_height, 'px' );
 		$css_output_desktop[ $selector . ' .ast-builder-grid-row' ]['margin-left']  = 'auto';
 		$css_output_desktop[ $selector . ' .ast-builder-grid-row' ]['margin-right'] = 'auto';
 	} else {

@@ -33,16 +33,16 @@ $astra_footer_classes   = implode( ' ', $astra_footer_classes );
 	<div class="footer-adv-overlay">
 		<div class="ast-container">
 			<div class="ast-row">
-				<div class="<?php echo astra_attr( 'ast-layout-4-grid' ); ?> footer-adv-widget footer-adv-widget-1" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-1' ) ); ?>>
+				<div class="<?php echo wp_kses_post( astra_attr( 'ast-layout-4-grid' ) ); ?> footer-adv-widget footer-adv-widget-1" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-1' ) ); ?>>
 					<?php astra_get_footer_widget( 'advanced-footer-widget-1' ); ?>
 				</div>
-				<div class="<?php echo astra_attr( 'ast-layout-4-grid' ); ?> footer-adv-widget footer-adv-widget-2" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-2' ) ); ?>>
+				<div class="<?php echo wp_kses_post( astra_attr( 'ast-layout-4-grid' ) ); ?> footer-adv-widget footer-adv-widget-2" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-2' ) ); ?>>
 					<?php astra_get_footer_widget( 'advanced-footer-widget-2' ); ?>
 				</div>
-				<div class="<?php echo astra_attr( 'ast-layout-4-grid' ); ?> footer-adv-widget footer-adv-widget-3" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-3' ) ); ?>>
+				<div class="<?php echo wp_kses_post( astra_attr( 'ast-layout-4-grid' ) ); ?> footer-adv-widget footer-adv-widget-3" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-3' ) ); ?>>
 					<?php astra_get_footer_widget( 'advanced-footer-widget-3' ); ?>
 				</div>
-				<div class="<?php echo astra_attr( 'ast-layout-4-grid' ); ?> footer-adv-widget footer-adv-widget-4" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-4' ) ); ?>>
+				<div class="<?php echo wp_kses_post( astra_attr( 'ast-layout-4-grid' ) ); ?> footer-adv-widget footer-adv-widget-4" <?php echo wp_kses_post( apply_filters( 'astra_sidebar_data_attrs', '', 'advanced-footer-widget-4' ) ); ?>>
 					<?php astra_get_footer_widget( 'advanced-footer-widget-4' ); ?>
 				</div>
 			</div><!-- .ast-row -->

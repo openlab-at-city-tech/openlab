@@ -32,7 +32,9 @@ class Ajax extends Lib\Base\Ajax
             $query = Lib\Entities\Customer::query( 'c' );
             $select = 'c.full_name, c.phone';
 
-            if ( empty ( $services ) && empty( $providers ) ) {
+            if ( $count_of_appointments == 0 ) {
+                $customers = $query->select( $select )->fetchArray();
+            } elseif ( empty ( $services ) && empty( $providers ) ) {
                 $customers = $query
                     ->select( $select )
                     ->leftJoin( 'CustomerAppointment', 'ca', 'ca.customer_id = c.id' )

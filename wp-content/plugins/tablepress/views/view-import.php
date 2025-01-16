@@ -27,7 +27,7 @@ class TablePress_Import_View extends TablePress_View {
 	 * @since 2.0.0
 	 * @var string[]
 	 */
-	protected $wp_pointers = array( 'tp20_import_drag_drop_detect_format' );
+	protected array $wp_pointers = array( 'tp20_import_drag_drop_detect_format' );
 
 	/**
 	 * Set up the view with data and do things that are specific for this view.
@@ -45,10 +45,8 @@ class TablePress_Import_View extends TablePress_View {
 
 		$this->add_text_box( 'no-javascript', array( $this, 'textbox_no_javascript' ), 'header' );
 
-		$this->admin_page->enqueue_style( 'jsuites' );
-		$this->admin_page->enqueue_style( 'import', array( 'tablepress-jsuites' ) );
-		$this->admin_page->enqueue_script( 'jsuites' );
-		$this->admin_page->enqueue_script( 'import', array( 'tablepress-jsuites' ) );
+		$this->admin_page->enqueue_style( 'import' );
+		$this->admin_page->enqueue_script( 'import' );
 
 		$this->process_action_messages( array(
 			'error_import' => __( 'Error: The import failed.', 'tablepress' ),
@@ -57,7 +55,7 @@ class TablePress_Import_View extends TablePress_View {
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		$this->add_meta_box( 'import-form', __( 'Import Tables', 'tablepress' ), array( $this, 'postbox_import_form' ), 'normal' );
 		$screen = get_current_screen();
-		add_filter( "postbox_classes_{$screen->id}_tablepress_{$this->action}-import-form", array( $this, 'postbox_classes' ) );
+		add_filter( "postbox_classes_{$screen->id}_tablepress_{$this->action}-import-form", array( $this, 'postbox_classes' ) ); // @phpstan-ignore property.nonObject
 		$this->add_meta_box( 'tables-auto-import', __( 'Automatic Periodic Table Import', 'tablepress' ), array( $this, 'postbox_auto_import' ), 'additional' );
 	}
 
@@ -135,7 +133,7 @@ class TablePress_Import_View extends TablePress_View {
 	 * @param array<string, mixed> $data Data for this screen.
 	 * @param array<string, mixed> $box  Information about the meta box.
 	 *
-	 * @phpstan-ignore-next-line (PHPStan would like to see a type hint.)
+	 * @phpstan-ignore missingType.return (The method is extended elsewhere and can't have type hints.)
 	 */
 	public function postbox_auto_import( /* array */ $data, /* array */ $box ) /* : void */ {
 		// Don't use type hints in the method declaration, as the method is extended in the TablePress Table Auto Update Extension which is no longer updated.
@@ -158,7 +156,7 @@ class TablePress_Import_View extends TablePress_View {
 	 */
 	public function wp_pointer_tp20_import_drag_drop_detect_format(): void {
 		$content  = '<h3>' . __( 'TablePress feature: Drag and Drop Import with Format Detection', 'tablepress' ) . '</h3>';
-		$content .= '<p>' . __( 'Did you know?', 'tablepress' ) . ' ' . __( 'The import of tables is now even more powerful! You can simply drag and drop your files into this area and TablePress will automatically detect the file format!', 'tablepress' ) . '</p>';
+		$content .= '<p>' . __( 'Did you know?', 'tablepress' ) . ' ' . __( 'To import tables, you can simply drag and drop your spreadsheet files into this area and TablePress will automatically detect the file format!', 'tablepress' ) . '</p>';
 
 		$this->admin_page->print_wp_pointer_js(
 			'tp20_import_drag_drop_detect_format',
@@ -166,7 +164,7 @@ class TablePress_Import_View extends TablePress_View {
 			array(
 				'content'  => $content,
 				'position' => array( 'edge' => 'bottom', 'align' => 'center' ),
-			)
+			),
 		);
 	}
 

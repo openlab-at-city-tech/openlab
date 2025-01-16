@@ -7,7 +7,6 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\BodySummarizerInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Client\RequestExceptionInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
-use SimpleCalendar\plugin_deps\Psr\Http\Message\UriInterface;
 /**
  * HTTP Request exception
  * @internal
@@ -26,7 +25,7 @@ class RequestException extends TransferException implements RequestExceptionInte
      * @var array
      */
     private $handlerContext;
-    public function __construct(string $message, RequestInterface $request, ResponseInterface $response = null, \Throwable $previous = null, array $handlerContext = [])
+    public function __construct(string $message, RequestInterface $request, ?ResponseInterface $response = null, ?\Throwable $previous = null, array $handlerContext = [])
     {
         // Set the code of the exception if the response is set and not future.
         $code = $response ? $response->getStatusCode() : 0;
@@ -51,7 +50,7 @@ class RequestException extends TransferException implements RequestExceptionInte
      * @param array                        $handlerContext Optional handler context
      * @param BodySummarizerInterface|null $bodySummarizer Optional body summarizer
      */
-    public static function create(RequestInterface $request, ResponseInterface $response = null, \Throwable $previous = null, array $handlerContext = [], BodySummarizerInterface $bodySummarizer = null) : self
+    public static function create(RequestInterface $request, ?ResponseInterface $response = null, ?\Throwable $previous = null, array $handlerContext = [], ?BodySummarizerInterface $bodySummarizer = null) : self
     {
         if (!$response) {
             return new self('Error completing request', $request, null, $previous, $handlerContext);
@@ -67,8 +66,7 @@ class RequestException extends TransferException implements RequestExceptionInte
             $label = 'Unsuccessful request';
             $className = __CLASS__;
         }
-        $uri = $request->getUri();
-        $uri = static::obfuscateUri($uri);
+        $uri = \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Utils::redactUserInfo($request->getUri());
         // Client Error: `GET /` resulted in a `404 Not Found` response:
         // <html> ... (truncated)
         $message = \sprintf('%s: `%s %s` resulted in a `%s %s` response', $label, $request->getMethod(), $uri->__toString(), $response->getStatusCode(), $response->getReasonPhrase());
@@ -77,17 +75,6 @@ class RequestException extends TransferException implements RequestExceptionInte
             $message .= ":\n{$summary}\n";
         }
         return new $className($message, $request, $response, $previous, $handlerContext);
-    }
-    /**
-     * Obfuscates URI if there is a username and a password present
-     */
-    private static function obfuscateUri(UriInterface $uri) : UriInterface
-    {
-        $userInfo = $uri->getUserInfo();
-        if (\false !== ($pos = \strpos($userInfo, ':'))) {
-            return $uri->withUserInfo(\substr($userInfo, 0, $pos), '***');
-        }
-        return $uri;
     }
     /**
      * Get the request that caused the exception

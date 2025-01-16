@@ -413,7 +413,7 @@ function bp_core_get_user_email( $user_id ) {
  *                        Default: false.
  * @param bool $just_link Disable full name and HTML and just return the URL
  *                        text. Default false.
- * @return string|bool The link text based on passed parameters, or false on
+ * @return string|false The link text based on passed parameters, or false on
  *                     no match.
  */
 function bp_core_get_userlink( $user_id, $no_anchor = false, $just_link = false ) {
@@ -514,7 +514,7 @@ function bp_core_get_user_displayname( $user_id_or_username ) {
 	 */
 	return apply_filters( 'bp_core_get_user_displayname', get_the_author_meta( 'display_name', $user_id ), $user_id );
 }
-add_filter( 'bp_core_get_user_displayname', 'strip_tags', 1 );
+add_filter( 'bp_core_get_user_displayname', 'wp_strip_all_tags', 1 );
 add_filter( 'bp_core_get_user_displayname', 'trim' );
 add_filter( 'bp_core_get_user_displayname', 'stripslashes' );
 add_filter( 'bp_core_get_user_displayname', 'esc_html' );
@@ -646,8 +646,8 @@ function bp_core_get_active_member_count() {
  *
  * @since 5.0.0
  *
- * @param int $user_id The user ID to spam or ham.
- * @param int $value   0 to mark the user as `ham`, 1 to mark as `spam`.
+ * @param int    $user_id The user ID to spam or ham.
+ * @param string $value   '0' to mark the user as `ham`, '1' to mark as `spam`.
  * @return bool          True if the spam status of the member changed.
  *                       False otherwise.
  */
@@ -664,11 +664,17 @@ function bp_core_update_member_status( $user_id = 0, $value = 0 ) {
 		return update_user_status( $user_id, 'spam', $value );
 	}
 
+	if ( $value ) {
+		$value = '1';
+	}
+
 	// Otherwise use the replacement function.
-	$user = wp_update_user( array(
-		'ID'   => $user_id,
-		'spam' => $value,
-	) );
+	$user = wp_update_user(
+		array(
+			'ID'   => $user_id,
+			'spam' => $value,
+		)
+	);
 
 	if ( is_wp_error( $user ) ) {
 		return false;
@@ -697,7 +703,7 @@ function bp_core_update_member_status( $user_id = 0, $value = 0 ) {
  *                              only be false if WordPress is expected to have
  *                              performed this cleanup independently, as when hooked
  *                              to 'make_spam_user'.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_core_process_spammer_status( $user_id, $status, $do_wp_cleanup = true ) {
 	global $wpdb;
@@ -835,7 +841,7 @@ function bp_core_process_spammer_status( $user_id, $status, $do_wp_cleanup = tru
 	}
 
 	/**
-	 * Fires at the end of the process for hanlding spammer status.
+	 * Fires at the end of the process for handling spammer status.
 	 *
 	 * @since 1.5.5
 	 *
@@ -1071,7 +1077,7 @@ function bp_is_user_inactive( $user_id = 0 ) {
  *
  * @param int    $user_id Optional. ID of the user being updated.
  * @param string $time    Optional. Time of last activity, in 'Y-m-d H:i:s' format.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_update_user_last_activity( $user_id = 0, $time = '' ) {
 
@@ -1246,7 +1252,7 @@ function bp_last_activity_migrate() {
  *
  * @param int $user_id Optional. ID of the user to be deleted. Default: the
  *                     logged-in user.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_core_delete_account( $user_id = 0 ) {
 
@@ -1343,7 +1349,7 @@ function bp_remove_user_data_on_delete_user_hook( $component, $user_id ) {
  * @since 1.9.0
  *
  * @param int $user_id ID of the user who is about to be deleted.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_core_delete_avatar_on_user_delete( $user_id ) {
 	return bp_core_delete_existing_avatar( array(
@@ -1587,7 +1593,7 @@ add_filter( 'pre_update_site_option_illegal_names', 'bp_core_get_illegal_names' 
  *   - Is the email address well-formed?
  *   - Is the email address already used?
  *   - If there are disallowed email domains, is the current domain among them?
- *   - If there's an email domain whitelest, is the current domain on it?
+ *   - If there's an email domain whitelist, is the current domain on it?
  *
  * @since 1.6.2
  *
@@ -1621,7 +1627,7 @@ function bp_core_validate_email_address( $user_email ) {
 		}
 	}
 
-	// Is the email alreday in use?
+	// Is the email already in use?
 	if ( email_exists( $user_email ) ) {
 		$errors['in_use'] = 1;
 	}
@@ -1858,21 +1864,26 @@ function bp_core_signup_user( $user_login, $user_password, $user_email, $usermet
 		$user_login     = preg_replace( '/\s+/', '', sanitize_user( $user_login, true ) );
 		$user_email     = sanitize_email( $user_email );
 		$activation_key = wp_generate_password( 32, false );
+		$create_user    = false;
+
+		// @deprecated.
+		if ( defined( 'BP_SIGNUPS_SKIP_USER_CREATION' ) ) {
+			_doing_it_wrong( 'BP_SIGNUPS_SKIP_USER_CREATION', esc_html__( 'the `BP_SIGNUPS_SKIP_USER_CREATION` constant is deprecated as skipping user creation is now the default behavior.', 'buddypress' ), 'BuddyPress 14.0.0' );
+
+			// Creating a user is the opposite of skipping user creation.
+			$create_user = ! BP_SIGNUPS_SKIP_USER_CREATION;
+		}
 
 		/**
-		 * WordPress's default behavior is to create user accounts
-		 * immediately at registration time. BuddyPress uses a system
-		 * borrowed from WordPress Multisite, where signups are stored
-		 * separately and accounts are only created at the time of
-		 * activation. For backward compatibility with plugins that may
-		 * be anticipating WP's default behavior, BP silently creates
-		 * accounts for registrations (though it does not use them). If
-		 * you know that you are not running any plugins dependent on
-		 * these pending accounts, you may want to save a little DB
-		 * clutter by defining setting the BP_SIGNUPS_SKIP_USER_CREATION
-		 * to true in your wp-config.php file.
+		 * Filter here to keep creating a user when a registration is performed on regular WordPress configs.
+		 *
+		 * @since 14.0.0
+		 * @todo Fully deprecate in 15.0.0
+		 *
+		 * @param boolean $create_user True to carry on creating a user when a registration is performed.
+		 *                             False otherwise.
 		 */
-		if ( ! defined( 'BP_SIGNUPS_SKIP_USER_CREATION' ) || ! BP_SIGNUPS_SKIP_USER_CREATION ) {
+		if ( apply_filters( 'bp_signups_create_user', $create_user ) ) {
 			$user_id = BP_Signup::add_backcompat( $user_login, $user_password, $user_email, $usermeta );
 
 			if ( is_wp_error( $user_id ) ) {
@@ -1943,12 +1954,14 @@ function bp_core_signup_user( $user_login, $user_password, $user_email, $usermet
  * @param string $user_name   user_login of requesting user.
  * @param string $user_email  Email address of requesting user.
  * @param string $usermeta    Miscellaneous metadata for the user.
- * @return bool
+ * @return bool|null
  */
 function bp_core_signup_blog( $blog_domain, $blog_path, $blog_title, $user_name, $user_email, $usermeta ) {
 	if ( ! is_multisite() || ! function_exists( 'wpmu_signup_blog' ) ) {
 		return false;
 	}
+
+	wpmu_signup_blog( $blog_domain, $blog_path, $blog_title, $user_name, $user_email, $usermeta );
 
 	/**
 	 * Filters the result of wpmu_signup_blog().
@@ -1958,9 +1971,9 @@ function bp_core_signup_blog( $blog_domain, $blog_path, $blog_title, $user_name,
 	 *
 	 * @since 1.2.2
 	 *
-	 * @param void $value
+	 * @param null $value Null value.
 	 */
-	return apply_filters( 'bp_core_signup_blog', wpmu_signup_blog( $blog_domain, $blog_path, $blog_title, $user_name, $user_email, $usermeta ) );
+	return apply_filters( 'bp_core_signup_blog', null );
 }
 
 /**
@@ -2017,7 +2030,13 @@ function bp_core_activate_signup( $key ) {
 		if ( ! $user_id ) {
 			$user_id = wp_create_user( $signup->user_login, $password, $signup->user_email );
 
-		// Otherwise, update the existing user's status.
+			/*
+			 * @todo Remove this `elseif` statement in version 15.0.0.
+			 *
+			 * Since 2.0.0 BuddyPress is using the $wpdb->signups table even in regular WordPress configs.
+			 * In 14.0.0, we are deprecating the `BP_SIGNUPS_SKIP_USER_CREATION` as well as creating a user
+			 * each time a registration is performed.
+			 */
 		} elseif ( $key === bp_get_user_meta( $user_id, 'activation_key', true ) || $key === wp_hash( $user_id ) ) {
 
 			// Change the user's status so they become active.
@@ -2090,7 +2109,7 @@ function bp_core_activate_signup( $key ) {
 		if ( ! empty( $user['meta']['profile_field_ids'] ) ) {
 			$profile_field_ids = explode( ',', $user['meta']['profile_field_ids'] );
 
-			foreach( (array) $profile_field_ids as $field_id ) {
+			foreach ( (array) $profile_field_ids as $field_id ) {
 				$current_field = isset( $user['meta']["field_{$field_id}"] ) ? $user['meta']["field_{$field_id}"] : false;
 
 				if ( ! empty( $current_field ) ) {
@@ -2618,8 +2637,8 @@ function bp_stop_live_spammer() {
 		$login_url = apply_filters( 'bp_live_spammer_redirect', add_query_arg( $args, wp_login_url() ) );
 
 		// Redirect user to login page.
-		wp_redirect( $login_url );
-		die();
+		wp_safe_redirect( $login_url );
+		exit;
 	}
 }
 add_action( 'bp_init', 'bp_stop_live_spammer', 5 );
@@ -2729,7 +2748,7 @@ function bp_get_member_type_tax_labels() {
 			'new_item_name'              => _x( 'New Member Type Name', 'Member type taxonomy new item name label', 'buddypress' ),
 			'separate_items_with_commas' => _x( 'Separate member types with commas', 'Member type taxonomy separate items with commas label', 'buddypress' ),
 			'add_or_remove_items'        => _x( 'Add or remove member types', 'Member type taxonomy add or remove items label', 'buddypress' ),
-			'choose_from_most_used'      => _x( 'Choose from the most used meber types', 'Member type taxonomy choose from most used label', 'buddypress' ),
+			'choose_from_most_used'      => _x( 'Choose from the most used member types', 'Member type taxonomy choose from most used label', 'buddypress' ),
 			'not_found'                  => _x( 'No member types found.', 'Member type taxonomy not found label', 'buddypress' ),
 			'no_terms'                   => _x( 'No member types', 'Member type taxonomy no terms label', 'buddypress' ),
 			'items_list_navigation'      => _x( 'Member Types list navigation', 'Member type taxonomy items list navigation label', 'buddypress' ),
@@ -2899,7 +2918,7 @@ function bp_register_member_type( $member_type, $args = array() ) {
 
 	// Directory slug.
 	if ( $r['has_directory'] ) {
-		// A string value is intepreted as the directory slug. Otherwise fall back on member type.
+		// A string value is interpreted as the directory slug. Otherwise fall back on member type.
 		if ( is_string( $r['has_directory'] ) ) {
 			$directory_slug = $r['has_directory'];
 		} else {
@@ -3432,7 +3451,7 @@ function bp_members_invitations_user_has_sent_invites( $user_id = 0 ) {
  *     @type bool   $send_invite   Optional. Whether the invitation should be
  *                                 sent now. Default: false.
  * }
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_members_invitations_invite_user( $args = array() ) {
 	$r = bp_parse_args(
@@ -3457,7 +3476,7 @@ function bp_members_invitations_invite_user( $args = array() ) {
 		'send_invite'   => $r['send_invite'],
 	);
 
-	// Create the invitataion.
+	// Create the invitation.
 	$invites_class = new BP_Members_Invitation_Manager();
 	$created       = $invites_class->add_invitation( $inv_args );
 
@@ -3480,7 +3499,7 @@ function bp_members_invitations_invite_user( $args = array() ) {
  * @since 8.0.0
  *
  * @param int $id ID of the invitation to resend.
- * @return bool True on success, false on failure.
+ * @return bool
  */
 function bp_members_invitation_resend_by_id( $id = 0 ) {
 

@@ -1,4 +1,47 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
+.elementor-hidden {
+  display: none;
+}
+
+.elementor-visibility-hidden {
+  visibility: hidden;
+}
+
+.elementor-screen-only,
+.screen-reader-text,
+.screen-reader-text span,
+.ui-helper-hidden-accessible {
+  position: absolute;
+  top: -10000em;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.elementor-clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+  width: 0;
+  height: 0;
+}
+
+.e-logo-wrapper {
+  background: var(--e-a-bg-logo);
+  display: inline-block;
+  padding: 0.75em;
+  border-radius: 50%;
+  line-height: 1;
+}
+.e-logo-wrapper i {
+  color: var(--e-a-color-logo);
+  font-size: 1em;
+}
+
 .dialog-widget-content {
   background-color: var(--e-a-bg-default);
   position: absolute;
@@ -16,7 +59,7 @@
   cursor: pointer;
   position: absolute;
   margin-block-start: 15px;
-  right: 15px;
+  inset-inline-end: 15px;
   color: var(--e-a-color-txt);
   font-size: 15px;
   line-height: 1;
@@ -261,65 +304,6 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button:visited {
   color: initial;
 }
-.flatpickr-calendar {
-  width: 280px;
-}
-.flatpickr-calendar .flatpickr-current-month span.cur-month {
-  font-weight: 300;
-}
-.flatpickr-calendar .dayContainer {
-  width: 280px;
-  min-width: 280px;
-  max-width: 280px;
-}
-.flatpickr-calendar .flatpickr-days {
-  width: 280px;
-}
-.flatpickr-calendar .flatpickr-day {
-  max-width: 37px;
-  height: 37px;
-  line-height: 37px;
-}
-
-.elementor-hidden {
-  display: none;
-}
-
-.elementor-screen-only,
-.screen-reader-text,
-.screen-reader-text span,
-.ui-helper-hidden-accessible {
-  position: absolute;
-  top: -10000em;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  padding: 0;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  border: 0;
-}
-
-.elementor-clearfix:after {
-  content: "";
-  display: block;
-  clear: both;
-  width: 0;
-  height: 0;
-}
-
-.e-logo-wrapper {
-  background: var(--e-a-bg-logo);
-  display: inline-block;
-  padding: 0.75em;
-  border-radius: 50%;
-  line-height: 1;
-}
-.e-logo-wrapper i {
-  color: var(--e-a-color-logo);
-  font-size: 1em;
-}
-
 #elementor-change-exit-preference-dialog .dialog-message a {
   cursor: pointer;
 }

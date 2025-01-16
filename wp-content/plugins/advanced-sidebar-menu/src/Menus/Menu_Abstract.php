@@ -2,7 +2,7 @@
 
 namespace Advanced_Sidebar_Menu\Menus;
 
-use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
+use Advanced_Sidebar_Menu\Widget\Widget;
 
 /**
  * Base for Menu classes.
@@ -10,7 +10,7 @@ use Advanced_Sidebar_Menu\Widget\Widget_Abstract;
  * @author OnPoint Plugins
  *
  * @phpstan-import-type PAGE_SETTINGS from Page
- * @phpstan-import-type WIDGET_ARGS from Widget_Abstract
+ * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
  * @implements Menu<SETTINGS, self<SETTINGS>>
@@ -35,6 +35,26 @@ abstract class Menu_Abstract implements Menu {
 	public const LEVEL_PARENT      = 'parent';
 
 	/**
+	 * Track the ids, which have been used in case of
+	 * plugins like Elementor that we need to manually increment.
+	 *
+	 * @since 7.6.0
+	 * @ticket #4775
+	 *
+	 * @var string[]
+	 */
+	protected static array $unique_widget_ids = [];
+
+	/**
+	 * The current menu instance.
+	 *
+	 * @deprecated In favor of using factory on the specific class.
+	 *
+	 * @var Menu_Abstract
+	 */
+	protected static Menu_Abstract $current;
+
+	/**
 	 * Widget Args
 	 *
 	 * @phpstan-var WIDGET_ARGS
@@ -52,17 +72,6 @@ abstract class Menu_Abstract implements Menu {
 	 */
 	public $instance;
 
-	/**
-	 * Track the ids, which have been used in case of
-	 * plugins like Elementor that we need to manually increment.
-	 *
-	 * @since 7.6.0
-	 * @ticket #4775
-	 *
-	 * @var string[]
-	 */
-	protected static $unique_widget_ids = [];
-
 
 	/**
 	 * Constructs a new instance of this widget.
@@ -70,8 +79,8 @@ abstract class Menu_Abstract implements Menu {
 	 * @phpstan-param SETTINGS    $instance
 	 * @phpstan-param WIDGET_ARGS $args
 	 *
-	 * @param array $instance - Widget settings.
-	 * @param array $args     - Widget registration arguments.
+	 * @param array               $instance - Widget settings.
+	 * @param array               $args     - Widget registration arguments.
 	 */
 	final public function __construct( array $instance, array $args ) {
 		$this->instance = apply_filters( 'advanced-sidebar-menu/menus/widget-instance', $instance, $args, $this );
@@ -113,7 +122,7 @@ abstract class Menu_Abstract implements Menu {
 			$suffix = 2;
 			do {
 				$alt_widget_id = $this->args['widget_id'] . "-$suffix";
-				++$suffix;
+				++ $suffix;
 			} while ( \in_array( $alt_widget_id, static::$unique_widget_ids, true ) );
 			$this->args['widget_id'] = $alt_widget_id;
 			static::$unique_widget_ids[] = $alt_widget_id;
@@ -209,11 +218,6 @@ abstract class Menu_Abstract implements Menu {
 
 
 	//phpcs:disable
-	/**
-	 * @deprecated No longer used.
-	 */
-	// @phpstan-ignore-next-line
-	protected static $current;
 
 
 	/**

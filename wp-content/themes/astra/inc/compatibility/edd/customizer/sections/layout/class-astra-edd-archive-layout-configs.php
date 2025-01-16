@@ -3,8 +3,6 @@
  * Easy Digital Downloads Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.5.5
  */
@@ -257,7 +255,7 @@ if ( ! class_exists( 'Astra_Edd_Archive_Layout_Configs' ) ) {
 						'section'  => 'section-edd-archive',
 						'priority' => 999,
 						'title'    => __( 'View Astra Pro Features', 'astra' ),
-						'url'      => ASTRA_PRO_CUSTOMIZER_UPGRADE_URL,
+						'url'      => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'edd' ),
 						'settings' => array(),
 						'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 					);

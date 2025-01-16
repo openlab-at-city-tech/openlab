@@ -11,18 +11,16 @@
  * Catch and process group creation form submissions.
  *
  * @since 1.2.0
- *
- * @return bool
  */
 function groups_action_create_group() {
 
 	// If we're not at domain.org/groups/create/ then return false.
 	if ( ! bp_is_groups_component() || ! bp_is_current_action( 'create' ) ) {
-		return false;
+		return;
 	}
 
 	if ( ! is_user_logged_in() ) {
-		return false;
+		return;
 	}
 
 	if ( ! bp_user_can_create_groups() ) {
@@ -344,7 +342,7 @@ function groups_action_sort_creation_steps() {
 	ksort( $temp );
 	unset( $bp->groups->group_creation_steps );
 
-	foreach( (array) $temp as $position => $step ) {
+	foreach ( (array) $temp as $position => $step ) {
 		$bp->groups->group_creation_steps[ $step['slug'] ] = array(
 			'rewrite_id'   => $step['rewrite_id'],
 			'default_slug' => $step['slug'],

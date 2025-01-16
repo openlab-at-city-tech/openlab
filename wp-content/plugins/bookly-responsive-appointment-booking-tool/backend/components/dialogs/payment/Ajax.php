@@ -65,9 +65,8 @@ class Ajax extends Lib\Base\Ajax
             }
 
             $data['show'] = array(
-                'coupons' => Lib\Config::couponsActive(),
-                'discounts' => Lib\Config::discountsActive(),
-                'customer_groups' => Lib\Config::customerGroupsActive(),
+                'coupons' => isset( $data['payment']['coupon'] ) && ( $data['payment']['coupon']['discount'] > 0 || $data['payment']['coupon']['deduction'] > 0 ),
+                'customer_groups' => Lib\Config::customerGroupsActive() && isset( $data['group_discount'] ),
                 'deposit' => $show_deposit,
                 'price_correction' => $price_correction,
                 'taxes' => Lib\Config::taxesActive() || $data['payment']['tax_total'] > 0,
@@ -96,7 +95,7 @@ class Ajax extends Lib\Base\Ajax
 
             foreach ( $data['payment']['items'] as &$item ) {
                 if ( isset( $item['units'], $item['duration'] ) && $item['units'] > 1 ) {
-                    $item['service_name'] .= ' (' . Lib\Utils\DateTime::secondsToInterval( $item['units'] * $item['duration'] ) . ')';
+                    $item['service_name'] .= ' (' . Lib\Utils\DateTime::secondsToInterval( $item['duration'] ) . ')';
                 }
                 $item['appointment_date'] = isset( $item['appointment_date'] ) ? Lib\Utils\DateTime::applyStaffTimeZone( $item['appointment_date'] ) : '';
             }

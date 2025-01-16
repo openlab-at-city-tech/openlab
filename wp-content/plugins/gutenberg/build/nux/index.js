@@ -74,12 +74,12 @@ __webpack_require__.d(selectors_namespaceObject, {
   isTipVisible: () => (isTipVisible)
 });
 
-;// CONCATENATED MODULE: external ["wp","deprecated"]
+;// external ["wp","deprecated"]
 const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
-;// CONCATENATED MODULE: external ["wp","data"]
+;// external ["wp","data"]
 const external_wp_data_namespaceObject = window["wp"]["data"];
-;// CONCATENATED MODULE: ./packages/nux/build-module/store/reducer.js
+;// ./packages/nux/build-module/store/reducer.js
 /**
  * WordPress dependencies
  */
@@ -150,7 +150,7 @@ const preferences = (0,external_wp_data_namespaceObject.combineReducers)({
   preferences
 }));
 
-;// CONCATENATED MODULE: ./packages/nux/build-module/store/actions.js
+;// ./packages/nux/build-module/store/actions.js
 /**
  * Returns an action object that, when dispatched, presents a guide that takes
  * the user through a series of tips step by step.
@@ -204,7 +204,7 @@ function enableTips() {
   };
 }
 
-;// CONCATENATED MODULE: ./packages/nux/build-module/store/selectors.js
+;// ./packages/nux/build-module/store/selectors.js
 /**
  * WordPress dependencies
  */
@@ -278,7 +278,7 @@ function selectors_areTipsEnabled(state) {
   return state.preferences.areTipsEnabled;
 }
 
-;// CONCATENATED MODULE: ./packages/nux/build-module/store/index.js
+;// ./packages/nux/build-module/store/index.js
 /**
  * WordPress dependencies
  */
@@ -315,19 +315,19 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
   persist: ['preferences']
 });
 
-;// CONCATENATED MODULE: external ["wp","compose"]
+;// external ["wp","compose"]
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
-;// CONCATENATED MODULE: external ["wp","components"]
+;// external ["wp","components"]
 const external_wp_components_namespaceObject = window["wp"]["components"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
+;// external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
-;// CONCATENATED MODULE: external ["wp","element"]
+;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: external ["wp","primitives"]
+;// external ["wp","primitives"]
 const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
-;// CONCATENATED MODULE: external "ReactJSXRuntime"
+;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/close.js
+;// ./packages/icons/build-module/library/close.js
 /**
  * WordPress dependencies
  */
@@ -337,12 +337,12 @@ const close_close = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24",
   children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M13 11.8l6.1-6.3-1-1-6.1 6.2-6.1-6.2-1 1 6.1 6.3-6.5 6.7 1 1 6.5-6.6 6.5 6.6 1-1z"
+    d: "m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"
   })
 });
 /* harmony default export */ const library_close = (close_close);
 
-;// CONCATENATED MODULE: ./packages/nux/build-module/components/dot-tip/index.js
+;// ./packages/nux/build-module/components/dot-tip/index.js
 /**
  * WordPress dependencies
  */
@@ -356,7 +356,6 @@ const close_close = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx
 /**
  * Internal dependencies
  */
-
 
 
 function onClick(event) {
@@ -397,11 +396,13 @@ function DotTip({
       children: children
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+        __next40pxDefaultSize: true,
         variant: "link",
         onClick: onDismiss,
         children: hasNextTip ? (0,external_wp_i18n_namespaceObject.__)('See next tip') : (0,external_wp_i18n_namespaceObject.__)('Got it')
       })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_components_namespaceObject.Button, {
+      size: "small",
       className: "nux-dot-tip__disable",
       icon: library_close,
       label: (0,external_wp_i18n_namespaceObject.__)('Disable tips'),
@@ -438,7 +439,7 @@ function DotTip({
   };
 }))(DotTip));
 
-;// CONCATENATED MODULE: ./packages/nux/build-module/index.js
+;// ./packages/nux/build-module/index.js
 /**
  * WordPress dependencies
  */

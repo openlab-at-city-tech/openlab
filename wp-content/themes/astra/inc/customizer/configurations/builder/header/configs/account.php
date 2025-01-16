@@ -2,9 +2,7 @@
 /**
  * Account Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -153,6 +151,45 @@ function astra_header_account_configuration() {
 			'divider'    => array( 'ast_class' => 'ast-bottom-dotted-divider ast-section-spacing' ),
 		),
 
+
+		/**
+		 * Option: Show Text with
+		 *
+		 * @since 4.6.15
+		 */
+		array(
+			'name'        => ASTRA_THEME_SETTINGS . '[header-account-login-style-extend-text-profile-type]',
+			'default'     => astra_get_option( 'header-account-login-style-extend-text-profile-type' ),
+			'type'        => 'control',
+			'control'     => 'ast-selector',
+			'section'     => $_section,
+			'priority'    => 3,
+			'description' => __( 'Choose if you want to display Icon or Avatar with the Text selected Profile Type.', 'astra' ),
+			'title'       => __( 'Show Text with', 'astra' ),
+			'choices'     => array(
+				'default' => __( 'Default', 'astra' ),
+				'avatar'  => __( 'Avatar', 'astra' ),
+				'icon'    => __( 'Icon', 'astra' ),
+			),
+			'transport'   => 'postMessage',
+			'partial'     => array(
+				'selector'        => '.ast-header-account',
+				'render_callback' => array( 'Astra_Builder_UI_Controller', 'render_account' ),
+			),
+			'responsive'  => false,
+			'renderAs'    => 'text',
+			'divider'     => array( 'ast_class' => 'ast-bottom-dotted-divider ast-section-spacing' ),
+			'context'     => array(
+				array(
+					'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style]',
+					'operator' => '==',
+					'value'    => 'text',
+				),
+				Astra_Builder_Helper::$general_tab_config,
+			),
+		),
+
+
 		/**
 		* Option: Logged Out Text
 		*/
@@ -239,6 +276,43 @@ function astra_header_account_configuration() {
 			'responsive' => false,
 			'renderAs'   => 'text',
 			'divider'    => array( 'ast_class' => 'ast-section-spacing' ),
+		),
+
+
+		/**
+		 * Option: Show Text with
+		 *
+		 * @since 4.6.15
+		 */
+		array(
+			'name'        => ASTRA_THEME_SETTINGS . '[header-account-logout-style-extend-text-profile-type]',
+			'default'     => astra_get_option( 'header-account-logout-style-extend-text-profile-type' ),
+			'type'        => 'control',
+			'control'     => 'ast-selector',
+			'section'     => $_section,
+			'priority'    => 202,
+			'description' => __( 'Choose if you want to display Icon with the Text selected Profile Type for logged out users.', 'astra' ),
+			'title'       => __( 'Show Text with', 'astra' ),
+			'choices'     => array(
+				'default' => __( 'Default', 'astra' ),
+				'icon'    => __( 'Icon', 'astra' ),
+			),
+			'transport'   => 'postMessage',
+			'partial'     => array(
+				'selector'        => '.ast-header-account',
+				'render_callback' => array( 'Astra_Builder_UI_Controller', 'render_account' ),
+			),
+			'responsive'  => false,
+			'renderAs'    => 'text',
+			'divider'     => array( 'ast_class' => 'ast-top-dotted-divider ast-section-spacing' ),
+			'context'     => array(
+				array(
+					'setting'  => ASTRA_THEME_SETTINGS . '[header-account-logout-style]',
+					'operator' => '==',
+					'value'    => 'text',
+				),
+				Astra_Builder_Helper::$general_tab_config,
+			),
 		),
 
 
@@ -340,9 +414,29 @@ function astra_header_account_configuration() {
 			'suffix'            => 'px',
 			'context'           => array(
 				array(
-					'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style]',
-					'operator' => '==',
-					'value'    => 'avatar',
+					'relation' => 'OR',
+					array(
+						'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style]',
+						'operator' => '==',
+						'value'    => 'avatar',
+					),
+					array(
+						'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style-extend-text-profile-type]',
+						'operator' => '==',
+						'value'    => 'avatar',
+					),
+				),
+				array(
+					array(
+						'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style]',
+						'operator' => '==',
+						'value'    => 'text',
+					),
+					array(
+						'setting'  => ASTRA_THEME_SETTINGS . '[header-account-login-style-extend-text-profile-type]',
+						'operator' => '==',
+						'value'    => 'avatar',
+					),
 				),
 				Astra_Builder_Helper::$design_tab_config,
 			),
@@ -369,6 +463,9 @@ function astra_header_account_configuration() {
 				'max'  => 50,
 			),
 			'context'           => array(
+				/**
+				 * Other conditions are maintained from "inc/customizer/custom-controls/class-astra-customizer-control-base.php".
+				 */
 				Astra_Builder_Helper::$design_tab_config,
 				array(
 					'relation' => 'OR',
@@ -380,7 +477,7 @@ function astra_header_account_configuration() {
 					array(
 						'setting'  => ASTRA_THEME_SETTINGS . '[header-account-logout-style]',
 						'operator' => '==',
-						'value'    => 'icon',
+						'value'    => 'icon', 
 					),
 				),
 			),
@@ -401,6 +498,9 @@ function astra_header_account_configuration() {
 			'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_alpha_color' ),
 			'title'             => __( 'Icon Color', 'astra' ),
 			'context'           => array(
+				/**
+				 * Other conditions are maintained from "inc/customizer/custom-controls/class-astra-customizer-control-base.php".
+				 */
 				Astra_Builder_Helper::$design_tab_config,
 				array(
 					'relation' => 'OR',

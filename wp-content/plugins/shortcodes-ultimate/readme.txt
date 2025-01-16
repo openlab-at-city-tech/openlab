@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://getshortcodes.com/pricing/
 Tags: posts, carousel, shortcode, toggle, columns
-Stable tag: 7.1.8
+Stable tag: 7.3.1
 Requires PHP: 5.4
 Requires at least: 5.0
-Tested up to: 6.5
+Tested up to: 6.7
 
 
 A comprehensive collection of visual components for your site
@@ -141,28 +141,58 @@ Upgrade normally
 
 
 
-### 7.1.8
+= 7.3.1
+
+- Tested compatibility with WordPress 6.7
+- Updated Freemius SDK
+
+
+= 7.3.0
+
+This update features security improvements and is recommended for all users
+
+- Security improvements
+- Added support for avif images in the image carousel shortcode
+- Updated Freemius SDK
+
+
+= 7.2.2
+
+- Fixed issue with HTML tags not working in the Box title
+- Minor updates under the hood
+
+
+= 7.2.1
+
+
+- Tested with WordPress 6.6
+- Updated Freemius SDK to version 2.7.3
+
+
+
+
+= 7.1.8
 
 This update features security improvements and is recommended for all users
 
 
-### 7.1.7
+= 7.1.7
 
 This update features security improvements and is recommended for all users
 
 
-### 7.1.6
+= 7.1.6
 
 This update features security improvements and is recommended for all users
 
 
-### 7.1.5
+= 7.1.5
 
 - Updated Freemius SDK (UI improvements)
 - Minor improvements to codebase
 
 
-### 7.1.4
+= 7.1.4
 
 - Fixed issue with nested HTML tags in the following shortcodes: Button, Tab, Spoiler, Quote, Tooltip, and Service
 - Reduced static files size to imporove the loading speeds
@@ -170,19 +200,19 @@ This update features security improvements and is recommended for all users
 - Minor "under the hood" improvements
 
 
-### 7.1.3
+= 7.1.3
 
 This update features security improvements and is recommended for all users
 
 
-### 7.1.2
+= 7.1.2
 
 This update features security improvements and is recommended for all users
 
 
 
 
-### 7.1.0
+= 7.1.0
 
 This update features security improvements and is recommended for all users. It also includes enhancements of the Custom Gallery shortcode.
 
@@ -192,33 +222,33 @@ This update features security improvements and is recommended for all users. It 
 - Extended theme compatibility of the Custom Gallery shortcode
 
 
-### 7.0.5
+= 7.0.5
 
 - Tested compatibility with WordPress 6.5
 - Security improvements
 
 
-### 7.0.4
+= 7.0.4
 
 This update features security improvements and is recommended for all users
 
 
-### 7.0.3
+= 7.0.3
 
 This update features security improvements and is recommended for all users
 
 
-### 7.0.2
+= 7.0.2
 
 This update features security improvements and is recommended for all users
 
 
-### 7.0.1
+= 7.0.1
 
 This update features security improvements and is recommended for all users
 
 
-### 7.0.0
+= 7.0.0
 
 **IMPORTANT CHANGE**
 
@@ -235,26 +265,26 @@ This update features security improvements and is recommended for all users
 - Improved attribute handling in the *Button* shortcode
 
 
-### 5.13.3
+= 5.13.3
 
 - Tested compatibility with WordPress 6.4
 - Improved plugin stability
 - Updated Freemius SDK
 
 
-### 5.13.2
+= 5.13.2
 
 - Freemius-related security improvements
 - Tested compatibility with WordPress 6.3
 - Added compatibility with PHP 8.2
 
 
-### 5.13.1
+= 5.13.1
 
 This update features security improvements and is recommended for all users
 
 
-### 5.13.0
+= 5.13.0
 
 - Added support for WebP images in `[su_image_carousel]`
 - Minor updates to the codebase
@@ -263,39 +293,39 @@ This update features security improvements and is recommended for all users
 - Fixed issue with media taxonomies in `[su_custom_gallery]` ([forum topic](https://wordpress.org/support/topic/gallery-shortcode-source-taxonomy-still-not-solved/))
 
 
-### 5.12.11
+= 5.12.11
 
 **Stability release**
 
 This update provides minor improvements to the plugin codebase and bugfixes
 
 
-### 5.12.10
+= 5.12.10
 
 This update provides minor improvements to the plugin codebase and removes connectivity test upon activation
 It also fixes the fatal error introduced in version 5.12.9
 
 
-### 5.12.9
+= 5.12.9
 
 This update provides minor improvements to the plugin codebase and removes connectivity test upon activation
 
 
-### 5.12.8
+= 5.12.8
 
 **Security update**
 
 This update features security improvements and is recommended for all users
 
 
-### 5.12.7
+= 5.12.7
 
 **Security update**
 
 This update features security improvements and is recommended for all users
 
 
-### 5.12.6
+= 5.12.6
 
 * Improved PHP8 compatibility
 * Added missing Opt-Out dialog stylesheet
@@ -306,31 +336,31 @@ This update features security improvements and is recommended for all users
 * Freemius SDK updated to version 2.5.3
 
 
-### 5.12.5
+= 5.12.5
 
 * Added Freemius SDK
 * Fixed JS error introduced in the previous update. See [forum topic](https://wordpress.org/support/topic/su-tabs-and-other-shortcodes-no-longer-work-after-recent-update/).
 
 
-### 5.12.3
+= 5.12.3
 
 * Tested compatibility with WordPress 6.1
 
 
-### 5.12.2
+= 5.12.2
 
 * Fixed issue with Shortcode Generator Presets, introduced in the previous update
 * Tested compatibility with WordPress 6
 
 
-### 5.12.1
+= 5.12.1
 
 **Security release**
 
 This update fixes a security vulnerability in the shortcode generator. Thanks to Dave John for discovering it.
 
 
-### 5.12.0
+= 5.12.0
 
 **What's new**
 
@@ -338,14 +368,14 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Tested compatibility with WordPress 5.9
 
 
-### 5.11.2
+= 5.11.2
 
 **Fixed**
 
 - Fixed *Pro Tip* translation in shortcode generator. Thanks to (Pieterjan Deneys)[https://wordpress.org/support/topic/bug-untranslated-string/]
 
 
-### 5.11.1
+= 5.11.1
 
 **What's new**
 
@@ -358,7 +388,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Fixed issue in `[su_posts]` where posts with thumbnails were generating PHP warnings. Thanks to [@dimabr](https://wordpress.org/support/topic/su_posts/#post-14756135)
 
 
-### 5.11.0
+= 5.11.0
 
 **What's changed**
 
@@ -373,7 +403,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Fixed issue when `su_animate` content wasn't properly indexed by search engines
 
 
-### 5.10.2
+= 5.10.2
 
 **What's new**
 
@@ -389,7 +419,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Fixed PHP warning at the new Widgets screen
 
 
-### 5.10.1
+= 5.10.1
 
 **What's new**
 
@@ -405,7 +435,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Fixed issue with the shortcode generator presets for the Tooltip shortcode
 
 
-### 5.10.0
+= 5.10.0
 
 **What's new**
 
@@ -413,7 +443,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Fixed logic of the `su_user` shortcode
 
 
-### 5.9.8
+= 5.9.8
 
 **What's new**
 
@@ -422,7 +452,7 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Tested compatibility with WordPress 5.7
 
 
-### 5.9.7
+= 5.9.7
 
 **What's new**
 
@@ -432,21 +462,21 @@ This update fixes a security vulnerability in the shortcode generator. Thanks to
 - Improved handling of nested dynamic elements within Tabs
 
 
-### 5.9.6
+= 5.9.6
 
 Added compatiblity with WordPress 5.6
 Minor improvements
 Fixed readme.txt information
 
 
-### 5.9.5
+= 5.9.5
 
 Added compatiblity with WordPress 5.6
 Minor improvements
 Fixed readme.txt information
 
 
-### 5.9.4
+= 5.9.4
 
 **Fixes**
 
@@ -455,7 +485,7 @@ Fixed readme.txt information
 - Updated in-plugin links
 
 
-### 5.9.3
+= 5.9.3
 
 **What's new**
 
@@ -467,7 +497,7 @@ Fixed readme.txt information
 - Fixed issue in `[su_image_carousel]` where images were hidden on some themes
 
 
-### 5.9.2
+= 5.9.2
 
 **What's new**
 
@@ -481,7 +511,7 @@ Fixed readme.txt information
 - This update also fixes the plugin options issue present in 5.9.1
 
 
-### 5.9.1
+= 5.9.1
 
 **What's new**
 
@@ -494,7 +524,7 @@ Fixed readme.txt information
 - Fixed error `Posts: invalid template name` on some installations
 
 
-### 5.9.0
+= 5.9.0
 
 **Important changes**
 
@@ -521,7 +551,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Minor UI improvements
 
 
-### 5.8.1
+= 5.8.1
 
 **What's new**
 
@@ -541,7 +571,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Translation fixes
 
 
-### 5.8.0
+= 5.8.0
 
 **What's new**
 
@@ -558,7 +588,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - `[su_feed]` links now have title attribute with descriptions
 
 
-### 5.7.0
+= 5.7.0
 
 **What's new**
 
@@ -576,7 +606,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Fixed compatibility issue with WordPress version 4.5 (white screen at the settings screen)
 
 
-### 5.6.2
+= 5.6.2
 
 **Fixes**
 
@@ -585,7 +615,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Other minor issues
 
 
-### 5.6.1
+= 5.6.1
 
 **What's new**
 
@@ -599,7 +629,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Fixed issue with `[su_spoiler]` where nested `[su_youtube]` remains clickable if spoiler is closed
 
 
-### 5.6.0
+= 5.6.0
 
 **What's new**
 
@@ -612,7 +642,7 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Fixed issue with ghost-style button colors
 
 
-### 5.5.0
+= 5.5.0
 
 **What's new**
 
@@ -634,12 +664,12 @@ Use [su_image_carousel](https://getshortcodes.com/docs/image-carousel/) instead,
 - Fixed `[su_image_carousel]` issue where images weren't shown when crop is disabled
 
 
-### 5.4.1
+= 5.4.1
 
 This update fix various issues related to version 5.4.0
 
 
-### 5.4.0
+= 5.4.0
 
 **What's new**
 
@@ -669,7 +699,7 @@ This update fix various issues related to version 5.4.0
 - *Error messages* are now displayed only to allowed users (user must have required capability)
 
 
-### 5.3.0
+= 5.3.0
 
 **What's new**
 
@@ -685,7 +715,7 @@ This update fix various issues related to version 5.4.0
 - Min-width for responsive tables is set to 100%
 
 
-### 5.2.0
+= 5.2.0
 
 **Improvements**
 
@@ -702,12 +732,12 @@ This update fix various issues related to version 5.4.0
 - Font Awesome replaced with [Fork Awesome](https://github.com/ForkAwesome/Fork-Awesome). Font Awesome stylesheet (v 4.7.0) will be completely removed in the next update. All icons are now use CSS class `sui` instead of `fa`
 
 
-### 5.1.1
+= 5.1.1
 
 - Gutenberg compatibility enabled by default
 
 
-### 5.1.0
+= 5.1.0
 
 **What's new**
 
@@ -718,7 +748,7 @@ This update fix various issues related to version 5.4.0
 - Fixed `<img>` icon appearance of the `[su_service]` shortcode
 
 
-### 5.0.8
+= 5.0.8
 
 **Fixes**
 
@@ -732,13 +762,13 @@ This update fix various issues related to version 5.4.0
 - Returned `su_cmpt()` and `su_compatibility_mode_prefix()` utils
 
 
-### 5.0.7
+= 5.0.7
 
 **Security update**
 
 - Fixed shortcode generator preview vulnerability. [Description](https://www.pluginvulnerabilities.com/2018/09/25/full-disclosure-of-vulnerability-in-wordpress-plugin-with-700000-active-installations/).
 
-### 5.0.6
+= 5.0.6
 
 **Fixes**
 
@@ -749,7 +779,7 @@ This update fix various issues related to version 5.4.0
 - Added missing `su_do_shortcode()` utility function
 
 
-### 5.0.5
+= 5.0.5
 
 **Improvements**
 
@@ -774,21 +804,21 @@ This update fix various issues related to version 5.4.0
 - Fixed warning in `su_siblings` shortcode.
 
 
-### 5.0.4
+= 5.0.4
 * Fixed: added missing FontAwesome icons
 * Fixed: is_plugin_active call removed on frontend
 * Fixed: nested shortcodes
 * Fixed: issue with spoiler loaded through ajax
 * Fixed: [scheduler] shortcode logic
 
-### 5.0.3
+= 5.0.3
 * Changed: Inview.js library replaced with [jQuery.Inview](https://github.com/protonet/jquery.inview)
 * Fixed: caching issue with [su_dummy_text]
 * Fixed: PHP warning in [su_posts] shortcode when specified template does not exist
 * Updated: Font Awesome to version 4.7.0
 * Added: responsive styles for [su_pullquote]
 
-### 5.0.2
+= 5.0.2
 * Fixed: an issue where RTL stylesheet won't displayed if custom CSS field is empty
 * Fixed: icon sizes at 'Dashboard - Available Shortcodes' page
 * Fixed: [expand] shortcode now works when loaded through AJAX
@@ -798,7 +828,7 @@ This update fix various issues related to version 5.4.0
 * Added: new attribute 'responsive' for table shortcode: [su_table responsive="no|yes"]
 * Added: new attribute 'playsinline' for youtube_advanced shortcode: [su_youtube_advanced playsinline="no|yes"]
 
-### 5.0.1
+= 5.0.1
 * Fixed: serious security vulnerability, which allows attacker to run any code using filter in meta, post, or user shortcodes. Thanks to Robert L Mathews.
 * Fixed: changed admin menu position (it was replacing 'Settings' menu on some installations)
 * Fixed: shortcodes prefix field now accepts special characters
@@ -809,7 +839,7 @@ This update fix various issues related to version 5.4.0
 * Added: new filter 'su/assets/custom_css/template' to filter custom css output
 * Minor fixes
 
-### 5.0.0
+= 5.0.0
 * Read [this blog post](https://vanokhin.com/whats-new-in-shortcodes-ultimate-5/) to learn more about update
 * New project website [getshortcodes.com](https://getshortcodes.com/)
 * New documentation [getshortcodes.com/docs](https://getshortcodes.com/docs/)

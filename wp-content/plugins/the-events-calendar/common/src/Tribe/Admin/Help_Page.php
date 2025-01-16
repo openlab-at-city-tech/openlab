@@ -4,6 +4,7 @@
  * Administration Help Page
  *
  * @since 4.0
+ * @deprecated 6.3.2 This class is deprecated and should no longer be used. Use \TEC\Common\Admin\Help_Hub\Hub instead.
  */
 
 // Don't load directly.
@@ -15,6 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class with a few helpers for the Administration Pages
  *
  * @since  4.0
+ * @deprecated 6.3.2 This class is deprecated. Use \TEC\Common\Admin\Help_Hub\Hub instead.
  */
 class Tribe__Admin__Help_Page {
 	//phpcs:ignore - legacy class naming.
@@ -24,6 +26,7 @@ class Tribe__Admin__Help_Page {
 	 * @return Tribe__Admin__Help_Page
 	 */
 	public static function instance() {
+		_deprecated_function( __METHOD__, '6.3.2', '\TEC\Common\Admin\Help_Hub\Hub' );
 		return tribe( static::class );
 	}
 
@@ -326,7 +329,7 @@ class Tribe__Admin__Help_Page {
 
 		$addons['community-events'] = [
 			'id'        => 'community-events',
-			'title'     => esc_html__( 'Community Events', 'tribe-common' ),
+			'title'     => esc_html__( 'Community', 'tribe-common' ),
 			'link'      => 'http://evnt.is/dt',
 			'plugin'    => [ 'the-events-calendar' ],
 			'is_active' => class_exists( 'Tribe__Events__Community__Main' ),
@@ -1110,8 +1113,6 @@ class Tribe__Admin__Help_Page {
 				'events-calendar-pro',
 				'tribe-filterbar',
 				'event-aggregator',
-				'event-automator',
-				'events-virtual',
 				'event-schedule-manager',
 			]
 		);
@@ -1206,7 +1207,6 @@ class Tribe__Admin__Help_Page {
 				'event-tickets-plus',
 				'tribe-eventbrite',
 				'promoter',
-				'event-tickets-wallet-plus',
 			]
 		);
 	}
@@ -1236,13 +1236,13 @@ class Tribe__Admin__Help_Page {
 				],
 				[
 					'title'        => __( 'Hide Others’ Organizers and Venues', 'tribe-common' ),
-					'description'  => __( 'This extension allows you to hide the Organizers and Venues that a visitor has not created from the Community Events submission form.', 'tribe-common' ),
+					'description'  => __( 'This extension allows you to hide the Organizers and Venues that a visitor has not created from the Community submission form.', 'tribe-common' ),
 					'link'         => 'https://evnt.is/1aro',
 					'product-slug' => 'community-events',
 				],
 				[
 					'title'        => __( 'Display Custom HTML', 'tribe-common' ),
-					'description'  => __( 'This extension allows you to add custom HTML content to the top of the Community Events submission form.', 'tribe-common' ),
+					'description'  => __( 'This extension allows you to add custom HTML content to the top of the Community submission form.', 'tribe-common' ),
 					'link'         => 'https://evnt.is/1arp',
 					'product-slug' => 'community-events',
 				],
@@ -1262,7 +1262,6 @@ class Tribe__Admin__Help_Page {
 			'tec_help_ticketing_products',
 			[
 				'events-community',
-				'events-community-tickets',
 			]
 		);
 	}

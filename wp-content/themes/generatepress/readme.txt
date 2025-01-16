@@ -4,9 +4,10 @@ Donate link: https://generatepress.com/ongoing-development/
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: two-columns, three-columns, one-column, right-sidebar, left-sidebar, footer-widgets, blog, e-commerce, flexible-header, full-width-template, buddypress, custom-header, custom-background, custom-menu, custom-colors, sticky-post, threaded-comments, translation-ready, rtl-language-support, featured-images, theme-options
-Requires at least: 5.2
-Tested up to: 6.3
-Stable tag: 3.3.1
+Requires at least: 6.1
+Requires PHP: 7.4
+Tested up to: 6.6
+Stable tag: 3.5.1
 
 GeneratePress is a lightweight WordPress theme built with a focus on speed and usability.
 
@@ -99,6 +100,40 @@ MIT License: https://github.com/JedWatson/react-select/blob/master/LICENSE
 
 == Changelog ==
 
+= 3.5.1 =
+* Tweak: Revert addition of appearance-tools theme support
+* Fix: Dropdown click conflict with off-canvas panel
+
+= 3.5.0 =
+* Feature: Add support for more core block options
+* Feature: Add support for GPP Font Library in the Customizer
+* Fix: Underlined buttons in the editor
+* Tweak: Add minimal header/footer templates for future GPP site editor
+* Tweak: Allow bottom margin value in custom typography elements
+* Accessibility: Add role to back to top button
+* Accessibility: Use h2 for comments title
+* Accessibility: Add aria-controls to menu dropdowns
+* Accessibility: Add aria-label to menu dropdown toggles
+* Accessibility: Add proper roles to menu dropdown toggles
+* Accessibility: Allow spacebar to open menu dropdowns
+
+= 3.4.0 =
+
+* Important: Require PHP 7.4 or later
+* Accessibility: Add label to search modal input
+* Feature: Allow CSS variables and string-based values in Typography
+* Feature: Add read more label filters
+* Fix: Mobile menu toggle alignment when navigation above/below header
+* Fix: Disable nav search modal if using floats or font icons
+* Fix: Remove unnecessary white-space from .site-title and .site-description elements
+* Fix: `html` typography selector in the editor
+* Fix: Content title color in editor
+* Fix: Content width jump when loading editor
+* Fix: Editor losing content width switching code/visual editor
+* Fix: Remove prohibited attribute from header element
+* Fix: Heading text color in the editor
+* Fix: Wrong text domains
+
 = 3.3.1 =
 
 * Tweak: Update Customizer script dependencies to prevent WP 6.3 conflicts
@@ -116,6 +151,7 @@ MIT License: https://github.com/JedWatson/react-select/blob/master/LICENSE
 * Fix: Allow rgb() color values
 * Fix: JS error when toggling empty mobile menu
 * Fix: PHP notice when using SVG as normal and retina logo
+* Fix: Color picker outline
 * Tweak: Allow sub-menus to open using the spacebar
 * Tweak: Increase .has- class specificity
 

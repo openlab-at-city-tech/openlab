@@ -208,7 +208,7 @@ $canUseVideoAddon = (defined('B2S_PLUGIN_ADDON_VIDEO') && !empty(B2S_PLUGIN_ADDO
                             </div> 
                             <div class="b2s-video-upload-file-container">
                                     <?php if (current_user_can('upload_files')) { ?>
-                                    <input type="file" name="file" id="b2s-video-upload-file">
+                                    <input type="file" name="file" id="b2s-video-upload-file" accept="<?php echo esc_html_e(implode(',', unserialize(B2S_PLUGIN_ALLOW_VIDEO_MIME_TYPE))) ?>">
                                     <div class="b2s-video-upload-file-area"  id="b2s-video-upload-file-area">
                                         <h4 class="b2s-video-upload-title"><?php esc_html_e("Drop your video file here or click to select it from your device.", 'blog2social') ?></h4>
                                     </div>

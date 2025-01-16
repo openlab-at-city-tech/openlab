@@ -3,8 +3,6 @@
  * Related Posts Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2021, Astra
  * @link        https://wpastra.com/
  * @since       Astra 3.5.0
  */
@@ -361,7 +359,7 @@ class Astra_Related_Posts_Configs extends Astra_Customizer_Config_Base {
 				'section'  => 'ast-sub-section-related-posts',
 				'priority' => 14,
 				'label'    => '',
-				'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="https://www.digitalrebellion.com/webapps/aspectcalc" target="_blank">', '</a>' ),
+				'help'     => sprintf( /* translators: 1: link open markup, 2: link close markup */ __( 'Calculate a personalized image ratio using this %1$s online tool %2$s for your image dimensions.', 'astra' ), '<a href="' . esc_url( 'https://www.digitalrebellion.com/webapps/aspectcalc' ) . '" target="_blank">', '</a>' ),
 			),
 			array(
 				'name'        => 'related-posts-image-size',

@@ -43,15 +43,15 @@ class TablePress_CSSTidy {
 	 *
 	 * @since 1.0.0
 	 */
-	const AT_START = 1;
-	const AT_END = 2;
-	const SEL_START = 3;
-	const SEL_END = 4;
-	const PROPERTY = 5;
-	const VALUE = 6;
-	const COMMENT = 7;
-	const IMPORTANT_COMMENT = 8;
-	const DEFAULT_AT = 41;
+	public const AT_START = 1;
+	public const AT_END = 2;
+	public const SEL_START = 3;
+	public const SEL_END = 4;
+	public const PROPERTY = 5;
+	public const VALUE = 6;
+	public const COMMENT = 7;
+	public const IMPORTANT_COMMENT = 8;
+	public const DEFAULT_AT = 41;
 
 	/**
 	 * The parsed CSS.
@@ -59,65 +59,57 @@ class TablePress_CSSTidy {
 	 * This array is empty if preserve_css is on.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $css = array();
+	public array $css = array();
 
 	/**
 	 * The raw parsed CSS.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $tokens = array();
+	public array $tokens = array();
 
 	/**
 	 * Instance of the CSS Printer class.
 	 *
 	 * @since 1.0.0
-	 * @var TablePress_CSSTidy_Print
 	 */
-	public $print;
+	public \TablePress_CSSTidy_Print $print;
 
 	/**
 	 * Instance of the CSS Optimiser class.
 	 *
 	 * @since 1.0.0
-	 * @var TablePress_CSSTidy_Optimise
 	 */
-	public $optimise;
+	public \TablePress_CSSTidy_Optimise $optimise;
 
 	/**
 	 * The CSS charset.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $charset = '';
+	public string $charset = '';
 
 	/**
 	 * All @import URLs.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $import = array();
+	public array $import = array();
 
 	/**
 	 * The namespace.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $namespace = '';
+	public string $namespace = '';
 
 	/**
 	 * The settings.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	protected $settings = array();
+	protected array $settings = array();
 
 	/**
 	 * The parser-status.
@@ -131,17 +123,15 @@ class TablePress_CSSTidy {
 	 * - at = in @-block
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	protected $status = 'is';
+	protected string $status = 'is';
 
 	/**
 	 * The current at rule (@media).
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $at = '';
+	public string $at = '';
 
 	/**
 	 * The at rule for next selector (during @font-face or other @).
@@ -155,33 +145,29 @@ class TablePress_CSSTidy {
 	 * The current selector.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $selector = '';
+	public string $selector = '';
 
 	/**
 	 * The current property.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $property = '';
+	public string $property = '';
 
 	/**
 	 * The position of , in selectors.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	protected $sel_separate = array();
+	protected array $sel_separate = array();
 
 	/**
 	 * The current value.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $value = '';
+	public string $value = '';
 
 	/**
 	 * The current sub-value.
@@ -192,105 +178,92 @@ class TablePress_CSSTidy {
 	 * separated by whitespace.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	public $sub_value = '';
+	public string $sub_value = '';
 
 	/**
 	 * All sub-values for a property.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	protected $sub_value_arr = array();
+	protected array $sub_value_arr = array();
 
 	/**
 	 * The stack of characters that opened the current strings.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $str_char = array();
+	public array $str_char = array();
 
 	/**
 	 * [$cur_string description]
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $cur_string = array();
+	public array $cur_string = array();
 
 	/**
 	 * Status from which the parser switched to ic or instr
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	protected $from = array();
+	protected array $from = array();
 
 	/**
 	 * True if in invalid at-rule.
 	 *
 	 * @since 1.0.0
-	 * @var bool
 	 */
-	protected $invalid_at = false;
+	protected bool $invalid_at = false;
 
 	/**
 	 * True if something has been added to the current selector.
 	 *
 	 * @since 1.0.0
-	 * @var bool
 	 */
-	protected $added = false;
+	protected bool $added = false;
 
 	/**
 	 * The message log.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $log = array();
+	public array $log = array();
 
 	/**
 	 * The line number.
 	 *
 	 * @since 1.0.0
-	 * @var int
 	 */
-	protected $line = 1;
+	protected int $line = 1;
 
 	/**
 	 * Marks if we need to leave quotes for a string.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	protected $quoted_string = array();
+	protected array $quoted_string = array();
 
 	/**
 	 * List of tokens.
 	 *
 	 * @since 1.0.0
-	 * @var string
 	 */
-	protected $tokens_list = '';
+	protected string $tokens_list = '';
 
 	/**
 	 * Various CSS Data for CSSTidy.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $data = array();
+	public array $data = array();
 
 	/**
 	 * The output templates.
 	 *
 	 * @since 1.0.0
-	 * @var array
 	 */
-	public $template = array();
+	public array $template = array();
 
 	/**
 	 * Loads standard template and sets default settings.
@@ -469,50 +442,6 @@ class TablePress_CSSTidy {
 		}
 
 		return '';
-	}
-
-	/**
-	 * Writes formatted output to a file.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $filename File name.
-	 */
-	public function write_page( string $filename ): void {
-		$this->write( $filename, true );
-	}
-
-	/**
-	 * Writes plain output to a file.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $filename    File name.
-	 * @param bool   $formatted   Optional. Whether to print formatted or not.
-	 * @param string $doctype     Optional. When printing formatted, is a shorthand for the document type.
-	 * @param bool   $externalcss Optional. When printing formatted, indicates whether styles to be attached internally or as an external stylesheet.
-	 * @param string $title       Optional. When printing formatted, is the title to be added in the head of the document.
-	 * @param string $lang        Optional. When printing formatted, gives a two-letter language code to be added to the output.
-	 */
-	public function write( string $filename, bool $formatted = false, string $doctype = 'xhtml1.1', bool $externalcss = true, string $title = '', string $lang = 'en' ): void {
-		$filename .= ( $formatted ) ? '.xhtml' : '.css';
-
-		if ( ! is_dir( 'temp' ) ) {
-			$madedir = mkdir( 'temp' );
-			if ( ! $madedir ) {
-				print 'Could not make directory "temp" in ' . __DIR__;
-				exit;
-			}
-		}
-		$handle = fopen( 'temp/' . $filename, 'w' );
-		if ( $handle ) {
-			if ( ! $formatted ) {
-				fwrite( $handle, $this->print->plain() );
-			} else {
-				fwrite( $handle, $this->print->formatted_page( $doctype, $externalcss, $title, $lang ) );
-			}
-		}
-		fclose( $handle );
 	}
 
 	/**

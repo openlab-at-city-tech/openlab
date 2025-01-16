@@ -3,8 +3,6 @@
  * Colors - Breadcrumbs Options for theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 1.7.0
  */

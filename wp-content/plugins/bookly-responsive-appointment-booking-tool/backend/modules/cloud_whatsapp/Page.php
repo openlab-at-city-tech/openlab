@@ -42,7 +42,6 @@ class Page extends Lib\Base\Component
                     'country' => $cloud->account->getCountry(),
                     'intlTelInput' => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),
-                        'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                         'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
                     ),
                     'lastMonth' => __( 'Last month', 'bookly' ),
@@ -65,8 +64,8 @@ class Page extends Lib\Base\Component
             self::renderTemplate( 'index', compact( 'datatables', 'whatsapp' ) );
         } else {
             Lib\Utils\Common::redirect( add_query_arg(
-                array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
-                admin_url( 'admin.php' ) )
+                    array( 'page' => \Bookly\Backend\Modules\CloudProducts\Page::pageSlug() ),
+                    admin_url( 'admin.php' ) )
             );
         }
     }
@@ -86,7 +85,7 @@ class Page extends Lib\Base\Component
             $title,
             Lib\Utils\Common::getRequiredCapability(),
             self::pageSlug(),
-            function () {
+            function() {
                 \Bookly\Backend\Modules\CloudWhatsapp\Page::render();
             }
         );

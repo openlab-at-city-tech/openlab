@@ -510,7 +510,7 @@
 											?>
 											<tr class="fs-field-<?php echo esc_attr( $p['id'] ) ?><?php if ( $odd ) : ?> alternate<?php endif ?>">
 												<td>
-													<nobr><?php echo esc_attr( $p['title'] ) ?><?php echo ( ! empty( $p['title'] ) ) ? ':' : '' ?></nobr>
+													<nobr><?php echo esc_html( $p['title'] ) ?><?php echo ( ! empty( $p['title'] ) ) ? ':' : '' ?></nobr>
 												</td>
 												<td<?php if ( 'plan' === $p['id'] || 'bundle_plan' === $p['id'] ) { echo ' colspan="2"'; }?>>
 													<?php if ( in_array( $p['id'], array( 'license_key', 'site_secret_key' ) ) ) : ?>
@@ -723,7 +723,7 @@
 										<a class="button<?php echo ( ! $has_license ? ' button-primary' : '' ) ?> activate-license-trigger <?php echo $fs->get_unique_affix() ?>" href="#"><?php echo $activate_license_button_text ?></a>
 									<?php endif ?>
 								<?php endif ?>
-								<input class="fs-search" type="text" placeholder="<?php fs_esc_attr_echo_inline( 'Search by address', 'search-by-address', $slug ) ?>..."><span class="dashicons dashicons-search"></span>
+								<input class="fs-search" type="text" placeholder="<?php fs_esc_attr_echo_inline( 'Search by address', 'search-by-address', $slug ) ?>..." autocomplete="off"><span class="dashicons dashicons-search"></span>
 							</div>
 							<div class="inside">
 								<div id="" class="fs-scrollable-table">
@@ -1118,12 +1118,3 @@
 	if ( $has_tabs ) {
 		$fs->_add_tabs_after_content();
 	}
-
-	$params = array(
-		'page'           => 'account',
-		'module_id'      => $fs->get_id(),
-		'module_type'    => $fs->get_module_type(),
-		'module_slug'    => $slug,
-		'module_version' => $fs->get_plugin_version(),
-	);
-	fs_require_template( 'powered-by.php', $params );

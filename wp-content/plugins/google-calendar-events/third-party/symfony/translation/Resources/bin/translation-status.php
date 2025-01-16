@@ -140,7 +140,7 @@ function extractTranslationKeys($filePath)
     $contents = new \SimpleXMLElement(\file_get_contents($filePath));
     foreach ($contents->file->body->{'trans-unit'} as $translationKey) {
         $translationId = (string) $translationKey['id'];
-        $translationKey = (string) $translationKey->source;
+        $translationKey = (string) ($translationKey['resname'] ?? $translationKey->source);
         $translationKeys[$translationId] = $translationKey;
     }
     return $translationKeys;

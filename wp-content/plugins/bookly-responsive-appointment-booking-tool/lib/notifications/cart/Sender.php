@@ -3,7 +3,7 @@ namespace Bookly\Lib\Notifications\Cart;
 
 use Bookly\Lib\Config;
 use Bookly\Lib\DataHolders\Booking\Order;
-use Bookly\Lib\DataHolders\Booking\Package;
+use BooklyPackages\Lib\DataHolders\Booking\Package;
 use Bookly\Lib\Entities\Notification;
 use Bookly\Lib\Notifications\Assets\Item\Codes;
 use Bookly\Lib\Notifications\Booking;
@@ -36,7 +36,7 @@ abstract class Sender extends Booking\BaseSender
                 static::notifyStaffAndAdmins( $notifications_recurring['staff'], $item, $order, $codes );
             } elseif ( $item->isPackage() ) {
                 /** @var Package $item */
-                BooklyProxy\Packages::sendNotifications( $item->getPackage() );
+                BooklyProxy\Packages::sendNotifications( $item );
             } elseif ( $item->isGiftCard() ) {
                 // ok
             } else {

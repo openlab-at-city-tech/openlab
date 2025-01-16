@@ -180,8 +180,8 @@ class Controller extends Base {
 
 		if ( ! (bool) self::site_connected() ||
 		     Settings::instance()->get( 'use_legacy_blc_version' ) ||
-		     ! class_exists( '\WPMUDEV_Dashboard' ) ||
-		     ! \WPMUDEV_Dashboard::$api->has_key() ) {
+		     ( class_exists( '\WPMUDEV_Dashboard' ) && ! \WPMUDEV_Dashboard::$api->has_key() )
+		     ) {
 			return new WP_Error(
 				'blc-api-request-failled',
 				esc_html__(
@@ -222,7 +222,7 @@ class Controller extends Base {
 		}
 
 		// WPMUDEV_Dashboard class has been checked already in `$this->can_do_request()`.
-		$this->api_key = \WPMUDEV_Dashboard::$api->get_key();
+		$this->api_key = self::get_api_key();
 	}
 
 	/**

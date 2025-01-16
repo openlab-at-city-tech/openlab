@@ -62,6 +62,14 @@ class TablePress_Admin_Page {
 			}
 		}
 
+		/*
+		 * Register the `react-jsx-runtime` polyfill, if it is not already registered.
+		 * This is needed as a polyfill for WP < 6.6, and can be removed once WP 6.6 is the minimum requirement for TablePress.
+		 */
+		if ( ! wp_script_is( 'react-jsx-runtime', 'registered' ) ) {
+			wp_register_script( 'react-jsx-runtime', plugins_url( 'admin/js/react-jsx-runtime.min.js', TABLEPRESS__FILE__ ), array( 'react' ), TablePress::version, true );
+		}
+
 		/**
 		 * Filters the dependencies of a TablePress script file.
 		 *
@@ -81,7 +89,7 @@ class TablePress_Admin_Page {
 
 		if ( ! empty( $script_data ) ) {
 			foreach ( $script_data as $var_name => $var_data ) {
-				$var_data = wp_json_encode( $var_data, JSON_FORCE_OBJECT );
+				$var_data = wp_json_encode( $var_data, JSON_FORCE_OBJECT | JSON_HEX_TAG | JSON_UNESCAPED_SLASHES );
 				wp_add_inline_script( "tablepress-{$name}", "const tablepress_{$var_name} = {$var_data};", 'before' );
 			}
 		}
@@ -109,7 +117,7 @@ class TablePress_Admin_Page {
 		// Don't use a type hint in the method declaration as many WordPress plugins use the `admin_footer_text` filter in the wrong way.
 
 		// Protect against other plugins not returning a string in their filter callbacks.
-		if ( ! is_string( $content ) ) {
+		if ( ! is_string( $content ) ) { // @phpstan-ignore function.alreadyNarrowedType (The `is_string()` check is needed as the input is coming from a filter hook.)
 			$content = '';
 		}
 
@@ -141,7 +149,7 @@ class TablePress_Admin_Page {
 		?>
 <script>
 ( function( $ ) {
-	let options = <?php echo wp_json_encode( $args, TABLEPRESS_JSON_OPTIONS ); ?>;
+	let options = <?php echo wp_json_encode( $args, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES ); ?>;
 
 	if ( ! options ) {
 		return;
@@ -178,13 +186,13 @@ class TablePress_Admin_Page {
 	 * @return string Safe JSON representation of a variable for printing inside of JavaScript code.
 	 */
 	public function convert_to_json_parse_output( /* string|array|bool|int|float|null */ $data ): string {
-		$json = wp_json_encode( $data, TABLEPRESS_JSON_OPTIONS );
+		$json = wp_json_encode( $data, JSON_HEX_TAG | JSON_UNESCAPED_SLASHES );
 		if ( false === $json ) {
 			// JSON encoding failed, return an error object. Use a prefixed "_error" key to avoid conflicts with intentionally added "error" keys.
 			$json = '{ "_error": "The data could not be encoded to JSON!" }';
 		}
-		// Print them inside a `JSON.parse()` call in JS for speed gains, with necessary escaping of `</script>`, `'`, and `\`.
-		$json = str_replace( array( '</script>', '\\', "'" ), array( '<\/script>', '\\\\', "\'" ), $json );
+		// Print the JSON data inside a `JSON.parse()` call in JS for speed gains, with necessary escaping of `\` and `'`.
+		$json = str_replace( array( '\\', "'" ), array( '\\\\', "\'" ), $json );
 		return "JSON.parse( '{$json}' )";
 	}
 

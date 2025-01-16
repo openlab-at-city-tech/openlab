@@ -177,7 +177,6 @@ div#astra_settings_meta_box {
 }
 .ast-header-settings-modal .components-modal__header {
     padding-left: 24px;
-    padding-right: 0;
     border-bottom: 0;
     padding-bottom: 20px;
     padding-top: 20px;
@@ -311,10 +310,14 @@ td.ast-advanced-hook-row-heading {
 .ast-pro-upgrade-cta-wrapper {
     padding: 20px;
     text-align: center;
+	display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
 }
 p.ast-upgrade-description {
-    margin-top: 15px;
-	margin-bottom: 15px;
+    margin: 0;
 }
 a.ast-pro-upgrade-link {
     color: #0284C7;
@@ -1096,7 +1099,7 @@ a.ast-pro-upgrade-link {
 	width: 20px;
 	padding: 4px;
 	background: transparent;
-	box-shadow: none;
+	box-shadow: none !important;
 	cursor: pointer;
 }
 .astra-color-clear-button.components-button:focus:not(:disabled) {
@@ -2070,7 +2073,7 @@ a.ast-pro-upgrade-link {
   font-weight: 400;
 }
 
-.components-base-control .components-base-control__field .components-input-control__backdrop {
+.ast-sidebar-container .components-base-control .components-base-control__field .components-input-control__backdrop {
   border-color: #D1D5DB !important;
 }
 

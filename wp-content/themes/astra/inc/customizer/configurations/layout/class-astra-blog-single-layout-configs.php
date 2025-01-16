@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -147,15 +145,15 @@ if ( ! class_exists( 'Astra_Blog_Single_Layout_Configs' ) ) {
 					'control'           => 'ast-responsive-spacing',
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_spacing' ),
 					'section'           => 'section-blog-single',
-					'title'             => __( 'Inside', 'astra-addon' ),
+					'title'             => __( 'Inside', 'astra' ),
 					'linked_choices'    => true,
 					'transport'         => 'refresh',
 					'unit_choices'      => array( 'px', 'em', '%' ),
 					'choices'           => array(
-						'top'    => __( 'Top', 'astra-addon' ),
-						'right'  => __( 'Right', 'astra-addon' ),
-						'bottom' => __( 'Bottom', 'astra-addon' ),
-						'left'   => __( 'Left', 'astra-addon' ),
+						'top'    => __( 'Top', 'astra' ),
+						'right'  => __( 'Right', 'astra' ),
+						'bottom' => __( 'Bottom', 'astra' ),
+						'left'   => __( 'Left', 'astra' ),
 					),
 					'priority'          => 30,
 					'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),

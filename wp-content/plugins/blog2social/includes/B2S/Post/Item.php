@@ -26,10 +26,11 @@ class B2S_Post_Item {
     protected $userLang;
     protected $results_per_page = null;
     protected $searchSharedToNetwork;
+    protected $rawResponse = false;
     public $currentPage = 0;
     public $type;
 
-    function __construct($type = 'all', $title = "", $authorId = 0, $postStatus = "", $shareStatus = "", $publishDate = '', $schedDate = '', $showByDate = '', $showByNetwork = 0, $userAuthId = 0, $blogPostId = 0, $currentPage = 0, $postCat = 0, $postType = "", $userLang = "en", $results_per_page = B2S_PLUGIN_POSTPERPAGE, $searchPostSharedById = 0, $searchSharedToNetwork = 0, $searchSharedAtDateStart = 0, $searchSharedAtDateEnd = 0) {
+    function __construct($type = 'all', $title = "", $authorId = 0, $postStatus = "", $shareStatus = "", $publishDate = '', $schedDate = '', $showByDate = '', $showByNetwork = 0, $userAuthId = 0, $blogPostId = 0, $currentPage = 0, $postCat = 0, $postType = "", $userLang = "en", $results_per_page = B2S_PLUGIN_POSTPERPAGE, $searchPostSharedById = 0, $searchSharedToNetwork = 0, $searchSharedAtDateStart = 0, $searchSharedAtDateEnd = 0, $rawResponse = false) {
         $this->type = $type;
         $this->searchPostTitle = $title;
         $this->searchAuthorId = (int) $authorId;
@@ -50,6 +51,7 @@ class B2S_Post_Item {
         $this->searchSharedToNetwork = (int) $searchSharedToNetwork;
         $this->searchSharedAtDateStart = $searchSharedAtDateStart;
         $this->searchSharedAtDateEnd = $searchSharedAtDateEnd;
+        $this->rawResponse = $rawResponse;
     }
 
     protected function getData() {
@@ -64,6 +66,7 @@ class B2S_Post_Item {
         $leftJoin3 = "";
         $leftJoin4 = "";
         $leftJoinWhere = "";
+        $blogSort = '';
 
         if (!empty($this->searchPostTitle)) {
             $addSearchPostTitle = $wpdb->prepare(' AND posts.`post_title` LIKE %s', '%' . trim(esc_sql($wpdb->esc_like($this->searchPostTitle))) . '%');
@@ -84,6 +87,12 @@ class B2S_Post_Item {
                 } else if ($sortType == "sched_asc") {
                     $sortType = "asc";
                     $order = "sched_date";
+                } else if ($sortType == 'blog_asc') {
+                    $sortType = 'asc';
+                    $blogSort = 'ASC';
+                } else if ($sortType == 'blog_desc') {
+                    $sortType = 'desc';
+                    $blogSort = 'DESC';
                 }
             }
             if ($this->searchPostCat > 0) {
@@ -245,6 +254,9 @@ class B2S_Post_Item {
                         GROUP BY a.`post_id` ORDER BY a.`sched_date` " . $sortType;
                     }
                     $orderBy = ($this->type == 'publish' || $this->type == 'notice') ? " ORDER BY filter.max_publish_date " . $sortType : " ORDER BY filter.`sched_date` " . $sortType;
+                    if ($this->type == 'sched' && !empty($blogSort)) {
+                        $orderBy = " ORDER BY posts.`post_date` " . $sortType;
+                    }
                     $addSearchBlogPostId = ((int) $this->searchBlogPostId != 0) ? " a.`post_id` = " . (int) $this->searchBlogPostId . " AND " : '';
                     $addSearchShowByDate = (!empty($this->searchShowByDate)) ? (($this->type == 'publish' || $this->type == 'notice') ? " DATE_FORMAT(a.`publish_date`,'%Y-%m-%d') = '" . $this->searchShowByDate . "' AND " : " DATE_FORMAT(a.`sched_date`,'%Y-%m-%d') = '" . $this->searchShowByDate . "' AND ") : '';
                     $select = ($this->type == 'publish' || $this->type == 'notice') ? 'filter.`blog_user_id`, filter.max_publish_date' : 'filter.`blog_user_id`, filter.`sched_date`';
@@ -262,7 +274,7 @@ class B2S_Post_Item {
                 }
 
 
-                $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`,posts.`post_type`,posts.`post_title`, " . $select . ", filter.`id` 
+                $sqlPosts = "SELECT DISTINCT posts.`ID`, posts.`post_author`,posts.`post_type`,posts.`post_title`,posts.`post_date`, " . $select . ", filter.`id` 
                             FROM `$wpdb->posts` posts $leftJoin $leftJoin2
                                 INNER JOIN(
                                         SELECT a.`id`,$selectInnerJoin, a.`blog_user_id`, a.`hide`, a.`post_id` $sharedToNetworkSelect
@@ -442,6 +454,16 @@ class B2S_Post_Item {
 
     public function getItemHtml($selectSchedDate = "") {
         $this->getData();
+        if ($this->rawResponse) {
+            try {
+                foreach ($this->postData as $index => $post) {
+                    $this->postData[$index]->blog_user_name = get_the_author_meta('display_name', (int) $post->blog_user_id);
+                }
+            } catch (Exception | Throwable $e) {
+                return array('Exception' => $e->getMessage());
+            }
+            return $this->postData;
+        }
         $postStatus = array('publish' => __('published', 'blog2social'), 'pending' => __('draft', 'blog2social'), 'future' => __('scheduled', 'blog2social'));
         $permalinkSetting = (get_option('B2S_PLUGIN_USER_USE_PERMALINKS_' . B2S_PLUGIN_BLOG_USER_ID) !== false) ? 1 : 0;
 
@@ -686,7 +708,7 @@ class B2S_Post_Item {
                                             <img class="post-img-10 pull-left hidden-xs" src="' . esc_url(plugins_url('/assets/images/b2s/' . $postType . '-icon.png', B2S_PLUGIN_FILE)) . '" alt="posttype">
                                                 <div class="media-body">
                                                     <div class="pull-left media-head">
-                                                            <strong><a target="_blank" href="' . esc_url($url) . '">' . esc_html($postTitle) . '</a></strong>' . $curated . '
+                                                            <strong><a target="_blank" href="' . esc_url($url) . '">' . esc_html($postTitle) . '</a></strong> (' . esc_html('Published on the blog: ', 'blog2social') . esc_html(B2S_Util::getCustomDateFormat($var->post_date, substr(B2S_LANGUAGE, 0, 2))) . ')' . $curated . '
                                                         <span class="pull-right">
                                                             <button type="button" class="btn btn-primary btn-sm b2sDetailsSchedPostBtn" data-search-network="' . esc_attr($this->searchShowByNetwork) . '" data-search-date="' . esc_attr($this->searchShowByDate) . '" data-post-id="' . esc_attr($var->ID) . '"><i class="glyphicon glyphicon-chevron-down"></i> ' . esc_html__('Details', 'blog2social') . '</button>
                                                         </span>
@@ -1488,4 +1510,26 @@ class B2S_Post_Item {
         return false;
     }
 
+    public function getItemRaw() {
+        $this->getData();
+        try {
+            foreach ($this->postData as $index => $post) {
+                $postCount = $this->getPostCount($post->ID);
+                $lastPublish = $this->getLastPost($post->ID);
+                $userInfoName = get_the_author_meta('display_name', (int) $lastPublish['user']);
+
+                // translated date
+                $dt = get_date_from_gmt($lastPublish['date'], 'Y-m-d H:i:d');
+                $formattedDate = date_i18n('l, j F Y', strtotime($dt));
+
+                // $formattedDate = B2S_Util::getCustomDateFormat($lastPublish['date'], substr(B2S_LANGUAGE, 0, 2));
+                $this->postData[$index]->blog_user_name = (isset($userInfoName) && !empty($userInfoName) ? $userInfoName : '-');
+                $this->postData[$index]->post_count = (int) $postCount;
+                $this->postData[$index]->formatted_date = $formattedDate;
+            }
+        } catch (Exception | Throwable $e) {
+            return array('Exception' => $e->getMessage());
+        }
+        return $this->postData;
+    }
 }

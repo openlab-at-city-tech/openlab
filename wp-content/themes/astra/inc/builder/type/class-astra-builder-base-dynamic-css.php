@@ -312,7 +312,7 @@ if ( ! class_exists( 'Astra_Builder_Base_Dynamic_CSS' ) ) {
 
 			if ( '' !== $mobile_header_logo && '1' == $different_mobile_header_order ) {
 				$mobile_header_css = '
-				.ast-header-break-point .ast-has-mobile-header-logo .custom-logo-link {
+				.ast-header-break-point .ast-has-mobile-header-logo .custom-logo-link, .ast-header-break-point .wp-block-site-logo .custom-logo-link, .ast-desktop .wp-block-site-logo .custom-mobile-logo-link {
 					display: none;
 				}
 				.ast-header-break-point .ast-has-mobile-header-logo .custom-mobile-logo-link {

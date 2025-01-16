@@ -478,6 +478,7 @@ function astra_theme_background_updater_4_1_4() {
 
 				$theme_options[ $bg_option ]['overlay-type']     = 'none';
 				$theme_options[ $bg_option ]['overlay-color']    = '';
+				$theme_options[ $bg_option ]['overlay-opacity']  = '';
 				$theme_options[ $bg_option ]['overlay-gradient'] = '';
 
 				if ( 'image' === $bg_type ) {
@@ -487,6 +488,7 @@ function astra_theme_background_updater_4_1_4() {
 					if ( '' !== $bg_img && '' !== $bg_color && ( ! is_numeric( strpos( $bg_color, 'linear-gradient' ) ) && ! is_numeric( strpos( $bg_color, 'radial-gradient' ) ) ) ) {
 						$theme_options[ $bg_option ]['overlay-type']     = 'classic';
 						$theme_options[ $bg_option ]['overlay-color']    = $bg_color;
+						$theme_options[ $bg_option ]['overlay-opacity']  = '';
 						$theme_options[ $bg_option ]['overlay-gradient'] = '';
 					}
 				}
@@ -529,6 +531,7 @@ function astra_theme_background_updater_4_1_4() {
 
 				$theme_options[ $resp_bg_option ]['desktop']['overlay-type']     = '';
 				$theme_options[ $resp_bg_option ]['desktop']['overlay-color']    = '';
+				$theme_options[ $resp_bg_option ]['desktop']['overlay-opacity']  = '';
 				$theme_options[ $resp_bg_option ]['desktop']['overlay-gradient'] = '';
 
 				if ( 'image' === $desk_bg_type ) {
@@ -538,6 +541,7 @@ function astra_theme_background_updater_4_1_4() {
 					if ( '' !== $bg_img && '' !== $bg_color && ( ! is_numeric( strpos( $bg_color, 'linear-gradient' ) ) && ! is_numeric( strpos( $bg_color, 'radial-gradient' ) ) ) ) {
 						$theme_options[ $resp_bg_option ]['desktop']['overlay-type']     = 'classic';
 						$theme_options[ $resp_bg_option ]['desktop']['overlay-color']    = $bg_color;
+						$theme_options[ $resp_bg_option ]['desktop']['overlay-opacity']  = '';
 						$theme_options[ $resp_bg_option ]['desktop']['overlay-gradient'] = '';
 					}
 				}
@@ -551,6 +555,7 @@ function astra_theme_background_updater_4_1_4() {
 				// @codingStandardsIgnoreEnd
 				$theme_options[ $resp_bg_option ]['tablet']['overlay-type']     = '';
 				$theme_options[ $resp_bg_option ]['tablet']['overlay-color']    = '';
+				$theme_options[ $resp_bg_option ]['tablet']['overlay-opacity']  = '';
 				$theme_options[ $resp_bg_option ]['tablet']['overlay-gradient'] = '';
 				if ( 'image' === $tablet_bg_type ) {
 					$bg_img   = isset( $theme_options[ $resp_bg_option ]['tablet']['background-image'] ) ? $theme_options[ $resp_bg_option ]['tablet']['background-image'] : '';
@@ -558,6 +563,7 @@ function astra_theme_background_updater_4_1_4() {
 					if ( '' !== $bg_img && '' !== $bg_color && ( ! is_numeric( strpos( $bg_color, 'linear-gradient' ) ) && ! is_numeric( strpos( $bg_color, 'radial-gradient' ) ) ) ) {
 						$theme_options[ $resp_bg_option ]['tablet']['overlay-type']     = 'classic';
 						$theme_options[ $resp_bg_option ]['tablet']['overlay-color']    = $bg_color;
+						$theme_options[ $resp_bg_option ]['tablet']['overlay-opacity']  = '';
 						$theme_options[ $resp_bg_option ]['tablet']['overlay-gradient'] = '';
 					}
 				}
@@ -572,6 +578,7 @@ function astra_theme_background_updater_4_1_4() {
 				// @codingStandardsIgnoreEnd
 				$theme_options[ $resp_bg_option ]['mobile']['overlay-type']     = '';
 				$theme_options[ $resp_bg_option ]['mobile']['overlay-color']    = '';
+				$theme_options[ $resp_bg_option ]['mobile']['overlay-opacity']  = '';
 				$theme_options[ $resp_bg_option ]['mobile']['overlay-gradient'] = '';
 
 				if ( 'image' === $mobile_bg_type ) {
@@ -581,6 +588,7 @@ function astra_theme_background_updater_4_1_4() {
 					if ( '' !== $bg_img && '' !== $bg_color && ( ! is_numeric( strpos( $bg_color, 'linear-gradient' ) ) && ! is_numeric( strpos( $bg_color, 'radial-gradient' ) ) ) ) {
 						$theme_options[ $resp_bg_option ]['mobile']['overlay-type']     = 'classic';
 						$theme_options[ $resp_bg_option ]['mobile']['overlay-color']    = $bg_color;
+						$theme_options[ $resp_bg_option ]['mobile']['overlay-opacity']  = '';
 						$theme_options[ $resp_bg_option ]['mobile']['overlay-gradient'] = '';
 					}
 				}
@@ -985,4 +993,193 @@ function astra_theme_background_updater_4_6_6() {
 		$theme_options['elementor-container-padding-style'] = defined( 'ELEMENTOR_PRO_VERSION' ) ? true : false;
 		update_option( 'astra-settings', $theme_options );
 	}
+}
+
+/**
+ * Handle backward compatibility for Starter template library preview line height cases.
+ *
+ * @since 4.6.11
+ * @return void
+ */
+function astra_theme_background_updater_4_6_11() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( isset( $theme_options['global-headings-line-height-update'] ) ) {
+		return;
+	}
+
+	$headers_fonts = array(
+		'h1' => '1.4',
+		'h2' => '1.3',
+		'h3' => '1.3',
+		'h4' => '1.2',
+		'h5' => '1.2',
+		'h6' => '1.25',
+	);
+
+	foreach ( $headers_fonts as $header_tag => $header_font_value ) {
+
+		if ( empty( $theme_options[ 'font-extras-' . $header_tag ]['line-height'] ) ) {
+			$theme_options[ 'font-extras-' . $header_tag ]['line-height'] = $header_font_value;
+			if ( empty( $theme_options[ 'font-extras-' . $header_tag ]['line-height-unit'] ) ) {
+				$theme_options[ 'font-extras-' . $header_tag ]['line-height-unit'] = 'em';
+			}
+		}
+	}
+
+	$theme_options['global-headings-line-height-update'] = true;
+
+	update_option( 'astra-settings', $theme_options );
+
+}
+
+/**
+ * Handle backward compatibility for heading `clear:both` css in single posts and pages.
+ *
+ * @since 4.6.12
+ * @return void
+ */
+function astra_theme_background_updater_4_6_12() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['single_posts_pages_heading_clear_none'] ) ) {
+		$theme_options['single_posts_pages_heading_clear_none'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+
+	if ( ! isset( $theme_options['elementor-btn-styling'] ) ) {
+		$theme_options['elementor-btn-styling'] = defined( 'ELEMENTOR_VERSION' ) ? true : false;
+		update_option( 'astra-settings', $theme_options );
+	}
+
+	if ( ! isset( $theme_options['remove_single_posts_navigation_mobile_device_padding'] ) ) {
+		$theme_options['remove_single_posts_navigation_mobile_device_padding'] = true;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility for following pointers.
+ *
+ * 1. unit less line-height support.
+ * 2. H5 font size case.
+ *
+ * @since 4.6.14
+ * @return void
+ */
+function astra_theme_background_updater_4_6_14() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['enable-4-6-14-compatibility'] ) ) {
+		$theme_options['enable-4-6-14-compatibility'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility for following cases.
+ *
+ * 1. Making edd default option enable by default.
+ * 2. Handle backward compatibility for Heading font size fix.
+ *
+ * @since 4.7.0
+ * @return void
+ */
+function astra_theme_background_updater_4_7_0() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( class_exists( 'Easy_Digital_Downloads' ) && ! isset( $theme_options['can-update-edd-featured-image-default'] ) ) {
+		$theme_options['can-update-edd-featured-image-default'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+
+	if ( ! isset( $theme_options['heading-widget-font-size'] ) ) {
+		$theme_options['heading-widget-font-size'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility for version 4.7.1
+ *
+ * @since 4.7.1
+ * @return void
+ */
+function astra_theme_background_updater_4_7_1() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	// Setting same background color for above and below transparent headers as on transparent primary header.
+	if ( isset( $theme_options['transparent-header-bg-color-responsive'] ) ) {
+		if ( ! isset( $theme_options['hba-transparent-header-bg-color-responsive'] ) ) {
+			$theme_options['hba-transparent-header-bg-color-responsive'] = $theme_options['transparent-header-bg-color-responsive'];
+		}
+		if ( ! isset( $theme_options['hbb-transparent-header-bg-color-responsive'] ) ) {
+			$theme_options['hbb-transparent-header-bg-color-responsive'] = $theme_options['transparent-header-bg-color-responsive'];
+		}
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+
+/**
+ * Handle backward compatibility Spectra Heading max-width with Astra when fullwidth layout is selected.
+ *
+ * @since 4.8.0
+ * @return void
+ */
+function astra_theme_background_updater_4_8_0() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['enable-4-8-0-compatibility'] ) ) {
+		$theme_options['enable-4-8-0-compatibility'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+
+
+/**
+ * Handle backward compatibility Single post outside spacing issue.
+ *
+ * @since 4.8.2
+ * @return void
+ */
+function astra_theme_background_updater_4_8_2() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['v4-8-2-backward-option'] ) ) {
+		$theme_options['v4-8-2-backward-option'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Handle backward compatibility for Spectra container margin left and right.
+ * Handle backward compatibility for Heading font size px to em conversion cases.
+ *
+ * @since 4.8.4
+ * @return void
+ */
+function astra_theme_background_updater_4_8_4() {
+	$theme_options = get_option( 'astra-settings', array() );
+
+	if ( ! isset( $theme_options['enable-4-8-4-compatibility'] ) ) {
+		$theme_options['enable-4-8-4-compatibility'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+
+	if ( ! isset( $theme_options['astra-heading-font-size-compatibility'] ) ) {
+				$theme_options['astra-heading-font-size-compatibility'] = false;
+		update_option( 'astra-settings', $theme_options );
+	}
+}
+
+/**
+ * Set key to show NPS survey popup immediately for old user.
+ *
+ * @since 4.8.7
+ * @return void
+ */
+function astra_theme_background_updater_4_8_7() {
+	update_option( 'astra_nps_show', true);
 }

@@ -108,6 +108,37 @@ class GFImageChoices extends GFAddOn {
 		parent::pre_init();
 	}
 
+    public function field_supports_product_image( $field ) {
+        if ( empty($field) ) {
+            return false;
+        }
+        return is_object($field) ? ( $field->type == "product" && $field->inputType == "singleproduct" ) : ( $field['input'] === "product" && $field['inputType'] === "singleproduct" );
+    }
+
+    public function field_has_product_image_enabled( $field ) {
+        return ( !empty($field) && $this->field_supports_product_image($field) && $this->get_field_settings_value("enabled", false, $field, true) );
+    }
+
+	public function form_contains_product_image_fields( $form ) {
+		$has_pi = false;
+		foreach( $form['fields'] as $field ) {
+			if ( $this->field_has_product_image_enabled( $field ) ) {
+				$has_pi = true;
+				break;
+			}
+		}
+		return $has_pi;
+	}
+
+	public function field_supports_image_choices( $field ) {
+		if ( empty($field) ) {
+			return false;
+		}
+		$is_supported_field_type = ( is_object( $field ) && property_exists($field, 'type') && in_array($field->type, $this->get_supported_field_types()) );
+		$is_supported_input_type = ( in_array($field->type, $this->get_supported_input_types()) || ( property_exists($field, 'inputType') && !empty($field->inputType) && in_array($field->inputType, $this->get_supported_input_types()) ) );
+		return ($is_supported_field_type && $is_supported_input_type);
+	}
+
     public function field_has_image_choices_enabled( $field ) {
         return ( !empty($field) && $this->get_field_settings_value("enableImages", false, $field) );
     }
@@ -134,6 +165,7 @@ class GFImageChoices extends GFAddOn {
 		// add a special class to relevant fields so we can identify them later
 		add_action( 'gform_field_css_class', array( $this, 'add_custom_class' ), 10, 3 );
 		add_filter( 'gform_field_choice_markup_pre_render', array( $this, 'add_image_options_markup' ), 10, 4 );
+		add_filter( 'gform_field_content', array( $this, 'add_product_image_markup' ), 100, 5 );
 
 		// display on entry detail
 		add_filter( 'gform_entry_field_value', array( $this, 'custom_entry_field_value' ), 20, 4 );
@@ -180,7 +212,8 @@ class GFImageChoices extends GFAddOn {
 		// form editor
 		add_action( 'gform_field_standard_settings', array( $this, 'image_choice_field_settings' ), 10, 2 );
 		add_filter( 'gform_field_settings_tabs', array( $this, 'custom_settings_tab' ), 10, 1 );
-		add_action( 'gform_field_settings_tab_content_image_choices', array( $this, 'custom_settings_markup' ), 10, 1 );
+		add_action( 'gform_field_settings_tab_content_image_choices', array( $this, 'custom_image_choices_settings_markup' ), 10, 1 );
+		add_action( 'gform_field_settings_tab_content_product_image', array( $this, 'custom_product_image_settings_markup' ), 10, 1 );
 
 		add_filter( 'gform_tooltips', array( $this, 'add_image_choice_field_tooltips' ) );
 
@@ -364,7 +397,7 @@ class GFImageChoices extends GFAddOn {
 	}
 
 	public function maybe_enqueue_main_scripts_styles( $form ) {
-		return( !empty($form) && $this->form_contains_image_choices_fields($form) );
+		return( !empty($form) && ( $this->form_contains_image_choices_fields($form) || $this->form_contains_product_image_fields($form) ) );
 	}
 
 
@@ -408,12 +441,14 @@ class GFImageChoices extends GFAddOn {
 	}
 
 
-    public function get_field_feature_color( $field, $fallback_to_form = true ) {
+    public function get_field_feature_color( $field, $fallback_to_form = true, $for_product_image = false ) {
         $color = false;
 
-	    $field_feature_color = $this->get_field_settings_value("featureColor", "form_setting", $field);
+	    $is_product_image_field = ( $for_product_image === true );
+
+	    $field_feature_color = $this->get_field_settings_value("featureColor", "form_setting", $field, $is_product_image_field);
 	    if ( $field_feature_color == "custom" ) {
-		    $color = $this->get_field_settings_value("featureColorCustom", false, $field);
+		    $color = $this->get_field_settings_value("featureColorCustom", false, $field, $is_product_image_field);
 	    }
 
         if ( empty($color) && $fallback_to_form ) {
@@ -435,10 +470,12 @@ class GFImageChoices extends GFAddOn {
         return $color;
     }
 
-    public function get_field_theme( $field, $fallback_to_form = true ) {
+    public function get_field_theme( $field, $fallback_to_form = true, $for_product_image = false ) {
 	    $theme = false;
 
-	    $field_theme = $this->get_field_settings_value("theme", "form_setting", $field);
+	    $is_product_image_field = ( $for_product_image === true );
+
+	    $field_theme = $this->get_field_settings_value("theme", "form_setting", $field, $is_product_image_field);
 	    if ( (empty($field_theme) || $field_theme == "form_setting") && $fallback_to_form ) {
 		    $form = GFAPI::get_form( $field['formId'] );
 		    $form_settings = $this->get_form_settings( $form );
@@ -460,7 +497,7 @@ class GFImageChoices extends GFAddOn {
 
 	public function frontend_inline_styles( $form ) {
 
-		if ( is_admin() || wp_doing_ajax() || !$this->form_contains_image_choices_fields($form) ) {
+		if ( is_admin() || wp_doing_ajax() ) {
 			return;
 		}
 
@@ -468,6 +505,122 @@ class GFImageChoices extends GFAddOn {
 		$form_settings = $this->get_form_settings( $form );
 		$plugin_settings = $this->get_plugin_settings();
 		$use_new_features = $this->use_new_features();
+
+		////// product image
+		if ( $use_new_features && $this->form_contains_product_image_fields( $form ) ) {
+
+			ob_start();
+
+			// global heights
+			$global_setting_height = $this->get_plugin_settings_value( "gf_image_choices_global_height", "", $plugin_settings );
+			if ( !empty($global_setting_height) ) {
+				?>
+                .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height: <?php echo $global_setting_height; ?>px;
+                }
+				<?php
+			}
+			$global_setting_medium_height = $this->get_plugin_settings_value( "gf_image_choices_global_height_medium", "", $plugin_settings );
+			if ( !empty($global_setting_medium_height) ) {
+				?>
+                .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height-medium: <?php echo $global_setting_medium_height; ?>px;
+                }
+				<?php
+			}
+			$global_setting_small_height = $this->get_plugin_settings_value( "gf_image_choices_global_height_small", "", $plugin_settings );
+			if ( !empty($global_setting_small_height) ) {
+				?>
+                .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height-small: <?php echo $global_setting_small_height; ?>px;
+                }
+				<?php
+			}
+
+			$global_overrides_css = ob_get_clean();
+			$global_overrides_css_ref = "product_image_css_overrides";
+			if ( !wp_style_is($global_overrides_css_ref) && !empty($global_overrides_css) ) {
+				wp_register_style( $global_overrides_css_ref, false );
+				wp_enqueue_style( $global_overrides_css_ref );
+				wp_add_inline_style( $global_overrides_css_ref, $global_overrides_css );
+			}
+
+
+			ob_start();
+
+			// form heights
+			$form_setting_height = $this->get_form_settings_value( "gf_image_choices_height", "", $form, $form_settings );
+			if ( !empty($form_setting_height) ) {
+				?>
+                #gform_<?php echo $form_id; ?> .gform_fields .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height: <?php echo $form_setting_height; ?>px;
+                }
+				<?php
+			}
+			$form_setting_medium_height = $this->get_form_settings_value( "gf_image_choices_height_medium", "", $form, $form_settings );
+			if ( !empty($form_setting_medium_height) ) {
+				?>
+                #gform_<?php echo $form_id; ?> .gform_fields .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height-medium: <?php echo $form_setting_medium_height; ?>px;
+                }
+				<?php
+			}
+			$form_setting_small_height = $this->get_form_settings_value( "gf_image_choices_height_small", "", $form, $form_settings );
+			if ( !empty($form_setting_small_height) ) {
+				?>
+                #gform_<?php echo $form_id; ?> .gform_fields .product-image-field[class*="product-image-theme--"] {
+                    --product-image-height-small: <?php echo $form_setting_small_height; ?>px;
+                }
+				<?php
+			}
+
+
+			// field heights
+			foreach( $form['fields'] as $field ) {
+				if ( !$this->field_has_product_image_enabled( $field ) ) {
+					continue;
+				}
+				$height = $this->get_field_settings_value("height", "", $field, true);
+				if ( !empty($height) ) {
+					?>
+                    #field_<?php echo $field["formId"] . "_" . $field["id"]; ?>.product-image-field[class*="product-image-theme--"] {
+                        --product-image-height: <?php echo $height; ?>px;
+                    }
+					<?php
+				}
+				$medium_height = $this->get_field_settings_value("heightMedium", "", $field, true);
+				if ( !empty($medium_height) ) {
+					?>
+                    #field_<?php echo $field["formId"] . "_" . $field["id"]; ?>.product-image-field[class*="product-image-theme--"] {
+                        --product-image-height-medium: <?php echo $medium_height; ?>px;
+                    }
+					<?php
+				}
+				$small_height = $this->get_field_settings_value("heightSmall", "", $field, true);
+				if ( !empty($small_height) ) {
+					?>
+                    #field_<?php echo $field["formId"] . "_" . $field["id"]; ?>.product-image-field[class*="product-image-theme--"] {
+                        --product-image-height-small: <?php echo $small_height; ?>px;
+                    }
+					<?php
+				}
+			}
+
+			$form_overrides_css = ob_get_clean();
+			$form_overrides_css_ref = "product_image_css_overrides_{$form_id}";
+			if ( !wp_style_is($form_overrides_css_ref) && !empty($form_overrides_css) ) {
+				wp_register_style( $form_overrides_css_ref, false );
+				wp_enqueue_style( $form_overrides_css_ref );
+				wp_add_inline_style( $form_overrides_css_ref, $form_overrides_css );
+			}
+
+		}
+
+        ////// image choices
+
+        if ( !$this->form_contains_image_choices_fields($form) ) {
+            return;
+        }
 
         if ( $use_new_features ) {
 
@@ -767,7 +920,7 @@ class GFImageChoices extends GFAddOn {
 			'uploadImage'    => esc_html__( 'Upload image', 'gf_image_choices' ),
 			'removeImage'    => esc_html__( 'Remove this image', 'gf_image_choices' ),
 			'removeAllChoices'    => esc_html__( 'Remove All Choices', 'gf_image_choices' ),
-			'useLightboxWarning'    => esc_html__( 'It looks like you created your choices for this field prior to our release of the lightbox functionality. In order for lightbox to work with this field, you will need to remove and re-add the images for these choices again.', 'gf_image_choices' ),
+			'useLightboxWarning'    => esc_html__( "It looks like we don't have the media ID for the selected image(s), which is needed for the lightbox functionality. In order for lightbox to work with this field, you might want to remove and re-add the image(s) again or use one of the available filters to add the ID or the large image URL.", 'gf_image_choices' ),
 		) );
 
 		$js_name = $use_new_features ? 'gf_image_choices_admin' : 'gf_image_choices';
@@ -2320,7 +2473,7 @@ class GFImageChoices extends GFAddOn {
 
 			$form = GFAPI::get_form($form_id);
 
-			return $this->maybe_format_field_values( $value, $field, $form, $entry );
+			return $this->maybe_format_field_values( $value, $field, $form, $entry, $field_id );
 		}
 
 		return $value;
@@ -2353,6 +2506,7 @@ class GFImageChoices extends GFAddOn {
 		// Eg: Product Option Field Label: Selected Option Value
 
 		$contains_image_choices_fields = false;
+		$contains_product_image_fields = false;
 
 		// ---------
 		$settings = $this->get_form_settings( $form );
@@ -2370,6 +2524,7 @@ class GFImageChoices extends GFAddOn {
 		foreach ($order_summary['products'] as $product_field_id => $product) {
 
 			$data = array(
+				'product_image_field' => false,
 				'product_field_id' => $product_field_id,
 				'product_field_label' => '',
 				'product_summary_display_value' => $product['name'],
@@ -2384,14 +2539,25 @@ class GFImageChoices extends GFAddOn {
 
 			if (isset($fields_id_lookup[$product_field_id])) {
 				$field = $fields_id_lookup[$product_field_id];
-				if ( is_object( $field ) && property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages ) {
-					$field_choices_entry_setting = (property_exists($field, 'imageChoices_entrySetting') && !empty($field->imageChoices_entrySetting)) ? $field->imageChoices_entrySetting : 'form_setting';
+
+				if ( $this->field_has_product_image_enabled($field) ) {
+					$field_choices_entry_setting = $this->get_field_settings_value('entrySetting', 'form_setting', $field, true);
+					$data['product_image_field'] = true;
+					$data['product_field_label'] = $field->label;
+					$data['product_field_selected_label'] = $field->label;
+					$data['product_field_entry_value_type'] = ($field_choices_entry_setting == 'form_setting') ? $form_choices_entry_setting : $field_choices_entry_setting;
+					$data['product_field_selected_image'] = $this->get_field_settings_value( 'image', '', $field, true );
+					$contains_product_image_fields = true;
+				}
+				else if ( $this->field_has_image_choices_enabled($field) ) {
+					$field_choices_entry_setting = $this->get_field_settings_value('entrySetting', 'form_setting', $field);
 					$data['product_field_label'] = $field->label;
 					$data['product_field_selected_label'] = RGFormsModel::get_choice_text($field, $data['product_field_selected_value']);
 					$data['product_field_entry_value_type'] = ($field_choices_entry_setting == 'form_setting') ? $form_choices_entry_setting : $field_choices_entry_setting;
 					$data['product_field_selected_image'] = $this->get_choice_image_src($field, $data['product_field_selected_value']);
 					$contains_image_choices_fields = true;
 				}
+
 			}
 
 			if (isset($product['options']) && !empty($product['options'])) {
@@ -2410,8 +2576,8 @@ class GFImageChoices extends GFAddOn {
 
 					if (isset($fields_label_lookup[$option_field_label])) {
 						$field = $fields_label_lookup[$option_field_label];
-						if ( is_object( $field ) && property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages ) {
-							$field_choices_entry_setting = (property_exists($field, 'imageChoices_entrySetting') && !empty($field->imageChoices_entrySetting)) ? $field->imageChoices_entrySetting : 'form_setting';
+						if ( $this->field_has_image_choices_enabled($field) ) {
+							$field_choices_entry_setting = $this->get_field_settings_value('entrySetting', 'form_setting', $field);
 							$option_data['option_field_selected_label'] = RGFormsModel::get_choice_text($field, $option_data['option_field_selected_value']);
 							$option_data['option_field_entry_value_type'] = ($field_choices_entry_setting == 'form_setting') ? $form_choices_entry_setting : $field_choices_entry_setting;
 							$option_data['option_field_selected_image'] = $this->get_choice_image_src($field, $option_data['option_field_selected_value']);
@@ -2425,7 +2591,7 @@ class GFImageChoices extends GFAddOn {
 			array_push($product_summary_image_choices, $data);
 		}
 
-		if ($contains_image_choices_fields) {
+		if ($contains_image_choices_fields || $contains_product_image_fields) {
 			$image_entry_setting_values = array('src', 'image', 'image_text', 'image_text_price', 'image_price', 'image_value');
 
 			foreach($product_summary_image_choices as $summary_item) {
@@ -2434,24 +2600,33 @@ class GFImageChoices extends GFAddOn {
 					&& !empty($summary_item['product_field_selected_image'])) {
 
 					$replacement_markup = '';
+                    $is_product_image_field = ( !empty($summary_item['product_image_field']) );
+                    $css_class = $is_product_image_field ? "gf-image-choices-entry-product-image" : "gf-image-choices-entry-choice-image";
+                    if ( $is_product_image_field && empty($summary_item['options']) ) {
+	                    $css_class .= " gf-image-choices-entry-product-image-no-options";
+                    }
 
 					if ($summary_item['product_field_entry_value_type'] == 'src') {
 						$replacement_markup = $summary_item['product_field_selected_image'];
 					}
-					else if ($summary_item['product_field_entry_value_type'] == 'image') {
-						$replacement_markup = '<div class="gf-image-choices-entry-choice-image" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div>';
+                    else if ( $is_product_image_field ) {
+	                    // for Product Image on the order summary table, just show image + label (unless they want image src only)
+	                    $replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /><div class="product_name">'.$summary_item['product_field_selected_label'].'</div></div>';
+                    }
+					else if ($summary_item['product_field_entry_value_type'] == 'image' ) {
+						$replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div>';
 					}
-					else if ($summary_item['product_field_entry_value_type'] == 'image_text') {
-						$replacement_markup = '<div class="gf-image-choices-entry-choice-image" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_field_selected_label'].'</div>';
+					else if ($summary_item['product_field_entry_value_type'] == 'image_text' ) {
+						$replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_field_selected_label'].'</div>';
 					}
 					else if ($summary_item['product_field_entry_value_type'] == 'image_text_price') {
-						$replacement_markup = '<div class="gf-image-choices-entry-choice-image" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">' . $summary_item['product_field_selected_label'] . ' (' . $summary_item['product_field_selected_price_formatted'] . ')' . '</div>';
+						$replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">' . $summary_item['product_field_selected_label'] . ' (' . $summary_item['product_field_selected_price_formatted'] . ')' . '</div>';
 					}
 					else if ($summary_item['product_field_entry_value_type'] == 'image_price') {
-						$replacement_markup = '<div class="gf-image-choices-entry-choice-image" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_field_selected_price_formatted'].'</div>';
+						$replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_field_selected_price_formatted'].'</div>';
 					}
 					else if ($summary_item['product_field_entry_value_type'] == 'image_value') {
-						$replacement_markup = '<div class="gf-image-choices-entry-choice-image" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_summary_display_value'].'</div>';
+						$replacement_markup = '<div class="'.$css_class.'" style="display: inline-block;"><img src="'.$summary_item['product_field_selected_image'].'" '.$style.' /></div><div class="product_name">'.$summary_item['product_summary_display_value'].'</div>';
 					}
 
 					if (!empty($replacement_markup)) {
@@ -2549,6 +2724,43 @@ class GFImageChoices extends GFAddOn {
 		return $img;
 	}
 
+	public function get_product_image_markup($src = '', $text_value = '', $modifier = '') {
+
+		$size = (!empty($modifier) && strlen($modifier) > 5 && substr($modifier, 0, 6) == 'image_') ? substr($modifier, 6) : '80px';
+
+		if ( GFCommon::is_entry_detail() ) {
+
+			$markup = '<div class="gf-image-choices-entry"><div class="gf-product-image-entry-wrap">';
+			$markup .= '<span class="gf-product-image-entry-image">';
+			if (!empty($src)) {
+				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%;" />';
+			}
+			$markup .= '</span>';
+			if (!empty($text_value)) {
+				$markup .= '<span class="gf-product-image-entry-text">'.html_entity_decode($text_value).'</span>';
+			}
+			$markup .= '</div></div>';
+
+		}
+		else {
+
+			$markup = '<div style="display: block; text-align: center;"><span style="display: inline-block; vertical-align: top; margin: 0 10px 20px; text-align: center;">';
+			$markup .= '<span style="display: inline-block;">';
+			if (!empty($src)) {
+				$markup .= '<img src="'.$src.'" style="width:'.$size.'; height:auto; max-width:100%;" />';
+			}
+			$markup .= '</span>';
+			if (!empty($text_value)) {
+				$markup .= '<span style="display: block; font-size: 12px;">'.html_entity_decode($text_value).'</span>';
+			}
+			$markup .= '</span></div>';
+
+		}
+
+
+		return $markup;
+	}
+
 	public function get_choice_image_item_markup($src = '', $text_value = '', $modifier = '') {
 
 		$size = (!empty($modifier) && strlen($modifier) > 5 && substr($modifier, 0, 6) == 'image_') ? substr($modifier, 6) : '80px';
@@ -2616,12 +2828,18 @@ class GFImageChoices extends GFAddOn {
 
 	public function custom_notification_merge_tag($value, $merge_tag, $modifier, $field, $raw_value) {
 
-		$is_supported_field_type = ( is_object( $field ) && property_exists($field, 'type') && in_array($field->type, $this->get_supported_field_types()) );
-		$is_supported_input_type = ( in_array($field->type, $this->get_supported_input_types()) || ( property_exists($field, 'inputType') && !empty($field->inputType) && in_array($field->inputType, $this->get_supported_input_types()) ) );
-		$is_supported_field = ($is_supported_field_type && $is_supported_input_type);
-		$is_image_choices_enabled = (property_exists($field, 'imageChoices_enableImages') && !empty($field->imageChoices_enableImages));
+		$is_supported_field = false;
+		$is_product_image_enabled = $this->field_has_product_image_enabled($field);
+		$is_image_choices_enabled = $this->field_has_image_choices_enabled($field);
 
-		if ( !$is_supported_field || !$is_image_choices_enabled ) {
+        if ( $is_product_image_enabled ) {
+	        $is_supported_field = $this->field_supports_product_image($field);
+        }
+        else if ( $is_image_choices_enabled ) {
+	        $is_supported_field = $this->field_supports_image_choices($field);
+        }
+
+		if ( !$is_supported_field || ( !$is_image_choices_enabled && !$is_product_image_enabled ) ) {
 			return $value;
 		}
 
@@ -2638,8 +2856,8 @@ class GFImageChoices extends GFAddOn {
 		// ---------
 		$form = GFAPI::get_form( $field->formId );
 		$settings = $this->get_form_settings( $form );
-		$form_choices_entry_setting = (isset($settings['gf_image_choices_entry_value'])) ? $settings['gf_image_choices_entry_value'] : 'value';
-		$field_choices_entry_setting = (property_exists($field, 'imageChoices_entrySetting') && !empty($field->imageChoices_entrySetting)) ? $field->imageChoices_entrySetting : 'form_setting';
+		$form_choices_entry_setting = $this->get_form_settings_value('gf_image_choices_entry_value', 'value', $form, $settings);
+        $field_choices_entry_setting = $this->get_field_settings_value('entrySetting', 'form_setting', $field, $is_product_image_enabled);
 		$field_entry_value_type = ($field_choices_entry_setting == 'form_setting') ? $form_choices_entry_setting : $field_choices_entry_setting;
 		$image_entry_setting_values = array('src', 'image', 'image_text', 'image_text_price', 'image_price', 'image_value');
 		// ---------
@@ -2661,7 +2879,58 @@ class GFImageChoices extends GFAddOn {
 		$text = RGFormsModel::get_choice_text($field, $value);
 		$image = '';
 
-		if ( $field_input_type == 'checkbox' ) {
+        if ( $is_product_image_enabled ) {
+
+	        $image = $this->get_field_settings_value( 'image', '', $field, true );
+	        $text = $field->label;
+	        $price = $field->basePrice;
+	        //GFCommon::format_number($price, 'currency')
+
+	        if ($is_image_specific_modifier) {
+		        return $this->get_product_image_markup($image, "", $modifier);
+	        }
+	        else if ($is_src_specific_modifier) {
+		        return $image;
+	        }
+	        else if ($field_entry_value_type == 'text') {
+		        return $text;
+	        }
+	        else if (!empty($image)) {
+		        $image_item_markup = '';
+		        if ($field_entry_value_type == 'src') {
+			        $image_item_markup = $image;
+		        }
+		        else if ($field_entry_value_type == 'image') {
+			        $image_item_markup = $this->get_product_image_markup($image);
+		        }
+		        else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value') {
+			        $image_item_markup = $this->get_product_image_markup($image, $text);
+		        }
+		        else if ($field_entry_value_type == 'image_text_price') {
+			        if ( !empty($price) ) {
+				        $image_item_markup = $this->get_product_image_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
+			        }
+			        else {
+				        // if it's not a product or option field, just return the image and label
+				        $image_item_markup = $this->get_product_image_markup($image, $text);
+			        }
+		        }
+		        else if ($field_entry_value_type == 'image_price') {
+			        if ( !empty($price) ) {
+				        $image_item_markup = $this->get_product_image_markup($image, GFCommon::format_number($price, 'currency'));
+			        }
+			        else {
+				        // if it's not a product or option field, just return the image
+				        $image_item_markup = $this->get_product_image_markup($image);
+			        }
+		        }
+
+		        return $image_item_markup;
+	        }
+
+
+        }
+		else if ( $field_input_type == 'checkbox' ) {
 
 			$merge_tag_dot_pos = strpos( $merge_tag, "." );
 			$merge_tag_contains_dot = ( $merge_tag_dot_pos !== FALSE );
@@ -3064,615 +3333,699 @@ class GFImageChoices extends GFAddOn {
 	 * @param GF_Field|null $field The field object being processed or null.
 	 * @param array $form The form object currently being processed.
 	 * @param array $entry The entry object currently being processed.
+	 * @param string $entry_column_id The field or input ID currently being processed. Used for Product Image
 	 *
 	 * @return string
 	 */
 
-	public function maybe_format_field_values( $value, $field, $form, $entry ) {
+	public function maybe_format_field_values( $value, $field, $form, $entry, $entry_column_id = '' ) {
 
-		if (!isset($field) || empty($field)) {
+		if ( empty($field) || !is_object( $field ) ) {
 			return $value;
 		}
+
+		$is_for_product_image = $this->field_has_product_image_enabled( $field );
 
 
 		// ---------
 		$settings = $this->get_form_settings( $form );
 		$form_choices_entry_setting = (isset($settings['gf_image_choices_entry_value'])) ? $settings['gf_image_choices_entry_value'] : 'value';
-		$field_choices_entry_setting = (property_exists($field, 'imageChoices_entrySetting') && !empty($field->imageChoices_entrySetting)) ? $field->imageChoices_entrySetting : 'form_setting';
+        $field_choices_entry_setting = $this->get_field_settings_value( 'entrySetting', 'form_setting', $field, $is_for_product_image );
 		$field_entry_value_type = ($field_choices_entry_setting == 'form_setting') ? $form_choices_entry_setting : $field_choices_entry_setting;
 		$image_entry_setting_values = array('src', 'image', 'image_text', 'image_text_price', 'image_price', 'image_value');
 		// ---------
 
 		$form_theme_setting = (isset($settings['gf_image_choices_theme'])) ? $settings['gf_image_choices_theme'] : "global_setting";
-		$field_theme_setting = (property_exists($field, 'imageChoices_theme') && !empty($field->imageChoices_theme)) ? $field->imageChoices_theme : 'form_setting';
+        $field_theme_setting = $this->get_field_settings_value( 'theme', 'form_setting', $field, $is_for_product_image );
 		$field_theme = ($field_theme_setting == 'form_setting') ? $form_theme_setting : $field_theme_setting;
 
 		$real_value = RGFormsModel::get_lead_field_value( $entry, $field );
 
-		//if ( is_object( $field ) && property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages && $field->type != 'product' && $field->type != 'option') {
-		if ( is_object( $field ) && property_exists($field, 'imageChoices_enableImages') && $field->imageChoices_enableImages && $field_entry_value_type != 'value' ) {
-			$type_property = ($field->type == 'survey' || $field->type == 'poll' || $field->type == 'quiz' || $field->type == 'post_custom_field' || $field->type == 'product' || $field->type == 'option') ? 'inputType' : 'type';
+        if ( $field_entry_value_type == 'value' ) {
+            return $value;
+        }
+        else if ( $is_for_product_image ) {
+            // PRODUCT IMAGE
 
-			// Product field doesn't have checkboxes, only radio
-			// Option field has both
+            // We'll only do a replace if the selected column is for the product Label/Name
+            // $entry_column_id will only be present for entry table/list view
+            if ( !empty($entry_column_id) && strpos($entry_column_id, ".1") === FALSE ) {
+                return $value;
+            }
 
-			if (
-				( $field[$type_property] == 'checkbox' || apply_filters( 'gfic_is_supported_multi_value_field', false, $field ) )
-				&& ( strpos($value, ', ') !== FALSE || strpos($value, "<ul class='bulleted'>") !== FALSE )
-			) {
+	        $image = $this->get_field_settings_value( 'image', '', $field, $is_for_product_image );
+	        $field_id = rgobj($field, 'id');
 
-				// multiple selections
-				$ordered_values = '';//(!empty($value)) ? explode(', ', $value) : '';
-				if ( !empty($value) && strpos($value, ', ') !== FALSE ) {
-					$ordered_values = explode(', ', $value);
-				}
-				else if ( !empty($value) && strpos($value, "<ul class='bulleted'>") !== FALSE ) {
-					$ordered_values = [];
-					foreach( $real_value as $choice_id => $choice_value ) {
-						if ( !empty($choice_value) ) {
-							$ordered_values[] = $choice_value;
-						}
-					}
-				}
+	        /*
+			$real_value for product is Label, Price, Qty
+			Eg:
+			Array (
+				[1.1] => Simple
+				[1.2] => $ 105.00
+				[1.3] => 1
+			)
+			*/
 
-				if (is_array($ordered_values)) {
-					$return_strings = array();
-					$return_images = array();
-					foreach ($ordered_values as $ordered_value) {
-						if ($field->type != 'option') {
-							$image = $this->get_choice_image_src($field, $ordered_value);
-							$text = RGFormsModel::get_choice_text($field, $ordered_value);
-							if ($field_entry_value_type == 'text') {
-								array_push($return_strings, $text);
-							}
-							else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-								if ($field_entry_value_type == 'src') {
-									array_push($return_images, $image);
-								}
-								else {
-									$image_item_markup = '';
-									if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-										$image_item_markup = $this->get_choice_image_item_markup($image);
-									}
-									else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-									}
-									else if ($field_entry_value_type == 'image_value') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $ordered_value);
-									}
-									array_push($return_images, $image_item_markup);
-								}
-							}
-						}
-						else {
-							// product option field CHECKBOX - saved as
-							// Value|Price
-							// Eg: Choice Value|0
+	        $text = ( !empty($real_value) && isset($real_value["{$field_id}.1"]) ) ? $real_value["{$field_id}.1"] : RGFormsModel::get_label($field);
+	        $price = ( !empty($real_value) && isset($real_value["{$field_id}.2"]) ) ? $real_value["{$field_id}.2"] : rgobj($field, 'basePrice');
+            $hasQty = empty( rgobj($field, 'disableQuantity') );
+            $qty = null;
+            if ( $hasQty ) {
+	            $qty = ( !empty($real_value) && isset($real_value["{$field_id}.3"]) && !empty($real_value["{$field_id}.3"]) ) ? (int) $real_value["{$field_id}.3"] : 0;
+            }
 
-							list($name, $price) = explode("|", $ordered_value);
-							$image = $this->get_choice_image_src($field, $name);
-							$text = RGFormsModel::get_choice_text($field, $name);
+	        if ( $field_entry_value_type == 'text' ) {
+		        // Label
+		        return $text;
+	        }
+	        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
 
-							if ($field_entry_value_type == 'text') {
-								array_push($return_strings, $text);
-							}
-							else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-								if ($field_entry_value_type == 'src') {
-									array_push($return_images, $image);
-								}
-								else {
-									$image_item_markup = '';
-									if ($field_entry_value_type == 'image') {
-										$image_item_markup = $this->get_choice_image_item_markup($image);
-									}
-									else if ($field_entry_value_type == 'image_text') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-									}
-									else if ($field_entry_value_type == 'image_text_price') {
-										if ( !empty($price) ) {
-											$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')' );
-										}
-										else {
-											$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-										}
-									}
-									else if ($field_entry_value_type == 'image_price') {
-										if ( !empty($price) ) {
-											$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
-										}
-										else {
-											$image_item_markup = $this->get_choice_image_item_markup($image);
-										}
-									}
-									else if ($field_entry_value_type == 'image_value') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $name);
-									}
-									array_push($return_images, $image_item_markup);
-								}
-							}
+		        if ($field_entry_value_type == 'src') {
+			        // Image URL
+			        return $image;
+		        }
+		        else {
 
-						}
-					}
+			        $image_item_markup = '';
+			        $text_value = "{$text}";
 
-					if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
-						$value = $this->wrap_choice_images_markup($return_images);
-					}
-					else {
-						$value = implode(', ', $return_strings);
-					}
-				}
+			        if ($field_entry_value_type == 'image') {
+				        // Image only
+				        $image_item_markup = $this->get_product_image_markup($image);
+			        }
+			        else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value') {
+				        // Image + Label
+				        $image_item_markup = $this->get_product_image_markup($image, $text_value);
+			        }
+			        else if ($field_entry_value_type == 'image_text_price') {
+                        // Image + Label + Price
+				        if ( !empty($price) ) {
+					        $text_value .= '<br/>(' . GFCommon::format_number($price, 'currency') . ')';
+				        }
+				        $image_item_markup = $this->get_product_image_markup($image, $text_value);
+			        }
+			        else if ($field_entry_value_type == 'image_price') {
+				        // Image + Price
+				        $text_value = "";
+				        if ( !empty($price) ) {
+					        $text_value .= '(' . GFCommon::format_number($price, 'currency') . ')';
+				        }
+				        $image_item_markup = $this->get_product_image_markup($image, $text_value);
+			        }
 
-			}
-			else {
+			        return $image_item_markup;
+		        }
+	        }
 
-				// either a radio, or a checkbox with a single selection
-				if (
-					($field->type == 'checkbox' || apply_filters( 'gfic_is_supported_multi_value_field', false, $field ))
-					|| ( $field->type == 'post_custom_field' && $field->inputType == 'checkbox' )
-				) {
+            return $value;
 
-					// When on the View Entry page, checkbox field is unordered list HTML
-					// so just grab the real values
-					$checkbox_text_values = $field->get_value_entry_detail($real_value, '', true, 'text');
+        }
+        else if ( $this->get_field_settings_value( 'enableImages', false, $field ) ) {
 
-					$return_strings = array();
-					$return_images = array();
+	        // IMAGE CHOICES
 
-					foreach ($real_value as $key => $choice_value) {
-						if (!empty($choice_value)) {
-							$image = $this->get_choice_image_src($field, $choice_value);
-							$text = RGFormsModel::get_choice_text($field, $choice_value);
+            $type_property = ($field->type == 'survey' || $field->type == 'poll' || $field->type == 'quiz' || $field->type == 'post_custom_field' || $field->type == 'product' || $field->type == 'option') ? 'inputType' : 'type';
 
-							if ($field_entry_value_type == 'text') {
-								array_push($return_strings, $text);
-							}
-							else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-								if ($field_entry_value_type == 'src') {
-									array_push($return_strings, $image);
-								}
-								else {
-									$image_item_markup = '';
-									if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-										$image_item_markup = $this->get_choice_image_item_markup($image);
-									}
-									else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-									}
-									else if ($field_entry_value_type == 'image_value') {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $choice_value);
-									}
-									array_push($return_images, $image_item_markup);
-								}
-							}
+            // Product field doesn't have checkboxes, only radio
+            // Option field has both
 
-						}
-					}
+            if (
+                ( $field[$type_property] == 'checkbox' || apply_filters( 'gfic_is_supported_multi_value_field', false, $field ) )
+                && ( strpos($value, ', ') !== FALSE || strpos($value, "<ul class='bulleted'>") !== FALSE )
+            ) {
 
-					if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
-						$value = $this->wrap_choice_images_markup($return_images);
-					}
-					else {
-						if (!empty($return_strings)) {
-							$markup = '<ul class="bulleted">';
-							foreach ($return_strings as $return_value) {
-								$markup .= '<li>' . $return_value . '</li>';
-							}
-							$markup .= '</ul>';
-							$value = $markup;
-						}
-						else {
-							$value = implode(', ', $return_strings);
-						}
-					}
+                // multiple selections
+                $ordered_values = '';//(!empty($value)) ? explode(', ', $value) : '';
+                if ( !empty($value) && strpos($value, ', ') !== FALSE ) {
+                    $ordered_values = explode(', ', $value);
+                }
+                else if ( !empty($value) && strpos($value, "<ul class='bulleted'>") !== FALSE ) {
+                    $ordered_values = [];
+                    foreach( $real_value as $choice_id => $choice_value ) {
+                        if ( !empty($choice_value) ) {
+                            $ordered_values[] = $choice_value;
+                        }
+                    }
+                }
 
-				}
-				else if ($field->type == 'quiz' && $field->is_entry_detail()) {
+                if (is_array($ordered_values)) {
+                    $return_strings = array();
+                    $return_images = array();
+                    foreach ($ordered_values as $ordered_value) {
+                        if ($field->type != 'option') {
+                            $image = $this->get_choice_image_src($field, $ordered_value);
+                            $text = RGFormsModel::get_choice_text($field, $ordered_value);
+                            if ($field_entry_value_type == 'text') {
+                                array_push($return_strings, $text);
+                            }
+                            else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                                if ($field_entry_value_type == 'src') {
+                                    array_push($return_images, $image);
+                                }
+                                else {
+                                    $image_item_markup = '';
+                                    if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image);
+                                    }
+                                    else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                    }
+                                    else if ($field_entry_value_type == 'image_value') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $ordered_value);
+                                    }
+                                    array_push($return_images, $image_item_markup);
+                                }
+                            }
+                        }
+                        else {
+                            // product option field CHECKBOX - saved as
+                            // Value|Price
+                            // Eg: Choice Value|0
 
-					// Can only show text (choice label) or image, or both.
-					// Can't show value - doesn't let user set it anyway, it's a unique id
+                            list($name, $price) = explode("|", $ordered_value);
+                            $image = $this->get_choice_image_src($field, $name);
+                            $text = RGFormsModel::get_choice_text($field, $name);
 
-					$choices_data = array();
-					foreach ($field->choices as $choice) {
-						array_push($choices_data, array(
-							'text' => $choice['text'],
-							'value' => $choice['value'],
-							'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
-							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
-							'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
-						));
-					}
+                            if ($field_entry_value_type == 'text') {
+                                array_push($return_strings, $text);
+                            }
+                            else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                                if ($field_entry_value_type == 'src') {
+                                    array_push($return_images, $image);
+                                }
+                                else {
+                                    $image_item_markup = '';
+                                    if ($field_entry_value_type == 'image') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image);
+                                    }
+                                    else if ($field_entry_value_type == 'image_text') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                    }
+                                    else if ($field_entry_value_type == 'image_text_price') {
+                                        if ( !empty($price) ) {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')' );
+                                        }
+                                        else {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                        }
+                                    }
+                                    else if ($field_entry_value_type == 'image_price') {
+                                        if ( !empty($price) ) {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
+                                        }
+                                        else {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image);
+                                        }
+                                    }
+                                    else if ($field_entry_value_type == 'image_value') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $name);
+                                    }
+                                    array_push($return_images, $image_item_markup);
+                                }
+                            }
 
-					// Taken from GFQuiz::display_quiz_on_entry_detail (class-gf-quiz.php)
-					$new_value = '';
-					$new_value .= '<div class="gquiz_entry">';
-					$results = gf_quiz()->get_quiz_results($form, $entry, false);
-					$field_markup = '';
+                        }
+                    }
 
-					foreach ($results['fields'] as $field_results) {
-						if ($field_results['id'] == $field->id) {
-							$field_markup = $field_results['markup'];
-							break;
-						}
-					}
+                    if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
+                        $value = $this->wrap_choice_images_markup($return_images);
+                    }
+                    else {
+                        $value = implode(', ', $return_strings);
+                    }
+                }
 
-					if (in_array($field_entry_value_type, $image_entry_setting_values)) {
-						// Modify the markup for image choices
-						$field_markup = str_replace('<ul>', '<ul class="gf-image-choices-entry">', $field_markup);
-						$field_markup = str_replace('<li>', '<li class="gf-image-choices-entry-choice">', $field_markup);
-						foreach ($choices_data as $choice) {
-							$replacement_markup = '';
-							if ($field_entry_value_type == 'src') {
-								$replacement_markup = $choice['image'];
-							}
-							else if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-								$replacement_markup = '<span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span>';
-							}
-							else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
-								$replacement_markup = '<span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span><span class="gf-image-choices-entry-choice-text">' . html_entity_decode($choice['text']) . '</span>';
-							}
-							$field_markup = str_replace($choice['text'], $replacement_markup, $field_markup);
-						}
-					}
+            }
+            else {
 
-					$new_value .= $field_markup;
-					$new_value .= '</div>';
+                // either a radio, or a checkbox with a single selection
+                if (
+                    ($field->type == 'checkbox' || apply_filters( 'gfic_is_supported_multi_value_field', false, $field ))
+                    || ( $field->type == 'post_custom_field' && $field->inputType == 'checkbox' )
+                ) {
 
-					$value = $new_value;
+                    // When on the View Entry page, checkbox field is unordered list HTML
+                    // so just grab the real values
+                    $checkbox_text_values = $field->get_value_entry_detail($real_value, '', true, 'text');
 
-				}
-				else if ($field->type == 'poll' && $field->is_entry_detail()) {
+                    $return_strings = array();
+                    $return_images = array();
 
-					$choices_data = array();
-					foreach ($field->choices as $choice) {
-						array_push($choices_data, array(
-							'id' => $choice['id'],
-							'text' => $choice['text'],
-							'value' => $choice['value'],
-							'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
-							'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
-							'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
-						));
-					}
+                    foreach ($real_value as $key => $choice_value) {
+                        if (!empty($choice_value)) {
+                            $image = $this->get_choice_image_src($field, $choice_value);
+                            $text = RGFormsModel::get_choice_text($field, $choice_value);
 
-					// Taken from GFPolls::display_poll_on_entry_detail (class-gf-polls.php)
-					$results = gf_polls()->gpoll_get_results($form['id'], $field->id, 'green', true, true, $entry);
-					$new_value = sprintf('<div class="gpoll_entry">%s</div>', rgar($results, 'summary'));
-					gf_polls()->gpoll_add_scripts = true;
+                            if ($field_entry_value_type == 'text') {
+                                array_push($return_strings, $text);
+                            }
+                            else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                                if ($field_entry_value_type == 'src') {
+                                    array_push($return_strings, $image);
+                                }
+                                else {
+                                    $image_item_markup = '';
+                                    if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image);
+                                    }
+                                    else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                    }
+                                    else if ($field_entry_value_type == 'image_value') {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $choice_value);
+                                    }
+                                    array_push($return_images, $image_item_markup);
+                                }
+                            }
 
-					//if original response is not in results display below
-					$selected_values = gf_polls()->get_selected_values($form['id'], $field->id, $entry);
-					$possible_choices = gf_polls()->get_possible_choices($form['id'], $field->id);
-					foreach ($selected_values as $selected_value) {
-						if (!in_array($selected_value, $possible_choices)) {
-							$new_value = sprintf('%s<h2>%s</h2>%s', $new_value, esc_html__('Original Response', 'gravityformspolls'), $value);
-							break;
-						}
-					}
+                        }
+                    }
 
-					if (in_array($field_entry_value_type, $image_entry_setting_values)) {
-						// Now modify the markup for image choices
-						$new_value = str_replace('<div class="gpoll_entry">', '<div class="gpoll_entry gf-image-choices-entry">', $new_value);
-						foreach ($choices_data as $choice) {
-							$replacement_markup = '';
-							if ($field_entry_value_type == 'src') {
-								$replacement_markup = '<div class="gf-image-choices-entry-choice">'.$choice['image'].'</div>';
-							}
-							else if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-								$replacement_markup = '<div class="gf-image-choices-entry-choice"><span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span></div>';
-							}
-							else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
-								// Don't return value for poll fields. IF that's selected, use text
-								$replacement_markup = '<div class="gf-image-choices-entry-choice"><span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span><span class="gf-image-choices-entry-choice-text">' . html_entity_decode($choice['text']) . '</span></div>';
-							}
-							$new_value = str_replace($choice['text'], $replacement_markup, $new_value);
-						}
-					}
+                    if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
+                        $value = $this->wrap_choice_images_markup($return_images);
+                    }
+                    else {
+                        if (!empty($return_strings)) {
+                            $markup = '<ul class="bulleted">';
+                            foreach ($return_strings as $return_value) {
+                                $markup .= '<li>' . $return_value . '</li>';
+                            }
+                            $markup .= '</ul>';
+                            $value = $markup;
+                        }
+                        else {
+                            $value = implode(', ', $return_strings);
+                        }
+                    }
 
-					$value = $new_value;
+                }
+                else if ($field->type == 'quiz' && $field->is_entry_detail()) {
 
-				}
-				else if ($field->type == 'survey' && $field->is_entry_detail()) {
+                    // Can only show text (choice label) or image, or both.
+                    // Can't show value - doesn't let user set it anyway, it's a unique id
 
-					if ($field[$type_property] == 'checkbox') {
+                    $choices_data = array();
+                    foreach ($field->choices as $choice) {
+                        array_push($choices_data, array(
+                            'text' => $choice['text'],
+                            'value' => $choice['value'],
+                            'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
+                            'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
+                            'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
+                        ));
+                    }
 
-						$return_strings = array();
-						$return_images = array();
+                    // Taken from GFQuiz::display_quiz_on_entry_detail (class-gf-quiz.php)
+                    $new_value = '';
+                    $new_value .= '<div class="gquiz_entry">';
+                    $results = gf_quiz()->get_quiz_results($form, $entry, false);
+                    $field_markup = '';
 
-						foreach ($real_value as $key => $choice_value) {
-							if (!empty($choice_value)) {
-								$image = $this->get_choice_image_src($field, $choice_value);
-								$text = RGFormsModel::get_choice_text($field, $choice_value);
-								if ($field_entry_value_type == 'text') {
-									array_push($return_strings, $text);
-								}
-								else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-									if ($field_entry_value_type == 'src') {
-										array_push($return_images, $image);
-									}
-									else {
-										$image_item_markup = '';
-										if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-											$image_item_markup = $this->get_choice_image_item_markup($image);
-										}
-										else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
-											// Don't return value for survey fields. IF that's selected, use text
-											$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-										}
-										/*
-										else if ($field_entry_value_type == 'image_value') {
-											$image_item_markup = $this->get_choice_image_item_markup($image, $choice_value);
-										}
-										*/
-										array_push($return_images, $image_item_markup);
-									}
-								}
-							}
-						}
+                    foreach ($results['fields'] as $field_results) {
+                        if ($field_results['id'] == $field->id) {
+                            $field_markup = $field_results['markup'];
+                            break;
+                        }
+                    }
 
-						if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
-							$value = $this->wrap_choice_images_markup($return_images);
-						}
-						else {
-							if (!empty($return_strings)) {
-								$markup = '<ul class="bulleted">';
-								foreach ($return_strings as $return_value) {
-									$markup .= '<li>' . $return_value . '</li>';
-								}
-								$markup .= '</ul>';
-								$value = $markup;
-							}
-							else {
-								$value = implode(', ', $return_strings);
-							}
-						}
+                    if (in_array($field_entry_value_type, $image_entry_setting_values)) {
+                        // Modify the markup for image choices
+                        $field_markup = str_replace('<ul>', '<ul class="gf-image-choices-entry">', $field_markup);
+                        $field_markup = str_replace('<li>', '<li class="gf-image-choices-entry-choice">', $field_markup);
+                        foreach ($choices_data as $choice) {
+                            $replacement_markup = '';
+                            if ($field_entry_value_type == 'src') {
+                                $replacement_markup = $choice['image'];
+                            }
+                            else if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                $replacement_markup = '<span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span>';
+                            }
+                            else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
+                                $replacement_markup = '<span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span><span class="gf-image-choices-entry-choice-text">' . html_entity_decode($choice['text']) . '</span>';
+                            }
+                            $field_markup = str_replace($choice['text'], $replacement_markup, $field_markup);
+                        }
+                    }
 
-					}
-					else {
+                    $new_value .= $field_markup;
+                    $new_value .= '</div>';
 
-						$image = $this->get_choice_image_src($field, $real_value);
-						$text = RGFormsModel::get_choice_text($field, $real_value);
+                    $value = $new_value;
 
-						if ($field_entry_value_type == 'text') {
-							$value = $text;
-						}
-						else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-							if ($field_entry_value_type == 'src') {
-								$value = $image;
-							}
-							else {
-								$image_item_markup = '';
-								if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image);
-								}
-								else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
-									// Don't return value for survey fields. IF that's selected, use text
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-								}
-								/*
-								else if ($field_entry_value_type == 'image_value') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $real_value);
-								}
-								*/
-								$value = $this->wrap_choice_images_markup(array($image_item_markup));
-							}
-						}
+                }
+                else if ($field->type == 'poll' && $field->is_entry_detail()) {
 
-					}
+                    $choices_data = array();
+                    foreach ($field->choices as $choice) {
+                        array_push($choices_data, array(
+                            'id' => $choice['id'],
+                            'text' => $choice['text'],
+                            'value' => $choice['value'],
+                            'image' => (isset($choice['imageChoices_image'])) ? $choice['imageChoices_image'] : '',
+                            'imageID' => (isset($choice['imageChoices_imageID'])) ? $choice['imageChoices_imageID'] : '',
+                            'largeImage' => (isset($choice['imageChoices_largeImage'])) ? $choice['imageChoices_largeImage'] : ''
+                        ));
+                    }
 
-				}
-				else if (
-					$field->type == 'radio'
-					|| $field->type == 'post_custom_field'
-					|| ($field->type == 'quiz' && !$field->is_entry_detail())
-					|| ($field->type == 'poll' && !$field->is_entry_detail())
-					|| ($field->type == 'survey' && !$field->is_entry_detail())
-					|| apply_filters( 'gfic_is_supported_single_value_field', false, $field )
-				) {
+                    // Taken from GFPolls::display_poll_on_entry_detail (class-gf-polls.php)
+                    $results = gf_polls()->gpoll_get_results($form['id'], $field->id, 'green', true, true, $entry);
+                    $new_value = sprintf('<div class="gpoll_entry">%s</div>', rgar($results, 'summary'));
+                    gf_polls()->gpoll_add_scripts = true;
 
-					$image = $this->get_choice_image_src($field, $value);
-					$text = RGFormsModel::get_choice_text($field, $value);
+                    //if original response is not in results display below
+                    $selected_values = gf_polls()->get_selected_values($form['id'], $field->id, $entry);
+                    $possible_choices = gf_polls()->get_possible_choices($form['id'], $field->id);
+                    foreach ($selected_values as $selected_value) {
+                        if (!in_array($selected_value, $possible_choices)) {
+                            $new_value = sprintf('%s<h2>%s</h2>%s', $new_value, esc_html__('Original Response', 'gravityformspolls'), $value);
+                            break;
+                        }
+                    }
 
-					// Don't show value for quiz, survey and poll fields
-					$force_text_instead_of_value = ($field->type == 'quiz' || $field->type == 'poll' || $field->type == 'survey');
+                    if (in_array($field_entry_value_type, $image_entry_setting_values)) {
+                        // Now modify the markup for image choices
+                        $new_value = str_replace('<div class="gpoll_entry">', '<div class="gpoll_entry gf-image-choices-entry">', $new_value);
+                        foreach ($choices_data as $choice) {
+                            $replacement_markup = '';
+                            if ($field_entry_value_type == 'src') {
+                                $replacement_markup = '<div class="gf-image-choices-entry-choice">'.$choice['image'].'</div>';
+                            }
+                            else if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                $replacement_markup = '<div class="gf-image-choices-entry-choice"><span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span></div>';
+                            }
+                            else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
+                                // Don't return value for poll fields. IF that's selected, use text
+                                $replacement_markup = '<div class="gf-image-choices-entry-choice"><span class="gf-image-choices-entry-choice-image" style="background-image:url(' . $choice['image'] . ')"></span><span class="gf-image-choices-entry-choice-text">' . html_entity_decode($choice['text']) . '</span></div>';
+                            }
+                            $new_value = str_replace($choice['text'], $replacement_markup, $new_value);
+                        }
+                    }
 
-					if ($field_entry_value_type == 'text') {
-						$value = $text;
-					}
-					else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-						if ($field_entry_value_type == 'src') {
-							$value = $image;
-						}
-						else {
-							$image_item_markup = '';
-							if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-								$image_item_markup = $this->get_choice_image_item_markup($image);
-							}
-							else if ($field_entry_value_type == 'image_text' || ($force_text_instead_of_value && $field_entry_value_type == 'image_value') || $field_entry_value_type == 'image_text_price') {
-								$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-							}
-							else if ($field_entry_value_type == 'image_value') {
-								$image_item_markup = $this->get_choice_image_item_markup($image, $value);
-							}
-							$value = $this->wrap_choice_images_markup(array($image_item_markup));
-						}
-					}
+                    $value = $new_value;
 
-				}
-				else if ($field->type == 'product') {
+                }
+                else if ($field->type == 'survey' && $field->is_entry_detail()) {
 
-					// product field IF NOT FREE - single selection - saved as
-					// Value ($Price)
-					// Eg: Choice Value ($20.00)
+                    if ($field[$type_property] == 'checkbox') {
 
-					// product field IF FREE - single selection - saved as
-					// Value
-					// Eg: Choice Value
+                        $return_strings = array();
+                        $return_images = array();
 
-					if (strpos($value, '(') === FALSE && strpos($value, ')') === FALSE) {
-						// FREE
-						$image = $this->get_choice_image_src($field, $value);
-						$text = RGFormsModel::get_choice_text($field, $value);
-						if ($field_entry_value_type == 'text') {
-							$value = $text;
-						}
-						else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-							if ($field_entry_value_type == 'src') {
-								$value = $image;
-							}
-							else {
-								$image_item_markup = '';
-								if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image);
-								}
-								else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-								}
-								else if ($field_entry_value_type == 'image_value') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $value);
-								}
-								$value = $this->wrap_choice_images_markup(array($image_item_markup));
-							}
-						}
-					}
-					else {
-						// NOT FREE
-						$value_without_price = trim(substr($value, 0, strrpos($value, '(')));
-						preg_match('#\((.*?)\)#', $value, $price_str_match);
-						$price = $price_str_match[1];
-						$image = $this->get_choice_image_src($field, $value_without_price);
-						$text = RGFormsModel::get_choice_text($field, $value_without_price);
-						if ($field_entry_value_type == 'text') {
-							$value = $text;
-						}
-						else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-							if ($field_entry_value_type == 'src') {
-								$value = $image;
-							}
-							else {
-								$image_item_markup = '';
-								if ($field_entry_value_type == 'image') {
-									$image_item_markup = $this->get_choice_image_item_markup($image);
-								}
-								else if ($field_entry_value_type == 'image_text') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-								}
-								else if ($field_entry_value_type == 'image_text_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . $price . ')');
-									//$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
-								}
-								else if ($field_entry_value_type == 'image_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $price);
-									//$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
-								}
-								else if ($field_entry_value_type == 'image_value') {
-									//$image_item_markup = $this->get_choice_image_item_markup($image, $value_without_price);
-									$image_item_markup = $this->get_choice_image_item_markup($image, $value);
-								}
-								$value = $this->wrap_choice_images_markup(array($image_item_markup));
-							}
-						}
-					}
-				}
-				else if ($field->type == 'option') {
+                        foreach ($real_value as $key => $choice_value) {
+                            if (!empty($choice_value)) {
+                                $image = $this->get_choice_image_src($field, $choice_value);
+                                $text = RGFormsModel::get_choice_text($field, $choice_value);
+                                if ($field_entry_value_type == 'text') {
+                                    array_push($return_strings, $text);
+                                }
+                                else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                                    if ($field_entry_value_type == 'src') {
+                                        array_push($return_images, $image);
+                                    }
+                                    else {
+                                        $image_item_markup = '';
+                                        if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image);
+                                        }
+                                        else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
+                                            // Don't return value for survey fields. IF that's selected, use text
+                                            $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                        }
+                                        /*
+                                        else if ($field_entry_value_type == 'image_value') {
+                                            $image_item_markup = $this->get_choice_image_item_markup($image, $choice_value);
+                                        }
+                                        */
+                                        array_push($return_images, $image_item_markup);
+                                    }
+                                }
+                            }
+                        }
 
-					// product option field RADIO - single selection - saved as
-					// Value ($Price)
-					// Eg: Choice Value ($20.00)
+                        if ($field_entry_value_type != 'src' && in_array($field_entry_value_type, $image_entry_setting_values) && !empty($return_images)) {
+                            $value = $this->wrap_choice_images_markup($return_images);
+                        }
+                        else {
+                            if (!empty($return_strings)) {
+                                $markup = '<ul class="bulleted">';
+                                foreach ($return_strings as $return_value) {
+                                    $markup .= '<li>' . $return_value . '</li>';
+                                }
+                                $markup .= '</ul>';
+                                $value = $markup;
+                            }
+                            else {
+                                $value = implode(', ', $return_strings);
+                            }
+                        }
 
-					// product option field CHECKBOX - single selection - saved as
-					// Value|Price
-					// Eg: Choice Value|0
+                    }
+                    else {
 
-					if (strpos($value, '|') === FALSE) {
-						// RADIO
-						$value_without_price = (strpos($value, '(') !== FALSE) ? trim(substr($value, 0, strrpos($value, '('))) : $value;
-						preg_match('#\((.*?)\)#', $value, $price_str_match);
-						$price = $price_str_match[1];
-						$image = $this->get_choice_image_src($field, $value_without_price);
-						$text = RGFormsModel::get_choice_text($field, $value_without_price);
+                        $image = $this->get_choice_image_src($field, $real_value);
+                        $text = RGFormsModel::get_choice_text($field, $real_value);
 
-						if ($field_entry_value_type == 'text') {
-							$value = $text;
-						}
-						else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-							if ($field_entry_value_type == 'src') {
-								$value = $image;
-							}
-							else {
-								$image_item_markup = '';
-								if ($field_entry_value_type == 'image') {
-									$image_item_markup = $this->get_choice_image_item_markup($image);
-								}
-								else if ($field_entry_value_type == 'image_text') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-								}
-								else if ($field_entry_value_type == 'image_text_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . $price . ')');
-									//$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
-								}
-								else if ($field_entry_value_type == 'image_price') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $price);
-									//$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
-								}
-								else if ($field_entry_value_type == 'image_value') {
-									//$image_item_markup = $this->get_choice_image_item_markup($image, $value_without_price);
-									$image_item_markup = $this->get_choice_image_item_markup($image, $value);
-								}
-								$value = $this->wrap_choice_images_markup(array($image_item_markup));
-							}
-						}
-					}
-					else {
-						// CHECKBOX
-						list($name, $price) = explode("|", $value);
-						$image = $this->get_choice_image_src($field, $name);
-						$text = RGFormsModel::get_choice_text($field, $name);
+                        if ($field_entry_value_type == 'text') {
+                            $value = $text;
+                        }
+                        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                            if ($field_entry_value_type == 'src') {
+                                $value = $image;
+                            }
+                            else {
+                                $image_item_markup = '';
+                                if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image);
+                                }
+                                else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_value' || $field_entry_value_type == 'image_text_price') {
+                                    // Don't return value for survey fields. IF that's selected, use text
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                }
+                                /*
+                                else if ($field_entry_value_type == 'image_value') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $real_value);
+                                }
+                                */
+                                $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                            }
+                        }
 
-						if ($field_entry_value_type == 'text') {
-							$value = $text;
-						}
-						else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
-							if ($field_entry_value_type == 'src') {
-								$value = $image;
-							}
-							else {
-								$image_item_markup = '';
-								if ($field_entry_value_type == 'image') {
-									$image_item_markup = $this->get_choice_image_item_markup($image);
-								}
-								else if ($field_entry_value_type == 'image_text') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-								}
-								else if ($field_entry_value_type == 'image_text_price') {
-									if ( !empty($price) ) {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
-									}
-									else {
-										$image_item_markup = $this->get_choice_image_item_markup($image, $text);
-									}
-								}
-								else if ($field_entry_value_type == 'image_price') {
-									if ( !empty($price) ) {
-										$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
-									}
-									else {
-										$image_item_markup = $this->get_choice_image_item_markup($image);
-									}
-								}
-								else if ($field_entry_value_type == 'image_value') {
-									$image_item_markup = $this->get_choice_image_item_markup($image, $name);
-								}
-								$value = $this->wrap_choice_images_markup(array($image_item_markup));
-							}
-						}
-					}
+                    }
 
-				}
+                }
+                else if (
+                    $field->type == 'radio'
+                    || $field->type == 'post_custom_field'
+                    || ($field->type == 'quiz' && !$field->is_entry_detail())
+                    || ($field->type == 'poll' && !$field->is_entry_detail())
+                    || ($field->type == 'survey' && !$field->is_entry_detail())
+                    || apply_filters( 'gfic_is_supported_single_value_field', false, $field )
+                ) {
 
-			}
+                    $image = $this->get_choice_image_src($field, $value);
+                    $text = RGFormsModel::get_choice_text($field, $value);
 
-			return $value;
-		}
+                    // Don't show value for quiz, survey and poll fields
+                    $force_text_instead_of_value = ($field->type == 'quiz' || $field->type == 'poll' || $field->type == 'survey');
+
+                    if ($field_entry_value_type == 'text') {
+                        $value = $text;
+                    }
+                    else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                        if ($field_entry_value_type == 'src') {
+                            $value = $image;
+                        }
+                        else {
+                            $image_item_markup = '';
+                            if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                $image_item_markup = $this->get_choice_image_item_markup($image);
+                            }
+                            else if ($field_entry_value_type == 'image_text' || ($force_text_instead_of_value && $field_entry_value_type == 'image_value') || $field_entry_value_type == 'image_text_price') {
+                                $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                            }
+                            else if ($field_entry_value_type == 'image_value') {
+                                $image_item_markup = $this->get_choice_image_item_markup($image, $value);
+                            }
+                            $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                        }
+                    }
+
+                }
+                else if ($field->type == 'product') {
+
+                    // product field IF NOT FREE - single selection - saved as
+                    // Value ($Price)
+                    // Eg: Choice Value ($20.00)
+
+                    // product field IF FREE - single selection - saved as
+                    // Value
+                    // Eg: Choice Value
+
+                    if (strpos($value, '(') === FALSE && strpos($value, ')') === FALSE) {
+                        // FREE
+                        $image = $this->get_choice_image_src($field, $value);
+                        $text = RGFormsModel::get_choice_text($field, $value);
+                        if ($field_entry_value_type == 'text') {
+                            $value = $text;
+                        }
+                        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                            if ($field_entry_value_type == 'src') {
+                                $value = $image;
+                            }
+                            else {
+                                $image_item_markup = '';
+                                if ($field_entry_value_type == 'image' || $field_entry_value_type == 'image_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image);
+                                }
+                                else if ($field_entry_value_type == 'image_text' || $field_entry_value_type == 'image_text_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                }
+                                else if ($field_entry_value_type == 'image_value') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $value);
+                                }
+                                $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                            }
+                        }
+                    }
+                    else {
+                        // NOT FREE
+                        $value_without_price = trim(substr($value, 0, strrpos($value, '(')));
+                        preg_match('#\((.*?)\)#', $value, $price_str_match);
+                        $price = $price_str_match[1];
+                        $image = $this->get_choice_image_src($field, $value_without_price);
+                        $text = RGFormsModel::get_choice_text($field, $value_without_price);
+                        if ($field_entry_value_type == 'text') {
+                            $value = $text;
+                        }
+                        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                            if ($field_entry_value_type == 'src') {
+                                $value = $image;
+                            }
+                            else {
+                                $image_item_markup = '';
+                                if ($field_entry_value_type == 'image') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image);
+                                }
+                                else if ($field_entry_value_type == 'image_text') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                }
+                                else if ($field_entry_value_type == 'image_text_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . $price . ')');
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
+                                }
+                                else if ($field_entry_value_type == 'image_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $price);
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
+                                }
+                                else if ($field_entry_value_type == 'image_value') {
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, $value_without_price);
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $value);
+                                }
+                                $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                            }
+                        }
+                    }
+                }
+                else if ($field->type == 'option') {
+
+                    // product option field RADIO - single selection - saved as
+                    // Value ($Price)
+                    // Eg: Choice Value ($20.00)
+
+                    // product option field CHECKBOX - single selection - saved as
+                    // Value|Price
+                    // Eg: Choice Value|0
+
+                    if (strpos($value, '|') === FALSE) {
+                        // RADIO
+                        $value_without_price = (strpos($value, '(') !== FALSE) ? trim(substr($value, 0, strrpos($value, '('))) : $value;
+                        preg_match('#\((.*?)\)#', $value, $price_str_match);
+                        $price = $price_str_match[1];
+                        $image = $this->get_choice_image_src($field, $value_without_price);
+                        $text = RGFormsModel::get_choice_text($field, $value_without_price);
+
+                        if ($field_entry_value_type == 'text') {
+                            $value = $text;
+                        }
+                        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                            if ($field_entry_value_type == 'src') {
+                                $value = $image;
+                            }
+                            else {
+                                $image_item_markup = '';
+                                if ($field_entry_value_type == 'image') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image);
+                                }
+                                else if ($field_entry_value_type == 'image_text') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                }
+                                else if ($field_entry_value_type == 'image_text_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . $price . ')');
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
+                                }
+                                else if ($field_entry_value_type == 'image_price') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $price);
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
+                                }
+                                else if ($field_entry_value_type == 'image_value') {
+                                    //$image_item_markup = $this->get_choice_image_item_markup($image, $value_without_price);
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $value);
+                                }
+                                $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                            }
+                        }
+                    }
+                    else {
+                        // CHECKBOX
+                        list($name, $price) = explode("|", $value);
+                        $image = $this->get_choice_image_src($field, $name);
+                        $text = RGFormsModel::get_choice_text($field, $name);
+
+                        if ($field_entry_value_type == 'text') {
+                            $value = $text;
+                        }
+                        else if (in_array($field_entry_value_type, $image_entry_setting_values) && !empty($image)) {
+                            if ($field_entry_value_type == 'src') {
+                                $value = $image;
+                            }
+                            else {
+                                $image_item_markup = '';
+                                if ($field_entry_value_type == 'image') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image);
+                                }
+                                else if ($field_entry_value_type == 'image_text') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                }
+                                else if ($field_entry_value_type == 'image_text_price') {
+                                    if ( !empty($price) ) {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $text . ' (' . GFCommon::format_number($price, 'currency') . ')');
+                                    }
+                                    else {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, $text);
+                                    }
+                                }
+                                else if ($field_entry_value_type == 'image_price') {
+                                    if ( !empty($price) ) {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image, GFCommon::format_number($price, 'currency'));
+                                    }
+                                    else {
+                                        $image_item_markup = $this->get_choice_image_item_markup($image);
+                                    }
+                                }
+                                else if ($field_entry_value_type == 'image_value') {
+                                    $image_item_markup = $this->get_choice_image_item_markup($image, $name);
+                                }
+                                $value = $this->wrap_choice_images_markup(array($image_item_markup));
+                            }
+                        }
+                    }
+
+                }
+
+            }
+
+            return $value;
+        }
 
 		return $value;
 	}
@@ -3688,13 +4041,79 @@ class GFImageChoices extends GFAddOn {
 	 */
 	public function add_custom_class( $classes, $field, $form ) {
 
+		/////// product image
+
+        if ( $this->field_has_product_image_enabled($field) ) {
+
+	        $use_new_features = $this->use_new_features();
+            if ( !$use_new_features ) {
+                return $classes;
+            }
+
+	        $plugin_settings = $this->get_plugin_settings();
+	        $form_settings = $this->get_form_settings( $form );
+
+	        $classes .= (GFCommon::is_form_editor()) ? ' product-image-admin-field ' : ' product-image-field ';
+
+	        $image_url = $this->get_field_settings_value("image", "", $field, true);
+	        $image_id = $this->get_field_settings_value("imageId", "", $field, true);
+            if ( !empty($image_url) ) {
+	            $classes .= 'has-product-image ';
+            }
+
+	        if ( $this->get_field_settings_value("useLightbox", false, $field, true) ) {
+		        $classes .= 'product-image-use-lightbox ';
+	        }
+
+	        $global_theme_setting = $this->get_plugin_settings_value("gf_image_choices_global_theme", $this->_defaultTheme, $plugin_settings);
+	        $form_theme_setting = $this->get_form_settings_value("gf_image_choices_theme", "global_setting", $form, $form_settings);
+	        $field_theme_setting = $this->get_field_settings_value("theme", "form_setting", $field, true);
+	        $field_theme = $this->get_field_setting_fallback_value( $field_theme_setting, $form_theme_setting, $global_theme_setting );
+
+	        if ( $field_theme !== "none" ) {
+		        $classes .= "product-image-theme--{$field_theme} ";
+	        }
+
+	        $global_image_style_setting = $this->get_plugin_settings_value("gf_image_choices_global_image_style", $this->_defaultImageDisplay, $plugin_settings);
+	        $form_image_style_setting = $this->get_form_settings_value("gf_image_choices_image_style", "global_setting", $form, $form_settings);
+	        $field_image_style_setting = $this->get_field_settings_value("imageStyle", "form_setting", $field, true);
+	        $field_image_style = $this->get_field_setting_fallback_value( $field_image_style_setting, $form_image_style_setting, $global_image_style_setting );
+	        if ( $field_image_style != "" ) {
+		        $classes .= "product-image--{$field_image_style} ";
+	        }
+
+	        $field_lightbox_captions_setting = $this->get_field_settings_value("useLightboxCaption", true, $field, true);
+	        if ( !empty($field_lightbox_captions_setting) && $field_lightbox_captions_setting !== "No" && $field_lightbox_captions_setting !== "false" ) {
+		        $classes .= "product-image-lightbox-captions ";
+	        }
+
+	        $lazy_load = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0, $plugin_settings);
+//	        $lazy_load_global_value = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0, $plugin_settings);
+//	        $form_lazy_load_value = $this->get_form_settings_value('gf_image_choices_lazy_load', "global_setting", $form, $form_settings);
+//	        $lazy_load = $this->get_field_setting_fallback_value("form_setting", $form_lazy_load_value, $lazy_load_global_value);
+
+	        if ( !empty($lazy_load) && !is_admin() ) {
+		        $classes .= 'has-jetsloth-lazy ';
+	        }
+
+            return $classes;
+        }
+
+        /////// image choices
+
 		if ( !$this->field_has_image_choices_enabled($field) ) {
 			return $classes;
 		}
 
-		$plugin_settings = $this->get_plugin_settings();
-		$form_settings = $this->get_form_settings( $form );
-        $use_new_features = $this->use_new_features();
+        if ( !isset($plugin_settings) ) {
+	        $plugin_settings = $this->get_plugin_settings();
+        }
+        if ( !isset($form_settings) ) {
+	        $form_settings = $this->get_form_settings( $form );
+        }
+        if ( !isset($use_new_features) ) {
+	        $use_new_features = $this->use_new_features();
+        }
 
 		$classes .= (GFCommon::is_form_editor()) ? ' image-choices-admin-field ' : ' image-choices-field ';
 		$classes .= 'image-choices-use-images ';
@@ -3784,9 +4203,10 @@ class GFImageChoices extends GFAddOn {
 			$classes .= "ic-lightbox-captions ";
 		}
 
-		$lazy_load_global_value = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0, $plugin_settings);
-		$form_lazy_load_value = $this->get_form_settings_value('gf_image_choices_lazy_load', "global_setting", $form, $form_settings);
-		$lazy_load = $this->get_field_setting_fallback_value("form_setting", $form_lazy_load_value, $lazy_load_global_value);
+		$lazy_load = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0, $plugin_settings);
+//		$lazy_load_global_value = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0, $plugin_settings);
+//		$form_lazy_load_value = $this->get_form_settings_value('gf_image_choices_lazy_load', "global_setting", $form, $form_settings);
+//		$lazy_load = $this->get_field_setting_fallback_value("form_setting", $form_lazy_load_value, $lazy_load_global_value);
 		if ( !empty($lazy_load) && !is_admin() ) {
 			$classes .= 'has-jetsloth-lazy ';
 		}
@@ -3804,9 +4224,13 @@ class GFImageChoices extends GFAddOn {
 	public function add_image_choice_field_tooltips( $tooltips ) {
 		$tooltips['image_choices_use_images'] = '<h6>' . esc_html__( 'Use Images', 'gf_image_choices' ) . '</h6>' . esc_html__( 'Enable to use of images as choices.', 'gf_image_choices' );
 		$tooltips['image_choices_use_lightbox'] = '<h6>' . esc_html__( 'Use Lightbox', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the user will be able to preview large versions of each image in a lightbox.', 'gf_image_choices' );
+		$tooltips['image_choices_use_lightbox_captions'] = '<h6>' . esc_html__( 'Use Lightbox Captions', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the choice label text will be displayed in the lightbox as the image caption.', 'gf_image_choices' );
 		$tooltips['image_choices_show_prices'] = '<h6>' . esc_html__( 'Show Prices', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the product price will be displayed below the image.', 'gf_image_choices' );
 		$tooltips['image_choices_show_labels'] = '<h6>' . esc_html__( 'Show Labels', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the choices labels will be displayed along with the image.', 'gf_image_choices' );
 		$tooltips['image_choices_columns'] = __('<h6>Columns</h6>Control the fluid and responsive layout of your choices<br/><br/>Fixed Width: Will use a fixed pixel width for columns vs a fluid layout<br/><br/>Auto: Automatic fluid columns based on the number of choices<br/><br/>1 - 12: Choose the column number that works for you.', 'gf_image_choices');
+
+		$tooltips['product_image_use_lightbox'] = '<h6>' . esc_html__( 'Use Lightbox', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the user will be able to preview a large version of the image in a lightbox.', 'gf_image_choices' );
+		$tooltips['product_image_use_lightbox_caption'] = '<h6>' . esc_html__( 'Use Lightbox Caption', 'gf_image_choices' ) . '</h6>' . esc_html__( 'With this setting, the field label text will be displayed in the lightbox as the image caption.', 'gf_image_choices' );
 		return $tooltips;
 	}
 
@@ -3819,6 +4243,10 @@ class GFImageChoices extends GFAddOn {
 	public function image_choice_field_settings( $position, $form_id ) {
 		if ( $position == 1350 ) {
 			?>
+            <!-- Product Image Toggle -->
+            <li class="product-image-setting-use-image field_setting">
+                <input type="checkbox" id="field_product_image_enabled" class="field_product_image_enabled" onclick="imageChoicesAdmin.onProductImageToggleClick(this);" onkeypress="imageChoicesAdmin.onProductImageToggleClick(this);"> <label for="field_product_image_enabled"><?php echo esc_html__("Use Product Image", 'gf_image_choices'); ?></label>
+            </li>
             <!-- Image Choices Toggle -->
             <li class="image-choices-setting-use-images field_setting">
                 <input type="checkbox" id="field_choice_images_enabled" class="field_choice_images_enabled" onclick="imageChoicesAdmin.toggleEnableImages(this.checked);" onkeypress="imageChoicesAdmin.toggleEnableImages(this.checked);"> <label for="field_choice_images_enabled"><?php echo esc_html__("Use Image Choices", 'gf_image_choices'); ?></label>
@@ -3832,6 +4260,12 @@ class GFImageChoices extends GFAddOn {
 		$tabs[] = array(
 			'id' => 'image_choices', // Tab id is used later with the action hook that will output content for this specific tab.
 			'title' => esc_html__('Image Choices', 'gf_image_choices'),
+			//'toggle_classes' => '', // Goes into the tab button class attribute.
+			//'body_classes'   => '', // Goes into the tab content ( ul tag ) class attribute.
+		);
+		$tabs[] = array(
+			'id' => 'product_image', // Tab id is used later with the action hook that will output content for this specific tab.
+			'title' => esc_html__('Product Image', 'gf_image_choices'),
 			//'toggle_classes' => '', // Goes into the tab button class attribute.
 			//'body_classes'   => '', // Goes into the tab content ( ul tag ) class attribute.
 		);
@@ -3849,21 +4283,32 @@ class GFImageChoices extends GFAddOn {
         return $value;
     }
 
-	public function get_field_settings_value( $setting_name, $default_value, $field ) {
+	public function get_field_settings_value( $setting_name, $default_value, $field, $for_product_image = false ) {
 		if ( empty($field) || empty($setting_name) ) {
 			return null;
 		}
-        $full_setting_name = "imageChoices_{$setting_name}";
-        $form_id = $field["formId"];
-		$field_id = $field["id"];
+
+        $is_product_image_field = ( $for_product_image === true );
+        $setting_prefix = $is_product_image_field ? "productImage_" : "imageChoices_";
+        $filter_prefix = $is_product_image_field ? "gfpi_" : "gfic_";
+
+        $full_setting_name = "{$setting_prefix}{$setting_name}";
+        $form_id = is_object($field) ? $field->formId : $field["formId"];
+		$field_id = is_object($field) ? $field->id : $field["id"];
 
         $filter_name = strtolower(preg_replace(
 	        '/(?<=[a-z])([A-Z]+)/',
 	        '_$1',
-	        str_replace("imageChoices_", "gfic_", $full_setting_name)
+	        str_replace($setting_prefix, $filter_prefix, $full_setting_name)
         ));
 
-		$value = ( isset($field[$full_setting_name]) ) ? $field[$full_setting_name] : $default_value;
+        if ( is_object($field) ) {
+	        $value = property_exists($field, $full_setting_name) ? $field->{$full_setting_name} : $default_value;
+        }
+        else {
+	        $value = ( isset($field[$full_setting_name]) ) ? $field[$full_setting_name] : $default_value;
+        }
+
 		$value = apply_filters( $filter_name, $value, $form_id, $field_id, $default_value );// Eg: "imageChoices_featureColorCustom" will do ALL fields across ALL forms
 		$value = apply_filters( "{$filter_name}_{$form_id}", $value, $form_id, $field_id, $default_value );// Eg: "imageChoices_featureColorCustom_2" will do ALL fields in form with id 2
 		return apply_filters( "{$filter_name}_{$form_id}_{$field_id}", $value, $form_id, $field_id, $default_value );// Eg: "imageChoices_featureColorCustom_2_1" will do field with id 1 in form with id 2
@@ -3965,15 +4410,17 @@ class GFImageChoices extends GFAddOn {
 		);
 	}
 
-	public function get_settings_theme_preview_html() {
+	public function get_settings_theme_preview_html( $for_product_image = false ) {
 		$choices = $this->get_settings_theme_choices();
+        $class_prefix = ( $for_product_image === true ) ? "product-image" : "image-choices";
+        $filename_prefix = ( $for_product_image === true ) ? "product-image-" : "";
         ob_start();
-		echo '<div id="image-choices-theme-preview" class="image-choices-theme-preview">';
+		echo '<div id="'. $class_prefix .'-theme-preview" class="'. $class_prefix .'-theme-preview">';
 		foreach( $choices as $choice_value => $choice_label ) {
             if ( empty($choice_value) || $choice_value == 'none' ) {
                 continue;
             }
-			echo '<img src="'.plugins_url('', __FILE__).'/images/themes/theme-'.$choice_value.'.png?v='.$this->_version.'" alt="'.$choice_label.'" class="image-choices-theme-preview-'.$choice_value.'" />';
+			echo '<img src="'.plugins_url('', __FILE__).'/images/themes/'.$filename_prefix.'theme-'.$choice_value.'.png?v='.$this->_version.'" alt="'.$choice_label.'" class="'. $class_prefix .'-theme-preview-'.$choice_value.'" />';
 		}
 		echo '</div>';
         $html = ob_get_clean();
@@ -4017,7 +4464,17 @@ class GFImageChoices extends GFAddOn {
 		);
 	}
 
-	public function get_settings_entry_value_choices() {
+	public function get_settings_entry_value_choices( $for_product_image = false ) {
+        if ( $for_product_image ) {
+	        return array(
+		        'value' => esc_html__('Label (Gravity Forms default)', 'gf_image_choices'),
+		        'image_text_price' => esc_html__('Image, Label and Price', 'gf_image_choices'),
+		        'image_text' => esc_html__('Image and Label', 'gf_image_choices'),
+		        'image_price' => esc_html__('Image and Price', 'gf_image_choices'),
+		        'image' => esc_html__('Image only', 'gf_image_choices'),
+	        );
+        }
+
 		return array(
             'value' => esc_html__('Value (Gravity Forms default)', 'gf_image_choices'),
             'image' => esc_html__('Image', 'gf_image_choices'),
@@ -4029,7 +4486,90 @@ class GFImageChoices extends GFAddOn {
 		);
 	}
 
-	public function custom_settings_markup( $form ) {
+	public function custom_product_image_settings_markup( $form ) {
+
+		$form_settings = $this->get_form_settings( $form );
+		$plugin_settings = $this->get_plugin_settings();
+		$use_new_features = $this->use_new_features();
+
+        if ( !$use_new_features ) {
+            return;
+        }
+
+        ?>
+        <!-- Product Image -->
+        <li class="product-image-setting-url field_setting">
+            <label for="product-image-url" class="section_label"><?php echo esc_html__("Product Image", "gf_image_choices"); ?></label>
+            <input type="hidden" id="product-image-url" class="product-image-url" value="" />
+            <input type="hidden" id="product-image-id" class="product-image-id" value="" />
+            <div id="product-image-preview"></div>
+            <button type="button" id="product-image-button" class="button product-image-button" onclick="imageChoicesAdmin.OpenMediaLibrary(this);" title="<?php echo esc_html__("Open Media Library", 'gf_image_choices'); ?>"><?php echo esc_html__("Select image", 'gf_image_choices'); ?></button>
+            <button type="button" id="product-image-remove-button" class="button product-image-remove-button" onclick="imageChoicesAdmin.updateProductImage('');"><?php echo esc_html__("Remove image", 'gf_image_choices'); ?></button>
+        </li>
+        <!-- Product Image Theme Settings -->
+		<?php
+		$display_theme_labels = $this->get_settings_theme_choices();
+		$form_setting_display_style = $this->get_form_settings_value( "gf_image_choices_theme", "global_setting", $form, $form_settings );
+		$global_setting_display_style = $this->get_plugin_settings_value( "gf_image_choices_global_theme", $this->_defaultTheme, $plugin_settings );
+		$form_setting_display_style_label = ( $form_setting_display_style == "global_setting" ) ? sprintf( esc_html__("Global: %s", 'gf_image_choices'), $display_theme_labels[$global_setting_display_style] ) : $display_theme_labels[$form_setting_display_style];
+		?>
+        <li class="product-image-setting-theme field_setting">
+            <label for="product-image-theme" class="section_label"><?php echo esc_html__("Display Style"); ?></label>
+            <select id="product-image-theme" class="product-image-theme" onchange="imageChoicesAdmin.updateThemeSetting(this.value, true);">
+                <option value="form_setting"><?php echo sprintf( esc_html__("Use Form Setting (%s)", 'gf_image_choices'), $form_setting_display_style_label ); ?></option>
+				<?php echo $this->get_settings_select_options_html( $this->get_settings_theme_choices() ); ?>
+            </select>
+			<?php echo $this->get_settings_theme_preview_html(true); ?>
+        </li>
+        <!-- Product Image Style Settings -->
+		<?php
+		$form_setting_image_style = $this->get_form_settings_value( "gf_image_choices_image_style", "global_setting", $form, $form_settings );
+		$global_setting_image_style = $this->get_plugin_settings_value( "gf_image_choices_global_image_style", $this->_defaultImageDisplay, $plugin_settings );
+		$form_setting_image_style_label = ( $form_setting_image_style == "global_setting" ) ? sprintf( esc_html__("Global: %s", 'gf_image_choices'), ucfirst($global_setting_image_style) ) : ucfirst($form_setting_image_style);
+		?>
+        <li class="product-image-setting-style field_setting">
+            <label for="product-image-style" class="section_label"><?php echo esc_html__("Image Display Style"); ?></label>
+            <select id="product-image-style" class="product-image-style" onchange="imageChoicesAdmin.updateImageStyleSetting(this.value, true);">
+                <option value="form_setting"><?php echo sprintf( esc_html__("Use Form Setting (%s)", 'gf_image_choices'), $form_setting_image_style_label ); ?></option>
+				<?php echo $this->get_settings_select_options_html( $this->get_settings_image_style_choices() ); ?>
+            </select>
+        </li>
+        <!-- Item Height Setting -->
+        <li class="product-image-setting-height field_setting">
+            <label for="product-image-height" class="section_label"><?php echo esc_html__("Display Height"); ?></label>
+            <input id="product-image-height" class="product-image-height" type="text" placeholder="<?php echo esc_html__('px value or leave blank for default / fallback', 'gf_image_choices'); ?>" onkeyup="imageChoicesAdmin.updateHeightSetting(this.value, true);" />
+        </li>
+        <!-- Item Medium Height Setting -->
+        <li class="product-image-setting-height-medium field_setting">
+            <label for="product-image-height-medium" class="section_label"><?php echo esc_html__("Medium Display Height (at medium screen sizes)"); ?></label>
+            <input id="product-image-height-medium" class="product-image-height-medium" type="text" placeholder="<?php echo esc_html__('px value or leave blank for default / fallback', 'gf_image_choices'); ?>" onkeyup="imageChoicesAdmin.updateMediumHeightSetting(this.value, true);" />
+        </li>
+        <!-- Item Small Height Setting -->
+        <li class="product-image-setting-height-small field_setting">
+            <label for="product-image-height-small" class="section_label"><?php echo esc_html__("Small Display Height (at small screen sizes)"); ?></label>
+            <input id="product-image-height-small" class="product-image-height-small" type="text" placeholder="<?php echo esc_html__('px value or leave blank for default / fallback', 'gf_image_choices'); ?>" onkeyup="imageChoicesAdmin.updateSmallHeightSetting(this.value, true);" />
+        </li>
+        <!-- Product Image Lightbox Setting -->
+        <li class="product-image-setting-use-lightbox field_setting">
+            <input id="product_image_use_lightbox" class="product_image_use_lightbox" type="checkbox" onclick="imageChoicesAdmin.toggleUseLightbox(this.checked, true);" onkeypress="imageChoicesAdmin.toggleUseLightbox(this.checked, true);"> <label for="product_image_use_lightbox"><?php echo esc_html__("Use lightbox", 'gf_image_choices'); gform_tooltip('product_image_use_lightbox'); ?></label>
+        </li>
+        <!-- Product Image Lightbox Caption Setting -->
+        <li class="product-image-setting-use-lightbox-caption field_setting">
+            <input id="product_image_use_lightbox_caption" class="product_image_use_lightbox_caption" type="checkbox" onclick="imageChoicesAdmin.toggleUseLightboxCaption(this.checked, true);" onkeypress="imageChoicesAdmin.toggleUseLightboxCaption(this.checked, true);"> <label for="product_image_use_lightbox_caption"><?php echo esc_html__("Show label text as lightbox caption", 'gf_image_choices'); gform_tooltip('product_image_use_lightbox_caption'); ?></label>
+        </li>
+        <!-- Product Image Entry / Notification Display Settings -->
+        <li class="product-image-setting-entry-value field_setting">
+            <label for="product-image-entry-value" class="section_label"><?php echo esc_html__("Entry / Notification Display"); ?></label>
+            <select id="product-image-entry-value" class="product-image-entry-value" onchange="imageChoicesAdmin.updateEntrySetting(this.value, true);">
+                <option value="form_setting"><?php esc_html_e("Use Form Setting", 'gf_image_choices'); ?></option>
+				<?php echo $this->get_settings_select_options_html( $this->get_settings_entry_value_choices( true ) ); ?>
+            </select>
+        </li>
+        <?php
+
+	}
+
+	public function custom_image_choices_settings_markup( $form ) {
 
 		$form_settings = $this->get_form_settings( $form );
 		$plugin_settings = $this->get_plugin_settings();
@@ -4212,6 +4752,82 @@ class GFImageChoices extends GFAddOn {
         </li>
 		<?php
 	}
+
+    public function add_product_image_markup( $content, $field, $value, $lead_id, $form_id ) {
+
+	    if ( !$this->field_has_product_image_enabled($field) || !$this->use_new_features() ) {
+		    return $content;
+	    }
+
+        if ( GFCommon::is_form_editor() ) {
+            return $content;
+        }
+
+	    $image_url = $this->get_field_settings_value("image", "", $field, true);
+	    $image_id = $this->get_field_settings_value("imageId", "", $field, true);
+	    $large_img = $this->get_field_settings_value("largeImage", "", $field, true);
+
+        if ( empty($image_url) ) {
+            return $content;
+        }
+
+	    $lightbox_attr = "";
+	    $lightbox_button = "";
+
+	    $form = GFAPI::get_form( $field->formId );
+
+	    if ( $this->get_field_settings_value("useLightbox", false, $field, true) ) {
+
+		    if ( !empty($large_img) ) {
+			    $lightbox_img = $large_img;
+		    }
+		    else {
+			    $form_settings = $this->get_form_settings($form);
+			    $plugin_settings = $this->get_plugin_settings();
+
+			    $global_lightbox_size = $this->get_plugin_settings_value('gf_image_choices_global_lightbox_size', $this->_defaultLightboxImageSize, $plugin_settings);
+			    $form_lightbox_size = $this->get_form_settings_value('gf_image_choices_lightbox_size', 'global_setting', $form, $form_settings);
+			    $lightbox_size = $this->get_field_setting_fallback_value( null, $form_lightbox_size, $global_lightbox_size );
+
+			    $lightbox_img = ( !empty($image_id) ) ? wp_get_attachment_image_src($image_id, $lightbox_size) : '';
+			    if ( !empty($lightbox_img) ) {
+				    $lightbox_img = $lightbox_img[0];
+			    }
+		    }
+		    // make lightcase safe
+		    $lightbox_img = str_replace('$', '\$', $lightbox_img);
+		    $lightbox_attr = "data-lightbox-src='" . $lightbox_img . "'";
+
+		    $lightbox_button = "<a href='{$lightbox_img}' class='ic-product-image-lightbox-btn'><i></i></a>";
+
+	    }
+
+	    $lazy_load = $this->get_plugin_settings_value('gf_image_choices_lazy_load_global', 0);
+        if ( !empty($lazy_load) ) {
+	        $image_html = "<div class='ic-product-image jetsloth-lazy' data-lazy-bg='{$image_url}'><img src='' data-lazy-src='{$image_url}' alt='' class='ic-product-image-element jetsloth-lazy' {$lightbox_attr} /></div>";
+        }
+        else {
+            $image_html = "<div class='ic-product-image' style='background-image:url({$image_url});'><img src='{$image_url}' alt='' class='ic-product-image-element' {$lightbox_attr} /></div>";
+        }
+
+	    $image_wrap = "<div class='ic-product-image-wrap'>{$lightbox_button}{$image_html}";
+        $price = GFCommon::format_number( $field->basePrice, 'currency' );
+        $price_text = "<div class='ic-product-image-price'>{$price}</div></div>";// has closing div for .ic-product-image-wrap
+
+	    $description_setting = 'below';
+        if ( !empty( $field->description ) ) {
+	        $form_description_setting = rgempty( 'descriptionPlacement', $form ) ? 'below' : $form['descriptionPlacement'];
+	        $description_setting = ( !isset( $field->descriptionPlacement ) || empty( $field->descriptionPlacement ) ) ? $form_description_setting : $field->descriptionPlacement;
+	        $description_setting = $description_setting == 'above' && ( $field->labelPlacement == 'top_label' || $field->labelPlacement == 'hidden_label' || ( empty( $field->labelPlacement ) && $form[ 'labelPlacement' ] == 'top_label' ) ) ? 'above' : 'below';
+        }
+
+	    $content = str_replace("<label class='gfield_label", "{$image_wrap}<label class='gfield_label", $content);
+
+        $element = ( $description_setting == 'above' ) ? "div" : "label";
+
+	    return str_replace("</{$element}><div class='ginput_container", "</{$element}>{$price_text}<div class='ginput_container", $content);
+
+    }
 
 	public function add_image_options_markup( $choice_markup, $choice, $field, $value ) {
 
@@ -4477,7 +5093,9 @@ class GFImageChoices extends GFAddOn {
             return;
         }
 
-        if ( substr($previous_version, 0, 3) != "1.4" ) {
+        $version_num = floatval( substr($previous_version, 0, 3) );
+
+        if ( $version_num < 1.4 ) {
 	        // upgraded from < 1.4
 
 	        // switch to use legacy styles by default and show message

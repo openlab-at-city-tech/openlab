@@ -31,10 +31,13 @@ interface Utils {
 	/**
 	 * Apply a callback to all elements of an array recursively.
 	 *
-	 * @param callable             $callback   - Callback for each element in each level of array.
-	 * @param array<string, mixed> $to_recurse - Array to recurse.
+	 * @phpstan-template T
+	 * @phpstan-template R
 	 *
-	 * @return array<string, mixed>
+	 * @param callable( T ): R  $callback   - Callback to apply to each element.
+	 * @param array<array<T>|T> $to_recurse - Array to apply the callback to.
+	 *
+	 * @return array<mixed>
 	 */
 	public function array_map_recursive( callable $callback, array $to_recurse ): array;
 

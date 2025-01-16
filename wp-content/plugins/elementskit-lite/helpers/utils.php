@@ -399,4 +399,8 @@ class Utils {
 
 		return $page_got_by_title;
 	}
+
+	public static function remove_special_chars($string) {
+		return preg_replace('/[^A-Za-z0-9 ]/', '', $string);
+	}
 }

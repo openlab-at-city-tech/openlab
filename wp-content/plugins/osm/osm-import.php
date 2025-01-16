@@ -60,18 +60,22 @@ else if($a_import == 'ecf'){
   
     //		WHERE comment_approved = '1' AND comment_type = '' AND
     // SUBSTRING(comment_content,1,80) AS com_excerpt    
-		$sql = "SELECT DISTINCT ID, post_title, comment_author, post_password, comment_ID, comment_post_ID, comment_content
-    FROM $wpdb->comments
-		LEFT OUTER JOIN $wpdb->posts ON ($wpdb->comments.comment_post_ID =
-		$wpdb->posts.ID)
-		WHERE comment_type = '' AND
-		post_password = '' AND comment_post_ID = '".$post->ID."'
-		ORDER BY comment_date DESC
-		LIMIT 100";
-		$comments = $wpdb->get_results($sql);
+    $comments = $wpdb->get_results(
+        $wpdb->prepare(
+            "SELECT DISTINCT ID, post_title, comment_author, post_password, comment_ID, comment_post_ID, comment_content
+            FROM $wpdb->comments
+            LEFT OUTER JOIN $wpdb->posts ON ($wpdb->comments.comment_post_ID = $wpdb->posts.ID)
+            WHERE comment_type = '' AND post_password = '' AND comment_post_ID = %d
+            ORDER BY comment_date DESC
+            LIMIT 100",
+            $post->ID
+        )
+    );
+    
+    // Weitere Verarbeitung der Kommentare
     $comments = ecf_getComments($comments, $post->ID);
-
-		foreach ($comments as $comment) :
+    
+   foreach ($comments as $comment) :
 		  Osm::traceText(DEBUG_INFO, "Found a tagged comment!");
       $ecf_lat = $comment->extra_lat;
       $ecf_lon = $comment->extra_lon;

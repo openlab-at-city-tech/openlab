@@ -34,22 +34,25 @@
 								?>
 							</div>
 							<?php endif;?>
-							<?php
-								if (isset($testimonial['client_photo']) && !empty($testimonial['client_photo']['url']) && sizeof($testimonial['client_photo']) > 0) {
+							<?php if (!empty($testimonial['client_photo']['url'])):
+								$client_image_size = !empty($ekit_testimonial_client_image_size['size']) ? $ekit_testimonial_client_image_size['size'] : '';
 							?>
-							<div class="elementskit-commentor-bio <?php echo esc_attr($ekit_testimonial_client_area_alignment); ?>">
-								<div class="elementkit-commentor-details">
+								<div class="elementskit-commentor-bio <?php echo esc_attr($ekit_testimonial_client_area_alignment); ?>">
+									<div class="elementkit-commentor-details">
 										<div class="elementskit-commentor-image ekit-testimonial--avatar">
-											<?php echo wp_kses( \Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full', [
-												'height'	=> esc_attr($ekit_testimonial_client_image_size['size']),
-												'width'	=> esc_attr($ekit_testimonial_client_image_size['size'])
-											]), \ElementsKit_Lite\Utils::get_kses_array());?>
+											<?php
+											echo wp_kses(
+												\Elementskit_Lite\Utils::get_attachment_image_html($testimonial, 'client_photo', 'full', [
+													'height' => esc_attr($client_image_size),
+													'width' => esc_attr($client_image_size)
+												]),
+												\ElementsKit_Lite\Utils::get_kses_array()
+											);
+											?>
 										</div>
+									</div>
 								</div>
-							</div>
-							<?php
-								}
-							?>
+							<?php endif; ?>
 
 							<?php if (!empty($testimonial['client_name']) || !empty($testimonial['designation'])) { ?>
 								<div class="elementskit-profile-info">

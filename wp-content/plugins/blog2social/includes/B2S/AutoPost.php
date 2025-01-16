@@ -38,8 +38,8 @@ class B2S_AutoPost {
         $this->keywords = $keywords;
         $this->optionPostFormat = $optionPostFormat;
         $this->allowHashTag = $allowHashTag;
-        $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(6 => 300, 17 => 442, 19 => 239, 42 => 1000), 2 => array(17 => 442, 19 => 239), 20 => 300);
-        $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000, 42 => 1000), 1 => array(6 => 400, 19 => 400, 42 => 1000), 2 => array(19 => 9000));
+        $this->setPreFillText = array(0 => array(6 => 300, 16 => 250, 17 => 442, 18 => 800, 21 => 65000, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(6 => 300, 17 => 442, 19 => 5000, 42 => 1000), 2 => array(17 => 442, 19 => 239), 20 => 300);
+        $this->setPreFillTextLimit = array(0 => array(6 => 400, 18 => 1000, 16 => false, 21 => 65535, 38 => 500, 39 => 2000, 42 => 1000), 1 => array(6 => 400, 19 => 60000, 42 => 1000), 2 => array(19 => 9000));
         $this->default_template = (defined('B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT')) ? unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT) : false;
         $this->echo = $echo;
         $this->delay = $delay;
@@ -87,7 +87,7 @@ class B2S_AutoPost {
             }
 
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43))) {
+            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43, 44))) {
                 //Get: client settings
                 if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && ((int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 0 || (int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 1)) {
                     $postData['post_format'] = (int) $tempOptionPostFormat[$networkId][$networkType]['format'];
@@ -165,6 +165,9 @@ class B2S_AutoPost {
                         $limit = 254;
                     }
                     if (!empty($this->url) && $networkId == 38) {
+                        $limit = 500 - strlen($this->url);
+                    }
+                    if (!empty($this->url) && $networkId == 44) {
                         $limit = 500 - strlen($this->url);
                     }
                     if (!empty($this->url) && $networkId == 43 && $postData['post_format'] == 1) {

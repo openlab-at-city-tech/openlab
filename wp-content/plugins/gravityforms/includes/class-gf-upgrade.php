@@ -645,6 +645,7 @@ class GF_Upgrade {
               created_by bigint unsigned,
               transaction_type tinyint,
               status varchar(20) not null default 'active',
+              source_id bigint unsigned,
               PRIMARY KEY  (id),
               KEY form_id (form_id),
               KEY form_id_status (form_id,status)
@@ -797,6 +798,13 @@ class GF_Upgrade {
 			$this->post_upgrade_schema_240();
 		}
 		*/
+
+		// Setting the version of Gravity Forms that was installed initially.
+		// If upgrading from a version prior to 2.7.14.2 and this option's existence,
+		// we set this to be the version you are upgrading from as that's all we can do.
+		if ( ! get_option( 'rg_form_original_version' ) ) {
+			update_option( 'rg_form_original_version', $versions['previous_db_version'], false );
+		}
 
 		if ( GFForms::$background_upgrader->get_data() ) {
 			GFForms::$background_upgrader->push_to_queue( array( $this, 'post_background_upgrade' ) );

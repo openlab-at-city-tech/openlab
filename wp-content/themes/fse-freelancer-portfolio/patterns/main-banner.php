@@ -7,12 +7,12 @@
 
 ?>
 
-<!-- wp:cover {"url":"<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>","id":12,"dimRatio":0,"minHeight":600,"minHeightUnit":"px","isDark":false,"align":"full","style":{"border":{"radius":"0px"}},"className":"slide2 cr-animated animate__zoomIn delay-1s"} -->
-<div class="wp-block-cover alignfull is-light slide2 cr-animated animate__zoomIn delay-1s" style="border-radius:0px;min-height:600px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-0 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-12" alt="" src="<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:group {"layout":{"type":"constrained","contentSize":"90%"}} -->
+<!-- wp:cover {"url":"<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>","id":12,"dimRatio":0,"minHeight":600,"minHeightUnit":"px","isDark":false,"align":"full","style":{"border":{"radius":"0px"}},"className":"slide2"} -->
+<div class="wp-block-cover alignfull is-light slide2" style="border-radius:0px;min-height:600px"><span aria-hidden="true" class="wp-block-cover__background has-background-dim-0 has-background-dim"></span><img class="wp-block-cover__image-background wp-image-12" alt="" src="<?php echo get_parent_theme_file_uri( '/assets/images/slider.png' ); ?>" data-object-fit="cover"/><div class="wp-block-cover__inner-container"><!-- wp:group {"layout":{"type":"constrained","contentSize":"90%"}} -->
 <div class="wp-block-group"><!-- wp:columns {"verticalAlignment":"center"} -->
 <div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","width":"50%"} -->
-<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:50%"><!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"500"},"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"extra-large","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-poppins-font-family has-extra-large-font-size" style="margin-top:0;margin-bottom:0;font-style:normal;font-weight:500"><?php esc_html_e('Hello, I am','fse-freelancer-portfolio'); ?></h4>
+<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:50%"><!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"500"},"spacing":{"margin":{"top":"0","bottom":"0"}},"elements":{"link":{"color":{"text":"#181719"}}},"color":{"text":"#181719"}},"fontSize":"extra-large","fontFamily":"poppins"} -->
+<h4 class="wp-block-heading has-text-color has-link-color has-poppins-font-family has-extra-large-font-size" style="color:#181719;margin-top:0;margin-bottom:0;font-style:normal;font-weight:500"><?php esc_html_e('Hello, I am','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
 <!-- wp:heading {"style":{"typography":{"fontStyle":"normal","fontWeight":"700","fontSize":"85px"},"color":{"text":"#181719"}},"fontFamily":"poppins"} -->
@@ -24,8 +24,8 @@
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"secondary-bg-color","textColor":"background","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|50","right":"var:preset|spacing|50","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"fontSize":"small","fontFamily":"inter"} -->
-<div class="wp-block-button has-custom-font-size has-inter-font-family has-small-font-size"><a class="wp-block-button__link has-background-color has-secondary-bg-color-background-color has-text-color has-background wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--50)"><?php esc_html_e('Download CV','fse-freelancer-portfolio'); ?></a></div>
+<div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"primary","textColor":"white","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|50","right":"var:preset|spacing|50","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"fontSize":"small","fontFamily":"inter"} -->
+<div class="wp-block-button has-custom-font-size has-inter-font-family has-small-font-size"><a class="wp-block-button__link has-white-color has-primary-background-color has-text-color has-background wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--50)"><?php esc_html_e('Download CV','fse-freelancer-portfolio'); ?></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 

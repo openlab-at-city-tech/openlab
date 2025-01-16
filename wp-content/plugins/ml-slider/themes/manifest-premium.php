@@ -15,7 +15,7 @@ return array(
             __(  '2 columns', 'ml-slider' )
         ),
         'description' => __( 'A 2 columns minimalistic theme to split your images and captions.', 'ml-slider' ),
-        'instructions' => __( 'Image, External URL and Post Feed slides are displayed in 2 columns, while the rest of slide types in 1 column.', 'ml-slider' )
+        'instructions' => __( 'Image, External URL and Post Feed slides are displayed in 2 columns, while the others slide types are displayed in 1 column.', 'ml-slider' )
     ),
     'social-play' => array(
         'folder' => 'social-play',

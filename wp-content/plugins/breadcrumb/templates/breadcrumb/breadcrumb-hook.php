@@ -145,20 +145,23 @@ function breadcrumb_main_items($atts)
         }
 
         .breadcrumb-container {
-            font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
-            padding: <?php echo esc_attr($breadcrumb_padding); ?>;
-            margin: <?php echo esc_attr($breadcrumb_margin); ?>;
+            <?php if (!empty($breadcrumb_font_size)): ?>font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php endif; ?><?php if (!empty($breadcrumb_padding)): ?>padding: <?php echo esc_attr($breadcrumb_padding); ?>;
+            <?php endif; ?><?php if (!empty($breadcrumb_margin)): ?>margin: <?php echo esc_attr($breadcrumb_margin); ?>;
+            <?php endif; ?>
         }
 
         .breadcrumb-container li a {
-            color: <?php echo esc_attr($breadcrumb_link_color); ?> !important;
-            font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
-            line-height: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php if (!empty($breadcrumb_link_color)): ?>color: <?php echo esc_attr($breadcrumb_link_color); ?> !important;
+            <?php endif; ?><?php if (!empty($breadcrumb_font_size)): ?>font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php endif; ?><?php if (!empty($breadcrumb_font_size)): ?>line-height: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php endif; ?>
         }
 
         .breadcrumb-container li .separator {
-            color: <?php echo esc_attr($breadcrumb_separator_color); ?> !important;
-            font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php if (!empty($breadcrumb_separator_color)): ?>color: <?php echo esc_attr($breadcrumb_separator_color); ?> !important;
+            <?php endif; ?><?php if (!empty($breadcrumb_font_size)): ?>font-size: <?php echo esc_attr($breadcrumb_font_size); ?> !important;
+            <?php endif; ?>
         }
 
         .breadcrumb-container li:last-child .separator {

@@ -46,6 +46,7 @@ class Model extends Option {
 		'use_legacy_blc_version'        => true,
 		'blc_schedule_scan_in_progress' => false,
 		'show_multisite_notice'         => true,
+		'show_connector_notice'         => false,
 		'installation_timestamp'        => null,
 		'v2_activation_request'         => false,
 		'version_highlights'            => array(

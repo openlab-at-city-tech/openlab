@@ -148,6 +148,52 @@
 				<template slot="header">{{ __('Enable TinyMCE', 'ml-slider') }}</template>
 				<template slot="description">{{ __('TinyMCE is a WYSIWYG editor you can use in slide captions.', 'ml-slider') }}</template>
 			</switch-single-input>
+			<template>
+				<div id="dashboard-settings" class="bg-white shadow mb-4 relative px-4 py-5 md:p-6">
+					<h3 class="text-lg leading-6 m-0 font-medium text-gray-darkest">
+						{{ __('Dashboard Settings', 'ml-slider') }}
+					</h3>
+					<div class="mt-2 max-w-xl text-sm leading-5 text-gray-dark">
+						<div class="m-0 pt-0">
+							{{ __('Set default sorting options and items per page for your Dashboard.', 'ml-slider') }}
+						</div>
+					</div>
+					<div class="row">
+						<div class="col">
+							<select-field-input 
+								v-model="globalSettings.dashboardSort" 
+								:options="[
+									{ value: 'ID', label: __('Slideshow ID', 'ml-slider') },
+									{ value: 'post_title', label: __('Title', 'ml-slider') },
+									{ value: 'post_date', label: __('Date Created', 'ml-slider') }
+								]" 
+								@click="saveGlobalSettings()">
+								<template slot="header">{{ __('Sort Slideshows By', 'ml-slider') }}</template>
+							</select-field-input>
+						</div>
+						<div class="col">
+							<select-field-input 
+								v-model="globalSettings.dashboardOrder" 
+								:options="[
+									{ value: 'asc', label: __('Ascending', 'ml-slider') },
+									{ value: 'desc', label: __('Descending', 'ml-slider') }
+								]" 
+								@click="saveGlobalSettings()">
+								<template slot="header">{{ __('Order By', 'ml-slider') }}</template>
+							</select-field-input>
+						</div>
+						<div class="col">
+							<text-single-input 
+								v-model="globalSettings.dashboardItems" 
+								name="dashboard-items" 
+								wrapper-class="w-24" 
+								@click="saveGlobalSettings()">
+								<template slot="header">{{ __('Items Per Page', 'ml-slider') }}</template>
+							</text-single-input>
+						</div>
+					</div>
+				</div>
+			</template>
 		</template>
 	</split-layout>
 	<!-- Pro settings -->
@@ -215,7 +261,11 @@ export default {
 				newSlideOrder: 'last',
 				mobileSettings: true,
 				legacyWidget: true,
-				tinyMce: true
+				tinyMce: true,
+				dashboardSort: 'ID',
+				dashboardOrder: 'asc',
+				dashboardItems: 10
+
 			},
 			proSettings: {
 				postFeedFields: 30,

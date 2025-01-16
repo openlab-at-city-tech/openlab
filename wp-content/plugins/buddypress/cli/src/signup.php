@@ -9,9 +9,11 @@ use WP_CLI;
  *
  * ## EXAMPLES
  *
+ *     # Add a signup.
  *     $ wp bp signup create --user-login=test_user --user-email=teste@site.com
  *     Success: Successfully added new user signup (ID #345).
  *
+ *     # Activate a signup.
  *     $ wp bp signup activate ee48ec319fef3nn4
  *     Success: Signup activated, new user (ID #545).
  *
@@ -24,14 +26,16 @@ class Signup extends BuddyPressCommand {
 	 *
 	 * @var array
 	 */
-	protected $obj_fields = array(
-		'signup_id',
-		'user_login',
+	protected $obj_fields = [
+		'id',
 		'user_name',
+		'user_login',
+		'user_email',
+		'registered',
 		'meta',
 		'activation_key',
-		'registered',
-	);
+		'count_sent',
+	];
 
 	/**
 	 * Dependency check for this CLI command.
@@ -70,8 +74,9 @@ class Signup extends BuddyPressCommand {
 	 * [--porcelain]
 	 * : Output only the new signup id.
 	 *
-	 * ## EXAMPLE
+	 * ## EXAMPLES
 	 *
+	 *     # Add a signup.
 	 *     $ wp bp signup create --user-login=test_user --user-email=teste@site.com
 	 *     Success: Successfully added new user signup (ID #345).
 	 *
@@ -80,14 +85,14 @@ class Signup extends BuddyPressCommand {
 	public function create( $args, $assoc_args ) {
 		$r = wp_parse_args(
 			$assoc_args,
-			array(
+			[
 				'user-login'     => '',
 				'user-email'     => '',
 				'activation-key' => wp_generate_password( 32, false ),
-			)
+			]
 		);
 
-		$signup_args = array( 'meta' => array() );
+		$signup_args = [ 'meta' => [] ];
 
 		$user_login = $r['user-login'];
 		if ( ! empty( $user_login ) ) {
@@ -103,21 +108,21 @@ class Signup extends BuddyPressCommand {
 		$signup_args['user_email']     = $user_email;
 		$signup_args['activation_key'] = $r['activation-key'];
 
-		$id = \BP_Signup::add( $signup_args );
+		$signup_id = \BP_Signup::add( $signup_args );
 
 		// Silent it.
 		if ( WP_CLI\Utils\get_flag_value( $assoc_args, 'silent' ) ) {
 			return;
 		}
 
-		if ( ! $id ) {
+		if ( ! $signup_id ) {
 			WP_CLI::error( 'Could not add user signup.' );
 		}
 
 		if ( WP_CLI\Utils\get_flag_value( $assoc_args, 'porcelain' ) ) {
-			WP_CLI::log( $id );
+			WP_CLI::log( $signup_id );
 		} else {
-			WP_CLI::success( sprintf( 'Successfully added new user signup (ID #%d).', $id ) );
+			WP_CLI::success( sprintf( 'Successfully added new user signup (ID #%d).', $signup_id ) );
 		}
 	}
 
@@ -147,18 +152,23 @@ class Signup extends BuddyPressCommand {
 	 * default: table
 	 * options:
 	 *   - table
-	 *   - csv
-	 *   - ids
 	 *   - json
-	 *   - count
+	 *   - csv
 	 *   - yaml
 	 * ---
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     $ wp bp signup get 123
-	 *     $ wp bp signup get foo@example.com
-	 *     $ wp bp signup get 123 --match-field=id
+	 *     # Get a signup.
+	 *     $ wp bp signup get 35 --fields=id,user_login,user_name,count_sent
+	 *     +------------+------------+
+	 *     | Field      | Value      |
+	 *     +------------+------------+
+	 *     | id         | 35         |
+	 *     | user_login | user897616 |
+	 *     | user_name  | Test user  |
+	 *     | count_sent | 4          |
+	 *     +------------+------------+
 	 */
 	public function get( $args, $assoc_args ) {
 		$signup = $this->get_signup_by_identifier( $args[0], $assoc_args );
@@ -172,29 +182,45 @@ class Signup extends BuddyPressCommand {
 	 * ## OPTIONS
 	 *
 	 * <signup-id>...
-	 * : ID or IDs of signup.
+	 * : ID or IDs of signup to delete.
 	 *
 	 * [--yes]
 	 * : Answer yes to the confirmation message.
 	 *
 	 * ## EXAMPLES
 	 *
-	 *     $ wp bp signup delete 520
-	 *     Success: Signup deleted.
+	 *     # Delete a signup.
+	 *     $ wp bp signup delete 520 --yes
+	 *     Success: Signup deleted 54565.
 	 *
-	 *     $ wp bp signup delete 55654 54564 --yes
-	 *     Success: Signup deleted.
+	 *     # Delete multiple signups.
+	 *     $ wp bp signup delete 55654 54565 --yes
+	 *     Success: Signup deleted 55654.
+	 *     Success: Signup deleted 54565.
+	 *
+	 * @alias remove
+	 * @alias trash
 	 */
 	public function delete( $args, $assoc_args ) {
-		WP_CLI::confirm( 'Are you sure you want to delete this signup?', $assoc_args );
+		$signup_ids = wp_parse_id_list( $args );
 
-		parent::_delete( $args, $assoc_args, function( $signup_id ) {
-			if ( \BP_Signup::delete( array( $signup_id ) ) ) {
-				return array( 'success', 'Signup deleted.' );
-			} else {
-				return array( 'error', 'Could not delete signup.' );
+		if ( count( $signup_ids ) > 1 ) {
+			WP_CLI::confirm( 'Are you sure you want to delete these signups?', $assoc_args );
+		} else {
+			WP_CLI::confirm( 'Are you sure you want to delete this signup?', $assoc_args );
+		}
+
+		parent::_delete(
+			$signup_ids,
+			$assoc_args,
+			function ( $signup_id ) {
+				if ( \BP_Signup::delete( [ $signup_id ] ) ) {
+					return [ 'success', sprintf( 'Signup deleted %d.', $signup_id ) ];
+				}
+
+				return [ 'error', sprintf( 'Could not delete signup %d.', $signup_id ) ];
 			}
-		} );
+		);
 	}
 
 	/**
@@ -205,8 +231,9 @@ class Signup extends BuddyPressCommand {
 	 * <signup-id>
 	 * : Identifier for the signup. Can be a signup ID, an email address, or a user_login.
 	 *
-	 * ## EXAMPLE
+	 * ## EXAMPLES
 	 *
+	 *     # Activate a signup.
 	 *     $ wp bp signup activate ee48ec319fef3nn4
 	 *     Success: Signup activated, new user (ID #545).
 	 */
@@ -232,29 +259,49 @@ class Signup extends BuddyPressCommand {
 	 * default: 100
 	 * ---
 	 *
-	 * ## EXAMPLE
+	 * [--format=<format>]
+	 * : Render output in a particular format.
+	 * ---
+	 * default: progress
+	 * options:
+	 *   - progress
+	 *   - ids
+	 * ---
 	 *
+	 * ## EXAMPLES
+	 *
+	 *     # Generate 50 random signups.
 	 *     $ wp bp signup generate --count=50
+	 *     Generating signups  100% [======================] 0:00 / 0:00
+	 *
+	 *     # Generate 5 random signups and return their IDs.
+	 *     $ wp bp signup generate --count=5 --format=ids
+	 *     70 71 72 73 74
 	 */
 	public function generate( $args, $assoc_args ) {
-		$notify = WP_CLI\Utils\make_progress_bar( 'Generating signups', $assoc_args['count'] );
-
 		// Use the email API to get a valid "from" domain.
 		$email_domain = new \BP_Email( '' );
 		$email_domain = $email_domain->get_from()->get_address();
 		$random_login = wp_generate_password( 12, false ); // Generate random user login.
 
-		for ( $i = 0; $i < $assoc_args['count']; $i++ ) {
-			$this->create( array(), array(
-				'user-login' => $random_login,
-				'user-email' => $random_login . substr( $email_domain, strpos( $email_domain, '@' ) ),
-				'silent',
-			) );
+		$this->generate_callback(
+			'Generating signups',
+			$assoc_args,
+			function ( $assoc_args, $format ) use ( $random_login, $email_domain ) {
+				$params = [
+					'user-login' => $random_login,
+					'user-email' => $random_login . substr( $email_domain, strpos( $email_domain, '@' ) ),
+				];
 
-			$notify->tick();
-		}
+				if ( 'ids' === $format ) {
+					$params['porcelain'] = true;
+				} else {
+					$params['silent'] = true;
+				}
 
-		$notify->finish();
+				return $this->create( [], $params );
+			}
+		);
 	}
 
 	/**
@@ -265,8 +312,9 @@ class Signup extends BuddyPressCommand {
 	 * <signup-id>
 	 * : Identifier for the signup. Can be a signup ID, an email address, or a user_login.
 	 *
-	 * ## EXAMPLE
+	 * ## EXAMPLES
 	 *
+	 *     # Resend activation e-mail to a newly registered user.
 	 *     $ wp bp signup resend test@example.com
 	 *     Success: Email sent successfully.
 	 *
@@ -274,7 +322,7 @@ class Signup extends BuddyPressCommand {
 	 */
 	public function resend( $args, $assoc_args ) {
 		$signup = $this->get_signup_by_identifier( $args[0], $assoc_args );
-		$send   = \BP_Signup::resend( array( $signup->signup_id ) );
+		$send   = \BP_Signup::resend( [ $signup->signup_id ] );
 
 		// Add feedback message.
 		if ( empty( $send['errors'] ) ) {
@@ -289,13 +337,16 @@ class Signup extends BuddyPressCommand {
 	 *
 	 * ## OPTIONS
 	 *
-	 * [--fields=<value>]
+	 * [--<field>=<value>]
 	 * : One or more parameters to pass. See \BP_Signup::get()
 	 *
-	 * [--number=<value>]
+	 * [--fields=<fields>]
+	 * : Fields to display.
+	 *
+	 * [--count=<number>]
 	 * : How many signups to list.
 	 * ---
-	 * default: 20
+	 * default: 50
 	 * ---
 	 *
 	 * [--format=<value>]
@@ -304,30 +355,35 @@ class Signup extends BuddyPressCommand {
 	 * default: table
 	 * options:
 	 *   - table
-	 *   - ids
-	 *   - count
 	 *   - csv
+	 *   - ids
+	 *   - json
+	 *   - count
+	 *   - yaml
 	 * ---
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # List signups and get the IDs.
 	 *     $ wp bp signup list --format=ids
-	 *     $ wp bp signup list --number=100 --format=count
-	 *     $ wp bp signup list --number=5 --activation_key=ee48ec319fef3nn4
+	 *     70 71 72 73 74
+	 *
+	 *     # List 100 signups and return the count.
+	 *     $ wp bp signup list --count=100 --format=count
+	 *     100
+	 *
+	 *     # List active signups.
+	 *     $ wp bp signup list --active=1 --count=10
+	 *     50
 	 *
 	 * @subcommand list
 	 */
-	public function list_( $args, $assoc_args ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
-		$formatter  = $this->get_formatter( $assoc_args );
-		$assoc_args = wp_parse_args(
-			$assoc_args,
-			array(
-				'number' => 20,
-				'fields' => 'all',
-			)
-		);
+	public function list_( $args, $assoc_args ) {
+		$formatter = $this->get_formatter( $assoc_args );
 
-		if ( 'ids' === $formatter->format ) {
+		$assoc_args['number'] = $assoc_args['count'];
+
+		if ( in_array( $formatter->format, [ 'ids', 'count' ], true ) ) {
 			$assoc_args['fields'] = 'ids';
 		}
 
@@ -337,13 +393,7 @@ class Signup extends BuddyPressCommand {
 			WP_CLI::error( 'No signups found.' );
 		}
 
-		if ( 'ids' === $formatter->format ) {
-			echo implode( ' ', $signups['signups'] );
-		} elseif ( 'count' === $formatter->format ) {
-			$formatter->display_items( $signups['total'] );
-		} else {
-			$formatter->display_items( $signups['signups'] );
-		}
+		$formatter->display_items( $signups['signups'] );
 	}
 
 	/**
@@ -357,7 +407,7 @@ class Signup extends BuddyPressCommand {
 		if ( isset( $assoc_args['match-field'] ) ) {
 			switch ( $assoc_args['match-field'] ) {
 				case 'signup_id':
-					$signup_args['include'] = array( $identifier );
+					$signup_args['include'] = [ $identifier ];
 					break;
 
 				case 'user_login':
@@ -369,14 +419,12 @@ class Signup extends BuddyPressCommand {
 					$signup_args['usersearch'] = $identifier;
 					break;
 			}
+		} elseif ( is_numeric( $identifier ) ) {
+			$signup_args['include'] = [ intval( $identifier ) ];
+		} elseif ( is_email( $identifier ) ) {
+			$signup_args['usersearch'] = $identifier;
 		} else {
-			if ( is_numeric( $identifier ) ) {
-				$signup_args['include'] = array( intval( $identifier ) );
-			} elseif ( is_email( $identifier ) ) {
-				$signup_args['usersearch'] = $identifier;
-			} else {
-				$signup_args['user_login'] = $identifier;
-			}
+			$signup_args['user_login'] = $identifier;
 		}
 
 		$signups = \BP_Signup::get( $signup_args );

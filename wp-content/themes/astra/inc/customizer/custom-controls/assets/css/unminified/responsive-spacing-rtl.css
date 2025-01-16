@@ -30,7 +30,7 @@
 }
 .customize-control-ast-responsive-spacing .ast-spacing-responsive-btns {
     position: relative;
-    top: 2px;
+    top: 1px;
 }
 .customize-control-ast-responsive-spacing .ast-spacing-responsive-btns > li {
   display: none;

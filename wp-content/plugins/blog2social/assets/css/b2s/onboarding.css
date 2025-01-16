@@ -1,15 +1,16 @@
-/*.stepwizard-row:before {
-    top:155px;
-    left:17%;
-    position: absolute;
-    content:" ";
-    width: 65%;
-    height: 1px;
-    background-color: #ccc;
-    z-index: 0;
-}*/
+.stepwizard {
+    padding-top: 20px;
+    margin-top: 40px;
+    width:100%;
+    overflow:hidden;
+    margin-bottom:40px;
+}
 
-
+.stepwizard-step {
+    display: table-cell;
+    text-align: center;
+    position: relative;
+}
 
 .stepwizard-step-green:before {
     top:15px;
@@ -40,21 +41,6 @@
     border-color: darkgrey !important;
     color:black;
 }
-
-.stepwizard {
-    padding-top: 20px;
-    margin-top: 40px;
-    width:100%;
-    overflow:hidden;
-    margin-bottom:40px;
-}
-
-.stepwizard-step {
-    display: table-cell;
-    text-align: center;
-    position: relative;
-}
-
 .b2s-onboarding-item{
     margin:10px;
     padding-bottom:40px;

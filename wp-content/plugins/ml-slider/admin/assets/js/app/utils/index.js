@@ -1,6 +1,6 @@
 import EventManager from './events'
 import Helpers from './helpers'
-import { __, _x, _n, _nx, sprintf, setLocaleData } from '@wordpress/i18n'
+const { __, _x, _n, _nx, sprintf, setLocaleData } = wp.i18n;
 
 // Let others hook into events
 if (window.metaslider.eventHooks) {

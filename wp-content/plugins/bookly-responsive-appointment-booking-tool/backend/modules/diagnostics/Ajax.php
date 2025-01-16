@@ -148,8 +148,12 @@ class Ajax extends Lib\Base\Ajax
                 /** @since Bookly 17.7 */
                 if ( isset( $json_data['plugins'] ) ) {
                     foreach ( $bookly_plugins as $slug => $plugin ) {
-                        if ( array_key_exists( $plugin::getBasename(), $json_data['plugins'] ) ) {
-                            $info[] = $plugin::getTitle() . ' v' . $json_data['plugins'][ $plugin::getBasename() ] . ( version_compare( $plugin::getVersion(), $json_data['plugins'][ $plugin::getBasename() ], '==' ) ? '' : ' ⚠️ code v' . $plugin::getVersion() );
+                        $basename = $plugin::getBasename();
+                        if ( array_key_exists( $basename, $json_data['plugins'] ) ) {
+                            $info[] = $plugin::getTitle() . ' v' . $json_data['plugins'][ $basename ] . ( version_compare( $plugin::getVersion(), $json_data['plugins'][ $basename ], '==' ) ? '' : ' ⚠️ code v' . $plugin::getVersion() );
+                        } elseif ( array_key_exists( 'bookly-addon-pro/lib/addons/' . $basename, $json_data['plugins'] ) ) {
+                            $basename_internal = 'bookly-addon-pro/lib/addons/' . $basename;
+                            $info[] = $plugin::getTitle() . ' v' . $json_data['plugins'][ $basename_internal ] . ( version_compare( $plugin::getVersion(), $json_data['plugins'][ $basename_internal ], '==' ) ? '' : ' ⚠️ code v' . $plugin::getVersion() );
                         } else {
                             deactivate_plugins( $plugin::getBasename(), true, is_network_admin() );
                             unset( $bookly_plugins[ $slug ] );
@@ -349,7 +353,9 @@ class Ajax extends Lib\Base\Ajax
         // Filters.
         list ( $start, $end ) = explode( ' - ', $filter['created_at'], 2 );
         if ( $start !== 'any' ) {
-            $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
+            if ( strlen( $end ) === 10 ) {
+                $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
+            }
             $query->whereBetween( 'created_at', $start, $end );
         }
         if ( isset( $filter['search'] ) && $filter['search'] !== '' ) {
@@ -360,6 +366,13 @@ class Ajax extends Lib\Base\Ajax
         }
         if ( isset( $filter['action'] ) && $filter['action'] ) {
             $query->whereIn( 'action', $filter['action'] );
+        } else {
+            $query->whereIn( 'action', array(
+                Lib\Utils\Log::ACTION_CREATE,
+                Lib\Utils\Log::ACTION_DELETE,
+                Lib\Utils\Log::ACTION_UPDATE,
+                Lib\Utils\Log::ACTION_ERROR,
+            ) );
         }
 
         $filtered = $query->count();

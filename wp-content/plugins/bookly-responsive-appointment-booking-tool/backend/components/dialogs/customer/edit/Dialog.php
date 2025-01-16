@@ -47,7 +47,6 @@ class Dialog extends Lib\Base\Component
             'moment_format_time' => Lib\Utils\DateTime::convertFormat( 'time', Lib\Utils\DateTime::FORMAT_MOMENT_JS ),
             'intlTelInput' => array(
                 'enabled' => $tel_input_enabled,
-                'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                 'country' => get_option( 'bookly_cst_phone_default_country' ),
             ),
             'datePicker' => Lib\Utils\DateTime::datePickerOptions( array(

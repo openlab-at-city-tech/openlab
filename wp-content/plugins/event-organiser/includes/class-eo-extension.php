@@ -331,7 +331,8 @@ if ( ! class_exists( 'EO_Extension' ) ) {
 
 			if ( ! $valid ) {
 				$message = sprintf(
-					'The license key you have entered is invalid. <a href="%s">Purchase a license key</a>.',
+					'The license key you have entered is invalid: <i>%s</i>.</br><a href="%s"> Purchase a license key </a>.',
+					$this->_get_verbose_reason( $check->get_error_code() ),
 					$this->public_url
 				);
 
@@ -340,7 +341,7 @@ if ( ! class_exists( 'EO_Extension' ) ) {
 					sprintf(
 						'<p>%s</p><p> Without a valid license key you will not be eligable for updates or support. You can purchase a
 					license key <a href="%s">here</a>.</p> <p> If you have entered a valid license which does not seem to work, please
-					<a href="%s">contact suppport</a>.',
+					<a href="%s">contact support</a>.',
 						$this->_get_verbose_reason( $check->get_error_code() ),
 						$this->public_url,
 						'http://wp-event-organiser.com/contact/'
@@ -473,7 +474,9 @@ if ( ! class_exists( 'EO_Extension' ) ) {
 				$plugin_obj = ( 'plugin_info' == $action ? unserialize( $request['body'] ) : $request['body'] );
 
 				if ( $this->name && empty( $plugin_obj->name ) ) {
-					$plugin_obj->name = $this->name;
+					$plugin_array = (array) $plugin_obj;
+					$plugin_array['name'] = $this->name;
+					$plugin_obj = (object) $plugin_array;
 				}
 
 				set_site_transient( $key, $plugin_obj, 12 * 60 * 60 );

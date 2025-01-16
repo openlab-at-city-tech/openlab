@@ -3,8 +3,6 @@
  * Styling Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.15
  */
@@ -46,6 +44,7 @@ if ( ! class_exists( 'Astra_Single_Typo_Configs' ) ) {
 						'name'     => ASTRA_THEME_SETTINGS . '[ast-single-post-items]',
 						'type'     => 'control',
 						'control'  => 'ast-upgrade',
+						'campaign' => 'blog-single',
 						'renderAs' => 'list',
 						'choices'  => array(
 							'one'   => array(

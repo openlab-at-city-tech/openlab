@@ -71,7 +71,7 @@
             'astra-builder-toggle',
             'astra-settings[header-mobile-menu-color-responsive]',
             'color',
-            selector + ' .menu-item > .ast-menu-toggle'
+            selector + ' .main-header-menu .menu-item > .ast-menu-toggle'
         );
 
         // Menu Toggle - Hover Color

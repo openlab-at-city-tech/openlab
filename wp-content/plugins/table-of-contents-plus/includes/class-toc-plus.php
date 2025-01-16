@@ -8,6 +8,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 		private $show_toc;  // allows to override the display (eg through [no_toc] shortcode)
 		private $exclude_post_types;
 		private $collision_collector;  // keeps a track of used anchors for collision detecting
+		private $defaults;
 
 		public function __construct() {
 			$this->show_toc            = true;
@@ -15,7 +16,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 			$this->collision_collector = [];
 
 			// get options
-			$defaults = [  // default options
+			$this->defaults = [  // default options
 				'fragment_prefix'                    => 'i',
 				'position'                           => TOC_POSITION_BEFORE_FIRST_HEADING,
 				'start'                              => 4,
@@ -62,15 +63,15 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				'rest_toc_output'                    => false,
 			];
 
-			$options       = get_option( 'toc-options', $defaults );
-			$this->options = wp_parse_args( $options, $defaults );
+			$options       = get_option( 'toc-options', $this->defaults );
+			$this->options = wp_parse_args( $options, $this->defaults );
 
 			add_action( 'plugins_loaded', [ $this, 'plugins_loaded' ] );
 			add_action( 'wp_enqueue_scripts', [ $this, 'wp_enqueue_scripts' ] );
 			add_action( 'admin_init', [ $this, 'admin_init' ] );
 			add_action( 'admin_menu', [ $this, 'admin_menu' ] );
 			add_action( 'widgets_init', [ $this, 'widgets_init' ] );
-			add_action( 'sidebar_admin_setup', [ $this, 'sidebar_admin_setup' ] );
+			add_action( 'delete_widget', [ $this, 'sidebar_admin_setup' ], 10, 3 );
 			add_action( 'init', [ $this, 'init' ] );
 
 			add_filter( 'the_content', [ $this, 'the_content' ], 100 );  // run after shortcodes are interpreted (level 10)
@@ -178,11 +179,11 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				$this->options['heading_text'] = wp_kses_post( html_entity_decode( $atts['label'] ) );
 			}
 			if ( $atts['label_show'] ) {
-				$this->options['visibility_show'] = wp_kses_post( html_entity_decode( $atts['label_show'] ) );
+				$this->options['visibility_show'] = wp_kses_post( $atts['label_show'] );
 				$re_enqueue_scripts               = true;
 			}
 			if ( $atts['label_hide'] ) {
-				$this->options['visibility_hide'] = wp_kses_post( html_entity_decode( $atts['label_hide'] ) );
+				$this->options['visibility_hide'] = wp_kses_post( $atts['label_hide'] );
 				$re_enqueue_scripts               = true;
 			}
 			if ( $atts['class'] ) {
@@ -527,17 +528,16 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 		/**
 		 * Remove widget options on widget deletion
 		 */
-		public function sidebar_admin_setup() {
+		public function sidebar_admin_setup( $widget_id, $sidebar_id, $id_base ) {
+			// If we aren't trying to delete a TOC widget, return early.
+			if ( 'toc-widget' !== $id_base ) {
+				return;
+			}
+
 			// this action is loaded at the start of the widget screen
 			// so only do the following when a form action has been initiated
-			if ( 'post' === strtolower( $_SERVER['REQUEST_METHOD'] ) ) {
-				if ( isset( $_POST['id_base'] ) && 'toc-widget' === $_POST['id_base'] ) {  // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					if ( isset( $_POST['delete_widget'] ) && 1 === (int) $_POST['delete_widget'] ) {  // phpcs:ignore WordPress.Security.NonceVerification.Missing
-						$this->set_show_toc_in_widget_only( false );
-						$this->set_show_toc_in_widget_only_post_types( [ 'page' ] );
-					}
-				}
-			}
+			$this->set_show_toc_in_widget_only( false );
+			$this->set_show_toc_in_widget_only_post_types( [ 'page' ] );
 		}
 
 
@@ -606,7 +606,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 			if ( ! isset( $_POST['toc-admin-options'] ) ) {
 				return false;
 			}
-			if ( ! wp_verify_nonce( $_POST['toc-admin-options'], plugin_basename( __FILE__ ) ) ) {
+			if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['toc-admin-options'] ) ), plugin_basename( __FILE__ ) ) ) {
 				return false;
 			}
 
@@ -619,14 +619,14 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 			// WordPress automatically slashes these characters as part of
 			// wp-includes/load.php::wp_magic_quotes()
 
-			$custom_background_colour    = $this->hex_value( trim( $_POST['custom_background_colour'] ), TOC_DEFAULT_BACKGROUND_COLOUR );
-			$custom_border_colour        = $this->hex_value( trim( $_POST['custom_border_colour'] ), TOC_DEFAULT_BORDER_COLOUR );
-			$custom_title_colour         = $this->hex_value( trim( $_POST['custom_title_colour'] ), TOC_DEFAULT_TITLE_COLOUR );
-			$custom_links_colour         = $this->hex_value( trim( $_POST['custom_links_colour'] ), TOC_DEFAULT_LINKS_COLOUR );
-			$custom_links_hover_colour   = $this->hex_value( trim( $_POST['custom_links_hover_colour'] ), TOC_DEFAULT_LINKS_HOVER_COLOUR );
-			$custom_links_visited_colour = $this->hex_value( trim( $_POST['custom_links_visited_colour'] ), TOC_DEFAULT_LINKS_VISITED_COLOUR );
+			$custom_background_colour    = ! empty( $_POST['custom_background_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_background_colour'] ) ), TOC_DEFAULT_BACKGROUND_COLOUR ) : TOC_DEFAULT_BACKGROUND_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$custom_border_colour        = ! empty( $_POST['custom_border_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_border_colour'] ) ), TOC_DEFAULT_BORDER_COLOUR ) : TOC_DEFAULT_BORDER_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$custom_title_colour         = ! empty( $_POST['custom_title_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_title_colour'] ) ), TOC_DEFAULT_TITLE_COLOUR ) : TOC_DEFAULT_TITLE_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$custom_links_colour         = ! empty( $_POST['custom_links_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_links_colour'] ) ), TOC_DEFAULT_LINKS_COLOUR ) : TOC_DEFAULT_LINKS_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$custom_links_hover_colour   = ! empty( $_POST['custom_links_hover_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_links_hover_colour'] ) ), TOC_DEFAULT_LINKS_HOVER_COLOUR ) : TOC_DEFAULT_LINKS_HOVER_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$custom_links_visited_colour = ! empty( $_POST['custom_links_visited_colour'] ) ? $this->hex_value( trim( wp_unslash( $_POST['custom_links_visited_colour'] ) ), TOC_DEFAULT_LINKS_VISITED_COLOUR ) : TOC_DEFAULT_LINKS_VISITED_COLOUR; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 
-			$restrict_path = trim( $_POST['restrict_path'] );
+			$restrict_path = ! empty( $_POST['restrict_path'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['restrict_path'] ) ) ) : '';
 
 			if ( $restrict_path ) {
 				if ( strpos( $restrict_path, '/' ) !== 0 ) {
@@ -635,50 +635,85 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 				}
 			}
 
+			$fragment_prefix               = isset( $_POST['fragment_prefix'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['fragment_prefix'] ) ) ) : $this->defaults['fragment_prefix'];
+			$position                      = isset( $_POST['position'] ) ? intval( $_POST['position'] ) : $this->defaults['position'];
+			$start                         = isset( $_POST['start'] ) ? intval( $_POST['start'] ) : $this->defaults['start'];
+			$show_heading_text             = isset( $_POST['show_heading_text'] ) && (bool) $_POST['show_heading_text'];
+			$heading_text                  = isset( $_POST['heading_text'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['heading_text'] ) ) ) ) : $this->defaults['heading_text'];
+			$auto_insert_post_types        = isset( $_POST['auto_insert_post_types'] ) ? array_map( 'sanitize_text_field', array_map( 'wp_unslash', (array) $_POST['auto_insert_post_types'] ) ) : []; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+			$show_heirarchy                = isset( $_POST['show_heirarchy'] ) && (bool) $_POST['show_heirarchy'];
+			$ordered_list                  = isset( $_POST['ordered_list'] ) && (bool) $_POST['ordered_list'];
+			$smooth_scroll                 = isset( $_POST['smooth_scroll'] ) && (bool) $_POST['smooth_scroll'];
+			$smooth_scroll_offset          = isset( $_POST['smooth_scroll_offset'] ) ? intval( $_POST['smooth_scroll_offset'] ) : $this->defaults['smooth_scroll_offset'];
+			$visibility                    = isset( $_POST['visibility'] ) && (bool) $_POST['visibility'];
+			$visibility_show               = isset( $_POST['visibility_show'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['visibility_show'] ) ) ) ) : $this->defaults['visibility_show'];
+			$visibility_hide               = isset( $_POST['visibility_hide'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['visibility_hide'] ) ) ) ) : $this->defaults['visibility_hide'];
+			$visibility_hide_by_default    = isset( $_POST['visibility_hide_by_default'] ) && (bool) $_POST['visibility_hide_by_default'];
+			$width                         = isset( $_POST['width'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['width'] ) ) ) : $this->defaults['width'];
+			$width_custom                  = isset( $_POST['width_custom'] ) ? floatval( $_POST['width_custom'] ) : $this->defaults['width_custom'];
+			$width_custom_units            = isset( $_POST['width_custom_units'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['width_custom_units'] ) ) ) : $this->defaults['width_custom_units'];
+			$wrapping                      = isset( $_POST['wrapping'] ) ? intval( $_POST['wrapping'] ) : $this->defaults['wrapping'];
+			$font_size                     = isset( $_POST['font_size'] ) ? floatval( $_POST['font_size'] ) : $this->defaults['font_size'];
+			$font_size_units               = isset( $_POST['font_size_units'] ) ? trim( sanitize_text_field( wp_unslash( $_POST['font_size_units'] ) ) ) : $this->defaults['font_size_units'];
+			$theme                         = isset( $_POST['theme'] ) ? intval( $_POST['theme'] ) : $this->defaults['theme'];
+			$lowercase                     = isset( $_POST['lowercase'] ) && (bool) $_POST['lowercase'];
+			$hyphenate                     = isset( $_POST['hyphenate'] ) && (bool) $_POST['hyphenate'];
+			$bullet_spacing                = isset( $_POST['bullet_spacing'] ) && (bool) $_POST['bullet_spacing'];
+			$include_homepage              = isset( $_POST['include_homepage'] ) && (bool) $_POST['include_homepage'];
+			$exclude_css                   = isset( $_POST['exclude_css'] ) && (bool) $_POST['exclude_css'];
+			$heading_levels                = isset( $_POST['heading_levels'] ) ? array_map( 'intval', (array) $_POST['heading_levels'] ) : [];
+			$exclude                       = isset( $_POST['exclude'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['exclude'] ) ) ) ) : $this->defaults['exclude'];
+			$sitemap_show_page_listing     = isset( $_POST['sitemap_show_page_listing'] ) && (bool) $_POST['sitemap_show_page_listing'];
+			$sitemap_show_category_listing = isset( $_POST['sitemap_show_category_listing'] ) && (bool) $_POST['sitemap_show_category_listing'];
+			$sitemap_heading_type          = isset( $_POST['sitemap_heading_type'] ) ? intval( $_POST['sitemap_heading_type'] ) : $this->defaults['sitemap_heading_type'];
+			$sitemap_pages                 = isset( $_POST['sitemap_pages'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['sitemap_pages'] ) ) ) ) : $this->defaults['sitemap_pages'];
+			$sitemap_categories            = isset( $_POST['sitemap_categories'] ) ? stripslashes( trim( sanitize_text_field( wp_unslash( $_POST['sitemap_categories'] ) ) ) ) : $this->defaults['sitemap_categories'];
+			$rest_toc_output               = isset( $_POST['rest_toc_output'] ) && (bool) $_POST['rest_toc_output'];
+
 			$this->options = array_merge(
 				$this->options,
 				[
-					'fragment_prefix'               => trim( $_POST['fragment_prefix'] ),
-					'position'                      => intval( $_POST['position'] ),
-					'start'                         => intval( $_POST['start'] ),
-					'show_heading_text'             => ( isset( $_POST['show_heading_text'] ) && $_POST['show_heading_text'] ) ? true : false,
-					'heading_text'                  => stripslashes( trim( $_POST['heading_text'] ) ),
-					'auto_insert_post_types'        => ( isset( $_POST['auto_insert_post_types'] ) ) ? (array) $_POST['auto_insert_post_types'] : array(),
-					'show_heirarchy'                => ( isset( $_POST['show_heirarchy'] ) && $_POST['show_heirarchy'] ) ? true : false,
-					'ordered_list'                  => ( isset( $_POST['ordered_list'] ) && $_POST['ordered_list'] ) ? true : false,
-					'smooth_scroll'                 => ( isset( $_POST['smooth_scroll'] ) && $_POST['smooth_scroll'] ) ? true : false,
-					'smooth_scroll_offset'          => intval( $_POST['smooth_scroll_offset'] ),
-					'visibility'                    => ( isset( $_POST['visibility'] ) && $_POST['visibility'] ) ? true : false,
-					'visibility_show'               => stripslashes( trim( $_POST['visibility_show'] ) ),
-					'visibility_hide'               => stripslashes( trim( $_POST['visibility_hide'] ) ),
-					'visibility_hide_by_default'    => ( isset( $_POST['visibility_hide_by_default'] ) && $_POST['visibility_hide_by_default'] ) ? true : false,
-					'width'                         => trim( $_POST['width'] ),
-					'width_custom'                  => floatval( $_POST['width_custom'] ),
-					'width_custom_units'            => trim( $_POST['width_custom_units'] ),
-					'wrapping'                      => intval( $_POST['wrapping'] ),
-					'font_size'                     => floatval( $_POST['font_size'] ),
-					'font_size_units'               => trim( $_POST['font_size_units'] ),
-					'theme'                         => intval( $_POST['theme'] ),
+					'fragment_prefix'               => $fragment_prefix,
+					'position'                      => $position,
+					'start'                         => $start,
+					'show_heading_text'             => $show_heading_text,
+					'heading_text'                  => $heading_text,
+					'auto_insert_post_types'        => $auto_insert_post_types,
+					'show_heirarchy'                => $show_heirarchy,
+					'ordered_list'                  => $ordered_list,
+					'smooth_scroll'                 => $smooth_scroll,
+					'smooth_scroll_offset'          => $smooth_scroll_offset,
+					'visibility'                    => $visibility,
+					'visibility_show'               => $visibility_show,
+					'visibility_hide'               => $visibility_hide,
+					'visibility_hide_by_default'    => $visibility_hide_by_default,
+					'width'                         => $width,
+					'width_custom'                  => $width_custom,
+					'width_custom_units'            => $width_custom_units,
+					'wrapping'                      => $wrapping,
+					'font_size'                     => $font_size,
+					'font_size_units'               => $font_size_units,
+					'theme'                         => $theme,
 					'custom_background_colour'      => $custom_background_colour,
 					'custom_border_colour'          => $custom_border_colour,
 					'custom_title_colour'           => $custom_title_colour,
 					'custom_links_colour'           => $custom_links_colour,
 					'custom_links_hover_colour'     => $custom_links_hover_colour,
 					'custom_links_visited_colour'   => $custom_links_visited_colour,
-					'lowercase'                     => ( isset( $_POST['lowercase'] ) && $_POST['lowercase'] ) ? true : false,
-					'hyphenate'                     => ( isset( $_POST['hyphenate'] ) && $_POST['hyphenate'] ) ? true : false,
-					'bullet_spacing'                => ( isset( $_POST['bullet_spacing'] ) && $_POST['bullet_spacing'] ) ? true : false,
-					'include_homepage'              => ( isset( $_POST['include_homepage'] ) && $_POST['include_homepage'] ) ? true : false,
-					'exclude_css'                   => ( isset( $_POST['exclude_css'] ) && $_POST['exclude_css'] ) ? true : false,
-					'heading_levels'                => ( isset( $_POST['heading_levels'] ) ) ? array_map( 'intval', (array) $_POST['heading_levels'] ) : array(),
-					'exclude'                       => stripslashes( trim( $_POST['exclude'] ) ),
+					'lowercase'                     => $lowercase,
+					'hyphenate'                     => $hyphenate,
+					'bullet_spacing'                => $bullet_spacing,
+					'include_homepage'              => $include_homepage,
+					'exclude_css'                   => $exclude_css,
+					'heading_levels'                => $heading_levels,
+					'exclude'                       => $exclude,
 					'restrict_path'                 => $restrict_path,
-					'sitemap_show_page_listing'     => ( isset( $_POST['sitemap_show_page_listing'] ) && $_POST['sitemap_show_page_listing'] ) ? true : false,
-					'sitemap_show_category_listing' => ( isset( $_POST['sitemap_show_category_listing'] ) && $_POST['sitemap_show_category_listing'] ) ? true : false,
-					'sitemap_heading_type'          => intval( $_POST['sitemap_heading_type'] ),
-					'sitemap_pages'                 => stripslashes( trim( $_POST['sitemap_pages'] ) ),
-					'sitemap_categories'            => stripslashes( trim( $_POST['sitemap_categories'] ) ),
-					'rest_toc_output'               => ( isset( $_POST['rest_toc_output'] ) && $_POST['rest_toc_output'] ) ? true : false,
+					'sitemap_show_page_listing'     => $sitemap_show_page_listing,
+					'sitemap_show_category_listing' => $sitemap_show_category_listing,
+					'sitemap_heading_type'          => $sitemap_heading_type,
+					'sitemap_pages'                 => $sitemap_pages,
+					'sitemap_categories'            => $sitemap_categories,
+					'rest_toc_output'               => $rest_toc_output,
 				]
 			);
 
@@ -690,7 +725,8 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 
 
 		public function admin_options() {
-			$msg = '';
+			$page = isset( $_GET['page'] ) ? sanitize_text_field( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$msg  = '';
 
 			// was there a form submission, if so, do security checks and try to save form
 			if ( isset( $_GET['update'] ) ) {  // phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -706,7 +742,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 <div id="icon-options-general" class="icon32"><br></div>
 <h2>Table of Contents Plus</h2>
 			<?php echo wp_kses_post( $msg ); ?>
-<form method="post" action="<?php echo esc_url( '?page=' . $_GET['page'] . '&update' ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended ?>">
+<form method="post" action="<?php echo esc_url( '?page=' . $page . '&update' ); ?>">
 			<?php wp_nonce_field( plugin_basename( __FILE__ ), 'toc-admin-options' ); ?>
 
 <ul id="tabbed-nav">
@@ -1036,7 +1072,7 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 			if ( in_array( $i, $this->options['heading_levels'], true ) ) {
 				echo ' checked="checked"';
 			}
-			echo '><label for="heading_levels' . esc_attr( $i ) . '"> ' . esc_html( __( 'heading ' ) . $i . ' - h' . $i ) . '</label><br>';
+			echo '><label for="heading_levels' . esc_attr( $i ) . '"> ' . esc_html( __( 'heading ', 'table-of-contents-plus' ) . $i . ' - h' . $i ) . '</label><br>';
 		}
 		?>
 		</td>
@@ -1566,7 +1602,8 @@ if ( ! class_exists( 'TOC_Plus' ) ) :
 					( $this->options['include_homepage'] && is_front_page() )
 				) {
 					if ( $this->options['restrict_path'] ) {
-						if ( strpos( $_SERVER['REQUEST_URI'], $this->options['restrict_path'] ) === 0 ) {
+						$requestUri = ! empty( $_SERVER['REQUEST_URI'] ) ? $_SERVER['REQUEST_URI'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.MissingUnslash
+						if ( strpos( $requestUri, $this->options['restrict_path'] ) === 0 ) {
 							return true;
 						} else {
 							return false;

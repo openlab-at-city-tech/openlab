@@ -5,8 +5,6 @@
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        http://wpastra.com/
  * @since       Astra 1.0
  */
@@ -260,7 +258,7 @@ if ( ! class_exists( 'Gutenberg_Editor_CSS' ) ) :
 			}
 
 			// Site title (Page Title) on Block Editor.
-			$post_type                 = strval( get_post_type() );
+			$post_type                 = astra_get_post_type();
 			$site_title_font_family    = astra_get_option( 'ast-dynamic-archive-' . esc_attr( $post_type ) . '-title-font-family' );
 			$site_title_font_weight    = astra_get_option( 'ast-dynamic-archive-' . esc_attr( $post_type ) . '-title-font-weight' );
 			$site_title_line_height    = astra_get_option( 'ast-dynamic-archive-' . esc_attr( $post_type ) . '-title-line-height' );

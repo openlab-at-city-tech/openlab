@@ -5,7 +5,7 @@ Plugin URI: https://free.searchandfilter.com/
 Description: Search and Filtering system for Pages, Posts, Categories, Tags and Taxonomies
 Author: Code Amp
 Author URI: https://codeamp.com
-Version: 1.2.16
+Version: 1.2.17
 Text Domain: searchandfilter
 License: GPLv2
 */
@@ -14,7 +14,7 @@ License: GPLv2
 * Set up Plugin Globals
 */
 if ( ! defined( 'SEARCHANDFILTER_VERSION_NUM' ) ) {
-	define( 'SEARCHANDFILTER_VERSION_NUM', '1.2.16' );
+	define( 'SEARCHANDFILTER_VERSION_NUM', '1.2.17' );
 }
 
 if ( ! defined( 'SEARCHANDFILTER_THEME_DIR' ) ) {
@@ -63,6 +63,7 @@ if ( ! class_exists( 'SearchAndFilter' ) ) {
 		private $catid           = 0;
 		private $defaults        = array();
 		private $frmreserved     = array();
+		private $frmqreserved    = array();
 		private $taxonomylist    = array();
 
 		public function __construct() {

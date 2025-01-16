@@ -108,7 +108,7 @@ function su_get_gallery_slides_posts( $atts ) {
 
 	if ( 'media' === $source['type'] ) {
 
-		$query['post_mime_type'] = 'image/jpeg,image/gif,image/jpg,image/png,image/webp';
+		$query['post_mime_type'] = 'image/jpeg,image/gif,image/jpg,image/png,image/webp,image/avif';
 		$query['post_type']      = 'attachment';
 		$query['post_status']    = 'any';
 

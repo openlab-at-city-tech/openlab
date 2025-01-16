@@ -61,7 +61,7 @@ class WhatsApp extends Product
      *
      * @param string $phone_number
      * @param array $message
-     * @return false
+     * @return bool
      */
     public function send( $phone_number, $message )
     {

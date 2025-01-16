@@ -34,13 +34,18 @@ class View extends Admin_Page {
 	 * @return void Render the output.
 	 */
 	public function render( $params = array() ) {
-		self::$unique_id = isset( $params['unique_id'] ) ? $params['unique_id'] : null;
-		self::$slug      = isset( $params['slug'] ) ? $params['slug'] : null;
-		$site_connected  = isset( $params['site_connected'] ) ? boolval( $params['site_connected'] ) : false;
+		self::$unique_id    = isset( $params['unique_id'] ) ? $params['unique_id'] : null;
+		self::$slug         = isset( $params['slug'] ) ? $params['slug'] : null;
+		$site_connected     = isset( $params['site_connected'] ) ? boolval( $params['site_connected'] ) : false;
+		$load_hub_connector = isset( $params['load_hub_connector'] ) ? boolval( $params['load_hub_connector'] ) : false;
 		?>
 		<div class="sui-wrap wrap-blc wrap-blc-dashboard-page <?php echo 'wrap-' . esc_attr( self::$slug ); ?>">
             <?php
-            $this->render_body();
+			if ( $load_hub_connector ) {
+				$this->render_hub_connector();
+			} else {
+				$this->render_body();
+			}
 
 			if ( $site_connected ){
 				$this->render_footer();
@@ -50,10 +55,25 @@ class View extends Admin_Page {
 		<?php
 	}
 
+	/**
+	 * Renders the Cloud page markup.
+	 *
+	 * @return void
+	 */
     public function render_body() {
 	    ?>
         <div class="blc-dashboard-container" id="<?php esc_attr_e( self::$unique_id ); ?>"></div>
 	    <?php
     }
+
+	/**
+	 * Renders the Hub Connector's markup.
+	 *
+	 * @return void
+	 */
+	public function render_hub_connector() {
+		// Render Hub connector UI.
+		do_action( 'wpmudev_hub_connector_ui', 'blc' );
+	}
 
 }

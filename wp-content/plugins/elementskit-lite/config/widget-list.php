@@ -550,6 +550,12 @@ class Widget_List extends \ElementsKit_Lite\Core\Config_List {
 					'package'         => 'pro-disabled',
 					'widget-category' => 'general', // General
 				),
+				'circle-menu' => array(
+					'slug'            => 'circle-menu',
+					'title'           => 'Circle Menu',
+					'package'         => 'pro-disabled',
+					'widget-category' => 'general', // General
+				),
 			)
 		);
 	}

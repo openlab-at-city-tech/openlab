@@ -4,7 +4,6 @@
  *
  * @package     Astra
  * @subpackage  Class
- * @author      Astra
  * @link        https://wpastra.com/
  * @since       3.7.0
  */

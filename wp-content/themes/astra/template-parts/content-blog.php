@@ -12,12 +12,14 @@
 <?php astra_entry_before(); ?>
 <article
 <?php
-		echo astra_attr(
-			'article-blog',
-			array(
-				'id'    => 'post-' . get_the_id(),
-				'class' => join( ' ', get_post_class() ),
-			)
+		echo wp_kses_post(
+			astra_attr(
+				'article-blog',
+				array(
+					'id'    => 'post-' . get_the_id(),
+					'class' => join( ' ', get_post_class() ),
+				)
+			) 
 		);
 		?>
 >

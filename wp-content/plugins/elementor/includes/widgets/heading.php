@@ -95,6 +95,20 @@ class Widget_Heading extends Widget_Base implements Sanitizable {
 	}
 
 	/**
+	 * Get style dependencies.
+	 *
+	 * Retrieve the list of style dependencies the widget requires.
+	 *
+	 * @since 3.24.0
+	 * @access public
+	 *
+	 * @return array Widget style dependencies.
+	 */
+	public function get_style_depends(): array {
+		return [ 'widget-heading' ];
+	}
+
+	/**
 	 * Remove data attributes from the html.
 	 *
 	 * @param string $content Heading title
@@ -362,7 +376,7 @@ class Widget_Heading extends Widget_Base implements Sanitizable {
 
 		$this->add_inline_editing_attributes( 'title' );
 
-		$title = $settings['title'];
+		$title = wp_kses_post( $settings['title'] );
 
 		if ( ! empty( $settings['link']['url'] ) ) {
 			$this->add_link_attributes( 'url', $settings['link'] );
@@ -390,7 +404,7 @@ class Widget_Heading extends Widget_Base implements Sanitizable {
 		let title = elementor.helpers.sanitize( settings.title, { ALLOW_DATA_ATTR: false } );
 
 		if ( '' !== settings.link.url ) {
-			title = '<a href="' + _.escape( settings.link.url ) + '">' + title + '</a>';
+			title = '<a href="' + elementor.helpers.sanitizeUrl( settings.link.url ) + '">' + title + '</a>';
 		}
 
 		view.addRenderAttribute( 'title', 'class', [ 'elementor-heading-title' ] );

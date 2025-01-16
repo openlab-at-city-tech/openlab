@@ -64,6 +64,8 @@ class Main extends Base {
 			return false;
 		}
 
+		$this->get_processor()->post_id = $post_id;
+
 		//Execute link in post content.
 		$completed_in_posts = $this->execute_in_post_content( $post_id );
 
@@ -90,7 +92,7 @@ class Main extends Base {
 		if ( empty( $post_id ) ) {
 			return false;
 		}
-
+		
 		$new_content = '';
 
 		if ( empty( $content ) ) {

@@ -29,11 +29,11 @@
 }
 
 .b2s-support-link-not-active {
-/*    pointer-events: none;
-    cursor: default;
-    text-decoration: none;
-    color: gray;
-    opacity: 0.5;*/
+    /*    pointer-events: none;
+        cursor: default;
+        text-decoration: none;
+        color: gray;
+        opacity: 0.5;*/
     display: none !important;
 }
 
@@ -59,10 +59,6 @@
 
 .b2s-sharing-debugger-result-area{
     display: block;
-}
-
-.b2s-padding-top-8{
-    padding-top:8px;
 }
 
 .b2s-support-icon {

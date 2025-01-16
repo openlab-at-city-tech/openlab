@@ -34,8 +34,8 @@ class B2S_RePost_Save {
         $this->allowHashTag = $allowHashTag;
         $this->b2sUserLang = $b2sUserLang;
         $this->bestTimes = (!empty($bestTimes)) ? $bestTimes : array();
-        $this->setPreFillText = array(0 => array(8 => 239, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 20 => 300, 21 => 65000, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 239, 42 => 1000), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239));
-        $this->setPreFillTextLimit = array(0 => array(8 => 400, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 500, 19 => 400, 42 => 1000), 2 => array(8 => 400, 10 => 500, 19 => 9000));
+        $this->setPreFillText = array(0 => array(8 => 239, 10 => 442, 16 => 250, 17 => 442, 18 => 800, 20 => 300, 21 => 65000, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 442, 17 => 442, 19 => 5000, 42 => 1000), 2 => array(8 => 239, 10 => 442, 17 => 442, 19 => 239));
+        $this->setPreFillTextLimit = array(0 => array(8 => 400, 10 => 500, 18 => 1000, 20 => 400, 16 => false, 21 => 65535, 38 => 500, 39 => 2000, 42 => 1000, 43 => 279), 1 => array(8 => 1200, 10 => 500, 19 => 60000, 42 => 1000), 2 => array(8 => 400, 10 => 500, 19 => 9000));
         $this->notAllowNetwork = array(4, 6, 11, 14, 16, 18);
         $this->allowHtml = array(4, 11, 14);
         $this->allowNetworkOnlyImage = array(7, 12, 20, 21);
@@ -100,11 +100,10 @@ class B2S_RePost_Save {
                     if ($schedData !== false && is_array($schedData)) {
                         $schedData = array_merge($schedData, $defaultPostData);
                     }
-
-                    if (((int) $value->networkId == 12) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
-                        $schedData['url'] = '';
-                    } else if (((int) $value->networkId == 1 || (int) $value->networkId == 2 || (int) $value->networkId == 24 || (int) $value->networkId == 43) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $this->optionPostFormat[$value->networkId][$value->networkType]['format'] == 1 && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
-                        $schedData['url'] = '';
+                    if (in_array($value->networkId, unserialize(B2S_PLUGIN_ALLOW_ADD_LINK)) && isset($this->optionPostFormat[$value->networkId][$value->networkType]['addLink']) && $this->optionPostFormat[$value->networkId][$value->networkType]['addLink'] == false) {
+                        if (($value->networkId == 12) || (isset($this->optionPostFormat[$value->networkId][$value->networkType]['format']) && (int) $this->optionPostFormat[$value->networkId][$value->networkType]['format'] == 1)) {
+                            $schedData['url'] = '';
+                        }
                     }
 
                     $count = $this->saveShareData($schedData, $value->networkId, $value->networkType, $value->networkAuthId, $shareApprove, strip_tags($value->networkUserName), $schedDate, $schedDateUtc);
@@ -186,7 +185,7 @@ class B2S_RePost_Save {
             }
 
             //PostFormat
-            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43))) {
+            if (in_array($networkId, array(1, 2, 3, 12, 17, 19, 24, 43, 44))) {
                 //Get: client settings
                 if (isset($tempOptionPostFormat[$networkId][$networkType]['format']) && ((int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 0 || (int) $tempOptionPostFormat[$networkId][$networkType]['format'] === 1)) {
                     $postData['post_format'] = (int) $tempOptionPostFormat[$networkId][$networkType]['format'];
@@ -266,6 +265,9 @@ class B2S_RePost_Save {
                         $limit = 254;
                     }
                     if (!empty($this->url) && $networkId == 38) {
+                        $limit = 500 - strlen($this->url);
+                    }
+                    if (!empty($this->url) && $networkId == 44) {
                         $limit = 500 - strlen($this->url);
                     }
                     if (!empty($this->url) && $networkId == 43 && $postData['post_format'] == 1) {

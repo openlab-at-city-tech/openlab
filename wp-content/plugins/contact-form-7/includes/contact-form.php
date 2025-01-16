@@ -232,31 +232,28 @@ class WPCF7_ContactForm {
 	public function __get( $name ) {
 		$message = __( '<code>%1$s</code> property of a <code>WPCF7_ContactForm</code> object is <strong>no longer accessible</strong>. Use <code>%2$s</code> method instead.', 'contact-form-7' );
 
-		if ( 'id' == $name ) {
-			if ( WP_DEBUG ) {
-				trigger_error(
-					sprintf( $message, 'id', 'id()' ),
-					E_USER_DEPRECATED
-				);
-			}
+		if ( 'id' === $name ) {
+			wp_trigger_error(
+				'',
+				sprintf( $message, 'id', 'id()' ),
+				E_USER_DEPRECATED
+			);
 
 			return $this->id;
-		} elseif ( 'title' == $name ) {
-			if ( WP_DEBUG ) {
-				trigger_error(
-					sprintf( $message, 'title', 'title()' ),
-					E_USER_DEPRECATED
-				);
-			}
+		} elseif ( 'title' === $name ) {
+			wp_trigger_error(
+				'',
+				sprintf( $message, 'title', 'title()' ),
+				E_USER_DEPRECATED
+			);
 
 			return $this->title;
 		} elseif ( $prop = $this->prop( $name ) ) {
-			if ( WP_DEBUG ) {
-				trigger_error(
-					sprintf( $message, $name, 'prop(\'' . $name . '\')' ),
-					E_USER_DEPRECATED
-				);
-			}
+			wp_trigger_error(
+				'',
+				sprintf( $message, $name, 'prop(\'' . $name . '\')' ),
+				E_USER_DEPRECATED
+			);
 
 			return $prop;
 		}
@@ -590,6 +587,7 @@ class WPCF7_ContactForm {
 				( get_option( 'html_type' ) == 'text/html' ) ? 'lang' : 'xml:lang'
 					=> $lang_tag,
 				'dir' => wpcf7_is_rtl( $this->locale ) ? 'rtl' : 'ltr',
+				'data-wpcf7-id' => $this->id(),
 			) )
 		);
 
@@ -1325,10 +1323,12 @@ class WPCF7_ContactForm {
 
 	/**
 	 * Deletes this contact form.
+	 *
+	 * @return bool True if deletion succeeded, false otherwise.
 	 */
 	public function delete() {
 		if ( $this->initial() ) {
-			return;
+			return false;
 		}
 
 		if ( wp_delete_post( $this->id, true ) ) {

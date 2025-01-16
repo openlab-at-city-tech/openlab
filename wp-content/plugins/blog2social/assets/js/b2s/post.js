@@ -37,8 +37,6 @@ jQuery(window).on("load", function () {
             autoclose: true
         });
     }
-
-
 });
 
 
@@ -306,6 +304,18 @@ function b2sSortFormSubmit(sched_dates) {
                     if (jQuery('#b2sPostBlogId').val() != "") {
                         jQuery('.b2sDetailsSchedPostBtn[data-post-id="' + jQuery('#b2sPostBlogId').val() + '"]').trigger('click');
                     }
+                }
+
+                let urlParams = new URLSearchParams(window.location.search);
+                let showPostId = urlParams.get('showPostId');
+                if (showPostId != null && showPostId > 0) {
+                    if (urlParams.get('page') == 'blog2social-publish') {
+                        jQuery('.b2sDetailsPublishPostBtn[data-post-id="' + showPostId + '"]').trigger('click');
+                    } else if (urlParams.get('page') == 'blog2social-sched') {
+                        jQuery('.b2sDetailsSchedPostBtn[data-post-id="' + showPostId + '"]').trigger('click');
+                    }
+                    urlParams.delete('showPostId');
+                    history.replaceState({}, '', '?' + urlParams.toString());
                 }
             } else {
                 if (data.error == 'nonce') {
@@ -1620,4 +1630,42 @@ jQuery(document).on('change', '.b2s-toastee-toggle', function () {
         jQuery('.b2s-onboarding-toastee-body').hide();
 
     }
+});
+
+jQuery(document).on('click', '#b2s-post-notice-delete-all-btn', function () {
+    jQuery('.b2s-post-notice-delete-all-confirm-btn').prop('disabled', false);
+    jQuery('.b2s-delete-post-notice-all').modal('show');
+});
+
+jQuery(document).on('click', '.b2s-post-notice-delete-all-confirm-btn', function () {
+    jQuery('.b2s-post-notice-delete-all-confirm-btn').prop('disabled', true);
+    // jQuery('.b2s-delete-post-notice-all').modal('hide');
+
+    jQuery.ajax({
+        url: ajaxurl,
+        type: "POST",
+        dataType: "json",
+        cache: false,
+        data: {
+            'action': 'b2s_delete_post_notice_all',
+            'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
+        },
+        error: function () {
+            jQuery('.b2s-server-connection-fail').show();
+            return false;
+        },
+        success: function (data) {
+            jQuery('.b2s-delete-post-notice-all').modal('hide');
+            if (data.result == true) {
+                b2sSortFormSubmit();
+            } else {
+                if (data.error == 'nonce') {
+                    jQuery('.b2s-nonce-check-fail').show();
+                }
+                jQuery('.b2s-post-remove-fail').show();
+            }
+            wp.heartbeat.connectNow();
+            return true;
+        }
+    });
 });

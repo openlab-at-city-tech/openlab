@@ -3,8 +3,6 @@
  * Template for 404
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -12,7 +10,7 @@
 $astra_404_subtitle_tag = ( true === astra_check_is_structural_setup() ) ? 'h3' : 'div';
 
 ?>
-<div <?php echo astra_attr( '404_page', array( 'class' => 'ast-404-layout-1' ) ); ?> >
+<div <?php echo wp_kses_post( astra_attr( '404_page', array( 'class' => 'ast-404-layout-1' ) ) ); ?> >
 
 	<?php astra_the_title( '<header class="page-header"><h1 class="page-title">', '</h1></header><!-- .page-header -->' ); ?>
 

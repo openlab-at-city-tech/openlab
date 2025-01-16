@@ -54,7 +54,6 @@ class Page extends Lib\Base\Component
                     'current_tab' => $current_tab,
                     'intlTelInput' => array(
                         'country' => get_option( 'bookly_cst_phone_default_country' ),
-                        'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
                         'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
                     ),
                     'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
@@ -64,7 +63,10 @@ class Page extends Lib\Base\Component
                         'set_default' => __( 'Sender ID is reset to default.', 'bookly' ),
                     ),
                     'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
+                    'zeroRecordsAlt' => __( 'No matching records found', 'bookly' ),
                     'noResults' => __( 'No records.', 'bookly' ),
+                    'emptyTable' => __( 'No data available in table', 'bookly' ),
+                    'quick_search' => __( 'Quick search', 'bookly' ),
                     'processing' => __( 'Processing...', 'bookly' ),
                     'state' => array( __( 'Disabled', 'bookly' ), __( 'Enabled', 'bookly' ) ),
                     'action' => array( __( 'enable', 'bookly' ), __( 'disable', 'bookly' ) ),
@@ -80,6 +82,7 @@ class Page extends Lib\Base\Component
                         'completed' => __( 'Completed', 'bookly' ),
                         'canceled' => __( 'Canceled', 'bookly' ),
                     ),
+                    'resend' => __( 'Resend', 'bookly' ),
                     'gateway' => 'sms',
                     'default' => __( 'Default', 'bookly' ),
                     'datatables' => $datatables,
@@ -115,7 +118,7 @@ class Page extends Lib\Base\Component
             '<span id="bookly-js-sms-menu-redirect">' . $title . '</span><script>document.getElementById("bookly-js-sms-menu-redirect").parentNode.href+="=' . $page . '";</script>',
             Lib\Utils\Common::getRequiredCapability(),
             '',
-            function () { Page::render(); }
+            function() { Page::render(); }
         );
     }
 
@@ -137,7 +140,7 @@ class Page extends Lib\Base\Component
             $title,
             Lib\Utils\Common::getRequiredCapability(),
             self::pageSlug(),
-            function () { Page::render(); }
+            function() { Page::render(); }
         );
     }
 }

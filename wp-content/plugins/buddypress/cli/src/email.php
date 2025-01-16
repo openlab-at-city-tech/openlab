@@ -76,7 +76,7 @@ class Email extends BuddyPressCommand {
 
 		$term = term_exists( $assoc_args['type'], bp_get_email_tax_type() );
 
-		// Term already exists so don't do anything.
+		// Term already exists, so don't do anything.
 		if ( 0 !== $term && null !== $term ) {
 			if ( true === $switched ) {
 				restore_current_blog();
@@ -91,25 +91,21 @@ class Email extends BuddyPressCommand {
 
 		if ( \WP_CLI\Utils\get_flag_value( $assoc_args, 'edit' ) ) {
 			$input  = \WP_CLI\Utils\get_flag_value( $assoc_args, 'content', '' );
-			$output = $this->_edit( $input, 'WP-CLI: New BP Email Content' );
+			$output = $this->edit_email( $input, 'WP-CLI: New BP Email Content' );
 
-			if ( $output ) {
-				$assoc_args['content'] = $output;
-			} else {
-				$assoc_args['content'] = $input;
-			}
+			$assoc_args['content'] = ( $output ) ? $output : $input;
 		}
 
-		$defaults = array(
+		$defaults = [
 			'post_status' => 'publish',
 			'post_type'   => bp_get_email_post_type(),
-		);
+		];
 
-		$email = array(
+		$email = [
 			'post_title'   => $assoc_args['subject'],
 			'post_content' => $assoc_args['content'],
 			'post_excerpt' => ! empty( $assoc_args['plain-text-content'] ) ? $assoc_args['plain-text-content'] : '',
-		);
+		];
 
 		$id = $assoc_args['type'];
 
@@ -123,9 +119,14 @@ class Email extends BuddyPressCommand {
 			// Situation description.
 			if ( ! is_wp_error( $tt_ids ) && ! empty( $assoc_args['type-description'] ) ) {
 				$term = get_term_by( 'term_taxonomy_id', (int) $tt_ids[0], bp_get_email_tax_type() );
-				wp_update_term( (int) $term->term_id, bp_get_email_tax_type(), array(
-					'description' => $assoc_args['type-description'],
-				) );
+
+				wp_update_term(
+					(int) $term->term_id,
+					bp_get_email_tax_type(),
+					[
+						'description' => $assoc_args['type-description'],
+					]
+				);
 			}
 
 			if ( true === $switched ) {
@@ -201,6 +202,7 @@ class Email extends BuddyPressCommand {
 	 *
 	 * ## EXAMPLE
 	 *
+	 *     # Reinstall BuddyPress default emails.
 	 *     $ wp bp email reinstall --yes
 	 *     Success: Emails have been successfully reinstalled.
 	 */
@@ -227,7 +229,7 @@ class Email extends BuddyPressCommand {
 	 * @param  string $title   Post title.
 	 * @return mixed
 	 */
-	protected function _edit( $content, $title ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+	protected function edit_email( $content, $title ) {
 		$content = apply_filters( 'the_editor_content', $content );
 		$output  = \WP_CLI\Utils\launch_editor_for_input( $content, $title );
 

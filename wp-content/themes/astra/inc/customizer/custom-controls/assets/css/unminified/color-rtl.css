@@ -245,9 +245,9 @@
     color: white;
     background: rgb(85 93 101);
     border-radius: 4px;
-    width: 24px;
-    height: 24px;
-    font-size: 24px;
+    width: 17px;
+    height: 17px;
+    font-size: 17px;
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 .astra-popover-color {
@@ -376,7 +376,7 @@
 	width: 20px;
 	padding: 4px;
 	background: transparent;
-	box-shadow: none;
+	box-shadow: none !important;
 	cursor: pointer;
 }
 .astra-color-clear-button.components-button:focus:not(:disabled) {
@@ -483,14 +483,23 @@
 .customize-control-ast-color + .customize-control-ast-color {
     margin-top: 30px;
 }
+.astra-popover-tabs .color-tab [data-wp-component="Flex"],
+.astra-popover-color .color-tab [data-wp-component="Flex"] {
+    padding-right: 8px;
+}
+.astra-popover-tabs .ast-clear-btn-inside-picker.components-button, .astra-popover-color .ast-clear-btn-inside-picker.components-button {
+    margin-right: 8px;
+    margin-top: 0px;
+}
 @media (max-width: 1845px) {
     /** Responsive Devices - Compatibility CSS */
     .ast-color-palette .components-circular-option-picker__option-wrapper {
         height: 22px;
         width: 22px;
     }
-    .ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option {
-        padding: 6px 10px;
+	.astra-background-tabs .ast-color-palette .components-circular-option-picker__option-wrapper {
+        height: 20px;
+        width: 20px;
     }
     .ast-color-palette .components-circular-option-picker__option.is-pressed + svg {
         width: 20px;
@@ -520,10 +529,21 @@
 		top: -2px;
 		width: 18px;
 	}
+    .astra-popover-color .components-circular-option-picker__option[aria-pressed=true]+svg, .components-circular-option-picker__option[aria-selected=true]+svg {
+        width: 22px;
+        height: 22px;
+        right: 0;
+        top: 0;
+        mix-blend-mode: difference;
+    }
 	.ast-color-palette .components-circular-option-picker__option-wrapper .components-circular-option-picker__option:focus::after {
         width: 24px;
         height: 24px;
     }
+	.astra-background-tabs .components-circular-option-picker__option[aria-selected=true]+svg {
+		width: 20px;
+		height: 20px;
+	}
 }
 @supports (-moz-appearance:none) {
 	@media (max-width: 1845px) {
@@ -585,9 +605,6 @@
     top: 61px;
 }
 
-.ast-top-divider.customize-control-ast-responsive-color .ast-divider-title + .ast-control-wrap .ast-responsive-btns {
-    top: 70px;
-}
 .ast-color-palette.components-circular-option-picker .components-circular-option-picker__swatches{
     width: 100%;
 }

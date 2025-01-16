@@ -11,6 +11,7 @@ use Bookly\Lib\Entities\MailingListRecipient;
 use Bookly\Lib\Entities\MailingQueue;
 use Bookly\Lib\Entities\NotificationQueue;
 use Bookly\Lib\Entities\Payment;
+use Bookly\Lib\Entities\SmsLog;
 
 abstract class Routines
 {
@@ -75,6 +76,7 @@ abstract class Routines
             // Calculate goal by number of customer appointments achieved
             self::calculateGoalOfCA();
             self::clearNotificationQueue();
+            self::clearSmsLog();
             // Let add-ons do their daily routines.
             Proxy\Shared::doDailyRoutine();
         }
@@ -109,6 +111,7 @@ abstract class Routines
         // Mark unpaid appointments as rejected.
         $payments = \Bookly\Lib\Payment\Proxy\Shared::prepareOutdatedUnpaidPayments( $payments );
         if ( ! empty( $payments ) ) {
+            Proxy\Shared::unpaidPayments( $payments );
             Payment::query()
                 ->update()
                 ->set( 'status', Payment::STATUS_REJECTED )
@@ -143,7 +146,6 @@ abstract class Routines
                     ->whereIn( 'ca.series_id', $series )
                     ->fetchCol( 'a.id' ) );
             }
-            Proxy\Shared::unpaidPayments( $payments );
 
             /** @var Appointment $appointment */
             foreach ( array_unique( $affected_appointments ) as $appointment_id ) {
@@ -160,7 +162,7 @@ abstract class Routines
     public static function handleDailyInfo()
     {
         $date = Entities\News::query( 'n' )
-            ->select( 'MAX(updated_at) as max_date' )
+            ->select( 'MAX(updated_at) AS max_date' )
             ->fetchRow();
 
         $data = API::getInfo( $date['max_date'] );
@@ -267,6 +269,13 @@ abstract class Routines
     {
         NotificationQueue::query()->delete()
             ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 2 DAY)', array() )
+            ->execute();
+    }
+
+    protected static function clearSmsLog()
+    {
+        SmsLog::query()->delete()
+            ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 1 MONTH)', array() )
             ->execute();
     }
 

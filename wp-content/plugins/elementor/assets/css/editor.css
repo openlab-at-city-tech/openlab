@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 .elementor-control-unit-1 {
   width: 27px;
 }
@@ -370,6 +370,268 @@ select {
   height: 27px;
 }
 
+.dialog-widget-content {
+  background-color: var(--e-a-bg-default);
+  position: absolute;
+  border-radius: 3px;
+  box-shadow: 2px 8px 23px 3px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+}
+
+.dialog-message {
+  line-height: 1.5;
+  box-sizing: border-box;
+}
+
+.dialog-close-button {
+  cursor: pointer;
+  position: absolute;
+  margin-block-start: 15px;
+  inset-inline-end: 15px;
+  color: var(--e-a-color-txt);
+  font-size: 15px;
+  line-height: 1;
+  transition: var(--e-a-transition-hover);
+}
+.dialog-close-button:hover {
+  color: var(--e-a-color-txt-hover);
+}
+
+.dialog-prevent-scroll {
+  overflow: hidden;
+  max-height: 100vh;
+}
+
+.dialog-type-lightbox {
+  position: fixed;
+  height: 100%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.8);
+  z-index: 9999;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+
+.elementor-editor-active .elementor-popup-modal {
+  background-color: initial;
+}
+
+.dialog-type-confirm .dialog-widget-content,
+.dialog-type-alert .dialog-widget-content {
+  margin: auto;
+  width: 400px;
+  padding: 20px;
+}
+.dialog-type-confirm .dialog-header,
+.dialog-type-alert .dialog-header {
+  font-size: 15px;
+  font-weight: 500;
+}
+.dialog-type-confirm .dialog-header:after,
+.dialog-type-alert .dialog-header:after {
+  content: "";
+  display: block;
+  border-block-end: var(--e-a-border);
+  padding-block-end: 10px;
+  margin-block-end: 10px;
+  margin-inline-start: -20px;
+  margin-inline-end: -20px;
+}
+.dialog-type-confirm .dialog-message,
+.dialog-type-alert .dialog-message {
+  min-height: 50px;
+}
+.dialog-type-confirm .dialog-buttons-wrapper,
+.dialog-type-alert .dialog-buttons-wrapper {
+  padding-block-start: 10px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button {
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+  padding: 8px 16px;
+  outline: none;
+  border: none;
+  border-radius: var(--e-a-border-radius);
+  background-color: var(--e-a-btn-bg);
+  color: var(--e-a-btn-color-invert);
+  transition: var(--e-a-transition-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:hover {
+  border: none;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:focus {
+  background-color: var(--e-a-btn-bg-hover);
+  color: var(--e-a-btn-color-invert);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:active,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:active {
+  background-color: var(--e-a-btn-bg-active);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:not([disabled]),
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:not([disabled]) {
+  cursor: pointer;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:disabled,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:disabled {
+  background-color: var(--e-a-btn-bg-disabled);
+  color: var(--e-a-btn-color-disabled);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:not(.elementor-button-state) .elementor-state-icon,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:not(.elementor-button-state) .elementor-state-icon {
+  display: none;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel {
+  background: transparent;
+  color: var(--e-a-color-txt);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel:focus {
+  background: var(--e-a-bg-hover);
+  color: var(--e-a-color-txt-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt:disabled, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel:disabled,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt:disabled,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel:disabled {
+  background: transparent;
+  color: var(--e-a-color-txt-disabled);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt-border,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt-border {
+  border: 1px solid var(--e-a-color-txt-muted);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success {
+  background-color: var(--e-a-btn-bg-success);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-success:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-success:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-success:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-success:focus {
+  background-color: var(--e-a-btn-bg-success-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-take_over, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok {
+  background-color: var(--e-a-btn-bg-primary);
+  color: var(--e-a-btn-color);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-take_over:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-take_over:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok:focus {
+  background-color: var(--e-a-btn-bg-primary-hover);
+  color: var(--e-a-btn-color);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel {
+  background: transparent;
+  color: var(--e-a-color-primary-bold);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.e-btn-txt:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-primary.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-cancel.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-btn-txt.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.dialog-ok.dialog-cancel:focus {
+  background: var(--e-a-bg-primary);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.go-pro, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-accent,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent {
+  background-color: var(--e-a-btn-bg-accent);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.go-pro:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.go-pro:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-accent:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-accent:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:focus {
+  background-color: var(--e-a-btn-bg-accent-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.go-pro:active, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-accent:active,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.go-pro:active,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-accent:active {
+  background-color: var(--e-a-btn-bg-accent-active);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info {
+  background-color: var(--e-a-btn-bg-info);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-info:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-info:focus {
+  background-color: var(--e-a-btn-bg-info-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-warning {
+  background-color: var(--e-a-btn-bg-warning);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-warning:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-warning:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-warning:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-warning:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-warning:focus {
+  background-color: var(--e-a-btn-bg-warning-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-danger {
+  background-color: var(--e-a-btn-bg-danger);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-danger:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-danger:focus {
+  background-color: var(--e-a-btn-bg-danger-hover);
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button i,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button i {
+  margin-inline-end: 5px;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button:visited,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button:visited {
+  color: initial;
+}
 /*
  * Container style
  */
@@ -833,10 +1095,13 @@ select {
 .elementor-panel .elementor-tab-control-style span:before {
   content: "\e921";
 }
-.elementor-panel .elementor-tab-control-advanced-tab-contact-buttons span:before,
+.elementor-panel .elementor-tab-control-settings span:before {
+  content: "\e940";
+}
+.elementor-panel .elementor-tab-control-advanced-tab-floating-buttons span:before,
 .elementor-panel .elementor-tab-control-advanced-tab-links-in-bio span:before,
+.elementor-panel .elementor-tab-control-advanced-tab-floating-bars span:before,
 .elementor-panel .elementor-tab-control-advanced span:before,
-.elementor-panel .elementor-tab-control-settings span:before,
 .elementor-panel .elementor-tab-control-general_style span:before {
   content: "\e916";
 }
@@ -1187,7 +1452,7 @@ body.elementor-panel-loading #elementor-panel-state-loading {
   position: absolute;
   width: 300px;
   z-index: 1;
-  background-color: #ffffff;
+  background-color: var(--e-a-bg-default);
   box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3);
   border-radius: 3px;
 }
@@ -1198,7 +1463,7 @@ body.elementor-panel-loading #elementor-panel-state-loading {
   right: 100%;
   transform: scaleY(0.7);
   border: 10px solid transparent;
-  border-inline-end-color: #ffffff;
+  border-inline-end-color: var(--e-a-bg-default);
 }
 .dialog-tooltip-widget__title {
   font-size: 14px;
@@ -1206,8 +1471,8 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 .dialog-tooltip-widget .dialog-tooltip-header {
   display: flex;
   padding: 20px 20px 0;
-  color: #0C0D0E;
-  border-block-end: 1px solid #ffffff;
+  color: var(--e-a-color-txt);
+  border-block-end: 1px solid var(--e-a-bg-default);
   font-weight: 500;
 }
 .dialog-tooltip-widget .dialog-tooltip-header .eicon-pro-icon {
@@ -1219,7 +1484,7 @@ body.elementor-panel-loading #elementor-panel-state-loading {
 .dialog-tooltip-widget .dialog-tooltip-header .eicon-close {
   cursor: pointer;
   margin-inline-start: auto;
-  color: #9DA5AE;
+  color: var(--e-a-color-txt);
 }
 .dialog-tooltip-widget .dialog-tooltip-message {
   padding: 20px;
@@ -2642,7 +2907,7 @@ body:not(.elementor-device-mobile) .elementor-control.elementor-control-responsi
   font-size: 13px;
 }
 .e-global__preview-items-container {
-  max-height: 260px;
+  max-height: 400px;
   overflow-y: auto;
   padding: 5px 0;
 }
@@ -4272,19 +4537,31 @@ body:not(.e-routes-has-history) #elementor-panel-header-kit-back {
 .e-btn:not(.elementor-button-state) .elementor-state-icon {
   display: none;
 }
-.elementor-button.e-btn-txt,
-.e-btn.e-btn-txt {
+.elementor-button.e-btn-txt, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel,
+.e-btn.e-btn-txt,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel {
   background: transparent;
   color: var(--e-a-color-txt);
 }
-.elementor-button.e-btn-txt:hover, .elementor-button.e-btn-txt:focus,
+.elementor-button.e-btn-txt:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:hover, .elementor-button.e-btn-txt:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:focus,
 .e-btn.e-btn-txt:hover,
-.e-btn.e-btn-txt:focus {
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:hover,
+.e-btn.e-btn-txt:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:focus {
   background: var(--e-a-bg-hover);
   color: var(--e-a-color-txt-hover);
 }
-.elementor-button.e-btn-txt:disabled,
-.e-btn.e-btn-txt:disabled {
+.elementor-button.e-btn-txt:disabled, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:disabled,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-cancel:disabled,
+.e-btn.e-btn-txt:disabled,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:disabled,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-cancel:disabled {
   background: transparent;
   color: var(--e-a-color-txt-disabled);
 }
@@ -4304,25 +4581,88 @@ body:not(.e-routes-has-history) #elementor-panel-header-kit-back {
 .e-btn.e-success:focus {
   background-color: var(--e-a-btn-bg-success-hover);
 }
-.elementor-button.e-primary,
-.e-btn.e-primary {
+.elementor-button.e-primary, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over,
+.e-btn.e-primary,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over {
   background-color: var(--e-a-btn-bg-primary);
   color: var(--e-a-btn-color);
 }
-.elementor-button.e-primary:hover, .elementor-button.e-primary:focus,
+.elementor-button.e-primary:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over:hover, .elementor-button.e-primary:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over:focus,
 .e-btn.e-primary:hover,
-.e-btn.e-primary:focus {
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok:hover,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over:hover,
+.e-btn.e-primary:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over:focus {
   background-color: var(--e-a-btn-bg-primary-hover);
   color: var(--e-a-btn-color);
 }
-.elementor-button.e-primary.e-btn-txt,
-.e-btn.e-primary.e-btn-txt {
+.elementor-button.e-primary.e-btn-txt, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel,
+.e-btn.e-primary.e-btn-txt,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel {
   background: transparent;
   color: var(--e-a-color-primary-bold);
 }
-.elementor-button.e-primary.e-btn-txt:hover, .elementor-button.e-primary.e-btn-txt:focus,
+.elementor-button.e-primary.e-btn-txt:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel:hover, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel:hover, .elementor-button.e-primary.e-btn-txt:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-ok:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-btn-txt.dialog-button.dialog-take_over:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel:focus, .dialog-type-confirm .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.e-primary.dialog-button.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-ok.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .elementor-button.dialog-button.dialog-take_over.dialog-cancel:focus,
 .e-btn.e-primary.e-btn-txt:hover,
-.e-btn.e-primary.e-btn-txt:focus {
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok:hover,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over:hover,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel:hover,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel:hover,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel:hover,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel:hover,
+.e-btn.e-primary.e-btn-txt:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-ok:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-btn-txt.dialog-button.dialog-take_over:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel:focus,
+.dialog-type-confirm .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.e-primary.dialog-button.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-ok.dialog-cancel:focus,
+.dialog-type-alert .dialog-buttons-wrapper .e-btn.dialog-button.dialog-take_over.dialog-cancel:focus {
   background: var(--e-a-bg-primary);
 }
 .elementor-button.go-pro, .elementor-button.e-accent,
@@ -5427,6 +5767,9 @@ label.elementor-template-library-order-label:hover {
 .elementor-context-menu-list__item.elementor-context-menu-list__item-delete:not(.elementor-context-menu-list__item--disabled):hover > *, .elementor-context-menu-list__item.elementor-context-menu-list__item-delete:not(.elementor-context-menu-list__item--disabled):focus > * {
   color: var(--e-global-color-danger);
 }
+.elementor-context-menu-list__item.elementor-hidden {
+  display: none;
+}
 .elementor-context-menu .eicon-pro-icon {
   color: var(--e-global-color-accent);
 }
@@ -5511,6 +5854,11 @@ label.elementor-template-library-order-label:hover {
   }
 }
 
+.elementor-template-library-template-remote:not(.elementor-template-library-template-page):not(.elementor-template-library-template-lp).elementor-template-library-template-floating_button {
+  margin-top: 0 !important;
+  width: calc(25% - 30px);
+}
+
 .ui-resizable-n {
   top: -5px;
 }
@@ -5570,6 +5918,7 @@ label.elementor-template-library-order-label:hover {
 
 body {
   --e-editor-navigator-width: 240px;
+  --e-editor-navigator-indicator-width: 3px;
   --e-editor-navigator-promotion-height: 30px;
 }
 
@@ -5615,6 +5964,20 @@ body:not(.elementor-navigator-docked) #elementor-navigator {
   font-weight: 400;
   padding: 10px 0;
   cursor: move;
+}
+iframe + #elementor-navigator__header__title, #elementor-navigator__ai-titles + #elementor-navigator__header__title {
+  padding-inline-end: 17.5px;
+}
+#elementor-navigator__ai-titles {
+  width: 35px;
+  text-align: center;
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+#elementor-navigator__ai-titles:hover {
+  color: #E73CF6;
 }
 #elementor-navigator__close, #elementor-navigator__toggle-all {
   color: var(--e-a-color-txt);
@@ -5712,7 +6075,7 @@ body:not(.elementor-navigator-docked) #elementor-navigator {
   padding: 10px;
 }
 .elementor-navigator__elements .elementor-empty-view__title {
-  margin-inline-start: 23px;
+  margin-inline-start: 34px;
   font-size: 10px;
   font-style: italic;
 }
@@ -5790,11 +6153,10 @@ body:not(.elementor-navigator-docked) #elementor-navigator {
 .elementor-navigator__element__indicators {
   position: relative;
   transition: transform 0.5s;
-  padding-inline-start: 5px;
   z-index: 91;
 }
 .elementor-navigator__element__indicators:not(:hover) {
-  transform: translateX(calc(100% - 8px));
+  transform: translateX(calc(100% - var(--e-editor-navigator-indicator-width)));
 }
 .elementor-navigator__element__indicator {
   height: 100%;
@@ -5804,13 +6166,10 @@ body:not(.elementor-navigator-docked) #elementor-navigator {
   justify-content: center;
   color: var(--e-a-color-txt);
   background-color: var(--e-a-bg-default);
-  border-inline-start: var(--e-a-border);
+  border-inline-end: var(--e-a-border);
 }
 .elementor-navigator__element__indicator:first-child {
-  border-inline-start: 3px solid var(--e-a-border-color-accent);
-}
-.elementor-editing .elementor-navigator__element__indicator:first-child {
-  border-color: #242729;
+  border-inline-start: var(--e-editor-navigator-indicator-width) solid var(--e-a-border-color-accent);
 }
 .elementor-navigator__element__indicator:hover {
   color: var(--e-a-color-txt-hover);

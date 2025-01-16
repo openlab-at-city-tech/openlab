@@ -1,0 +1,195 @@
+.cm-wizard-step.step-0{
+    text-align: center;
+    margin: 30px 0;
+}
+.cm-wizard-step.step-0 *:not(h1) {
+    font-size: 16px;
+}
+
+.cm-wizard-step h1{
+    text-align: center;
+    padding-top: 20px;
+}
+.cm-wizard-step:not(.step-0) img{
+    border: 1px solid black;
+}
+.next-step, .prev-step, .finish {
+    position: relative;
+    display: inline-block;
+    font-size: 20px !important;
+    font-weight: bolder;
+    color: white;
+    background-color: #28a745; /* Green background */
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    width: 120px;
+    padding: 3px 10px 5px 10px;
+}
+.next-step{
+    clip-path: polygon(0 0, 85% 0, 100% 50%, 85% 100%, 0 100%);
+    padding-right: 20px;
+}
+.prev-step {
+    clip-path: polygon(100% 0, 15% 0, 0 50%, 15% 100%, 100% 100%);
+    padding-left: 20px;
+}
+.step-container{
+    display: flex;
+}
+.cm-wizard-menu .selected:after{
+    content: "\f522";
+    font-family: dashicons;
+    vertical-align: middle;
+}
+.cm-wizard-menu .selected{
+    color: #6BC07F;
+    margin: 0;
+}
+.cm-wizard-menu-container{
+    min-width: 305px;
+}
+.cm-wizard-menu-container ul{
+    border: 2px black solid;
+    background-color: #fff;
+    padding: 0 20px;
+    font-size: 20px;
+    line-height: 2em;
+}
+.step-navigation-container{
+    text-align: center;
+}
+.cm-wizard-menu li:hover{
+    cursor: pointer;
+}
+/* Hide the default checkbox */
+.toggle-input {
+    display: none;
+}
+
+/* Style the toggle switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 40px;
+    height: 25px;
+    background-color: #ccc;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+/* The round slider inside the switch */
+.toggle-switch::before {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 21px;
+    height: 21px;
+    background-color: white;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+/* When the toggle is checked */
+.toggle-input:checked + .toggle-switch {
+    background-color: #6BC07F;
+}
+
+.toggle-input:checked + .toggle-switch::before {
+    transform: translateX(15px);
+}
+
+/* Label styling */
+.label {
+    margin-right: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    color: #333;
+}
+.toggle-input{
+    display: none !important;
+}
+
+.cm-wizard-content-container{
+    padding: 30px 20px;
+}
+.cm-wizard-content-container form{
+    display: grid;
+}
+.cm-wizard-content-container *{
+    font-size: 16px !important;
+}
+
+.cm-wizard-content-container:not(:has(.form-group)){
+    padding-top: 0;
+}
+.cm-wizard-content-container .form-group > label{
+    line-height: 5rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+.cm-wizard-content-container .form-group{
+    display: inline-grid;
+    grid-template-columns: 85% 30%;
+    gap: 20px;
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cm_field_help{
+    background-image: url("data:image/svg+xml,%3Csvg width='11' height='11' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 8.53757 8.53757 11 5.5 11ZM4.86908 6.85128H6.02117C6.02655 6.64718 6.05474 6.47866 6.10577 6.34572C6.1568 6.21279 6.2481 6.08321 6.3797 5.95699L6.84295 5.52596C7.039 5.33529 7.18133 5.14864 7.26995 4.96602C7.35858 4.78341 7.40289 4.58065 7.40289 4.35775C7.40289 3.84749 7.2384 3.45406 6.90942 3.17745C6.58044 2.90084 6.11652 2.76253 5.51763 2.76253C4.91607 2.76253 4.44879 2.91225 4.11578 3.21169C3.78277 3.51113 3.61358 3.9294 3.60821 4.46651H4.96978C4.97515 4.26509 5.02752 4.10531 5.12689 3.98714C5.22625 3.86898 5.3565 3.8099 5.51763 3.8099C5.86676 3.8099 6.04132 4.01265 6.04132 4.41817C6.04132 4.58468 5.98962 4.73708 5.88623 4.87539C5.78283 5.01369 5.63177 5.1661 5.43304 5.3326C5.23431 5.49911 5.09063 5.69582 5.00201 5.92275C4.91339 6.14968 4.86908 6.45919 4.86908 6.85128ZM4.70391 8.07589C4.70391 8.27462 4.77575 8.43776 4.91943 8.56533C5.06311 8.69289 5.24237 8.75667 5.45721 8.75667C5.67206 8.75667 5.85131 8.69289 5.99499 8.56533C6.13867 8.43776 6.21051 8.27462 6.21051 8.07589C6.21051 7.87716 6.13867 7.71401 5.99499 7.58645C5.85131 7.45888 5.67206 7.3951 5.45721 7.3951C5.24237 7.3951 5.06311 7.45888 4.91943 7.58645C4.77575 7.71401 4.70391 7.87716 4.70391 8.07589Z' fill='%236BC07F'/%3E%3C/svg%3E%0A");
+    min-width: 15px;
+    height: 15px;
+    display: inline-block;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative;
+}
+.cm_field_help:hover {
+    background-image: url("data:image/svg+xml,%3Csvg width='11' height='11' viewBox='0 0 11 11' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M5.5 11C2.46243 11 0 8.53757 0 5.5C0 2.46243 2.46243 0 5.5 0C8.53757 0 11 2.46243 11 5.5C11 8.53757 8.53757 11 5.5 11ZM4.86908 6.85128H6.02117C6.02655 6.64718 6.05474 6.47866 6.10577 6.34572C6.1568 6.21279 6.2481 6.08321 6.3797 5.95699L6.84295 5.52596C7.039 5.33529 7.18133 5.14864 7.26995 4.96602C7.35858 4.78341 7.40289 4.58065 7.40289 4.35775C7.40289 3.84749 7.2384 3.45406 6.90942 3.17745C6.58044 2.90084 6.11652 2.76253 5.51763 2.76253C4.91607 2.76253 4.44879 2.91225 4.11578 3.21169C3.78277 3.51113 3.61358 3.9294 3.60821 4.46651H4.96978C4.97515 4.26509 5.02752 4.10531 5.12689 3.98714C5.22625 3.86898 5.3565 3.8099 5.51763 3.8099C5.86676 3.8099 6.04132 4.01265 6.04132 4.41817C6.04132 4.58468 5.98962 4.73708 5.88623 4.87539C5.78283 5.01369 5.63177 5.1661 5.43304 5.3326C5.23431 5.49911 5.09063 5.69582 5.00201 5.92275C4.91339 6.14968 4.86908 6.45919 4.86908 6.85128ZM4.70391 8.07589C4.70391 8.27462 4.77575 8.43776 4.91943 8.56533C5.06311 8.69289 5.24237 8.75667 5.45721 8.75667C5.67206 8.75667 5.85131 8.69289 5.99499 8.56533C6.13867 8.43776 6.21051 8.27462 6.21051 8.07589C6.21051 7.87716 6.13867 7.71401 5.99499 7.58645C5.85131 7.45888 5.67206 7.3951 5.45721 7.3951C5.24237 7.3951 5.06311 7.45888 4.91943 7.58645C4.77575 7.71401 4.70391 7.87716 4.70391 8.07589Z' fill='%234A8B5A'/%3E%3C/svg%3E%0A");
+}
+.cm_field_help--wrap {
+    visibility: hidden;
+    opacity: 0;
+    transition: .3s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(-40%);
+    padding-left: 25px;
+    z-index: 10;
+    width: 250px;
+    display: flex;
+    align-items: center;
+}
+.cm_field_help--text {
+    height: 100%;
+    padding: 10px 15px;
+    background: #F0F0F1;
+    box-shadow: 0 0 3px 1px #6BC07F;
+    border-radius: 5px;
+    cursor: default;
+    font-weight: 400;
+    line-height: normal;
+}
+
+.cm_field_help--text a {
+    cursor: pointer;
+}
+
+.cm_field_help--text * {
+    cursor: initial;
+}
+
+.cm_field_help--active {
+    visibility: visible;
+    opacity: 1;
+}

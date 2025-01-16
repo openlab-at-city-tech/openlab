@@ -75,10 +75,13 @@ jQuery(function($) {
             }
         },
         columns: columns,
-        dom: '<\'row\'<\'col-sm-12\'tr>><\'row float-left mt-3\'<\'col-sm-12\'p>>',
         language: {
             zeroRecords: BooklyL10n.zeroRecords,
             processing : BooklyL10n.processing
+        },
+        layout: {
+            bottomStart: 'paging',
+            bottomEnd: null
         }
     });
 

@@ -153,6 +153,18 @@ final class Loader {
 				'gst'        => 'Get Started Free',
 				'message'    => 'Add URL redirects, spam protection, execute JavaScript after submissions, and more with the Redirection for CF7 free plugin.',
 			],
+			'hyve'            => [
+				'gotodash'   => 'Go to Hyve Dashboard',
+				'install'    => 'Install Hyve',
+				'dismisscta' => 'Dismiss this notice.',
+				'message'    => 'Hyve is an AI-powered chatbot that turns your WordPress content into interactive conversations, helping you efficiently handle user inquiries.',
+			],
+			'wp_full_pay'     => [
+				'gotodash'   => 'Go to WP Full Pay Settings',
+				'install'    => 'Install WP Full Pay',
+				'dismisscta' => 'Dismiss this notice.',
+				'message'    => 'Enhance your donation page with WP Full Pay—create custom Stripe forms for one-time and recurring donations, manage transactions easily, and boost support with a seamless setup.',
+			],
 		],
 		'welcome'          => [
 			'ctan'    => 'No, thanks.',

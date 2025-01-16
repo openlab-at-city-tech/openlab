@@ -18,3 +18,12 @@
 .is-light-theme:not(body.is-dark-theme) .ql-toolbar.ql-snow {
     border-bottom: 0;
 }
+
+/* Inline Comments */
+.incom-comments-wrapper .comment-form-cookies-consent input[type="checkbox"] {
+	width: 25px;
+}
+
+.incom-comments-wrapper .comment-form-cookies-consent label {
+	width: calc(100% - 45px);
+}

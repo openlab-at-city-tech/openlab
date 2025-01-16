@@ -44,7 +44,6 @@ jQuery(function ($) {
 
         var $helpItemText = $(this).find('.cm_field_help--text');
         $helpItemText.html(helpHtml);
-        $helpItemText.html($helpItemText.text());
 
         setTimeout(function () {
             $helpItemWrap.addClass('cm_field_help--active');

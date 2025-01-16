@@ -139,7 +139,7 @@ function ed11y_enqueue_editor_content_assets() {
 			wp_enqueue_script(
 				'editoria11y-editor',
 				trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor.js',
-				null,
+				array( 'wp-api' ),
 				Editoria11y::ED11Y_VERSION,
 				false
 			);
@@ -147,7 +147,7 @@ function ed11y_enqueue_editor_content_assets() {
 				'editoria11y-editor',
 				'ed11yVars',
 				array(
-					'worker'  => trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor-worker.js',
+					'worker'  => trailingslashit( ED11Y_ASSETS ) . 'js/editoria11y-editor-worker.js?ver=' . Editoria11y::ED11Y_VERSION,
 					'options' => ed11y_get_params( wp_get_current_user() ),
 				)
 			);
@@ -161,7 +161,7 @@ function ed11y_enqueue_editor_content_assets() {
 	}
 }
 add_action( 'enqueue_block_assets', 'ed11y_enqueue_editor_content_assets' );
-
+add_action( 'admin_enqueue_scripts', 'ed11y_enqueue_editor_content_assets' );
 
 /**
  * Returns page-specific config for the Editoria11y library.

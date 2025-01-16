@@ -20,6 +20,8 @@ class GWAPI {
 	private $license_key;
 	private $product;
 	private $author;
+	private $gcgs_upgrade_successful = false;
+	private $should_activate_gcgs = false;
 
 	private $_product_update_data = array(
 		'loaded'    => false,
@@ -164,7 +166,56 @@ class GWAPI {
 		add_filter( 'plugins_api', array( $this, 'products_plugins_api_filter' ), 100, 3 );
 		add_filter( 'http_request_host_is_external', array( $this, 'allow_gwiz_external_redirects' ), 15, 3 );
 		add_filter( 'upgrader_package_options', array( $this, 'upgrader_package_options_filter' ) );
+		add_filter( 'upgrader_post_install', array( $this, 'gpgs_to_gcgs_upgrader_post_install' ), 10, 3 );
+		add_action( 'upgrader_process_complete', array( $this, 'gpgs_to_gcgs_upgrader_process_complete' ), 10, 2 );
 
+	}
+
+	public function gpgs_to_gcgs_upgrader_post_install( $response, $hook_extra, $result ) {
+		if ( rgar( $hook_extra, 'plugin' ) !== 'gp-google-sheets/gp-google-sheets.php' ) {
+			return $response;
+		}
+
+		if ( is_plugin_active( 'gp-google-sheets/gp-google-sheets.php' ) ) {
+			// Unhook Action Scheduler during this request to prevent errors.
+			if ( class_exists( 'ActionScheduler_QueueRunner' ) ) {
+				remove_action( 'shutdown', array( ActionScheduler_QueueRunner::instance(), 'maybe_dispatch_async_request' ) );
+			}
+
+			deactivate_plugins( 'gp-google-sheets/gp-google-sheets.php' );
+
+			/*
+			 * I don't know the technical reasoning behind this, but if we try activating GCGS here, it doesn't
+			 * end up getting activated. To work around this, we set a property and do it later during
+			 * upgrader_process_complete.
+			 */
+			$this->should_activate_gcgs = true;
+		}
+
+		$this->gcgs_upgrade_successful = true;
+
+		return $response;
+	}
+
+	public function gpgs_to_gcgs_upgrader_process_complete( $upgrader, $hook_extra ) {
+		if ( rgar( $hook_extra, 'action' ) !== 'update' || rgar( $hook_extra, 'type' ) !== 'plugin' ) {
+			return;
+		}
+
+		if ( ! is_array( rgar( $hook_extra, 'plugins' ) ) || ! in_array( 'gp-google-sheets/gp-google-sheets.php', $hook_extra['plugins'], true ) ) {
+			return;
+		}
+
+		if ( ! $this->gcgs_upgrade_successful ) {
+			return;
+		}
+
+		$upgrader->skin->feedback( __( '<strong>Important Note!</strong> GP Google Sheets has been converted to GC Google Sheets', 'gravityperks' ) );
+
+		if ( $this->should_activate_gcgs ) {
+			activate_plugin( 'gc-google-sheets/gc-google-sheets.php' );
+			$upgrader->skin->feedback( __( 'GC Google Sheets has been activated.', 'gravityperks' ) );
+		}
 	}
 
 	public function upgrader_package_options_filter( $options ) {
@@ -257,6 +308,30 @@ class GWAPI {
 			}
 
 			$perk->download_link = $perk->package;
+
+			// If GC Google Sheets is not installed, convert GCGS to be GPGS to provide an upgrade path.
+			if ( $plugin_file === 'gc-google-sheets/gc-google-sheets.php' && ! class_exists( 'GC_Google_Sheets' ) ) {
+				$plugin_file = 'gp-google-sheets/gp-google-sheets.php';
+				$perk->slug = 'gp-google-sheets';
+				$perk->plugin = 'gp-google-sheets';
+				$perk->plugin_file = 'gp-google-sheets/gp-google-sheets.php';
+			}
+
+			if ( isset( $perk->icons ) ) {
+				$icons = maybe_unserialize( $perk->icons );
+
+				if ( is_array( $icons ) && ! empty( $icons ) ) {
+					$perk->icons = $icons;
+				}
+			}
+
+			if ( isset( $perk->banners ) ) {
+				$banners = maybe_unserialize( $perk->banners );
+
+				if ( is_array( $banners ) && ! empty( $banners ) ) {
+					$perk->banners = $banners;
+				}
+			}
 
 			$perks[ $plugin_file ] = $perk;
 

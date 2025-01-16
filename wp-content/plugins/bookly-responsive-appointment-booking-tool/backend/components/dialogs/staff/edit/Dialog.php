@@ -25,10 +25,11 @@ class Dialog extends Lib\Base\Component
         ) );
 
         self::enqueueScripts( array(
-            'frontend' => get_option( 'bookly_cst_phone_default_country' ) == 'disabled'
+            'frontend' => get_option( 'bookly_cst_phone_default_country' ) === 'disabled'
                 ? array()
-                : array( 'js/intlTelInput.min.js' => array( 'jquery' ) )
-        ,
+                : array(
+                    'js/intlTelInput.min.js' => array( 'bookly-backend-globals' )
+                ),
             'backend' => array(
                 'js/jCal.js' => array( 'jquery' ),
                 'js/nav-scrollable.js' => array( 'bookly-backend-globals' ),
@@ -57,7 +58,6 @@ class Dialog extends Lib\Base\Component
             'intlTelInput' => array(
                 'country' => get_option( 'bookly_cst_phone_default_country' ),
                 'enabled' => get_option( 'bookly_cst_phone_default_country' ) != 'disabled',
-                'utils' => plugins_url( 'intlTelInput.utils.js', Lib\Plugin::getDirectory() . '/frontend/resources/js/intlTelInput.utils.js' ),
             ),
             'holidays' => array(
                 'close' => esc_attr__( 'Close', 'bookly' ),

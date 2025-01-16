@@ -1,0 +1,38 @@
+.metaslider.ms-theme-default-base {
+	
+	.flexslider {
+
+		.flex-direction-nav li a {
+			width: 26px;
+			  height: 26px;
+			background: #333;
+			background-image: none;
+			border-radius: 50%;
+	
+			&:after {
+				background-color: #fff;
+				mask-repeat: no-repeat;
+				mask-size: 75% auto;
+				content: '';
+				display: table;
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				mask-position: center;
+			}
+	
+			&.flex-prev:after {
+				mask-image: url(images/left.svg);
+			}
+	
+			&.flex-next:after {
+				mask-image: url(images/right.svg);
+			}
+		}
+
+		.caption-wrap .caption a {
+			color: #fff;
+		}
+	}
+}

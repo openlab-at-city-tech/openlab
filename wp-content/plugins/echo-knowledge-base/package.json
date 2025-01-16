@@ -1,0 +1,52 @@
+{
+	"name": "echo-knowledge-base",
+	"version": "12.40.0",
+	"description": "Knowledge Base for Documents and FAQs",
+	"author": "Echo Plugins",
+	"license": "GPL-2.0-or-later",
+	"scripts": {
+		"build": "npm run search-block-build && npm run basic-layout-block-build && npm run tabs-layout-block-build && npm run categories-layout-block-build && npm run classic-layout-block-build && npm run drill-down-layout-block-build && npm run clean-build",
+		"search-block-build": "wp-scripts build js/blocks/search/search-block.js && npm run search-block-postbuild",
+		"search-block-php-move": "shx mkdir -p includes/admin/blocks/search && shx mv -f build/search-block.asset.php includes/admin/blocks/block.asset.php",
+		"search-block-js-move": "shx mv -f build/search-block.js js/search-block.js",
+		"search-block-js-minify": "terser js/search-block.js -o js/search-block.min.js",
+		"search-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/search/search-block.js",
+		"search-block-postbuild": "npm run search-block-js-move && npm run search-block-php-move && npm run search-block-js-minify",
+		"basic-layout-block-build": "wp-scripts build js/blocks/basic-layout/basic-layout-block.js && npm run basic-layout-block-postbuild",
+		"basic-layout-block-js-move": "shx mv -f build/basic-layout-block.js js/basic-layout-block.js",
+		"basic-layout-block-js-minify": "terser js/basic-layout-block.js -o js/basic-layout-block.min.js",
+		"basic-layout-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/basic-layout/basic-layout-block.js",
+		"basic-layout-block-postbuild": "npm run basic-layout-block-js-move && npm run basic-layout-block-js-minify",
+		"tabs-layout-block-build": "wp-scripts build js/blocks/tabs-layout/tabs-layout-block.js && npm run tabs-layout-block-postbuild",
+		"tabs-layout-block-js-move": "shx mv -f build/tabs-layout-block.js js/tabs-layout-block.js",
+		"tabs-layout-block-js-minify": "terser js/tabs-layout-block.js -o js/tabs-layout-block.min.js",
+		"tabs-layout-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/tabs-layout/tabs-layout-block.js",
+		"tabs-layout-block-postbuild": "npm run tabs-layout-block-js-move && npm run tabs-layout-block-js-minify",
+		"categories-layout-block-build": "wp-scripts build js/blocks/categories-layout/categories-layout-block.js && npm run categories-layout-block-postbuild",
+		"categories-layout-block-js-move": "shx mv -f build/categories-layout-block.js js/categories-layout-block.js",
+		"categories-layout-block-js-minify": "terser js/categories-layout-block.js -o js/categories-layout-block.min.js",
+		"categories-layout-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/categories-layout/categories-layout-block.js",
+		"categories-layout-block-postbuild": "npm run categories-layout-block-js-move && npm run categories-layout-block-js-minify",
+		"classic-layout-block-build": "wp-scripts build js/blocks/classic-layout/classic-layout-block.js && npm run classic-layout-block-postbuild",
+		"classic-layout-block-js-move": "shx mv -f build/classic-layout-block.js js/classic-layout-block.js",
+		"classic-layout-block-js-minify": "terser js/classic-layout-block.js -o js/classic-layout-block.min.js",
+		"classic-layout-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/classic-layout/classic-layout-block.js",
+		"classic-layout-block-postbuild": "npm run classic-layout-block-js-move && npm run classic-layout-block-js-minify",
+		"drill-down-layout-block-build": "wp-scripts build js/blocks/drill-down-layout/drill-down-layout-block.js && npm run drill-down-layout-block-postbuild",
+		"drill-down-layout-block-js-move": "shx mv -f build/drill-down-layout-block.js js/drill-down-layout-block.js",
+		"drill-down-layout-block-js-minify": "terser js/drill-down-layout-block.js -o js/drill-down-layout-block.min.js",
+		"drill-down-layout-block-start": "CHOKIDAR_USEPOLLING=true WATCHPACK_POLLING=true wp-scripts start js/blocks/drill-down-layout/drill-down-layout-block.js",
+		"drill-down-layout-block-postbuild": "npm run drill-down-layout-block-js-move && npm run drill-down-layout-block-js-minify",
+		"format": "wp-scripts format",
+		"lint:js": "wp-scripts lint-js",
+		"clean-build": "shx rm -rf build",
+		"packages-update": "wp-scripts packages-update",
+		"plugin-zip": "wp-scripts plugin-zip"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^30.1.0"
+	},
+	"dependencies": {
+		"@wordpress/blocks": "^13.9.0"
+	}
+}

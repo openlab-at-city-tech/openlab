@@ -116,6 +116,7 @@ jQuery(function ($) {
     var applyColor = function () {
         var color = $color_picker.wpColorPicker('color'),
             color_important = color + '!important;';
+        document.querySelector(':root').style.setProperty('--bookly-main-color', color);
         $('.bookly-progress-tracker').find('.active').css('color', color).find('.step').css('background', color);
         $('.bookly-js-mobile-step-1 label').css('color', color);
         $('.bookly-label-error').css('color', color);
@@ -623,7 +624,7 @@ jQuery(function ($) {
 
     // Init phone field.
     if (BooklyL10n.intlTelInput.enabled) {
-        $('.bookly-user-phone').intlTelInput({
+        window.booklyIntlTelInput($('.bookly-user-phone').get(0), {
             preferredCountries: [BooklyL10n.intlTelInput.country],
             initialCountry: BooklyL10n.intlTelInput.country,
             geoIpLookup: function (callback) {
@@ -632,8 +633,7 @@ jQuery(function ($) {
                     var countryCode = (resp && resp.country) ? resp.country : '';
                     callback(countryCode);
                 });
-            },
-            utilsScript: BooklyL10n.intlTelInput.utils
+            }
         });
     }
 

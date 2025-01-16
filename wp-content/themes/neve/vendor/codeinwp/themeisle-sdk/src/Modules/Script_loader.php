@@ -78,7 +78,7 @@ class Script_Loader extends Abstract_Module {
 			return '';
 		}
 		
-		if ( 'tracking' !== $slug && 'survey' !== $slug ) {
+		if ( 'tracking' !== $slug && 'survey' !== $slug && 'banner' !== $slug ) {
 			return '';
 		}
 
@@ -100,6 +100,8 @@ class Script_Loader extends Abstract_Module {
 			$this->load_tracking( $handler );
 		} elseif ( 'survey' === $slug ) {
 			$this->load_survey( $handler );
+		} elseif ( 'banner' === $slug ) {
+			$this->load_banner( $handler );
 		}
 	}
 
@@ -121,6 +123,15 @@ class Script_Loader extends Abstract_Module {
 			$asset_file['version'],
 			true
 		);
+
+		$language            = get_user_locale();
+		$available_languages = [
+			'de_DE'        => 'de',
+			'de_DE_formal' => 'de',
+		];
+		$lang_code           = isset( $available_languages[ $language ] ) ? $available_languages[ $language ] : 'en';
+
+		wp_localize_script( $handler, 'tsdk_survey_attrs', [ 'language' => $lang_code ] );
 	}
 
 	/**
@@ -140,6 +151,33 @@ class Script_Loader extends Abstract_Module {
 			$asset_file['dependencies'],
 			$asset_file['version'],
 			true
+		);
+	}
+
+	/**
+	 * Load the banner script.
+	 * 
+	 * @param string $handler The script handler.
+	 * 
+	 * @return void
+	 */
+	public function load_banner( $handler ) {
+		global $themeisle_sdk_max_path;
+		$asset_file = require $themeisle_sdk_max_path . '/assets/js/build/banner/banner.asset.php';
+
+		wp_enqueue_script(
+			$handler,
+			$this->get_sdk_uri() . 'assets/js/build/banner/banner.js',
+			$asset_file['dependencies'],
+			$asset_file['version'],
+			true
+		);
+
+		wp_enqueue_style(
+			$handler . '_style',
+			$this->get_sdk_uri() . 'assets/css/banner.css',
+			[],
+			$asset_file['version']
 		);
 	}
 }

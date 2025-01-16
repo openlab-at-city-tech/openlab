@@ -20,6 +20,7 @@ class Page extends Lib\Base\Component
 
         self::enqueueScripts( array(
             'module' => array( 'js/customers.js' => array( 'bookly-backend-globals' ), ),
+            'frontend' => array( 'js/intlTelInput.min.js' => array( 'bookly-backend-globals' ) ),
         ) );
 
         $datatables = Lib\Utils\Tables::getSettings( Lib\Utils\Tables::CUSTOMERS );

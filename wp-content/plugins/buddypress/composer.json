@@ -14,10 +14,12 @@
 	],
 	"homepage": "https://buddypress.org",
 	"license": "GPL-2.0-or-later",
-	"authors": [ {
-		"name": "BuddyPress Community",
-		"homepage": "https://buddypress.org/about/"
-	} ],
+	"authors": [
+		{
+			"name": "BuddyPress Community",
+			"homepage": "https://buddypress.org/about/"
+		}
+	],
 	"support": {
 		"forum": "https://buddypress.org/support/",
 		"docs": "https://codex.buddypress.org/",
@@ -32,23 +34,25 @@
 			"dealerdirect/phpcodesniffer-composer-installer": true
 		}
 	},
-	"repositories": [
-		{
-			"url": "https://github.com/buddypress/bp-coding-standards.git",
-			"type": "git"
-		}
-	],
 	"require": {
-		"composer/installers": "^1.10.0",
 		"php": ">=5.6.0"
 	},
 	"require-dev": {
 		"buddypress/bp-coding-standards": "dev-trunk",
-		"wp-phpunit/wp-phpunit": "^6.3",
-		"yoast/phpunit-polyfills": "^1.0.1"
+		"yoast/phpunit-polyfills": "^1.0",
+		"spatie/phpunit-watcher": "^1.23"
 	},
 	"scripts": {
 		"test": "@php ./vendor/phpunit/phpunit/phpunit",
-		"phpcs" : "@php ./vendor/bin/phpcs"
+		"test_multi": "@php ./vendor/phpunit/phpunit/phpunit -c tests/phpunit/multisite.xml",
+		"phpunit": "@test",
+		"phpcs": "@php ./vendor/bin/phpcs . --basepath=.",
+		"phpcbf": "@php ./vendor/bin/phpcbf . --basepath=.",
+		"phpcs-escape": "@php ./vendor/bin/phpcs src --extensions=php -sp --standard=BuddyPress --sniffs=WordPress.Security.EscapeOutput,WordPress.Security.SafeRedirect",
+		"phpcompat": "@php ./vendor/bin/phpcs --standard=PHPCompatibilityWP --extensions=php -sp --runtime-set testVersion 5.6- src tests",
+		"test:watch": [
+			"Composer\\Config::disableProcessTimeout",
+			"phpunit-watcher watch"
+		]
 	}
 }

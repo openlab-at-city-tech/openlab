@@ -102,10 +102,6 @@ body.perk-iframe {
 	height: 150px;
 }
 
-.perk-settings .updated *:last-child {
-	margin-bottom: 0;
-}
-
 .perk-settings-container {
 	border-left: 2px solid #eee;
 	margin: -18px 0 15px 6px;

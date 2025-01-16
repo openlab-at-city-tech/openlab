@@ -2,7 +2,7 @@
   "private": true,
   "name": "openlab-attributions",
   "description": "Add formatted attributions to post content.",
-  "version": "2.1.2",
+  "version": "2.1.4",
   "author": "George Mamadashvili",
   "license": "GPL-2.0+",
   "main": "dist/js/block-editor.js",

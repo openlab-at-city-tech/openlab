@@ -212,6 +212,7 @@ function openlab_bbp_map_group_forum_meta_caps( $caps = array(), $cap = '', $use
 		case 'publish_topics':
 		case 'read_hidden_forums':
 		case 'read_private_forums':
+		case 'assign_topic_tags':
 			if ( bbp_group_is_member() || bbp_group_is_mod() || bbp_group_is_admin() ) {
 				$caps = array( 'exist' );
 			}

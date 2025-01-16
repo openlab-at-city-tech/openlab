@@ -3,8 +3,6 @@
  * Comments options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       Astra 4.6.0
  */

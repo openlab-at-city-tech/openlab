@@ -55,6 +55,9 @@ class Ajax extends Lib\Base\Ajax
         $gateway = new Lib\Payment\StripeCloudGateway( \Bookly\Frontend\Modules\Payment\Request::getInstance() );
         $payment = new Lib\Entities\Payment();
         if ( $payment->loadBy( array( 'id' => $event['metadata']['payment_id'], 'type' => Lib\Entities\Payment::TYPE_CLOUD_STRIPE ) ) ) {
+            if ( array_key_exists( 'payment_intent', $event ) ) {
+                $payment->setRefId( $event['payment_intent'] )->save();
+            }
             $gateway->setPayment( $payment )->retrieve();
         }
     }

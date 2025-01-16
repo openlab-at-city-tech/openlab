@@ -466,12 +466,124 @@ window.jQuery(function ($) {
     showHideAutoPlay();
 
     /**
+     * When Pause/Play button changes
+     * 
+     * @since 3.92
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[pausePlay]"], .ms-settings-table input[name="settings[autoPlay]"]', function () {
+        showHideCustomPlayColor();
+    });
+
+    /**
+     * Show/hide custom color settings for play button
+     * 
+     * @since 3.92
+     */
+    var showHideCustomPlayColor = function () {
+        var pausePlay = $('.ms-settings-table input[name="settings[pausePlay]"]');
+        var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
+        if (autoPlay.is(':checked')) {
+            if (pausePlay.is(':checked')) {
+                $('tr.customizer-pausePlay').show();
+            } else {
+                $('tr.customizer-pausePlay').hide();
+            }
+        } else {
+            $('tr.customizer-pausePlay').hide(); 
+        }   
+    }
+
+    setTimeout(function () {
+        showHideCustomPlayColor();
+    }, 100);
+
+    /**
+     * When Arrows changes
+     * 
+     * @since 3.92
+     */
+    $('.metaslider').on('change', '.ms-settings-table select[name="settings[links]"]', function () {
+        showHideCustomArrowColor();
+    });
+
+    /**
+     * Show/hide custom color settings for arrows button
+     * 
+     * @since 3.92
+     */
+    var showHideCustomArrowColor = function () {
+        var links = $('.ms-settings-table select[name="settings[links]"]').val();
+        if (links === 'false') {
+            $('tr.customizer-links').hide();
+        } else {
+            $('tr.customizer-links').show();
+        }
+    }
+
+    setTimeout(function () {
+        showHideCustomArrowColor();
+    }, 100);
+
+    /**
+     * When Navigation changes
+     * 
+     * @since 3.92
+     */
+    $('.metaslider').on('change', '.ms-settings-table select[name="settings[navigation]"]', function () {
+        showHideCustomNavigationColor();
+    });
+
+    /**
+     * Show/hide custom color settings for navigation
+     * 
+     * @since 3.92
+     */
+    var showHideCustomNavigationColor = function () {
+        var navigation = $('.ms-settings-table select[name="settings[navigation]"]').val();
+        if (navigation === 'true') {
+            $('tr.customizer-navigation').show();
+        } else {
+            $('tr.customizer-navigation').hide();
+        }
+    }
+
+    setTimeout(function () {
+        showHideCustomNavigationColor();
+    }, 100);
+
+    /**
      * When Auto play or Loop changes
      * 
      * @since 3.90
      */
     $('.metaslider').on('change', '.ms-settings-table input[name="settings[autoPlay]"], .ms-settings-table select[name="settings[loop]"]', function () {
         adjustLoop();
+    });
+
+    /**
+     * When Image crop changes, enable/disable fields inside Crop tab
+     * 
+     * @since 3.93
+     */
+    $('.metaslider').on('change', '.ms-settings-table select[name="settings[smartCrop]"]', function () {
+        var $this = $(this);
+        var el_status = $this.val() == 'true' || $this.val() == 'false' ? true : false;
+
+        $("#metaslider-slides-list tr.slide").each(function () {
+            var row = $(this);
+            if (row.hasClass('image')) {
+                var crop_position = row.find('select.crop_position');
+                var recrop_image = row.find('button.recrop_image');
+
+                if (!el_status) {
+                    crop_position.attr('disabled', 'disabled');
+                    recrop_image.attr('disabled', 'disabled');
+                } else {
+                    crop_position.removeAttr('disabled');
+                    recrop_image.removeAttr('disabled');
+                }
+            }
+        });
     });
 
     /**
@@ -806,32 +918,44 @@ window.jQuery(function ($) {
         });
     });
 
-
-    // bind an event to the slides table to update the menu order of each slide
-    // TODO: Remove this soon
-    $(".metaslider").on('resizeSlides', 'table#metaslider-slides-list', function (event) {
-        var slideshow_width = $("input.width").val();
-        var slideshow_height = $("input.height").val();
-
-        $("tr.slide input[name='resize_slide_id']", this).each(function () {
-            $this = $(this);
-
-            var thumb_width = $this.attr("data-width");
-            var thumb_height = $this.attr("data-height");
-            var slide_row = $(this).closest('tr');
+    /**
+     * Resize a single slide image 
+     * 
+     * @since 3.93
+     * 
+     * @param object el The input[name='resize_slide_id'] element
+     */
+    var resize_single_slide_image = function (el) {
+        return new Promise(function (resolve, reject) {
+            var slideshow_width = $("input.width").val();
+            var slideshow_height = $("input.height").val();
+            var thumb_width = el.attr("data-width");
+            var thumb_height = el.attr("data-height");
+            var slide_row = el.closest('tr');
             var crop_changed = slide_row.data('crop_changed');
 
-            if (thumb_width != slideshow_width || thumb_height != slideshow_height || crop_changed) {
-                $this.attr("data-width", slideshow_width);
-                $this.attr("data-height", slideshow_height);
-
+            // Get the current Image crop size value and data-value attributes
+            // The value for data-value is updated after all image resize through cropSlidesTheOldWay()
+            var crop_multiply = parseInt($("select.cropMultiply").val());
+            var prev_crop_multiply = parseInt($("select.cropMultiply").attr('data-value'));
+    
+            // Check if resizing is needed
+            if (thumb_width != slideshow_width 
+                    || thumb_height != slideshow_height 
+                    || crop_changed 
+                    || crop_multiply !== prev_crop_multiply
+                ) {
+                el.attr("data-width", slideshow_width);
+                el.attr("data-height", slideshow_height);
+    
                 var data = {
                     action: "resize_image_slide",
                     slider_id: window.parent.metaslider_slider_id,
-                    slide_id: $this.attr("data-slide_id"),
+                    slide_id: el.attr("data-slide_id"),
                     _wpnonce: metaslider.resize_nonce
                 };
-
+    
+                // AJAX call wrapped in a Promise
                 $.ajax({
                     type: "POST",
                     data: data,
@@ -842,13 +966,114 @@ window.jQuery(function ($) {
                         if (crop_changed) {
                             slide_row.data('crop_changed', false);
                         }
-                        if (response.data.thumbnail_url_small) {
-                            $this.closest('tr.slide').trigger('metaslider/attachment/updated', response.data);
+                        if (response.data && response.data.thumbnail_url_small) {
+                            el.closest('tr.slide').trigger('metaslider/attachment/updated', response.data);
                         }
+                        // Resolve the promise on success
+                        resolve(response);
+                    },
+                    error: function (error) {
+                        // Reject the promise on failure
+                        reject(error);
                     }
                 });
+            } else {
+                // Resolve immediately if no resizing is needed
+                resolve("No resizing needed.");
             }
         });
+    };
+    
+    /**
+     * Save crop position for a single slide image 
+     * 
+     * @since 3.93
+     * 
+     * @param object el The input[name='resize_slide_id'] element
+     */
+    var crop_position_single_slide_image = function (el) {
+        return new Promise(function (resolve, reject) {
+            var slide_id = el.attr("data-slide_id");
+            var slide_row = el.closest('tr');
+            var crop_position = slide_row.find('.crop_position').val();
+    
+            if (crop_position.length > 0) {
+                var data = {
+                    action: "crop_position_image_slide",
+                    slide_id: slide_id,
+                    crop_position: crop_position,
+                    _wpnonce: metaslider.resize_nonce
+                };
+    
+                $.ajax({
+                    type: "POST",
+                    data: data,
+                    async: false,
+                    cache: false,
+                    url: metaslider.ajaxurl,
+                    success: function (response) {
+                        slide_row.data('crop_changed', true);
+                        // Resolve the promise on success
+                        resolve(response);
+                    },
+                    error: function (error) {
+                        // Reject the promise on failure
+                        reject(error);
+                    }
+                });
+            } else {
+                // Resolve immediately if crop position can't be saved
+                resolve("Can't save new crop position.");
+            }
+        });
+    };
+
+    // bind an event to the slides table to update the menu order of each slide
+    // TODO: Remove this soon
+    $(".metaslider").on('resizeSlides', 'table#metaslider-slides-list', function (event) {
+        $("tr.slide input[name='resize_slide_id']", this).each(function () {
+            resize_single_slide_image($(this));
+        });
+    });
+
+    $(".metaslider").on('click', 'tr.slide button.recrop_image', function (event) {
+        var recrop_image = $(this);
+        var resize_slide_id = recrop_image.closest('tr').find("input[name='resize_slide_id']");
+        
+        recrop_image.attr('disabled',true);
+        
+        crop_position_single_slide_image(resize_slide_id)
+            .then(function(response) {
+                console.log('New crop position saved'); 
+                return resize_single_slide_image(resize_slide_id);
+            })
+            .then(function(response) {
+                setTimeout(function () {
+                    recrop_image.attr('disabled', false);
+                    APP && APP.notifySuccess(
+                        'metaslider/slide-updated',
+                        APP.__('Crop position saved and image cropped', 'ml-slider'),
+                        true
+                    );
+                }, 1000);
+            })
+            .catch(function(error) {
+                // Handle error from either crop_position_single_slide_image() or resize_single_slide_image()
+                console.error('There was an error when saving crop position or cropping the image:', error);
+
+                // Specific error message if the error originated in crop_position_single_slide_image()
+                if (error instanceof Error && error.message.includes('crop_position_single_slide_image')) {
+                    console.error('There was an error when trying to save new crop position:', error);
+                }
+
+                setTimeout(function () {
+                    APP && APP.notifyError(
+                        'metaslider/slide-update-failed',
+                        APP.__('There was an error when saving crop position or cropping the image', 'ml-slider'),
+                        true
+                    );
+                }, 1000);
+            });
     });
 
     /**
@@ -1011,8 +1236,9 @@ window.jQuery(function ($) {
 
     /* Add mobile icon for slides with existing mobile setting */
     var show_mobile_icon = function (slide_id) {
+        var mobile_label = APP && APP.__('Mobile options are enabled for this slide. Adjust using the Mobile tab.', 'ml-slider');
         var mobile_checkboxes = $('#metaslider-slides-list #'+ slide_id +' .mobile-checkbox:checked');
-        var icon = '<span class="mobile_setting_enabled float-left tipsy-tooltip-top" title="Mobile options enabled for this slide"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
+        var icon = '<span class="mobile_setting_enabled float-left tipsy-tooltip-top" title="'+ mobile_label +'"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
         var mobile_enabled = $('#metaslider-slides-list #'+ slide_id +' .slide-details .mobile_setting_enabled');
         if (mobile_checkboxes.length > 0) {
             if(mobile_enabled.length == 0) {

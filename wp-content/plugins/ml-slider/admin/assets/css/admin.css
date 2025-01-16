@@ -1529,16 +1529,20 @@ input.no_last_pass {
 }
 
 /* Settngs & Help Page */
-#mobile-settings button {
+#mobile-settings button,
+#dashboard-settings button {
 	display: none !important;
 }
-#mobile-settings div.col:last-child button {
+#mobile-settings div.col:last-child button,
+#dashboard-settings div.col:last-child button {
 	display: inline-block !important;
 }
-#mobile-settings .row {
+#mobile-settings .row,
+#dashboard-settings .row {
 	display: flex;
 }
-#mobile-settings .col {
+#mobile-settings .col,
+#dashboard-settings .col {
 	display: flex;
 	flex-direction: row;
 	align-items: flex-start;
@@ -1553,7 +1557,18 @@ input.no_last_pass {
 #mobile-settings form input {
 	width: 80px !important;
 }
-
+#dashboard-settings form {
+	box-shadow: none !important;
+}
+#dashboard-settings form .px-4.py-5.md\:p-6 {
+	padding: 10px 10px 0 0 !important;
+}
+#dashboard-settings form h3 {
+	font-size: 16px !important;
+}
+#dashboard-settings form select {
+	width: 200px !important;
+}
 /* Comparison Chart */
 #comparison-chart {
 	width: 100%;
@@ -1685,6 +1700,7 @@ td .dot.available {
     table {
         margin-top: 20px !important;
         margin-bottom: 0 !important;
+        width: 100%;
 
         tr {
             border: none !important;
@@ -1703,7 +1719,7 @@ td .dot.available {
     }
 
     .colorpicker {
-        width: 150px !important;
+        width: 183px !important;
     }
 
     .wp-picker-container {
@@ -1721,6 +1737,98 @@ td .dot.available {
     }
 }
 
+/* Color tooltips */
+.ms-color-tooltip-wrapper {
+    position: relative;
+    display: inline-block;
+
+    /* START custom color picker position */
+    .wp-picker-holder > div {
+        /*border-bottom: none;*/
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    .wp-picker-input-wrap {
+        bottom: -292px;
+        padding: 10px;
+        background: #fff;
+        border: 1px solid #dcdcde;
+        width: 257px;
+        box-shadow: 0 0 5px #ccc;
+    }
+
+    &:nth-child(1) {
+        
+        .wp-picker-input-wrap,
+        .wp-picker-holder {
+            left: -50px;
+        }
+    }
+
+    &:nth-child(2) {
+        
+        .wp-picker-input-wrap,
+        .wp-picker-holder {
+            left: -88px;
+        }
+    }
+
+    &:nth-child(3) {
+        
+        .wp-picker-input-wrap,
+        .wp-picker-holder {
+            left: -126px;
+        }
+    }
+
+    &:nth-child(4) {
+        
+        .wp-picker-input-wrap,
+        .wp-picker-holder {
+            left: -164px;
+        }
+    }
+    /* END custom color picker position */
+}
+
+.ms-color-tooltip-wrapper .ms-color-tooltip {
+    position: absolute;
+    background: rgba(0,0,0,0.6);
+    color: #fff;
+    z-index: 9;
+    left: -24px;
+    bottom: 40px;
+    padding: 3px 7px;
+    border-radius: 3px;
+    font-size: 0.9em;
+    visibility: hidden;
+    width: 80px;
+    height: auto;
+    text-align: center;
+}
+
+.ms-color-tooltip-wrapper:hover .ms-color-tooltip {
+    visibility: visible;
+}
+
+.ms-color-tooltip-wrapper .ms-color-tooltip:after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -4px;
+    width: 0;
+    height: 0;
+    border-top: 4px solid rgba(0,0,0,0.6);
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+}
+
+/* Theme customizer Pause / Play Options */
+.metaslider .ms-settings-table tr.customizer-pausePlay {
+	display: none;
+}
+
 @media only screen and (min-width : 320px) {
     .toolbar-separator, .toolbar-actions{
         padding: 0!important;
@@ -1728,6 +1836,9 @@ td .dot.available {
     .ms-toolbar-button {
         padding-left: 4px!important;
         padding-right: 4px!important;
+    }
+    #dashboard-settings form select {
+        width: 100% !important;
     }
 }
 
@@ -1762,6 +1873,9 @@ td .dot.available {
     .metaslider-start {
         margin: 30px auto!important;
         max-width: 80%;
+    }
+    #dashboard-settings form select {
+        width: 200px!important;
     }
 }
 

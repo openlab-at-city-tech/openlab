@@ -3,13 +3,13 @@
 Contributors: managewp, wpmudev
 Tags: links, broken links, internal link, external link, broken images, seo, test links, check links, bad links
 Requires at least: 5.2
-Tested up to: 6.4
-Stable tag: 2.2.4
+Tested up to: 6.6
+Stable tag: 2.4.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Check posts, pages & all content for broken links & missing images to improve SEO. Get notified when bad links are found.
+Check posts, pages & all content for broken links to improve SEO. Get notified when bad links are found.
 
 == Description ==
 The fastest and most accurate broken link checker for WordPress. Join over 700K people who use Broken Link Checker to monitor and detect broken links 20x faster than other plugins, with pinpoint accuracy. No page limits, no ads, no upsells. Enjoy effortless, unlimited, and automated broken link checking from the get-go.
@@ -28,9 +28,7 @@ You need a tool that not only automates the process, but also detects broken lin
 
 BLC doesn’t *just* scan your sites faster than other solutions, it scans deeply and frequently to ensure no broken links are missed.
 
-Scan every inch of your sites, including external and internal links within your posts, pages, comments, blogroll, even custom fields.
-
-It’ll also detect missing images and redirects, helping to ensure your site's SEO and user experience are not compromised in any way. And if that isn't enough, you’ll also receive detection reports via email so you can quickly take corrective action.
+Scan every inch of your sites, including external and internal links within your posts, pages, comments, blogroll, even custom fields, helping to ensure your site's SEO and user experience are not compromised in any way. And if that isn't enough, you’ll also receive detection reports via email so you can quickly take corrective action.
 
 **Choose from two different link checking engines:**
 
@@ -70,7 +68,7 @@ It also uses your site's IP address, which as mentioned above, increases your ri
 **Here are the standout features of the local link checking engine:**
 
 -   Monitors external links and internal links in your posts, pages, comments, the blogroll, and custom fields (optional).
--   Detects broken links, missing images, and redirects.
+-   Detects broken links and redirects.
 -   Receive notifications via your dashboard or email.
 -   Make broken links display differently in posts (optional).
 -   Prevent search engines from following broken links (optional).
@@ -105,6 +103,7 @@ BLC’s search and filtering tools make it faster and easier to find specific UR
 
 Export your broken link lists as a CSV file for greater analysis inside of Google Sheets, Microsoft Excel, and other spreadsheet/data software.
 
+
 ### HELP KEEP BLC SECURE
 
 We take plugin security incredibly seriously; if you have a bug or vulnerability to report, you can do so through the Patchstack Vulnerability Disclosure Program. It’s fast, easy, and you will be notified when the issue is fixed. [Report a vulnerability](https://patchstack.com/database/vdp/broken-link-checker).
@@ -118,6 +117,19 @@ Our WordPress offerings include site management tools, dedicated hosting, resell
 Oh, and one more thing… we hope you enjoy our free offerings as much as we’ve loved making them for you!
 
 == Changelog ==
+
+= 2.4.1 =
+* Security Fix: Cross-Site Scripting (XSS) vulnerability.
+
+= 2.4.0 =
+* Enhance: Improved editing and unlinking of URLs with query parameters.
+* Fix: Resolved issue with implicit conversion from float to int in YouTube links.
+
+= 2.3.0 =
+* New: Connect to the Cloud Engine API directly without installing the Dashboard plugin.
+* Fix: PHP8 Deprecation message.
+* Fix: Recipient confirmation link from scheduled scan email not working.
+* Fix: User role conflict with Solidwp
 
 = 2.2.4 =
 * Enhance: Code stability improvements.

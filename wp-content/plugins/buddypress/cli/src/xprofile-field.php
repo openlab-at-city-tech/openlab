@@ -16,14 +16,14 @@ class XProfile_Field extends BuddyPressCommand {
 	 *
 	 * @var array
 	 */
-	protected $obj_fields = array(
+	protected $obj_fields = [
 		'id',
 		'name',
 		'description',
 		'type',
 		'group_id',
 		'is_required',
-	);
+	];
 
 	/**
 	 * Get a list of XProfile fields.
@@ -33,22 +33,52 @@ class XProfile_Field extends BuddyPressCommand {
 	 * [--<field>=<value>]
 	 * : One or more parameters to pass. See bp_xprofile_get_groups()
 	 *
+	 * [--format=<format>]
+	 * : Render output in a particular format.
+	 *  ---
+	 * default: table
+	 * options:
+	 *   - table
+	 *   - csv
+	 *   - ids
+	 *   - json
+	 *   - count
+	 *   - yaml
+	 * ---
+	 *
+	 *  * ## AVAILABLE FIELDS
+	 *
+	 * These fields will be displayed by default for each field:
+	 *
+	 * * id
+	 * * name
+	 * * description
+	 * * type
+	 * * group_id
+	 * * is_required
+	 *
 	 * ## EXAMPLE
 	 *
+	 *     # List XProfile fields.
 	 *     $ wp bp xprofile field list
+	 *     +----+------+-------------+---------+----------+-------------+
+	 *     | id | name | description | type    | group_id | is_required |
+	 *     +----+------+-------------+---------+----------+-------------+
+	 *     | 1  | Name |             | textbox | 1        | 1           |
+	 *     +----+------+-------------+---------+----------+-------------+
 	 *
 	 * @subcommand list
 	 */
-	public function list_( $args, $assoc_args ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+	public function list_( $args, $assoc_args ) {
 		$args = array_merge(
 			$assoc_args,
-			array(
+			[
 				'fields'       => 'id,name',
 				'fetch_fields' => true,
-			)
+			]
 		);
 
-		$fields = array();
+		$fields = [];
 		$groups = bp_xprofile_get_groups( $args );
 
 		// Reformat so that field_group_id is a property of fields.
@@ -58,21 +88,14 @@ class XProfile_Field extends BuddyPressCommand {
 			}
 		}
 
-		ksort( $fields );
-
-		$this->get_formatter( $assoc_args )->display_items( $fields );
+		$formatter = $this->get_formatter( $assoc_args );
+		$formatter->display_items( 'ids' === $formatter->format ? wp_list_pluck( $fields, 'id' ) : $fields );
 	}
 
 	/**
-	 * Create an XProfile field.
+	 * Create a XProfile field.
 	 *
 	 * ## OPTIONS
-	 *
-	 * [--type=<type>]
-	 * : Field type.
-	 * ---
-	 * default: textbox
-	 * ---
 	 *
 	 * --field-group-id=<field-group-id>
 	 * : ID of the field group where the new field will be created.
@@ -80,14 +103,25 @@ class XProfile_Field extends BuddyPressCommand {
 	 * --name=<name>
 	 * : Name of the new field.
 	 *
+	 * [--type=<type>]
+	 * : Field type.
+	 * ---
+	 * default: textbox
+	 * ---
+	 *
+	 * [--silent]
+	 * : Whether to silent the XProfile field creation.
+	 *
 	 * [--porcelain]
 	 * : Output just the new field id.
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Create a XProfile field.
 	 *     $ wp bp xprofile field create --type=checkbox --field-group-id=508 --name="Field Name"
 	 *     Success: Created XProfile field "Field Name" (ID 24564).
 	 *
+	 *     # Create a XProfile field.
 	 *     $ wp bp xprofile field add --field-group-id=165 --name="Another Field"
 	 *     Success: Created XProfile field "Another Field" (ID 5465).
 	 *
@@ -99,21 +133,27 @@ class XProfile_Field extends BuddyPressCommand {
 			WP_CLI::error( 'Not a valid field type.' );
 		}
 
-		$create_args = array(
-			'type'           => $assoc_args['type'],
-			'name'           => $assoc_args['name'],
-			'field_group_id' => $assoc_args['field-group-id'],
+		$xprofile_field_id = xprofile_insert_field(
+			[
+				'type'           => $assoc_args['type'],
+				'name'           => $assoc_args['name'],
+				'field_group_id' => $assoc_args['field-group-id'],
+			]
 		);
 
-		$field_id = xprofile_insert_field( $create_args );
-		if ( ! $field_id ) {
+		// Silent it before it errors.
+		if ( WP_CLI\Utils\get_flag_value( $assoc_args, 'silent' ) ) {
+			return;
+		}
+
+		if ( ! $xprofile_field_id ) {
 			WP_CLI::error( 'Could not create XProfile field.' );
 		}
 
 		if ( WP_CLI\Utils\get_flag_value( $assoc_args, 'porcelain' ) ) {
-			WP_CLI::log( $field_id );
+			WP_CLI::log( $xprofile_field_id );
 		} else {
-			$field = new \BP_XProfile_Field( $field_id );
+			$field = new \BP_XProfile_Field( $xprofile_field_id );
 
 			WP_CLI::success(
 				sprintf(
@@ -143,12 +183,16 @@ class XProfile_Field extends BuddyPressCommand {
 	 * options:
 	 *   - table
 	 *   - json
-	 *   - haml
+	 *   - csv
+	 *   - yaml
 	 * ---
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Get a xprofile field.
 	 *     $ wp bp xprofile field get 500
+	 *
+	 *     # Get a xprofile field in JSON format.
 	 *     $ wp bp xprofile field see 56 --format=json
 	 *
 	 * @alias see
@@ -162,6 +206,7 @@ class XProfile_Field extends BuddyPressCommand {
 		}
 
 		$object_arr = get_object_vars( $object );
+
 		if ( empty( $assoc_args['fields'] ) ) {
 			$assoc_args['fields'] = array_keys( $object_arr );
 		}
@@ -185,29 +230,41 @@ class XProfile_Field extends BuddyPressCommand {
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Delete a field.
 	 *     $ wp bp xprofile field delete 500 --yes
 	 *     Success: Deleted XProfile field "Field Name" (ID 500).
 	 *
+	 *     # Delete a field and its data.
 	 *     $ wp bp xprofile field remove 458 --delete-data --yes
 	 *     Success: Deleted XProfile field "Another Field Name" (ID 458).
 	 *
 	 * @alias remove
+	 * @alias trash
 	 */
 	public function delete( $args, $assoc_args ) {
-		$delete_data = WP_CLI\Utils\get_flag_value( $assoc_args, 'delete-data' );
+		$delete_data = (bool) WP_CLI\Utils\get_flag_value( $assoc_args, 'delete-data' );
+		$field_ids   = wp_parse_id_list( $args );
 
-		WP_CLI::confirm( 'Are you sure you want to delete this field?', $assoc_args );
+		if ( count( $field_ids ) > 1 ) {
+			WP_CLI::confirm( 'Are you sure you want to delete these fields?', $assoc_args );
+		} else {
+			WP_CLI::confirm( 'Are you sure you want to delete this field?', $assoc_args );
+		}
 
-		parent::_delete( $args, $assoc_args, function( $field_id ) use ( $delete_data ) {
-			$field = new \BP_XProfile_Field( $field_id );
-			$name  = $field->name;
-			$id    = $field->id;
+		parent::_delete(
+			$field_ids,
+			$assoc_args,
+			function ( $field_id ) use ( $delete_data ) {
+				$field = new \BP_XProfile_Field( $field_id );
+				$name  = $field->name;
+				$id    = $field->id;
 
-			if ( $field->delete( $delete_data ) ) {
-				return array( 'success', sprintf( 'Deleted XProfile field "%s" (ID %d).', $name, $id ) );
-			} else {
-				return array( 'error', sprintf( 'Failed deleting XProfile field (ID %d).', $field_id ) );
+				if ( $field->delete( $delete_data ) ) {
+					return [ 'success', sprintf( 'Deleted XProfile field "%s" (ID %d).', $name, $id ) ];
+				}
+
+				return [ 'error', sprintf( 'Failed deleting XProfile field "%s" (ID %d).', $name, $id ) ];
 			}
-		} );
+		);
 	}
 }

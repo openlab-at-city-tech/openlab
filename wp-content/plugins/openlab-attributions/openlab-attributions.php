@@ -3,7 +3,7 @@
  * Plugin Name:       OpenLab Attributions
  * Plugin URI:        https://openlab.citytech.cuny.edu/
  * Description:       Add formatted attributions to post content.
- * Version:           2.1.3
+ * Version:           2.1.4
  * Requires at least: 5.4
  * Requires PHP:      5.6
  * Author:            OpenLab

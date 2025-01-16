@@ -1487,7 +1487,7 @@ class ExactDN extends Page_Parser {
 						}
 
 						// Cleanup ExactDN URL.
-						$exactdn_url = \str_replace( '&#038;', '&', \esc_url( \trim( $exactdn_url ) ) );
+						$exactdn_url = \str_replace( '&#038;', '&', \esc_url( \trim( html_entity_decode( $exactdn_url ) ) ) );
 						// Supplant the original source value with our ExactDN URL.
 						$this->debug_message( "replacing $src_orig with $exactdn_url" );
 						if ( $is_relative ) {
@@ -1514,7 +1514,7 @@ class ExactDN extends Page_Parser {
 							$placeholder_src = $this->generate_url( $placeholder_src );
 
 							if ( $placeholder_src !== $placeholder_src_orig ) {
-								$new_tag = \str_replace( $placeholder_src_orig, \str_replace( '&#038;', '&', \esc_url( \trim( $placeholder_src ) ) ), $new_tag );
+								$new_tag = \str_replace( $placeholder_src_orig, \str_replace( '&#038;', '&', \esc_url( \trim( html_entity_decode( $placeholder_src ) ) ) ), $new_tag );
 							}
 
 							unset( $placeholder_src );
@@ -1572,7 +1572,7 @@ class ExactDN extends Page_Parser {
 					// If Lazy Load is in use, pass placeholder image through ExactDN.
 					$placeholder_src = $this->generate_url( $placeholder_src );
 					if ( $placeholder_src !== $placeholder_src_orig ) {
-						$new_tag = \str_replace( $placeholder_src_orig, \str_replace( '&#038;', '&', \esc_url( \trim( $placeholder_src ) ) ), $new_tag );
+						$new_tag = \str_replace( $placeholder_src_orig, \str_replace( '&#038;', '&', \esc_url( \trim( html_entity_decode( $placeholder_src ) ) ) ), $new_tag );
 						// Replace original tag with modified version.
 						$content = \str_replace( $tag, $new_tag, $content );
 					}
@@ -2495,8 +2495,9 @@ class ExactDN extends Page_Parser {
 					$got_meta   = true;
 
 					if ( isset( $image_meta['width'], $image_meta['height'] ) ) {
-						$full_width    = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
-						$full_height   = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
+						$full_width  = ! empty( $image_meta['width'] ) ? (int) $image_meta['width'] : false;
+						$full_height = ! empty( $image_meta['height'] ) ? (int) $image_meta['height'] : false;
+						$this->debug_message( "original (full-size) dimensions (w,h): $full_width, $full_height" );
 						$image_resized = \image_resize_dimensions( $image_meta['width'], $image_meta['height'], $image_args['width'], $image_args['height'], $image_args['crop'] );
 						if ( $image_resized ) { // This could be false when the requested image size is larger than the full-size image.
 							// The new dimensions here are what we'd use to crop/scale the image. If crop is truthy, then the dimensions

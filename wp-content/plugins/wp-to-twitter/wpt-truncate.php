@@ -401,6 +401,8 @@ function wpt_create_values( $post, $post_ID, $ref ) {
 	$auth         = $post['authId'];
 	$title        = trim( apply_filters( 'wpt_status', $post['postTitle'], $post_ID, 'title' ) );
 	$title        = ( ! $title ) ? get_the_title( $post_ID ) : $title;
+	$encoding     = get_option( 'blog_charset', 'UTF-8' );
+	$title        = html_entity_decode( $title, ENT_QUOTES, $encoding );
 	$blogname     = trim( $post['blogTitle'] );
 	$excerpt      = trim( apply_filters( 'wpt_status', $post['postExcerpt'], $post_ID, 'post' ) );
 	$thisposturl  = trim( $shrink );

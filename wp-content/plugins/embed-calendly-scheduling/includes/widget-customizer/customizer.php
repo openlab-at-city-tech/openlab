@@ -8,7 +8,7 @@ class EMCS_Customizer
     {
         add_submenu_page(
             'emcs-event-types',
-            __('Customize Widget - Embed Calendly', 'embed-calendly-scheduling'),
+            __('Customize Widget - EMC', 'embed-calendly-scheduling'),
             __('Customizer', 'embed-calendly-scheduling'),
             'manage_options',
             'emcs-customizer',
@@ -25,13 +25,13 @@ class EMCS_Customizer
         $events = EMCS_Event_Types::get_event_types();
 ?>
         <div class="emcs-title">
-            <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="embed calendly logo" width="200px" />
+            <img src="<?php echo esc_url(EMCS_URL . 'assets/img/emc-logo.svg') ?>" alt="<?php esc_attr_e('emc logo', 'embed-calendly-scheduling'); ?>" width="200px" />
         </div>
         <div class="emcs-subtitle">
-            Widget Customizer
+            <?php esc_html_e('Widget Customizer', 'embed-calendly-scheduling'); ?>
             <div class="emcs-sync-event-types">
                 <form action="" method="POST">
-                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button"><span class="dashicons dashicons-update-alt emcs-dashicon"></span> Sync </button>
+                    <button type="submit" name="emcs_sync_event_types" class="button-primary emcs-sync-button"><span class="dashicons dashicons-update-alt emcs-dashicon"></span> <?php esc_html_e('Sync', 'embed-calendly-scheduling'); ?> </button>
                 </form>
             </div>
         </div>
@@ -39,13 +39,13 @@ class EMCS_Customizer
             <?php
 
             if (empty($events)) {
-                echo '<div class="emcs-text-center">Create an event type in your Calendly account to begin customization.</div>';
+                printf(esc_html__('%1$sCreate an event type in your Calendly account to begin customization.%1$s'), '<div class="emcs-text-center">', '</div>');
                 return;
             }
 
             $owner = EMCS_Event_Types::extract_event_type_owner($events[0]->url);
             ?>
-            <div class="emcs-embed-title">Customize Widget</div>
+            <div class="emcs-embed-title"><?php esc_html_e('Customize Widget', 'embed-calendly-scheduling'); ?></div>
             <?php
             include_once(EMCS_INCLUDES . 'widget-customizer/choose-customizer.php');
             include_once(EMCS_CUSTOMIZER_TEMPLATES . 'inline-form-customizer.php');

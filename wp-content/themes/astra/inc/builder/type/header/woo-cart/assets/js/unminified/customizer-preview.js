@@ -65,21 +65,21 @@
 		'woo-cart-background-color',
 		'astra-settings[header-woo-cart-background-color]',
 		'background-color',
-		'#ast-site-header-cart .widget_shopping_cart, .astra-cart-drawer'
+		'.ast-site-header-cart .widget_shopping_cart, .astra-cart-drawer'
 	);
 
 	astra_color_responsive_css(
 		'woo-cart-border-color',
 		'astra-settings[header-woo-cart-background-color]',
 		'border-color',
-		'#ast-site-header-cart .widget_shopping_cart, .astra-cart-drawer'
+		'.ast-site-header-cart .widget_shopping_cart, .astra-cart-drawer'
 	);
 
 	astra_color_responsive_css(
 		'woo-cart-border-bottom-color',
 		'astra-settings[header-woo-cart-background-color]',
 		'border-bottom-color',
-		'#ast-site-header-cart .widget_shopping_cart:before, #ast-site-header-cart .widget_shopping_cart:after, .open-preview-woocommerce-cart #ast-site-header-cart .widget_shopping_cart:before, #astra-mobile-cart-drawer, .astra-cart-drawer'
+		'.ast-site-header-cart .widget_shopping_cart:before, .ast-site-header-cart .widget_shopping_cart:after, .open-preview-woocommerce-cart .ast-site-header-cart .widget_shopping_cart:before, #astra-mobile-cart-drawer, .astra-cart-drawer'
 	);
 
 	// Added Background Color Hover
@@ -87,34 +87,34 @@
 		'woo-cart-background-hover-color',
 		'astra-settings[header-woo-cart-background-hover-color]',
 		'background-color',
-		'#ast-site-header-cart .widget_shopping_cart:hover, #astra-mobile-cart-drawer:hover'
+		'.ast-site-header-cart .widget_shopping_cart:hover, #astra-mobile-cart-drawer:hover'
 	);
 
 	astra_color_responsive_css(
 		'woo-cart-border-color',
 		'astra-settings[header-woo-cart-background-hover-color]',
 		'border-color',
-		'#ast-site-header-cart .widget_shopping_cart:hover, #astra-mobile-cart-drawer:hover'
+		'.ast-site-header-cart .widget_shopping_cart:hover, #astra-mobile-cart-drawer:hover'
 	);
 
 	astra_color_responsive_css(
 		'woo-cart-border-bottom-color',
 		'astra-settings[header-woo-cart-background-hover-color]',
 		'border-bottom-color',
-		'#ast-site-header-cart .widget_shopping_cart:hover,site-header-cart .widget_shopping_cart:hover:after, #astra-mobile-cart-drawer:hover,#ast-site-header-cart:hover .widget_shopping_cart:hover:before, #ast-site-header-cart:hover .widget_shopping_cart:hover:after, .open-preview-woocommerce-cart #ast-site-header-cart .widget_shopping_cart:hover:before'
+		'.ast-site-header-cart .widget_shopping_cart:hover,site-header-cart .widget_shopping_cart:hover:after, #astra-mobile-cart-drawer:hover,.ast-site-header-cart:hover .widget_shopping_cart:hover:before, .ast-site-header-cart:hover .widget_shopping_cart:hover:after, .open-preview-woocommerce-cart .ast-site-header-cart .widget_shopping_cart:hover:before'
 	);
 	astra_color_responsive_css(
 		'woo-cart-separator-colors',
 		'astra-settings[header-woo-cart-separator-color]',
 		'border-top-color',
-		'#ast-site-header-cart .widget_shopping_cart .woocommerce-mini-cart__total, #astra-mobile-cart-drawer .widget_shopping_cart .woocommerce-mini-cart__total, .astra-cart-drawer .astra-cart-drawer-header'
+		'.ast-site-header-cart .widget_shopping_cart .woocommerce-mini-cart__total, #astra-mobile-cart-drawer .widget_shopping_cart .woocommerce-mini-cart__total, .astra-cart-drawer .astra-cart-drawer-header'
 	);
 
 	astra_color_responsive_css(
 		'woo-cart-border-bottom-colors',
 		'astra-settings[header-woo-cart-separator-color]',
 		'border-bottom-color',
-		'#ast-site-header-cart .widget_shopping_cart .woocommerce-mini-cart__total, #astra-mobile-cart-drawer .widget_shopping_cart .woocommerce-mini-cart__total, .astra-cart-drawer .astra-cart-drawer-header, #ast-site-header-cart .widget_shopping_cart .mini_cart_item, #astra-mobile-cart-drawer .widget_shopping_cart .mini_cart_item'
+		'.ast-site-header-cart .widget_shopping_cart .woocommerce-mini-cart__total, #astra-mobile-cart-drawer .widget_shopping_cart .woocommerce-mini-cart__total, .astra-cart-drawer .astra-cart-drawer-header, .ast-site-header-cart .widget_shopping_cart .mini_cart_item, #astra-mobile-cart-drawer .widget_shopping_cart .mini_cart_item'
 	);
 
 	astra_color_responsive_css(

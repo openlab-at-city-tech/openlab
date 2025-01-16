@@ -3,8 +3,6 @@
  * Bottom Footer Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -135,6 +133,7 @@ if ( ! class_exists( 'Astra_Sidebar_Layout_Configs' ) ) {
 					'name'     => ASTRA_THEME_SETTINGS . '[ast-sidebar-pro-items]',
 					'type'     => 'control',
 					'control'  => 'ast-upgrade',
+					'campaign' => 'sidebar',
 					'renderAs' => 'list',
 					'choices'  => array(
 						'one'   => array(

@@ -1,7 +1,7 @@
 === Editoria11y Accessibility Checker ===
 Contributors: itmaybejj, partyka
 Tags: accessibility checker, automated testing, quality assurance, SEO
-Stable tag: 1.0.21
+Stable tag: 2.0.4
 Tested up to: 6.7
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -16,24 +16,22 @@ Editoria11y ("editorial accessibility ally") is a quality assurance tool built f
 2. It checks in context on pages, not just within the post editor, allowing it to test content edited in widgets or theme features.
 3. It focuses exclusively on **content** issues: assisting authors at improving the things that are their responsibility.
 
-It is meant to **supplement**, not replace, [testing your code and visual design](https://webaim.org/resources/evalquickref/) with developer-focused tools and testing practices.
+This plugin is the WordPress adaptation of the open-source [Editoria11y library](https://editoria11y.princeton.edu). Tests run in the browser and findings are stored in your own database; nothing is sent to any third party. It is meant to **supplement**, not replace, [testing your code and visual design](https://webaim.org/resources/evalquickref/) with developer-focused tools and testing practices.
 
 ## The authoring experience
 
-Check out a [demo of the checker itself](https://editoria11y.princeton.edu/demo).
+Check out a [demo of the checker itself](https://editoria11y.princeton.edu/next).
 
-* When **logged-in authors and editors** are viewing published or in-preview pages, Editoria11y's toggle discretely indicates if any issues are present on the current page.
-* Clicking the toggle opens the checker's main panel. Alerts are placed on pieces of content with issues, with tooltips to explain each problem and what actions are needed to resolve it. If an issue is not critical or may be OK as written, buttons are available to dismiss the alert on this page, either for the current user ("Hide alert") or for all users ("Mark as Checked and OK").
-* When Editoria11y finds **new** issues on a page that was just edited, the panel pops open automatically.
-* The main panel also allows authors to jump to the next issue, restore previously dismissed alerts, visualize text alternatives for images on the page ("alts"), and view the document's heading outline.
+* When **logged-in authors and editors** are viewing pages, Editoria11y inserts tooltips marking any issues present on the current page. Issues are also highlighted while editing in the Block Editor / Gutenberg.
+* Tooltips explain each problem and what actions are needed to resolve it. Some issues are marked as "manual checks," can be hidden or marked as OK.
+* Clicking the main toggle shows and hides the tooltips.
+* The main toggle also allows authors to jump to the next issue, restore previously dismissed alerts, visualize text alternatives for images on the page ("alts"), and view the document's heading outline.
 * Optionally, the checker can also outline blocks with issues while the author is editing the content.
 
 ## The admin experience
 
 * Filterable reports let you explore recent issues, which pages have the most issues, which issues are most common, and which issues have been dismissed. These populate and update as content is viewed and updated.
 * Various settings are available to constrain checks to specific parts of the page and tweak the sensitivity of several tests.
-
-Note that all this runs locally within your site. This plugin is the WordPress adaptation of the free and open-source [Editoria11y library](https://editoria11y.princeton.edu). Tests run in the browser and findings are stored in your own database; nothing is sent to any third party.
 
 ## The tests
 
@@ -83,16 +81,16 @@ Editoria11y is...spellcheck: a seamless, automatic and intuitive integration for
 
 Editoria11y's test suite is quite similar to [Sa11y](https://wordpress.org/plugins/sa11y/). Editoria11y began as a Sa11y fork, and the maintainers collaborate on new tests and optimizations.
 
-The look, feel and features outside of the core test suite are a bit different. At a high level:
+The look, feel and features outside the core test suite are a bit different. At a high level:
 
-* Sa11y focuses on flexibility and extensibility:
-    * The end-user can override appearance and test coverage settings from the results panel
+* Sa11y provides a broader test suite:
     * A legibility scoring library is included
     * A contrast checking library is included
-* Editoria11y focuses on providing a shared experience for all editors:
-    * An API is added, meaning findings are synchronized with your site's database, populating a site-wide reporting dashboard
+    * The end-user can override appearance and test coverage settings from the results panel
+* Editoria11y provides live-editing feedback and server-side tools:
+    * Editors receive feedback while editing.
+    * Findings are synchronized to a site-wide reporting dashboard
     * Manual-checks marked as "OK" are dismissed for **all** users, not just the current user
-    * Issues can be highlighted within the Block Editor/Gutenberg as you edit, not just on the published page
     * All configuration is managed in the plugin settings
 
 = Is this an overlay? =
@@ -113,7 +111,7 @@ If you notice anything amiss, experiment with these settings:
 
 1. Pick a "Theme for tooltips" that looks nice with your site's colors.
 2. If the checker is flagging issues that are not relevant to content editors, either use "Check content in these containers" to constrain checks to the parts of the page with editable content, or "Exclude these elements from checks" to skip over certain elements, regions or widgets.
-3. Editoria11y also provides a minimalist "as-you-type" issue highlighter that works inside the Block Editor/Gutenberg. If you find this feature annoying rather than helpful, change "Highlight issues while editing content" to "Only definite errors" or "None."
+3. Editoria11y also provides an "as-you-type" issue highlighter that works inside the Block Editor/Gutenberg. If you find live correction annoying rather than helpful, change "Check inside the block editor" to unset "always show tips," or chose "Do not check while editing."
 4. If you do not want PDF or other document types flagged for manual checks, provide a shorter selector list or set "Document types that need manual review" to `false`
 5. If your theme has done something very unusual with its layout, such as setting the height of the content container to 0px, you may see confusing alerts when opening Editoria11y tips saying that the highlighted element may be off-screen or invisible. If that happens, disable "Check if elements are visible when using panel navigation buttons." This is disabled by defaults on any WordPress themes we have noticed this on, so if you find a theme
 
@@ -142,6 +140,23 @@ Editoria11y began as a fork of the Toronto Metropolitan University's [Sa11y Acce
 
 Note that work is proceeding on the [UI rewrite](https://editoria11y.princeton.edu/next/), and feedback would be much appreciated.
 
+= 2.0.4 =
+* Fixes race condition that caused the checker to not always appear in the block editor.
+* Adds color highlighting inside the headings panel.
+
+= 2.0.3 =
+* Fixes alignment of issue count in tooltip when there is exactly 1 issue.
+
+= 2.0.2 =
+* Improved tip placement logic, and some visual refinements.
+
+= 2.0.1 =
+* Fixes some alignment and display bugs, especially in Safari.
+
+= 2.0.0 =
+* Updates to the 2.3 branch of the checker library. This is a significant redesign of the tips and panel, so please do test before sending to production on complex sites. The new interface can be tested on the [Editoria11y library demo site](https://editoria11y.princeton.edu/next/).
+* New interface for the in-editor checker brings in the full tooltip rather than a simple outline, and eliminates [compatibility issues with other plugins](https://github.com/itmaybejj/editoria11y-wp/issues/37) that were also modifying the Gutenberg interface.
+
 = 1.0.21 =
 * [Fix for live checker not showing in WP 6.6+](https://github.com/itmaybejj/editoria11y-wp/issues/36).
 
@@ -157,29 +172,3 @@ Note that work is proceeding on the [UI rewrite](https://editoria11y.princeton.e
 = 1.0.17 =
 * Fix for table structure updates failing in MariaDB
 * [ Display author name in CSV export ](https://github.com/itmaybejj/editoria11y-wp/issues/29) when user data is not stored in the default table.
-
-= 1.0.16 =
-* [ Display author name on dashboard ](https://github.com/itmaybejj/editoria11y-wp/issues/29) when user data is not stored in the default table.
-
-= 1.0.15 =
-* [Begins recording post ID](https://github.com/itmaybejj/editoria11y-wp/issues/18) with results, which allows for filtering the dashboard by author and published status, and sorting pages by modified date.
-* [Adds author, publish status and edit URL](https://github.com/itmaybejj/editoria11y-wp/issues/17) to the results export CSV.
-* [Fix for tables not provisioning on network activation](https://github.com/itmaybejj/editoria11y-wp/issues/22) for multi-site installs.
-* [Fix for false positives on links](https://github.com/itmaybejj/editoria11y-wp/issues/28) titled only "Download," "Tab" or "Window."
-* [Auto-opens detail/summary elements](https://github.com/itmaybejj/editoria11y-wp/issues/27) when jumping to a hidden alert, and improves alert positioning on hidden elements.
-* [Adds alert for WordPress button blocks](https://github.com/itmaybejj/editoria11y-wp/issues/28) that are not yet linked.
-* [Basic support for inline highlighting in the Site Editor](https://github.com/itmaybejj/editoria11y-wp/issues/4).
-* [Backwards compatibility for Firefox 115 ESR](https://www.drupal.org/project/editoria11y/issues/3444920).
-
-= 1.0.14 =
-* Page URLs now have a slightly shorter limit for [Pantheon compatibility](https://docs.pantheon.io/guides/wordpressvip/troubleshooting#maximum-index-size)
-* Update library to [2.1.2](https://github.com/itmaybejj/editoria11y/releases/tag/2.1.2)
-
-= 1.0.13 =
-* Themes and plugins can now provide [custom results](https://editoria11y.princeton.edu/configuration/#customtests).
-* Old results will clear from the dashboard when clicking through to a page with checking disabled.
-* More accurate accessible name calculation for complex situations involving CSS generated content, nested SVG or aria-labelledby references.
-* Headings are now clickable in the outline panel.
-* Experimental inline checker now highlights specific links with issues within a block.
-* Bugfix: Experimental inline checker was not appearing in some contexts.
-* Bugfix: two consecutive paragraphs starting with "A " could throw a false positive on the possible link test.

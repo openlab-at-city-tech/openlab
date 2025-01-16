@@ -2,9 +2,7 @@
 /**
  * WooCommerce cart Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -174,7 +172,13 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'title'    => __( 'Cart Click', 'astra' ),
 			'priority' => 60,
 			'settings' => array(),
-			'context'  => Astra_Builder_Helper::$desktop_general_tab,
+			'context'  => array( 
+				Astra_Builder_Helper::$desktop_general_tab,
+				array(
+					'setting' => 'ast_selected_tab',
+					'value'   => 'general',
+				),
+			),
 			'divider'  => array( 'ast_class' => 'ast-section-spacing ast-bottom-spacing' ),
 		),
 
@@ -201,6 +205,34 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 		),
 
 		/**
+		 * Option: Cart icon click action for responsive devices.
+		 */
+		array(
+			'name'        => ASTRA_THEME_SETTINGS . '[responsive-cart-click-action]',
+			'default'     => astra_get_option( 'responsive-cart-click-action' ),
+			'type'        => 'control',
+			'section'     => $_section,
+			'title'       => __( 'Responsive Cart Click Action', 'astra' ),
+			'control'     => 'ast-selector',
+			'priority'    => 65,
+			'choices'     => array(
+				'flyout'   => __( 'Slide-In', 'astra' ),
+				'redirect' => __( 'Cart Page', 'astra' ),
+			),
+			'responsive'  => false,
+			'renderAs'    => 'text',
+			'description' => __( 'This responsive cart click option will work for tablet and mobile in same way', 'astra' ),
+			'context'     => array(
+				Astra_Builder_Helper::$desktop_general_tab,
+				array(
+					'setting'  => 'ast_selected_device',
+					'operator' => 'in',
+					'value'    => array( 'tablet', 'mobile' ),
+				),
+			),
+			'transport'   => 'refresh',
+		), 
+		/**
 		 * Option: Woo sidebar Off-Canvas Slide-Out.
 		 */
 		array(
@@ -225,7 +257,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			),
 			'renderAs'   => 'text',
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-top-dotted-divider ast-bottom-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-top-dotted-divider' ),
 		),
 
 		/**
@@ -234,14 +266,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 		array(
 			'name'              => ASTRA_THEME_SETTINGS . '[woo-slide-in-cart-width]',
 			'type'              => 'control',
-			'context'           => array(
-				Astra_Builder_Helper::$general_tab_config,
-				array(
-					'setting'  => ASTRA_THEME_SETTINGS . '[woo-header-cart-click-action]',
-					'operator' => '==',
-					'value'    => 'flyout',
-				),
-			),
+			'context'           => Astra_Builder_Helper::$general_tab_config,
 			'control'           => 'ast-responsive-slider',
 			'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_responsive_slider' ),
 			'section'           => $_section,
@@ -262,6 +287,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 					'max'  => 100,
 				),
 			),
+			'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),
 		),
 
 		/**
@@ -978,7 +1004,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'section'  => $_section,
 			'priority' => 999,
 			'title'    => __( 'View Astra Pro Features', 'astra' ),
-			'url'      => ASTRA_PRO_CUSTOMIZER_UPGRADE_URL,
+			'url'      => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'header-builder' ),
 			'settings' => array(),
 			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			'context'  => array(),

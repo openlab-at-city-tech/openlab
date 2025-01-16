@@ -104,6 +104,19 @@
 	astra_apply_responsive_background_css( 'astra-settings[hb-header-bg-obj-responsive]', '.ast-primary-header.main-header-bar', 'tablet' );
 	astra_apply_responsive_background_css( 'astra-settings[hb-header-bg-obj-responsive]', '.ast-primary-header.main-header-bar', 'mobile' );
 
+	// Style guide logo background colour preview.
+	var desktopHeader = document.getElementById("ast-desktop-header");
+
+	if (desktopHeader) {
+		var mainHeaderWrap = desktopHeader.querySelector( '.ast-main-header-wrap.main-header-bar-wrap' );
+
+		if (mainHeaderWrap && mainHeaderWrap.querySelector(".site-logo-img")) {
+			astra_apply_responsive_background_css( "astra-settings[hb-header-bg-obj-responsive]", ".ast-sg-element-wrap.ast-sg-logo-section, .main-header-bar", "desktop" );
+			astra_apply_responsive_background_css( "astra-settings[hb-header-bg-obj-responsive]", ".ast-sg-element-wrap.ast-sg-logo-section, .ast-primary-header.main-header-bar", "tablet" );
+			astra_apply_responsive_background_css( "astra-settings[hb-header-bg-obj-responsive]", ".ast-sg-element-wrap.ast-sg-logo-section, .ast-primary-header.main-header-bar", "mobile" );
+		}
+	}
+
 	// Advanced CSS Generation.
 	astra_builder_advanced_css( 'section-primary-header-builder', '.ast-desktop .ast-primary-header-bar, .ast-header-break-point .ast-primary-header-bar' );
 

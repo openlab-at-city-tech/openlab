@@ -1,3 +1,56 @@
+##### [Version 3.3.39](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.38...v3.3.39) (2024-11-19)
+
+- Adds WPFS promo to About Page
+- Changes to Licenser and Updater to accommodate WPFS
+
+##### [Version 3.3.38](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.37...v3.3.38) (2024-11-13)
+
+- fix: new SDK slug on wp env
+- fix: wfp promo not checking for donation page
+
+##### [Version 3.3.37](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.36...v3.3.37) (2024-11-06)
+
+- Hotfix for Black Friday Global notice
+
+##### [Version 3.3.36](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.35...v3.3.36) (2024-11-06)
+
+- Update Blackfriday
+- Add WP Full Pay
+
+##### [Version 3.3.35](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.34...v3.3.35) (2024-10-29)
+
+ignore dev files
+
+##### [Version 3.3.34](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.33...v3.3.34) (2024-10-25)
+
+- Add initial promo delay to 6 hours
+- Add 21 days delay between two promos
+
+##### [Version 3.3.33](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.32...v3.3.33) (2024-10-24)
+
+- chore: disable otter promos by default
+- feat: add lang code for Formbricks survey
+
+##### [Version 3.3.32](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.31...v3.3.32) (2024-10-16)
+
+- Fix translations bugs and adapt mechanism to work on themes
+- Adds product review links in About page
+- Fix About page layout on Safari browser
+
+##### [Version 3.3.31](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.30...v3.3.31) (2024-10-14)
+
+- Update minimum PHP version required for Hyve promo
+- add E2E test support with wp-scripts and Playwright
+
+##### [Version 3.3.30](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.29...v3.3.30) (2024-09-10)
+
+- Remove margin auto from ThemeIsle Woo tab
+- Add Hyve Promo
+
+##### [Version 3.3.29](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.28...v3.3.29) (2024-08-21)
+
+- feat: improve the Promotions appearance timing
+
 ##### [Version 3.3.28](https://github.com/Codeinwp/themeisle-sdk/compare/v3.3.27...v3.3.28) (2024-08-09)
 
 

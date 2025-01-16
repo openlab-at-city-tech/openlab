@@ -80,7 +80,7 @@ return array(
 <!-- wp:group {"style":{"elements":{"link":{"color":{"text":"var:preset|color|background"}}}},"backgroundColor":"accent","className":"footertext","layout":{"type":"constrained"}} -->
 <div class="wp-block-group footertext has-accent-background-color has-background has-link-color"><!-- wp:paragraph {"align":"center","textColor":"background","className":"has-link-color","fontSize":"medium"} -->
 
-<p class="has-text-align-center has-link-color has-background-color has-text-color has-medium-font-size"><a href="https://www.wpradiant.net/products/free-portfolio-wordpress-theme/">'. esc_html('Portfolio WordPress Theme ','cv-portfolio-blocks') .'</a> By <a href="https://www.wpradiant.net/">'. esc_html('WP Radiant','cv-portfolio-blocks') .'</a> | '. esc_html('Proudly powered by','cv-portfolio-blocks') .' <a href="https://wordpress.org/">'. esc_html('WordPress','cv-portfolio-blocks') .'</a></p>
+<p class="has-text-align-center has-link-color has-background-color has-text-color has-medium-font-size"><a href="https://www.wpradiant.net/products/free-portfolio-wordpress-theme">'. esc_html('Portfolio WordPress Theme ','cv-portfolio-blocks') .'</a> By <a href="https://www.wpradiant.net/">'. esc_html('WP Radiant','cv-portfolio-blocks') .'</a> | '. esc_html('Proudly powered by','cv-portfolio-blocks') .' <a href="https://wordpress.org/">'. esc_html('WordPress','cv-portfolio-blocks') .'</a></p>
 <!-- /wp:paragraph --></div>
 <!-- /wp:group -->
 

@@ -66,6 +66,15 @@ class B2S_Util {
         }
     }
 
+    public static function getRandomColor() {
+        $letters = '0123456789ABCDEF';
+        $color = '#';
+        for ($i = 0; $i < 6; $i++) {
+            $color .= $letters[rand(0, 15)];
+        }
+        return $color;
+    }
+
     public static function returnInByts($val = "") {
         if (!empty($val)) {
             $last = strtolower(mb_substr(trim($val), -1));
@@ -536,8 +545,10 @@ class B2S_Util {
     }
 
     public static function getExcerpt($text, $count = 400, $max = false, $add = false) {
-//Bug: Converting json + PHP Extension
+
+        //Bug: Converting json + PHP Extension
         if (function_exists('mb_strlen') && function_exists('mb_substr') && function_exists('mb_stripos') && function_exists('mb_strripos')) {
+
             if (mb_strlen($text, 'UTF-8') < $count) {
                 return trim($text);
             }
@@ -545,51 +556,79 @@ class B2S_Util {
                 return trim($text);
             }
 
-            $stops = array('.', '?', '!', '#', '(');
-            $min = $count;
-            $cleanTruncateWord = true;
-            $max = ($max !== false) ? ($max - $min) : ($min - 1);
-            if (mb_strlen($text, 'UTF-8') < $max) {
+            //New Case: whole set - V8.0.0
+            $tmpMax = ($max !== false) ? ($max - $count) : ($count - 1);
+            if (mb_strlen($text, 'UTF-8') < $tmpMax) {
                 return trim($text);
             }
 
-            $sub = mb_substr($text, $min, $max, 'UTF-8');
-            $stopAt = '';
-            $stopAtPos = 0;
-            for ($i = 0; $i < count($stops); $i++) {
-                if (mb_strripos($sub, $stops[$i]) > $stopAtPos) {
-                    $stopAt = $stops[$i];
-                    $stopAtPos = mb_strripos($sub, $stops[$i]);
+            $tmpCount = ($max !== false) ? $max : $count;
+            $parts = preg_split('/([\s\n\r]+)/', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+            $length = 0;
+            $last_part = 0;
+            $last_taken = 0;
+            foreach ($parts as $part) {
+                $length += mb_strlen($part);
+                if ($length > $tmpCount) {
+                    break;
+                }
+                ++$last_part;
+                if (in_array($part[mb_strlen($part) - 1], array('.', '?', '!'))) {
+                    $last_taken = $last_part;
                 }
             }
+            $tmpText = implode(array_slice($parts, 0, $last_taken));
 
-            if (!empty($stopAt)) {
-                if (count($subArray = explode($stopAt, $sub)) > 1) {
-                    $cleanTruncateWord = false;
-                    if (mb_substr($subArray[count($subArray) - 1], 0, 1) == ' ' || mb_substr($subArray[count($subArray) - 1], 0, 1) == "\n") { //empty first charcater in last explode - delete last explode
-                        $subArray[count($subArray) - 1] = ' ';
-                    }
-                    if (mb_stripos($subArray[count($subArray) - 1], $stopAt) === false) { //delete last explode if no stops set
-                        $subArray[count($subArray) - 1] = mb_substr($subArray[count($subArray) - 1], 0, mb_stripos($subArray[count($subArray) - 1], ' '));
-                    }
-                    $sub = implode($stopAt, $subArray);
-                    $add = false;
-                }
-                if ($stopAt == '#') {
-                    $sub = mb_substr($sub, 0, -1);
-                }
-            }
+            //Old case: first whole set in $text is greater than $count, do cut off by word -until V7.5.5
+            if (empty($tmpText)) {
 
-            if ($cleanTruncateWord) {
-                $lastIndex = mb_strripos($sub, ' ');
-                if ($lastIndex !== false) {
-                    $sub = trim(mb_substr($sub, 0, $lastIndex));
+                $stops = array('.', '?', '!', '#', '(');
+                $min = $count;
+                $cleanTruncateWord = true;
+                $max = ($max !== false) ? ($max - $min) : ($min - 1);
+                if (mb_strlen($text, 'UTF-8') < $max) {
+                    return trim($text);
                 }
+
+                $sub = mb_substr($text, $min, $max, 'UTF-8');
+                $stopAt = '';
+                $stopAtPos = 0;
+                for ($i = 0; $i < count($stops); $i++) {
+                    if (mb_strripos($sub, $stops[$i]) > $stopAtPos) {
+                        $stopAt = $stops[$i];
+                        $stopAtPos = mb_strripos($sub, $stops[$i]);
+                    }
+                }
+
+                if (!empty($stopAt)) {
+                    if (count($subArray = explode($stopAt, $sub)) > 1) {
+                        $cleanTruncateWord = false;
+                        if (mb_substr($subArray[count($subArray) - 1], 0, 1) == ' ' || mb_substr($subArray[count($subArray) - 1], 0, 1) == "\n") { //empty first charcater in last explode - delete last explode
+                            $subArray[count($subArray) - 1] = ' ';
+                        }
+                        if (mb_stripos($subArray[count($subArray) - 1], $stopAt) === false) { //delete last explode if no stops set
+                            $subArray[count($subArray) - 1] = mb_substr($subArray[count($subArray) - 1], 0, mb_stripos($subArray[count($subArray) - 1], ' '));
+                        }
+                        $sub = implode($stopAt, $subArray);
+                        $add = false;
+                    }
+                    if ($stopAt == '#') {
+                        $sub = mb_substr($sub, 0, -1);
+                    }
+                }
+
+                if ($cleanTruncateWord) {
+                    $lastIndex = mb_strripos($sub, ' ');
+                    if ($lastIndex !== false) {
+                        $sub = trim(mb_substr($sub, 0, $lastIndex));
+                    }
+                }
+                $text = trim(mb_substr($text, 0, $min, 'UTF-8') . $sub);
+            } else {
+                $text = $tmpText;
             }
-            $text = trim(mb_substr($text, 0, $min, 'UTF-8') . $sub);
             return ($add) ? $text . "..." : $text;
         }
-
         return trim($text);
     }
 
@@ -736,5 +775,4 @@ class B2S_Util {
         }
         return $url;
     }
-
 }

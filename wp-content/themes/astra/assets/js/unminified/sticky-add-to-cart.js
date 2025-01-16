@@ -20,9 +20,9 @@
 
     if (AstraSmoothScrollBtn && element) {
         const headerOffset = 230;
-        const elementPosition = element.getBoundingClientRect().top;
+        const elementPosition = document.querySelector('.single_add_to_cart_button').offsetTop;
         if (elementPosition) {
-            const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+            const offsetPosition = elementPosition - headerOffset;
 
             if (offsetPosition) {
                 AstraSmoothScrollBtn.addEventListener('click', function (e) {

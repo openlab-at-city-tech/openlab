@@ -110,7 +110,7 @@ function su_shortcode_box( $atts = null, $content = null ) {
 		esc_attr( $atts['box_color'] ),
 		esc_attr( $atts['title_color'] ),
 		esc_attr( $atts['inner_radius'] ),
-		su_do_attribute( $atts['title'] ),
+		su_do_attribute( $atts['title'], true ),
 		su_do_nested_shortcodes( $content, 'box' ),
 		sanitize_html_class( $atts['id'] )
 	);

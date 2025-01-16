@@ -3,8 +3,8 @@ Contributors: oneweekonetool, boonebgorges, digitaleffie, gossettphd, janaremy, 
 Donate link: http://anthologize.org/
 Tags: book, pdf, tei, epub, publish, ebook
 Requires at least: 3.3
-Tested up to: 6.1
-Stable tag: 0.8.1
+Tested up to: 6.7
+Stable tag: 0.8.2
 
 Use the power of WordPress to transform your content into a book.
 
@@ -29,6 +29,11 @@ If you're upgrading manually from a previous version of Anthologize, please be s
 
 For full export functionality, your PHP installation must have the `mbstring` extension enabled. See <a href="https://www.php.net/manual/en/mbstring.installation.php">the mbstring installation page on php.net</a> for more information.
 
+Note that the following PHP extensions may be required for all export formats:
+- mbstring
+- tcpdf
+- zip
+
 == Screenshots ==
 
 1. The Anthologize Project Organizer screen
@@ -46,7 +51,6 @@ max_execution_time = 180;
 Change the memory_limit setting:
 memory_limit = 128M;
 
-
 The latest release of PHP has a default memory limit of 128M, but this might not be in place on your server. Increasing the execution time (measured in seconds) can also help.
 In a hosted server environment, increasing the resources Anthologize consumes could hurt performance for everyone else on your server. It might be worth consulting your hosting company before increasing these resource limits and exporting projects on a regular basis.
 
@@ -55,6 +59,9 @@ Cover images in ePub output.
 To add your own cover images, just upload them to the anthologize/templates/epub/covers directory and they will appear as options in the export screen. Make sure they are readable by the server.
 
 == Changelog ==
+
+= 0.8.2 =
+* Improved PHP 8.1+ compatibility
 
 = 0.8.1 =
 * Improved PHP 8+ compatibility

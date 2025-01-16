@@ -2,7 +2,7 @@
 /**
  * Plugin Name: NextGEN Gallery
  * Description: The most popular gallery plugin for WordPress and one of the most popular plugins of all time with over 30 million downloads.
- * Version: 3.59.5
+ * Version: 3.59.6
  * Author: Imagely
  * Plugin URI: https://www.imagely.com/wordpress-gallery-plugin/nextgen-gallery/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=pluginuri
  * Author URI: https://www.imagely.com/?utm_source=ngglite&utm_medium=pluginlist&utm_campaign=authoruri
@@ -23,6 +23,7 @@ use Imagely\NGG\Admin\AMNotifications;
 use Imagely\NGG\Admin\About;
 use Imagely\NGG\Admin\MenuNudge;
 use Imagely\NGG\Admin\Ecommerce_Preview;
+use Imagely\NGG\Admin\Onboarding_Wizard;
 
 /**
  * @deprecated
@@ -153,6 +154,7 @@ class C_NextGEN_Bootstrap {
 			$this->notifications->hooks();
 
 			if ( is_admin() ) {
+				( new Onboarding_Wizard() )->hooks();
 				( new About() )->hooks();
 				( new MenuNudge() )->hooks();
 				( new Ecommerce_Preview() )->hooks();
@@ -665,7 +667,7 @@ class C_NextGEN_Bootstrap {
 		add_action( 'activate_' . NGG_PLUGIN_BASENAME, [ $this, 'activate' ], -10 );
 
 		// Handle activation redirect to overview page.
-		add_action( 'init', [ $this, 'handle_activation_redirect' ] );
+		add_action( 'admin_init', [ $this, 'handle_activation_redirect' ] );
 
 		// Ensure that settings manager is saved as an array.
 		add_filter( 'pre_update_option_ngg_options', [ $this, 'persist_settings' ] );
@@ -801,6 +803,7 @@ class C_NextGEN_Bootstrap {
 		\Imagely\NGG\IGW\EventPublisher::get_instance()->register_hooks();
 		\Imagely\NGG\Util\Router::get_instance()->register_hooks();
 		\Imagely\NGG\Util\ThirdPartyCompatibility::get_instance()->register_hooks();
+		( new \Imagely\NGG\Util\UsageTracking )->hooks();
 	}
 
 	/**
@@ -822,9 +825,23 @@ class C_NextGEN_Bootstrap {
 	}
 
 	public function handle_activation_redirect() {
+		// Check if it is new install or not.
+		$envira_display_welcome = get_option( 'ngg_wizard' );
+
 		if ( get_transient( 'ngg-activated' ) ) {
+
+			if ( ! $envira_display_welcome ) {
+				// New install.
+				update_option( 'ngg_wizard', 'yes' );
+				wp_safe_redirect( admin_url( '/index.php?page=nextgen-gallery-setup-wizard' ) );
+			} else {
+				// Existing install.
+				update_option( 'ngg_wizard', 'no' );
+				wp_safe_redirect( admin_url( '/admin.php?page=nextgen-gallery' ) );
+			}
 			delete_transient( 'ngg-activated' );
-			wp_redirect( admin_url( '?page=nextgen-gallery' ) );
+			exit;
+
 		}
 	}
 
@@ -948,7 +965,7 @@ class C_NextGEN_Bootstrap {
 
 	public function activate() {
 		\Imagely\NGG\Util\Installer::set_role_caps();
-		set_transient( 'ngg-activated', time(), 30 );
+		set_transient( 'ngg-activated', time(), 120 );
 
 		$over_time = get_option( 'nextgen_over_time', [] );
 		if ( empty( $over_time['installed_lite'] ) ) {
@@ -967,7 +984,7 @@ class C_NextGEN_Bootstrap {
 		define( 'NGG_PRODUCT_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PLUGIN_DIR, '/\\' ), 'products' ] ) );
 		define( 'NGG_MODULE_DIR', implode( DIRECTORY_SEPARATOR, [ rtrim( NGG_PRODUCT_DIR, '/\\' ), 'photocrati_nextgen', 'modules' ] ) );
 		define( 'NGG_PLUGIN_STARTED_AT', microtime() );
-		define( 'NGG_PLUGIN_VERSION', '3.59.5' );
+		define( 'NGG_PLUGIN_VERSION', '3.59.6' );
 
 		define( 'NGG_SCRIPT_VERSION', defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? (string) mt_rand( 0, mt_getrandmax() ) : NGG_PLUGIN_VERSION );
 

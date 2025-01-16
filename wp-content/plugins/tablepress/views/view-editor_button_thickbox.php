@@ -25,9 +25,8 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 	 * Object for the Editor Button Thickbox List Table.
 	 *
 	 * @since 1.0.0
-	 * @var TablePress_Editor_Button_Thickbox_List_Table
 	 */
-	protected $wp_list_table;
+	protected \TablePress_Editor_Button_Thickbox_List_Table $wp_list_table;
 
 	/**
 	 * Initializes the View class.
@@ -126,7 +125,7 @@ html {
 		}
 		?>
 <form method="get">
-	<input type="hidden" name="action" value="tablepress_<?php echo $this->action; ?>" />
+	<input type="hidden" name="action" value="tablepress_<?php echo $this->action; ?>">
 		<?php
 		wp_nonce_field( TablePress::nonce( $this->action ), '_wpnonce', false );
 		$this->wp_list_table->search_box( __( 'Search Tables', 'tablepress' ), 'tables_search' );

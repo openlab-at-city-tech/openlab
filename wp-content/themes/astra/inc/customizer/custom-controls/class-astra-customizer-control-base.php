@@ -3,8 +3,6 @@
  * Astra Theme Customizer Configuration Base.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.4.3
  */
@@ -80,6 +78,44 @@ if ( ! class_exists( 'Astra_Customizer_Control_Base' ) ) {
 
 			wp_enqueue_script( 'astra-custom-control-script', ASTRA_THEME_URI . 'inc/customizer/extend-custom-controls/build/index.js', $custom_controls_react_deps, ASTRA_THEME_VERSION, true );
 			wp_set_script_translations( 'astra-custom-control-script', 'astra' );
+
+
+			/**
+			 * Had to go this route because the default context check
+			 * from the core was not working properly for advanced conditions in `inc/customizer/configurations/builder/header/configs/account.php`.
+			 *
+			 * @since 4.6.15
+			 */
+			wp_add_inline_script(
+				'astra-custom-control-script',
+				"
+				(function(){
+					window.addEventListener('load', function() {
+
+						wp.customize.state('astra-customizer-tab').bind(function(state) {
+
+							if ( 'general' === state ) {
+								wp.customize.control('astra-settings[header-account-icon-size]').container.hide();
+								wp.customize.control('astra-settings[header-account-icon-color]').container.hide();
+								return;
+							}
+
+							var loginStyleIsText = 'text' === wp.customize('astra-settings[header-account-login-style]').get();
+							var logoutStyleIsText = 'text' === wp.customize('astra-settings[header-account-logout-style]').get();
+
+							var loginIsIconExtend = 'icon' === wp.customize('astra-settings[header-account-login-style-extend-text-profile-type]').get();
+							var logoutIsIconExtend = 'icon' === wp.customize('astra-settings[header-account-logout-style-extend-text-profile-type]').get();
+
+							if ( ( loginStyleIsText && loginIsIconExtend ) || ( logoutStyleIsText && logoutIsIconExtend ) ) {
+								wp.customize.control('astra-settings[header-account-icon-size]').container.show();
+								wp.customize.control('astra-settings[header-account-icon-color]').container.show();
+							}
+						});
+
+					});
+				})();
+				"
+			);
 
 			$astra_typo_localize = array(
 				'100'       => __( 'Thin 100', 'astra' ),

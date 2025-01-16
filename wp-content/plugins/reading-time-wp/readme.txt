@@ -3,8 +3,8 @@ Contributors: yingling017, jvarn13, bonaparte
 Donate link: https://jasonyingling.me/donations/buy-me-a-coffee/
 Tags: reading time, estimated time, word count, time, posts, page, reading
 Requires at least: 3.0.1
-Tested up to: 6.5.2
-Stable tag: 2.0.16
+Tested up to: 6.7
+Stable tag: 2.0.17
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Reading Time WP creates an estimated reading time of your posts that is inserted
 
 WP Reading Time let's you easily add an estimated reading time to your WordPress posts. Activating the plugin will automatically add the reading time to the beginning of your post's content. This can be deactivated in the Reading Time settings which can be accessed from your Dashboard's Settings menu. You can also edit the label and postfix from this menu.
 
-If you'd prefer more control over where you add your reading time you can use the the [rt_reading_time] shortcode to insert the time into a post. This shortcode also excepts values for label and postfix. These are optional. Ex. [rt_reading_time label="Reading Time:" postfix="minutes"].
+If you'd prefer more control over where you add your reading time you can use the the [rt_reading_time] shortcode to insert the time into a post. This shortcode also excepts values for label and postfix. These are optional. Ex. [rt_reading_time label="Reading Time:" postfix="minutes" postfix_singular="minute"].
 
 == Installation ==
 
@@ -74,6 +74,11 @@ Use the optional page_id attribute on the shortcode. e.g. [rt_reading_time label
 2. The options available in Reading Time WP.
 
 == Changelog ==
+
+= 2.0.17 =
+* Moved reading time output to function
+* Added filter for reading time output `rtwp_filter_reading_time_output` passes 4 arguments: `$output`, `$label`, `$reading_time`, `$postfix`
+* WordPress 6.7 support
 
 = 2.0.16 =
 * WordPress 6.5 support

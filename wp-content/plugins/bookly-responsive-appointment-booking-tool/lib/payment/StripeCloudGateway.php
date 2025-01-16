@@ -70,27 +70,29 @@ class StripeCloudGateway extends Lib\Base\Gateway
     public function retrieveStatus()
     {
         $payment_intent = $this->payment->getRefId();
-        $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->retrievePaymentIntent( $payment_intent );
-        if ( ( $data['status'] !== 'canceled' )
-            && strtoupper( $data['currency'] ) == Lib\Config::getCurrency()
-        ) {
-            $paid = $this->payment->getPaid();
-            if ( ! Lib\Config::isZeroDecimalsCurrency() ) {
-                $paid *= 100;
-            }
-            if ( (int) $paid == $data['amount'] ) {
-                $pi_status = $data['status'];
-                $good_statuses = array(
-                    'succeeded' => self::STATUS_COMPLETED,
-                    'processing' => self::STATUS_PROCESSING,
-                );
-                if ( array_key_exists( $pi_status, $good_statuses ) ) {
-                    return $good_statuses[ $pi_status ];
+        if ( $payment_intent ) {
+            $data = Lib\Cloud\API::getInstance()->getProduct( Lib\Cloud\Account::PRODUCT_STRIPE )->retrievePaymentIntent( $payment_intent );
+            if ( ( $data['status'] !== 'canceled' )
+                && strtoupper( $data['currency'] ) == Lib\Config::getCurrency()
+            ) {
+                $paid = $this->payment->getPaid();
+                if ( ! Lib\Config::isZeroDecimalsCurrency() ) {
+                    $paid *= 100;
+                }
+                if ( (int) $paid == $data['amount'] ) {
+                    $pi_status = $data['status'];
+                    $good_statuses = array(
+                        'succeeded' => self::STATUS_COMPLETED,
+                        'processing' => self::STATUS_PROCESSING,
+                    );
+                    if ( array_key_exists( $pi_status, $good_statuses ) ) {
+                        return $good_statuses[ $pi_status ];
+                    }
                 }
             }
         }
 
-        return self::STATUS_FAILED;
+        return self::STATUS_PROCESSING;
     }
 
     /**

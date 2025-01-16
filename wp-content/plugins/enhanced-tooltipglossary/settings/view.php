@@ -128,6 +128,17 @@
 								<br/><strong>This option cannot be empty.</strong>
 							</td>
 						</tr>
+
+                        <tr valign="top">
+                            <th scope="row">Display "Setup Wizard" in plugin menu</th>
+                            <td>
+                                <input type="hidden" name="cmtt_addWizardMenu" value="0"/>
+                                <input type="checkbox"
+                                       name="cmtt_addWizardMenu" <?php checked(true, \CM\CMTT_Settings::get('cmtt_addWizardMenu', 1)); ?>
+                                       value="1"/>
+                            </td>
+                            <td colspan="2" class="cm_field_help_container">Uncheck this to remove Setup Wizard from plugin menu.</td>
+                        </tr>
 						<tr valign="top" class="onlyinpro">
 							<th scope="row">Glossary Breadcrumbs Title</th>
 							<td><?php echo \CM\CMTT_Settings::renderOnlyin(); ?></td>
@@ -323,7 +334,7 @@
 							</td>
 							<td colspan="2" class="cm_field_help_container">
 								<strong>Warning: Don't change this setting unless you know what you're doing</strong><br/>
-								Select this option if you want to load the plugin's js files in the footer.</td>
+                                This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues</td>
 						</tr>
 						<tr valign="top">
 							<th scope="row">Only highlight on "main" WP query?</th>
@@ -391,7 +402,7 @@
 								<input type="checkbox" name="cmtt_glossaryTooltipHashContent" <?php checked(true, \CM\CMTT_Settings::get('cmtt_glossaryTooltipHashContent', 0)); ?> value="1" />
 							</td>
 							<td colspan="2" class="cm_field_help_container">
-								If this option is enabled, the tooltip content will not be passed directly to JS with the HTML attribute.</td>
+                                When this option is enabled, tooltip content will not be passed directly to JavaScript via the HTML attribute. This setting can improve compatibility with page builders, such as Elementor.</td>
 						</tr>
 						<tr valign="top">
 							<th scope="row">Don't use the DOM parser for the content</th>

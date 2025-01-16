@@ -926,7 +926,7 @@ class Licenser extends Abstract_Module {
 	 */
 	public function can_load( $product ) {
 
-		if ( $product->is_wordpress_available() ) {
+		if ( ! $product->requires_license() ) {
 			return false;
 		}
 
@@ -975,55 +975,59 @@ class Licenser extends Abstract_Module {
 
 		add_action( 'admin_head', [ $this, 'auto_activate' ] );
 		if ( $this->product->is_plugin() ) {
-			add_filter(
-				'pre_set_site_transient_update_plugins',
-				[
-					$this,
-					'pre_set_site_transient_update_plugins_filter',
-				]
-			);
-			add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
-			add_filter( //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args
-				'http_request_args',
-				array(
-					$this,
-					'http_request_args',
-				),
-				10,
-				2
-			);
-			if ( ! self::is_valid( $product->get_basefile() ) ) {
+			if ( ! $product->is_wordpress_available() ) {
 				add_filter(
-					'plugin_action_links_' . plugin_basename( $product->get_basefile() ),
-					function ( $actions ) {
-						if ( $this->get_license_status( true ) !== self::STATUS_ACTIVE_EXPIRED ) {
-							return $actions;
-						}
-						$new_actions['deactivate'] = $actions['deactivate'];
-						$new_actions['renew_link'] = '<a style="color:#d63638" href="' . esc_url( $this->renew_url() ) . '" target="_blank" rel="external noopener noreferrer">' . esc_html( Loader::$labels['licenser']['renew_cta'] ) . '</a>';
-
-						return $new_actions;
-					}
+					'pre_set_site_transient_update_plugins',
+					[
+						$this,
+						'pre_set_site_transient_update_plugins_filter',
+					]
 				);
+				add_filter( 'plugins_api', array( $this, 'plugins_api_filter' ), 10, 3 );
+				add_filter( //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args
+					'http_request_args',
+					array(
+						$this,
+						'http_request_args',
+					),
+					10,
+					2
+				);
+				if ( ! self::is_valid( $product->get_basefile() ) ) {
+					add_filter(
+						'plugin_action_links_' . plugin_basename( $product->get_basefile() ),
+						function ( $actions ) {
+							if ( $this->get_license_status( true ) !== self::STATUS_ACTIVE_EXPIRED ) {
+								return $actions;
+							}
+							$new_actions['deactivate'] = $actions['deactivate'];
+							$new_actions['renew_link'] = '<a style="color:#d63638" href="' . esc_url( $this->renew_url() ) . '" target="_blank" rel="external noopener noreferrer">' . esc_html( Loader::$labels['licenser']['renew_cta'] ) . '</a>';
+
+							return $new_actions;
+						}
+					);
+				}
 			}
 
 			return $this;
 		}
 		if ( $this->product->is_theme() ) {
-			add_filter( 'site_transient_update_themes', array( &$this, 'theme_update_transient' ) );
-			add_action( 'delete_site_transient_update_themes', array( &$this, 'delete_theme_update_transient' ) );
-			add_action( 'load-update-core.php', array( &$this, 'delete_theme_update_transient' ) );
-			add_action( 'load-themes.php', array( &$this, 'delete_theme_update_transient' ) );
-			add_action( 'load-themes.php', array( &$this, 'load_themes_screen' ) );
-			add_filter( //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args
-				'http_request_args',
-				array(
-					$this,
-					'disable_wporg_update',
-				),
-				5,
-				2
-			);
+			if ( ! $product->is_wordpress_available() ) {
+				add_filter( 'site_transient_update_themes', array( &$this, 'theme_update_transient' ) );
+				add_action( 'delete_site_transient_update_themes', array( &$this, 'delete_theme_update_transient' ) );
+				add_action( 'load-update-core.php', array( &$this, 'delete_theme_update_transient' ) );
+				add_action( 'load-themes.php', array( &$this, 'delete_theme_update_transient' ) );
+				add_action( 'load-themes.php', array( &$this, 'load_themes_screen' ) );
+				add_filter( //phpcs:ignore WordPressVIPMinimum.Hooks.RestrictedHooks.http_request_args
+					'http_request_args',
+					array(
+						$this,
+						'disable_wporg_update',
+					),
+					5,
+					2
+				);
+			}
 
 			return $this;
 

@@ -253,10 +253,6 @@ class GF_Field_FileUpload extends GF_Field {
 		$multiple_files  = $this->multipleFiles;
 		$file_list_id    = 'gform_preview_' . $form_id . '_' . $id;
 
-		$is_entry_detail = $this->is_entry_detail();
-		$is_form_editor  = $this->is_form_editor();
-		$is_admin = $is_entry_detail || $is_form_editor;
-
 		// Generate upload rules messages ( allowed extensions, max no. of files, max file size ).
 		$upload_rules_messages = array();
 		// Extensions.
@@ -346,7 +342,7 @@ class GF_Field_FileUpload extends GF_Field {
 			$upload             = "<div id='{$container_id}' data-settings='{$plupload_init_json}' class='gform_fileupload_multifile'>
 										<div id='{$drag_drop_id}' class='gform_drop_area gform-theme-field-control'>
 											<span class='gform_drop_instructions'>{$drop_files_here_text} </span>
-											<button type='button' id='{$browse_button_id}' class='button gform_button_select_files gform-theme-button gform-theme-button--control' {$describedby} {$tabindex} >{$select_files_text}</button>
+											<button type='button' id='{$browse_button_id}' class='button gform_button_select_files gform-theme-button gform-theme-button--control' {$describedby} {$tabindex} {$disabled_text}>{$select_files_text}</button>
 										</div>
 									</div>";
 
@@ -582,11 +578,23 @@ class GF_Field_FileUpload extends GF_Field {
 					if ( ! isset( $file_info['temp_filename'] ) ) {
 						$existing_file = $this->check_existing_entry( $entry_id, $input_name, $file_info );
 
+						// If existing file is an array, we need to get the filename to avoid a fatal.
+						if ( rgar( $existing_file, 'uploaded_filename' ) ) {
+							$existing_file = $existing_file['uploaded_filename'];
+						}
+
 						// We already have the file path in $existing_file, however it's good to check that the file path in the entry meta matches.
 						$uploaded_path = gform_get_meta( $entry_id, self::get_file_upload_path_meta_key_hash( $existing_file ) );
 
 						if ( $uploaded_path ) {
 							$uploaded_files[ $i ] = $uploaded_path['url'] . $uploaded_path['file_name'];
+						} else {
+							// If there is no file path in the entry meta or we're not editing an existing entry, get the upload path.
+							$uploaded_path = GFFormsModel::get_file_upload_path( $form_id, $existing_file, false );
+
+							if ( $uploaded_path ) {
+								$uploaded_files[ $i ] = $uploaded_path['url'];
+							}
 						}
 						continue;
 					}
@@ -742,7 +750,16 @@ class GF_Field_FileUpload extends GF_Field {
 
 	public function get_value_entry_list( $value, $entry, $field_id, $columns, $form ) {
 		if ( $this->multipleFiles ) {
-			$uploaded_files_arr = empty( $value ) ? array() : json_decode( $value, true );
+			if ( is_array( $value ) ) {
+				$uploaded_files_arr = $value;
+			} else {
+				$uploaded_files_arr = json_decode( $value, true );
+				if ( ! is_array( $uploaded_files_arr ) ) {
+					$uploaded_files_arr = array( $value );
+				}
+			}
+
+
 			$file_count         = count( $uploaded_files_arr );
 			if ( $file_count > 1 ) {
 				$value = empty( $uploaded_files_arr ) ? '' : sprintf( esc_html__( '%d files', 'gravityforms' ), count( $uploaded_files_arr ) );
@@ -930,7 +947,12 @@ class GF_Field_FileUpload extends GF_Field {
 
 		$value = rgar( $entry, $input_id );
 		if ( $this->multipleFiles && ! empty( $value ) ) {
-			return implode( ' , ', json_decode( $value, true ) );
+			$decoded = json_decode( $value, true );
+			if ( ! is_array( $decoded ) ) {
+				return $value;
+			}
+
+			return implode( ' , ', $decoded );
 		}
 
 		return $value;

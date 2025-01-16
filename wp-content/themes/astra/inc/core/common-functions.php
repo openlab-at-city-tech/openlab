@@ -3,8 +3,6 @@
  * Functions for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -281,29 +279,7 @@ if ( ! function_exists( 'astra_get_css_value' ) ) {
 				break;
 
 			case 'url':
-						$css_val = $unit . '(' . esc_url( $value ) . ')';
-				break;
-
-			case 'rem':
-				if ( 'inherit' === strtolower( $value ) || 'inherit' === strtolower( $default ) ) {
-					return $value;
-				}
-				if ( is_numeric( $value ) || strpos( $value, 'px' ) ) {
-					$value          = intval( $value );
-					$body_font_size = astra_get_option( 'font-size-body' );
-					if ( is_array( $body_font_size ) ) {
-						$body_font_size_desktop = ( isset( $body_font_size['desktop'] ) && '' != $body_font_size['desktop'] ) ? $body_font_size['desktop'] : 15;
-					} else {
-						$body_font_size_desktop = ( '' != $body_font_size ) ? $body_font_size : 15;
-					}
-
-					if ( $body_font_size_desktop ) {
-						$css_val = esc_attr( $value ) . 'px;font-size:' . ( esc_attr( $value ) / esc_attr( $body_font_size_desktop ) ) . $unit;
-					}
-				} else {
-					$css_val = esc_attr( $value );
-				}
-
+				$css_val = $unit . '(' . esc_url( $value ) . ')';
 				break;
 
 			default:
@@ -348,13 +324,30 @@ if ( ! function_exists( 'astra_get_background_obj' ) ) {
 					break;
 
 				case 'image':
-					$overlay_type  = isset( $bg_obj['overlay-type'] ) ? $bg_obj['overlay-type'] : 'none';
-					$overlay_color = isset( $bg_obj['overlay-color'] ) ? $bg_obj['overlay-color'] : '';
-					$overlay_grad  = isset( $bg_obj['overlay-gradient'] ) ? $bg_obj['overlay-gradient'] : '';
+					$overlay_type    = isset( $bg_obj['overlay-type'] ) ? $bg_obj['overlay-type'] : 'none';
+					$overlay_color   = isset( $bg_obj['overlay-color'] ) ? $bg_obj['overlay-color'] : '';
+					$overlay_opacity = isset( $bg_obj['overlay-opacity'] ) ? $bg_obj['overlay-opacity'] : '';
+					$overlay_grad    = isset( $bg_obj['overlay-gradient'] ) ? $bg_obj['overlay-gradient'] : '';
 					if ( '' !== $bg_img ) {
 						if ( 'none' !== $overlay_type ) {
 							if ( 'classic' === $overlay_type && '' !== $overlay_color ) {
-								$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $overlay_color . ', ' . $overlay_color . '), url(' . $bg_img . ');';
+								$updated_overlay_color = $overlay_color;
+
+								// Compatibility of overlay color opacity to HEX & VAR colors.
+								if ( '' !== $overlay_opacity ) {
+									$is_linked_with_gcp = 'var' === substr( $overlay_color, 0, 3 );
+
+									if ( $is_linked_with_gcp ) {
+										$astra_gcp_instance    = new Astra_Global_Palette();
+										$updated_overlay_color = $astra_gcp_instance->get_color_by_palette_variable( $overlay_color );
+									}
+
+									if ( '#' === $updated_overlay_color[0] ) {
+										$updated_overlay_color = astra_hex_to_rgba( $updated_overlay_color, $overlay_opacity );
+									}
+								}
+
+								$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $updated_overlay_color . ', ' . $updated_overlay_color . '), url(' . $bg_img . ');';
 							} elseif ( 'gradient' === $overlay_type && '' !== $overlay_grad ) {
 								$gen_bg_css['background-image'] = $overlay_grad . ', url(' . $bg_img . ');';
 							} else {
@@ -433,8 +426,8 @@ if ( ! function_exists( 'astra_parse_css' ) ) {
 				$properties_added = 0;
 
 				foreach ( $properties as $property => $value ) {
-
-					if ( '' == $value && 0 !== $value ) {
+					// to ignore if the value is empty with just !important appended.
+					if ( ( '' == $value && 0 !== $value ) || '!important' === $value ) {
 						continue;
 					}
 
@@ -515,6 +508,73 @@ if ( ! function_exists( 'astra_get_option' ) ) {
 		 * @var Mixed.
 		 */
 		return apply_filters( "astra_get_option_{$option}", $value, $option, $default );
+	}
+}
+
+/**
+ * Return translated theme option.
+ */
+if ( ! function_exists( 'astra_get_i18n_option' ) ) {
+
+	/**
+	 * Returns translated string for strings saved in Astra settings.
+	 *
+	 * This function retrieves a theme option value and checks if it needs translation.
+	 * If the option's translation is needed, it looks it up based on the provided context.
+	 * If the translation is not available, it returns the default value.
+	 *
+	 * Usage examples:
+	 * - Retrieve translated theme option with a context description:
+	 *      $value = astra_get_i18n_option( 'astra-option-key', esc_html_x( '%astra%', 'Context Description', 'astra-addon' ) );
+	 *
+	 * - Retrieve translated theme option with a different context:
+	 *      $value = astra_get_i18n_option( 'astra-option-key', _x( '%astra%', 'Context Description', 'astra-addon' ) );
+	 *
+	 * @param  string $option       Option key.
+	 * @param  string $translated   Default translation flag.
+	 * @param  mixed  $default      Option default value.
+	 * @param  string $deprecated   Option default value.
+	 *
+	 * @return string Return option value.
+	 *
+	 * @since 4.8.1
+	 */
+	function astra_get_i18n_option( $option, $translated, $default = '', $deprecated = '' ) {
+		// #%astra%# is for TranslatePress compatibility.
+		$is_translated = '%astra%' !== $translated && ! strpos( $translated, '#%astra%#' );
+		return $is_translated ? $translated : astra_get_option( $option, $default, $deprecated );
+	}
+}
+
+/**
+ * Return translated string.
+ */
+if ( ! function_exists( 'astra_get_i18n_string' ) ) {
+
+	/**
+	 * Returns translated string.
+	 *
+	 * This function checks if string has translation.
+	 * If the translation is not available, it returns the default value.
+	 *
+	 * Usage examples:
+	 * - Retrieve translated theme option with a context description:
+	 *      $value = astra_get_i18n_string( $default, esc_html_x( '%astra%', 'Context Description', 'astra-addon' ) );
+	 *
+	 * - Retrieve translated theme option with a different context:
+	 *      $value = astra_get_i18n_string( $default, _x( '%astra%', 'Context Description', 'astra-addon' ) );
+	 *
+	 * @param  string $default      Default string value.
+	 * @param  string $translated   Default translation flag.
+	 *
+	 * @return string Return string value.
+	 *
+	 * @since 4.8.1
+	 */
+	function astra_get_i18n_string( $default, $translated ) {
+		// #%astra%# is for TranslatePress compatibility.
+		$is_translated = '%astra%' !== $translated && ! strpos( $translated, '#%astra%#' );
+		return $is_translated ? $translated : $default;
 	}
 }
 
@@ -831,6 +891,37 @@ if ( ! function_exists( 'astra_the_post_title' ) ) {
 	}
 }
 
+if ( ! function_exists( 'astra_the_search_page_title' ) ) {
+	/**
+	 * Function to get the search page custom title.
+	 *
+	 * @param string $before Optional. Content to prepend to the title.
+	 * @param string $after  Optional. Content to append to the title.
+	 * @param bool   $echo   Optional, default to true.Whether to display or return.
+	 *
+	 * @return string Returns search page custom title.
+	 *
+	 * @since 4.8.4
+	 */
+	function astra_the_search_page_title( $before = '', $after = '', $echo = false ) {
+		$title = apply_filters(
+			'astra_the_search_page_title',
+			sprintf(
+				/* translators: 1: search title, 2: search string */
+				'%1$s %2$s',
+				astra_get_i18n_option( 'section-search-page-title-custom-title', _x( '%astra%', 'Search Page Title: Heading - Text', 'astra' ) ),
+				'<span>' . get_search_query() . '</span>'
+			)
+		);
+
+		if ( $echo ) {
+			echo $before . $title . $after; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		} else {
+			return $before . $title . $after;
+		}
+	}
+}
+
 /**
  * Wrapper function for the_title()
  */
@@ -850,7 +941,7 @@ if ( ! function_exists( 'astra_the_title' ) ) {
 	function astra_the_title( $before = '', $after = '', $post_id = 0, $echo = true ) {
 
 		$title             = '';
-		$post_type         = strval( get_post_type() );
+		$post_type         = astra_get_post_type();
 		$blog_post_title   = astra_get_option( 'ast-dynamic-archive-' . $post_type . '-structure', array( 'ast-dynamic-archive-' . $post_type . '-title', 'ast-dynamic-archive-' . $post_type . '-description' ) );
 		$single_post_title = astra_get_option( 'ast-dynamic-single-' . $post_type . '-structure', 'page' === $post_type ? array( 'ast-dynamic-single-' . $post_type . '-image', 'ast-dynamic-single-' . $post_type . '-title' ) : array( 'ast-dynamic-single-' . $post_type . '-title', 'ast-dynamic-single-' . $post_type . '-meta' ) );
 
@@ -909,8 +1000,7 @@ if ( ! function_exists( 'astra_get_the_title' ) ) {
 				// for search page - title always display.
 			} elseif ( is_search() ) {
 
-				/* translators: 1: search string */
-				$title = apply_filters( 'astra_the_search_page_title', sprintf( astra_get_option( 'section-search-page-title-custom-title' ) . ' %s', '<span>' . get_search_query() . '</span>' ) );
+				$title = astra_the_search_page_title();
 
 			} elseif ( class_exists( 'WooCommerce' ) && is_shop() ) {
 
@@ -941,9 +1031,8 @@ if ( ! function_exists( 'astra_get_the_title' ) ) {
  * @return boolean false if it is an existing user , true if not.
  */
 function astra_use_dynamic_blog_layouts() {
-	$astra_settings                         = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['dynamic-blog-layouts'] = isset( $astra_settings['dynamic-blog-layouts'] ) ? $astra_settings['dynamic-blog-layouts'] : true;
-	return apply_filters( 'astra_get_option_dynamic_blog_layouts', $astra_settings['dynamic-blog-layouts'] );
+	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	return apply_filters( 'astra_get_option_dynamic_blog_layouts', isset( $astra_settings['dynamic-blog-layouts'] ) ? $astra_settings['dynamic-blog-layouts'] : true );
 }
 
 /**
@@ -952,7 +1041,7 @@ function astra_use_dynamic_blog_layouts() {
  * @since 4.0.0
  */
 function astra_get_taxonomy_banner_legacy_layout() {
-	$post_type        = strval( get_post_type() );
+	$post_type        = astra_get_post_type();
 	$banner_structure = is_search() ? astra_get_option( 'section-search-page-title-structure' ) : astra_get_option( 'ast-dynamic-archive-' . $post_type . '-structure', array( 'ast-dynamic-archive-' . $post_type . '-title', 'ast-dynamic-archive-' . $post_type . '-description' ) );
 
 	if ( empty( $banner_structure ) ) {
@@ -968,10 +1057,7 @@ function astra_get_taxonomy_banner_legacy_layout() {
 					case 'archive-title':
 						do_action( 'astra_before_archive_title' );
 						if ( is_search() ) {
-							$title = apply_filters( 'astra_the_search_page_title', sprintf( /* translators: 1: search string */ astra_get_option( 'section-search-page-title-custom-title' ) . ' %s', '<span>' . get_search_query() . '</span>' ) );
-							?>
-							 <h1 class="page-title ast-archive-title"> <?php echo $title; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> </h1>
-																				  <?php
+							astra_the_search_page_title( '<h1 class="page-title ast-archive-title">', '</h1>', true );
 						} else {
 							add_filter( 'get_the_archive_title_prefix', '__return_empty_string' );
 							the_archive_title( '<h1 class="page-title ast-archive-title">', '</h1>' );
@@ -989,11 +1075,10 @@ function astra_get_taxonomy_banner_legacy_layout() {
 					case 'archive-description':
 						do_action( 'astra_before_archive_description' );
 						if ( is_search() ) {
-							if ( have_posts() ) {
-								echo wp_kses_post( wpautop( astra_get_option( 'section-search-page-title-found-custom-description' ) ) );
-							} else {
-								echo wp_kses_post( wpautop( astra_get_option( 'section-search-page-title-not-found-custom-description' ) ) );
-							}
+							$title = have_posts()
+								? astra_get_i18n_option( 'section-search-page-title-found-custom-description', _x( '%astra%', 'Search Page Custom `When Results Found` Text', 'astra' ) )
+								: astra_get_i18n_option( 'section-search-page-title-not-found-custom-description', _x( '%astra%', 'Search Page Custom `When Results Not Found` Text', 'astra' ) );
+							echo wp_kses_post( wpautop( $title ) );
 						} else {
 							echo wp_kses_post( wpautop( get_the_archive_description() ) );
 						}
@@ -1026,7 +1111,6 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 				$author_name_html   = ( true === astra_check_is_structural_setup() && $author_name ) ? __( 'Author name: ', 'astra' ) . $author_name : $author_name;
 				$author_description = get_the_author_meta( 'description' );
 				/** @psalm-suppress RedundantConditionGivenDocblockType */
-				$author_description_html = wp_kses_post( $author_description );
 				?>
 
 				<section class="ast-author-box ast-archive-description">
@@ -1034,7 +1118,7 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 						<?php do_action( 'astra_before_archive_title' ); ?>
 						<h1 class='page-title ast-archive-title'><?php echo esc_html( apply_filters( 'astra_author_page_title', $author_name_html ) ); ?></h1>
 						<?php do_action( 'astra_after_archive_title' ); ?>
-						<p><?php echo $author_description_html; ?></p>
+						<p><?php echo wp_kses_post( $author_description ); ?></p>
 						<?php do_action( 'astra_after_archive_description' ); ?>
 					</div>
 					<div class="ast-author-avatar">
@@ -1045,9 +1129,8 @@ if ( ! function_exists( 'astra_archive_page_info' ) ) {
 				<?php
 
 			} else {
-				$taxonomy_banner_content      = astra_get_taxonomy_banner_legacy_layout();
-				$taxonomy_banner_content_html = is_string( $taxonomy_banner_content ) ? wp_kses_post( $taxonomy_banner_content ) : '';
-				echo $taxonomy_banner_content_html;
+				$taxonomy_banner_content = astra_get_taxonomy_banner_legacy_layout();
+				echo wp_kses_post( $taxonomy_banner_content );
 			}
 		}
 	}
@@ -1120,8 +1203,8 @@ if ( ! function_exists( 'astra_hex_to_rgba' ) ) :
 	/**
 	 * Convert colors from HEX to RGBA
 	 *
-	 * @param  string  $color   Color code in HEX.
-	 * @param  boolean $opacity Color code opacity.
+	 * @param  string $color   Color code in HEX.
+	 * @param  mixed  $opacity Color code opacity.
 	 * @return string           Color code in RGB or RGBA.
 	 */
 	function astra_hex_to_rgba( $color, $opacity = false ) {
@@ -1466,30 +1549,30 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 		switch ( $bg_type ) {
 			case 'color':
 				if ( '' !== $bg_img && '' !== $bg_color ) {
-					$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_img . ');';
+					$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_img . ')';
 				} elseif ( 'mobile' === $device ) {
 					if ( $desktop_css ) {
-						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_desk_img . ');';
+						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_desk_img . ')';
 					} elseif ( $tablet_css ) {
-						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_tab_img . ');';
+						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_tab_img . ')';
 					} else {
 						if ( '' !== $bg_color ) {
-							$gen_bg_css['background-color'] = $bg_color . ';';
-							$gen_bg_css['background-image'] = 'none;';
+							$gen_bg_css['background-color'] = $bg_color;
+							$gen_bg_css['background-image'] = 'none';
 						}
 					}
 				} elseif ( 'tablet' === $device ) {
 					if ( $desktop_css ) {
-						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_desk_img . ');';
+						$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $bg_color . ', ' . $bg_color . '), url(' . $bg_desk_img . ')';
 					} else {
 						if ( '' !== $bg_color ) {
-							$gen_bg_css['background-color'] = $bg_color . ';';
-							$gen_bg_css['background-image'] = 'none;';
+							$gen_bg_css['background-color'] = $bg_color;
+							$gen_bg_css['background-image'] = 'none';
 						}
 					}
 				} elseif ( '' === $bg_img ) {
-					$gen_bg_css['background-color'] = $bg_color . ';';
-					$gen_bg_css['background-image'] = 'none;';
+					$gen_bg_css['background-color'] = $bg_color;
+					$gen_bg_css['background-image'] = 'none';
 				}
 				break;
 
@@ -1501,25 +1584,43 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 				$overlay_grad = isset( $bg_obj['overlay-gradient'] ) ? $bg_obj['overlay-gradient'] : '';
 				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+				$overlay_opacity = isset( $bg_obj['overlay-opacity'] ) ? $bg_obj['overlay-opacity'] : '';
+				/** @psalm-suppress PossiblyUndefinedStringArrayOffset */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 				if ( '' !== $bg_img ) {
 					if ( 'none' !== $overlay_type ) {
 						if ( 'classic' === $overlay_type && '' !== $overlay_color ) {
-							$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $overlay_color . ', ' . $overlay_color . '), url(' . $bg_img . ');';
+							$updated_overlay_color = $overlay_color;
+
+							// Compatibility of overlay color opacity to HEX & VAR colors.
+							if ( '' !== $overlay_opacity ) {
+								$is_linked_with_gcp = 'var' === substr( $overlay_color, 0, 3 );
+
+								if ( $is_linked_with_gcp ) {
+									$astra_gcp_instance    = new Astra_Global_Palette();
+									$updated_overlay_color = $astra_gcp_instance->get_color_by_palette_variable( $overlay_color );
+								}
+
+								if ( '#' === $updated_overlay_color[0] ) {
+									$updated_overlay_color = astra_hex_to_rgba( $updated_overlay_color, $overlay_opacity );
+								}
+							}
+
+							$gen_bg_css['background-image'] = 'linear-gradient(to right, ' . $updated_overlay_color . ', ' . $updated_overlay_color . '), url(' . $bg_img . ')';
 						} elseif ( 'gradient' === $overlay_type && '' !== $overlay_grad ) {
-							$gen_bg_css['background-image'] = $overlay_grad . ', url(' . $bg_img . ');';
+							$gen_bg_css['background-image'] = $overlay_grad . ', url(' . $bg_img . ')';
 						} else {
-							$gen_bg_css['background-image'] = 'url(' . $bg_img . ');';
+							$gen_bg_css['background-image'] = 'url(' . $bg_img . ')';
 						}
 					} else {
-						$gen_bg_css['background-image'] = 'url(' . $bg_img . ');';
+						$gen_bg_css['background-image'] = 'url(' . $bg_img . ')';
 					}
 				}
 				break;
 
 			case 'gradient':
 				if ( isset( $bg_color ) ) {
-					$gen_bg_css['background-image'] = $bg_color . ';';
+					$gen_bg_css['background-image'] = $bg_color;
 				}
 				break;
 
@@ -1527,7 +1628,7 @@ function astra_get_responsive_background_obj( $bg_obj_res, $device ) {
 				break;
 		}
 	} elseif ( '' !== $bg_color ) {
-		$gen_bg_css['background-color'] = $bg_color . ';';
+		$gen_bg_css['background-color'] = $bg_color;
 	}
 
 	if ( '' !== $bg_img ) {
@@ -1580,9 +1681,8 @@ function astra_check_current_post_comment_enabled() {
  * @return boolean false if it is an existing user , true if not.
  */
 function astra_zero_font_size_case() {
-	$astra_settings                                  = get_option( ASTRA_THEME_SETTINGS );
-	$astra_settings['astra-zero-font-size-case-css'] = isset( $astra_settings['astra-zero-font-size-case-css'] ) ? false : true;
-	return apply_filters( 'astra_zero_font_size_case', $astra_settings['astra-zero-font-size-case-css'] );
+	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
+	return apply_filters( 'astra_zero_font_size_case', isset( $astra_settings['astra-zero-font-size-case-css'] ) ? false : true );
 }
 
 /**
@@ -1604,8 +1704,7 @@ function astra_wp_version_compare( $version, $compare ) {
  */
 function astra_block_based_legacy_setup() {
 	$astra_settings = get_option( ASTRA_THEME_SETTINGS );
-	$legacy_setup   = ( isset( $astra_settings['blocks-legacy-setup'] ) && isset( $astra_settings['wp-blocks-ui'] ) && 'legacy' === $astra_settings['wp-blocks-ui'] ) ? true : false;
-	return $legacy_setup;
+	return ( isset( $astra_settings['blocks-legacy-setup'] ) && isset( $astra_settings['wp-blocks-ui'] ) && 'legacy' === $astra_settings['wp-blocks-ui'] ) ? true : false;
 }
 
 /**
@@ -1847,4 +1946,104 @@ function astra_render_svg_mask( $id, $filter_name, $color ) {
 
 	/** @psalm-suppress UndefinedFunction  */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 	echo astra_get_filter_svg( $id, apply_filters( 'astra_' . $filter_name, $svg_color ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+}
+
+/**
+ * Returns an array of logo svg icons.
+ *
+ * @return array
+ * @since 4.7.0
+ */
+function astra_get_logo_svg_icons_array() {
+	static $ast_all_svg_icons = array();
+
+	if ( $ast_all_svg_icons ) {
+		return $ast_all_svg_icons;
+	}
+
+	$icons_dir = ASTRA_THEME_DIR . 'assets/svg/logo-svg-icons';
+
+	for ( $i = 0; $i < 4; $i++ ) {
+		$file = "{$icons_dir}/icons-v6-{$i}.php";
+
+		if ( file_exists( $file ) ) {
+			$icons = include_once $file;
+
+			foreach ( $icons as &$icon ) {
+				$fallback            = isset( $icon['svg']['solid'] ) ? $icon['svg']['solid'] : array();
+				$icon_brand_or_solid = isset( $icon['svg']['brands'] ) ? $icon['svg']['brands'] : $fallback;
+				$path                = isset( $icon_brand_or_solid['path'] ) ? $icon_brand_or_solid['path'] : '';
+				$width               = isset( $icon_brand_or_solid['width'] ) ? $icon_brand_or_solid['width'] : '';
+				$height              = isset( $icon_brand_or_solid['height'] ) ? $icon_brand_or_solid['height'] : '';
+				$view                = (bool) $width && (bool) $height ? "0 0 {$width} {$height}" : null;
+
+				if ( $path && $view ) {
+					ob_start();
+					?>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox= "<?php echo esc_attr( $view ); ?>"><path d="<?php echo esc_attr( $path ); ?>"></path></svg>
+					<?php
+					$icon['rendered'] = trim( ob_get_clean() );
+				}
+			}
+
+			$ast_all_svg_icons = array_merge( $ast_all_svg_icons, $icons );
+		}
+	}
+
+	return $ast_all_svg_icons;
+}
+
+/**
+ * Retrieve the post type for the current page based on category, tag, or custom taxonomy archives.
+ *
+ * @return string The detected post type.
+ *
+ * @since 4.8.4
+ */
+function astra_get_post_type() {
+	$post_type = get_post_type();
+
+	// If post type not found check for taxonomy archives.
+	if ( ! $post_type ) {
+		// Get the queried object (category, tag, or custom taxonomy).
+		$queried_object = get_queried_object();
+
+		if ( is_category() || is_tag() || is_tax() ) {
+			$taxonomy   = $queried_object->taxonomy ?? '';
+			$post_types = get_post_types();
+			
+			// Loop through all post types to see which ones support the current taxonomy.
+			foreach ( $post_types as $type ) {
+				if ( in_array( $taxonomy, get_object_taxonomies( $type ) ) ) {
+					// If a custom post type matches the taxonomy, assign it.
+					$post_type = $type;
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Filter the detected post type before returning.
+	 *
+	 * @param string $post_type The detected post type.
+	 */
+	return apply_filters( 'astra_get_post_type', strval( $post_type ) );
+}
+
+/**
+ * Get Astra's upgrade URL based on org or woo package version.
+ *
+ * @param string $type Type of upgrade URL.
+ * @since 4.8.4
+ * @return string Upgrade URL.
+ */
+function astra_get_upgrade_url( $type = 'pro' ) {
+	$upgrade_url = 'pricing' === $type ? astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'main-cta' ) : astra_get_pro_url( 'https://wpastra.com/pro/', 'dashboard', 'free-theme', 'upgrade-now' );
+	/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+	if ( false === ASTRA_THEME_ORG_VERSION ) {
+		/** @psalm-suppress TypeDoesNotContainType */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
+		$upgrade_url = 'https://woo.com/products/astra-pro/';
+	}
+	return $upgrade_url;
 }

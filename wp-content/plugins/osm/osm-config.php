@@ -4,28 +4,32 @@ define ("OSM_enable_Ajax", True);
 
 // change them for shortcode generatgor & geotagger
 // to your location
-define ("OSM_default_lat",  apply_filters('get_osm_default_lat', get_option("osm_default_lat",43.758629))); 
-define ("OSM_default_lon",  apply_filters('get_osm_default_lon', get_option("osm_default_lon",6.924225)));
+define ("OSM_default_lat", apply_filters('get_osm_default_lat', get_option("osm_default_lat",43.758629))); 
+define ("OSM_default_lon", apply_filters('get_osm_default_lon', get_option("osm_default_lon",6.924225)));
 define ("OSM_default_zoom", apply_filters('get_osm_default_zoom', get_option("osm_default_zoom",11)));
 
+define('DEFAULT_MAP_V3_WIDTH', '100%');
+define('DEFAULT_MAP_V3_HEIGHT', '300');
+define('DEFAULT_MAP_V3_ZOOM', '4');
+define('DEFAULT_MAP_V3_CENTER', OSM_default_lat . ',' . OSM_default_lon);
 
 // SERVER_EMBEDDED   ... loaded by the plugin for each map (default)
 // SERVER_WP_ENQUEUE ... registered and loaded by WordPress
-define ("Osm_LoadLibraryMode", SERVER_EMBEDDED); 
+define ("Osm_LoadLibraryMode", SERVER_WP_ENQUEUE); 
 // OpenStreetMap scripts and tiles
 //define ("Osm_OSM_LibraryLocation", 'http://www.openstreetmap.org/openlayers/OpenStreetMap.js');
 define ("Osm_OSM_LibraryLocation", OSM_PLUGIN_URL.'js/OSM/openlayers/OpenStreetMap.js');
 
-  define ("Osm_Mapnik_Tiles_a", 'https://a.tile.openstreetmap.org');
-  define ("Osm_Mapnik_Tiles_b", 'https://b.tile.openstreetmap.org');
-  define ("Osm_Mapnik_Tiles_c", 'https://c.tile.openstreetmap.org');
+ define ("Osm_Mapnik_Tiles_a", 'https://a.tile.openstreetmap.org');
+ define ("Osm_Mapnik_Tiles_b", 'https://b.tile.openstreetmap.org');
+ define ("Osm_Mapnik_Tiles_c", 'https://c.tile.openstreetmap.org');
 
-  define ("Osm_OCM_Tiles_a", 'https://a.tile.opencyclemap.org/cycle');
-  define ("Osm_OCM_Tiles_b", 'https://b.tile.opencyclemap.org/cycle');
-  define ("Osm_OCM_Tiles_c", 'https://c.tile.opencyclemap.org/cycle');
+ define ("Osm_OCM_Tiles_a", 'https://a.tile.opencyclemap.org/cycle');
+ define ("Osm_OCM_Tiles_b", 'https://b.tile.opencyclemap.org/cycle');
+ define ("Osm_OCM_Tiles_c", 'https://c.tile.opencyclemap.org/cycle');
 
 // BaseMap (Austria)
-  define ("Osm_BaseMap_Tiles", 'https://maps.wien.gv.at/basemap/geolandbasemap/');
+ define ("Osm_BaseMap_Tiles", 'https://maps.wien.gv.at/basemap/geolandbasemap/');
  
 //  thunderforest maps
 define ("Osm_thunderforest_Landscape_Tiles", 'https://{a-c}.tile.thunderforest.com/landscape/{z}/{x}/{y}.png');
@@ -41,13 +45,11 @@ define ("Osm_OpenSeaMap_Tiles", 'https://t1.openseamap.org/seamark/{z}/{x}/{y}.p
 // OpenTopoMap
 define ("Osm_OpenTopoMap_Tiles", 'https://{a-c}.tile.opentopomap.org/{z}/{x}/{y}.png'); 
 
-  
-
-
 // Stamen
   define ("Osm_Stamen_Tiles_a", 'https://a.tile.stamen.com/');
   define ("Osm_Stamen_Tiles_b", 'https://b.tile.stamen.com/');
   define ("Osm_Stamen_Tiles_c", 'https://c.tile.stamen.com/');
+
 // OpenLayers scripts
 define ("Osm_OL_LibraryPath", OSM_PLUGIN_URL.'js/OL/2.13.1/');
 define ("Osm_OL_LibraryLocation", OSM_PLUGIN_URL."js/OL/2.13.1/OpenLayers.js?ver=2.13.1");

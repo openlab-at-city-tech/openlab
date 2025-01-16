@@ -3,8 +3,6 @@
  * Helper class for font settings.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.19
  */

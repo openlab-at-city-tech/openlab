@@ -784,7 +784,7 @@
     box-shadow: none;
 }
 
-.dashicons-plus-alt2:before {
+.ahfb-builder-item-add-icon.dashicons-plus-alt2:before {
     content: "\f543";
     display: inline-block;
     opacity: 0;
@@ -886,11 +886,6 @@
 
 .ahfb-builder-item-start.ahfb-move-item .ahfb-builder-item {
     justify-content: flex-start;
-}
-
-.customize-control:not(.customize-control-ast-builder-header-control) + #customize-control-astra-settings-header-mobile-draggable-items.customize-control {
-    padding-top: 0;
-    border-top: 0;
 }
 
 .ahfb-availbile-items-title {
@@ -2167,4 +2162,10 @@ li#accordion-section-ast-archive-post, li#accordion-section-ast-archive-product 
 /** Site icon control specific CSS as divider attr can't accessible to core control. */
 li#customize-control-site_icon {
     margin-bottom: 16px;
+}
+/*
+ * Hide customizer scrollbar during navigation.
+ */
+ #customize-controls .wp-full-overlay-sidebar-content:has(.busy) {
+    overflow-y: hidden;
 }

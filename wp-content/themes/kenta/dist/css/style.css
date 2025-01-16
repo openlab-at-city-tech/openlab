@@ -1,0 +1,3004 @@
+/*
+1. Prevent padding and border from affecting element width. (https://github.com/mozdevs/cssremedy/issues/4)
+2. Allow adding a border to an element by just adding a border-width. (https://github.com/tailwindcss/tailwindcss/pull/116)
+*/
+*,
+::before,
+::after {
+  box-sizing: border-box; /* 1 */
+  border-width: 0; /* 2 */
+  border-style: solid; /* 2 */
+  border-color: #e5e7eb; /* 2 */
+}
+
+::before,
+::after {
+  --tw-content: "";
+}
+
+/*
+1. Use a consistent sensible line-height in all browsers.
+2. Prevent adjustments of font size after orientation changes in iOS.
+3. Use a more readable tab size.
+4. Use the user's configured `sans` font-family by default.
+*/
+html {
+  line-height: 1.5; /* 1 */
+  -webkit-text-size-adjust: 100%; /* 2 */
+  -moz-tab-size: 4; /* 3 */
+  -o-tab-size: 4;
+  tab-size: 4; /* 3 */
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"; /* 4 */
+}
+
+/*
+1. Remove the margin in all browsers.
+2. Inherit line-height from `html` so users can set them as a class directly on the `html` element.
+*/
+body {
+  margin: 0; /* 1 */
+  line-height: inherit; /* 2 */
+}
+
+/**
+  Smooth scroll
+ */
+:root {
+  scroll-behavior: smooth;
+}
+
+/**
+  Css selection colors
+ */
+::-moz-selection {
+  color: var(--kb-base-color);
+  background-color: var(--kb-primary-color);
+}
+::-moz-selection,
+::selection {
+  color: var(--kb-base-color);
+  background-color: var(--kb-primary-color);
+}
+
+[data-kenta-theme=light] {
+  --kenta-primary-color: var(--kenta-light-primary-color);
+  --kenta-primary-active: var(--kenta-light-primary-active);
+  --kenta-accent-color: var(--kenta-light-accent-color);
+  --kenta-accent-active: var(--kenta-light-accent-active);
+  --kenta-base-color: var(--kenta-light-base-color);
+  --kenta-base-100: var(--kenta-light-base-100);
+  --kenta-base-200: var(--kenta-light-base-200);
+  --kenta-base-300: var(--kenta-light-base-300);
+}
+[data-kenta-theme=light] .kenta-theme-switch .dark-mode {
+  display: inline;
+}
+[data-kenta-theme=light] .kenta-theme-switch .light-mode {
+  display: none;
+}
+
+[data-kenta-theme=dark] {
+  --kenta-primary-color: var(--kenta-dark-primary-color, var(--kenta-light-primary-color));
+  --kenta-primary-active: var(--kenta-dark-primary-active, var(--kenta-light-primary-active));
+  --kenta-accent-color: var(--kenta-dark-accent-color, var(--kenta-light-accent-color));
+  --kenta-accent-active: var(--kenta-dark-accent-active, var(--kenta-light-accent-active));
+  --kenta-base-color: var(--kenta-dark-base-color, var(--kenta-light-base-color));
+  --kenta-base-100: var(--kenta-dark-base-100, var(--kenta-light-base-100));
+  --kenta-base-200: var(--kenta-dark-base-200, var(--kenta-light-base-200));
+  --kenta-base-300: var(--kenta-dark-base-300, var(--kenta-light-base-300));
+}
+[data-kenta-theme=dark] .kenta-theme-switch .light-mode {
+  display: inline;
+}
+[data-kenta-theme=dark] .kenta-theme-switch .dark-mode {
+  display: none;
+}
+
+.kenta-max-w-wide {
+  max-width: min(var(--wp--style--global--wide-size), 100%);
+}
+.kenta-max-w-wide.has-global-padding {
+  max-width: calc(var(--wp--style--global--wide-size) + var(--wp--style--root--padding-right) + var(--wp--style--root--padding-left));
+}
+
+.kenta-max-w-content {
+  max-width: min(var(--wp--style--global--content-size), 100%);
+}
+.kenta-max-w-content.has-global-padding {
+  max-width: calc(var(--wp--style--global--content-size) + var(--wp--style--root--padding-right) + var(--wp--style--root--padding-left));
+}
+
+.kenta-container {
+  padding-top: var(--kenta-content-area-spacing);
+  padding-bottom: var(--kenta-content-area-spacing);
+}
+.kenta-container.is-align-normal {
+  --wp--style--global--content-size: var(--wp--style--global--wide-size);
+}
+.kenta-container.is-align-normal.is-style-fluid {
+  --wp--style--global--wide-size: 100%;
+}
+
+.kenta-site-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: calc(100vh - var(--wp-admin-bar-height, 0px));
+  max-width: var(--kenta-site-wrap-width, inherit);
+}
+
+.has-global-padding > .alignfull {
+  margin-right: calc(var(--wp--style--root--padding-right) * -1) !important;
+  margin-left: calc(var(--wp--style--root--padding-left) * -1) !important;
+}
+
+.is-layout-constrained > :where(:not(.alignleft):not(.alignright):not(.alignfull)) {
+  max-width: min(var(--wp--style--global--content-size), 100%);
+}
+
+.kenta-no-sidebar .kenta-article-content-wrap::before {
+  content: " ";
+  display: block;
+  max-width: calc(100% - (var(--wp--style--root--padding-right) + var(--wp--style--root--padding-left)));
+  margin-left: calc((var(--wp--style--root--padding-right) + var(--wp--style--root--padding-left)) / 2);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: -1;
+}
+
+@media screen and (min-width: 1140px) {
+  .kenta-no-sidebar .kenta-article-content-wrap::before {
+    width: calc(var(--wp--style--global--wide-size) + var(--wp--style--root--padding-right) + var(--wp--style--root--padding-left));
+    margin-left: calc(var(--wp--style--global--wide-size) / -2 - var(--wp--style--root--padding-left));
+    left: 50%;
+  }
+}
+@media (min-width: 1024px) {
+  .kenta-transparent-header-desktop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+@media (max-width: 1024px) {
+  .kenta-transparent-header-mobile {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}
+figure {
+  max-width: 100%;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+pre {
+  overflow-x: auto;
+}
+
+/**
+    Responsive builder
+ */
+.kenta-builder-column-desktop {
+  display: none;
+}
+@media (min-width: 1024px) {
+  .kenta-builder-column-desktop {
+    display: flex;
+  }
+}
+
+.kenta-builder-column-mobile {
+  display: flex;
+}
+
+@media (min-width: 1024px) {
+  .kenta-builder-column-mobile {
+    display: none;
+  }
+}
+
+/**
+    Generic builder
+ */
+.kenta-builder-column-desktop-dir-row > [data-builder-element],
+.kenta-builder-column-tablet-dir-row > [data-builder-element],
+.kenta-builder-column-mobile-dir-row > [data-builder-element] {
+  flex-shrink: 0;
+  margin-right: var(--kenta-builder-elements-gap, 12px);
+}
+.kenta-builder-column-desktop-dir-row > [data-builder-element]:last-child,
+.kenta-builder-column-tablet-dir-row > [data-builder-element]:last-child,
+.kenta-builder-column-mobile-dir-row > [data-builder-element]:last-child {
+  margin-right: 0;
+}
+
+.kenta-builder-column-desktop-dir-column > [data-builder-element],
+.kenta-builder-column-tablet-dir-column > [data-builder-element],
+.kenta-builder-column-mobile-dir-column > [data-builder-element] {
+  margin-bottom: var(--kenta-builder-elements-gap, 12px);
+}
+.kenta-builder-column-desktop-dir-column > [data-builder-element]:last-child,
+.kenta-builder-column-tablet-dir-column > [data-builder-element]:last-child,
+.kenta-builder-column-mobile-dir-column > [data-builder-element]:last-child {
+  margin-bottom: 0;
+}
+
+.kenta-footer-row,
+.kenta-header-row {
+  position: relative;
+}
+.kenta-footer-row .container,
+.kenta-header-row .container {
+  position: relative;
+}
+
+/**
+  Elements
+ */
+.kenta-popup {
+  min-width: 300px;
+  color: var(--kenta-accent-color);
+  font-size: 1rem;
+  top: calc(100% + 0.6em);
+  box-shadow: 0 0 14px rgba(70, 71, 73, 0.1);
+  opacity: 0;
+  margin-top: 10px;
+  transition: all ease 0.2s;
+  visibility: hidden;
+  pointer-events: none;
+}
+.kenta-popup::before {
+  content: " ";
+  bottom: 100%;
+  border-width: 0.65em;
+  border-style: solid;
+  border-bottom-color: var(--kenta-popup-color, var(--kenta-base-300));
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  position: absolute;
+  right: 0.65em;
+}
+.kenta-popup.show {
+  opacity: 1;
+  margin-top: 0;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.kenta-breadcrumbs-element {
+  color: var(--breadcrumb-link-initial);
+  fill: var(--breadcrumb-link-initial);
+}
+.kenta-breadcrumbs-element svg {
+  display: inline-block;
+}
+.kenta-breadcrumbs-element .breadcrumb-link > svg {
+  width: auto;
+  height: 80%;
+}
+.kenta-breadcrumbs-element .breadcrumb-sep svg {
+  display: inline-block;
+  position: relative;
+  top: -0.15em;
+  vertical-align: middle;
+  width: 0.7em;
+  height: 0.7em;
+}
+.kenta-breadcrumbs-element .breadcrumb-link {
+  color: var(--breadcrumb-link-initial);
+  transition: color, fill 0.25s ease-in;
+}
+.kenta-breadcrumbs-element .breadcrumb-link, .kenta-breadcrumbs-element .breadcrumb-link svg {
+  fill: var(--breadcrumb-link-initial);
+}
+.kenta-breadcrumbs-element .breadcrumb-link svg {
+  display: inline-block;
+  position: relative;
+  top: -0.2em;
+  vertical-align: middle;
+  width: 1.25em;
+  height: 1.25em;
+}
+.kenta-breadcrumbs-element .breadcrumb-link:hover {
+  color: var(--breadcrumb-link-hover);
+}
+.kenta-breadcrumbs-element .breadcrumb-link:hover, .kenta-breadcrumbs-element .breadcrumb-link:hover svg {
+  fill: var(--breadcrumb-link-hover);
+}
+.kenta-breadcrumbs-element .breadcrumb-item {
+  color: var(--breadcrumb-text);
+}
+
+.kenta-site-branding {
+  max-width: 100%;
+}
+.kenta-site-branding .site-logo {
+  display: inline-block;
+  width: var(--logo-max-width, 200px);
+  margin-bottom: var(--logo-spacing);
+}
+.kenta-site-branding .site-logo img {
+  height: auto;
+  width: inherit;
+  max-width: initial;
+  vertical-align: initial;
+  -o-object-fit: contain;
+     object-fit: contain;
+  display: inline-block;
+}
+.kenta-site-branding .site-logo .kenta-transparent-logo {
+  display: none;
+}
+.kenta-site-branding .site-logo .kenta-dark-scheme-logo {
+  display: none;
+}
+.kenta-site-branding .site-identity .site-title,
+.kenta-site-branding .site-identity .site-tagline {
+  display: block;
+  margin-bottom: 0;
+  color: var(--kenta-link-initial-color);
+}
+.kenta-site-branding .site-identity .site-title, .kenta-site-branding .site-identity .site-title a,
+.kenta-site-branding .site-identity .site-tagline,
+.kenta-site-branding .site-identity .site-tagline a {
+  text-decoration: none;
+}
+.kenta-site-branding .site-identity .site-title {
+  transition: color ease 0.25s;
+}
+.kenta-site-branding .site-identity .site-title:hover {
+  color: var(--kenta-link-hover-color);
+}
+.kenta-site-branding[data-logo=right], .kenta-site-branding[data-logo=left] {
+  display: flex;
+  align-items: center;
+}
+.kenta-site-branding[data-logo=right] .site-logo, .kenta-site-branding[data-logo=left] .site-logo {
+  margin-bottom: 0;
+}
+.kenta-site-branding[data-logo=left] .site-logo {
+  margin-right: var(--logo-spacing);
+}
+.kenta-site-branding[data-logo=right] {
+  flex-direction: row-reverse;
+}
+.kenta-site-branding[data-logo=right] .site-logo {
+  margin-left: var(--logo-spacing);
+}
+
+[data-kenta-theme=dark] .kenta-site-branding .kenta-has-dark-scheme-logo .kenta-logo {
+  display: none;
+}
+[data-kenta-theme=dark] .kenta-site-branding .kenta-has-dark-scheme-logo .kenta-dark-scheme-logo {
+  display: inline-block;
+}
+
+.kenta-menu-wrap {
+  display: flex;
+  flex-shrink: initial !important;
+  align-items: center;
+}
+
+.kenta-menu {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  height: 100%;
+}
+.kenta-menu li {
+  white-space: nowrap; /* no need for Supersubs plugin */
+  *white-space: normal; /* ...unless you support IE7 (let it wrap) */
+  line-height: 1.5;
+  display: flex;
+}
+.kenta-menu ul {
+  min-width: 12em; /* allow long menu items to determine submenu width */
+  *width: 12em; /* no auto sub width for IE7, see white-space comment below */
+}
+.kenta-menu .kenta-menu-icon {
+  display: none;
+}
+.kenta-menu.kenta-menu-has-arrow .page_item_has_children > a > .kenta-menu-icon, .kenta-menu.kenta-menu-has-arrow .menu-item-has-children > a > .kenta-menu-icon {
+  display: inline-block;
+  font-size: 12px;
+  margin-left: 0.65em;
+}
+.kenta-menu > li {
+  height: var(--menu-items-height, 100%);
+  margin: var(--menu-items-margin, 0);
+}
+.kenta-menu > li > a {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: var(--menu-items-padding, 0);
+  text-decoration: none;
+  transition: all ease 0.25s;
+  color: var(--menu-text-initial-color);
+  background-color: var(--menu-background-initial-color);
+  border-radius: var(--menu-items-radius, 0);
+  border-top: var(--menu-items-border-top);
+  border-bottom: var(--menu-items-border-bottom);
+}
+.kenta-menu > li > a svg {
+  fill: var(--menu-text-initial-color);
+}
+.kenta-menu > li.sfHover > a, .kenta-menu > li:hover > a {
+  color: var(--menu-text-hover-color);
+  background-color: var(--menu-background-hover-color);
+  border-top: var(--menu-items-border-top-active);
+  border-bottom: var(--menu-items-border-bottom-active);
+}
+.kenta-menu > li.sfHover > a svg, .kenta-menu > li:hover > a svg {
+  fill: var(--menu-text-hover-color);
+}
+.kenta-menu > li[class*=current-menu-] > a {
+  color: var(--menu-text-active-color);
+  background-color: var(--menu-background-active-color);
+  border-top: var(--menu-items-border-top-active);
+  border-bottom: var(--menu-items-border-bottom-active);
+}
+.kenta-menu > li[class*=current-menu-] > a svg {
+  fill: var(--menu-text-active-color);
+}
+.kenta-menu > li ul {
+  min-width: var(--dropdown-width);
+  color: var(--dropdown-text-initial-color);
+  background-color: var(--dropdown-background-initial-color);
+  border-radius: var(--dropdown-radius, 0);
+  border: var(--dropdown-border, none);
+  box-shadow: var(--dropdown-box-shadow, none);
+  z-index: 99999;
+}
+.kenta-menu > li ul svg {
+  fill: var(--dropdown-text-initial-color);
+}
+.kenta-menu > li ul a {
+  color: var(--dropdown-text-initial-color);
+  width: 100%;
+  white-space: normal;
+  transition: all ease 0.25s;
+  padding: var(--dropdown-item-padding);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  text-decoration: none;
+}
+.kenta-menu > li ul li {
+  border-top: var(--dropdown-divider);
+}
+.kenta-menu > li ul li:first-child,
+.kenta-menu > li ul li:first-child > a {
+  border-top: none;
+  border-top-left-radius: inherit;
+  border-top-right-radius: inherit;
+}
+.kenta-menu > li ul li:last-child,
+.kenta-menu > li ul li:last-child > a {
+  border-bottom-left-radius: inherit;
+  border-bottom-right-radius: inherit;
+}
+.kenta-menu > li ul li:hover > a {
+  color: var(--dropdown-text-hover-color);
+  background-color: var(--dropdown-background-active-color);
+}
+.kenta-menu > li ul li:hover > a svg {
+  fill: var(--dropdown-text-hover-color);
+}
+.kenta-menu > li ul li[class*=current-menu-] > a {
+  color: var(--dropdown-text-active-color);
+  background-color: var(--dropdown-background-active-color);
+}
+.kenta-menu > li ul li[class*=current-menu-] > a svg {
+  fill: var(--dropdown-text-active-color);
+}
+
+.kenta-menu .kenta-mega-menu {
+  position: unset !important;
+}
+.kenta-menu .kenta-mega-menu > ul {
+  width: 100%;
+}
+@media (min-width: 576px) {
+  .kenta-menu .kenta-mega-menu > ul {
+    max-width: 576px;
+  }
+}
+@media (min-width: 768px) {
+  .kenta-menu .kenta-mega-menu > ul {
+    max-width: 768px;
+  }
+}
+@media (min-width: 1024px) {
+  .kenta-menu .kenta-mega-menu > ul {
+    max-width: 1024px;
+  }
+}
+@media (min-width: 1140px) {
+  .kenta-menu .kenta-mega-menu > ul {
+    max-width: 1140px;
+  }
+}
+.kenta-footer-row .kenta-menu .kenta-mega-menu > ul, 
+.kenta-header-row .kenta-menu .kenta-mega-menu > ul {
+  position: relative;
+}
+.kenta-archive-header .kenta-menu .kenta-mega-menu > ul {
+  position: relative;
+  z-index: 1;
+}
+.kenta-menu .kenta-mega-menu > ul {
+  width: 100%;
+  left: 50% !important;
+  right: unset !important;
+  transform: translateX(-50%);
+  position: absolute !important;
+  padding: 24px 12px;
+  display: flex !important;
+}
+.kenta-menu .kenta-mega-menu > ul ul {
+  position: relative;
+  left: initial !important;
+  visibility: visible;
+  opacity: 1;
+  margin-top: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+.kenta-menu .kenta-mega-menu > ul .kenta-mega-col {
+  width: 100%;
+  border-top: none;
+  padding: 0 12px;
+}
+.kenta-menu .kenta-mega-menu > ul .kenta-mega-col:not(:last-child) {
+  border-right: var(--dropdown-divider);
+}
+.kenta-menu .kenta-mega-menu > ul .kenta-mega-col > a {
+  display: none;
+}
+.kenta-menu .kenta-mega-menu > ul .kenta-mega-heading {
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.kenta-html-element {
+  width: 100%;
+}
+
+.kenta-raw-html {
+  max-width: 100%;
+}
+.kenta-raw-html a {
+  transition: all ease 0.25s;
+  text-decoration: none;
+  color: var(--kenta-link-initial-color);
+}
+.kenta-raw-html a:hover {
+  color: var(--kenta-link-hover-color);
+  text-decoration: underline;
+}
+
+.kenta-no-result-search-form {
+  --kenta-form-background-color: var(--kenta-base-color);
+  --kenta-form-text-color: var(--kenta-accent-active);
+  --kenta-form-border-color: var(--kenta-base-300);
+  --kenta-form-active-color: var(--kenta-primary-color);
+}
+.kenta-no-result-search-form input[type=search i]::-webkit-search-cancel-button {
+  display: none;
+}
+.kenta-no-result-search-form .search-submit {
+  position: absolute;
+  right: 0;
+  top: 0;
+  font-size: 18px;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.woocommerce .kenta-search-modal-form .search-input,
+.kenta-search-modal-form .search-input {
+  flex-grow: 1;
+  border-radius: 0;
+  background: transparent;
+  padding: 1rem 1.5rem;
+  border: none;
+  border-bottom: 2px solid var(--kenta-search-input-border-initial-color, var(--kenta-base-200));
+  color: var(--kenta-search-input-initial-color, var(--kenta-accent-color));
+}
+.woocommerce .kenta-search-modal-form .search-input::-moz-placeholder, .kenta-search-modal-form .search-input::-moz-placeholder {
+  color: var(--kenta-search-input-placeholder-color, var(--kenta-accent-color));
+}
+.woocommerce .kenta-search-modal-form .search-input::placeholder,
+.kenta-search-modal-form .search-input::placeholder {
+  color: var(--kenta-search-input-placeholder-color, var(--kenta-accent-color));
+}
+.woocommerce .kenta-search-modal-form .search-input:focus,
+.kenta-search-modal-form .search-input:focus {
+  outline: none;
+  box-shadow: none;
+  color: var(--kenta-search-input-focus-color, var(--kenta-accent-color));
+  border-bottom-color: var(--kenta-search-input-border-focus-color, var(--kenta-primary-color));
+}
+.woocommerce .kenta-search-modal-form .search-submit,
+.kenta-search-modal-form .search-submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem;
+  position: absolute;
+  right: 0;
+  background: var(--kenta-search-submit-background-initial-color, var(--kenta-accent-color));
+  border-radius: var(--kenta-search-submit-radius, 4px);
+  border: var(--kenta-search-submit-border, none);
+  transition: all ease 0.25s;
+  color: var(--kenta-search-submit-initial-color, var(--kenta-accent-color));
+}
+.woocommerce .kenta-search-modal-form .search-submit:hover,
+.kenta-search-modal-form .search-submit:hover {
+  background: var(--kenta-search-submit-background-hover-color, var(--kenta-primary-color));
+  color: var(--kenta-search-submit-hover-color, var(--kenta-primary-color));
+}
+
+.kenta-collapsable-menu {
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.kenta-collapsable-menu a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  justify-content: space-between;
+  padding: 12px;
+  color: var(--menu-text-initial-color, var(--kenta-accent-color));
+  border-bottom: var(--menu-items-divider, none);
+  transition: all ease 0.25s;
+}
+.kenta-collapsable-menu a:hover {
+  color: var(--menu-text-hover-color, var(--kenta-primary-color));
+}
+.kenta-collapsable-menu [class*=current-menu-] > a {
+  color: var(--menu-text-active-color, var(--kenta-primary-color));
+}
+.kenta-collapsable-menu .kenta-dropdown-toggle {
+  display: none;
+  visibility: hidden;
+  border-radius: 2px;
+  transition: all ease 0.25s;
+  border: var(--menu-dropdown-toggle-border, none);
+  color: var(--menu-text-initial-color, var(--kenta-accent-color));
+  width: 2em;
+  height: 2em;
+  justify-content: center;
+  align-items: center;
+}
+.kenta-collapsable-menu .kenta-dropdown-toggle .kenta-menu-icon {
+  display: block;
+  transform: rotate3d(0, 0, 1, 0deg);
+  transition: all ease 0.25s;
+  font-size: 1em;
+  line-height: 1;
+}
+.kenta-collapsable-menu .kenta-dropdown-toggle.active .kenta-menu-icon {
+  transform: rotate3d(0, 0, 1, 180deg);
+}
+.kenta-collapsable-menu .kenta-dropdown-toggle:hover {
+  border-color: var(--menu-text-hover-color, var(--kenta-primary-color));
+  color: var(--menu-text-hover-color, var(--kenta-primary-color));
+}
+.kenta-collapsable-menu.kenta-menu-has-arrow .page_item_has_children > a > .kenta-dropdown-toggle, .kenta-collapsable-menu.kenta-menu-has-arrow .menu-item-has-children > a > .kenta-dropdown-toggle {
+  display: flex;
+  visibility: visible;
+  margin-left: 1em;
+}
+.kenta-collapsable-menu > li ul {
+  display: none;
+  list-style: none;
+  overflow: hidden;
+  transition: all ease-in 0.2s;
+  -webkit-padding-start: 1em;
+          padding-inline-start: 1em;
+}
+.kenta-collapsable-menu > li ul.open {
+  display: block;
+}
+
+.kenta-cart-trigger {
+  position: relative;
+  font-size: 1rem;
+}
+.kenta-cart-trigger .kenta-cart-badge {
+  font-size: 14px;
+  width: 1.75em;
+  height: 1.75em;
+  line-height: 1.75em;
+  text-align: center;
+  transform: scale(0.75);
+  top: -0.725em;
+  right: -0.725em;
+}
+
+.kenta-cart-popup .widget > h2 {
+  display: none;
+}
+.kenta-cart-popup p.buttons {
+  margin: 1.25em 0;
+}
+.kenta-cart-popup .total {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+.kenta-modal-visible {
+  overflow: hidden;
+  padding-right: var(--scrollbar-width, 0);
+}
+
+.kenta-modal {
+  width: 100vw;
+  height: calc(100vh - var(--wp-admin-bar-height, 0));
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: var(--wp-admin-bar-height, 0);
+  bottom: 0;
+  z-index: 999999;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+}
+.kenta-modal, .kenta-modal .kenta-modal-inner {
+  transition: all ease 0.3s !important;
+}
+.kenta-modal .kenta-modal-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.kenta-modal[data-toggle-behaviour=drawer-left] .kenta-modal-inner {
+  transform: translate3d(-20%, 0, 0);
+}
+.kenta-modal[data-toggle-behaviour=drawer-right] .kenta-modal-inner {
+  transform: translate3d(20%, 0, 0);
+}
+.kenta-modal.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+.kenta-modal.active .kenta-modal-inner {
+  transform: translate3d(0, 0, 0);
+}
+.kenta-modal .kenta-modal-actions {
+  padding: 12px 24px 0 24px;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+.kenta-modal .kenta-modal-actions button {
+  z-index: 9999;
+  position: relative;
+  cursor: pointer;
+  display: block;
+  color: var(--kenta-modal-action-initial, rgba(255, 255, 255, 0.5));
+}
+.kenta-modal .kenta-modal-actions button, .kenta-modal .kenta-modal-actions button * {
+  transition: all ease 0.25s;
+}
+.kenta-modal .kenta-modal-actions button:hover {
+  color: var(--kenta-modal-action-hover, rgb(255, 255, 255));
+}
+.kenta-modal .kenta-modal-actions .kenta-close-modal {
+  font-size: 100%;
+  background: transparent;
+  -webkit-margin-start: auto;
+          margin-inline-start: auto;
+}
+.kenta-modal .kenta-modal-content {
+  padding: 24px;
+  flex-grow: 1;
+  box-sizing: border-box;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+.sf-menu, .sf-menu * {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sf-menu li, .sf-menu a {
+  position: relative;
+}
+.sf-menu li {
+  width: 100%;
+}
+.sf-menu li:hover,
+.sf-menu li.sfHover {
+  transition: none;
+}
+.sf-menu li:focus-within > ul,
+.sf-menu li:hover > ul,
+.sf-menu li.sfHover > ul {
+  visibility: visible;
+  display: block;
+  opacity: 1;
+  margin-top: 0;
+  pointer-events: auto;
+}
+.sf-menu ul {
+  transition: all ease 0.25s;
+  position: absolute;
+  margin-top: var(--dropdown-initial-offset, 15px);
+  top: 0;
+  opacity: 0;
+  visibility: hidden;
+  display: none;
+  pointer-events: none;
+  z-index: 50;
+}
+.sf-menu > li > ul {
+  top: 100%;
+}
+.sf-menu:not(.sf-dropdown-left) ul {
+  left: calc(100% + 4px);
+}
+.sf-menu:not(.sf-dropdown-left) > li > ul {
+  left: 0;
+  right: auto;
+}
+.sf-menu.sf-dropdown-left ul {
+  left: calc(-100% - 4px);
+}
+.sf-menu.sf-dropdown-left > li > ul {
+  left: auto;
+  right: 0;
+}
+.sf-menu > li {
+  float: left;
+}
+.sf-menu li {
+  width: auto;
+}
+
+.kenta-sidebar {
+  margin-top: var(--kenta-sidebar-gap, 0);
+  width: 100%;
+}
+
+@media (min-width: 1024px) {
+  .kenta-sidebar {
+    margin-top: 0;
+    width: var(--kenta-sidebar-width, 30%);
+  }
+  .kenta-right-sidebar .kenta-sidebar {
+    margin-left: var(--kenta-sidebar-gap, 0);
+  }
+  .kenta-left-sidebar .kenta-sidebar {
+    margin-right: var(--kenta-sidebar-gap, 0);
+  }
+}
+.woocommerce a.button,
+.wp-block-button,
+.kenta-button {
+  font-size: 0.75rem;
+  line-height: 1;
+  --kenta-button-border: 1px solid var(--kenta-primary-color);
+  --kenta-button-padding: 0.85em 1.25em;
+  --kenta-button-height: 32px;
+  --kenta-button-initial-color: var(--kenta-primary-color);
+  --kenta-button-hover-color: var(--kenta-accent-color);
+  --kenta-button-text-initial-color: var(--kenta-base-color);
+  --kenta-button-text-hover-color: var(--kenta-base-color);
+  --kenta-button-radius: 2px;
+}
+.woocommerce a.button .has-text-align-center,
+.wp-block-button .has-text-align-center,
+.kenta-button .has-text-align-center {
+  justify-content: center;
+}
+.woocommerce a.button .has-text-align-right,
+.wp-block-button .has-text-align-right,
+.kenta-button .has-text-align-right {
+  justify-content: flex-end;
+}
+.woocommerce a.button .has-text-align-left,
+.wp-block-button .has-text-align-left,
+.kenta-button .has-text-align-left {
+  justify-content: flex-start;
+}
+
+.woocommerce #respond input#submit,
+.woocommerce #respond input#submit.alt,
+.woocommerce .page-content .widget_price_filter .button,
+.woocommerce .page-content .woocommerce-message .button,
+.woocommerce .page-content a.button.alt,
+.woocommerce .page-content button.button.alt,
+.woocommerce .page-content .woocommerce-message .button,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button,
+.woocommerce a.button,
+.woocommerce a.button.alt,
+.woocommerce button.button,
+.woocommerce button.button.alt,
+.woocommerce input.button,
+.woocommerce input.button.alt,
+.widget_search [type=submit],
+.wp-block-search__button,
+.wc-block-product-search__button,
+div:not(.is-style-outline) > .wp-block-button__link,
+.wp-block-button.is-style-outline .wp-block-button__link,
+.kenta-form [type=submit],
+.kenta-raw-html [type=submit],
+.kenta-article-content button,
+.kenta-article-content [type=submit],
+.kenta-button {
+  display: inline-flex;
+  cursor: pointer;
+  align-items: center;
+  box-sizing: border-box;
+  text-decoration: none;
+  min-height: var(--kenta-button-height);
+  padding: var(--kenta-button-padding);
+  border-radius: var(--kenta-button-radius);
+  color: var(--kenta-button-text-initial-color);
+  background-color: var(--kenta-button-initial-color);
+  border-color: var(--lotta-border-initial-color);
+  transition: all ease 0.2s;
+  border: var(--kenta-button-border, none);
+  box-shadow: var(--kenta-button-shadow, none);
+}
+.woocommerce #respond input#submit:disabled,
+.woocommerce #respond input#submit.alt:disabled,
+.woocommerce .page-content .widget_price_filter .button:disabled,
+.woocommerce .page-content .woocommerce-message .button:disabled,
+.woocommerce .page-content a.button.alt:disabled,
+.woocommerce .page-content button.button.alt:disabled,
+.woocommerce .page-content .woocommerce-message .button:disabled,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button:disabled,
+.woocommerce a.button:disabled,
+.woocommerce a.button.alt:disabled,
+.woocommerce button.button:disabled,
+.woocommerce button.button.alt:disabled,
+.woocommerce input.button:disabled,
+.woocommerce input.button.alt:disabled,
+.widget_search [type=submit]:disabled,
+.wp-block-search__button:disabled,
+.wc-block-product-search__button:disabled,
+div:not(.is-style-outline) > .wp-block-button__link:disabled,
+.wp-block-button.is-style-outline .wp-block-button__link:disabled,
+.kenta-form [type=submit]:disabled,
+.kenta-raw-html [type=submit]:disabled,
+.kenta-article-content button:disabled,
+.kenta-article-content [type=submit]:disabled,
+.kenta-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
+.woocommerce #respond input#submit:not(:disabled):hover,
+.woocommerce #respond input#submit.alt:not(:disabled):hover,
+.woocommerce .page-content .widget_price_filter .button:not(:disabled):hover,
+.woocommerce .page-content .woocommerce-message .button:not(:disabled):hover,
+.woocommerce .page-content a.button.alt:not(:disabled):hover,
+.woocommerce .page-content button.button.alt:not(:disabled):hover,
+.woocommerce .page-content .woocommerce-message .button:not(:disabled):hover,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button:not(:disabled):hover,
+.woocommerce a.button:not(:disabled):hover,
+.woocommerce a.button.alt:not(:disabled):hover,
+.woocommerce button.button:not(:disabled):hover,
+.woocommerce button.button.alt:not(:disabled):hover,
+.woocommerce input.button:not(:disabled):hover,
+.woocommerce input.button.alt:not(:disabled):hover,
+.widget_search [type=submit]:not(:disabled):hover,
+.wp-block-search__button:not(:disabled):hover,
+.wc-block-product-search__button:not(:disabled):hover,
+div:not(.is-style-outline) > .wp-block-button__link:not(:disabled):hover,
+.wp-block-button.is-style-outline .wp-block-button__link:not(:disabled):hover,
+.kenta-form [type=submit]:not(:disabled):hover,
+.kenta-raw-html [type=submit]:not(:disabled):hover,
+.kenta-article-content button:not(:disabled):hover,
+.kenta-article-content [type=submit]:not(:disabled):hover,
+.kenta-button:not(:disabled):hover {
+  color: var(--kenta-button-text-hover-color);
+  background-color: var(--kenta-button-hover-color);
+  border-color: var(--lotta-border-hover-color);
+  box-shadow: var(--kenta-button-shadow-active, none);
+}
+.woocommerce #respond input#submit.kenta-button-right,
+.woocommerce #respond input#submit.alt.kenta-button-right,
+.woocommerce .page-content .widget_price_filter .button.kenta-button-right,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right,
+.woocommerce .page-content a.button.alt.kenta-button-right,
+.woocommerce .page-content button.button.alt.kenta-button-right,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right,
+.woocommerce a.button.kenta-button-right,
+.woocommerce a.button.alt.kenta-button-right,
+.woocommerce button.button.kenta-button-right,
+.woocommerce button.button.alt.kenta-button-right,
+.woocommerce input.button.kenta-button-right,
+.woocommerce input.button.alt.kenta-button-right,
+.widget_search [type=submit].kenta-button-right,
+.wp-block-search__button.kenta-button-right,
+.wc-block-product-search__button.kenta-button-right,
+div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right,
+.wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right,
+.kenta-form [type=submit].kenta-button-right,
+.kenta-raw-html [type=submit].kenta-button-right,
+.kenta-article-content button.kenta-button-right,
+.kenta-article-content [type=submit].kenta-button-right,
+.kenta-button.kenta-button-right {
+  flex-direction: row-reverse;
+}
+.woocommerce #respond input#submit.kenta-button-right i, .woocommerce #respond input#submit.kenta-button-right svg,
+.woocommerce #respond input#submit.alt.kenta-button-right i,
+.woocommerce #respond input#submit.alt.kenta-button-right svg,
+.woocommerce .page-content .widget_price_filter .button.kenta-button-right i,
+.woocommerce .page-content .widget_price_filter .button.kenta-button-right svg,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right i,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right svg,
+.woocommerce .page-content a.button.alt.kenta-button-right i,
+.woocommerce .page-content a.button.alt.kenta-button-right svg,
+.woocommerce .page-content button.button.alt.kenta-button-right i,
+.woocommerce .page-content button.button.alt.kenta-button-right svg,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right i,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-right svg,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right i,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-right svg,
+.woocommerce a.button.kenta-button-right i,
+.woocommerce a.button.kenta-button-right svg,
+.woocommerce a.button.alt.kenta-button-right i,
+.woocommerce a.button.alt.kenta-button-right svg,
+.woocommerce button.button.kenta-button-right i,
+.woocommerce button.button.kenta-button-right svg,
+.woocommerce button.button.alt.kenta-button-right i,
+.woocommerce button.button.alt.kenta-button-right svg,
+.woocommerce input.button.kenta-button-right i,
+.woocommerce input.button.kenta-button-right svg,
+.woocommerce input.button.alt.kenta-button-right i,
+.woocommerce input.button.alt.kenta-button-right svg,
+.widget_search [type=submit].kenta-button-right i,
+.widget_search [type=submit].kenta-button-right svg,
+.wp-block-search__button.kenta-button-right i,
+.wp-block-search__button.kenta-button-right svg,
+.wc-block-product-search__button.kenta-button-right i,
+.wc-block-product-search__button.kenta-button-right svg,
+div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right i,
+div:not(.is-style-outline) > .wp-block-button__link.kenta-button-right svg,
+.wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right i,
+.wp-block-button.is-style-outline .wp-block-button__link.kenta-button-right svg,
+.kenta-form [type=submit].kenta-button-right i,
+.kenta-form [type=submit].kenta-button-right svg,
+.kenta-raw-html [type=submit].kenta-button-right i,
+.kenta-raw-html [type=submit].kenta-button-right svg,
+.kenta-article-content button.kenta-button-right i,
+.kenta-article-content button.kenta-button-right svg,
+.kenta-article-content [type=submit].kenta-button-right i,
+.kenta-article-content [type=submit].kenta-button-right svg,
+.kenta-button.kenta-button-right i,
+.kenta-button.kenta-button-right svg {
+  margin-left: 0.75em;
+}
+.woocommerce #respond input#submit.kenta-button-left i, .woocommerce #respond input#submit.kenta-button-left svg,
+.woocommerce #respond input#submit.alt.kenta-button-left i,
+.woocommerce #respond input#submit.alt.kenta-button-left svg,
+.woocommerce .page-content .widget_price_filter .button.kenta-button-left i,
+.woocommerce .page-content .widget_price_filter .button.kenta-button-left svg,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-left i,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-left svg,
+.woocommerce .page-content a.button.alt.kenta-button-left i,
+.woocommerce .page-content a.button.alt.kenta-button-left svg,
+.woocommerce .page-content button.button.alt.kenta-button-left i,
+.woocommerce .page-content button.button.alt.kenta-button-left svg,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-left i,
+.woocommerce .page-content .woocommerce-message .button.kenta-button-left svg,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-left i,
+.woocommerce .woocommerce-page .page-content .woocommerce-message .button.kenta-button-left svg,
+.woocommerce a.button.kenta-button-left i,
+.woocommerce a.button.kenta-button-left svg,
+.woocommerce a.button.alt.kenta-button-left i,
+.woocommerce a.button.alt.kenta-button-left svg,
+.woocommerce button.button.kenta-button-left i,
+.woocommerce button.button.kenta-button-left svg,
+.woocommerce button.button.alt.kenta-button-left i,
+.woocommerce button.button.alt.kenta-button-left svg,
+.woocommerce input.button.kenta-button-left i,
+.woocommerce input.button.kenta-button-left svg,
+.woocommerce input.button.alt.kenta-button-left i,
+.woocommerce input.button.alt.kenta-button-left svg,
+.widget_search [type=submit].kenta-button-left i,
+.widget_search [type=submit].kenta-button-left svg,
+.wp-block-search__button.kenta-button-left i,
+.wp-block-search__button.kenta-button-left svg,
+.wc-block-product-search__button.kenta-button-left i,
+.wc-block-product-search__button.kenta-button-left svg,
+div:not(.is-style-outline) > .wp-block-button__link.kenta-button-left i,
+div:not(.is-style-outline) > .wp-block-button__link.kenta-button-left svg,
+.wp-block-button.is-style-outline .wp-block-button__link.kenta-button-left i,
+.wp-block-button.is-style-outline .wp-block-button__link.kenta-button-left svg,
+.kenta-form [type=submit].kenta-button-left i,
+.kenta-form [type=submit].kenta-button-left svg,
+.kenta-raw-html [type=submit].kenta-button-left i,
+.kenta-raw-html [type=submit].kenta-button-left svg,
+.kenta-article-content button.kenta-button-left i,
+.kenta-article-content button.kenta-button-left svg,
+.kenta-article-content [type=submit].kenta-button-left i,
+.kenta-article-content [type=submit].kenta-button-left svg,
+.kenta-button.kenta-button-left i,
+.kenta-button.kenta-button-left svg {
+  margin-right: 0.75em;
+}
+
+.wp-block-button.is-style-outline .wp-block-button__link,
+.wp-block-button.is-style-outline .wp-block-button__link:not(.has-background),
+.wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color) {
+  border-width: 2px;
+  border-style: solid;
+  color: var(--kenta-button-initial-color);
+  border-color: var(--kenta-button-initial-color);
+  background-color: transparent;
+}
+
+.components-button.is-primary {
+  background: var(--wp-admin-theme-color) !important;
+}
+
+.kenta-icon-button {
+  cursor: pointer;
+  background-color: transparent;
+  border: none;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  transition: all ease 0.25s;
+  width: calc(var(--kenta-icon-button-size) * 1.25);
+  height: calc(var(--kenta-icon-button-size) * 1.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--kenta-icon-button-icon-initial-color);
+}
+.kenta-icon-button:active, .kenta-icon-button:hover {
+  color: var(--kenta-icon-button-icon-hover-color);
+}
+.kenta-icon-button.kenta-icon-button-rounded, .kenta-icon-button.kenta-icon-button-square {
+  width: calc(var(--kenta-icon-button-size) * 2.5);
+  height: calc(var(--kenta-icon-button-size) * 2.5);
+  border-radius: var(--kenta-icon-button-radius, 3px);
+}
+.kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-solid, .kenta-icon-button.kenta-icon-button-square.kenta-icon-button-solid {
+  background-color: var(--kenta-icon-button-bg-initial-color);
+}
+.kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-solid:hover, .kenta-icon-button.kenta-icon-button-square.kenta-icon-button-solid:hover {
+  background-color: var(--kenta-icon-button-bg-hover-color);
+}
+.kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-outline, .kenta-icon-button.kenta-icon-button-square.kenta-icon-button-outline {
+  border: var(--kenta-icon-button-outline, 1px solid);
+  border-color: var(--kenta-icon-button-border-initial-color);
+}
+.kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-outline:hover, .kenta-icon-button.kenta-icon-button-square.kenta-icon-button-outline:hover {
+  border-color: var(--kenta-icon-button-border-hover-color);
+}
+.kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-solid, .kenta-icon-button.kenta-icon-button-rounded.kenta-icon-button-outline {
+  --kenta-icon-button-radius: 9999px;
+}
+
+.kenta-archive-header {
+  position: relative;
+}
+.kenta-archive-header .container {
+  position: relative;
+  z-index: 1;
+}
+.kenta-archive-header.kenta-archive-header-has-overlay::after {
+  content: "";
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.woocommerce .kenta-products,
+.card-list,
+.kenta-related-posts-list {
+  margin: 0 calc(-1 * var(--card-gap) / 2);
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.woocommerce .kenta-products > .product,
+.card-wrapper {
+  padding: 0 calc(var(--card-gap) / 2) var(--card-gap) calc(var(--card-gap) / 2);
+}
+
+.woocommerce .kenta-products .kenta-product-wrapper,
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--kenta-base-color);
+  border-radius: var(--kenta-card-radius, 2px);
+}
+.woocommerce .kenta-products .kenta-product-wrapper .kenta-product-thumbnail,
+.woocommerce .kenta-products .kenta-product-wrapper .card-thumbnail,
+.card .kenta-product-thumbnail,
+.card .card-thumbnail {
+  flex-shrink: 0;
+  overflow: hidden;
+  margin-bottom: var(--card-thumbnail-spacing, 0);
+}
+.woocommerce .kenta-products .kenta-product-wrapper .kenta-product-thumbnail img,
+.woocommerce .kenta-products .kenta-product-wrapper .card-thumbnail img,
+.card .kenta-product-thumbnail img,
+.card .card-thumbnail img {
+  width: 100%;
+  transition: all ease 0.3s;
+  -o-object-fit: cover;
+     object-fit: cover;
+  -o-object-position: center;
+     object-position: center;
+}
+.woocommerce .kenta-products .kenta-product-wrapper[data-card-layout$=left] .card-thumbnail, .woocommerce .kenta-products .kenta-product-wrapper[data-card-layout$=right] .card-thumbnail,
+.card[data-card-layout$=left] .card-thumbnail,
+.card[data-card-layout$=right] .card-thumbnail {
+  margin-bottom: 0;
+  width: var(--card-thumbnail-width, 45%);
+}
+.woocommerce .kenta-products .kenta-product-wrapper[data-card-layout$=left] .card-thumbnail,
+.card[data-card-layout$=left] .card-thumbnail {
+  margin-right: var(--card-thumbnail-spacing, 0);
+}
+.woocommerce .kenta-products .kenta-product-wrapper[data-card-layout$=right] .card-thumbnail,
+.card[data-card-layout$=right] .card-thumbnail {
+  margin-left: var(--card-thumbnail-spacing, 0);
+}
+.woocommerce .kenta-products .kenta-product-wrapper[data-card-layout$=masonry] .entry-thumbnail,
+.card[data-card-layout$=masonry] .entry-thumbnail {
+  height: auto;
+}
+.woocommerce .kenta-products .kenta-product-wrapper.card-thumb-motion .card-thumbnail:hover img,
+.card.card-thumb-motion .card-thumbnail:hover img {
+  transform: scale(1.1);
+}
+.woocommerce .kenta-products .kenta-product-wrapper .kenta-product-content,
+.woocommerce .kenta-products .kenta-product-wrapper .card-content,
+.card .kenta-product-content,
+.card .card-content {
+  padding: var(--card-content-spacing);
+}
+.woocommerce .kenta-products .kenta-product-wrapper .card-thumbnail.card-content,
+.card .card-thumbnail.card-content {
+  padding: 0 var(--card-content-spacing);
+}
+
+@media (min-width: 768px) {
+  .card[data-card-layout$=left] {
+    flex-direction: row;
+  }
+  .card[data-card-layout$=right] {
+    flex-direction: row-reverse;
+  }
+}
+.entry-title {
+  color: var(--kenta-link-initial-color, inherit);
+  word-break: break-word;
+}
+.entry-title, .entry-title a {
+  text-decoration: none;
+}
+
+.entry-divider {
+  padding-bottom: 24px;
+}
+.entry-divider.full-width {
+  margin: 0 calc(-1 * var(--card-content-spacing));
+}
+.entry-divider::after {
+  content: "";
+  display: block;
+  width: 100%;
+  border-bottom: var(--entry-divider, 1px solid var(--kenta-base-200));
+}
+
+.cat-taxonomies .entry-tax-item {
+  transition: all ease 0.25s;
+  text-decoration: none;
+  color: var(--kenta-tax-text-initial);
+}
+.cat-taxonomies .entry-tax-item:hover {
+  color: var(--kenta-tax-text-hover);
+}
+
+.cat-taxonomies[data-tax-type=badge] .entry-tax-item {
+  border-radius: var(--kenta-tax-item-radius, 3px);
+  padding: 0.3em 0.75em;
+  background: var(--kenta-tax-bg-initial);
+  display: inline-block;
+  margin-top: 1px;
+  margin-bottom: 1px;
+}
+.cat-taxonomies[data-tax-type=badge] .entry-tax-item:hover {
+  background: var(--kenta-tax-bg-hover);
+}
+
+.entry-metas i, .entry-metas svg {
+  display: inline-block;
+  color: var(--kenta-meta-link-initial-color);
+  fill: var(--kenta-meta-link-initial-color);
+  position: relative;
+  top: -0.1em;
+  vertical-align: middle;
+}
+.entry-metas .meta-item {
+  display: inline-block;
+}
+.entry-metas .meta-item i, .entry-metas .meta-item svg {
+  font-size: 1em;
+  margin-right: 0.65em;
+}
+.entry-metas .meta-item svg {
+  width: 1em;
+  height: 1em;
+}
+.entry-metas .meta-divider {
+  width: 1.25em;
+  height: 1.25em;
+  margin: 0 0.5em;
+}
+.entry-metas .meta-divider:last-child {
+  display: none;
+}
+.entry-metas .entry-meta-link {
+  text-decoration: none;
+  color: var(--kenta-meta-link-initial-color);
+  transition: all ease 0.25s;
+}
+.entry-metas .entry-meta-link:hover {
+  color: var(--kenta-meta-link-hover-color);
+}
+
+.kenta-about-author-bio-box .kenta-author-bio-avatar-link {
+  display: inline-block;
+}
+.kenta-about-author-bio-box .kenta-author-bio-avatar {
+  margin: 0;
+  border-radius: var(--kenta-author-bio-avatar-radius, 0);
+}
+.kenta-about-author-bio-box .kenta-author-bio-all-articles {
+  font-size: 0.85rem;
+}
+.kenta-about-author-bio-box .kenta-author-bio-name {
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.5;
+}
+
+.kenta-related-posts-wrap .heading-content {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: var(--kenta-accent-active);
+}
+
+.kenta-post-navigation .nav-links {
+  color: var(--kenta-navigation-initial-color);
+  word-break: break-all;
+}
+
+@media (min-width: 1024px) {
+  .kenta-post-navigation .nav-links {
+    display: flex;
+  }
+}
+.kenta-post-navigation .nav-next {
+  width: 100%;
+}
+@media (min-width: 1024px) {
+  .kenta-post-navigation .nav-previous {
+    width: 50%;
+  }
+}
+.kenta-post-navigation .nav-previous {
+  flex-shrink: 0;
+}
+.kenta-post-navigation .nav-previous,
+.kenta-post-navigation .nav-next {
+  display: flex;
+  align-items: center;
+}
+.kenta-post-navigation .nav-previous a,
+.kenta-post-navigation .nav-next a {
+  display: flex;
+  align-items: center;
+  transition: all ease 0.2s;
+  text-decoration: none;
+  fill: var(--kenta-navigation-initial-color);
+  color: var(--kenta-navigation-initial-color);
+}
+.kenta-post-navigation .nav-previous a .post-thumbnail,
+.kenta-post-navigation .nav-next a .post-thumbnail {
+  position: relative;
+  flex-shrink: 0;
+  width: 4em;
+  height: 4em;
+  border-radius: var(--kenta-navigation-thumb-radius, 8px);
+  border: 1px dashed var(--kenta-base-300);
+  overflow: hidden;
+}
+.kenta-post-navigation .nav-previous a .post-thumbnail::after,
+.kenta-post-navigation .nav-next a .post-thumbnail::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--kenta-navigation-hover-color);
+  opacity: 0;
+  transition: all ease 0.25s;
+}
+.kenta-post-navigation .nav-previous a .post-thumbnail svg, .kenta-post-navigation .nav-previous a .post-thumbnail i,
+.kenta-post-navigation .nav-next a .post-thumbnail svg,
+.kenta-post-navigation .nav-next a .post-thumbnail i {
+  display: inline-block;
+  position: absolute;
+  top: 50%;
+  width: 1.2em;
+  height: 1.2em;
+  margin-left: -0.6em;
+  margin-top: -0.6em;
+  color: var(--kenta-base-color);
+  fill: var(--kenta-base-color);
+  z-index: 1;
+  opacity: 0;
+  transition: all ease 0.25s;
+}
+.kenta-post-navigation .nav-previous a .post-thumbnail img,
+.kenta-post-navigation .nav-next a .post-thumbnail img {
+  width: 100%;
+  height: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.kenta-post-navigation .nav-previous a span,
+.kenta-post-navigation .nav-next a span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+}
+.kenta-post-navigation .nav-previous a:hover,
+.kenta-post-navigation .nav-next a:hover {
+  fill: var(--kenta-navigation-hover-color);
+  color: var(--kenta-navigation-hover-color);
+}
+.kenta-post-navigation .nav-previous a:hover .post-thumbnail::after,
+.kenta-post-navigation .nav-next a:hover .post-thumbnail::after {
+  opacity: 0.75;
+}
+.kenta-post-navigation .nav-previous a:hover .post-thumbnail svg, .kenta-post-navigation .nav-previous a:hover .post-thumbnail i,
+.kenta-post-navigation .nav-next a:hover .post-thumbnail svg,
+.kenta-post-navigation .nav-next a:hover .post-thumbnail i {
+  opacity: 1;
+  left: 50%;
+}
+.kenta-post-navigation .nav-previous a svg, .kenta-post-navigation .nav-previous a i {
+  left: 80%;
+  flex-shrink: 0;
+}
+.kenta-post-navigation .nav-next {
+  text-align: end;
+  justify-content: flex-end;
+}
+.kenta-post-navigation .nav-next a {
+  flex-direction: row-reverse;
+}
+.kenta-post-navigation .nav-next a svg, .kenta-post-navigation .nav-next a i {
+  left: 20%;
+}
+.kenta-post-navigation .item-label {
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+.kenta-post-navigation .item-title {
+  display: block;
+  margin-top: 5px;
+  font-size: 14px;
+  font-weight: 700;
+  word-break: break-word;
+}
+
+.woocommerce-pagination,
+nav.woocommerce-pagination,
+.woocommerce-pagination > .page-numbers,
+nav.woocommerce-pagination > .page-numbers,
+.kenta-pagination {
+  display: flex;
+  padding: var(--kenta-pagination-spacing, 24px) 0;
+  color: var(--kenta-accent-color);
+}
+.woocommerce-pagination > li,
+nav.woocommerce-pagination > li,
+.woocommerce-pagination > .page-numbers > li,
+nav.woocommerce-pagination > .page-numbers > li,
+.kenta-pagination > li {
+  display: flex;
+}
+.woocommerce-pagination li > .page-numbers,
+.woocommerce-pagination .kenta-btn,
+nav.woocommerce-pagination li > .page-numbers,
+nav.woocommerce-pagination .kenta-btn,
+.woocommerce-pagination > .page-numbers li > .page-numbers,
+.woocommerce-pagination > .page-numbers .kenta-btn,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers,
+nav.woocommerce-pagination > .page-numbers .kenta-btn,
+.kenta-pagination li > .page-numbers,
+.kenta-pagination .kenta-btn {
+  width: 2.5em;
+  height: 2.5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--kenta-pagination-button-border);
+  border-radius: var(--kenta-pagination-button-radius);
+  transition: all ease 0.25s;
+  color: var(--kenta-pagination-initial-color);
+  text-decoration: none;
+}
+.woocommerce-pagination li > .page-numbers svg,
+.woocommerce-pagination .kenta-btn svg,
+nav.woocommerce-pagination li > .page-numbers svg,
+nav.woocommerce-pagination .kenta-btn svg,
+.woocommerce-pagination > .page-numbers li > .page-numbers svg,
+.woocommerce-pagination > .page-numbers .kenta-btn svg,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers svg,
+nav.woocommerce-pagination > .page-numbers .kenta-btn svg,
+.kenta-pagination li > .page-numbers svg,
+.kenta-pagination .kenta-btn svg {
+  fill: var(--kenta-pagination-initial-color);
+}
+.woocommerce-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+.woocommerce-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+nav.woocommerce-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+nav.woocommerce-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+.woocommerce-pagination > .page-numbers li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+.woocommerce-pagination > .page-numbers .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+nav.woocommerce-pagination > .page-numbers .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+.kenta-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover,
+.kenta-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover {
+  border-color: var(--kenta-pagination-accent-color);
+  color: var(--kenta-pagination-accent-color);
+}
+.woocommerce-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+.woocommerce-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+nav.woocommerce-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+nav.woocommerce-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+.woocommerce-pagination > .page-numbers li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+.woocommerce-pagination > .page-numbers .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+nav.woocommerce-pagination > .page-numbers .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+.kenta-pagination li > .page-numbers:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg,
+.kenta-pagination .kenta-btn:not(.kenta-btn-disabled, .kenta-btn-active, .current):hover svg {
+  fill: var(--kenta-pagination-accent-color);
+}
+.woocommerce-pagination li > .page-numbers.current, .woocommerce-pagination li > .page-numbers.kenta-btn-active,
+.woocommerce-pagination .kenta-btn.current,
+.woocommerce-pagination .kenta-btn.kenta-btn-active,
+nav.woocommerce-pagination li > .page-numbers.current,
+nav.woocommerce-pagination li > .page-numbers.kenta-btn-active,
+nav.woocommerce-pagination .kenta-btn.current,
+nav.woocommerce-pagination .kenta-btn.kenta-btn-active,
+.woocommerce-pagination > .page-numbers li > .page-numbers.current,
+.woocommerce-pagination > .page-numbers li > .page-numbers.kenta-btn-active,
+.woocommerce-pagination > .page-numbers .kenta-btn.current,
+.woocommerce-pagination > .page-numbers .kenta-btn.kenta-btn-active,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers.current,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers.kenta-btn-active,
+nav.woocommerce-pagination > .page-numbers .kenta-btn.current,
+nav.woocommerce-pagination > .page-numbers .kenta-btn.kenta-btn-active,
+.kenta-pagination li > .page-numbers.current,
+.kenta-pagination li > .page-numbers.kenta-btn-active,
+.kenta-pagination .kenta-btn.current,
+.kenta-pagination .kenta-btn.kenta-btn-active {
+  background: var(--kenta-pagination-accent-color);
+  border-color: var(--kenta-pagination-accent-color);
+  color: var(--kenta-pagination-active-color);
+}
+.woocommerce-pagination li > .page-numbers.current svg, .woocommerce-pagination li > .page-numbers.kenta-btn-active svg,
+.woocommerce-pagination .kenta-btn.current svg,
+.woocommerce-pagination .kenta-btn.kenta-btn-active svg,
+nav.woocommerce-pagination li > .page-numbers.current svg,
+nav.woocommerce-pagination li > .page-numbers.kenta-btn-active svg,
+nav.woocommerce-pagination .kenta-btn.current svg,
+nav.woocommerce-pagination .kenta-btn.kenta-btn-active svg,
+.woocommerce-pagination > .page-numbers li > .page-numbers.current svg,
+.woocommerce-pagination > .page-numbers li > .page-numbers.kenta-btn-active svg,
+.woocommerce-pagination > .page-numbers .kenta-btn.current svg,
+.woocommerce-pagination > .page-numbers .kenta-btn.kenta-btn-active svg,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers.current svg,
+nav.woocommerce-pagination > .page-numbers li > .page-numbers.kenta-btn-active svg,
+nav.woocommerce-pagination > .page-numbers .kenta-btn.current svg,
+nav.woocommerce-pagination > .page-numbers .kenta-btn.kenta-btn-active svg,
+.kenta-pagination li > .page-numbers.current svg,
+.kenta-pagination li > .page-numbers.kenta-btn-active svg,
+.kenta-pagination .kenta-btn.current svg,
+.kenta-pagination .kenta-btn.kenta-btn-active svg {
+  fill: var(--kenta-pagination-active-color);
+}
+
+.woocommerce-pagination > li,
+nav.woocommerce-pagination > li,
+.woocommerce-pagination > .page-numbers > li,
+nav.woocommerce-pagination > .page-numbers > li {
+  margin-right: 0.5em;
+}
+.woocommerce-pagination > li:last-child,
+nav.woocommerce-pagination > li:last-child,
+.woocommerce-pagination > .page-numbers > li:last-child,
+nav.woocommerce-pagination > .page-numbers > li:last-child {
+  margin-right: 0;
+}
+
+.kenta-pagination .kenta-btn {
+  margin-right: 0.5em;
+}
+.kenta-pagination .kenta-btn.kenta-prev-btn-text, .kenta-pagination .kenta-btn.kenta-next-btn-text {
+  width: auto;
+  padding: 0 1.25em;
+}
+.kenta-pagination .kenta-btn:last-child {
+  margin-right: 0;
+}
+.kenta-pagination .kenta-btn.kenta-btn-disabled {
+  opacity: 0.5;
+}
+
+.kenta-article-header-background::after {
+  content: " ";
+  position: absolute;
+  display: block;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.kenta-article-header-background .kenta-article-header .entry-title {
+  --kenta-link-initial-color: var(--kenta-article-header-override);
+}
+.kenta-article-header-background .kenta-article-header .entry-title > * {
+  color: inherit;
+}
+.kenta-article-header-background .kenta-article-header .entry-metas {
+  --kenta-meta-link-initial-color: var(--kenta-article-header-override);
+}
+.kenta-article-header-background .article-featured-image {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  padding: 0;
+}
+.kenta-article-header-background .article-featured-image img {
+  width: 100%;
+  height: 100%;
+  margin: 0 !important;
+}
+
+.kenta-form-classic {
+  --kenta-form-border-top: 1px solid var(--kenta-form-border-color);
+  --kenta-form-border-right: 1px solid var(--kenta-form-border-color);
+  --kenta-form-border-bottom: 1px solid var(--kenta-form-border-color);
+  --kenta-form-border-left: 1px solid var(--kenta-form-border-color);
+  --kenta-form-checkbox-border-top: 1px solid var(--kenta-form-border-color);
+  --kenta-form-checkbox-border-right: 1px solid var(--kenta-form-border-color);
+  --kenta-form-checkbox-border-bottom: 1px solid var(--kenta-form-border-color);
+  --kenta-form-checkbox-border-left: 1px solid var(--kenta-form-border-color);
+}
+
+.kenta-article-content .kenta-form-control, .kenta-article-content textarea, .kenta-article-content select, .kenta-article-content .select2-selection--single, .kenta-article-content [type=url], .kenta-article-content [type=email], .kenta-article-content [type=tel], .kenta-article-content [type=password], .kenta-article-content [type=number], .kenta-article-content [type=search], .kenta-article-content [type=text],
+.kenta-widget .kenta-form-control,
+.kenta-widget textarea,
+.kenta-widget select,
+.kenta-widget .select2-selection--single,
+.kenta-widget [type=url],
+.kenta-widget [type=email],
+.kenta-widget [type=tel],
+.kenta-widget [type=password],
+.kenta-widget [type=number],
+.kenta-widget [type=search],
+.kenta-widget [type=text],
+form .kenta-form-control,
+form textarea,
+form select,
+form .select2-selection--single,
+form [type=url],
+form [type=email],
+form [type=tel],
+form [type=password],
+form [type=number],
+form [type=search],
+form [type=text],
+.kenta-form .kenta-form-control,
+.kenta-form textarea,
+.kenta-form select,
+.kenta-form .select2-selection--single,
+.kenta-form [type=url],
+.kenta-form [type=email],
+.kenta-form [type=tel],
+.kenta-form [type=password],
+.kenta-form [type=number],
+.kenta-form [type=search],
+.kenta-form [type=text] {
+  display: block;
+  width: 100%;
+  height: var(--kenta-form-control-height, 45px);
+  transition: all ease 0.25s;
+  border-radius: var(--kenta-form-control-radius, 2px);
+  border-top: var(--kenta-form-border-top);
+  border-right: var(--kenta-form-border-right);
+  border-bottom: var(--kenta-form-border-bottom);
+  border-left: var(--kenta-form-border-left);
+  background: var(--kenta-form-background-color);
+  padding: var(--kenta-form-control-paddding, 0.3em 0.75em);
+  color: var(--kenta-form-text-color, inherit);
+  font-size: inherit;
+}
+.kenta-article-content .kenta-form-control:focus, .kenta-article-content textarea:focus, .kenta-article-content select:focus, .kenta-article-content .select2-selection--single:focus, .kenta-article-content [type=url]:focus, .kenta-article-content [type=email]:focus, .kenta-article-content [type=tel]:focus, .kenta-article-content [type=password]:focus, .kenta-article-content [type=number]:focus, .kenta-article-content [type=search]:focus, .kenta-article-content [type=text]:focus,
+.kenta-widget .kenta-form-control:focus,
+.kenta-widget textarea:focus,
+.kenta-widget select:focus,
+.kenta-widget .select2-selection--single:focus,
+.kenta-widget [type=url]:focus,
+.kenta-widget [type=email]:focus,
+.kenta-widget [type=tel]:focus,
+.kenta-widget [type=password]:focus,
+.kenta-widget [type=number]:focus,
+.kenta-widget [type=search]:focus,
+.kenta-widget [type=text]:focus,
+form .kenta-form-control:focus,
+form textarea:focus,
+form select:focus,
+form .select2-selection--single:focus,
+form [type=url]:focus,
+form [type=email]:focus,
+form [type=tel]:focus,
+form [type=password]:focus,
+form [type=number]:focus,
+form [type=search]:focus,
+form [type=text]:focus,
+.kenta-form .kenta-form-control:focus,
+.kenta-form textarea:focus,
+.kenta-form select:focus,
+.kenta-form .select2-selection--single:focus,
+.kenta-form [type=url]:focus,
+.kenta-form [type=email]:focus,
+.kenta-form [type=tel]:focus,
+.kenta-form [type=password]:focus,
+.kenta-form [type=number]:focus,
+.kenta-form [type=search]:focus,
+.kenta-form [type=text]:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--kenta-form-active-color);
+}
+.kenta-article-content textarea,
+.kenta-widget textarea,
+form textarea,
+.kenta-form textarea {
+  height: auto;
+}
+.kenta-article-content [type=checkbox],
+.kenta-widget [type=checkbox],
+form [type=checkbox],
+.kenta-form [type=checkbox] {
+  border-radius: 3px;
+  transition: all ease 0.25s;
+  margin-right: 0.5rem;
+  width: 20px;
+  height: 20px;
+  vertical-align: center;
+  border-top: var(--kenta-form-checkbox-border-top);
+  border-right: var(--kenta-form-checkbox-border-right);
+  border-bottom: var(--kenta-form-checkbox-border-bottom);
+  border-left: var(--kenta-form-checkbox-border-left);
+  background-color: var(--kenta-form-background-color);
+}
+.kenta-article-content [type=checkbox]:focus, .kenta-article-content [type=checkbox]:checked,
+.kenta-widget [type=checkbox]:focus,
+.kenta-widget [type=checkbox]:checked,
+form [type=checkbox]:focus,
+form [type=checkbox]:checked,
+.kenta-form [type=checkbox]:focus,
+.kenta-form [type=checkbox]:checked {
+  --tw-ring-color: var(--kenta-form-active-color);
+}
+.kenta-article-content [type=checkbox]:checked,
+.kenta-widget [type=checkbox]:checked,
+form [type=checkbox]:checked,
+.kenta-form [type=checkbox]:checked {
+  background-color: var(--kenta-form-active-color);
+}
+.kenta-article-content [type=submit],
+.kenta-widget [type=submit],
+form [type=submit],
+.kenta-form [type=submit] {
+  line-height: 1;
+}
+
+.kenta-input-group {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+.kenta-input-group [type=submit]:not(:last-child), .kenta-input-group .kenta-form-control:not(:last-child), .kenta-input-group textarea:not(:last-child), .kenta-input-group select:not(:last-child), .kenta-input-group .select2-selection--single:not(:last-child), .kenta-input-group [type=url]:not(:last-child), .kenta-input-group [type=email]:not(:last-child), .kenta-input-group [type=tel]:not(:last-child), .kenta-input-group [type=password]:not(:last-child), .kenta-input-group [type=number]:not(:last-child), .kenta-input-group [type=search]:not(:last-child), .kenta-input-group [type=text]:not(:last-child) {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+.kenta-input-group [type=submit]:not(:first-child), .kenta-input-group .kenta-form-control:not(:first-child), .kenta-input-group textarea:not(:first-child), .kenta-input-group select:not(:first-child), .kenta-input-group .select2-selection--single:not(:first-child), .kenta-input-group [type=url]:not(:first-child), .kenta-input-group [type=email]:not(:first-child), .kenta-input-group [type=tel]:not(:first-child), .kenta-input-group [type=password]:not(:first-child), .kenta-input-group [type=number]:not(:first-child), .kenta-input-group [type=search]:not(:first-child), .kenta-input-group [type=text]:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.kenta-full-width-submit input[type=submit] {
+  justify-content: center;
+  width: 100%;
+}
+
+.kenta-inner-label {
+  position: relative;
+}
+.kenta-inner-label label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  max-height: var(--kenta-form-control-height, 45px);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  opacity: 0.85;
+  transition: all ease 0.25s;
+  z-index: 1;
+}
+.kenta-inner-label:focus-within label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(20px, 0, 0);
+}
+
+.kenta-not-empty-field label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(20px, 0, 0);
+}
+
+.mc4wp-response {
+  text-align: center;
+}
+
+.kenta-newsletter {
+  --kenta-form-control-paddding: 0.75em 2em;
+  --kenta-form-control-radius: 9999px;
+  --kenta-form-control-height: auto;
+}
+.kenta-newsletter .kenta-inner-label label {
+  padding: 0 2em;
+}
+.kenta-newsletter [type=submit] {
+  --kenta-button-padding: 8px 36px 8px 36px !important;
+  --kenta-button-radius: 9999px !important;
+}
+
+.kenta-comments-link, .kenta-comments-area .comment-respond .comment-reply-title small, .kenta-comments-area .comment-list .reply, .kenta-comments-area .comment-list .comment-meta .comment-metadata a, .kenta-comments-area .comment-list .comment-meta .comment-author .fn .url, .kenta-comments-area .comment-list .comment-body a {
+  transition: all ease 0.25s;
+  color: var(--kenta-comments-initial-color);
+}
+.kenta-comments-link:hover, .kenta-comments-area .comment-respond .comment-reply-title small:hover, .kenta-comments-area .comment-list .reply:hover, .kenta-comments-area .comment-list .comment-meta .comment-metadata a:hover, .kenta-comments-area .comment-list .comment-meta .comment-author .fn .url:hover, .kenta-comments-area .comment-list .comment-body a:hover {
+  color: var(--kenta-comments-hover-color);
+}
+
+.kenta-comments-area {
+  --kenta-comments-initial-color: var(--kenta-accent-color);
+  --kenta-comments-hover-color: var(--kenta-primary-color);
+  color: var(--kenta-comments-initial-color);
+}
+.kenta-comments-area ol {
+  list-style: none;
+}
+.kenta-comments-area .comment-list > .comment:first-child > .comment-body {
+  margin-top: 0;
+}
+.kenta-comments-area .comments-title,
+.kenta-comments-area .comment-reply-title {
+  position: relative;
+  border-bottom: 1px solid var(--kenta-base-300);
+  padding-bottom: 8px;
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+.kenta-comments-area .comments-title::after,
+.kenta-comments-area .comment-reply-title::after {
+  content: " ";
+  display: block;
+  width: 3em;
+  height: 4px;
+  background: var(--kenta-primary-color);
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+}
+.kenta-comments-area .comment-list .comment-body {
+  position: relative;
+  overflow-wrap: break-word;
+  margin-bottom: 12px;
+  border-bottom-width: 2px;
+  border-color: var(--kenta-base-100);
+  padding: 12px;
+}
+.kenta-comments-area .comment-list > .comment:first-child > .comment-body {
+  margin-top: 0;
+}
+.kenta-comments-area .comment-list .children {
+  padding-left: 24px;
+}
+.kenta-comments-area .comment-list .comment-meta::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+.kenta-comments-area .comment-list .comment-meta a {
+  text-decoration: none;
+}
+.kenta-comments-area .comment-list .comment-meta .comment-author img {
+  width: 46px !important;
+  height: 46px !important;
+  float: left;
+  margin: 0px;
+  margin-right: 1rem;
+  display: block;
+  border-radius: 9999px;
+  padding: 0px;
+}
+.kenta-comments-area .comment-list .comment-meta .comment-author .says {
+  display: none;
+}
+.kenta-comments-area .comment-list .comment-meta .comment-author .fn {
+  display: inline-block;
+  font-weight: 700;
+}
+.kenta-comments-area .comment-list .comment-meta .comment-metadata {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+.kenta-comments-area .comment-list .comment-meta .edit-link {
+  margin-left: 10px;
+}
+.kenta-comments-area .comment-list .comment-meta .comment-awaiting-moderation {
+  margin-top: 24px;
+  display: block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.kenta-comments-area .comment-list .comment-content {
+  margin-top: 12px;
+  padding-left: 12px;
+  padding-right: 12px;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.kenta-comments-area .comment-list .comment-content p {
+  margin: 0;
+}
+.kenta-comments-area .comment-list .reply {
+  margin-top: 12px;
+  display: inline-block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+}
+.kenta-comments-area .comment-list .reply, 
+.kenta-comments-area .comment-list .reply a {
+  text-decoration: none;
+}
+.kenta-comments-area .comment-list .reply .comment-reply-link {
+  padding-left: 8px;
+}
+.kenta-comments-area .comment-respond .comment-reply-title {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+.kenta-comments-area .comment-respond .comment-reply-title small {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+}
+.kenta-comments-area .comment-respond .logged-in-as {
+  display: none;
+}
+.kenta-comments-area .comment-respond .comment-notes {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.kenta-comments-area .comment-respond .form-submit {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.kenta-comments-area .comment-respond .comment-form-cookies-consent label {
+  display: inline-block;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+.kenta-comments-area .comment-form .required {
+  color: #dd0000;
+}
+.kenta-comments-area .comment-form > p {
+  margin-bottom: 24px;
+}
+.kenta-comments-area .comment-form .comment-form-comment,
+.kenta-comments-area .comment-form .comment-form-author,
+.kenta-comments-area .comment-form .comment-form-email,
+.kenta-comments-area .comment-form .comment-form-url {
+  position: relative;
+}
+.kenta-comments-area .comment-form .comment-form-comment label, 
+.kenta-comments-area .comment-form .comment-form-author label, 
+.kenta-comments-area .comment-form .comment-form-email label, 
+.kenta-comments-area .comment-form .comment-form-url label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  max-height: var(--kenta-form-control-height, 45px);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  opacity: 0.85;
+  transition: all ease 0.25s;
+  z-index: 1;
+}
+.kenta-comments-area .comment-form .comment-form-comment:focus-within label, 
+.kenta-comments-area .comment-form .comment-form-author:focus-within label, 
+.kenta-comments-area .comment-form .comment-form-email:focus-within label, 
+.kenta-comments-area .comment-form .comment-form-url:focus-within label {
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(20px, 0, 0);
+}
+.kenta-newsletter .kenta-comments-area .comment-form .comment-form-comment label, .kenta-newsletter 
+.kenta-comments-area .comment-form .comment-form-author label, .kenta-newsletter 
+.kenta-comments-area .comment-form .comment-form-email label, .kenta-newsletter 
+.kenta-comments-area .comment-form .comment-form-url label {
+  padding: 0 2em;
+}
+
+.kenta-heading .heading-content {
+  position: relative;
+}
+.kenta-heading .heading-content::after {
+  content: "";
+  display: block;
+  background: var(--kenta-heading-indicator, var(--kenta-primary-color));
+}
+.kenta-heading.kenta-heading-style-1 .heading-content {
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--kenta-base-200);
+}
+.kenta-heading.kenta-heading-style-1 .heading-content::after {
+  position: absolute;
+  width: 3em;
+  height: 4px;
+  left: 0;
+  bottom: -1px;
+}
+.kenta-heading.kenta-heading-style-2 .heading-content {
+  padding-left: 0.65em;
+}
+.kenta-heading.kenta-heading-style-2 .heading-content::after {
+  position: absolute;
+  width: 4px;
+  height: 1.2em;
+  left: 0;
+  top: 50%;
+  margin-top: -0.6em;
+}
+
+.popup-triangle {
+  content: " ";
+  bottom: 100%;
+  border-width: 0.65em;
+  border-style: solid;
+  border-bottom-color: var(--kenta-popup-color, var(--kenta-base-300));
+  border-top-color: transparent;
+  border-left-color: transparent;
+  border-right-color: transparent;
+  position: absolute;
+}
+
+.wp-block-details summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  cursor: pointer;
+  border-radius: inherit;
+}
+.wp-block-details summary::-webkit-details-marker {
+  display: none;
+}
+.wp-block-details summary::marker {
+  display: none;
+  content: "";
+}
+.wp-block-details summary::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  inset: 0 0 0 auto;
+  opacity: 1;
+  transition: transform 0.1s ease-in;
+  height: 1.5em;
+  width: 1.5em;
+  margin-right: -0.333em;
+  transform: rotate(0deg);
+  mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+  mask-size: contain;
+  mask-repeat: no-repeat;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.5 11.6 12 16l-5.5-4.4.9-1.2L12 14l4.5-3.6 1 1.2z"/></svg>');
+  background: currentcolor;
+}
+.wp-block-details[open]:not(.closing) summary::after {
+  transform: rotate(180deg);
+}
+.wp-block-details section:not([hidden]) {
+  display: block;
+}
+
+.kenta-widget {
+  position: relative;
+  margin-bottom: var(--kenta-widgets-spacing, 0);
+  color: var(--kenta-widgets-text-color);
+}
+.kenta-widget ul,
+.kenta-widget ol {
+  margin: 0;
+  padding: 0;
+  list-style: outside none none;
+}
+.kenta-widget li, .kenta-widget ul > li, .kenta-widget ol > li {
+  padding: 0;
+}
+.kenta-widget a {
+  transition: all ease 0.25s;
+  color: var(--kenta-widgets-link-initial, var(--kenta-primary-color));
+}
+.kenta-widget a:hover {
+  color: var(--kenta-widgets-link-hover, var(--kenta-primary-active));
+}
+.kenta-widget .widget-title {
+  margin: 0px;
+  margin-bottom: 12px;
+}
+.kenta-widget [type=text],
+.kenta-widget [type=email],
+.kenta-widget [type=url],
+.kenta-widget [type=password],
+.kenta-widget [type=number],
+.kenta-widget [type=date],
+.kenta-widget [type=datetime-local],
+.kenta-widget [type=month],
+.kenta-widget [type=search],
+.kenta-widget [type=tel],
+.kenta-widget [type=time],
+.kenta-widget [type=week],
+.kenta-widget [multiple],
+.kenta-widget textarea,
+.kenta-widget select {
+  display: block;
+  width: 100%;
+  transition: all ease 0.25s;
+  border-radius: var(--kenta-form-control-radius, 2px);
+  border: 1px solid var(--kenta-form-border-color, var(--kenta-base-200));
+  background-color: transparent;
+}
+.kenta-widget [type=text]:focus,
+.kenta-widget [type=email]:focus,
+.kenta-widget [type=url]:focus,
+.kenta-widget [type=password]:focus,
+.kenta-widget [type=number]:focus,
+.kenta-widget [type=date]:focus,
+.kenta-widget [type=datetime-local]:focus,
+.kenta-widget [type=month]:focus,
+.kenta-widget [type=search]:focus,
+.kenta-widget [type=tel]:focus,
+.kenta-widget [type=time]:focus,
+.kenta-widget [type=week]:focus,
+.kenta-widget [multiple]:focus,
+.kenta-widget textarea:focus,
+.kenta-widget select:focus {
+  outline: none;
+  box-shadow: none;
+  border-color: var(--kenta-form-active-color, var(--kenta-primary-color));
+}
+
+.widget_tag_cloud a,
+.wp-block-tag-cloud a,
+.widget_product_tag_cloud a {
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 0.5em;
+  margin-right: 0.5em;
+  padding: 0.25em 1em;
+  transition: all ease 0.25s;
+  border-radius: 2px;
+  color: var(--kenta-tag-cloud-text-initial, var(--kenta-accent-color));
+  background-color: var(--kenta-tag-cloud-background-initial, var(--kenta-base-color));
+  border: 1px solid var(--kenta-tag-cloud-border-initial-color, var(--kenta-base-200));
+}
+.widget_tag_cloud a:hover,
+.wp-block-tag-cloud a:hover,
+.widget_product_tag_cloud a:hover {
+  color: var(--kenta-tag-cloud-text-hover, var(--kenta-base-color));
+  background-color: var(--kenta-tag-cloud-background-hover, var(--kenta-primary-color));
+  border-color: var(--kenta-tag-cloud-border-hover-color, var(--kenta-primary-color));
+}
+
+.widget_rss .widget-title a.rsswidget:first-of-type {
+  display: none;
+}
+.widget_rss li {
+  margin-bottom: 12px;
+}
+
+.gallery {
+  margin-bottom: 10px;
+  overflow: hidden;
+  list-style: none !important;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.gallery-item {
+  position: relative;
+}
+.gallery-item img {
+  width: 100%;
+  margin: 0;
+}
+.gallery-item * {
+  display: block;
+  height: 100%;
+}
+
+.wp-caption {
+  position: relative;
+}
+
+figcaption,
+.wp-caption figcaption,
+.wp-caption-text,
+.gallery-caption,
+.wp-caption-text {
+  width: 100%;
+  margin-top: 0;
+}
+
+body:not(.elementor-page) .gallery-item {
+  display: inline-block;
+  vertical-align: top;
+  padding: 0 !important;
+  margin-right: 5px;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.gallery-columns-1 .gallery-item {
+  float: none !important;
+  width: 100%;
+}
+
+.gallery-columns-2 .gallery-item {
+  width: calc((100% - 5px) / 2 - 1px);
+}
+
+.gallery-columns-3 .gallery-item {
+  width: calc((100% - 10px) / 3 - 1px);
+}
+
+.gallery-columns-4 .gallery-item {
+  width: calc((100% - 15px) / 4 - 1px);
+}
+
+.gallery-columns-5 .gallery-item {
+  width: calc((100% - 20px) / 5 - 1px);
+}
+
+.gallery-columns-6 .gallery-item {
+  width: calc((100% - 25px) / 6 - 1px);
+}
+
+.gallery-columns-7 .gallery-item {
+  width: calc((100% - 30px) / 7 - 1px);
+}
+
+.gallery-columns-8 .gallery-item {
+  width: calc((100% - 35px) / 8 - 1px);
+}
+
+.gallery-columns-9 .gallery-item {
+  width: calc((100% - 40px) / 9 - 1px);
+}
+
+.gallery-columns-2 .gallery-item:nth-child(2n+2),
+.gallery-columns-3 .gallery-item:nth-child(3n+3),
+.gallery-columns-4 .gallery-item:nth-child(4n+4),
+.gallery-columns-5 .gallery-item:nth-child(5n+5),
+.gallery-columns-6 .gallery-item:nth-child(6n+6),
+.gallery-columns-7 .gallery-item:nth-child(7n+7),
+.gallery-columns-8 .gallery-item:nth-child(8n+8),
+.gallery-columns-9 .gallery-item:nth-child(9n+9) {
+  margin-right: 0 !important;
+}
+
+.gallery-columns-2 .gallery-item:nth-child(2n+2) + li,
+.gallery-columns-3 .gallery-item:nth-child(3n+3) + li,
+.gallery-columns-4 .gallery-item:nth-child(4n+4) + li,
+.gallery-columns-5 .gallery-item:nth-child(5n+5) + li,
+.gallery-columns-6 .gallery-item:nth-child(6n+6) + li,
+.gallery-columns-7 .gallery-item:nth-child(7n+7) + li,
+.gallery-columns-8 .gallery-item:nth-child(8n+8) + li,
+.gallery-columns-9 .gallery-item:nth-child(9n+9) + li {
+  clear: both;
+}
+
+.kenta-widget.widget_search label {
+  display: block;
+}
+.kenta-widget.widget_search button[type=submit] {
+  height: 100%;
+}
+.kenta-widget form.search-form {
+  position: relative;
+}
+.kenta-widget form.search-form button {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
+/* Classic List Widget -------------------------- */
+.kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) {
+  list-style: none;
+  padding: 0;
+}
+.kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) > li {
+  padding: var(--widget-list-pt, 0.2rem) var(--widget-list-pr, 1rem) var(--widget-list-pb, 0.2rem) var(--widget-list-pl, 1.4rem);
+  position: relative;
+}
+.kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) li a {
+  position: static;
+}
+.kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) li:not(.menu-item-has-children)::before {
+  content: "\f02b";
+  display: inline-block;
+  font-size: 0.6rem;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -0.3rem;
+  color: var(--kenta-primary-color);
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  display: var(--fa-display, inline-block);
+  font-style: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-rendering: auto;
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+}
+.kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links,
+.blocks-gallery-grid,
+.wc-block-grid__products,
+.wc-block-product-categories-list) .sub-menu {
+  padding-left: 1rem;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-archives li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_archive ul li::before {
+  content: "\f0c6" !important;
+  font-size: 13px;
+  top: 9px;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-categories li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_categories ul li::before {
+  content: "\f07c" !important;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-page-list li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_pages ul li::before {
+  content: "\f15b" !important;
+}
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_meta ul li::before {
+  content: "\f0c1" !important;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-latest-comments li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_recent_comments ul li::before {
+  content: "\f086" !important;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-latest-posts li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_recent_entries ul li::before {
+  content: "\f02b" !important;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-rss li .wp-block-rss__item-title {
+  margin: 0;
+}
+.kenta-widget:not(.woocommerce) ul.wp-block-rss li::before,
+.kenta-widget:not(.woocommerce) .kenta-widget:not(.woocommerce).widget_rss ul li::before {
+  content: "\f09e" !important;
+}
+
+.rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li {
+  padding-left: 0;
+  padding-right: 1.4rem;
+}
+.rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li:not(.menu-item-has-children)::before {
+  left: auto;
+  right: 0;
+}
+.rtl .kenta-widget:not(.woocommerce) ul:not(.wp-block-social-links, .blocks-gallery-grid, .wc-block-grid__products) li:not(.menu-item-has-children) a::after {
+  right: auto;
+  left: 0;
+  content: "\f053";
+}
+
+.kenta-to-top {
+  position: fixed;
+  text-decoration: none;
+  bottom: var(--kenta-to-top-bottom-offset, 40px);
+  color: var(--kenta-to-top-icon-initial);
+  background-color: var(--kenta-to-top-background-initial);
+  transition: all ease 0.25s;
+  z-index: 999;
+  font-size: var(--kenta-to-top-icon-size);
+  line-height: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 3em;
+  height: 3em;
+  opacity: 0;
+  visibility: hidden;
+}
+.kenta-to-top.active {
+  opacity: 1;
+  visibility: visible;
+}
+.kenta-to-top [data-shortcut] {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+}
+.kenta-to-top svg {
+  transition: fill ease 0.25s;
+}
+.kenta-to-top.kenta-to-top-left {
+  left: var(--kenta-to-top-side-offset, 40px);
+}
+.kenta-to-top.kenta-to-top-right {
+  right: var(--kenta-to-top-side-offset, 40px);
+}
+.kenta-to-top svg {
+  width: var(--kenta-to-top-icon-size);
+  height: var(--kenta-to-top-icon-size);
+  fill: var(--kenta-to-top-icon-initial);
+}
+.kenta-to-top:hover {
+  background-color: var(--kenta-to-top-background-hover);
+  color: var(--kenta-to-top-icon-hover);
+  border-color: var(--lotta-border-hover-color);
+}
+.kenta-to-top:hover svg {
+  fill: var(--kenta-to-top-icon-hover);
+}
+
+.kenta-socials {
+  display: flex;
+}
+.kenta-socials .kenta-social-link {
+  margin-right: var(--kenta-social-icons-spacing, 0);
+  text-decoration: none;
+}
+.kenta-socials .kenta-social-link:last-of-type {
+  margin-right: 0;
+}
+.kenta-socials .kenta-social-link .kenta-social-icon {
+  transition: all ease 0.2s, opacity ease 0.2s;
+  font-size: var(--kenta-social-icons-size, 12px);
+  color: var(--kenta-official-color);
+}
+.kenta-socials .kenta-social-link.kenta-socials-official:hover .kenta-social-icon svg {
+  opacity: 0.8;
+}
+.kenta-socials.kenta-socials-custom .kenta-social-link .kenta-social-icon {
+  color: var(--kenta-social-icon-initial-color);
+}
+.kenta-socials.kenta-socials-custom .kenta-social-link:hover .kenta-social-icon {
+  color: var(--kenta-social-icon-hover-color);
+}
+.kenta-socials.kenta-socials-rounded .kenta-social-icon, .kenta-socials.kenta-socials-square .kenta-social-icon {
+  border-radius: var(--kenta-social-icons-radius, 3px);
+  width: calc(var(--kenta-social-icons-size) * 2.5);
+  height: calc(var(--kenta-social-icons-size) * 2.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.kenta-socials.kenta-socials-rounded.kenta-socials-solid .kenta-social-icon, .kenta-socials.kenta-socials-square.kenta-socials-solid .kenta-social-icon {
+  background-color: var(--kenta-social-bg-initial-color);
+}
+.kenta-socials.kenta-socials-rounded.kenta-socials-solid .kenta-social-icon:hover, .kenta-socials.kenta-socials-square.kenta-socials-solid .kenta-social-icon:hover {
+  background-color: var(--kenta-social-bg-hover-color);
+}
+.kenta-socials.kenta-socials-rounded.kenta-socials-outline .kenta-social-icon, .kenta-socials.kenta-socials-square.kenta-socials-outline .kenta-social-icon {
+  border: var(--kenta-social-icons-outline, 1px solid);
+  border-color: var(--kenta-social-border-initial-color);
+}
+.kenta-socials.kenta-socials-rounded.kenta-socials-outline .kenta-social-icon:hover, .kenta-socials.kenta-socials-square.kenta-socials-outline .kenta-social-icon:hover {
+  border-color: var(--kenta-social-border-hover-color);
+}
+.kenta-socials.kenta-socials-rounded.kenta-socials-solid .kenta-social-icon, .kenta-socials.kenta-socials-rounded.kenta-socials-outline .kenta-social-icon {
+  --kenta-social-icons-radius: 9999px;
+}
+
+.kenta-particles-canvas {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: var(--kenta-particles-canvas-z-index, 1);
+}
+
+.visible {
+  visibility: visible;
+}
+
+.static {
+  position: static;
+}
+
+.fixed {
+  position: fixed;
+}
+
+.absolute {
+  position: absolute;
+}
+
+.relative {
+  position: relative;
+}
+
+.right-0 {
+  right: 0px;
+}
+
+.z-\[1\] {
+  z-index: 1;
+}
+
+.z-\[9\] {
+  z-index: 9;
+}
+
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+}
+
+.my-gutter {
+  margin-top: 24px;
+  margin-bottom: 24px;
+}
+
+.mb-gutter {
+  margin-bottom: 24px;
+}
+
+.mb-0 {
+  margin-bottom: 0px;
+}
+
+.mr-2 {
+  margin-right: 0.5rem;
+}
+
+.mb-half-gutter {
+  margin-bottom: 12px;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
+}
+
+.mt-half-gutter {
+  margin-top: 12px;
+}
+
+.mt-60 {
+  margin-top: 15rem;
+}
+
+.mb-60 {
+  margin-bottom: 15rem;
+}
+
+.mt-10 {
+  margin-top: 2.5rem;
+}
+
+.block {
+  display: block;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.inline {
+  display: inline;
+}
+
+.flex {
+  display: flex;
+}
+
+.grid {
+  display: grid;
+}
+
+.hidden {
+  display: none;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.max-w-full {
+  max-width: 100%;
+}
+
+.max-w-screen-md {
+  max-width: 768px;
+}
+
+.shrink-0 {
+  flex-shrink: 0;
+}
+
+.flex-grow {
+  flex-grow: 1;
+}
+
+.transform {
+  transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
+}
+
+.resize {
+  resize: both;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-stretch {
+  align-items: stretch;
+}
+
+.overflow-hidden {
+  overflow: hidden;
+}
+
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
+
+.break-words {
+  overflow-wrap: break-word;
+}
+
+.rounded {
+  border-radius: 0.25rem;
+}
+
+.rounded-full {
+  border-radius: 9999px;
+}
+
+.border {
+  border-width: 1px;
+}
+
+.border-base-300 {
+  border-color: var(--kenta-base-300);
+}
+
+.bg-red-600 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(220 38 38 / var(--tw-bg-opacity));
+}
+
+.bg-base-color {
+  background-color: var(--kenta-base-color);
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.object-center {
+  -o-object-position: center;
+     object-position: center;
+}
+
+.p-half-gutter {
+  padding: 12px;
+}
+
+.px-gutter {
+  padding-left: 24px;
+  padding-right: 24px;
+}
+
+.pl-gutter {
+  padding-left: 24px;
+}
+
+.pr-gutter {
+  padding-right: 24px;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.text-justify {
+  text-align: justify;
+}
+
+.font-sans {
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.font-normal {
+  font-weight: 400;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.leading-none {
+  line-height: 1;
+}
+
+.leading-normal {
+  line-height: 1.5;
+}
+
+.text-accent {
+  color: var(--kenta-accent-color);
+}
+
+.text-red-100 {
+  --tw-text-opacity: 1;
+  color: rgb(254 226 226 / var(--tw-text-opacity));
+}
+
+.text-accent-active {
+  color: var(--kenta-accent-active);
+}
+
+.underline {
+  -webkit-text-decoration-line: underline;
+          text-decoration-line: underline;
+}
+
+.no-underline {
+  -webkit-text-decoration-line: none;
+          text-decoration-line: none;
+}
+
+.shadow {
+  --tw-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 1px 3px 0 var(--tw-shadow-color), 0 1px 2px -1px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+}
+
+.outline {
+  outline-style: solid;
+}
+
+.blur {
+  --tw-blur: blur(8px);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.invert {
+  --tw-invert: invert(100%);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+.filter {
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+.transition-force-none, .transition-force-none * {
+  transition: none !important;
+}
+
+.clearfix::after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+.kenta-is-sticky {
+  z-index: 9999;
+}
+
+.no-underline,
+.no-underline a {
+  text-decoration: none;
+}
+
+.screen-reader-text {
+  border: 0;
+  clip: rect(1px, 1px, 1px, 1px);
+  -webkit-clip-path: inset(50%);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  word-wrap: normal !important;
+}
+.screen-reader-text:focus {
+  background-color: #ddd;
+  clip: auto !important;
+  -webkit-clip-path: none;
+  clip-path: none;
+  color: #444;
+  display: block;
+  font-size: 1em;
+  height: auto;
+  left: 5px;
+  line-height: normal;
+  padding: 15px 23px 14px;
+  text-decoration: none;
+  top: 5px;
+  width: auto;
+  z-index: 100000;
+}
+.last\:mb-0:last-child {
+  margin-bottom: 0px;
+}
+.last\:mr-0:last-child {
+  margin-right: 0px;
+}
+@media (min-width: 1024px) {
+  .lg\:flex-row {
+    flex-direction: row;
+  }
+  .lg\:flex-row-reverse {
+    flex-direction: row-reverse;
+  }
+  .lg\:pr-2 {
+    padding-right: 0.5rem;
+  }
+  .lg\:pl-2 {
+    padding-left: 0.5rem;
+  }
+}

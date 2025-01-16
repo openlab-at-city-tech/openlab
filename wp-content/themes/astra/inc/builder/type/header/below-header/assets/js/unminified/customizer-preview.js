@@ -72,6 +72,24 @@
 	astra_apply_responsive_background_css( 'astra-settings[hbb-header-bg-obj-responsive]', '.ast-below-header.ast-below-header-bar', 'tablet' );
 	astra_apply_responsive_background_css( 'astra-settings[hbb-header-bg-obj-responsive]', '.ast-below-header.ast-below-header-bar', 'mobile' );
 
+	if (document.querySelector(".ast-below-header-bar .site-logo-img")) {
+		astra_apply_responsive_background_css(
+			"astra-settings[hbb-header-bg-obj-responsive]",
+			".ast-sg-element-wrap.ast-sg-logo-section, .ast-below-header.ast-below-header-bar",
+			"desktop"
+		);
+		astra_apply_responsive_background_css(
+			"astra-settings[hbb-header-bg-obj-responsive]",
+			".ast-sg-element-wrap.ast-sg-logo-section, .ast-below-header.ast-below-header-bar",
+			"tablet"
+		);
+		astra_apply_responsive_background_css(
+			"astra-settings[hbb-header-bg-obj-responsive]",
+			".ast-sg-element-wrap.ast-sg-logo-section, .ast-below-header.ast-below-header-bar",
+			"mobile"
+		);
+	}
+
 	// Advanced CSS Generation.
 	astra_builder_advanced_css( 'section-below-header-builder', '.ast-below-header.ast-below-header-bar' );
 

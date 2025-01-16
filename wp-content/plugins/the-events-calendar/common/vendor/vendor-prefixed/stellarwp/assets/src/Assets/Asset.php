@@ -2,8 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Assets;
@@ -33,11 +32,32 @@ class Asset {
 	protected $after_enqueue;
 
 	/**
+	 * The asset asset file contents.
+	 *
+	 * @var array
+	 */
+	protected array $asset_file_contents = [];
+
+	/**
+	 * The asset file path.
+	 *
+	 * @var string
+	 */
+	protected string $asset_file_path = '';
+
+	/**
 	 * The asset conditional callable.
 	 *
 	 * @var mixed
 	 */
 	protected $condition;
+
+	/**
+	 * An array of objects to localized using dot-notation and namespaces.
+	 *
+	 * @var array<array{0: string, 1:mixed}>
+	 */
+	protected array $custom_localize_script_objects = [];
 
 	/**
 	 * The asset dependencies.
@@ -161,6 +181,21 @@ class Asset {
 	protected string $root_path = '';
 
 	/**
+	 * The path group name for this asset.
+	 *
+	 * A path group is a group of assets that share the same path which could be different that the root path or the asset's path.
+	 *
+	 * The order of priority goes like this:
+	 *
+	 * 1. If a specific root path is set, that will be used.
+	 * 2. If a path group is set, that will be used.
+	 * 3. Otherwise, the root path will be used.
+	 *
+	 * @var string
+	 */
+	protected string $group_path_name = '';
+
+	/**
 	 * Content or callable that should be printed after the asset.
 	 *
 	 * @var mixed
@@ -203,6 +238,20 @@ class Asset {
 	protected ?string $slug = null;
 
 	/**
+	 * The asset textdomain.
+	 *
+	 * @var string
+	 */
+	protected string $textdomain = '';
+
+	/**
+	 * Translation path.
+	 *
+	 * @var string
+	 */
+	protected string $translations_path = '';
+
+	/**
 	 * The asset type.
 	 *
 	 * @var ?string
@@ -217,18 +266,20 @@ class Asset {
 	protected ?string $url = null;
 
 	/**
+	 * Whether or not to attempt to load an .asset.php file.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @var bool
+	 */
+	protected bool $use_asset_file = true;
+
+	/**
 	 * The asset version.
 	 *
 	 * @var ?string
 	 */
 	protected ?string $version = null;
-
-	/**
-	 * An array of objects to localized using dot-notation and namespaces.
-	 *
-	 * @var array<array{0: string, 1:mixed}>
-	 */
-	protected array $custom_localize_script_objects = [];
 
 	/**
 	 * Constructor.
@@ -252,6 +303,22 @@ class Asset {
 		}
 
 		$this->infer_type();
+	}
+
+	/**
+	 * Adds the asset to a group path.
+	 *
+	 * @since 1.4.0
+	 * @since 1.4.2 Also sets the usage of the Asset directory prefix based on the group path.
+	 *
+	 * @return static
+	 */
+	public function add_to_group_path( string $group_path_name ) {
+		$this->group_path_name = $group_path_name;
+
+		$this->prefix_asset_directory( Config::is_group_path_using_asset_directory_prefix( $this->group_path_name ) );
+
+		return $this;
 	}
 
 	/**
@@ -279,6 +346,28 @@ class Asset {
 		}
 
 		$this->dependencies[ $dependency ] = $dependency;
+
+		return $this;
+	}
+
+	/**
+	 * Adds a wp_localize_script object to the asset.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string $object_name JS object name.
+	 * @param array|callable  $data Data assigned to the JS object. If a callable is passed, it will be called
+	 *                              when the asset is enqueued and the return value will be used. The callable
+	 *                              will be passed the asset as the first argument and should return an array.
+	 *
+	 * @return static
+	 */
+	public function add_localize_script( string $object_name, $data ) {
+		if ( strpos( $object_name, '.' ) !== false ) {
+			$this->custom_localize_script_objects[] = [ $object_name, $data ];
+		} else {
+			$this->wp_localize_script_objects[ $object_name ] = $data;
+		}
 
 		return $this;
 	}
@@ -318,13 +407,11 @@ class Asset {
 	}
 
 	/**
-	 * Builds the base asset URL.
+	 * Builds the path information for the asset.
 	 *
-	 * @since 1.0.0
-	 *
-	 * @return string
+	 * @return array<string,string>
 	 */
-	protected function build_asset_url(): string {
+	protected function build_resource_path_data(): array {
 		$resource                = $this->get_file();
 		$root_path               = $this->get_root_path();
 		$relative_path_to_assets = $this->is_vendor() ? '' : null;
@@ -333,11 +420,11 @@ class Asset {
 			$root_path = Config::get_path();
 		}
 
-		$plugin_base_url = Config::get_url( $root_path );
-		$hook_prefix     = Config::get_hook_prefix();
-		$extension       = pathinfo( $resource, PATHINFO_EXTENSION );
-		$resource_path   = $relative_path_to_assets;
-		$type            = $this->get_type();
+		$hook_prefix   = Config::get_hook_prefix();
+		$extension     = pathinfo( $resource, PATHINFO_EXTENSION );
+		$resource_path = $relative_path_to_assets;
+		$type          = $this->get_type();
+		$prefix_dir    = '';
 
 		if ( ! $extension && $type ) {
 			$extension = $type;
@@ -350,8 +437,6 @@ class Asset {
 			$resource_path  = $resources_path;
 
 			if ( $should_prefix ) {
-				$prefix_dir = '';
-
 				switch ( $extension ) {
 					case 'css':
 						$prefix_dir     = 'css';
@@ -383,6 +468,38 @@ class Asset {
 				}
 			}
 		}
+
+		$data = [
+			'resource_path' => $resource_path,
+			'resource'      => $resource,
+			'prefix_dir'    => $prefix_dir,
+		];
+
+		/**
+		 * Filters the asset URL
+		 *
+		 * @param array<string,string> $data  Resource path data.
+		 * @param string               $slug  Asset slug.
+		 * @param Asset                $asset The Asset object.
+		 */
+		return (array) apply_filters( "stellarwp/assets/{$hook_prefix}/resource_path_data", $data, $this->get_slug(), $this );
+	}
+
+	/**
+	 * Builds the base asset URL.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @return string
+	 */
+	protected function build_asset_url(): string {
+		$resource_path_data = $this->build_resource_path_data();
+		$resource           = $resource_path_data['resource'];
+		$resource_path      = $resource_path_data['resource_path'];
+
+		$root_path       = $this->get_root_path();
+		$plugin_base_url = Config::get_url( $root_path );
+		$hook_prefix     = Config::get_hook_prefix();
 
 		$url = $plugin_base_url . $resource_path . $resource;
 
@@ -518,25 +635,84 @@ class Asset {
 	}
 
 	/**
-	 * Adds a wp_localize_script object to the asset.
+	 * Clone the asset to another type (JS to CSS or vice versa).
 	 *
-	 * @since 1.0.0
+	 * This assumes that both the CSS and JS assets are in the same directory. If
+	 * more differentiation is needed, modify the clone or create the asset separately.
 	 *
-	 * @param string $object_name JS object name.
-	 * @param array|callable  $data Data assigned to the JS object. If a callable is passed, it will be called
-	 *                              when the asset is enqueued and the return value will be used. The callable
-	 *                              will be passed the asset as the first argument and should return an array.
+	 * @since 1.3.1
 	 *
-	 * @return static
+	 * @param string          $clone_type      The type of asset to register- 'css' or 'js'.
+	 * @param string|callable ...$dependencies The dependencies to add to the cloned asset.
+	 *
+	 * @return self
 	 */
-	public function add_localize_script( string $object_name, $data ) {
-		if ( str_contains( $object_name, '.' ) ) {
-			$this->custom_localize_script_objects[] = [ $object_name, $data ];
-		} else {
-			$this->wp_localize_script_objects[ $object_name ] = $data;
+	public function clone_to( string $clone_type, ...$dependencies ) {
+		$source_type = $this->get_type();
+
+		if ( $clone_type === $source_type ) {
+			throw new \InvalidArgumentException( 'The clone type must be different from the source type.' );
 		}
 
-		return $this;
+		if ( ! in_array( $clone_type, [ 'css', 'js' ], true ) ) {
+			throw new \InvalidArgumentException( 'The clone type must be either "css" or "js".' );
+		}
+
+		$slug  = $this->slug;
+		$slug  = preg_replace( "/-(css|js|script|style)$/", '', $slug );
+		$slug .= "-{$clone_type}";
+
+		$clone = static::add(
+			$slug,
+			str_replace( ".{$source_type}", ".{$clone_type}", $this->file ),
+			$this->version,
+			$this->get_root_path()
+		);
+
+		$condition  = $this->get_condition();
+		$enqueue_on = $this->get_enqueue_on();
+		$groups     = $this->get_groups();
+		$priority   = $this->get_priority();
+		$path       = $this->get_path();
+		$min_path   = $this->get_min_path();
+
+		$clone->use_asset_file( false );
+		$clone->prefix_asset_directory( $this->should_use_asset_directory_prefix );
+
+		if ( $dependencies ) {
+			foreach ( $dependencies as $dependency ) {
+				$clone->add_dependency( $dependency );
+			}
+		}
+
+		if ( $condition ) {
+			$clone->set_condition( $condition );
+		}
+
+		if ( $enqueue_on ) {
+			foreach ( $enqueue_on as $on ) {
+				$clone->enqueue_on(
+					$on,
+					$priority
+				);
+			}
+		}
+
+		if ( $groups ) {
+			foreach ( $groups as $group ) {
+				$clone->add_to_group( $group );
+			}
+		}
+
+		if ( $path ) {
+			$clone->set_path( $path );
+		}
+
+		if ( $min_path ) {
+			$clone->set_min_path( $min_path );
+		}
+
+		return $clone;
 	}
 
 	/**
@@ -590,6 +766,57 @@ class Asset {
 	}
 
 	/**
+	 * Get the asset asset file contents.
+	 *
+	 * @return array
+	 */
+	public function get_asset_file_contents(): array {
+		if ( ! empty( $this->asset_file_contents ) ) {
+			return $this->asset_file_contents;
+		}
+
+		$default = [
+			'dependencies' => [],
+			'version'      => null,
+		];
+
+		if ( ! $this->has_asset_file() ) {
+			$this->asset_file_contents = $default;
+
+			return $this->asset_file_contents;
+		}
+
+		$asset_file_contents = include $this->get_asset_file_path();
+
+		if ( ! is_array( $asset_file_contents ) ) {
+			$this->asset_file_contents = $default;
+
+			return $this->asset_file_contents;
+		}
+
+		$asset_file_contents                 = wp_parse_args( $asset_file_contents, $default );
+		$asset_file_contents['dependencies'] = array_unique( $asset_file_contents['dependencies'] );
+
+		$this->asset_file_contents = $asset_file_contents;
+
+		return $this->asset_file_contents;
+	}
+
+	/**
+	 * Get the asset asset file path.
+	 *
+	 * @return string
+	 */
+	public function get_asset_file_path(): string {
+		if ( $this->asset_file_path === '' ) {
+			$resource_path_data    = $this->build_resource_path_data();
+			$this->asset_file_path = $this->get_root_path() . $resource_path_data['resource_path'] . str_replace( [ '.css', '.js' ], '', $this->get_file() ) . '.asset.php';
+		}
+
+		return $this->asset_file_path;
+	}
+
+	/**
 	 * Get the asset condition callable.
 	 *
 	 * @return mixed
@@ -601,10 +828,27 @@ class Asset {
 	/**
 	 * Get the asset dependencies.
 	 *
-	 * @return array<string>|callable
+	 * @return array<string>
 	 */
-	public function get_dependencies() {
-		return $this->dependencies;
+	public function get_dependencies(): array {
+		$dependencies = $this->dependencies;
+
+		if ( is_callable( $dependencies ) ) {
+			$dependencies = $dependencies( $this );
+		}
+
+		$asset_file_contents = $this->get_asset_file_contents();
+
+		if ( ! empty( $asset_file_contents['dependencies'] ) ) {
+			$dependencies = array_unique(
+				array_merge(
+					$asset_file_contents['dependencies'],
+					$dependencies
+				)
+			);
+		}
+
+		return $dependencies;
 	}
 
 	/**
@@ -702,7 +946,8 @@ class Asset {
 	 */
 	public function get_path(): string {
 		if ( $this->path === null ) {
-			return Config::get_relative_asset_path();
+			$group_relative = $this->group_path_name ? Config::get_relative_path_of_group_path( $this->group_path_name ) : '';
+			return $group_relative ? $group_relative : Config::get_relative_asset_path();
 		}
 
 		return $this->path;
@@ -714,7 +959,17 @@ class Asset {
 	 * @return ?string
 	 */
 	public function get_root_path(): ?string {
-		return $this->root_path;
+		if ( ! $this->group_path_name ) {
+			return $this->root_path;
+		}
+
+		if ( $this->root_path !== Config::get_path() ) {
+			return $this->root_path;
+		}
+
+		$group_path = Config::get_path_of_group_path( $this->group_path_name );
+
+		return $group_path ? $group_path : $this->root_path;
 	}
 
 	/**
@@ -751,6 +1006,26 @@ class Asset {
 	 */
 	public function get_slug(): string {
 		return $this->slug;
+	}
+
+	/**
+	 * Get the asset textdomain.
+	 *
+	 * @return string
+	 */
+	public function get_textdomain(): string {
+		return $this->textdomain;
+	}
+
+	/**
+	 * Get the asset translation path.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @return string
+	 */
+	public function get_translation_path(): string {
+		return Config::get_path() . $this->translations_path;
 	}
 
 	/**
@@ -806,7 +1081,32 @@ class Asset {
 	 * @return string
 	 */
 	public function get_version(): string {
+		$asset_file_contents = $this->get_asset_file_contents();
+
+		if ( ! empty( $asset_file_contents['version'] ) ) {
+			return (string) $asset_file_contents['version'];
+		}
+
 		return $this->version;
+	}
+
+	/**
+	 * Determines if the asset has an asset.php file.
+	 *
+	 * @return boolean
+	 */
+	public function has_asset_file(): bool {
+		if ( ! $this->use_asset_file ) {
+			return false;
+		}
+
+		$asset_file_path = $this->get_asset_file_path();
+
+		if ( empty( $asset_file_path ) ) {
+			return false;
+		}
+
+		return file_exists( $asset_file_path );
 	}
 
 	/**
@@ -860,6 +1160,15 @@ class Asset {
 	}
 
 	/**
+	 * Returns whether or not the asset is a CSS asset.
+	 *
+	 * @return boolean
+	 */
+	public function is_css(): bool {
+		return $this->get_type() === 'css';
+	}
+
+	/**
 	 * Returns whether or not the asset is deferred.
 	 *
 	 * @since 1.0.0
@@ -901,6 +1210,15 @@ class Asset {
 	 */
 	public function is_in_header(): bool {
 		return ! $this->in_footer;
+	}
+
+	/**
+	 * Returns whether or not the asset is a JS asset.
+	 *
+	 * @return boolean
+	 */
+	public function is_js(): bool {
+		return $this->get_type() === 'js';
 	}
 
 	/**
@@ -1039,6 +1357,19 @@ class Asset {
 	}
 
 	/**
+	 * Sets whether or not to use the asset directory prefix (css/ or js/).
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param boolean $prefix_asset_directory Whether to use the asset directory prefix.
+	 * @return static
+	 */
+	public function prefix_asset_directory( bool $prefix_asset_directory = true ): self {
+		$this->should_use_asset_directory_prefix = $prefix_asset_directory;
+		return $this;
+	}
+
+	/**
 	 * Print the asset.
 	 *
 	 * @since 1.0.0
@@ -1084,9 +1415,50 @@ class Asset {
 	 * Enqueue the asset.
 	 *
 	 * @since 1.0.0
+	 * @since 1.3.1 Returns itself to enable chaining.
+	 *
+	 * @return static
 	 */
-	public function register() {
+	public function register(): self {
 		Assets::init()->register_in_wp( $this );
+
+		return $this;
+	}
+
+	/**
+	 * Register the asset along with registering a CSS asset from the same directory.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param string|callable ...$dependencies The dependencies to add to the cloned asset.
+	 *
+	 * @return static
+	 */
+	public function register_with_css( ...$dependencies ): self {
+		$this->prefix_asset_directory( false );
+		$this->register();
+		$asset = $this->clone_to( 'css', ...$dependencies );
+		$asset->register();
+
+		return $this;
+	}
+
+	/**
+	 * Register the asset along with registering a JS asset from the same directory.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param string|callable ...$dependencies The dependencies to add to the cloned asset.
+	 *
+	 * @return static
+	 */
+	public function register_with_js( ...$dependencies ): self {
+		$this->prefix_asset_directory( false );
+		$this->register();
+		$asset = $this->clone_to( 'js', ...$dependencies );
+		$asset->register();
+
+		return $this;
 	}
 
 	/**
@@ -1117,6 +1489,29 @@ class Asset {
 	 */
 	public function set_action( string $action ) {
 		$this->action[ $action ] = $action;
+
+		return $this;
+	}
+
+	/**
+	 * Set the asset file path for the asset.
+	 *
+	 * @since TBD
+	 *
+	 * @param string $path The partial path to the asset.
+	 *
+	 * @return static
+	 */
+	public function set_asset_file( string $path ) {
+		if ( strpos( $path, '.asset.php' ) === false ) {
+			$path = preg_replace( '/\.(js|css)$/', '', $path );
+			$path .= '.asset.php';
+		}
+
+		$this->asset_file_path = $this->get_root_path() . $this->get_path() . $path;
+
+		// Since we are setting a new asset file path, reset the asset file contents.
+		$this->asset_file_contents = [];
 
 		return $this;
 	}
@@ -1163,13 +1558,17 @@ class Asset {
 	 * @since 1.0.0
 	 *
 	 * @param string|null $path                                                 The path to the minified file.
-	 * @param bool        $should_automatically_use_asset_type_directory_prefix Whether to prefix files automatically by type (e.g. js/ for JS). Defaults to true.
+	 * @param bool|null   $should_automatically_use_asset_type_directory_prefix Whether to prefix files automatically by type (e.g. js/ for JS). Defaults to true.
 	 *
 	 * @return $this
 	 */
-	public function set_path( ?string $path = null, bool $should_automatically_use_asset_type_directory_prefix = true ) {
-		$this->path                              = trailingslashit( $path );
-		$this->should_use_asset_directory_prefix = $should_automatically_use_asset_type_directory_prefix;
+	public function set_path( ?string $path = null, $should_automatically_use_asset_type_directory_prefix = null ) {
+		$this->path = trailingslashit( $path );
+
+		if ( $should_automatically_use_asset_type_directory_prefix !== null ) {
+			$this->prefix_asset_directory( $should_automatically_use_asset_type_directory_prefix );
+		}
+
 		return $this;
 	}
 
@@ -1347,6 +1746,19 @@ class Asset {
 	}
 
 	/**
+	 * Set the translation path. Alias of with_translations().
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param string $textdomain The textdomain of the asset.
+	 * @param string $path Relative path to the translations directory.
+	 * @return self
+	 */
+	public function set_translations( string $textdomain, string $path ): self {
+		return $this->with_translations( $textdomain, $path );
+	}
+
+	/**
 	 * Set the asset type.
 	 *
 	 * @since 1.0.0
@@ -1369,5 +1781,40 @@ class Asset {
 	 */
 	public function should_print(): bool {
 		return $this->should_print;
+	}
+
+	/**
+	 * Set whether or not to use an .asset.php file.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param boolean $use_asset_file Whether to use an .asset.php file.
+	 * @return self
+	 */
+	public function use_asset_file( bool $use_asset_file = true ): self {
+		$this->use_asset_file = $use_asset_file;
+		return $this;
+	}
+
+	/**
+	 * Set the translation path.
+	 *
+	 * @since 1.3.1
+	 *
+	 * @param string $textdomain The textdomain of the asset.
+	 * @param string $path Relative path to the translations directory.
+	 *
+	 * @throws InvalidArgumentException If the asset is not a JS asset.
+	 *
+	 * @return self
+	 */
+	public function with_translations( string $textdomain = 'default', string $path = 'languages' ): self {
+		if ( ! $this->is_js() ) {
+			throw new InvalidArgumentException( 'Translations may only be set for JS assets.' );
+		}
+
+		$this->translations_path = $path;
+		$this->textdomain        = $textdomain;
+		return $this;
 	}
 }

@@ -10,7 +10,7 @@ final class BodySummarizer implements BodySummarizerInterface
      * @var int|null
      */
     private $truncateAt;
-    public function __construct(int $truncateAt = null)
+    public function __construct(?int $truncateAt = null)
     {
         $this->truncateAt = $truncateAt;
     }
@@ -19,6 +19,6 @@ final class BodySummarizer implements BodySummarizerInterface
      */
     public function summarize(MessageInterface $message) : ?string
     {
-        return $this->truncateAt === null ? \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Message::bodySummary($message) : \SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Message::bodySummary($message, $this->truncateAt);
+        return $this->truncateAt === null ? Psr7\Message::bodySummary($message) : Psr7\Message::bodySummary($message, $this->truncateAt);
     }
 }

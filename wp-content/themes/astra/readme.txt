@@ -3,9 +3,9 @@ Contributors: brainstormforce
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: custom-menu, custom-logo, entertainment, featured-images, full-width-template, one-column, two-columns, left-sidebar, e-commerce, right-sidebar, custom-colors, editor-style, featured-images, full-width-template, microformats, post-formats, rtl-language-support, theme-options, threaded-comments, translation-ready, blog
-Tested up to: 6.4
+Tested up to: 6.7
 Requires PHP: 5.3
-Stable tag: 4.6.9
+Stable tag: 4.8.7
 
 Astra is fast, fully customizable & beautiful WordPress theme suitable for blog, personal portfolio, business website and WooCommerce storefront.
 

@@ -8,11 +8,11 @@ msgstr ""
 "Language: es_ES\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-01 12:59+0000\n"
-"PO-Revision-Date: 2024-07-04 11:56+0000\n"
+"POT-Creation-Date: 2024-10-18 06:42+0000\n"
+"PO-Revision-Date: 2024-10-21 06:22+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Spanish (Spain)\n"
-"X-Loco-Version: 2.3.1; wp-6.3.1"
+"X-Loco-Version: 2.3.1; wp-6.6.2"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Factura #{invoice_number} por su cita"
@@ -104,6 +104,29 @@ msgstr ""
 "\"miarchivo_\", su archivo PDF se descargará con el nombre \"miarchivo_1."
 "pdf\"."
 
+msgid "Sequential numbering"
+msgstr "Numeración secuencial"
+
+msgid ""
+"If enabled, invoices will be numbered sequentially. If disabled, invoice "
+"numbers will match the corresponding payment numbers."
+msgstr ""
+"Si está habilitada, las facturas se numerarán de manera secuencial. Si está "
+"deshabilitada, los números de factura coincidirán con los números de pago "
+"correspondientes."
+
+msgid "Initial invoice number"
+msgstr "Número inicial de factura "
+
+msgid ""
+"Enter the starting number for your invoices. For example, if you set it to "
+"1000, the first invoice will be numbered 1000, the second 1001, the third "
+"1002, and so on."
+msgstr ""
+"Introduzca el número inicial de sus facturas. Por ejemplo, si lo establece "
+"en 1000, la primera factura se numerará como 1000, la segunda como 1001, la "
+"tercera como 1002, y así sucesivamente."
+
 msgid "Show manual adjustments"
 msgstr "Mostrar ajustes manuales"
 
@@ -183,6 +206,9 @@ msgstr "Subtotal"
 msgid "Coupon discount"
 msgstr "Descuento de cupones"
 
+msgid "Gift card discount"
+msgstr "Descuento de tarjeta de regalo"
+
 msgid "Tips"
 msgstr "Propinas"
 
@@ -216,127 +242,13 @@ msgstr "Teléfono"
 msgid "Instructions"
 msgstr "Instrucciones"
 
-msgid ""
-"Important: Your website must use <b>HTTPS</b>. The Outlook Calendar API will "
-"not work with your website if there is no valid SSL certificate installed on "
-"your web server."
-msgstr ""
-"Importante: su sitio web debe utilizar <b>HTTPS</b>. La API del Calendario "
-"de Outlook no funcionará en su sitio web si no hay un certificado SSL válido "
-"instalado en su servidor web."
-
-msgid "To find your Application ID and Application Secret, do the following:"
-msgstr ""
-"Para encontrar su ID de Aplicación y su secreto de Aplicación, haga lo "
-"siguiente:"
-
 #, php-format
 msgid ""
-"Sign in to the <a href=\"%s\" target=\"_blank\">Azure portal</a> using "
-"either a work or school account or a personal Microsoft account."
+"To setup %s integration, follow the instruction in <a href=\"%s\" "
+"target=\"_blank\">our documentation</a>"
 msgstr ""
-"Inicie sesión en el <a href=\"%s\" target=\"_blank\">Azure portal</a> "
-"utilizando una cuenta profesional, educativa o una cuenta personal de "
-"Microsoft."
-
-msgid ""
-"If your account gives you access to more than one tenant, select your "
-"account in the top right corner, and set your portal session to the Azure AD "
-"tenant that you want."
-msgstr ""
-"Si su cuenta le da acceso a más de un inquilino, seleccione su cuenta en la "
-"esquina superior derecha y configure su sesión de portal para el inquilino "
-"de Azure AD que desee."
-
-msgid ""
-"In the left-hand navigation panel, select <b>Microsoft Entra ID</b>. Then "
-"select <b>Add > App registration</b>."
-msgstr ""
-"En el panel de navegación de la izquierda, seleccione <b>Microsoft Entra "
-"ID</b>. Luego seleccione <b>Añadir > Registro de aplicación</b>."
-
-msgid ""
-"When the <b>Register an application</b> page appears, enter your "
-"application's <b>Name</b> and <b>Redirect URI</b> found below on this page."
-msgstr ""
-"Cuando aparezca la página <b>Registrar una aplicación</b> introduzca el<b>"
-"Nombre</b> y el <b>URI de redirección</b> de su aplicación que se encuentran "
-"a continuación en esta página"
-
-msgid ""
-"Under the <b>Redirect URI</b>, in <b>Select a platform</b> field, choose <b>"
-"Web</b>."
-msgstr ""
-"En el <b>URI de redireccionamiento</b>, en el campo <b>Seleccione una "
-"plataforma</b>, elija <b>Web</b>."
-
-msgid ""
-"Make sure that the <b>Supported account types</b> is set to <b>Accounts in "
-"any organizational directory (Any Microsoft Entra ID tenant - Multitenant) "
-"and personal Microsoft accounts (e.g. Skype, Xbox)</b>."
-msgstr ""
-"Asegúrese de que <b>Tipos de cuentas admitidos</b> esté configurado en <b>"
-"Cuentas en cualquier directorio organizacional (cualquier inquilino de "
-"Microsoft Entra ID - Multiinquilino) y cuentas personales de Microsoft (por "
-"ejemplo, Skype, Xbox)</b>."
-
-msgid "When finished, select <b>Register</b>."
-msgstr "Cuando haya terminado, seleccione <b>Registrarse</b>."
-
-msgid ""
-"Azure AD assigns a unique application (client) ID to your app, and you're "
-"taken to the Home page. Find your application in <b>App registrations > All "
-"applications</b>, and select it."
-msgstr ""
-"Azure AD asigna un ID de aplicación (de cliente) único a su aplicación y "
-"accederá a la página de inicio. Busque su aplicación en <b>Registros de "
-"aplicaciones > Todas las aplicaciones</b> y selecciónela."
-
-msgid ""
-"Copy the <b>Application (client) ID</b> and insert it into the form below on "
-"this page."
-msgstr ""
-"Copie el <b>ID de la aplicación (cliente)</b> e insértelo en el siguiente "
-"formulario de esta página."
-
-msgid ""
-"Under <b>Certificates & secrets</b>, choose <b>New client secret</b>, set <b>"
-"Expires</b> to <b>24 months</b>, add description and click <b>Add</b>."
-msgstr ""
-"En <b>Certificados y secretos</b>, elija <b>Nuevo secreto de cliente</b>, "
-"establezca <b>Expira</b> en <b>24 meses</b>, añada una descripción y haga "
-"clic en <b>Añadir</b>."
-
-msgid ""
-"Copy the app secret value from the <b>Client secrets</b> list before leaving "
-"the page."
-msgstr ""
-"Copie el valor del secreto de la aplicación de la lista <b>secretos del "
-"cliente</b> antes de salir de la página."
-
-msgid "Insert the secret into the form below on this page."
-msgstr "Inserte el secreto en el formulario siguiente de esta página."
-
-msgid ""
-"Under <b>API permissions</b>, choose <b>Add a permission</b>, and select <b>"
-"Microsoft Graph &gt; Delegated permissions</b>. In <b>Select permissions</b> "
-"find <b>Calendars.ReadWrite</b>, select it and click <b>Add permissions</b> "
-"button."
-msgstr ""
-"En <b>Permisos API</b>, escoja <b>Añadir permiso</b>, y seleccione <b>"
-"Microsoft Graph &gt; Permisos delegados</b>. En <b>Seleccionar permisos</b>, "
-"busque <b>Calendarios.ReadWrite</b>, selecciónelo y haga clic en el botón <b>"
-"Añadir permisos</b>."
-
-msgid "<b>Save</b> your changes."
-msgstr "<b>Guarda</b> los cambios."
-
-msgid ""
-"Go to Staff Members, select a staff member. On the <b>Advanced</b> tab, "
-"click <b>Sign in with Microsoft</b>."
-msgstr ""
-"Vaya a Miembros del personal, seleccione un miembro del personal. Sobre la "
-"etiqueta <b>Avanzado</b>, haga clic en <b>Iniciar sesión con Microsoft</b>."
+"Para configurar la integración %s, siga las instrucciones en <a href=\"%s\" "
+"target=\"_blank\">nuestra documentación</a>"
 
 msgid "Application ID"
 msgstr "ID de aplicación"
@@ -1746,6 +1658,9 @@ msgstr "Agregar Horario del Personal"
 msgid "Add Staff Days Off"
 msgstr "Añadir Días Libres del Personal"
 
+msgid "Add Staff Appointments"
+msgstr "Añadir Citas del Personal"
+
 msgid ""
 "Hide this field if you want to hide the list of WP users from your staff "
 "members."
@@ -1764,6 +1679,9 @@ msgstr "Deshabilitar actualización de servicios"
 
 msgid "Disable price update"
 msgstr "Deshabilitar actualización de precios"
+
+msgid "Hide create appointment button"
+msgstr "Ocultar el botón para crear una cita"
 
 msgid "Insert"
 msgstr "Insertar"
@@ -1808,6 +1726,12 @@ msgstr "Días de descanso"
 msgid "A custom block for displaying staff days off"
 msgstr "Un bloque personalizado para mostrar los días libres del personal"
 
+msgid "Appointments"
+msgstr "Citas"
+
+msgid "A custom block for displaying staff appointments"
+msgstr "Un bloque personalizado para mostrar las citas del personal"
+
 msgid "Capacity"
 msgstr "Capacidad"
 
@@ -1819,6 +1743,42 @@ msgstr "Horas especiales"
 
 msgid "Fields"
 msgstr "Campos"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Created at any time"
+msgstr "Creado en cualquier momento"
+
+msgid "Customer"
+msgstr "Cliente"
+
+msgid "All statuses"
+msgstr "Todos los estados"
+
+msgid "No status selected"
+msgstr "Ningún estado seleccionado"
+
+msgid "New appointment"
+msgstr "Nueva cita"
+
+msgid "Any time"
+msgstr "En cualquier momento"
+
+msgid "No appointments for selected period."
+msgstr "No hay citas para el período seleccionado."
+
+msgid "Processing..."
+msgstr "Procesando..."
+
+msgid "No result found"
+msgstr "No hay resultados"
+
+msgid "Searching"
+msgstr "Buscando"
+
+msgid "Attachments"
+msgstr "Archivos adjuntos"
 
 msgid "Repeat every year"
 msgstr "Repetir cada año"
@@ -1963,9 +1923,6 @@ msgstr "ID de Inicio de Sesión API"
 msgid "API Transaction Key"
 msgstr "Clave de Transacción API"
 
-msgid "ID"
-msgstr "ID"
-
 msgid "Title"
 msgstr "Titulo"
 
@@ -2004,9 +1961,6 @@ msgstr "Editar impuesto"
 
 msgid "No taxes found."
 msgstr "No hay impuestos"
-
-msgid "Processing..."
-msgstr "Procesando..."
 
 msgid "Service tax amount"
 msgstr "Importe del impuesto sobre el servicio"
@@ -2313,14 +2267,8 @@ msgstr "Zona horaria"
 msgid "Employee"
 msgstr "Empleado"
 
-msgid "Appointments"
-msgstr "Citas"
-
 msgid "Profile"
 msgstr "Perfil"
-
-msgid "Any time"
-msgstr "En cualquier momento"
 
 msgid "WP user"
 msgstr "Usuario de WP"
@@ -2410,6 +2358,12 @@ msgstr "Número de teléfono está vacía."
 msgid "%d min"
 msgstr "%d min"
 
+msgid "Out of credit"
+msgstr "Fuera de crédito"
+
+msgid "Country out of service"
+msgstr "País fuera de servicio"
+
 msgid "Purchase code is not valid"
 msgstr "El código de compra no es válido"
 
@@ -2473,8 +2427,8 @@ msgstr "Correo o contraseña incorrectos."
 msgid "Invalid email."
 msgstr "Email inválido."
 
-msgid "Low balance."
-msgstr "Saldo bajo."
+msgid "Recharge your account with one of the standard amounts"
+msgstr ""
 
 msgid "Pending sender ID already exists."
 msgstr "A la espera de ID del remitente ya existe."
@@ -2536,12 +2490,6 @@ msgstr "Error al enviar SMS."
 
 msgid "Queued"
 msgstr "En cola"
-
-msgid "Out of credit"
-msgstr "Fuera de crédito"
-
-msgid "Country out of service"
-msgstr "País fuera de servicio"
 
 msgid "Blocked"
 msgstr "Bloqueado"
@@ -3160,12 +3108,12 @@ msgstr "Lista"
 msgid "All day"
 msgstr "Todo el dia"
 
-msgid "No appointments for selected period."
-msgstr "No hay citas para el período seleccionado."
-
 #, php-format
 msgid "+%d more"
 msgstr "+%d más"
+
+msgid "Timeline"
+msgstr "Cronología"
 
 msgid "Education"
 msgstr "Educación"
@@ -3481,9 +3429,6 @@ msgstr "Estado"
 msgid "Subject"
 msgstr "Asunto"
 
-msgid "Customer"
-msgstr "Cliente"
-
 msgid "Start at"
 msgstr "Empieza a las "
 
@@ -3760,27 +3705,6 @@ msgstr "Facturación"
 msgid "Get Bookly Pro"
 msgstr "Consigue Bookly Pro"
 
-msgid "New appointment"
-msgstr "Nueva cita"
-
-msgid "Created at any time"
-msgstr "Creado en cualquier momento"
-
-msgid "All statuses"
-msgstr "Todos los estados"
-
-msgid "No status selected"
-msgstr "Ningún estado seleccionado"
-
-msgid "No result found"
-msgstr "No hay resultados"
-
-msgid "Searching"
-msgstr "Buscando"
-
-msgid "Attachments"
-msgstr "Archivos adjuntos"
-
 msgid "Archived"
 msgstr "Archivado"
 
@@ -3808,39 +3732,6 @@ msgstr ""
 msgid "No records."
 msgstr "No hay registros."
 
-msgid "1 - 9 employees"
-msgstr "1-9 empleados"
-
-msgid "10 - 19 employees"
-msgstr "10-19 empleados"
-
-msgid "20 - 49 employees"
-msgstr "20 - 49 empleados"
-
-msgid "50 - 249 employees"
-msgstr "50-249 empleados"
-
-msgid "250 or more employees"
-msgstr "250 o más empleados"
-
-msgid "Company name"
-msgstr "Nombre de la compañía"
-
-msgid "Industry"
-msgstr "Industria"
-
-msgid "Select industry"
-msgstr "Seleccionar industria"
-
-msgid "Company size"
-msgstr "Tamaño de la empresa"
-
-msgid "Select company size"
-msgstr "Seleccione el tamaño de la empresa"
-
-msgid "Company owner email"
-msgstr "Correo electrónico del propietario de la empresa"
-
 msgid "Add service"
 msgstr "Añadir servicio"
 
@@ -3853,46 +3744,190 @@ msgstr "Terminar"
 msgid "Skip"
 msgstr "Omitir"
 
-msgid "Company"
-msgstr "Compañía"
-
-msgid "Congratulations, the initial setup is complete!"
-msgstr "¡Felicitaciones, la configuración inicial está completa!"
-
-#, php-format
-msgid "Shortcode of your form is %s"
-msgstr "El código corto de su formulario es %s"
+msgid "Welcome to Bookly!"
+msgstr "¡Bienvenido a Bookly!"
 
 msgid ""
-"Open the page you want to add the booking form to in edit mode and paste "
-"this shortcode into a free block."
+"As the ultimate appointment booking plugin for online scheduling, Bookly is "
+"designed to help you effortlessly manage your booking calendar, services, "
+"and client base."
 msgstr ""
-"Abra la página en la que desea añadir el formulario de reserva en modo de "
-"edición y pegue este código corto en un bloque gratuito."
+"Como el complemento definitivo para la reserva de citas en línea, Bookly "
+"está diseñado para ayudarlo a administrar sin esfuerzo su calendario de "
+"reservas, sus servicios y su base de clientes."
+
+msgid ""
+"This introduction will guide you through the essential configuration steps "
+"to get you started quickly. "
+msgstr ""
+"Esta introducción lo guiará a través de los pasos de configuración "
+"esenciales para que pueda comenzar rápidamente."
 
 #, php-format
 msgid ""
-"You can find more detailed instructions for publishing Bookly form in our %s"
+"You can optionally skip this wizard and refer to %s or watch our %s to learn "
+"the basics and get the most out of Bookly."
 msgstr ""
-"Puede encontrar instrucciones más detalladas para publicar el formulario "
-"Bookly en nuestro %s"
+"Opcionalmente, puede omitir este asistente y consultar %s o ver nuestro %s "
+"para aprender los conceptos básicos y aprovechar Bookly al máximo."
+
+msgid "Bookly Help Center"
+msgstr "Centro de ayuda de Bookly"
+
+msgid "Video Tutorials"
+msgstr "Tutoriales en vídeo"
+
+msgid ""
+"Set your company business hours. This schedule will serve as a template for "
+"all new staff members."
+msgstr ""
+"Establezca el horario comercial de su empresa. Este cronograma servirá como "
+"modelo para todos los nuevos empleados."
+
+msgid ""
+"Select a time interval to be used as a step when creating all time slots in "
+"the system."
+msgstr ""
+"Seleccione un intervalo de tiempo que se utilizará como paso al crear todos "
+"los espacios de tiempo en el sistema."
+
+msgid "Select the currency for the prices of your services."
+msgstr "Seleccione la moneda para los precios de sus servicios."
+
+msgid ""
+"In Bookly, 'staff' refers to any employee or resource that provides services "
+"to your clients, such as a consultant, therapist, or any other service "
+"provider. Adding staff members allows you to manage their schedules, assign "
+"services to them, and track their appointments."
+msgstr ""
+"En Bookly, \"personal\" hace referencia a cualquier empleado o recurso que "
+"ofrezca servicios a sus clientes, como un consultor, un terapeuta o "
+"cualquier otro proveedor de servicios. Añadir miembros del personal le "
+"permite administrar sus horarios, asignarles servicios y realizar un "
+"seguimiento de sus citas."
+
+msgid ""
+"In Bookly, a 'service' refers to the various offerings or activities your "
+"business provides to clients, such as consultations, treatments, classes, or "
+"other services. By adding services, you can manage their duration, cost, and "
+"assign them to specific employees."
+msgstr ""
+"En Bookly, un \"servicio\" hace referencia a las distintas ofertas o "
+"actividades que su empresa ofrece a los clientes, como consultas, "
+"tratamientos, clases u otros servicios. Al añadir servicios, puede "
+"administrar su duración, costo y asignarlos a empleados específicos."
+
+msgid ""
+"Bookly Cloud is an integral part of the Bookly booking system, offering a "
+"range of additional products and features for efficient appointment "
+"management and automation."
+msgstr ""
+"Bookly Cloud es una parte integral del sistema de reservas Bookly, que "
+"ofrece una gama de productos y funciones adicionales para la gestión y "
+"automatización eficiente de citas."
+
+msgid ""
+"Features like SMS Notifications, Zapier integration, Stripe and Square "
+"Payments, Gift Cards, Voice and WhatsApp Notifications are designed to "
+"enhance your operations and boost your online business."
+msgstr ""
+"Funciones como las notificaciones por SMS, integración con Zapier, pagos con "
+"Stripe y Square, tarjetas de regalo, notificaciones por voz y WhatsApp están "
+"diseñadas para mejorar sus operaciones e impulsar su negocio en línea."
+
+#, php-format
+msgid ""
+"Discover the full range of <a href=\"%s\" target=\"_blank\">powerful tools "
+"here</a>."
+msgstr ""
+"Descubra la gama completa de <a href=\"%s\" target=\"_blank\">herramientas "
+"potentes aquí</a>."
+
+msgid "Sign up today and enjoy a welcome bonus! "
+msgstr "¡Regístrese hoy y disfrute de un bono de bienvenida!"
+
+msgid "Create an account"
+msgstr "Crear una cuenta"
+
+msgid "Already registered"
+msgstr "Ya registrado"
+
+msgid "Password"
+msgstr "Contraseña"
+
+#, php-format
+msgid ""
+"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
+"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
+msgstr ""
+"Acepto <a href=\"%1$s\" target=\"_blank\">los Términos de Servicio</a> y <a "
+"href=\"%2$s\" target=\"_blank\">la Política de Privacidad</a>\n"
+
+msgid "Forgot password"
+msgstr "Has olvidado tu contraseña"
+
+msgid "Send recovery code"
+msgstr "Enviar código de recuperación"
+
+msgid "Verify recovery code"
+msgstr "Verificar código de recuperación"
+
+msgid "Set new password"
+msgstr "Establecer nueva contraseña"
+
+msgid "Recovery code"
+msgstr "Código de recuperación"
+
+msgid "You are currently logged into Bookly Cloud with the account"
+msgstr "Actualmente está conectado a Bookly Cloud con la cuenta"
+
+msgid "Greetings"
+msgstr "Saludos"
+
+msgid "Cloud"
+msgstr "Cloud"
+
+msgid ""
+"The initial setup is complete, and you can now continue using Bookly in the "
+"admin panel."
+msgstr ""
+"La configuración inicial está completa y ahora puede continuar usando Bookly "
+"en el panel de administración."
+
+msgid ""
+"You can create staff members and services, add appointments to the calendar, "
+"and manage them directly from the backend."
+msgstr ""
+"Puede crear miembros del personal y servicios, añadir citas al calendario y "
+"administrarlos directamente desde el backend."
+
+msgid ""
+"To start receiving appointments via the front-end booking form, follow these "
+"steps:"
+msgstr ""
+"Para comenzar a recibir citas a través del formulario de reserva del front-"
+"end, siga estos pasos:"
+
+msgid "Create a new page in WordPress."
+msgstr "Crear una nueva página en WordPress."
+
+#, php-format
+msgid "Insert the following shortcode: %s"
+msgstr "Inserte el siguiente código corto: %s"
+
+msgid "Save the page and visit it to see your booking form in action."
+msgstr ""
+"Guarde la página y visítela para ver su formulario de reserva en acción."
+
+#, php-format
+msgid "Have questions? Visit our %s or reach out to our %s."
+msgstr "¿Tiene preguntas? Visite nuestro %s o comuníquese con nuestro %s."
 
 msgid "Help center"
 msgstr "Centro de ayuda"
 
-#, php-format
-msgid ""
-"Bookly can boost your sales and scale together with your business. Get more "
-"features and remove the limits by upgrading to the paid version with the %s, "
-"which allows you to use a vast number of additional features and settings "
-"for online scheduling, install other add-ons for Bookly, and includes six "
-"months of customer support."
-msgstr ""
-"Bookly puede impulsar sus ventas y escalar junto con su negocio. Obtenga más "
-"funciones y elimine los límites actualizando a la versión de pago con %s, "
-"que le permite usar una gran cantidad de funciones y configuraciones "
-"adicionales para la programación en línea, instalar otros complementos para "
-"Bookly e incluye seis meses de soporte al cliente."
+msgid "Support Team"
+msgstr "Equipo de soporte"
 
 msgid "Staff members order"
 msgstr "Orden de miembros del personal"
@@ -3915,11 +3950,41 @@ msgstr "Día siguiente"
 msgid "Reorder"
 msgstr "Reordenar"
 
+msgid "1 - 9 employees"
+msgstr "1-9 empleados"
+
+msgid "10 - 19 employees"
+msgstr "10-19 empleados"
+
+msgid "20 - 49 employees"
+msgstr "20 - 49 empleados"
+
+msgid "50 - 249 employees"
+msgstr "50-249 empleados"
+
+msgid "250 or more employees"
+msgstr "250 o más empleados"
+
+msgid "Select company size"
+msgstr "Seleccione el tamaño de la empresa"
+
 msgid "Image"
 msgstr "Imagen"
 
+msgid "Company name"
+msgstr "Nombre de la compañía"
+
 msgid "Website"
 msgstr "Página Web"
+
+msgid "Industry"
+msgstr "Industria"
+
+msgid "Select industry"
+msgstr "Seleccionar industria"
+
+msgid "Company size"
+msgstr "Tamaño de la empresa"
 
 msgid "Bookly data upon deleting Bookly items"
 msgstr "Datos de Bookly al eliminar elementos de Bookly"
@@ -4072,9 +4137,6 @@ msgstr "Puerto"
 msgid "Username"
 msgstr "Nombre de usuario"
 
-msgid "Password"
-msgstr "Contraseña"
-
 msgid "Secure"
 msgstr "Seguro"
 
@@ -4086,6 +4148,9 @@ msgstr "Servicio pagado localmente"
 
 msgid "URL Settings"
 msgstr "Configuración de URL"
+
+msgid "Company"
+msgstr "Compañía"
 
 msgid "Google Calendar"
 msgstr "Google Calendar"
@@ -4593,6 +4658,12 @@ msgstr "Solicitud de ID del remitente se envía."
 
 msgid "Sender ID is reset to default."
 msgstr "ID del remitente se restablece a los valores predeterminados."
+
+msgid "No matching records found"
+msgstr ""
+
+msgid "No data available in table"
+msgstr ""
 
 msgid "enable"
 msgstr "habilitar"
@@ -5726,19 +5797,8 @@ msgstr "Iniciar Sesión"
 msgid "Registration"
 msgstr "Rregistro"
 
-msgid "Forgot password"
-msgstr "Has olvidado tu contraseña"
-
 msgid "Repeat password"
 msgstr "Repita la contraseña"
-
-#, php-format
-msgid ""
-"I accept <a href=\"%1$s\" target=\"_blank\">Service Terms</a> and <a "
-"href=\"%2$s\" target=\"_blank\">Privacy Policy</a>"
-msgstr ""
-"Acepto <a href=\"%1$s\" target=\"_blank\">los Términos de Servicio</a> y <a "
-"href=\"%2$s\" target=\"_blank\">la Política de Privacidad</a>\n"
 
 msgid "Enter code from email"
 msgstr "Introduzca el código de correo electrónico"
@@ -6138,11 +6198,11 @@ msgstr "Vincular el pago"
 msgid "Complete payment"
 msgstr "Completa el pago"
 
-msgid "Gift card discount"
-msgstr "Descuento de tarjeta de regalo"
-
 msgid "Manual adjustment"
 msgstr "Ajuste manual"
+
+msgid "This invoice number is already in use"
+msgstr "Este número de factura ya está en uso"
 
 msgid "Payment is not found."
 msgstr "No se encuentra el pago."
@@ -6288,6 +6348,10 @@ msgid "This text can be inserted into notifications with {client_note} code"
 msgstr ""
 "Este texto se puede insertar en las notificaciones con el código "
 "{client_note}"
+
+#, php-format
+msgid "This WP user is already connected to another customer: %s"
+msgstr "Este usuario de WP ya está conectado a otro cliente: %s"
 
 msgid "Delete customers"
 msgstr "Eliminar clientes"
@@ -6478,6 +6542,9 @@ msgstr "Ajustes de la tabla"
 
 msgid "Column"
 msgstr "Columna"
+
+msgid "Entries per page"
+msgstr ""
 
 msgid "Attach ICS file"
 msgstr "Adjuntar archivo ICS"
@@ -7256,6 +7323,15 @@ msgstr ""
 msgid "Life Time"
 msgstr "Toda la vida"
 
+msgid "Days from the first booking"
+msgstr ""
+
+msgid "Days from the creation"
+msgstr ""
+
+msgid "Number of days"
+msgstr ""
+
 msgid "The period in days when the customer can use a package of services."
 msgstr ""
 "El período en días en que el cliente puede usar un paquete de servicios."
@@ -7780,6 +7856,9 @@ msgstr "Un bloque personalizado para mostrar el formulario de servicios."
 msgid "A custom block for displaying staff form"
 msgstr "Un bloque personalizado para mostrar el formulario del personal"
 
+msgid "The calendar list is not available"
+msgstr ""
+
 msgid "no limit"
 msgstr "sin límite"
 
@@ -8073,85 +8152,6 @@ msgstr ""
 "Si utiliza el código {cart_info} en las notificaciones, puede seleccionar "
 "las columnas que desea mostrar y establecer aquí el orden de los campos. "
 "Desmarque la casilla para ocultar la columna."
-
-msgid "To find your client ID and client secret, do the following:"
-msgstr "Para encontrar su ID y número secreto de cliente haga lo siguiente:"
-
-msgid ""
-"Go to the <a href=\"https://console.developers.google.com/\" "
-"target=\"_blank\">Google Cloud Platform</a>."
-msgstr ""
-"Ir a la <a href=\"https://console.developers.google.com/\" target=\"_blank\">"
-"Plataforma en la nube de Google</a>."
-
-msgid "Select a project or create a new one."
-msgstr "Seleccione un proyecto o cree uno nuevo."
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <b>Library</b>. In the list of APIs look "
-"for <b>Calendar API</b> or click <a href=\"%s\" target=\"_blank\">this "
-"link</a> to go directly to Calendar API and make sure it is enabled."
-msgstr ""
-"En la barra lateral de la izquierda, seleccione <b>Biblioteca</b>. En la "
-"lista de APIs busque la <b>API de calendario</b> o haga clic en <a "
-"href=\"%s\" target=\"_blank\">este enlace</a> para ir directamente a la API "
-"de calendario y asegurarse de que esté habilitada."
-
-msgid ""
-"Click <b>OAuth consent screen</b> tab, select user type and provide the "
-"necessary information (App name, User support email and Developer contact "
-"information). Then click <b>Save and continue</b>. You can leave the "
-"following settings unchanged."
-msgstr ""
-"Haga clic en la pestaña de la <b>Pantalla de consentimiento de OAuth</b>, "
-"seleccione el tipo de usuario y proporcione la información necesaria (nombre "
-"de la aplicación, correo electrónico de soporte al usuario e información de "
-"contacto del desarrollador). Luego haga clic en <b>Guardar y continuar</b>. "
-"Puede dejar las siguientes configuraciones sin cambios."
-
-msgid ""
-"We recommend to change the publishing status of your app to <b>In "
-"production</b> by clicking <b>Publish app</b> button."
-msgstr ""
-"Recomendamos cambiar el estado de publicación de su aplicación a <b>En "
-"producción</b> haciendo clic en el botón <b>Publicar aplicación</b>."
-
-#, php-format
-msgid ""
-"In the sidebar on the left, select <a href=\"%s\" target=\"_blank\">"
-"Credentials</a>, and in <b>Create credentials</b> drop-down menu select <b>"
-"OAuth client ID</b>."
-msgstr ""
-"En la barra lateral de la izquierda, seleccione <a href=\"%s\" "
-"target=\"_blank\">Credenciales</a>, y en el menú desplegable <b>Crear "
-"credenciales</b>, seleccione <b>ID de cliente de OAuth</b>."
-
-msgid ""
-"Select <b>Web application</b> and create your project's <b>OAuth 2.0 "
-"credentials</b> by providing the necessary information. For <b>Authorized "
-"redirect URIs</b> enter the <b>Redirect URI</b> found below on this page. "
-"Click <b>Create</b>."
-msgstr ""
-"Seleccione <b>Aplicación web</b> y cree sus <b>Credenciales OAuth 2.0</b> "
-"del proyecto proporcionando la información necesaria. Para <b>URIs de "
-"redirección autorizado</b> introduzca el <b>URI de redirección</b> que se "
-"encuentra más abajo en esta página. Haga clic en<b>Crear</b>."
-
-msgid ""
-"In the popup window look for the <b>Client ID</b> and <b>Client secret</b>. "
-"Use them in the form below on this page."
-msgstr ""
-"En la ventana emergente busca <b>Client ID</b> y <b>Client secret</b>. "
-"Úsalos en el siguiente formulario en esta página."
-
-msgid ""
-"Go to <b>Staff Members</b>, select a staff member and enable the connection "
-"with Google Calendar on the <b>Advanced</b> tab."
-msgstr ""
-"Vaya a <b>Miembros del personal</b>, seleccione un miembro del personal y "
-"habilite la conexión con el Calendario de Google en la pestaña <b>"
-"Avanzado</b>."
 
 msgid "The client ID obtained from the Google Cloud Platform"
 msgstr "ID de cliente obtenido de la Plataforma en la nube de Google"
@@ -8732,6 +8732,23 @@ msgstr "Desactivar fechas sin franjas horarias disponibles"
 
 msgid "Show stepper"
 msgstr "Mostrar paso a paso"
+
+msgid "Cards with Any staff"
+msgstr "Tarjetas con Cualquier personal"
+
+msgid "Don't show"
+msgstr "No mostrar"
+
+msgid "Show only with Any staff"
+msgstr "Mostrar solo con Cualquier personal"
+
+msgid "Show staff member rating before employee name"
+msgstr ""
+"Mostrar la calificación del miembro del personal antes del nombre del "
+"empleado"
+
+msgid "Skip step"
+msgstr "Saltar paso"
 
 msgid "Add new form"
 msgstr "Añadir nuevo formulario"
@@ -10578,11 +10595,6 @@ msgid "Set the URL of a page with a rating and comment form."
 msgstr ""
 "Establezca la URL de una página con un formulario de calificación y de "
 "comentarios."
-
-msgid "Show staff member rating before employee name"
-msgstr ""
-"Mostrar la calificación del miembro del personal antes del nombre del "
-"empleado"
 
 msgid "URL of the page for staff rating"
 msgstr "URL de la página para la calificación del personal"

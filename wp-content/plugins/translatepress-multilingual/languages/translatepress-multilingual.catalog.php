@@ -80,7 +80,6 @@
 <?php __("Something went wrong, please try again.", "translatepress-multilingual"); ?>
 <?php __("Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to product downloads, automatic updates and support. %3$sRenew now %4$s", "translatepress-multilingual"); ?>
 <?php __("Your <strong>TranslatePress</strong> serial number is invalid or missing. <br/>Please %1$sregister your copy%2$s to receive access to automatic updates and support. Need a license key? %3$sPurchase one now%4$s", "translatepress-multilingual"); ?>
-<?php __("NEW: Translate Emails and other plugin texts using String Translation. Find out <a href=\"https://translatepress.com/docs/translation-editor/string-translation/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettings&utm_campaign=TRP\" >how to search for a specific text to translate</a>.", "translatepress-multilingual"); ?>
 <?php __("The daily quota for machine translation characters exceeded. Please check the <strong>TranslatePress -> <a href=\"%s\">Automatic Translation</a></strong> page for more information.", "translatepress-multilingual"); ?>
 <?php __("One or more languages are unsupported by the automatic translation provider. Please check the <strong>TranslatePress -> <a href=\"%s\">Automatic Translation</a></strong> page for more information.", "translatepress-multilingual"); ?>
 <?php __("Marketing optin", "translatepress-multilingual"); ?>
@@ -171,13 +170,15 @@
 <?php __("Strings that are user-created cannot be modified, only those from themes and plugins.", "translatepress-multilingual"); ?>
 <?php __("Extra Translation Features", "translatepress-multilingual"); ?>
 <?php __("Support for 130+ Extra Languages", "translatepress-multilingual"); ?>
-<?php __("Yoast SEO support", "translatepress-multilingual"); ?>
+<?php __("Access to TranslatePress AI", "translatepress-multilingual"); ?>
 <?php __("Translate SEO Title, Description, Slug", "translatepress-multilingual"); ?>
 <?php __("Publish only when translation is complete", "translatepress-multilingual"); ?>
 <?php __("Translate by Browsing as User Role", "translatepress-multilingual"); ?>
 <?php __("Different Menu Items for each Language", "translatepress-multilingual"); ?>
 <?php __("Automatic User Language Detection", "translatepress-multilingual"); ?>
 <?php __("Upgrade to PRO", "translatepress-multilingual"); ?>
+<?php __("Upgrade to PRO with our biggest discount of the year!", "translatepress-multilingual"); ?>
+<?php __("This Black Friday, get access to these features and more at a fraction of the costs:", "translatepress-multilingual"); ?>
 <?php __("No available suggestions", "translatepress-multilingual"); ?>
 <?php __("Suggestions from translation memory", "translatepress-multilingual"); ?>
 <?php __("Click to Copy", "translatepress-multilingual"); ?>
@@ -194,6 +195,8 @@
 <?php __("Your %s license has <span class=\"trp-license-status-emphasized\">expired</span>.", "translatepress-multilingual"); ?>
 <?php __("Please renew your license to continue receiving access to product downloads, automatic updates and support.", "translatepress-multilingual"); ?>
 <?php __("Renew Now", "translatepress-multilingual"); ?>
+<?php __("<strong>This Black Friday, renew your license at a special price</strong> to continue receiving access to product downloads, automatic updates, and support.", "translatepress-multilingual"); ?>
+<?php __("Get Deal", "translatepress-multilingual"); ?>
 <?php __("Your %s license was <span class=\"trp-license-status-emphasized\">refunded</span>.", "translatepress-multilingual"); ?>
 <?php __("Please purchase a new license to continue receiving access to product downloads, automatic updates and support.", "translatepress-multilingual"); ?>
 <?php __("Purchase a new license", "translatepress-multilingual"); ?>
@@ -227,7 +230,7 @@
 <?php __("Post type base slugs", "translatepress-multilingual"); ?>
 <?php __("WooCommerce slugs", "translatepress-multilingual"); ?>
 <?php __("The SEO Pack add-on is available with ALL premium versions of the plugin.", "translatepress-multilingual"); ?>
-<?php __("Update to Pro", "translatepress-multilingual"); ?>
+<?php __("Upgrade to Pro", "translatepress-multilingual"); ?>
 <?php __("Description", "translatepress-multilingual"); ?>
 <?php __("Article Section", "translatepress-multilingual"); ?>
 <?php __("Article Tag", "translatepress-multilingual"); ?>
@@ -656,6 +659,7 @@
 <?php __("Translator", "translatepress-multilingual"); ?>
 <?php __(" TranslatePress Settings", "translatepress-multilingual"); ?>
 <?php __("Allow this user to translate the website.", "translatepress-multilingual"); ?>
+<?php __("(inactive)", "translatepress-multilingual"); ?>
 <?php __("Taxonomy Slugs", "translatepress-multilingual"); ?>
 <?php __("Search Taxonomy Slugs", "translatepress-multilingual"); ?>
 <?php __("Taxonomy Slug", "translatepress-multilingual"); ?>

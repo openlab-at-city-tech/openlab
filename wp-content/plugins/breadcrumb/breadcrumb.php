@@ -3,7 +3,7 @@
 Plugin Name: Breadcrumb
 Plugin URI: https://pickplugins.com/breadcrumb/
 Description: Awesome Breadcrumb for wordpress.
-Version: 1.5.46
+Version: 1.5.48
 WC requires at least: 3.0.0
 WC tested up to: 7.2
 Author: PickPlugins
@@ -25,7 +25,7 @@ class BreadcrumbMain
 		define('breadcrumb_plugin_url', plugins_url('/', __FILE__));
 		define('breadcrumb_plugin_dir', plugin_dir_path(__FILE__));
 		define('breadcrumb_plugin_name', 'Breadcrumb');
-		define('breadcrumb_plugin_version', '1.5.46');
+		define('breadcrumb_plugin_version', '1.5.48');
 
 
 		require_once(breadcrumb_plugin_dir . 'includes/class-settings-tabs.php');
@@ -45,6 +45,14 @@ class BreadcrumbMain
 		add_action('admin_enqueue_scripts', array($this, '_admin_scripts'));
 		add_filter('widget_text', 'do_shortcode');
 		add_action('plugins_loaded', array($this, 'breadcrumb_load_textdomain'));
+		add_action('before_woocommerce_init', array($this, 'high_performance_order_storage'));
+	}
+
+	function high_performance_order_storage()
+	{
+		if (class_exists(\Automattic\WooCommerce\Utilities\FeaturesUtil::class)) {
+			\Automattic\WooCommerce\Utilities\FeaturesUtil::declare_compatibility('custom_order_tables', __FILE__, true);
+		}
 	}
 
 	public function breadcrumb_load_textdomain()

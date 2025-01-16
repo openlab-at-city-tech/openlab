@@ -92,7 +92,7 @@ function breadcrumb_settings_tabs_content_options()
             'details'    => __('You can limit link text by word or character', 'breadcrumb'),
             'type'        => 'select',
             'value'        => $breadcrumb_word_char,
-            'default'        => 'word',
+            'default'        => 'none',
             'args'        => array(
                 'none' => __('None', 'breadcrumb'),
                 'word' => __('Word', 'breadcrumb'),

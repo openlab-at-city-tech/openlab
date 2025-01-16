@@ -1,18 +1,21 @@
 === MapPress Maps for WordPress ===
 Contributors: chrisvrichardson
 Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4339298
-Tags: maps, google maps, map, map markers, google map, leaflet maps, leaflet map plugin, google maps plugin, gpx, wp google maps, wp google map, map plugin, store locator, google map plugin, map widget,
+License: GPLv2
+Tags: maps, google maps, leaflet, store locator, map plugin
 Requires at least: 5.9.5
 Requires PHP: 7.0
-Tested up to: 6.4
-Stable tag: 2.90.6
+Tested up to: 6.6
+Stable tag: 2.94.3
+
+MapPress is the easiest way to add unlimited interactive Google and Leaflet maps to WordPress.
 
 == Description ==
-MapPress is the easiest way to add beautiful interactive Google and Leaflet maps to WordPress.
+MapPress is the easiest way to add unlimited, beautiful interactive Google and Leaflet maps to WordPress.
 
 Create **unlimited maps and markers** using Gutenberg blocks or the classic editor.  The popup map editor makes creating and editing maps easy!
 
-Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more features, including custom icons, search and filter, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
+Upgrade to [MapPress Pro](https://mappresspro.com/mappress) for even more features, including custom icons (with a built-in icon editor!), search and filter, clustering, and much more.  See it in action on the [MapPress Home Page](https://mappresspro.com/mappress) or test it yourself with a [Free Demo Site](https://mappresspro.com/demo)!
 
 [Home Page](https://mappresspro.com/mappress)
 [What's New](https://mappresspro.com/whats-new)
@@ -90,8 +93,54 @@ Please see the plugin documentation pages:
 
 == Changelog ==
 
+= 2.94.3 =
+* Fixed: bug in lat/lng check
+
+= 2.94.2 =
+* Fixed: sanitized lat/lng coordinates
+
+= 2.94.1 =
+* Fixed: mashups not displaying if no filters available
+
+= 2.94 =
+* Added: settings screen now includes default search/filter toggles for maps and mashups
+* Added: map editor now allows toggling search & filter for individual maps and mashups
+
+= 2.93 =
+* Fixed: escaping for poi data labels
+
+= 2.92.2 =
+* Added: warning message about siteground antibot system
+
+= 2.92.1 =
+* Changed: clicking anywhere in a POI popup now behaves the same as clicking its marker
+* Fixed: JS error from document panel due to changes in WP 6.6 full-site editor 
+
+= 2.91.6 =
+* Changed: allow iframe tags in POI body
+* Fixed: template "POI data" button was defaulting to custom fields instead of data fields
+
+= 2.91.5 =
+* Fixed: filters not displaying properly for single maps
+* Fixed: map not panning when opening POI that had been hovered with a tooltip 
+
+= 2.91.4 =
+* Fixed: clusters no re-rendering when filtering single map
+
+= 2.91.3 =
+* Fixed: popup not opening on KML POIs
+
+= 2.91.2 =
+* Fixed: data tab not scrolling when there are many POI data fields
+
+= 2.91.1 =
+* Added: text filter can now be separated from the main filters dropdown
+* Added: text filter can now search POI title or title+body 
+* Changed: rendering is now always via web component
+* Changed: removed CSS theme interference fixes, since WP editor requires some of them
+
 = 2.90.6 =
-* Fixed: Pro build reverted to free version due to new host server 
+* Fixed: Pro build reverted to free version due to new hosting
 * Fixed: magnifying glass icon missing from search box
 
 = 2.90.5 =

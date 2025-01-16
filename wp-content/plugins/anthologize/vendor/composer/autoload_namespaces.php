@@ -9,5 +9,4 @@ return array(
     'MIME' => array($vendorDir . '/pear/mime_type'),
     'File' => array($vendorDir . '/pear/file_archive'),
     'Console' => array($vendorDir . '/pear/console_getopt'),
-    '' => array($vendorDir . '/pear/pear-core-minimal/src'),
 );

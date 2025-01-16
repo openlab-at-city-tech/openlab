@@ -348,7 +348,7 @@ function xprofile_admin_screen( $message = '', $type = 'error' ) {
 										 * This function handles the WYSIWYG profile field
 										 * display for the xprofile admin setup screen.
 										 */
-										$signup_fields[ $_signup_field->id ] = bp_xprofile_admin_get_signup_field( $_signup_field, $signup_group, '' );
+										$signup_fields[ $_signup_field->id ] = bp_xprofile_admin_get_signup_field( $_signup_field, $signup_group );
 									}
 								}
 							}
@@ -1233,7 +1233,7 @@ function bp_xprofile_admin_form_field_types( $select_field_type ) {
 		printf( '<optgroup label="%1$s">', esc_attr( $category ) );  // Already i18n'd in each profile type class.
 
 		// Sort these fields types alphabetically.
-		uasort( $fields, function( $a, $b ) { return strnatcmp( $a[1]->name, $b[1]->name ); } );
+		uasort( $fields, function ( $a, $b ) { return strnatcmp( $a[1]->name, $b[1]->name ); } );
 
 		foreach ( $fields as $field_type_obj ) {
 			$field_name     = $field_type_obj[0];

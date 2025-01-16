@@ -1,3 +1,27 @@
+##### [Version 3.8.15](https://github.com/Codeinwp/neve/compare/v3.8.14...v3.8.15) (2024-11-22)
+
+ - Fixed issues from the latest release
+
+##### [Version 3.8.14](https://github.com/Codeinwp/neve/compare/v3.8.13...v3.8.14) (2024-11-21)
+
+- Fixed compatibility issue with WordPress 6.7 that was throwing warnings on translations
+- Fixed WooCoomerce icon display issue on notices
+
+##### [Version 3.8.13](https://github.com/Codeinwp/neve/compare/v3.8.12...v3.8.13) (2024-11-12)
+
+- Fixed submenu text wrapping issue on mobile
+- Updated Google Fonts and dependencies
+
+##### [Version 3.8.12](https://github.com/Codeinwp/neve/compare/v3.8.11...v3.8.12) (2024-10-29)
+
+- Added a new starter site
+- Fixed PHP warning in template_parts.php
+- Fixed compatibility issue with the TranslatePress plugin
+- Fixed the plugin install issue on a multisite installation
+- Fixed lightbox issue with alignment control
+- Added support for a new custom layout magic tag current_single_content [PRO]
+- Added support for Messenger social media sharing [PRO]
+
 ##### [Version 3.8.11](https://github.com/Codeinwp/neve/compare/v3.8.10...v3.8.11) (2024-08-14)
 
 - Fixed Breadcrumb NavXT integration

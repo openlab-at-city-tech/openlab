@@ -3,8 +3,6 @@
  * Astra Theme Strings
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -55,8 +53,8 @@ if ( ! function_exists( 'astra_default_strings' ) ) {
 				'string-comment-cancel-reply-link'       => __( 'Cancel Reply', 'astra' ),
 				'string-comment-label-submit'            => $post_comment_dynamic_string,
 				'string-comment-label-message'           => __( 'Type here..', 'astra' ),
-				'string-comment-label-name'              => __( 'Name*', 'astra' ),
-				'string-comment-label-email'             => __( 'Email*', 'astra' ),
+				'string-comment-label-name'              => __( 'Name', 'astra' ),
+				'string-comment-label-email'             => __( 'Email', 'astra' ),
 				'string-comment-label-website'           => __( 'Website', 'astra' ),
 				'string-comment-closed'                  => __( 'Comments are closed.', 'astra' ),
 				'string-comment-navigation-title'        => __( 'Comment navigation', 'astra' ),

@@ -308,7 +308,7 @@ function name_directory_show_directory($attributes)
 
     if(! empty($_GET['name-directory-search-value']) && ! empty($_GET['dir']) && $_GET['dir'] == $dir)
     {
-        $search_value = htmlspecialchars($_GET['name-directory-search-value']);
+        $search_value = trim(htmlspecialchars($_GET['name-directory-search-value']));
         $name_filter['containing'] = $search_value;
         if(! empty($directory['search_highlight']))
         {

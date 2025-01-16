@@ -22,7 +22,6 @@ jQuery(function ($) {
         isMobile = false,
         urlParts = document.URL.split('#'),
         columns = [],
-        order = [],
         pickers = {
             dateFormat: 'YYYY-MM-DD',
             appointmentDate: {
@@ -45,6 +44,7 @@ jQuery(function ($) {
     function onChangeFilter() {
         dt.ajax.reload();
     }
+
     $statusFilter.booklyDropdown({onChange: onChangeFilter});
 
     $('.bookly-js-select').val(null);
@@ -128,9 +128,9 @@ jQuery(function ($) {
                         data: 'customer.phone',
                         render: function (data, type, row, meta) {
                             if (isMobile) {
-                                return '<a href="tel:' + $.fn.dataTable.render.text().display(data) + '">' + $.fn.dataTable.render.text().display(data) + '</a>';
+                                return '<a href="tel:' + window.booklyIntlTelInput.utils.formatNumber($.fn.dataTable.render.text().display(data), null, window.booklyIntlTelInput.utils.numberFormat.INTERNATIONAL) + '">' + $.fn.dataTable.render.text().display(data) + '</a>';
                             } else {
-                                return $.fn.dataTable.render.text().display(data);
+                                return data ? '<span style="white-space: nowrap;">' + window.booklyIntlTelInput.utils.formatNumber($.fn.dataTable.render.text().display(data), null, window.booklyIntlTelInput.utils.numberFormat.INTERNATIONAL) + '</span>' : '';
                             }
                         }
                     });
@@ -265,34 +265,13 @@ jQuery(function ($) {
 
     columns[0].responsivePriority = 0;
 
-    $.each(BooklyL10n.datatables.appointments.settings.order, function (_, value) {
-        const index = columns.findIndex(function (c) { return c.data === value.column; });
-        if (index !== -1) {
-            order.push([index, value.order]);
-        }
-    });
     /**
      * Init DataTables.
      */
-    var dt = $appointmentsList.DataTable({
-        order: order,
-        info: false,
-        searching: false,
-        lengthChange: false,
-        processing: true,
-        responsive: true,
-        pageLength: 25,
-        pagingType: 'numbers',
-        serverSide: true,
-        drawCallback: function (settings) {
-            $('[data-toggle="bookly-popover"]', $appointmentsList).on('click', function (e) {
-                e.preventDefault();
-            }).booklyPopover();
-            dt.responsive.recalc();
-        },
+    var dt = booklyDataTables.init($appointmentsList, BooklyL10n.datatables.appointments.settings, {
         ajax: {
             url: ajaxurl,
-            type: 'POST',
+            method: 'POST',
             data: function (d) {
                 return $.extend({action: 'bookly_get_appointments', csrf_token: BooklyL10nGlobal.csrf_token}, {
                     filter: {
@@ -309,11 +288,12 @@ jQuery(function ($) {
             }
         },
         columns: columns,
-        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing
-        }
+        drawCallback: function (settings) {
+            $('[data-toggle="bookly-popover"]', $appointmentsList).on('click', function (e) {
+                e.preventDefault();
+            }).booklyPopover();
+            dt.responsive.recalc();
+        },
     });
 
     // Show ratings in expanded rows.
@@ -422,7 +402,7 @@ jQuery(function ($) {
         // Show payment details
         .on('click', '[data-action=show-payment]', function () {
             BooklyPaymentDetailsDialog.showDialog({
-                payment_id: getDTRowData(this).payment_id,
+                payment_id: booklyDataTables.getRowData(this, dt).payment_id,
                 done: function (event) {
                     dt.ajax.reload(null, false);
                 }
@@ -432,7 +412,7 @@ jQuery(function ($) {
         .on('click', '[data-action=edit]', function (e) {
             e.preventDefault();
             BooklyAppointmentDialog.showDialog(
-                getDTRowData(this).id,
+                booklyDataTables.getRowData(this, dt).id,
                 null,
                 null,
                 function (event) {
@@ -621,14 +601,6 @@ jQuery(function ($) {
                 }
             },
         });
-
-    function getDTRowData(element) {
-        let $el = $(element).closest('td');
-        if ($el.hasClass('child')) {
-            $el = $el.closest('tr').prev();
-        }
-        return dt.row($el).data();
-    }
 
     $idFilter.on('keyup', onChangeFilter);
     $appointmentDateFilter.on('apply.daterangepicker', onChangeFilter);

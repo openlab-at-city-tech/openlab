@@ -1,41 +1,46 @@
-# Copyright (C) 2023 WPMU DEV
+# Copyright (C) 2024 WPMU DEV
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Broken Link Checker 2.2.4\n"
+"Project-Id-Version: Broken Link Checker 2.4.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/build\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-12-27T14:39:26+00:00\n"
+"POT-Creation-Date: 2024-09-30T12:41:07+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 
 #. Plugin Name of the plugin
-#: app/admin-pages/cloud-page/class-controller.php:84
+#: broken-link-checker.php
+#: app/admin-pages/cloud-page/class-controller.php:108
 #: app/admin-pages/cloud-submenu/class-controller.php:67
 #: app/emails/recipient-activation/class-controller.php:88
 #: app/emails/scan-report/class-controller.php:101
 #: legacy/core/core.php:3922
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:68
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:223
 msgid "Broken Link Checker"
 msgstr ""
 
 #. Plugin URI of the plugin
+#: broken-link-checker.php
 msgid "https://wordpress.org/plugins/broken-link-checker/"
 msgstr ""
 
 #. Description of the plugin
+#: broken-link-checker.php
 msgid "Checks your blog for broken links and notifies you on the dashboard if any are found."
 msgstr ""
 
 #. Author of the plugin
+#: broken-link-checker.php
 msgid "WPMU DEV"
 msgstr ""
 
 #. Author URI of the plugin
+#: broken-link-checker.php
 msgid "https://wpmudev.com/"
 msgstr ""
 
@@ -66,17 +71,15 @@ msgstr ""
 
 #: app/admin-modals/legacy/class-controller.php:216
 #: app/admin-modals/local/class-controller.php:180
-#: app/admin-pages/cloud-page/class-controller.php:267
+#: app/admin-pages/cloud-page/class-controller.php:312
 msgid "Something went wrong here."
 msgstr ""
 
 #: app/admin-notices/features/class-view.php:40
-#: app/admin-modals/welcome/assets/js/layouts/modalHeader.js:10
 msgid "Introducing Edit Link and Unlink features in Broken Link Checker!"
 msgstr ""
 
 #: app/admin-notices/features/class-view.php:41
-#: app/admin-modals/welcome/assets/js/layouts/modalBody.js:12
 msgid "Now you can edit links and unlink broken links directly from the new Cloud version with ease."
 msgstr ""
 
@@ -102,8 +105,16 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: app/admin-pages/cloud-page/class-controller.php:85
+#: app/admin-pages/cloud-page/class-controller.php:109
 msgid "Link Checker"
+msgstr ""
+
+#: app/admin-pages/cloud-page/class-controller.php:521
+msgid "The Hub connects WPMU DEV to your website, unlocking all the power of the Cloud Broken Link Checker."
+msgstr ""
+
+#: app/admin-pages/cloud-page/class-controller.php:522
+msgid "Once your website is connected to the Hub, you will be able to scan for and fix broken links instantly, keeping your website error-free."
 msgstr ""
 
 #: app/admin-pages/cloud-submenu/class-controller.php:68
@@ -168,7 +179,7 @@ msgstr ""
 msgid "Links param `%1$s` potentially malicious"
 msgstr ""
 
-#: app/broken-links-actions/class-router.php:306
+#: app/broken-links-actions/class-router.php:305
 msgid "Invalid sub-site id"
 msgstr ""
 
@@ -176,7 +187,7 @@ msgstr ""
 msgid "Missing Full Site Target Table"
 msgstr ""
 
-#: app/broken-links-actions/processors/class-main.php:432
+#: app/broken-links-actions/processors/class-main.php:434
 msgid "Unmapped action"
 msgstr ""
 
@@ -300,17 +311,17 @@ msgid "Scan for Broken Links is in progress. Please wait a few minutes until sca
 msgstr ""
 
 #: app/http-requests/scan/class-controller.php:174
-#: app/http-requests/sync-scan-results/class-controller.php:277
+#: app/http-requests/sync-scan-results/class-controller.php:276
 msgid "Scan could not be started because it seems you are on localhost. Broken Links Checker API can not reach sites on local hosts"
 msgstr ""
 
 #: app/http-requests/scan/class-controller.php:188
-#: app/http-requests/sync-scan-results/class-controller.php:291
+#: app/http-requests/sync-scan-results/class-controller.php:287
 msgid "Can not make request."
 msgstr ""
 
 #: app/http-requests/scan/class-controller.php:243
-#: app/http-requests/sync-scan-results/class-controller.php:346
+#: app/http-requests/sync-scan-results/class-controller.php:342
 msgid "Something went wrong with request."
 msgstr ""
 
@@ -318,27 +329,27 @@ msgstr ""
 msgid "Scan is currently in progress. Please try again in 15 minutes."
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:251
+#: app/http-requests/sync-scan-results/class-controller.php:250
 msgid "Scan completed successfully."
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:258
+#: app/http-requests/sync-scan-results/class-controller.php:257
 msgid "Data successfully updated."
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:347
+#: app/http-requests/sync-scan-results/class-controller.php:343
 msgid "Scan is currently in progress. Please try again in a few minutes."
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:348
+#: app/http-requests/sync-scan-results/class-controller.php:344
 msgid "Something went wrong while storing new data to DB. More likely there is nothing to update"
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:349
+#: app/http-requests/sync-scan-results/class-controller.php:345
 msgid "The start time is missing. Aborting importing data."
 msgstr ""
 
-#: app/http-requests/sync-scan-results/class-controller.php:350
+#: app/http-requests/sync-scan-results/class-controller.php:346
 msgid "Results are missing. Aborting importing data."
 msgstr ""
 
@@ -401,44 +412,44 @@ msgstr ""
 msgid "Schedule event not created. Please refresh page and try once more"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:168
+#: app/rest-endpoints/settings/class-controller.php:178
 msgid "Dashboard plugin is already active. Please wait while refreshing page."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:187
+#: app/rest-endpoints/settings/class-controller.php:197
 msgid "Dashboard plugin has been activated."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:210
+#: app/rest-endpoints/settings/class-controller.php:220
 msgid "Dashboard plugin has been activated.  You should be redirected to sign-in page shortly"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:230
+#: app/rest-endpoints/settings/class-controller.php:240
 msgid "Dashboard plugin could not be activated. You can reload page and try again or contact support."
 msgstr ""
 
 #. translators: 1: The Hub's signup url.
-#: app/rest-endpoints/settings/class-controller.php:248
+#: app/rest-endpoints/settings/class-controller.php:258
 msgid "Dashboard plugin is not installed. You can connect your site for free directly from <a href=\"%s\">Hub<a>."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:262
+#: app/rest-endpoints/settings/class-controller.php:272
 msgid "Settings saved"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:455
+#: app/rest-endpoints/settings/class-controller.php:465
 msgid "Schedule frequency was not set"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:463
+#: app/rest-endpoints/settings/class-controller.php:473
 msgid "Schedule days were not set"
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:552
+#: app/rest-endpoints/settings/class-controller.php:562
 msgid "You cannot view settings."
 msgstr ""
 
-#: app/rest-endpoints/settings/class-controller.php:590
+#: app/rest-endpoints/settings/class-controller.php:600
 msgid "Action forbidden."
 msgstr ""
 
@@ -493,7 +504,7 @@ msgstr ""
 msgid "Hi %1$s. You should stop receiving broken links reports for this site. You can visit site from %2$shere%3$s."
 msgstr ""
 
-#: app/webhooks/recipient-activation/class-controller.php:56
+#: app/webhooks/recipient-activation/class-controller.php:63
 msgid "Activate broken links recipient"
 msgstr ""
 
@@ -501,21 +512,175 @@ msgstr ""
 msgid "Scan results"
 msgstr ""
 
-#: app/webhooks/user-review/class-controller.php:59
+#: app/webhooks/user-review/class-controller.php:63
 msgid "Review Broken Link Checker plugin"
 msgstr ""
 
-#: app/webhooks/user-review/class-controller.php:75
+#: app/webhooks/user-review/class-controller.php:79
 msgid "It seems there is some missing input"
 msgstr ""
 
-#: app/webhooks/user-review/class-controller.php:76
-#: app/webhooks/user-review/class-controller.php:85
+#: app/webhooks/user-review/class-controller.php:80
+#: app/webhooks/user-review/class-controller.php:89
 msgid "Invalid action"
 msgstr ""
 
-#: app/webhooks/user-review/class-controller.php:84
+#: app/webhooks/user-review/class-controller.php:88
 msgid "No user found for given input data."
+msgstr ""
+
+#. translators: %s Account detail URL.
+#: core/external/hub-connector/inc/class-admin.php:453
+msgid "You are currently using your Google account as your preferred login method. If you wish to login with your WPMU DEV email & password instead, please change the <strong>Login Method</strong> in <a href=\"%s\" target=\"_blank\">your WPMU DEV account</a>."
+msgstr ""
+
+#. translators: %s Account detail URL.
+#: core/external/hub-connector/inc/class-admin.php:460
+msgid "You are currently using your WPMU DEV email & password as your preferred login method. If you wish to login with your Google account instead, please change the <strong>Login Method</strong> in <a href=\"%s\" target=\"_blank\">your WPMU DEV account</a>."
+msgstr ""
+
+#. translators: %1$s Account detail URL, %2$s Reset URL.
+#: core/external/hub-connector/inc/class-admin.php:467
+msgid "Due to security improvements, you will need to re-link your Google account in the Hub. Please log in with your WPMU DEV email & password for now, then set up your preferred <strong>Login Method</strong> in <a href=\"%1$s\" target=\"_blank\">your WPMU DEV account</a>. Forgot your password? You can <a href=\"%2$s\" target=\"_blank\">reset it here</a>."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:476
+msgid "Your login details were incorrect. Please make sure you're using your WPMU DEV email and password and try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:478
+msgid "Forgot your password?"
+msgstr ""
+
+#. translators: %1$s Rest URL, %2$s Upgrade URL, %3$s Trial URL.
+#: core/external/hub-connector/inc/class-admin.php:489
+msgid "This domain has previously been registered with us by the user %1$s. To use WPMU DEV on this domain, you can either log in with the original account (you can <a target=\"_blank\" href=\"%2$s\">reset your password</a>) or <a target=\"_blank\" href=\"%3$s\">upgrade your trial</a> to a full membership. Trial accounts can't use previously registered domains - <a target=\"_blank\" href=\"%4$s\">here's why</a>."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:496
+msgid "Contact support if you need further assistance &raquo;"
+msgstr ""
+
+#. translators: %1$d Account name, %2$s Security info, %3$s Hub URL, %4$s Support URL.
+#: core/external/hub-connector/inc/class-admin.php:502
+msgid "This site is currently registered to %1$s. For <a target=\"_blank\" href=\"%2$s\">security reasons</a> they will need to go to the <a target=\"_blank\" href=\"%3$s\">WPMU DEV Hub</a> and remove this domain before you can log in. If you do not have access to that account, and have no way of contacting that user, please <a target=\"_blank\" href=\"%4$s\">contact support for assistance</a>."
+msgstr ""
+
+#. translators: %s Support URL.
+#: core/external/hub-connector/inc/class-admin.php:512
+msgid "This domain cannot be registered to your WPMU DEV account.<br><a href=\"%s\">Contact Accounts & Billing if you need further assistance »</a>"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:520
+msgid "Google login failed. Please try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:524
+msgid "Unknown error. Please update the WPMU DEV Dashboard plugin and try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:532
+msgid "Your server had a problem connecting to WPMU DEV. Please try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:533
+msgid "If this problem continues, please contact your host with this error message and ask:"
+msgstr ""
+
+#. translators: url to API.
+#: core/external/hub-connector/inc/class-admin.php:536
+msgid "\"Is PHP on my server properly configured to be able to contact %s with a POST HTTP request via fsockopen or CURL?\""
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:542
+msgid "Your API Key was invalid. Please try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:617
+msgid "Let’s connect your site"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:618
+msgid "To manage your site from The Hub, log in with your WPMU DEV account email and password."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:619
+msgid "Could not sync with Hub. Please try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:620
+msgid "The Hub connects WPMU DEV to your website and unlocks all the power of our all-in-one platform services."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:621
+msgid "Once your website is connected to the Hub, you will be able to perform updates, managing services - all from one place."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:622
+msgid "Please wait a few moments while we connect your website."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:623
+msgid "Choose The Hub Team"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:624
+msgid "We've noticed that you are a member of multiple teams in The Hub. Which team would you like to connect to this site?"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-admin.php:625
+msgid "Unknown API error occurred. Please try again."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-api.php:142
+#: core/external/hub-connector/inc/class-api.php:344
+msgid "Not logged in."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-api.php:225
+#: core/external/hub-connector/inc/class-api.php:370
+msgid "Error unserializing remote response."
+msgstr ""
+
+#. translators: %s Support URL.
+#: core/external/hub-connector/inc/class-api.php:546
+msgid "This site is currently registered to a different user. Please <a target=\"_blank\" href=\"%s\">contact support for assistance</a>."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:96
+msgid "The \"action\" parameter is missing"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:106
+msgid "The \"params\" object is missing"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:147
+msgid "This action is not registered. The required plugin is not installed, updated, or configured properly."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:234
+msgid "Remote calls are disabled in wp-config.php"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:247
+msgid "Missing authentication header"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:265
+msgid "Incorrect authentication"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-remote.php:276
+msgid "Nonce check failed"
+msgstr ""
+
+#: core/external/hub-connector/inc/class-rest.php:62
+msgid "Should do a force sync."
+msgstr ""
+
+#: core/external/hub-connector/inc/class-upgrader.php:159
+msgid "Invalid or empty slug."
 msgstr ""
 
 #: core/models/class-http-request.php:93
@@ -523,33 +688,34 @@ msgid "Missing url."
 msgstr ""
 
 #. translators: 1. The Hours of the datetime.
-#: core/utils/class-utilities.php:872
+#: core/utils/class-utilities.php:851
 msgid "%d h "
 msgid_plural "%d h "
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1. The Minutes of the datetime.
-#: core/utils/class-utilities.php:884
+#: core/utils/class-utilities.php:863
 msgid "%d min "
 msgid_plural "%d min "
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1. The Seconds of the datetime.
-#: core/utils/class-utilities.php:895
+#: core/utils/class-utilities.php:874
 msgid "%d s "
 msgid_plural "%d s "
 msgstr[0] ""
 msgstr[1] ""
 
-#: core/utils/class-utilities.php:956
+#: core/utils/class-utilities.php:935
 msgctxt "date time sep"
 msgid " "
 msgstr ""
 
 #: core/views/class-admin-page.php:67
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:50
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:25
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:38
 msgid "View Documentation"
 msgstr ""
 
@@ -560,6 +726,7 @@ msgstr ""
 
 #: core/views/class-admin-page.php:117
 #: core/views/class-admin-page.php:136
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:103
 msgid "The Hub"
 msgstr ""
 
@@ -574,6 +741,7 @@ msgstr ""
 
 #: core/views/class-admin-page.php:120
 #: core/views/class-admin-page.php:134
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:124
 msgid "Support"
 msgstr ""
 
@@ -2446,6 +2614,7 @@ msgstr ""
 
 #: app/admin-modals/legacy/assets/js/components/legacyButton.js:48
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/saveScheduleButton.js:22
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20868
 msgid "Continue"
 msgstr ""
 
@@ -2492,10 +2661,6 @@ msgstr ""
 
 #: app/admin-modals/local/assets/js/layouts/modalHeader.js:13
 msgid "Activate new Broken Link Checker"
-msgstr ""
-
-#: app/admin-modals/welcome/assets/js/components/closeButton.js:41
-msgid "Got it"
 msgstr ""
 
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/activeScheduleRow.js:79
@@ -2558,7 +2723,7 @@ msgstr ""
 
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/activeScheduleRow.js:295
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/inactiveScheduleRow.js:65
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:77
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:95
 msgid "Upgrade Membership"
 msgstr ""
 
@@ -2578,37 +2743,45 @@ msgstr ""
 msgid "Deactivate"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/freePlanNotice.js:12
-msgid "You are currently viewing the results of a 30-minute free plan scanning session. <a>Upgrade to Pro</a> for uninterrupted link scanning."
-msgstr ""
-
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/inactiveScheduleRow.js:59
 msgid "Schedule broken link checks and receive results via email."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:23
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:31
 msgid "Run New Scan"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:61
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:73
 msgid "Membership seems to be expired. You can manage your Membership "
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:62
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:78
 msgid "here."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:79
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:97
 msgid "Upgrade Membership to start a new scan."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:122
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:314
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:147
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:377
 msgid "A scan is currently in progress. Please wait for scan results."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:126
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:154
 msgid "Site scan for broken links is in progress."
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:185
+msgid "Broken Link Checker is just catching her breath - you can run another test in a minute"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:193
+msgid "Broken Link Checker is just catching her breath - you can run another test in %d minutes"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/newScanButton.js:213
+msgid "Please wait while we are updating a link. "
 msgstr ""
 
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/components/saveScheduleButton.js:35
@@ -2766,83 +2939,189 @@ msgstr ""
 msgid "Duration"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/headerNotifications.js:38
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/headerNotifications.js:44
 msgid "Click to close"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:55
+msgid "BLC isn't connected to a WPMU DEV account. Connect to unlock additional free features."
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:67
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:71
+msgid "Connect to Hub"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:112
+msgid "Product Roadmap"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:148
+msgid "Profile"
+msgstr ""
+
+#: app/admin-pages/cloud-page/assets/js/layouts/dashboard/resultsArea.js:184
+msgid "Your site is connected to the Hub. You can now manage your broken links with our cloud based service."
 msgstr ""
 
 #: app/admin-pages/cloud-page/assets/js/layouts/dashboard/schedulesArea.js:41
 msgid "Enable scheduled broken link checks and be notified of results."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:175
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:184
 msgid "Connect to WPMU DEV"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:176
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:182
-msgid "Next-gen broken link detection is just a few clicks away.  Activate Cloud-based Broken Link Checker by connecting your site to WPMU DEV. It’s easy and 100% free. Run your first scan in minutes."
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:187
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:203
+msgid "Next-gen broken link detection is just a few clicks away.  Activate Cloud-based Broken Link Checker by connecting your site to WPMU DEV. Run your first scan in minutes."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:183
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:209
 msgid "Activate WPMU DEV Dashboard"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:189
-msgid "Next-gen broken link detection is just a few clicks away. Activate Cloud-based Broken Link Checker by enabling the new version. It’s easy and 100% free. Run your first scan in minutes."
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:220
+msgid "Next-gen broken link detection is just a few clicks away. Activate Cloud-based Broken Link Checker by enabling the new version. Run your first scan in minutes."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:190
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:226
 msgid "Enable Cloud Engine"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:199
-msgid "It’s still 100% free to use"
-msgstr ""
-
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:200
-msgid "Just like the local version, this is not a paid upgrade and there are no upsells."
-msgstr ""
-
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:203
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:235
 msgid "A WPMU DEV connection is required"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:204
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:239
 msgid "Connecting to plugin developer WPMU DEV’s API allows you to access all of the cloud-based benefits + a host of helpful bonus tools."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:207
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:245
 msgid "We don’t store private data"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:208
-msgid "The connection is 100% free and secure; we do not store any of your private data, ever."
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:246
+msgid "We do not store any of your private data, ever."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:211
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:252
 msgid "You can switch plugin versions without worry"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:212
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:256
 msgid "Easily move between local and cloud broken link checking without losing your saved settings."
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:231
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:279
 msgid "Activate Cloud-based Link Checker for better accuracy & superior speed"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:257
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:310
 msgid "The company behind BLC 2.0, WPMU DEV is an all-in-one WordPress platform that has helped millions of web developers worldwide run and grow their businesses. Connecting your site to WPMU DEV allows you to harness BLC 2.0’s full capabilities (plus, you’ll gain access to a host of other powerful bonus web dev tools for free)"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:261
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:324
 msgid "What is WPMU DEV?"
 msgstr ""
 
-#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:271
+#: app/admin-pages/cloud-page/assets/js/layouts/onboarding/body.js:338
 msgid "Unsure about switching to cloud-based? Here’s what you need to know:"
 msgstr ""
 
 #: assets/common/js/react/components/modal.js:55
 msgid "Close this modal"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18032
+msgid "Sign in with Google"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18132
+msgid "Email is not valid."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18134
+msgid "Email is required."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18189
+msgid "Hide Password"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18190
+msgid "Show Password"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:18216
+msgid "Password is required."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:19249
+msgctxt "text direction"
+msgid "ltr"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20036
+msgid "Email"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20037
+msgid "johndoe@mail.com"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20046
+msgid "Password"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20066
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20473
+msgid "Login"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20070
+msgid "Keep me logged in"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20076
+msgid "Forgot password?"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20480
+msgid "I am a new user"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20481
+msgid "I am an existing user"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20488
+msgid "Create a free account to connect your site to WPMU DEV and activate cloud-based link checker. <i>It's fast, seamless, and free.</i>"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20499
+msgid "Create a free account"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20509
+msgid "OR continue with email"
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20533
+msgid "You do not have the permission to view this page."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20550
+msgid "Successfully connected to the Hub."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20571
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20592
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20613
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20709
+msgid "Connecting..."
+msgstr ""
+
+#: core/external/hub-connector/assets/js/hub-connector.min.js:20764
+msgid "Select Team"
 msgstr ""

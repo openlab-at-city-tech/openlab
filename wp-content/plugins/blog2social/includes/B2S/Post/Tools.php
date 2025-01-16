@@ -158,4 +158,13 @@ class B2S_Post_Tools {
         return 0;
     }
 
+    public static function deletePostNoticeAll() {
+        global $wpdb;
+        $query = $wpdb->prepare("UPDATE {$wpdb->prefix}b2s_posts SET hook_action = 0, hide = 1 WHERE publish_error_code != '' AND hide = 0");
+        $result = $wpdb->query($query);
+        if ((int) $result >= 0) {
+            return array('result' => true);
+        }
+        return array('result' => false);
+    }
 }

@@ -3,8 +3,6 @@
  * Store Notice options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2021, Astra
  * @link        https://wpastra.com/
  * @since       Astra 3.9.0
  */

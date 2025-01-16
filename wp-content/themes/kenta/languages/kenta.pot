@@ -1,0 +1,2805 @@
+# Copyright (C) 2024 WP Moose
+# This file is distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Kenta 1.4.4\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/theme/kenta\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-11-10T08:46:33+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: kenta\n"
+
+#. Theme Name of the theme
+#: style.css
+msgid "Kenta"
+msgstr ""
+
+#. Theme URI of the theme
+#: style.css
+msgid "https://kentatheme.com"
+msgstr ""
+
+#. Description of the theme
+#: style.css
+msgid "The Powerful and Multipurpose Kenta Theme provides endless possibilities to create your site visually in minutes, without coding skills. We have tons of options for you to customize every part of your site. We also provide Starter Sites to help you create your sites with one click instead of starting from scratch. You can build any kind of websites, like blog, business, portfolio, WooCommerce storefronts etc. Whether you're bloggers, editors, online magazines, newspaper, news portals, content publishers, creative business, small businesses, startups and freelancers, we can help you build an amazing website."
+msgstr ""
+
+#. Author of the theme
+#: style.css
+msgid "WP Moose"
+msgstr ""
+
+#. Author URI of the theme
+#: style.css
+msgid "https://www.wpmoose.com"
+msgstr ""
+
+#: comments.php:43
+msgid "One Comment"
+msgstr ""
+
+#. translators: %s: The count of comments
+#: comments.php:46
+msgid "%s Comments"
+msgstr ""
+
+#: comments.php:66
+msgid "Comments are closed."
+msgstr ""
+
+#: inc/admin-page.php:13
+msgid "Plover Kit"
+msgstr ""
+
+#: inc/admin-page.php:14
+msgid "Plover kit have pluggable modules that enhance the Gutenberg core blocks and also provide extended features."
+msgstr ""
+
+#: inc/admin-page.php:19
+#: inc/admin-page.php:152
+msgid "Kenta Blocks"
+msgstr ""
+
+#: inc/admin-page.php:20
+msgid "Kenta Blocks is a set of responsive blocks with powerful options and pre-designed templates library. "
+msgstr ""
+
+#: inc/admin-page.php:25
+#: inc/admin-page.php:151
+msgid "Kenta Companion"
+msgstr ""
+
+#: inc/admin-page.php:26
+msgid "Kenta Companion is an extension to the Kenta theme. It provides a lot of features and one-click demo import for Kenta Theme."
+msgstr ""
+
+#: inc/admin-page.php:40
+msgid "Install Recommend Plugin"
+msgstr ""
+
+#: inc/admin-page.php:46
+#: inc/admin-page.php:139
+#: inc/admin-page.php:171
+msgid "You need a higher level of permission."
+msgstr ""
+
+#: inc/admin-page.php:47
+#: inc/admin-page.php:140
+msgid "Sorry, you are not allowed to activate plugins on this site."
+msgstr ""
+
+#: inc/admin-page.php:63
+msgid "You can not install this plugin."
+msgstr ""
+
+#: inc/admin-page.php:64
+msgid "Sorry, you are not allowed to install this plugin."
+msgstr ""
+
+#: inc/admin-page.php:172
+msgid "Sorry, you are not allowed to customize this site."
+msgstr ""
+
+#: inc/admin-page.php:202
+#: inc/admin-page.php:203
+#: template-parts/admin-container.php:33
+msgid "Kenta Theme"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:121
+msgid "Width"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:130
+msgid "Elements Gap"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:139
+#: inc/customizer/class-archive-section.php:461
+#: inc/traits/trait-post-card.php:44
+#: inc/traits/trait-widgets-controls.php:158
+msgid "Enable Scroll Reveal"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:149
+#: inc/elements/class-menu-element.php:85
+msgid "Direction"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:154
+msgid "Row"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:155
+msgid "Column"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:163
+msgid "Justify Content"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:168
+#: inc/builder/class-builder-column.php:183
+msgid "Start"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:169
+#: inc/builder/class-builder-column.php:184
+#: inc/customizer/class-archive-section.php:184
+#: inc/customizer/class-single-post-section.php:212
+#: inc/elements/class-logo-element.php:114
+#: inc/traits/trait-article-controls.php:178
+#: inc/traits/trait-post-card.php:75
+msgid "Center"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:170
+#: inc/builder/class-builder-column.php:185
+msgid "End"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:178
+msgid "Align Items"
+msgstr ""
+
+#: inc/builder/class-builder-column.php:193
+#: inc/customizer/class-archive-section.php:190
+#: inc/customizer/class-single-post-section.php:242
+msgid "Padding"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:33
+msgid "Footer Elements"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:40
+#: inc/builder/class-header-builder.php:41
+#: inc/customizer/class-header-section.php:108
+#: inc/elements/class-logo-element.php:40
+msgid "Logo"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:41
+msgid "Copyright"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:42
+#: inc/theme-setup.php:138
+msgid "Footer Menu"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:49
+#: inc/builder/class-header-builder.php:63
+msgid "Breadcrumbs"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:51
+msgid "Footer Widgets Area #1"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:52
+msgid "Footer Widgets Area #2"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:53
+msgid "Footer Widgets Area #3"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:54
+msgid "Footer Widgets Area #4"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:55
+#: inc/builder/class-header-builder.php:64
+#: inc/extensions/class-socials-extension.php:29
+msgid "Socials"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:85
+msgid "Top Row"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:130
+msgid "Middle Row"
+msgstr ""
+
+#: inc/builder/class-footer-builder.php:173
+#: inc/builder/class-header-builder.php:232
+msgid "Bottom Row"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:118
+#: inc/builder/class-header-row.php:228
+#: inc/customizer/class-archive-section.php:327
+#: inc/customizer/class-header-section.php:63
+#: inc/elements/class-menu-element.php:201
+msgid "General"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:120
+msgid "Vertical Spacing"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:132
+#: inc/builder/class-header-row.php:126
+#: inc/traits/trait-particles-effect.php:132
+msgid "Z Index"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:139
+#: inc/builder/class-header-row.php:133
+msgid "Render Empty Row"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:144
+#: inc/builder/class-header-row.php:138
+msgid "Visibility"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:174
+#: inc/builder/class-header-row.php:231
+#: inc/builder/class-modal-row.php:112
+#: inc/customizer/class-archive-section.php:135
+#: inc/customizer/class-archive-section.php:311
+#: inc/customizer/class-archive-section.php:328
+#: inc/customizer/class-content-section.php:205
+#: inc/customizer/class-header-section.php:115
+#: inc/customizer/class-single-post-section.php:268
+#: inc/customizer/class-store-catalog-section.php:103
+#: inc/elements/class-breadcrumbs-element.php:36
+#: inc/elements/class-button-element.php:61
+#: inc/elements/class-cart-element.php:73
+#: inc/elements/class-collapsable-menu-element.php:103
+#: inc/elements/class-logo-element.php:119
+#: inc/elements/class-menu-element.php:202
+#: inc/elements/class-search-element.php:82
+#: inc/elements/class-trigger-element.php:48
+#: inc/extensions/class-related-posts-extension.php:164
+#: inc/extensions/class-scroll-top-extension.php:169
+#: inc/traits/trait-post-structure.php:121
+#: inc/traits/trait-post-structure.php:366
+#: inc/traits/trait-socials-controls.php:68
+#: inc/traits/trait-widgets-controls.php:99
+msgid "Style"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:175
+#: inc/builder/class-header-row.php:170
+#: inc/customizer/class-footer-section.php:34
+#: inc/customizer/class-header-section.php:45
+msgid "Override Global Colors"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:180
+#: inc/builder/class-header-row.php:175
+#: inc/customizer/class-header-section.php:172
+#: inc/elements/class-menu-element.php:53
+#: inc/extensions/class-sticky-extension.php:66
+msgid "Top Border"
+msgstr ""
+
+#: inc/builder/class-footer-row.php:194
+#: inc/builder/class-header-row.php:215
+#: inc/customizer.php:207
+#: inc/customizer/class-archive-section.php:202
+#: inc/customizer/class-content-section.php:231
+#: inc/customizer/class-single-post-section.php:234
+#: inc/customizer/class-store-notice-section.php:40
+#: inc/extensions/class-preloader-extension.php:73
+msgid "Background"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:33
+#: inc/traits/trait-article-controls.php:138
+msgid "Header Elements"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:44
+#: searchform.php:10
+msgid "Search"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:46
+msgid "Button #1"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:47
+msgid "Button #2"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:49
+msgid "Menu #1"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:52
+msgid "Menu #2"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:58
+#: inc/theme-setup.php:128
+msgid "Collapsable Menu"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:61
+msgid "Trigger"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:65
+msgid "Theme Switch"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:69
+msgid "Cart"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:101
+msgid "Modal Area"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:139
+msgid "Top Bar"
+msgstr ""
+
+#: inc/builder/class-header-builder.php:185
+msgid "Primary Navbar"
+msgstr ""
+
+#: inc/builder/class-header-row.php:117
+#: inc/traits/trait-button-controls.php:155
+msgid "Min Height"
+msgstr ""
+
+#: inc/builder/class-header-row.php:187
+#: inc/customizer/class-header-section.php:185
+#: inc/elements/class-menu-element.php:52
+#: inc/extensions/class-sticky-extension.php:73
+msgid "Bottom Border"
+msgstr ""
+
+#: inc/builder/class-header-row.php:199
+#: inc/extensions/class-sticky-extension.php:80
+msgid "Box Shadow"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:111
+#: inc/customizer/class-archive-section.php:134
+#: inc/customizer/class-archive-section.php:307
+#: inc/customizer/class-content-section.php:142
+#: inc/customizer/class-single-post-section.php:267
+#: inc/customizer/class-store-catalog-section.php:100
+#: inc/elements/class-breadcrumbs-element.php:35
+#: inc/elements/class-button-element.php:42
+#: inc/elements/class-collapsable-menu-element.php:65
+#: inc/elements/class-logo-element.php:38
+#: inc/extensions/class-related-posts-extension.php:162
+#: inc/extensions/class-scroll-top-extension.php:113
+#: inc/traits/trait-socials-controls.php:67
+#: inc/traits/trait-widgets-controls.php:98
+msgid "Content"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:119
+msgid "Close Button Color"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:120
+#: inc/customizer/class-archive-section.php:248
+#: inc/customizer/class-archive-section.php:255
+#: inc/customizer/class-header-section.php:119
+#: inc/customizer/class-header-section.php:134
+#: inc/customizer/class-header-section.php:141
+#: inc/customizer/class-header-section.php:147
+#: inc/customizer/class-header-section.php:155
+#: inc/customizer/class-header-section.php:161
+#: inc/customizer/class-header-section.php:167
+#: inc/customizer/class-single-post-section.php:284
+#: inc/elements/class-collapsable-menu-element.php:117
+#: inc/elements/class-copyright-element.php:48
+#: inc/elements/class-logo-element.php:138
+#: inc/elements/class-logo-element.php:160
+#: inc/traits/trait-socials-controls.php:145
+msgid "Initial"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:121
+#: inc/customizer/class-header-section.php:120
+#: inc/customizer/class-header-section.php:135
+#: inc/customizer/class-header-section.php:148
+#: inc/customizer/class-header-section.php:156
+#: inc/customizer/class-header-section.php:162
+#: inc/customizer/class-header-section.php:168
+#: inc/customizer/class-single-post-section.php:285
+#: inc/elements/class-collapsable-menu-element.php:118
+#: inc/elements/class-copyright-element.php:49
+#: inc/elements/class-logo-element.php:140
+#: inc/traits/trait-socials-controls.php:146
+msgid "Hover"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:125
+msgid "Modal Background"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:135
+msgid "Modal Mask"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:142
+msgid "Modal Shadow"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:157
+msgid "Modal Type"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:161
+#: inc/elements/class-search-element.php:44
+msgid "Modal"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:162
+msgid "Drawer"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:169
+msgid "Drawer Placement"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:173
+#: inc/customizer/class-archive-section.php:183
+#: inc/customizer/class-single-post-section.php:211
+#: inc/elements/class-logo-element.php:65
+#: inc/elements/class-logo-element.php:113
+#: inc/elements/class-menu-element.php:90
+#: inc/extensions/class-scroll-top-extension.php:164
+#: inc/traits/trait-article-controls.php:174
+#: inc/traits/trait-button-controls.php:75
+#: inc/traits/trait-post-card.php:71
+msgid "Left"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:174
+#: inc/customizer/class-archive-section.php:185
+#: inc/customizer/class-single-post-section.php:213
+#: inc/elements/class-logo-element.php:66
+#: inc/elements/class-logo-element.php:115
+#: inc/elements/class-menu-element.php:91
+#: inc/extensions/class-scroll-top-extension.php:165
+#: inc/traits/trait-article-controls.php:182
+#: inc/traits/trait-button-controls.php:76
+#: inc/traits/trait-post-card.php:79
+msgid "Right"
+msgstr ""
+
+#: inc/builder/class-modal-row.php:179
+msgid "Drawer Width"
+msgstr ""
+
+#: inc/customizer.php:126
+msgid "Install Companion Plugin"
+msgstr ""
+
+#: inc/customizer.php:139
+msgid "Upgrade To Pro"
+msgstr ""
+
+#: inc/customizer.php:149
+#: template-parts/admin-start.php:97
+msgid "Visit Starter Sites"
+msgstr ""
+
+#: inc/customizer.php:159
+msgid "Update Customizer Cache"
+msgstr ""
+
+#: inc/customizer.php:160
+msgid "If the final style is not the same as the preview, please try to update the cache"
+msgstr ""
+
+#: inc/customizer.php:178
+msgid "Store Notice"
+msgstr ""
+
+#: inc/customizer.php:179
+msgid "Product Catalog"
+msgstr ""
+
+#: inc/customizer.php:203
+#: template-parts/admin-customize.php:31
+msgid "Header Builder"
+msgstr ""
+
+#: inc/customizer.php:204
+#: template-parts/admin-customize.php:36
+msgid "Footer Builder"
+msgstr ""
+
+#: inc/customizer.php:205
+msgid "Homepage Settings"
+msgstr ""
+
+#: inc/customizer.php:206
+#: inc/customizer/class-content-section.php:32
+#: inc/customizer/class-store-notice-section.php:29
+#: inc/extensions/class-preloader-extension.php:67
+msgid "Colors"
+msgstr ""
+
+#: inc/customizer.php:208
+msgid "Global"
+msgstr ""
+
+#: inc/customizer.php:209
+#: template-parts/admin-customize.php:56
+msgid "Archive Settings"
+msgstr ""
+
+#: inc/customizer.php:210
+#: template-parts/admin-customize.php:41
+msgid "Content Settings"
+msgstr ""
+
+#: inc/customizer.php:211
+#: template-parts/admin-customize.php:46
+msgid "Single Post Settings"
+msgstr ""
+
+#: inc/customizer.php:212
+msgid "Pages Settings"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:47
+msgid "Header"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:52
+msgid "Post Card"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:57
+msgid "Pagination"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:63
+#: inc/customizer/class-global-section.php:44
+#: inc/customizer/class-pages-section.php:47
+#: inc/customizer/class-single-post-section.php:63
+#: inc/customizer/class-store-catalog-section.php:62
+msgid "Sidebar"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:68
+#: inc/customizer/class-pages-section.php:51
+#: inc/customizer/class-single-post-section.php:67
+#: inc/customizer/class-store-catalog-section.php:66
+#: dist/js/block-editor.js:110
+msgid "Sidebar Layout"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:72
+#: inc/customizer/class-pages-section.php:55
+#: inc/customizer/class-single-post-section.php:71
+#: inc/customizer/class-store-catalog-section.php:70
+#: dist/js/block-editor.js:119
+msgid "Left Sidebar"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:76
+#: inc/customizer/class-pages-section.php:59
+#: inc/customizer/class-single-post-section.php:75
+#: inc/customizer/class-store-catalog-section.php:74
+#: dist/js/block-editor.js:122
+msgid "Right Sidebar"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:82
+#: inc/customizer/class-pages-section.php:65
+#: inc/customizer/class-single-post-section.php:81
+msgid "Customize Sidebar"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:89
+msgid "%sRead documentation for archive customize%s"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:103
+msgid "Card Columns"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:116
+msgid "Card Gap"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:145
+msgid "Disable Header On Blogs Home"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:155
+msgid "Disable Header On Shop"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:165
+msgid "Blogs Page Title"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:169
+msgid "Blogs"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:178
+#: inc/customizer/class-archive-section.php:361
+#: inc/customizer/class-single-post-section.php:206
+msgid "Alignment"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:211
+msgid "Enable Overlay"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:221
+#: inc/traits/trait-article-controls.php:222
+msgid "Overlay Opacity"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:230
+#: inc/traits/trait-article-controls.php:231
+msgid "Header Overlay"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:244
+msgid "Title Color"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:251
+msgid "Description Color"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:302
+msgid "%sRead documentation for post card options%s"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:324
+msgid "%sRead documentation for posts pagination%s"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:339
+msgid "Numbered"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:340
+msgid "Prev & Next"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:341
+msgid "Load More"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:342
+msgid "Infinite Scroll"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:352
+msgid "Pagination Type"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:382
+msgid "Previous & Next Buttons"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:395
+msgid "Previous & Next Type"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:402
+#: inc/customizer/class-header-section.php:126
+#: inc/customizer/class-store-notice-section.php:35
+msgid "Text"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:403
+#: inc/elements/class-cart-element.php:58
+#: inc/elements/class-cart-element.php:60
+#: inc/elements/class-search-element.php:67
+#: inc/elements/class-search-element.php:69
+#: inc/elements/class-trigger-element.php:33
+#: inc/elements/class-trigger-element.php:35
+#: inc/extensions/class-scroll-top-extension.php:115
+#: inc/extensions/class-socials-extension.php:159
+msgid "Icon"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:410
+msgid "Previous Icon"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:420
+msgid "Next Icon"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:435
+msgid "Previous Text"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:440
+msgid "Prev"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:443
+msgid "Next Text"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:448
+msgid "Next"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:454
+msgid "Show Disabled Buttons"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:480
+#: inc/customizer/class-content-section.php:36
+#: inc/customizer/class-content-section.php:214
+#: inc/elements/class-collapsable-menu-element.php:105
+#: inc/elements/class-copyright-element.php:30
+msgid "Typography"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:494
+#: inc/customizer/class-single-post-section.php:279
+msgid "Text Color"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:500
+#: inc/elements/class-copyright-element.php:47
+msgid "Text Initial"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:501
+msgid "Text Active"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:502
+#: inc/customizer/class-content-section.php:55
+#: inc/extensions/class-preloader-extension.php:74
+#: inc/traits/trait-button-controls.php:110
+msgid "Accent"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:505
+#: inc/customizer/class-content-section.php:232
+#: inc/customizer/class-single-post-section.php:219
+msgid "Border"
+msgstr ""
+
+#: inc/customizer/class-archive-section.php:516
+msgid "Radius"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:33
+msgid "Site Wrap"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:34
+msgid "Enable boundaries for your site on large screens (>1600px)"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:48
+#: inc/traits/trait-article-controls.php:99
+msgid "Site Background"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:60
+msgid "Body Background"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:69
+msgid "Site Box Shadow"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:83
+msgid "%sLearn how to use site wrap & site background%s"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:88
+msgid "Site Css Filters"
+msgstr ""
+
+#: inc/customizer/class-background-section.php:92
+msgid "%sLearn how to use site filters"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:29
+#: inc/elements/class-search-element.php:104
+#: dist/js/block-editor.js:3257
+msgid "Light"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:30
+#: inc/elements/class-search-element.php:105
+#: dist/js/block-editor.js:3263
+msgid "Dark"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:35
+msgid "%sRead Colors Documentation%s"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:41
+msgid "Use Dark Scheme As Default"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:45
+msgid "Save User Color Scheme"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:46
+msgid "Save the user's color scheme to the cookie and refresh the page without losing current color scheme."
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:67
+#: inc/customizer/class-colors-section.php:102
+#: inc/traits/trait-global-color-controls.php:39
+msgid "Primary Color"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:68
+msgid "Primary Active"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:69
+#: inc/customizer/class-colors-section.php:118
+#: inc/traits/trait-global-color-controls.php:50
+msgid "Accent Color"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:70
+msgid "Accent Active"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:71
+#: inc/customizer/class-colors-section.php:134
+#: inc/customizer/class-colors-section.php:153
+#: inc/traits/trait-global-color-controls.php:61
+#: inc/traits/trait-global-color-controls.php:73
+msgid "Base Color"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:72
+msgid "Base 50"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:73
+#: inc/customizer/class-colors-section.php:152
+#: inc/traits/trait-global-color-controls.php:72
+msgid "Base 100"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:74
+#: inc/customizer/class-colors-section.php:151
+#: inc/traits/trait-global-color-controls.php:71
+msgid "Base 200"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:75
+#: inc/customizer/class-colors-section.php:150
+#: inc/traits/trait-global-color-controls.php:70
+msgid "Base 300"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:77
+msgid "Color Presets"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:114
+#: inc/customizer/class-colors-section.php:130
+#: inc/extensions/class-related-posts-extension.php:64
+#: inc/traits/trait-article-controls.php:261
+#: inc/traits/trait-global-color-controls.php:46
+#: inc/traits/trait-global-color-controls.php:57
+#: inc/traits/trait-particles-effect.php:161
+#: inc/traits/trait-particles-effect.php:196
+#: inc/traits/trait-post-structure.php:125
+msgid "Default"
+msgstr ""
+
+#: inc/customizer/class-colors-section.php:115
+#: inc/customizer/class-colors-section.php:131
+#: inc/customizer/class-content-section.php:233
+#: inc/customizer/class-header-section.php:136
+#: inc/customizer/class-header-section.php:142
+#: inc/customizer/class-header-section.php:149
+#: inc/elements/class-collapsable-menu-element.php:119
+#: inc/template-tags.php:1049
+#: inc/traits/trait-global-color-controls.php:47
+#: inc/traits/trait-global-color-controls.php:58
+msgid "Active"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:40
+msgid "Buttons"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:50
+#: inc/elements/class-menu-element.php:51
+#: inc/elements/class-menu-element.php:129
+#: inc/template-tags.php:1041
+#: inc/traits/trait-button-controls.php:105
+#: inc/traits/trait-icon-button-controls.php:71
+msgid "Ghost"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:51
+#: inc/traits/trait-button-controls.php:107
+msgid "Outline"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:52
+#: inc/elements/class-menu-element.php:131
+#: inc/traits/trait-button-controls.php:106
+msgid "Solid"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:53
+#: inc/traits/trait-button-controls.php:108
+msgid "Invert"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:54
+#: inc/extensions/class-preloader-extension.php:75
+#: inc/traits/trait-button-controls.php:109
+msgid "Primary"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:56
+#: inc/elements/class-menu-element.php:56
+#: inc/elements/class-menu-element.php:133
+#: inc/template-tags.php:1050
+#: inc/traits/trait-button-controls.php:111
+#: inc/traits/trait-icon-button-controls.php:76
+msgid "Custom (Premium)"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:61
+msgid "Forms"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:73
+msgid "Paragraph Color"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:82
+msgid "Drop Cap Color"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:91
+msgid "Links Color"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:102
+msgid "All Headings Color (H1 - H6)"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:128
+#: inc/customizer/class-content-section.php:190
+#: inc/customizer/class-placeholders.php:136
+#: inc/customizer/class-placeholders.php:157
+#: inc/customizer/class-placeholders.php:174
+#: inc/customizer/class-placeholders.php:193
+#: inc/customizer/class-placeholders.php:409
+msgid "More options in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:152
+msgid "Drop Cap"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:166
+#: inc/customizer/class-global-section.php:107
+#: inc/customizer/class-header-section.php:60
+#: inc/extensions/class-socials-extension.php:175
+#: inc/traits/trait-global-color-controls.php:36
+msgid "%sRead Documentation%s"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:169
+msgid "Global Typography"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:170
+msgid "This option will affects the entire site"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:209
+msgid "Classic"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:210
+msgid "Modern"
+msgstr ""
+
+#: inc/customizer/class-content-section.php:224
+msgid "Controls Color"
+msgstr ""
+
+#: inc/customizer/class-footer-section.php:27
+msgid "%sLearn how to use footer builder%s"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:34
+#: inc/extensions/class-related-posts-extension.php:163
+#: dist/js/block-editor.js:75
+msgid "Layout"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:39
+msgid "Performance"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:53
+msgid "%sLearn More%s"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:67
+msgid "Content Area Spacing"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:71
+msgid "Homepage"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:78
+msgid "Archive"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:85
+msgid "Single Post"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:92
+msgid "Pages"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:99
+msgid "Store"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:117
+msgid "Enable Customizer Cache"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:118
+msgid "Enable Customizer caching can improve page load speed."
+msgstr ""
+
+#: inc/customizer/class-global-section.php:122
+msgid "Load Google Fonts Locally"
+msgstr ""
+
+#: inc/customizer/class-global-section.php:123
+msgid "Complying with GDPR by using local google fonts."
+msgstr ""
+
+#: inc/customizer/class-header-section.php:38
+msgid "%sLearn how to use header builder%s"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:50
+#: dist/js/block-editor.js:129
+msgid "Transparent Header"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:65
+msgid "Enable Transparent Header"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:72
+msgid "Disable on Search & Archives"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:76
+msgid "Disable on Posts"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:80
+msgid "Disable on Pages"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:87
+msgid "Enable Device"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:91
+msgid "All"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:92
+msgid "Desktop"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:93
+msgid "Mobile"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:98
+msgid "Logo for Transparent Header"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:117
+msgid "Site Title Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:124
+msgid "Raw Text Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:127
+msgid "Link Initial"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:128
+msgid "Link Hover"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:132
+msgid "Menu Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:139
+msgid "Menu Border Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:145
+msgid "Menu Background Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:153
+msgid "Button/Icon Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:159
+msgid "Button Border Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:165
+msgid "Button Background Colors"
+msgstr ""
+
+#: inc/customizer/class-header-section.php:198
+msgid "Header Background"
+msgstr ""
+
+#: inc/customizer/class-homepage-section.php:30
+msgid "Show Page Header"
+msgstr ""
+
+#: inc/customizer/class-pages-section.php:43
+#: inc/customizer/class-single-post-section.php:57
+msgid "Container"
+msgstr ""
+
+#: inc/customizer/class-pages-section.php:73
+msgid "Page Header"
+msgstr ""
+
+#: inc/customizer/class-pages-section.php:96
+#: inc/customizer/class-single-post-section.php:104
+msgid "Featured Image"
+msgstr ""
+
+#: inc/customizer/class-pages-section.php:111
+#: inc/customizer/class-single-post-section.php:119
+msgid "Share Box"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:41
+#: inc/customizer/class-placeholders.php:47
+msgid "More builder elements in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:53
+msgid "Header row overlay is available in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:89
+msgid "Fully customize your button style in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:96
+msgid "Search Results for: "
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:123
+msgid "Fully customize your archive header in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:233
+msgid "Fully customize your sidebar in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:301
+msgid "Fully customize your menu's top level items in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:307
+msgid "Customize your copyright text in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:313
+msgid "More breadcrumb options in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:335
+msgid "More breadcrumb style options in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:349
+msgid "More social icon options in our %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:368
+msgid "Fully customize your social icons in our %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:376
+msgid "More layout available in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:382
+msgid "Fully customize your posts card style in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:391
+msgid "Load More & Infinite Scroll is available in our %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-placeholders.php:401
+msgid "Fully customize your product card style in %sPro Version%s"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:89
+msgid "Post Header"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:139
+msgid "Author Bio"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:145
+msgid "Posts Navigation"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:160
+msgid "Show Avatar"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:167
+msgid "Link Avatar To Author Page"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:171
+msgid "Avatar Size"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:178
+msgid "Avatar Radius"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:188
+msgid "Author Name Prefix"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:189
+msgid "Hi, I’m"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:193
+msgid "Show All Articles Link"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:200
+msgid "All Articles Text"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:201
+msgid "All My Articles"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:225
+msgid "Shadow"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:253
+#: inc/customizer/class-single-post-section.php:307
+#: inc/elements/class-breadcrumbs-element.php:73
+#: inc/traits/trait-article-controls.php:188
+#: inc/traits/trait-article-controls.php:241
+#: inc/traits/trait-article-controls.php:277
+msgid "Spacing"
+msgstr ""
+
+#: inc/customizer/class-single-post-section.php:289
+#: inc/customizer/class-single-post-section.php:299
+msgid "Prev Icon"
+msgstr ""
+
+#: inc/customizer/class-store-catalog-section.php:30
+msgid "Shop Columns"
+msgstr ""
+
+#: inc/customizer/class-store-catalog-section.php:43
+msgid "Shop Gap"
+msgstr ""
+
+#: inc/customizer/class-store-catalog-section.php:50
+msgid "Products Per Page"
+msgstr ""
+
+#: inc/customizer/class-store-catalog-section.php:57
+msgid "Store Product Card"
+msgstr ""
+
+#: inc/customizer/class-store-notice-section.php:36
+msgid "Dismiss Initial"
+msgstr ""
+
+#: inc/customizer/class-store-notice-section.php:37
+msgid "Dismiss Hover"
+msgstr ""
+
+#: inc/elements/class-breadcrumbs-element.php:43
+msgid "Separator"
+msgstr ""
+
+#: inc/elements/class-breadcrumbs-element.php:50
+msgid "Type 1"
+msgstr ""
+
+#: inc/elements/class-breadcrumbs-element.php:54
+msgid "Type 2"
+msgstr ""
+
+#: inc/elements/class-breadcrumbs-element.php:58
+msgid "Type 3"
+msgstr ""
+
+#: inc/elements/class-breadcrumbs-element.php:62
+msgid "Type 4"
+msgstr ""
+
+#: inc/elements/class-button-element.php:44
+msgid "Button Link"
+msgstr ""
+
+#: inc/elements/class-button-element.php:50
+#: inc/traits/trait-socials-controls.php:89
+msgid "Open In New Tab"
+msgstr ""
+
+#: inc/elements/class-button-element.php:55
+#: inc/traits/trait-socials-controls.php:94
+msgid "No Follow"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:49
+#: inc/elements/class-menu-element.php:149
+msgid "Edit Menu Locations"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:54
+#: inc/elements/class-menu-element.php:154
+msgid "Menu Depth"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:55
+#: inc/elements/class-menu-element.php:155
+msgid "\"0\" meas no limit."
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:67
+msgid "Collapsable"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:68
+msgid "This option will collapse/expand the sub menu items on click/touch."
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:74
+#: inc/elements/class-menu-element.php:176
+msgid "Toggle Icon"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:83
+msgid "Toggle Style"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:88
+msgid "Simple"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:89
+#: inc/template-tags.php:1043
+msgid "Bordered"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:96
+msgid "Toggle Border"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:115
+#: inc/elements/class-copyright-element.php:40
+msgid "Color"
+msgstr ""
+
+#: inc/elements/class-collapsable-menu-element.php:123
+msgid "Items Divider"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:45
+msgid "Logo For Dark Mode"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:53
+msgid "Dark Mode Logo"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:60
+msgid "Logo Position"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:67
+msgid "Top"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:71
+msgid "Logo Width"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:82
+msgid "Logo Spacing"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:92
+msgid "Site Title"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:97
+msgid "Site Tagline"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:102
+msgid "Click here to edit the site title and tagline."
+msgstr ""
+
+#: inc/elements/class-logo-element.php:109
+#: inc/traits/trait-article-controls.php:167
+#: inc/traits/trait-post-card.php:63
+msgid "Content Alignment"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:121
+msgid "Site Title Typography"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:132
+msgid "Site Title Color"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:145
+msgid "Site Tagline Typography"
+msgstr ""
+
+#: inc/elements/class-logo-element.php:155
+msgid "Site Tagline Color"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:47
+msgid "Top Level Preset"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:54
+msgid "Both Border"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:55
+msgid "Pill"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:60
+msgid "Items Height"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:78
+msgid "Min Width"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:96
+msgid "Items Padding"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:107
+msgid "Dropdown Border Radius"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:125
+msgid "Dropdown Preset"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:130
+msgid "Ghost Dark"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:132
+msgid "Solid Dark"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:168
+msgid "Sub Menu Toggle Icon"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:188
+msgid "Top Level Options"
+msgstr ""
+
+#: inc/elements/class-menu-element.php:197
+msgid "Dropdown Options"
+msgstr ""
+
+#: inc/elements/class-search-element.php:37
+msgid "Search Style"
+msgstr ""
+
+#: inc/elements/class-search-element.php:43
+msgid "Popup"
+msgstr ""
+
+#: inc/elements/class-search-element.php:45
+msgid "Inline"
+msgstr ""
+
+#: inc/elements/class-search-element.php:52
+msgid "Search Input Width"
+msgstr ""
+
+#: inc/elements/class-search-element.php:64
+msgid "Search Icon"
+msgstr ""
+
+#: inc/elements/class-search-element.php:91
+msgid "Search Placeholder Text"
+msgstr ""
+
+#: inc/elements/class-search-element.php:93
+msgid "Type & Hit Enter"
+msgstr ""
+
+#: inc/elements/class-search-element.php:99
+msgid "Modal Style"
+msgstr ""
+
+#: inc/elements/class-theme-switch-element.php:33
+msgid "Light Icon"
+msgstr ""
+
+#: inc/elements/class-theme-switch-element.php:41
+msgid "Dark Icon"
+msgstr ""
+
+#: inc/extensions/class-particles-extension.php:148
+msgid "Background Particles Effect"
+msgstr ""
+
+#: inc/extensions/class-particles-extension.php:159
+msgid "Scope"
+msgstr ""
+
+#: inc/extensions/class-particles-extension.php:162
+msgid "Site Body"
+msgstr ""
+
+#: inc/extensions/class-particles-extension.php:163
+msgid "Site Content"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:31
+msgid "Preloader"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:46
+msgid "Preloader Preset"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:53
+msgid "Preset 1"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:54
+msgid "Preset 2"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:55
+msgid "Preset 3"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:56
+msgid "Preset 4"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:57
+msgid "Preset 5"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:58
+msgid "Preset 6"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:59
+msgid "Preset 7"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:60
+msgid "Preset 8"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:61
+msgid "Preset 9"
+msgstr ""
+
+#: inc/extensions/class-preloader-extension.php:62
+msgid "Preset 10"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:50
+msgid "Related Criteria"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:54
+msgid "Category"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:55
+#: inc/traits/trait-post-structure.php:152
+msgid "Tag"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:56
+msgid "Author"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:60
+msgid "Sort By"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:65
+msgid "Recent"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:66
+msgid "Random"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:67
+msgid "Comment Count"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:71
+msgid "Posts Count"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:80
+msgid "Section Title"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:82
+#: inc/extensions/class-related-posts-extension.php:157
+msgid "Related Posts"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:120
+msgid "Grid Columns"
+msgstr ""
+
+#: inc/extensions/class-related-posts-extension.php:132
+msgid "Items Gap"
+msgstr ""
+
+#: inc/extensions/class-scroll-reveal-extension.php:41
+msgid "Scroll Reveal"
+msgstr ""
+
+#: inc/extensions/class-scroll-reveal-extension.php:51
+msgid "Enable On Customize Preview"
+msgstr ""
+
+#: inc/extensions/class-scroll-reveal-extension.php:56
+msgid "Delay"
+msgstr ""
+
+#: inc/extensions/class-scroll-reveal-extension.php:62
+msgid "Duration"
+msgstr ""
+
+#: inc/extensions/class-scroll-reveal-extension.php:86
+msgid "More scroll reveal options in %sPro Version%s"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:40
+msgid "Scroll Top"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:127
+#: inc/traits/trait-icon-button-controls.php:32
+msgid "Icon Size"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:137
+msgid "Bottom Offset"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:146
+msgid "Side Offset"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:156
+msgid "Position"
+msgstr ""
+
+#: inc/extensions/class-scroll-top-extension.php:231
+msgid "Fully customize to top button in %sPro Version%s"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:40
+msgid "Social Networks"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:75
+#: inc/traits/trait-button-controls.php:45
+msgid "Label"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:80
+msgid "URL"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:85
+msgid "Share Link"
+msgstr ""
+
+#. translators: placeholder here means the actual URL.
+#: inc/extensions/class-socials-extension.php:90
+msgid "Social media sharing link formats, you can use {url} instead of the url of the current post and {text} instead of the title of the current post. %s Learn more %s"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:99
+msgid "Official Color"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:100
+#: inc/traits/trait-socials-controls.php:125
+msgid "Official"
+msgstr ""
+
+#: inc/extensions/class-socials-extension.php:169
+msgid "Add more social networks in %sPro Version%s"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:48
+msgid "Sticky Header"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:53
+msgid "Sticky Rows"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:56
+msgid "All Rows"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:57
+msgid "Top Row Only"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:58
+msgid "Primary Row Only"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:59
+msgid "Bottom Row Only"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:60
+msgid "Top & Primary Row"
+msgstr ""
+
+#: inc/extensions/class-sticky-extension.php:61
+msgid "Primary & Bottom Row"
+msgstr ""
+
+#: inc/helpers.php:163
+msgid "The installation process is starting. This process may take a while on some hosts, so please be patient."
+msgstr ""
+
+#: inc/helpers.php:173
+msgid "Upgrading %s ..."
+msgstr ""
+
+#: inc/helpers.php:179
+msgid "Installing %s ..."
+msgstr ""
+
+#: inc/helpers.php:186
+msgid "Activating %s ..."
+msgstr ""
+
+#: inc/helpers.php:190
+msgid "%s installed successfully"
+msgstr ""
+
+#: inc/helpers.php:194
+msgid "Could not install the %s plugin."
+msgstr ""
+
+#: inc/helpers.php:202
+msgid "All Done!"
+msgstr ""
+
+#: inc/helpers.php:204
+msgid "Return To Theme Page"
+msgstr ""
+
+#: inc/helpers.php:210
+msgid "Access our starter sites and more extensions"
+msgstr ""
+
+#: inc/helpers.php:217
+msgid "Learn More"
+msgstr ""
+
+#: inc/template-functions.php:584
+msgid "Previous Post"
+msgstr ""
+
+#: inc/template-functions.php:585
+msgid "Next Post"
+msgstr ""
+
+#: inc/template-functions.php:586
+msgid "Page"
+msgstr ""
+
+#: inc/template-tags.php:538
+msgid "Edit"
+msgstr ""
+
+#: inc/template-tags.php:911
+msgid "Pages:"
+msgstr ""
+
+#: inc/template-tags.php:1042
+#: inc/traits/trait-widgets-controls.php:140
+msgid "Plain"
+msgstr ""
+
+#: inc/template-tags.php:1044
+msgid "Shadowed"
+msgstr ""
+
+#: inc/template-tags.php:1045
+msgid "Mixed"
+msgstr ""
+
+#: inc/template-tags.php:1046
+msgid "Inner Shadow"
+msgstr ""
+
+#: inc/template-tags.php:1047
+msgid "Inner Shadow Bordered"
+msgstr ""
+
+#: inc/template-tags.php:1048
+msgid "Solid Shadow"
+msgstr ""
+
+#: inc/theme-setup.php:99
+msgid "Home"
+msgstr ""
+
+#: inc/theme-setup.php:108
+msgid "Header Menu #1"
+msgstr ""
+
+#: inc/theme-setup.php:118
+msgid "Header Menu #2"
+msgstr ""
+
+#: inc/theme-setup.php:170
+msgid "Primary Sidebar"
+msgstr ""
+
+#: inc/theme-setup.php:172
+#: inc/theme-setup.php:184
+msgid "Add widgets here."
+msgstr ""
+
+#: inc/theme-setup.php:182
+msgid "Store Sidebar"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:52
+#: inc/traits/trait-article-controls.php:136
+#: inc/traits/trait-article-controls.php:292
+msgid "%sLearn how it works%s"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:54
+#: dist/js/block-editor.js:78
+msgid "Container Style"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:58
+#: dist/js/block-editor.js:84
+msgid "Boxed"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:59
+#: dist/js/block-editor.js:87
+msgid "Fluid"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:63
+#: dist/js/block-editor.js:94
+msgid "Content Width"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:73
+#: dist/js/block-editor.js:100
+msgid "Narrow"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:77
+#: dist/js/block-editor.js:103
+msgid "Normal"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:86
+msgid "Content Max Width"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:109
+msgid "Container Style Preset"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:141
+#: inc/traits/trait-post-structure.php:71
+msgid "Title"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:152
+#: inc/traits/trait-post-structure.php:89
+msgid "Metas"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:156
+#: inc/traits/trait-post-structure.php:74
+msgid "Categories"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:161
+#: inc/traits/trait-post-structure.php:77
+msgid "Tags"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:214
+msgid "Header Color Override"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:218
+msgid "Override"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:256
+msgid "Image Width"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:262
+msgid "Wide"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:263
+msgid "Full"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:267
+msgid "Image Height"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:294
+msgid "Image Fallback"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:295
+#: inc/traits/trait-post-structure.php:222
+msgid "If the current post does not have a featured image, then this image will be displayed."
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:299
+#: inc/traits/trait-post-structure.php:197
+msgid "Image Size"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:306
+msgid "Image Position"
+msgstr ""
+
+#: inc/traits/trait-article-controls.php:327
+#: inc/traits/trait-post-structure.php:212
+msgid "Css Filter"
+msgstr ""
+
+#: inc/traits/trait-button-controls.php:34
+msgid "Button"
+msgstr ""
+
+#: inc/traits/trait-button-controls.php:51
+msgid "Show Icon"
+msgstr ""
+
+#: inc/traits/trait-button-controls.php:63
+msgid "Choose Icon"
+msgstr ""
+
+#: inc/traits/trait-button-controls.php:70
+msgid "Icon Direction"
+msgstr ""
+
+#: inc/traits/trait-button-controls.php:165
+msgid "Button Style Presets"
+msgstr ""
+
+#: inc/traits/trait-icon-button-controls.php:66
+msgid "Icon Style Preset"
+msgstr ""
+
+#: inc/traits/trait-icon-button-controls.php:72
+msgid "Square Solid"
+msgstr ""
+
+#: inc/traits/trait-icon-button-controls.php:73
+msgid "Square Outline"
+msgstr ""
+
+#: inc/traits/trait-icon-button-controls.php:74
+msgid "Rounded Solid"
+msgstr ""
+
+#: inc/traits/trait-icon-button-controls.php:75
+msgid "Rounded Outline"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:123
+msgid "Enable Particles Effect"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:140
+msgid "Particle Source"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:144
+msgid "Preset"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:145
+#: inc/traits/trait-socials-controls.php:124
+msgid "Custom"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:158
+msgid "Choose Particle Preset"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:162
+msgid "Gather"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:163
+msgid "Parallax"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:164
+msgid "NASA"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:165
+msgid "Polygon Bubble"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:166
+msgid "Circle Bubble"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:167
+msgid "Snow"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:168
+msgid "Fire Spark"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:169
+msgid "Nyan Cat"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:182
+msgid "You can customize your particles effect using the online editor in %sPro Version%s"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:192
+msgid "Interactivity Detect On"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:197
+msgid "Window"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:198
+msgid "Canvas"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:202
+#: inc/traits/trait-particles-effect.php:203
+msgid "Particle Color"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:204
+msgid "Line Color"
+msgstr ""
+
+#: inc/traits/trait-particles-effect.php:207
+msgid "More particle options available in %sPro Version%s"
+msgstr ""
+
+#: inc/traits/trait-post-card.php:48
+#: dist/js/block-editor.js:202
+msgid "Content Spacing"
+msgstr ""
+
+#: inc/traits/trait-post-card.php:55
+msgid "Thumbnail Spacing"
+msgstr ""
+
+#: inc/traits/trait-post-card.php:95
+msgid "Card Style"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:80
+msgid "Thumbnail"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:83
+#: inc/traits/trait-post-structure.php:247
+msgid "Excerpt"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:86
+#: inc/traits/trait-post-structure.php:280
+msgid "Read More"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:92
+msgid "Divider"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:126
+msgid "Badge"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:157
+msgid "H1"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:158
+msgid "H2"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:159
+msgid "H3"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:160
+msgid "H4"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:161
+msgid "H5"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:162
+msgid "H6"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:203
+msgid "Height"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:216
+#: inc/traits/trait-post-structure.php:373
+msgid "Full Width"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:221
+msgid "Use Fallback Image"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:227
+msgid "Edit Fallback Image"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:248
+msgid "Full Post"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:255
+msgid "Length"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:264
+msgid "More Text"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:331
+msgid "Byline"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:332
+msgid "Published Date"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:334
+msgid "Show modified date"
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:338
+msgid "Date Format"
+msgstr ""
+
+#. translators: placeholder here means the actual URL.
+#: inc/traits/trait-post-structure.php:342
+msgid "Date format %s instructions %s."
+msgstr ""
+
+#: inc/traits/trait-post-structure.php:349
+msgid "Comments"
+msgstr ""
+
+#: inc/traits/trait-socials-controls.php:83
+msgid "Edit Social Network Accounts"
+msgstr ""
+
+#: inc/traits/trait-socials-controls.php:100
+msgid "Icons Size"
+msgstr ""
+
+#: inc/traits/trait-socials-controls.php:109
+msgid "Icons Spacing"
+msgstr ""
+
+#: inc/traits/trait-socials-controls.php:119
+#: inc/traits/trait-socials-controls.php:144
+msgid "Icons Color"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:92
+msgid "Edit Widgets"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:108
+msgid "Sidebar Style"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:113
+#: inc/traits/trait-widgets-controls.php:141
+msgid "Style 1"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:117
+#: inc/traits/trait-widgets-controls.php:142
+msgid "Style 2"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:124
+msgid "Widget Title Tag"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:137
+msgid "Widget Title Style"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:147
+msgid "Widgets Spacing"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:172
+msgid "List Icon"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:186
+msgid "Link Underline"
+msgstr ""
+
+#: inc/traits/trait-widgets-controls.php:197
+msgid "Widgets Card Style"
+msgstr ""
+
+#: searchform.php:23
+msgid "Search for:"
+msgstr ""
+
+#: template-parts/admin-cmp-upgrade.php:39
+msgid "Your Kenta Companion Plugin is outdated!"
+msgstr ""
+
+#: template-parts/admin-cmp-upgrade.php:42
+msgid "The Kenta Companion Plugin you are using is not compatible with the current Kenta theme version, please update it to the latest version or some features will be broken."
+msgstr ""
+
+#: template-parts/admin-cmp-upgrade.php:49
+msgid "You can update it on the %s."
+msgstr ""
+
+#: template-parts/admin-cmp-upgrade.php:52
+msgid "Plugins Page"
+msgstr ""
+
+#: template-parts/admin-container.php:16
+msgid "Customize"
+msgstr ""
+
+#: template-parts/admin-container.php:19
+#: template-parts/admin-start.php:67
+msgid "Starter Sites"
+msgstr ""
+
+#: template-parts/admin-container.php:35
+msgid "Fast, Customizable & SEO Optimized Free WordPress Theme."
+msgstr ""
+
+#: template-parts/admin-customize.php:11
+msgid "Site Logo"
+msgstr ""
+
+#: template-parts/admin-customize.php:16
+msgid "Colors Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:21
+msgid "Typography Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:26
+msgid "Menu Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:51
+msgid "Page Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:61
+msgid "Sidebar Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:66
+msgid "Copyright Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:71
+msgid "Social Settings"
+msgstr ""
+
+#: template-parts/admin-customize.php:76
+msgid "Scroll Top Settings"
+msgstr ""
+
+#: template-parts/admin-recommend-plugins.php:10
+msgid "Recommend Plugins"
+msgstr ""
+
+#: template-parts/admin-recommend-plugins.php:40
+msgid "Install Plugin"
+msgstr ""
+
+#: template-parts/admin-recommend-plugins.php:49
+msgid "Plugin Page"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:18
+msgid "Upgrade to Premium"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:19
+msgid "Upgrade to Premium Edition to support our development and get more features and functionality to help you create powerful and feature-rich websites."
+msgstr ""
+
+#: template-parts/admin-sidebar.php:22
+msgid "Upgrade"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:27
+#: template-parts/admin-start.php:130
+msgid "Support Forum"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:28
+#: template-parts/admin-start.php:133
+msgid "If you have any question about using this theme, feel free to create a new topic in the support forum."
+msgstr ""
+
+#: template-parts/admin-sidebar.php:32
+#: template-parts/admin-start.php:138
+msgid "Create a Topic"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:46
+msgid "Kenta Theme Homepage"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:51
+msgid "Kenta Documention"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:56
+msgid "Kenta Support Forum"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:61
+msgid "Rate Us 5 Stars"
+msgstr ""
+
+#: template-parts/admin-sidebar.php:71
+msgid "Helpful Links"
+msgstr ""
+
+#: template-parts/admin-start.php:39
+msgid "Congratulations!"
+msgstr ""
+
+#: template-parts/admin-start.php:41
+msgid "Kenta is now installed and ready to use. We have some links to help you get started."
+msgstr ""
+
+#: template-parts/admin-start.php:50
+msgid "Demo Preview"
+msgstr ""
+
+#: template-parts/admin-start.php:57
+msgid "Dismiss"
+msgstr ""
+
+#: template-parts/admin-start.php:70
+msgid "Kenta comes with many starter sites with various designs to choose from."
+msgstr ""
+
+#: template-parts/admin-start.php:74
+msgid "Would you like to import pre-designed demo like the screenshot?"
+msgstr ""
+
+#: template-parts/admin-start.php:85
+msgid "Import Demo Now"
+msgstr ""
+
+#: template-parts/admin-start.php:91
+msgid "Visit More Demos"
+msgstr ""
+
+#: template-parts/admin-start.php:101
+msgid "Kenta Companion & Kenta Blocks plugin will be installed"
+msgstr ""
+
+#: template-parts/admin-start.php:111
+msgid "Documentation"
+msgstr ""
+
+#: template-parts/admin-start.php:114
+msgid "Want more details, take a look at our documentation, which will teach you how to use Kenta."
+msgstr ""
+
+#: template-parts/admin-start.php:119
+msgid "Read Documentation"
+msgstr ""
+
+#: template-parts/admin-starter-sites.php:10
+msgid "Kenta comes with many starter sites with various designs to choose from. Install the Companion plugin to access our starter sites."
+msgstr ""
+
+#: template-parts/admin-starter-sites.php:19
+msgid "Get Started"
+msgstr ""
+
+#: template-parts/content-none.php:15
+msgid "Oops! That page can&rsquo;t be found."
+msgstr ""
+
+#: template-parts/content-none.php:17
+msgid "Nothing Found"
+msgstr ""
+
+#. translators: %1$s: the url of 'post-new.php'
+#: template-parts/content-none.php:30
+msgid "Ready to publish your first post? <a class=\"link\" href=\"%1$s\">Get started here</a>."
+msgstr ""
+
+#: template-parts/content-none.php:39
+msgid "Sorry, but nothing matched your search terms. Please try again with some different keywords."
+msgstr ""
+
+#: template-parts/content-none.php:47
+msgid "It seems we can&rsquo;t find what you&rsquo;re looking for. Perhaps searching can help."
+msgstr ""
+
+#: template-parts/document-open.php:25
+msgid "Skip to content"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Boxed Page Builder Template"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Template with Narrow Content"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Boxed Page Builder Template With Transparent Header"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Template with Transparent Header and Narrow Content"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Fluid Page Builder Template"
+msgstr ""
+
+#. Template Name of the theme
+msgid "Kenta: Fluid Page Builder Template With Transparent Header"
+msgstr ""
+
+#: dist/js/block-editor.js:66
+#: dist/js/block-editor.js:71
+msgid "Kenta Settings"
+msgstr ""
+
+#: dist/js/block-editor.js:81
+#: dist/js/block-editor.js:97
+#: dist/js/block-editor.js:113
+#: dist/js/block-editor.js:137
+#: dist/js/block-editor.js:157
+#: dist/js/block-editor.js:173
+#: dist/js/block-editor.js:189
+#: dist/js/block-editor.js:206
+msgid "Inherit"
+msgstr ""
+
+#: dist/js/block-editor.js:116
+msgid "No Sidebar"
+msgstr ""
+
+#: dist/js/block-editor.js:133
+msgid "Lean More About Transparent Header."
+msgstr ""
+
+#: dist/js/block-editor.js:140
+#: dist/js/block-editor.js:160
+#: dist/js/block-editor.js:176
+#: dist/js/block-editor.js:192
+#: dist/js/block-editor.js:209
+msgid "Enable"
+msgstr ""
+
+#: dist/js/block-editor.js:143
+#: dist/js/block-editor.js:163
+#: dist/js/block-editor.js:179
+#: dist/js/block-editor.js:195
+#: dist/js/block-editor.js:212
+msgid "Disable"
+msgstr ""
+
+#: dist/js/block-editor.js:151
+msgid "Elements"
+msgstr ""
+
+#: dist/js/block-editor.js:154
+msgid "Site Header"
+msgstr ""
+
+#: dist/js/block-editor.js:170
+msgid "Site Footer"
+msgstr ""
+
+#: dist/js/block-editor.js:186
+msgid "Article Header"
+msgstr ""
+
+#: dist/js/block-editor.js:204
+msgid "There is a gap between the page content and the header or footer, if you don't want it you can disable it here."
+msgstr ""
+
+#: dist/js/block-editor.js:225
+msgid "You can override the global customize settings for individual pages or posts here."
+msgstr ""
+
+#: dist/js/block-editor.js:3241
+msgid "Select theme scheme"
+msgstr ""
+
+#: dist/js/block-editor.js:3251
+msgid "Theme"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Inherit"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Base"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "Extra Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "2X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "3X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "4X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "5X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "6X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "7X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "8X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Font size name"
+msgid "9X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2X Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Extra Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Small"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Medium"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "Extra Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Space size name"
+msgid "2X Large"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary Color"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Primary Active"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent Color"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent Active"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Base Color"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Base 100"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Base 200"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Base 300"
+msgstr ""

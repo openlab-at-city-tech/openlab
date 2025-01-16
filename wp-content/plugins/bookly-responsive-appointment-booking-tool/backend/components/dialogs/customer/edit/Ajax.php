@@ -150,4 +150,22 @@ class Ajax extends Lib\Base\Ajax
             'page' => $page,
         ) );
     }
+
+    public static function checkWpUserIsAssigned()
+    {
+        $query = Lib\Entities\Customer::query()
+            ->limit( 1 )
+            ->where( 'wp_user_id', self::parameter( 'wp_user_id' ) );
+        if ( self::hasParameter( 'customer_id' ) ) {
+            $query->whereNot( 'id', self::parameter( 'customer_id' ) );
+        }
+
+        $full_name = $query->fetchVar( 'full_name' );
+        $notices = array();
+        if ( $full_name ) {
+            $notices['wp_user_in_use'] = sprintf( __( 'This WP user is already connected to another customer: %s', 'bookly' ), $full_name );
+        }
+
+        wp_send_json_success( compact( 'notices' ) );
+    }
 }

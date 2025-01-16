@@ -698,7 +698,7 @@ class Account extends Base
             case 'ERROR_INVALID_USERNAME':
                 return __( 'Invalid email.', 'bookly' );
             case 'ERROR_LOW_BALANCE':
-                return __( 'Low balance.', 'bookly' );
+                return __( 'Recharge your account with one of the standard amounts', 'bookly' );
             case 'ERROR_PENDING_SENDER_ID_ALREADY_EXISTS':
                 return __( 'Pending sender ID already exists.', 'bookly' );
             case 'ERROR_PRODUCT_NOT_FOUND':

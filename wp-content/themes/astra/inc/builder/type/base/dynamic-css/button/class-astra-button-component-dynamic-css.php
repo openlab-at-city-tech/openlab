@@ -3,8 +3,6 @@
  * Astra Button Component Dynamic CSS.
  *
  * @package     astra-builder
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       3.0.0
  */

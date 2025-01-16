@@ -1,8 +1,8 @@
 <?php
 
-define('CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW',__('https://www.wpradiant.net/products/cv-wordpress-theme/','cv-portfolio-blocks'));
+define('CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW',__('https://www.wpradiant.net/products/cv-wordpress-theme','cv-portfolio-blocks'));
 
-define('CV_PORTFOLIO_BLOCKS_BUY_BUNDLE',__('https://www.wpradiant.net/products/wordpress-theme-bundle/','cv-portfolio-blocks'));
+define('CV_PORTFOLIO_BLOCKS_BUY_BUNDLE',__('https://www.wpradiant.net/products/wordpress-theme-bundle','cv-portfolio-blocks'));
 
 // Upsell
 if ( class_exists( 'WP_Customize_Section' ) ) {

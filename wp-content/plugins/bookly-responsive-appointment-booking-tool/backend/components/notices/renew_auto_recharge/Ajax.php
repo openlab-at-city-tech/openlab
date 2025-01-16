@@ -2,7 +2,7 @@
 namespace Bookly\Backend\Components\Notices\RenewAutoRecharge;
 
 use Bookly\Lib;
-use Bookly\Backend\Modules\CloudSettings\Page;
+use Bookly\Backend\Modules\CloudProducts\Page;
 
 class Ajax extends Lib\Base\Ajax
 {

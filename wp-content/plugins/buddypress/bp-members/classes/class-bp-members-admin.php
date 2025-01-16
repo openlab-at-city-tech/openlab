@@ -54,6 +54,14 @@ class BP_Members_Admin {
 	/** Other *****************************************************************/
 
 	/**
+	 * Support forum link.
+	 *
+	 * @since 14.0.0
+	 * @var string
+	 */
+	private $bp_forum = '';
+
+	/**
 	 * Redirect.
 	 *
 	 * @since 2.0.0
@@ -255,6 +263,13 @@ class BP_Members_Admin {
 		if ( ! empty( $this->subsite_activated ) ) {
 			$this->capability = 'manage_network_users';
 		}
+
+		// Support forum link.
+		$this->bp_forum = sprintf(
+			'<a href="%1$s">%2$s</a>',
+			esc_url( 'https://buddypress.org/support/' ),
+			esc_html__( 'Support Forums', 'buddypress' )
+		);
 
 		/*
 		 * For consistency with non-Multisite, we add a Tools menu in
@@ -1499,6 +1514,7 @@ class BP_Members_Admin {
 		$types        = bp_get_member_types( array(), 'objects' );
 		$current_type = (array) bp_get_member_type( $user->ID, false );
 		$types_count  = count( array_filter( $current_type ) );
+		$disabled     = ! bp_current_user_can( 'edit_users' ) && ! bp_current_user_can( 'bp_moderate' );
 		?>
 
 		<label for="bp-members-profile-member-type" class="screen-reader-text">
@@ -1511,7 +1527,7 @@ class BP_Members_Admin {
 			<?php foreach ( $types as $type ) : ?>
 				<li>
 					<label class="selectit">
-						<input value="<?php echo esc_attr( $type->name ) ?>" name="bp-members-profile-member-type[]" type="checkbox" <?php checked( true, in_array( $type->name, $current_type ) ); ?>>
+						<input value="<?php echo esc_attr( $type->name ) ?>" name="bp-members-profile-member-type[]" type="checkbox" <?php checked( true, in_array( $type->name, $current_type ) ); ?> <?php disabled( $disabled ); ?>>
 						<?php echo esc_html( $type->labels['singular_name'] ); ?>
 					</label>
 				</li>
@@ -1538,7 +1554,7 @@ class BP_Members_Admin {
 		check_admin_referer( 'bp-member-type-change-' . $user_id, 'bp-member-type-nonce' );
 
 		// Permission check.
-		if ( ! bp_current_user_can( 'edit_users' ) && ! bp_current_user_can( 'bp_moderate' ) && $user_id != bp_loggedin_user_id() ) {
+		if ( ! bp_current_user_can( 'edit_users' ) && ! bp_current_user_can( 'bp_moderate' ) ) {
 			return;
 		}
 
@@ -1802,7 +1818,7 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @global $bp_members_signup_list_table
+	 * @global object $bp_members_signup_list_table
 	 */
 	public function signups_admin_load() {
 		global $bp_members_signup_list_table;
@@ -1877,10 +1893,17 @@ class BP_Members_Admin {
 				'content' => $signup_help_content
 			) );
 
+			$manage_pending_ua = sprintf(
+				'<a href="%1$s">%2$s</a>',
+				esc_url( 'https://github.com/buddypress/buddypress/blob/master/docs/user/administration/users/signups.md#manage-pending-user-accounts' ),
+				esc_html__( 'Managing Pending User Accounts', 'buddypress' )
+			);
+
 			// Help panel - sidebar links.
 			get_current_screen()->set_help_sidebar(
 				'<p><strong>' . esc_html__( 'For more information:', 'buddypress' ) . '</strong></p>' .
-				'<p>' . __( '<a href="https://buddypress.org/support/">Support Forums</a>', 'buddypress' ) . '</p>'
+				'<p>' . $manage_pending_ua . '</p>' .
+				'<p>' . $this->bp_forum . '</p>'
 			);
 
 			// Add accessible hidden headings and text for the Pending Users screen.
@@ -2263,8 +2286,8 @@ class BP_Members_Admin {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @global $plugin_page
-	 * @global $bp_members_signup_list_table
+	 * @global string $plugin_page
+	 * @global object $bp_members_signup_list_table
 	 */
 	public function signups_admin_index() {
 		global $plugin_page, $bp_members_signup_list_table;
@@ -2456,8 +2479,8 @@ class BP_Members_Admin {
 				'fetch_fields'      => true,
 			) );
 
-			foreach( $field_groups as $fg ) {
-				foreach( $fg->fields as $f ) {
+			foreach ( $field_groups as $fg ) {
+				foreach ( $fg->fields as $f ) {
 					$fdata[ $f->id ] = $f->name;
 				}
 			}
@@ -2614,7 +2637,7 @@ class BP_Members_Admin {
 		<select name="<?php echo $id_name; ?>" id="<?php echo $id_name; ?>" style="display:inline-block;float:none;">
 			<option value=""><?php esc_html_e( 'Change member type to&hellip;', 'buddypress' ) ?></option>
 
-			<?php foreach( $types as $type ) : ?>
+			<?php foreach ( $types as $type ) : ?>
 
 				<option value="<?php echo esc_attr( $type->name ); ?>"><?php echo esc_html( $type->labels['singular_name'] ); ?></option>
 
@@ -2698,8 +2721,8 @@ class BP_Members_Admin {
 			$redirect = add_query_arg( array( 'updated' => 'member-type-change-success' ), wp_get_referer() );
 		}
 
-		wp_redirect( $redirect );
-		exit();
+		wp_safe_redirect( $redirect );
+		exit;
 	}
 
 	/**
@@ -2844,7 +2867,7 @@ class BP_Members_Admin {
 	 *
 	 * @since 8.0.0
 	 *
-	 * @global $bp_members_invitations_list_table
+	 * @global object $bp_members_invitations_list_table
 	 */
 	public function members_invitations_admin_load() {
 		global $bp_members_invitations_list_table;
@@ -3171,8 +3194,8 @@ class BP_Members_Admin {
 	 *
 	 * @since 8.0.0
 	 *
-	 * @global $plugin_page
-	 * @global $bp_members_invitations_list_table
+	 * @global string $plugin_page
+	 * @global object $bp_members_invitations_list_table
 	 */
 	public function invitations_admin_index() {
 		global $plugin_page, $bp_members_invitations_list_table;

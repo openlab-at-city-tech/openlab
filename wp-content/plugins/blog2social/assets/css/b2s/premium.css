@@ -2,21 +2,9 @@ body .thumbnail{
     border: none;
 }
 
-
-.b2s-premium-h2{
-    margin-top: 0px !important;
-}
-
-.b2s-premium-go-to-text{
-    color: #79B232 !important;
-}
-
-.b2s-premium-line{
-    margin-bottom: 0px!important;
-}
 .b2s-premium-btn-group{
     text-align: center;
-    margin-top: 15px;
+    margin-top: 25px;
     margin-bottom: 15px;
 }
 
@@ -52,6 +40,37 @@ body .thumbnail{
     }
 }
 
-.b2s-feature-img-with-90{
-    max-width: 90px !important;
+.b2s-btn-premium-filled {
+    border-style:solid !important;
+    border-width:0px !important;
+    border-color:#79b331 !important;
+    color: #ffffff !important;
+    background-color:#79b331 !important;
+    border-radius:25px !important;
+}
+
+.modal-header{
+    border-bottom: none !important;
+}
+
+.input-group-btn{
+    padding-top:19px;
+}
+
+.b2s-key-area-btn-submit{
+    border-style:solid !important;
+    border-width:1px !important;
+    border-color:#79b331 !important;
+    color: #79b331 !important;
+    background-color:white !important;
+    
+}
+
+.b2s-text-middle{
+    vertical-align: middle;
+    font: 13px/1 Arial,sans-serif;
+}
+
+.b2s-btn-lg{
+    padding: 8px 70px !important;
 }

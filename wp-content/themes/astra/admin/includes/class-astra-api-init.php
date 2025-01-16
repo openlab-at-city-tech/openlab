@@ -24,7 +24,6 @@ class Astra_API_Init extends WP_REST_Controller {
 	/**
 	 * Instance
 	 *
-	 * @access private
 	 * @var null $instance
 	 * @since 4.0.0
 	 */
@@ -60,7 +59,6 @@ class Astra_API_Init extends WP_REST_Controller {
 	/**
 	 * Option name
 	 *
-	 * @access private
 	 * @var string $option_name DB option name.
 	 * @since 4.0.0
 	 */
@@ -69,7 +67,6 @@ class Astra_API_Init extends WP_REST_Controller {
 	/**
 	 * Admin settings dataset
 	 *
-	 * @access private
 	 * @var array $astra_admin_settings Settings array.
 	 * @since 4.0.0
 	 */
@@ -143,7 +140,7 @@ class Astra_API_Init extends WP_REST_Controller {
 	public function get_permissions_check( $request ) {
 
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
-			return new WP_Error( 'astra_rest_cannot_view', __( 'Sorry, you cannot list resources.', 'astra' ), array( 'status' => rest_authorization_required_code() ) );
+			return new WP_Error( 'astra_rest_cannot_view', esc_html__( 'Sorry, you cannot list resources.', 'astra' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
 		return true;

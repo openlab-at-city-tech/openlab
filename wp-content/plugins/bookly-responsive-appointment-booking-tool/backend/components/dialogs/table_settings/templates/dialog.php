@@ -16,6 +16,15 @@ use Bookly\Backend\Components\Controls\Elements;
                     <div class="col text-right mr-2"><?php esc_html_e( 'Show', 'bookly' ) ?></div>
                 </div>
                 <ul class="list-unstyled bookly-js-table-columns"></ul>
+                <div class="form-group bookly-table-paging">
+                    <label for="bookly_dt_page_length"><?php esc_html_e( 'Entries per page', 'bookly' ) ?></label>
+                    <select id="bookly_dt_page_length" class="form-control custom-select" name="bookly_dt_page_length">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                </div>
             </div>
             <div class="modal-footer">
                 <input type="hidden" name="bookly-table-name" value="">

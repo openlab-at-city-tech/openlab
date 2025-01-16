@@ -267,7 +267,7 @@
             */
             function admin_options_print_styles()
                 {
-                    wp_register_style('pto-options', CPTURL . '/css/cpt-options.css');
+                    wp_register_style('pto-options', CPTURL . '/css/cpt-options.css', array(), PTO_VERSION );
                     wp_enqueue_style( 'pto-options'); 
                 }
                 
@@ -583,7 +583,7 @@
                             wp_enqueue_script('jquery-ui-sortable');
                         }
                         
-                    wp_register_style('CPTStyleSheets', CPTURL . '/css/cpt.css');
+                    wp_register_style('CPTStyleSheets', CPTURL . '/css/cpt.css', array(), PTO_VERSION );
                     wp_enqueue_style( 'CPTStyleSheets');
                 }
             
@@ -594,6 +594,9 @@
             */
             function sort_page() 
                 {
+                    
+                    $options          =     $this->functions->get_options();
+                    
                     ?>
                     <div id="cpto" class="wrap">
                         <div class="icon32" id="icon-edit"><br></div>
@@ -609,13 +612,34 @@
                             </div>
                         </noscript>
                         
-                        <div id="order-post-type">
-                            <ul id="sortable">
-                                <?php $this->list_pages('hide_empty=0&title_li=&post_type='.$this->current_post_type->name); ?>
-                            </ul>
+                        <p>&nbsp;</p>
+                        
+                        
+                        <table id="order-post-type" class="wp-list-table widefat fixed striped table-view-list<?php if ( $options['edit_view_links']    ===  1 ) { echo ' extended-view'; } ?>">
+                            <thead>
+                                <tr>
+                                    <th scope="col" id="title" class="manage-column column-title column-primary sortable" abbr="Title"><a><span>Title</span></a></th>
+                                    
+                                </tr>
+                                <?php do_action('pto/interface/table/thead', $this->current_post_type->name ) ?>
+                            </thead>
+
+                            <tbody id="sortable" class="ui-sortable">
                             
-                            <div class="clear"></div>
-                        </div>
+                                <?php $this->list_pages('hide_empty=0&title_li=&post_type=' . $this->current_post_type->name ); ?>
+                               
+                          
+                            </tbody>
+
+                            <tfoot>
+                                <tr>
+                                    <th scope="col" class="manage-column column-title column-primary sortable desc" abbr="Title"><a><span>Title</span></a></th>    
+                                </tr>
+                                <?php do_action('pto/interface/table/tfoot', $this->current_post_type->name ) ?>
+                            </tfoot>
+
+                        </table>
+                        
                         
                         <p class="submit">
                             <a href="javascript: void(0)" id="save-order" class="button-primary"><?php esc_html_e('Update', 'post-types-order' ); ?></a>
@@ -628,7 +652,7 @@
                                 jQuery("#sortable").sortable({
                                     'tolerance':'intersect',
                                     'cursor':'pointer',
-                                    'items':'li',
+                                    'items':'tr',
                                     'placeholder':'placeholder',
                                     'nested': 'ul'
                                 });
@@ -645,6 +669,9 @@
                                 });
                             });
                         </script>
+                        
+                        
+                        
                         
                     </div>
                     <?php

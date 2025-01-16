@@ -73,6 +73,78 @@
             }
         );
 
+		$document.on(
+			'click',
+			'.ast-quick-tour-item',
+			function(e) {
+				e.preventDefault();
+				e.stopPropagation();
+
+				const self    = $( this );
+				const type    = self.attr( 'data-type' ) ? self.attr( 'data-type' ) : 'section';
+				const itemId  = self.attr( 'data-name' ) ? self.attr( 'data-name' ) : '';
+				const context = self.attr( 'data-context' ) ? self.attr( 'data-context' ) : 'general';
+				const reference = self.attr( 'data-reference' ) ? self.attr( 'data-reference' ) : '';
+
+				if ( itemId && type ) {
+					switch ( type ) {
+						case 'section':
+							if ( defaultTarget.wp.customize.section( itemId ) ) {
+								defaultTarget.wp.customize.section( itemId ).focus();
+							}
+						break;
+
+						case 'control':
+							if ( defaultTarget.wp.customize.control( itemId ) ) {
+								defaultTarget.wp.customize.control( itemId ).focus();
+
+								/**
+								 * Specific compatibility to open color palette & typography settings on style guide trigger click.
+								 *
+								 * 1. Color palette
+								 * 2. Typography
+								 */
+								if ( reference ) {
+									switch (itemId) {
+										case 'astra-color-palettes':
+											defaultTarget.wp.customize.control( itemId ).container.find( '.components-button.astra-color-icon-indicate.open').click(); // Close all other opened pickers first.
+											defaultTarget.wp.customize.control( itemId ).container.find( '.' + reference + ' .components-button.astra-color-icon-indicate').click();
+										break;
+
+										case 'astra-settings[ast-headings-font-settings]':
+										case 'astra-settings[ast-body-font-settings]':
+										case 'astra-settings[ast-heading-h1-typo]':
+										case 'astra-settings[ast-heading-h2-typo]':
+										case 'astra-settings[ast-heading-h3-typo]':
+										case 'astra-settings[ast-heading-h4-typo]':
+										case 'astra-settings[ast-heading-h5-typo]':
+										case 'astra-settings[ast-heading-h6-typo]':
+											defaultTarget.wp.customize.control( itemId ).container.find( '.ast-adv-toggle-icon.open').click(); // Close all other opened settings group first.
+											defaultTarget.wp.customize.control( itemId ).container.find( '.' + reference + ' .ast-adv-toggle-icon').click();
+										break;
+
+										default:
+										break;
+									}
+								}
+							}
+						break;
+
+						case 'panel':
+							if ( defaultTarget.wp.customize.panel( itemId ) ) {
+								defaultTarget.wp.customize.panel( itemId ).focus();
+							}
+						break;
+
+						default:
+						break;
+					}
+
+					defaultTarget.wp.customize.state('astra-customizer-tab').set( context );
+				}
+			}
+		);
+
         /**
          * Ajax quantity input show.
          */
@@ -88,7 +160,7 @@
 		wp.customize.preview.bind( 'active', function() {
 			var partials = $.extend({}, astraCustomizer.dynamic_partial_options), key;
 			var register_partial = async function () {
-				for ( key in partials) {
+				for ( const key in partials ) {
 					wp.customize.selectiveRefresh.partial.add(
 						new wp.customize.selectiveRefresh.Partial(
 							key,
@@ -109,10 +181,11 @@
     wp.customize( 'astra-settings[logo-title-inline]', function( value ) {
         value.bind( function( is_checked ) {
            jQuery('#masthead').toggleClass( 'ast-logo-title-inline', is_checked );
+           jQuery('.ast-sg-logo-section').toggleClass( 'ast-logo-title-inline', is_checked );
         } );
     } );
 
-} )( jQuery, wp );
+} )( jQuery, wp.customize );
 
 
 // Single Post Content Width
@@ -203,6 +276,7 @@ wp.customize( 'astra-settings[store-notice-position]', function( setting ) {
 		if( 'hang-over-top' === position ) {
 			wp.customize.preview.send( 'refresh' );
 		} else {
+			jQuery('body').css('margin-top', 0);
 			jQuery('body').removeClass( 'ast-woocommerce-store-notice-hanged' );
 			jQuery('.woocommerce-store-notice').attr( 'data-position', position );
 		}
@@ -247,28 +321,3 @@ astra_refresh_customizer(
 astra_refresh_customizer(
     'astra-settings[blog-post-per-page]'
 );
-
-// Global Typography Refresh - START
-const bodyFontFamily = [
-	'body-font-family',
-	'body-font-variant',
-	'font-size-body',
-	'body-font-weight',
-	'body-font-extras',
-	'headings-font-family',
-	'headings-font-variant',
-	'headings-font-weight',
-	'headings-font-extras'
-];
-
-bodyFontFamily.forEach(element => {
-	// Body Font Family
-	wp.customize( 'astra-settings['+element+']', function( value ) {
-		value.bind( function( value ) {
-			wp.customize.preview.send( 'refresh' );
-		} );
-	} );
-
-});
-
-// Global Typography Refresh - END

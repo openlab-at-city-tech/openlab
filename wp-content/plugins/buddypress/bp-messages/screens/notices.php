@@ -26,12 +26,17 @@ function messages_screen_notices() {
 	 */
 	do_action( 'messages_screen_notices' );
 
-	/**
-	 * Filters the template to load for the Messages notices screen.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $template Path to the messages template to load.
-	 */
-	bp_core_load_template( apply_filters( 'messages_template_notices', 'members/single/home' ) );
+	$templates = array(
+		/**
+		 * Filters the template to load for the Messages notices screen.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $template Path to the messages template to load.
+		 */
+		apply_filters( 'messages_template_notices', 'members/single/home' ),
+		'members/single/index',
+	);
+
+	bp_core_load_template( $templates );
 }

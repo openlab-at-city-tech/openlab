@@ -3,6 +3,7 @@
 use Gravity_Forms\Gravity_Forms\Settings\Settings;
 use \Gravity_Forms\Gravity_Forms\License;
 use \Gravity_Forms\Gravity_Forms\Setup_Wizard\Endpoints\GF_Setup_Wizard_Endpoint_Save_Prefs;
+use Gravity_Forms\Gravity_Forms\TranslationsPress_Updater;
 
 class_exists( 'GFForms' ) || die();
 
@@ -46,7 +47,7 @@ class GFSettings {
 	 *
 	 * @since  Unknown
 	 * @access public
-	 *
+	 * @remove-in 3.0
 	 * @uses GFSettings::$addon_pages
 	 *
 	 * @param string|array $name      The settings page slug.
@@ -212,7 +213,6 @@ class GFSettings {
 			delete_option( 'gform_enable_toolbar_menu' );
 			delete_option( 'gform_enable_logging' );
 			delete_option( 'gform_pending_installation' );
-			delete_option( 'gform_version_info' );
 			delete_option( 'gform_enable_noconflict' );
 			delete_option( 'gform_enable_background_updates' );
 			delete_option( 'gform_sticky_admin_messages' );
@@ -236,6 +236,22 @@ class GFSettings {
 			// Delete Logging settings and logging files
 			gf_logging()->delete_settings();
 			gf_logging()->delete_log_files();
+
+			delete_option( 'widget_gform_widget' );
+			delete_option( 'rg_gforms_default_theme' );
+			delete_option( 'rg_form_original_version' );
+			delete_option( 'gform_version_info' );
+
+			delete_option( 'gf_telemetry_data' );
+			delete_option( 'gf_last_telemetry_run' );
+
+			delete_transient( 'rg_gforms_license' );
+
+			if ( ! class_exists( 'TranslationsPress_Updater' ) ) {
+				require_once GF_PLUGIN_DIR_PATH . '/includes/class-translationspress-updater.php';
+			}
+
+			delete_site_transient( TranslationsPress_Updater::T15S_TRANSIENT_KEY );
 
 			// Deactivating plugin
 			$plugin = 'gravityforms/gravityforms.php';
@@ -377,16 +393,28 @@ class GFSettings {
 	* @return bool
 	*/
     public static function is_orbital_default() {
-		if ( 'orbital' == get_option( 'rg_gforms_default_theme' ) ) {
+		$theme_option = get_option( 'rg_gforms_default_theme' );
+
+		// Fallback if the option is not set
+		if ( ! $theme_option ) {
+			$versions = gf_upgrade()->get_versions();
+
+			// New install or upgrade from version that supports this feature
+			if ( version_compare( get_option( 'rg_form_original_version', $versions['version'] ), '2.7.14.2', '>=' ) ) {
+				return true;
+			}
+
+			// Upgrade from version prior to this feature
+			if ( version_compare( $versions['previous_db_version'], '2.7.14.2', '<' ) ) {
+				return false;
+			}
+		}
+
+		if ( 'orbital' == $theme_option ) {
 			return true;
 		}
 
-		// If there is no default theme saved, and if this is an old installation, Gravity Theme should be the default.
-		if ( version_compare( get_option( 'rg_form_original_version', '1.0.0' ), '2.7.14.2', '<' ) ) {
-		    return false;
-		}
-
-		return true;
+		return false;
     }
 
 
@@ -441,7 +469,7 @@ class GFSettings {
 								'<div class="alert gforms_note_%s">%s %s</div>',
 								$usability,
 								$is_save_postback && ! $license_info->can_be_used() ? __( 'Your license key was not updated. ', 'gravityforms' ) : null,
-								License\GF_License_Statuses::get_message_for_code( $license_info->get_status() )
+								License\GF_License_Statuses::get_message_for_code( $license_info->get_status(), $license_info->get_error_message() )
 							);
 
 							delete_transient( 'rg_gforms_registration_error' );
@@ -497,7 +525,7 @@ class GFSettings {
 						'description'   => esc_html__( 'Select the default currency for your forms. This is used for product fields, credit card fields and others.', 'gravityforms' ),
 						'type'          => 'select',
 						'choices'       => RGCurrency::get_grouped_currency_options(),
-						'enhanced_ui'   => true,
+						'enhanced_ui'   => false,
 						'after_select'  => self::currency_message_callback(),
 						'save_callback' => function( $field, $value ) {
 							update_option( 'rg_gforms_currency', $value );
@@ -731,11 +759,12 @@ class GFSettings {
 	}
 
 	public static function license_key_details_callback() {
-		$key          = GFCommon::get_key();
-		$empty_string = '<div class="gform-p-16">' . __( 'Please enter a valid license key to see details.', 'gravityforms' ) . '</div>';
+		$key             = GFCommon::get_key();
+		$empty_template  = '<div class="gform-p-16">%s</div>';
+		$invalid_message = sprintf( $empty_template, esc_html__( 'Please enter a valid license key to see details.', 'gravityforms' ) );
 
 		if ( empty( $key ) ) {
-			return $empty_string;
+			return $invalid_message;
 		}
 
 		/**
@@ -745,7 +774,9 @@ class GFSettings {
 		$license_info      = $license_connector->check_license( $key );
 
 		if ( ! $license_info->can_be_used() ) {
-			return $empty_string;
+			return $invalid_message;
+		} else if ( empty( $license_info->get_data_value( 'product_name' ) ) ) {
+			return sprintf( $empty_template, esc_html__( 'License details are not available at this time.', 'gravityforms' ) );
 		}
 
 		$cta              = $license_info->get_cta();

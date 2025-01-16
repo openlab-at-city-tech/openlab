@@ -255,46 +255,21 @@
           "name": "Foreground and background"
         },
         {
-          "colors": ["#ffffff", "#181818"],
-          "slug": "foreground-and-secondary",
-          "name": "Foreground and secondary"
-        },
-        {
-          "colors": ["#ffffff", "#121212"],
-          "slug": "foreground-and-tertiary",
-          "name": "Foreground and tertiary"
-        },
-        {
-          "colors": ["#ff4973", "#000000"],
-          "slug": "link-and-background",
-          "name": "Link and background"
-        },
-        {
-          "colors": ["#ff4973", "#181818"],
-          "slug": "link-and-secondary",
-          "name": "Link and secondary"
-        },
-        {
-          "colors": ["#ff4973", "#121212"],
-          "slug": "link-and-tertiary",
-          "name": "Link and tertiary"
+          "colors": ["#c848f5", "#181719"],
+          "slug": "primary-and-heading",
+          "name": "Primary and Heading"
         }
       ],
       "gradients": [
-        {
-          "slug": "vertical-secondary-to-tertiary",
-          "gradient": "linear-gradient(to bottom,var(--wp--preset--color--secondary) 0%,var(--wp--preset--color--tertiary) 100%)",
-          "name": "Vertical secondary to tertiary"
-        },
         {
           "slug": "vertical-foreground-to-background",
           "gradient": "linear-gradient(to bottom,var(--wp--preset--color--foreground) 0%,var(--wp--preset--color--background) 100%)",
           "name": "Vertical foreground to background"
         },
         {
-          "slug": "vertical-tertiary-to-background",
-          "gradient": "linear-gradient(to bottom,var(--wp--preset--color--tertiary) 0%,var(--wp--preset--color--background) 100%)",
-          "name": "Vertical tertiary to background"
+          "slug": "vertical-background-to-foreground",
+          "gradient": "linear-gradient(to bottom,var(--wp--preset--color--background) 0%,var(--wp--preset--color--foreground) 100%)",
+          "name": "Vertical background to foreground"
         },
         {
           "slug": "diagonal-primary-to-foreground",
@@ -302,27 +277,47 @@
           "name": "Diagonal primary to foreground"
         },
         {
-          "slug": "diagonal-secondary-to-background",
-          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--secondary) 50%,var(--wp--preset--color--background) 50%)",
-          "name": "Diagonal secondary to background"
+          "slug": "diagonal-primary-to-background",
+          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--primary) 50%,var(--wp--preset--color--background) 50%)",
+          "name": "Diagonal primary to background"
         },
         {
-          "slug": "diagonal-background-to-secondary",
-          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--background) 50%,var(--wp--preset--color--secondary) 50%)",
-          "name": "Diagonal background to secondary"
-        },
-        {
-          "slug": "diagonal-tertiary-to-background",
-          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--tertiary) 50%,var(--wp--preset--color--background) 50%)",
-          "name": "Diagonal tertiary to background"
-        },
-        {
-          "slug": "diagonal-background-to-tertiary",
-          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--background) 50%,var(--wp--preset--color--tertiary) 50%)",
-          "name": "Diagonal background to tertiary"
+          "slug": "diagonal-primary-to-heading",
+          "gradient": "linear-gradient(to bottom right,var(--wp--preset--color--primary) 50%,var(--wp--preset--color--heading) 50%)",
+          "name": "Diagonal primary to heading"
         }
       ],
       "palette": [
+        {
+          "slug": "primary",
+          "color": "#c848f5",
+          "name": "Primary"
+        },
+        {
+          "slug": "heading",
+          "color": "#181719",
+          "name": "Heading"
+        },
+        {
+          "slug": "body-text",
+          "color": "#666666",
+          "name": "Body Text"
+        },
+        {
+          "slug": "tertiary-text-color",
+          "color": "#999999",
+          "name": "Tertiary Text Color"
+        },
+        {
+          "slug": "tertiary-bg-color",
+          "color": "#f6f7fa",
+          "name": "Tertiary Bg Color"
+        },
+        {
+          "slug": "border-color",
+          "color": "#dadada",
+          "name": "Border Color"
+        },
         {
           "slug": "background",
           "color": "#ffffff",
@@ -332,51 +327,6 @@
           "slug": "foreground",
           "color": "#000000",
           "name": "Foreground"
-        },
-        {
-          "slug": "primary",
-          "color": "#ffffff",
-          "name": "Primary"
-        },
-        {
-          "slug": "secondary-bg-color",
-          "color": "#c848f5",
-          "name": "Secondary Bg Color"
-        },
-        {
-          "slug": "tertiary-bg-color",
-          "color": "#f9f9f9",
-          "name": "Tertiary Bg Color"
-        },
-        {
-          "slug": "color-white",
-          "color": "#ffffff",
-          "name": "color light"
-        },
-        {
-          "slug": "title-color",
-          "color": "#000000",
-          "name": "Title Color"
-        },
-        {
-          "slug": "body-text",
-          "color": "#666666",
-          "name": "Body Text"
-        },
-        {
-          "slug": "secondary-text-color",
-          "color": "#000000",
-          "name": "Secondary Text Color"
-        },
-        {
-          "slug": "tertiary-text-color",
-          "color": "#999999",
-          "name": "Tertiary Text Color"
-        },
-        {
-          "slug": "border-color",
-          "color": "#dadada",
-          "name": "Border Color"
         }
       ]
     },
@@ -481,14 +431,14 @@
       },
       "core/button": {
         "border": {
-          "radius": "45px",
+          "radius": "8px",
           "style": "solid",
           "color": "transparent",
           "width": "0"
         },
         "color": {
-          "text": "var(--wp--preset--color--foreground)",
-          "background": "var(--wp--preset--color--background)"
+          "text": "var(--wp--preset--color--white)",
+          "background": "var(--wp--preset--color--primary)"
         },
         "typography": {
           "fontSize": "var(--wp--preset--font-size--small)",
@@ -520,11 +470,11 @@
         },
         "link": {
           "color": {
-            "text": "var(--wp--preset--color--title-color)"
+            "text": "var(--wp--preset--color--heading)"
           }
         },
         "color": {
-          "text": "var(--wp--preset--color--title-color)"
+          "text": "var(--wp--preset--color--heading)"
         },
         "spacing": {
           "margin": "0"
@@ -618,10 +568,10 @@
           }
         },
         "color": {
-          "text": "var(--wp--preset--color--title-color)"
+          "text": "var(--wp--preset--color--heading)"
         },
         "typography": {
-          "fontFamily": "var(--wp--preset--font-family--lora)",
+          "fontFamily": "var(--wp--preset--font-family--poppins)",
           "fontWeight": "var(--wp--custom--typography--font-weight--normal)"
         }
       },
@@ -629,12 +579,12 @@
         "elements": {
           "link": {
             "color": {
-              "text": "var(--wp--preset--color--secondary-text-color)"
+              "text": "var(--wp--preset--color--heading)"
             }
           }
         },
         "color": {
-          "text": "var(--wp--preset--color--secondary-text-color)"
+          "text": "var(--wp--preset--color--heading)"
         },
         "typography": {
           "fontFamily": "var(--wp--preset--font-family--poppins)",
@@ -818,19 +768,19 @@
       "postTypes": ["post"]
     },
     {
-      "name": "single-page-sidebar-on-right",
-      "title": "Single Page (Sidebar on Right)",
-      "postTypes": ["page"]
-    },
-    {
-      "name": "blank",
-      "title": "Blank",
-      "postTypes": ["page", "post"]
-    },
-    {
       "name": "single-post-sidebar-on-left",
       "title": "Single Post (Sidebar on Left)",
       "postTypes": ["post"]
+    },
+    {
+      "name": "single-post-no-sidebar",
+      "title": "Single Post (No Sidebar)",
+      "postTypes": ["post"]
+    },
+    {
+      "name": "single-page-sidebar-on-right",
+      "title": "Single Page (Sidebar on Right)",
+      "postTypes": ["page"]
     },
     {
       "name": "single-page-sidebar-on-left",
@@ -838,13 +788,23 @@
       "postTypes": ["page"]
     },
     {
-      "name": "single-page-no-sidebar",
-      "title": "Single Post (No Sidebar)",
-      "postTypes": ["post"]
-    },
-    {
       "name": "page-no-title",
       "title": "Page (No Title / Feature Image)",
+      "postTypes": ["page"]
+    },
+    {
+      "name": "blog-page-right-sidebar",
+      "title": "Blog Page (Right Sidebar)",
+      "postTypes": ["page"]
+    },
+    {
+      "name": "blog-page-left-sidebar",
+      "title": "Blog Page (Left Sidebar)",
+      "postTypes": ["page"]
+    },
+    {
+      "name": "blog-page-no-sidebar",
+      "title": "Blog Page (No Sidebar)",
       "postTypes": ["page"]
     }
   ]

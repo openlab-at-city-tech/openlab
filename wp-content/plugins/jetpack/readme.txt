@@ -1,10 +1,10 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
-Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, jwidavid, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
+Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, arsihasi, azaozz, barry, batmoo, beaulebens, bindlegirl, biskobe, bjorsch, blobaugh, brbrr, brileyhooper, cainm, cena, cfinke, cgastrell, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, daniloercoli, davoraltman, delawski, designsimply, dkmyta, dllh, drawmyface, dsmart, dun2mis, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, joen, jblz, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lhkowalski, lschuyler, macmanx, martinremy, matt, mattwiebe, matveb, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, miguelxavierpenha, mikeyarce, mkaz, nancythanki, nickmomrik, njweller, nunyvega, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, renatoagds, retrofox, richardmtl, richardmuscat, robertbpugh, roccotripaldi, ryancowles, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, thehenridev, tmoorewp, tyxla, Viper007Bond, westi, williamvianas, wpkaren, yoavf, zinigor
 Tags: Security, backup, malware, scan, performance
-Stable tag: 13.6.1
-Requires at least: 6.4
+Stable tag: 14.0
+Requires at least: 6.5
 Requires PHP: 7.0
-Tested up to: 6.6
+Tested up to: 6.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -326,33 +326,40 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 13.6.1 - 2024-10-14
-#### Security:
-- Contact Form: ensure that submitted forms can only be accessed by logged in users allowed to view form submissions.
+### 14.0 - 2024-11-07
+#### Major enhancements
+- Newsletters: Add email previews and a floating subscribe button.
+- Social: Add support for Bluesky.
 
-### 13.6 - 2024-07-02
 #### Enhancements
-- AI Assistant: Hide input when user types on extended block.
-- Goodreads Block: provide support for additional profile URLs.
-- Newsletter: Add ability to manage the newsletter byline appearance.
-- Newsletter: Adding a new toggle to control the newsletter author line.
-- Newsletter: Email replies can become comments on your blog.
-- Social: Add Threads preview to Social Previews.
-- Tiled Gallery: Increase accessibility of Tiled Gallery carousel images.
+- Newsletters: Allow skipping newsletter modals with the "jetpack_skip_subscription_popup" URL query param.
+- Newsletters: Update the default "reply to" setting value from not allowed to replies being posted as public comments.
+- Performance: Optimize CSS for better page load performance and improve sitemap write efficiency.
 
 #### Improved compatibility
-- Block Editor: Ensure that no Jetpack features are displayed in the site editor's sidebar when not necessary.
-- General: indicate compatibility with the upcoming version of WordPress - 6.6.
-- Offline Mode: do not display Jetpack's outbound SSL notice when in Offline mode.
+- Embed Blocks: Append 'Embed' to Facebook and Instagram embed blocks' titles.
+- Filters: Update "plugin_action_links" filter parameter to avoid conflicts with other plugins.
+- General: Ensure correct display of notices when running an old version of WordPress.
+- General: Indicate compatibility with WordPress 6.7.
+- Image Block: Make the external media picker button consistent with other Image Block buttons.
+- Image CDN: URL encode image path parts for RSS feed compatibility.
+- Related Posts: Allow Related Posts on non-post CPTs where the block is already able to be used.
 
 #### Bug fixes
-- AI Assistant: Disable extensions when AI Assistant block is hidden.
-- External Media: Do not display External Media options in the Caption edit field.
-- External media: Ensure connect URL has the correct blog ID and verification values.
-- Like block: Fix editor styling.
-- Publicize: Fix a race condition with refreshing the active social connections.
-- Slideshow: Ensure whole block is selectable in the editor.
-- User Content Link Tracking: Check domain before redirecting to subscribe.wordpress.com.
+- AI Assistant: Fix false-positive spelling errors in Write Brief.
+- Carousel: Further improve accessibility by being more selective over which images to apply attributes to.
+- Contact Form: Ensure that submitted forms can only be accessed by logged in users allowed to view form submissions.
+- General: Include `wp-polyfill` as a script dependency only when needed.
+- Goodreads Block: Avoid PHP warnings caused by missing attributes when rendering.
+- Google Fonts: Fix module not fully loading in certain scenarios.
+- Map Block: Prevent overlap with other blocks placed below.
+- Newsletters: Fix "Enable featured image on your new post emails" and "Use excerpt" settings.
+- Sharing: Ensure the sharing settings can be accessed even when the user is not connected to WordPress.com.
+- Slideshow Block: Ensure the block renders correctly inside an iframe editor.
+- Social: Fix the maximum video length for Instagram Business reels.
+- Social: Prevent share status styles from causing text overflow or affecting other elements on the page.
+- Stats: Fix top post card on the Insights page.
+- Subscribe Block: Fix styling for the number of subscribers in the post editor sidebar.
 
 --------
 

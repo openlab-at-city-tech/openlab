@@ -473,6 +473,7 @@ class CMTT_Free {
 		include_once CMTT_PLUGIN_DIR . 'glossaryIndex.php';
 		include_once CMTT_PLUGIN_DIR . 'amp.php';
 		include_once CMTT_PLUGIN_DIR . 'functions.php';
+		include_once CMTT_PLUGIN_DIR . 'wizard.php';
 
 		do_action( 'cmtt_include_files_after' );
 	}
@@ -484,6 +485,7 @@ class CMTT_Free {
 		do_action( 'cmtt_init_files_before' );
 
 		\CM\CMTT_Settings::init();
+        CMTT_SetupWizard::init();
 		CMTT_Glossary_Index::init();
 		CMTT_AMP::init();
 
@@ -2226,7 +2228,11 @@ class CMTT_Free {
 		}
 
 		add_filter( 'views_edit-glossary', array( __CLASS__, 'cmtt_filter_admin_nav' ), 10, 1 );
-	}
+
+        add_submenu_page( CMTT_MENU_OPTION, 'Categories', 'Categories', 'manage_categories', 'cmtt_glossary-categories',[__CLASS__,'renderProAdminPage'],2 );
+        add_submenu_page( CMTT_MENU_OPTION, 'Tags', 'Tags', 'manage_categories', 'cmtt_glossary-tags',[__CLASS__,'renderProAdminPage'],3 );
+        add_submenu_page( CMTT_MENU_OPTION, 'TooltipGlossary Import/Export', 'Import/Export', 'manage_options', 'cmtt_importexport',[__CLASS__,'renderProAdminPage'],5 );
+    }
 
 	public static function cmtt_about() {
 		ob_start();
@@ -2238,6 +2244,24 @@ class CMTT_Free {
 	public static function displayAdminPage( $content ) {
 		include 'views/backend/admin_template.php';
 	}
+
+    public static function renderProAdminPage(){
+        $pageId = filter_input(INPUT_GET, 'page');
+        switch ($pageId) {
+            case 'cmtt_glossary-categories': {
+                include_once CMTT_PLUGIN_DIR . 'views/backend/admin_categories.phtml';
+                break;
+            }
+            case 'cmtt_glossary-tags': {
+                include_once CMTT_PLUGIN_DIR . 'views/backend/admin_tags.phtml';
+                break;
+            }
+            case 'cmtt_importexport': {
+                include_once CMTT_PLUGIN_DIR . 'views/backend/admin_importexport.phtml';
+                break;
+            }
+        }
+    }
 
 	/**
 	 * Shows extensions page
@@ -4410,7 +4434,7 @@ class CMTT_Free {
 	 * Plugin activation
 	 */
 	protected static function _activate() {
-		CMTT_Glossary_Index::tryGenerateGlossaryIndexPage();
+//		CMTT_Glossary_Index::tryGenerateGlossaryIndexPage();
 		do_action( 'cmtt_do_activate' );
 	}
 

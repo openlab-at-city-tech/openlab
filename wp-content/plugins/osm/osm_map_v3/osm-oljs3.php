@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2021  MiKa (wp-osm-plugin.HyuMiKa.com)
+/*  (c) Copyright 2024  MiKa (wp-osm-plugin.HyuMiKa.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -49,22 +49,22 @@ class Osm_OLJS3
       })]
     };';
 
-
+        $kml_marker_names = [
+            "blue" => "mic_blue_pinother_02.png",
+            "red" => "mic_red_pinother_02.png",
+            "green" => "mic_green_pinother_02.png",
+            "black" => "mic_black_pinother_02.png"
+        ];
+        
 	/** if no map_title is given, plugin output remains the same */
 	if (empty($a_title)) {
 
-		if (($a_Type == 'kml') &&  ($a_file_param == 'cluster')) {
+	  if (($a_Type == 'kml') &&  ($a_file_param == 'cluster')) {
+            $kml_marker_name = $kml_marker_names[$a_Colour] ?? "mic_blue_pinother_02.png";
+            $bordercolor = cOsm_arguments::getBorderColor($a_Colour);
+            $innercolor  = cOsm_arguments::getInnerColor($a_Colour);
 
-        $kml_marker_name = "mic_blue_pinother_02.png";
-		  if ($a_Colour == "blue"){$kml_marker_name = "mic_blue_pinother_02.png";}
-		  else if ($a_Colour == "red"){$kml_marker_name = "mic_red_pinother_02.png";}
-		  else if ($a_Colour == "green"){$kml_marker_name = "mic_green_pinother_02.png";}
-		  else if ($a_Colour == "black"){$kml_marker_name = "mic_black_pinother_02.png";}
-
-        $bordercolor = cOsm_arguments::getBorderColor($a_Colour);
-        $innercolor  = cOsm_arguments::getInnerColor($a_Colour);
-
-		  $VectorLayer .= '  
+            $VectorLayer .= '  
 var KMLclusterSource = new ol.source.Cluster({
         distance: 15,
         geometryFunction: function (feature) {

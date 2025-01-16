@@ -1,10 +1,10 @@
 /*
 Theme Name: CV Portfolio Blocks
-Theme URI: https://www.wpradiant.net/products/free-portfolio-wordpress-theme/
+Theme URI: https://www.wpradiant.net/products/free-portfolio-wordpress-theme
 Author: WP Radiant
 Author URI: https://www.wpradiant.net/
 Description: CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you. Demo: https://preview.wpradiant.net/cv-portfolio-blocks/
-Version: 1.1.9
+Version: 1.2
 Requires at least: 6.0
 Tested up to: 6.6
 Requires PHP: 7.2
@@ -396,7 +396,8 @@ a, .content > .video-play:hover span, .content > .video-play svg, a svg.icon, .w
   background: transparent; }
 
   .woocommerce .woocommerce-breadcrumb{
-     color: var(--wp--preset--color--primary); 
+     color: var(--wp--preset--color--primary);
+     text-align: center; 
    }
 .woocommerce .woocommerce-breadcrumb a{
 color: var(--wp--preset--color--accent); }
@@ -1456,6 +1457,10 @@ nav.woocommerce-MyAccount-navigation ul li a {
   .wc-block-components-sidebar-layout .wc-block-components-main,.wc-block-components-sidebar,.woocommerce-account .woocommerce-MyAccount-navigation,.woocommerce-account .woocommerce-MyAccount-content{
     width: 100% !important;
   }
+  .woocommerce .col2-set .col-1, .woocommerce .col2-set .col-2, .woocommerce-page .col2-set .col-1, .woocommerce-page .col2-set .col-2{
+      float: none;
+      width: 100%;
+    }
 }
 @media screen and (max-width: 425px){
   td.wc-block-cart-item__total{
@@ -1488,4 +1493,67 @@ nav.woocommerce-MyAccount-navigation ul li a {
   border-radius: 50% !important;
   padding: 0!important;
   margin: 0 !important;
+}
+
+header ul.wp-block-navigation__submenu-container.wp-block-navigation-submenu .wp-block-navigation-item__content{
+  /*border: 0 !important;
+  background: var(--wp--preset--color--accent);*/
+  width: 100%;
+  padding: 10px !important;
+  border-bottom: 2px solid #eee;
+}
+header ul.wp-block-navigation__submenu-container.wp-block-navigation-submenu a.wp-block-navigation-item__content:hover{
+  color: #fff !important;
+}
+header ul.wp-block-navigation__submenu-container.wp-block-navigation-submenu{
+      width: 100% !important;
+      padding-right: 0 !important;
+}
+.wc-block-components-sidebar-layout{
+  padding: 0 20px !important;
+}
+@media screen and (max-width: 781px){
+  footer ul.wp-block-navigation__container.has-medium-font-size.is-vertical.wp-block-navigation.has-medium-font-size.has-lexend-deca-font-family{
+    align-items: center;
+  }
+}
+@media screen and (max-width: 599px){
+  .wp-block-navigation__responsive-container-open,.wp-block-navigation__responsive-container-close{
+    padding: 10px;
+    color: var(--wp--preset--color--background) !important;
+    background-color: var(--wp--preset--color--accent);
+  }
+  header .wp-block-navigation .wp-block-navigation-item a{
+    text-align: left;
+  }
+  ul.wp-block-navigation__container.is-responsive.items-justified-right.is-head-menu.wp-block-navigation{
+    width: 100% !important;
+  }
+  header li.wp-block-navigation-item{
+    padding: 5px !important;
+    border-bottom: 2px solid #eee;
+    width: 100%;
+    align-items: flex-start !important;
+  }
+  li.wp-block-navigation-item.has-child.open-on-hover-click.wp-block-navigation-submenu{
+    border: 0 !important;
+  }
+  
+  .wp-block-navigation:not(.has-text-color) .wp-block-navigation__submenu-container li{
+    border: 0 !important;
+  }
+  footer h2,footer h1,footer p{
+    text-align: center;
+  }
+}
+@media screen and (max-width: 781px){
+  .footer-menu-box,footer .wp-block-navigation {
+    align-items: center;
+  }
+}
+@media screen and (max-width: 1440px){
+  footer .wp-block-columns.alignwide.is-footer.wow.fadeInUp.is-layout-flex.wp-container-core-columns-is-layout-5.wp-block-columns-is-layout-flex,
+  footer .wp-block-columns.alignwide.is-footer.wow.fadeInUp.is-layout-flex.wp-container-core-columns-is-layout-2.wp-block-columns-is-layout-flex{
+    max-width: 90%;
+  }
 }

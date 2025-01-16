@@ -116,15 +116,21 @@ class DLM_Logging {
 	/**
 	 * Check if visitor has downloaded version
 	 *
-	 * @param DLM_Download_Version $version Version object.
+	 * @param mixed $version Version object or version ID.
 	 *
 	 * @return bool
 	 * @since 4.6.0
 	 */
 	public function has_uuid_downloaded_version( $version ) {
 		global $wpdb;
+		// Check if version ID is passed or object
+		if ( is_int( $version ) ) {
+			$version_id = $version;
+		} else {
+			$version_id = $version->get_id();
+		}
 
-		return ( absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->download_log} WHERE `version_id` = %d AND `uuid` = %s AND `download_status` IN ('completed','redirected')", $version->get_id(), DLM_Utils::get_visitor_uuid() ) ) ) > 0 );
+		return ( absint( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM {$wpdb->download_log} WHERE `version_id` = %d AND `uuid` = %s AND `download_status` IN ('completed','redirected')", $version_id, DLM_Utils::get_visitor_uuid() ) ) ) > 0 );
 	}
 
 	/**
@@ -173,21 +179,10 @@ class DLM_Logging {
 	 * @param string $url
 	 */
 	public function log( $download, $version, $status = 'completed', $cookie = true, $url = '-' ) {
-		// Don't log if admin hit does not need to be logged
-		if ( self::ignore_admin_log() ) {
-			return;
-		}
 
-		if ( $this->is_count_unique_ips_only() && true === $this->has_uuid_downloaded_version( $version ) ) {
-			return;
-		}
-
-		if ( false !== strpos( $url, admin_url() ) ) {
-			return;
-		}
-
+		$cookie_manager = DLM_Cookie_Manager::get_instance();
 		// setup new log item object.
-		if ( ! DLM_Cookie_Manager::exists( $download ) ) {
+		if ( false === $cookie_manager->check_cookie_meta( 'wp_dlm_downloading', $download->get_id() ) ) {
 			$ip       = DLM_Utils::get_visitor_ip();
 			$log_item = new DLM_Log_Item();
 			$log_item->set_user_id( absint( get_current_user_id() ) );
@@ -201,7 +196,7 @@ class DLM_Logging {
 			$log_item->set_current_url( $url );
 
 			if ( $cookie ) {
-				DLM_Cookie_Manager::set_cookie( $download );
+				$cookie_manager->set_cookie( $download, array( 'meta' => array( array( 'wp_dlm_downloading' => $download->get_id() ) ) ) );
 			}
 			// persist log item.
 			download_monitor()->service( 'log_item_repository' )->persist( $log_item );

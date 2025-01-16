@@ -134,6 +134,16 @@ class Controller extends Rest_Api {
 				//Activation_Webhook::instance()->reset_rule();
 				Activation_Webhook::instance()->flush_rewrite_rules( true );
 				break;
+			// Hide HUB Connector's notice.
+			case 'hc-notice-shown' :
+				Settings::instance()->set(
+					array(
+						'show_connector_notice' => false,
+					)
+				);
+
+				Settings::instance()->save();
+				break;
 			case 'save-version-highlights-option' :
 				Settings::instance()->set(
 					array(

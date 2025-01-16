@@ -52,6 +52,7 @@ class Categories extends Block_Abstract {
 	protected function get_block_support() {
 		return apply_filters( 'advanced-sidebar-menu/blocks/categories/supports', [
 			'anchor' => true,
+			'html'   => false,
 		] );
 	}
 
@@ -104,28 +105,28 @@ class Categories extends Block_Abstract {
 				'type'    => 'boolean',
 				'default' => false,
 			],
-			Category::EXCLUDE               => [
+			Category::EXCLUDE                  => [
 				'type'    => 'string',
 				'default' => '',
 			],
-			Category::DISPLAY_ALL           => [
+			Category::DISPLAY_ALL              => [
 				'type'    => 'boolean',
 				'default' => false,
 			],
-			Category::DISPLAY_ON_SINGLE     => [
+			Category::DISPLAY_ON_SINGLE        => [
 				'type'    => 'boolean',
 				'default' => true,
 			],
 			// No block option available. We only support 'list'.
-			Category::EACH_CATEGORY_DISPLAY => [
+			Category::EACH_CATEGORY_DISPLAY    => [
 				'type'    => 'string',
 				'default' => \Advanced_Sidebar_Menu\Menus\Category::EACH_LIST,
-				'enum' => [
+				'enum'    => [
 					\Advanced_Sidebar_Menu\Menus\Category::EACH_LIST,
 					\Advanced_Sidebar_Menu\Menus\Category::EACH_WIDGET,
 				],
 			],
-			Category::LEVELS                => [
+			Category::LEVELS                   => [
 				'type'    => 'number',
 				'default' => 100,
 			],

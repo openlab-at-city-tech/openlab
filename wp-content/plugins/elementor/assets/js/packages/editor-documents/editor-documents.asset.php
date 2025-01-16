@@ -8,8 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 return [
 	'handle' => 'elementor-v2-editor-documents',
 	'deps' => [
+		'elementor-v2-editor',
 		'elementor-v2-editor-v1-adapters',
 		'elementor-v2-store',
 		'react',
+		'wp-i18n',
 	],
 ];

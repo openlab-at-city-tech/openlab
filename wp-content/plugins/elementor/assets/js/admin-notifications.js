@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -108,7 +108,6 @@ var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "../node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _whatsNew = __webpack_require__(/*! ./whats-new */ "../modules/notifications/assets/js/components/whats-new.js");
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-var _giftIcon = __webpack_require__(/*! ../icons/gift-icon */ "../modules/notifications/assets/js/icons/gift-icon.js");
 function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
 function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 var BarButtonNotification = function BarButtonNotification(props) {
@@ -140,8 +139,8 @@ var BarButtonNotification = function BarButtonNotification(props) {
     sx: {
       mx: 0.5
     }
-  }, /*#__PURE__*/_react.default.createElement(_giftIcon.GiftIcon, {
-    fontSize: "inherit"
+  }, /*#__PURE__*/_react.default.createElement("i", {
+    className: "e-admin-top-bar__bar-button-icon eicon-speakerphone"
   })), /*#__PURE__*/_react.default.createElement("span", {
     className: "e-admin-top-bar__bar-button-title"
   }, props.children)), /*#__PURE__*/_react.default.createElement(_whatsNew.WhatsNew, {
@@ -165,6 +164,7 @@ BarButtonNotification.propTypes = {
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
+/* provided dependency */ var PropTypes = __webpack_require__(/*! prop-types */ "../node_modules/prop-types/index.js");
 
 
 var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
@@ -177,7 +177,8 @@ var _query = __webpack_require__(/*! @elementor/query */ "../node_modules/@eleme
 var _api = __webpack_require__(/*! ../api */ "../modules/notifications/assets/js/api/index.js");
 var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
 var _whatsNewItem = __webpack_require__(/*! ./whats-new-item */ "../modules/notifications/assets/js/components/whats-new-item.js");
-var WhatsNewDrawerContent = function WhatsNewDrawerContent() {
+var WhatsNewDrawerContent = function WhatsNewDrawerContent(_ref) {
+  var setIsOpen = _ref.setIsOpen;
   var _useQuery = (0, _query.useQuery)({
       queryKey: ['e-notifications'],
       queryFn: _api.getNotifications
@@ -198,11 +199,15 @@ var WhatsNewDrawerContent = function WhatsNewDrawerContent() {
       key: itemIndex,
       item: item,
       itemIndex: itemIndex,
-      itemsLength: items.length
+      itemsLength: items.length,
+      setIsOpen: setIsOpen
     });
   });
 };
 exports.WhatsNewDrawerContent = WhatsNewDrawerContent;
+WhatsNewDrawerContent.propTypes = {
+  setIsOpen: PropTypes.func.isRequired
+};
 
 /***/ }),
 
@@ -380,7 +385,8 @@ var _whatsNewItemChips = __webpack_require__(/*! ./whats-new-item-chips */ "../m
 var WhatsNewItem = function WhatsNewItem(_ref) {
   var item = _ref.item,
     itemIndex = _ref.itemIndex,
-    itemsLength = _ref.itemsLength;
+    itemsLength = _ref.itemsLength,
+    setIsOpen = _ref.setIsOpen;
   return /*#__PURE__*/_react.default.createElement(_ui.Box, {
     key: itemIndex,
     display: "flex",
@@ -422,10 +428,13 @@ var WhatsNewItem = function WhatsNewItem(_ref) {
     }
   }, /*#__PURE__*/_react.default.createElement(_ui.Button, {
     href: item.ctaLink,
-    target: "_blank",
+    target: item.ctaLink.startsWith('#') ? '_self' : '_blank',
     variant: "contained",
     size: "small",
-    color: "promotion"
+    color: "promotion",
+    onClick: item.ctaLink.startsWith('#') ? function () {
+      return setIsOpen(false);
+    } : function () {}
   }, item.cta)), itemIndex !== itemsLength - 1 && /*#__PURE__*/_react.default.createElement(_ui.Divider, {
     sx: {
       my: 1
@@ -436,7 +445,8 @@ exports.WhatsNewItem = WhatsNewItem;
 WhatsNewItem.propTypes = {
   item: PropTypes.object.isRequired,
   itemIndex: PropTypes.number.isRequired,
-  itemsLength: PropTypes.number.isRequired
+  itemsLength: PropTypes.number.isRequired,
+  setIsOpen: PropTypes.func.isRequired
 };
 
 /***/ }),
@@ -565,7 +575,9 @@ var WhatsNew = function WhatsNew(props) {
     sx: {
       padding: '16px'
     }
-  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, null))))))));
+  }, /*#__PURE__*/_react.default.createElement(_whatsNewDrawerContent.WhatsNewDrawerContent, {
+    setIsOpen: setIsOpen
+  }))))))));
 };
 exports.WhatsNew = WhatsNew;
 WhatsNew.propTypes = {
@@ -617,41 +629,6 @@ WrapperWithLink.propTypes = {
   link: PropTypes.string,
   children: PropTypes.any.isRequired
 };
-
-/***/ }),
-
-/***/ "../modules/notifications/assets/js/icons/gift-icon.js":
-/*!*************************************************************!*\
-  !*** ../modules/notifications/assets/js/icons/gift-icon.js ***!
-  \*************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "../node_modules/@babel/runtime/helpers/interopRequireDefault.js");
-var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "../node_modules/@babel/runtime/helpers/typeof.js");
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.GiftIcon = void 0;
-var _react = _interopRequireWildcard(__webpack_require__(/*! react */ "react"));
-var _extends2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/extends */ "../node_modules/@babel/runtime/helpers/extends.js"));
-var _ui = __webpack_require__(/*! @elementor/ui */ "@elementor/ui");
-function _getRequireWildcardCache(nodeInterop) { if (typeof WeakMap !== "function") return null; var cacheBabelInterop = new WeakMap(); var cacheNodeInterop = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(nodeInterop) { return nodeInterop ? cacheNodeInterop : cacheBabelInterop; })(nodeInterop); }
-function _interopRequireWildcard(obj, nodeInterop) { if (!nodeInterop && obj && obj.__esModule) { return obj; } if (obj === null || _typeof(obj) !== "object" && typeof obj !== "function") { return { default: obj }; } var cache = _getRequireWildcardCache(nodeInterop); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (key !== "default" && Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
-var GiftIcon = (0, _react.forwardRef)(function (props, ref) {
-  return /*#__PURE__*/_react.default.createElement(_ui.SvgIcon, (0, _extends2.default)({
-    viewBox: "0 0 24 24"
-  }, props, {
-    ref: ref
-  }), /*#__PURE__*/_react.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M9.65527 4.84484C8.95951 4.07178 8.20923 3.73771 7.51306 3.74984L7.5 3.75007C7.03587 3.75007 6.59075 3.93433 6.26256 4.26252C5.93437 4.59071 5.75 5.03583 5.75 5.49995C5.75 5.96408 5.93437 6.4092 6.26256 6.73739C6.59075 7.06558 7.03587 7.24995 7.5 7.24995C7.50295 7.24995 7.5059 7.24997 7.50884 7.25001H11.0002C10.6592 6.26394 10.1939 5.44328 9.65527 4.84484ZM11.25 8.75001V11.25H4C3.86193 11.25 3.75 11.1381 3.75 11V9.00001C3.75 8.86193 3.86193 8.75001 4 8.75001H11.25ZM4.25 12.75H4C3.0335 12.75 2.25 11.9665 2.25 11V9.00001C2.25 8.03351 3.0335 7.25001 4 7.25001H4.76141C4.43004 6.73144 4.25 6.12498 4.25 5.49995C4.25 4.638 4.59241 3.81135 5.2019 3.20186C5.80984 2.59392 6.63384 2.2517 7.49342 2.24996C8.72414 2.23069 9.86213 2.83242 10.7702 3.84139C11.2484 4.37275 11.6608 5.01284 12 5.73103C12.3392 5.01284 12.7516 4.37275 13.2298 3.84139C14.1379 2.83242 15.2759 2.23069 16.5066 2.24996C17.3662 2.2517 18.1902 2.59392 18.7981 3.20186C19.4076 3.81135 19.75 4.638 19.75 5.49995C19.75 6.12498 19.57 6.73144 19.2386 7.25001H20C20.9665 7.25001 21.75 8.03351 21.75 9.00001V11C21.75 11.9665 20.9665 12.75 20 12.75H19.75V19C19.75 19.7294 19.4603 20.4288 18.9445 20.9445C18.4288 21.4603 17.7293 21.75 17 21.75H7C6.27065 21.75 5.57118 21.4603 5.05546 20.9445C4.53973 20.4288 4.25 19.7294 4.25 19V12.75ZM11.25 20.25H7C6.66848 20.25 6.35054 20.1183 6.11612 19.8839C5.8817 19.6495 5.75 19.3315 5.75 19V12.75H11.25V20.25ZM12.75 20.25H17C17.3315 20.25 17.6495 20.1183 17.8839 19.8839C18.1183 19.6495 18.25 19.3315 18.25 19V12.75H12.75V20.25ZM12.75 11.25V8.75001H20C20.1381 8.75001 20.25 8.86193 20.25 9.00001V11C20.25 11.1381 20.1381 11.25 20 11.25H12.75ZM16.4912 7.25001C16.4941 7.24997 16.497 7.24995 16.5 7.24995C16.9641 7.24995 17.4092 7.06558 17.7374 6.73739C18.0656 6.4092 18.25 5.96408 18.25 5.49995C18.25 5.03583 18.0656 4.59071 17.7374 4.26252C17.4092 3.93433 16.9641 3.74995 16.5 3.74995H16.4869C15.7908 3.73783 15.0405 4.07178 14.3447 4.84484C13.8061 5.44328 13.3408 6.26394 12.9998 7.25001H16.4912Z"
-  }));
-});
-exports.GiftIcon = GiftIcon;
 
 /***/ }),
 
@@ -1797,6 +1774,1366 @@ if (false) {} else {
 
 /***/ }),
 
+/***/ "../node_modules/react/cjs/react-jsx-runtime.development.js":
+/*!******************************************************************!*\
+  !*** ../node_modules/react/cjs/react-jsx-runtime.development.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+/**
+ * @license React
+ * react-jsx-runtime.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+
+
+if (true) {
+  (function() {
+'use strict';
+
+var React = __webpack_require__(/*! react */ "react");
+
+// ATTENTION
+// When adding new symbols to this file,
+// Please consider also adding to 'react-devtools-shared/src/backend/ReactSymbols'
+// The Symbol used to tag the ReactElement-like types.
+var REACT_ELEMENT_TYPE = Symbol.for('react.element');
+var REACT_PORTAL_TYPE = Symbol.for('react.portal');
+var REACT_FRAGMENT_TYPE = Symbol.for('react.fragment');
+var REACT_STRICT_MODE_TYPE = Symbol.for('react.strict_mode');
+var REACT_PROFILER_TYPE = Symbol.for('react.profiler');
+var REACT_PROVIDER_TYPE = Symbol.for('react.provider');
+var REACT_CONTEXT_TYPE = Symbol.for('react.context');
+var REACT_FORWARD_REF_TYPE = Symbol.for('react.forward_ref');
+var REACT_SUSPENSE_TYPE = Symbol.for('react.suspense');
+var REACT_SUSPENSE_LIST_TYPE = Symbol.for('react.suspense_list');
+var REACT_MEMO_TYPE = Symbol.for('react.memo');
+var REACT_LAZY_TYPE = Symbol.for('react.lazy');
+var REACT_OFFSCREEN_TYPE = Symbol.for('react.offscreen');
+var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
+var FAUX_ITERATOR_SYMBOL = '@@iterator';
+function getIteratorFn(maybeIterable) {
+  if (maybeIterable === null || typeof maybeIterable !== 'object') {
+    return null;
+  }
+
+  var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
+
+  if (typeof maybeIterator === 'function') {
+    return maybeIterator;
+  }
+
+  return null;
+}
+
+var ReactSharedInternals = React.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+
+function error(format) {
+  {
+    {
+      for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+        args[_key2 - 1] = arguments[_key2];
+      }
+
+      printWarning('error', format, args);
+    }
+  }
+}
+
+function printWarning(level, format, args) {
+  // When changing this logic, you might want to also
+  // update consoleWithStackDev.www.js as well.
+  {
+    var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+    var stack = ReactDebugCurrentFrame.getStackAddendum();
+
+    if (stack !== '') {
+      format += '%s';
+      args = args.concat([stack]);
+    } // eslint-disable-next-line react-internal/safe-string-coercion
+
+
+    var argsWithFormat = args.map(function (item) {
+      return String(item);
+    }); // Careful: RN currently depends on this prefix
+
+    argsWithFormat.unshift('Warning: ' + format); // We intentionally don't use spread (or .apply) directly because it
+    // breaks IE9: https://github.com/facebook/react/issues/13610
+    // eslint-disable-next-line react-internal/no-production-logging
+
+    Function.prototype.apply.call(console[level], console, argsWithFormat);
+  }
+}
+
+// -----------------------------------------------------------------------------
+
+var enableScopeAPI = false; // Experimental Create Event Handle API.
+var enableCacheElement = false;
+var enableTransitionTracing = false; // No known bugs, but needs performance testing
+
+var enableLegacyHidden = false; // Enables unstable_avoidThisFallback feature in Fiber
+// stuff. Intended to enable React core members to more easily debug scheduling
+// issues in DEV builds.
+
+var enableDebugTracing = false; // Track which Fiber(s) schedule render work.
+
+var REACT_MODULE_REFERENCE;
+
+{
+  REACT_MODULE_REFERENCE = Symbol.for('react.module.reference');
+}
+
+function isValidElementType(type) {
+  if (typeof type === 'string' || typeof type === 'function') {
+    return true;
+  } // Note: typeof might be other than 'symbol' or 'number' (e.g. if it's a polyfill).
+
+
+  if (type === REACT_FRAGMENT_TYPE || type === REACT_PROFILER_TYPE || enableDebugTracing  || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || enableLegacyHidden  || type === REACT_OFFSCREEN_TYPE || enableScopeAPI  || enableCacheElement  || enableTransitionTracing ) {
+    return true;
+  }
+
+  if (typeof type === 'object' && type !== null) {
+    if (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || // This needs to include all possible module reference object
+    // types supported by any Flight configuration anywhere since
+    // we don't know which Flight build this will end up being used
+    // with.
+    type.$$typeof === REACT_MODULE_REFERENCE || type.getModuleId !== undefined) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+function getWrappedName(outerType, innerType, wrapperName) {
+  var displayName = outerType.displayName;
+
+  if (displayName) {
+    return displayName;
+  }
+
+  var functionName = innerType.displayName || innerType.name || '';
+  return functionName !== '' ? wrapperName + "(" + functionName + ")" : wrapperName;
+} // Keep in sync with react-reconciler/getComponentNameFromFiber
+
+
+function getContextName(type) {
+  return type.displayName || 'Context';
+} // Note that the reconciler package should generally prefer to use getComponentNameFromFiber() instead.
+
+
+function getComponentNameFromType(type) {
+  if (type == null) {
+    // Host root, text node or just invalid type.
+    return null;
+  }
+
+  {
+    if (typeof type.tag === 'number') {
+      error('Received an unexpected object in getComponentNameFromType(). ' + 'This is likely a bug in React. Please file an issue.');
+    }
+  }
+
+  if (typeof type === 'function') {
+    return type.displayName || type.name || null;
+  }
+
+  if (typeof type === 'string') {
+    return type;
+  }
+
+  switch (type) {
+    case REACT_FRAGMENT_TYPE:
+      return 'Fragment';
+
+    case REACT_PORTAL_TYPE:
+      return 'Portal';
+
+    case REACT_PROFILER_TYPE:
+      return 'Profiler';
+
+    case REACT_STRICT_MODE_TYPE:
+      return 'StrictMode';
+
+    case REACT_SUSPENSE_TYPE:
+      return 'Suspense';
+
+    case REACT_SUSPENSE_LIST_TYPE:
+      return 'SuspenseList';
+
+  }
+
+  if (typeof type === 'object') {
+    switch (type.$$typeof) {
+      case REACT_CONTEXT_TYPE:
+        var context = type;
+        return getContextName(context) + '.Consumer';
+
+      case REACT_PROVIDER_TYPE:
+        var provider = type;
+        return getContextName(provider._context) + '.Provider';
+
+      case REACT_FORWARD_REF_TYPE:
+        return getWrappedName(type, type.render, 'ForwardRef');
+
+      case REACT_MEMO_TYPE:
+        var outerName = type.displayName || null;
+
+        if (outerName !== null) {
+          return outerName;
+        }
+
+        return getComponentNameFromType(type.type) || 'Memo';
+
+      case REACT_LAZY_TYPE:
+        {
+          var lazyComponent = type;
+          var payload = lazyComponent._payload;
+          var init = lazyComponent._init;
+
+          try {
+            return getComponentNameFromType(init(payload));
+          } catch (x) {
+            return null;
+          }
+        }
+
+      // eslint-disable-next-line no-fallthrough
+    }
+  }
+
+  return null;
+}
+
+var assign = Object.assign;
+
+// Helpers to patch console.logs to avoid logging during side-effect free
+// replaying on render function. This currently only patches the object
+// lazily which won't cover if the log function was extracted eagerly.
+// We could also eagerly patch the method.
+var disabledDepth = 0;
+var prevLog;
+var prevInfo;
+var prevWarn;
+var prevError;
+var prevGroup;
+var prevGroupCollapsed;
+var prevGroupEnd;
+
+function disabledLog() {}
+
+disabledLog.__reactDisabledLog = true;
+function disableLogs() {
+  {
+    if (disabledDepth === 0) {
+      /* eslint-disable react-internal/no-production-logging */
+      prevLog = console.log;
+      prevInfo = console.info;
+      prevWarn = console.warn;
+      prevError = console.error;
+      prevGroup = console.group;
+      prevGroupCollapsed = console.groupCollapsed;
+      prevGroupEnd = console.groupEnd; // https://github.com/facebook/react/issues/19099
+
+      var props = {
+        configurable: true,
+        enumerable: true,
+        value: disabledLog,
+        writable: true
+      }; // $FlowFixMe Flow thinks console is immutable.
+
+      Object.defineProperties(console, {
+        info: props,
+        log: props,
+        warn: props,
+        error: props,
+        group: props,
+        groupCollapsed: props,
+        groupEnd: props
+      });
+      /* eslint-enable react-internal/no-production-logging */
+    }
+
+    disabledDepth++;
+  }
+}
+function reenableLogs() {
+  {
+    disabledDepth--;
+
+    if (disabledDepth === 0) {
+      /* eslint-disable react-internal/no-production-logging */
+      var props = {
+        configurable: true,
+        enumerable: true,
+        writable: true
+      }; // $FlowFixMe Flow thinks console is immutable.
+
+      Object.defineProperties(console, {
+        log: assign({}, props, {
+          value: prevLog
+        }),
+        info: assign({}, props, {
+          value: prevInfo
+        }),
+        warn: assign({}, props, {
+          value: prevWarn
+        }),
+        error: assign({}, props, {
+          value: prevError
+        }),
+        group: assign({}, props, {
+          value: prevGroup
+        }),
+        groupCollapsed: assign({}, props, {
+          value: prevGroupCollapsed
+        }),
+        groupEnd: assign({}, props, {
+          value: prevGroupEnd
+        })
+      });
+      /* eslint-enable react-internal/no-production-logging */
+    }
+
+    if (disabledDepth < 0) {
+      error('disabledDepth fell below zero. ' + 'This is a bug in React. Please file an issue.');
+    }
+  }
+}
+
+var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
+var prefix;
+function describeBuiltInComponentFrame(name, source, ownerFn) {
+  {
+    if (prefix === undefined) {
+      // Extract the VM specific prefix used by each line.
+      try {
+        throw Error();
+      } catch (x) {
+        var match = x.stack.trim().match(/\n( *(at )?)/);
+        prefix = match && match[1] || '';
+      }
+    } // We use the prefix to ensure our stacks line up with native stack frames.
+
+
+    return '\n' + prefix + name;
+  }
+}
+var reentry = false;
+var componentFrameCache;
+
+{
+  var PossiblyWeakMap = typeof WeakMap === 'function' ? WeakMap : Map;
+  componentFrameCache = new PossiblyWeakMap();
+}
+
+function describeNativeComponentFrame(fn, construct) {
+  // If something asked for a stack inside a fake render, it should get ignored.
+  if ( !fn || reentry) {
+    return '';
+  }
+
+  {
+    var frame = componentFrameCache.get(fn);
+
+    if (frame !== undefined) {
+      return frame;
+    }
+  }
+
+  var control;
+  reentry = true;
+  var previousPrepareStackTrace = Error.prepareStackTrace; // $FlowFixMe It does accept undefined.
+
+  Error.prepareStackTrace = undefined;
+  var previousDispatcher;
+
+  {
+    previousDispatcher = ReactCurrentDispatcher.current; // Set the dispatcher in DEV because this might be call in the render function
+    // for warnings.
+
+    ReactCurrentDispatcher.current = null;
+    disableLogs();
+  }
+
+  try {
+    // This should throw.
+    if (construct) {
+      // Something should be setting the props in the constructor.
+      var Fake = function () {
+        throw Error();
+      }; // $FlowFixMe
+
+
+      Object.defineProperty(Fake.prototype, 'props', {
+        set: function () {
+          // We use a throwing setter instead of frozen or non-writable props
+          // because that won't throw in a non-strict mode function.
+          throw Error();
+        }
+      });
+
+      if (typeof Reflect === 'object' && Reflect.construct) {
+        // We construct a different control for this case to include any extra
+        // frames added by the construct call.
+        try {
+          Reflect.construct(Fake, []);
+        } catch (x) {
+          control = x;
+        }
+
+        Reflect.construct(fn, [], Fake);
+      } else {
+        try {
+          Fake.call();
+        } catch (x) {
+          control = x;
+        }
+
+        fn.call(Fake.prototype);
+      }
+    } else {
+      try {
+        throw Error();
+      } catch (x) {
+        control = x;
+      }
+
+      fn();
+    }
+  } catch (sample) {
+    // This is inlined manually because closure doesn't do it for us.
+    if (sample && control && typeof sample.stack === 'string') {
+      // This extracts the first frame from the sample that isn't also in the control.
+      // Skipping one frame that we assume is the frame that calls the two.
+      var sampleLines = sample.stack.split('\n');
+      var controlLines = control.stack.split('\n');
+      var s = sampleLines.length - 1;
+      var c = controlLines.length - 1;
+
+      while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
+        // We expect at least one stack frame to be shared.
+        // Typically this will be the root most one. However, stack frames may be
+        // cut off due to maximum stack limits. In this case, one maybe cut off
+        // earlier than the other. We assume that the sample is longer or the same
+        // and there for cut off earlier. So we should find the root most frame in
+        // the sample somewhere in the control.
+        c--;
+      }
+
+      for (; s >= 1 && c >= 0; s--, c--) {
+        // Next we find the first one that isn't the same which should be the
+        // frame that called our sample function and the control.
+        if (sampleLines[s] !== controlLines[c]) {
+          // In V8, the first line is describing the message but other VMs don't.
+          // If we're about to return the first line, and the control is also on the same
+          // line, that's a pretty good indicator that our sample threw at same line as
+          // the control. I.e. before we entered the sample frame. So we ignore this result.
+          // This can happen if you passed a class to function component, or non-function.
+          if (s !== 1 || c !== 1) {
+            do {
+              s--;
+              c--; // We may still have similar intermediate frames from the construct call.
+              // The next one that isn't the same should be our match though.
+
+              if (c < 0 || sampleLines[s] !== controlLines[c]) {
+                // V8 adds a "new" prefix for native classes. Let's remove it to make it prettier.
+                var _frame = '\n' + sampleLines[s].replace(' at new ', ' at '); // If our component frame is labeled "<anonymous>"
+                // but we have a user-provided "displayName"
+                // splice it in to make the stack more readable.
+
+
+                if (fn.displayName && _frame.includes('<anonymous>')) {
+                  _frame = _frame.replace('<anonymous>', fn.displayName);
+                }
+
+                {
+                  if (typeof fn === 'function') {
+                    componentFrameCache.set(fn, _frame);
+                  }
+                } // Return the line we found.
+
+
+                return _frame;
+              }
+            } while (s >= 1 && c >= 0);
+          }
+
+          break;
+        }
+      }
+    }
+  } finally {
+    reentry = false;
+
+    {
+      ReactCurrentDispatcher.current = previousDispatcher;
+      reenableLogs();
+    }
+
+    Error.prepareStackTrace = previousPrepareStackTrace;
+  } // Fallback to just using the name if we couldn't make it throw.
+
+
+  var name = fn ? fn.displayName || fn.name : '';
+  var syntheticFrame = name ? describeBuiltInComponentFrame(name) : '';
+
+  {
+    if (typeof fn === 'function') {
+      componentFrameCache.set(fn, syntheticFrame);
+    }
+  }
+
+  return syntheticFrame;
+}
+function describeFunctionComponentFrame(fn, source, ownerFn) {
+  {
+    return describeNativeComponentFrame(fn, false);
+  }
+}
+
+function shouldConstruct(Component) {
+  var prototype = Component.prototype;
+  return !!(prototype && prototype.isReactComponent);
+}
+
+function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
+
+  if (type == null) {
+    return '';
+  }
+
+  if (typeof type === 'function') {
+    {
+      return describeNativeComponentFrame(type, shouldConstruct(type));
+    }
+  }
+
+  if (typeof type === 'string') {
+    return describeBuiltInComponentFrame(type);
+  }
+
+  switch (type) {
+    case REACT_SUSPENSE_TYPE:
+      return describeBuiltInComponentFrame('Suspense');
+
+    case REACT_SUSPENSE_LIST_TYPE:
+      return describeBuiltInComponentFrame('SuspenseList');
+  }
+
+  if (typeof type === 'object') {
+    switch (type.$$typeof) {
+      case REACT_FORWARD_REF_TYPE:
+        return describeFunctionComponentFrame(type.render);
+
+      case REACT_MEMO_TYPE:
+        // Memo may contain any component type so we recursively resolve it.
+        return describeUnknownElementTypeFrameInDEV(type.type, source, ownerFn);
+
+      case REACT_LAZY_TYPE:
+        {
+          var lazyComponent = type;
+          var payload = lazyComponent._payload;
+          var init = lazyComponent._init;
+
+          try {
+            // Lazy may contain any component type so we recursively resolve it.
+            return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+          } catch (x) {}
+        }
+    }
+  }
+
+  return '';
+}
+
+var hasOwnProperty = Object.prototype.hasOwnProperty;
+
+var loggedTypeFailures = {};
+var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+
+function setCurrentlyValidatingElement(element) {
+  {
+    if (element) {
+      var owner = element._owner;
+      var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+      ReactDebugCurrentFrame.setExtraStackFrame(stack);
+    } else {
+      ReactDebugCurrentFrame.setExtraStackFrame(null);
+    }
+  }
+}
+
+function checkPropTypes(typeSpecs, values, location, componentName, element) {
+  {
+    // $FlowFixMe This is okay but Flow doesn't know it.
+    var has = Function.call.bind(hasOwnProperty);
+
+    for (var typeSpecName in typeSpecs) {
+      if (has(typeSpecs, typeSpecName)) {
+        var error$1 = void 0; // Prop type validation may throw. In case they do, we don't want to
+        // fail the render phase where it didn't fail before. So we log it.
+        // After these have been cleaned up, we'll let them throw.
+
+        try {
+          // This is intentionally an invariant that gets caught. It's the same
+          // behavior as without this statement except with a better message.
+          if (typeof typeSpecs[typeSpecName] !== 'function') {
+            // eslint-disable-next-line react-internal/prod-error-codes
+            var err = Error((componentName || 'React class') + ': ' + location + ' type `' + typeSpecName + '` is invalid; ' + 'it must be a function, usually from the `prop-types` package, but received `' + typeof typeSpecs[typeSpecName] + '`.' + 'This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.');
+            err.name = 'Invariant Violation';
+            throw err;
+          }
+
+          error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED');
+        } catch (ex) {
+          error$1 = ex;
+        }
+
+        if (error$1 && !(error$1 instanceof Error)) {
+          setCurrentlyValidatingElement(element);
+
+          error('%s: type specification of %s' + ' `%s` is invalid; the type checker ' + 'function must return `null` or an `Error` but returned a %s. ' + 'You may have forgotten to pass an argument to the type checker ' + 'creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and ' + 'shape all require an argument).', componentName || 'React class', location, typeSpecName, typeof error$1);
+
+          setCurrentlyValidatingElement(null);
+        }
+
+        if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
+          // Only monitor this failure once because there tends to be a lot of the
+          // same error.
+          loggedTypeFailures[error$1.message] = true;
+          setCurrentlyValidatingElement(element);
+
+          error('Failed %s type: %s', location, error$1.message);
+
+          setCurrentlyValidatingElement(null);
+        }
+      }
+    }
+  }
+}
+
+var isArrayImpl = Array.isArray; // eslint-disable-next-line no-redeclare
+
+function isArray(a) {
+  return isArrayImpl(a);
+}
+
+/*
+ * The `'' + value` pattern (used in in perf-sensitive code) throws for Symbol
+ * and Temporal.* types. See https://github.com/facebook/react/pull/22064.
+ *
+ * The functions in this module will throw an easier-to-understand,
+ * easier-to-debug exception with a clear errors message message explaining the
+ * problem. (Instead of a confusing exception thrown inside the implementation
+ * of the `value` object).
+ */
+// $FlowFixMe only called in DEV, so void return is not possible.
+function typeName(value) {
+  {
+    // toStringTag is needed for namespaced types like Temporal.Instant
+    var hasToStringTag = typeof Symbol === 'function' && Symbol.toStringTag;
+    var type = hasToStringTag && value[Symbol.toStringTag] || value.constructor.name || 'Object';
+    return type;
+  }
+} // $FlowFixMe only called in DEV, so void return is not possible.
+
+
+function willCoercionThrow(value) {
+  {
+    try {
+      testStringCoercion(value);
+      return false;
+    } catch (e) {
+      return true;
+    }
+  }
+}
+
+function testStringCoercion(value) {
+  // If you ended up here by following an exception call stack, here's what's
+  // happened: you supplied an object or symbol value to React (as a prop, key,
+  // DOM attribute, CSS property, string ref, etc.) and when React tried to
+  // coerce it to a string using `'' + value`, an exception was thrown.
+  //
+  // The most common types that will cause this exception are `Symbol` instances
+  // and Temporal objects like `Temporal.Instant`. But any object that has a
+  // `valueOf` or `[Symbol.toPrimitive]` method that throws will also cause this
+  // exception. (Library authors do this to prevent users from using built-in
+  // numeric operators like `+` or comparison operators like `>=` because custom
+  // methods are needed to perform accurate arithmetic or comparison.)
+  //
+  // To fix the problem, coerce this object or symbol value to a string before
+  // passing it to React. The most reliable way is usually `String(value)`.
+  //
+  // To find which value is throwing, check the browser or debugger console.
+  // Before this exception was thrown, there should be `console.error` output
+  // that shows the type (Symbol, Temporal.PlainDate, etc.) that caused the
+  // problem and how that type was used: key, atrribute, input value prop, etc.
+  // In most cases, this console output also shows the component and its
+  // ancestor components where the exception happened.
+  //
+  // eslint-disable-next-line react-internal/safe-string-coercion
+  return '' + value;
+}
+function checkKeyStringCoercion(value) {
+  {
+    if (willCoercionThrow(value)) {
+      error('The provided key is an unsupported type %s.' + ' This value must be coerced to a string before before using it here.', typeName(value));
+
+      return testStringCoercion(value); // throw (to help callers find troubleshooting comments)
+    }
+  }
+}
+
+var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
+var RESERVED_PROPS = {
+  key: true,
+  ref: true,
+  __self: true,
+  __source: true
+};
+var specialPropKeyWarningShown;
+var specialPropRefWarningShown;
+var didWarnAboutStringRefs;
+
+{
+  didWarnAboutStringRefs = {};
+}
+
+function hasValidRef(config) {
+  {
+    if (hasOwnProperty.call(config, 'ref')) {
+      var getter = Object.getOwnPropertyDescriptor(config, 'ref').get;
+
+      if (getter && getter.isReactWarning) {
+        return false;
+      }
+    }
+  }
+
+  return config.ref !== undefined;
+}
+
+function hasValidKey(config) {
+  {
+    if (hasOwnProperty.call(config, 'key')) {
+      var getter = Object.getOwnPropertyDescriptor(config, 'key').get;
+
+      if (getter && getter.isReactWarning) {
+        return false;
+      }
+    }
+  }
+
+  return config.key !== undefined;
+}
+
+function warnIfStringRefCannotBeAutoConverted(config, self) {
+  {
+    if (typeof config.ref === 'string' && ReactCurrentOwner.current && self && ReactCurrentOwner.current.stateNode !== self) {
+      var componentName = getComponentNameFromType(ReactCurrentOwner.current.type);
+
+      if (!didWarnAboutStringRefs[componentName]) {
+        error('Component "%s" contains the string ref "%s". ' + 'Support for string refs will be removed in a future major release. ' + 'This case cannot be automatically converted to an arrow function. ' + 'We ask you to manually fix this case by using useRef() or createRef() instead. ' + 'Learn more about using refs safely here: ' + 'https://reactjs.org/link/strict-mode-string-ref', getComponentNameFromType(ReactCurrentOwner.current.type), config.ref);
+
+        didWarnAboutStringRefs[componentName] = true;
+      }
+    }
+  }
+}
+
+function defineKeyPropWarningGetter(props, displayName) {
+  {
+    var warnAboutAccessingKey = function () {
+      if (!specialPropKeyWarningShown) {
+        specialPropKeyWarningShown = true;
+
+        error('%s: `key` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://reactjs.org/link/special-props)', displayName);
+      }
+    };
+
+    warnAboutAccessingKey.isReactWarning = true;
+    Object.defineProperty(props, 'key', {
+      get: warnAboutAccessingKey,
+      configurable: true
+    });
+  }
+}
+
+function defineRefPropWarningGetter(props, displayName) {
+  {
+    var warnAboutAccessingRef = function () {
+      if (!specialPropRefWarningShown) {
+        specialPropRefWarningShown = true;
+
+        error('%s: `ref` is not a prop. Trying to access it will result ' + 'in `undefined` being returned. If you need to access the same ' + 'value within the child component, you should pass it as a different ' + 'prop. (https://reactjs.org/link/special-props)', displayName);
+      }
+    };
+
+    warnAboutAccessingRef.isReactWarning = true;
+    Object.defineProperty(props, 'ref', {
+      get: warnAboutAccessingRef,
+      configurable: true
+    });
+  }
+}
+/**
+ * Factory method to create a new React element. This no longer adheres to
+ * the class pattern, so do not use new to call it. Also, instanceof check
+ * will not work. Instead test $$typeof field against Symbol.for('react.element') to check
+ * if something is a React Element.
+ *
+ * @param {*} type
+ * @param {*} props
+ * @param {*} key
+ * @param {string|object} ref
+ * @param {*} owner
+ * @param {*} self A *temporary* helper to detect places where `this` is
+ * different from the `owner` when React.createElement is called, so that we
+ * can warn. We want to get rid of owner and replace string `ref`s with arrow
+ * functions, and as long as `this` and owner are the same, there will be no
+ * change in behavior.
+ * @param {*} source An annotation object (added by a transpiler or otherwise)
+ * indicating filename, line number, and/or other information.
+ * @internal
+ */
+
+
+var ReactElement = function (type, key, ref, self, source, owner, props) {
+  var element = {
+    // This tag allows us to uniquely identify this as a React Element
+    $$typeof: REACT_ELEMENT_TYPE,
+    // Built-in properties that belong on the element
+    type: type,
+    key: key,
+    ref: ref,
+    props: props,
+    // Record the component responsible for creating this element.
+    _owner: owner
+  };
+
+  {
+    // The validation flag is currently mutative. We put it on
+    // an external backing store so that we can freeze the whole object.
+    // This can be replaced with a WeakMap once they are implemented in
+    // commonly used development environments.
+    element._store = {}; // To make comparing ReactElements easier for testing purposes, we make
+    // the validation flag non-enumerable (where possible, which should
+    // include every environment we run tests in), so the test framework
+    // ignores it.
+
+    Object.defineProperty(element._store, 'validated', {
+      configurable: false,
+      enumerable: false,
+      writable: true,
+      value: false
+    }); // self and source are DEV only properties.
+
+    Object.defineProperty(element, '_self', {
+      configurable: false,
+      enumerable: false,
+      writable: false,
+      value: self
+    }); // Two elements created in two different places should be considered
+    // equal for testing purposes and therefore we hide it from enumeration.
+
+    Object.defineProperty(element, '_source', {
+      configurable: false,
+      enumerable: false,
+      writable: false,
+      value: source
+    });
+
+    if (Object.freeze) {
+      Object.freeze(element.props);
+      Object.freeze(element);
+    }
+  }
+
+  return element;
+};
+/**
+ * https://github.com/reactjs/rfcs/pull/107
+ * @param {*} type
+ * @param {object} props
+ * @param {string} key
+ */
+
+function jsxDEV(type, config, maybeKey, source, self) {
+  {
+    var propName; // Reserved names are extracted
+
+    var props = {};
+    var key = null;
+    var ref = null; // Currently, key can be spread in as a prop. This causes a potential
+    // issue if key is also explicitly declared (ie. <div {...props} key="Hi" />
+    // or <div key="Hi" {...props} /> ). We want to deprecate key spread,
+    // but as an intermediary step, we will use jsxDEV for everything except
+    // <div {...props} key="Hi" />, because we aren't currently able to tell if
+    // key is explicitly declared to be undefined or not.
+
+    if (maybeKey !== undefined) {
+      {
+        checkKeyStringCoercion(maybeKey);
+      }
+
+      key = '' + maybeKey;
+    }
+
+    if (hasValidKey(config)) {
+      {
+        checkKeyStringCoercion(config.key);
+      }
+
+      key = '' + config.key;
+    }
+
+    if (hasValidRef(config)) {
+      ref = config.ref;
+      warnIfStringRefCannotBeAutoConverted(config, self);
+    } // Remaining properties are added to a new props object
+
+
+    for (propName in config) {
+      if (hasOwnProperty.call(config, propName) && !RESERVED_PROPS.hasOwnProperty(propName)) {
+        props[propName] = config[propName];
+      }
+    } // Resolve default props
+
+
+    if (type && type.defaultProps) {
+      var defaultProps = type.defaultProps;
+
+      for (propName in defaultProps) {
+        if (props[propName] === undefined) {
+          props[propName] = defaultProps[propName];
+        }
+      }
+    }
+
+    if (key || ref) {
+      var displayName = typeof type === 'function' ? type.displayName || type.name || 'Unknown' : type;
+
+      if (key) {
+        defineKeyPropWarningGetter(props, displayName);
+      }
+
+      if (ref) {
+        defineRefPropWarningGetter(props, displayName);
+      }
+    }
+
+    return ReactElement(type, key, ref, self, source, ReactCurrentOwner.current, props);
+  }
+}
+
+var ReactCurrentOwner$1 = ReactSharedInternals.ReactCurrentOwner;
+var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+
+function setCurrentlyValidatingElement$1(element) {
+  {
+    if (element) {
+      var owner = element._owner;
+      var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+      ReactDebugCurrentFrame$1.setExtraStackFrame(stack);
+    } else {
+      ReactDebugCurrentFrame$1.setExtraStackFrame(null);
+    }
+  }
+}
+
+var propTypesMisspellWarningShown;
+
+{
+  propTypesMisspellWarningShown = false;
+}
+/**
+ * Verifies the object is a ReactElement.
+ * See https://reactjs.org/docs/react-api.html#isvalidelement
+ * @param {?object} object
+ * @return {boolean} True if `object` is a ReactElement.
+ * @final
+ */
+
+
+function isValidElement(object) {
+  {
+    return typeof object === 'object' && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+  }
+}
+
+function getDeclarationErrorAddendum() {
+  {
+    if (ReactCurrentOwner$1.current) {
+      var name = getComponentNameFromType(ReactCurrentOwner$1.current.type);
+
+      if (name) {
+        return '\n\nCheck the render method of `' + name + '`.';
+      }
+    }
+
+    return '';
+  }
+}
+
+function getSourceInfoErrorAddendum(source) {
+  {
+    if (source !== undefined) {
+      var fileName = source.fileName.replace(/^.*[\\\/]/, '');
+      var lineNumber = source.lineNumber;
+      return '\n\nCheck your code at ' + fileName + ':' + lineNumber + '.';
+    }
+
+    return '';
+  }
+}
+/**
+ * Warn if there's no key explicitly set on dynamic arrays of children or
+ * object keys are not valid. This allows us to keep track of children between
+ * updates.
+ */
+
+
+var ownerHasKeyUseWarning = {};
+
+function getCurrentComponentErrorInfo(parentType) {
+  {
+    var info = getDeclarationErrorAddendum();
+
+    if (!info) {
+      var parentName = typeof parentType === 'string' ? parentType : parentType.displayName || parentType.name;
+
+      if (parentName) {
+        info = "\n\nCheck the top-level render call using <" + parentName + ">.";
+      }
+    }
+
+    return info;
+  }
+}
+/**
+ * Warn if the element doesn't have an explicit key assigned to it.
+ * This element is in an array. The array could grow and shrink or be
+ * reordered. All children that haven't already been validated are required to
+ * have a "key" property assigned to it. Error statuses are cached so a warning
+ * will only be shown once.
+ *
+ * @internal
+ * @param {ReactElement} element Element that requires a key.
+ * @param {*} parentType element's parent's type.
+ */
+
+
+function validateExplicitKey(element, parentType) {
+  {
+    if (!element._store || element._store.validated || element.key != null) {
+      return;
+    }
+
+    element._store.validated = true;
+    var currentComponentErrorInfo = getCurrentComponentErrorInfo(parentType);
+
+    if (ownerHasKeyUseWarning[currentComponentErrorInfo]) {
+      return;
+    }
+
+    ownerHasKeyUseWarning[currentComponentErrorInfo] = true; // Usually the current owner is the offender, but if it accepts children as a
+    // property, it may be the creator of the child that's responsible for
+    // assigning it a key.
+
+    var childOwner = '';
+
+    if (element && element._owner && element._owner !== ReactCurrentOwner$1.current) {
+      // Give the component that originally created this child.
+      childOwner = " It was passed a child from " + getComponentNameFromType(element._owner.type) + ".";
+    }
+
+    setCurrentlyValidatingElement$1(element);
+
+    error('Each child in a list should have a unique "key" prop.' + '%s%s See https://reactjs.org/link/warning-keys for more information.', currentComponentErrorInfo, childOwner);
+
+    setCurrentlyValidatingElement$1(null);
+  }
+}
+/**
+ * Ensure that every element either is passed in a static location, in an
+ * array with an explicit keys property defined, or in an object literal
+ * with valid key property.
+ *
+ * @internal
+ * @param {ReactNode} node Statically passed child of any type.
+ * @param {*} parentType node's parent's type.
+ */
+
+
+function validateChildKeys(node, parentType) {
+  {
+    if (typeof node !== 'object') {
+      return;
+    }
+
+    if (isArray(node)) {
+      for (var i = 0; i < node.length; i++) {
+        var child = node[i];
+
+        if (isValidElement(child)) {
+          validateExplicitKey(child, parentType);
+        }
+      }
+    } else if (isValidElement(node)) {
+      // This element was passed in a valid location.
+      if (node._store) {
+        node._store.validated = true;
+      }
+    } else if (node) {
+      var iteratorFn = getIteratorFn(node);
+
+      if (typeof iteratorFn === 'function') {
+        // Entry iterators used to provide implicit keys,
+        // but now we print a separate warning for them later.
+        if (iteratorFn !== node.entries) {
+          var iterator = iteratorFn.call(node);
+          var step;
+
+          while (!(step = iterator.next()).done) {
+            if (isValidElement(step.value)) {
+              validateExplicitKey(step.value, parentType);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+/**
+ * Given an element, validate that its props follow the propTypes definition,
+ * provided by the type.
+ *
+ * @param {ReactElement} element
+ */
+
+
+function validatePropTypes(element) {
+  {
+    var type = element.type;
+
+    if (type === null || type === undefined || typeof type === 'string') {
+      return;
+    }
+
+    var propTypes;
+
+    if (typeof type === 'function') {
+      propTypes = type.propTypes;
+    } else if (typeof type === 'object' && (type.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+    // Inner props are checked in the reconciler.
+    type.$$typeof === REACT_MEMO_TYPE)) {
+      propTypes = type.propTypes;
+    } else {
+      return;
+    }
+
+    if (propTypes) {
+      // Intentionally inside to avoid triggering lazy initializers:
+      var name = getComponentNameFromType(type);
+      checkPropTypes(propTypes, element.props, 'prop', name, element);
+    } else if (type.PropTypes !== undefined && !propTypesMisspellWarningShown) {
+      propTypesMisspellWarningShown = true; // Intentionally inside to avoid triggering lazy initializers:
+
+      var _name = getComponentNameFromType(type);
+
+      error('Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?', _name || 'Unknown');
+    }
+
+    if (typeof type.getDefaultProps === 'function' && !type.getDefaultProps.isReactClassApproved) {
+      error('getDefaultProps is only used on classic React.createClass ' + 'definitions. Use a static property named `defaultProps` instead.');
+    }
+  }
+}
+/**
+ * Given a fragment, validate that it can only be provided with fragment props
+ * @param {ReactElement} fragment
+ */
+
+
+function validateFragmentProps(fragment) {
+  {
+    var keys = Object.keys(fragment.props);
+
+    for (var i = 0; i < keys.length; i++) {
+      var key = keys[i];
+
+      if (key !== 'children' && key !== 'key') {
+        setCurrentlyValidatingElement$1(fragment);
+
+        error('Invalid prop `%s` supplied to `React.Fragment`. ' + 'React.Fragment can only have `key` and `children` props.', key);
+
+        setCurrentlyValidatingElement$1(null);
+        break;
+      }
+    }
+
+    if (fragment.ref !== null) {
+      setCurrentlyValidatingElement$1(fragment);
+
+      error('Invalid attribute `ref` supplied to `React.Fragment`.');
+
+      setCurrentlyValidatingElement$1(null);
+    }
+  }
+}
+
+var didWarnAboutKeySpread = {};
+function jsxWithValidation(type, props, key, isStaticChildren, source, self) {
+  {
+    var validType = isValidElementType(type); // We warn in this case but don't throw. We expect the element creation to
+    // succeed and there will likely be errors in render.
+
+    if (!validType) {
+      var info = '';
+
+      if (type === undefined || typeof type === 'object' && type !== null && Object.keys(type).length === 0) {
+        info += ' You likely forgot to export your component from the file ' + "it's defined in, or you might have mixed up default and named imports.";
+      }
+
+      var sourceInfo = getSourceInfoErrorAddendum(source);
+
+      if (sourceInfo) {
+        info += sourceInfo;
+      } else {
+        info += getDeclarationErrorAddendum();
+      }
+
+      var typeString;
+
+      if (type === null) {
+        typeString = 'null';
+      } else if (isArray(type)) {
+        typeString = 'array';
+      } else if (type !== undefined && type.$$typeof === REACT_ELEMENT_TYPE) {
+        typeString = "<" + (getComponentNameFromType(type.type) || 'Unknown') + " />";
+        info = ' Did you accidentally export a JSX literal instead of a component?';
+      } else {
+        typeString = typeof type;
+      }
+
+      error('React.jsx: type is invalid -- expected a string (for ' + 'built-in components) or a class/function (for composite ' + 'components) but got: %s.%s', typeString, info);
+    }
+
+    var element = jsxDEV(type, props, key, source, self); // The result can be nullish if a mock or a custom function is used.
+    // TODO: Drop this when these are no longer allowed as the type argument.
+
+    if (element == null) {
+      return element;
+    } // Skip key warning if the type isn't valid since our key validation logic
+    // doesn't expect a non-string/function type and can throw confusing errors.
+    // We don't want exception behavior to differ between dev and prod.
+    // (Rendering will throw with a helpful message and as soon as the type is
+    // fixed, the key warnings will appear.)
+
+
+    if (validType) {
+      var children = props.children;
+
+      if (children !== undefined) {
+        if (isStaticChildren) {
+          if (isArray(children)) {
+            for (var i = 0; i < children.length; i++) {
+              validateChildKeys(children[i], type);
+            }
+
+            if (Object.freeze) {
+              Object.freeze(children);
+            }
+          } else {
+            error('React.jsx: Static children should always be an array. ' + 'You are likely explicitly calling React.jsxs or React.jsxDEV. ' + 'Use the Babel transform instead.');
+          }
+        } else {
+          validateChildKeys(children, type);
+        }
+      }
+    }
+
+    {
+      if (hasOwnProperty.call(props, 'key')) {
+        var componentName = getComponentNameFromType(type);
+        var keys = Object.keys(props).filter(function (k) {
+          return k !== 'key';
+        });
+        var beforeExample = keys.length > 0 ? '{key: someKey, ' + keys.join(': ..., ') + ': ...}' : '{key: someKey}';
+
+        if (!didWarnAboutKeySpread[componentName + beforeExample]) {
+          var afterExample = keys.length > 0 ? '{' + keys.join(': ..., ') + ': ...}' : '{}';
+
+          error('A props object containing a "key" prop is being spread into JSX:\n' + '  let props = %s;\n' + '  <%s {...props} />\n' + 'React keys must be passed directly to JSX without using spread:\n' + '  let props = %s;\n' + '  <%s key={someKey} {...props} />', beforeExample, componentName, afterExample, componentName);
+
+          didWarnAboutKeySpread[componentName + beforeExample] = true;
+        }
+      }
+    }
+
+    if (type === REACT_FRAGMENT_TYPE) {
+      validateFragmentProps(element);
+    } else {
+      validatePropTypes(element);
+    }
+
+    return element;
+  }
+} // These two functions exist to still get child warnings in dev
+// even with the prod transform. This means that jsxDEV is purely
+// opt-in behavior for better messages but that we won't stop
+// giving you warnings if you use production apis.
+
+function jsxWithValidationStatic(type, props, key) {
+  {
+    return jsxWithValidation(type, props, key, true);
+  }
+}
+function jsxWithValidationDynamic(type, props, key) {
+  {
+    return jsxWithValidation(type, props, key, false);
+  }
+}
+
+var jsx =  jsxWithValidationDynamic ; // we may want to special case jsxs internally to take advantage of static children.
+// for now we can ship identical prod functions
+
+var jsxs =  jsxWithValidationStatic ;
+
+exports.Fragment = REACT_FRAGMENT_TYPE;
+exports.jsx = jsx;
+exports.jsxs = jsxs;
+  })();
+}
+
+
+/***/ }),
+
+/***/ "../node_modules/react/jsx-runtime.js":
+/*!********************************************!*\
+  !*** ../node_modules/react/jsx-runtime.js ***!
+  \********************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+if (false) {} else {
+  module.exports = __webpack_require__(/*! ./cjs/react-jsx-runtime.development.js */ "../node_modules/react/cjs/react-jsx-runtime.development.js");
+}
+
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "React" ***!
@@ -2084,8 +3421,9 @@ var FocusManager = class extends import_subscribable.Subscribable {
     }
   }
   onFocus() {
+    const isFocused = this.isFocused();
     this.listeners.forEach((listener) => {
-      listener();
+      listener(isFocused);
     });
   }
   isFocused() {
@@ -2137,18 +3475,37 @@ __export(hydration_exports, {
   hydrate: () => hydrate
 });
 module.exports = __toCommonJS(hydration_exports);
+function defaultTransformerFn(data) {
+  return data;
+}
 function dehydrateMutation(mutation) {
   return {
     mutationKey: mutation.options.mutationKey,
     state: mutation.state,
+    ...mutation.options.scope && { scope: mutation.options.scope },
     ...mutation.meta && { meta: mutation.meta }
   };
 }
-function dehydrateQuery(query) {
+function dehydrateQuery(query, serializeData) {
   return {
-    state: query.state,
+    state: {
+      ...query.state,
+      ...query.state.data !== void 0 && {
+        data: serializeData(query.state.data)
+      }
+    },
     queryKey: query.queryKey,
     queryHash: query.queryHash,
+    ...query.state.status === "pending" && {
+      promise: query.promise?.then(serializeData).catch((error) => {
+        if (true) {
+          console.error(
+            `A query that was dehydrated as pending ended up rejecting. [${query.queryHash}]: ${error}; The error will be redacted in production builds`
+          );
+        }
+        return Promise.reject(new Error("redacted"));
+      })
+    },
     ...query.meta && { meta: query.meta }
   };
 }
@@ -2159,12 +3516,15 @@ function defaultShouldDehydrateQuery(query) {
   return query.state.status === "success";
 }
 function dehydrate(client, options = {}) {
-  const filterMutation = options.shouldDehydrateMutation ?? defaultShouldDehydrateMutation;
+  const filterMutation = options.shouldDehydrateMutation ?? client.getDefaultOptions().dehydrate?.shouldDehydrateMutation ?? defaultShouldDehydrateMutation;
   const mutations = client.getMutationCache().getAll().flatMap(
     (mutation) => filterMutation(mutation) ? [dehydrateMutation(mutation)] : []
   );
-  const filterQuery = options.shouldDehydrateQuery ?? defaultShouldDehydrateQuery;
-  const queries = client.getQueryCache().getAll().flatMap((query) => filterQuery(query) ? [dehydrateQuery(query)] : []);
+  const filterQuery = options.shouldDehydrateQuery ?? client.getDefaultOptions().dehydrate?.shouldDehydrateQuery ?? defaultShouldDehydrateQuery;
+  const serializeData = options.serializeData ?? client.getDefaultOptions().dehydrate?.serializeData ?? defaultTransformerFn;
+  const queries = client.getQueryCache().getAll().flatMap(
+    (query) => filterQuery(query) ? [dehydrateQuery(query, serializeData)] : []
+  );
   return { mutations, queries };
 }
 function hydrate(client, dehydratedState, options) {
@@ -2173,43 +3533,54 @@ function hydrate(client, dehydratedState, options) {
   }
   const mutationCache = client.getMutationCache();
   const queryCache = client.getQueryCache();
+  const deserializeData = options?.defaultOptions?.deserializeData ?? client.getDefaultOptions().hydrate?.deserializeData ?? defaultTransformerFn;
   const mutations = dehydratedState.mutations || [];
   const queries = dehydratedState.queries || [];
-  mutations.forEach((dehydratedMutation) => {
+  mutations.forEach(({ state, ...mutationOptions }) => {
     mutationCache.build(
       client,
       {
+        ...client.getDefaultOptions().hydrate?.mutations,
         ...options?.defaultOptions?.mutations,
-        mutationKey: dehydratedMutation.mutationKey,
-        meta: dehydratedMutation.meta
+        ...mutationOptions
       },
-      dehydratedMutation.state
+      state
     );
   });
-  queries.forEach(({ queryKey, state, queryHash, meta }) => {
-    const query = queryCache.get(queryHash);
+  queries.forEach(({ queryKey, state, queryHash, meta, promise }) => {
+    let query = queryCache.get(queryHash);
+    const data = state.data === void 0 ? state.data : deserializeData(state.data);
     if (query) {
       if (query.state.dataUpdatedAt < state.dataUpdatedAt) {
-        const { fetchStatus: _ignored, ...dehydratedQueryState } = state;
-        query.setState(dehydratedQueryState);
+        const { fetchStatus: _ignored, ...serializedState } = state;
+        query.setState({
+          ...serializedState,
+          data
+        });
       }
-      return;
+    } else {
+      query = queryCache.build(
+        client,
+        {
+          ...client.getDefaultOptions().hydrate?.queries,
+          ...options?.defaultOptions?.queries,
+          queryKey,
+          queryHash,
+          meta
+        },
+        // Reset fetch status to idle to avoid
+        // query being stuck in fetching state upon hydration
+        {
+          ...state,
+          data,
+          fetchStatus: "idle"
+        }
+      );
     }
-    queryCache.build(
-      client,
-      {
-        ...options?.defaultOptions?.queries,
-        queryKey,
-        queryHash,
-        meta
-      },
-      // Reset fetch status to idle to avoid
-      // query being stuck in fetching state upon hydration
-      {
-        ...state,
-        fetchStatus: "idle"
-      }
-    );
+    if (promise) {
+      const initialPromise = Promise.resolve(promise).then(deserializeData);
+      void query.fetch(void 0, { initialPromise });
+    }
   });
 }
 // Annotate the CommonJS export names for ESM import in node:
@@ -2266,10 +3637,12 @@ __export(src_exports, {
   isCancelledError: () => import_retryer2.isCancelledError,
   isServer: () => import_utils.isServer,
   keepPreviousData: () => import_utils.keepPreviousData,
+  matchMutation: () => import_utils.matchMutation,
   matchQuery: () => import_utils.matchQuery,
   notifyManager: () => import_notifyManager.notifyManager,
   onlineManager: () => import_onlineManager.onlineManager,
-  replaceEqualDeep: () => import_utils.replaceEqualDeep
+  replaceEqualDeep: () => import_utils.replaceEqualDeep,
+  skipToken: () => import_utils.skipToken
 });
 module.exports = __toCommonJS(src_exports);
 var import_retryer = __webpack_require__(/*! ./retryer.cjs */ "../node_modules/@tanstack/query-core/build/modern/retryer.cjs");
@@ -2354,9 +3727,7 @@ function infiniteQueryBehavior(pages) {
             }
           });
         };
-        const queryFn = context.options.queryFn || (() => Promise.reject(
-          new Error(`Missing queryFn: '${context.options.queryHash}'`)
-        ));
+        const queryFn = (0, import_utils.ensureQueryFn)(context.options, context.fetchOptions);
         const fetchPage = async (data, param, previous) => {
           if (cancelled) {
             return Promise.reject();
@@ -2490,7 +3861,6 @@ module.exports = __toCommonJS(infiniteQueryObserver_exports);
 var import_queryObserver = __webpack_require__(/*! ./queryObserver.cjs */ "../node_modules/@tanstack/query-core/build/modern/queryObserver.cjs");
 var import_infiniteQueryBehavior = __webpack_require__(/*! ./infiniteQueryBehavior.cjs */ "../node_modules/@tanstack/query-core/build/modern/infiniteQueryBehavior.cjs");
 var InfiniteQueryObserver = class extends import_queryObserver.QueryObserver {
-  // eslint-disable-next-line @typescript-eslint/no-useless-constructor
   constructor(client, options) {
     super(client, options);
   }
@@ -2530,20 +3900,27 @@ var InfiniteQueryObserver = class extends import_queryObserver.QueryObserver {
   }
   createResult(query, options) {
     const { state } = query;
-    const result = super.createResult(query, options);
-    const { isFetching, isRefetching } = result;
-    const isFetchingNextPage = isFetching && state.fetchMeta?.fetchMore?.direction === "forward";
-    const isFetchingPreviousPage = isFetching && state.fetchMeta?.fetchMore?.direction === "backward";
-    return {
-      ...result,
+    const parentResult = super.createResult(query, options);
+    const { isFetching, isRefetching, isError, isRefetchError } = parentResult;
+    const fetchDirection = state.fetchMeta?.fetchMore?.direction;
+    const isFetchNextPageError = isError && fetchDirection === "forward";
+    const isFetchingNextPage = isFetching && fetchDirection === "forward";
+    const isFetchPreviousPageError = isError && fetchDirection === "backward";
+    const isFetchingPreviousPage = isFetching && fetchDirection === "backward";
+    const result = {
+      ...parentResult,
       fetchNextPage: this.fetchNextPage,
       fetchPreviousPage: this.fetchPreviousPage,
       hasNextPage: (0, import_infiniteQueryBehavior.hasNextPage)(options, state.data),
       hasPreviousPage: (0, import_infiniteQueryBehavior.hasPreviousPage)(options, state.data),
+      isFetchNextPageError,
       isFetchingNextPage,
+      isFetchPreviousPageError,
       isFetchingPreviousPage,
+      isRefetchError: isRefetchError && !isFetchNextPageError && !isFetchPreviousPageError,
       isRefetching: isRefetching && !isFetchingNextPage && !isFetchingPreviousPage
     };
+    return result;
   }
 };
 // Annotate the CommonJS export names for ESM import in node:
@@ -2589,22 +3966,20 @@ var import_notifyManager = __webpack_require__(/*! ./notifyManager.cjs */ "../no
 var import_removable = __webpack_require__(/*! ./removable.cjs */ "../node_modules/@tanstack/query-core/build/modern/removable.cjs");
 var import_retryer = __webpack_require__(/*! ./retryer.cjs */ "../node_modules/@tanstack/query-core/build/modern/retryer.cjs");
 var Mutation = class extends import_removable.Removable {
+  #observers;
+  #mutationCache;
+  #retryer;
   constructor(config) {
     super();
     this.mutationId = config.mutationId;
-    this.#defaultOptions = config.defaultOptions;
     this.#mutationCache = config.mutationCache;
     this.#observers = [];
     this.state = config.state || getDefaultState();
     this.setOptions(config.options);
     this.scheduleGc();
   }
-  #observers;
-  #defaultOptions;
-  #mutationCache;
-  #retryer;
   setOptions(options) {
-    this.options = { ...this.#defaultOptions, ...options };
+    this.options = options;
     this.updateGcTime(this.options.gcTime);
   }
   get meta() {
@@ -2644,33 +4019,32 @@ var Mutation = class extends import_removable.Removable {
     this.execute(this.state.variables);
   }
   async execute(variables) {
-    const executeMutation = () => {
-      this.#retryer = (0, import_retryer.createRetryer)({
-        fn: () => {
-          if (!this.options.mutationFn) {
-            return Promise.reject(new Error("No mutationFn found"));
-          }
-          return this.options.mutationFn(variables);
-        },
-        onFail: (failureCount, error) => {
-          this.#dispatch({ type: "failed", failureCount, error });
-        },
-        onPause: () => {
-          this.#dispatch({ type: "pause" });
-        },
-        onContinue: () => {
-          this.#dispatch({ type: "continue" });
-        },
-        retry: this.options.retry ?? 0,
-        retryDelay: this.options.retryDelay,
-        networkMode: this.options.networkMode
-      });
-      return this.#retryer.promise;
-    };
+    this.#retryer = (0, import_retryer.createRetryer)({
+      fn: () => {
+        if (!this.options.mutationFn) {
+          return Promise.reject(new Error("No mutationFn found"));
+        }
+        return this.options.mutationFn(variables);
+      },
+      onFail: (failureCount, error) => {
+        this.#dispatch({ type: "failed", failureCount, error });
+      },
+      onPause: () => {
+        this.#dispatch({ type: "pause" });
+      },
+      onContinue: () => {
+        this.#dispatch({ type: "continue" });
+      },
+      retry: this.options.retry ?? 0,
+      retryDelay: this.options.retryDelay,
+      networkMode: this.options.networkMode,
+      canRun: () => this.#mutationCache.canRun(this)
+    });
     const restored = this.state.status === "pending";
+    const isPaused = !this.#retryer.canStart();
     try {
       if (!restored) {
-        this.#dispatch({ type: "pending", variables });
+        this.#dispatch({ type: "pending", variables, isPaused });
         await this.#mutationCache.config.onMutate?.(
           variables,
           this
@@ -2680,11 +4054,12 @@ var Mutation = class extends import_removable.Removable {
           this.#dispatch({
             type: "pending",
             context,
-            variables
+            variables,
+            isPaused
           });
         }
       }
-      const data = await executeMutation();
+      const data = await this.#retryer.start();
       await this.#mutationCache.config.onSuccess?.(
         data,
         variables,
@@ -2732,6 +4107,8 @@ var Mutation = class extends import_removable.Removable {
       } finally {
         this.#dispatch({ type: "error", error });
       }
+    } finally {
+      this.#mutationCache.runNext(this);
     }
   }
   #dispatch(action) {
@@ -2761,7 +4138,7 @@ var Mutation = class extends import_removable.Removable {
             failureCount: 0,
             failureReason: null,
             error: null,
-            isPaused: !(0, import_retryer.canFetch)(this.options.networkMode),
+            isPaused: action.isPaused,
             status: "pending",
             variables: action.variables,
             submittedAt: Date.now()
@@ -2860,12 +4237,11 @@ var MutationCache = class extends import_subscribable.Subscribable {
   constructor(config = {}) {
     super();
     this.config = config;
-    this.#mutations = [];
-    this.#mutationId = 0;
+    this.#mutations = /* @__PURE__ */ new Map();
+    this.#mutationId = Date.now();
   }
   #mutations;
   #mutationId;
-  #resuming;
   build(client, options, state) {
     const mutation = new import_mutation.Mutation({
       mutationCache: this,
@@ -2877,33 +4253,52 @@ var MutationCache = class extends import_subscribable.Subscribable {
     return mutation;
   }
   add(mutation) {
-    this.#mutations.push(mutation);
+    const scope = scopeFor(mutation);
+    const mutations = this.#mutations.get(scope) ?? [];
+    mutations.push(mutation);
+    this.#mutations.set(scope, mutations);
     this.notify({ type: "added", mutation });
   }
   remove(mutation) {
-    this.#mutations = this.#mutations.filter((x) => x !== mutation);
+    const scope = scopeFor(mutation);
+    if (this.#mutations.has(scope)) {
+      const mutations = this.#mutations.get(scope)?.filter((x) => x !== mutation);
+      if (mutations) {
+        if (mutations.length === 0) {
+          this.#mutations.delete(scope);
+        } else {
+          this.#mutations.set(scope, mutations);
+        }
+      }
+    }
     this.notify({ type: "removed", mutation });
+  }
+  canRun(mutation) {
+    const firstPendingMutation = this.#mutations.get(scopeFor(mutation))?.find((m) => m.state.status === "pending");
+    return !firstPendingMutation || firstPendingMutation === mutation;
+  }
+  runNext(mutation) {
+    const foundMutation = this.#mutations.get(scopeFor(mutation))?.find((m) => m !== mutation && m.state.isPaused);
+    return foundMutation?.continue() ?? Promise.resolve();
   }
   clear() {
     import_notifyManager.notifyManager.batch(() => {
-      this.#mutations.forEach((mutation) => {
+      this.getAll().forEach((mutation) => {
         this.remove(mutation);
       });
     });
   }
   getAll() {
-    return this.#mutations;
+    return [...this.#mutations.values()].flat();
   }
   find(filters) {
     const defaultedFilters = { exact: true, ...filters };
-    return this.#mutations.find(
+    return this.getAll().find(
       (mutation) => (0, import_utils.matchMutation)(defaultedFilters, mutation)
     );
   }
   findAll(filters = {}) {
-    return this.#mutations.filter(
-      (mutation) => (0, import_utils.matchMutation)(filters, mutation)
-    );
+    return this.getAll().filter((mutation) => (0, import_utils.matchMutation)(filters, mutation));
   }
   notify(event) {
     import_notifyManager.notifyManager.batch(() => {
@@ -2913,20 +4308,17 @@ var MutationCache = class extends import_subscribable.Subscribable {
     });
   }
   resumePausedMutations() {
-    this.#resuming = (this.#resuming ?? Promise.resolve()).then(() => {
-      const pausedMutations = this.#mutations.filter((x) => x.state.isPaused);
-      return import_notifyManager.notifyManager.batch(
-        () => pausedMutations.reduce(
-          (promise, mutation) => promise.then(() => mutation.continue().catch(import_utils.noop)),
-          Promise.resolve()
-        )
-      );
-    }).then(() => {
-      this.#resuming = void 0;
-    });
-    return this.#resuming;
+    const pausedMutations = this.getAll().filter((x) => x.state.isPaused);
+    return import_notifyManager.notifyManager.batch(
+      () => Promise.all(
+        pausedMutations.map((mutation) => mutation.continue().catch(import_utils.noop))
+      )
+    );
   }
 };
+function scopeFor(mutation) {
+  return mutation.options.scope?.id ?? String(mutation.mutationId);
+}
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
 //# sourceMappingURL=mutationCache.cjs.map
@@ -2970,18 +4362,17 @@ var import_notifyManager = __webpack_require__(/*! ./notifyManager.cjs */ "../no
 var import_subscribable = __webpack_require__(/*! ./subscribable.cjs */ "../node_modules/@tanstack/query-core/build/modern/subscribable.cjs");
 var import_utils = __webpack_require__(/*! ./utils.cjs */ "../node_modules/@tanstack/query-core/build/modern/utils.cjs");
 var MutationObserver = class extends import_subscribable.Subscribable {
+  #client;
+  #currentResult = void 0;
+  #currentMutation;
+  #mutateOptions;
   constructor(client, options) {
     super();
-    this.#currentResult = void 0;
     this.#client = client;
     this.setOptions(options);
     this.bindMethods();
     this.#updateResult();
   }
-  #client;
-  #currentResult;
-  #currentMutation;
-  #mutateOptions;
   bindMethods() {
     this.mutate = this.mutate.bind(this);
     this.reset = this.reset.bind(this);
@@ -2989,14 +4380,18 @@ var MutationObserver = class extends import_subscribable.Subscribable {
   setOptions(options) {
     const prevOptions = this.options;
     this.options = this.#client.defaultMutationOptions(options);
-    if (!(0, import_utils.shallowEqualObjects)(prevOptions, this.options)) {
+    if (!(0, import_utils.shallowEqualObjects)(this.options, prevOptions)) {
       this.#client.getMutationCache().notify({
         type: "observerOptionsUpdated",
         mutation: this.#currentMutation,
         observer: this
       });
     }
-    this.#currentMutation?.setOptions(this.options);
+    if (prevOptions?.mutationKey && this.options.mutationKey && (0, import_utils.hashKey)(prevOptions.mutationKey) !== (0, import_utils.hashKey)(this.options.mutationKey)) {
+      this.reset();
+    } else if (this.#currentMutation?.state.status === "pending") {
+      this.#currentMutation.setOptions(this.options);
+    }
   }
   onUnsubscribe() {
     if (!this.hasListeners()) {
@@ -3011,6 +4406,7 @@ var MutationObserver = class extends import_subscribable.Subscribable {
     return this.#currentResult;
   }
   reset() {
+    this.#currentMutation?.removeObserver(this);
     this.#currentMutation = void 0;
     this.#updateResult();
     this.#notify();
@@ -3037,29 +4433,18 @@ var MutationObserver = class extends import_subscribable.Subscribable {
   #notify(action) {
     import_notifyManager.notifyManager.batch(() => {
       if (this.#mutateOptions && this.hasListeners()) {
+        const variables = this.#currentResult.variables;
+        const context = this.#currentResult.context;
         if (action?.type === "success") {
-          this.#mutateOptions.onSuccess?.(
-            action.data,
-            this.#currentResult.variables,
-            this.#currentResult.context
-          );
-          this.#mutateOptions.onSettled?.(
-            action.data,
-            null,
-            this.#currentResult.variables,
-            this.#currentResult.context
-          );
+          this.#mutateOptions.onSuccess?.(action.data, variables, context);
+          this.#mutateOptions.onSettled?.(action.data, null, variables, context);
         } else if (action?.type === "error") {
-          this.#mutateOptions.onError?.(
-            action.error,
-            this.#currentResult.variables,
-            this.#currentResult.context
-          );
+          this.#mutateOptions.onError?.(action.error, variables, context);
           this.#mutateOptions.onSettled?.(
             void 0,
             action.error,
-            this.#currentResult.variables,
-            this.#currentResult.context
+            variables,
+            context
           );
         }
       }
@@ -3079,7 +4464,7 @@ var MutationObserver = class extends import_subscribable.Subscribable {
 /*!***************************************************************************!*\
   !*** ../node_modules/@tanstack/query-core/build/modern/notifyManager.cjs ***!
   \***************************************************************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
 
@@ -3108,7 +4493,6 @@ __export(notifyManager_exports, {
   notifyManager: () => notifyManager
 });
 module.exports = __toCommonJS(notifyManager_exports);
-var import_utils = __webpack_require__(/*! ./utils.cjs */ "../node_modules/@tanstack/query-core/build/modern/utils.cjs");
 function createNotifyManager() {
   let queue = [];
   let transactions = 0;
@@ -3117,6 +4501,10 @@ function createNotifyManager() {
   };
   let batchNotifyFn = (callback) => {
     callback();
+  };
+  let scheduleFn = (cb) => setTimeout(cb, 0);
+  const setScheduler = (fn) => {
+    scheduleFn = fn;
   };
   const batch = (callback) => {
     let result;
@@ -3135,7 +4523,7 @@ function createNotifyManager() {
     if (transactions) {
       queue.push(callback);
     } else {
-      (0, import_utils.scheduleMicrotask)(() => {
+      scheduleFn(() => {
         notifyFn(callback);
       });
     }
@@ -3151,7 +4539,7 @@ function createNotifyManager() {
     const originalQueue = queue;
     queue = [];
     if (originalQueue.length) {
-      (0, import_utils.scheduleMicrotask)(() => {
+      scheduleFn(() => {
         batchNotifyFn(() => {
           originalQueue.forEach((callback) => {
             notifyFn(callback);
@@ -3171,7 +4559,8 @@ function createNotifyManager() {
     batchCalls,
     schedule,
     setNotifyFunction,
-    setBatchNotifyFunction
+    setBatchNotifyFunction,
+    setScheduler
   };
 }
 var notifyManager = createNotifyManager();
@@ -3321,19 +4710,16 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
   #result;
   #queries;
   #observers;
-  #options;
   #combinedResult;
-  constructor(client, queries, options) {
+  #lastCombine;
+  #lastResult;
+  constructor(client, queries, _options) {
     super();
     this.#client = client;
     this.#queries = [];
     this.#observers = [];
-    this.#setResult([]);
-    this.setQueries(queries, options);
-  }
-  #setResult(value) {
-    this.#result = value;
-    this.#combinedResult = this.#combineResult(value);
+    this.#result = [];
+    this.setQueries(queries);
   }
   onSubscribe() {
     if (this.listeners.size === 1) {
@@ -3355,9 +4741,8 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
       observer.destroy();
     });
   }
-  setQueries(queries, options, notifyOptions) {
+  setQueries(queries, _options, notifyOptions) {
     this.#queries = queries;
-    this.#options = options;
     import_notifyManager.notifyManager.batch(() => {
       const prevObservers = this.#observers;
       const newObserverMatches = this.#findMatchingObservers(this.#queries);
@@ -3375,7 +4760,7 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
         return;
       }
       this.#observers = newObservers;
-      this.#setResult(newResult);
+      this.#result = newResult;
       if (!this.hasListeners()) {
         return;
       }
@@ -3391,7 +4776,7 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
     });
   }
   getCurrentResult() {
-    return this.#combinedResult;
+    return this.#result;
   }
   getQueries() {
     return this.#observers.map((observer) => observer.getCurrentQuery());
@@ -3399,7 +4784,7 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
   getObservers() {
     return this.#observers;
   }
-  getOptimisticResult(queries) {
+  getOptimisticResult(queries, combine) {
     const matches = this.#findMatchingObservers(queries);
     const result = matches.map(
       (match) => match.observer.getOptimisticResult(match.defaultedQueryOptions)
@@ -3407,20 +4792,31 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
     return [
       result,
       (r) => {
-        return this.#combineResult(r ?? result);
+        return this.#combineResult(r ?? result, combine);
       },
       () => {
         return matches.map((match, index) => {
           const observerResult = result[index];
-          return !match.defaultedQueryOptions.notifyOnChangeProps ? match.observer.trackResult(observerResult) : observerResult;
+          return !match.defaultedQueryOptions.notifyOnChangeProps ? match.observer.trackResult(observerResult, (accessedProp) => {
+            matches.forEach((m) => {
+              m.observer.trackProp(accessedProp);
+            });
+          }) : observerResult;
         });
       }
     ];
   }
-  #combineResult(input) {
-    const combine = this.#options?.combine;
+  #combineResult(input, combine) {
     if (combine) {
-      return (0, import_utils.replaceEqualDeep)(this.#combinedResult, combine(input));
+      if (!this.#combinedResult || this.#result !== this.#lastResult || combine !== this.#lastCombine) {
+        this.#lastCombine = combine;
+        this.#lastResult = this.#result;
+        this.#combinedResult = (0, import_utils.replaceEqualDeep)(
+          this.#combinedResult,
+          combine(input)
+        );
+      }
+      return this.#combinedResult;
     }
     return input;
   }
@@ -3464,7 +4860,7 @@ var QueriesObserver = class extends import_subscribable.Subscribable {
   #onUpdate(observer, result) {
     const index = this.#observers.indexOf(observer);
     if (index !== -1) {
-      this.#setResult(replaceAt(this.#result, index, result));
+      this.#result = replaceAt(this.#result, index, result);
       this.#notify();
     }
   }
@@ -3511,7 +4907,8 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/query.ts
 var query_exports = {};
 __export(query_exports, {
-  Query: () => Query
+  Query: () => Query,
+  fetchState: () => fetchState
 });
 module.exports = __toCommonJS(query_exports);
 var import_utils = __webpack_require__(/*! ./utils.cjs */ "../node_modules/@tanstack/query-core/build/modern/utils.cjs");
@@ -3519,12 +4916,18 @@ var import_notifyManager = __webpack_require__(/*! ./notifyManager.cjs */ "../no
 var import_retryer = __webpack_require__(/*! ./retryer.cjs */ "../node_modules/@tanstack/query-core/build/modern/retryer.cjs");
 var import_removable = __webpack_require__(/*! ./removable.cjs */ "../node_modules/@tanstack/query-core/build/modern/removable.cjs");
 var Query = class extends import_removable.Removable {
+  #initialState;
+  #revertState;
+  #cache;
+  #retryer;
+  #defaultOptions;
+  #abortSignalConsumed;
   constructor(config) {
     super();
     this.#abortSignalConsumed = false;
     this.#defaultOptions = config.defaultOptions;
-    this.#setOptions(config.options);
-    this.#observers = [];
+    this.setOptions(config.options);
+    this.observers = [];
     this.#cache = config.cache;
     this.queryKey = config.queryKey;
     this.queryHash = config.queryHash;
@@ -3532,23 +4935,18 @@ var Query = class extends import_removable.Removable {
     this.state = this.#initialState;
     this.scheduleGc();
   }
-  #initialState;
-  #revertState;
-  #cache;
-  #promise;
-  #retryer;
-  #observers;
-  #defaultOptions;
-  #abortSignalConsumed;
   get meta() {
     return this.options.meta;
   }
-  #setOptions(options) {
+  get promise() {
+    return this.#retryer?.promise;
+  }
+  setOptions(options) {
     this.options = { ...this.#defaultOptions, ...options };
     this.updateGcTime(this.options.gcTime);
   }
   optionalRemove() {
-    if (!this.#observers.length && this.state.fetchStatus === "idle") {
+    if (!this.observers.length && this.state.fetchStatus === "idle") {
       this.#cache.remove(this);
     }
   }
@@ -3566,7 +4964,7 @@ var Query = class extends import_removable.Removable {
     this.#dispatch({ type: "setState", state, setStateOptions });
   }
   cancel(options) {
-    const promise = this.#promise;
+    const promise = this.#retryer?.promise;
     this.#retryer?.cancel(options);
     return promise ? promise.then(import_utils.noop).catch(import_utils.noop) : Promise.resolve();
   }
@@ -3579,40 +4977,48 @@ var Query = class extends import_removable.Removable {
     this.setState(this.#initialState);
   }
   isActive() {
-    return this.#observers.some(
-      (observer) => observer.options.enabled !== false
+    return this.observers.some(
+      (observer) => (0, import_utils.resolveEnabled)(observer.options.enabled, this) !== false
     );
   }
   isDisabled() {
     return this.getObserversCount() > 0 && !this.isActive();
   }
   isStale() {
-    return this.state.isInvalidated || !this.state.dataUpdatedAt || this.#observers.some((observer) => observer.getCurrentResult().isStale);
+    if (this.state.isInvalidated) {
+      return true;
+    }
+    if (this.getObserversCount() > 0) {
+      return this.observers.some(
+        (observer) => observer.getCurrentResult().isStale
+      );
+    }
+    return this.state.data === void 0;
   }
   isStaleByTime(staleTime = 0) {
-    return this.state.isInvalidated || !this.state.dataUpdatedAt || !(0, import_utils.timeUntilStale)(this.state.dataUpdatedAt, staleTime);
+    return this.state.isInvalidated || this.state.data === void 0 || !(0, import_utils.timeUntilStale)(this.state.dataUpdatedAt, staleTime);
   }
   onFocus() {
-    const observer = this.#observers.find((x) => x.shouldFetchOnWindowFocus());
+    const observer = this.observers.find((x) => x.shouldFetchOnWindowFocus());
     observer?.refetch({ cancelRefetch: false });
     this.#retryer?.continue();
   }
   onOnline() {
-    const observer = this.#observers.find((x) => x.shouldFetchOnReconnect());
+    const observer = this.observers.find((x) => x.shouldFetchOnReconnect());
     observer?.refetch({ cancelRefetch: false });
     this.#retryer?.continue();
   }
   addObserver(observer) {
-    if (!this.#observers.includes(observer)) {
-      this.#observers.push(observer);
+    if (!this.observers.includes(observer)) {
+      this.observers.push(observer);
       this.clearGcTimeout();
       this.#cache.notify({ type: "observerAdded", query: this, observer });
     }
   }
   removeObserver(observer) {
-    if (this.#observers.includes(observer)) {
-      this.#observers = this.#observers.filter((x) => x !== observer);
-      if (!this.#observers.length) {
+    if (this.observers.includes(observer)) {
+      this.observers = this.observers.filter((x) => x !== observer);
+      if (!this.observers.length) {
         if (this.#retryer) {
           if (this.#abortSignalConsumed) {
             this.#retryer.cancel({ revert: true });
@@ -3626,7 +5032,7 @@ var Query = class extends import_removable.Removable {
     }
   }
   getObserversCount() {
-    return this.#observers.length;
+    return this.observers.length;
   }
   invalidate() {
     if (!this.state.isInvalidated) {
@@ -3635,20 +5041,20 @@ var Query = class extends import_removable.Removable {
   }
   fetch(options, fetchOptions) {
     if (this.state.fetchStatus !== "idle") {
-      if (this.state.dataUpdatedAt && fetchOptions?.cancelRefetch) {
+      if (this.state.data !== void 0 && fetchOptions?.cancelRefetch) {
         this.cancel({ silent: true });
-      } else if (this.#promise) {
-        this.#retryer?.continueRetry();
-        return this.#promise;
+      } else if (this.#retryer) {
+        this.#retryer.continueRetry();
+        return this.#retryer.promise;
       }
     }
     if (options) {
-      this.#setOptions(options);
+      this.setOptions(options);
     }
     if (!this.options.queryFn) {
-      const observer = this.#observers.find((x) => x.options.queryFn);
+      const observer = this.observers.find((x) => x.options.queryFn);
       if (observer) {
-        this.#setOptions(observer.options);
+        this.setOptions(observer.options);
       }
     }
     if (true) {
@@ -3659,10 +5065,6 @@ var Query = class extends import_removable.Removable {
       }
     }
     const abortController = new AbortController();
-    const queryFnContext = {
-      queryKey: this.queryKey,
-      meta: this.meta
-    };
     const addSignalProperty = (object) => {
       Object.defineProperty(object, "signal", {
         enumerable: true,
@@ -3672,24 +5074,22 @@ var Query = class extends import_removable.Removable {
         }
       });
     };
-    addSignalProperty(queryFnContext);
     const fetchFn = () => {
-      if (!this.options.queryFn) {
-        return Promise.reject(
-          new Error(`Missing queryFn: '${this.options.queryHash}'`)
-        );
-      }
+      const queryFn = (0, import_utils.ensureQueryFn)(this.options, fetchOptions);
+      const queryFnContext = {
+        queryKey: this.queryKey,
+        meta: this.meta
+      };
+      addSignalProperty(queryFnContext);
       this.#abortSignalConsumed = false;
       if (this.options.persister) {
         return this.options.persister(
-          this.options.queryFn,
+          queryFn,
           queryFnContext,
           this
         );
       }
-      return this.options.queryFn(
-        queryFnContext
-      );
+      return queryFn(queryFnContext);
     };
     const context = {
       fetchOptions,
@@ -3731,10 +5131,11 @@ var Query = class extends import_removable.Removable {
       this.isFetchingOptimistic = false;
     };
     this.#retryer = (0, import_retryer.createRetryer)({
+      initialPromise: fetchOptions?.initialPromise,
       fn: context.fetchFn,
       abort: abortController.abort.bind(abortController),
       onSuccess: (data) => {
-        if (typeof data === "undefined") {
+        if (data === void 0) {
           if (true) {
             console.error(
               `Query data cannot be undefined. Please make sure to return a value other than undefined from your query function. Affected query key: ${this.queryHash}`
@@ -3767,10 +5168,10 @@ var Query = class extends import_removable.Removable {
       },
       retry: context.options.retry,
       retryDelay: context.options.retryDelay,
-      networkMode: context.options.networkMode
+      networkMode: context.options.networkMode,
+      canRun: () => true
     });
-    this.#promise = this.#retryer.promise;
-    return this.#promise;
+    return this.#retryer.start();
   }
   #dispatch(action) {
     const reducer = (state) => {
@@ -3794,14 +5195,8 @@ var Query = class extends import_removable.Removable {
         case "fetch":
           return {
             ...state,
-            fetchFailureCount: 0,
-            fetchFailureReason: null,
-            fetchMeta: action.meta ?? null,
-            fetchStatus: (0, import_retryer.canFetch)(this.options.networkMode) ? "fetching" : "paused",
-            ...!state.dataUpdatedAt && {
-              error: null,
-              status: "pending"
-            }
+            ...fetchState(state.data, this.options),
+            fetchMeta: action.meta ?? null
           };
         case "success":
           return {
@@ -3847,16 +5242,27 @@ var Query = class extends import_removable.Removable {
     };
     this.state = reducer(this.state);
     import_notifyManager.notifyManager.batch(() => {
-      this.#observers.forEach((observer) => {
+      this.observers.forEach((observer) => {
         observer.onQueryUpdate();
       });
       this.#cache.notify({ query: this, type: "updated", action });
     });
   }
 };
+function fetchState(data, options) {
+  return {
+    fetchFailureCount: 0,
+    fetchFailureReason: null,
+    fetchStatus: (0, import_retryer.canFetch)(options.networkMode) ? "fetching" : "paused",
+    ...data === void 0 && {
+      error: null,
+      status: "pending"
+    }
+  };
+}
 function getDefaultState(options) {
   const data = typeof options.initialData === "function" ? options.initialData() : options.initialData;
-  const hasData = typeof data !== "undefined";
+  const hasData = data !== void 0;
   const initialDataUpdatedAt = hasData ? typeof options.initialDataUpdatedAt === "function" ? options.initialDataUpdatedAt() : options.initialDataUpdatedAt : 0;
   return {
     data,
@@ -4069,15 +5475,15 @@ var QueryClient = class {
     this.#mountCount++;
     if (this.#mountCount !== 1)
       return;
-    this.#unsubscribeFocus = import_focusManager.focusManager.subscribe(() => {
-      if (import_focusManager.focusManager.isFocused()) {
-        this.resumePausedMutations();
+    this.#unsubscribeFocus = import_focusManager.focusManager.subscribe(async (focused) => {
+      if (focused) {
+        await this.resumePausedMutations();
         this.#queryCache.onFocus();
       }
     });
-    this.#unsubscribeOnline = import_onlineManager.onlineManager.subscribe(() => {
-      if (import_onlineManager.onlineManager.isOnline()) {
-        this.resumePausedMutations();
+    this.#unsubscribeOnline = import_onlineManager.onlineManager.subscribe(async (online) => {
+      if (online) {
+        await this.resumePausedMutations();
         this.#queryCache.onOnline();
       }
     });
@@ -4098,38 +5504,51 @@ var QueryClient = class {
     return this.#mutationCache.findAll({ ...filters, status: "pending" }).length;
   }
   getQueryData(queryKey) {
-    return this.#queryCache.find({ queryKey })?.state.data;
+    const options = this.defaultQueryOptions({ queryKey });
+    return this.#queryCache.get(options.queryHash)?.state.data;
   }
   ensureQueryData(options) {
     const cachedData = this.getQueryData(options.queryKey);
-    return cachedData !== void 0 ? Promise.resolve(cachedData) : this.fetchQuery(options);
+    if (cachedData === void 0)
+      return this.fetchQuery(options);
+    else {
+      const defaultedOptions = this.defaultQueryOptions(options);
+      const query = this.#queryCache.build(this, defaultedOptions);
+      if (options.revalidateIfStale && query.isStaleByTime((0, import_utils.resolveStaleTime)(defaultedOptions.staleTime, query))) {
+        void this.prefetchQuery(defaultedOptions);
+      }
+      return Promise.resolve(cachedData);
+    }
   }
   getQueriesData(filters) {
-    return this.getQueryCache().findAll(filters).map(({ queryKey, state }) => {
+    return this.#queryCache.findAll(filters).map(({ queryKey, state }) => {
       const data = state.data;
       return [queryKey, data];
     });
   }
   setQueryData(queryKey, updater, options) {
-    const query = this.#queryCache.find({ queryKey });
+    const defaultedOptions = this.defaultQueryOptions({ queryKey });
+    const query = this.#queryCache.get(
+      defaultedOptions.queryHash
+    );
     const prevData = query?.state.data;
     const data = (0, import_utils.functionalUpdate)(updater, prevData);
-    if (typeof data === "undefined") {
+    if (data === void 0) {
       return void 0;
     }
-    const defaultedOptions = this.defaultQueryOptions({ queryKey });
     return this.#queryCache.build(this, defaultedOptions).setData(data, { ...options, manual: true });
   }
   setQueriesData(filters, updater, options) {
     return import_notifyManager.notifyManager.batch(
-      () => this.getQueryCache().findAll(filters).map(({ queryKey }) => [
+      () => this.#queryCache.findAll(filters).map(({ queryKey }) => [
         queryKey,
         this.setQueryData(queryKey, updater, options)
       ])
     );
   }
   getQueryState(queryKey) {
-    return this.#queryCache.find({ queryKey })?.state;
+    const options = this.defaultQueryOptions({ queryKey });
+    return this.#queryCache.get(options.queryHash)?.state;
   }
   removeQueries(filters) {
     const queryCache = this.#queryCache;
@@ -4192,11 +5611,13 @@ var QueryClient = class {
   }
   fetchQuery(options) {
     const defaultedOptions = this.defaultQueryOptions(options);
-    if (typeof defaultedOptions.retry === "undefined") {
+    if (defaultedOptions.retry === void 0) {
       defaultedOptions.retry = false;
     }
     const query = this.#queryCache.build(this, defaultedOptions);
-    return query.isStaleByTime(defaultedOptions.staleTime) ? query.fetch(defaultedOptions) : Promise.resolve(query.state.data);
+    return query.isStaleByTime(
+      (0, import_utils.resolveStaleTime)(defaultedOptions.staleTime, query)
+    ) ? query.fetch(defaultedOptions) : Promise.resolve(query.state.data);
   }
   prefetchQuery(options) {
     return this.fetchQuery(options).then(import_utils.noop).catch(import_utils.noop);
@@ -4209,7 +5630,10 @@ var QueryClient = class {
     return this.fetchInfiniteQuery(options).then(import_utils.noop).catch(import_utils.noop);
   }
   resumePausedMutations() {
-    return this.#mutationCache.resumePausedMutations();
+    if (import_onlineManager.onlineManager.isOnline()) {
+      return this.#mutationCache.resumePausedMutations();
+    }
+    return Promise.resolve();
   }
   getQueryCache() {
     return this.#queryCache;
@@ -4256,12 +5680,12 @@ var QueryClient = class {
     return result;
   }
   defaultQueryOptions(options) {
-    if (options?._defaulted) {
+    if (options._defaulted) {
       return options;
     }
     const defaultedOptions = {
       ...this.#defaultOptions.queries,
-      ...options?.queryKey && this.getQueryDefaults(options.queryKey),
+      ...this.getQueryDefaults(options.queryKey),
       ...options,
       _defaulted: true
     };
@@ -4271,14 +5695,17 @@ var QueryClient = class {
         defaultedOptions
       );
     }
-    if (typeof defaultedOptions.refetchOnReconnect === "undefined") {
+    if (defaultedOptions.refetchOnReconnect === void 0) {
       defaultedOptions.refetchOnReconnect = defaultedOptions.networkMode !== "always";
     }
-    if (typeof defaultedOptions.throwOnError === "undefined") {
+    if (defaultedOptions.throwOnError === void 0) {
       defaultedOptions.throwOnError = !!defaultedOptions.suspense;
     }
-    if (typeof defaultedOptions.networkMode === "undefined" && defaultedOptions.persister) {
+    if (!defaultedOptions.networkMode && defaultedOptions.persister) {
       defaultedOptions.networkMode = "offlineFirst";
+    }
+    if (defaultedOptions.enabled !== true && defaultedOptions.queryFn === import_utils.skipToken) {
+      defaultedOptions.enabled = false;
     }
     return defaultedOptions;
   }
@@ -4340,24 +5767,20 @@ var import_utils = __webpack_require__(/*! ./utils.cjs */ "../node_modules/@tans
 var import_notifyManager = __webpack_require__(/*! ./notifyManager.cjs */ "../node_modules/@tanstack/query-core/build/modern/notifyManager.cjs");
 var import_focusManager = __webpack_require__(/*! ./focusManager.cjs */ "../node_modules/@tanstack/query-core/build/modern/focusManager.cjs");
 var import_subscribable = __webpack_require__(/*! ./subscribable.cjs */ "../node_modules/@tanstack/query-core/build/modern/subscribable.cjs");
-var import_retryer = __webpack_require__(/*! ./retryer.cjs */ "../node_modules/@tanstack/query-core/build/modern/retryer.cjs");
+var import_query = __webpack_require__(/*! ./query.cjs */ "../node_modules/@tanstack/query-core/build/modern/query.cjs");
 var QueryObserver = class extends import_subscribable.Subscribable {
   constructor(client, options) {
     super();
-    this.#currentQuery = void 0;
-    this.#currentQueryInitialState = void 0;
-    this.#currentResult = void 0;
-    this.#trackedProps = /* @__PURE__ */ new Set();
-    this.#client = client;
     this.options = options;
+    this.#client = client;
     this.#selectError = null;
     this.bindMethods();
     this.setOptions(options);
   }
   #client;
-  #currentQuery;
-  #currentQueryInitialState;
-  #currentResult;
+  #currentQuery = void 0;
+  #currentQueryInitialState = void 0;
+  #currentResult = void 0;
   #currentResultState;
   #currentResultOptions;
   #selectError;
@@ -4369,7 +5792,7 @@ var QueryObserver = class extends import_subscribable.Subscribable {
   #staleTimeoutId;
   #refetchIntervalId;
   #currentRefetchInterval;
-  #trackedProps;
+  #trackedProps = /* @__PURE__ */ new Set();
   bindMethods() {
     this.refetch = this.refetch.bind(this);
   }
@@ -4378,6 +5801,8 @@ var QueryObserver = class extends import_subscribable.Subscribable {
       this.#currentQuery.addObserver(this);
       if (shouldFetchOnMount(this.#currentQuery, this.options)) {
         this.#executeFetch();
+      } else {
+        this.updateResult();
       }
       this.#updateTimers();
     }
@@ -4411,20 +5836,20 @@ var QueryObserver = class extends import_subscribable.Subscribable {
     const prevOptions = this.options;
     const prevQuery = this.#currentQuery;
     this.options = this.#client.defaultQueryOptions(options);
-    if (!(0, import_utils.shallowEqualObjects)(prevOptions, this.options)) {
+    if (this.options.enabled !== void 0 && typeof this.options.enabled !== "boolean" && typeof this.options.enabled !== "function" && typeof (0, import_utils.resolveEnabled)(this.options.enabled, this.#currentQuery) !== "boolean") {
+      throw new Error(
+        "Expected enabled to be a boolean or a callback that returns a boolean"
+      );
+    }
+    this.#updateQuery();
+    this.#currentQuery.setOptions(this.options);
+    if (prevOptions._defaulted && !(0, import_utils.shallowEqualObjects)(this.options, prevOptions)) {
       this.#client.getQueryCache().notify({
         type: "observerOptionsUpdated",
         query: this.#currentQuery,
         observer: this
       });
     }
-    if (typeof this.options.enabled !== "undefined" && typeof this.options.enabled !== "boolean") {
-      throw new Error("Expected enabled to be a boolean");
-    }
-    if (!this.options.queryKey) {
-      this.options.queryKey = prevOptions.queryKey;
-    }
-    this.#updateQuery();
     const mounted = this.hasListeners();
     if (mounted && shouldFetchOptionally(
       this.#currentQuery,
@@ -4435,11 +5860,11 @@ var QueryObserver = class extends import_subscribable.Subscribable {
       this.#executeFetch();
     }
     this.updateResult(notifyOptions);
-    if (mounted && (this.#currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || this.options.staleTime !== prevOptions.staleTime)) {
+    if (mounted && (this.#currentQuery !== prevQuery || (0, import_utils.resolveEnabled)(this.options.enabled, this.#currentQuery) !== (0, import_utils.resolveEnabled)(prevOptions.enabled, this.#currentQuery) || (0, import_utils.resolveStaleTime)(this.options.staleTime, this.#currentQuery) !== (0, import_utils.resolveStaleTime)(prevOptions.staleTime, this.#currentQuery))) {
       this.#updateStaleTimeout();
     }
     const nextRefetchInterval = this.#computeRefetchInterval();
-    if (mounted && (this.#currentQuery !== prevQuery || this.options.enabled !== prevOptions.enabled || nextRefetchInterval !== this.#currentRefetchInterval)) {
+    if (mounted && (this.#currentQuery !== prevQuery || (0, import_utils.resolveEnabled)(this.options.enabled, this.#currentQuery) !== (0, import_utils.resolveEnabled)(prevOptions.enabled, this.#currentQuery) || nextRefetchInterval !== this.#currentRefetchInterval)) {
       this.#updateRefetchInterval(nextRefetchInterval);
     }
   }
@@ -4456,19 +5881,23 @@ var QueryObserver = class extends import_subscribable.Subscribable {
   getCurrentResult() {
     return this.#currentResult;
   }
-  trackResult(result) {
+  trackResult(result, onPropTracked) {
     const trackedResult = {};
     Object.keys(result).forEach((key) => {
       Object.defineProperty(trackedResult, key, {
         configurable: false,
         enumerable: true,
         get: () => {
-          this.#trackedProps.add(key);
+          this.trackProp(key);
+          onPropTracked?.(key);
           return result[key];
         }
       });
     });
     return trackedResult;
+  }
+  trackProp(key) {
+    this.#trackedProps.add(key);
   }
   getCurrentQuery() {
     return this.#currentQuery;
@@ -4506,13 +5935,14 @@ var QueryObserver = class extends import_subscribable.Subscribable {
   }
   #updateStaleTimeout() {
     this.#clearStaleTimeout();
-    if (import_utils.isServer || this.#currentResult.isStale || !(0, import_utils.isValidTimeout)(this.options.staleTime)) {
+    const staleTime = (0, import_utils.resolveStaleTime)(
+      this.options.staleTime,
+      this.#currentQuery
+    );
+    if (import_utils.isServer || this.#currentResult.isStale || !(0, import_utils.isValidTimeout)(staleTime)) {
       return;
     }
-    const time = (0, import_utils.timeUntilStale)(
-      this.#currentResult.dataUpdatedAt,
-      this.options.staleTime
-    );
+    const time = (0, import_utils.timeUntilStale)(this.#currentResult.dataUpdatedAt, staleTime);
     const timeout = time + 1;
     this.#staleTimeoutId = setTimeout(() => {
       if (!this.#currentResult.isStale) {
@@ -4526,7 +5956,7 @@ var QueryObserver = class extends import_subscribable.Subscribable {
   #updateRefetchInterval(nextInterval) {
     this.#clearRefetchInterval();
     this.#currentRefetchInterval = nextInterval;
-    if (import_utils.isServer || this.options.enabled === false || !(0, import_utils.isValidTimeout)(this.#currentRefetchInterval) || this.#currentRefetchInterval === 0) {
+    if (import_utils.isServer || (0, import_utils.resolveEnabled)(this.options.enabled, this.#currentQuery) === false || !(0, import_utils.isValidTimeout)(this.#currentRefetchInterval) || this.#currentRefetchInterval === 0) {
       return;
     }
     this.#refetchIntervalId = setInterval(() => {
@@ -4560,7 +5990,7 @@ var QueryObserver = class extends import_subscribable.Subscribable {
     const queryChange = query !== prevQuery;
     const queryInitialState = queryChange ? query.state : this.#currentQueryInitialState;
     const { state } = query;
-    let { error, errorUpdatedAt, fetchStatus, status } = state;
+    let newState = { ...state };
     let isPlaceholderData = false;
     let data;
     if (options._optimisticResults) {
@@ -4568,22 +5998,23 @@ var QueryObserver = class extends import_subscribable.Subscribable {
       const fetchOnMount = !mounted && shouldFetchOnMount(query, options);
       const fetchOptionally = mounted && shouldFetchOptionally(query, prevQuery, options, prevOptions);
       if (fetchOnMount || fetchOptionally) {
-        fetchStatus = (0, import_retryer.canFetch)(query.options.networkMode) ? "fetching" : "paused";
-        if (!state.dataUpdatedAt) {
-          status = "pending";
-        }
+        newState = {
+          ...newState,
+          ...(0, import_query.fetchState)(state.data, query.options)
+        };
       }
       if (options._optimisticResults === "isRestoring") {
-        fetchStatus = "idle";
+        newState.fetchStatus = "idle";
       }
     }
-    if (options.select && typeof state.data !== "undefined") {
-      if (prevResult && state.data === prevResultState?.data && options.select === this.#selectFn) {
+    let { error, errorUpdatedAt, status } = newState;
+    if (options.select && newState.data !== void 0) {
+      if (prevResult && newState.data === prevResultState?.data && options.select === this.#selectFn) {
         data = this.#selectResult;
       } else {
         try {
           this.#selectFn = options.select;
-          data = options.select(state.data);
+          data = options.select(newState.data);
           data = (0, import_utils.replaceData)(prevResult?.data, data, options);
           this.#selectResult = data;
           this.#selectError = null;
@@ -4592,9 +6023,9 @@ var QueryObserver = class extends import_subscribable.Subscribable {
         }
       }
     } else {
-      data = state.data;
+      data = newState.data;
     }
-    if (typeof options.placeholderData !== "undefined" && typeof data === "undefined" && status === "pending") {
+    if (options.placeholderData !== void 0 && data === void 0 && status === "pending") {
       let placeholderData;
       if (prevResult?.isPlaceholderData && options.placeholderData === prevResultOptions?.placeholderData) {
         placeholderData = prevResult.data;
@@ -4603,7 +6034,7 @@ var QueryObserver = class extends import_subscribable.Subscribable {
           this.#lastQueryWithDefinedData?.state.data,
           this.#lastQueryWithDefinedData
         ) : options.placeholderData;
-        if (options.select && typeof placeholderData !== "undefined") {
+        if (options.select && placeholderData !== void 0) {
           try {
             placeholderData = options.select(placeholderData);
             this.#selectError = null;
@@ -4612,7 +6043,7 @@ var QueryObserver = class extends import_subscribable.Subscribable {
           }
         }
       }
-      if (typeof placeholderData !== "undefined") {
+      if (placeholderData !== void 0) {
         status = "success";
         data = (0, import_utils.replaceData)(
           prevResult?.data,
@@ -4628,33 +6059,34 @@ var QueryObserver = class extends import_subscribable.Subscribable {
       errorUpdatedAt = Date.now();
       status = "error";
     }
-    const isFetching = fetchStatus === "fetching";
+    const isFetching = newState.fetchStatus === "fetching";
     const isPending = status === "pending";
     const isError = status === "error";
     const isLoading = isPending && isFetching;
+    const hasData = data !== void 0;
     const result = {
       status,
-      fetchStatus,
+      fetchStatus: newState.fetchStatus,
       isPending,
       isSuccess: status === "success",
       isError,
       isInitialLoading: isLoading,
       isLoading,
       data,
-      dataUpdatedAt: state.dataUpdatedAt,
+      dataUpdatedAt: newState.dataUpdatedAt,
       error,
       errorUpdatedAt,
-      failureCount: state.fetchFailureCount,
-      failureReason: state.fetchFailureReason,
-      errorUpdateCount: state.errorUpdateCount,
-      isFetched: state.dataUpdateCount > 0 || state.errorUpdateCount > 0,
-      isFetchedAfterMount: state.dataUpdateCount > queryInitialState.dataUpdateCount || state.errorUpdateCount > queryInitialState.errorUpdateCount,
+      failureCount: newState.fetchFailureCount,
+      failureReason: newState.fetchFailureReason,
+      errorUpdateCount: newState.errorUpdateCount,
+      isFetched: newState.dataUpdateCount > 0 || newState.errorUpdateCount > 0,
+      isFetchedAfterMount: newState.dataUpdateCount > queryInitialState.dataUpdateCount || newState.errorUpdateCount > queryInitialState.errorUpdateCount,
       isFetching,
       isRefetching: isFetching && !isPending,
-      isLoadingError: isError && state.dataUpdatedAt === 0,
-      isPaused: fetchStatus === "paused",
+      isLoadingError: isError && !hasData,
+      isPaused: newState.fetchStatus === "paused",
       isPlaceholderData,
-      isRefetchError: isError && state.dataUpdatedAt !== 0,
+      isRefetchError: isError && hasData,
       isStale: isStale(query, options),
       refetch: this.refetch
     };
@@ -4665,11 +6097,11 @@ var QueryObserver = class extends import_subscribable.Subscribable {
     const nextResult = this.createResult(this.#currentQuery, this.options);
     this.#currentResultState = this.#currentQuery.state;
     this.#currentResultOptions = this.options;
-    if ((0, import_utils.shallowEqualObjects)(nextResult, prevResult)) {
-      return;
-    }
     if (this.#currentResultState.data !== void 0) {
       this.#lastQueryWithDefinedData = this.#currentQuery;
+    }
+    if ((0, import_utils.shallowEqualObjects)(nextResult, prevResult)) {
+      return;
     }
     this.#currentResult = nextResult;
     const defaultNotifyOptions = {};
@@ -4733,23 +6165,23 @@ var QueryObserver = class extends import_subscribable.Subscribable {
   }
 };
 function shouldLoadOnMount(query, options) {
-  return options.enabled !== false && !query.state.dataUpdatedAt && !(query.state.status === "error" && options.retryOnMount === false);
+  return (0, import_utils.resolveEnabled)(options.enabled, query) !== false && query.state.data === void 0 && !(query.state.status === "error" && options.retryOnMount === false);
 }
 function shouldFetchOnMount(query, options) {
-  return shouldLoadOnMount(query, options) || query.state.dataUpdatedAt > 0 && shouldFetchOn(query, options, options.refetchOnMount);
+  return shouldLoadOnMount(query, options) || query.state.data !== void 0 && shouldFetchOn(query, options, options.refetchOnMount);
 }
 function shouldFetchOn(query, options, field) {
-  if (options.enabled !== false) {
+  if ((0, import_utils.resolveEnabled)(options.enabled, query) !== false) {
     const value = typeof field === "function" ? field(query) : field;
     return value === "always" || value !== false && isStale(query, options);
   }
   return false;
 }
 function shouldFetchOptionally(query, prevQuery, options, prevOptions) {
-  return options.enabled !== false && (query !== prevQuery || prevOptions.enabled === false) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
+  return (query !== prevQuery || (0, import_utils.resolveEnabled)(prevOptions.enabled, query) === false) && (!options.suspense || query.state.status !== "error") && isStale(query, options);
 }
 function isStale(query, options) {
-  return query.isStaleByTime(options.staleTime);
+  return (0, import_utils.resolveEnabled)(options.enabled, query) !== false && query.isStaleByTime((0, import_utils.resolveStaleTime)(options.staleTime, query));
 }
 function shouldAssignObserverCurrentProperties(observer, optimisticResult) {
   if (!(0, import_utils.shallowEqualObjects)(observer.getCurrentResult(), optimisticResult)) {
@@ -4904,7 +6336,8 @@ function createRetryer(config) {
   const continueRetry = () => {
     isRetryCancelled = false;
   };
-  const shouldPause = () => !import_focusManager.focusManager.isFocused() || config.networkMode !== "always" && !import_onlineManager.onlineManager.isOnline();
+  const canContinue = () => import_focusManager.focusManager.isFocused() && (config.networkMode === "always" || import_onlineManager.onlineManager.isOnline()) && config.canRun();
+  const canStart = () => canFetch(config.networkMode) && config.canRun();
   const resolve = (value) => {
     if (!isResolved) {
       isResolved = true;
@@ -4924,11 +6357,9 @@ function createRetryer(config) {
   const pause = () => {
     return new Promise((continueResolve) => {
       continueFn = (value) => {
-        const canContinue = isResolved || !shouldPause();
-        if (canContinue) {
+        if (isResolved || canContinue()) {
           continueResolve(value);
         }
-        return canContinue;
       };
       config.onPause?.();
     }).then(() => {
@@ -4943,8 +6374,9 @@ function createRetryer(config) {
       return;
     }
     let promiseOrValue;
+    const initialPromise = failureCount === 0 ? config.initialPromise : void 0;
     try {
-      promiseOrValue = config.fn();
+      promiseOrValue = initialPromise ?? config.fn();
     } catch (error) {
       promiseOrValue = Promise.reject(error);
     }
@@ -4963,10 +6395,7 @@ function createRetryer(config) {
       failureCount++;
       config.onFail?.(failureCount, error);
       (0, import_utils.sleep)(delay).then(() => {
-        if (shouldPause()) {
-          return pause();
-        }
-        return;
+        return canContinue() ? void 0 : pause();
       }).then(() => {
         if (isRetryCancelled) {
           reject(error);
@@ -4976,20 +6405,24 @@ function createRetryer(config) {
       });
     });
   };
-  if (canFetch(config.networkMode)) {
-    run();
-  } else {
-    pause().then(run);
-  }
   return {
     promise,
     cancel,
     continue: () => {
-      const didContinue = continueFn?.();
-      return didContinue ? promise : Promise.resolve();
+      continueFn?.();
+      return promise;
     },
     cancelRetry,
-    continueRetry
+    continueRetry,
+    canStart,
+    start: () => {
+      if (canStart()) {
+        run();
+      } else {
+        pause().then(run);
+      }
+      return promise;
+    }
   };
 }
 // Annotate the CommonJS export names for ESM import in node:
@@ -5117,6 +6550,7 @@ var utils_exports = {};
 __export(utils_exports, {
   addToEnd: () => addToEnd,
   addToStart: () => addToStart,
+  ensureQueryFn: () => ensureQueryFn,
   functionalUpdate: () => functionalUpdate,
   hashKey: () => hashKey,
   hashQueryKeyByOptions: () => hashQueryKeyByOptions,
@@ -5131,13 +6565,15 @@ __export(utils_exports, {
   partialMatchKey: () => partialMatchKey,
   replaceData: () => replaceData,
   replaceEqualDeep: () => replaceEqualDeep,
-  scheduleMicrotask: () => scheduleMicrotask,
+  resolveEnabled: () => resolveEnabled,
+  resolveStaleTime: () => resolveStaleTime,
   shallowEqualObjects: () => shallowEqualObjects,
+  skipToken: () => skipToken,
   sleep: () => sleep,
   timeUntilStale: () => timeUntilStale
 });
 module.exports = __toCommonJS(utils_exports);
-var isServer = typeof window === "undefined" || "Deno" in window;
+var isServer = typeof window === "undefined" || "Deno" in globalThis;
 function noop() {
   return void 0;
 }
@@ -5149,6 +6585,12 @@ function isValidTimeout(value) {
 }
 function timeUntilStale(updatedAt, staleTime) {
   return Math.max(updatedAt + (staleTime || 0) - Date.now(), 0);
+}
+function resolveStaleTime(staleTime, query) {
+  return typeof staleTime === "function" ? staleTime(query) : staleTime;
+}
+function resolveEnabled(enabled, query) {
+  return typeof enabled === "function" ? enabled(query) : enabled;
 }
 function matchQuery(filters, query) {
   const {
@@ -5180,7 +6622,7 @@ function matchQuery(filters, query) {
   if (typeof stale === "boolean" && query.isStale() !== stale) {
     return false;
   }
-  if (typeof fetchStatus !== "undefined" && fetchStatus !== query.state.fetchStatus) {
+  if (fetchStatus && fetchStatus !== query.state.fetchStatus) {
     return false;
   }
   if (predicate && !predicate(query)) {
@@ -5241,16 +6683,22 @@ function replaceEqualDeep(a, b) {
   }
   const array = isPlainArray(a) && isPlainArray(b);
   if (array || isPlainObject(a) && isPlainObject(b)) {
-    const aSize = array ? a.length : Object.keys(a).length;
+    const aItems = array ? a : Object.keys(a);
+    const aSize = aItems.length;
     const bItems = array ? b : Object.keys(b);
     const bSize = bItems.length;
     const copy = array ? [] : {};
     let equalItems = 0;
     for (let i = 0; i < bSize; i++) {
       const key = array ? i : bItems[i];
-      copy[key] = replaceEqualDeep(a[key], b[key]);
-      if (copy[key] === a[key]) {
+      if ((!array && aItems.includes(key) || array) && a[key] === void 0 && b[key] === void 0) {
+        copy[key] = void 0;
         equalItems++;
+      } else {
+        copy[key] = replaceEqualDeep(a[key], b[key]);
+        if (copy[key] === a[key] && a[key] !== void 0) {
+          equalItems++;
+        }
       }
     }
     return aSize === bSize && equalItems === aSize ? a : copy;
@@ -5258,7 +6706,7 @@ function replaceEqualDeep(a, b) {
   return b;
 }
 function shallowEqualObjects(a, b) {
-  if (a && !b || b && !a) {
+  if (!b || Object.keys(a).length !== Object.keys(b).length) {
     return false;
   }
   for (const key in a) {
@@ -5276,7 +6724,7 @@ function isPlainObject(o) {
     return false;
   }
   const ctor = o.constructor;
-  if (typeof ctor === "undefined") {
+  if (ctor === void 0) {
     return true;
   }
   const prot = ctor.prototype;
@@ -5286,18 +6734,18 @@ function isPlainObject(o) {
   if (!prot.hasOwnProperty("isPrototypeOf")) {
     return false;
   }
+  if (Object.getPrototypeOf(o) !== Object.prototype) {
+    return false;
+  }
   return true;
 }
 function hasObjectPrototype(o) {
   return Object.prototype.toString.call(o) === "[object Object]";
 }
-function sleep(timeout) {
+function sleep(ms) {
   return new Promise((resolve) => {
-    setTimeout(resolve, timeout);
+    setTimeout(resolve, ms);
   });
-}
-function scheduleMicrotask(callback) {
-  sleep(0).then(callback);
 }
 function replaceData(prevData, data, options) {
   if (typeof options.structuralSharing === "function") {
@@ -5318,6 +6766,23 @@ function addToStart(items, item, max = 0) {
   const newItems = [item, ...items];
   return max && newItems.length > max ? newItems.slice(0, -1) : newItems;
 }
+var skipToken = Symbol();
+var ensureQueryFn = (options, fetchOptions) => {
+  if (true) {
+    if (options.queryFn === skipToken) {
+      console.error(
+        `Attempted to invoke queryFn when set to skipToken. This is likely a configuration error. Query hash: '${options.queryHash}'`
+      );
+    }
+  }
+  if (!options.queryFn && fetchOptions?.initialPromise) {
+    return () => fetchOptions.initialPromise;
+  }
+  if (!options.queryFn || options.queryFn === skipToken) {
+    return () => Promise.reject(new Error(`Missing queryFn: '${options.queryHash}'`));
+  }
+  return options.queryFn;
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
 //# sourceMappingURL=utils.cjs.map
@@ -5473,6 +6938,7 @@ __export(QueryClientProvider_exports, {
 });
 module.exports = __toCommonJS(QueryClientProvider_exports);
 var React = __toESM(__webpack_require__(/*! react */ "react"), 1);
+var import_jsx_runtime = __webpack_require__(/*! react/jsx-runtime */ "../node_modules/react/jsx-runtime.js");
 var QueryClientContext = React.createContext(
   void 0
 );
@@ -5496,7 +6962,7 @@ var QueryClientProvider = ({
       client.unmount();
     };
   }, [client]);
-  return /* @__PURE__ */ React.createElement(QueryClientContext.Provider, { value: client }, children);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryClientContext.Provider, { value: client, children });
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
@@ -5549,6 +7015,7 @@ __export(QueryErrorResetBoundary_exports, {
 });
 module.exports = __toCommonJS(QueryErrorResetBoundary_exports);
 var React = __toESM(__webpack_require__(/*! react */ "react"), 1);
+var import_jsx_runtime = __webpack_require__(/*! react/jsx-runtime */ "../node_modules/react/jsx-runtime.js");
 function createValue() {
   let isReset = false;
   return {
@@ -5569,7 +7036,7 @@ var QueryErrorResetBoundary = ({
   children
 }) => {
   const [value] = React.useState(() => createValue());
-  return /* @__PURE__ */ React.createElement(QueryErrorResetBoundaryContext.Provider, { value }, typeof children === "function" ? children(value) : children);
+  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(QueryErrorResetBoundaryContext.Provider, { value, children: typeof children === "function" ? children(value) : children });
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
@@ -5642,7 +7109,7 @@ var getHasError = ({
   throwOnError,
   query
 }) => {
-  return result.isError && !errorResetBoundary.isReset() && !result.isFetching && (0, import_utils.shouldThrowError)(throwOnError, [result.error, query]);
+  return result.isError && !errorResetBoundary.isReset() && !result.isFetching && query && (0, import_utils.shouldThrowError)(throwOnError, [result.error, query]);
 };
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
@@ -5693,6 +7160,8 @@ __export(src_exports, {
   useIsRestoring: () => import_isRestoring.useIsRestoring,
   useMutation: () => import_useMutation.useMutation,
   useMutationState: () => import_useMutationState.useMutationState,
+  usePrefetchInfiniteQuery: () => import_prefetch.usePrefetchInfiniteQuery,
+  usePrefetchQuery: () => import_prefetch.usePrefetchQuery,
   useQueries: () => import_useQueries.useQueries,
   useQuery: () => import_useQuery.useQuery,
   useQueryClient: () => import_QueryClientProvider.useQueryClient,
@@ -5709,6 +7178,7 @@ var import_useQuery = __webpack_require__(/*! ./useQuery.cjs */ "../node_modules
 var import_useSuspenseQuery = __webpack_require__(/*! ./useSuspenseQuery.cjs */ "../node_modules/@tanstack/react-query/build/modern/useSuspenseQuery.cjs");
 var import_useSuspenseInfiniteQuery = __webpack_require__(/*! ./useSuspenseInfiniteQuery.cjs */ "../node_modules/@tanstack/react-query/build/modern/useSuspenseInfiniteQuery.cjs");
 var import_useSuspenseQueries = __webpack_require__(/*! ./useSuspenseQueries.cjs */ "../node_modules/@tanstack/react-query/build/modern/useSuspenseQueries.cjs");
+var import_prefetch = __webpack_require__(/*! ./prefetch.cjs */ "../node_modules/@tanstack/react-query/build/modern/prefetch.cjs");
 var import_queryOptions = __webpack_require__(/*! ./queryOptions.cjs */ "../node_modules/@tanstack/react-query/build/modern/queryOptions.cjs");
 var import_infiniteQueryOptions = __webpack_require__(/*! ./infiniteQueryOptions.cjs */ "../node_modules/@tanstack/react-query/build/modern/infiniteQueryOptions.cjs");
 var import_QueryClientProvider = __webpack_require__(/*! ./QueryClientProvider.cjs */ "../node_modules/@tanstack/react-query/build/modern/QueryClientProvider.cjs");
@@ -5820,6 +7290,58 @@ var IsRestoringProvider = IsRestoringContext.Provider;
 
 /***/ }),
 
+/***/ "../node_modules/@tanstack/react-query/build/modern/prefetch.cjs":
+/*!***********************************************************************!*\
+  !*** ../node_modules/@tanstack/react-query/build/modern/prefetch.cjs ***!
+  \***********************************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+var __defProp = Object.defineProperty;
+var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __export = (target, all) => {
+  for (var name in all)
+    __defProp(target, name, { get: all[name], enumerable: true });
+};
+var __copyProps = (to, from, except, desc) => {
+  if (from && typeof from === "object" || typeof from === "function") {
+    for (let key of __getOwnPropNames(from))
+      if (!__hasOwnProp.call(to, key) && key !== except)
+        __defProp(to, key, { get: () => from[key], enumerable: !(desc = __getOwnPropDesc(from, key)) || desc.enumerable });
+  }
+  return to;
+};
+var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
+
+// src/prefetch.ts
+var prefetch_exports = {};
+__export(prefetch_exports, {
+  usePrefetchInfiniteQuery: () => usePrefetchInfiniteQuery,
+  usePrefetchQuery: () => usePrefetchQuery
+});
+module.exports = __toCommonJS(prefetch_exports);
+var import_QueryClientProvider = __webpack_require__(/*! ./QueryClientProvider.cjs */ "../node_modules/@tanstack/react-query/build/modern/QueryClientProvider.cjs");
+function usePrefetchQuery(options) {
+  const queryClient = (0, import_QueryClientProvider.useQueryClient)();
+  if (!queryClient.getQueryState(options.queryKey)) {
+    queryClient.prefetchQuery(options);
+  }
+}
+function usePrefetchInfiniteQuery(options) {
+  const queryClient = (0, import_QueryClientProvider.useQueryClient)();
+  if (!queryClient.getQueryState(options.queryKey)) {
+    queryClient.prefetchInfiniteQuery(options);
+  }
+}
+// Annotate the CommonJS export names for ESM import in node:
+0 && (0);
+//# sourceMappingURL=prefetch.cjs.map
+
+/***/ }),
+
 /***/ "../node_modules/@tanstack/react-query/build/modern/queryOptions.cjs":
 /*!***************************************************************************!*\
   !*** ../node_modules/@tanstack/react-query/build/modern/queryOptions.cjs ***!
@@ -5897,7 +7419,7 @@ __export(suspense_exports, {
   willFetch: () => willFetch
 });
 module.exports = __toCommonJS(suspense_exports);
-var defaultThrowOnError = (_error, query) => typeof query.state.data === "undefined";
+var defaultThrowOnError = (_error, query) => query.state.data === void 0;
 var ensureStaleTime = (defaultedOptions) => {
   if (defaultedOptions.suspense) {
     if (typeof defaultedOptions.staleTime !== "number") {
@@ -5906,7 +7428,7 @@ var ensureStaleTime = (defaultedOptions) => {
   }
 };
 var willFetch = (result, isRestoring) => result.isLoading && result.isFetching && !isRestoring;
-var shouldSuspend = (defaultedOptions, result, isRestoring) => defaultedOptions?.suspense && willFetch(result, isRestoring);
+var shouldSuspend = (defaultedOptions, result) => defaultedOptions?.suspense && result.isPending;
 var fetchOptimistic = (defaultedOptions, observer, errorResetBoundary) => observer.fetchOptimistic(defaultedOptions).catch(() => {
   errorResetBoundary.clearReset();
 });
@@ -6007,6 +7529,9 @@ function useBaseQuery(options, Observer, queryClient) {
   const isRestoring = (0, import_isRestoring.useIsRestoring)();
   const errorResetBoundary = (0, import_QueryErrorResetBoundary.useQueryErrorResetBoundary)();
   const defaultedOptions = client.defaultQueryOptions(options);
+  client.getDefaultOptions().queries?._experimental_beforeQuery?.(
+    defaultedOptions
+  );
   defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : "optimistic";
   (0, import_suspense.ensureStaleTime)(defaultedOptions);
   (0, import_errorBoundaryUtils.ensurePreventErrorBoundaryRetry)(defaultedOptions, errorResetBoundary);
@@ -6033,17 +7558,22 @@ function useBaseQuery(options, Observer, queryClient) {
   React.useEffect(() => {
     observer.setOptions(defaultedOptions, { listeners: false });
   }, [defaultedOptions, observer]);
-  if ((0, import_suspense.shouldSuspend)(defaultedOptions, result, isRestoring)) {
+  if ((0, import_suspense.shouldSuspend)(defaultedOptions, result)) {
     throw (0, import_suspense.fetchOptimistic)(defaultedOptions, observer, errorResetBoundary);
   }
   if ((0, import_errorBoundaryUtils.getHasError)({
     result,
     errorResetBoundary,
     throwOnError: defaultedOptions.throwOnError,
-    query: observer.getCurrentQuery()
+    query: client.getQueryCache().get(defaultedOptions.queryHash)
   })) {
     throw result.error;
   }
+  ;
+  client.getDefaultOptions().queries?._experimental_afterQuery?.(
+    defaultedOptions,
+    result
+  );
   return !defaultedOptions.notifyOnChangeProps ? observer.trackResult(result) : result;
 }
 // Annotate the CommonJS export names for ESM import in node:
@@ -6090,7 +7620,6 @@ var import_useBaseQuery = __webpack_require__(/*! ./useBaseQuery.cjs */ "../node
 function useInfiniteQuery(options, queryClient) {
   return (0, import_useBaseQuery.useBaseQuery)(
     options,
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     import_query_core.InfiniteQueryObserver,
     queryClient
   );
@@ -6233,7 +7762,7 @@ function useMutation(options, queryClient) {
   );
   const mutate = React.useCallback(
     (variables, mutateOptions) => {
-      observer.mutate(variables, mutateOptions).catch(noop);
+      observer.mutate(variables, mutateOptions).catch(import_utils.noop);
     },
     [observer]
   );
@@ -6241,8 +7770,6 @@ function useMutation(options, queryClient) {
     throw result.error;
   }
   return { ...result, mutate, mutateAsync: result.mutate };
-}
-function noop() {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);
@@ -6306,15 +7833,13 @@ function useIsMutating(filters, queryClient) {
 }
 function getResult(mutationCache, options) {
   return mutationCache.findAll(options.filters).map(
-    (mutation) => options.select ? options.select(
-      mutation
-    ) : mutation.state
+    (mutation) => options.select ? options.select(mutation) : mutation.state
   );
 }
 function useMutationState(options = {}, queryClient) {
   const mutationCache = (0, import_QueryClientProvider.useQueryClient)(queryClient).getMutationCache();
   const optionsRef = React.useRef(options);
-  const result = React.useRef();
+  const result = React.useRef(null);
   if (!result.current) {
     result.current = getResult(mutationCache, options);
   }
@@ -6404,7 +7929,9 @@ function useQueries({
   const errorResetBoundary = (0, import_QueryErrorResetBoundary.useQueryErrorResetBoundary)();
   const defaultedQueries = React.useMemo(
     () => queries.map((opts) => {
-      const defaultedOptions = client.defaultQueryOptions(opts);
+      const defaultedOptions = client.defaultQueryOptions(
+        opts
+      );
       defaultedOptions._optimisticResults = isRestoring ? "isRestoring" : "optimistic";
       return defaultedOptions;
     }),
@@ -6422,7 +7949,10 @@ function useQueries({
       options
     )
   );
-  const [optimisticResult, getCombinedResult, trackResult] = observer.getOptimisticResult(defaultedQueries);
+  const [optimisticResult, getCombinedResult, trackResult] = observer.getOptimisticResult(
+    defaultedQueries,
+    options.combine
+  );
   React.useSyncExternalStore(
     React.useCallback(
       (onStoreChange) => isRestoring ? () => void 0 : observer.subscribe(import_query_core.notifyManager.batchCalls(onStoreChange)),
@@ -6441,13 +7971,13 @@ function useQueries({
     );
   }, [defaultedQueries, options, observer]);
   const shouldAtLeastOneSuspend = optimisticResult.some(
-    (result, index) => (0, import_suspense.shouldSuspend)(defaultedQueries[index], result, isRestoring)
+    (result, index) => (0, import_suspense.shouldSuspend)(defaultedQueries[index], result)
   );
   const suspensePromises = shouldAtLeastOneSuspend ? optimisticResult.flatMap((result, index) => {
     const opts = defaultedQueries[index];
     if (opts) {
       const queryObserver = new import_query_core.QueryObserver(client, opts);
-      if ((0, import_suspense.shouldSuspend)(opts, result, isRestoring)) {
+      if ((0, import_suspense.shouldSuspend)(opts, result)) {
         return (0, import_suspense.fetchOptimistic)(opts, queryObserver, errorResetBoundary);
       } else if ((0, import_suspense.willFetch)(result, isRestoring)) {
         void (0, import_suspense.fetchOptimistic)(opts, queryObserver, errorResetBoundary);
@@ -6458,14 +7988,16 @@ function useQueries({
   if (suspensePromises.length > 0) {
     throw Promise.all(suspensePromises);
   }
-  const observerQueries = observer.getQueries();
   const firstSingleResultWhichShouldThrow = optimisticResult.find(
-    (result, index) => (0, import_errorBoundaryUtils.getHasError)({
-      result,
-      errorResetBoundary,
-      throwOnError: defaultedQueries[index]?.throwOnError ?? false,
-      query: observerQueries[index]
-    })
+    (result, index) => {
+      const query = defaultedQueries[index];
+      return query && (0, import_errorBoundaryUtils.getHasError)({
+        result,
+        errorResetBoundary,
+        throwOnError: query.throwOnError,
+        query: client.getQueryCache().get(query.queryHash)
+      });
+    }
   );
   if (firstSingleResultWhichShouldThrow?.error) {
     throw firstSingleResultWhichShouldThrow.error;
@@ -6566,7 +8098,6 @@ function useSuspenseInfiniteQuery(options, queryClient) {
       suspense: true,
       throwOnError: import_suspense.defaultThrowOnError
     },
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
     import_query_core.InfiniteQueryObserver,
     queryClient
   );
@@ -6620,7 +8151,8 @@ function useSuspenseQueries(options, queryClient) {
         ...query,
         suspense: true,
         throwOnError: import_suspense.defaultThrowOnError,
-        enabled: true
+        enabled: true,
+        placeholderData: void 0
       }))
     },
     queryClient
@@ -6669,12 +8201,18 @@ var import_query_core = __webpack_require__(/*! @tanstack/query-core */ "../node
 var import_useBaseQuery = __webpack_require__(/*! ./useBaseQuery.cjs */ "../node_modules/@tanstack/react-query/build/modern/useBaseQuery.cjs");
 var import_suspense = __webpack_require__(/*! ./suspense.cjs */ "../node_modules/@tanstack/react-query/build/modern/suspense.cjs");
 function useSuspenseQuery(options, queryClient) {
+  if (true) {
+    if (options.queryFn === import_query_core.skipToken) {
+      console.error("skipToken is not allowed for useSuspenseQuery");
+    }
+  }
   return (0, import_useBaseQuery.useBaseQuery)(
     {
       ...options,
       enabled: true,
       suspense: true,
-      throwOnError: import_suspense.defaultThrowOnError
+      throwOnError: import_suspense.defaultThrowOnError,
+      placeholderData: void 0
     },
     import_query_core.QueryObserver,
     queryClient
@@ -6715,6 +8253,7 @@ var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: tru
 // src/utils.ts
 var utils_exports = {};
 __export(utils_exports, {
+  noop: () => noop,
   shouldThrowError: () => shouldThrowError
 });
 module.exports = __toCommonJS(utils_exports);
@@ -6723,6 +8262,8 @@ function shouldThrowError(throwError, params) {
     return throwError(...params);
   }
   return !!throwError;
+}
+function noop() {
 }
 // Annotate the CommonJS export names for ESM import in node:
 0 && (0);

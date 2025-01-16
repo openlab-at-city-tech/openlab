@@ -6,12 +6,12 @@ use Bookly\Lib\DataHolders\Booking;
 
 class CustomerAppointment extends Lib\Base\Entity
 {
-    const STATUS_PENDING    = 'pending';
-    const STATUS_APPROVED   = 'approved';
-    const STATUS_CANCELLED  = 'cancelled';
-    const STATUS_REJECTED   = 'rejected';
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED = 'approved';
+    const STATUS_CANCELLED = 'cancelled';
+    const STATUS_REJECTED = 'rejected';
     const STATUS_WAITLISTED = 'waitlisted';
-    const STATUS_DONE       = 'done';
+    const STATUS_DONE = 'done';
 
     /** @var int */
     protected $series_id;
@@ -1084,7 +1084,7 @@ class CustomerAppointment extends Lib\Base\Entity
         $result = parent::delete();
         if ( $result && $this->getSeriesId() !== null ) {
             if ( self::query()->where( 'series_id', $this->getSeriesId() )->count() === 0 ) {
-                Series::query()->delete()->where( 'id', $this->getSeriesId() )->execute();
+                Series::find( $this->getSeriesId() )->delete();
             }
         }
 

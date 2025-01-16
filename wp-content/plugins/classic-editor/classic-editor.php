@@ -5,7 +5,7 @@
  * Plugin Name: Classic Editor
  * Plugin URI:  https://wordpress.org/plugins/classic-editor/
  * Description: Enables the WordPress classic editor and the old-style Edit Post screen with TinyMCE, Meta Boxes, etc. Supports the older plugins that extend this screen.
- * Version:     1.6.5
+ * Version:     1.6.6
  * Author:      WordPress Contributors
  * Author URI:  https://github.com/WordPress/classic-editor/
  * License:     GPLv2 or later
@@ -65,9 +65,16 @@ class Classic_Editor {
 
 		// Always remove the "Try Gutenberg" dashboard widget. See https://core.trac.wordpress.org/ticket/44635.
 		remove_action( 'try_gutenberg_panel', 'wp_try_gutenberg_panel' );
-		
+
 		// Fix for Safari 18 negative horizontal margin on floats.
 		add_action( 'admin_print_styles', array( __CLASS__, 'safari_18_temp_fix' ) );
+
+		// Fix for the Categories postbox for WP 6.7.1.
+		global $wp_version;
+
+		if ( '6.7.1' === $wp_version && is_admin() ) {
+			add_action( 'wp_default_scripts', array( __CLASS__, 'replace_post_js' ), 11 );
+		}
 
 		if ( ! $block_editor && ! $gutenberg  ) {
 			return;
@@ -459,7 +466,7 @@ class Classic_Editor {
 		if ( ! $user_can_edit || ! $settings['allow-users'] ) {
 			return;
 		}
-		
+
 		if ( $user instanceof WP_User ) {
 			$user_id = (int) $user->ID;
 		} else {
@@ -977,7 +984,7 @@ class Classic_Editor {
 		delete_option( 'classic-editor-replace' );
 		delete_option( 'classic-editor-allow-users' );
 	}
-	
+
 	/**
 	 * Temporary fix for Safari 18 negative horizontal margin on floats.
 	 * See: https://core.trac.wordpress.org/ticket/62082 and
@@ -986,10 +993,10 @@ class Classic_Editor {
 	 */
 	public static function safari_18_temp_fix() {
 		global $current_screen;
-		
+
 		if ( isset( $current_screen->base ) && 'post' === $current_screen->base ) {
 			$clear = is_rtl() ? 'right' : 'left';
-			
+
 			?>
 			<style id="classic-editor-safari-18-temp-fix">
 			_::-webkit-full-page-media, _:future, :root #post-body #postbox-container-2 {
@@ -997,6 +1004,34 @@ class Classic_Editor {
 			}
 			</style>
 			<?php
+		}
+	}
+
+	/**
+	 * Temporary fix for the Categories postbox on the classic Edit Post screen.
+	 * See: https://core.trac.wordpress.org/ticket/62504.
+	 */
+	public static function replace_post_js( $scripts ) {
+		$script = $scripts->query( 'post', 'registered' );
+		$suffix = wp_scripts_get_suffix();
+
+		if ( $script ) {
+			if ( '62504-20241121' === $script->ver ) {
+				// The script src was replaced from another plugin.
+				return;
+			}
+
+			$script->src = plugins_url( 'scripts/', __FILE__ ) . "post{$suffix}.js";
+			$script->ver = '62504-20241121';
+		} else {
+			$scripts->add(
+				'post',
+				plugins_url( 'scripts/', __FILE__ ) . "post{$suffix}.js",
+				array( 'suggest', 'wp-lists', 'postbox', 'tags-box', 'underscore', 'word-count', 'wp-a11y', 'wp-sanitize', 'clipboard' ),
+				'62504-20241121',
+				1
+			);
+			$scripts->set_translations( 'post' );
 		}
 	}
 }

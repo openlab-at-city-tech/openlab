@@ -470,17 +470,23 @@ class Cart
 
                     $bound_start = Slots\DatePoint::fromStr( $datetime );
                     $bound_end = Slots\DatePoint::fromStr( $datetime )->modify( ( (int) ( $service->isCollaborative() ? $service->getCollaborativeDuration() : $service->getDuration() ) * $cart_item->getUnits() ) . ' sec' );
-                    if ( Config::proActive() ) {
-                        $bound_start = $bound_start->modify( '-' . (int) $service->getPaddingLeft() . ' sec' );
-                        $bound_end = $bound_end->modify( ( (int) $service->getPaddingRight() + $cart_item->getExtrasDuration() ) . ' sec' );
-                    }
 
                     if ( Slots\DatePoint::now()->gte( $bound_start->modify( -Proxy\Pro::getMinimumTimePriorBooking( $cart_item->getServiceId() ) ) ) ) {
                         // The appointment cannot be booked, the condition for getMinimumTimePriorBooking is violated.
                         return $cart_key;
                     }
 
+                    if ( Config::proActive() ) {
+                        $bound_start = $bound_start->modify( ( '-' . (int) $service->getPaddingLeft() )  );
+                        if ( Config::serviceExtrasActive() ) {
+                            $bound_end = $bound_end->modify( $cart_item->getExtrasDuration() );
+                        }
+                    }
+
                     if ( $bound_end->lte( $max_date ) ) {
+                        if ( Config::proActive() ) {
+                            $bound_end = $bound_end->modify( $service->getPaddingRight() );
+                        }
                         $query = Entities\CustomerAppointment::query( 'ca' )
                             ->select(
                                 sprintf(

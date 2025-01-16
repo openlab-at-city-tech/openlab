@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -462,7 +462,7 @@ try {
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames not based on template
-/******/ 			if (chunkId === "modules_nested-tabs_assets_js_editor_module_js") return "4586b3ce03181d93c8bf.bundle.js";
+/******/ 			if (chunkId === "modules_nested-tabs_assets_js_editor_module_js") return "f634673e5824ceb13f3d.bundle.js";
 /******/ 			// return url for filenames based on template
 /******/ 			return undefined;
 /******/ 		};

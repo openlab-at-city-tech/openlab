@@ -28,10 +28,10 @@ abstract class Updater extends Schema
 
                 $updates = array_filter(
                     get_class_methods( $this ),
-                    function ( $method ) { return strstr( $method, 'update_' ); }
+                    function( $method ) { return strstr( $method, 'update_' ); }
                 );
                 usort( $updates, 'strnatcmp' );
-
+                $updates_processed = array();
                 foreach ( $updates as $method ) {
                     $version = str_replace( '_', '.', substr( $method, 7 ) );
                     if ( strnatcmp( $version, $db_version ) > 0 && strnatcmp( $version, $plugin_version ) <= 0 ) {
@@ -39,7 +39,12 @@ abstract class Updater extends Schema
                         set_transient( $transient_name, time() );
                         // Do update.
                         try {
+                            $updates_processed[ $method ] = false;
+                            $errors_count = count( $this->errors );
                             $this->$method();
+                            if ( $errors_count === count( $this->errors ) ) {
+                                $updates_processed[ $method ] = true;
+                            }
                         } catch ( \Error $e ) {
                             $this->errors[] = array(
                                 'method' => get_class( $this ) . '::' . $method,
@@ -79,10 +84,10 @@ abstract class Updater extends Schema
                 update_option( $version_option_name, $plugin_version );
                 $wpdb->insert( $logs_table, array(
                     'action' => 'debug',
-                    'target' => $plugin_class::getTitle() . ' ' . $plugin_version,
+                    'target' => $plugin_class::getTitle() . ' ' . $db_version . ' - ' . $plugin_version,
                     'author' => get_current_user_id(),
                     'details' => $plugin_class::getSlug(),
-                    'comment' => 'Updated',
+                    'comment' => json_encode( $updates_processed ),
                     'ref' => '',
                     'created_at' => current_time( 'mysql' ),
                 ) );
@@ -227,10 +232,33 @@ abstract class Updater extends Schema
      */
     protected function disposable( $token, $callable )
     {
+        global $wpdb;
+
         $disposable_key = strtolower( strtok( __NAMESPACE__, '\\' ) ) . '_disposable_' . $token . '_completed';
         $completed = (int) get_option( $disposable_key );
         if ( $completed === 0 ) {
+            $logs_table = $this->getTableName( 'bookly_log' );
+            try {
+                $wpdb->insert( $logs_table, array(
+                    'action' => 'debug',
+                    'target' => 'bookly-updater',
+                    'author' => get_current_user_id(),
+                    'details' => 'Disposable key: ' . $disposable_key,
+                    'created_at' => current_time( 'mysql' ),
+                ) );
+            } catch ( \Exception $e ) {
+            }
             $callable( $this );
+            try {
+                $wpdb->insert( $logs_table, array(
+                    'action' => 'debug',
+                    'target' => 'bookly-updater',
+                    'author' => get_current_user_id(),
+                    'details' => 'Disposable key: ' . $disposable_key . ' completed',
+                    'created_at' => current_time( 'mysql' ),
+                ) );
+            } catch ( \Exception $e ) {
+            }
             add_option( $disposable_key, '1' );
         }
 

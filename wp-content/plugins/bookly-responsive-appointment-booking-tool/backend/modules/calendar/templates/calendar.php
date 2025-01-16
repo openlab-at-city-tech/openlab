@@ -122,6 +122,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
             <?php endif ?>
             <div class="mt-3 position-relative">
                 <?php if ( $staff_members ) : ?>
+                    <input type="hidden" value="<?php echo esc_attr( $staff_members[0]->getId() ) ?>" id="bookly-js-staff-id" data-name="<?php echo esc_attr( $staff_members[0]->getFullName() ) ?>"/>
                     <div class="bookly-ec-loading" style="display: none">
                         <div class="bookly-ec-loading-icon"></div>
                     </div>

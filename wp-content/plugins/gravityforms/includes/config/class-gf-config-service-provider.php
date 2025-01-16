@@ -2,7 +2,7 @@
 
 namespace Gravity_Forms\Gravity_Forms\Config;
 
-use Gravity_Forms\Gravity_Forms\Config\Items\GF_Config_Admin_I18n;
+use Gravity_Forms\Gravity_Forms\Config\Items\GF_Config_Admin;
 use Gravity_Forms\Gravity_Forms\Config\Items\GF_Config_Block_Editor;
 use Gravity_Forms\Gravity_Forms\Config\Items\GF_Config_Global;
 use Gravity_Forms\Gravity_Forms\Config\Items\GF_Config_I18n;
@@ -28,11 +28,10 @@ class GF_Config_Service_Provider extends GF_Service_Provider {
 
 	// Config services
 	const I18N_CONFIG         = 'i18n_config';
-	const I18N_ADMIN_CONFIG   = 'i18n_admin_config';
+	const ADMIN_CONFIG        = 'admin_config';
 	const LEGACY_CONFIG       = 'legacy_config';
 	const LEGACY_MULTI_CONFIG = 'legacy_multi_config';
 	const MULTIFILE_CONFIG    = 'multifile_config';
-	const BLOCK_EDITOR_CONFIG = 'block_editor_config';
 	const GLOBAL_CONFIG       = 'global_config';
 
 	/**
@@ -44,11 +43,10 @@ class GF_Config_Service_Provider extends GF_Service_Provider {
 	 */
 	protected $configs = array(
 		self::I18N_CONFIG         => GF_Config_I18n::class,
-		self::I18N_ADMIN_CONFIG   => GF_Config_Admin_I18n::class,
+		self::ADMIN_CONFIG        => GF_Config_Admin::class,
 		self::LEGACY_CONFIG       => GF_Config_Legacy_Check::class,
 		self::LEGACY_MULTI_CONFIG => GF_Config_Legacy_Check_Multi::class,
 		self::MULTIFILE_CONFIG    => GF_Config_Multifile::class,
-		self::BLOCK_EDITOR_CONFIG => GF_Config_Block_Editor::class,
 	);
 
 	/**
@@ -86,6 +84,15 @@ class GF_Config_Service_Provider extends GF_Service_Provider {
 	}
 
 	/**
+	 * Whether the config has been localized.
+	 *
+	 * @since 2.9.0
+	 *
+	 * @var bool
+	 */
+	private static $is_localized = false;
+
+	/**
 	 * Initiailize any actions or hooks.
 	 *
 	 * @since 2.6
@@ -100,16 +107,43 @@ class GF_Config_Service_Provider extends GF_Service_Provider {
 		$self = $this;
 
 		add_action( 'wp_enqueue_scripts', function () use ( $container ) {
-			$container->get( self::CONFIG_COLLECTION )->handle();
+			// Only localize during wp_enqueue_scripts if none of the other more specific events have been fired.
+			if ( ! self::$is_localized ) {
+				$container->get( self::CONFIG_COLLECTION )->handle();
+			}
 		}, 9999 );
 
 		add_action( 'admin_enqueue_scripts', function () use ( $container ) {
-			$container->get( self::CONFIG_COLLECTION )->handle();
+			// Only localize during admin_enqueue_scripts if none of the other more specific events have been fired.
+			if ( ! self::$is_localized ) {
+				$container->get( self::CONFIG_COLLECTION )->handle();
+			}
 		}, 9999 );
 
-		add_action( 'gform_preview_init', function () use ( $container ) {
-			$container->get( self::CONFIG_COLLECTION )->handle();
-		}, 0 );
+		add_action( 'gform_output_config', function ( $form_ids = null ) use ( $container ) {
+			$container->get( self::CONFIG_COLLECTION )->handle( true, $form_ids );
+			self::$is_localized = true;
+		} );
+
+		add_action( 'gform_post_enqueue_scripts', function ( $found_forms, $found_blocks, $post ) use ( $container ) {
+			$form_ids = array_column( $found_forms, 'formId' );
+			$container->get( self::CONFIG_COLLECTION )->handle( true, array( 'form_ids' => $form_ids ) );
+			self::$is_localized = true;
+		}, 10, 3);
+
+		add_action( 'gform_preview_init', function ( $form_id ) use ( $container ) {
+			$form_ids = array( $form_id );
+			$container->get( self::CONFIG_COLLECTION )->handle( true, array( 'form_ids' => $form_ids ) );
+			self::$is_localized = true;
+		}, 10, 2);
+
+		add_action('wp_ajax_gform_get_config', function () use ( $container ) {
+			$container->get( self::CONFIG_COLLECTION )->handle_ajax();
+		});
+
+		add_action('wp_ajax_nopriv_gform_get_config', function () use ( $container ) {
+			$container->get( self::CONFIG_COLLECTION )->handle_ajax();
+		});
 
 		add_action( 'rest_api_init', function () use ( $container, $self ) {
 			register_rest_route( 'gravityforms/v2', '/tests/mock-data', array(
@@ -142,11 +176,10 @@ class GF_Config_Service_Provider extends GF_Service_Provider {
 	 */
 	private function register_config_items( GF_Service_Container $container ) {
 		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-i18n.php' );
-		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-admin-i18n.php' );
+		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-admin.php' );
 		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-legacy-check.php' );
 		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-legacy-check-multi.php' );
 		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-multifile.php' );
-		require_once( plugin_dir_path( __FILE__ ) . '/items/class-gf-config-block-editor.php' );
 
 		$parser = $container->get( self::DATA_PARSER );
 

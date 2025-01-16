@@ -24,7 +24,6 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
 		 *
 		 * @since 1.4.0
 		 *
-		 * @access private
 		 * @var object Class object.
 		 */
 		private static $instance;
@@ -109,7 +108,7 @@ if ( ! class_exists( 'Astra_Mobile_Header' ) ) :
 					'aria-expanded' => 'false',
 				),
 				$item
-			) . '><span class="screen-reader-text">' . __( 'Menu Toggle', 'astra' ) . '</span>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';
+			) . '><span class="screen-reader-text">' . esc_html__( 'Menu Toggle', 'astra' ) . '</span>' . Astra_Icons::get_icons( 'arrow' ) . '</button>';
 
 			return $item_output;
 		}

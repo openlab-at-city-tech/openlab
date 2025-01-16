@@ -19,7 +19,7 @@ class DLM_Admin_Scripts {
 	/**
 	 * Enqueue only elementor admin specific scripts
 	 */
-	public function elementor_enqueue_scripts(){
+	public function elementor_enqueue_scripts() {
 		$dlm = download_monitor();
 
 		// Enqueue Edit Post JS
@@ -36,8 +36,11 @@ class DLM_Admin_Scripts {
 			'dlm_notices',
 			plugins_url( '/assets/js/notices' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 			array( 'jquery' ),
-			DLM_VERSION
+			DLM_VERSION,
 		);
+		wp_enqueue_script( 'dlm_modal_upsells', plugins_url( '/assets/js/modal-upsells' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ), array( 'jquery' ), DLM_VERSION, true );
+		wp_add_inline_script( 'dlm_modal_upsells', 'const dlmModalUpsellsVars = { security: "' . wp_create_nonce( 'dlm_modal_upsell' ) . '", upsells: ' . json_encode( DLM_Upsells::get_modal_upsells() ) . '};', 'before' );
+		wp_enqueue_style( 'dlm-upsell-modal', plugins_url( '/assets/css/dlm-modal-upsell.css', $dlm->get_plugin_file() ), array(), DLM_VERSION );
 
 		// Make JavaScript strings translatable
 		wp_localize_script( 'dlm_insert_download', 'dlm_id_strings', $this->get_strings( 'edit-post' ) );
@@ -55,7 +58,8 @@ class DLM_Admin_Scripts {
 			'dlm_insert_download',
 			plugins_url( '/assets/js/download-operations' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 			array( 'jquery' ),
-			DLM_VERSION
+			DLM_VERSION,
+			true
 		);
 
 		wp_add_inline_script( 'dlm_insert_download', 'const dlm_ajax_nonce = "' . wp_create_nonce( 'dlm_ajax_nonce' ) . '";', 'before' );
@@ -64,9 +68,13 @@ class DLM_Admin_Scripts {
 			'dlm_notices',
 			plugins_url( '/assets/js/notices' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 			array( 'jquery' ),
-			DLM_VERSION
+			DLM_VERSION,
+			true
 		);
-
+		// Enqueue script for modal upsells
+		wp_enqueue_script( 'dlm_modal_upsells', plugins_url( '/assets/js/modal-upsells' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ), array( 'jquery' ), DLM_VERSION, true );
+		wp_add_inline_script( 'dlm_modal_upsells', 'const dlmModalUpsellsVars = { security: "' . wp_create_nonce( 'dlm_modal_upsell' ) . '", upsells: ' . json_encode( DLM_Upsells::get_modal_upsells() ) . '};', 'before' );
+		wp_enqueue_style( 'dlm-upsell-modal', plugins_url( '/assets/css/dlm-modal-upsell.css', $dlm->get_plugin_file() ), array(), DLM_VERSION );
 		// Make JavaScript strings translatable
 		wp_localize_script( 'dlm_insert_download', 'dlm_id_strings', $this->get_strings( 'edit-post' ) );
 
@@ -78,7 +86,6 @@ class DLM_Admin_Scripts {
 				||
 				( $pagenow == 'post-new.php' && isset( $_GET['post_type'] ) && 'dlm_download' == $_GET['post_type'] )
 			) {
-
 				wp_enqueue_media(
 					array(
 						'post' => $post->ID,
@@ -111,7 +118,8 @@ class DLM_Admin_Scripts {
 					'dlm_select2',
 					plugins_url( '/assets/js/select2/select2.min.js', $dlm->get_plugin_file() ),
 					array( 'jquery' ),
-					DLM_VERSION
+					DLM_VERSION,
+					true
 				);
 
 				wp_enqueue_style( 'dlm_select2_css', download_monitor()->get_plugin_url() . '/assets/js/select2/select2.min.css' );
@@ -121,16 +129,17 @@ class DLM_Admin_Scripts {
 					'dlm_edit_product',
 					plugins_url( '/assets/js/shop/edit-product' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 					array( 'jquery', 'dlm_select2' ),
-					DLM_VERSION
+					DLM_VERSION,
+					true
 				);
 
 				// Make JavaScript strings translatable
 				wp_localize_script( 'dlm_edit_product', 'dlm_ep_strings', $this->get_strings( 'edit-product' ) );
 			}
-
 		}
 
 		if ( 'edit.php' == $pagenow && isset( $_GET['post_type'] ) && 'dlm_download' === $_GET['post_type'] && ! isset( $_GET['page'] ) ) {
+			wp_enqueue_style( 'dlm-upsell-modal', plugins_url( '/assets/css/dlm-modal-upsell.css', $dlm->get_plugin_file() ), array(), DLM_VERSION );
 
 			// Enqueue Settings JS
 			wp_enqueue_script(
@@ -145,7 +154,7 @@ class DLM_Admin_Scripts {
 				'dlm_download_overview',
 				'dlm_download_overview',
 				array(
-					'copy_shortcode'    => esc_html__( 'Copy shortcode', 'download-monitor' ),
+					'copy_shortcode'   => esc_html__( 'Copy shortcode', 'download-monitor' ),
 					'shortcode_copied' => esc_html__( 'Copied', 'download-monitor' ),
 				)
 			);
@@ -153,16 +162,14 @@ class DLM_Admin_Scripts {
 			// Enqueue Download Duplicator JS
 			wp_enqueue_script(
 				'dlm_download_duplicator',
-				plugins_url( '/assets/js/download-duplicator' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file()),
+				plugins_url( '/assets/js/download-duplicator' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 				array( 'jquery' ),
 				DLM_VERSION,
 				true
 			);
-
 		}
 
 		if ( 'edit.php' == $pagenow && isset( $_GET['page'] ) && 'download-monitor-reports' === $_GET['page'] && ! DLM_DB_Upgrader::do_upgrade() ) {
-
 			wp_enqueue_style( 'download_monitor_range_picker', download_monitor()->get_plugin_url() . '/assets/css/daterangepicker.min.css', array( 'dashicons' ), DLM_VERSION );
 
 			// Enqueue Reports JS
@@ -173,7 +180,6 @@ class DLM_Admin_Scripts {
 				DLM_VERSION,
 				true
 			);
-
 
 			wp_enqueue_script(
 				'dlm_reports_moment',
@@ -202,16 +208,15 @@ class DLM_Admin_Scripts {
 			wp_enqueue_script(
 				'dlm_reports',
 				plugins_url( '/assets/js/reports/reports' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
-				array( 'jquery','dlm_reports_chartjs', 'dlm_templates' ),
+				array( 'jquery', 'dlm_reports_chartjs', 'dlm_templates' ),
 				DLM_VERSION,
 				true
 			);
 
 			// Make JavaScript strings translatable
 			wp_localize_script( 'dlm_reports', 'dlm_rs', $this->get_strings( 'reports' ) );
-			$per_page = ( $item = get_option('dlm-reports-per-page') ) ? $item : 10;
-			wp_add_inline_script( 'dlm_reports', 'const dlmReportsPerPage = ' . absint($per_page) . ';const dlmReportsNonce = "' . wp_create_nonce( 'dlm_reports_nonce' ) . '"; const dlmAdminUrl = "' . get_admin_url() . '"; const dlmWeekStart = "' . DLM_Admin_Helper::get_wp_weekstart() . '";', 'before' );
-
+			$per_page = ( $item = get_option( 'dlm-reports-per-page' ) ) ? $item : 10;
+			wp_add_inline_script( 'dlm_reports', 'const dlmReportsPerPage = ' . absint( $per_page ) . ';const dlmReportsNonce = "' . wp_create_nonce( 'dlm_reports_nonce' ) . '"; const dlmAdminUrl = "' . get_admin_url() . '"; const dlmWeekStart = "' . DLM_Admin_Helper::get_wp_weekstart() . '";', 'before' );
 		}
 
 		if ( 'edit.php' == $pagenow && isset( $_GET['page'] ) && ( 'download-monitor-settings' === $_GET['page'] || 'dlm-extensions' === $_GET['page'] ) ) {
@@ -221,14 +226,21 @@ class DLM_Admin_Scripts {
 				'dlm_settings',
 				plugins_url( '/assets/js/settings' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 				array( 'jquery' ),
-				DLM_VERSION
+				DLM_VERSION,
+				true
 			);
 
-			wp_localize_script( 'dlm_settings', 'dlm_settings_vars', array(
-				'img_path'          => download_monitor()->get_plugin_url() . '/assets/images/',
-				'lazy_select_nonce' => wp_create_nonce( 'dlm-settings-lazy-select-nonce' ),
-				'settings_url'      => DLM_Admin_Settings::get_url(),
-			) );
+			wp_localize_script(
+				'dlm_settings',
+				'dlm_settings_vars',
+				array(
+					'img_path'          => download_monitor()->get_plugin_url() . '/assets/images/',
+					'lazy_select_nonce' => wp_create_nonce( 'dlm-settings-lazy-select-nonce' ),
+					'settings_url'      => DLM_Admin_Settings::get_url(),
+					'shop_enabled'      => dlm_is_shop_enabled(),
+					'nonce'             => wp_create_nonce( 'dlm_ajax_nonce' ),
+				)
+			);
 
 			// Script used to install plugins
 			wp_enqueue_script( 'dlm_install_plugins', plugins_url( '/assets/js/install-plugins' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ), array( 'jquery', 'updates' ), DLM_VERSION, true );
@@ -236,38 +248,43 @@ class DLM_Admin_Scripts {
 				'dlm_install_plugins',
 				'dlm_install_plugins_vars',
 				array(
-					'install_plugin'   => esc_html__( 'Installing plugin...', 'download-monitor' ),
-					'activate_plugin'  => esc_html__( 'Activating plugin...', 'download-monitor' ),
-					'no_install'       => esc_html__( 'Plugin could not be installed.', 'download-monitor' ),
-					'no_activated'     => esc_html__( 'Something went wrong, plugin could not be activated.', 'download-monitor' ),
-					'activated_plugin' => esc_html__( 'Plugin activated successfully.', 'download-monitor' ),
+					'install_nonce'     => wp_create_nonce( 'dlm-install-plugin' ),
+					'install_plugin'    => esc_html__( 'Installing plugin...', 'download-monitor' ),
+					'activate_plugin'   => esc_html__( 'Activating plugin...', 'download-monitor' ),
+					'activate_license'  => esc_html__( 'Activating license...', 'download-monitor' ),
+					'no_install'        => esc_html__( 'Plugin could not be installed.', 'download-monitor' ),
+					'no_activated'      => esc_html__( 'Something went wrong, plugin could not be activated.', 'download-monitor' ),
+					'activated_plugin'  => esc_html__( 'Plugin activated successfully.', 'download-monitor' ),
+					'activated_license' => esc_html__( 'Plugin license activated successfully.', 'download-monitor' ),
+					'active'            => esc_html__( 'Active', 'download-monitor' ),
 				)
 			);
 
-			wp_enqueue_style( 'common');
-
+			wp_enqueue_style( 'common' );
 		}
 
-		// This should handle all extensions activation and deactivation single-handed
-		if ( isset($_GET['page']) && 'dlm-installed-extensions' === $_GET['page'] ) {
-
-			// Enqueue Extesions JS
+		// This handles network wide settings js.
+		if ( isset( $_GET['page'] ) && 'download-monitor-settings' === $_GET['page'] ) {
+			// Enqueue Settings JS
 			wp_enqueue_script(
-				'dlm_extensions',
-				plugins_url( '/assets/js/extensions' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
+				'dlm_settings',
+				plugins_url( '/assets/js/settings' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
 				array( 'jquery' ),
-				DLM_VERSION
+				DLM_VERSION,
+				true
 			);
 
-			wp_localize_script( 'dlm_extensions', 'extensions_vars', array(
-				'activate'               => esc_html__( 'Please wait, activating extensions...', 'download-monitor' ),
-				'deactivate'             => esc_html__( 'Please wait, deactivating extensions....', 'download-monitor' ),
-				'forget_license_success' => __( 'An email has been sent to you with the corresponding licenses.', 'download-monitor' ),
-				'forget_license_error'   => __( 'An error occurred while trying to retrieve your licenses. Please try again later.', 'download-monitor' ),
-				'missing_email'          => __( 'Please enter your email address.', 'download-monitor' ),
-				'reaching_server'        => __( 'Please wait, reaching server...', 'download-monitor' ),
-				'missing_license'        => __( 'Please enter your license key.', 'download-monitor' ),
-			) );
+			wp_localize_script(
+				'dlm_settings',
+				'dlm_settings_vars',
+				array(
+					'img_path'          => download_monitor()->get_plugin_url() . '/assets/images/',
+					'lazy_select_nonce' => wp_create_nonce( 'dlm-settings-lazy-select-nonce' ),
+					'settings_url'      => DLM_Admin_Settings::get_url(),
+					'shop_enabled'      => dlm_is_shop_enabled(),
+					'nonce'             => wp_create_nonce( 'dlm_ajax_nonce' ),
+				)
+			);
 		}
 
 		if ( 'options.php' == $pagenow && isset( $_GET['page'] ) && 'dlm_legacy_upgrade' === $_GET['page'] ) {
@@ -277,19 +294,75 @@ class DLM_Admin_Scripts {
 				'dlm_legacy_upgrader',
 				plugins_url( '/assets/js/legacy-upgrader/build/bundle.js', $dlm->get_plugin_file() ),
 				array(),
-				DLM_VERSION
+				DLM_VERSION,
+				true
 			);
 
-			wp_localize_script( 'dlm_legacy_upgrader', 'dlm_lu_vars', array(
-				'nonce'       => wp_create_nonce( 'dlm_legacy_upgrade' ),
-				'assets_path' => plugins_url( '/assets/js/legacy-upgrader/build/assets/', $dlm->get_plugin_file() )
-			) );
+			wp_localize_script(
+				'dlm_legacy_upgrader',
+				'dlm_lu_vars',
+				array(
+					'nonce'       => wp_create_nonce( 'dlm_legacy_upgrade' ),
+					'assets_path' => plugins_url( '/assets/js/legacy-upgrader/build/assets/', $dlm->get_plugin_file() ),
+				)
+			);
 
 			wp_enqueue_style( 'dlm_legacy_upgrader_css', download_monitor()->get_plugin_url() . '/assets/js/legacy-upgrader/build/style.css' );
 		}
 
-		do_action( 'dlm_admin_scripts_after' );
+		if ( 'edit.php' == $pagenow && isset( $_GET['page'] ) && 'download-monitor-settings' === $_GET['page'] && ! empty( $_GET['section'] ) && 'misc' === $_GET['section'] ) {
 
+			// Enqueue Select2
+			wp_enqueue_script(
+				'dlm_select2',
+				plugins_url( '/assets/js/select2/select2.min.js', $dlm->get_plugin_file() ),
+				array( 'jquery' ),
+				DLM_VERSION,
+				true
+			);
+
+			wp_enqueue_style( 'dlm_select2_css', download_monitor()->get_plugin_url() . '/assets/js/select2/select2.min.css' );
+
+			wp_enqueue_script(
+				'dlm_api_key_generator',
+				plugins_url( '/assets/js/api-keys-generator' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', $dlm->get_plugin_file() ),
+				array( 'jquery', 'dlm_select2' ),
+				DLM_VERSION,
+				true
+			);
+
+			wp_add_inline_script(
+				'dlm_api_key_generator',
+				'const dlm_ajax = ' . json_encode(
+					array(
+						'nonce'   => wp_create_nonce( 'dlm_ajax_nonce' ),
+						'ajaxurl' => admin_url( 'admin-ajax.php' ),
+					)
+				) . ';',
+				'before'
+			);
+		}
+
+		if ( isset( $_GET['page'] ) && 'edit.php' == $pagenow && isset( $_GET['page'] ) && 'dlm-installed-extensions' === $_GET['page'] ) {
+			wp_register_script( 'dlm-lite-extensions', DLM_URL . 'assets/js/extensions' . ( ( ! SCRIPT_DEBUG ) ? '.min' : '' ) . '.js', array( 'jquery' ), DLM_VERSION, true );
+			wp_enqueue_script( 'dlm-lite-extensions' );
+
+			wp_localize_script(
+				'dlm-lite-extensions',
+				'extensions_vars',
+				array(
+					'activate'               => esc_html__( 'Please wait, activating extensions...', 'download-monitor' ),
+					'deactivate'             => esc_html__( 'Please wait, deactivating extensions....', 'download-monitor' ),
+					'forget_license_success' => __( 'An email has been sent to you with the corresponding licenses.', 'download-monitor' ),
+					'forget_license_error'   => __( 'An error occurred while trying to retrieve your licenses. Please try again later.', 'download-monitor' ),
+					'missing_email'          => __( 'Please enter your email address.', 'download-monitor' ),
+					'reaching_server'        => __( 'Please wait, reaching server...', 'download-monitor' ),
+					'missing_license'        => __( 'Please enter your license key.', 'download-monitor' ),
+				)
+			);
+		}
+
+		do_action( 'dlm_admin_scripts_after' );
 	}
 
 	/**
@@ -303,7 +376,7 @@ class DLM_Admin_Scripts {
 		switch ( $file ) {
 			case 'edit-post':
 				$strings = array(
-					'insert_download' => __( 'Insert Download', 'download-monitor' )
+					'insert_download' => __( 'Insert Download', 'download-monitor' ),
 				);
 				break;
 			case 'edit-download':
@@ -330,7 +403,7 @@ class DLM_Admin_Scripts {
 	 *
 	 * @return void
 	 */
-	public function print_dlm_js_templates(){
+	public function print_dlm_js_templates() {
 		include __DIR__ . '/Reports/templates/dlm-js-templates.php';
 	}
 

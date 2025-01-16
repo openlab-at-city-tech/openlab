@@ -16,6 +16,7 @@ function openlab_hide_plugins( $plugins ) {
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'accordion-shortcodes/accordion-shortcodes.php',
 		'achievements/achievements.php',
+		'admin-commenters-comments-count/admin-commenters-comments-count.php', // #3483
 		'ajax-thumbnail-rebuild/ajax-thumbnail-rebuild.php',
 		'ambrosite-nextprevious-post-link-plus/ambrosite-post-link-plus.php',
 		'an-gradebook/GradeBook.php',
@@ -26,6 +27,7 @@ function openlab_hide_plugins( $plugins ) {
 		'bbpress/bbpress.php',
 		'blog2social/blog2social.php',
 		'bookly-responsive-appointment-booking-tool/main.php',
+		'bp-avatar-on-register/bp-avatar-on-register.php', // #3483
 		'bp-avatar-on-upload/bp-avatar-on-upload.php',
 		'bp-customizable-group-categories/bp-customizable-group-categories.php',
 		'bp-event-organiser/bp-event-organiser.php',
@@ -43,6 +45,7 @@ function openlab_hide_plugins( $plugins ) {
 		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
 		'easy-table/easy-table.php',
+		'echo-knowledge-base/echo-knowledge-base.php', // #3455
 		'edge-suite/edge-suite.php',
 		'elasticpress/elasticpress.php',
 		'elasticpress-buddypress/elasticpress-buddypress.php',
@@ -61,6 +64,7 @@ function openlab_hide_plugins( $plugins ) {
 		'grader/grader.php',
 		'gravity-forms-addons/gravity-forms-addons.php',
 		'gravityperks/gravityperks.php',
+		'h5p-postmessage/h5p-postmessage.php', // #3483
 		'highlighter-pro/highlighter.php', // #3438
 		'import-html-pages/html-import.php',
 		'kb-gradebook/kb-gradebook.php',
@@ -74,6 +78,7 @@ function openlab_hide_plugins( $plugins ) {
 		'pagemash/pagemash.php',
 		'page-tagger/page-tagger.php',
 		'papercite/papercite-wp-plugin.php',
+		'password-policy-manager/miniorange-password-policy-setting.php', // #3483
 		'pdf-embedder/pdf_embedder.php',
 		'pdfembedder-premium/mobile_pdf_embedder.php',
 		'post-gallery-widget/post-gallery.php',
@@ -94,6 +99,7 @@ function openlab_hide_plugins( $plugins ) {
 		'taxonomy-terms-order/taxonomy-terms-order.php',
 		'tinymce-comment-field/tinymce-comment-field.php',
 		'titan-framework/titan-framework.php',
+		'tablepress-responsive-tables/tablepress-responsive-tables.php', // #3483
 		'translatepress-multilingual/index.php',
 		'ufhealth-require-image-alt-tags/ufhealth-require-image-alt-tags.php',
 		'watupro/watupro.php',

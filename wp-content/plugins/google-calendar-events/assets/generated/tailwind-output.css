@@ -107,7 +107,7 @@
 }
 
 /*
-! tailwindcss v3.4.14 | MIT License | https://tailwindcss.com
+! tailwindcss v3.4.15 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -934,17 +934,17 @@ video {
 
 .\!simcal-border-white {
   --tw-border-opacity: 1 !important;
-  border-color: rgb(255 255 255 / var(--tw-border-opacity)) !important;
+  border-color: rgb(255 255 255 / var(--tw-border-opacity, 1)) !important;
 }
 
 .simcal-border-sc_green-200 {
   --tw-border-opacity: 1;
-  border-color: rgb(96 188 78 / var(--tw-border-opacity));
+  border-color: rgb(96 188 78 / var(--tw-border-opacity, 1));
 }
 
 .simcal-border-b-sc_green-200 {
   --tw-border-opacity: 1;
-  border-bottom-color: rgb(96 188 78 / var(--tw-border-opacity));
+  border-bottom-color: rgb(96 188 78 / var(--tw-border-opacity, 1));
 }
 
 .\!simcal-bg-sc_purple {
@@ -953,27 +953,27 @@ video {
 
 .simcal-bg-sc_blue-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(242 247 251 / var(--tw-bg-opacity));
+  background-color: rgb(242 247 251 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-sc_blue-300 {
   --tw-bg-opacity: 1;
-  background-color: rgb(93 196 254 / var(--tw-bg-opacity));
+  background-color: rgb(93 196 254 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-sc_cream-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(231 190 158 / var(--tw-bg-opacity));
+  background-color: rgb(231 190 158 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-sc_green-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(233 243 244 / var(--tw-bg-opacity));
+  background-color: rgb(233 243 244 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-sc_green-200 {
   --tw-bg-opacity: 1;
-  background-color: rgb(96 188 78 / var(--tw-bg-opacity));
+  background-color: rgb(96 188 78 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-transparent {
@@ -982,7 +982,7 @@ video {
 
 .simcal-bg-white {
   --tw-bg-opacity: 1;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1));
 }
 
 .simcal-bg-\[url\(\'\.\.\/images\/pages\/welcome\/bg-banner-img\.png\'\)\] {
@@ -1166,52 +1166,52 @@ video {
 
 .\!simcal-text-sc_black-100 {
   --tw-text-opacity: 1 !important;
-  color: rgb(58 65 76 / var(--tw-text-opacity)) !important;
+  color: rgb(58 65 76 / var(--tw-text-opacity, 1)) !important;
 }
 
 .\!simcal-text-white {
   --tw-text-opacity: 1 !important;
-  color: rgb(255 255 255 / var(--tw-text-opacity)) !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important;
 }
 
 .simcal-text-gray-400 {
   --tw-text-opacity: 1;
-  color: rgb(156 163 175 / var(--tw-text-opacity));
+  color: rgb(156 163 175 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-gray-500 {
   --tw-text-opacity: 1;
-  color: rgb(107 114 128 / var(--tw-text-opacity));
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-sc_black-100 {
   --tw-text-opacity: 1;
-  color: rgb(58 65 76 / var(--tw-text-opacity));
+  color: rgb(58 65 76 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-sc_black-200 {
   --tw-text-opacity: 1;
-  color: rgb(29 35 39 / var(--tw-text-opacity));
+  color: rgb(29 35 39 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-sc_blue-200 {
   --tw-text-opacity: 1;
-  color: rgb(62 175 239 / var(--tw-text-opacity));
+  color: rgb(62 175 239 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-sc_green-200 {
   --tw-text-opacity: 1;
-  color: rgb(96 188 78 / var(--tw-text-opacity));
+  color: rgb(96 188 78 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-sc_grey-100 {
   --tw-text-opacity: 1;
-  color: rgb(127 132 144 / var(--tw-text-opacity));
+  color: rgb(127 132 144 / var(--tw-text-opacity, 1));
 }
 
 .simcal-text-white {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
 .simcal-underline {
@@ -1224,12 +1224,12 @@ video {
 
 .hover\:simcal-border-sc_green-200:hover {
   --tw-border-opacity: 1;
-  border-color: rgb(96 188 78 / var(--tw-border-opacity));
+  border-color: rgb(96 188 78 / var(--tw-border-opacity, 1));
 }
 
 .hover\:\!simcal-bg-white:hover {
   --tw-bg-opacity: 1 !important;
-  background-color: rgb(255 255 255 / var(--tw-bg-opacity)) !important;
+  background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1)) !important;
 }
 
 .hover\:simcal-bg-inherit:hover {
@@ -1238,7 +1238,7 @@ video {
 
 .hover\:simcal-bg-sc_green-200:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(96 188 78 / var(--tw-bg-opacity));
+  background-color: rgb(96 188 78 / var(--tw-bg-opacity, 1));
 }
 
 .hover\:simcal-bg-transparent:hover {
@@ -1247,22 +1247,22 @@ video {
 
 .hover\:\!simcal-text-sc_green-200:hover {
   --tw-text-opacity: 1 !important;
-  color: rgb(96 188 78 / var(--tw-text-opacity)) !important;
+  color: rgb(96 188 78 / var(--tw-text-opacity, 1)) !important;
 }
 
 .hover\:simcal-text-green-600:hover {
   --tw-text-opacity: 1;
-  color: rgb(22 163 74 / var(--tw-text-opacity));
+  color: rgb(22 163 74 / var(--tw-text-opacity, 1));
 }
 
 .hover\:simcal-text-sc_green-200:hover {
   --tw-text-opacity: 1;
-  color: rgb(96 188 78 / var(--tw-text-opacity));
+  color: rgb(96 188 78 / var(--tw-text-opacity, 1));
 }
 
 .hover\:simcal-text-white:hover {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1));
 }
 
 .focus\:simcal-border-b-\[3px\]:focus {
@@ -1271,7 +1271,7 @@ video {
 
 .focus\:simcal-border-sc_green-200:focus {
   --tw-border-opacity: 1;
-  border-color: rgb(96 188 78 / var(--tw-border-opacity));
+  border-color: rgb(96 188 78 / var(--tw-border-opacity, 1));
 }
 
 .focus\:simcal-bg-transparent:focus {
@@ -1290,7 +1290,7 @@ video {
 
 .active\:simcal-border-sc_green-200:active {
   --tw-border-opacity: 1;
-  border-color: rgb(96 188 78 / var(--tw-border-opacity));
+  border-color: rgb(96 188 78 / var(--tw-border-opacity, 1));
 }
 
 @media not all and (min-width: 1920px) {

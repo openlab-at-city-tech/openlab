@@ -3,8 +3,6 @@
  * Post Meta Box
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -525,8 +523,14 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 						break;
 
 					case 'FILTER_DEFAULT':
-							$meta_value = filter_input( INPUT_POST, $key, FILTER_DEFAULT ); // phpcs:ignore WordPressVIPMinimum.Security.PHPFilterFunctions.RestrictedFilter -- Default filter after all other cases, keeping this filter for backward compatibility of PRO options.
+						/**
+						 * @psalm-suppress TooManyArguments
+						 * @psalm-suppress PossiblyInvalidArgument
+						 */
+						$meta_value = apply_filters( 'astra_php_default_filter_input', ! empty( $_POST[ $key ] ) ? sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) : '', $key );
+						/** @psalm-suppress PossiblyInvalidArgument */
 						break;
+						
 				}
 
 				// Store values.
@@ -612,6 +616,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 			$page_bg_dynamic_title = ( $post_type ? $bg_updated_title : __( 'Page Background', 'astra' ) );
 			$global_palette        = astra_get_option( 'global-color-palette' );
 
+			/* Created a new array specifically designed for storing post types that don't require Astra's meta settings.*/
+			$register_astra_metabox = ! in_array( $post_type, array( 'wp_block' ), true );
+
 			wp_localize_script(
 				'astra-meta-settings',
 				'astMetaParams',
@@ -639,7 +646,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 					'is_bb_themer_layout'            => ! astra_check_is_bb_themer_layout(), // Show page header option only when bb is not activated.
 					'is_addon_activated'             => defined( 'ASTRA_EXT_VER' ) ? true : false,
 					'sticky_addon_enabled'           => ( $astra_ext_extension_class_exists && Astra_Ext_Extension::is_active( 'sticky-header' ) ) ? true : false,
-					'register_astra_metabox'         => apply_filters( 'astra_settings_metabox_register', true ),
+					'register_astra_metabox'         => apply_filters( 'astra_settings_metabox_register', $register_astra_metabox ),
 					'is_hide_contnet_layout_sidebar' => $ast_content_layout_sidebar,
 					'upgrade_pro_link'               => ASTRA_PRO_CUSTOMIZER_UPGRADE_URL,
 					'show_upgrade_notice'            => astra_showcase_upgrade_notices(),
@@ -658,6 +665,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'tablet'  => array(
@@ -671,6 +679,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'mobile'  => array(
@@ -684,6 +693,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 					),
@@ -699,6 +709,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'tablet'  => array(
@@ -712,6 +723,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'mobile'  => array(
@@ -725,6 +737,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 					),
@@ -1336,6 +1349,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 										'overlay-color'    => array(
 											'type' => 'string',
 										),
+										'overlay-opacity'  => array(
+											'type' => 'string',
+										),
 										'overlay-gradient' => array(
 											'type' => 'string',
 										),
@@ -1372,6 +1388,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 											'type' => 'string',
 										),
 										'overlay-color'    => array(
+											'type' => 'string',
+										),
+										'overlay-opacity'  => array(
 											'type' => 'string',
 										),
 										'overlay-gradient' => array(
@@ -1412,6 +1431,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 										'overlay-color'    => array(
 											'type' => 'string',
 										),
+										'overlay-opacity'  => array(
+											'type' => 'string',
+										),
 										'overlay-gradient' => array(
 											'type' => 'string',
 										),
@@ -1432,6 +1454,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'tablet'  => array(
@@ -1445,6 +1468,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'mobile'  => array(
@@ -1458,6 +1482,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 					),
@@ -1509,6 +1534,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 										'overlay-color'    => array(
 											'type' => 'string',
 										),
+										'overlay-opacity'  => array(
+											'type' => 'string',
+										),
 										'overlay-gradient' => array(
 											'type' => 'string',
 										),
@@ -1545,6 +1573,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 											'type' => 'string',
 										),
 										'overlay-color'    => array(
+											'type' => 'string',
+										),
+										'overlay-opacity'  => array(
 											'type' => 'string',
 										),
 										'overlay-gradient' => array(
@@ -1585,6 +1616,9 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 										'overlay-color'    => array(
 											'type' => 'string',
 										),
+										'overlay-opacity'  => array(
+											'type' => 'string',
+										),
 										'overlay-gradient' => array(
 											'type' => 'string',
 										),
@@ -1605,6 +1639,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'tablet'  => array(
@@ -1618,6 +1653,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 						'mobile'  => array(
@@ -1631,6 +1667,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 							'background-media'      => '',
 							'overlay-type'          => '',
 							'overlay-color'         => '',
+							'overlay-opacity'       => '',
 							'overlay-gradient'      => '',
 						),
 					),
@@ -1719,6 +1756,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 							'tablet'  => array(
@@ -1732,6 +1770,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 							'mobile'  => array(
@@ -1745,6 +1784,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 						),
@@ -1763,6 +1803,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 							'tablet'  => array(
@@ -1776,6 +1817,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 							'mobile'  => array(
@@ -1789,6 +1831,7 @@ if ( ! class_exists( 'Astra_Meta_Boxes' ) ) {
 								'background-media'      => '',
 								'overlay-type'          => '',
 								'overlay-color'         => '',
+								'overlay-opacity'       => '',
 								'overlay-gradient'      => '',
 							),
 						),

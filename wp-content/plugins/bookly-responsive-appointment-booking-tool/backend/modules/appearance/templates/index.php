@@ -9,15 +9,15 @@ use Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Backend\Modules\Appearance;
 
 ?>
-<?php if ( trim( $custom_css ) ) : ?>
-    <style type="text/css">
-        :root {
-            --bookly-main-color: <?php echo esc_attr( get_option( 'bookly_app_color', '#f4662f' ) ) ?>;
-        }
+<style type="text/css">
+    :root {
+        --bookly-main-color: <?php echo esc_attr( get_option( 'bookly_app_color', '#f4662f' ) ) ?>;
+    }
 
-        <?php echo Lib\Utils\Common::stripScripts( $custom_css ) ?>
-    </style>
-<?php endif ?>
+    <?php if ( trim( $custom_css ) ) : ?>
+    <?php echo Lib\Utils\Common::stripScripts( $custom_css ) ?>
+    <?php endif ?>
+</style>
 
 <div id="bookly-tbs" class="wrap">
     <div class="form-row align-items-center mb-3">
@@ -222,7 +222,7 @@ use Bookly\Backend\Modules\Appearance;
 
                 <div class="card my-2">
                     <div class="card-body">
-                        <div class="tab-content">
+                        <div class="tab-content bookly-css-root">
                             <?php foreach ( $steps as $step => $step_name ) : ?>
                                 <div id="bookly-step-<?php echo esc_attr( $step ) ?>" class="tab-pane <?php if ( $step == 1 ) : ?>active<?php endif ?>" data-target="<?php echo esc_attr( $step ) ?>">
                                     <?php // Render unique data per step

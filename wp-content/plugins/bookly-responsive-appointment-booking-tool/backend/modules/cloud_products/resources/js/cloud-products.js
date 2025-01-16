@@ -227,6 +227,9 @@ jQuery(function ($) {
                         window.location.reload();
                     }
                 } else {
+                    if (response.data.hasOwnProperty('offer_to_top_up_balance')) {
+                        $('#bookly-cloud-panel .bookly-js-recharge-dialog-activator').trigger('click');
+                    }
                     booklyAlert({error: [response.data.message]});
                     ladda.stop();
                 }

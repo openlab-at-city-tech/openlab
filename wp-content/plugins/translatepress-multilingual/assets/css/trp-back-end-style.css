@@ -986,3 +986,11 @@ Advanced Setting Page
     margin-left: 12px;
     color: rgba(100, 100, 111, 0.3);
 }
+
+.trp-bf-notice-container {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    padding-left: 15px;
+    gap: 8px;
+}

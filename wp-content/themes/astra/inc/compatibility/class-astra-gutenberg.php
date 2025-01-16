@@ -65,7 +65,7 @@ class Astra_Gutenberg {
 	 * @return array       Updated embed markup.
 	 */
 	public function add_ast_block_container( $attr ) {
-		$attr['ast-blocks-layout'] = 'true';
+		$attr['data-ast-blocks-layout'] = 'true';
 		return $attr;
 	}
 
@@ -74,7 +74,6 @@ class Astra_Gutenberg {
 	 * to avoid the group block width from changing to full width.
 	 *
 	 * @since 3.7.1
-	 * @access public
 	 *
 	 * @param string $block_content Rendered block content.
 	 * @param array  $block         Block object.
@@ -109,7 +108,6 @@ class Astra_Gutenberg {
 	 * Add Group block custom class when "Inherit default layout" toggle enabled.
 	 *
 	 * @since 3.8.3
-	 * @access public
 	 *
 	 * @param string $block_content Rendered block content.
 	 * @param array  $block         Block object.
@@ -135,7 +133,6 @@ class Astra_Gutenberg {
 	 * Update the block content with inner div.
 	 *
 	 * @since 3.7.1
-	 * @access public
 	 *
 	 * @param mixed $matches block content.
 	 *
@@ -149,7 +146,6 @@ class Astra_Gutenberg {
 	 * Add iframe wrapper for videos.
 	 *
 	 * @since 4.4.0
-	 * @access public
 	 *
 	 * @param string $block_content Rendered block content.
 	 * @param array  $block         Block object.
@@ -173,7 +169,7 @@ class Astra_Gutenberg {
 		}
 
 		$video_url     = ! empty( $block['attrs']['url'] ) ? esc_url( $block['attrs']['url'] ) : '';
-		$replace_regex = '/<div\s+class="wp-block-embed__wrapper">(.*?)<\/div>/s';
+		$replace_regex = '/<div\s+class="wp-block-embed__wrapper"\s+>(.*?)<\/div>/s';
 
 		$updated_content = preg_replace_callback(
 			$replace_regex,

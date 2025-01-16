@@ -11,7 +11,7 @@ function gquizShowAnswer(radioInput) {
     fieldId = radioInput.name.replace('input_', '');
     fieldElem = jQuery('#field_' + formId + '_' + fieldId);
 	fieldElem.addClass( 'gquiz-instant-feedback-validated' );
-    correctValue = gquizAnswers[fieldId].correctValue;
+    correctValue = gquizAnswers[formId][fieldId].correctValue;
     correctValue = utf8_decode(base64_decode(correctValue));
     isCorrect = !!(correctValue == radioInput.value);
     if (!isCorrect) {
@@ -21,12 +21,12 @@ function gquizShowAnswer(radioInput) {
     correctInputId = jQuery(correctInput).attr("id");
     correctLabel = jQuery(fieldElem).find("label[for='" + correctInputId + "']");
     correctLabel.addClass('gquiz-correct-choice');
-    indicatorUrl = isCorrect ? gquizVars.correctIndicator : gquizVars.incorrectIndicator;
-	indicatorAlt = isCorrect ? gquizVars.strings.correctResponse : gquizVars.strings.incorrectResponse;
+    indicatorUrl = isCorrect ? gquizVars[formId].correctIndicator : gquizVars[formId].incorrectIndicator;
+	indicatorAlt = isCorrect ? gquizVars[formId].strings.correctResponse : gquizVars[formId].strings.incorrectResponse;
     answerIndicator = "<img class='gquiz-indicator' src='" + indicatorUrl + "' alt='" + indicatorAlt + "' />";
     jQuery(label).append(answerIndicator);
     fieldContainer = jQuery(radioInput).closest('.ginput_container');
-    answerExplanation = gquizAnswers[fieldId].explanation;
+    answerExplanation = gquizAnswers[formId][fieldId].explanation;
     if (answerExplanation) {
         answerExplanation = '<div class="gquiz-answer-explanation gfield_description">' + utf8_decode(base64_decode(answerExplanation)) + '</div>';
         fieldContainer.append(answerExplanation);

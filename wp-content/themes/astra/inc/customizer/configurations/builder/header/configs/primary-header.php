@@ -2,9 +2,7 @@
 /**
  * Primary Header Configuration.
  *
- * @author      Astra
  * @package     Astra
- * @copyright   Copyright (c) 2023, Astra
  * @link        https://wpastra.com/
  * @since       4.5.2
  */
@@ -80,19 +78,20 @@ function astra_primary_header_configuration() {
 
 		// Sub Option: Header Background.
 		array(
-			'name'       => ASTRA_THEME_SETTINGS . '[hb-header-bg-obj-responsive]',
-			'section'    => $_section,
-			'type'       => 'control',
-			'control'    => 'ast-responsive-background',
-			'transport'  => 'postMessage',
-			'context'    => Astra_Builder_Helper::$design_tab,
-			'priority'   => 5,
-			'data_attrs' => array(
+			'name'        => ASTRA_THEME_SETTINGS . '[hb-header-bg-obj-responsive]',
+			'section'     => $_section,
+			'type'        => 'control',
+			'control'     => 'ast-responsive-background',
+			'transport'   => 'postMessage',
+			'context'     => Astra_Builder_Helper::$design_tab,
+			'priority'    => 5,
+			'data_attrs'  => array(
 				'name' => 'hb-header-bg-obj-responsive',
 			),
-			'default'    => astra_get_option( 'hb-header-bg-obj-responsive' ),
-			'title'      => __( 'Background', 'astra' ),
-			'divider'    => array( 'ast_class' => 'ast-section-spacing' ),
+			'default'     => astra_get_option( 'hb-header-bg-obj-responsive' ),
+			'title'       => __( 'Background', 'astra' ),
+			'description' => __( 'It would not be effective if transparent header is enabled.', 'astra' ),
+			'divider'     => array( 'ast_class' => 'ast-section-spacing' ),
 		),
 
 		// Option: Header Bottom Boder Color.

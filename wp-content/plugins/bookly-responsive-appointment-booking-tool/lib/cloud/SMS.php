@@ -1,6 +1,7 @@
 <?php
 namespace Bookly\Lib\Cloud;
 
+use Bookly\Lib\Entities\SmsLog;
 use Bookly\Lib\Utils;
 
 class SMS extends Base
@@ -37,6 +38,15 @@ class SMS extends Base
             );
             if ( $data['phone'] != '' ) {
                 $response = $this->api->sendPostRequest( self::SEND_SMS, $data );
+
+                $sl = new SmsLog();
+                $sl->setPhone( $data['phone'] )
+                    ->setMessage( $message )
+                    ->setImpersonalMessage( $impersonal_message )
+                    ->setRefId( $response ? $response['ref_id'] : null )
+                    ->setTypeId( $type_id )
+                    ->save();
+
                 if ( $response ) {
                     if ( array_key_exists( 'notify_low_balance', $response ) && $response['notify_low_balance'] ) {
                         $this->api->dispatch( Events::ACCOUNT_LOW_BALANCE );
@@ -123,7 +133,9 @@ class SMS extends Base
                 compact( 'start', 'length', 'filter' )
             );
             if ( $response ) {
-                array_walk( $response['list'], function( &$item ) {
+                $refs = SmsLog::query()->whereIn( 'ref_id', $response['refs'] ?: array() )->fetchCol( 'ref_id' );
+
+                array_walk( $response['list'], function( &$item ) use ( $refs ) {
                     $date_time = Utils\DateTime::UTCToWPTimeZone( $item['datetime'] );
                     $item['date'] = Utils\DateTime::formatDate( $date_time );
                     $item['time'] = Utils\DateTime::formatTime( $date_time );
@@ -180,6 +192,7 @@ class SMS extends Base
                             $item['status'] = __( 'Error', 'bookly' );
                             $item['charge'] = '';
                     }
+                    $item['resend'] = in_array( $item['id'], $refs );
                 } );
 
                 $this->setUndeliveredSmsCount( 0 );

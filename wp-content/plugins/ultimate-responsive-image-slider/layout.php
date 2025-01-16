@@ -26,7 +26,7 @@ $j = 1;
 ?>
 <script type="text/javascript">
 document.addEventListener("DOMContentLoaded", function(event) { 
-	jQuery( '#slider-pro-3-<?php echo $post_id; ?>' ).sliderPro({
+	jQuery( '#slider-pro-3-<?php echo esc_js( $post_id ); ?>' ).sliderPro({
 		//width
 		<?php if($WRIS_L3_Width == "100%") { ?>
 		width: "100%",
@@ -79,7 +79,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 		thumbnailPointer: true, 
 		<?php } ?>
 		centerImage: true,
-		imageScaleMode: '<?php echo $WRIS_L3_Slider_Scale_Mode;?>',
+		imageScaleMode: '<?php echo esc_js(  $WRIS_L3_Slider_Scale_Mode ); ?>',
 		allowScaleUp: <?php if($WRIS_L3_Slider_Auto_Scale == 1) echo esc_js("true"); else echo esc_js("false"); ?>,
 		<?php if($WRIS_L3_Slide_Order == "shuffle") { ?>
 		shuffle: true,
@@ -217,7 +217,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
 <?php  
 $post_title = "";
 if($WRIS_L3_Slide_Title) { ?>
-<h3 class="uris-slider-post-title"><?php echo $post_title = get_the_title( $post_id ); ?></h3>
+<div id="uris-slider-title">
+	<h3 class="uris-slider-post-title"><?php echo esc_html( $post_title = get_the_title( $post_id ) ); ?></h3>
+</div>
 <?php } if($TotalSlideIds>0){ ?>
 		<div id="slider-pro-3-<?php echo esc_attr($post_id); ?>" class="slider-pro">
 			<!---- slides div start ---->
@@ -261,7 +263,13 @@ if($WRIS_L3_Slide_Title) { ?>
 								data-position="centerCenter"
 								data-vertical="14%"
 								data-show-transition="right" data-show-delay="500">
-								<?php if(strlen($slide_description) > 300 ) echo substr(wp_kses_post($slide_description),0,300)."..."; else echo wp_kses_post($slide_description); ?>
+								<?php 
+								if ( strlen( $slide_description ) > 300 ) {
+								    echo esc_html( substr( wp_kses_post( $slide_description ), 0, 300 ) ) . "...";
+								} else {
+								    echo esc_html( wp_kses_post( $slide_description ) );
+								}
+								?>
 							</p>
 							<?php } ?>
 						</div>
@@ -295,7 +303,7 @@ if($WRIS_L3_Slide_Title) { ?>
 							$slide_alt = $post_title;
 						}
 						$j++; ?>
-						<img class="sp-thumbnail" loading="lazy" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo $slide_alt; ?>"/>
+						<img class="sp-thumbnail" loading="lazy" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo esc_attr( $slide_alt ); ?>"/>
 					<?php } // end of for each
 				}// end of is_array ?>
 			</div>

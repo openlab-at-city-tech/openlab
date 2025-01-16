@@ -111,7 +111,13 @@ class Ajax extends Lib\Base\Ajax
                     'redirect_url' => add_query_arg( array( 'page' => Page::pageSlug() ), admin_url( 'admin.php' ) ) . '#cloud-product=' . $product_slug . '&status=activated',
                 ) );
             } else {
-                wp_send_json_error( array( 'message' => current( Lib\Cloud\API::getInstance()->getErrors() ) ) );
+                $errors = Lib\Cloud\API::getInstance()->getErrors();
+                $data = array( 'message' => current( $errors ) );
+                if ( array_key_exists( 'ERROR_LOW_BALANCE', $errors ) ) {
+                    $data['offer_to_top_up_balance'] = true;
+                }
+
+                wp_send_json_error( $data );
             }
         } elseif ( $product->deactivate( $status ) ) {
             wp_send_json_success();

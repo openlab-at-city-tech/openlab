@@ -13,10 +13,12 @@ class Series extends Lib\Base\Entity
     protected static $table = 'bookly_series';
 
     protected static $schema = array(
-        'id'     => array( 'format' => '%d' ),
+        'id' => array( 'format' => '%d' ),
         'repeat' => array( 'format' => '%s' ),
-        'token'  => array( 'format' => '%s' ),
+        'token' => array( 'format' => '%s' ),
     );
+
+    protected $loggable = true;
 
     /**************************************************************************
      * Entity Fields Getters & Setters                                        *

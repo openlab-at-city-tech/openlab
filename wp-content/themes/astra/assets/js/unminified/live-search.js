@@ -14,12 +14,12 @@
 	function getSearchResultPostMarkup(resultsData) {
 		let processedHtml = "";
 
-		Object.entries(resultsData).map(([postType, postsData]) => {
+		Object.entries(resultsData).forEach(([postType, postsData]) => {
 			let postTypeLabel = astra_search.search_post_types_labels[postType]
 				? astra_search.search_post_types_labels[postType]
 				: postType + "s";
 			processedHtml += `<label class="ast-search--posttype-heading"> ${postTypeLabel} </label>`;
-			postsData.map((post) => {
+			postsData.forEach((post) => {
 				const searchPostTitle = decodeHTMLEntities(post.title.rendered);
 				const headerCoverSearch = document.getElementById("ast-search-form");
 				const fullScreenSearch = document.getElementById("ast-seach-full-screen-form");
@@ -75,7 +75,7 @@
 
 							if (postsData.length > 0) {
 								let formattedPostsData = {};
-								postsData.map((post) => {
+								postsData.forEach((post) => {
 									if (post.type in formattedPostsData) {
 										formattedPostsData[post.type].push(
 											post

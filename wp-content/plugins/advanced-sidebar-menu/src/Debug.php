@@ -16,22 +16,31 @@ use Advanced_Sidebar_Menu\Widget\Page;
  *
  * @author OnPoint Plugins
  *
+ * @phpstan-import-type PAGE_SETTINGS from Page
+ * @phpstan-import-type CATEGORY_SETTINGS from Category
+ *
+ * @see    content/plugins/advanced-sidebar-menu/js/src/debug.ts
  * @phpstan-type DEBUG_INFO array{
  *      basic: string,
+ *      classicEditor?: bool,
  *      classicWidgets: bool,
  *      excludedCategories?: int[],
  *      excluded_pages?: int[],
+ *      menus: array<string, array<string, mixed>>,
  *      php: string,
  *      pro: string|false,
  *      scriptDebug: bool,
  *      WordPress: string,
- *      pro?: string
  *  }
  */
 class Debug {
 	use Singleton;
 
-	public const DEBUG_PARAM = 'asm_debug';
+	/**
+	 * @see DEBUG_PARAM in js/src/debug.ts
+	 */
+	public const DEBUG_PARAM   = 'asm_debug';
+	public const SCRIPT_HANDLE = 'advanced-sidebar-menu/debug/js';
 
 
 	/**
@@ -41,11 +50,12 @@ class Debug {
 	 */
 	protected function hook() {
 		if ( isset( $_GET[ static::DEBUG_PARAM ] ) ) {
-			add_action( 'advanced-sidebar-menu/widget/before-render', [ $this, 'print_instance' ], 1, 2 );
+			add_action( 'advanced-sidebar-menu/widget/before-render', [ $this, 'include_menu_in_debug_info' ], 1 );
 
 			if ( \is_array( $_GET[ static::DEBUG_PARAM ] ) ) {
 				add_filter( 'advanced-sidebar-menu/menus/widget-instance', [ $this, 'adjust_widget_settings' ], 100 );
 			}
+			add_action( 'wp_print_footer_scripts', [ $this, 'load_scripts' ], 1 );
 		}
 	}
 
@@ -53,12 +63,14 @@ class Debug {
 	/**
 	 * Adjust widget settings using the URL parameters.
 	 *
-	 * @param array $instance - Widget settings.
+	 * @phpstan-param PAGE_SETTINGS|CATEGORY_SETTINGS $instance
 	 *
-	 * @return array
+	 * @param array                                   $instance - Widget settings.
+	 *
+	 * @return array<string, mixed>
 	 */
-	public function adjust_widget_settings( array $instance ) {
-		if ( ! isset( $_GET[ static::DEBUG_PARAM ] ) ) {
+	public function adjust_widget_settings( array $instance ): array {
+		if ( ! isset( $_GET[ self::DEBUG_PARAM ] ) ) {
 			return $instance;
 		}
 
@@ -102,15 +114,7 @@ class Debug {
 	 *
 	 * @since 9.0.2
 	 *
-	 * @phpstan-return array{
-	 *     basic: string,
-	 *     classicWidgets: bool,
-	 *     php: string,
-	 *     pro: string|false,
-	 *     scriptDebug: bool,
-	 *     WordPress: string,
-	 *     pro?: string
-	 * }
+	 * @phpstan-return DEBUG_INFO
 	 *
 	 * @return array
 	 */
@@ -121,6 +125,7 @@ class Debug {
 		$data = [
 			'basic'          => ADVANCED_SIDEBAR_MENU_BASIC_VERSION,
 			'classicWidgets' => is_plugin_active( 'classic-widgets/classic-widgets.php' ),
+			'menus'          => [],
 			'php'            => PHP_VERSION,
 			'pro'            => false,
 			'scriptDebug'    => Scripts::instance()->is_script_debug_enabled(),
@@ -141,23 +146,30 @@ class Debug {
 
 
 	/**
-	 * Print the widget settings as a JS variable.
-	 *
-	 * @param Menu_Abstract<array<string,string>> $menu   - Menu class.
-	 * @param Page|Category                       $widget - Widget class.
+	 * Load the JS and the JS `asm_debug` variable into the footer.
 	 *
 	 * @return void
 	 */
-	public function print_instance( $menu, $widget ) {
-		$data = apply_filters( 'advanced-sidebar-menu/debug/print-instance', $this->get_site_info(), $menu, $widget );
-		?>
-		<script name="<?php echo esc_attr( static::DEBUG_PARAM ); ?>">
-			window.asm_debug = window.asm_debug || <?php echo wp_json_encode( $data ); ?>;
-			<?php
-			echo esc_attr( static::DEBUG_PARAM );
-			?>
-			[ '<?php echo esc_js( $menu->args['widget_id'] ?? '' ); ?>' ] = <?php echo wp_json_encode( $menu->instance ); ?>;
-		</script>
-		<?php
+	public function load_scripts(): void {
+		$file = Scripts::instance()->get_dist_file( Scripts::FILE_DEBUG, 'js' );
+		wp_enqueue_script( self::SCRIPT_HANDLE, $file, [], ADVANCED_SIDEBAR_MENU_BASIC_VERSION, true );
+		wp_localize_script( self::SCRIPT_HANDLE, self::DEBUG_PARAM, apply_filters( 'advanced-sidebar-menu/debug/print-instance', $this->get_site_info() ) );
+	}
+
+
+	/**
+	 * Print the widget settings as a JS variable.
+	 *
+	 * @phpstan-param Menu_Abstract<PAGE_SETTINGS|CATEGORY_SETTINGS> $menu
+	 *
+	 * @param Menu_Abstract                                          $menu - Menu class.
+	 *
+	 * @return void
+	 */
+	public function include_menu_in_debug_info( Menu_Abstract $menu ): void {
+		add_filter( 'advanced-sidebar-menu/debug/print-instance', function( array $data ) use ( $menu ) {
+			$data['menus'][ $menu->args['widget_id'] ?? '' ] = $menu->instance;
+			return $data;
+		} );
 	}
 }

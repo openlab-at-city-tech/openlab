@@ -72,6 +72,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                                         )
                                     ));
                                     ?>
+                                    <a id="b2s-post-notice-delete-all-btn" class="btn btn-sm btn-primary margin-top-8"><?php esc_html_e('Delete all', 'blog2social'); ?></a>
                                 </form>
                                 <!-- Filter Post Ende-->
                                 <br>
@@ -125,6 +126,25 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
             <div class="modal-footer">
                 <button class="btn btn-default" data-dismiss="modal"><?php esc_html_e('NO', 'blog2social') ?></button>
                 <button class="btn btn-danger b2s-publish-delete-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade b2s-delete-post-notice-all" tabindex="-1" role="dialog" aria-labelledby="b2s-delete-post-notice-all" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-delete-post-notice-all" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><?php esc_html_e('Delete all entries from the reporting', 'blog2social') ?></h4>
+            </div>
+            <div class="modal-body">
+                <b><?php esc_html_e('Are you sure, that you want to delete all entries from the reporting?', 'blog2social') ?></b>
+                <br>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal"><?php esc_html_e('NO', 'blog2social') ?></button>
+                <button class="btn btn-danger b2s-post-notice-delete-all-confirm-btn"><?php esc_html_e('YES, delete', 'blog2social') ?></button>
             </div>
         </div>
     </div>

@@ -5,7 +5,7 @@
  * Plugin Name: MetaSlider
  * Plugin URI:  https://www.metaslider.com
  * Description: MetaSlider gives you the power to create a beautiful slideshow, carousel, or gallery on your WordPress site.
- * Version:     3.91.0
+ * Version:     3.93.0
  * Author:      MetaSlider
  * Author URI:  https://www.metaslider.com
  * License:     GPL-2.0+
@@ -42,7 +42,7 @@ if (! class_exists('MetaSliderPlugin')) {
          *
          * @var string
          */
-        public $version = '3.91.0';
+        public $version = '3.93.0';
 
         /**
          * Pro installed version number
@@ -644,14 +644,6 @@ if (! class_exists('MetaSliderPlugin')) {
                 load_textdomain(
                     'ml-slider',
                     METASLIDER_PATH . 'languages/' . 'ml-slider' . '-' . get_locale() . '.mo'
-                );
-            }
-
-            if (function_exists('wp_set_script_translations')) {
-                wp_set_script_translations(
-                    'metaslider-admin-script',
-                    'ml-slider',
-                    METASLIDER_PATH . 'languages'
                 );
             }
         }
@@ -1352,6 +1344,13 @@ if (! class_exists('MetaSliderPlugin')) {
                     $dependencies = ' data-dependencies="' . $dependencies . '"';
                 }
 
+                $extra_attrs = '';
+                if (isset($row['extra_attrs']) && is_array($row['extra_attrs'])) {
+                    foreach ($row['extra_attrs'] as $x_attr => $x_value) {
+                        $extra_attrs .= ' ' . $x_attr . '="' . $x_value . '"';
+                    }
+                }
+
                 $after = '';
                 if (isset($row['after'])) {
                     $after = '<span class="">' . $row['after'] . '</span>';
@@ -1471,7 +1470,7 @@ if (! class_exists('MetaSliderPlugin')) {
                             ) . '</td><td><select class="option ' . esc_attr($row["class"]) . ' ' . esc_attr(
                                 $id
                             ) . ' width w-40" name="settings[' . esc_attr($id) . ']"' . 
-                                $dependencies . '>';
+                                $dependencies . $extra_attrs . '>';
                         foreach ($row['options'] as $option_name => $option_value) {
                             $selected = selected($option_name, $row['value'], false);
                             $disabled = isset( $option_value['addon_required'] ) && $option_value['addon_required'] 
@@ -1866,18 +1865,11 @@ if (! class_exists('MetaSliderPlugin')) {
                                             </div>
                                         </div>
                                     </metaslider-settings-viewer>
-                                    <?php
-                                    $url = wp_nonce_url(
-                                        admin_url(
-                                            "admin-post.php?action=metaslider_delete_slider&amp;slider_id={$this->slider->id}"
-                                        ),
-                                        "metaslider_delete_slider"
-                                    ); ?>
-
                                     <div class="ms-delete-save">
-                                        <a @click.prevent="deleteSlideshow()" class='ms-delete-slideshow' href='<?php
-                                        echo esc_url($url) ?>'><?php
-                                            esc_html_e('Move slideshow to trash', 'ml-slider'); ?></a>
+                                        <a @click.prevent="deleteSlideshow($event)" data-nonce="<?php 
+                                            esc_attr_e(wp_create_nonce('metaslider_delete_slider')) ?>" class='ms-delete-slideshow' href='#'><?php
+                                            esc_html_e('Move slideshow to trash', 'ml-slider'); ?>
+                                        </a>
                                     </div>
                                     </div>
                                 <?php
@@ -2597,7 +2589,10 @@ if (! class_exists('MetaSliderPlugin')) {
                 $attach_id,
                 $settings['width'],
                 $settings['height'],
-                isset($settings['smartCrop']) ? $settings['smartCrop'] : 'false'
+                isset($settings['smartCrop']) ? $settings['smartCrop'] : 'false',
+                true,
+                null,
+                isset($settings['cropMultiply']) ? absint($settings['cropMultiply']) : 1
             );
             $newurl = $image_cropper->get_image_url();
     

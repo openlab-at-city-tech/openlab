@@ -3,6 +3,32 @@ namespace Bookly\Lib;
 
 class Updater extends Base\Updater
 {
+    function update_24_4()
+    {
+        $this->createTables( array(
+            'bookly_sms_log' => 'CREATE TABLE IF NOT EXISTS `%s` ( `id` INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY, `phone` VARCHAR(20) NOT NULL, `message` VARCHAR(3072) NOT NULL, `impersonal_message` VARCHAR(3072) NOT NULL, `ref_id` VARCHAR(6) NULL, `type_id` INT UNSIGNED NOT NULL, `created_at` DATETIME NOT NULL ) ENGINE = INNODB',
+        ) );
+    }
+
+    function update_24_2()
+    {
+        $this->alterTables( array(
+            'bookly_services' => array(
+                'ALTER TABLE `%s` ADD COLUMN `package_life_time_type` ENUM("first_booking","creation_date") NOT NULL DEFAULT "first_booking" AFTER `package_life_time`',
+            ),
+        ) );
+    }
+
+    function update_23_8()
+    {
+        $this->alterTables( array(
+            'bookly_payments' => array(
+                'ALTER TABLE `%s` ADD COLUMN `invoice_id` VARCHAR(32) DEFAULT NULL AFTER `details`',
+                'ALTER TABLE `%s` ADD INDEX `invoice_id_idx` (`invoice_id`)',
+            ),
+        ) );
+    }
+
     function update_23_7()
     {
         add_option( 'bookly_app_datepicker_inverted', '0' );

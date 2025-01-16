@@ -1,0 +1,116 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "echo-knowledge-base/search",
+	"textdomain": "echo-knowledge-base",
+	"title": "KB Search",
+	"icon": "search",
+	"description": "",
+	"category": "echo-knowledge-base",
+	"keywords": [
+		"search",
+		"knowledge-base",
+		"list",
+		"find"
+	],
+	"supports": {
+		"html": false,
+		"align": true,
+		"reusable": false,
+		"customClassName": false
+	},
+	"attributes": {
+		"kb_id": {
+			"type": "number"
+		},
+		"ml_search_layout": {
+			"type": "string"
+		},
+		"search_title_html_tag": {
+			"type": "string"
+		},
+		"search_title": {
+			"type": "string"
+		},
+		"search_title_font_color": {
+			"type": "string"
+		},
+		"search_title_typography_controls": {
+			"type": "object"
+		},
+		"search_box_hint": {
+			"type": "string"
+		},
+		"search_button_typography_controls": {
+			"type": "object"
+		},
+		"search_button_name": {
+			"type": "string"
+		},
+		"search_btn_background_color": {
+			"type": "string"
+		},
+		"no_results_found": {
+			"type": "string"
+		},
+		"min_search_word_size_msg": {
+			"type": "string"
+		},
+		"search_background_color": {
+			"type": "string"
+		},
+		"search_text_input_background_color": {
+			"type": "string"
+		},
+		"search_text_input_border_color": {
+			"type": "string"
+		},
+		"search_box_padding_top": {
+			"type": "number"
+		},
+		"search_box_padding_bottom": {
+			"type": "number"
+		},
+		"search_box_padding_left": {
+			"type": "number"
+		},
+		"search_box_padding_right": {
+			"type": "number"
+		},
+		"search_box_margin_top": {
+			"type": "number"
+		},
+		"search_box_margin_bottom": {
+			"type": "number"
+		},
+		"search_input_typography_controls": {
+			"type": "object"
+		},
+		"search_box_input_width": {
+			"type": "number"
+		},
+		"search_box_input_height": {
+			"type": "string"
+		},
+		"search_results_typography_controls": {
+			"type": "object"
+		},
+		"search_result_mode": {
+			"type": "string"
+		},
+		"search_box_results_style": {
+			"type": "string"
+		},
+		"search_input_border_width": {
+			"type": "number"
+		},
+		"search_results_msg": {
+			"type": "string"
+		},
+		"custom_css_class": {
+			"type": "string"
+		}
+	},
+	"editorScript": "echo-knowledge-base-search-block",
+	"editorStyle": "echo-knowledge-base-block-editor"
+}

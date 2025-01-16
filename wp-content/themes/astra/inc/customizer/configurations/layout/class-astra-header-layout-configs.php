@@ -3,8 +3,6 @@
  * General Options for Astra Theme.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0.0
  */
@@ -435,7 +433,7 @@ if ( ! class_exists( 'Astra_Header_Layout_Configs' ) ) {
 						array(
 							'setting'  => ASTRA_THEME_SETTINGS . '[header-main-rt-section]',
 							'operator' => 'in',
-							'value'    => array( 'button', 'text-html' ),
+							'value'    => array( 'search', 'button', 'text-html', 'widget', 'woocommerce' ),
 						),
 					),
 					'section'  => 'section-primary-menu',
@@ -452,6 +450,12 @@ if ( ! class_exists( 'Astra_Header_Layout_Configs' ) ) {
 					'type'     => 'control',
 					'control'  => 'ast-toggle-control',
 					'context'  => array(
+						'relation' => 'AND',
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[header-main-rt-section]',
+							'operator' => 'in',
+							'value'    => array( 'search', 'button', 'text-html', 'widget', 'woocommerce' ),
+						),
 						array(
 							'setting'  => ASTRA_THEME_SETTINGS . '[hide-custom-menu-mobile]',
 							'operator' => '!=',
@@ -462,6 +466,7 @@ if ( ! class_exists( 'Astra_Header_Layout_Configs' ) ) {
 					'section'  => 'section-primary-menu',
 					'title'    => __( 'Take Last Item Outside Menu', 'astra' ),
 					'priority' => 7,
+					'divider'  => array( 'ast_class' => 'ast-bottom-divider' ),
 				),
 
 				array(

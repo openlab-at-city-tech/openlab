@@ -929,8 +929,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                     'size' => 100,
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-infobox .icon-hover > i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementskit-infobox .icon-hover > svg'    => 'max-width: {{SIZE}}{{UNIT}};',
+                    '{{WRAPPER}} .elementskit-infobox .icon-hover > :is(i, svg)' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
                 'condition' => [
                     'ekit_icon_box_enable_water_mark' => 'yes',
@@ -1109,8 +1108,7 @@ class ElementsKit_Widget_Icon_Box extends Widget_Base {
                     'unit' => 'px',
                 ],
                 'selectors' => [
-                    '{{WRAPPER}} .elementskit-infobox .elementskit-info-box-icon i' => 'font-size: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .elementskit-info-box-icon > svg'  => 'max-width: {{SIZE}}{{UNIT}}; height: auto;'
+                    '{{WRAPPER}} .elementskit-infobox .elementskit-info-box-icon :is(i, svg)' => 'font-size: {{SIZE}}{{UNIT}};',
                 ],
                 'separator' => 'before',
                 'condition' => [

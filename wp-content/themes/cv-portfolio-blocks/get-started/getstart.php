@@ -7,7 +7,7 @@
 
 define('CV_PORTFOLIO_BLOCKS_SUPPORT',__('https://wordpress.org/support/theme/cv-portfolio-blocks/','cv-portfolio-blocks'));
 define('CV_PORTFOLIO_BLOCKS_REVIEW',__('https://wordpress.org/support/theme/cv-portfolio-blocks/reviews/#new-post','cv-portfolio-blocks'));
-define('CV_PORTFOLIO_BLOCKS_BUY_NOW',__('https://www.wpradiant.net/products/cv-wordpress-theme/','cv-portfolio-blocks'));
+define('CV_PORTFOLIO_BLOCKS_BUY_NOW',__('https://www.wpradiant.net/products/cv-wordpress-theme','cv-portfolio-blocks'));
 define('CV_PORTFOLIO_BLOCKS_DOC_URL',__('https://preview.wpradiant.net/tutorial/cv-portfolio-blocks/','cv-portfolio-blocks'));
 define('CV_PORTFOLIO_BLOCKS_LIVE_DEMO',__('https://preview.wpradiant.net/cv-portfolio-blocks/','cv-portfolio-blocks'));
 define('CV_PORTFOLIO_BLOCKS_PRO_DOC',__('https://preview.wpradiant.net/tutorial/cv-portfolio-blocks-pro/','cv-portfolio-blocks'));

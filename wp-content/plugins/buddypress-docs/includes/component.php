@@ -1083,17 +1083,29 @@ class BP_Docs_Component extends BP_Component {
 			$submitted_data = isset( buddypress()->bp_docs->submitted_data ) ? buddypress()->bp_docs->submitted_data : null;
 
 			$strings = array(
-				'upload_title' => __( 'Upload File', 'buddypress-docs' ),
-				'upload_button' => __( 'OK', 'buddypress-docs' ),
-				'still_working'	=> __( 'Still working?', 'buddypress-docs' ),
-				'and_x_more' => __( 'and %d more', 'buddypress-docs' ),
+				'and_x_more'        => __( 'and %d more', 'buddypress-docs' ),
 				'failed_submission' => ! empty( $submitted_data ) ? 1 : 0,
+				'show_all_tags'     => __( 'show all tags', 'buddypress-docs' ),
+				'show_fewer_tags'   => __( 'show fewer tags', 'buddypress-docs' ),
+				'still_working'	    => __( 'Still working?', 'buddypress-docs' ),
+				'upload_title'      => __( 'Upload File', 'buddypress-docs' ),
+				'upload_button'     => __( 'OK', 'buddypress-docs' ),
 			);
 
 			if ( bp_docs_is_doc_edit() ) {
 				$strings['pulse'] = bp_docs_heartbeat_pulse();
 			}
 			wp_localize_script( 'bp-docs-js', 'bp_docs', $strings );
+
+			$config = [
+				'tagCloudCount' => bp_docs_get_tags_truncate_count(),
+			];
+
+			wp_add_inline_script(
+				'bp-docs-js',
+				'const bpDocsConfig = ' . json_encode( $config ) . ';',
+				'before'
+			);
 
 			do_action( 'bp_docs_enqueue_scripts' );
 		}

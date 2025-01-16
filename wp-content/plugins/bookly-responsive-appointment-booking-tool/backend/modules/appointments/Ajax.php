@@ -155,7 +155,7 @@ class Ajax extends Lib\Base\Ajax
                 p.type       AS payment_type,
                 p.status     AS payment_status,
                 COALESCE(s.title, a.custom_service_name) AS service_title,
-                (TIME_TO_SEC(TIMEDIFF(a.end_date, a.start_date)) + a.extras_duration) AS service_duration' )
+                (TIMESTAMPDIFF(SECOND, a.start_date, a.end_date) + a.extras_duration) AS service_duration' )
             ->leftJoin( 'CustomerAppointment', 'ca', 'a.id = ca.appointment_id' )
             ->leftJoin( 'Service', 's', 's.id = a.service_id' )
             ->leftJoin( 'Customer', 'c', 'c.id = ca.customer_id' )

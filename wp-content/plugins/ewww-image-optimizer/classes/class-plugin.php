@@ -203,6 +203,8 @@ final class Plugin extends Base {
 			// We run this early, and then double-check after admin_init, once network settings have been saved/updated.
 			self::$instance->cloud_init();
 
+			// AJAX action hook to dismiss the UTF-8 notice.
+			\add_action( 'wp_ajax_ewww_dismiss_utf8_notice', array( self::$instance, 'dismiss_utf8_notice' ) );
 			// AJAX action hook to dismiss the exec notice and other related notices.
 			\add_action( 'wp_ajax_ewww_dismiss_exec_notice', array( self::$instance, 'dismiss_exec_notice' ) );
 
@@ -500,6 +502,11 @@ final class Plugin extends Base {
 				\add_action( 'admin_notices', 'ewww_image_optimizer_easyio_site_initialized' );
 			}
 		}
+		global $wpdb;
+		if ( ! $this->get_option( 'ewww_image_optimizer_dismiss_utf8' ) && false === strpos( $wpdb->charset, 'utf8' ) ) {
+			\add_action( 'network_admin_notices', array( $this, 'utf8_db_notice' ) );
+			\add_action( 'admin_notices', array( $this, 'utf8_db_notice' ) );
+		}
 		if ( \defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD_KEY' ) && \get_option( 'ewww_image_optimizer_cloud_key_invalid' ) ) {
 			\add_action( 'network_admin_notices', 'ewww_image_optimizer_notice_invalid_key' );
 			\add_action( 'admin_notices', 'ewww_image_optimizer_notice_invalid_key' );
@@ -603,9 +610,9 @@ final class Plugin extends Base {
 			\add_action( 'network_admin_notices', 'ewww_image_optimizer_notice_agr' );
 		}
 		// Increase the version when the next bump is coming.
-		if ( \defined( 'PHP_VERSION_ID' ) && PHP_VERSION_ID < 70200 ) {
-			\add_action( 'admin_notices', 'ewww_image_optimizer_php72_warning' );
-			\add_action( 'network_admin_notices', 'ewww_image_optimizer_php72_warning' );
+		if ( \defined( 'PHP_VERSION_ID' ) && PHP_VERSION_ID < 70400 ) {
+			\add_action( 'admin_notices', array( $this, 'php_warning' ) );
+			\add_action( 'network_admin_notices', array( $this, 'php_warning' ) );
 		}
 		if ( \get_option( 'ewww_image_optimizer_debug' ) ) {
 			\add_action( 'admin_notices', 'ewww_image_optimizer_debug_enabled_notice' );
@@ -662,6 +669,7 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_jpg_to_png', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_png_to_jpg', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_gif_to_png', 'boolval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_bmp_convert', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_jpg_background', 'ewww_image_optimizer_jpg_background' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_webp', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_webp_force', 'boolval' );
@@ -736,6 +744,68 @@ final class Plugin extends Base {
 		\add_site_option( 'exactdn_sub_folder', false );
 		\add_site_option( 'exactdn_prevent_db_queries', true );
 		\add_site_option( 'ewww_image_optimizer_ll_autoscale', true );
+	}
+
+	/**
+	 * Outputs the script to dismiss the 'utf8' notice.
+	 */
+	protected function display_utf8_dismiss_script() {
+		?>
+		<script>
+			jQuery(document).on('click', '#ewww-image-optimizer-warning-utf8-db-connection .notice-dismiss', function() {
+				var ewww_dismiss_utf8_data = {
+					action: 'ewww_dismiss_utf8_notice',
+					_wpnonce: <?php echo wp_json_encode( wp_create_nonce( 'ewww-image-optimizer-notice' ) ); ?>,
+				};
+				jQuery.post(ajaxurl, ewww_dismiss_utf8_data, function(response) {
+					if (response) {
+						console.log(response);
+					}
+				});
+			});
+		</script>
+		<?php
+	}
+
+	/**
+	 * Alert the user when the database connection does not appear to be using utf8.
+	 */
+	public function utf8_db_notice() {
+		?>
+		<div id='ewww-image-optimizer-warning-utf8-db-connection' class='notice notice-warning is-dismissible'>
+			<p>
+				<strong><?php \esc_html_e( 'The database connection for your site does not appear to be using UTF-8.', 'ewww-image-optimizer' ); ?></strong>
+				<?php \esc_html_e( 'EWWW Image Optimizer may not properly process images with non-English filenames.', 'ewww-image-optimizer' ); ?>
+			</p>
+		</div>
+		<?php
+		$this->display_utf8_dismiss_script();
+	}
+
+	/**
+	 * Disables UTF-8 notice after being dismissed.
+	 */
+	public function dismiss_utf8_notice() {
+		$this->ob_clean();
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		check_ajax_referer( 'ewww-image-optimizer-notice' );
+		// Verify that the user is properly authorized.
+		if ( ! \current_user_can( \apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
+			\wp_die( \esc_html__( 'Access denied.', 'ewww-image-optimizer' ) );
+		}
+		\update_option( 'ewww_image_optimizer_dismiss_utf8', 1 );
+		\update_site_option( 'ewww_image_optimizer_dismiss_utf8', 1 );
+		die();
+	}
+
+	/**
+	 * Display a notice that PHP version 8.1 will be required in a future version.
+	 */
+	public function php_warning() {
+		if ( ! current_user_can( apply_filters( 'ewww_image_optimizer_admin_permissions', '' ) ) ) {
+			return;
+		}
+		echo '<div id="ewww-image-optimizer-notice-php" class="notice notice-info"><p><a href="https://docs.ewww.io/article/55-upgrading-php" target="_blank" data-beacon-article="5ab2baa6042863478ea7c2ae">' . esc_html__( 'The next release of EWWW Image Optimizer will require PHP 8.1 or greater. Newer versions of PHP are significantly faster and much more secure. If you are unsure how to upgrade to a supported version, ask your webhost for instructions.', 'ewww-image-optimizer' ) . '</a></p></div>';
 	}
 
 	/**

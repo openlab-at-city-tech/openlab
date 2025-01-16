@@ -3,8 +3,6 @@
  * Easy Digital Downloads Container Options for Astra theme.
  *
  * @package     Astra
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 1.5.5
  */
@@ -74,9 +72,9 @@ if ( ! class_exists( 'Astra_Edd_Container_Configs' ) ) {
 					'priority'    => 5,
 					'title'       => __( 'Container Style', 'astra' ),
 					'choices'     => array(
-						'default' => 'Default',
-						'unboxed' => 'Unboxed',
-						'boxed'   => 'Boxed',
+						'default' => __( 'Default', 'astra' ),
+						'unboxed' => __( 'Unboxed', 'astra' ),
+						'boxed'   => __( 'Boxed', 'astra' ),
 					),
 					'renderAs'    => 'text',
 					'responsive'  => false,

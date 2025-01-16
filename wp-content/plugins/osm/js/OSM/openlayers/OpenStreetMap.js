@@ -20,7 +20,7 @@ OpenLayers.Layer.OSM.Mapnik = OpenLayers.Class(OpenLayers.Layer.OSM, {
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 20,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors; <a href='https://www.HanBlog.Net'>OSM Plugin</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors; <a href='https://www.hyumika.com'>OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -54,7 +54,7 @@ OpenLayers.Layer.OSM.CycleMap = OpenLayers.Class(OpenLayers.Layer.OSM, {
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>  contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>; <a href='https://www.HanBlog.Net'>OSM Plugin</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a>  contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>; <a href='https://www.hyumika.com'>OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -89,7 +89,7 @@ OpenLayers.Layer.OSM.StamenWC = OpenLayers.Class(OpenLayers.Layer.OSM, {
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a>  and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
+            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a>  and <a href=\"https://www.hyumika.com\">OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -122,7 +122,7 @@ OpenLayers.Layer.OSM.StamenToner = OpenLayers.Class(OpenLayers.Layer.OSM, {
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a> and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
+            attribution: "<a href=\"http://map.stamen.com\">Map tiles</a> by <a href=\"http://stamen.com\">Stamen Design</a>, under <a href=\"http://creativecommons.org/licenses/by/3.0\">CC BY 3.0</a>. Data by <a href=\"http://openstreetmap.org\">OpenStreetMap</a> and <a href=\"https://www.hyumika.com\">OSM Plugin</a>",
             buffer: 0,
             tileOptions: {crossOriginKeyword: null},
             transitionEffect: "resize"
@@ -155,7 +155,7 @@ OpenLayers.Layer.OSM.TransportMap = OpenLayers.Class(OpenLayers.Layer.OSM, {
         ];
         options = OpenLayers.Util.extend({
             numZoomLevels: 19,
-            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>,  and <a href=\"https://www.HanBlog.net\">OSM Plugin</a>",
+            attribution: "&copy; <a href='http://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors, Tiles courtesy of <a href='http://www.opencyclemap.org'>Andy Allan</a>,  and <a href=\"https://www.hyumika.com\">OSM Plugin</a>",
             buffer: 0,
             transitionEffect: "resize"
         }, options);

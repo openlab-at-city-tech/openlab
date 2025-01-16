@@ -48,10 +48,16 @@ class Controller extends Virtual_Post {
 		if ( empty( $activated_recipient ) || is_null( $action ) ) {
 			global $wp_query;
 
+			$page_404 = get_query_template( '404' );
+
 			$wp_query->set_404();
 			status_header( 404 );
 			nocache_headers();
-			include get_query_template( '404' );
+			
+			if ( ! empty( $page_404 ) ) {
+				include $page_404;
+			}
+			
 			die();
 		}
 

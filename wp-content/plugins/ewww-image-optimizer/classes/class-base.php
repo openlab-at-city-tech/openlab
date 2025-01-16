@@ -553,11 +553,11 @@ class Base {
 					$this->debug_message( 'imagewebp() missing' );
 				} elseif ( ! \function_exists( '\imagepalettetotruecolor' ) ) {
 					$this->debug_message( 'imagepalettetotruecolor() missing' );
-				} elseif ( \function_exists( '\imageistruecolor' ) ) {
+				} elseif ( ! \function_exists( '\imageistruecolor' ) ) {
 					$this->debug_message( 'imageistruecolor() missing' );
-				} elseif ( \function_exists( '\imagealphablending' ) ) {
+				} elseif ( ! \function_exists( '\imagealphablending' ) ) {
 					$this->debug_message( 'imagealphablending() missing' );
-				} elseif ( \function_exists( '\imagesavealpha' ) ) {
+				} elseif ( ! \function_exists( '\imagesavealpha' ) ) {
 					$this->debug_message( 'imagesavealpha() missing' );
 				} elseif ( $gd_version ) {
 					$this->debug_message( "version: $gd_version" );
@@ -587,6 +587,35 @@ class Base {
 			}
 		}
 		return $this->imagick_supports_webp;
+	}
+
+	/**
+	 * Get a list of which image/file types are supported.
+	 *
+	 * @param string $select Defaults to 'enabled' to only list those types which have optimization enabled. Specify 'all' to return all possible types.
+	 * @return array A list of file/mime types.
+	 */
+	public function get_supported_types( $select = 'enabled' ) {
+		$supported_types = array();
+		if ( $this->get_option( 'ewww_image_optimizer_jpg_level' ) || $this->get_option( 'ewww_image_optimizer_webp' ) || 'all' === $select ) {
+			$supported_types[] = 'image/jpeg';
+		}
+		if ( $this->get_option( 'ewww_image_optimizer_png_level' ) || $this->get_option( 'ewww_image_optimizer_webp' ) || 'all' === $select ) {
+			$supported_types[] = 'image/png';
+		}
+		if ( $this->get_option( 'ewww_image_optimizer_gif_level' ) || 'all' === $select ) {
+			$supported_types[] = 'image/gif';
+		}
+		if ( $this->get_option( 'ewww_image_optimizer_pdf_level' ) || 'all' === $select ) {
+			$supported_types[] = 'application/pdf';
+		}
+		if ( $this->get_option( 'ewww_image_optimizer_svg_level' ) || 'all' === $select ) {
+			$supported_types[] = 'image/svg+xml';
+		}
+		if ( $this->get_option( 'ewww_image_optimizer_bmp_convert' ) || $this->get_option( 'ewww_image_optimizer_jpg_level' ) || 'all' === $select ) {
+			$supported_types[] = 'image/bmp';
+		}
+		return $supported_types;
 	}
 
 	/**
@@ -882,31 +911,13 @@ class Base {
 	 * @return bool True if the file exists and is local, false otherwise.
 	 */
 	public function is_file( $file ) {
+		if ( empty( $file ) ) {
+			return false;
+		}
 		if ( false !== \strpos( $file, '://' ) ) {
 			return false;
 		}
 		if ( false !== \strpos( $file, 'phar://' ) ) {
-			return false;
-		}
-		$file       = \realpath( $file );
-		$wp_dir     = \realpath( ABSPATH );
-		$upload_dir = \wp_get_upload_dir();
-		$upload_dir = \realpath( $upload_dir['basedir'] );
-
-		$content_dir = \realpath( WP_CONTENT_DIR );
-		if ( empty( $content_dir ) ) {
-			$content_dir = $wp_dir;
-		}
-		if ( empty( $upload_dir ) ) {
-			$upload_dir = $content_dir;
-		}
-		$plugin_dir = \realpath( \constant( \strtoupper( $this->prefix ) . 'PLUGIN_PATH' ) );
-		if (
-			false === \strpos( $file, $upload_dir ) &&
-			false === \strpos( $file, $content_dir ) &&
-			false === \strpos( $file, $wp_dir ) &&
-			false === \strpos( $file, $plugin_dir )
-		) {
 			return false;
 		}
 		return \is_file( $file );
@@ -993,11 +1004,11 @@ class Base {
 	 * Check the mimetype of the given file with magic mime strings/patterns.
 	 *
 	 * @param string $path The absolute path to the file.
-	 * @param string $category The type of file we are checking. Accepts 'i' for
+	 * @param string $category The type of file we are checking. Default 'i' for
 	 *                     images/pdfs or 'b' for binary.
 	 * @return bool|string A valid mime-type or false.
 	 */
-	public function mimetype( $path, $category ) {
+	public function mimetype( $path, $category = 'i' ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		$this->debug_message( "testing mimetype: $path" );
 		$type = false;
@@ -1021,6 +1032,11 @@ class Base {
 				// Read first 12 bytes, which equates to 24 hex characters.
 				$magic = \bin2hex( \substr( $file_contents, 0, 12 ) );
 				$this->debug_message( $magic );
+				if ( '424d' === \substr( $magic, 0, 4 ) ) {
+					$type = 'image/bmp';
+					$this->debug_message( "ewwwio type: $type" );
+					return $type;
+				}
 				if ( 0 === \strpos( $magic, '52494646' ) && 16 === \strpos( $magic, '57454250' ) ) {
 					$type = 'image/webp';
 					$this->debug_message( "ewwwio type: $type" );
@@ -1098,6 +1114,8 @@ class Base {
 	public function quick_mimetype( $path ) {
 		$pathextension = \strtolower( \pathinfo( $path, PATHINFO_EXTENSION ) );
 		switch ( $pathextension ) {
+			case 'bmp':
+				return 'image/bmp';
 			case 'jpg':
 			case 'jpeg':
 			case 'jpe':
@@ -1551,7 +1569,7 @@ class Base {
 			$url = ( \is_ssl() ? 'https://' : 'http://' ) . $url;
 		}
 		// Because encoded ampersands in the filename break things.
-		$url = \str_replace( '&#038;', '&', $url );
+		$url = \html_entity_decode( $url );
 		return \parse_url( $url, $component );
 	}
 

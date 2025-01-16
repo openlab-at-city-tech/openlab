@@ -3,8 +3,6 @@
  * Transparent Header Options for our theme.
  *
  * @package     Astra Addon
- * @author      Brainstorm Force
- * @copyright   Copyright (c) 2020, Brainstorm Force
  * @link        https://www.brainstormforce.com
  * @since       Astra 1.4.3
  */
@@ -46,6 +44,9 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 			/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			$diff_trans_logo = astra_get_option( 'different-transparent-logo', false );
 
+			// Old setting option for disabling the transparent header on 404, search and archive pages.
+			$transparent_header_disable_archive = astra_get_option( 'transparent-header-disable-archive' );
+
 			$_configs = array(
 
 				/**
@@ -63,11 +64,11 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 				),
 
 				/**
-				 * Option: Disable Transparent Header on Archive Pages
+				 * Option: Disable Transparent Header on 404 Page
 				 */
 				array(
-					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-disable-archive]',
-					'default'     => astra_get_option( 'transparent-header-disable-archive' ),
+					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-disable-404-page]',
+					'default'     => astra_get_option( 'transparent-header-disable-404-page', $transparent_header_disable_archive ),
 					'type'        => 'control',
 					'section'     => $_section,
 					'context'     => array(
@@ -78,8 +79,52 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 							'value'    => '1',
 						),
 					),
-					'title'       => __( 'Disable on 404, Search & Archives?', 'astra' ),
-					'description' => __( 'This setting is generally not recommended on special pages such as archive, search, 404, etc. If you would like to enable it, uncheck this option', 'astra' ),
+					'title'       => __( 'Disable on 404 Page?', 'astra' ),
+					'description' => __( 'This setting is generally not recommended on 404 page. If you would like to enable it, uncheck this option', 'astra' ),
+					'priority'    => 25,
+					'control'     => 'ast-toggle-control',
+				),
+
+				/**
+				 * Option: Disable Transparent Header on Search Page
+				 */
+				array(
+					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-disable-search-page]',
+					'default'     => astra_get_option( 'transparent-header-disable-search-page', $transparent_header_disable_archive ),
+					'type'        => 'control',
+					'section'     => $_section,
+					'context'     => array(
+						Astra_Builder_Helper::$general_tab_config,
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[transparent-header-enable]',
+							'operator' => '==',
+							'value'    => '1',
+						),
+					),
+					'title'       => __( 'Disable on Search Page?', 'astra' ),
+					'description' => __( 'This setting is generally not recommended on search page. If you would like to enable it, uncheck this option', 'astra' ),
+					'priority'    => 25,
+					'control'     => 'ast-toggle-control',
+				),
+
+				/**
+				 * Option: Disable Transparent Header on Archive Pages
+				 */
+				array(
+					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-disable-archive-pages]',
+					'default'     => astra_get_option( 'transparent-header-disable-archive-pages', $transparent_header_disable_archive ),
+					'type'        => 'control',
+					'section'     => $_section,
+					'context'     => array(
+						Astra_Builder_Helper::$general_tab_config,
+						array(
+							'setting'  => ASTRA_THEME_SETTINGS . '[transparent-header-enable]',
+							'operator' => '==',
+							'value'    => '1',
+						),
+					),
+					'title'       => __( 'Disable on Archive Pages?', 'astra' ),
+					'description' => __( 'This setting is generally not recommended on archives pages, etc. If you would like to enable it, uncheck this option', 'astra' ),
 					'priority'    => 25,
 					'control'     => 'ast-toggle-control',
 				),
@@ -321,7 +366,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					'name'        => ASTRA_THEME_SETTINGS . '[transparent-header-main-sep]',
 					'default'     => astra_get_option( 'transparent-header-main-sep' ),
 					'type'        => 'control',
-					'transport'   => 'postMessage',
+					'transport'   => 'refresh',
 					'control'     => 'ast-slider',
 					'section'     => $_section,
 					'priority'    => 32,
@@ -343,7 +388,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					'name'              => ASTRA_THEME_SETTINGS . '[transparent-header-main-sep-color]',
 					'default'           => astra_get_option( 'transparent-header-main-sep-color' ),
 					'type'              => 'control',
-					'transport'         => 'postMessage',
+					'transport'         => 'refresh',
 					'control'           => 'ast-color',
 					'sanitize_callback' => array( 'Astra_Customizer_Sanitizes', 'sanitize_alpha_color' ),
 					'section'           => $_section,
@@ -785,7 +830,7 @@ if ( ! class_exists( 'Astra_Customizer_Transparent_Header_Configs' ) ) {
 					 * Option: Button Border Hover Color
 					 */
 					array(
-						'name'      => 'transparent-header-button-border-h-color', 
+						'name'      => 'transparent-header-button-border-h-color',
 						'default'   => astra_get_option( 'transparent-header-button-border-h-color' ),
 						'transport' => 'postMessage',
 						'type'      => 'sub-control',

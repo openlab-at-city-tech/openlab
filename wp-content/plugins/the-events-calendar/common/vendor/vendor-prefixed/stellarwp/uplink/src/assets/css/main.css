@@ -1,0 +1,57 @@
+.license-test-results {
+	margin-top: 10px;
+}
+
+.key-validity {
+	display: inline-block;
+}
+
+.valid-key {
+	color: green;
+}
+
+.invalid-key {
+	color: red;
+}
+
+.uplink-authorize-container {
+	display: inline-block;
+}
+
+.uplink-authorize {
+	transition: border-color 300ms ease-in-out;
+}
+
+.uplink-authorize.button {
+	vertical-align: initial;
+}
+
+.uplink-authorize.not-authorized {
+	background: #b8e6bf;
+	border-color: #00a32a;
+	color:#000;
+}
+
+.uplink-authorize.not-authorized:hover,
+.uplink-authorize.not-authorized:focus,
+.uplink-authorize.not-authorized:active {
+	background: #00a32a;
+	border-color: #00a32a;
+	color: #000;
+	box-shadow: none;
+}
+
+.uplink-authorize.authorized {
+	background: #f5e6ab;
+	border-color: #f0c33c;
+	color:#000;
+}
+
+.uplink-authorize.authorized:hover,
+.uplink-authorize.authorized:focus,
+.uplink-authorize.authorized:active {
+	background: #f0c33c;
+	border-color: #f0c33c;
+	color: #000;
+	box-shadow: none;
+}

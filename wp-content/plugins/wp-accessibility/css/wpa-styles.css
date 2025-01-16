@@ -142,6 +142,21 @@
 	align-items: center;
 }
 
+.wpa-flex.wpa-social {
+	gap: 16px;
+	margin: 0;
+}
+
+.wpa-flex.wpa-social li {
+	margin: 0;
+}
+
+.wpa-flex.wpa-social a {
+	display: block;
+	padding: 3px;
+	border-radius: 3px;
+}
+
 #wpa-sidebar .postbox .wpa-affiliate-notice {
 	font-size: 1rem;
 	padding: .5rem;

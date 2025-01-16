@@ -47,7 +47,7 @@ class BP_XProfile_Component extends BP_Component {
 	public function __construct() {
 		parent::start(
 			'xprofile',
-			_x( 'Extended Profiles', 'Component page <title>', 'buddypress' ),
+			'Extended Profiles',
 			buddypress()->plugin_dir,
 			array(
 				'adminbar_myaccount_order' => 20,
@@ -148,7 +148,7 @@ class BP_XProfile_Component extends BP_Component {
 		// to use in SQL statements.
 		// Defined conditionally to accommodate unit tests.
 		if ( ! defined( 'BP_XPROFILE_BASE_GROUP_NAME' ) ) {
-			define( 'BP_XPROFILE_BASE_GROUP_NAME', stripslashes( bp_core_get_root_option( 'avatar_default' ) ) );
+			define( 'BP_XPROFILE_BASE_GROUP_NAME', stripslashes( bp_core_get_root_option( 'bp-xprofile-base-group-name' ) ) );
 		}
 
 		if ( ! defined( 'BP_XPROFILE_FULLNAME_FIELD_NAME' ) ) {

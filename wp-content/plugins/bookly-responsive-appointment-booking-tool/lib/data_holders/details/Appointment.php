@@ -2,9 +2,8 @@
 namespace Bookly\Lib\DataHolders\Details;
 
 use Bookly\Lib;
-use Bookly\Lib\DataHolders\Booking\Item;
+use Bookly\Lib\DataHolders\Booking;
 use Bookly\Lib\Entities\CustomerAppointment;
-use Bookly\Lib\Entities\Service;
 
 class Appointment extends Base
 {
@@ -27,7 +26,7 @@ class Appointment extends Base
         'wait_listed',
     );
 
-    protected function setItem( Item $item )
+    protected function setItem( Booking\Item $item )
     {
         $extras = array();
         $extras_price = 0;
@@ -88,32 +87,22 @@ class Appointment extends Base
      */
     private function setCaExtras( CustomerAppointment $ca, array $extras )
     {
-        $appointment = Lib\Entities\Appointment::find( $ca->getAppointmentId() );
-        $service = null;
-        if ( $appointment->getCustomServiceName() === null ) {
-            $service  = Service::find( $appointment->getServiceId() );
-            $title    = $service->getTitle();
-            $duration = $service->getDuration();
-        } else {
-            $title    = $appointment->getCustomServiceName();
-            $duration = strtotime( $appointment->getEndDate() ) - strtotime( $appointment->getStartDate() );
-        }
-        $item = new Lib\DataHolders\Booking\Simple( $ca );
-        $price = $item->getServicePrice();
-        $tax = $item->getServiceTax();
+        /** @var Booking\Item $item */
+        $item = Booking\Item::collect( $ca );
+
         $this->setData(
             Lib\Proxy\Shared::preparePaymentDetailsItem(
                 array(
                     'ca_id' => $ca->getId(),
-                    'appointment_date' => $appointment->getStartDate(),
-                    'app_start_info' => ( $service && $duration >= DAY_IN_SECONDS ) ? $service->getStartTimeInfo() : null,
-                    'service_name' => $title,
-                    'service_price' => $price,
-                    'service_tax' => $tax,
+                    'appointment_date' => $item->getAppointment()->getStartDate(),
+                    'app_start_info' => $item->getServiceDuration() >= DAY_IN_SECONDS ? $item->getService()->getStartTimeInfo() : null,
+                    'service_name' => $item->getService()->getTitle(),
+                    'service_price' => $item->getServicePrice(),
+                    'service_tax' => $item->getServiceTax(),
                     'wait_listed' => $ca->getStatus() === $ca::STATUS_WAITLISTED,
                     'number_of_persons' => $ca->getNumberOfPersons(),
                     'units' => $ca->getUnits() ?: 1,
-                    'duration' => $duration,
+                    'duration' => $item->getServiceDuration(),
                     'staff_name' => $item->getStaff()->getFullName(),
                     'deposit_format' => Lib\Proxy\DepositPayments::formatDeposit( $this->deposit, $item->getDeposit() ),
                     'extras' => $extras,
@@ -168,7 +157,7 @@ class Appointment extends Base
     private function getRates()
     {
         static $rates;
-        if( $rates === null ) {
+        if ( $rates === null ) {
             $rates = Lib\Proxy\Taxes::getServiceTaxRates() ?: array();
         }
         return $rates;

@@ -9,9 +9,11 @@ use WP_CLI;
  *
  * ## EXAMPLES
  *
+ *     # Add an activity item as a favorite for a user.
  *     $ wp bp activity favorite add 100 500
  *     Success: Activity item added as a favorite for the user.
  *
+ *     # Add an activity item as a favorite for a user using user_login.
  *     $ wp bp activity favorite create 100 user_test
  *     Success: Activity item added as a favorite for the user.
  *
@@ -24,7 +26,7 @@ class Activity_Favorite extends BuddyPressCommand {
 	 *
 	 * @var array
 	 */
-	protected $obj_fields = array(
+	protected $obj_fields = [
 		'id',
 		'user_id',
 		'component',
@@ -36,7 +38,7 @@ class Activity_Favorite extends BuddyPressCommand {
 		'date_recorded',
 		'hide_sitewide',
 		'is_spam',
-	);
+	];
 
 	/**
 	 * Add an activity item as a favorite for a user.
@@ -44,37 +46,44 @@ class Activity_Favorite extends BuddyPressCommand {
 	 * ## OPTIONS
 	 *
 	 * <activity-id>
-	 * : ID of the activity to add an item to.
+	 * : ID of the activity.
 	 *
 	 * <user>
 	 * : Identifier for the user. Accepts either a user_login or a numeric ID.
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Add an activity item as a favorite.
 	 *     $ wp bp activity favorite add 100 500
 	 *     Success: Activity item added as a favorite for the user.
 	 *
+	 *     # Add an activity item as a favorite using a user_login identifier.
 	 *     $ wp bp activity favorite create 100 user_test
 	 *     Success: Activity item added as a favorite for the user.
 	 *
 	 * @alias add
 	 */
 	public function create( $args ) {
-		$activity = bp_activity_get_specific(
-			array(
-				'activity_ids'     => $args[0],
-				'spam'             => null,
-				'display_comments' => true,
-			)
-		);
+		$activity_id = $args[0];
 
-		$activity = $activity['activities'][0];
-
-		if ( ! is_object( $activity ) ) {
-			WP_CLI::error( 'Could not find the activity.' );
+		if ( ! is_numeric( $activity_id ) ) {
+			WP_CLI::error( 'Please provide a numeric activity ID.' );
 		}
 
-		$user = $this->get_user_id_from_identifier( $args[1] );
+		$activity = bp_activity_get_specific(
+			[
+				'activity_ids'     => $activity_id,
+				'spam'             => null,
+				'display_comments' => true,
+			]
+		);
+
+		if ( ! isset( $activity['activities'][0] ) || ! is_object( $activity['activities'][0] ) ) {
+			WP_CLI::error( 'No activity found.' );
+		}
+
+		$activity = $activity['activities'][0];
+		$user     = $this->get_user_id_from_identifier( $args[1] );
 
 		if ( bp_activity_add_user_favorite( $activity->id, $user->ID ) ) {
 			WP_CLI::success( 'Activity item added as a favorite for the user.' );
@@ -89,7 +98,7 @@ class Activity_Favorite extends BuddyPressCommand {
 	 * ## OPTIONS
 	 *
 	 * <activity-id>
-	 * : ID of the activity to remove a item to.
+	 * : ID of the activity.
 	 *
 	 * <user>
 	 * : Identifier for the user. Accepts either a user_login or a numeric ID.
@@ -99,30 +108,38 @@ class Activity_Favorite extends BuddyPressCommand {
 	 *
 	 * ## EXAMPLES
 	 *
+	 *     # Remove an activity item as a favorite for a user.
 	 *     $ wp bp activity favorite remove 100 500
 	 *     Success: Activity item removed as a favorite for the user.
 	 *
+	 *     # Remove an activity item as a favorite for a user.
 	 *     $ wp bp activity favorite delete 100 user_test --yes
 	 *     Success: Activity item removed as a favorite for the user.
 	 *
-	 * @alias delete
+	 * @alias remove
+	 * @alias trash
 	 */
-	public function remove( $args, $assoc_args ) {
-		$activity = bp_activity_get_specific(
-			array(
-				'activity_ids'     => $args[0],
-				'spam'             => null,
-				'display_comments' => true,
-			)
-		);
+	public function delete( $args, $assoc_args ) {
+		$activity_id = $args[0];
 
-		$activity = $activity['activities'][0];
-
-		if ( ! is_object( $activity ) ) {
-			WP_CLI::error( 'Could not find the activity.' );
+		if ( ! is_numeric( $activity_id ) ) {
+			WP_CLI::error( 'Please provide a numeric activity ID.' );
 		}
 
-		$user = $this->get_user_id_from_identifier( $args[1] );
+		$activity = bp_activity_get_specific(
+			[
+				'activity_ids'     => $activity_id,
+				'spam'             => null,
+				'display_comments' => true,
+			]
+		);
+
+		if ( ! isset( $activity['activities'][0] ) || ! is_object( $activity['activities'][0] ) ) {
+			WP_CLI::error( 'No activity found.' );
+		}
+
+		$activity = $activity['activities'][0];
+		$user     = $this->get_user_id_from_identifier( $args[1] );
 
 		WP_CLI::confirm( 'Are you sure you want to remove this activity item?', $assoc_args );
 
@@ -144,6 +161,12 @@ class Activity_Favorite extends BuddyPressCommand {
 	 * [--<field>=<value>]
 	 * : One or more parameters to pass to \BP_Activity_Activity::get()
 	 *
+	 * [--count=<number>]
+	 * : How many activity favorites to list.
+	 * ---
+	 * default: 50
+	 * ---
+	 *
 	 * [--format=<format>]
 	 * : Render output in a particular format.
 	 *  ---
@@ -157,21 +180,15 @@ class Activity_Favorite extends BuddyPressCommand {
 	 *   - yaml
 	 * ---
 	 *
-	 * [--count=<number>]
-	 * : How many activity favorites to list.
-	 * ---
-	 * default: 50
-	 * ---
+	 * ## EXAMPLE
 	 *
-	 * ## EXAMPLES
-	 *
+	 *     # Get a user's favorite activity items.
 	 *     $ wp bp activity favorite list 315
 	 *
 	 * @subcommand list
-	 * @alias items
-	 * @alias user_items
+	 * @alias user-items
 	 */
-	public function list_( $args, $assoc_args ) { // phpcs:ignore PSR2.Methods.MethodDeclaration.Underscore
+	public function list_( $args, $assoc_args ) {
 		$user      = $this->get_user_id_from_identifier( $args[0] );
 		$favorites = bp_activity_get_user_favorites( $user->ID );
 
@@ -180,10 +197,10 @@ class Activity_Favorite extends BuddyPressCommand {
 		}
 
 		$activities = bp_activity_get_specific(
-			array(
+			[
 				'activity_ids' => (array) $favorites,
 				'per_page'     => $assoc_args['count'],
-			)
+			]
 		);
 
 		// Sanity check.
@@ -191,6 +208,8 @@ class Activity_Favorite extends BuddyPressCommand {
 			WP_CLI::error( 'No favorite found for this user.' );
 		}
 
-		$this->get_formatter( $assoc_args )->display_items( $activities['activities'] );
+		$activities = $activities['activities'];
+		$formatter  = $this->get_formatter( $assoc_args );
+		$formatter->display_items( 'ids' === $formatter->format ? wp_list_pluck( $activities, 'id' ) : $activities );
 	}
 }

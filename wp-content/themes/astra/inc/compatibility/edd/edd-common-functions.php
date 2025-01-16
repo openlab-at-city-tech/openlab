@@ -3,8 +3,6 @@
  * Custom functions that used for Easy Digital Downloads compatibility.
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.5.5
  */
@@ -204,11 +202,23 @@ if ( ! function_exists( 'astra_edd_terms_list' ) ) {
 	 * @return void
 	 */
 	function astra_edd_terms_list( $taxonomy_name ) {
-		$terms = get_terms( array( 'taxonomy' => $taxonomy_name ) );
+		
+		$product_id = get_the_ID();
+		
+		if ( ! $product_id ) {
+			return;
+		}
+
+		// Getting the terms related to the current products.
+		$terms = get_the_terms( $product_id, $taxonomy_name );
+		
+		if ( ! $terms || is_wp_error( $terms ) ) {
+			return;
+		}
 		?>
 	<div class="ast-edd-download-categories">
 		<?php foreach ( $terms as $term ) : ?>
-			<?php 
+			<?php
 				$term_link = get_term_link( $term, $taxonomy_name );
 
 				// If there was an error, continue to the next term.
@@ -217,13 +227,13 @@ if ( ! function_exists( 'astra_edd_terms_list' ) ) {
 			}
 			?>
 			<a href="
-			<?php 
+			<?php
 			/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 			echo esc_url( $term_link );
 			?>
-			" title="<?php echo esc_attr( $term->name ); ?>"> <?php echo esc_html( $term->name ); ?> </a>	
-			<?php 
-		endforeach; 
+			" title="<?php echo esc_attr( $term->name ); ?>"> <?php echo esc_html( $term->name ); ?> </a>
+			<?php
+		endforeach;
 		?>
 	</div>
 		<?php
@@ -317,8 +327,8 @@ if ( ! function_exists( 'astra_edd_archive_product_category' ) ) {
  */
 function astra_edd_cart_button_markup() {
 	$variable_button      = astra_get_option( 'edd-archive-variable-button' );
-	$add_to_cart_text     = astra_get_option( 'edd-archive-add-to-cart-button-text' );
-	$variable_button_text = astra_get_option( 'edd-archive-variable-button-text' );
+	$add_to_cart_text     = astra_get_i18n_option( 'edd-archive-add-to-cart-button-text', _x( '%astra%', 'EDD Product Archive: Cart Button Text', 'astra' ) );
+	$variable_button_text = astra_get_i18n_option( 'edd-archive-variable-button-text', _x( '%astra%', 'EDD Product Archive: Variable Product Button Text', 'astra' ) );
 	$output               = edd_get_purchase_link();
 	if ( edd_has_variable_prices( get_the_ID() ) && 'button' == $variable_button ) {
 		$output  = '<div class="ast-edd-variable-details-button-wrap">';
@@ -328,8 +338,9 @@ function astra_edd_cart_button_markup() {
 		if ( ! empty( $add_to_cart_text ) ) {
 			$output = edd_get_purchase_link(
 				array(
-					'price' => false,
-					'text'  => esc_html( $add_to_cart_text ),
+					'price'    => false,
+					'text'     => esc_html( $add_to_cart_text ),
+					'checkout' => esc_html( $add_to_cart_text ), // To display astra customizer add to cart text.
 				)
 			);
 		}

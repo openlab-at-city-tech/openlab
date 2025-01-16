@@ -1,6 +1,6 @@
 (function() {
 	// Load plugin specific language pack
-	tinymce.PluginManager.requireLangPack('spqplugin');
+	//tinymce.PluginManager.requireLangPack('spqplugin');
 
 	tinymce.create('tinymce.plugins.SimplePullQuotesPlugin', {
 		/**
@@ -62,8 +62,8 @@
 			return {
 				longname : 'Simple Pull Quotes plugin',
 				author : 'Toby Cryns',
-				authorurl : 'http://www.themightymo.com/',
-				infourl : 'http://www.themightymo.com/',
+				authorurl : 'https://themightymo.com/',
+				infourl : 'https://themightymo.com/',
 				version : "1.0"
 			};
 		}

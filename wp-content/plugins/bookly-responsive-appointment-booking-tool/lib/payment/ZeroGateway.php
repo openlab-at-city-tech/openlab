@@ -13,9 +13,7 @@ class ZeroGateway extends Lib\Base\Gateway
      */
     protected function getCheckoutUrl( array $intent_data )
     {
-        return $this->request->isBookingForm()
-            ? $intent_data['target_url']
-            : null;
+        return $intent_data['target_url'];
     }
 
     /**

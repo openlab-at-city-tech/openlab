@@ -310,7 +310,7 @@ class CartInfo
                         $amount = min( $cost, $this->total );
                     }
 
-                    return $amount + $this->price_correction + $this->userData->getTips();
+                    return $amount + $this->price_correction + $this->userData->getTips() - $this->getGiftCardDiscount();
                 }
 
                 return $this->getPayNow();

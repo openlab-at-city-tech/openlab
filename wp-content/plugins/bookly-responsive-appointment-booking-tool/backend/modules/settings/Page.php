@@ -37,6 +37,21 @@ class Page extends Lib\Base\Ajax
 
         // Save the settings.
         if ( ! empty ( $_POST ) && self::csrfTokenValid() ) {
+            // Log options before saving.
+            try {
+                foreach ( self::parameters() as $key => $value ) {
+                    if ( $key === 'purchase_code' ) {
+                        foreach ( $value as $_key => $_value ) {
+                            if ( strpos( $_key, 'bookly_' ) === 0 && ( $old_value = get_option( $_key, 'non-exists' ) ) !== $_value ) {
+                                Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $_key, null, htmlspecialchars( $old_value ) . ' -> ' . htmlspecialchars( $_value ), null, 'Update settings' );
+                            }
+                        }
+                    } else if ( strpos( $key, 'bookly_' ) === 0 && ( $old_value = get_option( $key, 'non-exists' ) ) !== $value ) {
+                        Lib\Utils\Log::put( Lib\Utils\Log::ACTION_DEBUG, $key, null, htmlspecialchars( is_array( $old_value ) ? json_encode( $old_value ) : $old_value ) . ' -> ' . htmlspecialchars( is_array( $value ) ? json_encode( $value ) : $value ), null, 'Update settings' );
+                    }
+                }
+            } catch ( \Exception $e ) {
+            }
             switch ( self::parameter( 'tab' ) ) {
                 case 'calendar':  // Calendar form.
                     update_option( 'bookly_cal_show_only_business_days', self::parameter( 'bookly_cal_show_only_business_days' ) );
@@ -91,7 +106,7 @@ class Page extends Lib\Base\Ajax
                     break;
                 case 'general':  // General form.
                     $bookly_gen_time_slot_length = self::parameter( 'bookly_gen_time_slot_length' );
-                    if ( in_array( $bookly_gen_time_slot_length, array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 ) ) ) {
+                    if ( in_array( $bookly_gen_time_slot_length, Lib\Config::getTimeSlotLengthOptions() ) ) {
                         update_option( 'bookly_gen_time_slot_length', $bookly_gen_time_slot_length );
                     }
                     update_option( 'bookly_gen_delete_data_on_uninstall', self::parameter( 'bookly_gen_delete_data_on_uninstall' ) );
@@ -186,7 +201,7 @@ class Page extends Lib\Base\Ajax
             'processing' => __( 'Processing...', 'bookly' ),
         ) );
         $values = array();
-        foreach ( array( 2, 4, 5, 10, 12, 15, 20, 30, 45, 60, 90, 120, 180, 240, 360 ) as $duration ) {
+        foreach ( Lib\Config::getTimeSlotLengthOptions() as $duration ) {
             $values['bookly_gen_time_slot_length'][] = array( $duration, Lib\Utils\DateTime::secondsToInterval( $duration * MINUTE_IN_SECONDS ) );
         }
         foreach (

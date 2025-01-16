@@ -5,8 +5,6 @@
  * @link https://developer.wordpress.org/themes/basics/theme-functions/
  *
  * @package     Astra
- * @author      Astra
- * @copyright   Copyright (c) 2020, Astra
  * @link        https://wpastra.com/
  * @since       Astra 1.0
  */

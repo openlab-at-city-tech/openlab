@@ -1,7 +1,5 @@
-#akismet-plugin-container {
-	background-color: var(--akismet-color-light-grey);
-	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
-    --akismet-color-charcoal: #272635;
+body {
+	--akismet-color-charcoal: #272635;
 	--akismet-color-light-grey: #f6f7f7;
 	--akismet-color-mid-grey: #a7aaad;
 	--akismet-color-dark-grey: #646970;
@@ -15,14 +13,26 @@
 	--akismet-color-notice-dark-green: #69bf82;
 	--akismet-color-notice-light-red: #ffdbde;
 	--akismet-color-notice-dark-red: #ff6676;
+	--akismet-color-notice-yellow: #e5c133;
+}
+
+#akismet-plugin-container {
+	background-color: var(--akismet-color-light-grey);
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen-Sans', 'Ubuntu', 'Cantarell', 'Helvetica Neue', sans-serif;
 }
 
 #akismet-plugin-container a {
 	color: var(--akismet-color-mid-green);
 }
 
+#akismet-plugin-container a.akismet-button {
+	background-color: var(--akismet-color-mid-green);
+	color: var(--akismet-color-white);
+}
+
 #akismet-plugin-container button:focus-visible,
-#akismet-plugin-container input:focus-visible {
+#akismet-plugin-container input:focus-visible,
+#akismet-plugin-container a:focus-visible {
 	border: 0;
 	box-shadow: none;
 	outline: 2px solid var(--akismet-color-light-blue);
@@ -297,10 +307,35 @@
 	border-left-color: var(--akismet-color-notice-dark-red);
 }
 
+.akismet-alert.is-commercial {
+	background-color: var(--akismet-color-white);
+	border-color: var(--akismet-color-mid-grey);
+	border-bottom-width: 1px;
+	border-left-color: var(--akismet-color-notice-yellow);
+	display: flex;
+	padding-bottom: 1em;
+}
+
 #akismet-plugin-container .akismet-alert.is-good a,
 #akismet-plugin-container .akismet-alert.is-bad a {
 	/* For better contrast - green isn't great */
 	color: var(--akismet-color-grey-80);
+}
+
+.akismet-alert-header {
+	font-size: 16px;
+	margin-bottom: 0.5em;
+}
+
+.akismet-alert-button-wrapper {
+	align-self: center;
+	margin-left: 2em;
+	min-width: 120px;
+}
+
+.akismet-alert-info {
+	text-wrap: pretty;
+	margin: 0.5em 0;
 }
 
 /* Setup - API key input */
@@ -340,6 +375,50 @@ h3.akismet-enter-api-key-box__header {
 	text-align: left;
 }
 
+/* Notices > Activation (shown on edit-comments.php) */
+#akismet-setup-prompt {
+	background: none;
+	border: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+}
+
+.akismet-activate {
+	align-items: center;
+	/* background-image is defined via an inline style in class.akismet-admin.php */
+	background-color: var(--akismet-color-light-grey);
+	background-position: calc(100% - 1em) center;
+	background-repeat: no-repeat;
+	background-size: 140px;
+	border: 1px solid var(--akismet-color-mid-green);
+	border-left-width: 4px;
+	display: flex;
+	justify-content: space-between;
+	margin: 15px 0;
+	min-height: 60px;
+	overflow: hidden;
+	padding: 5px 160px 5px 5px;
+	position: relative;
+}
+
+.akismet-activate__button,
+.akismet-activate__button:hover, 
+.akismet-activate__button:visited {
+	margin: 0 1em;
+}
+
+.akismet-activate__description {
+	color: var(--akismet-color-charcoal);
+	flex-grow: 1;
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 auto;
+	text-align: center;
+	text-wrap: pretty;
+}
+
+/* Gutenberg medium breakpoint */
 @media screen and (max-width: 782px) {
 	.akismet-new-snapshot__list {
 		display: block;
@@ -374,5 +453,31 @@ h3.akismet-enter-api-key-box__header {
 	.akismet-settings__row input[type="checkbox"],
 	.akismet-settings__row input[type="radio"] {
 		margin-top: 0;
+	}
+
+	.akismet-activate {
+		background-size: 120px;
+		padding-right: 134px;
+	}
+
+	.akismet-activate__button {
+		white-space: normal;
+	}
+
+	.akismet-activate__description {
+		font-size: 14px;
+		margin-right: 1em;
+	}
+}
+
+/* Gutenberg small breakpoint */
+@media screen and (max-width: 600px) {
+	.akismet-activate__button,
+	.akismet-activate__button:hover {
+		font-size: 13px;
+	}
+
+	.akismet-activate__description {
+		display: none;
 	}
 }

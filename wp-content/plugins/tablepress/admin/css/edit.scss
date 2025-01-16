@@ -8,7 +8,7 @@
  */
 
 /* Import spinner and alert box styling. */
-@import "spinner-alert";
+@use "spinner-alert";
 
 /* Container for Table Preview, Advanced Editor, and Help Box dialogs. */
 .hidden-container {
@@ -21,12 +21,25 @@
 }
 
 /* Positioning of the "Help" button in the header section of a postbox. */
-.postbox-header .handle-actions .button-module-help {
-	margin-right: 10px;
+.postbox-header .handle-actions {
+	.button-module-help {
+		margin-right: 10px;
+		vertical-align: top;
+		margin-top: 1px;
 
-	@media screen and (min-width: 783px) {
-		position: relative;
-		top: -5px;
+		@media screen and (max-width: 782px) {
+			line-height: 2.18181818;
+			vertical-align: top;
+			min-height: auto;
+			margin-bottom: 0;
+		}
+	}
+
+	/* Backward compatibility with WP < 6.5. */
+	.handle-order-higher,
+	.handle-order-lower,
+	.handlediv {
+		height: 1.62rem;
 	}
 }
 
@@ -90,19 +103,9 @@ body #wp-link-backdrop {
 	min-width: 99.9%; /* but use the full width, minus approx. 1px as the box is wider than the others otherwise. */
 }
 
-#tablepress-page .button {
-	vertical-align: baseline;
-}
-
-#table-id-shortcode-wrapper {
-	display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
-	width: 99%;
-	gap: 5px 0;
-}
-#table-information-shortcode {
-	margin: 0 -1px 0 1px;
+/* Button positioning inside tables in postboxes, like "Table Manipulation". */
+.tablepress-postbox-table .button {
+	vertical-align: middle;
 }
 
 #tablepress_edit-table-manipulation .column-1,
@@ -115,6 +118,12 @@ body #wp-link-backdrop {
 	display: inline-block;
 	padding-left: 1.25rem; /* Checkboxes are 1rem wide + 0.25rem margin. */
 	padding-top: 8px;
+}
+
+/* Compatibility with WP < 6.6 */
+.components-checkbox-control .components-base-control__field:has(> span) {
+	display: flex;
+	align-items: center;
 }
 
 #table-editor {

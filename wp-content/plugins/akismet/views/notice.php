@@ -18,26 +18,17 @@ if ( ! isset( $type ) ) {
  */
 ?>
 <?php if ( $type === 'plugin' ) : ?>
-<div class="updated" id="akismet_setup_prompt">
-	<form name="akismet_activate" action="<?php echo esc_url( Akismet_Admin::get_page_url() ); ?>" method="POST">
-		<div class="akismet_activate">
-			<div class="aa_a">A</div>
-			<div class="aa_button_container">
-				<div class="aa_button_border">
-					<input type="submit" class="aa_button" value="<?php esc_attr_e( 'Set up your Akismet account', 'akismet' ); ?>" />
+	<?php // Displayed on edit-comments.php to users who have not set up Akismet yet. ?>
+	<div class="updated" id="akismet-setup-prompt">
+		<form name="akismet_activate" action="<?php echo esc_url( Akismet_Admin::get_page_url() ); ?>" method="post">
+			<div class="akismet-activate">
+				<input type="submit" class="akismet-activate__button akismet-button" value="<?php esc_attr_e( 'Set up your Akismet account', 'akismet' ); ?>" />
+				<div class="akismet-activate__description">
+					<?php esc_html_e( 'Almost done! Configure Akismet and say goodbye to spam', 'akismet' ); ?>
 				</div>
 			</div>
-			<div class="aa_description">
-				<?php
-				echo wp_kses(
-					__( '<strong>Almost done</strong> - configure Akismet and say goodbye to spam', 'akismet' ),
-					$kses_allow_strong
-				);
-				?>
-			</div>
-		</div>
-	</form>
-</div>
+		</form>
+	</div>
 
 <?php elseif ( $type === 'spam-check' ) : ?>
 	<?php // This notice is only displayed on edit-comments.php. ?>
@@ -55,7 +46,32 @@ if ( ! isset( $type ) ) {
 		<p><strong><?php esc_html_e( 'Akismet has detected a problem.', 'akismet' ); ?></strong></p>
 		<p><?php esc_html_e( 'WP-Cron has been disabled using the DISABLE_WP_CRON constant. Comment rechecks may not work properly.', 'akismet' ); ?></p>
 	</div>
-	
+
+<?php elseif ( $type === 'alert' && $code === Akismet::ALERT_CODE_COMMERCIAL && $parent_view === 'config' ) : ?>
+	<?php // Display a different commercial warning alert on the config page ?>
+	<div class="akismet-card akismet-alert is-commercial">
+		<div>
+			<h3 class="akismet-alert-header"><?php esc_html_e( 'We detected commercial activity on your site', 'akismet' ); ?></h3>
+			<p class="akismet-alert-info">
+				<?php
+					/* translators: The placeholder is a URL. */
+					echo wp_kses( sprintf( __( 'Your current subscription is for <a href="%s">personal, non-commercial use</a>. Please upgrade your plan to continue using Akismet.', 'akismet' ), esc_url( 'https://akismet.com/support/getting-started/free-or-paid/' ) ), $kses_allow_link );
+				?>
+			</p>
+			<p class="akismet-alert-info">
+				<?php
+					/* translators: The placeholder is a URL to the contact form. */
+					echo wp_kses( sprintf( __( 'If you believe your site should not be classified as commercial, <a href="%s">please get in touch</a>.', 'akismet' ), esc_url( 'https://akismet.com/contact/?purpose=commercial' ) ), $kses_allow_link );
+				?>
+			</p>
+		</div>
+		<div class="akismet-alert-button-wrapper">
+			<a href="https://akismet.com/pricing/?flow=upgrade&amp;utm_source=akismet_plugin&amp;utm_campaign=commercial_notice&amp;utm_medium=banner" class="akismet-alert-button akismet-button">
+			<?php esc_html_e( 'Upgrade plan' ); ?>
+			</a>
+		</div>
+	</div>
+
 <?php elseif ( $type === 'alert' ) : ?>
 <div class="<?php echo isset( $parent_view ) && $parent_view === 'config' ? 'akismet-alert is-bad' : 'error'; ?>">
 	<?php /* translators: The placeholder is an error code returned by Akismet. */ ?>

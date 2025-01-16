@@ -1,4 +1,4 @@
-/*  (c) Copyright 2020  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2024  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -20,9 +20,8 @@
 var MetaboxEventhandler = {
 	
   AddMarker: function osm_AddMarker(a_mapname, a_post_id) {
-      a_mapname.on('click', function(evt) {
-
-jQuery( document ).ready( function( $ ) {
+    a_mapname.on('click', function(evt) {
+      jQuery( document ).ready( function( $ ) {
 
       var lonlat = ol.proj.transform(evt.coordinate, "EPSG:3857", "EPSG:4326");
       var lon = lonlat[0].toFixed(4);
@@ -43,8 +42,9 @@ jQuery( document ).ready( function( $ ) {
 
       MarkerId = 1;
 
-      MarkerName = $('#osm_add_marker_name').val();
+      //MarkerName = $('#osm_add_marker_name').val();
       MarkerIcon = $('#marker_icon:checked').val();
+      MarkerName = MarkerIcon;
       MarkerTextField = $('#osm_add_marker_text').val();
 
       MarkerTextField = MarkerTextField.replace(/(\r\n|\n|\r)/gm, "");
@@ -63,7 +63,7 @@ jQuery( document ).ready( function( $ ) {
       GenTxt = "<br> Marker_Id: "+ MarkerId + "<br>Marker_Name: " + MarkerName + "<br>Marker_LatLon: "+lat+","+lon+ " <br>Icon: " + MarkerIcon + "<br>  Marker_Text:<br>"+ MarkerTextField + "<br><b>4. Press [Save marker and generate shortcode]!</b>";
 
       if (attr == 0){
-      GenTxt = WarningTxt + GenTxt;
+        GenTxt = WarningTxt + GenTxt;
       }
 
       $('#Marker_Div').html(GenTxt);
@@ -77,12 +77,9 @@ jQuery( document ).ready( function( $ ) {
       }
       MarkerIconUrl = osm_ajax_object.plugin_url + "/icons/"+MarkerIcon;
       osm_addMarkerLayer(a_mapname,   Number(lon), Number(lat), MarkerIconUrl, -16, -41, "");
-} ); /** JQuery **/
+      } ); /** JQuery **/
       
-	  });
-
-	  
-	  
+	  });  
   },
 
   SetGeotag: function osm_setGeotagEvent(a_mapname, a_post_id) {

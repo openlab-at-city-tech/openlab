@@ -9,8 +9,9 @@
 (function () {
 
 	var cart_flyout = document.getElementById('astra-mobile-cart-drawer'),
-		main_header_masthead = document.getElementById('masthead');
-
+		main_header_masthead = document.getElementById('masthead'),
+		responsive_cart_click = astra_cart.responsive_cart_click;
+	
 	// Return if masthead not exixts.
 	if (!main_header_masthead) {
 		return;
@@ -29,6 +30,12 @@
 	 * Opens the Cart Flyout.
 	 */
 	cartFlyoutOpen = function (event) {
+
+		// Check if responsive_cart_click is "redirect" and body has class "ast-header-break-point"
+		if ((responsive_cart_click === 'redirect' && document.body.classList.contains('ast-header-break-point')) ) {
+			return;
+		}
+
 		event.preventDefault();
 		var current_cart = event.currentTarget.cart_type;
 
@@ -163,12 +170,23 @@
 		cartInit();
 	});
 
+	let initialWidth = window.innerWidth; // Store the initial device width.
+
 	var layoutChangeDelay;
 	window.addEventListener('resize', function () {
+		let newWidth = window.innerWidth; // Get the device width after resize.
+
 		clearTimeout(layoutChangeDelay);
 		layoutChangeDelay = setTimeout(function () {
 			cartInit();
-			document.dispatchEvent(new CustomEvent("astLayoutWidthChanged", {"detail": {'response': ''}}));
+			// Dispatch 'astLayoutWidthChanged' event only if the width has changed.
+			// This prevents input elements from losing focus unnecessarily.
+			if ( initialWidth !== newWidth ) {
+				document.dispatchEvent(new CustomEvent("astLayoutWidthChanged", {"detail": {'response': ''}}));
+			}
+
+			// Update the initial width to the new width after resizing completes.
+			initialWidth = newWidth;
 		}, 50);
 	});
 

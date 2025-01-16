@@ -25,9 +25,8 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	 * Number of items of the initial data set (before sort, search, and pagination).
 	 *
 	 * @since 1.0.0
-	 * @var int
 	 */
-	protected $items_count = 0;
+	protected int $items_count = 0;
 
 	/**
 	 * Initializes the List Table.
@@ -35,7 +34,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		// @phpstan-ignore-next-line (WordPress Core's docblocks state wrong argument types in some places.)
+		// @phpstan-ignore argument.type (WordPress Core's docblocks state wrong argument types in some places.)
 		parent::__construct( array(
 			'singular' => 'tablepress-table',              // Singular name of the listed records.
 			'plural'   => 'tablepress-editor-button-list', // Plural name of the listed records.
@@ -177,7 +176,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	 * @return string HTML content of the cell.
 	 */
 	protected function column_table_action( array $item ): string {
-		return '<input type="button" class="insert-shortcode button" title="' . esc_attr( '[' . TablePress::$shortcode . " id={$item['id']} /]" ) . '" value="' . esc_attr__( 'Insert Shortcode', 'tablepress' ) . '" />';
+		return '<input type="button" class="insert-shortcode button" title="' . esc_attr( '[' . TablePress::$shortcode . " id={$item['id']} /]" ) . '" value="' . esc_attr__( 'Insert Shortcode', 'tablepress' ) . '">';
 	}
 
 	/**
@@ -221,7 +220,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 		$this->pagination( $which );
 		remove_filter( 'ngettext_default', array( $this, 'change_pagination_items_string' ), 10 );
 		?>
-			<br class="clear" />
+			<br class="clear">
 		</div>
 		<?php
 	}
@@ -258,7 +257,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 		static $json_encoded_term;
 		if ( is_null( $term ) || is_null( $json_encoded_term ) ) {
 			$term = wp_unslash( $_GET['s'] );
-			$json_encoded_term = substr( wp_json_encode( $term, TABLEPRESS_JSON_OPTIONS ), 1, -1 ); // @phpstan-ignore-line
+			$json_encoded_term = substr( wp_json_encode( $term, TABLEPRESS_JSON_OPTIONS ), 1, -1 ); // @phpstan-ignore argument.type
 		}
 
 		// Load table again, with table data, but without options and visibility settings.
@@ -274,12 +273,12 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 		}
 
 		// Search from easy to hard, so that "expensive" code maybe doesn't have to run.
-		if ( false !== stripos( $item['id'], $term )
-		|| false !== stripos( $item['name'], $term )
-		|| false !== stripos( $item['description'], $term )
-		|| false !== stripos( TablePress::get_user_display_name( $item['author'] ), $term )
-		|| false !== stripos( TablePress::format_datetime( $item['last_modified'] ), $term )
-		|| false !== stripos( wp_json_encode( $item['data'], TABLEPRESS_JSON_OPTIONS ), $json_encoded_term ) ) { // @phpstan-ignore-line
+		if ( false !== stripos( $item['id'], (string) $term )
+		|| false !== stripos( $item['name'], (string) $term )
+		|| false !== stripos( $item['description'], (string) $term )
+		|| false !== stripos( TablePress::get_user_display_name( $item['author'] ), (string) $term )
+		|| false !== stripos( TablePress::format_datetime( $item['last_modified'] ), (string) $term )
+		|| false !== stripos( wp_json_encode( $item['data'], TABLEPRESS_JSON_OPTIONS ), (string) $json_encoded_term ) ) { // @phpstan-ignore argument.type
 			return true;
 		}
 
@@ -328,8 +327,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 			// Don't load data nor table options.
 			$item = TablePress::$model_table->load( $item, false, false );
 		}
-		// Break reference in foreach iterator.
-		unset( $item );
+		unset( $item ); // Unset use-by-reference parameter of foreach loop.
 
 		// Maybe sort the items.
 		$_sortable_columns = $this->get_sortable_columns();

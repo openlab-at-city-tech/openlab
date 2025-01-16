@@ -380,7 +380,7 @@ class DLM_Media_Library {
 		// Get current URL so we can update the Version files.
 		$current_url = wp_get_attachment_url( $file['attachment_id'] );
 		// Get secure path and update the file path in the Download
-		list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( $current_url, 'relative' );
+		list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( $current_url );
 
 		if ( $version_id ) {
 			// Update the Version meta.
@@ -407,7 +407,7 @@ class DLM_Media_Library {
 	public function create_download( $file ) {
 
 		// Get new path
-		list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( wp_get_attachment_url( $file['attachment_id'] ), 'relative' );
+		list( $file_path, $remote_file, $restriction ) = download_monitor()->service( 'file_manager' )->get_secure_path( wp_get_attachment_url( $file['attachment_id'] ) );
 
 		// Check if the file has been previously protected
 		$known_download = get_post_meta( $file['attachment_id'], 'dlm_download', true );
@@ -589,8 +589,12 @@ class DLM_Media_Library {
 				add_query_arg(
 					array(
 						'dlm_action' => $doaction,
-						'posts'      => $post_ids
-					), '/upload.php' ) );
+						'nonce' 	 => $_REQUEST['_wpnonce'],
+						'posts'      => $post_ids,
+					),
+					'/upload.php'
+				)
+			);
 		}
 
 		return $location;
@@ -611,6 +615,8 @@ class DLM_Media_Library {
 		if ( ! current_user_can( 'manage_downloads' ) ) {
 			return;
 		}
+		// Check the nonce.
+		check_admin_referer( 'bulk-media', 'nonce' );
 
 		$action = sanitize_text_field( wp_unslash( $_GET['dlm_action'] ) );
 		$posts  = array_map( 'absint', $_GET['posts'] );

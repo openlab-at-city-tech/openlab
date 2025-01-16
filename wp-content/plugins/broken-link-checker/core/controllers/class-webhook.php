@@ -131,7 +131,7 @@ abstract class Webhook extends Base {
 	 *
 	 * @return mixed
 	 */
-	public function pass_tag_to_query_vars( array $query_vars = array() ) {
+	public function pass_tag_to_query_vars( $query_vars = array() ) {
 		$query_vars[] = $this->webhook_tag;
 
 		return $query_vars;

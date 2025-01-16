@@ -841,10 +841,12 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
 
 		$data_settings = [
             'disable_bodyscroll' => $settings['ekit_offcanvas_disable_bodyscroll'],
-        ]
+        ];
 
+        $menu_icons_position = isset($settings['ekit_offcanvas_menu_icons_position']) ? $settings['ekit_offcanvas_menu_icons_position'] : 'before';
+        $close_icons_position = isset($settings['ekit_offcanvas_menu_close_icons_position']) ? $settings['ekit_offcanvas_menu_close_icons_position'] : 'before';
         ?>
-        <div class="ekit-offcanvas-toggle-wraper <?php echo esc_attr($settings['ekit_offcanvas_menu_icons_position']); ?>">
+        <div class="ekit-offcanvas-toggle-wraper <?php echo esc_attr($menu_icons_position); ?>">
             <a href="#" class="ekit_navSidebar-button ekit_offcanvas-sidebar" aria-label="offcanvas-menu">
                 <?php
                     if($settings['ekit_offcanvas_menu_type'] !== 'text') {
@@ -874,7 +876,7 @@ class ElementsKit_Widget_Header_Offcanvas extends Widget_Base
             <div class="ekit-overlay ekit-bg-black"></div>
             <div class="ekit-sidebar-widget">
                 <div class="ekit_sidebar-widget-container">
-                    <div class="ekit_widget-heading <?php echo esc_attr($settings['ekit_offcanvas_menu_close_icons_position']); ?>">
+                    <div class="ekit_widget-heading <?php echo esc_attr($close_icons_position); ?>">
                         <a href="#" class="ekit_close-side-widget" aria-label="close-icon">
 
 							<?php

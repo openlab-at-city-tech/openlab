@@ -1,5 +1,5 @@
 <?php
-/*  (c) Copyright 2021  MiKa (http://wp-osm-plugin.hyumika.com)
+/*  (c) Copyright 2024  MiKa (http://wp-osm-plugin.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -17,10 +17,10 @@
 */
     extract(shortcode_atts(array(
     // size of the map
-    'width'      => '100%',
-    'height'     => '300',
-    'map_center' => OSM_default_lat.','.OSM_default_lon,
-    'zoom'       => '4',
+    'width'      => DEFAULT_MAP_V3_WIDTH,
+    'height'     => DEFAULT_MAP_V3_HEIGHT,
+    'map_center' => DEFAULT_MAP_V3_CENTER,
+    'zoom'       => DEFAULT_MAP_V3_ZOOM,
     'map_api_key' => 'NoKey',
     'file_list'  => 'NoFile',
     'file_color_list'  => 'NoColor',
@@ -48,7 +48,7 @@
     'file_title' => 'no',
     'file_link' => 'no',
     'file_param' => 'no',
-	 'hide_kml_sel_box' => 'no',
+    'hide_kml_sel_box' => 'no',
     'setup_zoom' => 'undefined',
     'setup_layer' => 'undefined',
     'setup_center' => 'undefined',
@@ -64,45 +64,45 @@
 
 
     $sc_args = new cOsm_arguments(
-    	$width,
-    	$height,
-    	$map_center,
-    	$zoom,
+      $width,
+      $height,
+      $map_center,
+      $zoom,
       $map_api_key,
-    	$file_list,
-    	$file_color_list,
-		$type,
-		$jsname,
-		$marker_latlon,
-		$map_border,
-		$map_event,
-		$marker_name,
-		$marker_size,
-		$control,
-		$wms_address,
-		$wms_param,
-		$wms_attr_name,
-		$wms_type,
-		$wms_attr_url,
-		$tagged_type,
-		$tagged_filter,
+      $file_list,
+      $file_color_list,
+      $type,
+      $jsname,
+      $marker_latlon,
+      $map_border,
+      $map_event,
+      $marker_name,
+      $marker_size,
+      $control,
+      $wms_address,
+      $wms_param,
+      $wms_attr_name,
+      $wms_type,
+      $wms_attr_url,
+      $tagged_type,
       $tagged_filter_type,
-		$mwz,
-		$post_markers,
-		$display_marker_name,
-		$tagged_param,
-		$tagged_color,
-		$file_title,
-		$file_link,
-		$setup_zoom,
-		$setup_layer,
-		$setup_center,
-		$setup_trigger,
-		$setup_map_name,
-		$file_select_box,
-		$bckgrndimg,
-		$attribution
-		);
+      $tagged_filter,
+      $mwz,
+      $post_markers,
+      $display_marker_name,
+      $tagged_param,
+      $tagged_color,
+      $file_title,
+      $file_link,
+      $setup_zoom,
+      $setup_layer,
+      $setup_center,
+      $setup_trigger,
+      $setup_map_name,
+      $file_select_box,
+      $bckgrndimg,
+      $attribution
+    );
 
     global $OL3_LIBS_LOADED;
     
@@ -114,16 +114,22 @@
     $zoom = $sc_args->getMapZoom();
 
     $map_autocenter = $sc_args->isAutocenter();
- 
     
     $array_control = $sc_args->getMapControl();
-    $width_str = $sc_args->getMapWidth_str();
-    $height_str = $sc_args->getMapHeight_str();
     $type =  $sc_args->getMapType();
     $postmarkers = $sc_args->getPostMarkers();
     $api_key = $sc_args->getMapAPIkey();
+    
+    // CVE-2024-3604
+    $tagged_type = sanitize_text_field($tagged_type);
+    $tagged_filter = sanitize_text_field($tagged_filter);
+    
+    $bckgrndimg = sanitize_text_field($bckgrndimg);
+    $semicolon_position = strpos($bckgrndimg, ';');
+    if ($semicolon_position !== false) {
+      $bckgrndimg = substr($bckgrndimg, 0, $semicolon_position);
+    } 
 
-        
     if ($debug_trc == "true"){
       echo "WP version: ".get_bloginfo(version)."<br>";
       echo "OSM Plugin Version: ".PLUGIN_VER."<br>";
@@ -174,12 +180,13 @@
 		  Osm::traceText(HTML_COMMENT, 'WP OSM Plugin Warning: map attribution is disabled, make sure site follows copyright!');	              
       }		
 		
-	   $vis_str = $map_div_vis;		
+           $vis_str = esc_attr($map_div_vis);
+	   
 		
 if ($bckgrndimg != 'no'){
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; max-width:100%; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $sc_args->getMapWidth_str() . '; max-width:100%; height:' . $sc_args->getMapHeight_str() . '; display:' . $vis_str . '; overflow:hidden;border:' .  $sc_args->getMapBorder() . '; background-image: url('.OSM_PLUGIN_URL.$bckgrndimg.'); background-repeat: no-repeat; background-position: center; position: relative;" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -190,7 +197,7 @@ if ($bckgrndimg != 'no'){
 else{
 		$output = '
 
-				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $width_str . '; max-width:100%; height:' . $height_str . '; display:' . $vis_str . '; overflow:hidden;border:' . $map_border . ';" >
+				<div id="' . $MapName . '" class="map ' . $setup_map_name . '" data-map_name="' . $setup_map_name . '" data-map="' . $MapName . '" style="width:' . $sc_args->getMapWidth_str() . '; max-width:100%; height:' . $sc_args->getMapHeight_str() . '; display:' . $vis_str . '; overflow:hidden;border:' .  $sc_args->getMapBorder() . ';" >
 				  <div id="' . $MapName . '_popup" class="ol-popup" >
 					<a href="#" id="' . $MapName . '_popup-closer" class="ol-popup-closer"></a>
 					<div id="' . $MapName . '_popup-content" ></div>
@@ -198,20 +205,9 @@ else{
 				</div>
 			';
 }
-
-      if( $OL3_LIBS_LOADED == 0) {
-			  $OL3_LIBS_LOADED = 1;
+			  
 			  $output .= '
-				<link rel="stylesheet" href="' . Osm_OL_3_CSS . '" type="text/css">
-				<link rel="stylesheet" href="' . Osm_OL_3_Ext_CSS . '" type="text/css">
-				<link rel="stylesheet" href="' . Osm_map_CSS. '" type="text/css">
-				<!-- The line below is only needed for old environments like Internet Explorer and Android 4.x -->
-                                <script src="' . OSM_PLUGIN_URL .'js/polyfill/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
 
-				<script src="' . Osm_OL_3_LibraryLocation .'" type="text/javascript"></script>
-				<script src="' . Osm_OL_3_Ext_LibraryLocation .'" type="text/javascript"></script>
-				<script src="' . Osm_OL_3_MetaboxEvents_LibraryLocation .'" type="text/javascript"></script>
-				<script src="' . Osm_map_startup_LibraryLocation . '" type="text/javascript"></script>
 				<script type="text/javascript">
 					translations[\'openlayer\'] = "' . __('open layer', 'OSM_Plugin') . '";
 					translations[\'openlayerAtStartup\'] = "' . __('open layer at startup', 'OSM_Plugin') . '";
@@ -224,7 +220,7 @@ else{
 
 
 			  ';
-			}
+			
 
 			$FileColorListArray = array();
 			$FileLinkArray = array();
@@ -245,9 +241,9 @@ else{
 
 
 
-         if(($file_select_box != 'no') && ($file_title != 'no')){
-			    $showSelectbox = true;
-			  }
+                       if(($file_select_box != 'no') && ($file_title != 'no') && ($file_list != "NoFile") && (!empty($file_list))){
+                         $showSelectbox = true;
+	               }
 
 			/** if title are set - my code will run - otherwise not
 			if ($file_title != 'no') {*/
@@ -363,7 +359,7 @@ else{
 			}
 
 
-			if ($file_list != "NoFile"){
+			if (($file_list != "NoFile") && (!empty($file_list))){
 			  $FileListArray   = explode( ',', $file_list );
 				/** FileColorListArray is set on line 181 */
 
@@ -398,7 +394,9 @@ else{
 					$output .= Osm_OLJS3::addVectorLayer($MapName, $FileListArray[$x], $Color, $FileType, $x, $gpx_marker_name, $showMarkerName, $FileTitle, $file_param);
 				  }
 				  else {
-					 Osm::traceText(DEBUG_ERROR, (sprintf(__('%s hast got wrong file extension (gpx, kml)!'), $FileName)));
+                                    /* translators: %s: filename */ 
+                                    Osm::traceText(DEBUG_ERROR, (sprintf(__('file_list = %s!'), $file_list)));
+                                    Osm::traceText(DEBUG_ERROR, (sprintf(__('%s has got wrong file extension (gpx, kml)!'), $FileName)));	 
 				  }
 				}
 				//$output .= 'osm_addPopupClickhandler('. $MapName .',  "'. $MapName .'"); ';
@@ -409,7 +407,7 @@ else{
         $post_marked = in_array($tagged_type, $custom_post_types);
         if (($post_marked) && ($tagged_param == "cluster")) {	  
 		    $tagged_icon = new cOsm_icon($default_icon->getIconName());
-			 $MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
+			 $MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $sc_args->getTaxonomy());
 			 $NumOfMarker = count($MarkerArray);
 			 $Counter = 0;
 			 $output .= 'var vectorMarkerSource = new ol.source.Vector({});';
@@ -438,33 +436,33 @@ else{
 			 $output .= $MapName.'.addLayer(vectorMarkerLayer);';
 		  }
 		  elseif (($post_marked) && ($tagged_param != "cluster")) {
-		
-		
-			$tagged_icon = new cOsm_icon($default_icon->getIconName());
+                    $tagged_icon = new cOsm_icon($default_icon->getIconName());
 
-			$MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
+                    $MarkerArray = OSM::OL3_createMarkerList('osm_l', $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $sc_args->getTaxonomy());
 
-			$NumOfMarker = count($MarkerArray);
-			$Counter = 0;
-			$output .= '
-			  var vectorMarkerSource = new ol.source.Vector({});
-			  var vectorMarkerLayer = new ol.layer.Vector({
-				source: vectorMarkerSource,
-				zIndex: 92
-			   });
-			';
-			foreach( $MarkerArray as $Marker ) {
-			  if ($MarkerArray[$Counter]['Marker'] != ""){
-				$tagged_icon->setIcon($MarkerArray[$Counter]['Marker']);
-			  }
-			  else{
-				$tagged_icon->setIcon($default_icon->getIconName());
-			  }
+                    if (isset($MarkerArray) && is_array($MarkerArray)) {
+                      $NumOfMarker = count($MarkerArray);
+                      $Counter = 0;
+                      $output .= '
+                      var vectorMarkerSource = new ol.source.Vector({});
+                      var vectorMarkerLayer = new ol.layer.Vector({
+                        source: vectorMarkerSource,
+                        zIndex: 92
+                      });
+                      ';
 
-			   $MarkerText = addslashes($MarkerArray[$Counter]['text']);
+                      foreach( $MarkerArray as $Marker ) {
+                        if ($MarkerArray[$Counter]['Marker'] != ""){
+                          $tagged_icon->setIcon($MarkerArray[$Counter]['Marker']);
+                        }
+                        else{
+                          $tagged_icon->setIcon($default_icon->getIconName());
+                        }
+                        
+                        $MarkerText = addslashes($MarkerArray[$Counter]['text']);
 
-			 $output .= '
-				var iconStyle'.$Counter.' = new ol.style.Style({
+                        $output .= '
+                          var iconStyle'.$Counter.' = new ol.style.Style({
 				  image: new ol.style.Icon(/** @type {olx.style.IconOptions} */({
 					anchor: [('.$tagged_icon->getIconOffsetwidth().'*-1),('.$tagged_icon->getIconOffsetheight().'*-1)],
 					anchorXUnits: "pixels",
@@ -482,9 +480,9 @@ else{
 				vectorMarkerSource.addFeature(iconFeature'.$Counter.');
 			   ';
 			   $Counter = $Counter +1;
-			} // foreach(MarkerArray)
-
-			$output .= $MapName.'.addLayer(vectorMarkerLayer);';
+                      } // foreach(MarkerArray)
+                    }
+                    $output .= $MapName.'.addLayer(vectorMarkerLayer);';
 
 		   }
 
@@ -539,7 +537,7 @@ else{
 		// add post markers
 		if (strtolower($postmarkers) != 'no'){
 
-			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $tagged_filter_type);
+			$MarkerArray = OSM::OL3_createMarkerList($postmarkers, $tagged_filter, 'Osm_None', $tagged_type, 'Osm_All', $sc_args->getTaxonomy());
 
          if (is_array($MarkerArray) || is_object($MarkerArray)) {
 			  $NumOfMarker = count($MarkerArray);

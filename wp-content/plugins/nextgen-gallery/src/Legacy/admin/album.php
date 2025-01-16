@@ -59,6 +59,31 @@ class nggManageAlbum {
 	public $num_albums = false;
 
 	/**
+	 * Define allowed HTML tags and attributes.
+	 *
+	 * @since 3.59.6
+	 * @access public
+	 * @var array
+	 */
+	public $allowed_html_tags = [
+		'a'      => [
+			'href'   => [],
+			'title'  => [],
+			'target' => [],
+		],
+		'b'      => [],
+		'i'      => [],
+		'u'      => [],
+		'em'     => [],
+		'strong' => [],
+		'p'      => [],
+		'br'     => [],
+		'ul'     => [],
+		'ol'     => [],
+		'li'     => [],
+	];
+
+	/**
 	 * Gets the Pope component registry
 	 *
 	 * @return C_Component_Registry
@@ -174,8 +199,12 @@ class nggManageAlbum {
 		// Create album.
 		if ( isset( $_POST['add'] ) && isset( $_POST['newalbum'] ) ) {
 
+			// Allow filtering of allowed HTML tags to extend custom tags and attributes.
+			$allowed_html_tags = apply_filters( 'ngg_title_desc_custom_allowed_html_tags', $this->allowed_html_tags );
+
 			// sanitize the album name.
-			$name = sanitize_text_field( $_POST['newalbum'] );
+			$name = wp_kses( $_POST['newalbum'], $allowed_html_tags );
+			$name = stripslashes( $name );
 
 			if( empty( $name ) ) {
 				nggGallery::show_message( __( 'Album name is invalid', 'nggallery' ) );
@@ -255,10 +284,21 @@ class nggManageAlbum {
 			wp_die( esc_html__( 'Cheatin&#8217; uh?', 'nggallery' ) );
 		}
 
+		// Allow filtering of allowed HTML tags to extend custom tags and attributes.
+		$allowed_html_tags = apply_filters( 'ngg_title_desc_custom_allowed_html_tags', $this->allowed_html_tags );
+
+		// Sanitize the album name.
+		$album_name = wp_kses( $_POST['album_name'], $allowed_html_tags );
+		$album_name = stripslashes( $album_name );
+
+		// Sanitize the album description.
+		$album_desc = wp_kses( $_POST['album_desc'], $allowed_html_tags );
+		$album_desc = stripslashes( $album_desc );
+
 		$this->currentID   = $_REQUEST['act_album'];
 		$album             = $this->_get_album( $this->currentID );
-		$album->name       = sanitize_text_field( $_POST['album_name'] );
-		$album->albumdesc  = sanitize_textarea_field( $_POST['album_desc'] );
+		$album->name       = $album_name;
+		$album->albumdesc  = $album_desc;
 		$album->previewpic = (int) $_POST['previewpic'];
 		$album->pageid     = (int) $_POST['pageid'];
 		$result            = AlbumMapper::get_instance()->save( $album );
@@ -501,7 +541,7 @@ function ngg_confirm_delete_album(form) {
 						if ( is_array( $this->albums ) ) {
 							foreach ( $this->albums as $a ) {
 								$selected = ( $this->currentID == $a->id ) ? 'selected="selected" ' : '';
-								echo '<option value="' . $a->id . '" ' . $selected . '>' . $a->id . ' - ' . esc_attr( $a->name ) . '</option>' . "\n";
+								echo '<option value="' . esc_attr( $a->id ) . '" ' . $selected . '>' . esc_html( $a->id . ' - ' . wp_strip_all_tags( $a->name ) ) . '</option>' . "\n";
 							}
 						}
 						?>
@@ -555,7 +595,7 @@ function ngg_confirm_delete_album(form) {
 			<div class="widget target-album widget-left">
 			<?php if ( $album && $this->currentID ) { ?>
 					<div class="widget-top">
-						<h3><?php esc_html_e( 'Album ID', 'nggallery' ); ?> <?php echo $album->id . ' : ' . esc_html( $album->name ); ?> </h3>
+						<h3><?php esc_html_e( 'Album ID', 'nggallery' ); ?> <?php echo $album->id . ' : ' . esc_html( wp_strip_all_tags( $album->name ) ); ?> </h3>
 					</div>
 					<div id="galleryContainer" class="widget-holder target">
 					<?php
@@ -784,16 +824,19 @@ function ngg_confirm_delete_album(form) {
 		// add class if it's in use in other albums.
 		$used = $used ? ' inUse' : '';
 
+		$obj_name  = wp_strip_all_tags( $obj['name'] );
+		$obj_title = wp_strip_all_tags( $obj['title'] );
+
 		$retval = '<div id="gid-' . $prefix . $obj['id'] . '" class="groupItem' . $used . '">
 				<div class="innerhandle">
 					<div class="item_top ' . $class . '">
 						<a href="#" class="min" title="close">[-]</a>
-						ID: ' . $obj['id'] . ' | ' . wp_html_excerpt( esc_html( \Imagely\NGG\Display\I18N::translate( $obj['title'] ) ), 25 ) . '
+						ID: ' . $obj['id'] . ' | ' . wp_html_excerpt( esc_html( \Imagely\NGG\Display\I18N::translate( $obj_title ) ), 25 ) . '
 					</div>
 					<div class="itemContent">
 							' . $preview_image . '
-							<p><strong>' . __( 'Name', 'nggallery' ) . ' : </strong>' . esc_html( \Imagely\NGG\Display\I18N::translate( $obj['name'] ) ) . '</p>
-							<p><strong>' . __( 'Title', 'nggallery' ) . ' : </strong>' . esc_html( \Imagely\NGG\Display\I18N::translate( $obj['title'] ) ) . '</p>
+							<p><strong>' . __( 'Name', 'nggallery' ) . ' : </strong>' . esc_html( \Imagely\NGG\Display\I18N::translate( $obj_name ) ) . '</p>
+							<p><strong>' . __( 'Title', 'nggallery' ) . ' : </strong>' . esc_html( \Imagely\NGG\Display\I18N::translate( $obj_title ) ) . '</p>
 							<p><strong>' . __( 'Page', 'nggallery' ) . ' : </strong>' . esc_html( \Imagely\NGG\Display\I18N::translate( $obj['pagenname'] ) ) . '</p>
 							' . apply_filters( 'ngg_display_album_item_content', '', $obj ) . '
 						</div>

@@ -5,13 +5,15 @@
 * Description: Posts Order and Post Types Objects Order using a Drag and Drop Sortable javascript capability
 * Author: Nsp Code
 * Author URI: http://www.nsp-code.com 
-* Version: 2.2.6
+* Version: 2.3.3
 * Text Domain: post-types-order
 * Domain Path: /languages/
 */
 
     define('CPTPATH',   plugin_dir_path(__FILE__));
     define('CPTURL',    plugins_url('', __FILE__));
+    
+    define('PTO_VERSION',          '2.3.3');
     
     include_once(CPTPATH . '/include/class.cpto.php');
     include_once(CPTPATH . '/include/class.functions.php');

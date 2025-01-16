@@ -174,33 +174,34 @@
         },
         {
             "name": "pear/pear-core-minimal",
-            "version": "v1.10.11",
-            "version_normalized": "1.10.11.0",
+            "version": "v1.10.16",
+            "version_normalized": "1.10.16.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/pear-core-minimal.git",
-                "reference": "68d0d32ada737153b7e93b8d3c710ebe70ac867d"
+                "reference": "c0f51b45f50683bf5bbf558036854ebc9b54d033"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/68d0d32ada737153b7e93b8d3c710ebe70ac867d",
-                "reference": "68d0d32ada737153b7e93b8d3c710ebe70ac867d",
+                "url": "https://api.github.com/repos/pear/pear-core-minimal/zipball/c0f51b45f50683bf5bbf558036854ebc9b54d033",
+                "reference": "c0f51b45f50683bf5bbf558036854ebc9b54d033",
                 "shasum": ""
             },
             "require": {
                 "pear/console_getopt": "~1.4",
-                "pear/pear_exception": "~1.0"
+                "pear/pear_exception": "~1.0",
+                "php": ">=5.4"
             },
             "replace": {
                 "rsky/pear-core-min": "self.version"
             },
-            "time": "2021-08-10T22:31:03+00:00",
+            "time": "2024-11-24T22:27:58+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
-                "psr-0": {
-                    "": "src/"
-                }
+                "classmap": [
+                    "src/"
+                ]
             },
             "notification-url": "https://packagist.org/downloads/",
             "include-path": [
@@ -230,12 +231,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/pear/PEAR_Exception.git",
-                "reference": "76631ea7fa66755900beb615e3b7b1ee54cf1c99"
+                "reference": "645d1af08bdd9a6b9bb6d3b81eb8e235ca84d1d1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/76631ea7fa66755900beb615e3b7b1ee54cf1c99",
-                "reference": "76631ea7fa66755900beb615e3b7b1ee54cf1c99",
+                "url": "https://api.github.com/repos/pear/PEAR_Exception/zipball/645d1af08bdd9a6b9bb6d3b81eb8e235ca84d1d1",
+                "reference": "645d1af08bdd9a6b9bb6d3b81eb8e235ca84d1d1",
                 "shasum": ""
             },
             "require": {
@@ -244,7 +245,7 @@
             "require-dev": {
                 "phpunit/phpunit": "<9"
             },
-            "time": "2022-03-27T11:31:16+00:00",
+            "time": "2024-11-24T18:10:39+00:00",
             "default-branch": true,
             "type": "class",
             "extra": {
@@ -287,24 +288,62 @@
             "install-path": "../pear/pear_exception"
         },
         {
-            "name": "tecnickcom/tcpdf",
-            "version": "6.5.0",
-            "version_normalized": "6.5.0.0",
+            "name": "php5friends/polyfill-create_function",
+            "version": "dev-master",
+            "version_normalized": "dev-master",
             "source": {
                 "type": "git",
-                "url": "https://github.com/tecnickcom/TCPDF.git",
-                "reference": "cc54c1503685e618b23922f53635f46e87653662"
+                "url": "https://github.com/php5friends/polyfill-create_function.git",
+                "reference": "8ce0726a4ca334f37f57154a2b6d112352239c4a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/cc54c1503685e618b23922f53635f46e87653662",
-                "reference": "cc54c1503685e618b23922f53635f46e87653662",
+                "url": "https://api.github.com/repos/php5friends/polyfill-create_function/zipball/8ce0726a4ca334f37f57154a2b6d112352239c4a",
+                "reference": "8ce0726a4ca334f37f57154a2b6d112352239c4a",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
-            "time": "2022-08-12T07:50:54+00:00",
+            "time": "2020-12-09T21:26:57+00:00",
+            "default-branch": true,
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "files": [
+                    "create_function.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "FSFAP"
+            ],
+            "description": "Polyfill of create_function()",
+            "support": {
+                "issues": "https://github.com/php5friends/polyfill-create_function/issues",
+                "source": "https://github.com/php5friends/polyfill-create_function/tree/0.0.4"
+            },
+            "install-path": "../php5friends/polyfill-create_function"
+        },
+        {
+            "name": "tecnickcom/tcpdf",
+            "version": "6.7.7",
+            "version_normalized": "6.7.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tecnickcom/TCPDF.git",
+                "reference": "cfbc0028cc23f057f2baf9e73bdc238153c22086"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tecnickcom/TCPDF/zipball/cfbc0028cc23f057f2baf9e73bdc238153c22086",
+                "reference": "cfbc0028cc23f057f2baf9e73bdc238153c22086",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.5.0"
+            },
+            "time": "2024-10-26T12:15:02+00:00",
             "type": "library",
             "installation-source": "source",
             "autoload": {
@@ -329,7 +368,7 @@
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "LGPL-3.0-only"
+                "LGPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -351,7 +390,7 @@
             ],
             "support": {
                 "issues": "https://github.com/tecnickcom/TCPDF/issues",
-                "source": "https://github.com/tecnickcom/TCPDF/tree/6.5.0"
+                "source": "https://github.com/tecnickcom/TCPDF/tree/6.7.7"
             },
             "funding": [
                 {
@@ -362,6 +401,6 @@
             "install-path": "../tecnickcom/tcpdf"
         }
     ],
-    "dev": true,
+    "dev": false,
     "dev-package-names": []
 }

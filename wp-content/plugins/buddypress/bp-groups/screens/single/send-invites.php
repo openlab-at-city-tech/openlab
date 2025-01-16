@@ -14,18 +14,20 @@
  */
 function groups_screen_group_invite() {
 
-	if ( !bp_is_single_item() )
-		return false;
+	if ( ! bp_is_single_item() ) {
+		return;
+	}
 
 	$bp = buddypress();
 
 	if ( bp_is_action_variable( 'send', 0 ) ) {
 
-		if ( !check_admin_referer( 'groups_send_invites', '_wpnonce_send_invites' ) )
-			return false;
+		if ( ! check_admin_referer( 'groups_send_invites', '_wpnonce_send_invites' ) ) {
+			return;
+		}
 
-		if ( !empty( $_POST['friends'] ) ) {
-			foreach( (array) $_POST['friends'] as $friend ) {
+		if ( ! empty( $_POST['friends'] ) ) {
+			foreach ( (array) $_POST['friends'] as $friend ) {
 				groups_invite_user( array( 'user_id' => $friend, 'group_id' => $bp->groups->current_group->id ) );
 			}
 		}
@@ -44,16 +46,21 @@ function groups_screen_group_invite() {
 		do_action( 'groups_screen_group_invite', $bp->groups->current_group->id );
 		bp_core_redirect( bp_get_group_url( $bp->groups->current_group ) );
 
-	} elseif ( !bp_action_variable( 0 ) ) {
+	} elseif ( ! bp_action_variable( 0 ) ) {
 
-		/**
-		 * Filters the template to load for a group's Send Invites page.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $value Path to a group's Send Invites template.
-		 */
-		bp_core_load_template( apply_filters( 'groups_template_group_invite', 'groups/single/home' ) );
+		$templates = array(
+			/**
+			 * Filters the template to load for a group's Send Invites page.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param string $value Path to a group's Send Invites template.
+			 */
+			apply_filters( 'groups_template_group_invite', 'groups/single/home' ),
+			'groups/single/index',
+		);
+
+		bp_core_load_template( $templates );
 
 	} else {
 		bp_do_404();
@@ -78,7 +85,7 @@ function groups_remove_group_invite() {
 	}
 
 	if ( ! check_admin_referer( 'groups_invite_uninvite_user' ) ) {
-		return false;
+		return;
 	}
 
 	$friend_id = intval( bp_action_variable( 1 ) );

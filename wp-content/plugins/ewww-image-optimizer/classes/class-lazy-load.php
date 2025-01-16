@@ -450,7 +450,7 @@ class Lazy_Load extends Page_Parser {
 						$image    = $this->parse_img_tag( $image, $file );
 						$this->set_attribute( $ns_img, 'data-eio', 'l', true );
 						$noscript = '<noscript>' . $ns_img . '</noscript>';
-						$picture  = \str_replace( $orig_img, $image . $noscript, $picture );
+						$picture  = \str_replace( $orig_img, $image, $picture ) . $noscript;
 					}
 				} else {
 					continue;
@@ -557,7 +557,7 @@ class Lazy_Load extends Page_Parser {
 		if ( ! $file ) {
 			$file = $this->get_attribute( $image, 'src' );
 		}
-		$file = \str_replace( '&#038;', '&', \esc_url( \trim( $file ) ) );
+		$file = \str_replace( '&#038;', '&', \esc_url( \trim( html_entity_decode( $file ) ) ) );
 		$this->set_attribute( $image, 'data-src', $file, true );
 		$srcset = $this->get_attribute( $image, 'srcset' );
 
@@ -774,6 +774,14 @@ class Lazy_Load extends Page_Parser {
 					$element = $this->lazify_element( $element );
 					if ( $element !== $elements[ $index ] ) {
 						$this->debug_message( "$tag_type lazified, replacing in html source" );
+						$buffer = \str_replace( $elements[ $index ], $element, $buffer );
+					}
+					continue;
+				}
+				if ( false !== \strpos( $element, '--background' ) ) {
+					$this->set_attribute( $element, 'class', $this->get_attribute( $element, 'class' ) . ' lazyload', true );
+					if ( $element !== $elements[ $index ] ) {
+						$this->debug_message( "$tag_type with bg var lazified, replacing in html source" );
 						$buffer = \str_replace( $elements[ $index ], $element, $buffer );
 					}
 					continue;
@@ -1001,6 +1009,18 @@ class Lazy_Load extends Page_Parser {
 		if ( \strpos( $image, 'data-pin-description=' ) && \strpos( $image, 'width="0" height="0"' ) ) {
 			$this->debug_message( 'data-pin-description img skipped' );
 			return false;
+		}
+		$autoscaling = true;
+		if ( \defined( 'EIO_LL_AUTOSCALE' ) && ! EIO_LL_AUTOSCALE ) {
+			$autoscaling = false;
+		} elseif ( false === \strpos( $image, 'srcset' ) && empty( $this->exactdn_domain ) ) {
+			$autoscaling = false;
+		}
+		if ( ! $autoscaling ) {
+			if ( \strpos( $image, 'fetchpriority="high"' ) || \strpos( $image, "fetchpriority='high'" ) ) {
+				$this->debug_message( 'no autoscaling for this image, and lcp indicated' );
+				return false;
+			}
 		}
 
 		$exclusions = \apply_filters(

@@ -87,6 +87,16 @@ class GFQuiz extends GFAddOn {
 	private static $_instance = null;
 
 	/**
+	 * @var array The quiz variables to be localized for all the frontend forms in a request.
+	 */
+	public static $quiz_vars = array();
+
+	/**
+	 * @var array The quiz answers to be localized for all the frontend forms in a request.
+	 */
+	public static $quiz_answers = array();
+
+	/**
 	 * Get an instance of this class.
 	 *
 	 * @return GFQuiz
@@ -481,7 +491,8 @@ class GFQuiz extends GFAddOn {
 					'incorrectResponse' => __( 'Incorrect response', 'gravityformsquiz' ),
 				)
 			);
-			wp_localize_script( 'gquiz_js', 'gquizVars', $params );
+			self::$quiz_vars[ $form['id'] ] = $params;
+			wp_localize_script( 'gquiz_js', 'gquizVars', self::$quiz_vars );
 
 			$answers = array();
 			foreach ( $quiz_fields as $quiz_field ) {
@@ -495,7 +506,8 @@ class GFQuiz extends GFAddOn {
 				);
 			}
 
-			wp_localize_script( 'gquiz_js', 'gquizAnswers', $answers );
+			self::$quiz_answers[ $form['id'] ] = $answers;
+			wp_localize_script( 'gquiz_js', 'gquizAnswers', self::$quiz_answers );
 		}
 
 	}

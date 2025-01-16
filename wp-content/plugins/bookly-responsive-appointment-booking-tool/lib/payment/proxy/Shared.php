@@ -16,6 +16,7 @@ use Bookly\Frontend\Modules\Payment;
  * @method static \Bookly\Lib\DataHolders\Details\Base paymentCreateDetailsByType( $details, string $type )
  * @method static bool paymentSpecificPriceExists( string $gateway ) Check whether specific price exists for given gateway.
  * @method static bool showPaymentSpecificPrices( bool $show ) Whether to show specific price for each payment system.
+ * @method static Lib\Entities\Payment rollbackPayment( Lib\Entities\Payment $payment ) Rollback payment.
  */
 abstract class Shared extends Lib\Base\Proxy
 {

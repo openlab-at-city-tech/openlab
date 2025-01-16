@@ -1,4 +1,4 @@
-/*! elementor - v3.22.0 - 26-06-2024 */
+/*! elementor - v3.25.0 - 24-11-2024 */
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -2675,25 +2675,25 @@ var Scroll = /*#__PURE__*/function () {
     function scrollObserver(obj) {
       var lastScrollY = 0;
 
-      // Generating threshholds points along the animation height
-      // More threshholds points = more trigger points of the callback
-      var buildThreshholds = function buildThreshholds() {
+      // Generating thresholds points along the animation height
+      // More thresholds points = more trigger points of the callback
+      var buildThresholds = function buildThresholds() {
         var sensitivityPercentage = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 0;
-        var threshholds = [];
+        var thresholds = [];
         if (sensitivityPercentage > 0 && sensitivityPercentage <= 100) {
           var increment = 100 / sensitivityPercentage;
           for (var i = 0; i <= 100; i += increment) {
-            threshholds.push(i / 100);
+            thresholds.push(i / 100);
           }
         } else {
-          threshholds.push(0);
+          thresholds.push(0);
         }
-        return threshholds;
+        return thresholds;
       };
       var options = {
         root: obj.root || null,
         rootMargin: obj.offset || '0px',
-        threshold: buildThreshholds(obj.sensitivity)
+        threshold: buildThresholds(obj.sensitivity)
       };
       function handleIntersect(entries) {
         var currentScrollY = entries[0].boundingClientRect.y,
@@ -2899,6 +2899,18 @@ var _default = /*#__PURE__*/function (_Marionette$LayoutVie) {
     key: "onCloseModalClick",
     value: function onCloseModalClick() {
       this._parent._parent._parent.hideModal();
+      if (this.isFloatingButtonLibraryClose()) {
+        $e.internal('document/save/set-is-modified', {
+          status: false
+        });
+        window.location.href = elementor.config.admin_floating_button_admin_url;
+      }
+    }
+  }, {
+    key: "isFloatingButtonLibraryClose",
+    value: function isFloatingButtonLibraryClose() {
+      var _elementor$config, _elementor$config2, _elementor$config2$do;
+      return window.elementor && ((_elementor$config = elementor.config) === null || _elementor$config === void 0 ? void 0 : _elementor$config.admin_floating_button_admin_url) && 'floating-buttons' === ((_elementor$config2 = elementor.config) === null || _elementor$config2 === void 0 ? void 0 : (_elementor$config2$do = _elementor$config2.document) === null || _elementor$config2$do === void 0 ? void 0 : _elementor$config2$do.type) && (this.$el.closest('.dialog-lightbox-widget-content').find('.elementor-template-library-template-floating_button').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-preview').length || this.$el.closest('.dialog-lightbox-widget-content').find('#elementor-template-library-templates-empty').length);
     }
   }]);
   return _default;

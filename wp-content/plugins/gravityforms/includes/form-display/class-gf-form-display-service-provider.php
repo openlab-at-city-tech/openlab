@@ -2,6 +2,9 @@
 
 namespace Gravity_Forms\Gravity_Forms\Form_Display;
 
+use Gravity_Forms\Gravity_Forms\Config\GF_Config_Service_Provider;
+use Gravity_Forms\Gravity_Forms\Form_Display\Config\GF_Product_Meta_Config;
+use Gravity_Forms\Gravity_Forms\Form_Display\Config\GF_Pagination_Config;
 use Gravity_Forms\Gravity_Forms\Form_Display\Full_Screen\Full_Screen_Handler;
 use Gravity_Forms\Gravity_Forms\Form_Display\Block_Styles\Block_Styles_Handler;
 use Gravity_Forms\Gravity_Forms\GF_Service_Container;
@@ -25,6 +28,8 @@ class GF_Form_Display_Service_Provider extends GF_Service_Provider {
 	const FULL_SCREEN_HANDLER   = 'full_screen_handler';
 	const BLOCK_STYLES_HANDLER  = 'block_styles_handler';
 	const BLOCK_STYLES_DEFAULTS = 'block_styles_defaults';
+	const PRODUCT_META_CONFIG   = 'products_meta_config';
+	const PAGINATION_CONFIG     = 'pagination_config';
 
 	/**
 	 * Register services to the container.
@@ -38,6 +43,8 @@ class GF_Form_Display_Service_Provider extends GF_Service_Provider {
 		require_once( plugin_dir_path( __FILE__ ) . '/block-styles/views/class-form-view.php' );
 		require_once( plugin_dir_path( __FILE__ ) . '/block-styles/views/class-confirmation-view.php' );
 		require_once( plugin_dir_path( __FILE__ ) . '/block-styles/block-styles-handler.php' );
+		require_once( plugin_dir_path( __FILE__ ) . '/config/class-gf-product-meta-config.php' );
+		require_once( plugin_dir_path( __FILE__ ) . '/config/class-gf-pagination-config.php' );
 
 		$container->add( self::FULL_SCREEN_HANDLER, function() use ( $container ) {
 			// Use string handler for now to avoid JSON query issues on old platforms.
@@ -63,6 +70,9 @@ class GF_Form_Display_Service_Provider extends GF_Service_Provider {
 					// should be for the theme framework and CSS API. When empty, it defaults to:
 					// buttonPrimaryBackgroundColor
 					'inputPrimaryColor'            => rgar( $form_styles, 'inputPrimaryColor' ) ? $form_styles['inputPrimaryColor'] : '', // #204ce5
+					'inputImageChoiceAppearance'   => rgar( $form_styles, 'inputImageChoiceAppearance' ) ? $form_styles['inputImageChoiceAppearance'] : 'card',
+					'inputImageChoiceStyle'        => rgar( $form_styles, 'inputImageChoiceStyle' ) ? $form_styles['inputImageChoiceStyle'] : 'square',
+					'inputImageChoiceSize'         => rgar( $form_styles, 'inputImageChoiceSize' ) ? $form_styles['inputImageChoiceSize'] : 'md',
 					'labelFontSize'                => rgar( $form_styles, 'labelFontSize' ) ? $form_styles['labelFontSize'] : 14,
 					'labelColor'                   => rgar( $form_styles, 'labelColor' ) ? $form_styles['labelColor'] : '#112337',
 					'descriptionFontSize'          => rgar( $form_styles, 'descriptionFontSize' ) ? $form_styles['descriptionFontSize'] : 13,
@@ -76,6 +86,19 @@ class GF_Form_Display_Service_Provider extends GF_Service_Provider {
 		$container->add( self::BLOCK_STYLES_HANDLER, function() use ( $container ) {
 			return new Block_Styles_Handler( $container->get( self::BLOCK_STYLES_DEFAULTS ) );
 		});
+
+		// Product meta config.
+		$container->add( self::PRODUCT_META_CONFIG, function () use ( $container ) {
+			return new GF_Product_Meta_Config( $container->get( GF_Config_Service_Provider::DATA_PARSER ) );
+		});
+		$container->get( GF_Config_Service_Provider::CONFIG_COLLECTION )->add_config( $container->get( self::PRODUCT_META_CONFIG ) );
+
+		// Pagination config.
+		$container->add( self::PAGINATION_CONFIG, function () use ( $container ) {
+			return new GF_Pagination_Config( $container->get( GF_Config_Service_Provider::DATA_PARSER ) );
+		});
+		$container->get( GF_Config_Service_Provider::CONFIG_COLLECTION )->add_config( $container->get( self::PAGINATION_CONFIG ) );
+
 	}
 
 	/**
@@ -98,37 +121,41 @@ class GF_Form_Display_Service_Provider extends GF_Service_Provider {
 
 		add_action( 'gform_enqueue_scripts', array( $this, 'register_theme_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'register_theme_styles' ) );
+		add_action( 'enqueue_block_editor_assets', array( $this, 'register_theme_styles' ) );
 	}
 
 	public function register_theme_styles() {
+		if ( GFCommon::output_default_css() === false ) {
+			return;
+		}
+
 		$base_url = GFCommon::get_base_url();
 		$version  = GFForms::$version;
 		$dev_min  = defined( 'GF_SCRIPT_DEBUG' ) && GF_SCRIPT_DEBUG ? '' : '.min';
 
-		/**
-		 * Allows users to disable all CSS files from being loaded on the Front End.
-		 *
-		 * @since 2.8
-		 *
-		 * @param boolean Whether to disable css.
-		 */
-		$disable_css = apply_filters( 'gform_disable_css', get_option( 'rg_gforms_disable_css' ) );
-
-		if ( ! $disable_css ) {
-			wp_register_style( 'gravity_forms_theme_reset', "{$base_url}/assets/css/dist/gravity-forms-theme-reset{$dev_min}.css", array(), $version );
-			wp_register_style( 'gravity_forms_theme_foundation', "{$base_url}/assets/css/dist/gravity-forms-theme-foundation{$dev_min}.css", array(), $version );
-			wp_register_style(
-				'gravity_forms_theme_framework',
-				"{$base_url}/assets/css/dist/gravity-forms-theme-framework{$dev_min}.css",
-				array(
-					'gravity_forms_theme_reset',
-					'gravity_forms_theme_foundation',
-				),
-				$version
-			);
-			wp_register_style( 'gravity_forms_orbital_theme', "{$base_url}/assets/css/dist/gravity-forms-orbital-theme{$dev_min}.css", array( 'gravity_forms_theme_framework' ), $version );
-		}
+		wp_register_style( 'gravity_forms_theme_reset', "{$base_url}/assets/css/dist/gravity-forms-theme-reset{$dev_min}.css", array(), $version );
+		wp_register_style( 'gravity_forms_theme_foundation', "{$base_url}/assets/css/dist/gravity-forms-theme-foundation{$dev_min}.css", array(), $version );
+		wp_register_style(
+			'gravity_forms_theme_foundation_admin',
+			"{$base_url}/assets/css/dist/gravity-forms-theme-foundation-admin{$dev_min}.css",
+			array( 'gravity_forms_theme_foundation' ),
+			$version
+		);
+		wp_register_style(
+			'gravity_forms_theme_framework',
+			"{$base_url}/assets/css/dist/gravity-forms-theme-framework{$dev_min}.css",
+			array(
+				'gravity_forms_theme_reset',
+				'gravity_forms_theme_foundation',
+			),
+			$version
+		);
+		wp_register_style(
+			'gravity_forms_theme_framework_admin',
+			"{$base_url}/assets/css/dist/gravity-forms-theme-framework-admin{$dev_min}.css",
+			array( 'gravity_forms_theme_framework' ),
+			$version
+		);
+		wp_register_style( 'gravity_forms_orbital_theme', "{$base_url}/assets/css/dist/gravity-forms-orbital-theme{$dev_min}.css", array( 'gravity_forms_theme_framework' ), $version );
 	}
-
 }
-

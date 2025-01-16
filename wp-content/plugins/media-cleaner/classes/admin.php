@@ -38,6 +38,11 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
     wp_register_style( 'meow-neko-ui-lato-font', '//fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700;900&display=swap');
     wp_enqueue_style( 'meow-neko-ui-lato-font' );
 
+    // Options
+    $options = array_merge( $this->core->get_all_options(), [
+      'incompatible_plugins' => !class_exists( 'MeowPro_WPMC_Core' ) ? Meow_WPMC_Support::get_issues() : []
+    ] );
+
     // Localize and options
     wp_localize_script( 'wpmc_media_cleaner', 'wpmc_media_cleaner', [
       'api_url' => rest_url( 'media-cleaner/v1' ),
@@ -48,7 +53,7 @@ class Meow_WPMC_Admin extends MeowCommon_Admin {
       'is_pro' => class_exists( 'MeowPro_WPMC_Core' ),
       'is_registered' => !!$this->is_registered(),
       'rest_nonce' => wp_create_nonce( 'wp_rest' ),
-      'options' => $this->core->get_all_options()
+      'options' => $options
     ] );
   }
 

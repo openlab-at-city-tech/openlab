@@ -21,7 +21,7 @@ class CsvFileLoader extends FileLoader
 {
     private $delimiter = ';';
     private $enclosure = '"';
-    private $escape = '\\';
+    private $escape = '';
     /**
      * {@inheritdoc}
      */
@@ -34,7 +34,7 @@ class CsvFileLoader extends FileLoader
             throw new NotFoundResourceException(\sprintf('Error opening file "%s".', $resource), 0, $e);
         }
         $file->setFlags(\SplFileObject::READ_CSV | \SplFileObject::SKIP_EMPTY);
-        $file->setCsvControl($this->delimiter, $this->enclosure, $this->escape);
+        $file->setCsvControl($this->delimiter, $this->enclosure, '' === $this->escape && \PHP_VERSION_ID < 70400 ? '\\' : $this->escape);
         foreach ($file as $data) {
             if (\false === $data) {
                 continue;
@@ -48,10 +48,10 @@ class CsvFileLoader extends FileLoader
     /**
      * Sets the delimiter, enclosure, and escape character for CSV.
      */
-    public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '\\')
+    public function setCsvControl(string $delimiter = ';', string $enclosure = '"', string $escape = '')
     {
         $this->delimiter = $delimiter;
         $this->enclosure = $enclosure;
-        $this->escape = $escape;
+        $this->escape = '' === $escape && \PHP_VERSION_ID < 70400 ? '\\' : $escape;
     }
 }

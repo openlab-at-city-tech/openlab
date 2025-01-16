@@ -11,6 +11,9 @@ class Ajax extends Lib\Base\Ajax
      */
     public static function getSetupForm()
     {
+        /** @global \WP_Locale $wp_locale */
+        global $wp_locale;
+
         $services = Lib\Entities\Service::query( 's' )
             ->select( 'id, title, duration' )
             ->fetchArray();
@@ -21,8 +24,38 @@ class Ajax extends Lib\Base\Ajax
             ->select( 'id, full_name as name, email, phone' )
             ->fetchArray();
 
+        // Business hours
+        $week_day_ids = array(
+            1 => 'sunday',
+            'monday',
+            'tuesday',
+            'wednesday',
+            'thursday',
+            'friday',
+            'saturday',
+        );
+        $start_of_week = (int) get_option( 'start_of_week' );
+        $business_hours = array();
+
+        for ( $i = 1; $i <= 7; $i++ ) {
+            $day_index = ( $start_of_week + $i ) < 8 ? $start_of_week + $i : $start_of_week + $i - 7;
+            $day = $week_day_ids[ $day_index ];
+            foreach ( array( 'start', 'end' ) as $var ) {
+                $$var = get_option( 'bookly_bh_' . $day . '_' . $var, 'not-exists' );
+                if ( 'not-exists' === $$var ) {
+                    if ( $day === 'saturday' || $day === 'sunday' ) {
+                        $$var = '';
+                    } else {
+                        $$var = $var === 'start' ? '8:00' : '18:00';
+                    }
+                }
+            }
+            $business_hours[] = array( 'index' => $day_index, 'title' => $wp_locale->weekday[ $day_index == 7 ? 6 : ( $day_index - 1 ) ], 'start' => $start, 'end' => $end );
+        }
+
         wp_send_json_success( array(
             'company' => get_option( 'bookly_co_name', '' ),
+            'business_hours' => $business_hours,
             'industry' => get_option( 'bookly_co_industry', false ),
             'size' => get_option( 'bookly_co_size', '' ),
             'email' => get_option( 'bookly_co_email', '' ),
@@ -38,13 +71,34 @@ class Ajax extends Lib\Base\Ajax
     {
         $step = self::parameter( 'step', 1 );
         switch ( $step ) {
-            case 1:
-                update_option( 'bookly_co_name', self::parameter( 'company' ) );
-                update_option( 'bookly_co_industry', self::parameter( 'industry' ) );
-                update_option( 'bookly_co_size', self::parameter( 'size' ) );
-                update_option( 'bookly_co_email', self::parameter( 'email' ) );
-                break;
             case 2:
+                // Save business hours
+                $week_day_ids = array(
+                    1 => 'sunday',
+                    'monday',
+                    'tuesday',
+                    'wednesday',
+                    'thursday',
+                    'friday',
+                    'saturday',
+                );
+                foreach ( self::parameter( 'business_hours', array() ) as $data ) {
+                    foreach ( array( 'start', 'end' ) as $var ) {
+                        $option = 'bookly_bh_' . $week_day_ids[ $data['index'] ] . '_' . $var;
+                        update_option( $option, $data[ $var ] );
+                    }
+                }
+
+                // Save timeslot length
+                $bookly_gen_time_slot_length = self::parameter( 'timeslot_length' );
+                if ( in_array( $bookly_gen_time_slot_length, Lib\Config::getTimeSlotLengthOptions() ) ) {
+                    update_option( 'bookly_gen_time_slot_length', $bookly_gen_time_slot_length );
+                }
+
+                // Save currency
+                update_option( 'bookly_pmt_currency', self::parameter( 'currency' ) );
+                break;
+            case 3:
                 $existing_staff = array();
                 foreach ( self::parameter( 'staff_members', array() ) as $staff_data ) {
                     $staff = new Lib\Entities\Staff();
@@ -52,8 +106,8 @@ class Ajax extends Lib\Base\Ajax
                         $staff->load( $staff_data['id'] );
                     }
                     $staff
-                        ->setFullName( $staff_data['name'] )
-                        ->setPhone( $staff_data['phone_formatted'] ?: $staff_data['phone'] )
+                        ->setFullName( $staff_data['name'] ?: __( 'Staff', 'bookly' ) )
+                        ->setPhone( $staff_data['phone'] )
                         ->setEmail( $staff_data['email'] )
                         ->save();
                     $existing_staff[] = $staff->getId();
@@ -70,7 +124,7 @@ class Ajax extends Lib\Base\Ajax
                 }
                 Lib\Entities\Staff::query()->delete()->whereNotIn( 'id', $existing_staff )->execute();
                 break;
-            case 3:
+            case 4:
                 $existing_services = array();
                 foreach ( self::parameter( 'services', array() ) as $service_data ) {
                     $service = new Lib\Entities\Service();
@@ -78,7 +132,7 @@ class Ajax extends Lib\Base\Ajax
                         $service->load( $service_data['id'] );
                     }
                     $service
-                        ->setTitle( $service_data['title'] )
+                        ->setTitle( $service_data['title'] ?: __( 'Service', 'bookly' ) )
                         ->setDuration( $service_data['duration'] )
                         ->save();
                     Proxy\Shared::serviceCreated( $service );
@@ -98,8 +152,10 @@ class Ajax extends Lib\Base\Ajax
                 break;
         }
         if ( $step < 4 ) {
-            update_option( 'bookly_setup_step', ++ $step );
+            update_option( 'bookly_setup_step', ++$step );
         }
+
+        wp_send_json_success();
     }
 
     /**

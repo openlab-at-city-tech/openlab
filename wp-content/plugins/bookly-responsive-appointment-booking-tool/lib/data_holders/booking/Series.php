@@ -232,4 +232,12 @@ class Series extends Item
 
         return reset( $clone );
     }
+
+    /**
+     * @inerhitDoc
+     */
+    public function getLocationId()
+    {
+        return $this->getFirstItem()->getAppointment()->getLocationId();
+    }
 }

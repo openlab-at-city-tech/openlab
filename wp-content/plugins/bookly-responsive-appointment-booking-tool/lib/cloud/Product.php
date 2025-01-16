@@ -36,16 +36,7 @@ class Product extends Base
      */
     public function activate( $product_price, $purchase_code = null )
     {
-        $this->response = $this->api
-            ->setRequestTimeout( 90 )
-            ->sendPostRequest( static::ACTIVATE, $this->getActivatingData( $product_price, $purchase_code ) );
-        if ( $this->response ) {
-            update_option( 'bookly_cloud_account_products', $this->response['products'] );
-
-            return true;
-        }
-
-        return false;
+        return $this->sendPostRequest( static::ACTIVATE, $this->getActivatingData( $product_price, $purchase_code ) );
     }
 
     /**
@@ -57,19 +48,7 @@ class Product extends Base
      */
     public function deactivate( $status = 'now' )
     {
-        if ( $status === 'now' ) {
-            $response = $this->api->sendPostRequest( static::DEACTIVATE_NOW, $this->withProductId( array() ) );
-        } else {
-            $response = $this->api->sendPostRequest( static::DEACTIVATE_NEXT_RENEWAL, $this->withProductId( array() ) );
-        }
-
-        if ( $response ) {
-            update_option( 'bookly_cloud_account_products', $response['products'] );
-
-            return true;
-        }
-
-        return false;
+        return $this->sendPostRequest( $status === 'now' ? static::DEACTIVATE_NOW : static::DEACTIVATE_NEXT_RENEWAL );
     }
 
     /**
@@ -79,14 +58,7 @@ class Product extends Base
      */
     public function revertCancel()
     {
-        $response = $this->api->sendPostRequest( static::REVERT_CANCEL, $this->withProductId( array() ) );
-        if ( $response ) {
-            update_option( 'bookly_cloud_account_products', $response['products'] );
-
-            return true;
-        }
-
-        return false;
+        return $this->sendPostRequest( static::REVERT_CANCEL );
     }
 
     /**
@@ -106,7 +78,7 @@ class Product extends Base
             $data = $this->addTestCanIUse( $data );
         }
 
-        return $this->withProductId( $data );
+        return $data;
     }
 
     /**
@@ -114,21 +86,30 @@ class Product extends Base
      */
     public function updateEndPoint()
     {
-        return method_exists( $this, 'getEndPoint' )
-            ? $this->api->sendPostRequest( static::ENDPOINT, array( 'endpoint' => $this->getEndPoint() ) )
-            : true;
+        return ! method_exists( $this, 'getEndPoint' ) || $this->sendPostRequest( static::ENDPOINT, array( 'endpoint' => $this->getEndPoint() ) );
     }
 
     /**
+     * Send a post request
+     *
+     * @param string $path
      * @param array $data
-     * @return array
+     * @return bool
      */
-    private function withProductId( array $data )
+    private function sendPostRequest( $path, $data = array() )
     {
         if ( $this->product_id ) {
             $data['%product_id%'] = $this->product_id;
         }
 
-        return $data;
+        $this->response = $this->api
+            ->sendPostRequest( $path, $data );
+        if ( $this->response ) {
+            update_option( 'bookly_cloud_account_products', $this->response['products'] );
+
+            return true;
+        }
+
+        return false;
     }
 }

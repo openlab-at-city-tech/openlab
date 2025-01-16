@@ -93,7 +93,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 
 				add_action( 'astra_mobile_site_identity', __CLASS__ . '::site_identity' );
 				add_action( 'astra_header_search', array( $this, 'header_search' ), 10, 1 );
-				add_action( 'astra_header_woo_cart', array( $this, 'header_woo_cart' ) );
+				add_action( 'astra_header_woo_cart', array( $this, 'header_woo_cart' ), 10, 1 );
 				add_action( 'astra_header_edd_cart', array( $this, 'header_edd_cart' ) );
 				add_action( 'astra_header_account', array( $this, 'header_account' ) );
 				add_action( 'astra_header_mobile_trigger', array( $this, 'header_mobile_trigger' ) );
@@ -185,10 +185,12 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 
 		/**
 		 * Render WooCommerce Cart.
+		 *
+		 * @param string $device Either 'mobile' or 'desktop' option.
 		 */
-		public function header_woo_cart() {
+		public function header_woo_cart( $device = 'desktop' ) {
 			if ( class_exists( 'Astra_Woocommerce' ) ) {
-				echo Astra_Woocommerce::get_instance()->woo_mini_cart_markup(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo Astra_Woocommerce::get_instance()->woo_mini_cart_markup( $device ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 
@@ -248,7 +250,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function above_header() {
 
-			$display = get_post_meta( get_the_ID(), 'ast-hfb-above-header-display', true );
+			$display = is_singular() ? get_post_meta( get_the_ID(), 'ast-hfb-above-header-display', true ) : true;
 			$display = apply_filters( 'astra_above_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -272,7 +274,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function primary_header() {
 
-			$display = get_post_meta( get_the_ID(), 'ast-main-header-display', true );
+			$display = is_singular() ? get_post_meta( get_the_ID(), 'ast-main-header-display', true ) : true;
 			$display = apply_filters( 'astra_main_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -296,7 +298,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function below_header() {
 
-			$display = get_post_meta( get_the_ID(), 'ast-hfb-below-header-display', true );
+			$display = is_singular() ? get_post_meta( get_the_ID(), 'ast-hfb-below-header-display', true ) : true;
 			$display = apply_filters( 'astra_below_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -337,7 +339,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function mobile_above_header() {
 
-			$display = get_post_meta( get_the_ID(), 'ast-hfb-mobile-header-display', true );
+			$display = is_singular() ? get_post_meta( get_the_ID(), 'ast-hfb-mobile-header-display', true ) : true;
 			$display = apply_filters( 'astra_above_mobile_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -361,7 +363,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function mobile_primary_header() {
 
-			$display = get_post_meta( get_the_ID(), 'ast-hfb-mobile-header-display', true );
+			$display = is_singular() ? get_post_meta( get_the_ID(), 'ast-hfb-mobile-header-display', true ) : true;
 			$display = apply_filters( 'astra_primary_mobile_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -385,7 +387,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function mobile_below_header() {
 
-			$display = get_post_meta( absint( astra_get_post_id() ), 'ast-hfb-mobile-header-display', true );
+			$display = is_singular() ? get_post_meta( absint( astra_get_post_id() ), 'ast-hfb-mobile-header-display', true ) : true;
 			$display = apply_filters( 'astra_below_mobile_header_display', $display );
 
 			if ( 'disabled' !== $display ) {
@@ -408,6 +410,10 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		public function mobile_popup() {
 
+			if ( apply_filters( 'astra_disable_mobile_popup_markup', false ) ) {
+				return;
+			}
+
 			$mobile_header_type = astra_get_option( 'mobile-header-type' );
 
 			if ( 'off-canvas' === $mobile_header_type || 'full-width' === $mobile_header_type || is_customize_preview() ) {
@@ -428,10 +434,21 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 *  Call Mobile Cart Flyout UI.
 		 */
 		public function mobile_cart_flyout() {
-
-			// Hide cart flyout only if current page is checkout/cart.
-			if ( ( Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) && class_exists( 'WooCommerce' ) && ! is_cart() && ! is_checkout() ) || Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' ) ) {
-
+			// Get the responsive cart click action setting.
+			$responsive_cart_action = astra_get_option( 'responsive-cart-click-action' );
+			$desktop_cart_action    = astra_get_option( 'woo-header-cart-click-action' );
+		
+			// Hide cart flyout only if current page is checkout/cart or if redirect option is selected.
+			if (
+				(
+					Astra_Builder_Helper::is_component_loaded( 'woo-cart', 'header' ) &&
+					class_exists( 'WooCommerce' ) &&
+					! is_cart() &&
+					! is_checkout() &&
+					( 'redirect' !== $responsive_cart_action || // Prevent flyout markup when 'redirect' option is selected.
+					'redirect' !== $desktop_cart_action )
+				) || Astra_Builder_Helper::is_component_loaded( 'edd-cart', 'header' )
+			) {
 				Astra_Builder_UI_Controller::render_mobile_cart_flyout_markup();
 			}
 		}

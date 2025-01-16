@@ -106,6 +106,24 @@ class Voice extends Product
     /**
      * @inheritDoc
      */
+    public function translateError( $error_code )
+    {
+        $translated = null;
+        switch ( $error_code ) {
+            case 'ERROR_OUT_OF_CREDIT':
+                $translated = __( 'Out of credit', 'bookly' );
+                break;
+            case 'ERROR_COUNTRY_OUT_OF_SERVICE':
+                $translated = __( 'Country out of service', 'bookly' );
+                break;
+        }
+
+        return $translated;
+    }
+
+    /**
+     * @inheritDoc
+     */
     protected function setupListeners()
     {
         $voice = $this;

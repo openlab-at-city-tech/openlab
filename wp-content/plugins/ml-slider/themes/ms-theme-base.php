@@ -61,6 +61,9 @@ class MetaSlider_Theme_Base
         self::$themes[$this->id] = $this;
 
         $this->init();
+
+        // Customize theme design
+        add_filter('metaslider_css', array($this, 'theme_customize'), 10, 3);
     }
 
     /**
@@ -175,7 +178,7 @@ return $options;
 
         // Only enable this for dots nav
         if ('true' === $settings['navigation'] && 'false' === $settings['carouselMode']) {
-            $nav .= "<ol class='flex-control-nav titleNav-{$slideshow_id}'>";
+            $nav .= "<ol class='flex-control-nav titleNav-%s'>";
             foreach ($this->get_slides($slideshow_id) as $count => $slide) {
                 // Check if the title is inherited or manually set
                 if ((bool) get_post_meta($slide->ID, 'ml-slider_inherit_image_title', true)) {
@@ -241,5 +244,109 @@ return $options;
             
         }
         return $available_slides;
+    }
+
+    /**
+     * Build CSS to customize theme colors
+     * 
+     * @since 3.93
+     * 
+     * @param string $theme                 Theme name in lowercase. e.g. 'bitono'
+     * @param array|string $settings        Slideshow settings
+     * @param array|string $slideshow_id    Slideshow id 
+     * 
+     * @return string
+     */
+    public function theme_customize_css($theme, $settings, $slideshow_id)
+    {
+        // This CSS only works with Flexslider
+        if ($settings['type'] !== 'flex' || ! isset($settings['theme_customize'])) {
+            return "";
+        }
+
+        $theme_settings = get_post_meta($slideshow_id, 'metaslider_slideshow_theme');
+
+        $manifest   = array();
+        $type       = isset($theme_settings[0]['type']) && isset($theme_settings[0]) ? $theme_settings[0]['type'] : 'free';
+
+        // If is not a free theme, maybe override $manifest path
+        if ($type !== 'free') {
+            /**
+             * Check if we have extra themes/ folders added from external sources,
+             * including MetaSlider Pro 
+             * 
+             * e.g. 
+             * array(
+             *  '/path/to/wp-content/plugins/ml-slider-pro/themes/',
+             *  '/path/to/wp-content/themes/my-theme/ms-themes/'
+             * )
+             */
+            $extra_themes = apply_filters('metaslider_extra_themes', array());
+
+            foreach ($extra_themes as $location) {
+                // Check if customize.php file that belongs to $theme as theme name (lowercase) exists
+                if (file_exists($customize_file = trailingslashit($location) . trailingslashit($theme) . 'customize.php')) {
+                    // Get the data from customize.php files
+                    $manifest = MetaSlider_Themes::get_instance()->add_base_customize_settings_single(
+                        $theme, $customize_file
+                    );
+                    break;
+                }
+            }
+        } else {
+            // Get data from themes/$theme/customize.php
+            $manifest = MetaSlider_Themes::get_instance()->add_base_customize_settings_single($theme);
+        }
+
+        $output = "";
+
+        // Loop each theme customize setting from customize.php 
+        foreach ($manifest as $row_item) {
+
+            foreach ($row_item['fields'] as $field_item) {
+
+                // Check if setting from manifest exists in db
+                if (isset($settings['theme_customize'][$field_item['name']])
+                    && isset($field_item['css'])
+                ) {
+                    if (is_array($field_item['css'])) {
+                        // CSS is an array of strings
+                        foreach ($field_item['css'] as $css_item) {
+
+                            $output .= sprintf(
+                                $css_item, 
+                                "#metaslider-id-{$slideshow_id}", 
+                                $settings['theme_customize'][$field_item['name']]
+                            ) . "\n";
+                        }
+                    } else {
+                        // CSS is a single string
+                        $output .= sprintf(
+                            $field_item['css'], 
+                            "#metaslider-id-{$slideshow_id}", 
+                            $settings['theme_customize'][$field_item['name']]
+                        ) . "\n";
+                    }
+                }
+            }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Add inline CSS to customize theme design
+     * 
+     * @since 3.93.0 - Moved from each theme.php file
+     */
+    public function theme_customize($css, $settings, $slideshow_id)
+    {
+        $css .= $this->theme_customize_css(
+            $this->id,
+            $settings,
+            $slideshow_id
+        );
+
+        return $css;
     }
 }

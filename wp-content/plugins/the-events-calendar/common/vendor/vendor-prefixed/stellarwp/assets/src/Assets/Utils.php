@@ -2,8 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified using Strauss.
- * @see https://github.com/BrianHenryIE/strauss
+ * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Assets;
@@ -105,6 +104,17 @@ class Utils {
 		}
 
 		return static::$bases[ $key ];
+	}
+
+	/**
+	 * Clears the runtime cache.
+	 *
+	 * @since 1.4.1
+	 *
+	 * @return void
+	 */
+	public static function clear_runtime_cache() {
+		static::$bases = [];
 	}
 
 	/**

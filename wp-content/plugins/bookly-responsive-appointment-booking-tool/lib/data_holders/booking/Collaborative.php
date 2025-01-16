@@ -200,7 +200,7 @@ class Collaborative extends Item
                 $item_end = $item->getTotalEnd();
                 if ( $this->total_end === null ) {
                     $this->total_end = $item_end;
-                } else if ( $item_end->gt( $this->total_end ) ) {
+                } elseif ( $item_end->gt( $this->total_end ) ) {
                     $this->total_end = $item_end;
                 }
             }
@@ -217,6 +217,14 @@ class Collaborative extends Item
         $extras_total_price = (float) Lib\Proxy\ServiceExtras::getTotalPrice( (array) json_decode( $this->getCA()->getExtras(), true ), $this->getCA()->getNumberOfPersons() );
 
         return $this->getServicePrice() * $this->getCA()->getNumberOfPersons() + $extras_total_price;
+    }
+
+    /**
+     * @inerhitDoc
+     */
+    public function getLocationId()
+    {
+        return $this->getAppointment()->getLocationId();
     }
 
     /**

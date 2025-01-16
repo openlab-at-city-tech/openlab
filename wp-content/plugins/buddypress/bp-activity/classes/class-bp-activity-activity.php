@@ -173,6 +173,8 @@ class BP_Activity_Activity {
 	 * Populate the object with data about the specific activity item.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 */
 	public function populate() {
 		global $wpdb;
@@ -226,6 +228,8 @@ class BP_Activity_Activity {
 	 * Save the activity item to the database.
 	 *
 	 * @since 1.0.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @return WP_Error|bool True on success.
 	 */
@@ -349,6 +353,8 @@ class BP_Activity_Activity {
 	 *      'filter' parameter.
 	 * @see WP_Meta_Query::queries for a description of the 'meta_query'
 	 *      parameter format.
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args {
 	 *     An array of arguments. All items are optional.
@@ -881,6 +887,8 @@ class BP_Activity_Activity {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param array $activity_ids Array of activity IDs.
 	 * @return array
 	 */
@@ -1239,6 +1247,8 @@ class BP_Activity_Activity {
 	 * @since 1.2.0
 	 * @since 10.0.0 Parameters were made optional.
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param array $args {
 	 *     An array of arguments. All items are optional.
 	 *     @type int    $user_id           User ID to filter by.
@@ -1350,6 +1360,8 @@ class BP_Activity_Activity {
 	 * Otherwise use the filters.
 	 *
 	 * @since 1.2.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param array $args {
 	 *     @int    $id                Optional. The ID of a specific item to delete.
@@ -1528,11 +1540,13 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.2.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @deprecated 2.3.0
 	 *
 	 * @param array $activity_ids Activity IDs whose comments should be deleted.
 	 * @param bool  $delete_meta  Should we delete the activity meta items for these comments.
-	 * @return bool True on success.
+	 * @return bool
 	 */
 	public static function delete_activity_item_comments( $activity_ids = array(), $delete_meta = true ) {
 		global $wpdb;
@@ -1560,7 +1574,7 @@ class BP_Activity_Activity {
 	 * @since 1.2.0
 	 *
 	 * @param array $activity_ids Activity IDs whose meta should be deleted.
-	 * @return bool True on success.
+	 * @return bool
 	 */
 	public static function delete_activity_meta_entries( $activity_ids = array() ) {
 		$activity_ids = wp_parse_id_list( $activity_ids );
@@ -1829,6 +1843,8 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.2.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param bool $skip_last_activity If true, components will not be
 	 *                                 included if the only activity type associated with them is
 	 *                                 'last_activity'. (Since 2.0.0, 'last_activity' is stored in
@@ -1864,7 +1880,7 @@ class BP_Activity_Activity {
 
 		for ( $i = 0, $count = count( $activities ); $i < $count; ++$i ) {
 			$title                            = explode( '<span', $activities[$i]['content'] );
-			$activity_feed[$i]['title']       = trim( strip_tags( $title[0] ) );
+			$activity_feed[$i]['title']       = wp_strip_all_tags( $title[0] );
 			$activity_feed[$i]['link']        = $activities[$i]['primary_link'];
 			$activity_feed[$i]['description'] = @sprintf( $activities[$i]['content'], '' );
 			$activity_feed[$i]['pubdate']     = $activities[$i]['date_recorded'];
@@ -1879,6 +1895,8 @@ class BP_Activity_Activity {
 	 * @since 1.5.0
 	 *
 	 * @see BP_Activity_Activity::get_filter_sql()
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param string     $field The database field.
 	 * @param array|bool $items The values for the IN clause, or false when none are found.
@@ -2001,6 +2019,8 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.2.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @return string ISO timestamp.
 	 */
 	public static function get_last_updated() {
@@ -2036,6 +2056,8 @@ class BP_Activity_Activity {
 	 *
 	 * @since 1.1.0
 	 *
+	 * @global wpdb $wpdb WordPress database object.
+	 *
 	 * @param string $content The content to filter by.
 	 * @return int|false The ID of the first matching item if found, otherwise false.
 	 */
@@ -2053,6 +2075,8 @@ class BP_Activity_Activity {
 	 * Hide all activity for a given user.
 	 *
 	 * @since 1.2.0
+	 *
+	 * @global wpdb $wpdb WordPress database object.
 	 *
 	 * @param int $user_id The ID of the user whose activity you want to mark hidden.
 	 * @return mixed

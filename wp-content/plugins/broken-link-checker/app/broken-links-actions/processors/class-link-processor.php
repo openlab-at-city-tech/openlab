@@ -44,6 +44,8 @@ abstract class Link_Processor extends Base {
 	 */
 	protected $special_rules = array();
 
+	public $post_id = null;
+
 	/**
 	 * Used to set the properties of the class and set them up.
 	 *
@@ -170,41 +172,39 @@ abstract class Link_Processor extends Base {
 					$special_actions[ $special_case_key ] = $special_case_data['action'];
 				}
 			}
-
 		}
 
 		return $special_actions;
 	}
 
-	public function links_match( string $requested_link = '', string $comparison_link = '' ) {
-		$requested_link  = $this->normalize_url( $requested_link );
-		$comparison_link = $this->normalize_url( $comparison_link );
-		$links_match     = false;
+	/**
+	 * Summary of links_match
+	 * @param string $requested_link The link that we are looking for (to replace/delete).
+	 * @param string $comparison_link The link found in post or block content.
+	 * @return bool
+	 */
+	public function links_match( string $requested_link = '', string $comparison_link = '' ) : bool {
+		return strcasecmp( $this->prepare_url( $comparison_link ), $this->prepare_url( $requested_link ) ) == 0;
+	}
 
-		/**
-		 * If link doesn't have Host part, it is internal link. All internal links are stored as relative urls in Queue.
-		 * If link does have the Host part, then it's an external link.
-		 * For internal links we need to test 3 cases:
-		 * 1. Relative urls (that is how it is stored in Queue)
-		 * 2. Absolute url.
-		 * 3. Absolute url without scheme ( //site.com )
-		 * Engine treats all those types as full urls
-		 */
-		if ( empty( wp_parse_url( $requested_link, PHP_URL_HOST ) ) ) {
-			// Check Relative, Absolute and Absolute without host urls for $old_link.
-			$site_url           = site_url();
-			$scheme             = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
-			$absolute_link      = $site_url . $requested_link;
-			$semi_absolute_link = str_replace( $scheme, '', $absolute_link );
-			$links_match        = strcasecmp( $requested_link, $comparison_link ) == 0 ||
-				strcasecmp( $absolute_link, $comparison_link ) == 0 ||
-				strcasecmp( $semi_absolute_link, $comparison_link ) == 0;
-		} else {
-			// Check $old_link normally.
-			$links_match = strcasecmp( $comparison_link, $requested_link ) == 0;
+	/**
+	 * Prepares/normalizes a url for string comparison. It turns relative urls into absolute urls and removes scheme (http|https).
+	 * @param string $url
+	 * @return string
+	 */
+	public function prepare_url( string $url = '' ) : string {
+		$site_url = site_url();
+		$scheme   = wp_parse_url( $site_url, PHP_URL_SCHEME ) . ':';
+
+		if ( empty( wp_parse_url( $url, PHP_URL_HOST ) ) ) {
+			// If the url is relative, we need to make it absolute. 
+			// Makes sure that the relative url is subpath of the current post too by checking if url pah starts with `/` or not.
+			// If it doesn't start with `/` then it is a relative url to the current post.
+			$url_start = $this->str_starts_with( $url, '/' ) ? $site_url : get_permalink( $this->post_id );
+			$url       = rtrim( $url_start, '/' ) . '/' . ltrim( $url, '/' );
 		}
 
-		return $links_match;
+		return str_replace( $scheme, '', $url );
 	}
 
 	/**
@@ -223,12 +223,6 @@ abstract class Link_Processor extends Base {
 			),
 			'?'
 		);
-
-		/*
-		$parsed = array_intersect_key(
-			wp_parse_url( $url ),
-			array_flip( ['scheme', 'host', 'path'] )
-		);*/
 	}
 
 	/**

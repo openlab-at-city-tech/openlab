@@ -14,7 +14,6 @@ jQuery(function ($) {
         $exportDialog = $('#bookly-export-customers-dialog'),
         $exportSelectAll = $('#bookly-js-export-select-all', $exportDialog),
         columns = [],
-        order = [],
         info_renders = {}
     ;
 
@@ -51,6 +50,13 @@ jQuery(function ($) {
                         data: 'facebook_id',
                         render: function (data, type, row, meta) {
                             return data ? '<a href="https://www.facebook.com/app_scoped_user_id/' + data + '/" target="_blank"><span class="dashicons dashicons-facebook"></span></a>' : '';
+                        }
+                    });
+                    break;
+                case 'phone':
+                    columns.push({
+                        data: column, render: function (data, type, row, meta) {
+                            return data ? '<span style="white-space: nowrap;">' + window.booklyIntlTelInput.utils.formatNumber($.fn.dataTable.render.text().display(data), null, window.booklyIntlTelInput.utils.numberFormat.INTERNATIONAL) + '</span>' : '';
                         }
                     });
                     break;
@@ -103,32 +109,11 @@ jQuery(function ($) {
     });
     columns[0].responsivePriority = 0;
 
-    $.each(BooklyL10n.datatables.customers.settings.order, function (_, value) {
-        const index = columns.findIndex(function (c) {
-            return c.data === value.column;
-        });
-        if (index !== -1) {
-            order.push([index, value.order]);
-        }
-    });
-
-    /**
-     * Init DataTables.
-     */
-    var dt = $customersList.DataTable({
-        order: order,
-        info: false,
-        searching: false,
-        lengthChange: false,
-        pageLength: 25,
-        pagingType: 'numbers',
-        processing: true,
-        responsive: true,
-        serverSide: true,
+    let dt = booklyDataTables.init($customersList, BooklyL10n.datatables.customers.settings, {
         ajax: {
             url: ajaxurl,
-            type: 'POST',
-            data: function (d) {
+            method: 'POST',
+            data: function(d) {
                 return $.extend({}, d, {
                     action: 'bookly_get_customers',
                     csrf_token: BooklyL10nGlobal.csrf_token,
@@ -143,7 +128,7 @@ jQuery(function ($) {
                 orderable: false,
                 searchable: false,
                 width: 120,
-                render: function (data, type, row, meta) {
+                render: function(data, type, row, meta) {
                     return '<button type="button" class="btn btn-default" data-action="edit"><i class="far fa-fw fa-edit mr-lg-1"></i><span class="d-none d-lg-inline">' + BooklyL10n.edit + '…</span></button>';
                 }
             },
@@ -152,7 +137,7 @@ jQuery(function ($) {
                 responsivePriority: 1,
                 orderable: false,
                 searchable: false,
-                render: function (data, type, row, meta) {
+                render: function(data, type, row, meta) {
                     return '<div class="custom-control custom-checkbox">' +
                         '<input value="' + row.id + '" id="bookly-dt-' + row.id + '" type="checkbox" class="custom-control-input">' +
                         '<label for="bookly-dt-' + row.id + '" class="custom-control-label"></label>' +
@@ -160,11 +145,6 @@ jQuery(function ($) {
                 }
             }
         ]),
-        dom: "<'row'<'col-sm-12'tr>><'row float-left mt-3'<'col-sm-12'p>>",
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords,
-            processing: BooklyL10n.processing
-        }
     });
 
     /**
@@ -199,7 +179,7 @@ jQuery(function ($) {
         .on('click', '[data-action=edit]', function () {
             BooklyCustomerDialog.showDialog({
                 action: 'load',
-                customerId: getDTRowData(this).id,
+                customerId: booklyDataTables.getRowData(this, dt).id,
                 onDone: function (customer, result) {
                     dt.ajax.reload(null, false);
                     if (result && result.new_tags.length) {
@@ -225,12 +205,9 @@ jQuery(function ($) {
     /**
      * Merge list.
      */
-    var mdt = $mergeList.DataTable({
-        order: [[0, 'asc']],
-        info: false,
-        searching: false,
+    var dt_merge = booklyDataTables.init($mergeList, {order: [{column: 'id', order: 'asc'}]}, {
         paging: false,
-        responsive: true,
+        serverSide: false,
         columns: columns.concat([
             {
                 data: null,
@@ -242,9 +219,6 @@ jQuery(function ($) {
                 }
             }
         ]),
-        language: {
-            zeroRecords: BooklyL10n.zeroRecords
-        }
     });
 
     /**
@@ -255,15 +229,15 @@ jQuery(function ($) {
 
         if ($checkboxes.length) {
             $checkboxes.each(function () {
-                var data = getDTRowData(this);
-                if (mdt.rows().data().indexOf(data) < 0) {
-                    mdt.row.add(data).draw();
+                var data = booklyDataTables.getRowData(this, dt);
+                if (dt_merge.rows().data().indexOf(data) < 0) {
+                    dt_merge.row.add(data).draw();
                 }
                 this.checked = false;
             }).trigger('change');
             $mergeWithButton.show();
             $mergeListContainer.show();
-            mdt.responsive.recalc();
+            dt_merge.responsive.recalc();
         }
     });
 
@@ -275,12 +249,12 @@ jQuery(function ($) {
         let ladda = Ladda.create(this),
             ids = [];
         ladda.start();
-        mdt.rows().every(function () {
+        dt_merge.rows().every(function () {
             ids.push(this.data().id);
         });
         $.ajax({
             url: ajaxurl,
-            type: 'POST',
+            method: 'POST',
             data: {
                 action: 'bookly_merge_customers',
                 csrf_token: BooklyL10nGlobal.csrf_token,
@@ -293,7 +267,7 @@ jQuery(function ($) {
                 $mergeDialog.booklyModal('hide');
                 if (response.success) {
                     dt.ajax.reload(null, false);
-                    mdt.clear();
+                    dt_merge.clear();
                     $mergeListContainer.hide();
                     $mergeWithButton.hide();
                 } else {
@@ -307,8 +281,8 @@ jQuery(function ($) {
      * Remove customer from merge list.
      */
     $mergeList.on('click', 'button', function () {
-        mdt.row($(this).closest('td')).remove().draw();
-        var any = mdt.rows().any();
+        dt_merge.row($(this).closest('td')).remove().draw();
+        var any = dt_merge.rows().any();
         $mergeWithButton.toggle(any);
         $mergeListContainer.toggle(any);
     });
@@ -331,12 +305,4 @@ jQuery(function ($) {
      */
     Ladda.bind('#bookly-import-customers-dialog button[type=submit]');
     Ladda.bind('#bookly-export-customers-dialog button[type=submit]', {timeout: 2000});
-
-    function getDTRowData(element) {
-        let $el = $(element).closest('td');
-        if ($el.hasClass('child')) {
-            $el = $el.closest('tr').prev();
-        }
-        return dt.row($el).data();
-    }
 });

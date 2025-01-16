@@ -12,45 +12,182 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/html/header.php'); ?>
                 <!--Header|End-->
                 <div class="clearfix"></div>
-                <?php if (!B2S_System::isblockedArea('B2S_DASHBOARD_MODUL_NEWS', B2S_PLUGIN_ADMIN)) { ?>
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/content.php'); ?>
-                            <div class="clearfix"></div>
+
+                <div class="row">
+                    <div class="col-md-12 del-padding-left del-padding-right">
+                        <div class="col-md-8 col-sm-12">
+                            <?php if (!B2S_System::isblockedArea('B2S_DASHBOARD_MODUL_NEWS', B2S_PLUGIN_ADMIN)) { ?>
+                                <div class="panel panel-default b2s-panel-height-300">
+                                    <div class="panel-body">
+                                        <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/content.php'); ?>
+                                        <div class="clearfix"></div>
+                                    </div>
+                                </div>
+                            <?php } ?>
                         </div>
-                    </div>
-                <?php } ?>
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="b2s-dashboard-h4"><?php esc_html_e("Your Activity", "blog2social"); ?></h4>  
-                            </div>
-                            <div class="col-md-6 add-margin-top-10">
-                                <div class="btn-group pull-right">
-                                    <button type="button" class="btn btn-primary" data-toggle="tab" href="#tab1"><?php esc_html_e("Calendar", "blog2social"); ?></button>
-                                    <button type="button" class="btn btn-primary" data-toggle="tab" href="#tab2"><?php esc_html_e("List", "blog2social"); ?></button>
-                                    <button type="button" class="btn btn-primary" data-toggle="tab" href="#tab3"><?php esc_html_e("Chart", "blog2social"); ?></button>
+                        <div class="col-md-4 hidden-sm">
+                            <div class="panel panel-default b2s-panel-height-300">
+                                <div class="panel-body">
+                                    <div class="b2s-cal-sched-dashboard-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
+                                    <div id="b2s-cal-sched-dashboard"></div>
+                                    <div class="text-center">
+                                        <a href="admin.php?page=blog2social-calendar" class="btn btn-link b2s-color-green b2s-font-bold"><?php esc_html_e("Open calendar", "blog2social"); ?></a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-content">
-                            <div id="tab1" class="tab-pane active fade in">
-                                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/calendar.php'); ?>
-                            </div>
-                            <div id="tab2" class="tab-pane fade">
-                                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/posts.php'); ?>
-                            </div>
-                            <div id="tab3" class="tab-pane fade">
-                                <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/activity.php'); ?>
-                            </div>
-                        </div>
-                        <div class="clearfix"></div>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-md-12 del-padding-left del-padding-right">
+                        <div class="col-md-3 col-sm-6 hidden-xs">
+                            <div class="panel panel-default">
+                                <div class="panel-header text-center b2s-panel-header-addon b2s-font-color-green b2s-font-size-24 b2s-padding-top-20">
+                                    <span class="glyphicon glyphicon-star glyphicon-success"></span>
+                                </div>
+                                <div class="panel-body b2s-panel-body-dashboard-premium b2s-panel-bg-body">
+                                    <h3 class="b2s-font-color-green text-center b2s-font-bold b2s-margin-top-5">
+                                        <?php esc_html_e("Upgrade Blog2Social", "blog2social"); ?></h3>
+                                    <p>
+                                    <ul class="b2s-list-dashboard">
+                                        <li><?php esc_html_e("20+ Social Platforms", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Auto-Posting", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Best Time Manager", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Social Media Calendar", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Customizable Post Templates", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Automatic Resharing", "blog2social"); ?></li>
+                                    </ul>
+                                    </p>
+                                </div>
+                                <div class="panel-footer text-center b2s-panel-bg-footer">
+                                    <?php if ((int) B2S_PLUGIN_USER_VERSION >= 3 && (!defined("B2S_PLUGIN_TRAIL_END") || (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < time()))) { ?>
+                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-filled b2s-dashboard-premium-enterprise-version-btn"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                                    <?php } else { ?>
+                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 hidden-xs">
+                            <div class="panel panel-default">
+                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
+
+                                <div class="panel-body text-center b2s-panel-body-dashboard">
+                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Video Posting", "blog2social"); ?></h3>
+                                    <p><?php esc_html_e("Share your video files on YouTube, Vimeo, TikTok, Facebook, Instagram, Pinterest and X (Twitter). Get 25 GB data volume, valid for one year, top-up at any time. ", "blog2social"); ?></p>
+                                    <p><a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('dashboard-video-posting-addon-info')); ?>"><?php esc_html_e("Discover the Video Posting feature", "blog2social") ?></a></p>
+                                </div>
+                                <div class="panel-footer text-center">
+                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_video'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 hidden-xs">
+                            <div class="panel panel-default">
+                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
+
+                                <div class="panel-body text-center b2s-panel-body-dashboard">
+                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Licenses User", "blog2social"); ?></h3>
+                                    <p><?php esc_html_e("Add more users to suit your growing social media demands - whether you're a business, team, or managing clients.", "blog2social"); ?></p>
+                                </div>
+                                <div class="panel-footer text-center">
+                                    <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline b2s-dashboard-addon-add-user-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                    <?php } else { ?>
+                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_user_licence'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-3 col-sm-6 hidden-xs">
+                            <div class="panel panel-default">
+                                <div class="panel-header pull-right b2s-panel-header-addon b2s-font-color-white">
+                                    <?php esc_html_e("Addon", "blog2social"); ?></div>
+
+                                <div class="panel-body text-center b2s-panel-body-dashboard">
+                                    <h3 class="b2s-font-color-green b2s-font-bold b2s-padding-top-36"><?php esc_html_e("Add Social Media Accounts", "blog2social"); ?></h3>
+                                    <p><?php esc_html_e("Expand your social media management with extra accounts per network!", "blog2social"); ?></p>
+                                </div>
+                                <div class="panel-footer text-center">
+                                    <?php if ((int) B2S_PLUGIN_USER_VERSION <= 1 || ((int) B2S_PLUGIN_USER_VERSION >= 3 && defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) > time())) { ?>
+                                        <a href="#" class="btn b2s-font-bold b2s-btn-dashboard-outline b2s-dashboard-addon-add-social-account-btn"><?php esc_html_e("Buy now", "blog2social"); ?></a>
+                                    <?php } else { ?>
+                                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_social_account'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-outline"><?php esc_html_e("Buy now", "blog2social"); ?></a>                                
+                                    <?php } ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3 class="b2s-font-bold"><?php esc_html_e("Your Activity", "blog2social"); ?></h3>  
+
+                        <div class="row">
+                            <div class="col-md-6 col-sm-12 add-margin-top-10">
+                                <h4><?php esc_html_e("Last shared on Social Media", "blog2social"); ?></h4>
+
+                                <div class="b2s-dashboard-activity-publish-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
+
+                                <div class="b2s-dashboard-activity-publish-case-1" style="display: none;">
+                                    <a href="admin.php?page=blog2social-post"><?php esc_html_e("Share your first post now!", "blog2social"); ?></a>
+                                </div>
+
+                                <ul class="b2s-timeline b2s-dashboard-activity-publish" style="display: none;"></ul>
+
+                            </div>
+
+                            <div class="col-md-6 col-sm-12 add-margin-top-10">
+
+                                <div class="b2s-dashboard-activity-sched-loader b2s-loader-impulse b2s-loader-impulse-md"></div>
+
+                                <div class="b2s-dashboard-activity-sched-case-1" style="display: none;">
+                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                    <br>
+                                    <a href="admin.php?page=blog2social-post"><?php esc_html_e("Schedule your first post now!", "blog2social"); ?></a>
+                                </div>
+
+                                <div class="b2s-dashboard-activity-sched-case-2" style="display: none;">
+                                    <h4><?php esc_html_e("Start your 30-day free trial with Blog2Social!", "blog2social"); ?></h4>                               
+                                    <p><?php esc_html_e("Streamline your social media management across 20+ platforms with advanced features:", "blog2social"); ?></p>
+                                    <ul class="b2s-list-dashboard b2s-color-black">
+                                        <li><?php esc_html_e("Advanced scheduling capabilities for optimal posting times across multiple channels", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Automated posting and resharing to save time and maintain a consistent content stream", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Customizable templates for optimized social media presentation", "blog2social"); ?></li>
+                                        <li><?php esc_html_e("Flexible user and account settings and add-ons for efficient social media management", "blog2social"); ?></li>
+                                    </ul>
+                                    <p><?php esc_html_e("These exclusive features can help you reach more people in less time.", "blog2social"); ?></p>
+                                    <br>
+                                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('trial'); ?>" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Start your free trial now", "blog2social"); ?></a>
+                                </div>
+
+                                <div class="b2s-dashboard-activity-sched-case-3" style="display: none;">
+                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                    <br>
+                                    <a class="b2s-dashboard-trial-expired-btn" href="#"><?php esc_html_e("Schedule your first post now!", "blog2social"); ?></a>
+                                </div>
+
+                                <div class="b2s-dashboard-activity-sched-case-4" style="display: none;">
+                                    <h4><?php esc_html_e("Next scheduled posts", "blog2social"); ?></h4>
+                                    <ul class="b2s-timeline b2s-dashboard-activity-sched"></ul>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="clearfix"></div>
                 <?php if (!B2S_System::isblockedArea('B2S_DASHBOARD_MODUL_NEWS_EMAIL ', B2S_PLUGIN_ADMIN)) { ?>
-                    <div class="panel panel-default hidden-xs hidden-sm">
+                    <div class="panel panel-default b2s-panel-dashboard-footer hidden-xs hidden-sm">
                         <div class="panel-body">
                             <div class="col-md-8">
                                 <?php require_once (B2S_PLUGIN_DIR . 'views/b2s/widgets/newsletter.php'); ?>
@@ -58,12 +195,10 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
                             <div class="col-md-4">
                                 <div class="pull-right">
                                     <div class="form-inline">
-                                        <label class="b2s-text-xl b2s-color-grey"><?php esc_html_e("Follow us", "blog2social") ?></label>
+                                        <label class="b2s-text-xl b2s-color-white"><?php esc_html_e("Follow us", "blog2social") ?></label>
                                         <a href="https://www.facebook.com/Blog2Social/" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/1_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Facebook"></a>
+                                        <a href="https://www.instagram.com/blog2social/" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Instagram"></a>
                                         <a href="https://twitter.com/Blog2Social" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/2_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Twitter"></a>
-                                        <a href="https://www.linkedin.com/showcase/blog2social-com/" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/3_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Linkedin"></a>
-                                        <a href="https://www.instagram.com/adenion_gmbh/" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/12_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Instagram"></a>
-                                        <a href="https://www.pinterest.de/adeniongmbh/" target="_blank" rel="nofollow"><img src="<?php echo esc_url(plugins_url('/assets/images/portale/20_flat.png', B2S_PLUGIN_FILE)); ?>" width="28" alt="Pinterest"></a>
                                     </div>
                                 </div>
                             </div>
@@ -81,92 +216,27 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
         ?>
     </div>
 </div>
+
+<input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2s-redirect-url-sched-post" value="<?php echo esc_url($b2sSiteUrl) . 'wp-admin/admin.php?page=blog2social-sched'; ?>"/>
 <input type="hidden" id="isLegacyMode" value="<?php echo (isset($b2sGeneralOptions['legacy_mode']) ? (int) esc_attr($b2sGeneralOptions['legacy_mode']) : 0); ?>">
-<input type="hidden" id="showFullCalenderText" value="<?php  esc_attr_e('show full calendar', 'blog2social'); ?>">
 
-<div id="b2s-post-ship-item-post-format-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
+
+<div id="b2s-dashboard-premium-addon-add-user-modal" class="modal fade" role="dialog" aria-labelledby="b2s-dashboard-premium-addon-add-user-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-post-ship-item-post-format-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Choose your', 'blog2social') ?> <span id="b2s-post-ship-item-post-format-network-title"></span> <?php esc_html_e('Post Format', 'blog2social') ?>
-                    <?php if (B2S_PLUGIN_USER_VERSION >= 2) { ?>
-                        <?php esc_html_e('for:', 'blog2social') ?> <span id="b2s-post-ship-item-post-format-network-display-name"></span>
-                    <?php } ?>
-                </h4>
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-dashboard-premium-addon-add-user-modal">&times;</button>
+                <h3 class="modal-title b2s-color-green"><?php esc_html_e('Expand your capabilities by adding more users!', 'blog2social') ?></h3>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        <?php
-                        $settingsItem = new B2S_Settings_Item();
-                        echo wp_kses($settingsItem->setNetworkSettingsHtml(), array(
-                            'input' => array(
-                                'type' => array(),
-                                'class' => array(),
-                                'value' => array(),
-                                'data-post-format-type' => array(),
-                                'data-network-id' => array(),
-                                'data-network-type' => array()
-                            )
-                        ));
-                        echo wp_kses($settingsItem->getNetworkSettingsHtml(), array(
-                            'div' => array(
-                                'class' => array(),
-                                'data-post-format-type' => array(),
-                                'data-network-type' => array(),
-                                'data-network-id' => array(),
-                                'data-network-title' => array(),
-                                'style' => array()
-                            ),
-                            'b' => array(),
-                            'br' => array(),
-                            'a' => array(
-                                'target' => array(),
-                                'href' => array()
-                            ),
-                            'hr' => array(),
-                            'span' => array(
-                                'class' => array()
-                            ),
-                            'label' => array(),
-                            'input' => array(
-                                'type' => array(),
-                                'name' => array(),
-                                'value' => array(),
-                                'class' => array(),
-                                'data-post-wp-type' => array(),
-                                'data-post-format-type' => array(),
-                                'data-network-type' => array(),
-                                'data-network-id' => array(),
-                                'data-post-format' => array()
-                            ),
-                            'img' => array(
-                                'class' => array(),
-                                'src' => array()
-                            )
-                        ));
-                        ?>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="text-center">
-                            <br>
-                            <div class="b2s-post-format-settings-info" data-network-id="1" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your Facebook accounts in the Blog2Social settings.', 'blog2social'); ?></b>
-                            </div>
-                            <div class="b2s-post-format-settings-info" data-network-id="2" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your Twitter accounts in the Blog2Social settings.', 'blog2social'); ?></b>
-                            </div>
-                            <div class="b2s-post-format-settings-info" data-network-id="3" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your LinkedIn accounts in the Blog2Social settings.', 'blog2social'); ?></b>
-                            </div>
-                            <div class="b2s-post-format-settings-info" data-network-id="12" style="display:none;">
-                                <b><?php esc_html_e('Define the default settings for the custom post format for all of your Instagram accounts in the Blog2Social settings.', 'blog2social'); ?></b>
-                            </div>
-                        </div>
+                        <p><?php esc_html_e('With a Pro or Business License, you\'ll already have more users included, and you can easily add even more to suit your needs - whether for your business, team, or clients.', 'blog2social') ?></p><!-- comment -->
+                        <br>
+                        <p class="b2s-text-bold"><?php esc_html_e('Upgrade now to unlock additional users and powerful features for your social media management!', 'blog2social') ?></p>
+                        <br>
+                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
                     </div>
                 </div>
             </div>
@@ -174,136 +244,21 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
     </div>
 </div>
 
-<div id="b2s-network-select-image" class="modal fade" role="dialog" aria-labelledby="b2s-network-select-image" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
+<div id="b2s-dashboard-premium-addon-add-social-account-modal" class="modal fade" role="dialog" aria-labelledby="b2s-dashboard-premium-addon-add-social-account-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-network-select-image">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Select image for', 'blog2social') ?> <span class="b2s-selected-network-for-image-info"></span></h4>
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-dashboard-premium-addon-add-social-account-modal">&times;</button>
+                <h3 class="modal-title b2s-color-green"><?php esc_html_e('Unlock more social media accounts with an upgrade!', 'blog2social') ?></h3>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="b2s-network-select-image-content"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div id="b2s-show-post-type-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-post-type-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-show-post-type-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('What would you like to share?', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-md-6 col-xs-12">
-                        <div class="b2s-post-type-area text-center">
-                            <div class="image">
-                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/blog-post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="blog post">
-                            </div>
-                            <div class="text">
-                                <?php esc_html_e("Share your WordPress posts, pages or products", "blog2social") ?>
-                            </div>
-                            <div class="action">
-                                <button class="btn btn-primary" id="b2s-btn-select-blog-post"><?php esc_html_e("select", "blog2social"); ?></button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xs-12">
-                        <div class="b2s-post-type-area text-center">
-                            <div class="image">
-                                <img class="img-width-150" src="<?php echo esc_url(plugins_url('/assets/images/b2s/content-curation-icon.png', B2S_PLUGIN_FILE)); ?>" alt="content curation">
-                            </div>
-                            <div class="text">
-                                <?php esc_html_e("Create or share content from other sources", "blog2social") ?>
-                            </div>
-                            <div class="action">
-                                <button class="btn btn-primary" id="b2s-btn-select-content-curation"><?php esc_html_e("select", "blog2social"); ?></button>
-                            </div>
-                        </div>
-                    </div>
-                    <input type="hidden" id="b2sSelSchedDate" value="">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<div id="b2s-show-post-all-modal" class="modal fade" role="dialog" aria-labelledby="b2s-post-all-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-show-post-all-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Select a post', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="b2s-all-post-content">
-                            <div class="b2s-post">
-                                <div class="grid-body">
-                                    <div class="hidden-lg hidden-md hidden-sm filterShow"><a href="#" onclick="showFilter('show');return false;"><i class="glyphicon glyphicon-chevron-down"></i><?php esc_html_e('filter', 'blog2social') ?></a></div>
-                                    <div class="hidden-lg hidden-md hidden-sm filterHide"><a href="#" onclick="showFilter('hide');return false;"><i class="glyphicon glyphicon-chevron-up"></i><?php esc_html_e('filter', 'blog2social') ?></a></div>
-                                    <form class="b2sSortForm form-inline pull-left" action="#">
-                                        <input id="b2sType" type="hidden" value="all" name="b2sType">
-                                        <input id="b2sShowByDate" type="hidden" value="" name="b2sShowByDate">
-                                        <input id="b2sPagination" type="hidden" value="1" name="b2sPagination">
-                                        <?php
-                                        $postFilter = new B2S_Post_Filter('all');
-                                        echo wp_kses($postFilter->getItemHtml(), array(
-                                                'div' => array(
-                                                'class' => array()
-                                            ),
-                                            'input' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array(),
-                                                'value' => array(),
-                                                'type' => array(),
-                                                'placeholder' => array(),
-                                            ),
-                                            'a' => array(
-                                                'href' => array(),
-                                                'id' => array(),
-                                                'class' => array()
-                                            ),
-                                            'span' => array(
-                                                'class' => array()
-                                            ),
-                                            'small' => array(),
-                                            'select' => array(
-                                                'id' => array(),
-                                                'name' => array(),
-                                                'class' => array()
-                                            ),
-                                            'option' => array(
-                                                'value' => array()
-                                            )
-                                        ));
-                                        ?>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="b2s-loading-area" style="display:none">
-                                <br>
-                                <div class="b2s-loader-impulse b2s-loader-impulse-md"></div>
-                                <div class="clearfix"></div>
-                                <div class="text-center b2s-loader-text"><?php esc_html_e("Loading...", "blog2social"); ?></div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <br>
-                            <ul class="list-group b2s-sort-result-item-area"></ul>
-                            <br>
-                            <nav class="b2s-sort-pagination-area text-center"></nav>
-                        </div>
+                        <p><?php esc_html_e('With a Pro or Business License, you\'ll start with additional accounts per network included in your license and have the flexibility to add even more as needed—ideal for businesses, teams, or clients. And you will get more powerful features for your social media management. ', 'blog2social') ?></p>
+                        <br>
+                        <p class="b2s-text-bold"><?php esc_html_e('Upgrade now to maximize your social media impact!', 'blog2social') ?></p>
+                        <br>
+                        <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('pricing'); ?>" target="_blank" class="btn b2s-font-bold b2s-btn-dashboard-filled"><?php esc_html_e("Upgrade now", "blog2social"); ?></a>
                     </div>
                 </div>
             </div>
@@ -312,62 +267,21 @@ $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 </div>
 
 
-<div id="b2s-sched-post-modal" class="modal fade" role="dialog" aria-labelledby="b2s-sched-post-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-sched-post-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Need to schedule your posts?', 'blog2social') ?></h4>
-            </div>
-            <div class="modal-body">
-                <p><?php esc_html_e('Blog2Social Premium covers everything you need.', 'blog2social') ?></p>
-                <br>
-                <div class="clearfix"></div>
-                <b><?php esc_html_e('Schedule for specific dates', 'blog2social') ?></b>
-                <p><?php esc_html_e('You want to publish a post on a specific date? No problem! Just enter your desired date and you are ready to go!', 'blog2social') ?></p>
-                <br>
-                <b><?php esc_html_e('Schedule post recurrently', 'blog2social') ?></b>
-                <p><?php esc_html_e('You have evergreen content you want to re-share from time to time in your timeline? Schedule your evergreen content to be shared once, multiple times or recurringly at specific times.', 'blog2social') ?></p>
-                <br>
-                <b><?php esc_html_e('Best Time Scheduler', 'blog2social') ?></b>
-                <p><?php esc_html_e('Whenever you publish a post, only a fraction of your followers will actually see your post. Use the Blog2Social Best Times Scheduler to share your post at the best times for each social network. Get more outreach and extend the lifespan of your posts.', 'blog2social') ?></p>
-                <br>
-                <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
-                    <hr>
-                    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
-                    <br>
-                    <br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Share on multiple profiles, pages and groups', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Auto-post and auto-schedule new and updated blog posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your posts at the best times on each network', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Best Time Manager: use predefined best time scheduler to auto-schedule your social media posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule your post for one time, multiple times or recurrently', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Schedule and re-share old posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select link format or image format for your posts', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Select individual images per post', 'blog2social') ?><br>
-                    <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Reporting & calendar: keep track of your published and scheduled social media posts', 'blog2social') ?><br>
-                    <br>
-                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
-                    <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
-                <?php } ?>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div id="b2s-show-error-modal" class="modal fade" role="dialog" aria-labelledby="b2s-show-error-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
-    <div class="modal-dialog modal-lg">
+<div id="b2s-dashboard-premium-enterprise-version-modal" class="modal fade" role="dialog" aria-labelledby="b2s-dashboard-premium-enterprise-version-modal" aria-hidden="true" data-backdrop="false" style="display:none;z-index: 1070;">
+    <div class="modal-dialog modal-md">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-show-error-modal">&times;</button>
-                <h4 class="modal-title"><?php esc_html_e('Notification', 'blog2social') ?></h4>
+                <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-dashboard-premium-enterprise-version-modal">&times;</button>
+                <h3 class="modal-title b2s-color-green"><?php esc_html_e('Expand your Blog2Social experience!', 'blog2social') ?></h3>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="alert alert-danger b2s-error-text"></div>
+                        <p><?php esc_html_e('Since you are already on our Business version, we would love to introduce you to the flexibility and enhanced features available with an individual plan just for you. Benefit from additional options that go beyond our regular licenses.', 'blog2social') ?></p>
+                        <p class="b2s-text-bold"><?php esc_html_e('Our sales team is here to help you explore all the options and create a personalized plan tailored just for you.', 'blog2social') ?></p>
+                        <p><?php esc_html_e('Contact us today to unlock the full potential of your Blog2Social experience for your business!', 'blog2social') ?></p>
+                        <p class="b2s-text-bold"><?php esc_html_e('Email', 'blog2social') ?>: customer-service@blog2social.com</p>
                     </div>
                 </div>
             </div>

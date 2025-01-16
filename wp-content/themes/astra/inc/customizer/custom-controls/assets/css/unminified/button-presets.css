@@ -30,7 +30,7 @@
 }
 .ast-reset-btn-preset-wrap .components-button.is-secondary,
 .ast-reset-btn-preset-wrap .components-button.is-secondary:hover{
-	box-shadow: none;
+	box-shadow: none !important;
 	background: transparent;
 	color: var(--ast-customizer-color-1);
 }

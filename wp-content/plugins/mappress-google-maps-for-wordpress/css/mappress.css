@@ -32,36 +32,6 @@ mappress-map.mapp-layout {
 	font-size: 13px;
 }
 
-/* Theme interference */
-.mapp-layout input[type="text"], .mapp-layout input[type="search"], .mapp-layout input[type="checkbox"], .mapp-layout input[type="radio"], .mapp-layout select {	
-	background: #fff;
-	border: 1px solid #bbb;
-	border-radius: 0;
-	box-shadow: none;
-	box-sizing: border-box;
-	color: black;
-	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
-	font-size: 13px;
-	height: auto;
-	letter-spacing: normal;
-	margin: initial;
-	max-width: none;
-	outline: none;
-	padding: initial;    
-	width: auto;
-}
-
-.mapp-layout input[type="text"]:focus, .mapp-layout input[type="search"]:focus, .mapp-layout input[type="checkbox"]:focus, .mapp-layout input[type="radio"]:focus, .mapp-layout select:focus {    
-	border: 1px solid black;
-	outline: none;  /* 2020 */
-}
-
-/* Theme interference */
-.mapp-layout label {
-	font-weight: normal;
-	margin: 0;
-}
-
 /* WP block editor interferes */
 .mapp-layout p {
 	font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
@@ -619,7 +589,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	flex: 1;
 	flex-direction: column;
 	overflow: auto;
-	padding: 5px;
+	padding: 5px 10px;
 }
 
 .mapp-filter-button {
@@ -631,7 +601,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 .mapp-filter-values {
 	line-height: normal;
 	min-width: 100%;
-	padding: 5px 10px;
+	padding: 5px;
 }
 
 .mapp-filter-values .mapp-control {
@@ -658,7 +628,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 
 .mapp-filter-label {
 	font-weight: bold;
-	padding: 5px;
+	padding: 5px 0;
 	text-transform: capitalize;
 	white-space: nowrap;
 }
@@ -668,8 +638,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	color: #666;
 	display: flex;
 	font-weight: normal;		/* 2017 */
-	margin-bottom: 5px;
-	margin-right: 10px;
+	margin: 0;
 }
 
 .mapp-filter-values img.mapp-icon {
@@ -677,19 +646,19 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	margin-right: 5px;
 }
 
-/* Many selectors, to override styles from GT editor, theme */
-.mapp-content .mapp-filter .mapp-filter-values input[type="text"] {
-	border: 1px solid gray;
+/* Try to prevent interference from GT editor, theme */
+.mapp-filter input, .mapp-filter input[type="text"], .mapp-filter input[type="search"] {
+	border: 1px solid #bbb;
 	border-radius: 0;
 	box-shadow: none;
 	line-height: 1;
-	margin: initial;
 	max-width: none;
 	outline: none;
-	padding: 5px;
+	padding: 5px 10px;
 }
 
-.mapp-content .mapp-filter .mapp-filter-values input[type="radio"], .mapp-filter-values input[type="checkbox"] {
+.mapp-filter input[type="radio"], .mapp-filter input[type="checkbox"] {    
+	all: revert;
 	border-radius: 0;
 	box-shadow: none;
 	line-height: 1;
@@ -698,7 +667,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	outline: none;
 }
 
-.mapp-content .mapp-filter .mapp-filter-values select {
+.mapp-filter .mapp-filter-values select {
 	border: 1px solid gray;
 	border-radius: 0;
 	box-shadow: none;
@@ -706,35 +675,49 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 	margin: initial;
 	max-width: none;
 	outline: none;
-	padding: 5px;
 	width: 100%;
+}
+
+/* Standalone text filter should fill header height or sidebar width */
+.mapp-header .mapp-filter-text label, .mapp-header .mapp-filter-text input {
+	height: 100%;
+}
+
+.mapp-sidebar .mapp-filter-text .mapp-control, .mapp-sidebar .mapp-filter-text label {
+	display: flex;
+	flex: 1;
+}
+
+.mapp-sidebar .mapp-filter-text input {
+	flex: 1;
+	padding: 10px;
 }
 
 /*
 	Filters in header/sidebar
 */
-
-.mapp-header .mapp-filter .mapp-dropdown-content {
-	top: 45px;
+.mapp-header .mapp-filters {
+	display: flex;
+	gap: 5px;
 }
 
 .mapp-sidebar .mapp-filter {
 	border-bottom: 1px solid lightgray;
 	flex-direction: column;
-	overflow: hidden;
-	z-index: 1003;
 }
 
 .mapp-sidebar .mapp-filter-button {
 	border: none;
-	border-bottom: 1px solid lightgray;
 }
 
 .mapp-sidebar .mapp-filter .mapp-dropdown-content {
 	border: none;
-	line-height: normal;
-	top: 35px; bottom: 0; right: 0; left: 0;
-	z-index: 10000;
+	height: 100%;
+	right: 0; left: 0;
+}
+
+.mapp-sidebar .mapp-filter-text {
+	padding: 5px;
 }
 
 /*
@@ -763,6 +746,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 }
 
 .mapp-ib-content {
+	cursor: pointer;
 	display: flex;
 	flex-direction: column;
 	line-height: 0;		/* Prevent font from distorting tip */
@@ -934,11 +918,12 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 /* Display block removes extra whitespace @ bottom */
 .mapp-thumbnail img {
 	display: inline-block;
+	max-width: none;
 	object-fit: cover;
 }
 
 .mapp-thumbnail .mapp-gallery-previous, .mapp-thumbnail .mapp-gallery-next {
-	align-items: center;
+	align-items: end;
 	background-color: white;
 	border: 1px solid gray;
 	border-radius: 40px;
@@ -1116,6 +1101,11 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 .mapp-footer {
 	background-color: #f5f5f5;
 	border-top: 1px solid lightgray;
+}
+
+.mapp-mini .mapp-filters .mapp-dropdown-content { 
+	width: 100%;
+	height: 100%;
 }
 
 /*
@@ -1393,6 +1383,7 @@ a.leaflet-control-zoom-in, .leaflet-control-zoom-out {
 .mapp-dialog.mapp-modal {
 	max-height: 80vh;
 	max-width: 80vw;
+	min-width: 400px;
 }
 
 .mapp-dialog.mapp-modal .mapp-dialog-content {

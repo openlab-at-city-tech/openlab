@@ -280,12 +280,6 @@ main .nv-shop {
   --primarybtnbg: transparent;
 }
 
-.woocommerce-info::before,
-.woocommerce-error::before,
-.woocommerce-message::before {
-  display: none;
-}
-
 .woocommerce-info a,
 .woocommerce-info .button,
 .woocommerce-error a,
@@ -463,10 +457,6 @@ main .nv-shop {
   color: var(--primarybtnhovercolor) !important;
   border-color: var(--primarybtnhovercolor) !important;
   opacity: 0.9;
-}
-
-.woocommerce .woocommerce-error {
-  padding-left: 3.5em;
 }
 
 .woocommerce .woocommerce-error li {
