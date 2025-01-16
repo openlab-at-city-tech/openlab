@@ -71,6 +71,7 @@ function openlab_hide_plugins( $plugins ) {
 		'link-manager/link-manager.php',
 		'mailchimp-for-wp/mailchimp-for-wp.php',
 		'media-cleaner/media-cleaner.php',
+		'openlab-exif-tools/openlab-exif-tools', // #3487
 		'openlab-gradebook/GradeBook.php', // #3435
 		'out-of-the-box/out-of-the-box.php',
 		'p3-profiler/p3-profiler.php',
