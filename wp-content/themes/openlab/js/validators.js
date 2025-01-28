@@ -44,6 +44,20 @@
         }
     });
 
+		window.Parsley.addValidator( 'passwordStrength', {
+			validateString: function( value ) {
+				var passwordBlacklist = window.passwordBlacklist || [];
+				var strength = wp.passwordStrength.meter( value, passwordBlacklist, '' );
+
+				var minimumStrength = 2;
+
+				return strength >= minimumStrength;
+			},
+			messages: {
+				en: 'Your password is too weak. Please choose a stronger password.'
+			}
+		} );
+
 		window.Parsley.addAsyncValidator(
 			'newSiteValidate',
 			function( xhr ) {

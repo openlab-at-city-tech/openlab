@@ -151,7 +151,6 @@ $account_type_options = array_map(
 									/>
 
 								<label class="control-label" for="signup_email_confirm"><span class="label-text">Confirm Email Address</span> <span class="label-gloss">(required)</span></label>
-								<div id="signup_email_confirm_error" class="error-container"></div>
 								<input
 									class="form-control email-autocomplete"
 									type="text"
@@ -162,7 +161,6 @@ $account_type_options = array_map(
 									data-parsley-required
 									data-parsley-required-message="Confirming your email is required."
 									data-parsley-type="email"
-									data-parsley-iff="#signup_email"
 									data-parsley-iff-message="Email addresses must match."
 									data-parsley-group="email"
 									data-parsley-errors-container="#signup_email_confirm_error"
@@ -251,6 +249,7 @@ $account_type_options = array_map(
 										data-parsley-group="password"
 										data-parsley-iff="#signup_password_confirm"
 										data-parsley-iff-message=""
+										data-parsley-password-strength=""
 										data-parsley-errors-container="#signup_password_error"
 										/>
 
