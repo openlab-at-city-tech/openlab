@@ -46,7 +46,7 @@ function ajax_email_check() {
 
 	if ( $code ) {
 		$data = Schema::get_code_data( $code );
-		$response['accountType'] = $data ? $data->account_type : null;
+		$response['accountType'] = $data ? strtolower( $data->account_type ) : null;
 	}
 
 	wp_send_json( $response );
