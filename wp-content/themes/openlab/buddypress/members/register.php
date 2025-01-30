@@ -256,6 +256,9 @@ $account_type_options = array_map(
 									<div id="password-strength-notice" class="password-strength-notice"></div>
 								</div>
 
+								<p id="password-help-text"><?php echo openlab_get_profile_field_helper_text( 'password' ); ?></p>
+
+
 								<label class="control-label" for="signup_password_confirm"><span class="label-text">Confirm Password</span> <span class="label-gloss">(required)</span></label>
 								<div id="signup_password_confirm_error" class="error-container"></div>
 								<?php do_action( 'bp_signup_password_confirm_errors' ); ?>
