@@ -49,7 +49,7 @@
 				var passwordBlacklist = window.passwordBlacklist || [];
 				var strength = wp.passwordStrength.meter( value, passwordBlacklist, '' );
 
-				var minimumStrength = 2;
+				var minimumStrength = 3;
 
 				return strength >= minimumStrength;
 			},
