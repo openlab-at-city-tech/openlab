@@ -54,7 +54,7 @@
 				return strength >= minimumStrength;
 			},
 			messages: {
-				en: 'Your password is too weak. Please choose a stronger password.'
+				en: 'Your password is too weak. To complete sign up you must choose a stronger password.'
 			}
 		} );
 
