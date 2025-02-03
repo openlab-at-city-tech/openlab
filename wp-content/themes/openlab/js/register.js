@@ -383,9 +383,7 @@
 		const signupUsernameField = document.getElementById( 'signup_username' );
 		if ( signupUsernameField ) {
 			signupUsernameField.addEventListener( 'input', ( event ) => {
-				const accountType = $account_type_field.val();
-				const validationAccountTypes = [ 'student', 'non-city-tech' ];
-				if ( ! validationAccountTypes.includes( accountType ) ) {
+				if ( 'student' !== $account_type_field.val() ) {
 					return;
 				}
 
