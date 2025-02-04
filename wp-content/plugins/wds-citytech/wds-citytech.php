@@ -2706,33 +2706,6 @@ add_action(
 	}
 );
 
-/**
- * Hide target option for Link inserter in editor.
- */
-add_action(
-	'admin_print_footer_scripts',
-	function() {
-		global $pagenow;
-
-		if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
-			return;
-		}
-
-		if ( 'on' !== get_option( 'wpa_target' ) ) {
-			return;
-		}
-		?>
-		<style type="text/css">
-			#link-options .link-target,
-			.block-editor-link-control__settings,
-			.editor-url-popover .editor-url-popover__settings-toggle {
-				display: none;
-			}
-		</style>
-		<?php
-	}
-);
-
 function openlab_wpa_alt_attribute( $html, $id, $caption, $title, $align, $url, $size, $alt ) {
 	if ( false === strpos( $html, 'alt-missing.png' ) ) {
 		return $html;
