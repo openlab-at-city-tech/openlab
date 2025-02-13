@@ -54,6 +54,10 @@ switch ( get_query_var( 'academic_unit_type' ) ) {
 				];
 			}
 		}
+
+		uasort( $units_of_type, function( $a, $b ) {
+			return strcasecmp( $a['name'], $b['name'] );
+		} );
 	break;
 }
 
