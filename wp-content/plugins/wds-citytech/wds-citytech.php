@@ -583,6 +583,9 @@ function openlab_get_entity_departments( $entity = null ) {
 			),
 		),
 		'other'            => array(
+			'city-tech-101' => [
+				'label' => 'City Tech 101',
+			],
 			'clip' => array(
 				'label' => 'CLIP',
 			),
