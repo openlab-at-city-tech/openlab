@@ -583,6 +583,9 @@ function openlab_get_entity_departments( $entity = null ) {
 			),
 		),
 		'other'            => array(
+			'city-tech-101' => [
+				'label' => 'City Tech 101',
+			],
 			'clip' => array(
 				'label' => 'CLIP',
 			),
@@ -2703,33 +2706,6 @@ add_action(
 </script>
 		<?php
 
-	}
-);
-
-/**
- * Hide target option for Link inserter in editor.
- */
-add_action(
-	'admin_print_footer_scripts',
-	function() {
-		global $pagenow;
-
-		if ( ! in_array( $pagenow, [ 'post.php', 'post-new.php' ] ) ) {
-			return;
-		}
-
-		if ( 'on' !== get_option( 'wpa_target' ) ) {
-			return;
-		}
-		?>
-		<style type="text/css">
-			#link-options .link-target,
-			.block-editor-link-control__settings,
-			.editor-url-popover .editor-url-popover__settings-toggle {
-				display: none;
-			}
-		</style>
-		<?php
 	}
 );
 
