@@ -1,21 +1,7 @@
 (function ($) {
-	function checkPasswordStrength(pw, blacklist) {
-		var score = window.wp.passwordStrength.meter(pw, blacklist, '');
-
-		var message = window.pwsL10n.short;
-		switch (score) {
-			case 2 :
-				return window.pwsL10n.bad;
-
-			case 3 :
-				return window.pwsL10n.good;
-
-			case 4 :
-				return window.pwsL10n.strong;
-		}
-	}
-
 	var $account_type_field;
+
+	window.passwordBlacklist = [];
 
 	jQuery(document).ready(function () {
 		var $signup_form = $('#signup_form');
@@ -80,20 +66,19 @@
 		];
 
 		var $password_strength_notice = $('#password-strength-notice');
-		$('body').on('keyup', '#signup_password', function (e) {
-			var blacklistValues = [];
+		$('body').on('keyup change', '#signup_password', function (e) {
 			for (var i = 0; i < inputBlacklist.length; i++) {
 				var blacklistField = document.getElementById( inputBlacklist[i] );
 				if ( blacklistField ) {
 					var fieldValue = document.getElementById(inputBlacklist[ i ]).value;
 					if (4 <= fieldValue.length) {
 						// Exclude short items. See password-strength-meter.js.
-						blacklistValues.push(fieldValue);
+						window.passwordBlacklist.push(fieldValue);
 					}
 				}
 			}
 
-			var score = window.wp.passwordStrength.meter(e.target.value, blacklistValues, '');
+			var score = window.wp.passwordStrength.meter(e.target.value, window.passwordBlacklist, '');
 
 			var message = window.pwsL10n.short;
 			switch (score) {

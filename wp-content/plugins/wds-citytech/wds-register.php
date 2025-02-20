@@ -442,6 +442,9 @@ function openlab_get_profile_field_helper_text( $field_name ) {
 				$group_type_label
 			);
 
+		case 'password' :
+			return 'Your password should be at least nine characters long. To make it stronger, use upper and lower case letters, numbers, and symbols like ! " ? $ % ^ & ).';
+
 		default :
 			return '';
 	}
