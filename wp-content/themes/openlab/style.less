@@ -1884,6 +1884,31 @@ body form{
         width: 25%;
     }
 }
+
+#site-options {
+	#wds-website-external {
+		.form-group.row {
+			margin-bottom: 0;
+		}
+		.col-sm-18 {
+			align-items: flex-start;
+			display: flex;
+			gap: 12px;
+		}
+	}
+
+	#check-note-wrapper,
+	#find-feeds {
+		display: none !important;
+	}
+
+	&.selected-external {
+		#check-note-wrapper,
+		#find-feeds {
+			display: block !important;
+		}
+	}
+}
 .privacy-settings-note{
     padding-left: 20px;
     margin-top: -15px;
