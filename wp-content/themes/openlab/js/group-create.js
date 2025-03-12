@@ -197,6 +197,7 @@ jQuery( document ).ready(
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).removeClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
+							$( '.advanced-cloning-options-row').addClass( 'disabled' );
 						}
 
 					} else {
@@ -221,6 +222,7 @@ jQuery( document ).ready(
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).addClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).addClass( 'disabled' );
+							$( '.advanced-cloning-options-row').removeClass( 'disabled' );
 						}
 					}
 				}
@@ -435,6 +437,7 @@ jQuery( document ).ready(
 				// Hide 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).hide();
 				$( '#wds-website-existing' ).hide();
+				$( '.advanced-cloning-options-row').show();
 			} else {
 				// Show the Site Details section.
 				$( '#panel-site-details' ).show();
@@ -450,6 +453,7 @@ jQuery( document ).ready(
 				// Show 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).show();
 				$( '#wds-website-existing' ).show();
+				$( '.advanced-cloning-options-row').hide();
 
 				group_id_to_clone = 0;
 			}
@@ -705,7 +709,6 @@ jQuery( document ).ready(
 		function catchOutgoingFetches() {
 			// Save a reference to the original fetch function
 			const originalFetch = window.fetch;
-			console.log('monkey patching...')
 
 			window.fetch = async function(resource, init) {
 				const { endpoint } = window.SiteTemplatePicker;
