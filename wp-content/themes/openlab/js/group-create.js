@@ -168,64 +168,70 @@ jQuery( document ).ready(
 			}
 		}
 
-		function new_old_switch(noo) {
+		function new_old_switch( noo ) {
 			var radioid = '#new_or_old_' + noo;
-			$(radioid).prop('checked', true);
+			$( radioid ).prop( 'checked','checked' );
 
-			// Helper functions for enabling/disabling elements
-			function enableOptions(thisid) {
-				$(thisid).find('input, select').each(function () {
-					var $element = $(this);
-					if ($element.attr('type') !== 'radio') {
-						$element.removeClass('disabled-opt');
-						$element.prop('disabled', false).removeClass('disabled');
-					}
-				});
-			}
+			$( '.noo_radio' ).each(
+				function(i,v) {
+					var thisval = $( v ).val();
+					var thisid  = '#noo_' + thisval + '_options';
 
-			function disableOptions(thisid) {
-				$(thisid).find('input, select').each(function () {
-					var $element = $(this);
-					if ($element.attr('type') !== 'radio') {
-						$element.addClass('disabled-opt');
-						$element.prop('disabled', true).addClass('disabled');
-					}
-				});
-			}
+					if ( noo == thisval) {
+						$( thisid ).find( 'input' ).each(
+							function(index,element){
+												$( element ).removeClass( 'disabled-opt' );
+												$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
+							}
+						);
+						$( thisid ).find( 'select' ).each(
+							function(index,element){
+								if ($( element ).attr( 'type' ) !== 'radio') {
+									$( element ).removeClass( 'disabled-opt' );
+									$( element ).prop( 'disabled', false ).removeClass( 'disabled' );
+								}
+							}
+						);
 
-			// Handle enable/disable for all options
-			$('.noo_radio').each(function () {
-				var thisval = $(this).val();
-				var thisid = '#noo_' + thisval + '_options';
+									//for external site note
+						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
+							$( '#check-note' ).removeClass( 'disabled-opt' );
+							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
+						}
 
-				if (noo === thisval) {
-					enableOptions(thisid);
-					// External site-specific logic
-					if ($(this).attr('id') === 'new_or_old_external') {
-						$('#check-note').removeClass('disabled-opt');
-						$('#wds-website-external #find-feeds').removeClass('disabled');
-					}
-				} else {
-					disableOptions(thisid);
-					// External site-specific logic
-					if ($(this).attr('id') === 'new_or_old_external') {
-						$('#check-note').addClass('disabled-opt');
-						$('#wds-website-external #find-feeds').addClass('disabled');
+					} else {
+						$( thisid ).find( 'input' ).each(
+							function(index,element){
+								if ($( element ).attr( 'type' ) !== 'radio') {
+									$( element ).addClass( 'disabled-opt' );
+									$( element ).prop( 'disabled','disabled' ).addClass( 'disabled' );
+								}
+							}
+						);
+						$( thisid ).find( 'select' ).each(
+							function(index,element){
+								if ($( element ).attr( 'type' ) !== 'radio') {
+									$( element ).addClass( 'disabled-opt' );
+									$( element ).prop( 'disabled','disabled' ).addClass( 'disabled' );
+								}
+							}
+						);
+
+									//for external site note
+						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
+							$( '#check-note' ).addClass( 'disabled-opt' );
+							$( '#wds-website-external #find-feeds' ).addClass( 'disabled' );
+						}
 					}
 				}
-			});
+			);
 
-			// Remove any existing selected-* classes
-			$('#site-options').removeClass(function (index, className) {
-				return (className.match(/(^|\s)selected-\S+/g) || []).join(' ');
-			});
-
-			// Add the new selected class based on the value
-			$('#site-options').addClass('selected-' + noo);
-
-			// Handle external feed visibility
-			var $efr = $('#external-feed-results');
-			noo === 'external' ? $efr.show() : $efr.hide();
+			var efr = $( '#external-feed-results' );
+			if ( 'external' == noo ) {
+				$( efr ).show();
+			} else {
+				$( efr ).hide();
+			}
 		}
 
 		function disable_gc_form() {
