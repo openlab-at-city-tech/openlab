@@ -953,31 +953,33 @@ function openlab_group_member_role_settings( $group_type ) {
 			</div>
 
 			<div class="row">
-				<div class="member-role-definition col-sm-24">
-					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo esc_html( $group_type_name_uc ); ?> Member Role Definitions</div>
-					<div class="member-role-definition-text">
-						<ul>
-							<li><strong>Administrator</strong>: Someone who can change course, project, or club settings (such as changing privacy settings); edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs. They can also change the avatar, manage membership, and delete the course, project, or club.</li>
-							<li><strong>Moderator</strong>: Someone who can edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs.</li>
-							<li><strong>Member</strong>: Someone who can post in discussion forums, edit docs (depending on settings determined by the admin), and upload files.</li>
-						</ul>
-					</div>
-				</div>
+				<?php
+				openlab_render_collapsible_definition(
+					'member-role',
+					$group_type_name_uc . ' Member Role Definitions',
+					'<ul>
+						<li><strong>Administrator</strong>: Someone who can change course, project, or club settings (such as changing privacy settings); edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs. They can also change the avatar, manage membership, and delete the course, project, or club.</li>
+						<li><strong>Moderator</strong>: Someone who can edit course, project, or club details; edit, close, and delete discussion forum topics; and edit and delete docs.</li>
+						<li><strong>Member</strong>: Someone who can post in discussion forums, edit docs (depending on settings determined by the admin), and upload files.</li>
+					</ul>'
+				);
+				?>
 			</div>
 
 			<div class="row">
-				<div class="member-role-definition col-sm-24">
-					<div class="member-role-definition-label"><i class="fa fa-caret-square-o-right" aria-hidden="true"></i><?php echo esc_html( $group_type_name_uc ); ?> Site Member Role Definitions</div>
-					<div class="member-role-definition-text">
-						<ul>
-							<li><strong>Administrator</strong>: Someone who can control every aspect of a site, from managing content and comments, to choosing site themes to activating widgets and plugins.  In most cases, you should not make another site user an Administrator unless you want them to have equal control over your site content and functions.</li>
-							<li><strong>Editor</strong>: Someone who can write and publish posts, as well as manage the posts of other users.  Editors can also make changes to pages, but cannot change the theme, menu, widgets, plugins, or edit other user roles.</li>
-							<li><strong>Author</strong>: Someone who can publish and edit their own content, but cannot change or delete anything that anyone else has created on the site.  In most cases, if you are adding additional users to your site, making them site Authors is the best choice.</li>
-							<li><strong>Contributor</strong>: Someone who can write and edit their own posts, but can’t publish them.  They can save them as drafts for an Editor or Administrator to publish.</li>
-							<li><strong>Subscriber</strong>: Someone who can only log in and manage their profile, but they can’t post or change anything on the site.</li>
-						</ul>
-					</div>
-				</div>
+				<?php
+				openlab_render_collapsible_definition(
+					'site-member-role',
+					$group_type_name_uc . ' Site Member Role Definitions',
+					'<ul>
+						<li><strong>Administrator</strong>: Someone who can control every aspect of a site, from managing content and comments, to choosing site themes to activating widgets and plugins.  In most cases, you should not make another site user an Administrator unless you want them to have equal control over your site content and functions.</li>
+						<li><strong>Editor</strong>: Someone who can write and publish posts, as well as manage the posts of other users.  Editors can also make changes to pages, but cannot change the theme, menu, widgets, plugins, or edit other user roles.</li>
+						<li><strong>Author</strong>: Someone who can publish and edit their own content, but cannot change or delete anything that anyone else has created on the site.  In most cases, if you are adding additional users to your site, making them site Authors is the best choice.</li>
+						<li><strong>Contributor</strong>: Someone who can write and edit their own posts, but can’t publish them.  They can save them as drafts for an Editor or Administrator to publish.</li>
+						<li><strong>Subscriber</strong>: Someone who can only log in and manage their profile, but they can’t post or change anything on the site.</li>
+					</ul>'
+				);
+				?>
 			</div>
 		</div>
 	</div>

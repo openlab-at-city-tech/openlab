@@ -21,7 +21,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.eventValidation();
 			OpenLab.utility.refreshActivity();
 			OpenLab.utility.refreshWhatsHappeningAtCityTech();
-			OpenLab.utility.initMemberRoleDefinitions();
+			OpenLab.utility.initCollapsibleDefinitions();
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
 			OpenLab.utility.initClickableCards();
 			OpenLab.utility.initPortfolioProfileLinkToggle();
@@ -664,15 +664,15 @@ OpenLab.utility = (function ($) {
 
 			} );
 		},
-		initMemberRoleDefinitions: function() {
-			$( '.member-role-definition-label' ).on(
+		initCollapsibleDefinitions: function() {
+			$( '.collapsible-definition-label' ).on(
 				'click',
 				function( e ) {
 					$clicked = $( e.target );
-					$def     = $clicked.closest( '.member-role-definition' );
+					$def     = $clicked.closest( '.collapsible-definition' );
 
 					$clicked.find( 'i' ).toggleClass( 'fa-caret-square-o-right' ).toggleClass( 'fa-caret-square-o-down' );
-					$clicked.closest( '.member-role-definition' ).toggleClass( 'show-definition-text' );
+					$clicked.closest( '.collapsible-definition' ).toggleClass( 'show-definition-text' );
 				}
 			);
 		},
