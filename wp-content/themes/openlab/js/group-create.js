@@ -226,6 +226,15 @@ jQuery( document ).ready(
 				}
 			);
 
+			// Remove any existing selected-* classes
+			$('#site-options').removeClass(function (index, className) {
+						 return (className.match(/(^|\s)selected-\S+/g) || []).join(' ');
+			});
+
+			// Add the new selected class based on the value
+			$('#site-options').addClass('selected-' + noo);
+			console.log('selected-' + noo);
+
 			var efr = $( '#external-feed-results' );
 			if ( 'external' == noo ) {
 				$( efr ).show();
