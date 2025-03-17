@@ -98,7 +98,7 @@ function openlab_clone_create_form_catcher() {
 				// Collect information from Advanced Options.
 				$clone_options = [
 					'draft_posts'        => isset( $_POST['clone-draft-posts'] ) && 'yes' === $_POST['clone-draft-posts'],
-					'publish_posts'      => isset( $_POST['clone-publish_posts'] ) && 'yes' === $_POST['clone-publish-posts'],
+					'publish_posts'      => isset( $_POST['clone-publish-posts'] ) && 'yes' === $_POST['clone-publish-posts'],
 					'set_dates_to_today' => isset( $_POST['clone-set-dates-to-today'] ) && 'yes' === $_POST['clone-set-dates-to-today'],
 					'unused_media'       => isset( $_POST['clone-unused-media'] ) && 'yes' === $_POST['clone-unused-media'],
 				];
@@ -1107,6 +1107,30 @@ class Openlab_Clone_Course_Site {
 				if ( ! empty( $classes ) && in_array( 'menu-item-group-profile-link', $classes ) ) {
 					$group = groups_get_group( $this->group_id );
 					update_post_meta( $sp->ID, '_menu_item_url', bp_get_group_permalink( $group ) );
+				}
+			}
+		}
+
+		// If 'publish_posts' option is set to 'no', bulk update all published posts to draft.
+		if ( ! $clone_options['publish_posts'] && ! empty( $site_posts ) ) {
+			// Get IDs of all published posts that survived the previous filters
+			$published_post_ids = $wpdb->get_col( $wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_status = %s
+				 AND ID NOT IN (" . implode( ',', array_map( 'intval', $posts_to_delete_ids ) ) . ")",
+				'publish'
+			) );
+
+			if ( ! empty( $published_post_ids ) ) {
+				// Bulk update all published posts to draft
+				$wpdb->query( $wpdb->prepare(
+					"UPDATE {$wpdb->posts} SET post_status = %s WHERE ID IN (" .
+					implode( ',', array_map( 'intval', $published_post_ids ) ) . ")",
+					'draft'
+				) );
+
+				// Clear caches
+				foreach ( $published_post_ids as $post_id ) {
+					clean_post_cache( $post_id );
 				}
 			}
 		}
