@@ -95,6 +95,16 @@ function openlab_clone_create_form_catcher() {
 
 				groups_update_groupmeta( $new_group_id, 'clone_steps', $clone_steps );
 
+				// Collect information from Advanced Options.
+				$clone_options = [
+					'draft_posts'        => isset( $_POST['clone-draft-posts'] ) && 'yes' === $_POST['clone-draft-posts'],
+					'publish_posts'      => isset( $_POST['clone-publish_posts'] ) && 'yes' === $_POST['clone-publish-posts'],
+					'set_dates_to_today' => isset( $_POST['clone-set-dates-to-today'] ) && 'yes' === $_POST['clone-set-dates-to-today'],
+					'unused_media'       => isset( $_POST['clone-unused-media'] ) && 'yes' === $_POST['clone-unused-media'],
+				];
+
+				groups_update_groupmeta( $new_group_id, 'clone_options', $clone_options );
+
 				$async = openlab_clone_async_process();
 				$async->data( [ 'group_id' => $new_group_id ] )->dispatch();
 			}
@@ -1016,6 +1026,18 @@ class Openlab_Clone_Course_Site {
 
 		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
 		$source_group_admins = $this->get_source_group_admins();
+
+		$clone_options = array_merge(
+			[
+				'draft_posts'        => true,
+				'publish_posts'      => true,
+				'set_dates_to_today' => true,
+				'unused_media'       => false,
+			],
+			(array) groups_get_groupmeta( $this->group_id, 'clone_options' )
+		);
+
+		$clone_options = array_map( 'boolval', $clone_options );
 
 		$posts_to_delete_ids = [];
 		$atts_to_delete_ids  = [];

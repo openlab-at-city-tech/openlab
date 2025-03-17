@@ -853,11 +853,11 @@ function wds_bp_group_meta() {
 										If you have pages and posts in draft (unpublished) on the site you are cloning, those will be copied over to the new site. If you do not wish to clone draft items, change the setting below.
 									</p>
 									<label>
-										<input type="radio" name="clone_draft_posts" value="yes" checked> Yes
+										<input type="radio" name="clone-draft-posts" value="yes" checked> Yes
 									</label>
 									<br>
 									<label>
-										<input type="radio" name="clone_draft_posts" value="no"> No: Do not clone draft posts and pages
+										<input type="radio" name="clone-draft-posts" value="no"> No: Do not clone draft posts and pages
 									</label>
 								</fieldset>
 
@@ -867,11 +867,11 @@ function wds_bp_group_meta() {
 										All posts and pages that are published on the site you are cloning will also be published on the new site. If you would prefer to publish them gradually, you may wish to set them to draft on the new site by changing the setting below.
 									</p>
 									<label>
-										<input type="radio" name="publish_posts" value="yes" checked> Yes
+										<input type="radio" name="clone-publish-posts" value="yes" checked> Yes
 									</label>
 									<br>
 									<label>
-										<input type="radio" name="publish_posts" value="no"> No: Set all currently-published posts and pages to draft
+										<input type="radio" name="clone-publish-posts" value="no"> No: Set all currently-published posts and pages to draft
 									</label>
 								</fieldset>
 
@@ -881,11 +881,11 @@ function wds_bp_group_meta() {
 										Post and page publication dates will be set to today on your new site, but the current publication order will be maintained. This prevents posts and pages from appearing out of date, especially if you are cloning an older site. You can choose to keep the existing publication dates by changing the setting below.
 									</p>
 									<label>
-										<input type="radio" name="set_post_dates" value="yes" checked> Yes
+										<input type="radio" name="clone-set-dates-to-today" value="yes" checked> Yes
 									</label>
 									<br>
 									<label>
-										<input type="radio" name="set_post_dates" value="no"> No: Keep the existing publication dates
+										<input type="radio" name="clone-set-dates-to-today" value="no"> No: Keep the existing publication dates
 									</label>
 								</fieldset>
 
@@ -895,11 +895,11 @@ function wds_bp_group_meta() {
 										Media library items that are not being used in a page or post will not be cloned to the new site, allowing you to save space on your new site. If you would like to clone unused items, change the setting below.
 									</p>
 									<label>
-										<input type="radio" name="clone_unused_media" value="yes"> Yes
+										<input type="radio" name="clone-unused-media" value="yes"> Yes
 									</label>
 									<br>
 									<label>
-										<input type="radio" name="clone_unused_media" value="no" checked> No (default)
+										<input type="radio" name="clone-unused-media" value="no" checked> No (default)
 									</label>
 								</fieldset>
 							';
