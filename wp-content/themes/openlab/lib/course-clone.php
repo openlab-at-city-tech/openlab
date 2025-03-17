@@ -1242,9 +1242,14 @@ class Openlab_Clone_Course_Site {
 			wp_mkdir_p( $dest );
 		}
 
-		// Loop through the folder if it's not in the skip list
+		// Permissions may prevent us from accessing a directory. Skip rather than fatal.
 		$dir = dir( $source );
-		if( ! in_array( $source, $skip, true ) ) {
+		if ( ! $dir ) {
+			return false;
+		}
+
+		// Loop through the folder if it's not in the skip list
+		if ( ! in_array( $source, $skip, true ) ) {
 			while ( false !== $entry = $dir->read() ) {
 				// Skip pointers
 				if ( '.' === $entry || '..' === $entry ) {
