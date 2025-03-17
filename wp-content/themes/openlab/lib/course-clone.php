@@ -1024,7 +1024,7 @@ class Openlab_Clone_Course_Site {
 		];
 		self::copyr( $source_dir, $upload_dir['basedir'], $skip_dirs );
 
-		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
+		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts} ORDER BY ID ASC" );
 		$source_group_admins = $this->get_source_group_admins();
 
 		$clone_options = array_merge(
@@ -1039,12 +1039,31 @@ class Openlab_Clone_Course_Site {
 
 		$clone_options = array_map( 'boolval', $clone_options );
 
-		$posts_to_delete_ids = [];
-		$atts_to_delete_ids  = [];
+		$posts_to_delete_ids      = [];
+		$atts_to_delete_ids       = [];
+		$drafts_to_be_deleted_ids = [];
 		foreach ( $site_posts as $sp ) {
 			// Skip Custom CSS post.
 			if ( 'custom_css' === $sp->post_type) {
 				continue;
+			}
+
+			// If the 'clone drafts' option was set to 'no', set drafts to be deleted.
+			if ( ! $clone_options['draft_posts'] ) {
+				if ( 'draft' === $sp->post_status ) {
+					$posts_to_delete_ids[]      = $sp->ID;
+					$drafts_to_be_deleted_ids[] = $sp->ID;
+					continue;
+				}
+
+				/*
+				 * Also delete children of drafts. These should already be
+				 * mapped due to the ID ASC ordering of the query.
+				 */
+				if ( in_array( $sp->post_parent, $drafts_to_be_deleted_ids ) ) {
+					$posts_to_delete_ids[] = $sp->ID;
+					continue;
+				}
 			}
 
 			if ( ! is_super_admin( $sp->post_author ) && ! in_array( $sp->post_author, $source_group_admins ) && 'nav_menu_item' !== $sp->post_type ) {
