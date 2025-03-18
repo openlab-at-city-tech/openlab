@@ -1135,6 +1135,60 @@ class Openlab_Clone_Course_Site {
 			}
 		}
 
+		// After handling 'publish_posts' option but before the deletion operations
+		if ( $clone_options['set_dates_to_today'] && ! empty( $site_posts ) ) {
+			// Get current date
+			$today      = current_time( 'mysql' );
+			$today_date = current_time( 'Y-m-d' );
+
+			// Get all published posts that aren't scheduled for deletion, ordered by post_date
+			$posts_to_update = $wpdb->get_results(
+				"SELECT ID, post_date, post_date_gmt FROM {$wpdb->posts}
+				 WHERE post_status = 'publish'
+				 AND ID NOT IN (" . ( ! empty( $posts_to_delete_ids ) ? implode( ',', array_map( 'intval', $posts_to_delete_ids ) ) : '0' ) . ")
+				 ORDER BY post_date ASC"
+			);
+
+			if ( ! empty( $posts_to_update ) ) {
+				// Calculate time interval (in seconds) between posts to maintain order
+				// We'll distribute them across a 12-hour period
+				$total_posts      = count( $posts_to_update );
+				$seconds_per_post = min( 60, floor( ( 12 * 60 * 60 ) / $total_posts ) );
+
+				// Start time will be 8am today (or current time if it's after 8am)
+				$start_time = max(
+					strtotime( $today_date . ' 08:00:00' ),
+					strtotime( $today )
+				);
+
+				foreach ( $posts_to_update as $index => $post ) {
+					// Calculate the new date, each post is separated by $seconds_per_post
+					$new_date = date( 'Y-m-d H:i:s', $start_time + ( $index * $seconds_per_post ) );
+
+					// Calculate the GMT date based on site's timezone offset
+					$gmt_offset   = get_option( 'gmt_offset' );
+					$new_date_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $new_date ) - ( $gmt_offset * HOUR_IN_SECONDS ) );
+
+					// Update the post dates
+					$wpdb->update(
+						$wpdb->posts,
+						array(
+							'post_date'         => $new_date,
+							'post_date_gmt'     => $new_date_gmt,
+							'post_modified'     => $new_date,
+							'post_modified_gmt' => $new_date_gmt,
+						),
+						array(
+							'ID' => $post->ID,
+						)
+					);
+
+					// Clear post cache
+					clean_post_cache( $post->ID );
+				}
+			}
+		}
+
 		// Delete all edit locks.
 		$wpdb->delete(
 			$wpdb->postmeta,

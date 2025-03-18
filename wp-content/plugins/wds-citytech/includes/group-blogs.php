@@ -899,7 +899,7 @@ function wds_bp_group_meta() {
 									</label>
 									<br>
 									<label>
-										<input type="radio" name="clone-unused-media" value="no" checked> No (default)
+										<input type="radio" name="clone-unused-media" value="no" checked> No
 									</label>
 								</fieldset>
 							';
