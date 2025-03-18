@@ -1213,6 +1213,33 @@ class Openlab_Clone_Course_Site {
 			wp_delete_post( $post_id, true );
 		}
 
+		if ( ! $clone_options['unused_media'] ) {
+			// Find all orphaned attachments with either:
+			// 1. post_parent = 0, or
+			// 2. post_parent pointing to a non-existent post
+			$orphaned_att_ids = $wpdb->get_col(
+				"SELECT p.ID
+				FROM {$wpdb->posts} p
+				WHERE p.post_type = 'attachment'
+				AND (
+					p.post_parent = 0
+					OR NOT EXISTS (
+						SELECT 1
+						FROM {$wpdb->posts} parent
+						WHERE parent.ID = p.post_parent
+						AND parent.post_type != 'attachment'
+					)
+				)"
+			);
+
+			// Delete the orphaned attachments
+			if ( ! empty( $orphaned_att_ids ) ) {
+				foreach ( $orphaned_att_ids as $att_id ) {
+					wp_delete_attachment( $att_id, true );
+				}
+			}
+		}
+
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
 
