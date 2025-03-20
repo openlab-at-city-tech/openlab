@@ -484,51 +484,52 @@ input:disabled+label {
             margin-bottom: 2em;
         }
     }
+}
 
-    .member-role-definition {
-        margin-bottom: 1em;
+/* Collapsible definitions */
+.collapsible-definition {
+	margin-bottom: 1em;
 
-        .member-role-definition-label {
-            cursor: pointer;
-            font-weight: 600;
-            text-decoration: underline;
+	.collapsible-definition-label {
+		cursor: pointer;
+		font-weight: 600;
+		text-decoration: underline;
 
-            &:hover {
-                text-decoration: none;
-            }
-        }
+		&:hover {
+			text-decoration: none;
+		}
+	}
 
-        .member-role-definition-text {
-            display: none;
-            background: @panel-default-heading-bg;
-            margin-left: 15px;
-            margin-top: 5px;
+	.collapsible-definition-text {
+		display: none;
+		background: @panel-default-heading-bg;
+		margin-left: 15px;
+		margin-top: 5px;
 
-            ul {
-                list-style-type: none;
-                margin-top: 0;
-                padding: 10px;
-            }
+		ul {
+			list-style-type: none;
+			margin-top: 0;
+			padding: 10px;
+		}
 
-            strong {
-                font-weight: 600;
-            }
-        }
+		strong {
+			font-weight: 600;
+		}
+	}
 
-        &.show-definition-text {
-            .member-role-definition-text {
-                display: block;
-            }
+	&.show-definition-text {
+		.collapsible-definition-text {
+			display: block;
+		}
 
-            .member-role-definition-label {
-                text-decoration: none;
+		.collapsible-definition-label {
+			text-decoration: none;
 
-                &:hover {
-                    text-decoration: underline;
-                }
-            }
-        }
-    }
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
 }
 .import-acknowledge {
 	label {
@@ -5776,5 +5777,30 @@ p.private-membership-indicator {
 .two-factor-methods-table {
 	.col-primary {
 		display: none;
+	}
+}
+
+#site-options {
+	#wds-website-external {
+		.form-group.row {
+			margin-bottom: 0;
+		}
+		.col-sm-18 {
+			align-items: flex-start;
+			display: flex;
+			gap: 12px;
+		}
+	}
+
+	#check-note-wrapper,
+	#find-feeds {
+		display: none !important;
+	}
+
+	&.selected-external {
+		#check-note-wrapper,
+		#find-feeds {
+			display: block !important;
+		}
 	}
 }

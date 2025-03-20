@@ -7699,38 +7699,39 @@ input:disabled + label {
 .panel.member-roles ul.member-role-selectors li {
   margin-bottom: 2em;
 }
-.panel.member-roles .member-role-definition {
+/* Collapsible definitions */
+.collapsible-definition {
   margin-bottom: 1em;
 }
-.panel.member-roles .member-role-definition .member-role-definition-label {
+.collapsible-definition .collapsible-definition-label {
   cursor: pointer;
   font-weight: 600;
   text-decoration: underline;
 }
-.panel.member-roles .member-role-definition .member-role-definition-label:hover {
+.collapsible-definition .collapsible-definition-label:hover {
   text-decoration: none;
 }
-.panel.member-roles .member-role-definition .member-role-definition-text {
+.collapsible-definition .collapsible-definition-text {
   display: none;
   background: #f5f5f5;
   margin-left: 15px;
   margin-top: 5px;
 }
-.panel.member-roles .member-role-definition .member-role-definition-text ul {
+.collapsible-definition .collapsible-definition-text ul {
   list-style-type: none;
   margin-top: 0;
   padding: 10px;
 }
-.panel.member-roles .member-role-definition .member-role-definition-text strong {
+.collapsible-definition .collapsible-definition-text strong {
   font-weight: 600;
 }
-.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-text {
+.collapsible-definition.show-definition-text .collapsible-definition-text {
   display: block;
 }
-.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label {
+.collapsible-definition.show-definition-text .collapsible-definition-label {
   text-decoration: none;
 }
-.panel.member-roles .member-role-definition.show-definition-text .member-role-definition-label:hover {
+.collapsible-definition.show-definition-text .collapsible-definition-label:hover {
   text-decoration: underline;
 }
 .import-acknowledge label {
@@ -12493,4 +12494,20 @@ p.private-membership-indicator {
 }
 .two-factor-methods-table .col-primary {
   display: none;
+}
+#site-options #wds-website-external .form-group.row {
+  margin-bottom: 0;
+}
+#site-options #wds-website-external .col-sm-18 {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+}
+#site-options #check-note-wrapper,
+#site-options #find-feeds {
+  display: none !important;
+}
+#site-options.selected-external #check-note-wrapper,
+#site-options.selected-external #find-feeds {
+  display: block !important;
 }

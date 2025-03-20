@@ -38,12 +38,14 @@ function openlab_hide_plugins( $plugins ) {
 		'cac-non-cuny-signup/loader.php',
 		'cardboard/cardboard.php',
 		'category-sticky-post/category-sticky-post.php', // #3440
+		'content-aware-sidebars/content-aware-sidebars.php', // #3498
 		'cubepoints/cubepoints.php',
 		'distributor/distributor.php', // #3279
 		'dk-pdf/dk-pdf.php',
 		'download-media-library/download-media-library.php',
 		'dw-question-answer/dw-question-answer.php',
 		'dynamic-widgets/dynamic-widgets.php',
+		'easy-custom-sidebars/easy-custom-sidebars.php', // #3502
 		'easy-table/easy-table.php',
 		'echo-knowledge-base/echo-knowledge-base.php', // #3455
 		'edge-suite/edge-suite.php',
