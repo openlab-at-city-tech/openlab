@@ -96,6 +96,15 @@ class AttributionModal extends Component {
 				} )
 			} )
 		}, 100 )
+
+		// Add a focus capture event to the modal container
+		const modal = document.querySelector('.component-attributions-modal');
+		if (modal) {
+			modal.addEventListener('focusin', (event) => {
+				// Stop the event from bubbling up to WordPress's listeners
+				event.stopPropagation();
+			}, true); // Use capture phase
+		}
 	}
 
 	setFocusedElement( element ) {
