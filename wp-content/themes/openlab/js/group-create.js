@@ -197,6 +197,7 @@ jQuery( document ).ready(
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).removeClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
+							hideAdvancedCloningOptions();
 						}
 
 					} else {
@@ -221,6 +222,7 @@ jQuery( document ).ready(
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).addClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).addClass( 'disabled' );
+							showAdvancedCloningOptions();
 						}
 					}
 				}
@@ -241,6 +243,14 @@ jQuery( document ).ready(
 			} else {
 				$( efr ).hide();
 			}
+		}
+
+		function showAdvancedCloningOptions() {
+			$( '.advanced-cloning-options-row').show();
+		}
+
+		function hideAdvancedCloningOptions() {
+			$( '.advanced-cloning-options-row').hide();
 		}
 
 		function disable_gc_form() {
@@ -435,6 +445,7 @@ jQuery( document ).ready(
 				// Hide 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).hide();
 				$( '#wds-website-existing' ).hide();
+				showAdvancedCloningOptions();
 			} else {
 				// Show the Site Details section.
 				$( '#panel-site-details' ).show();
@@ -450,6 +461,7 @@ jQuery( document ).ready(
 				// Show 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).show();
 				$( '#wds-website-existing' ).show();
+				hideAdvancedCloningOptions();
 
 				group_id_to_clone = 0;
 			}
@@ -705,7 +717,6 @@ jQuery( document ).ready(
 		function catchOutgoingFetches() {
 			// Save a reference to the original fetch function
 			const originalFetch = window.fetch;
-			console.log('monkey patching...')
 
 			window.fetch = async function(resource, init) {
 				const { endpoint } = window.SiteTemplatePicker;

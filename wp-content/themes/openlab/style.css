@@ -8899,6 +8899,28 @@ body form .checkbox-list-container {
 .groupblog-setup th {
   width: 25%;
 }
+.advanced-cloning-options-row {
+  margin-top: 2em;
+}
+.advanced-cloning-options-row.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.advanced-cloning-options-row .advanced-cloning-options-gloss {
+  font-style: italic;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.advanced-cloning-options-row .collapsible-definition-text {
+  padding: 12px;
+}
+.advanced-cloning-options-row fieldset {
+  margin-bottom: 24px;
+}
+.advanced-cloning-options-row label {
+  font-weight: normal;
+  padding-left: 16px;
+}
 .privacy-settings-note {
   padding-left: 20px;
   margin-top: -15px;

@@ -842,6 +842,75 @@ function wds_bp_group_meta() {
 							</div>
 							<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
 						</div>
+
+						<div class="row advanced-cloning-options-row">
+							<?php
+
+							$advanced_option_markup = '
+								<fieldset>
+									<legend>Clone posts and pages that are currently set to draft (unpublished)?</legend>
+									<p class="advanced-cloning-options-gloss">
+										If you have pages and posts in draft (unpublished) on the site you are cloning, those will be copied over to the new site. If you do not wish to clone draft items, change the setting below.
+									</p>
+									<label>
+										<input type="radio" name="clone-draft-posts" value="yes" checked> Yes
+									</label>
+									<br>
+									<label>
+										<input type="radio" name="clone-draft-posts" value="no"> No: Do not clone draft posts and pages
+									</label>
+								</fieldset>
+
+								<fieldset>
+									<legend>Publish all currently-published posts and pages on your new site?</legend>
+									<p class="advanced-cloning-options-gloss">
+										All posts and pages that are published on the site you are cloning will also be published on the new site. If you would prefer to publish them gradually, you may wish to set them to draft on the new site by changing the setting below.
+									</p>
+									<label>
+										<input type="radio" name="clone-publish-posts" value="yes" checked> Yes
+									</label>
+									<br>
+									<label>
+										<input type="radio" name="clone-publish-posts" value="no"> No: Set all currently-published posts and pages to draft
+									</label>
+								</fieldset>
+
+								<fieldset>
+									<legend>Set post and page publication dates to today (while maintaining the current publication order)?</legend>
+									<p class="advanced-cloning-options-gloss">
+										Post and page publication dates will be set to today on your new site, but the current publication order will be maintained. This prevents posts and pages from appearing out of date, especially if you are cloning an older site. You can choose to keep the existing publication dates by changing the setting below.
+									</p>
+									<label>
+										<input type="radio" name="clone-set-dates-to-today" value="yes" checked> Yes
+									</label>
+									<br>
+									<label>
+										<input type="radio" name="clone-set-dates-to-today" value="no"> No: Keep the existing publication dates
+									</label>
+								</fieldset>
+
+								<fieldset>
+									<legend>Clone unused media library items?</legend>
+									<p class="advanced-cloning-options-gloss">
+										Media library items that are not being used in a page or post will not be cloned to the new site, allowing you to save space on your new site. If you would like to clone unused items, change the setting below.
+									</p>
+									<label>
+										<input type="radio" name="clone-unused-media" value="yes"> Yes
+									</label>
+									<br>
+									<label>
+										<input type="radio" name="clone-unused-media" value="no" checked> No
+									</label>
+								</fieldset>
+							';
+
+							openlab_render_collapsible_definition(
+								'advanced-cloning-options',
+								'Advanced Options',
+								$advanced_option_markup
+							);
+							?>
+						</div>
 					</div><!-- #site-options -->
 				<?php endif; ?>
 			</div>
