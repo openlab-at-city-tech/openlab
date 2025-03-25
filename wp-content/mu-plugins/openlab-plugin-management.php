@@ -5,14 +5,13 @@
  * on the Plugins page of their individual sites
  */
 
-function openlab_hide_plugins( $plugins ) {
-	$network_admin_only = array();
-
-	if ( defined( 'WP_CLI' ) ) {
-		return $plugins;
-	}
-
-	$super_admin_only = array(
+/**
+ * Gets a list of plugins that are hidden from the Plugins page.
+ *
+ * @return array
+ */
+function openlab_get_hidden_plugins() {
+	return [
 		'1-jquery-photo-gallery-slideshow-flash/wp-1pluginjquery.php',
 		'accordion-shortcodes/accordion-shortcodes.php',
 		'achievements/achievements.php',
@@ -123,7 +122,23 @@ function openlab_hide_plugins( $plugins ) {
 		'wpbadgedisplay/wpbadgedisplay.php',
 		'wpbadger/wpbadger.php',
 		'wp-to-twitter/wp-to-twitter.php',
-	);
+	];
+}
+
+/**
+ * Controls which plugins are shown to users on the Plugins page of their individual sites.
+ *
+ * @param array $plugins An array of plugin data.
+ * @return array
+ */
+function openlab_hide_plugins( $plugins ) {
+	$network_admin_only = array();
+
+	if ( defined( 'WP_CLI' ) ) {
+		return $plugins;
+	}
+
+	$super_admin_only = openlab_get_hidden_plugins();
 
 	if ( ! is_super_admin() ) {
 		foreach ( $plugins as $pkey => $plugin ) {
