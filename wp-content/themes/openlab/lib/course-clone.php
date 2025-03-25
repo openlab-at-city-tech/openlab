@@ -892,6 +892,14 @@ class Openlab_Clone_Course_Site {
 			'tec_', // Forces The Events Calendar to reinitialize.
 		];
 
+		// Remove hidden plugins from active_plugins option.
+		if ( isset( $options['active_plugins'] ) ) {
+			$options['active_plugins'] = array_diff(
+				$options['active_plugins'],
+				openlab_get_hidden_plugins()
+			);
+		}
+
 		// now write them all back
 		switch_to_blog( $this->site_id );
 		foreach ( $options as $key => $value ) {
