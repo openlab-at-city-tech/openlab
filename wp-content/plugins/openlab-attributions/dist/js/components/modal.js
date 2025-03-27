@@ -68,7 +68,7 @@ class AttributionModal extends Component {
 		document.addEventListener( 'keydown', this.handleKeyDown );
 
 		// eslint-disable-next-line
-		document.addEventListener( 'focusin', this.handleFocusIn );
+		document.addEventListener( 'focusin', this.handleFocusIn, true );
 
 		// Set focus on the first input in .component-attributions-modal.
 		setTimeout( () => {
@@ -96,15 +96,6 @@ class AttributionModal extends Component {
 				} )
 			} )
 		}, 100 )
-
-		// Add a focus capture event to the modal container
-		const modal = document.querySelector('.component-attributions-modal');
-		if (modal) {
-			modal.addEventListener('focusin', (event) => {
-				// Stop the event from bubbling up to WordPress's listeners
-				event.stopPropagation();
-			}, true); // Use capture phase
-		}
 	}
 
 	setFocusedElement( element ) {
@@ -130,6 +121,8 @@ class AttributionModal extends Component {
 	}
 
 	handleFocusIn( event ) {
+		event.stopPropagation();
+
 		const isModal = event.target.closest( '.component-attributions-modal' );
 		if ( ! isModal ) {
 			return;
