@@ -228,8 +228,10 @@ jQuery( document ).ready(
 
 			if ( 'clone' == noo ) {
 				showAdvancedCloningOptions();
+				$( '#cloned-site-url' ).show();
 			} else {
 				hideAdvancedCloningOptions();
+				$( '#cloned-site-url' ).hide();
 			}
 
 			// Remove any existing selected-* classes
