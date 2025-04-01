@@ -197,7 +197,6 @@ jQuery( document ).ready(
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).removeClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
-							hideAdvancedCloningOptions();
 						}
 
 					} else {
@@ -218,15 +217,20 @@ jQuery( document ).ready(
 							}
 						);
 
-									//for external site note
+						// for external site note
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).addClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).addClass( 'disabled' );
-							showAdvancedCloningOptions();
 						}
 					}
 				}
 			);
+
+			if ( 'clone' == noo ) {
+				showAdvancedCloningOptions();
+			} else {
+				hideAdvancedCloningOptions();
+			}
 
 			// Remove any existing selected-* classes
 			$('#site-options').removeClass(function (index, className) {
