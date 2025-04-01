@@ -493,10 +493,13 @@ input:disabled+label {
 	.collapsible-definition-label {
 		cursor: pointer;
 		font-weight: 600;
-		text-decoration: underline;
 
-		&:hover {
-			text-decoration: none;
+		span {
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+			}
 		}
 	}
 
@@ -522,7 +525,7 @@ input:disabled+label {
 			display: block;
 		}
 
-		.collapsible-definition-label {
+		.collapsible-definition-label span {
 			text-decoration: none;
 
 			&:hover {

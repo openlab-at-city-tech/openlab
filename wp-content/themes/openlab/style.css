@@ -7706,9 +7706,11 @@ input:disabled + label {
 .collapsible-definition .collapsible-definition-label {
   cursor: pointer;
   font-weight: 600;
+}
+.collapsible-definition .collapsible-definition-label span {
   text-decoration: underline;
 }
-.collapsible-definition .collapsible-definition-label:hover {
+.collapsible-definition .collapsible-definition-label span:hover {
   text-decoration: none;
 }
 .collapsible-definition .collapsible-definition-text {
@@ -7728,10 +7730,10 @@ input:disabled + label {
 .collapsible-definition.show-definition-text .collapsible-definition-text {
   display: block;
 }
-.collapsible-definition.show-definition-text .collapsible-definition-label {
+.collapsible-definition.show-definition-text .collapsible-definition-label span {
   text-decoration: none;
 }
-.collapsible-definition.show-definition-text .collapsible-definition-label:hover {
+.collapsible-definition.show-definition-text .collapsible-definition-label span:hover {
   text-decoration: underline;
 }
 .import-acknowledge label {
