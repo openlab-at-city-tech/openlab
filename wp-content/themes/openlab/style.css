@@ -8913,10 +8913,13 @@ body form .checkbox-list-container {
   margin-bottom: 12px;
 }
 .advanced-cloning-options-row .collapsible-definition-text {
-  padding: 12px;
+  padding: 16px;
 }
 .advanced-cloning-options-row fieldset {
   margin-bottom: 24px;
+}
+.advanced-cloning-options-row fieldset:last-child {
+  margin-bottom: 0;
 }
 .advanced-cloning-options-row label {
   font-weight: normal;
