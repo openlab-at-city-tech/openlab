@@ -177,7 +177,7 @@ jQuery( document ).ready(
 					var thisval = $( v ).val();
 					var thisid  = '#noo_' + thisval + '_options';
 
-					if ( noo == thisval) {
+					if ( noo == thisval ) {
 						$( thisid ).find( 'input' ).each(
 							function(index,element){
 												$( element ).removeClass( 'disabled-opt' );
@@ -193,7 +193,7 @@ jQuery( document ).ready(
 							}
 						);
 
-									//for external site note
+						// for external site note
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).removeClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
@@ -235,7 +235,6 @@ jQuery( document ).ready(
 
 			// Add the new selected class based on the value
 			$('#site-options').addClass('selected-' + noo);
-			console.log('selected-' + noo);
 
 			var efr = $( '#external-feed-results' );
 			if ( 'external' == noo ) {
@@ -246,11 +245,11 @@ jQuery( document ).ready(
 		}
 
 		function showAdvancedCloningOptions() {
-			$( '.advanced-cloning-options-row').show();
+			$( '.advanced-cloning-options-row' ).show();
 		}
 
 		function hideAdvancedCloningOptions() {
-			$( '.advanced-cloning-options-row').hide();
+			$( '.advanced-cloning-options-row' ).hide();
 		}
 
 		function disable_gc_form() {
