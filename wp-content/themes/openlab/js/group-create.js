@@ -415,6 +415,8 @@ jQuery( document ).ready(
 
 					enable_gc_form();
 					unmark_loading( $( e.target ) );
+
+					$( '#check-note' ).hide();
 				}
 			);
 		}
