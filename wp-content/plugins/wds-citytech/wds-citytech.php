@@ -2862,6 +2862,9 @@ add_filter(
 		$types['dwg|dxf|acd|dwt'] = 'application/acad';
 		$types['vwx']             = 'application/vnd.vectorworks';
 
+		// Photoshop - #3515
+		$types['psd'] = 'image/vnd.adobe.photoshop';
+
 		return $types;
 	}
 );
