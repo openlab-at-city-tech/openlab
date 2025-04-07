@@ -1,3 +1,3 @@
 (function($){
-	console.log('doing fine now' );
+//	console.log('doing fine now' );
 }(jQuery));
