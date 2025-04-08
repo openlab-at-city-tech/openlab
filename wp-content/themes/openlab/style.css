@@ -8903,7 +8903,7 @@ body form .checkbox-list-container {
 }
 .advanced-cloning-options-row {
   margin-top: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 24px;
 }
 .advanced-cloning-options-row.disabled {
   opacity: 0.5;
