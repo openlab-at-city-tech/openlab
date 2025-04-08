@@ -461,7 +461,7 @@ function openlab_render_collapsible_definition( $type, $label, $content ) {
 	?>
 	<div class="collapsible-definition <?php echo esc_attr( $type ); ?>-definition col-sm-24">
 		<div class="collapsible-definition-label <?php echo esc_attr( $type ); ?>-definition-label">
-			<i class="fa fa-caret-square-o-right" aria-hidden="true"></i>
+			<i class="fa fa-chevron-circle-right" aria-hidden="true"></i>
 			<span><?php echo esc_html( $label ); ?></span>
 		</div>
 		<div class="collapsible-definition-text <?php echo esc_attr( $type ); ?>-definition-text">
