@@ -820,7 +820,7 @@ function wds_bp_group_meta() {
 
 											openlab_render_collapsible_definition(
 												'advanced-cloning-options',
-												'Advanced Options',
+												'More Options',
 												$advanced_option_markup
 											);
 											?>
