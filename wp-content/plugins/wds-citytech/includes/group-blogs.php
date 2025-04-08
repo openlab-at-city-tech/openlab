@@ -685,14 +685,27 @@ function wds_bp_group_meta() {
 								switch ( $group_type ) {
 									case 'course':
 										?>
-										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an existing or external site, select the option below.</p>
+										<div class="site-creation-tooltips-noclone">
+											<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an existing or external site, select the option below.</p>
 
-										<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+											<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
-										<ul class="ol-tooltip">
-											<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-											<li class="hyphenate">Smithadv1100sp2025</li>
-										</ul>
+											<ul class="ol-tooltip">
+												<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+												<li class="hyphenate">Smithadv1100sp2025</li>
+											</ul>
+										</div>
+
+										<div class="site-creation-tooltips-clone">
+											<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an external site, select that option and enter the URL.</p>
+
+											<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+
+											<ul class="ol-tooltip">
+												<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+												<li class="hyphenate">smithadv1100sp2025</li>
+											</ul>
+										</div>
 
 										<?php
 										break;
@@ -700,7 +713,13 @@ function wds_bp_group_meta() {
 									case 'project':
 									case 'club':
 										?>
-										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an existing or external site, select the option below.</p>
+										<div class="site-creation-tooltips-noclone">
+											<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an existing or external site, select the option below.</p>
+										</div>
+
+										<div class="site-creation-tooltips-clone">
+											<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an external site, select that option and enter the URL.</p>
+										</div>
 										<?php
 										break;
 								}

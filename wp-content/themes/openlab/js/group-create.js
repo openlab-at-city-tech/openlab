@@ -427,6 +427,8 @@ jQuery( document ).ready(
 			$group_to_clone = $( '#group-to-clone' );
 
 			if ( 'on' == on_or_off ) {
+				$form.addClass( 'cloning' );
+
 				// Check "Clone a course" near the top
 				$( '#create-or-clone-clone' ).attr( 'checked', true );
 
@@ -454,6 +456,8 @@ jQuery( document ).ready(
 				$( '#wds-website-existing' ).hide();
 				showAdvancedCloningOptions();
 			} else {
+				$( form ).removeClass( 'cloning' );
+
 				// Show the Site Details section.
 				$( '#panel-site-details' ).show();
 

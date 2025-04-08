@@ -5781,6 +5781,23 @@ p.private-membership-indicator {
 
 /* Parsley.js styling for group create/edit forms */
 .group-validate-form {
+	.site-creation-tooltips-clone {
+		display: none;
+		visibility: hidden;
+	}
+
+	&.cloning {
+		.site-creation-tooltips-clone {
+			display: block;
+			visibility: visible;
+		}
+
+		.site-creation-tooltips-noclone {
+			display: none;
+			visibility: hidden;
+		}
+	}
+
     .error-container {
         font-weight: 400;
         border-radius: 4px;
