@@ -685,26 +685,22 @@ function wds_bp_group_meta() {
 								switch ( $group_type ) {
 									case 'course':
 										?>
-										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
+										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an existing or external site, select the option below.</p>
+
+										<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
 										<ul class="ol-tooltip">
 											<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-											<li class="hyphenate">smithadv1100sp2012</li>
+											<li class="hyphenate">Smithadv1100sp2025</li>
 										</ul>
 
-										<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 										<?php
 										break;
 
 									case 'project':
-										?>
-										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
-										<?php
-										break;
-
 									case 'club':
 										?>
-										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an existing or external site, select the option below.</p>
 										<?php
 										break;
 								}
@@ -820,7 +816,7 @@ function wds_bp_group_meta() {
 								<div id="noo_new_options">
 									<div id="noo_new_options-div" class="row">
 										<?php if ( 'portfolio' === $group_type ) : ?>
-											<p style="padding: 0 5px 10px 5px">Depending on the privacy settings you choose, your <?php echo esc_html( $group_label ); ?> URL may be publicly visible, so you may not wish to include your full name. Your <?php echo esc_html( $group_label ); ?> URL cannot be changed.</p>
+											<p style="padding: 0 5px 10px 5px">Depending on the privacy settings you choose, your <?php echo esc_html( $group_label ); ?> URL may be publicly visible, so you may not wish to include your full name. Your <?php echo esc_html( $group_label ); ?> URL cannot be changed. If you are linking to an existing or external site, select the option below.</p>
 										<?php endif; ?>
 
 										<div class="radio col-sm-6">
