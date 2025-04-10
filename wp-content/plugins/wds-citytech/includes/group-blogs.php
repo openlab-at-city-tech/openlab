@@ -2053,60 +2053,31 @@ Comment URL: %s',
 add_action( 'wp_insert_comment', 'openlab_olpc_notify_comment_author_of_reply', 20, 2 );
 
 /**
- * Show a notice on the dashboard of cloned course sites.
+ * Show a notice to sites running retired themes.
  */
-function openlab_cloned_course_notice() {
-	global $current_blog;
-
+function openlab_retired_themes_admin_notice() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
-	// Don't show for sites created before 2016-03-09.
-	$latest     = new DateTime( '2016-03-09' );
-	$registered = new DateTime( $current_blog->registered );
-	if ( $latest > $registered ) {
+	$theme          = wp_get_theme();
+	$allowed_themes = WP_Theme::get_allowed_on_network();
+
+	$theme_is_allowed = isset( $allowed_themes[ $theme->get_stylesheet() ] ) || isset( $allowed_themes[ $theme->get_template() ] );
+
+	if ( $theme_is_allowed ) {
 		return;
 	}
-
-	// Allow dismissal.
-	if ( get_option( 'openlab-clone-notice-dismissed' ) ) {
-		return;
-	}
-
-	// Only show for cloned courses.
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	if ( ! groups_get_groupmeta( $group_id, 'clone_source_group_id' ) ) {
-		return;
-	}
-
-	// Groan
-	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce       = wp_create_nonce( 'ol_clone_dismiss' );
-	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
-	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
 	?>
-	<style type="text/css">
-		.ol-cloned-message {
-			position: relative;
-		}
-		.ol-cloned-message > p > span {
-			width: 80%;
-		}
-		.ol-clone-message-dismiss {
-			position: absolute;
-			right: 15px;
-		}
-	</style>
-	<div class="updated fade ol-cloned-message">
-		<p><span>Please Note: Your cloned site has been published. Please preview the site and make any adjustments (ie: set selected pages and posts to draft) as needed. <strong>This is a change to cloning functionality, which used to keep posts and pages in draft.</strong></span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_attr( esc_url( $dismiss_url ) ); ?>">Dismiss</a>
+	<div class="notice notice-error">
+		<p>
+			<?php echo 'Please note: Theme theme you are using is outdated and has been retired. Please choose a new theme to avoid potential problems with your site. Find out how to <a href="https://openlab.citytech.cuny.edu/blog/help/changing-the-appearance-of-your-site-with-themes/">change your theme</a> in <a href="https://openlab.citytech.cuny.edu/">OpenLab Help</a>.'; ?>
 		</p>
 	</div>
 	<?php
 }
-add_action( 'admin_notices', 'openlab_cloned_course_notice' );
+add_action( 'admin_notices', 'openlab_retired_themes_admin_notice' );
 
 /**
  * Catch cloned course notice dismissals.
