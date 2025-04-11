@@ -1030,6 +1030,14 @@ class GFFormsModel {
 		// Ensure the next field ID is set correctly.
 		$form['nextFieldId'] = self::get_next_field_id( $form['fields'] );
 
+		// Ensure the form has a button property.
+		if ( rgempty( 'button', $form ) ) {
+			$form['button'] = array(
+				'type' => 'text',
+				'text' => __( 'Submit', 'gravityforms' ),
+			);
+		}
+
 		/**
 		 * Filters the Form object after the form meta is obtained
 		 *
@@ -2105,7 +2113,7 @@ class GFFormsModel {
 			$count = (int) $count_exists_in_title[2][0] + 1;
 
 			// Remove existing count from title.
-			$title = preg_replace( '/(\\(([0-9])*\\))$/mi', null, $title );
+			$title = preg_replace( '/(\\(([0-9])*\\))$/mi', '', $title );
 
 		}
 
@@ -3589,9 +3597,10 @@ class GFFormsModel {
 				break;
 
 			case 'fileupload':
-				$tmp_path = GFFormsModel::get_upload_path( $form['id'] ) . '/tmp/';
-				$tmp_url  = GFFormsModel::get_upload_url( $form['id'] ) . '/tmp/';
-				$value    = array(); // Initialize as empty array to store file info
+				$tmp_location = GFFormsModel::get_tmp_upload_location( $form['id'] );
+				$tmp_path     = $tmp_location['path'];
+				$tmp_url      = $tmp_location['url'];
+				$value        = array(); // Initialize as empty array to store file info
 				// Check if it's a multiple file upload field
 				if ( $field->multipleFiles ) {
 					$temp_files = rgars( GFFormsModel::$uploaded_files, $form['id'] . '/' . $input_name );
@@ -3899,18 +3908,12 @@ class GFFormsModel {
 
 			case 'greater_than':
 			case '>' :
-				$val1 = floatval( $val1 );
-				$val2 = floatval( $val2 );
-
-				return $val1 > $val2;
+				return $val1 > $val2; // Do not cast these to float because this will compare numbers as well as dates.
 				break;
 
 			case 'less_than':
 			case '<' :
-				$val1 = floatval( $val1 );
-				$val2 = floatval( $val2 );
-
-				return $val1 < $val2;
+				return $val1 < $val2; // Do not cast these to float because this will compare numbers as well as dates.
 				break;
 
 			case 'contains' :
@@ -4905,7 +4908,8 @@ class GFFormsModel {
 
 			//check if file has already been uploaded by previous step
 			$file_info     = self::get_temp_filename( $form_id, $input_name );
-			$temp_filepath = self::get_upload_path( $form_id ) . '/tmp/' . $file_info['temp_filename'];
+			$tmp_location  = GFFormsModel::get_tmp_upload_location( $form_id );
+			$temp_filepath = $tmp_location['path'] . $file_info['temp_filename'];
 			GFCommon::log_debug( 'GFFormsModel::get_fileupload_value(): Temp file path: ' . $temp_filepath );
 			if ( $file_info && file_exists( $temp_filepath ) ) {
 				GFCommon::log_debug( 'GFFormsModel::get_fileupload_value(): Moving temp file: ' . $temp_filepath );
@@ -5541,6 +5545,9 @@ class GFFormsModel {
 			//processing values so that they are in the correct format for each input type
 			$value = self::prepare_value( $form, $field, $value, $input_name, rgar( $lead, 'id' ), $lead );
 
+			// Fix for implicit conversion from float to int in depreciation notice in PHP 8.1+
+			$input_id = (string) $input_id;
+
 			//ignore fields that have not changed
 			if ( $lead != null && isset( $lead[ $input_id ] ) && $value === rgget( (string) $input_id, $lead ) ) {
 				return;
@@ -5823,8 +5830,9 @@ class GFFormsModel {
 	private static function move_temp_file( $form_id, $tempfile_info ) {
 		_deprecated_function( 'move_temp_file', '1.9', 'GF_Field_Fileupload::move_temp_file' );
 
-		$target = self::get_file_upload_path( $form_id, $tempfile_info['uploaded_filename'] );
-		$source = self::get_upload_path( $form_id ) . '/tmp/' . $tempfile_info['temp_filename'];
+		$target       = self::get_file_upload_path( $form_id, $tempfile_info['uploaded_filename'] );
+		$tmp_location = GFFormsModel::get_tmp_upload_location( $form_id );
+		$source       = $tmp_location['path'] . $tempfile_info['temp_filename'];
 
 		if ( rename( $source, $target['path'] ) ) {
 			self::set_permissions( $target['path'] );
@@ -5888,6 +5896,31 @@ class GFFormsModel {
 	public static function get_upload_path( $form_id ) {
 		$form_id = absint( $form_id );
 		return self::get_upload_root() . $form_id . '-' . wp_hash( $form_id );
+	}
+
+	/*
+	 * Get the path to the temporary upload directory for a form
+	 *
+	 * @since 2.9.3
+	 *
+	 * @param int $form_id The ID of the form
+	 *
+	 * @return array The path and url to the temporary upload directory for a form
+	 */
+	public static function get_tmp_upload_location( $form_id ) {
+		/*
+		 * Filter the temporary upload directory path for a form
+		 *
+		 * @since 2.9.3
+		 *
+		 * @param array $path    An array containing the path and url of the temporary upload directory
+		 * @param int   $form_id The ID of the form
+		 */
+		$tmp_upload_locations = array(
+			'path' => self::get_upload_path( $form_id ) . DIRECTORY_SEPARATOR . 'tmp' . DIRECTORY_SEPARATOR,
+			'url'  => self::get_upload_url( $form_id ) . '/tmp/',
+		);
+		return gf_apply_filters( array( 'gform_file_upload_tmp_dir', $form_id ), $tmp_upload_locations, $form_id );
 	}
 
 	public static function get_upload_url( $form_id ) {
@@ -6241,7 +6274,7 @@ class GFFormsModel {
 			"  SELECT n.entry_id, n.id, n.user_id, n.date_created, n.value, n.note_type, n.sub_type, ifnull(u.display_name,n.user_name) as user_name, u.user_email
 												FROM $notes_table n
 												LEFT OUTER JOIN $wpdb->users u ON n.user_id = u.id
-												$where 
+												$where
 												$orderby"
 		);
 	}
@@ -8253,9 +8286,9 @@ class GFFormsModel {
 			}
 			$source_field   = RGFormsModel::get_field( $form, $rule['fieldId'] );
 			$source_value   = empty( $entry ) ? self::get_field_value( $source_field, $field_values ) : self::get_lead_field_value( $entry, $source_field );
-			$number_format  = ! empty( rgobj( $source_field, 'numberFormat' ) ) ? $source_field->numberFormat : 'currency';
 
-
+			// Number format will either be currency or decimal_dot. Numbers formatted with decimal_comma will have their values transformed and stored as decimal_dot.
+			$number_format  = rgobj( $source_field, 'numberFormat' ) == 'currency' ? 'currency' : 'decimal_dot';
 			$source_value = GFCommon::maybe_format_numeric( $source_value, $rule['operator'], $number_format );
 
 			/**

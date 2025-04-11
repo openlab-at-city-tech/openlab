@@ -193,7 +193,7 @@ class GFFormDetail {
 			</div>
 
 			<div class="gform-form-toolbar__form-title gform-form-toolbar__form-title--form-editor" data-js-reload="gforms-form-switcher">
-				<?php GFForms::form_switcher( $form['title'] ); ?>
+				<?php GFForms::form_switcher( $form['title'], $id ); ?>
 			</div>
 
 			<ul id="gform-form-toolbar__menu" class="gform-form-toolbar__menu">
@@ -1759,6 +1759,9 @@ class GFFormDetail {
                                         />
                                         <label for="field_other_choice" class="inline"><?php esc_html_e( 'Enable "other" choice', 'gravityforms' ); ?><?php gform_tooltip( 'form_field_other_choice' ); ?></label>
                                     </div>
+                                    <?php
+                                    do_action( 'gform_field_standard_settings', 1363, $form_id );
+                                    ?>
                                 </fieldset>
 							</li>
 

@@ -404,7 +404,7 @@ class GFAPI {
 	 *
 	 * @return array|WP_Error Either an array of new form IDs or a WP_Error instance.
 	 */
-	public static function add_forms( $forms ) {
+	public static function add_forms( $forms, $continue_on_error = false ) {
 
 		if ( gf_upgrade()->get_submissions_block() ) {
 			return new WP_Error( 'submissions_blocked', __( 'Submissions are currently blocked due to an upgrade in progress', 'gravityforms' ) );
@@ -414,15 +414,35 @@ class GFAPI {
 			return new WP_Error( 'invalid', __( 'Invalid form objects', 'gravityforms' ) );
 		}
 		$form_ids = array();
+		$failed_forms = array();
+		
 		foreach ( $forms as $form ) {
 			$result = self::add_form( $form );
 			if ( is_wp_error( $result ) ) {
-				return $result;
+				// If continue_on_error is true on the call, add the failed form details to the failed_forms array and return it else it will return the WP_Error.
+				if ( $continue_on_error ) {
+					$failed_forms[] = array(
+						'form_id' => $form['id'] ?? null,
+						'error'   => $result
+					);
+				} else {
+					return $result;
+				}
+				
+			} else {
+				$form_ids[] = $result;
 			}
-			$form_ids[] = $result;
+			
 		}
-
+		if ( $continue_on_error ) {
+			return array(
+				'form_ids'     => $form_ids,
+				'failed_forms' => $failed_forms
+			);
+		}
+		
 		return $form_ids;
+		
 	}
 
 	/**
@@ -2378,6 +2398,80 @@ class GFAPI {
 		}
 
 		gform_update_meta( $entry_id, 'processed_feeds', $meta, $form_id );
+	}
+
+	/**
+	 * Returns the key used when saving/retrieving the feed status entry meta.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int $feed_id The feed ID.
+	 *
+	 * @return string
+	 */
+	public static function get_entry_feed_status_key( $feed_id ) {
+		return sprintf( 'feed_%d_status', $feed_id );
+	}
+
+	/**
+	 * Retrieves the feed processing status for the specified entry from the "feed_{$feed_id}_status" meta.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int  $entry_id              The entry ID.
+	 * @param int  $feed_id               The feed ID.
+	 * @param bool $return_latest         Indicates if only the latest attempt should be returned. Default is to return all attempts.
+	 * @param bool $return_latest_details Indicates if the details array of the latest attempt should be returned instead of just the status string.
+	 *
+	 * @return array|string
+	 */
+	public static function get_entry_feed_status( $entry_id, $feed_id, $return_latest = false, $return_latest_details = false ) {
+		$meta = gform_get_meta( $entry_id, self::get_entry_feed_status_key( $feed_id ) );
+		if ( empty( $meta ) ) {
+			return $return_latest && ! $return_latest_details ? '' : array();
+		}
+
+		if ( $return_latest ) {
+			$latest = end( $meta );
+
+			return $return_latest_details ? $latest : rgar( $latest, 'status', '' );
+		}
+
+		return $meta;
+	}
+
+	/**
+	 * Updates or deletes the "feed_{$feed_id}_status" meta for the specified entry.
+	 *
+	 * @since 2.9.4
+	 *
+	 * @param int        $entry_id The entry ID.
+	 * @param int        $feed_id  The feed ID.
+	 * @param array|null $status   {
+	 *     The status array to be appended to the metadata or null to delete the metadata.
+	 *
+	 *     @type int        $timestamp The timestamp for the feed processing attempt.
+	 *     @type string     $status    The status: success or failed.
+	 *     @type int|string $code      The error code.
+	 *     @type string     $message   The error message.
+	 *     @type mixed      $data      Additional data relating to the error.
+	 * }
+	 * @param null|int   $form_id  The form ID of the entry (optional, saves extra query if passed when creating the metadata).
+	 *
+	 * @return void
+	 */
+	public static function update_entry_feed_status( $entry_id, $feed_id, $status, $form_id = null ) {
+		$key = self::get_entry_feed_status_key( $feed_id );
+		if ( is_null( $status ) ) {
+			gform_delete_meta( $entry_id, $key );
+
+			return;
+		}
+
+		$meta   = self::get_entry_feed_status( $entry_id, $feed_id );
+		$meta[] = $status;
+
+		gform_update_meta( $entry_id, $key, $meta, $form_id );
 	}
 
 	// NOTIFICATIONS ----------------------------------------------

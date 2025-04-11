@@ -1186,6 +1186,7 @@ function gformInitPriceFields(){
 }
 
 function bindProductChangeEvent() {
+	// For backwards compatibility, fire jQuery gform_price_change event.
 	document.addEventListener( 'gform/products/product_field_changed', function( event ) {
 		const productIds = { formId : event.detail.formId, productFieldId : event.detail.productFieldId }
 
@@ -2163,7 +2164,9 @@ var GFCalc = function(formId, formulaFields){
 			formulaInput.val(result).trigger('change');
 
 			// Firing native change event for compatibility with new code in JS bundle.
-			window.gform.utils.trigger( { event: 'change', el: formulaInput[0], native: true } );
+			if ( formulaInput && formulaInput.length > 0 ) {
+				window.gform.utils.trigger( { event: 'change', el: formulaInput[0], native: true } );
+			}
 
             // Announce the price change of the product only if there's no Total field.
             if ( jQuery( '.gfield_label_product' ).length && ! jQuery( '.ginput_total' ).length ) {
@@ -2204,8 +2207,14 @@ var GFCalc = function(formId, formulaFields){
                 jQuery(input).click(function(){
                     calcObj.bindCalcEvent(inputId, formulaField, formId, 0);
                 });
-            } else
-            if(input.is('select') || input.prop('type') == 'hidden') {
+                // Bind calc event to the image in an image choice field.
+                var imageChoice = input.closest('.gfield--type-image_choice .gchoice');
+                if ( imageChoice.length > 0 ) {
+                    jQuery(imageChoice).click(function(){
+                    	calcObj.bindCalcEvent(inputId, formulaField, formId, 0);
+                    });
+                }
+            } else if(input.is('select') || input.prop('type') == 'hidden') {
                 jQuery(input).change(function(){
                     calcObj.bindCalcEvent(inputId, formulaField, formId, 0);
                 });

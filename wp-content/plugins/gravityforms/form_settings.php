@@ -843,6 +843,9 @@ class GFFormSettings {
 
 		// Get all of the current values.
 		foreach ( $form as $key => $value ) {
+			if ( in_array( $key, array( 'fields', 'notifications', 'confirmations' ) ) ) {
+				continue;
+			}
 			if ( is_array( $value ) ) {
 				foreach ( $value as $sub_key => $sub_value ) {
 					if ( is_array( $sub_value ) ) {
@@ -855,9 +858,8 @@ class GFFormSettings {
 
 					}
 				}
-			} else {
-				$initial_values[ $key ] = $value;
 			}
+			$initial_values[ $key ] = $value;
 		}
 
 		// Start and end times are formatted differently than other fields.
@@ -984,7 +986,6 @@ class GFFormSettings {
 	 * @uses    SCRIPT_DEBUG
 	 * @uses    GFFormsModel::get_form_meta()
 	 * @uses    GFFormSettings::get_tabs()
-	 * @uses    GFCommon::form_page_title()
 	 * @uses    GFCommon::display_dismissible_message()
 	 * @uses    GFCommon::display_admin_message()
 	 * @uses    GFForms::top_toolbar()
