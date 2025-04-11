@@ -1,9 +1,14 @@
 
-/* Kludge for too-wide forums dropdown */
+/* Kludge for too-wide inputs & selects */
 #poststuff #bbp_forum_attributes select#parent_id,
+#poststuff #bbp_forum_attributes input#menu_order,
 #poststuff #bbp_topic_attributes select#parent_id,
 #poststuff #bbp_reply_attributes select#bbp_forum_id,
-#poststuff #bbp_reply_attributes select#bbp_reply_to {
+#poststuff #bbp_reply_attributes select#bbp_reply_to,
+#poststuff #bbp_reply_attributes input#bbp_forum_id,
+#poststuff #bbp_reply_attributes input#bbp_topic_id,
+#poststuff #bbp_author_metabox input#bbp_author_id,
+#poststuff #bbp_author_metabox input#bbp_author_ip_address {
 	max-width: 170px;
 }
 
@@ -313,6 +318,35 @@ body.post-type-topic strong.label,
 body.post-type-reply strong.label {
 	display: inline-block;
 	width: 60px;
+}
+
+body.post-type-forum .wp-list-table thead th a,
+body.post-type-forum .wp-list-table tfoot th a,
+body.post-type-topic .wp-list-table thead th a,
+body.post-type-topic .wp-list-table tfoot th a,
+body.post-type-reply .wp-list-table thead th a,
+body.post-type-reply .wp-list-table tfoot th a {
+	display: flex;
+}
+
+body.post-type-forum .wp-list-table thead th:not(.sortable),
+body.post-type-forum .wp-list-table tfoot th:not(.sortable),
+body.post-type-forum .wp-list-table thead th a > span:first-child,
+body.post-type-forum .wp-list-table tfoot th a > span:first-child,
+body.post-type-forum .wp-list-table tbody td,
+body.post-type-topic .wp-list-table thead th:not(.sortable),
+body.post-type-topic .wp-list-table tfoot th:not(.sortable),
+body.post-type-topic .wp-list-table thead th a > span:first-child,
+body.post-type-topic .wp-list-table tfoot th a > span:first-child,
+body.post-type-topic .wp-list-table tbody td,
+body.post-type-reply .wp-list-table thead th:not(.sortable),
+body.post-type-reply .wp-list-table tfoot th:not(.sortable),
+body.post-type-reply .wp-list-table thead th a > span:first-child,
+body.post-type-reply .wp-list-table tfoot th a > span:first-child,
+body.post-type-reply .wp-list-table tbody td {
+	overflow-x: hidden;
+	text-overflow: ellipsis;
+	word-wrap: normal;
 }
 
 .column-bbp_forum_topic_count,

@@ -47,7 +47,7 @@ function bbp_has_search_results( $args = array() ) {
 	}
 
 	// Default public statuses (topics coincidentally cover all post types)
-	$post_statuses = array_keys( bbp_get_public_topic_statuses() );
+	$post_statuses = bbp_get_public_topic_statuses();
 
 	// Add support for private status
 	if ( current_user_can( 'read_private_topics' ) ) {
