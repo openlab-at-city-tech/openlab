@@ -32,20 +32,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- Thumbnails -->
 		<?php $i = 0; ?>
 		<?php foreach ( $images as $image ) : ?>
-	
+
 	<div id="ngg-image-<?php echo $image->pid; ?>" class="ngg-gallery-thumbnail-box" <?php echo $image->style; ?> >
 		<div class="ngg-gallery-thumbnail" >
 			<a href="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->imageURL ); ?>"
 				title="<?php echo esc_attr( $image->description ); ?>"
 				<?php echo $image->thumbcode; ?> >
-				<?php if ( ! $image->hidden ) { ?>
-				<img title="<?php echo esc_attr( $image->alttext ); ?>" alt="<?php echo esc_attr( $image->alttext ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
+				<?php if ( ! $image->hidden ) {
+					$image_alttext = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext );
+					?>
+				<img title="<?php echo esc_attr( $image_alttext ); ?>" alt="<?php echo esc_attr( $image_alttext ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
 				<?php } ?>
 			</a>
 			<span>
 			<?php
 			if ( ! $image->hidden ) {
-				echo $image->caption; }
+				echo \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->caption );
+			}
 			?>
 			</span>
 		</div>
@@ -58,10 +61,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<br style="clear: both" />
 	<?php } ?>
 	<?php endforeach; ?>
-	
+
 	<!-- Pagination -->
 		<?php echo $pagination; ?>
-	
+
 </div>
 
 	<?php endif; ?>

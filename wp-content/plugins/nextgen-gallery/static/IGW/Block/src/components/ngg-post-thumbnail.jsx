@@ -1,5 +1,3 @@
-import React    from "react";
-import FormData from "form-data";
 import fetch    from "cross-fetch";
 
 const {dispatch}            = wp.data;

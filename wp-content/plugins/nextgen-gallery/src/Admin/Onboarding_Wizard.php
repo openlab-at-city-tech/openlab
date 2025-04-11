@@ -305,9 +305,9 @@ class Onboarding_Wizard {
 		$all_plugins = get_plugins();
 		$plugins     = $this->get_recommended_plugins();
 		$plugin      = '';
-		$plus        = 'nextgen-gallery-pro/ngg-plus.php';
+		$plus        = 'nextgen-gallery-plus/ngg-plus.php';
 		$pro         = 'nextgen-gallery-pro/nggallery-pro.php';
-		$starter     = 'nextgen-gallery-pro/ngg-starter-pro.php';
+		$starter     = 'nextgen-gallery-pro/ngg-starter.php';
 		// Switch case to check pro, plus and starter plugins.
 		switch ( $recommended ) {
 			// if $recommended contains plus, then set $plugin to plus.
@@ -393,12 +393,8 @@ class Onboarding_Wizard {
 				$onboarding_data['usage_stats_init'] = true;
 			}
 
-			$updated = update_option( 'ngg_onboarding_data', $onboarding_data );
+			update_option( 'ngg_onboarding_data', $onboarding_data );
 
-			if ( ! $updated ) {
-				wp_send_json_error( 'Error saving option.' );
-				wp_die();
-			}
 			// Send data to Drip.
 			$this->save_to_drip( $onboarding_data );
 
@@ -578,11 +574,8 @@ class Onboarding_Wizard {
 				$this->install_helper( $url );
 
 			}
-			wp_send_json_success( 'Installed the recommended plugins successfully.' );
-			wp_die();
 		}
-
-		wp_send_json_error( 'Something went wrong. Please try again.' );
+		wp_send_json_success( 'Installed the recommended plugins successfully.' );
 		wp_die();
 	}
 
@@ -679,29 +672,30 @@ class Onboarding_Wizard {
 			'redirection' => 5,
 			'httpversion' => '1.0',
 			'body'        => $query_args,
-			'user-agent'  => 'ImagelyUpdates',
+			'user-agent'  => 'ImagelyUpdates/' . NGG_PLUGIN_VERSION . '; ' . get_bloginfo( 'url' ),
 			'blocking'    => true,
 
 		];
 
 		$response = wp_safe_remote_post( $url, $args );
-		if ( is_wp_error( $response ) ) {
+ 		if ( is_wp_error( $response ) ) {
 			$error_message = $response->get_error_message();
-			wp_send_json_error( 'Something went wrong, please try again later.' );
+			wp_send_json_error( $error_message );
 			wp_die();
 		} else {
 			$http_code = wp_remote_retrieve_response_code( $response );
-			$body      = wp_remote_retrieve_body( $response );
-			$result    = json_decode( $body );
-
+ 			$result    = json_decode( wp_remote_retrieve_body( $response ) );
 			// check if the response has error and bail out.
+ 			// check if the response has error and bail out.
 			if ( isset( $result->error ) && '' !== $result->error ) {
 				wp_send_json_error( $this->get_error_message( $result->error ) );
 				wp_die();
 			}
 
-			// Check if body has status:active.
-			if ( 200 === $http_code && 'active' === $result->status ) {
+			$valid = in_array( $result->status ?? '', ['active', 'inactive','disabled'], true ) ?? false;
+
+			// Check if status is active/inactive not expired or disabled.
+			if ( 200 === $http_code && $valid ) {
 
 				$product = $result->level ?? false;
 
@@ -724,17 +718,12 @@ class Onboarding_Wizard {
 					wp_die();
 				}
 
-				if ( $result->is_site_active ) {
-					// Site is already active.
-					$url = $this->download_pro( $license_key, $product );
-					if ( ! empty( $url ) ) {
-						$this->install_helper( $url );
-					}
-				} else {
-					// throw error if site is not active.
-					wp_send_json_error( $this->get_error_message( 'inactive_site_for_license' ) );
-					wp_die();
+				$url = $this->download_pro( $license_key, $product );
+
+				if ( isset( $url ) ) {
+					$this->install_helper( $url );
 				}
+
 				wp_send_json_success( 'Congratulations! This site is now receiving automatic updates.' );
 				wp_die();
 			} else {
@@ -744,9 +733,8 @@ class Onboarding_Wizard {
 					wp_send_json_error( $this->get_error_message( 'license_expired' ) );
 					wp_die();
 				}
-
 				// if license is invalid, throw error.
-				wp_send_json_error( $this->get_error_message( $result->error ) );
+				wp_send_json_error( $this->get_error_message( null ) );
 				wp_die();
 			}
 		}
@@ -758,14 +746,13 @@ class Onboarding_Wizard {
 	 * @param string $key The license key.
 	 * @param string $product The product name.
 	 *
-	 * @return void|string
+	 * @return boolean|string
 	 */
 	public function download_pro( string $key, string $product ) {
 
-		// bail out if nextgen pro is installed.
-		$file = WP_PLUGIN_DIR . 'nextgen-gallery-pro/nggallery-pro.php';
-		if ( file_exists( $file ) ) {
-			return;
+		// Check if the product already exist in the installed plugins.
+		if( 'no-clicks disabled' === $this->is_recommended_plugin_installed( 'nextgen-gallery-' . $product ) ){
+			return false;
 		}
 
 		$url      = 'https://members.photocrati.com/wp-json/licensing/v1/get_update?product=nextgen-gallery-' . $product . '&license_key=' . $key . '&site_url=' . site_url();
@@ -774,7 +761,7 @@ class Onboarding_Wizard {
 			'timeout'     => 45,
 			'redirection' => 5,
 			'httpversion' => '1.0',
-			'user-agent'  => 'ImagelyUpdates',
+			'user-agent'  => 'ImagelyUpdates/' . NGG_PLUGIN_VERSION . '; ' . get_bloginfo( 'url' ),
 			'blocking'    => true,
 		];
 		$response = wp_safe_remote_get( $url, $args );
@@ -784,7 +771,7 @@ class Onboarding_Wizard {
 			if ( 200 === $http_code ) {
 				return json_decode( $body )->download_url ?? '';
 			} else {
-				return '';
+				return false;
 			}
 		}
 	}
@@ -817,45 +804,45 @@ class Onboarding_Wizard {
 	 *
 	 * @since 3.59.4
 	 *
-	 * @param string $message The error message.
+	 * @param string|null $code The error message.
 	 *
 	 * @return string
 	 */
-	public function get_error_message( string $message ): string {
+	public function get_error_message( ?string $code ): string {
 
-		if ( ! isset( $message ) ) {
+		if ( ! isset( $code ) ) {
 			return 'Something went wrong, please try again later.';
 		}
 
-		switch ( $message ) {
-			case 'invalid_action':
-				$response = 'Invalid Request';
+ 		$message = '';
+		switch ( $code ) {
+			case 'empty_site_url':
+				$message = __( 'The site URL is missing. Please provide a valid URL.', 'nextgen-gallery' );
 				break;
 			case 'license_not_found':
-				$response = 'Sorry, the license key was not found.';
+				$message = __( 'The license key was not found. Please verify and try again.', 'nextgen-gallery' );
 				break;
+			case 'license_status_expired':
 			case 'license_expired':
-			case 'license_expired_disabled':
-				$response = 'Sorry, the license key has expired.';
+				$message = __( 'The license key has expired. Please renew your license.', 'nextgen-gallery' );
 				break;
-			case 'license_revoked':
-				$response = 'Sorry, the license key has been revoked.';
-				break;
+			case 'license_status_disabled':
 			case 'license_disabled':
-				$response = 'Sorry, the license key has been disabled.';
+				$message = __( 'The license key has not been activated yet. Please contact support.', 'nextgen-gallery' );
 				break;
-			case 'inactive_site_for_license':
-				$response = 'Sorry, the license key is not active for this site.';
+			case 'license_status_revoked':
+			case 'license_revoked':
+				$message = __( 'The license key has been revoked. Please contact support.', 'nextgen-gallery' );
 				break;
-			case 'incorrect_level_for_download':
-				$response = 'Sorry, the license key is not valid for this download.';
+			case 'license_limit_installations':
+				$message = __( 'The license key has reached the maximum number of installations.', 'nextgen-gallery' );
 				break;
 			default:
-				$response = 'Something went wrong, please try again later.';
+				$message = __( 'An unknown error occurred. Please try again.', 'nextgen-gallery' );
 				break;
 
 		}
 
-		return $response;
+		return $message;
 	}
 }

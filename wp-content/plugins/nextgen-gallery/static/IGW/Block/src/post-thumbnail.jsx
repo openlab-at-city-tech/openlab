@@ -1,4 +1,3 @@
-import React from "react";
 import NGGFeaturedImage from './components/ngg-post-thumbnail.jsx';
 
 const {select}   = wp.data;

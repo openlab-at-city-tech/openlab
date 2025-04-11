@@ -32,14 +32,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<!-- Thumbnails -->
 		<?php $i = 0; ?>
 		<?php foreach ( $images as $image ) : ?>
-	
+
 	<div id="ngg-image-<?php echo $image->pid; ?>" class="ngg-gallery-thumbnail-box" <?php echo $image->style; ?> >
 		<div class="ngg-gallery-thumbnail" >
 			<a href="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->imageURL ); ?>"
 				title="<?php echo esc_attr( $image->description ); ?>"
 				<?php echo $image->thumbcode; ?> >
 				<?php if ( ! $image->hidden ) { ?>
-				<img title="<?php echo esc_attr( $image->alttext ); ?>" alt="<?php echo esc_attr( $image->alttext ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
+				<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>" alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
 				<?php } ?>
 			</a>
 		</div>
@@ -57,10 +57,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php ++$i; ?>
 
 	<?php endforeach; ?>
-	
+
 	<!-- Pagination -->
 		<?php echo $pagination; ?>
-	
+
 </div>
 
 	<?php endif; ?>

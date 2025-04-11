@@ -14,7 +14,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 	<?php if ( ! empty( $slideshow_link ) ) : ?>
 	<div class="slideshowlink">
 		<a href='<?php echo esc_attr( $slideshow_link ); ?>'><?php echo esc_html( $slideshow_link_text ); ?></a>
-		
+
 	</div>
 	<?php endif ?>
 	<?php
@@ -38,7 +38,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 			$this->start_element( 'nextgen_gallery.image_panel', 'item', $image );
 
 		?>
-			<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box" 
+			<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box"
 								<?php
 								if ( $style ) {
 									echo $style;}
@@ -60,8 +60,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				data-image-slug="<?php echo esc_attr( $image->image_slug ); ?>"
 				<?php echo $effect_code; ?>>
 				<img
-					title="<?php echo esc_attr( $image->alttext ); ?>"
-					alt="<?php echo esc_attr( $image->alttext ); ?>"
+					title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+					alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 					src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name, true ) ); ?>"
 					width="<?php echo esc_attr( $thumb_size['width'] ); ?>"
 					height="<?php echo esc_attr( $thumb_size['height'] ); ?>"
@@ -74,7 +74,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				$this->end_element();
 
 				?>
-			</div> 
+			</div>
 			<?php
 
 			$this->end_element();

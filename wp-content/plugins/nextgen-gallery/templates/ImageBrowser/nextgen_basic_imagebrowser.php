@@ -27,7 +27,7 @@ $template_params = [
 		id='<?php print $anchor; ?>'
 		data-nextgen-gallery-id="<?php print $displayed_gallery->id(); ?>">
 
-		<h3><?php print esc_attr( $image->alttext ); ?></h3>
+		<h3><?php print \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->alttext ); // phpcs:ignore ?></h3>
 
 		<?php $this->include_template( 'GalleryDisplay/ImageBefore', $template_params ); ?>
 
@@ -39,8 +39,8 @@ $template_params = [
 			data-title="<?php print esc_attr( $image->alttext ); ?>"
 			data-description="<?php print esc_attr( stripslashes( $image->description ) ); ?>"
 			<?php print $effect_code; ?>>
-			<img title='<?php print esc_attr( $image->alttext ); ?>'
-				alt='<?php print esc_attr( $image->alttext ); ?>'
+			<img title='<?php print esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>'
+				alt='<?php print esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>'
 				src='<?php print esc_attr( $storage->get_image_url( $image ) ); ?>'/>
 		</a>
 
@@ -73,7 +73,7 @@ $template_params = [
 			</div>
 
 			<div class='ngg-imagebrowser-desc'>
-				<p><?php print wp_kses( $image->description, I18N::get_kses_allowed_html() ); ?></p>
+				<p><?php print \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->description ); // phpcs:ignore ?></p>
 			</div>
 
 		</div>

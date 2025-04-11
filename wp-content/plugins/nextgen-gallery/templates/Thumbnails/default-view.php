@@ -3,7 +3,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 ?>
 <!-- default-view.php -->
 <div
-	class="ngg-galleryoverview default-view 
+	class="ngg-galleryoverview default-view
 	<?php
 	if ( ! intval( $ajax_pagination ) ) {
 		echo ' ngg-ajax-pagination-none';}
@@ -33,12 +33,12 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 			$this->start_element( 'nextgen_gallery.image_panel', 'item', $image );
 
 		?>
-			<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box 
+			<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box
 								<?php
 								if ( $number_of_columns > 0 && empty( $show_all_in_lightbox ) ) {
 									echo $column_class; }
 								?>
-			" 
+			"
 			<?php
 			if ( $style ) {
 						echo $style;}
@@ -60,8 +60,8 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				data-image-slug="<?php echo esc_attr( $image->image_slug ); ?>"
 				<?php echo $effect_code; ?>>
 				<img
-					title="<?php echo esc_attr( $image->alttext ); ?>"
-					alt="<?php echo esc_attr( $image->alttext ); ?>"
+					title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+					alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 					src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name ) ); ?>"
 					width="<?php echo esc_attr( $thumb_size['width'] ); ?>"
 					height="<?php echo esc_attr( $thumb_size['height'] ); ?>"
@@ -74,7 +74,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 				$this->end_element();
 
 				?>
-			</div> 
+			</div>
 			<?php
 
 			$this->end_element();
@@ -93,7 +93,7 @@ $this->start_element( 'nextgen_gallery.gallery_container', 'container', $display
 		?>
 	<div class="slideshowlink">
 		<a href='<?php echo esc_attr( $slideshow_link ); ?>'><?php echo esc_html( $slideshow_link_text ); ?></a>
-		
+
 	</div>
 	<?php endif ?>
 

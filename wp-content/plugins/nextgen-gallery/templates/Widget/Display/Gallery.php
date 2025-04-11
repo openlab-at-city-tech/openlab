@@ -17,8 +17,8 @@ echo $settings['widget_setting_before_widget']
 			title="<?php echo esc_attr( $image->description ); ?>"
 			data-image-id='<?php echo esc_attr( $image->pid ); ?>'
 			<?php echo $effect_code; ?>
-			><img title="<?php echo esc_attr( $image->alttext ); ?>"
-				alt="<?php echo esc_attr( $image->alttext ); ?>"
+			><img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 				src="<?php echo esc_attr( $storage->get_image_url( $image, $settings['image_type'], true ) ); ?>"
 				width="<?php echo esc_attr( $settings['image_width'] ); ?>"
 				height="<?php echo esc_attr( $settings['image_height'] ); ?>"

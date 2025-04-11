@@ -46,8 +46,8 @@
 			<?php echo $effect_code; ?>>
 
 			<img data-image-id='<?php echo esc_attr( $image->pid ); ?>'
-				title="<?php echo esc_attr( $image->description ); ?>"
-				alt="<?php echo esc_attr( $image->alttext ); ?>"
+				title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->description ) ); ?>"
+				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 				src="<?php echo esc_attr( $storage->get_image_url( $image, 'full' ) ); ?>"
 				style="max-height: <?php echo esc_attr( $gallery_height - 20 ); ?>px;"/>
 		</a>

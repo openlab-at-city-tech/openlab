@@ -4,11 +4,11 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4187dec02f5c3c74964a9194f1af4486
+class ComposerStaticInitf17e913da1987f733f91300631321767
 {
     public static $files = array (
-        'a5dbe7df96665c0b6c16ae8d91231502' => __DIR__ . '/..' . '/imagely/pope-framework/lib/autoload.php',
         '2cffec82183ee1cea088009cef9a6fc3' => __DIR__ . '/..' . '/ezyang/htmlpurifier/library/HTMLPurifier.composer.php',
+        'a5dbe7df96665c0b6c16ae8d91231502' => __DIR__ . '/..' . '/imagely/pope-framework/lib/autoload.php',
     );
 
     public static $prefixesPsr0 = array (
@@ -28,8 +28,8 @@ class ComposerStaticInit4187dec02f5c3c74964a9194f1af4486
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixesPsr0 = ComposerStaticInit4187dec02f5c3c74964a9194f1af4486::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4187dec02f5c3c74964a9194f1af4486::$classMap;
+            $loader->prefixesPsr0 = ComposerStaticInitf17e913da1987f733f91300631321767::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitf17e913da1987f733f91300631321767::$classMap;
 
         }, null, ClassLoader::class);
     }

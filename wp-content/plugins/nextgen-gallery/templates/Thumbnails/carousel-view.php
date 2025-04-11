@@ -21,8 +21,8 @@ if ( ! intval( $ajax_pagination ) ) {
 			data-description="<?php echo esc_attr( stripslashes( $current_image->description ) ); ?>"
 			data-current_image-slug="<?php echo esc_attr( $current_image->image_slug ); ?>"
 			<?php echo $effect_code; ?>>
-			<img title="<?php echo esc_attr( $current_image->alttext ); ?>"
-				alt="<?php echo esc_attr( $current_image->alttext ); ?>"
+			<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $current_image->alttext ) ); ?>"
+				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $current_image->alttext ) ); ?>"
 				src="<?php echo esc_attr( $storage->get_image_url( $current_image, 'full' ) ); ?>"
 				width="<?php echo esc_attr( $image_size['width'] ); ?>"
 				height="<?php echo esc_attr( $image_size['height'] ); ?>"
@@ -62,8 +62,8 @@ if ( ! intval( $ajax_pagination ) ) {
 							<div class="ngg-gallery-thumbnail">
 								<a href="<?php echo esc_attr( $href ); ?>"
 									title="<?php echo esc_attr( $image->description ); ?>">
-									<img title="<?php echo esc_attr( $image->alttext ); ?>"
-										alt="<?php echo esc_attr( $image->alttext ); ?>"
+									<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+										alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 										src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name ) ); ?>"
 										width="<?php echo esc_attr( $thumb_size['width'] ); ?>"
 										height="<?php echo esc_attr( $thumb_size['height'] ); ?>"/>

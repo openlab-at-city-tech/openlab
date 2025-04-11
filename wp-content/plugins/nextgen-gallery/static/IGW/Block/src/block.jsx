@@ -1,7 +1,5 @@
 import NGGEditor from './edit.jsx'
 import icons     from './icons.min';
-import React     from 'react';
-
 const { __ } 				= wp.i18n
 const { RawHTML } 	        = wp.element
 const { registerBlockType } = wp.blocks

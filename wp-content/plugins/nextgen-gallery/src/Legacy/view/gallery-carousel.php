@@ -23,47 +23,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="ngg-galleryoverview">
 
-	<div class="pic"><img title="<?php echo esc_attr( $current->alttext ); ?>" alt="<?php echo esc_attr( $current->alttext ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $current->url ); ?>" /></div>
-	
+	<div class="pic"><img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $current->alttext ) ); ?>" alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $current->alttext ) ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $current->url ); ?>" /></div>
+
 	<ul class="ngg-gallery-list">
-	
-		<!-- PREV LINK -->	
+
+		<!-- PREV LINK -->
 			<?php if ( $prev ) : ?>
 		<li class="ngg-prev">
 			<a class="prev" href="<?php echo \Imagely\NGG\Util\Router::esc_url( $prev ); ?>">&#9668;</a>
 		</li>
 		<?php endif; ?>
-		
+
 		<!-- Thumbnail list -->
 			<?php foreach ( $images as $image ) : ?>
 				<?php
 				if ( $image->hidden ) {
 					continue;}
 				?>
-				 
-		
-		<li id="ngg-image-<?php echo esc_attr( $image->pid ); ?>" class="ngg-thumbnail-list 
+
+
+		<li id="ngg-image-<?php echo esc_attr( $image->pid ); ?>" class="ngg-thumbnail-list
 									<?php
 									if ( $image->pid == $current->pid ) {
 										echo 'selected';}
 									?>
 		" >
 			<a href="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->pidlink ); ?>" title="<?php echo esc_attr( $image->description ); ?>" >
-				<img title="<?php echo esc_attr( $image->alttext ); ?>" alt="<?php echo esc_attr( $image->alttext ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
+				<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>" alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>" src="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->thumbnailURL ); ?>" <?php echo $image->size; ?> />
 			</a>
 		</li>
 
 		<?php endforeach; ?>
-		
+
 		<!-- NEXT LINK -->
 			<?php if ( $next ) : ?>
 		<li class="ngg-next">
 			<a class="next" href="<?php echo \Imagely\NGG\Util\Router::esc_url( $next ); ?>">&#9658;</a>
 		</li>
 		<?php endif; ?>
-		
+
 	</ul>
-	
+
 </div>
 
 	<?php endif; ?>

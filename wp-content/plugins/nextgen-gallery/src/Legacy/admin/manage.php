@@ -220,6 +220,9 @@ class nggManageGallery {
 		$image_url     = Router::esc_url( $picture->imageURL );
 		$filename      = esc_attr( $picture->filename );
 		$caption       = esc_html( ( empty( $picture->alttext ) ? $picture->filename : $picture->alttext ) );
+		$data_caption  = esc_attr( $caption );
+		$caption       = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $caption );
+		$caption       = esc_attr( $caption );
 		$date          = mysql2date( get_option( 'date_format' ), $picture->imagedate );
 		$width         = $picture->meta_data['width'];
 		$height        = $picture->meta_data['height'];
@@ -229,7 +232,7 @@ class nggManageGallery {
 
 		$output = [];
 
-		$output[] = "<div><strong><a href='{$image_url}' class='thickbox' title='{$caption}'>{$filename}</a></strong></div>";
+		$output[] = "<div><strong><a href='{$image_url}' class='thickbox' title='{$caption}' data-view-title='{$data_caption}'>{$filename}</a></strong></div>";
 		$output[] = '<div class="meta">' . esc_html( $date ) . '</div>';
 		$output[] = "<div class='meta'>{$pixels}</div>";
 		$output[] = "<label for='exclude_{$picture->pid}'>";
@@ -240,8 +243,8 @@ class nggManageGallery {
 	}
 
 	public function render_image_column_5( $output = '', $picture = [] ) {
-		$alttext = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $picture->alttext );
-		$desc    = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $picture->description );
+		$alttext = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $picture->alttext );
+		$desc    = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $picture->description );
 
 		$output = [];
 
@@ -313,12 +316,14 @@ class nggManageGallery {
 
 
 	public function render_view_action_link( $id, $picture ) {
-		$image_url = Router::esc_url( $picture->imageURL );
-		$label     = esc_html__( 'View', 'nggallery' );
-		$alt_text  = empty( $picture->alttext ) ? $picture->filename : $picture->alttext;
-		$title     = esc_attr( __( 'View', 'nggallery' ) . " \"{$alt_text}\"" );
+		$image_url  = Router::esc_url( $picture->imageURL );
+		$label      = esc_html__( 'View', 'nggallery' );
+		$alt_text   = empty( $picture->alttext ) ? $picture->filename : $picture->alttext;
+		$data_title = esc_attr( __( 'View', 'nggallery' ) ) . ' "' . esc_attr( $alt_text ) . '"';
+		$alt_text   = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $alt_text );
+		$title      = esc_attr( __( 'View', 'nggallery' ) ) . ' "' . esc_attr( $alt_text ) . '"';
 
-		return "<a href='{$image_url}' class='thickbox' title='{$title}'>{$label}</a>";
+		return "<a href='{$image_url}' class='thickbox' title='{$title}' data-view-title='{$data_title}'>{$label}</a>";
 	}
 
 	public function render_meta_action_link( $id, $picture ) {
@@ -358,6 +363,8 @@ class nggManageGallery {
 		$alttext = empty( $picture->alttext ) ? $picture->filename : $picture->alttext;
 		$alttext = Sanitizer::strip_html( html_entity_decode( $alttext ), true );
 		$alttext = htmlentities( $alttext, ENT_QUOTES | ENT_HTML401 );
+		$alttext = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $alttext );
+		$alttext = esc_attr( $alttext );
 
 		// Event handler is found in nextgen_admin_page.js.
 		return "<a href='{$url}'
@@ -376,6 +383,8 @@ class nggManageGallery {
 		$alttext = empty( $picture->alttext ) ? $picture->filename : $picture->alttext;
 		$alttext = Sanitizer::strip_html( html_entity_decode( $alttext ), true );
 		$alttext = htmlentities( $alttext, ENT_QUOTES | ENT_HTML401 );
+		$alttext = \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $alttext );
+		$alttext = esc_attr( $alttext );
 
 		// Event handler is found in nextgen_admin_page.js.
 		return "<a href='{$url}'
@@ -965,13 +974,13 @@ class nggManageGallery {
 				if ( ( $image = $image_mapper->find( $pid ) ) ) {
 					// Strip slashes from title/description/alttext fields.
 					if ( isset( $data['description'] ) ) {
-						$data['description'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['description'] );
+						$data['description'] = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $data['description'] );
 					}
 					if ( isset( $data['alttext'] ) ) {
-						$data['alttext'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['alttext'] );
+						$data['alttext'] = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $data['alttext'] );
 					}
 					if ( isset( $data['title'] ) ) {
-						$data['title'] = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $data['title'] );
+						$data['title'] = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $data['title'] );
 					}
 
 					// Generate new slug if the alttext has changed.

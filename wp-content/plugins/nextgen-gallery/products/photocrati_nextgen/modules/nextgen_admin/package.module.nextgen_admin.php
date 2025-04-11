@@ -760,7 +760,7 @@ class C_NextGen_First_Run_Notification_Wizard
                     allowfullscreen></iframe>
         </div>
 EOT;
-        return __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a id="ngg-video-wizard-invoker" href="">' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
+        return __('Thanks for installing NextGEN Gallery! Want help creating your first gallery?', 'nggallery') . ' <a href="' . esc_url(admin_url('index.php?page=nextgen-gallery-setup-wizard')) . '" >' . __('Launch the Gallery Wizard', 'nggallery') . '</a>. ' . __('If you close this message, you can also launch the Gallery Wizard at any time from the', 'nggallery') . ' <a href="' . esc_url(admin_url('admin.php?page=nextgen-gallery')) . '">' . __('NextGEN Overview page', 'nggallery') . '</a>.' . $block;
     }
     public function get_css_class()
     {
