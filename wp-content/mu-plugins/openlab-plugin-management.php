@@ -121,7 +121,6 @@ function openlab_get_hidden_plugins() {
 		'wp-twitter/wp-twitter.php',
 		'wpbadgedisplay/wpbadgedisplay.php',
 		'wpbadger/wpbadger.php',
-		'wp-to-twitter/wp-to-twitter.php',
 	];
 }
 
