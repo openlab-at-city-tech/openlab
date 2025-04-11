@@ -3,8 +3,8 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
-Tested up to: 6.7
-Stable tag: 2.3.3
+Tested up to: 6.7.2
+Stable tag: 2.3.4
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -13,10 +13,11 @@ Sort posts and custom post type objects using a drag-and-drop, sortable JavaScri
 == Description ==
 
 <strong>Over 12 MILLIONS DOWNLOADS and near PERFECT rating out of 200 REVIEWS</strong>. <br />
-A powerful plugin, Order Posts and Post Types Objects using a Drag and Drop Sortable JavaScript capability. 
+Easily Sort Posts and Custom Post Types with Drag-and-Drop
 
-The order of posts can be customized directly on the default WordPress post type archive list page or through a dedicated Re-Order interface, which displays all available items. 
-This feature allows you to easily reorder posts for any custom post types you've defined, including the default Posts. Managing post order has never been simpler.
+Take full control of your post order with a powerful plugin that lets you effortlessly reorder posts and custom post types using a simple drag-and-drop interface.
+
+Customize the order directly from the default WordPress post archive list or use the dedicated Re-Order interface, which displays all available items for easy management. Whether you're working with default posts or custom post types, organizing your content has never been easier.
   
 = Usage =
 This plugin was designed to be user-friendly, ensuring that anyone can easily use its sorting feature, regardless of their WordPress experience:
@@ -115,6 +116,11 @@ Consider upgrading to our advanced version of this plugin, which offers these fe
 
 
 == Changelog ==
+
+= 2.3.4 = 
+ - PHP 8.3.4 tag and compatibility check.
+ - WordPress 6.7.2 compatibility check and tag update.
+ - Readme revision. 
 
 = 2.3.3 = 
  - Add version to the plugin assets to avoid caching issues. 
@@ -310,3 +316,5 @@ Make sure you get the latest version.
 == Localization ==
 
 Would you like to contribute a translation in your language? Please check at https://translate.wordpress.org/projects/wp-plugins/post-types-order
+
+There isn't any Editors for your native language on plugin Contributors? You can help to moderate! https://translate.wordpress.org/projects/wp-plugins/post-types-order/contributors
