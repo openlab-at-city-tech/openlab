@@ -12,7 +12,7 @@ class Shortcodes_Ultimate_Widget extends WP_Widget {
 
 		$widget_ops = array(
 			'classname'   => self::$widget_prefix,
-			'description' => __( 'Shortcodes Ultimate widget', 'shortcodes-ultimate' ),
+			'description' => 'Shortcodes Ultimate widget',
 		);
 
 		$control_ops = array(
@@ -23,7 +23,7 @@ class Shortcodes_Ultimate_Widget extends WP_Widget {
 
 		parent::__construct(
 			self::$widget_prefix,
-			__( 'Shortcodes Ultimate', 'shortcodes-ultimate' ),
+			'Shortcodes Ultimate',
 			$widget_ops,
 			$control_ops
 		);
