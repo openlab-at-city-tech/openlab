@@ -56,8 +56,9 @@ jQuery( function( $ ) {
 
 			// Get all toggles that have not been loaded.
 			var toggles = $( '.ez-toc-toggle:not(.ez-toc-loaded),.ez-toc-widget-sticky-toggle:not(.ez-toc-loaded)' ); 
-
+            var invert_device =  (typeof ezTOC.visibility_hide_by_device != 'undefined') ? ezTOC.visibility_hide_by_device : 0;
 			var invert = ezTOC.visibility_hide_by_default;
+            
 
                         $.each(toggles, function(i, obj) {
                             
@@ -80,7 +81,7 @@ jQuery( function( $ ) {
                                 }
                             }
 
-                            if ( invert ) {
+                            if ( invert && invert_device != '0') {
 
                                     $(toggle).data( 'visible', false )
                             }
@@ -111,9 +112,9 @@ jQuery( function( $ ) {
                                                 if ( Cookies ) {
 
                                                         if ( invert )
-                                                                Cookies.set( 'ezTOC_hidetoc-' + i, null, { path: '/' } );
+                                                                Cookies.set( 'ezTOC_hidetoc-' + i, null, { path: '/', sameSite: 'Strict' } );
                                                         else
-                                                                Cookies.set( 'ezTOC_hidetoc-' + i, '1', { expires: 30, path: '/' } );
+                                                                Cookies.set( 'ezTOC_hidetoc-' + i, '1', { expires: 30, path: '/', sameSite: 'Strict' } );
                                                 }
                                             }
 
@@ -126,9 +127,9 @@ jQuery( function( $ ) {
                                                 if ( Cookies ) {
 
                                                         if ( invert )
-                                                                Cookies.set( 'ezTOC_hidetoc-' + i, '1', { expires: 30, path: '/' } );
+                                                                Cookies.set( 'ezTOC_hidetoc-' + i, '1', { expires: 30, path: '/', sameSite: 'Strict' } );
                                                         else
-                                                                Cookies.set( 'ezTOC_hidetoc-' + i, null, { path: '/' } );
+                                                                Cookies.set( 'ezTOC_hidetoc-' + i, null, { path: '/', sameSite: 'Strict' } );
                                                 }
                                             }
 
