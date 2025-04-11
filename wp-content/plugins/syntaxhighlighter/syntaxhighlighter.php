@@ -4,22 +4,22 @@
 
 Plugin Name:  SyntaxHighlighter Evolved
 Plugin URI:   https://alex.blog/wordpress-plugins/syntaxhighlighter/
-Version:      3.7.0
+Version:      3.7.2
 Description:  Easily post syntax-highlighted code to your site without having to modify the code at all. Uses Alex Gorbatchev's <a href="http://alexgorbatchev.com/SyntaxHighlighter/">SyntaxHighlighter</a>. Includes a new editor block.
 Author:       Alex Mills (Viper007Bond)
 Author URI:   https://alex.blog/
 Text Domain:  syntaxhighlighter
-License:      GPL2
+License:      GPL2+
 License URI:  https://www.gnu.org/licenses/gpl-2.0.html
 Requires at least: 5.7
-Tested up to: 6.4
+Tested up to: 6.7
 Requires PHP: 7.0
 
 **************************************************************************/
 
 class SyntaxHighlighter {
 	// All of these variables are private. Filters are provided for things that can be modified.
-	public $pluginver            = '3.7.0';  // Plugin version
+	public $pluginver            = '3.7.2';  // Plugin version
 	public $agshver              = false;    // Alex Gorbatchev's SyntaxHighlighter version (dynamically set below due to v2 vs v3)
 	public $shfolder             = false;    // Controls what subfolder to load SyntaxHighlighter from (v2 or v3)
 	public $settings             = array();  // Contains the user's settings
@@ -557,8 +557,14 @@ class SyntaxHighlighter {
 
 		$code = preg_replace( '#<pre [^>]+>([^<]+)?</pre>#', '$1', $content );
 
-		// Undo escaping done by WordPress
-		$code = htmlspecialchars_decode( $code );
+		$language = null;
+		if ( isset( $attributes['language'] ) ) {
+			$language = $attributes['language'];
+		}
+		if ( isset( $this->brushes[ $language ] ) )  {
+			// Undo escaping done by WordPress
+			$code = htmlspecialchars_decode( $code );
+		}
 		$code = preg_replace( '/^(\s*https?:)&#0?47;&#0?47;([^\s<>"]+\s*)$/m', '$1//$2', $code );
 
 		$code = $this->shortcode_callback( $attributes, $code, 'code' );
