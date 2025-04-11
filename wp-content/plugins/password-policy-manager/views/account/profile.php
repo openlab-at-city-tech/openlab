@@ -35,10 +35,10 @@ echo '
                  <center>';
 if ( isset( $back_button ) ) {
 
-		echo '<a class="button button-primary " href="' . esc_url( $back_button ) . '">Back</a> ';
+		echo '<a class="button button-secondary" href="' . esc_url( $back_button ) . '">Back</a> ';
 }
 				echo '
-                <a id="moppm_log_out" class="button button-primary" >Remove Account and Reset Settings</a>
+                <a id="moppm_log_out" class="button button-primary">Remove Account</a>
                 </center>
                 <p><a href="#mo_wpns_forgot_password_link">Click here</a> if you forgot your password to your miniOrange account.</p>
             </div>

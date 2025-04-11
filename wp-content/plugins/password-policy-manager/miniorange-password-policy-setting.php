@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Password Policy Manager
  * Description: This plugin enables configurable password policies for the Stronger passwords. We Support Password expiration, Enforce strong password for all Users in the free version of the plugin.
- * Version: 2.0.1
+ * Version: 2.0.2
  * Author: miniOrange
  * Author URI: https://miniorange.com
  * Text Domain: password-policy-manager
@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 	define( 'MOPPM_HOST_NAME', 'https://login.xecurify.com' );
-	define( 'MOPPM_VERSION', '2.0.1' );
+	define( 'MOPPM_VERSION', '2.0.2' );
 	define( 'MOPPM_TEST_MODE', false );
 	global $moppm_dir,$moppm_directory_url;
 	$moppm_dir           = plugin_dir_url( __FILE__ );
@@ -270,11 +270,14 @@ if ( ! class_exists( 'MOPPM' ) ) {
 		public function moppm_password_column_content( $value, $column_name, $user_id ) {
 			$moppm_score = get_user_meta( $user_id, 'moppm_pass_score' );
 
-			if ( 'current_status' === $column_name && ! empty( $moppm_score[0] ) ) {
-				$moppm_score = intval( $moppm_score[0] );
-				return ( '<span style="margin-left:30%;">' . esc_html( $moppm_score ) . ' <span>' );
+			if ( 'current_status' === $column_name ) {
+				if ( ! empty( $moppm_score[0] ) ) {
+					$moppm_score = intval( $moppm_score[0] );
+					return ( '<span style="margin-left:30%;">' . esc_html( $moppm_score ) . ' <span>' );
+				} 
+				return ( '<span style="margin-left:30%;">' . esc_html( '0' ) . ' <span>' );
 			}
-			return 'N/A';
+			return $value;
 		}
 
 		/**
@@ -347,6 +350,7 @@ if ( ! class_exists( 'MOPPM' ) ) {
 				}
 				delete_user_meta( $user->ID, 'moppm_points' );
 				add_user_meta( $user->ID, 'moppm_first_reset', '2' );
+				update_user_meta( $user->ID, 'moppm_last_pass_timestmp', time() );
 			}
 
 		}

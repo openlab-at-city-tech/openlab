@@ -296,8 +296,7 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 			global $moppm_db_queries;
 			$nonce = isset( $_POST['nonce'] ) ? sanitize_key( $_POST['nonce'] ) : '';
 			if ( ! wp_verify_nonce( $nonce, 'moppmresetformnonce' ) ) {
-				wp_send_json( 'ERROR' );
-				return;
+				wp_send_json_error( MOPPM_Messages::SOMETHING_WENT_WRONG );
 			}
 			$session_id = isset( $_POST['session_id'] ) ? sanitize_text_field( wp_unslash( $_POST['session_id'] ) ) : '';
 			if ( isset( $_POST['moppm_save_pass'] ) ) {
@@ -309,24 +308,24 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 			$oldpass  = isset( $_POST['oldpass'] ) ? $_POST['oldpass'] : '';//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash ,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- do not sanitize and unslash password.
 			$user_id  = get_transient( $session_id );
 			if ( ! $user_id ) {
-				wp_send_json( 'SESSION_TIMEOUT' );
+				wp_send_json_error( MOPPM_Messages::SESSION_TIMEOUT );
 			}
 			$pattern = ' ';
 			if ( strpos( $newpass2, $pattern ) ) {
-				wp_send_json( 'SPACE_FOUND' );
+				wp_send_json_error( MOPPM_Messages::BLANK_PASSWORD );
 			}
 			$user      = get_user_by( 'ID', $user_id );
 			$user_pass = $user->data->user_pass;
 			$user_name = $user->data->user_login;
 			if ( ! wp_check_password( $oldpass, $user_pass, $user_id ) ) {
-				wp_send_json( 'OLDPASSWORD_NOTMATCH' );
+				wp_send_json_error( MOPPM_Messages::WRONG_CURRENT_PASS );
 			} elseif ( $newpass !== $newpass2 ) {
-				wp_send_json( 'PASS_NOT_MATCH' );
+				wp_send_json_error( MOPPM_Messages::MISMATCH_PASSWORDS );
 			}
 			if ( $newpass === $newpass2 ) {
 				$result = Moppm_Utility::validate_password( $newpass2 );
 				if ( 'VALID' !== $result ) {
-					wp_send_json( $result );
+					wp_send_json_error( $result );
 				}
 				$moppm_count = Moppm_Utility::check_password_score( $newpass2 );
 				update_user_meta( $user_id, 'moppm_pass_score', $moppm_count );
@@ -334,7 +333,6 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 				if ( get_site_option( 'moppm_enable_disable_report' ) === 'on' ) {
 					$moppm_db_queries->update_report_list( $user_id, $log_out_time );
 				}
-				$length_pass = strlen( $newpass );
 				wp_set_password( $newpass, $user_id );
 				$meta_key = 'moppm_last_pass_timestmp';
 				update_user_meta( $user_id, $meta_key, time() );
@@ -343,27 +341,10 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 				$info['user_login']    = $user_name;
 				$info['user_password'] = $newpass;
 				$info['remember']      = true;
-				$user_signon           = wp_signon( $info, false );
-
-				if ( is_wp_error( $user_signon ) ) {
-					wp_send_json(
-						wp_json_encode(
-							array(
-								'loggedin' => false,
-								'message'  => __( 'Wrong username or password.', 'password-policy-manager' ),
-							)
-						)
-					);
-				} else {
-					wp_send_json( 'Login' );
-				}
-				exit;
+				$response = array( 'message' => MOPPM_Messages::PASSWORD_SAVED, 'user_id' => $user_id );
+				wp_send_json_success($response);
 			}
-			if ( 'on' === $moppm_submit_new_pass ) {
-				wp_send_json( 'true' );
-			} elseif ( '' === $moppm_submit_new_pass ) {
-				wp_send_json( 'false' );
-			}
+		
 		}
 	}
 }

@@ -44,7 +44,7 @@ require_once $setup_dir_name;
 	$count = 1;
 	foreach ( $wp_roles_1->role_names as $id_1 => $name ) {
 		?>
-		<span class="moppm_display_tab button button-primary" ID="moppm_role_<?php echo esc_attr( $id_1 ); ?>" onclick="displayTab('<?php echo esc_attr( $id_1 ); ?>');" value="<?php echo esc_attr( $id_1 ); ?>" 
+		<span class="moppm_display_tab button button-secondary" ID="moppm_role_<?php echo esc_attr( $id_1 ); ?>" onclick="displayTab('<?php echo esc_attr( $id_1 ); ?>');" value="<?php echo esc_attr( $id_1 ); ?>" 
 		<?php
 		if ( get_site_option( 'moppm_all_users_method' ) ) {
 			echo 'hidden';
@@ -59,7 +59,7 @@ require_once $setup_dir_name;
 	}
 	?>
 	<br><br><br>
-	<span class="moppm_advertise"><?php esc_html_e( 'This feature is available in our', 'password-policy-manager' ); ?> <a href="admin.php?page=moppm_upgrade" style="font-weight:bold;">Premium and Enterprise</a> <?php esc_html_e( 'plugins ' ); ?><?php echo '<a href="' . esc_url( $upgrade_url ) . '" style="color: red; font-weight:bold;">'; ?>[ UPGRADE ]</a></span>
+	<span class="moppm_advertise"><?php esc_html_e( 'This feature is available in our', 'password-policy-manager' ); ?> <a href="admin.php?page=moppm_upgrade" style="font-weight:bold;">Premium and Enterprise</a> <?php esc_html_e( 'plugins ', 'password-policy-manager' ); ?><?php echo '<a href="' . esc_url( $upgrade_url ) . '" style="color: red; font-weight:bold;">'; ?>[ UPGRADE ]</a></span>
 	<hr>
 </div>
 <div class="moppm_show_user_redirect">
@@ -72,7 +72,7 @@ require_once $setup_dir_name;
 				<div>
 					<form name="f" method="post" action="">
 						<div id="enabling_password_policy">
-							<strong class="moppm_enable_settings_text"><?php esc_html_e( ' Enable all settings', 'password-policy-manager' ); ?></strong>
+							<strong class="moppm_enable_settings_text"><?php esc_html_e( 'Enable all settings', 'password-policy-manager' ); ?></strong>
 							<label class="mo_wpns_switch">
 								<input type="checkbox" id="Moppm_enable_ppm" name="Moppm_enable_ppm">
 								<span class="mo_wpns_slider mo_wpns_round"></span>
@@ -139,10 +139,9 @@ require_once $setup_dir_name;
 									<div><?php esc_html_e( 'Enable/disable password expiry', 'password-policy-manager' ); ?>
 									</div>
 								<div>
-									<label class="moppm_switch" >
-									<input type="checkbox"  id="moppm_enable_disable_expiry"
-										name="moppm_enable_disable_expiry">    
-									<span class="moppm_switch_slider moppm_switch_round"></span>
+									<label class="mo_wpns_switch_small">
+										<input type="checkbox" id="moppm_enable_disable_expiry" name="moppm_enable_disable_expiry">
+										<span class="mo_wpns_slider_small mo_wpns_round_small"></span>
 									</label>
 								</div>
 							</div>
@@ -167,13 +166,16 @@ require_once $setup_dir_name;
 			</div>
 			<script>
 				jQuery('.moppm_show_roles').hide();
-
 				function displayTab(role) {
 					role_name_value = role;
 					jQuery('.moppm_display_tab').removeClass("moppm_blue");
 					jQuery('.moppm_display_tab').addClass("moppm_btn");
+					jQuery('.moppm_display_tab').removeClass("button-primary");
+					jQuery('.moppm_display_tab').addClass("button-secondary");
 					jQuery('#moppm_role_' + role).removeClass("moppm_btn");
 					jQuery('#moppm_role_' + role).addClass("moppm_blue");
+					jQuery('#moppm_role_' + role).removeClass("button-secondary");
+					jQuery('#moppm_role_' + role).addClass("button-primary");
 					jQuery('#moppm_for_all_' + role).show();
 					jQuery('.moppm_show_user_redirect').show();
 					jQuery('.moppm_hide_user_redirect').find('input, textarea, button, select').attr('disabled', 'disabled');
@@ -191,6 +193,7 @@ require_once $setup_dir_name;
 					jQuery('.moppm_show_user_redirect').hide();
 					jQuery('.moppm_for_Select_users-div').addClass('nav-tab-active');
 					jQuery('.moppm_for_roles-div').removeClass('  nav-tab-active');
+					displayTab('administrator');
 				})
 
 				var Moppm_enable_ppm = "<?php echo esc_js( get_site_option( 'Moppm_enable_disable_ppm' ) ); ?>";

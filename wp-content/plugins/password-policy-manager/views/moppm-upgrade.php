@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 global $moppm_dir;
 $back_button        = admin_url() . 'admin.php?page=moppm';
-$is_user_registered = get_site_option( 'moppm_registration_status' ) === 'SUCCESS' ? true : false;
 $moppm_allowed_html = array(
 	'div'    => array( 'class' => array() ),
 	'ul'     => array(),
@@ -38,16 +37,7 @@ echo '<a class="moppm_back_button" style="font-size: 16px; color: #000;" href="'
 </div>
 		<br><br>
 		<center>
-			<?php
-			if ( isset( $is_user_registered ) && $is_user_registered ) {
-				?>
-			<button class="moppm_upgrade_my_plan" onclick="moppm_upgradeform('wp_security_ppm_premium_plan','moppm_plan')"><?php esc_html_e( 'BUY', 'password-policy-manager' ); ?></button>
-			<?php } else { ?>
-
-			<button class="moppm_upgrade_my_plan" onclick="mopmm_register_and_upgradeform('wp_security_ppm_premium_plan','moppm_plan')"><?php esc_html_e( 'BUY', 'password-policy-manager' ); ?></button>
-				<?php
-			}
-			?>
+		<button class="moppm_upgrade_my_plan" onclick="moppm_upgradeform('wp_security_ppm_premium_plan','moppm_plan')"><?php esc_html_e( 'UPGRADE', 'password-policy-manager' ); ?></button>
 		</center>
 		</div>
 		<div id="purchase_user_limit">
@@ -58,8 +48,6 @@ echo '<a class="moppm_back_button" style="font-size: 16px; color: #000;" href="'
 			<option value="79"> 1 Sites</option>
 			<option value="129">2 Sites </option>
 			<option value="299">5 Sites</option>
-			<!-- <option value="499">10 Sites </option>
-			<option value="799">20 Sites</option> -->
 			</select>
 		</center>
 		</div>
@@ -106,15 +94,7 @@ echo '<a class="moppm_back_button" style="font-size: 16px; color: #000;" href="'
 		</div>
 		<br><br>
 		<center>
-			<?php
-			if ( isset( $is_user_registered ) && $is_user_registered ) {
-				?>
-			<button class="moppm_upgrade_my_plan" onclick="moppm_upgradeform('wp_security_ppm_enterprise_plan','moppm_plan')"><?php esc_html_e( 'BUY', 'password-policy-manager' ); ?></button>
-			<?php } else { ?>
-			<button class="moppm_upgrade_my_plan" onclick="mopmm_register_and_upgradeform('wp_security_ppm_enterprise_plan','moppm_plan')"><?php esc_html_e( 'BUY', 'password-policy-manager' ); ?></button>
-				<?php
-			}
-			?>
+		<button class="moppm_upgrade_my_plan" onclick="moppm_upgradeform('wp_security_ppm_enterprise_plan','moppm_plan')"><?php esc_html_e( 'UPGRADE', 'password-policy-manager' ); ?></button>
 		</center>
 		</div>
 		<div id="purchase_user_limit">
@@ -125,8 +105,6 @@ echo '<a class="moppm_back_button" style="font-size: 16px; color: #000;" href="'
 			<option value="159"> 1 Site</option>
 			<option value="279">2 Sites</option>
 			<option value="499">5 Sites</option>
-			<!-- <option value="699">10 Sites</option>
-			<option value="999">20 Sites</option> -->
 			</select>
 		</center>
 		</div>
@@ -201,11 +179,6 @@ echo '<a class="moppm_back_button" style="font-size: 16px; color: #000;" href="'
 </div>
 <br><br>
 </div>
-
-<form class="moppm_display_none_forms" id="moppm_register_to_upgrade_form" method="post">
-<input type="hidden" name="requestOrigin" />
-<input type="hidden" name="moppm_register_to_upgrade_nonce" value="<?php echo esc_attr( wp_create_nonce( 'miniorange-moppm-user-reg-to-upgrade-nonce' ) ); ?>" />
-</form>
 <script type="text/javascript">
 var base_price_site_based = 0;
 var display_my_site_based_price = parseInt(base_price_site_based) + parseInt(0) + parseInt(0) + parseInt(0);
@@ -243,19 +216,4 @@ function moppm_upgradeform(planType, planname) {
 	jQuery.post(ajaxurl, data, function(response) {});
 	window.open(url, "_blank");
 }
-
-function mopmm_register_and_upgradeform(planType, planname) {
-	var nonce = '<?php echo esc_js( wp_create_nonce( 'moppm_update_plan' ) ); ?>';
-	jQuery('#requestOrigin').val(planType);
-	jQuery('input[name="requestOrigin"]').val(planType);
-	jQuery('#moppm_register_to_upgrade_form').submit();
-	var data = {
-	'action': 'moppm_ajax',
-	'option': 'moppm_update_plan',
-	'planname': planname,
-	'nonce': nonce,
-	'plantype': planType,
-		}
-		jQuery.post(ajaxurl, data, function(response) {});
-	}
 </script>

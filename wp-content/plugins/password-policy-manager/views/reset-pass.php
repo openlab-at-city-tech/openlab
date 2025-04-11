@@ -87,11 +87,10 @@ function moppm_reset_pass_form( $user ) {
 									</div>
 
 									<div class="my-3">
-
-										<button class="btn btn-block moppmbtn-primary btn-md moppm_form_value" type="button" id="moppm_save_pass">
-											<small> <i class="far fa-user pr-2"></i> <?php esc_html_e( 'Change Password', 'password-policy-manager' ); ?></small>
-
-										</button>
+									<button class="btn btn-block btn-primary btn-md" type="button" value="SUBMIT" id="moppm_save_pass" >
+									<span class="moppm_button_name"> <?php esc_html_e('Change Password','password-policy-manager'); ?></span> 
+									<span class="moppm_loader"></span> 
+										</button> 
 									</div>
 									<input type="hidden" name="NONCE" value="<?php echo esc_attr( wp_create_nonce( 'moppmresetformnonce' ) ); ?>">
 									<input type="hidden" name="session_id" value="<?php echo esc_attr( $session_id ); ?>">
@@ -142,6 +141,11 @@ function moppm_reset_pass_form( $user ) {
 				</div>
 			</div>
 		</div>
+		<form name="moppm-login-submit-form" id="moppm-login-form-submit" method="post" action="" hidden>
+		    <input type="hidden" id="mopppm_userid" name="mopppm_userid" value=""/>
+			<input type="text" name="option" id="mopppm_login" hidden/>
+			<input type="hidden" name="moppm_login_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moppm-login-nonce' ) ); ?>"/>
+		</form>   
 		<div id="moppm_message"></div>
 		<?php
 		wp_register_script( 'moppm_ajax-login-script', plugins_url( 'includes/js/moppm_reset_pass.min.js', dirname( __FILE__ ) ), array(), MOPPM_VERSION, true );

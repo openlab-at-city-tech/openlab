@@ -1273,7 +1273,7 @@ input:checked + .mo_wpns_slider:before {
 .mo_wpns_switch_small {
   position: relative;
   display: inline-block;
-  width: 44px;
+  width: 40px;
   height: 24px;
 }
 .mo_wpns_switch_small input {
@@ -1304,10 +1304,10 @@ input:checked + .mo_wpns_slider:before {
   transition: .4s;
 }
 input:checked + .mo_wpns_slider_small {
-  background-color: #20b2aa;
+  background-color: #2271b1;
 }
 input:focus + .mo_wpns_slider_small {
-  box-shadow: 0 0 1px #20b2aa;
+  box-shadow: 0 0 1px #2271b1;
 }
 
 input:checked + .mo_wpns_slider_small:before {
@@ -1316,7 +1316,7 @@ input:checked + .mo_wpns_slider_small:before {
   transform: translateX(17px);
 }
 .mo_wpns_slider_small.mo_wpns_round_small {
-  border-radius: 24px;
+  border-radius: 28px;
 }
 
 .mo_wpns_slider_small.mo_wpns_round_small:before {
@@ -1594,4 +1594,39 @@ border-color: transparent black transparent transparent;
   height:unset !important;
   font-size: 23px !important;
   font-weight: unset !important;
+}
+
+/* Loader styles */
+#moppm_save_pass .moppm_loadling {
+  pointer-events: none; /* Disable clicks */
+  opacity: 0.7;
+}
+
+#moppm_save_pass .moppm_loader {
+  display: none;
+  position: absolute;
+  top: 75%;
+  left: 55%;
+  width: 40px;
+  height: 40px;
+  border: 5px solid rgb(63, 23, 225);
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  transform: translate(-50%, -50%);
+}
+
+/* When the button is loading, hide text and show loader */
+#moppm_save_pass.moppm_loadling .moppm_button_name {
+  visibility: hidden;
+}
+
+#moppm_save_pass.moppm_loadling .moppm_loader {
+  display: block;
+}
+
+/* Spinner animation */
+@keyframes spin {
+  0% { transform: translate(-50%, -50%) rotate(0deg); }
+  100% { transform: translate(-50%, -50%) rotate(360deg); }
 }
