@@ -1,0 +1,16 @@
+{
+	"compilerOptions": {
+		"baseUrl": "./e2e-tests",
+		"downlevelIteration": true,
+		"target": "esnext",
+		"module": "esnext",
+		"lib": [ "DOM", "DOM.Iterable", "ESNext" ],
+		"types": ["node"],
+		"moduleResolution": "node",
+		"esModuleInterop": false,
+		"resolveJsonModule": true,
+	},
+	"include": [
+		".",
+	]
+}
