@@ -1,4 +1,8 @@
 <?php
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 $current_language_preference = $this->add_shortcode_preferences($shortcode_settings, $current_language['code'], $current_language['name']);
 
 ?>

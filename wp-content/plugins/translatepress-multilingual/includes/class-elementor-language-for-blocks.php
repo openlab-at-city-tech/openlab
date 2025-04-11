@@ -49,6 +49,9 @@ class TRP_Elementor {
 
         add_filter( 'trp_allow_language_redirect', array( $this, 'trp_elementor_compatibility' ) );
 
+        // Disable Element Cache when Language Restriction rules are setup for an element
+		add_filter( 'elementor/element/is_dynamic_content', array( $this, 'are_language_restriction_rules_setup' ), 20, 3 );
+
 	}
 
     /**
@@ -293,6 +296,27 @@ class TRP_Elementor {
         return $allow_redirect;
 
     }
+
+    public function are_language_restriction_rules_setup( $is_dynamic_content, $data, $element ){
+
+		if( empty( $data['settings'] ) )
+			return $is_dynamic_content;
+
+		if( isset( $data['settings']['trp_language_restriction'] ) && $data['settings']['trp_language_restriction'] == 'yes' )
+			return true;
+
+		if( isset( $data['settings']['trp_exclude_handler'] ) && $data['settings']['trp_exclude_handler'] == 'yes' )
+			return true;
+
+		if( isset( $data['settings']['trp_restricted_languages'] ) && !empty( $data['settings']['trp_restricted_languages'] ) )
+			return true;
+
+		if( isset( $data['settings']['trp_excluded_languages'] ) && !empty( $data['settings']['trp_excluded_languages'] ) )
+			return true;
+
+		return $is_dynamic_content;
+
+	}
 }
 
 // Instantiate Plugin Class

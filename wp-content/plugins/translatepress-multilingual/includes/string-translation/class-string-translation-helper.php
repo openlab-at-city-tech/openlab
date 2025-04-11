@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_String_Translation_Helper {
 	/* @var TRP_Query */
 	protected $trp_query;
@@ -9,12 +13,13 @@ class TRP_String_Translation_Helper {
 
 
 	/** Functions used by regular, gettext and slugs from SEO Pack */
-	public function check_ajax( $type, $get_or_save ) {
+	public function check_ajax( $type, $action ) {
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			check_ajax_referer( 'string_translation_' . $get_or_save . '_strings_' . $type, 'security' );
+            $handle_suffix = ( $action !== 'delete' ) ? '_' . $type : '';
+			check_ajax_referer( 'string_translation_' . $action . '_strings' . $handle_suffix, 'security' );
 
-			$action = ( $get_or_save === 'save' ) ? 'trp_save_translations_' : 'trp_string_translation_get_strings_';
-			if ( isset( $_POST['action'] ) && $_POST['action'] === $action . $type ) {
+            $map = [ 'save' => 'trp_save_translations_', 'get' => 'trp_string_translation_get_strings_', 'delete' => 'trp_string_translation_delete_' ];
+			if ( isset( $_POST['action'] ) && $_POST['action'] === $map[ $action ] . $type ) {
 				return true;
 			}
 		}
@@ -153,7 +158,9 @@ class TRP_String_Translation_Helper {
 
 		$this->check_ajax( $type, 'get' );
 
-		$trp                = TRP_Translate_Press::get_trp_instance();
+        global $wpdb;
+
+        $trp                = TRP_Translate_Press::get_trp_instance();
 		$string_translation = $trp->get_component( 'string_translation' );
 		$trp_query          = $trp->get_component( 'query' );
 		$trp_settings       = $trp->get_component( 'settings' );
@@ -192,7 +199,7 @@ class TRP_String_Translation_Helper {
 		$results_query  .= ( $type === 'gettext' ) ? ', original_strings.domain, original_strings.context, original_strings.original_plural ' : '';
 		$query          = "FROM `" . sanitize_text_field( $original_table ) . "` AS original_strings ";
 
-		if ( ! empty( $sanitized_args['status'] ) || ! empty( $sanitized_args['translation-block-type'] ) ) {
+		if ( ( ! empty( $sanitized_args['status'] ) || ! empty( $sanitized_args['translation-block-type'] ) ) && empty( $sanitized_args['s'] ) ) {
 
 			// joining translation tables is needed only when we have filter for translation status or for translation block type
 			foreach ( $translation_languages as $language ) {
@@ -218,37 +225,78 @@ class TRP_String_Translation_Helper {
 
 		// search
 		if ( ! empty( $sanitized_args['s'] ) ) {
-			$where_clauses[] = 'original_strings.original LIKE \'%' . $sanitized_args['s'] . '%\' ';
+            $search_term = $sanitized_args['s'];
+
+            $search = [
+                'queries' => [],
+                'clauses' => []
+            ];
+
+            foreach ( $translation_languages as $language ){
+                $table = $trp_query->$get_table_name_func( $language );
+
+                $search['queries'][$language] = $results_query . "FROM `" . sanitize_text_field( $original_table ) . "` AS original_strings " .
+                                                                 "LEFT JOIN $table AS $language ON $language.original_id = original_strings.id ";
+                $language_clauses = ["$language.translated LIKE '$search_term%'"];
+
+                if ( !empty( $sanitized_args['status'] ) ) {
+                    $status_array = array_map( function( $status ) use ( $language ){
+                        return "$language.status = $status";
+                    }, $sanitized_args['status'] );
+
+                    $status_clause = implode( ' OR ', $status_array );
+
+                    $language_clauses[] = "($status_clause)";
+                }
+
+                if ( !empty( $sanitized_args['translation-block-type'] ) ) {
+                    $block_type = $sanitized_args['translation-block-type'];
+
+                    $language_clauses[] = "$language.block_type = $block_type";
+                }
+
+                $search['clauses'][$language] = array_merge( $where_clauses, $language_clauses );
+            }
+
+			$where_clauses[] = "(original_strings.original LIKE '%$search_term%' )";
 		}
 
 		if ( ! empty( $sanitized_args['domain'] ) ) {
-			$where_clauses[] = 'original_strings.domain LIKE \'%' . $sanitized_args['domain'] . '%\' ';
+			$where_clauses[] = '(original_strings.domain LIKE \'%' . $sanitized_args['domain'] . '%\' )';
 		}
 
 		$query = $this->add_where_clauses_to_query( $query, $where_clauses );
 
-		$counting_query .= $query;
+        if ( isset( $search ) ) {
+            foreach ( $search['queries'] as $language => &$search_query ) {
+                $search_query = $this->add_where_clauses_to_query( $search_query, $search['clauses'][$language] );
+            }
 
+            $search['queries'] = array_merge( $search['queries'], [$results_query . $query] );
+            $query             = implode( ' UNION ', $search['queries'] );
+        }
+
+		$counting_query .= isset( $search ) ? "FROM ($query) as union_query" : $query;
 
 		// order by
 		if ( ! empty( $sanitized_args['orderby'] ) ) {
 			if ( $sanitized_args['orderby'] === 'original' ) {
-				$query .= 'ORDER BY original_strings.' . $sanitized_args['orderby'] . ' ' . $sanitized_args['order'] . ' ';
+                $order_clause = 'ORDER BY original_strings.' . $sanitized_args['orderby'] . ' ' . $sanitized_args['order'] . ' ';
+
+				$query .= $order_clause;
 			}
 		}
 
 		// pagination
 		$query .= 'LIMIT ' . ( $sanitized_args['page'] - 1 ) * $config['items_per_page'] . ', ' . $config['items_per_page'];
 
-
-		global $wpdb;
-		$total_item_count = $wpdb->get_var( $counting_query );
+        $total_item_count = $wpdb->get_var( $counting_query );
 		$original_ids     = array();
 		$originals        = array();
 		if ( $total_item_count > 0 ) {
 
 			// query search to retrieve IDs of original strings needed
-			$results_query .= $query;
+			$results_query = isset( $search ) ? $query : $results_query . $query;
 			$originals     = $wpdb->get_results( $results_query, OBJECT_K );
 			$original_ids  = array_keys( $originals );
 		}
@@ -264,4 +312,32 @@ class TRP_String_Translation_Helper {
 	private function string_starts_with($haystack, $needle){
 		return (string)$needle !== '' && strncmp($haystack, $needle, strlen($needle)) === 0;
 	}
+
+    public function get_original_ids_from_post_request() {
+        $trp = TRP_Translate_Press::get_trp_instance();
+        if ( !$this->settings ) {
+            $trp_settings   = $trp->get_component( 'settings' );
+            $this->settings = $trp_settings->get_settings();
+        }
+
+        $all_strings = json_decode( stripslashes( $_POST['strings'] ), true ); //phpcs:ignore
+        $ids         = [];
+        foreach ( $all_strings as $string ) {
+            if ( !empty( $string['originalId'] ) ) {
+                $ids[] = (int)$string['originalId'];
+            } else {
+                foreach ( $this->settings['translation-languages'] as $language ) {
+                    if ( $this->settings['default-language'] == $language ) {
+                        continue;
+                    }
+                    if ( isset( $string['translationsArray'][ $language ]['original_id'] ) && (int)$string['translationsArray'][ $language ]['original_id'] > 0 ) {
+                        $ids[] = (int)$string['translationsArray'][ $language ]['original_id'];
+                        // all languages have identical original table id
+                        break;
+                    };
+                }
+            }
+        }
+        return $ids;
+    }
 }

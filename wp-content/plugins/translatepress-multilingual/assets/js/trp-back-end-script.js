@@ -96,10 +96,12 @@ jQuery( function() {
             var language_code = new_option.find( 'input.trp-language-code' );
             language_code.val( new_language);
 
-            var remove = new_option.find( '.trp-remove-language' ).toggle();
+            var remove = new_option.find( '.trp-remove-language__container' ).toggle();
 
             new_option = jQuery( '#trp-sortable-languages' ).append( new_option );
-            new_option.find( '.trp-remove-language' ).last().click( _this.remove_language );
+            new_option.find( '.trp-remove-language__container' ).last().click( _this.remove_language );
+
+            jQuery( '#trp-new-language.trp-add-new-language-row' ).remove();
         };
 
         this.change_language = function( event ){
@@ -114,7 +116,7 @@ jQuery( function() {
             var confirmed = confirm( message );
 
             if ( confirmed ) {
-                let language_to_remove = jQuery( element.target ).parent().parent();
+                let language_to_remove = jQuery( element.target ).closest('.trp-language');
                 let language_to_remove_code = language_to_remove.find('.trp-language-code').val();
 
                 // remove language from array
@@ -268,7 +270,7 @@ jQuery( function() {
 
             // Show Add button, hide Remove button
             add_list_entry.querySelector( '.trp-adst-button-add-new-item' ).style.display = 'none'
-            add_list_entry.querySelector( '.trp-adst-remove-element' ).style.display = 'block'
+            add_list_entry.querySelector( '.trp-adst-remove-element' ).parentNode.style.display = 'block'
 
             // Design change to add the cloned element at the bottom of list
             // Done becasue the select box element cannot be cloned with its selected state
@@ -307,15 +309,70 @@ jQuery( function() {
     var trpSettingsLanguages = new TRP_Settings_Language_Selector();
 
     jQuery('#trp-default-language').on("select2:selecting", function(e) {
-        jQuery("#trp-options .warning").show('fast');
+        jQuery(".trp-settings-warning").show('fast');
     });
+
     /*
      * Automatic Translation Page
      */
 
+
+    /** Backwards compatibility for when Pro version was not updated -- Tp Settings redesign */
+    function toggleDeeplElements__compat(show = true) {
+        const optionsContainer = document.querySelector('.trp-settings-options__wrapper .trp-to-hide');
+
+        // Wrap the given text in a span first due to it not having a tag
+        function wrapTextNode(text, className) {
+            document.querySelectorAll('.trp-settings-options__wrapper .trp-to-hide').forEach(el => {
+                el.childNodes.forEach(node => {
+                    if (node.nodeType === 3 && node.nodeValue.includes(text)) {
+                        // Check if the text is already wrapped by seeing if its parent is a <span> with the class
+                        if (node.parentNode && node.parentNode.classList?.contains(className)) {
+                            return; // Already wrapped, so do nothing
+                        }
+
+                        // Create a <span> and wrap the text
+                        let span = document.createElement("span");
+                        span.textContent = node.nodeValue;
+                        span.classList.add(className);
+                        node.replaceWith(span);
+                    }
+                });
+            });
+        }
+
+        wrapTextNode("DeepL API Type", "trp-deepl-api-type-text");
+
+        const deeplApiTypeText  = optionsContainer.querySelector('.trp-deepl-api-type-text');
+
+        if ( !optionsContainer || !deeplApiTypeText ) return;
+
+        const labelProType      = document.querySelector('label[for="trp-deepl-api-type-pro"]');
+        const labelFreeType     = document.querySelector('label[for="trp-deepl-api-type-free"]');
+        const deeplApiKeyText   = document.querySelector('h4');
+        const deeplApiKeyInput  = document.querySelector('#trp-deepl-key');
+        const apiKeyDescription = deeplApiKeyInput.nextElementSibling;
+        const deeplDescription = labelFreeType?.nextElementSibling; // Safe check
+        function toggleElement(el, show) {
+            if (el)
+                el.style.display = show ? "" : "none";
+        }
+
+        // Toggle elements
+        toggleElement(deeplApiTypeText, show);
+        toggleElement(labelProType, show);
+        toggleElement(labelFreeType, show);
+        toggleElement(deeplApiKeyText, show);
+        toggleElement(deeplDescription, show);
+        toggleElement(deeplApiKeyInput, show);
+        toggleElement(apiKeyDescription, show);
+    }
+
     // Hide API Fields Based on Selected Translation Engine
     jQuery('#trp-translation-engines').on('change', function (){
         jQuery('.trp-engine').hide();
+
+        toggleDeeplElements__compat(false);
 
         // backwards compatibility for when Paid version not updated. Deepl missing .trp-engine and #deepl selectors in html
         jQuery("#trp-deepl-api-type-pro").closest('tr').hide();
@@ -332,8 +389,12 @@ jQuery( function() {
             // backwards compatibility for when Paid version not updated. Deepl missing .trp-engine and #deepl selectors in html
             jQuery("#trp-deepl-api-type-pro").closest('tr').show();
             jQuery("#trp-deepl-key").closest('tr').show();
+
+            toggleDeeplElements__compat(true);
         }
     })
+
+
 
     // Used for the main machine translation toggle to show/hide all options below it
     function TRP_show_hide_machine_translation_options(){
@@ -350,6 +411,101 @@ jQuery( function() {
     jQuery('#trp-machine-translation-enabled').on( 'change', function(){
         TRP_show_hide_machine_translation_options()
     })
+
+    function TRP_test_API_key(){
+        const testPopupOverlay = document.querySelector( '.trp-test-api-key-popup-overlay');
+        const testPopup        = document.querySelector( '.trp-test-api-key-popup' );
+
+        if ( !testPopup )
+            return;
+
+        const testApiBtn = document.querySelector( '#trp-test-api-key button' );
+
+        const closePopup = document.querySelector( '.trp-test-api-key-close-btn' );
+
+        closePopup.addEventListener( "click", function () {
+            testPopupOverlay.style.visibility = "hidden";
+            testPopup.style.visibility = "hidden";
+        });
+
+        testPopupOverlay.addEventListener( "click", function () {
+            if ( testPopup.style.visibility === 'hidden' )
+                return;
+
+            testPopupOverlay.style.visibility = "hidden";
+            testPopup.style.visibility = "hidden";
+        });
+
+        testPopup.addEventListener( "click", function (event) {
+            event.stopPropagation();
+        });
+
+
+        testApiBtn.addEventListener( "click", function(){
+            testPopupOverlay.style.visibility = 'visible';
+
+            jQuery('.trp-loading-spinner').show();
+
+            jQuery.ajax({
+                    url: trp_url_slugs_info['admin-ajax'],
+                    type: 'POST',
+                    data: {
+                        action: 'test_api_key',
+                        security: document.querySelector( '#trp_test_api_nonce_field' ).value
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            testPopup.style.visibility        = 'visible';
+
+                            populatePopup(response.data);
+                        } else {
+                            console.error("Error:", response.data.message);
+                        }
+                    },
+                    error: function() {
+                        console.error("AJAX request failed");
+                    },
+                    complete: function(){
+                        jQuery('.trp-loading-spinner').hide();
+                    }
+            });
+        });
+
+        function populatePopup( response ){
+            const popupResponse = testPopup.querySelector('.trp-test-api-key-response .trp-settings-container');
+            const popupResponseBody = testPopup.querySelector('.trp-test-api-key-response-body .trp-settings-container');
+            const popupResponseFull = testPopup.querySelector('.trp-test-api-key-response-full .trp-settings-container');
+
+            popupResponse.textContent     = JSON.stringify( response.response.response );
+            popupResponseBody.textContent = response.response.body;
+            popupResponseFull.textContent = response.raw_response;
+        }
+    }
+    TRP_test_API_key();
+
+    function TRP_show_hide_automatic_translation_content(){
+        const toggleSwitch = document.getElementById( "trp-machine-translation-enabled" );
+
+        if ( !toggleSwitch )
+            return;
+
+        function toggleSwitchFn(){
+            const toHideElements = document.querySelectorAll('.trp-to-hide');
+
+            toHideElements.forEach( (element) => {
+               if ( toggleSwitch.checked )
+                   element.classList.remove( 'trp-hidden' )
+
+               else
+                   element.classList.add( 'trp-hidden' )
+            });
+        }
+
+        toggleSwitchFn();
+
+        toggleSwitch.addEventListener( 'change', toggleSwitchFn );
+    }
+    TRP_show_hide_automatic_translation_content();
 
     // check quota for site on TP AI
     function TRP_TP_AI_Recheck(){
@@ -387,6 +543,33 @@ jQuery( function() {
         })
     }
 
+    // Enable target field only if checkbox is checked
+    function trp_enable_disable_conditional_field( targetField, checkboxField ){
+        const checkbox = document.querySelector( checkboxField );
+        const target = document.querySelector( targetField );
+
+        if ( !checkbox )
+            return;
+
+        function toggleInput() {
+            if (target.matches("input, select, textarea, button")) {
+                target.disabled = !checkbox.checked;
+            } else {
+                const inputs = target.querySelectorAll("input, select, textarea, button");
+                inputs.forEach(input => {
+                    input.disabled = !checkbox.checked;
+                })
+            }
+        }
+
+        checkbox.addEventListener("change", toggleInput);
+        toggleInput();
+    }
+    trp_enable_disable_conditional_field( '#trp-machine-translation-limit','#trp-machine-translation-limit-toggle' );
+    trp_enable_disable_conditional_field( 'select[name="trp_advanced_settings[enable_hreflang_xdefault]"]','#enable_hreflang_xdefault-checkbox' );
+    trp_enable_disable_conditional_field( 'div.trp-input-array-rows__wrapper','#language_date_format' );
+
+
     trp_ai_recheck_in_progress = false
     jQuery("#trp-refresh-tpai").on('click', function(){
         if ( !trp_ai_recheck_in_progress ){
@@ -410,88 +593,78 @@ jQuery( function() {
 //Advanced Settings Tabs
 function TRP_Advanced_Settings_Tabs() {
     function init() {
+        if (!window.location.search.includes('trp_advanced_page')) return;
 
-        jQuery('.advanced_settings_class').hide();
-        jQuery('#trp-cuslang-table').hide();
-        jQuery('.description_table').hide();
+        jQuery('.trp-settings-container').hide();
 
-        var trp_current_url = window.location.href;
+        // Backwards compatibility for old Pro versions. We did not have trp-settings-containers then
+        const aldSettingsContainer = document.querySelector('.advanced_settings_class.ald_settings');
 
-        if (!window.location.href.includes('tab')) {
-            jQuery('#trp_advanced_tab_content_table li:first-child').addClass('active');
-            let first_settings = jQuery('#trp_advanced_tab_content_table li:first-child').find('a').attr('class');
-            jQuery("." + first_settings).show();
-        } else if (!window.location.href.includes('#')) {
-            var trp_tab = trp_current_url.split('tab');
-            var trp_tab_value = trp_tab[1].split(/[=&]/);
+        let navItems = document.querySelectorAll(".trp_advanced_tab_content_table_item");
+        let containers = !aldSettingsContainer ?
+            document.querySelectorAll(".trp-settings-container") :
+            [...document.querySelectorAll(".trp-settings-container"), aldSettingsContainer];
 
-            jQuery('.trp_advanced_tab_content_table_item .' + trp_tab_value[1]).css({
-                'border-bottom': '4px solid #2271b1',
-                'padding-bottom': '19px',
-                'font-weight': 'bold',
-                'color': '#000000'
-            });
-            jQuery("." + trp_tab_value[1]).show();
+        let settingsReferer = document.querySelector("#trp_advanced_settings_referer"); // Hidden input field
 
-            if (trp_tab_value[1] === 'custom_language') {
-                jQuery('#trp-cuslang-table').show();
-                jQuery('.description_table').show();
-            } else {
-                jQuery('#trp-cuslang-table').hide();
-                jQuery('.description_table').hide();
+        function getURLParameter(name) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(name);
+        }
+
+        function updateURLParameter(param, value) {
+            let url = new URL(window.location.href);
+            url.searchParams.set(param, value);
+            window.history.replaceState(null, "", url.toString());
+        }
+
+        function showTargetContainer(targetClass) {
+            containers.forEach(container => container.style.display = "none");
+
+            let targetContainers = targetClass === 'ald_settings' && aldSettingsContainer ?
+                document.querySelectorAll('.advanced_settings_class.ald_settings') :
+                document.querySelectorAll(`.trp-settings-container-${targetClass}`);
+
+            if (targetContainers.length > 0) {
+                targetContainers.forEach(container => container.style.display = "block");
             }
-        } else {
-            var trp_tab = trp_current_url.split('tab');
-            var trp_tab_value = trp_tab[1].split('#');
 
-            jQuery('.trp_advanced_tab_content_table_item .' + trp_tab_value[1]).css({
-                'border-bottom': '4px solid #2271b1',
-                'padding-bottom': '19px',
-                'font-weight': 'bold',
-                'color': '#000000'
+            document.querySelectorAll(".trp_advanced_tab_content_table_item").forEach(el => {
+                el.classList.remove("trp-nav-active");
             });
-            jQuery("." + trp_tab_value[1]).show();
 
-            if (trp_tab_value[1] === 'custom_language') {
-                jQuery('#trp-cuslang-table').show();
-                jQuery('.description_table').show();
-            } else {
-                jQuery('#trp-cuslang-table').hide();
-                jQuery('.description_table').hide();
+            let activeNavItem = document.querySelector(`.trp_advanced_tab_content_table_item a.${targetClass}`);
+            if (activeNavItem) {
+                activeNavItem.closest(".trp_advanced_tab_content_table_item").classList.add("trp-nav-active");
             }
         }
-        jQuery('#trp_advanced_tab_content_table li').click(function (event) {
-            event.preventDefault();
-            jQuery('#trp_advanced_tab_content_table li').removeClass('active');
-            jQuery(this).addClass('active');
-            jQuery('.advanced_settings_class').hide();
-            jQuery('.trp_advanced_tab_content_table_item a').css({
-                'border-bottom': 'none',
-                'padding-bottom': 'none',
-                'font-weight': 'normal',
-                'color': '#2271b1'
+
+        navItems.forEach(item => {
+            item.addEventListener("click", function (event) {
+                event.preventDefault();
+
+                let targetClass = this.querySelector("a").classList[0];
+
+                updateURLParameter("tab", targetClass);
+                if (settingsReferer) settingsReferer.value = targetClass;
+                showTargetContainer(targetClass);
             });
-
-            var activeTab = jQuery(this).find('a').attr('class');
-
-            jQuery('.trp_advanced_tab_content_table_item .' + activeTab).css({
-                'border-bottom': '4px solid #2271b1',
-                'padding-bottom': '19px',
-                'font-weight': 'bold',
-                'color': '#000000'
-            });
-
-            jQuery('#trp_advanced_settings_referer').attr('value', activeTab);
-            jQuery("." + activeTab).show();
-            if (activeTab === 'custom_language') {
-                jQuery('#trp-cuslang-table').show();
-                jQuery('.description_table').show();
-            } else {
-                jQuery('#trp-cuslang-table').hide();
-                jQuery('.description_table').hide();
-            }
-
         });
+
+        // On page load, check for &tab= in URL or in the hidden input
+        let activeTab = getURLParameter("tab") || (settingsReferer ? settingsReferer.value : null);
+
+        if (activeTab) {
+            showTargetContainer(activeTab);
+        } else {
+            let firstNavItem = navItems[0]?.querySelector("a");
+            if (firstNavItem) {
+                let firstTargetClass = firstNavItem.classList[0];
+                updateURLParameter("tab", firstTargetClass);
+                if (settingsReferer) settingsReferer.value = firstTargetClass;
+                showTargetContainer(firstTargetClass);
+            }
+        }
     }
 
     return {
@@ -687,7 +860,6 @@ jQuery(document).ready(function (e) {
             })
 
         }
-
     })
 })
 

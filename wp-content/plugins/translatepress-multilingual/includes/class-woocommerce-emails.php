@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Woocommerce_Emails{
 
     public function __construct(){}

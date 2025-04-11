@@ -1,6 +1,9 @@
 <?php
 
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Install_Plugins {
     public function get_plugin_slugs() {
         $slugs = array(

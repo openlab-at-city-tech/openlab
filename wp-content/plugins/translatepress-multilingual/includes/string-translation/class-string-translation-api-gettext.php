@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_String_Translation_API_Gettext {
     protected $type = 'gettext';
     protected $helper;
@@ -27,10 +31,16 @@ class TRP_String_Translation_API_Gettext {
 			array( 'status' => 'status' )
 		);
 
+        $query_args = $this->helper->get_sanitized_query_args( $this->type );
+
+        // Used to display (found in translation) label next to the original string in case we found the search result in translations
+        if ( !empty( $query_args['s'] ) )
+            set_transient( 'trp_gettext_search', $query_args['s'], 10 );
+
 
 		echo trp_safe_json_encode( array( //phpcs:ignore
 			'originalIds' => $originals_results['original_ids'],
-			'totalItems' => $originals_results['total_item_count']
+			'totalItems' => $originals_results['total_item_count'],
 		) );
 		wp_die();
 
@@ -106,17 +116,34 @@ class TRP_String_Translation_API_Gettext {
 				}
 
 				/* html entity decode the strings so we display them properly in the textareas  */
-				foreach( $dictionaries as $lang => $dictionary ){
-					foreach( $dictionary as $key => $string ){
-						$string = array_map('html_entity_decode', $string );
-						$dictionaries[$lang][$key] = (object)$string;
-					}
-				}
+                foreach ($dictionaries as $lang => $dictionary) {
+                    foreach ($dictionary as $key => $string) {
+                        // Ensure $string is an array before applying array_map
+                        if (is_array($string)) {
+                            $string = array_map(function($value) {
+                                return $value !== null ? html_entity_decode($value) : '';
+                            }, $string);
+                        }
+
+                        $dictionaries[$lang][$key] = (object) $string;
+                    }
+                }
 
 				$translation_manager = $trp->get_component('translation_manager');
 				$localized_text = $translation_manager->string_groups();
 				$post_language = ( isset( $_POST['language'] ) ) ? sanitize_text_field( $_POST['language'] ) : null;
 				$dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'gettext', $localized_text['gettextstrings'], $post_language );
+
+                $search_query = get_transient('trp_gettext_search' );
+
+                if ( !empty( $search_query ) ) {
+                    foreach ( $dictionary_by_original as &$dictionary ) {
+                        foreach ( $dictionary['translationsArray'] as $translationArray ) {
+                            if ( strpos( $translationArray->translated, $search_query  ) !== false )
+                                $dictionary['foundInTranslation'] = true;
+                        }
+                    }
+                }
 
 				echo trp_safe_json_encode( array('dictionary' => $dictionary_by_original ) ); //phpcs:ignore
 
@@ -132,6 +159,18 @@ class TRP_String_Translation_API_Gettext {
      * Leave this function empty, removing it will cause a thrown notice
      */
     public function save_strings() {
+
+    }
+
+
+    public function delete_strings() {
+        $this->helper->check_ajax( 'gettext', 'delete' );
+        $original_ids   = $this->helper->get_original_ids_from_post_request();
+        $regular_delete = new TRP_Gettext_Delete();
+        $items_deleted  = $regular_delete->delete_strings( $original_ids );
+
+        echo trp_safe_json_encode( $items_deleted );//phpcs:ignore
+        wp_die();
 
     }
 }

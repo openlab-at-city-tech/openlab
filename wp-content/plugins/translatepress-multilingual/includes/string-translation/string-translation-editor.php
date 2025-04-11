@@ -1,3 +1,10 @@
+<?php
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
+?>
+
 <!DOCTYPE html>
 <html <?php language_attributes(); ?> class="no-js">
 <head>

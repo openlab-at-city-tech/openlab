@@ -1,4 +1,8 @@
 <?php
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_register_strip_gettext_post_content', 60 );
 function trp_register_strip_gettext_post_content( $settings_array ){
 	$settings_array[] = array(
@@ -6,7 +10,8 @@ function trp_register_strip_gettext_post_content( $settings_array ){
 		'type'          => 'checkbox',
 		'label'         => esc_html__( 'Filter Gettext wrapping from post content and title', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'Filters gettext wrapping such as #!trpst#trp-gettext from all updated post content and post title. Does not affect previous post content. <br/><strong>Database backup is recommended before switching on.</strong>', 'translatepress-multilingual' ), array( 'br' => array(), 'strong' => array()) ),
-        'id'            =>'troubleshooting',
+        'id'            => 'troubleshooting',
+        'container'     => 'troubleshooting'
 	);
 	return $settings_array;
 }

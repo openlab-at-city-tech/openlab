@@ -1,5 +1,8 @@
 <?php
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_register_show_dynamic_content_before_translation', 20 );
 function trp_register_show_dynamic_content_before_translation( $settings_array ){
 	$settings_array[] = array(
@@ -7,7 +10,8 @@ function trp_register_show_dynamic_content_before_translation( $settings_array )
 		'type'          => 'checkbox',
 		'label'         => esc_html__( 'Fix missing dynamic content', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'May help fix missing content inserted using JavaScript. <br> It shows dynamically inserted content in original language for a moment before the translation request is finished.', 'translatepress-multilingual' ), array( 'br' => array()) ),
-        'id'            =>'troubleshooting',
+        'id'            => 'troubleshooting',
+        'container'     => 'troubleshooting'
     );
 	return $settings_array;
 }

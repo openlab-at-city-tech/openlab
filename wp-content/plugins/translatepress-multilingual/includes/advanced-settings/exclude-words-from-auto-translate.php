@@ -1,16 +1,21 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_register_exclude_words_from_auto_translate', 100 );
 function trp_register_exclude_words_from_auto_translate( $settings_array ){
     $settings_array[] = array(
         'name'          => 'exclude_words_from_auto_translate',
-        'type'          => 'list',
+        'type'          => 'list_input',
         'columns'       => array(
             'words' => __('String', 'translatepress-multilingual' ),
         ),
         'label'         => esc_html__( 'Exclude strings from automatic translation', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Do not automatically translate these strings (ex. names, technical words...)<br>Paragraphs containing these strings will still be translated except for the specified part.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
-        'id'            =>'exclude_strings',
+        'id'            => 'exclude_strings',
+        'container'     => 'exclude_at_strings'
     );
     return $settings_array;
 }

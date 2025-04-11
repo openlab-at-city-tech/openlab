@@ -1,11 +1,17 @@
 <?php
+
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 function trp_register_fix_broken_html( $settings_array ){
     $settings_array[] = array(
         'name'          => 'fix_broken_html',
         'type'          => 'checkbox',
         'label'         => esc_html__( 'Fix broken HTML', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'General attempt to fix broken or missing HTML on translated pages.<br/>', 'translatepress-multilingual' ), array( 'br' => array(), 'strong' => array() ) ),
-        'id'            =>'troubleshooting',
+        'id'            => 'troubleshooting',
+        'container'     => 'troubleshooting'
     );
     return $settings_array;
 }

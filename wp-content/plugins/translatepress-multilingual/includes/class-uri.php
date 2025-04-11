@@ -1,6 +1,9 @@
 <?php
 namespace TranslatePress;
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class Uri
 {
     const SCHEMES_WITH_AUTHORITY = ';http;https;ftp';

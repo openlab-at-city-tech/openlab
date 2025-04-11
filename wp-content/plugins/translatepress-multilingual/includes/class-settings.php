@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Settings
  *
@@ -160,8 +164,9 @@ class TRP_Settings{
         $trp = TRP_Translate_Press::get_trp_instance();
         $install_plugins = $trp->get_component('install_plugins');
 
-        $active_plugin = __('Active', 'translatepress-multilingual');
-        $inactive_plugin = __('Install & Activate', 'translatepress-multilingual');
+        $active_plugin = __( 'Deactivate', 'translatepress-multilingual' );
+        $inactive_plugin = __( 'Install & Activate', 'translatepress-multilingual' );
+        $inactive_and_installed = __( 'Activate', 'translatepress-multilingual' );
 
         $plugins = array( 'pb', 'pms', 'wha' );
         $plugin_settings = array();
@@ -169,10 +174,20 @@ class TRP_Settings{
             $plugin_settings[$plugin] = array();
             if ( $install_plugins->is_plugin_active( $plugin ) ) {
                 $plugin_settings[$plugin]['install_button'] = $active_plugin;
-                $plugin_settings[$plugin]['disabled']       = 'disabled';
-            }else{
+                $plugin_settings[$plugin]['disabled']       = '';
+                $plugin_settings[$plugin]['action']         = 'deactivate';
+            }
+
+            elseif ( $install_plugins->is_plugin_installed( $plugin ) ) {
+                $plugin_settings[$plugin]['install_button'] = $inactive_and_installed;
+                $plugin_settings[$plugin]['disabled']       = '';
+                $plugin_settings[$plugin]['action']         = 'activate';
+            }
+
+            else{
                 $plugin_settings[$plugin]['install_button'] = $inactive_plugin;
                 $plugin_settings[$plugin]['disabled']       = '';
+                $plugin_settings[$plugin]['action']         = 'install_activate';
             }
         }
 
@@ -456,6 +471,7 @@ class TRP_Settings{
             'block-crawlers'                    => 'yes',
             'automatically-translate-slug'      => 'yes',
             'machine_translation_counter_date'  => date ("Y-m-d" ),
+            'machine_translation_limit_enabled' => 'no',
             'machine_translation_limit'         => 1000000
             /*
              * These settings are merged into the saved DB option.
@@ -471,7 +487,7 @@ class TRP_Settings{
      * @param string $hook          Admin page.
      */
     public function enqueue_scripts_and_styles( $hook ) {
-        if( in_array( $hook, [ 'settings_page_translate-press', 'admin_page_trp_license_key', 'admin_page_trp_addons_page', 'admin_page_trp_advanced_page', 'admin_page_trp_machine_translation', 'admin_page_trp_test_machine_api', 'admin_page_trp_optin_page' ] ) ){
+        if( in_array( $hook, [ 'settings_page_translate-press', 'admin_page_trp_license_key', 'admin_page_trp_addons_page', 'admin_page_trp_advanced_page', 'admin_page_trp_machine_translation', 'admin_page_trp_test_machine_api', 'admin_page_trp_optin_page', 'admin_page_trp_remove_duplicate_rows', 'admin_page_trp_update_database' ] ) ){
             wp_enqueue_style(
                 'trp-settings-style',
                 TRP_PLUGIN_URL . 'assets/css/trp-back-end-style.css',
@@ -481,7 +497,9 @@ class TRP_Settings{
         }
 
         if( in_array( $hook, array( 'settings_page_translate-press', 'admin_page_trp_advanced_page', 'admin_page_trp_machine_translation' ) ) ) {
-            wp_enqueue_script( 'trp-settings-script', TRP_PLUGIN_URL . 'assets/js/trp-back-end-script.js', array( 'jquery', 'jquery-ui-sortable' ), TRP_PLUGIN_VERSION );
+            $back_end_script_url = defined( 'TRP_IN_EL_PLUGIN_URL' ) && file_exists( TRP_IN_EL_PLUGIN_DIR . 'assets/js/trp-back-end-script-pro.js' )  ? TRP_IN_EL_PLUGIN_URL . 'assets/js/trp-back-end-script-pro.js' : TRP_PLUGIN_URL . 'assets/js/trp-back-end-script.js';
+
+            wp_enqueue_script( 'trp-settings-script', $back_end_script_url, array( 'jquery', 'jquery-ui-sortable' ), TRP_PLUGIN_VERSION );
 
             if ( ! $this->trp_languages ){
                 $trp                 = TRP_Translate_Press::get_trp_instance();

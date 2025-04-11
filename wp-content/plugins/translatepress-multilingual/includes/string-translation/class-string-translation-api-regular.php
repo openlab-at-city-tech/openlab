@@ -1,6 +1,9 @@
 <?php
 
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_String_Translation_API_Regular {
     protected $type = 'regular';
     protected $helper;
@@ -56,6 +59,19 @@ class TRP_String_Translation_API_Regular {
 			}
 
 			$dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, $this->type, null, null );
+
+            $query_args = $this->helper->get_sanitized_query_args( $this->type );
+
+            // Used to display (found in translation) label next to the original string in case we found the search result in translations
+            if ( !empty( $query_args['s'] ) ) {
+                foreach ( $dictionary_by_original as &$dictionary ) {
+                    foreach ( $dictionary['translationsArray'] as $translationArray ) {
+                        if ( strpos( $translationArray->translated, $query_args['s'] ) !== false )
+                            $dictionary['foundInTranslation'] = true;
+                    }
+                }
+            }
+
 		}else{
 			$dictionary_by_original = array();
 		}
@@ -76,4 +92,16 @@ class TRP_String_Translation_API_Regular {
     public function save_strings() {
 
     }
+
+    public function delete_strings() {
+        $this->helper->check_ajax( 'regular', 'delete' );
+        $original_ids   = $this->helper->get_original_ids_from_post_request();
+        $regular_delete = new TRP_Regular_Delete();
+        $items_deleted  = $regular_delete->delete_strings( $original_ids );
+
+        echo trp_safe_json_encode( $items_deleted );//phpcs:ignore
+        wp_die();
+
+    }
+
 }

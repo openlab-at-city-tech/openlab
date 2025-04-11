@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Advanced_Tab {
 
     private $settings;
@@ -100,26 +104,49 @@ class TRP_Advanced_Tab {
                         break;
                     }
                     case 'custom': {
-						foreach ( $registered_setting['rows'] as $row_label => $row_type ) {
-                            if (isset($submitted_settings[$registered_setting['name']][$row_label])) {
+                        if ( isset( $registered_setting['rows'] ) ) {
+                            foreach ( $registered_setting['rows'] as $row_label => $row_type ) {
+                                if ( isset( $submitted_settings[ $registered_setting['name'] ][ $row_label ] ) ) {
 
-                                if( $row_type != 'textarea' )
-                                    $value = sanitize_text_field( $submitted_settings[$registered_setting['name']][$row_label] );
-                                else
-                                    $value = sanitize_textarea_field( $submitted_settings[$registered_setting['name']][$row_label] );
+                                    if ( $row_type != 'textarea' )
+                                        $value = sanitize_text_field( $submitted_settings[ $registered_setting['name'] ][ $row_label ] );
+                                    else
+                                        $value = sanitize_textarea_field( $submitted_settings[ $registered_setting['name'] ][ $row_label ] );
 
-                                $settings[$registered_setting['name']][$row_label] = $value;
-
+                                    $settings[ $registered_setting['name'] ][ $row_label ] = $value;
+                                }
                             }
                         }
+
+                        if ( $registered_setting['name'] === 'enable_hreflang_xdefault' ){
+                            $select_key   = $registered_setting['name'];
+                            $checkbox_key = $registered_setting['name'] . '-checkbox';
+
+                            $is_checkbox_disabled = $submitted_settings[$select_key] === false ;
+
+                            $select_value   = $is_checkbox_disabled ? 'disabled' : $submitted_settings[$select_key];
+                            $checkbox_value = $is_checkbox_disabled ? 'no' : $submitted_settings[$checkbox_key];
+
+                            $settings[ $select_key ]   = sanitize_text_field( $select_value );
+                            $settings[ $checkbox_key ] = sanitize_text_field( $checkbox_value );
+                        }
+
 						break;
 					}
 					case 'input_array': {
+                        $formats_array_key = $registered_setting['name'];
+                        $checkbox_key      = $registered_setting['name'] . '-checkbox';
+
 						foreach ( $registered_setting['rows'] as $row_label => $row_name ) {
-                            if (isset($submitted_settings[$registered_setting['name']][$row_label])) {
-                                    $settings[$registered_setting['name']][$row_label] = sanitize_text_field( $submitted_settings[$registered_setting['name']][$row_label] );
+                            if (isset($submitted_settings[$formats_array_key][$row_label])) {
+                                    $settings[$formats_array_key][$row_label] = sanitize_text_field( $submitted_settings[$formats_array_key][$row_label] );
                             }
                         }
+
+                        $checkbox_value = isset( $submitted_settings[$checkbox_key] ) && $submitted_settings[$checkbox_key] !== false ? $submitted_settings[$checkbox_key] : 'no';
+
+                        $settings[$checkbox_key] = sanitize_text_field( $checkbox_value );
+
 						break;
 					}
                     case 'number': {
@@ -263,23 +290,37 @@ class TRP_Advanced_Tab {
 	/*
 	 * Hooked to trp_before_output_advanced_settings_options
 	 */
-
     function trp_advanced_settings_content_table(){
 
         $advanced_settings_array = $this->get_registered_advanced_settings();
 
-        $html                    = '<ul id="trp_advanced_tab_content_table">';
+        $html                    = '<div class="trp_advanced_tab_content_table__wrapper"><div id="trp_advanced_tab_content_table">';
         $advanced_settings_array = apply_filters( 'trp_advanced_tab_add_element', $advanced_settings_array );
-        foreach ( $advanced_settings_array as $item=> $setting ) {
+        $advanced_settings_array = apply_filters('trp_advanced_tab_add_element', $advanced_settings_array);
 
-            if ($setting['type'] ==='separator' && $setting['name'] === 'automatic_user_language_detection'){
-                $html .= '<li style = "display:inline" class="trp_advanced_tab_content_table_item"><a href="#' . esc_html( $advanced_settings_array[ $item ]['id'] ) . '" class="' . esc_html( $advanced_settings_array[ $item ]['id'] ) . '">' . esc_html( $setting['label'] ) . '</a></li>';
-            }elseif ($setting['type'] ==='separator') {
-                $html .= '<li style = "display:inline" class="trp_advanced_tab_content_table_item"><a href="#' . esc_html( $advanced_settings_array[ $item + 1 ]['id'] ) . '" class="' . esc_html( $advanced_settings_array[ $item + 1 ]['id'] ) . '">' . esc_html( $setting['label'] ) . '</a></li>';
+        $first_item = '';
+        $other_items = '';
+
+        foreach ($advanced_settings_array as $setting) {
+            if ($setting['type'] === 'separator') {
+                $tab_html = '<span class="trp_advanced_tab_content_table_item">
+                                <a href="#' . esc_html($setting['id']) . '" class="' . esc_html($setting['id']) . '">
+                                    ' . esc_html($setting['label']) . '
+                                </a>
+                            </span>';
+
+                if ($setting['name'] === 'automatic_user_language_detection') {
+                    $first_item = $tab_html; // Store this to add it first
+                } else {
+                    $other_items .= $tab_html; // Collect other separators
+                }
             }
         }
 
-        $html .= '</ul>';
+        $html .= $first_item . $other_items;
+
+        $html .= '</div></div>';
+
         echo $html;//phpcs:ignore
     }
 
@@ -288,96 +329,117 @@ class TRP_Advanced_Tab {
     /*
      * Hooked to trp_settings_navigation_tabs
      */
-	public function output_advanced_options(){
-
-        echo "<input type='hidden' name='tab' id='trp_advanced_settings_referer'>";//phpcs:ignore
+    public function output_advanced_options() {
+        echo "<input type='hidden' name='tab' id='trp_advanced_settings_referer'>"; // phpcs:ignore
         $advanced_settings_array = $this->get_registered_advanced_settings();
-        foreach( $advanced_settings_array as $setting ){
-            switch( $setting['type'] ){
-                case 'checkbox':
-                    echo $this->checkbox_setting( $setting );//phpcs:ignore
-                    break;
-                case 'radio':
-                    echo $this->radio_setting( $setting );//phpcs:ignore
-                    break;
-                case 'input':
-                    echo $this->input_setting( $setting );//phpcs:ignore
-                    break;
-                case 'number':
-                    echo $this->input_setting( $setting, 'number' );//phpcs:ignore
-                    break;
-                case 'input_array':
-                    echo $this->input_array_setting( $setting );//phpcs:ignore
-                    break;
-                case 'select':
-                    echo $this->select_setting( $setting );//phpcs:ignore
-                    break;
-                case 'separator':
-                    echo $this->separator_setting( $setting );//phpcs:ignore
-                    break;
-                case 'list':
-                    echo $this->add_to_list_setting( $setting );//phpcs:ignore
-                    break;
-                case 'list_input':
-                    echo $this->add_to_list_input_setting( $setting );//phpcs:ignore
-                    break;
-                case 'text':
-                    echo $this->text_setting( $setting );//phpcs:ignore
-                    break;
-                case 'mixed':
-                    echo $this->mixed_setting( $setting );//phpcs:ignore
-                    break;
-                case 'custom':
-                    echo $this->custom_setting( $setting );//phpcs:ignore
-                    break;
-            }
+
+        $grouped_settings = [];
+
+        // Step 1: Group settings by ID
+        foreach ( $advanced_settings_array as $setting ) {
+            if ( !isset( $setting['container'] ) )
+                continue;
+
+            $array_key = $setting['type'] === 'container_title' ? 'container_title' : 'container_elements';
+
+            $grouped_settings[$setting['container']][$array_key][] = $setting;
+        }
+
+        // Step 2: Loop through each group and output settings within a container
+        foreach ( $grouped_settings as $id => $settings ) {
+            $container_id = $settings['container_elements'][0]['id'];
+
+            echo "<div class='trp-settings-container trp-settings-container-" . esc_attr($container_id) . "'>";
+            echo $this->container_title_setting( $settings['container_title'][0] ); //phpcs:ignore
+
+            echo "<div class='trp-settings-options__wrapper'>";
+                foreach ( $settings['container_elements'] as $setting ) {
+                    switch ( $setting['type'] ) {
+                        case 'checkbox':
+                            echo $this->checkbox_setting($setting); // phpcs:ignore
+                            break;
+                        case 'radio':
+                            echo $this->radio_setting($setting); // phpcs:ignore
+                            break;
+                        case 'input':
+                            echo $this->input_setting($setting); // phpcs:ignore
+                            break;
+                        case 'number':
+                            echo $this->input_setting($setting, 'number'); // phpcs:ignore
+                            break;
+                        case 'input_array':
+                            echo $this->input_array_setting($setting); // phpcs:ignore
+                            break;
+                        case 'select':
+                            echo $this->select_setting($setting); // phpcs:ignore
+                            break;
+                        case 'list':
+                            echo $this->add_to_list_setting($setting); // phpcs:ignore
+                            break;
+                        case 'list_input':
+                            echo $this->add_to_list_input_setting($setting); // phpcs:ignore
+                            break;
+                        case 'text':
+                            echo $this->text_setting($setting); // phpcs:ignore
+                            break;
+                        case 'mixed':
+                            echo $this->mixed_setting($setting); // phpcs:ignore
+                            break;
+                        case 'custom':
+                            echo $this->custom_setting($setting); // phpcs:ignore
+                            break;
+                    }
+                }
+            echo "</div>"; // Close options wrapper
+
+            echo "</div>"; // Close container for this group
         }
     }
-//
-//	/**
-//	 * Return HTML of a checkbox type setting
-//	 *
-//	 * @param $setting
-//	 *
-//	 * @return 'string'
-//	 */
-    public function checkbox_setting( $setting ){
+
+
+	/**
+	 * Return HTML of a checkbox type setting
+	 *
+	 * @param $setting
+	 *
+	 * @return 'string'
+	 */
+    public function checkbox_setting( $setting ) {
         $adv_option = $this->settings['trp_advanced_settings'];
         $checked = ( isset( $adv_option[ $setting['name'] ] ) && $adv_option[ $setting['name'] ] === 'yes' ) ? 'checked' : '';
-        $html = "<div class='advanced_settings_class " . esc_html($setting['id']) . "' id = '" . esc_html($setting['id']) . "'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ). "</div>
-                <div class='trp_advanced_settings_align'>
-	                <label>
-	                    <input type='checkbox' id='" . esc_attr( $setting['name'] ). "' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "]' value='yes' " . $checked . ">
-	                    " . __('Yes', 'translatepress-multilingual' ). "
-			        </label>
-                    <p class='description'>
-                        " . wp_kses_post( $setting['description'] ) . "
-                    </p>
-                </div>
-            </div>
+
+        $html = "<div class='trp-settings-checkbox trp-settings-options-item'>
+                <input type='checkbox' id='" . esc_attr( $setting['name'] ) . "' 
+                       name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "]' 
+                       value='yes' " . $checked . " />
+
+                <label for='" . esc_attr( $setting['name'] ) . "' class='trp-checkbox-label'>
+                    <div class='trp-checkbox-content'>
+                        <span class='trp-primary-text-bold'>" . esc_html( $setting['label'] ) . "</span>
+                        <span class='trp-description-text'>" . wp_kses_post( $setting['description'] ) . "</span>
+                    </div>
+                </label>
             </div>";
-        return apply_filters('trp_advanced_setting_checkbox', $html );
+
+        return apply_filters( 'trp_advanced_setting_checkbox', $html );
     }
 
-//    /**
-//     * Return HTML of a radio button type setting
-//     *
-//     * @param $setting
-//     *
-//     * @return 'string'
-//     */
+
+    /**
+     * Return HTML of a radio button type setting
+     *
+     * @param $setting
+     *
+     * @return 'string'
+     */
     public function radio_setting( $setting ){
 
         $adv_option = $this->settings['trp_advanced_settings'];
-        $html = "<div class='advanced_settings_class " . esc_html($setting['id']) . "' id='" . esc_html($setting['id']) . "'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name'>" . esc_html($setting['label'] ) . "</div>
-                <div class='trp-adst-radio trp_advanced_settings_align'>";
+        $html = "<div class='trp-radio__wrapper trp-settings-options-item'>
+                    <span class='trp-primary-text-bold'>" . esc_html($setting['label'] ) . "</span>
+                    <div class='trp-adst-radio trp-radio__wrapper'>";
 
         foreach($setting[ 'options' ] as $key => $option ){
-
             if( isset( $adv_option[ $setting['name'] ] ) && !empty( $adv_option[ $setting['name'] ] ) ){
                 if( $adv_option[ $setting['name'] ] === $option ){
                     $checked = 'checked="checked"';
@@ -396,17 +458,17 @@ class TRP_Advanced_Tab {
             }
             $setting_name  = $setting['name'];
             $label  = $setting[ 'labels' ][$key];
-            $html .= "<label>
+            $html .= "<label class='trp-primary-text'>
 	                    <input type='radio' id='". esc_attr( $setting_name ) . "' name='trp_advanced_settings[". esc_attr( $setting_name ) ."]' value='". esc_attr( $option ) ."' $checked >
 	                    ". esc_html( $label ) ."
 			          </label>";
         }
 
-        $html .= "  <p class='description'>
+        $html .=   "</div>
+                    <span class='trp-description-text'>
                         " . wp_kses_post( $setting['description'] ). "
-                    </p>
-                </div>
-            </div></div>";
+                    </span>
+                </div>";
         return apply_filters('trp_advanced_setting_radio', $html );
     }
 
@@ -423,7 +485,7 @@ class TRP_Advanced_Tab {
         $adv_option = $this->settings['trp_advanced_settings'];
         $default = ( isset( $setting['default'] )) ? $setting['default'] : '';
         $value = ( isset( $adv_option[ $setting['name'] ] ) ) ? $adv_option[ $setting['name'] ] : $default;
-        $html = "<div class='advanced_settings_class " . esc_html($setting['id']) . "' id='" . esc_html($setting['id']) . "'>
+        $html = "
              <div class='trp_advanced_flex_box'>
                 <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ). "</div>
                 <div class='trp_advanced_settings_align'>
@@ -434,7 +496,7 @@ class TRP_Advanced_Tab {
                         ". wp_kses_post( $setting['description'] ) . "
                     </p>
                 </div>
-            </div></div>";
+            </div>";
         return apply_filters('trp_advanced_setting_input', $html );
     }
 
@@ -447,28 +509,43 @@ class TRP_Advanced_Tab {
 	 * @return 'string'
 	 */
     public function input_array_setting ($setting, $type = 'text'){
-
         $adv_option = $this->settings['trp_advanced_settings'];
         $default = ( isset( $setting['default'] )) ? $setting['default'] : '';
 
-        $html = "<div class='advanced_settings_class " . esc_html($setting['id']) . "' id='" . esc_html($setting['id']) . "'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name' style='padding-bottom: 15px'>" . esc_html( $setting['label'] ) .  "</div>
-                <div class='trp_advanced_settings_align'>
-                <div class='form-table' id='trp-form-table-div'>";
+        $checked = ( isset( $adv_option[ $setting['name'] . '-checkbox' ] ) && $adv_option[ $setting['name'] . '-checkbox' ] === 'yes' )
+            || !empty( $adv_option[ $setting['name'] ] )
+            ? 'checked'
+            : '';
+
+        $input_rows = '<div class="trp-input-array-rows__wrapper">';
+
         foreach ($setting['rows'] as $row_label=>$row_name ){
             $value = ( isset( $adv_option[ $setting['name'] ][$row_label] ) ) ? $adv_option[ $setting['name'] ][$row_label]  : $default;
 
-            $html.= "
-			    <div id='trp-input-array-setting-div'>
-			        <div id='trp-input-array-setting-div-language-name'><label for='". esc_attr( $setting['name'] ) ."-".esc_attr( $row_label ) ."'> ".esc_attr( $row_name )." </label></div><div><input type='". esc_attr( $type ) ."' id='". esc_attr( $setting['name'] ) ."-". esc_attr( $row_label ) ."' name='trp_advanced_settings[". esc_attr( $setting['name'] )."][". esc_attr( $row_label )."]' value='".esc_attr( $value )."'>
-			        </div>
-			    </div>";
+            $input_rows.= "<div class='trp-input-array-setting-row'>
+                                <label class='trp-primary-text' for='". esc_attr( $setting['name'] ) ."-".esc_attr( $row_label ) ."'> ".esc_attr( $row_name )." </label>
+                                <input type='text' id='". esc_attr( $setting['name'] ) ."-". esc_attr( $row_label ) ."' name='trp_advanced_settings[". esc_attr( $setting['name'] )."][". esc_attr( $row_label )."]' value='".esc_attr( $value )."'>
+                           </div>";
         }
-        $html.="</div>
-<p class='description'>". wp_kses_post( $setting['description'] ) ."</p>
-                </div>
-            </div></div></div>";
+
+        $input_rows.= "</div>";
+
+        $html = "<div class='trp-settings-custom-checkbox__wrapper'>
+                    <div class='trp-settings-checkbox'>
+                        <input type='checkbox' id='" . esc_attr( $setting['name'] ) . "' 
+                               name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "-checkbox]' 
+                               value='yes' " . $checked . " />
+        
+                        <label for='" . esc_attr( $setting['name'] ) . "' class='trp-checkbox-label'>
+                            <div class='trp-checkbox-content'>
+                                <span class='trp-primary-text-bold'>" . esc_html( $setting['label'] ) . "</span>
+                                <span class='trp-description-text'>" . wp_kses_post( $setting['description'] ) . "</span>
+                            </div>
+                        </label>
+                    </div>
+                    $input_rows
+                 </div>";
+
         return apply_filters('trp_advanced_setting_input_array', $html );
     }
 
@@ -492,7 +569,7 @@ class TRP_Advanced_Tab {
             $options .= "<option value='". esc_attr( $lang ) ."' $selected>". esc_html( $label )."</option>";
         }
 
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" . esc_html($setting['id']) . "'>
+        $html = "
              <div class='trp_advanced_flex_box'>
                 <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ) ."</div>
                 <div class='trp_advanced_settings_align'>
@@ -505,19 +582,23 @@ class TRP_Advanced_Tab {
                         ". wp_kses_post( $setting['description'] ) ."
                     </p>
                 </div>
-            </div></div>";
+            </div>";
         return apply_filters('trp_advanced_setting_select', $html );
     }
 
     /**
-     * Return HTML of a separator type setting
+     * Return HTML of a container title type setting
      *
      * @param $setting
      *
      * @return 'string'
      */
-    public function separator_setting( $setting ){
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" .$setting['id'] ."'><div><h2>" . esc_html( $setting['label'] ) . "<h2></div></div>";
+    public function container_title_setting( $setting ){
+        $html = "<div class='trp-settings-container-title__wrapper'>
+                    <h2 class='trp-settings-primary-heading'>" . esc_html( $setting['label'] ) . "</h2>
+                    <div class='trp-settings-separator'></div>
+                </div>";
+
         return apply_filters('trp_advanced_setting_separator', $html );
     }
 
@@ -528,57 +609,60 @@ class TRP_Advanced_Tab {
 	 *
 	 * @return 'string'
 	 */
-    public function add_to_list_setting( $setting ){
+    public function add_to_list_setting( $setting ) {
         $adv_option = $this->settings['trp_advanced_settings'];
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" .$setting['id'] ."'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ) . "</div>
-                <div class='trp_advanced_settings_align'>
-	                <div class='trp-adst-list-option'>
-						<div id='trp-adst-list-option-div'>
-							";
+
+        $remove_element = "<div class='trp-remove-language__container trp-adst-remove-element'>
+                            <span class='trp-adst-remove-element-text' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span>
+                            <svg width='20' height='21' viewBox='0 0 20 21' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                <path fill-rule='evenodd' clip-rule='evenodd' d='M12 4.5H15C15.6 4.5 16 4.9 16 5.5V6.5H3V5.5C3 4.9 3.5 4.5 4 4.5H7C7.2 3.4 8.3 2.5 9.5 2.5C10.7 2.5 11.8 3.4 12 4.5ZM11 4.5C10.8 3.9 10.1 3.5 9.5 3.5C8.9 3.5 8.2 3.9 8 4.5H11ZM14.1 17.6L15 7.5H4L4.9 17.6C5 18.1 5.4 18.5 5.9 18.5H13.1C13.6 18.5 14.1 18.1 14.1 17.6Z' fill='#757575'/>
+                            </svg>
+                       </div>";
+
+        $html = "
+                <span class='trp-description-text'>" . wp_kses_post( $setting['description'] ) . "</span>
+                <table class='trp-adst-list-option'>
+                    <thead class='trp-add-to-input-setting-columns'>
+                        <tr>";
         foreach( $setting['columns'] as $key => $value ){
-            $html .= '<div id="trp-adst-list-option-div-columns"><strong>' . esc_html( $value ) . '</strong></div>';
+            $html .= '<th><span class="trp-primary-text-bold">' . esc_html( $value ) . '</span></th>';
         }
-        //"Remove" button
-        $html .= "<div></div>";
+        $html .=        "</tr>
+                    </thead>";
 
-        // list existing entries
-        $html .= "		</div>";
+        $first_column = key($setting['columns']);
 
-        $first_column = '';
-        foreach( $setting['columns'] as $column => $column_name ) {
-            $first_column = $column;
-            break;
-        }
+        $html .= "<tbody>";
+
+        // Existing Entries
         if ( isset( $adv_option[ $setting['name'] ] ) && is_array( $adv_option[ $setting['name'] ] ) ) {
             foreach ( $adv_option[ $setting['name'] ][ $first_column ] as $index => $value ) {
-                $html .= "<div class='trp-list-entry' id='trp-adst-list-option-div-list-entry'>";
+                $html .= "<tr class='trp-list-entry'>";
                 foreach ( $setting['columns'] as $column => $column_name ) {
-                    $html .= "<div style='padding-right: 10px'><textarea name='trp_advanced_settings[" . esc_attr( $setting['name'] ). "][" . esc_attr( $column ) . "][]'>" . htmlspecialchars($adv_option[ $setting['name'] ][ $column ][ $index ], ENT_QUOTES) . "</textarea></div>";
+                    $column_value = isset($adv_option[ $setting['name'] ][ $column ][ $index ]) ? esc_attr($adv_option[ $setting['name'] ][ $column ][ $index ]) : '';
+                    $html .= "<td><input type='text' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $column ) . "][]' value='" . $column_value . "'></td>";
                 }
-                $html .= "<div><span class='trp-adst-remove-element' id='trp-adst-remove-element-list-entry' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></div>";
-                $html .= "</div>";
+                $html .= "<td>$remove_element</td>";
+                $html .= "</tr>";
             }
         }
 
-        // add new entry to list
-        $html .= "<div class='trp-add-list-entry trp-list-entry' style='display: flex; margin-bottom: 18px;'>";
+        // Add New Entry Row
+        $html .= "<tr class='trp-add-list-entry trp-list-entry'>";
         foreach( $setting['columns'] as $column => $column_name ) {
-            $html .= "<div style='padding-right: 10px'><textarea id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $column ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $column ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $column ) . "'></textarea></div>";
-
+            $html .= "<td class='trp-add-list-entry-input-col'><input type='text' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $column ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $column ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $column ) . "'></td>";
         }
-        $html .= "<div><input type='button' class='button-secondary trp-adst-button-add-new-item' style='margin-left: 10px; margin-top: 7px;' value='" . esc_html__( 'Add', 'translatepress-multilingual' ) . "'><span class='trp-adst-remove-element' style='display: none;' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></div>";
-        ;
-        $html .= "</div></div>";
 
-        $html .= "<p class='description'>
-                        " . wp_kses_post( $setting['description'] ) . "
-                    </p>
-                </div>
-            </div></div></div>";
+        $html .= "<td class='trp-add-list-entry-btn-col'>
+                <input type='button' class='trp-button-secondary trp-adst-button-add-new-item' value='" . esc_html__( 'Add', 'translatepress-multilingual' ) . "'>
+                <div style='display: none;'>$remove_element</div>
+              </td>";
+
+        $html .= "</tr></tbody></table>";
+
         return apply_filters( 'trp_advanced_setting_list', $html );
     }
+
 
     /**
      * Return HTML of input type list
@@ -589,53 +673,58 @@ class TRP_Advanced_Tab {
      */
     public function add_to_list_input_setting( $setting ){
         $adv_option = $this->settings['trp_advanced_settings'];
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" .$setting['id'] ."'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ) . "</div>
-                <div class='trp_advanced_settings_align'>
-	                <div class='trp-adst-list-option'>
-						<div id='trp-add-to-input-setting-div'>
-							";
-        foreach( $setting['columns'] as $key => $value ){
-            $html .= '<div style="padding-right: 175px; padding-bottom: 15px;"><strong>' . esc_html( $value ) . '</strong></div>';
-        }
-        //"Remove" button
-        $html .= "<div></div>";
 
-        // list existing entries
-        $html .= "		</div>";
+        $remove_element = "<div class='trp-remove-language__container trp-adst-remove-element'>
+                                <span class='trp-adst-remove-element-text' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span>
+                                <svg width='20' height='21' viewBox='0 0 20 21' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                    <path fill-rule='evenodd' clip-rule='evenodd' d='M12 4.5H15C15.6 4.5 16 4.9 16 5.5V6.5H3V5.5C3 4.9 3.5 4.5 4 4.5H7C7.2 3.4 8.3 2.5 9.5 2.5C10.7 2.5 11.8 3.4 12 4.5ZM11 4.5C10.8 3.9 10.1 3.5 9.5 3.5C8.9 3.5 8.2 3.9 8 4.5H11ZM14.1 17.6L15 7.5H4L4.9 17.6C5 18.1 5.4 18.5 5.9 18.5H13.1C13.6 18.5 14.1 18.1 14.1 17.6Z' fill='#757575'/>
+                                </svg>
+                           </div>";
+
+        $html = "
+                    <span class='trp-description-text'>
+                        " . wp_kses_post( $setting['description'] ) . "
+                    </span>
+	                <table class='trp-adst-list-option'>
+						<thead class='trp-add-to-input-setting-columns'><tr>";
+                            foreach( $setting['columns'] as $key => $value ){
+                                $html .= '<th><span class="trp-primary-text-bold">' . esc_html( $value ) . '</span></th>';
+                            }
+        $html .=        "</tr></thead>";
 
         $first_column = '';
         foreach( $setting['columns'] as $column => $column_name ) {
             $first_column = $column;
             break;
         }
+
+        $html .= '<tbody>';
+
         if ( isset( $adv_option[ $setting['name'] ] ) && is_array( $adv_option[ $setting['name'] ] ) ) {
             foreach ( $adv_option[ $setting['name'] ][ $first_column ] as $index => $value ) {
-                $html .= "<div class='trp-list-entry' id='trp-add-to-input-setting-div-entry'>";
+                $html .= "<tr class='trp-list-entry' id='trp-add-to-input-setting-div-entry'>";
                 foreach ( $setting['columns'] as $column => $column_name ) {
-                    $html .= "<div style='padding-right: 10px'><input type='text' name='trp_advanced_settings[" . esc_attr( $setting['name'] ). "][" . esc_attr( $column ) . "][]' value='". htmlspecialchars($adv_option[ $setting['name'] ][ $column ][ $index ], ENT_QUOTES) ."'></input></div>";
+                    $html .= "<td><input type='text' name='trp_advanced_settings[" . esc_attr( $setting['name'] ). "][" . esc_attr( $column ) . "][]' value='". htmlspecialchars($adv_option[ $setting['name'] ][ $column ][ $index ], ENT_QUOTES) ."'></td>";
                 }
-                $html .= "<div><span class='trp-adst-remove-element' id='trp-adst-remove-element-list-entry' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></div>";
-                $html .= "</div>";
+
+                $html .= "<td>$remove_element</td>";
+
+                $html .= "</tr>";
             }
         }
 
         // add new entry to list
-        $html .= "<div class='trp-add-list-entry trp-list-entry' id='trp-add-list-entry-new-entry'>";
+        $html .= "<tr class='trp-add-list-entry trp-list-entry'>";
         foreach( $setting['columns'] as $column => $column_name ) {
-            $html .= "<div style='padding-right: 10px'><input type='text' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $column ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $column ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $column ) . "'></input></div>";
+            $html .= "<td class='trp-add-list-entry-input-col'><input type='text' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $column ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $column ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $column ) . "'></td>";
 
         }
-        $html .= "<div><input type='button' class='button-secondary trp-adst-button-add-new-item' id='trp-add-list-entry-new-entry-button' value='" . esc_html__( 'Add', 'translatepress-multilingual' ) . "'><span class='trp-adst-remove-element' style='display: none;' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></div>";
-        ;
-        $html .= "</div></div>";
+        $html .= "<td class='trp-add-list-entry-btn-col'><input type='button' class='trp-button-secondary trp-adst-button-add-new-item' value='" . esc_html__( 'Add', 'translatepress-multilingual' ) . "'>
+                    <div style='display: none;'>$remove_element</div>
+                  </td>";
 
-        $html .= "<p class='description'>
-                        " . wp_kses_post( $setting['description'] ) . "
-                    </p>
-                </div>
-            </div></div></div>";
+        $html .= "</tr></tbody></table>";
+
         return apply_filters( 'trp_advanced_setting_list', $html );
     }
 
@@ -647,124 +736,145 @@ class TRP_Advanced_Tab {
      * @return 'string'
      */
     public function text_setting( $setting ){
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" . $setting['id'] . "'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name' style='padding-bottom: 15px'>" . esc_html( $setting['label'] ) . "</div>
-                <div class='trp_advanced_settings_align'>
-	                <p class='description'>
+        $html = "<div class='trp-settings-options-item trp-settings-options-item__column trp-settings-options-item__nocheckbox'>
+                    <div class='trp-primary-text-bold'>" . esc_html( $setting['label'] ) . "</div>
+                    <span class='trp-description-text'>
                         " . wp_kses_post( $setting['description'] ) . "
-                    </p>
-                </div>
-            </div></div>";
+                    </span>
+                 </div>";
         return apply_filters('trp_advanced_setting_text', $html );
     }
 
-    public function mixed_setting($setting){
+    public function mixed_setting($setting) {
         $adv_option = $this->settings['trp_advanced_settings'];
-        $html = "<div class ='advanced_settings_class " . esc_html($setting['id']) . "' id='" . esc_html($setting['id']) . "'>
-             <div class='trp_advanced_flex_box'>
-                <div class='trp_advanced_option_name'>" . esc_html( $setting['label'] ) . "</div>
-                <div class='trp_advanced_settings_align'>
-                <div></div>
-                <table id='trp-cuslang-table' class='trp-adst-list-option '>
-						<thead>
-							";
-        foreach( $setting['columns'] as $option_name => $option_details ){
-            if(isset($setting['columns'][$option_name]['required']) && $setting['columns'][$option_name]['required'] === true){
-                $html .= '<th class="trp_lang_code"><strong>' . esc_html( $option_details['label'] ). '<span title="Required"> *</span> </strong></th>';
-            }else{
-                $html .= '<th><strong>' . esc_html( $option_details['label'] ) . '</strong></th>';
+
+        $remove_element = "<div class='trp-remove-language__container trp-adst-remove-element'>
+                            <span class='trp-adst-remove-element-text' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span>
+                            <svg width='20' height='21' viewBox='0 0 20 21' fill='none' xmlns='http://www.w3.org/2000/svg'>
+                                <path fill-rule='evenodd' clip-rule='evenodd' d='M12 4.5H15C15.6 4.5 16 4.9 16 5.5V6.5H3V5.5C3 4.9 3.5 4.5 4 4.5H7C7.2 3.4 8.3 2.5 9.5 2.5C10.7 2.5 11.8 3.4 12 4.5ZM11 4.5C10.8 3.9 10.1 3.5 9.5 3.5C8.9 3.5 8.2 3.9 8 4.5H11ZM14.1 17.6L15 7.5H4L4.9 17.6C5 18.1 5.4 18.5 5.9 18.5H13.1C13.6 18.5 14.1 18.1 14.1 17.6Z' fill='#757575'/>
+                            </svg>
+                       </div>";
+
+        $html = "<span class='trp-description-text'>" . wp_kses_post($setting['first_description']) . "</span>";
+
+
+        $html .= "<table id='trp-cuslang-table' class='trp-adst-list-option'>
+                    <thead class='trp-add-to-input-setting-columns'>";
+
+        // Column headers
+        foreach ( $setting['columns'] as $option_name => $option_details ) {
+            if ( !empty($option_details['required'] ) ) {
+                $html .= "<th class='trp_lang_code'><span class='trp-primary-text-bold'>" . esc_html($option_details['label']) . " <span title='Required'>*</span></span></th>";
             }
 
+            else {
+                $html .= "<th><span class='trp-primary-text-bold'>" . esc_html($option_details['label']) . "</span></th>";
+            }
         }
+        $html .= "<th></th></thead>";
 
-        //"Remove" button
-        $html .= "<th></th>";
+        $first_column = key($setting['columns']);
 
-        // list existing entries
-        $html .= "		</thead>";
-
-        $first_column = '';
-        foreach( $setting['columns'] as $column => $column_name ) {
-            $first_column = $column;
-            break;
-        }
-
-        if ( isset( $adv_option[ $setting['name'] ] ) && is_array( $adv_option[ $setting['name'] ] )) {
-            foreach ( $adv_option[ $setting['name'] ][ $first_column ] as $index => $value ) {
-
+        // Existing entries
+        if ( !empty( $adv_option[$setting['name']] ) && is_array( $adv_option[$setting['name']] ) ) {
+            foreach ( $adv_option[$setting['name']][$first_column] as $index => $value ) {
                 $html .= "<tr class='trp-list-entry'>";
-
                 foreach ( $setting['columns'] as $option_name => $option_details ) {
-                    switch ( $option_details['type']) {
-                        case 'text':
-                            $html .= "<td class=' ". $option_name ." '><input class='trp_narrow_input' type='text' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' value='" . htmlspecialchars($adv_option[ $setting['name'] ][ $option_name ][ $index ], ENT_QUOTES) . "'></td>";
+                    $option_value = $adv_option[$setting['name']][$option_name][$index] ?? '';
 
+                    switch ($option_details['type']) {
+                        case 'text':
+                            $html .= "<td class='trp-col-" . esc_attr($option_name) . "'>
+                                    <input class='trp_narrow_input' type='text' 
+                                    name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]' 
+                                    value='" . esc_attr($option_value) . "'>
+                                  </td>";
                             break;
+
                         case 'textarea':
-                            $html .= "<td><textarea class='trp_narrow_input' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr(  $option_name ) . "][]'>" . htmlspecialchars($adv_option[ $setting['name'] ][ $option_name ][ $index ], ENT_QUOTES) . "</textarea></td>";
+                            $html .= "<td>
+                                    <textarea class='trp_narrow_input' 
+                                    name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]'>"
+                                . esc_textarea($option_value) . "</textarea>
+                                  </td>";
                             break;
+
                         case 'select':
-                            $html .= "<td><select class='trp-select-advanced' name='trp_advanced_settings[" . esc_attr(  $setting['name'] ) . "][" . esc_attr(  $option_name ) . "][]'>";
-                            $html .= "<option value=''>" . esc_html__( 'Select...', 'translatepress-multilingual' ) . "</option>";
-                            foreach ( $option_details["values"] as $select_key => $select_value ) {
-                                $selected = ($adv_option[ $setting['name'] ][ $option_name ][ $index ] === $select_value ) ? "selected='selected'" : '';
-                                $html .= "<option value='". esc_attr($select_value). "'$selected>" . esc_html($select_value) ."</option>";
+                            $html .= "<td>
+                                    <select class='trp-select-advanced' 
+                                    name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]'>
+                                      <option value=''>" . esc_html__('Select...', 'translatepress-multilingual') . "</option>";
+                            foreach ($option_details["values"] as $select_value) {
+                                $selected = ($option_value === $select_value) ? "selected='selected'" : '';
+                                $html .= "<option value='" . esc_attr($select_value) . "' $selected>" . esc_html($select_value) . "</option>";
                             }
-                            $html .="</select></td>";
+                            $html .= "</select></td>";
                             break;
+
                         case 'checkbox':
-                            $datavalue = isset($adv_option[ $setting['name'] ][ $option_name ][ $index ]) ? htmlspecialchars($adv_option[ $setting['name'] ][ $option_name ][ $index ], ENT_QUOTES) : '';
-                            $checked = ($datavalue === 'yes') ? "checked='checked'" : '';
-                            $html .= "<td><input type='checkbox' class='trp-adv-chk' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr(  $setting['name'] ) . "' data-column-name='" . esc_attr(  $option_name ) . "' value='yes' ".$checked .">";
-                            $html .= "<input type='hidden' name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr(  $option_name ) . "][]' id='new_entry_" . esc_attr(  $setting['name'] ) . "_" . esc_attr(  $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "' value=''>";
-                            $html .="</td>";
+                            $checked = ($option_value === 'yes') ? "checked='checked'" : '';
+                            $html .= "<td>
+                                    <div class='trp-settings-checkbox trp-settings-options-item'>
+                                        <input type='checkbox' id='" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "_$index' 
+                                               name='trp_advanced_settings[" . esc_attr($setting['name']) . "][" . esc_attr($option_name) . "][]' 
+                                               value='yes' $checked />
+                                    </div>
+                                  </td>";
                             break;
                     }
                 }
-                $html .= "<td><span class='trp-adst-remove-element' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></td>";
+                $html .= "<td>$remove_element</td>";
                 $html .= "</tr>";
             }
         }
+
         // Add new entry to list; renders the last row which is initially empty.
         $html .= "<tr class='trp-add-list-entry trp-list-entry'>";
-
-        foreach( $setting['columns'] as $option_name => $option_details ) {
-
-            switch ( $option_details['type']) {
+        foreach ( $setting['columns'] as $option_name => $option_details ) {
+            switch ($option_details['type']) {
                 case 'text':
-                    $html .= "<td class=' " . $option_name . " '><input type='text' class='trp_narrow_input' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "' placeholder='" . esc_attr( $setting['columns'][ $option_name ]['placeholder'] ) . "' '></input></td>";
+                    $html .= "<td class='trp-col-" . esc_attr($option_name) . "'>
+                            <input type='text' class='trp_narrow_input' 
+                            id='new_entry_" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "' 
+                            placeholder='" . esc_attr($option_details['placeholder'] ?? '') . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>
+                          </td>";
                     break;
+
                 case 'textarea':
-                    $html .= "<td class='trp_narrow_input'><textarea id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'></textarea></td>";
+                    $html .= "<td><textarea class='trp_narrow_input' id='new_entry_" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "'  data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'></textarea></td>";
                     break;
+
                 case 'select':
-                    $html .= "<td><select id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>";
-                    $html .= "<option value=''>" . __( 'Select...', 'translatepress-multilingual' ) . "</option>";
-                    foreach ( $option_details["values"] as $select_key => $select_value ) {
-                        $html .= "<option value='". esc_attr($select_value). "'>" . esc_html($select_value) . "</option>";
+                    $html .= "<td>
+                            <select id='new_entry_" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "'  data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>
+                              <option value=''>" . esc_html__('Select...', 'translatepress-multilingual') . "</option>";
+                    foreach ($option_details["values"] as $select_value) {
+                        $html .= "<option value='" . esc_attr($select_value) . "'>" . esc_html($select_value) . "</option>";
                     }
-                    $html .="</select></td>";
+                    $html .= "</select></td>";
                     break;
+
                 case 'checkbox':
-                    $html .= "<td><input type='checkbox' class='trp-adv-chk' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr(  $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr(  $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-column-name='" . esc_attr( $option_name ) ."' value='yes'>";
-                    $html .= "<input type='hidden' id='new_entry_" . esc_attr( $setting['name'] ) . "_" . esc_attr( $option_name ) . "' data-name='trp_advanced_settings[" . esc_attr(  $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-column-name='" . esc_attr( $option_name ) ."' value=''>";
-                    $html .="</td>";
+                    $html .= "<td>
+                            <div class='trp-settings-checkbox trp-settings-options-item'>
+                                <input type='checkbox' id='new_entry_" . esc_attr($setting['name']) . "_" . esc_attr($option_name) . "' value='yes'  data-name='trp_advanced_settings[" . esc_attr( $setting['name'] ) . "][" . esc_attr( $option_name ) . "][]' data-setting-name='" . esc_attr( $setting['name'] ) . "' data-column-name='" . esc_attr( $option_name ) . "'>
+                            </div>
+                          </td>";
                     break;
             }
         }
-        $html .= "<td><input type='button' id='button_add_" . esc_attr( $setting['name'] ) . "' class='button-secondary trp-adst-button-add-new-item' value='" . esc_html__( 'Add', 'translatepress-multilingual' ) . "'><span class='trp-adst-remove-element' style='display: none;' data-confirm-message='" . esc_html__('Are you sure you want to remove this item?', 'translatepress-multilingual') . "'>" . esc_html__( 'Remove', 'translatepress-multilingual' ) . "</span></td>";
+        $html .= "<td class='trp-col-add-new'>
+                    <input type='button' class='trp-button-secondary trp-adst-button-add-new-item' value='" . esc_html__('Add', 'translatepress-multilingual') . "'>
+                    <div style='display: none;'>$remove_element</div>
+                  </td>";
         $html .= "</tr></table>";
 
-       $html .= "<p class='description_table' >
-                        " . wp_kses_post( $setting['description'] ) . "
-                    </p>
-                </div>
-            </div></div>";
+        $html .= "<span class='trp-description-text'>" . wp_kses_post($setting['second_description']) . "</span>";
 
-        return apply_filters( 'trp_advanced_setting_list', $html );
-
+        return apply_filters('trp_advanced_setting_list', $html);
     }
+
+
 
 
     /**

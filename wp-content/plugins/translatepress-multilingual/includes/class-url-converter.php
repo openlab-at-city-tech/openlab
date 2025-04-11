@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Url_Converter
  *
@@ -244,13 +248,14 @@ class TRP_Url_Converter {
      */
     public function change_lang_attr_in_html_tag( $output ){
         global $TRP_LANGUAGE;
+        $tp_lang = str_replace('_formal', '', $TRP_LANGUAGE); // de-de-formal is not a valid lang attribute.
         $lang = get_bloginfo('language');
-        if ( $lang && !empty($TRP_LANGUAGE) ) {
+        if ( $lang && !empty($tp_lang) ) {
             if ( apply_filters( 'trp_add_default_lang_tags', true ) ) {
-                $output = str_replace( 'lang="' . $lang . '"', 'lang="' . str_replace( '_', '-', $TRP_LANGUAGE ) . '"', $output );
+                $output = str_replace( 'lang="' . $lang . '"', 'lang="' . str_replace( '_', '-', $tp_lang ) . '"', $output );
             }
             if ( apply_filters( 'trp_add_regional_lang_tags', true ) ) {
-                $language = strtok($TRP_LANGUAGE, '_');
+                $language = strtok($tp_lang, '_');
                 $output = str_replace( 'lang="' . $lang . '"', 'lang="' . $language . '"', $output );
 
             }
@@ -286,8 +291,6 @@ class TRP_Url_Converter {
     public function check_if_url_is_valid_and_set_cache( $cache_key, $language, $url, $trp_link_is_processed = '' ){
         $debug = false;
         global $TRP_LANGUAGE;
-
-        $url = urldecode($url);
 
         if ( apply_filters( 'trp_skip_url_for_language', false, $url ) ){
             return (string) $url;
@@ -409,9 +412,6 @@ class TRP_Url_Converter {
             $url = $this->cur_page_url( false );
         }
 
-        //moved urldecode here because calling it on null will trigger a PHP Deprecated notice
-        $url = urldecode( $url );
-
         $url = apply_filters( 'trp_pre_get_url_for_language', $url, $language, $this->get_abs_home(), $this->get_lang_from_url_string( $url ), $this->get_url_slug( $language ) );
 
         $cached_url = $this->check_if_url_is_valid_and_set_cache('get_url_for_language_', $language, $url, $trp_link_is_processed );
@@ -420,10 +420,19 @@ class TRP_Url_Converter {
 
         $hash = $cached_url['hash'];
 
-        // Both url_obj and abs_home_url_obj are set in self::check_if_url_is_valid_and_set_cache
         $url_obj = trp_cache_get('url_obj_' . hash('md4', $url), 'trp');
 
+        if ( $url_obj === false ){
+            $url_obj = new \TranslatePress\Uri($url);
+            wp_cache_set('url_obj_' . hash('md4', $url), $url_obj, 'trp' );
+        }
+
         $abs_home_url_obj = trp_cache_get('url_obj_' . hash('md4',  $this->get_abs_home() ), 'trp');
+
+        if ( $abs_home_url_obj === false ){
+            $abs_home_url_obj = new \TranslatePress\Uri( $this->get_abs_home() );
+            wp_cache_set('url_obj_' . hash('md4', $this->get_abs_home()), $abs_home_url_obj, 'trp' );
+        }
 
         // we're just adding the new language to the url
         $new_url_obj = clone $url_obj;
@@ -433,7 +442,7 @@ class TRP_Url_Converter {
         $lang_from_url_string = $this->get_lang_from_url_string($url);
         if ( $lang_from_url_string === null) {
             // these are the custom url. They don't have language
-            $abs_home_considered_path = trim(str_replace( $abs_home_url_obj->getPath() !== null ? $abs_home_url_obj->getPath() : '', '', $url_obj->getPath()), '/');
+            $abs_home_considered_path = trim(str_replace( strval( $abs_home_url_obj->getPath() ), '', strval( $url_obj->getPath() )), '/');
             $new_url_obj->setPath(trailingslashit(trailingslashit(strval($abs_home_url_obj->getPath())) . trailingslashit($this->get_url_slug($language)) . $abs_home_considered_path));
             $new_url = $new_url_obj->getUri();
 
@@ -442,7 +451,7 @@ class TRP_Url_Converter {
             trp_bulk_debug($debug, array('url' => $url, 'abort' => "URL already has the correct language added to it"));
         } else {
             // these have language param in them and we need to replace them with the new language
-            $abs_home_considered_path = trim(str_replace($abs_home_url_obj->getPath() !== null ? $abs_home_url_obj->getPath() : '', '', $url_obj->getPath()), '/');
+            $abs_home_considered_path = trim(str_replace(strval ( $abs_home_url_obj->getPath() ) ,'', strval( $url_obj->getPath() )), '/');
             $no_lang_orig_path = explode('/', $abs_home_considered_path);
             unset($no_lang_orig_path[0]);
             $no_lang_orig_path = implode('/', $no_lang_orig_path);
@@ -613,6 +622,9 @@ class TRP_Url_Converter {
         if( empty($this->absolute_home) ){
             $this->absolute_home = get_option("siteurl");
         }
+        // home_url can have a space in front braking TP.
+        $this->absolute_home = trim($this->absolute_home);
+
         if ( apply_filters('trp_adjust_absolute_home_https_based_on_server_variable', true) ) {
             // always return absolute_home based on the http or https version of the current page request. This means no more redirects.
             if ( !empty( $_SERVER['HTTPS'] ) && strtolower( sanitize_text_field( $_SERVER['HTTPS'] ) ) != 'off' ) {
@@ -733,7 +745,7 @@ class TRP_Url_Converter {
         $home_path_regex = sprintf( '|^%s|i', preg_quote( $home_path, '|' ) );
 
         // Trim path info from the end and the leading home path from the front.
-        $req_uri = urldecode( $req_uri );
+
         $req_uri = ltrim( $req_uri, '/' );
         $req_uri = preg_replace( $home_path_regex, '', $req_uri );
         $req_uri = trim( $abs_home, '/' ) . '/' . ltrim( $req_uri, '/' );
@@ -809,7 +821,7 @@ class TRP_Url_Converter {
         $trp     = TRP_Translate_Press::get_trp_instance();
         $upgrade = $trp->get_component( 'upgrade' );
 
-        if ( class_exists( 'TRP_IN_Seo_Pack' ) && $upgrade->is_pro_minimum_version_met() && ( !isset( $this->settings['trp_advanced_settings']['load_legacy_seo_pack'] ) || $this->settings['trp_advanced_settings']['load_legacy_seo_pack'] === 'no' ) ) {
+        if ( class_exists( 'TRP_IN_Seo_Pack' ) && $upgrade->is_seo_pack_minimum_version_met() && ( !isset( $this->settings['trp_advanced_settings']['load_legacy_seo_pack'] ) || $this->settings['trp_advanced_settings']['load_legacy_seo_pack'] === 'no' ) ) {
             return $value;
         }
 
@@ -967,3 +979,4 @@ class TRP_Url_Converter {
     }
 
 }
+

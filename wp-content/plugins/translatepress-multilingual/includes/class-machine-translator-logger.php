@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Machine_Translator_Logger {
     protected $settings;
     protected $query;

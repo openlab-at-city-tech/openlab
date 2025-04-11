@@ -1,4 +1,9 @@
 <?php
+
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_image_size( 'trp-custom-language-flag', 18, 12 );
 
 // Register country flag size for use in Add Media modal

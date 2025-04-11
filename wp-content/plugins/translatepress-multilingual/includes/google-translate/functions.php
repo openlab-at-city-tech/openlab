@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_machine_translation_engines', 'trp_gt_add_engine', 10 );
 function trp_gt_add_engine( $engines ){
     $engines[] = array( 'value' => 'google_translate_v2', 'label' => __( 'Google Translate v2', 'translatepress-multilingual' ) );
@@ -37,33 +41,34 @@ function trp_gt_add_settings( $mt_settings ){
     }
     ?>
 
-    <tr class="trp-engine" id="google_translate_v2">
-        <th scope="row"><?php esc_html_e( 'Google Translate API Key', 'translatepress-multilingual' ); ?> </th>
-        <td>
+    <div class="trp-engine trp-automatic-translation-engine__container" id="google_translate_v2">
+        <span class="trp-primary-text-bold"><?php esc_html_e( 'Google Translate API Key', 'translatepress-multilingual' ); ?> </span>
+
+        <div class="trp-automatic-translation-api-key-container">
+            <input type="text" id="trp-g-translate-key" placeholder="<?php esc_html_e( 'Add your API Key here...', 'translatepress-multilingual' ); ?>" class="<?php echo esc_html( implode( ' ', $text_input_classes ) ); ?>" name="trp_machine_translation_settings[google-translate-key]" value="<?php if( !empty( $mt_settings['google-translate-key'] ) ) echo esc_attr( $mt_settings['google-translate-key']);?>"/>
             <?php
-            // Display an error message above the input.
-            if ( $show_errors && 'google_translate_v2' === $translation_engine ) {
-                ?>
-                <p class="trp-error-inline">
-                    <?php echo wp_kses_post( $error_message ); ?>
-                </p>
-                <?php
-            }
-            ?>
-            <input type="text" id="trp-g-translate-key" class="<?php echo esc_html( implode( ' ', $text_input_classes ) ); ?>" name="trp_machine_translation_settings[google-translate-key]" value="<?php if( !empty( $mt_settings['google-translate-key'] ) ) echo esc_attr( $mt_settings['google-translate-key']);?>"/>
-            <?php
-             // Only show errors if Google Translate is active.
+            // Only show errors if Google Translate is active.
             if ( 'google_translate_v2' === $translation_engine && function_exists( 'trp_output_svg' ) ) {
                 $machine_translator->automatic_translation_svg_output( $show_errors );
             }
             ?>
-            <p class="description">
-                <?php echo wp_kses( __( 'Visit <a href="https://cloud.google.com/docs/authentication/api-keys" target="_blank">this link</a> to see how you can set up an API key, <strong>control API costs</strong> and set HTTP referrer restrictions.', 'translatepress-multilingual' ), [ 'a' => [ 'href' => [], 'title' => [], 'target' => [] ], 'strong' => [] ] ); ?>
-                <br><?php echo esc_html( sprintf( __( 'Your HTTP referrer is: %s', 'translatepress-multilingual' ), $machine_translator->get_referer() ) ); ?>
-            </p>
-        </td>
+        </div>
 
-    </tr>
+        <?php
+        if ( $show_errors && 'google_translate_v2' === $translation_engine ) {
+            ?>
+            <span class="trp-error-inline trp-settings-error-text">
+                <?php echo wp_kses_post( $error_message ); ?>
+            </span>
+            <?php
+        }
+        ?>
+
+        <span class="trp-description-text">
+            <?php echo wp_kses( __( 'Visit <a href="https://cloud.google.com/docs/authentication/api-keys" target="_blank">this link</a> to see how you can set up an API key, <strong>control API costs</strong> and set HTTP referrer restrictions.', 'translatepress-multilingual' ), [ 'a' => [ 'href' => [], 'title' => [], 'target' => [] ], 'strong' => [] ] ); ?>
+            <br><?php echo esc_html( sprintf( __( 'Your HTTP referrer is: %s', 'translatepress-multilingual' ), $machine_translator->get_referer() ) ); ?>
+        </span>
+    </div>
 
     <?php
 }

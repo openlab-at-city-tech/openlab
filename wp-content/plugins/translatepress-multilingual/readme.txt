@@ -3,9 +3,9 @@ Contributors: cozmoslabs, razvan.mo, madalin.ungureanu, sareiodata, cristophor
 Donate link: https://www.translatepress.com/
 Tags: translate, translation, multilingual, automatic translation, bilingual, front-end translation, google translate, language
 Requires at least: 3.1.0
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 5.6.20
-Stable tag: 2.9.0
+Stable tag: 2.9.10
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -141,6 +141,62 @@ For more information please check out our [documentation](https://translatepress
 
 
 == Changelog ==
+= 2.9.10 =
+* Fixed error on Automatic Translation tab from TranslatePress Settings when trying to remove the machine translation limit
+* Fixed admin notice positioning when exceeding daily quota
+
+= 2.9.9 =
+* Fixed compatibility issue with Query Monitor plugin
+* Fixed edge case issue with changing languages in Translation Editor when removing country from hreflang option was used
+* Fixed edge case php error when WP Cache was disabled
+* Fixed css on plugin stats opt-in pop-up from TranslatePress Settings
+
+= 2.9.8 =
+* Fixed issue with language switcher not showing all languages on non-admin visits for free version users that manually changed TranslatePress settings in version 2.9.7
+* Fixed error about undefined constant TRP_IN_EL_PLUGIN_DIR for paid version users in case Multiple Languages add-on was disabled
+* Fixed automatic user language detection settings not appearing for paid version users in case Multiple Languages add-on was disabled
+* Fixed html lang attribute declaration on formal languages
+* Fixed edge case triggering php warnings when opening Translation Editor
+
+= 2.9.7 =
+* Redesigned TranslatePress Settings UI
+* Improvements to the plugin stats API
+* Fixed insecure use of serialization function on request parameters
+* Fixed edge case issue with untrimmed home url preventing functioning on secondary languages
+
+= 2.9.6 =
+* Added support for translating html tags "picture" and "audio"
+* Improved query efficiency for removing duplicate entries when running Database Optimization
+* Fixed compatibility issue with Blocksy in Customizer
+
+= 2.9.5 =
+* Added support for video tag in order to show different videos according to selected language
+* Added compatibility for Elementor element caching on additional languages
+* Added compatibility with Profile Builder redirects after registration and edit profile forms
+* Reduced requests to TP AI when quota is unavailable
+* Fixed redirecting to wrong language after checkout in some cases
+
+= 2.9.4 =
+* Fixed potential security issue by preventing direct access to files
+* Extended keyword search in String Translation UI to return results from translations too, alongside matching default language text, for Gettext, Email and Regular strings
+* Added new feature to delete translations in String Translation UI, individually or in bulk, for Gettext, Email and Regular strings
+* Fixed incorrect translated urls in the page when reordering languages and using subdirectory for default language, while also excluding certain paths from translation
+* Fixed edge case PHP error in ajax request for front-end translations
+* Fixed edge case PHP error between Gutenberg language restrictions and WP Interactivity API
+* Fixed edge case PHP error argument must be of type string
+
+= 2.9.3 =
+* Fixed form action losing GET parameters on translated pages
+
+= 2.9.2 =
+* Fixed not setting srcset attributes properly for translated images
+
+= 2.9.1 =
+* Added Gutenberg Language Restriction option to allow for easily including/excluding blocks in specific languages
+* Fixed PHP notice in WP 6.7: function _load_textdomain_just_in_time was called incorrectly
+* Fixed translating internal links from inside translation blocks
+* Fixed edge case with some excluded paths redirecting translated urls to incorrect original urls
+
 = 2.9.0 =
 * Improved database management by no longer inserting non-translated external URLs and images
 * Fixed detecting the same email address multiple times due to antispambot outputting it in different encodings

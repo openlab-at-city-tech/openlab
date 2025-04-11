@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_open_language_switcher_shortcode_on_click', 1350 );
 function trp_open_language_switcher_shortcode_on_click( $settings_array ){
     $settings_array[] = array(
@@ -8,6 +12,7 @@ function trp_open_language_switcher_shortcode_on_click( $settings_array ){
         'label'         => esc_html__( 'Open language switcher only on click', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Open the language switcher shortcode by clicking on it instead of hovering.<br> Close it by clicking on it, anywhere else on the screen or by pressing the escape key. This will affect only the shortcode language switcher.', 'translatepress-multilingual' ), array( 'br' => array()) ),
         'id'            => 'miscellaneous_options',
+        'container'     => 'language_switcher'
     );
     return $settings_array;
 }

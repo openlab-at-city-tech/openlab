@@ -1,3 +1,7 @@
+<?php
+if ( !defined('ABSPATH' ) )
+    exit();
+?>
 <div id="trp-errors-page" class="wrap">
 
     <h1> <?php esc_html_e( 'TranslatePress Errors', 'translatepress-multilingual' );?></h1>

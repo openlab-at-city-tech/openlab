@@ -1,3 +1,7 @@
+<?php
+if ( !defined('ABSPATH' ) )
+    exit();
+?>
 <h2 class="nav-tab-wrapper">
         <?php
         foreach( $tabs as $tb ) {
