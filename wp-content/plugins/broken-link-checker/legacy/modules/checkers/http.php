@@ -34,7 +34,7 @@ class blcHttpChecker extends blcChecker {
 			$conf->get( 'http_throttle_min_interval', 2 )
 		);
 
-		if ( function_exists( 'curl_init' ) || is_callable( 'curl_init' ) ) {
+		if ( apply_filters( 'wpmudev_blc_local_use_curl', function_exists( 'curl_init' ) || is_callable( 'curl_init' ) )  ) {
 			$this->implementation = new blcCurlHttp(
 				$this->module_id,
 				$this->cached_header,
@@ -154,17 +154,32 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		global $blclog;
 		$blclog->info( __CLASS__ . ' Checking link', $url );
 
+		$log                = '';
 		$this->last_headers = '';
-
-		$url = $this->clean_url( $url );
-		$blclog->debug( __CLASS__ . ' Clean URL:', $url );
-
-		$result = array(
+		$url                = wp_http_validate_url( $url );
+		$result             = array(
 			'broken'  => false,
 			'timeout' => false,
 			'warning' => false,
 		);
-		$log    = '';
+
+		if ( empty( $url ) ) {
+			$blclog->error( __CLASS__ . ' Invalid URL:', $url );
+
+			$result = array(
+				'warning'     => true,
+				'log'         => "Invalid URL.\nURL fails to pass validation for safe use in the HTTP API.",
+				'status_text' => __( 'Invalid URL', 'broken-link-checker' ),
+				'error_code'  => 'invalid_url',
+				'status_code' => BLC_LINK_STATUS_WARNING,
+			);
+
+			return $result;
+		}
+
+		$url = wp_kses_bad_protocol( $this->clean_url( $url ), array( 'http', 'https', 'ssl' ) );
+
+		$blclog->debug( __CLASS__ . ' Clean URL:', $url );
 
 		// Get the BLC configuration. It's used below to set the right timeout values and such.
 		$conf = blc_get_configuration();
@@ -176,7 +191,9 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
 
 		// Masquerade as a recent version of Chrome
-		$ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.34 Safari/537.36';
+		//$ua = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.34 Safari/537.36';
+		// Use a custom user agent string.
+		$ua = apply_filters( 'wpmudev_blc_local_ua', 'WPMU DEV Broken Link Checker Local Engine', $url, $use_get );
 		curl_setopt( $ch, CURLOPT_USERAGENT, $ua );
 
 		// Close the connection after the request (disables keep-alive). The plugin rate-limits requests,
@@ -222,7 +239,7 @@ class blcCurlHttp extends blcHttpCheckerBase {
 		$nobody = ! $use_get; // Whether to send a HEAD request (the default) or a GET request
 
 		$parts = @parse_url( $url );
-		if ( 'https' === $parts['scheme'] ) {
+		if ( ! empty( $parts['scheme'] ) && 'https' === $parts['scheme'] ) {
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYPEER, false ); // Required to make HTTPS URLs work.
 			curl_setopt( $ch, CURLOPT_SSL_VERIFYHOST, false );
 			// $nobody = false; //Can't use HEAD with HTTPS.
@@ -436,11 +453,11 @@ class blcWPHttp extends blcHttpCheckerBase {
 		if ( is_wp_error( $request ) ) {
 			$result['http_code'] = 0;
 			$result['timeout']   = true;
-			$result['message']   = $request::get_error_message();
+			$result['message']   = $request->get_error_message();
 		} else {
-			$http_resp           = $request['http_response'];
-			$result['http_code'] = $request['response']['status']; // HTTP status code
-			$result['message']   = $request['response']['message'];
+			$http_resp           = wp_remote_retrieve_body( $request );
+			$result['http_code'] = wp_remote_retrieve_response_code( $request ); // HTTP status code
+			$result['message']   = wp_remote_retrieve_response_message( $request );
 		}
 
 		// Build the log

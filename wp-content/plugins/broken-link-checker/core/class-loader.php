@@ -161,7 +161,8 @@ final class Loader extends Base {
 		/**
 		 * Start app functions.
 		 */
-		$this->init_app();
+		//$this->init_app();
+		add_action( 'init', array( $this, 'init_app' ) );
 
 		/*
 		 * Setup plugin scripts
