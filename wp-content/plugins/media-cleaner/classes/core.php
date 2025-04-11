@@ -8,7 +8,7 @@ class Meow_WPMC_Core {
 	public $is_pro = false;
 	public $engine = null;
 	public $catch_timeout = true; // This will halt the plugin before reaching the PHP timeout.
-	public $types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|svg|pdf|xls|xlsx|doc|docx|odt|wpd|rtf|tiff|mp3|mp4|mov|wav|lua";
+	public $types = "jpg|jpeg|jpe|gif|png|tiff|bmp|csv|svg|pdf|xls|xlsx|doc|docx|odt|wpd|rtf|tiff|mp3|mp4|mov|wav|lua|webp|avif|ico";
 	public $current_method = 'media';
 	public $servername = null; // meowapps.com (site URL without http/https)
 	public $site_url = null; // https://meowapps.com
@@ -31,6 +31,8 @@ class Meow_WPMC_Core {
 	}
 
 	function plugins_loaded() {
+
+
 
 		// Variables
 		$this->site_url = get_site_url();
@@ -197,14 +199,14 @@ class Meow_WPMC_Core {
 	}
 
 	function get_favicon() {
-		// Yoast SEO plugin
-		$vals = get_option( 'wpseo_titles' );
-		if ( !empty( $vals ) ) {
-			$url = $vals['company_logo'];
-			if ( $this->is_url( $url ) )
-				return $this->clean_url( $url );
+			// Yoast SEO plugin
+			$vals = get_option( 'wpseo_titles' );
+			if ( !empty( $vals ) && isset( $vals['company_logo'] ) ) {
+				$url = $vals['company_logo'];
+				if ( $this->is_url( $url ) )
+					return $this->clean_url( $url );
+			}
 		}
-	}
 
 	function get_shortcode_attributes( $shortcode_tag, $post ) {
 		if ( has_shortcode( $post->post_content, $shortcode_tag ) ) {
@@ -254,14 +256,17 @@ class Meow_WPMC_Core {
 		// Proposal/fix by @copytrans
 		// Discussion: https://wordpress.org/support/topic/bug-in-core-php/#post-11647775
 		// Modified by Jordy again in 2021 for those who don't have MB enabled
-		if ( function_exists( 'htmlspecialchars' ) ) {
-			$html = htmlspecialchars( $html, ENT_QUOTES | ENT_HTML5, 'UTF-8' );
-		}
-		else if ( function_exists( 'mb_encode_numericentity' ) ) {
-			$convmap = array( 0x80, 0xFFFF, 0, 0xFFFF );
+		if ( function_exists( 'mb_encode_numericentity' ) ) {
+			$convmap = [0x80, 0xffff, 0, 0xffff];
 			$html = mb_encode_numericentity( $html, $convmap, 'UTF-8' );
 		} else {
-			$html = htmlentities( $html, ENT_COMPAT, 'UTF-8' );
+			$html = preg_replace_callback(
+				'/[\x80-\xFF]/',
+				function( $match ) {
+					return '&#' . ord( $match[0] ) . ';';
+				},
+				$html
+			);
 		}
 
 		// Resolve src-set and shortcodes
@@ -279,6 +284,7 @@ class Meow_WPMC_Core {
 			throw new Error( 'The DOM extension for PHP is not installed.' );
 		}
 
+		
 		if ( empty( $html ) ) {
 			return array();
 		}
@@ -356,7 +362,7 @@ class Meow_WPMC_Core {
 		}
 
 		// Videos: src, poster, and attached file
-		$videos = $dom->getElementsByTagName('video');
+		$videos = $dom->getElementsByTagName( 'video' );
 		foreach ($videos as $video) {
 			// Get src attribute
 			$raw_video_src = $video->getAttribute( 'src' );
@@ -444,6 +450,37 @@ class Meow_WPMC_Core {
 		return $results;
 	}
 
+	/**
+	 * 
+	 *  Get the IDs and URLs from the blocks of a post.
+	 * 
+	 * @param string $html The HTML content of the post.
+	 * @param string $prefix The prefix of the blocks to look for.
+	 * @param array $keys The keys to look for in the blocks.
+	 * @param array $urls The array to fill with the URLs.
+	 * @param array $ids The array to fill with the IDs.
+	 * 
+	 */
+	function get_from_blocks( $html, $prefix, $keys, &$urls, &$ids ) {
+
+		$data = parse_blocks( $html );
+
+		if ( ! is_array( $data )  || ! isset( $data[0] ) ) {
+			return;
+		}
+	
+		if ( strpos( $data[0]['blockName'], $prefix ) === false ) {
+			return;
+		}
+	
+		$this->get_from_meta(
+			$data,
+			$keys,
+			$ids,
+			$urls
+		);
+		
+	}
 	// Parse a meta, visit all the arrays, look for the attributes, fill $ids and $urls arrays
 	// If rawMode is enabled, it will not check if the value is an ID or an URL, it will just returns it in URLs
 	function get_from_meta( $meta, $lookFor, &$ids, &$urls, $rawMode = false ) {
@@ -1346,6 +1383,20 @@ class Meow_WPMC_Core {
 		}
 
 		return $ret;
+	}
+
+	function get_thumbnails_urls( $id, $sizes_as_key = false ) {
+		$sizes = get_intermediate_image_sizes();
+		// For each size use wp_get_attachment_image_src() to get the URL
+		$urls = array();
+		foreach ( $sizes as $size ) {
+			$src = wp_get_attachment_image_src( $id, $size );
+			if ( $src ) {
+				$urls[$size] = $this->clean_url( $src[0] );
+			}
+		}
+
+		return $sizes_as_key ? $urls : array_values( $urls );
 	}
 
 	function get_image_sizes() {

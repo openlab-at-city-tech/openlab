@@ -169,9 +169,18 @@ class MeowApps_WPMC_Parser_Common {
 					}
 				}
 			}
-			$wpmc->add_reference_id( $postmeta_images_ids, 'META (ID)', $id );
-			$wpmc->add_reference_id( $postmeta_images_urls, 'META (URL)', $id );
+			$wpmc->add_reference_id( $postmeta_images_ids, 'POST META (ID)', $id );
+			$wpmc->add_reference_id( $postmeta_images_urls, 'POST META (URL)', $id );
 		}
+
+
+		// WordPress does not tell which sizes are used for the Featured Image, so to be safe, we just get them all.
+		// * Add the SAFE tag for 'FEATURED IMAGE (URL)' in the dashboard
+		$thumbnail_id = get_post_thumbnail_id( $id );
+		$urls = $wpmc->get_thumbnails_urls( $thumbnail_id );
+
+		$wpmc->add_reference_url( $urls, 'FEATURED IMAGE (URL) {SAFE}', $id );
+
 	}
 }
 
