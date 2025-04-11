@@ -5,8 +5,8 @@ License: GPLv2
 Tags: maps, google maps, leaflet, store locator, map plugin
 Requires at least: 5.9.5
 Requires PHP: 7.0
-Tested up to: 6.6
-Stable tag: 2.94.3
+Tested up to: 6.8
+Stable tag: 2.94.11
 
 MapPress is the easiest way to add unlimited interactive Google and Leaflet maps to WordPress.
 
@@ -92,6 +92,33 @@ Please see the plugin documentation pages:
 1. Follow the installation instructions to install the new version
 
 == Changelog ==
+
+= 2.94.11 = 
+* Changed: bump version number
+
+= 2.94.10 =
+* Fixed: added sanitization to size settings for site admins
+
+= 2.94.9 =
+* Changed: wider POI input data fields
+* Changed: remove 'show in popups' for POI data fields
+* Changed: in mini mode, default to show map on initial load instead of POI list
+
+= 2.94.8 =
+* Added: POI data values now support drag & drop
+* Fixed: updated sanitization to prevent html encoded content
+
+= 2.94.7 = 
+* Changed: updated compatible WP version
+
+= 2.94.6 =
+* Fixed: error in last release interfered with mashup queries
+
+= 2.94.5 =
+* Fixed: POI titles not working if they contain brackets
+
+= 2.94.4 =
+* Fixed: initial POI list open setting affected by mini view
 
 = 2.94.3 =
 * Fixed: bug in lat/lng check

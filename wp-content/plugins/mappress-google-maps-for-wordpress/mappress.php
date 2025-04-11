@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.94.3
+Version: 2.94.11
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.94.3';
+	const VERSION = '2.94.11';
 
 	static
 		$api,
@@ -655,17 +655,7 @@ class Mappress {
 	static function is_footer() {
 		if (defined('DOING_AJAX') && DOING_AJAX)
 			return false;
-		// 2.91
-			return true;
-		
-		//	2.91
-		//	    if (defined('REST_REQUEST') && REST_REQUEST)
-		//			return true;
-		//		if (is_admin())
-		//			return true;
-		//		if (self::$options->webComponent)   // WC needs to load after dom render
-		//			return true;
-		//		return self::$options->footer;
+		return true;
 	}
 
 	static function is_localhost() {
@@ -725,12 +715,12 @@ class Mappress {
 			'version' => self::$version
 		);
 
-		// Tile providers
+		// Tile providers.  Parameter fresh=true was removed with 2.94.8.
 		$l10n['options']['tileProviders'] = array(
 			'mapbox' => array(
 				'accessToken' => self::get_api_keys()->mapbox,
 				'attribution' => ['<a href="https://www.mapbox.com/about/maps" target="_blank">&copy; Mapbox</a>', '<a href="https://www.openstreetmap.org/about/" target="_blank">&copy; OpenStreetMap</a>' ],
-				'url' => 'https://api.mapbox.com/styles/v1/{user}/{mapboxid}/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}&fresh=true',
+				'url' => 'https://api.mapbox.com/styles/v1/{user}/{mapboxid}/tiles/256/{z}/{x}/{y}{r}?access_token={accessToken}',
 				'zoomOffset' => 0
 			),
 			'osm' => array(
@@ -1184,11 +1174,13 @@ class Mappress {
 			$lcname = strtolower($name);        // Only lowercase is allowed
 
 			if (is_object($value) || is_array($value))
-				$results[] = sprintf("%s='%s'", $lcname, json_encode($value, JSON_HEX_APOS));
+				$result = sprintf("%s='%s'", $lcname, json_encode($value, JSON_HEX_APOS));
 			else if (is_bool($value))
-				$results[] = sprintf("%s='%s'", $lcname, ($value) ? 'true' : 'false');
+				$result = sprintf("%s='%s'", $lcname, ($value) ? 'true' : 'false');
 			else
-				$results[] = "$lcname='" . str_replace(array("'", '"'), array('&apos;', '&quot;'), $value) . "'";
+				$result = "$lcname='" . str_replace(array("'", '"', '<', '>'), array('&apos;', '&quot;', '&lt;', '&gt;'), $value) . "'";
+
+			$results[] = $result;
 		}
 		return join(' ', $results);
 	}

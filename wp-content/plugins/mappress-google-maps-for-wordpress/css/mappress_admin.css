@@ -781,6 +781,7 @@ button.mapp-query-refresh {
 
 /* Make poi data inputs on data tab full width */
 .mapp-poi-tabs.mapp-tab-data .mapp-control-input { display: flex; flex-direction: column; }
+.mapp-poi-tabs.mapp-tab-data .mapp-control-input input { width: 100%; }
 
 /*
 	-----------------------------------------------------------------------------------
@@ -1145,8 +1146,7 @@ html.mapp-iframe {
 
 .mapp-options-links a {
 	font-size: 12px;
-	margin-right: 5px;
-	text-decoration: none;
+	margin-right: 10px;
 }
 
 .mapp-options-version {
@@ -1340,19 +1340,19 @@ button.mapp-option-geocode {
 	-----------------------------------------------------------------------------------
 */
 
-.mapp-option .mapp-grid .mapp-cell {
+.mapp-option .mapp-crud-grid .mapp-cell {
 	display: table-cell;
 	border-bottom: 1px solid lightgray;
 	padding: 5px 10px;
 	vertical-align: middle;
 }
 
-.mapp-option .mapp-grid .mapp-dragover .mapp-cell {
+.mapp-option .mapp-crud-grid .mapp-dragover .mapp-cell {
 	border-bottom: 1px solid black !important;
 	border-top: 1px solid black !important;
 }
 
-.mapp-option .mapp-grid .mapp-table .mapp-label {
+.mapp-option .mapp-crud-grid .mapp-table .mapp-label {
 	border-bottom: 1px solid lightgray;
 	display: table-cell;
 	font-weight: 500;
