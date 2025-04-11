@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 } // Exit if accessed directly.
 
-require_once plugin_dir_path( __FILE__ ) . 'classes/class-wpt-mastodon-api.php';
+require_once plugin_dir_path( __FILE__ ) . 'class-wpt-mastodon-api.php';
 
 /**
  * Upload media to Mastodon API.
@@ -29,6 +29,12 @@ require_once plugin_dir_path( __FILE__ ) . 'classes/class-wpt-mastodon-api.php';
 function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $id ) {
 	if ( $connection ) {
 		if ( $attachment ) {
+			$allowed = wpt_check_mime_type( $attachment, 'mastodon' );
+			if ( ! $allowed ) {
+				wpt_mail( 'Media upload mime type not accepted by Mastodon', get_post_mime_type( $attachment ), $id );
+
+				return $status;
+			}
 			$alt_text = get_post_meta( $attachment, '_wp_attachment_image_alt', true );
 			/**
 			 * Add alt attributes to uploaded images.
@@ -41,7 +47,7 @@ function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $i
 			 * @return {string}
 			 */
 			$alt_text        = apply_filters( 'wpt_uploaded_image_alt', $alt_text, $attachment );
-			$attachment_data = wpt_image_binary( $attachment, 'mastodon' );
+			$attachment_data = wpt_image_binary( $attachment, $id, 'mastodon' );
 			// Return without attempting if fails to fetch image object.
 			if ( ! $attachment_data ) {
 				return $status;
@@ -51,11 +57,15 @@ function wpt_upload_mastodon_media( $connection, $auth, $attachment, $status, $i
 				'description' => $alt_text,
 			);
 
-			$response              = $connection->upload_media( $request );
-			$media_id              = $response['id'];
-			$status['media_ids[]'] = $media_id;
+			$response = $connection->upload_media( $request );
+			if ( isset( $response['id'] ) ) {
+				$media_id              = $response['id'];
+				$status['media_ids[]'] = $media_id;
 
-			wpt_mail( 'Media Uploaded', "$auth, $media_id, $attachment", $id );
+				wpt_mail( 'Media Uploaded (Mastodon)', "User: $auth, Mastodon Media ID: $media_id, Attachment ID: $attachment" . wpt_format_error( $response ) . wpt_format_error( $request ), $id );
+			} else {
+				wpt_mail( 'Media Upload Failed (Mastodon)', "User: $auth, Attachment ID: $attachment" . wpt_format_error( $response ), $id );
+			}
 		}
 	}
 
@@ -81,15 +91,18 @@ function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
 	 * @param {bool}     $staging_mode True to enable staging mode.
 	 * @param {int|bool} $auth Current author.
 	 * @param {int}      $id Post ID.
+	 * @param {string}   $service Service being put into staging.
 	 *
 	 * @return {bool}
 	 */
-	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id );
+	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id, 'mastodon' );
+	$status_text  = $status['text'];
 	if ( ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) || $staging_mode ) {
-		// if in staging mode, we'll behave as if the Tweet succeeded, but not send it.
+		// if in staging mode, we'll behave as if the update succeeded, but not send it.
 		$connection = true;
+		$success    = true;
 		$http_code  = 200;
-		$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ' . $status['text'];
+		$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ' . $status_text;
 		$status_id  = false;
 	} else {
 		/**
@@ -103,11 +116,11 @@ function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
 		 *
 		 * @return {bool}
 		 */
-		$do_post   = apply_filters( 'wpt_do_toot', true, $auth, $id, $status['text'] );
+		$do_post   = apply_filters( 'wpt_do_toot', true, $auth, $id, $status_text );
 		$status_id = false;
 		$success   = false;
 		// Change status array to Mastodon expectation.
-		$status['status'] = $status['text'];
+		$status['status'] = $status_text;
 		unset( $status['text'] );
 		/**
 		 * Filter status array for Mastodon.
@@ -143,6 +156,8 @@ function wpt_send_post_to_mastodon( $connection, $auth, $id, $status ) {
 		'http'      => $http_code,
 		'notice'    => $notice,
 		'status_id' => $status_id,
+		'status'    => $status_text,
+		'service'   => 'mastodon',
 	);
 }
 

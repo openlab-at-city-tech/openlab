@@ -1,42 +1,94 @@
 (function ($) {
-	$('#wpt_custom_tweet, #wpt_retweet_0, #wpt_retweet_1, #wpt_retweet_3').charCount({
+	let post_this = document.querySelectorAll( 'input[name=_wpt_post_this]' );
+	let wrapper   = document.querySelector( '.wpt-options-metabox' );
+
+	post_this.forEach( (el) => { 
+		if ( el && el.checked && el.value === 'no' ) {
+			wrapper.style.display = 'none';
+		}
+		el.addEventListener( 'change', function() {
+			if ( el.checked && el.value == 'yes' ) {
+				wrapper.style.display = 'grid';
+			} else {
+				wrapper.style.display = 'none';
+			}
+		});
+	});
+
+	let add_image = document.querySelectorAll( 'input[name=_wpt_image]' );
+	let image_holder = document.querySelector( '.wpt_custom_image' );
+
+	add_image.forEach( (el) => { 
+		if ( el && el.checked && el.value === '1' ) {
+			image_holder.style.display = 'none';
+		}
+		el.addEventListener( 'change', function() {
+			if ( el.checked && el.value == '0' ) {
+				image_holder.style.display = 'block';
+			} else {
+				image_holder.style.display = 'none';
+			}
+		});
+	});
+	$('#wpt_custom_tweet, #wpt_custom_update, #wpt_retweet_0, #wpt_retweet_1, #wpt_retweet_3').charCount({
 		allowed: wptSettings.allowed,
 		counterText: wptSettings.text
 	});
-	// add custom retweets
-	$('.wp-to-twitter .expandable').hide();
-	$('.wp-to-twitter .tweet-toggle').on('click', function (e) {
-		e.preventDefault();
-		if ( $( '.wp-to-twitter .expandable' ).is( ':visible' ) ) {
-			$( '.wp-to-twitter .tweet-toggle span ').addClass( 'dashicons-plus' );
-			$( '.wp-to-twitter .tweet-toggle span' ).removeClass( 'dashicons-minus' );
+
+	const variants = $( '.service-selection-variants .service-selector input' );
+	let status_update = $( '#wpt_custom_tweet' ).val();
+	if ( '' === status_update ) {
+		status_update = $( 'pre.wpt-template' ).text();
+	}
+	variants.each( function() {
+		$( this ).on( 'change', function() {
+			let status = $( this ).is( ':checked' );
+			let val    = $( this ).val();
+			if ( true === status ) {
+				$( '#wpt_custom_tweet_' + val ).parent( 'p' ).removeClass( 'hidden' );
+				$(  '#wpt_custom_tweet_' + val ).val( status_update );
+			} else {
+				$( '#wpt_custom_tweet_' + val ).parent( 'p' ).addClass( 'hidden' );
+			}
+		});
+		
+	});
+
+	// debugging
+	$( 'button.toggle-debug' ).on( 'click', function() {
+		var next = $( this ).next( 'pre' );
+		if ( next.is( ':visible' ) ) {
+			next.hide();
+			$( this ).attr( 'aria-expanded', 'false' );
 		} else {
-			$( '.wp-to-twitter .tweet-toggle span ').removeClass( 'dashicons-plus' );
-			$( '.wp-to-twitter .tweet-toggle span' ).addClass( 'dashicons-minus' );
+			next.show();
+			$( this ).attr( 'aria-expanded', 'true' );
 		}
-		$('.wp-to-twitter .expandable').toggle('slow');
 	});
 	// tweet history log
-	$('.wp-to-twitter .history').hide();
-	$('.wp-to-twitter .history-toggle').on('click', function (e) {
-		e.preventDefault();
-		if ( $( '.wp-to-twitter .history' ).is( ':visible' ) ) {
-			$( '.wp-to-twitter .history-toggle span ').addClass( 'dashicons-plus' );
-			$( '.wp-to-twitter .history-toggle span' ).removeClass( 'dashicons-minus' );
+	$('#wp2t .history').hide();
+	$('#wp2t .history-toggle').on('click', function (e) {
+		let dashicon = $( '#wp2t .history-toggle span ');
+		if ( $( '#wp2t .history' ).is( ':visible' ) ) {
+			dashicon.addClass( 'dashicons-plus' );
+			dashicon.removeClass( 'dashicons-minus' );
+			dashicon.parent( 'button' ).attr( 'aria-expanded', 'false' );
 		} else {
-			$( '.wp-to-twitter .history-toggle span ').removeClass( 'dashicons-plus' );
-			$( '.wp-to-twitter .history-toggle span' ).addClass( 'dashicons-minus' );
+			dashicon.removeClass( 'dashicons-plus' );
+			dashicon.addClass( 'dashicons-minus' );
+			dashicon.parent( 'button' ).attr( 'aria-expanded', 'true' );
 		}
-		$('.wp-to-twitter .history').toggle('slow');
+		$('#wp2t .history').toggle( 300 );
 	});
 
 	const templateTags = document.querySelectorAll( '#wp2t .inline-list button' );
 	let   custom       = document.getElementById( 'wpt_custom_tweet' );
-	let   template     = document.querySelector( '#wp2t .wpt-template code' );
-	let   customText   = custom.value;
-	let   templateText = template.innerText;
+	let   template     = document.querySelector( '#wp2t pre.wpt-template' );
+	let   customText   = ( null !== custom ) ? custom.value : '';
+	let   templateText = ( null !== template ) ? template.innerText : '';
 	templateTags.forEach((el) => {
 		el.addEventListener( 'click', function(e) {
+			customText   = ( null !== custom ) ? custom.value : '';
 			let pressed  = el.getAttribute( 'aria-pressed' );
 			let tag      = el.innerText;
 			templateText = ( customText ) ? customText : templateText;

@@ -173,9 +173,9 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Build a signature.
 		 *
-		 * @param object $request Request object.
-		 * @param object $consumer Consumer object.
-		 * @param string $token Token.
+		 * @param object        $request Request object.
+		 * @param object        $consumer Consumer object.
+		 * @param string|object $token Token or object with secret property.
 		 *
 		 * @return base 64 signature.
 		 */
@@ -212,7 +212,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param object $request Request object.
 		 * @param object $consumer Consumer object.
-		 * @param string $token Token.
+		 * @param string|object $token Token or object with token property.
 		 *
 		 * @return signature.
 		 *
@@ -264,7 +264,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 *
 		 * @param Object $request Request.
 		 *
-		 * @return Either way should return a string representation of the certificate.
+		 * @return OpenSSLAsymmetricKey|OpenSSLCertificate|array|string Either way should return a string representation of the certificate.
 		 */
 		protected abstract function fetch_private_cert( &$request );
 
@@ -375,7 +375,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * @param array  $parameters Query parameters; will be combined with POST data.
 		 */
 		public function __construct( $http_method, $http_url, $parameters = array() ) {
-			$parameters        = array_merge( WPOAuthUtil::parse_parameters( parse_url( $http_url, PHP_URL_QUERY ) ), $parameters );
+			$parameters        = array_merge( WPOAuthUtil::parse_parameters( wp_parse_url( $http_url, PHP_URL_QUERY ) ), $parameters );
 			$this->parameters  = $parameters;
 			$this->http_method = $http_method;
 			$this->http_url    = $http_url;
@@ -393,10 +393,13 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		public static function from_request( $http_method = null, $http_url = null, $parameters = null ) {
 			$scheme = ( ! isset( $_SERVER['HTTPS'] ) || 'on' !== $_SERVER['HTTPS'] ) ? 'http' : 'https';
 			if ( null === $http_url ) {
-				$http_url = $scheme . '://' . $_SERVER['HTTP_HOST'] . ':' . $_SERVER['SERVER_PORT'] . $_SERVER['REQUEST_URI'];
+				$host     = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+				$port     = isset( $_SERVER['HTTP_PORT'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_PORT'] ) ) : '';
+				$uri      = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
+				$http_url = $scheme . '://' . $host . ':' . $port . $uri;
 			}
 			if ( null === $http_method ) {
-				$http_method = $_SERVER['REQUEST_METHOD'];
+				$http_method = isset( $_SERVER['REQUEST_METHOD'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ) ) : '';
 			}
 
 			// We weren't handed any parameters, so let's find the ones relevant to this request.
@@ -406,7 +409,8 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 				$request_headers = WPOAuthUtil::get_headers();
 
 				// Parse the query-string to find GET parameters.
-				$parameters = WPOAuthUtil::parse_parameters( $_SERVER['QUERY_STRING'] );
+				$query_string = isset( $_SERVER['QUERY_STRING'] ) ? sanitize_text_field( wp_unslash( $_SERVER['QUERY_STRING'] ) ) : '';
+				$parameters   = WPOAuthUtil::parse_parameters( $query_string );
 
 				// It's a POST request of the proper content-type, so parse POST.
 				// parameters and add those overriding any duplicates from GET.
@@ -558,7 +562,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		 * scheme://host/path
 		 */
 		public function get_normalized_http_url() {
-			$parts = parse_url( $this->http_url );
+			$parts = wp_parse_url( $this->http_url );
 
 			$port   = isset( $parts['port'] ) ? $parts['port'] : false;
 			$scheme = isset( $parts['scheme'] ) ? $parts['scheme'] : '';
@@ -708,13 +712,13 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Version
 		 *
-		 * @var $version
+		 * @var string $version
 		 */
 		protected $version = '1.0';           // hi blaine.
 		/**
 		 * Array of methods usable.
 		 *
-		 * @var $signature_methods
+		 * @var array $signature_methods
 		 */
 		protected $signature_methods = array();
 
@@ -823,7 +827,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 				$version = '1.0';
 			}
 			if ( $version !== $this->version ) {
-				throw new WPOAuthException( "OAuth version '$version' not supported" );
+				throw new WPOAuthException( 'OAuth version "' . esc_html( $version ) . '" not supported' );
 			}
 
 			return $version;
@@ -848,9 +852,9 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 
 			if ( ! in_array( $signature_method, array_keys( $this->signature_methods ), true ) ) {
 				throw new WPOAuthException(
-					"Signature method '$signature_method' not supported " .
+					'Signature method "' . esc_html( $signature_method ) . '" not supported ' .
 					'try one of the following: ' .
-					implode( ', ', array_keys( $this->signature_methods ) )
+					implode( ', ', array_map( 'esc_html', array_keys( $this->signature_methods ) ) )
 				);
 			}
 
@@ -893,7 +897,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 			$token_field = $request->get_parameter( 'oauth_token' );
 			$token       = $this->data_store->lookup_token( $consumer, $token_type, $token_field );
 			if ( ! $token ) {
-				throw new WPOAuthException( "Invalid $token_type token: $token_field" );
+				throw new WPOAuthException( 'Invalid ' . esc_html( $token_type ) . ' token: ' . esc_html( $token_field ) );
 			}
 
 			return $token;
@@ -948,7 +952,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 			$now = time();
 			if ( abs( $now - $timestamp ) > $this->timestamp_threshold ) {
 				throw new WPOAuthException(
-					"Expired timestamp, yours $timestamp, ours $now"
+					'Expired timestamp, yours: ' . esc_html( $timestamp ) . ', ours: ' . esc_html( $now )
 				);
 			}
 		}
@@ -975,7 +979,7 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 				$timestamp
 			);
 			if ( $found ) {
-				throw new WPOAuthException( "Nonce already used: $nonce" );
+				throw new WPOAuthException( 'Nonce already used: ' . esc_html( $nonce ) );
 			}
 		}
 
@@ -1046,9 +1050,9 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 		/**
 		 * Encode as rfc3986.
 		 *
-		 * @param string $input Any string input.
+		 * @param string|array $input Any string input or array of strings.
 		 *
-		 * @return encoded input.
+		 * @return string|array encoded input.
 		 */
 		public static function urlencode_rfc3986( $input ) {
 			if ( is_array( $input ) ) {
@@ -1137,10 +1141,10 @@ if ( ! class_exists( 'WPOAuthException' ) ) {
 				// that $_SERVER actually contains what we need.
 				$out = array();
 				if ( isset( $_SERVER['CONTENT_TYPE'] ) ) {
-					$out['Content-Type'] = $_SERVER['CONTENT_TYPE'];
+					$out['Content-Type'] = sanitize_text_field( wp_unslash( $_SERVER['CONTENT_TYPE'] ) );
 				}
 				if ( isset( $_ENV['CONTENT_TYPE'] ) ) {
-					$out['Content-Type'] = $_ENV['CONTENT_TYPE'];
+					$out['Content-Type'] = sanitize_text_field( wp_unslash( $_ENV['CONTENT_TYPE'] ) );
 				}
 
 				foreach ( $_SERVER as $key => $value ) {

@@ -16,12 +16,29 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Check for OAuth configuration
+ *
+ * @param int|boolean $auth Which user ID to check. False for main account.
+ *
+ * @return boolean True if authorized.
+ */
+function wpt_check_oauth( $auth = false ) {
+	if ( ! function_exists( 'wtt_oauth_test' ) ) {
+		$oauth = false;
+	} else {
+		$oauth = wtt_oauth_test( $auth );
+	}
+
+	return $oauth;
+}
+
+/**
  * Function to test validity of credentials
  *
- * @param mixed int/boolean $auth Current author.
- * @param string            $context Use context.
+ * @param int|boolean $auth Current author.
+ * @param string      $context Use context.
  *
- * @return Is authenticated.
+ * @return bool Is authenticated.
  */
 function wtt_oauth_test( $auth = false, $context = '' ) {
 	if ( ! $auth ) {
@@ -89,7 +106,7 @@ function wpt_oauth_connection( $auth = false, $api = '2' ) {
 			);
 			$client   = new Client( $settings );
 		} else {
-			require_once plugin_dir_path( __FILE__ ) . 'classes/class-wpt-twitteroauth.php';
+			require_once plugin_dir_path( __FILE__ ) . 'class-wpt-twitteroauth.php';
 			$connection            = new Wpt_TwitterOAuth( $ack, $acs, $ot, $ots );
 			$connection->useragent = get_option( 'blogname' ) . ' ' . home_url();
 			$client                = $connection;
@@ -193,11 +210,11 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 					$message    = 'failed';
 					$connection = wpt_oauth_connection( $auth, '1.1' );
 					if ( $connection ) {
-						$data = $connection->get( 'https://api.twitter.com/1.1/account/verify_credentials.json' );
+						$data = $connection->get( 'https://api.x.com/1.1/account/verify_credentials.json' );
 						if ( '200' !== (string) $connection->http_code ) {
 							$parsed = json_decode( $data );
 							if ( is_object( $parsed ) ) {
-								$code  = "<a href='https://developer.twitter.com/en/support/twitter-api/error-troubleshooting'>" . $parsed->errors[0]->code . '</a>';
+								$code  = "<a href='https://developer.x.com/en/support/x-api/error-troubleshooting'>" . $parsed->errors[0]->code . '</a>';
 								$error = $parsed->errors[0]->message;
 							} else {
 								$code  = 'null';
@@ -238,11 +255,11 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 						}
 						if ( '1' === get_option( 'wp_debug_oauth' ) ) {
 							echo '<h2>Summary Connection Response</h2><pre>';
-							print_r( $error_information );
+							wpt_format_error( $error_information );
 							echo '</pre><h2>Account Verification Data</h2><pre>';
-							print_r( $data );
+							wpt_format_error( $data );
 							echo '</pre><h2>Full Connection Response</h2><pre>';
-							print_r( $connection );
+							wpt_format_error( $connection );
 							echo '</pre>';
 						}
 					} else {
@@ -256,6 +273,22 @@ function wpt_update_oauth_settings( $auth = false, $post = false ) {
 				}
 
 				return $message;
+				break;
+			case 'wtt_x_update':
+				if ( ! wp_verify_nonce( $post['_wpnonce'], 'wp-to-twitter-nonce' ) && ! $auth ) {
+					wp_die( 'Oops, please try again.' );
+				}
+				$option  = get_option( 'wpt_disabled_services', array() );
+				$disable = isset( $post['wpt_disabled_services'] ) ? true : false;
+				if ( $disable ) {
+					$option['x'] = 'true';
+				} else {
+					unset( $option['x'] );
+				}
+				if ( isset( $_POST['wpt_x_length'] ) ) {
+					update_option( 'wpt_x_length', intval( $_POST['wpt_x_length'] ) );
+				}
+				update_option( 'wpt_disabled_services', $option );
 				break;
 			case 'wtt_twitter_disconnect':
 				if ( ! wp_verify_nonce( $post['_wpnonce'], 'wp-to-twitter-nonce' ) && ! $auth ) {
@@ -296,88 +329,92 @@ function wtt_connect_oauth( $auth = false ) {
 		echo '<div class="ui-sortable meta-box-sortables">';
 		echo '<div class="postbox">';
 	}
-	$information = '';
-
 	if ( $auth ) {
 		wpt_update_authenticated_users();
 	}
-
 	$class = ( $auth ) ? 'wpt-profile' : 'wpt-settings';
-	$form  = ( ! $auth ) ? '<form action="" method="post" class="wpt-connection-form">' : '';
-	$nonce = ( ! $auth ) ? wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, false ) . wp_referer_field( false ) . '</form>' : '';
 
-	$bt_form = '<p>
-		<label for="wtt_bearer_token">' . __( 'Bearer Token', 'wp-to-twitter' ) . '</label>
-		<input type="text" size="45" name="wtt_bearer_token" id="wtt_bearer_token" value="%s" />
-	</p>';
 	if ( ! wtt_oauth_test( $auth, 'verify' ) ) {
 		$ack = ( ! $auth ) ? get_option( 'app_consumer_key' ) : get_user_meta( $auth, 'app_consumer_key', true );
 		$acs = ( ! $auth ) ? get_option( 'app_consumer_secret' ) : get_user_meta( $auth, 'app_consumer_secret', true );
 		$ot  = ( ! $auth ) ? get_option( 'oauth_token' ) : get_user_meta( $auth, 'oauth_token', true );
 		$ots = ( ! $auth ) ? get_option( 'oauth_token_secret' ) : get_user_meta( $auth, 'oauth_token_secret', true );
 		$bt  = ( ! $auth ) ? get_option( 'bearer_token' ) : get_user_meta( $auth, 'bearer_token', true );
+		?>
 
-		$bt_form = sprintf( $bt_form, esc_attr( wpt_mask_attr( $bt ) ) );
-
-		$submit = ( ! $auth ) ? '<p class="submit"><input type="submit" name="submit" class="button-primary" value="' . __( 'Connect to X.com', 'wp-to-twitter' ) . '" /></p>' : '';
-		print( '
-			<h3 class="wpt-has-link"><span>' . __( 'Connect to X.com', 'wp-to-twitter' ) . '</span> <a href="https://xposterpro.com/connecting-xposter-and-x-com/" class="button button-secondary">' . __( 'Instructions', 'wp-to-twitter' ) . '</a></h3>
-			<div class="inside ' . $class . '">
-			' . $form . '
-				<ol class="wpt-oauth-settings">
-					<li>' . __( 'Apply for a <a href="https://developer.twitter.com/en/apply-for-access">Developer Account with X.com</a>', 'wp-to-twitter' ) . '<ul>
-						<li><a href="https://developer.twitter.com/en/developer-terms/policy">' . __( 'Review the Terms of Service for use of the X.com API', 'wp-to-twitter' ) . '</a></li>
-						<li>' . __( 'If your app is suspended by X.com, contact <a href="https://help.twitter.com/forms/platform">their API Policy Support</a>.', 'wp-to-twitter' ) . '</li>
-					</ul></li>
-					<li>' . __( 'Add a new application in <a href="https://developer.twitter.com/en/portal/apps/new">X.com\'s project and app portal</a>', 'wp-to-twitter' ) . '
-						<ul>
-							<li>' . __( 'Name your application.', 'wp-to-twitter' ) . ' (' . __( 'Your app name cannot include the word "Twitter."', 'wp-to-twitter' ) . ')</li>
-							<li>' . __( 'Click "Next" to move to the Keys & Tokens step.', 'wp-to-twitter' ) . '</li>
-						</ul>
-					</li>
-					<li>' . __( 'Copy your API Key and API Key secret.', 'wp-to-twitter' ) . '
-					<div class="tokens auth-fields">
-					<p>
-						<label for="wtt_app_consumer_key">' . __( 'API Key', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="' . esc_attr( wpt_mask_attr( $ack ) ) . '" />
-					</p>
-					<p>
-						<label for="wtt_app_consumer_secret">' . __( 'API Key Secret', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="' . esc_attr( wpt_mask_attr( $acs ) ) . '" />
-					</p>
-					</div>
-					</li>
-					<li>' . __( 'Click "App Settings" to configure your app', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Click "Set up" to configure User authentication settings', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Enable OAuth 1.0a', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Set "App Permissions" to "Read and write".', 'wp-to-twitter' ) . '</li>' .
-					// Translators: Site URL.
-					'<li>' . sprintf( __( 'Add your website as the Website URL and the Callback URI: %s', 'wp-to-twitter' ), '<code>' . home_url() . '</code>' ) . '</li>
-					<li>' . __( 'Click "Save" to save settings.', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Click "Edit" at top of Settings screen to edit your App', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Change to the "Keys and Tokens" tab', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Generate your Access Token and Secret from the "Authentication Tokens" section.', 'wp-to-twitter' ) . '</li>
-					<li>' . __( 'Add your Access Token, Secret, and Bearer Token:', 'wp-to-twitter' ) . ' (' . __( 'If the Access Level for your Access Token is not "<em>Read and write</em>", return to step 7, change your permissions, and generate new Tokens.', 'wp-to-twitter' ) . ')
-					<div class="tokens auth-fields">
-					<p>
-						<label for="wtt_oauth_token">' . __( 'Access Token', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_oauth_token" id="wtt_oauth_token" value="' . esc_attr( wpt_mask_attr( $ot ) ) . '" />
-					</p>
-					<p>
-						<label for="wtt_oauth_token_secret">' . __( 'Access Token Secret', 'wp-to-twitter' ) . '</label>
-						<input type="text" size="45" name="wtt_oauth_token_secret" id="wtt_oauth_token_secret" value="' . esc_attr( wpt_mask_attr( $ots ) ) . '" />
-					</p>
-					' . $bt_form . '
-					</div>
-					</li>
-					<li>
-						<p>' . __( 'Create a Project and add your App to the project.', 'wp-to-twitter' ) . '</p>
-					</li>
-				</ol>
-				' . $submit . '
-				<input type="hidden" name="oauth_settings" value="wtt_oauth_test" class="hidden" />
-				' . $nonce . '
-			</div>' );
+		<h3 class="wpt-has-link"><span><?php esc_html_e( 'Connect to X.com', 'wp-to-twitter' ); ?></span> <a href="https://xposterpro.com/connecting-xposter-and-x-com/" class="button button-secondary"><?php esc_html_e( 'Instructions', 'wp-to-twitter' ); ?></a></h3>
+		<div class="inside <?php echo esc_attr( $class ); ?>">
+		<?php
+		echo ( ! $auth ) ? '<form action="" method="post" class="wpt-connection-form">' : '';
+		?>
+			<ol class="wpt-oauth-settings">
+				<li><?php echo wp_kses_post( __( 'Apply for a <a href="https://developer.twitter.com/en/apply-for-access">Developer Account with X.com</a>', 'wp-to-twitter' ) ); ?><ul>
+					<li><a href="https://developer.twitter.com/en/developer-terms/policy"><?php esc_html_e( 'Review the Terms of Service for use of the X.com API', 'wp-to-twitter' ); ?></a></li>
+					<li><?php echo wp_kses_post( __( 'If your app is suspended by X.com, contact <a href="https://help.twitter.com/forms/platform">their API Policy Support</a>.', 'wp-to-twitter' ) ); ?></li>
+				</ul></li>
+				<li><?php echo wp_kses_post( __( 'Add a new application in <a href="https://developer.twitter.com/en/portal/apps/new">X.com\'s project and app portal</a>', 'wp-to-twitter' ) ); ?>
+					<ul>
+						<li><?php esc_html_e( 'Name your application.', 'wp-to-twitter' ); ?> (<?php esc_html_e( 'Your app name cannot include the word "Twitter."', 'wp-to-twitter' ); ?>)</li>
+						<li><?php esc_html_e( 'Click "Next" to move to the Keys & Tokens step.', 'wp-to-twitter' ); ?></li>
+					</ul>
+				</li>
+				<li><?php esc_html_e( 'Copy your API Key and API Key secret.', 'wp-to-twitter' ); ?>
+				<div class="tokens auth-fields">
+				<p>
+					<label for="wtt_app_consumer_key"><?php esc_html_e( 'API Key', 'wp-to-twitter' ); ?></label>
+					<input type="text" size="45" name="wtt_app_consumer_key" id="wtt_app_consumer_key" value="<?php echo esc_attr( wpt_mask_attr( $ack ) ); ?>" />
+				</p>
+				<p>
+					<label for="wtt_app_consumer_secret"><?php esc_html_e( 'API Key Secret', 'wp-to-twitter' ); ?></label>
+					<input type="text" size="45" name="wtt_app_consumer_secret" id="wtt_app_consumer_secret" value="<?php echo esc_attr( wpt_mask_attr( $acs ) ); ?>" />
+				</p>
+				</div>
+				</li>
+				<li><?php esc_html_e( 'Click "App Settings" to configure your app', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Click "Set up" to configure User authentication settings', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Enable OAuth 1.0a', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Set "App Permissions" to "Read and write".', 'wp-to-twitter' ); ?></li>
+				<li>
+				<?php
+				// Translators: Site URL.
+				echo wp_kses_post( sprintf( __( 'Add your website as the Website URL and the Callback URI: %s', 'wp-to-twitter' ), '<code>' . home_url() . '</code>' ) );
+				?>
+				</li>
+				<li><?php esc_html_e( 'Click "Save" to save settings.', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Click "Edit" at top of Settings screen to edit your App', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Change to the "Keys and Tokens" tab', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Generate your Access Token and Secret from the "Authentication Tokens" section.', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Add your Access Token, Secret, and Bearer Token:', 'wp-to-twitter' ); ?> (<?php echo wp_kses_post( __( 'If the Access Level for your Access Token is not "<em>Read and write</em>", return to step 7, change your permissions, and generate new Tokens.', 'wp-to-twitter' ) ); ?>)
+				<div class="tokens auth-fields">
+				<p>
+					<label for="wtt_oauth_token"><?php esc_html_e( 'Access Token', 'wp-to-twitter' ); ?></label>
+					<input type="text" size="45" name="wtt_oauth_token" id="wtt_oauth_token" value="<?php echo esc_attr( wpt_mask_attr( $ot ) ); ?>" />
+				</p>
+				<p>
+					<label for="wtt_oauth_token_secret"><?php esc_html_e( 'Access Token Secret', 'wp-to-twitter' ); ?></label>
+					<input type="text" size="45" name="wtt_oauth_token_secret" id="wtt_oauth_token_secret" value="<?php echo esc_attr( wpt_mask_attr( $ots ) ); ?>" />
+				</p>
+				<p>
+					<label for="wtt_bearer_token"><?php esc_html_e( 'Bearer Token', 'wp-to-twitter' ); ?></label>
+					<input type="text" size="45" name="wtt_bearer_token" id="wtt_bearer_token" value="<?php echo esc_attr( wpt_mask_attr( $bt ) ); ?>" />
+				</p>
+				</div>
+				</li>
+				<li>
+					<p><?php esc_html_e( 'Create a Project and add your App to the project.', 'wp-to-twitter' ); ?></p>
+				</li>
+			</ol>
+			<?php
+			if ( ! $auth ) {
+				?>
+				<p class="submit"><input type="submit" name="submit" class="button-primary" value="<?php esc_html_e( 'Connect to X.com', 'wp-to-twitter' ); ?>" /></p>
+				<?php wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, true ); ?>
+				<?php
+			}
+			?>
+			<input type="hidden" name="oauth_settings" value="wtt_oauth_test" class="hidden" />
+		</div>
+		<?php
 	} elseif ( wtt_oauth_test( $auth ) ) {
 		$ack   = ( ! $auth ) ? get_option( 'app_consumer_key' ) : get_user_meta( $auth, 'app_consumer_key', true );
 		$acs   = ( ! $auth ) ? get_option( 'app_consumer_secret' ) : get_user_meta( $auth, 'app_consumer_secret', true );
@@ -385,94 +422,91 @@ function wtt_connect_oauth( $auth = false ) {
 		$ots   = ( ! $auth ) ? get_option( 'oauth_token_secret' ) : get_user_meta( $auth, 'oauth_token_secret', true );
 		$bt    = ( ! $auth ) ? get_option( 'bearer_token' ) : get_user_meta( $auth, 'bearer_token', true );
 		$uname = ( ! $auth ) ? get_option( 'wtt_twitter_username' ) : get_user_meta( $auth, 'wtt_twitter_username', true );
-		$nonce = ( ! $auth ) ? wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, false ) . wp_referer_field( false ) . '</form>' : '';
 		$site  = get_bloginfo( 'name' );
+		?>
 
+		<h3><?php esc_html_e( 'X Connection', 'wp-to-twitter' ); ?></h3>
+		<div class="inside <?php echo esc_attr( $class ); ?>">
+		<?php
 		if ( ! $bt ) {
-			$information = '
-			<p>' . __( 'The X.com version 2 API requires an additional API setting in your connection settings.', 'wp-to-twitter' ) . '</p>
+			?>
+			<p><?php esc_html_e( 'The X.com version 2 API requires an additional API setting in your connection settings.', 'wp-to-twitter' ); ?></p>
 			<ol>
-				<li>' . __( 'Go to <a href="https://developer.twitter.com/en/portal/dashboard">the X.com Developer Dashboard</a>', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'If prompted, create a project to use v2 endpoints. Follow the prompts to use your app.', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'Open your existing App.', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'Choose the Keys and Tokens tab', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'Generate the Bearer Token', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'Copy and Save your Bearer Token', 'wp-to-twitter' ) . '</li>
-				<li>' . __( 'If you already had a project, assign your app to the project.', 'wp-to-twitter' ) . '</li>
-			</ol>';
-
-			$bt_form = sprintf( $bt_form, '' ) . '<input type="hidden" name="oauth_settings" value="wtt_oauth_test" class="hidden" />';
-			if ( ! $auth ) {
-				// Translators: Name of the current site.
-				$submit = '<input type="submit" name="submit" class="button-primary" value="' . __( 'Add your Bearer Token', 'wp-to-twitter' ) . '" /> <button type="submit" name="oauth_settings" value="wtt_twitter_disconnect" class="button-secondary">' . sprintf( __( 'Disconnect %s from X.com', 'wp-to-twitter' ), $site ) . '</button>';
-			}
-		} else {
-			$bt_form = '';
-			if ( ! $auth ) {
-				// Translators: Name of the current site.
-				$submit = '<input type="submit" name="submit" class="button-primary" value="' . sprintf( __( 'Disconnect %s from X.com', 'wp-to-twitter' ), $site ) . '" />
-						<input type="hidden" name="oauth_settings" value="wtt_twitter_disconnect" class="hidden" />';
-			} else {
-				$submit = '<input type="checkbox" name="oauth_settings" value="wtt_twitter_disconnect" id="disconnect" /> <label for="disconnect">' . __( 'Disconnect Your Account from X.com', 'wp-to-twitter' ) . '</label>';
-			}
+				<li><?php echo wp_kses_post( __( 'Go to <a href="https://developer.twitter.com/en/portal/dashboard">the X.com Developer Dashboard</a>', 'wp-to-twitter' ) ); ?></li>
+				<li><?php esc_html_e( 'If prompted, create a project to use v2 endpoints. Follow the prompts to use your app.', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Open your existing App.', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Choose the Keys and Tokens tab', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Generate the Bearer Token', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'Copy and Save your Bearer Token', 'wp-to-twitter' ); ?></li>
+				<li><?php esc_html_e( 'If you already had a project, assign your app to the project.', 'wp-to-twitter' ); ?></li>
+			</ol>
+			<?php
 		}
-
-		$bearer_token = ( $bt ) ? '<li><strong class="auth_label">' . __( 'Bearer Token ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $bt ) ) . '</code></li>' : '';
-
-		print( '
-			<h3>' . __( 'X.com Connection', 'wp-to-twitter' ) . '</h3>
-			<div class="inside ' . $class . '">
-			' . $information . $form . $bt_form . '
-				<div id="wtt_authentication_display">
-					<ul>
-						<li><strong class="auth_label">' . __( 'Username ', 'wp-to-twitter' ) . '</strong> <code class="auth_code"><a href="http://twitter.com/' . esc_attr( $uname ) . '">' . esc_attr( $uname ) . '</a></code></li>
-						<li><strong class="auth_label">' . __( 'API Key ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ack ) ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'API Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $acs ) ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'Access Token ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ot ) ) . '</code></li>
-						<li><strong class="auth_label">' . __( 'Access Token Secret ', 'wp-to-twitter' ) . '</strong> <code class="auth_code">' . esc_attr( wpt_mask_attr( $ots ) ) . '</code></li>
-						' . $bearer_token . '
-					</ul>
-					<div>
-					' . $submit . '
-					</div>
-				</div>
-				' . $nonce . '
-			</div>' );
-
+		echo ( ! $auth ) ? '<form action="" method="post" class="wpt-connection-form">' : '';
+		if ( ! $bt ) {
+			?>
+			<p>
+				<label for="wtt_bearer_token"><?php esc_html_e( 'Bearer Token', 'wp-to-twitter' ); ?></label>
+				<input type="text" size="45" name="wtt_bearer_token" id="wtt_bearer_token" value="<?php echo esc_attr( wpt_mask_attr( $bt ) ); ?>" />
+			</p>
+			<?php
+		}
+		?>
+			<div id="wtt_authentication_display">
+				<ul>
+					<li><strong class="auth_label"><?php esc_html_e( 'Username ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><a href="http://twitter.com/<?php echo esc_attr( $uname ); ?>"><?php echo esc_attr( $uname ); ?></a></code></li>
+					<li><strong class="auth_label"><?php esc_html_e( 'API Key ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><?php echo esc_attr( wpt_mask_attr( $ack ) ); ?></code></li>
+					<li><strong class="auth_label"><?php esc_html_e( 'API Secret ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><?php echo esc_attr( wpt_mask_attr( $acs ) ); ?></code></li>
+					<li><strong class="auth_label"><?php esc_html_e( 'Access Token ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><?php echo esc_attr( wpt_mask_attr( $ot ) ); ?></code></li>
+					<li><strong class="auth_label"><?php esc_html_e( 'Access Token Secret ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><?php echo esc_attr( wpt_mask_attr( $ots ) ); ?></code></li>
+					<?php
+					if ( $bt ) {
+						?>
+					<li><strong class="auth_label"><?php esc_html_e( 'Bearer Token ', 'wp-to-twitter' ); ?></strong> <code class="auth_code"><?php echo esc_attr( wpt_mask_attr( $bt ) ); ?></code></li>
+						<?php
+					}
+					?>
+				</ul>
+			<div>
+			<?php
+			if ( ! $auth ) {
+				// Translators: Name of the current site.
+				$text = sprintf( __( 'Disconnect %s from X', 'wp-to-twitter' ), $site );
+				?>
+				<input type="submit" name="submit" class="button-primary" value="<?php echo esc_attr( $text ); ?>" />
+				<input type="hidden" name="oauth_settings" value="wtt_twitter_disconnect" class="hidden" />
+				<?php
+				wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, true );
+			} else {
+				?>
+				<input type="checkbox" name="oauth_settings" value="wtt_twitter_disconnect" id="disconnect_x" /> <label for="disconnect_x"><?php esc_html_e( 'Disconnect Your Account from X', 'wp-to-twitter' ); ?></label>
+				<?php
+			}
+			echo ( ! $auth ) ? '</form>' : '';
+			?>
+			</div>
+		</div>
+		<?php
+		if ( ! $auth ) {
+			$disabled = get_option( 'wpt_disabled_services', array() );
+			$checked  = ( in_array( 'x', array_keys( $disabled ), true ) ) ? 'checked' : '';
+			?>
+			<form action="" method="post" class="wpt-connection-form">
+				<?php wpt_service_length( 'x' ); ?>
+				<p class="checkboxes"><input <?php checked( 'checked', $checked ); ?> type="checkbox" name="wpt_disabled_services[]" id="wpt_disable_x" value="x"><label for="wpt_disable_x"><?php esc_html_e( 'Disable Posting to X', 'wp-to-twitter' ); ?></label></p>
+				<input type="hidden" name="oauth_settings" value="wtt_x_update"><input type="submit" name="wtt_x_update" class="button-secondary" value="<?php esc_html_e( 'Save Changes', 'wp-to-twitter' ); ?>" />
+				<?php wp_nonce_field( 'wp-to-twitter-nonce', '_wpnonce', true, true ); ?>
+			</form>
+			<?php
+		}
+		?>
+	</div>
+		<?php
 	}
 	if ( ! $auth ) {
-		echo '</div>
-		</div>';
+		?>
+	</div>
+</div>
+		<?php
 	}
-}
-
-/**
- * Update stored set of authenticated users.
- */
-function wpt_update_authenticated_users() {
-	$args = array(
-		'meta_query' => array(
-			array(
-				'key'     => 'wtt_twitter_username',
-				'compare' => 'EXISTS',
-			),
-		),
-	);
-	// get all authorized users.
-	$users            = get_users( $args );
-	$authorized_users = array();
-	if ( is_array( $users ) ) {
-		foreach ( $users as $this_user ) {
-			if ( wtt_oauth_test( $this_user->ID, 'verify' ) ) {
-				$twitter            = get_user_meta( $this_user->ID, 'wtt_twitter_username', true );
-				$authorized_users[] = array(
-					'ID'      => $this_user->ID,
-					'name'    => $this_user->display_name,
-					'twitter' => $twitter,
-				);
-			}
-		}
-	}
-
-	update_option( 'wpt_authorized_users', $authorized_users );
 }

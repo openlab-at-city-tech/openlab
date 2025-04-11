@@ -89,29 +89,54 @@ class Wpt_Mastodon_Api {
 	 * @return array Mastodon response or error.
 	 */
 	public function call_api( $endpoint, $method, $data ) {
+		$content_type_boundary = '';
+		$body                  = '';
+		if ( '/api/v1/media' === $endpoint ) {
+			$boundary = md5( time() );
+			$eol      = "\r\n";
+			$filedata = $data['file'];
+			$name     = $filedata['name'];
+			$file     = $filedata['file'];
+			$mime     = $filedata['mime'];
+			$alt      = $data['description'];
+
+			$body = '--' . $boundary . $eol;
+			if ( $alt ) {
+				$body .= 'Content-Disposition: form-data; name="description";' . $eol . $eol;
+				$body .= $alt . $eol;
+				$body .= '--' . $boundary . $eol;
+			}
+			$body .= 'Content-Disposition: form-data; name="file"; filename="' . $name . '"' . $eol;
+			$body .= 'Content-Type: ' . $mime . $eol . $eol;
+			$body .= $file . $eol;
+			$body .= '--' . $boundary . '--';
+
+			$data                  = $body;
+			$content_type_boundary = "; boundary=$boundary";
+		}
 		$headers = array(
-			'Authorization: Bearer ' . $this->token,
-			'Content-Type: multipart/form-data',
+			'Authorization' => 'Bearer ' . $this->token,
+			'Content-Type'  => 'multipart/form-data' . $content_type_boundary,
 		);
 
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, $this->instance_url . $endpoint );
-		curl_setopt( $ch, CURLOPT_CUSTOMREQUEST, $method );
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $data );
-		curl_setopt( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt( $ch, CURLOPT_HTTPHEADER, $headers );
-		$reply = curl_exec( $ch );
+		$reply = wp_remote_post(
+			$this->instance_url . $endpoint,
+			array(
+				'method'  => $method,
+				'headers' => $headers,
+				'body'    => $data,
+			)
+		);
 
-		if ( ! $reply ) {
+		if ( is_wp_error( $reply ) ) {
 			$error = array(
-				'ok'              => false,
-				'curl_error_code' => curl_errno( $ch ),
-				'curl_error'      => curl_error( $ch ),
+				'ok'         => false,
+				'error_code' => $reply->get_error_code(),
+				'error'      => $reply->get_error_message(),
 			);
-			return json_encode( $error );
+			return $error;
 		}
-		curl_close( $ch );
 
-		return json_decode( $reply, true );
+		return json_decode( wp_remote_retrieve_body( $reply ), true );
 	}
 }

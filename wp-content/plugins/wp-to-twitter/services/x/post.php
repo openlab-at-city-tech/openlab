@@ -28,7 +28,13 @@ function wpt_upload_twitter_media( $connection, $auth, $attachment, $status, $id
 	$text = $status['text'];
 	if ( $connection ) {
 		if ( $attachment ) {
-			$attachment_data = wpt_image_binary( $attachment );
+			$allowed = wpt_check_mime_type( $attachment, 'x' );
+			if ( ! $allowed ) {
+				wpt_mail( 'Media upload mime type not accepted by X', get_post_mime_type( $attachment ), $id );
+
+				return $status;
+			}
+			$attachment_data = wpt_image_binary( $attachment, $id );
 			// Return early if fails to fetch image binary.
 			if ( ! $attachment_data ) {
 				return $status;
@@ -52,7 +58,7 @@ function wpt_upload_twitter_media( $connection, $auth, $attachment, $status, $id
 					'attachment' => $attachment,
 				)
 			);
-			wpt_mail( 'Media Uploaded', "$auth, $media_id, $attachment", $id );
+			wpt_mail( 'Media Uploaded (X)', "$auth, $media_id, $attachment", $id );
 		}
 	}
 	return $status;
@@ -76,14 +82,16 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 	 * @param {bool}     $staging_mode True to enable staging mode.
 	 * @param {int|bool} $auth Current author.
 	 * @param {int}      $id Post ID.
+	 * @param {string}   $service Service being put into staging.
 	 *
 	 * @return {bool}
 	 */
-	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id );
+	$staging_mode = apply_filters( 'wpt_staging_mode', false, $auth, $id, 'x' );
 	$notice       = '';
 	if ( ( defined( 'WPT_STAGING_MODE' ) && true === WPT_STAGING_MODE ) || $staging_mode ) {
-		// if in staging mode, we'll behave as if the Tweet succeeded, but not send it.
+		// if in staging mode, we'll behave as if the update succeeded, but not send it.
 		$connection = true;
+		$success    = true;
 		$http_code  = 200;
 		$notice     = __( 'In Staging Mode:', 'wp-to-twitter' ) . ' ' . $status['text'];
 		$tweet_id   = false;
@@ -131,14 +139,14 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 					update_option( 'wpt_app_limit', $rate_limit );
 					$http_code = $response->getStatusCode();
 					$notice    = __( 'Request Exception occurred when sending to X.com', 'wp-to-twitter' );
-					wpt_mail( 'X RequestException', print_r( $response, 1 ), $id );
+					wpt_mail( 'X RequestException', wpt_format_error( $response ), $id );
 				}
 			} catch ( Exception $e ) {
 				if ( method_exists( $e, 'getMessage' ) ) {
 					$error     = json_decode( $e->getMessage() );
 					$http_code = $e->getCode();
 					$notice    = $error->title . ': ' . $error->detail;
-					wpt_mail( 'X Exception', print_r( $error, 1 ), $id );
+					wpt_mail( 'X Exception', wpt_format_error( $error ), $id );
 				} else {
 					$http_code = 405;
 					$notice    = __( 'Unhandled response', 'wp-to-twitter' );
@@ -151,9 +159,11 @@ function wpt_send_post_to_twitter( $connection, $auth, $id, $status ) {
 	}
 
 	return array(
-		'return'   => $success,
-		'http'     => $http_code,
-		'notice'   => $notice,
-		'tweet_id' => $tweet_id,
+		'return'    => $success,
+		'http'      => $http_code,
+		'notice'    => $notice,
+		'status_id' => $tweet_id,
+		'status'    => $status['text'],
+		'service'   => 'x',
 	);
 }

@@ -19,6 +19,9 @@
         // default configuration properties
         var defaults = {
             allowed: 140,
+			x_limit: 280,
+			mastodon_limit: 500,
+			bluesky_limit: 300,
             warning: 25,
             css: 'counter',
             counterElement: 'span',
@@ -29,7 +32,16 @@
         var options = $.extend(defaults, options);
 
         function calculate(obj) {
-            var count = $(obj).val().length;
+            var count   = $(obj).val().length;
+			console.log( count );
+			var allowed = options.allowed;
+			// Service specific limits.
+			var xAllowed        = options.x_limit;
+			var mastodonAllowed = options.mastodon_limit;
+			var blueskyAllowed  = options.bluesky_limit;
+			// Set allowed length to highest of available options.
+			allowed = Math.max( allowed, xAllowed, mastodonAllowed, blueskyAllowed );
+			var minimum = Math.min( allowed, xAllowed, mastodonAllowed, blueskyAllowed );
             // supported shortcodes
             var urlcount     = $(obj).val().indexOf('#url#') > -1 ? 18 : 0;
             var longurlcount = $(obj).val().indexOf('#longurl#') > -1 ? 14 : 0;
@@ -39,9 +51,33 @@
 				var titlecount = 0;
 			}
             var namecount = $(obj).val().indexOf('#blog#') > -1 ? ($('#wp-admin-bar-site-name a').val().length - 6) : 0;
-			var imgcount  = ( $('#wpt_image_yes:checked').length && $( '#remove-post-thumbnail' ).length ) ? 22 : 0;
-            var available = options.allowed - ( count + urlcount + longurlcount + titlecount + namecount + imgcount );
+			var length    = ( count + urlcount + longurlcount + titlecount + namecount )
+            var available = allowed - length;
 
+			if ( length >= xAllowed ) {
+				$( '.x-notification' ).show();
+				$( '.x-notification span' ).text( xAllowed );
+			} else {
+				$( '.x-notification' ).hide();
+			}
+			if ( length >= mastodonAllowed ) {
+				$( '.mastodon-notification' ).show();
+				$( '.mastodon-notification span' ).text( mastodonAllowed );
+			} else {
+				$( '.mastodon-notification' ).hide();
+			}
+			if ( length >= blueskyAllowed ) {
+				$( '.bluesky-notification' ).show();
+				$( '.bluesky-notification span' ).text( blueskyAllowed );
+			} else {
+				$( '.bluesky-notification' ).hide();
+			}
+			// Add aria-live when approaching first benchmark.
+			if ( length >= ( minimum - options.warning ) ) {
+				$(obj).next().attr( 'aria-live', 'polite' );
+			} else {
+				$(obj).next().removeAttr( 'aria-live', 'polite' );
+			}
             if ( available <= options.warning && available >= 0 ) {
                 $(obj).next().addClass(options.cssWarning);
             } else {
@@ -56,12 +92,11 @@
         };
 
         this.each(function () {
-            $(this).after('<' + options.counterElement + ' aria-live="polite" aria-atomic="true" class="' + options.css + '">' + options.counterText + '</' + options.counterElement + '>');
-            calculate(this);
-			$(this).on( 'keyup', function(e) {
+            $(this).after('<' + options.counterElement + ' aria-atomic="true" class="' + options.css + '">' + options.counterText + '</' + options.counterElement + '>');
+			$(this).on( 'keyup', function() {
 				setTimeout( calculate(this), 200 );
 			});
-			$(this).on( 'change', function(e) {
+			$(this).on( 'change', function() {
 				setTimeout( calculate(this), 200 );
 			});
         });
