@@ -289,6 +289,9 @@ return array(
     'WPChill\\DownloadMonitor\\Shop\\Util\\TemplateInjector' => $baseDir . '/src/Shop/Util/TemplateInjector.php',
     'WPChill\\DownloadMonitor\\Util\\ExtensionLoader' => $baseDir . '/src/Util/ExtensionLoader.php',
     'WPChill\\DownloadMonitor\\Util\\PageCreator' => $baseDir . '/src/Util/PageCreator.php',
+    'WPChill_About_Us' => $baseDir . '/includes/admin/wpchill/class-wpchill-about-us.php',
+    'WPChill_Notifications' => $baseDir . '/includes/admin/wpchill/class-wpchill-notifications.php',
+    'WPChill_Rest_Api' => $baseDir . '/includes/admin/wpchill/class-wpchill-rest-api.php',
     'WPChill_Welcome' => $baseDir . '/includes/submodules/banner/class-wpchill-welcome.php',
     'WP_DLM' => $baseDir . '/src/DLM.php',
 );
