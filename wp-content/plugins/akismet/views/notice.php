@@ -67,7 +67,7 @@ if ( ! isset( $type ) ) {
 		</div>
 		<div class="akismet-alert-button-wrapper">
 			<a href="https://akismet.com/pricing/?flow=upgrade&amp;utm_source=akismet_plugin&amp;utm_campaign=commercial_notice&amp;utm_medium=banner" class="akismet-alert-button akismet-button">
-			<?php esc_html_e( 'Upgrade plan' ); ?>
+			<?php esc_html_e( 'Upgrade plan', 'akismet' ); ?>
 			</a>
 		</div>
 	</div>
