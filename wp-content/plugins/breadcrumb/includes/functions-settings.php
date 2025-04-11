@@ -495,6 +495,8 @@ function breadcrumb_settings_tabs_content_style()
     $breadcrumb_bg_color = get_option('breadcrumb_bg_color');
     $breadcrumb_link_color = get_option('breadcrumb_link_color');
     $breadcrumb_font_size = get_option('breadcrumb_font_size');
+    $display_after_action = get_option('display_after_action');
+    $display_after_action_priority = get_option('display_after_action_priority');
 
     $breadcrumb_themes = get_option('breadcrumb_themes');
     $breadcrumb_separator_color = get_option('breadcrumb_separator_color');
@@ -626,6 +628,52 @@ function breadcrumb_settings_tabs_content_style()
         $settings_tabs_field->generate_field($args);
 
         ?>
+
+
+    </div>
+
+    <div class="section">
+        <div class="section-title"><?php echo __('Display Dynamically', 'breadcrumb'); ?></div>
+        <p class="description section-description"><?php echo __('Display dynamically by action hooks.', 'breadcrumb'); ?></p>
+
+
+        <?php
+        $args = array(
+            'id'        => 'display_after_action',
+            //'parent' => 'breadcrumb_options',
+            'title'        => __('Display after action', 'breadcrumb'),
+            'details'    => __('Insert breadcrumb dyncamically after action hook', 'breadcrumb'),
+            'type'        => 'text',
+            'placeholder'        => 'customify/main/before',
+            'value'        => $display_after_action,
+            'default'        => '',
+        );
+
+        $settings_tabs_field->generate_field($args);
+        $args = array(
+            'id'        => 'display_after_action_priority',
+            //'parent' => 'breadcrumb_options',
+            'title'        => __('Display after action priority', 'breadcrumb'),
+            'details'    => __('Insert breadcrumb dyncamically after action hook by priority', 'breadcrumb'),
+            'type'        => 'text',
+            'placeholder'        => '10',
+            'value'        => $display_after_action_priority,
+            'default'        => '',
+        );
+
+        $settings_tabs_field->generate_field($args);
+
+
+
+
+
+
+        ?>
+
+
+
+
+
 
 
     </div>
@@ -1161,6 +1209,15 @@ if (!function_exists('breadcrumb_settings_save')) {
 
         $breadcrumb_font_size = sanitize_text_field($_POST['breadcrumb_font_size']);
         update_option('breadcrumb_font_size', $breadcrumb_font_size);
+
+        $display_after_action = sanitize_text_field($_POST['display_after_action']);
+        update_option('display_after_action', $display_after_action);
+
+        $display_after_action_priority = sanitize_text_field($_POST['display_after_action_priority']);
+        update_option('display_after_action_priority', $display_after_action_priority);
+
+
+
 
         $breadcrumb_link_color = sanitize_text_field($_POST['breadcrumb_link_color']);
         update_option('breadcrumb_link_color', $breadcrumb_link_color);
