@@ -5,7 +5,7 @@
  * @package Redux
  * @author  Dovy Paukstys
  * @class   Redux_Extension_Users
- * @version 4.4.1
+ * @version 4.5.6
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -25,7 +25,7 @@ if ( ! class_exists( 'Redux_Extension_Users' ) ) {
 		 *
 		 * @var string
 		 */
-		public static $version = '4.4.19';
+		public static $version = '4.5.6';
 
 		/**
 		 * Extension friendly name.
@@ -38,100 +38,100 @@ if ( ! class_exists( 'Redux_Extension_Users' ) ) {
 		/**
 		 * Profiles array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $profiles = array();
+		public ?array $profiles = array();
 
 		/**
 		 * User roles array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $users_roles = array();
+		public ?array $users_roles = array();
 
 		/**
 		 * User role array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $users_role = array();
+		public ?array $users_role = array();
 
 		/**
 		 * Sections array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $sections = array();
+		public ?array $sections = array();
 
 		/**
 		 * Original args array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $orig_args = array();
+		public ?array $orig_args = array();
 
 		/**
 		 * Output array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $output = array();
+		public ?array $output = array();
 
 		/**
 		 * Parent options array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $parent_options = array();
+		public ?array $parent_options = array();
 
 		/**
 		 * Parent defaults.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $parent_defaults = array();
+		public ?array $parent_defaults = array();
 
 		/**
 		 * Profile fields array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $profile_fields = array();
+		public ?array $profile_fields = array();
 
 		/**
 		 * Options defaults.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $options_defaults = array();
+		public ?array $options_defaults = array();
 
 		/**
 		 * To replace array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $to_replace = array();
+		public ?array $to_replace = array();
 
 		/**
 		 * Meta array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $meta = array();
+		public ?array $meta = array();
 
 		/**
 		 * Array of page names.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $pagenows;
+		public ?array $pagenows;
 
 		/**
 		 * Notices array.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public array $notices;
+		public ?array $notices;
 
 		/**
 		 * Redux_Extension_Users constructor.
@@ -782,7 +782,7 @@ if ( ! class_exists( 'Redux_Extension_Users' ) ) {
 			if ( strpos( $pagenow, 'edit-' ) !== false ) {
 				if ( isset( $params['fields'] ) ) {
 					foreach ( $params['fields'] as $field ) {
-						if ( in_array( $field['id'], $this->parent->fields_hidden, true ) ) { //phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
+						if ( in_array( $field['id'], Redux_Core::$fields_hidden, true ) ) { //phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedIf
 							// Not visible.
 						} elseif ( isset( $field['add_visibility'] ) && $field['add_visibility'] ) {
 							return true;
@@ -1005,7 +1005,7 @@ if ( ! class_exists( 'Redux_Extension_Users' ) ) {
 
 			$check_user_id = sanitize_text_field( wp_unslash( $_POST['checkuser_id'] ?? 1 ) );
 
-			$user       = sanitize_text_field( wp_unslash( $_GET['user_id'] ?? get_current_user_id() ) );
+			$user       = sanitize_text_field( wp_unslash( $_POST['user_id'] ?? get_current_user_id() ) );
 			$this->meta = Redux_Users::get_user_meta( array( 'user' => $user ) );
 
 			$to_save    = array();

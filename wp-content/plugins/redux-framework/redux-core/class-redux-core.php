@@ -96,23 +96,100 @@ if ( ! class_exists( 'Redux_Core', false ) ) {
 		/**
 		 * Pointer to an updated Google fonts array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public static array $google_fonts = array();
+		public static ?array $updated_google_fonts = array();
 
 		/**
 		 * List of files calling Redux.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public static array $callers = array();
+		public static ?array $callers = array();
 
 		/**
 		 * Pointer to _SERVER global.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public static array $server = array();
+		public static ?array $server = array();
+
+		/**
+		 * Field folding information for localization.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $required = array();
+
+		/**
+		 * Field child-folding information for localization.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $required_child = array();
+
+		/**
+		 * Array of fields to be folded.
+		 *
+		 * @var array|null
+		 */
+		public static ?array $folds = array();
+
+		/**
+		 * Array of fields that didn't pass the fold dependency test and are hidden.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $fields_hidden = array();
+
+		/**
+		 * Values to generate google font CSS.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $typography = array();
+
+		/**
+		 * Validation ran flag.
+		 *
+		 * @var bool
+		 */
+		public static bool $validation_ran = false;
+
+		/**
+		 * No output flag.
+		 *
+		 * @var bool
+		 */
+		public static bool $no_output = false;
+
+		/**
+		 * Array of fonts used by the panel for localization.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $fonts = array();
+
+		/**
+		 * Array of Google fonts used by the panel for localization.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $google_array = array();
+
+		/**
+		 * Array of various font groups used within the typography field.
+		 *
+		 * @var null|array
+		 */
+		public static ?array $font_groups = array();
+
+		/**
+		 * File system object used for I/O file operations.  Done the WordPress way.
+		 *
+		 * @var null|object
+		 */
+		public static ?object $filesystem;
 
 		/**
 		 * Pointer to the third party fixes class.

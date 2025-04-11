@@ -18,44 +18,44 @@ if ( ! class_exists( 'Redux_Social_Profiles_Functions' ) ) {
 		/**
 		 * ReduxFramework object pointer.
 		 *
-		 * @var object
+		 * @var ReduxFramework
 		 */
-		public static $parent;
+		public static ReduxFramework $parent;
 
 		/**
 		 * Field ID.
 		 *
-		 * @var string
+		 * @var null|string
 		 */
-		public static $field_id;
+		public static ?string $field_id;
 
 		/**
 		 * Field array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public static $field;
+		public static ?array $field;
 
 		/**
 		 * WordPress upload directory.
 		 *
 		 * @var string
 		 */
-		public static $upload_dir;
+		public static string $upload_dir;
 
 		/**
 		 * WordPress upload URI.
 		 *
 		 * @var string
 		 */
-		public static $upload_url;
+		public static string $upload_url;
 
 		/**
 		 * Init helper library.
 		 *
-		 * @param object $redux ReduxFramework object.
+		 * @param ReduxFramework $redux ReduxFramework object.
 		 */
-		public static function init( $redux ) {
+		public static function init( ReduxFramework $redux ) {
 			self::$parent = $redux;
 
 			if ( empty( self::$field_id ) ) {
@@ -88,7 +88,7 @@ if ( ! class_exists( 'Redux_Social_Profiles_Functions' ) ) {
 			if ( file_exists( $file ) ) {
 
 				// Get the contents of the file and stuff it in a variable.
-				$data = self::$parent->filesystem->execute( 'get_contents', $file );
+				$data = Redux_Core::$filesystem->execute( 'get_contents', $file );
 
 				// Error or null, set the result to false.
 				if ( false === $data || null === $data ) {
@@ -126,7 +126,7 @@ if ( ! class_exists( 'Redux_Social_Profiles_Functions' ) ) {
 
 			// Write to its file on the server, return the return value
 			// True on success, false on error.
-			return self::$parent->filesystem->execute( 'put_contents', $file, array( 'content' => $data ) );
+			return Redux_Core::$filesystem->execute( 'put_contents', $file, array( 'content' => $data ) );
 		}
 
 		/**
@@ -212,7 +212,7 @@ if ( ! class_exists( 'Redux_Social_Profiles_Functions' ) ) {
 				}
 			}
 
-			return '';
+			return null;
 		}
 
 		/**

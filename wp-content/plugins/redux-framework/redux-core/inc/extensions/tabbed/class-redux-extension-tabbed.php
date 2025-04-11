@@ -32,7 +32,7 @@ if ( ! class_exists( 'Redux_Extension_Tabbed' ) ) {
 		 *
 		 * @var string
 		 */
-		public $extension_name = 'Tabbed';
+		public string $extension_name = 'Tabbed';
 
 		/**
 		 * Class Constructor. Defines the args for the extensions class

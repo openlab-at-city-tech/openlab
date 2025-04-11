@@ -33,56 +33,49 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 		 *
 		 * @var string
 		 */
-		public string $ext_name = 'Metaboxes';
+		public string $extension_name = 'Metaboxes';
 
 		/**
 		 * Boxes array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public array $boxes = array();
+		public ?array $boxes = array();
 
 		/**
 		 * Post types array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public array $post_types = array();
+		public ?array $post_types = array();
 
 		/**
 		 * Post type.
 		 *
-		 * @var string
+		 * @var string|null
 		 */
-		public string $post_type;
+		public ?string $post_type;
 
 		/**
 		 * Sections array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public array $orig_args;
+		public ?array $orig_args;
 
 		/**
 		 * Sections array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public array $sections = array();
+		public ?array $sections = array();
 
 		/**
 		 * CSS output array.
 		 *
-		 * @var array
+		 * @var array|null
 		 */
-		public array $output = array();
-
-		/**
-		 * ReduxFramework object pointer.
-		 *
-		 * @var object
-		 */
-		public $parent = null;
+		public ?array $output = array();
 
 		/**
 		 * Options array.
@@ -127,20 +120,6 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 		public array $to_replace = array();
 
 		/**
-		 * Extension URI.
-		 *
-		 * @var string|void
-		 */
-		public $extension_url;
-
-		/**
-		 * Extension Directory.
-		 *
-		 * @var string
-		 */
-		public $extension_dir;
-
-		/**
 		 * Meta data array.
 		 *
 		 * @var array
@@ -157,9 +136,9 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 		/**
 		 * Base URI.
 		 *
-		 * @var string
+		 * @var string|null
 		 */
-		public string $base_url;
+		public ?string $base_url;
 
 		/**
 		 * WP_Links array.
@@ -184,8 +163,6 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 			global $pagenow;
 
 			parent::__construct( $redux, __FILE__ );
-
-			$this->parent = $redux;
 
 			$this->parent->extensions['metaboxes'] = $this;
 
@@ -1557,6 +1534,6 @@ if ( ! class_exists( 'Redux_Extension_Metaboxes', false ) ) {
 			}
 		}
 	}
-}
 
-class_alias( 'Redux_Extension_Metaboxes', 'ReduxFramework_Extension_metaboxes' );
+	class_alias( Redux_Extension_Metaboxes::class, 'ReduxFramework_Extension_metaboxes' );
+}

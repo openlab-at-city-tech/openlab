@@ -104,7 +104,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 
 			// Create uploads/redux_scheme_colors/ folder.
 			if ( ! is_dir( $upload_dir ) ) {
-				$redux->filesystem->execute( 'mkdir', $upload_dir );
+				Redux_Core::$filesystem->execute( 'mkdir', $upload_dir );
 			}
 		}
 
@@ -498,7 +498,7 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 
 					$import_file = Redux_Color_Scheme_Functions::$upload_dir . Redux_Color_Scheme_Functions::$parent->args['opt_name'] . '_' . Redux_Color_Scheme_Functions::$field_id . '.json';
 
-					if ( true === Redux_Color_Scheme_Functions::$parent->filesystem->execute( 'put_contents', $import_file, $param_array ) ) {
+					if ( true === Redux_Core::$filesystem->execute( 'put_contents', $import_file, $param_array ) ) {
 						$result = array(
 							'result' => true,
 							// translators: %s = HTML content.
@@ -784,6 +784,6 @@ if ( ! class_exists( 'Redux_Extension_Color_Scheme' ) ) {
 			return $data;
 		}
 	}
-}
 
-class_alias( 'Redux_Extension_Color_Scheme', 'ReduxFramework_Extension_Color_Scheme' );
+	class_alias( Redux_Extension_Color_Scheme::class, 'ReduxFramework_Extension_Color_Scheme' );
+}

@@ -7,6 +7,9 @@
  * @class   Redux_Extension_Datetime
  *
  * @version 4.3.15
+ *
+ * @noinspection PhpHierarchyChecksInspection
+ * @noinspection PhpDocFinalChecksInspection
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -31,12 +34,12 @@ if ( ! class_exists( 'Redux_Extension_Datetime', false ) ) {
 		 *
 		 * @var string
 		 */
-		public $extension_name = 'Date/Time';
+		public string $extension_name = 'Date/Time';
 
 		/**
 		 * Redux_Extension_Datetime constructor.
 		 *
-		 * @param object $redux ReduxFramework pointer.
+		 * @param ReduxFramework $redux ReduxFramework pointer.
 		 */
 		public function __construct( $redux ) {
 			parent::__construct( $redux, __FILE__ );

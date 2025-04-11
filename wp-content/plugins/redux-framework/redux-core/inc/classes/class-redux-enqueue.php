@@ -22,28 +22,28 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		 *
 		 * @var array
 		 */
-		public $localize_data = array();
+		public array $localize_data = array();
 
 		/**
 		 * Min string for .min files.
 		 *
 		 * @var string
 		 */
-		private $min = '';
+		private string $min = '';
 
 		/**
 		 * Timestamp for file versions.
 		 *
 		 * @var string
 		 */
-		private $timestamp = '';
+		private string $timestamp = '';
 
 		/**
 		 * Localize data required for the repeater extension.
 		 *
 		 * @var array
 		 */
-		private $repeater_data = array();
+		private array $repeater_data = array();
 
 		/**
 		 * Redux_Enqueue constructor.
@@ -65,6 +65,15 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 			// phpcs:ignore WordPress.NamingConventions.ValidHookName
 			do_action( 'redux/enqueue/construct', $this );
+
+			// phpcs:ignore WordPress.NamingConventions.ValidHookName
+			do_action( 'redux/search/' . $redux->args['opt_name'] . '/construct' );
+
+			//if ( isset( $_GET['page'] ) && sanitize_text_field( wp_unslash( $_GET['page'] === $this->parent->args['page_slug'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			//	add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ), 0 );
+			//}
+
+			//add_action( "redux/metaboxes/{$this->parent->args[ 'opt_name' ]}/enqueue", array( $this, 'enqueue' ), 10 );
 		}
 
 		/**
@@ -89,7 +98,6 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 			$core = $this->core();
 
 			Redux_Functions::$parent = $core;
-			Redux_CDN::$parent       = $core;
 
 			$this->min = Redux_Functions::is_min();
 
@@ -119,9 +127,9 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		/**
 		 * Register all core framework styles.
 		 *
-		 * @param     object $core ReduxFramework object.
+		 * @param ReduxFramework $core ReduxFramework object.
 		 */
-		private function register_styles( $core ) {
+		private function register_styles( ReduxFramework $core ) {
 
 			/**
 			 * Redux Admin CSS
@@ -362,10 +370,10 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		/**
 		 * Enqueue fields that are in use.
 		 *
-		 * @param object $core  ReduxFramework object.
-		 * @param array  $field Field array.
+		 * @param ReduxFramework $core  ReduxFramework object.
+		 * @param array          $field Field array.
 		 */
-		public function enqueue_field( $core, array $field ) {
+		public function enqueue_field( ReduxFramework $core, array $field ) {
 			if ( isset( $field['type'] ) && 'callback' !== $field['type'] ) {
 				$field_type = str_replace( '_', '-', $field['type'] );
 				$core_path  = Redux_Core::$dir . "inc/fields/{$field['type']}/class-redux-$field_type.php";
@@ -379,7 +387,7 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 				/**
 				 * Field class file
-				 * filter 'redux/{opt_name}/field/class/{field.type}
+				 * filter 'redux/{opt_name}/field/class/{field.type}'
 				 *
 				 * @param     string    $filter_path Field class file path
 				 * @param     array     $field       Field config data
@@ -452,9 +460,9 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		/**
 		 * Enqueue field files.
 		 *
-		 * @param     object $core ReduxFramework object.
+		 * @param ReduxFramework $core ReduxFramework object.
 		 */
-		private function enqueue_fields( $core ) {
+		private function enqueue_fields( ReduxFramework $core ) {
 			foreach ( $core->sections as $section ) {
 				if ( isset( $section['fields'] ) ) {
 					foreach ( $section['fields'] as $field ) {
@@ -467,10 +475,10 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		/**
 		 * Build a localized array from field functions, if any.
 		 *
-		 * @param object $core ReduxFramework object.
-		 * @param string $type Field type.
+		 * @param ReduxFramework $core ReduxFramework object.
+		 * @param string         $type Field type.
 		 */
-		private function build_local_array( $core, string $type ) {
+		private function build_local_array( ReduxFramework $core, string $type ) {
 			if ( isset( $core->transients['last_save_mode'] ) && ! empty( $core->transients['notices'][ $type ] ) ) {
 				$the_total = 0;
 				$messages  = array();
@@ -517,17 +525,19 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 		/**
 		 * Commit localized data to global array.
 		 *
-		 * @param     object $core ReduxFramework object.
+		 * @param ReduxFramework $core ReduxFramework object.
 		 */
-		private function set_localized_data( $core ) {
+		private function set_localized_data( ReduxFramework $core ) {
 			if ( ! empty( $core->args['last_tab'] ) ) {
 				$this->localize_data['last_tab'] = $core->args['last_tab'];
 			}
 
+			$this->localize_data['search'] = esc_html__( 'Search for field(s)', 'redux-framework' );
+
 			$this->localize_data['font_weights'] = $this->args['font_weights'];
 
-			$this->localize_data['required'] = $core->required;
-			$this->repeater_data['fonts']    = $core->fonts;
+			$this->localize_data['required'] = Redux_Core::$required;
+			$this->repeater_data['fonts']    = Redux_Core::$fonts;
 
 			if ( ! isset( $this->repeater_data['opt_names'] ) ) {
 				$this->repeater_data['opt_names'] = array();
@@ -535,46 +545,46 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 			$this->repeater_data['opt_names'][]    = $core->args['opt_name'];
 			$this->repeater_data['folds']          = array();
-			$this->localize_data['required_child'] = $core->required_child;
+			$this->localize_data['required_child'] = Redux_Core::$required_child;
 			$this->localize_data['fields']         = $core->fields;
 
-			if ( isset( $core->font_groups['google'] ) ) {
-				$this->repeater_data['googlefonts'] = $core->font_groups['google'];
+			if ( isset( Redux_Core::$font_groups['google'] ) ) {
+				$this->repeater_data['googlefonts'] = Redux_Core::$font_groups['google'];
 			}
 
-			if ( isset( $core->font_groups['std'] ) ) {
-				$this->repeater_data['stdfonts'] = $core->font_groups['std'];
+			if ( isset( Redux_Core::$font_groups['std'] ) ) {
+				$this->repeater_data['stdfonts'] = Redux_Core::$font_groups['std'];
 			}
 
-			if ( isset( $core->font_groups['customfonts'] ) ) {
-				$this->repeater_data['customfonts'] = $core->font_groups['customfonts'];
+			if ( isset( Redux_Core::$font_groups['customfonts'] ) ) {
+				$this->repeater_data['customfonts'] = Redux_Core::$font_groups['customfonts'];
 			}
 
-			if ( isset( $core->font_groups['typekitfonts'] ) ) {
-				$this->repeater_data['typekitfonts'] = $core->font_groups['typekitfonts'];
+			if ( isset( Redux_Core::$font_groups['typekitfonts'] ) ) {
+				$this->repeater_data['typekitfonts'] = Redux_Core::$font_groups['typekitfonts'];
 			}
 
-			$this->localize_data['folds'] = $core->folds;
+			$this->localize_data['folds'] = Redux_Core::$folds;
 
 			// Make sure the children are all hidden properly.
 			foreach ( $core->fields as $key => $value ) {
-				if ( in_array( $key, $core->fields_hidden, true ) ) {
+				if ( in_array( $key, Redux_Core::$fields_hidden, true ) ) {
 					foreach ( $value as $k => $v ) {
-						if ( ! in_array( $k, $core->fields_hidden, true ) ) {
-							$core->fields_hidden[] = $k;
-							$core->folds[ $k ]     = 'hide';
+						if ( ! in_array( $k, Redux_Core::$fields_hidden, true ) ) {
+							Redux_Core::$fields_hidden[] = $k;
+							Redux_Core::$folds[ $k ]     = 'hide';
 						}
 					}
 				}
 			}
 
-			$this->localize_data['fields_hidden'] = $core->fields_hidden;
+			$this->localize_data['fields_hidden'] = Redux_Core::$fields_hidden;
 			$this->localize_data['options']       = $core->options;
 			$this->localize_data['defaults']      = $core->options_defaults;
 
 			/**
 			 * Save pending string
-			 * filter 'redux/{opt_name}/localize/save_pending
+			 * filter 'redux/{opt_name}/localize/save_pending'
 			 *
 			 * @param string $msg Save_pending string
 			 */
@@ -590,7 +600,7 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 			/**
 			 * Reset all string
-			 * filter 'redux/{opt_name}/localize/reset
+			 * filter 'redux/{opt_name}/localize/reset'
 			 *
 			 * @param string $msg Reset all string.
 			 */
@@ -606,7 +616,7 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 			/**
 			 * Reset section string
-			 * filter 'redux/{opt_name}/localize/reset_section
+			 * filter 'redux/{opt_name}/localize/reset_section'
 			 *
 			 * @param string $msg Reset section string.
 			 */
@@ -622,7 +632,7 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 
 			/**
 			 * Preset confirm string
-			 * filter 'redux/{opt_name}/localize/preset
+			 * filter 'redux/{opt_name}/localize/preset'
 			 *
 			 * @param string $msg Preset confirm string.
 			 */
@@ -664,6 +674,7 @@ if ( ! class_exists( 'Redux_Enqueue', false ) ) {
 				'please_wait'            => esc_html__( 'Please Wait', 'redux-framework' ),
 				'opt_name'               => $core->args['opt_name'],
 				'flyout_submenus'        => $core->args['flyout_submenus'] ?? false,
+				'search'                 => $core->args['search'] ?? true,
 				'slug'                   => $core->args['page_slug'],
 				'hints'                  => $core->args['hints'],
 				'disable_save_warn'      => $core->args['disable_save_warn'],
