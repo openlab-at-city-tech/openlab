@@ -12,7 +12,7 @@ use Advanced_Sidebar_Menu\Widget\Widget;
  * @phpstan-import-type PAGE_SETTINGS from Page
  * @phpstan-import-type WIDGET_ARGS from Widget
  *
- * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
+ * @phpstan-template SETTINGS of array<string, string|int|array<string|int, string>>
  * @implements Menu<SETTINGS, self<SETTINGS>>
  */
 abstract class Menu_Abstract implements Menu {

@@ -13,7 +13,7 @@ use Advanced_Sidebar_Menu\Widget\Widget;
  * @since  9.5.0
  *
  * @phpstan-import-type WIDGET_ARGS from Widget
- * @phpstan-template SETTINGS of array<string, string|int|array<string, string>>
+ * @phpstan-template SETTINGS of array<string, string|int|array<string|int, string>>
  * @phpstan-template INTERFACED_CLASS
  */
 interface Menu {

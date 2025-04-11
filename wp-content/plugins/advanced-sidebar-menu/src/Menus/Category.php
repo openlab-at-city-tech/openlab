@@ -181,13 +181,13 @@ class Category extends Menu_Abstract implements Menu {
 				'parent'   => $this->get_top_parent_id(),
 				'orderby'  => $this->get_order_by(),
 				'order'    => $this->get_order(),
-			] ) );
+			], fn( $value ) => null !== $value && '' !== $value && 0 !== $value ) );
 			if ( is_wp_error( $terms ) ) {
 				$terms = [];
 			}
 		}
 
-		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', \array_filter( $terms ), $this );
+		return (array) apply_filters( 'advanced-sidebar-menu/menus/category/get-child-terms', $terms, $this );
 	}
 
 
@@ -347,9 +347,10 @@ class Category extends Menu_Abstract implements Menu {
 				}
 			}
 
-			$view = require Core::instance()->get_template_part( 'category_list.php' );
+			$crumb = '';
+			$view = require Core::instance()->get_template_part( 'category_list.php', $crumb );
 
-			$output .= apply_filters( 'advanced-sidebar-menu/menus/category/output', $view, $this->args, $this->instance, $this );
+			$output .= apply_filters( 'advanced-sidebar-menu/menus/category/output', $crumb . $view, $this->args, $this->instance, $this );
 
 			if ( $close_menu ) {
 				$this->close_menu( $output );
@@ -371,18 +372,20 @@ class Category extends Menu_Abstract implements Menu {
 	 * @return \WP_Term[]
 	 */
 	public function get_top_level_terms() {
-		$top_level_term_ids = \array_filter( \array_map( function( $term_id ) {
+		$top_level_term_ids = \array_map( function( $term_id ) {
 			$top = $this->get_highest_parent( $term_id );
 			return $this->is_excluded( $top ) ? null : $top;
-		}, $this->get_included_term_ids() ) );
+		}, $this->get_included_term_ids() );
 
-		$top_level_term_ids = apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
+		$top_level_term_ids = (array) apply_filters( 'advanced-sidebar-menu/menus/category/top-level-term-ids', $top_level_term_ids, $this->args, $this->instance, $this );
+
+		$top_level_term_ids = \array_unique( \array_filter( $top_level_term_ids, fn( $id ) => \is_int( $id ) && $id > 0 ) );
 
 		$terms = [];
-		if ( ! empty( $top_level_term_ids ) ) {
+		if ( [] !== $top_level_term_ids ) {
 			$terms = get_terms(
 				[
-					'include'    => \array_unique( \array_filter( $top_level_term_ids ) ),
+					'include'    => $top_level_term_ids,
 					'hide_empty' => false,
 					'orderby'    => $this->get_order_by(),
 					'order'      => $this->get_order(),

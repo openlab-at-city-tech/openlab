@@ -115,28 +115,30 @@ class Core {
 	 * Retrieve a template file from either the theme's 'advanced-sidebar-menu' directory
 	 * or this plugin's view folder if one does not exist.
 	 *
-	 * @since 6.0.0
+	 * @since    6.0.0
 	 *
 	 * @phpstan-param 'category_list.php'|'page_list.php' $file_name
 	 *
-	 * @param string                                      $file_name - Name of template file with the PHP extension.
+	 * @formatter:off
+	 *
+	 * @param string $file_name - Name of template file with the PHP extension.
+	 * @param string $comment     - Optional. If provided, will be populated with a
+	 *                            comment indicating which template was loaded.
+	 *
+	 * @formatter:on
 	 *
 	 * @return string
 	 */
-	public function get_template_part( string $file_name ): string {
+	public function get_template_part( string $file_name, string &$comment = '' ): string {
 		$file = locate_template( 'advanced-sidebar-menu/' . $file_name );
 		$comments = apply_filters( 'advanced-sidebar-menu/core/include-template-parts-comments', true, $file_name );
 		if ( '' === $file ) {
 			if ( $comments ) {
-				?>
-				<!-- advanced-sidebar-menu/core-template -->
-				<?php
+				$comment = '<!-- advanced-sidebar-menu/core-template -->';
 			}
 			$file = ADVANCED_SIDEBAR_MENU_DIR . 'views/' . $file_name;
 		} elseif ( $comments ) {
-			?>
-			<!-- advanced-sidebar-menu/template-override -->
-			<?php
+			$comment = '<!-- advanced-sidebar-menu/template-override -->';
 		}
 
 		return (string) apply_filters( 'advanced-sidebar-menu/core/get-template-part', $file, $file_name, $this );
