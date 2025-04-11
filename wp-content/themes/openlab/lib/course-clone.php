@@ -1240,6 +1240,16 @@ class Openlab_Clone_Course_Site {
 				)"
 			);
 
+			$orphaned_att_ids = array_map( 'intval', $orphaned_att_ids );
+
+			// Exclude those that are used for header images.
+			$header_image_theme_mod = get_theme_mod( 'header_image_data' );
+			if ( $header_image_theme_mod && is_object( $header_image_theme_mod ) ) {
+				if ( isset( $header_image_theme_mod->attachment_id ) ) {
+					$orphaned_att_ids = array_diff( $orphaned_att_ids, array( (int) $header_image_theme_mod->attachment_id ) );
+				}
+			}
+
 			// Delete the orphaned attachments
 			if ( ! empty( $orphaned_att_ids ) ) {
 				foreach ( $orphaned_att_ids as $att_id ) {
