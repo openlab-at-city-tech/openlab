@@ -4,12 +4,19 @@ namespace LottaFramework;
 
 class Query {
 
+	// cache all querys
+	protected $querys = [];
+
 	/**
 	 * Get All Users
 	 *
 	 * @return array
 	 */
 	public function users() {
+		if ( isset( $this->querys['users'] ) ) {
+			return $this->querys['users'];
+		}
+
 		$users = [];
 
 		foreach ( get_users() as $key => $user ) {
@@ -17,6 +24,8 @@ class Query {
 		}
 
 		wp_reset_postdata();
+
+		$this->querys['users'] = $users;
 
 		return $users;
 	}
@@ -64,6 +73,11 @@ class Query {
 	 * @return array|null
 	 */
 	public function termsByTaxonomy( $slug, $per_page = - 1, $hide_empty = false ) {
+		$key = 'terms-' . (string) $slug . (string) $per_page . $hide_empty ? '-hide-empty' : '-include-empty';
+		if ( isset( $this->querys[ $key ] ) ) {
+			return $this->querys[ $key ];
+		}
+
 		// Exclude WooCommerce product
 		if ( ( 'product_cat' === $slug || 'product_tag' === $slug ) && ! class_exists( 'WooCommerce' ) ) {
 			return [];
@@ -78,6 +92,8 @@ class Query {
 
 		wp_reset_postdata();
 
+		$this->querys[ $key ] = $taxonomies;
+
 		return $taxonomies;
 	}
 
@@ -90,6 +106,11 @@ class Query {
 	 * @return array
 	 */
 	public function postsByPostType( $slug, $per_page = - 1 ) {
+		$key = 'posts-' . (string) $slug . (string) $per_page;
+		if ( isset( $this->querys[ $key ] ) ) {
+			return $this->querys[ $key ];
+		}
+
 		$query = get_posts( [ 'post_type' => $slug, 'posts_per_page' => $per_page ] );
 		$posts = [];
 
@@ -98,6 +119,8 @@ class Query {
 		}
 
 		wp_reset_postdata();
+
+		$this->querys[ $key ] = $posts;
 
 		return $posts;
 	}

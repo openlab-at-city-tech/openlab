@@ -113,6 +113,9 @@ if ( ! class_exists( 'Kenta_Socials_Element' ) ) {
 					'kenta-socials-' . $fill => $shape !== 'none',
 				] ); ?>">
 					<?php foreach ( $socials as $social ) { ?>
+                        <?php if ( empty( $social['url'] ) ) {
+							continue;
+						} ?>
                         <a <?php $this->print_attribute_string( 'social-link' ); ?>
                                 style="--kenta-official-color: <?php echo esc_attr( $social['color']['official'] ?? 'var(--kenta-primary-color)' ) ?>;"
                                 href="<?php echo esc_url( $social['url'] ) ?>">

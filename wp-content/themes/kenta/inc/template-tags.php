@@ -1460,7 +1460,7 @@ if ( ! function_exists( 'kenta_show_share_box' ) ) {
             <div <?php Utils::print_attribute_string( $attrs ); ?>>
 				<?php
 				foreach ( $socials as $social ) {
-					if ( isset( $social['share'] ) ) {
+					if ( ! empty( $social['share'] ) ) {
 						$home_url  = Utils::encode_uri_component( get_the_permalink() );
 						$share_url = str_replace(
 							'{url}',

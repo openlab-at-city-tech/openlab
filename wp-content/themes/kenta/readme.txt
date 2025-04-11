@@ -4,7 +4,7 @@ Author: WP Moose
 Requires at least: WordPress 5.4+
 Tested up to: WordPress 6.7
 Requires PHP: 7.4
-Stable tag: 1.4.4
+Stable tag: 1.4.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Tags: blog, portfolio, e-commerce, grid-layout, one-column, two-columns, three-columns, four-columns, left-sidebar, right-sidebar, block-styles, custom-background, custom-colors, custom-header, custom-logo, custom-menu, editor-style, featured-image-header, featured-images, footer-widgets, full-width-template, rtl-language-support, sticky-post, threaded-comments, theme-options, translation-ready, wide-blocks
@@ -47,6 +47,16 @@ GPL v2 - src/lotta-framework/LICENSE
 Credits - src/lotta-framework/README.md
 
 == Changelog ==
+
+= 1.4.6 =
+
+* Ref: Update lotta-framework
+* Fix: Gradient color picker error
+
+= 1.4.5 =
+
+* Ref: Update lotta-framework
+* Fix: Socials link error
 
 = 1.4.4 =
 

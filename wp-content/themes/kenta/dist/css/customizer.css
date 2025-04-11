@@ -109,6 +109,13 @@ body {
   border-top: 1px solid #dcdcde;
 }
 
+#accordion-section-kenta_single_post .accordion-section-title,
+#accordion-section-kenta_pages .accordion-section-title,
+#accordion-panel-woocommerce .accordion-section-title {
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+}
 #accordion-section-kenta_single_post .accordion-section-title::before,
 #accordion-section-kenta_pages .accordion-section-title::before,
 #accordion-panel-woocommerce .accordion-section-title::before {
