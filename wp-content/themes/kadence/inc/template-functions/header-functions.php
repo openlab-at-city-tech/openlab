@@ -225,20 +225,25 @@ function logo_icon() {
  * Desktop Navigation
  */
 function primary_navigation() {
-	?>
-	<nav id="site-navigation" class="main-navigation header-navigation nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'primary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'kadence' ); ?>">
-		<?php kadence()->customizer_quick_link(); ?>
-		<div class="primary-menu-container header-menu-container">
-			<?php
-			if ( kadence()->is_primary_nav_menu_active() ) {
-				kadence()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) );
-			} else {
-				kadence()->display_fallback_menu();
-			}
-			?>
-		</div>
-	</nav><!-- #site-navigation -->
-	<?php
+    $openType = get_theme_mod('primary_navigation_open_type');
+
+    ?>
+    <nav id="site-navigation" class="main-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'primary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'kadence' ); ?>">
+    <?php
+    kadence()->customizer_quick_link();
+    ?>
+        <div class="primary-menu-container header-menu-container">
+    <?php
+    if ( kadence()->is_primary_nav_menu_active() ) {
+        kadence()->display_primary_nav_menu( array( 'menu_id' => 'primary-menu' ) );
+    } else {
+        kadence()->display_fallback_menu();
+    }
+    ?>
+        </div>
+    </nav><!-- #site-navigation -->
+    <?php
+
 }
 
 /**

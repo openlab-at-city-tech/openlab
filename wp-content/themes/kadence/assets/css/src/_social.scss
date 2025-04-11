@@ -29,6 +29,7 @@ $socials: (
 	"soundcloud": $soundcloud,
 	"tumblr": $tumblr,
 	"anchor": $anchor,
+	"threads": $threads,
 );
 // @each $social, $color in $socials {
 // 	body .social-show-brand-hover .social-link-#{$social}:not(.ignore-brand):not(.skip):not(.ignore):hover, body .social-show-brand-until .social-link-#{$social}:not(:hover):not(.skip):not(.ignore), body .social-show-brand-always .social-link-#{$social}:not(.ignore-brand):not(.skip):not(.ignore) {

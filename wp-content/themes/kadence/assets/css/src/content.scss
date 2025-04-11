@@ -698,6 +698,9 @@ a.post-more-link {
     padding-right: 0;
 	clear:both;
 }
+.wp-site-blocks .content-container .is-layout-constrained > .alignwide {
+	max-width: var(--global-content-wide-width);
+}
 @media screen and (min-width: $laptop-plus-query) {
 	.content-width-narrow .entry-content .alignwide, .content-width-narrow .content-area .alignwide {
 		margin-left: -80px;

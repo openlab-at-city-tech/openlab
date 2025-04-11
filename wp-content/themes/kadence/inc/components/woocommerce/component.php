@@ -466,7 +466,6 @@ class Component implements Component_Interface {
 					$attachment_ids     = array_values( $attachment_ids );
 					$secondary_image_id    = $attachment_ids['0'];
 					$secondary_image_alt   = get_post_meta( $secondary_image_id, '_wp_attachment_image_alt', true );
-					$secondary_image_title = get_the_title( $secondary_image_id );
 					$secondary_image_output = wp_get_attachment_image(
 						$secondary_image_id,
 						apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' ),
@@ -474,7 +473,6 @@ class Component implements Component_Interface {
 						array(
 							'class' => 'secondary-product-image attachment-woocommerce_thumbnail attachment-shop-catalog wp-post-image wp-post-image--secondary',
 							'alt'   => $secondary_image_alt,
-							'title' => $secondary_image_title,
 						)
 					);
 				}

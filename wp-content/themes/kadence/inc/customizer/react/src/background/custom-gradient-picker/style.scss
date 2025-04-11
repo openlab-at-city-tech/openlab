@@ -1,18 +1,22 @@
+@use 'sass:meta';
+
 $components-custom-gradient-picker__padding: 3px; // 24px container, 18px handles inside, that leaves 6px padding, half of which is 3.
 
 .components-custom-gradient-picker {
-	margin-top: $grid-unit-10;
+	margin-top: (if(meta.variable-exists(grid-unit-10), $grid-unit-10, 10px));
 }
 
 .components-custom-gradient-picker__gradient-bar:not(.has-gradient) {
 	opacity: 0.4;
 }
 
+$button-size-small: 24px;
+$white: #fff;
 .components-custom-gradient-picker__gradient-bar {
 	width: 100%;
 	height: $button-size-small;
 	border-radius: $button-size-small;
-	margin-bottom: $grid-unit-10;
+	margin-bottom: (if(meta.variable-exists(grid-unit-10), $grid-unit-10, 10px));
 	padding-left: $components-custom-gradient-picker__padding;
 	padding-right: $button-size-small - $components-custom-gradient-picker__padding;
 
@@ -95,6 +99,7 @@ $components-custom-gradient-picker__padding: 3px; // 24px container, 18px handle
 
 	button {
 		&.is-pressed {
+			$dark-gray-200: #999;
 			> svg {
 				background: $white;
 				border: 1px solid $dark-gray-200;

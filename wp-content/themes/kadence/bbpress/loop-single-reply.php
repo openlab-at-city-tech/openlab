@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
 
 			<div class="bbp-meta">
 
-				<?php printf( __( '%1$s at %2$s', 'kadence' ), get_the_date(), esc_attr( get_the_time() ) ); ?>
+				<?php bbp_reply_post_date(bbp_get_reply_id()); ?>
 
 				<a href="<?php bbp_reply_url(); ?>" title="<?php bbp_reply_title(); ?>" class="bbp-reply-permalink">#<?php bbp_reply_id(); ?></a>
 

@@ -94,6 +94,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		add_filter( 'tiny_mce_before_init', array( $this, 'filter_add_tinymce_editor_styles' ) );
 		add_filter( 'kadence_editor_dynamic_css', array( $this, 'editor_dynamic_css' ) );
 		add_action( 'wp_head', array( $this, 'frontend_gfonts' ), 89 );
+        add_action( 'wp_footer', array( $this, 'frontend_footer_gfonts' ), 89 );
 		add_action( 'admin_init', array( $this, 'action_add_gutenberg_styles' ), 1 );
 		add_action( 'admin_init', array( $this, 'update_block_style_dependencies' ), 2 );
 	}
@@ -140,89 +141,133 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		// Inline Dynamic CSS.
 		wp_add_inline_style( 'kadence-global', trim( apply_filters( 'kadence_dynamic_css', '' ) ) );
 
-		// // Enqueue Google Fonts.
-		// $google_fonts_url = $this->get_google_fonts_url();
-		// if ( ! empty( $google_fonts_url ) ) {
-		// 	wp_enqueue_style( 'kadence-fonts', $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-		// }
 	}
+
 	/**
-	 * Enqueue Frontend Fonts
+	 * Handles the enqueueing of Google Fonts for the frontend.
+	 * Checks if the Kadence Blocks Frontend class exists and processes fonts accordingly.
+	 * If the class does not exist, it uses the locally stored Google Fonts data, if available.
+	 *
+	 * @return void
 	 */
 	public function frontend_gfonts() {
 		if ( class_exists( 'Kadence_Blocks_Frontend' ) ) {
 			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
-			foreach ( $ktblocks_instance::$gfonts as $key => $font ) {
-				if ( ! array_key_exists( $key, self::$google_fonts ) ) {
-					$add_font = array(
-						'fontfamily'   => $font['fontfamily'],
-						'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-						'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-					);
-					self::$google_fonts[ $key ] = $add_font;
-				} else {
-					foreach ( $font['fontvariants'] as $variant ) {
-						if ( ! in_array( $variant, self::$google_fonts[ $key ]['fontvariants'], true ) ) {
-							array_push( self::$google_fonts[ $key ]['fontvariants'], $variant );
-						}
-					}
-					foreach ( $font['fontsubsets'] as $variant ) {
-						if ( ! in_array( $variant, self::$google_fonts[ $key ]['fontsubsets'], true ) ) {
-							array_push( self::$google_fonts[ $key ]['fontsubsets'], $variant );
-						}
-					}
-				}
-			}
-			add_filter( 'kadence_blocks_print_google_fonts', '__return_false' );
-			// foreach ( self::$google_fonts as $key => $font ) {
-			// 	if ( ! array_key_exists( $key, $ktblocks_instance::$gfonts ) ) {
-			// 		$add_font = array(
-			// 			'fontfamily'   => $font['fontfamily'],
-			// 			'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
-			// 			'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
-			// 		);
-			// 		$ktblocks_instance::$gfonts[ $key ] = $add_font;
-			// 	} else {
-			// 		foreach ( $font['fontvariants'] as $variant ) {
-			// 			if ( ! in_array( $variant, $ktblocks_instance::$gfonts[ $key ]['fontvariants'], true ) ) {
-			// 				array_push( $ktblocks_instance::$gfonts[ $key ]['fontvariants'], $variant );
-			// 			}
-			// 		}
-			// 	}
-			// }
-			if ( empty( self::$google_fonts ) ) {
-				return;
-			}
-			$this->action_enqueue_fonts();
+			$this->frontend_gfonts_logic( $ktblocks_instance::$gfonts, 'gfonts', 'kadence_blocks_print_google_fonts' );
 		} else {
 			if ( empty( self::$google_fonts ) ) {
 				return;
 			}
-			$this->action_enqueue_fonts();
+			$this->action_enqueue_fonts('gfonts');
 		}
 	}
 
 	/**
-	 * Registers or enqueues google fonts.
+	 * Handles the enqueueing of footer-specific Google Fonts for the frontend.
+	 * Checks if the Kadence Blocks Frontend class exists and processes footer fonts accordingly.
+	 * If the class does not exist, it uses the locally stored Google Fonts data, if available.
+	 *
+	 * @return void
 	 */
-	public function action_enqueue_fonts() {
+	public function frontend_footer_gfonts() {
+		if ( class_exists( 'Kadence_Blocks_Frontend' ) ) {
+			$ktblocks_instance = Kadence_Blocks_Frontend::get_instance();
+			$this->frontend_gfonts_logic( $ktblocks_instance::$footer_gfonts, 'footer_gfonts', 'kadence_blocks_print_footer_google_fonts' );
+		}
+	}
+
+	/**
+	 * Processes and merges Google Fonts for frontend usage.
+	 * Ensures unique fonts, variants, and subsets are handled and stored correctly.
+	 * Applies a specified filter and enqueues the processed fonts.
+	 *
+	 * @param array $gfonts Array of fonts to process, including font family, variants, and subsets.
+	 * @param string $gfonts_type The type/key of fonts being processed (e.g., 'gfonts').
+	 * @param string $gfont_filter The filter hook to disable related font output.
+	 *
+	 * @return void
+	 */
+	public function frontend_gfonts_logic($gfonts, $gfonts_type, $gfont_filter) {
+		// If we are building the gfonts array, then we are in the header and it should contain theme fonts.
+		$temp_footer_gfonts = ( $gfonts_type === 'gfonts' ) ? self::$google_fonts : [];
+		foreach ( $gfonts as $key => $font ) {
+			if ( ! array_key_exists( $key, $temp_footer_gfonts ) ) {
+				$add_font = array(
+					'fontfamily'   => $font['fontfamily'],
+					'fontvariants' => ( isset( $font['fontvariants'] ) && ! empty( $font['fontvariants'] ) && is_array( $font['fontvariants'] ) ? $font['fontvariants'] : array() ),
+					'fontsubsets'  => ( isset( $font['fontsubsets'] ) && ! empty( $font['fontsubsets'] ) && is_array( $font['fontsubsets'] ) ? $font['fontsubsets'] : array() ),
+				);
+				$temp_footer_gfonts[ $key ] = $add_font;
+			} else {
+				foreach ( $font['fontvariants'] as $variant ) {
+					if ( ! in_array( $variant, $temp_footer_gfonts[ $key ]['fontvariants'], true ) ) {
+						array_push( $temp_footer_gfonts[ $key ]['fontvariants'], $variant );
+					}
+				}
+				foreach ( $font['fontsubsets'] as $variant ) {
+					if ( ! in_array( $variant, $temp_footer_gfonts[ $key ]['fontsubsets'], true ) ) {
+						array_push( $temp_footer_gfonts[ $key ]['fontsubsets'], $variant );
+					}
+				}
+			}
+		}
+		add_filter( $gfont_filter, '__return_false' );
+		if ( empty( $temp_footer_gfonts ) ) {
+			return;
+		}
+		// If we are building the gfonts array, set it to the global variable so we keep track of which fonts were added to the header.
+		if ( $gfonts_type === 'gfonts' ) {
+			self::$google_fonts = $temp_footer_gfonts;
+		}
 		// Enqueue Google Fonts.
-		$google_fonts_url = $this->get_google_fonts_url();
+		$google_fonts_url = $this->get_google_fonts_url( $temp_footer_gfonts, $gfonts_type );
 		if ( ! empty( $google_fonts_url ) ) {
 			if ( kadence()->option( 'load_fonts_local' ) ) {
 				if ( kadence()->option( 'preload_fonts_local' ) && apply_filters( 'kadence_local_fonts_preload', true ) ) {
 					print_webfont_preload( $google_fonts_url );
 				}
 				wp_register_style(
-					'kadence-fonts',
+					'kadence-fonts-' . $gfonts_type,
 					get_webfont_url( $google_fonts_url ),
 					array(),
 					KADENCE_VERSION
 				);
-				wp_print_styles( 'kadence-fonts' );
+				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			} else {
-				wp_register_style( 'kadence-fonts', $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-				wp_print_styles( 'kadence-fonts' );
+				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
+			}
+		}
+	}
+
+	/**
+	 * Enqueue Google Fonts for specified type.
+	 *
+	 * This method handles the registration and printing of Google Fonts styles depending on
+	 * whether the fonts are loaded locally or from an external source. It also includes optional
+	 * font preloading if conditions are met.
+	 *
+	 * @param string $gfontsType The type identifier for the Google Fonts being enqueued.
+	 * @return void
+	 */
+	public function action_enqueue_fonts($gfonts_type) {
+		// Enqueue Google Fonts.
+		$google_fonts_url = $this->get_google_fonts_url( self::$google_fonts, $gfonts_type );
+		if ( ! empty( $google_fonts_url ) ) {
+			if ( kadence()->option( 'load_fonts_local' ) ) {
+				if ( kadence()->option( 'preload_fonts_local' ) && apply_filters( 'kadence_local_fonts_preload', true ) ) {
+					print_webfont_preload( $google_fonts_url );
+				}
+				wp_register_style(
+					'kadence-fonts-' . $gfonts_type,
+					get_webfont_url( $google_fonts_url ),
+					array(),
+					KADENCE_VERSION
+				);
+				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
+			} else {
+				wp_register_style( 'kadence-fonts-' . $gfonts_type, $google_fonts_url, array(), null ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_print_styles( 'kadence-fonts-' . $gfonts_type );
 			}
 		}
 	}
@@ -1735,6 +1780,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-display-fallback-font', apply_filters( 'kadence_theme_global_display_typography_fallback', 'sans-serif' ) );
 		$css->add_property( '--global-content-width', kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) );
+		$css->add_property( '--global-content-wide-width', 'calc(' . kadence()->sub_option( 'content_width', 'size' ) . kadence()->sub_option( 'content_width', 'unit' ) . ' + ' . $wide_width_add[ $max_width_unit ] . $max_width_unit . ')' );
 		$css->add_property( '--global-content-narrow-width', kadence()->sub_option( 'content_narrow_width', 'size' ) . kadence()->sub_option( 'content_narrow_width', 'unit' ) );
 		$css->add_property( '--global-content-edge-padding', $css->render_range( kadence()->option( 'content_edge_spacing' ), 'desktop' ) );
 		$css->add_property( '--global-content-boxed-padding', $this->render_range( kadence()->option( 'boxed_spacing' ), 'desktop' ) );
@@ -2192,10 +2238,12 @@ class Component implements Component_Interface, Templating_Component_Interface {
 			$css->add_property( 'right', $this->render_range( kadence()->option( 'scroll_up_side_offset' ), 'desktop' ) );
 			$css->set_selector( '#kt-scroll-up-reader.scroll-up-side-left, #kt-scroll-up.scroll-up-side-left' );
 			$css->add_property( 'left', $this->render_range( kadence()->option( 'scroll_up_side_offset' ), 'desktop' ) );
+			$css->start_media_query( '(hover: hover)' );
 			$css->set_selector( '#kt-scroll-up-reader:hover, #kt-scroll-up:hover' );
 			$css->add_property( 'color', $css->render_color( kadence()->sub_option( 'scroll_up_color', 'hover' ) ) );
 			$css->add_property( 'background', $css->render_color( kadence()->sub_option( 'scroll_up_background', 'hover' ) ) );
 			$css->add_property( 'border-color', $css->render_color( kadence()->sub_option( 'scroll_up_border_colors', 'hover' ) ) );
+			$css->stop_media_query();
 			$css->start_media_query( $media_query['tablet'] );
 			$css->set_selector( '#kt-scroll-up-reader, #kt-scroll-up' );
 			$css->add_property( 'bottom', $this->render_range( kadence()->option( 'scroll_up_bottom_offset' ), 'tablet' ) );
@@ -2998,6 +3046,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 				'tumblr'=> '#32506d',
 				'tiktok'=> '#69C9D0',
 				'discord'=> '#7289DA',
+                'threads'=> '#000000',
 			);
 			$socials_final = array();
 			if ( is_array( $items ) && ! empty( $items ) ) {
@@ -3964,7 +4013,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		//wp_enqueue_style( 'kadence-editor-global' );
 		wp_add_inline_style( 'kadence-editor-global', trim( apply_filters( 'kadence_editor_dynamic_css', '' ) ) );
 		// Enqueue Google Fonts.
-		$google_fonts_url = $this->get_google_fonts_url();
+		$google_fonts_url = $this->get_google_fonts_url( self::$google_fonts, 'gfonts' );
 		if ( ! empty( $google_fonts_url ) ) {
 			if ( kadence()->option( 'load_fonts_local' ) || class_exists( 'Extendify' ) ) {
 				wp_register_style(
@@ -4285,8 +4334,8 @@ class Component implements Component_Interface, Templating_Component_Interface {
 	/**
 	 * Load the front end Google Fonts
 	 */
-	public function get_google_fonts_url() {
-		$google_fonts = apply_filters( 'kadence_theme_google_fonts_array', self::$google_fonts );
+	public function get_google_fonts_url( $google_fonts = null, $font_set = 'header' ) {
+		$google_fonts = apply_filters( 'kadence_theme_google_fonts_array', $google_fonts, $font_set );
 		if ( empty( $google_fonts ) ) {
 			return '';
 		}

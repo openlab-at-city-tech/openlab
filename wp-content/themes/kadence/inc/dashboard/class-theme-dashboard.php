@@ -53,6 +53,7 @@ class Kadence_Dashboard_Settings {
 		// only load if admin.
 		if ( is_admin() ) {
 			add_action( 'admin_menu', array( $this, 'add_menu' ) );
+			$this->add_category_color();
 		}
 		add_action( 'init', array( $this, 'load_api_settings' ) );
 	}
@@ -327,6 +328,92 @@ class Kadence_Dashboard_Settings {
 		</div>
 		<?php
 	}
+	private function add_category_color() {
+		// Enqueue the color picker script and styles
+		add_action('admin_enqueue_scripts', function ($hook_suffix) {
+			if ($hook_suffix === 'edit-tags.php' || $hook_suffix === 'term.php' || $hook_suffix === 'edit-category') {
+				// Add the color picker CSS and JS
+				wp_enqueue_style('wp-color-picker');
+				wp_enqueue_script('custom-color-picker', get_stylesheet_directory_uri() . '/assets/js/custom-color-picker.min.js', ['wp-color-picker', 'jquery'], false, true);
+		   }
+		});
 
+		// Add the color picker to the 'Add New Category' screen
+		add_action('category_add_form_fields', function ($taxonomy) {
+			?>
+			<div class="form-field">
+				<label for="archive_category_color"><?php esc_html_e('Archive Color', 'kadence'); ?></label>
+				<input type="text" name="archive_category_color" id="archive_category_color" class="color-field" value="" />
+				<p class="description"><?php esc_html_e('Color for the archive category label.', 'kadence'); ?></p>
+			</div>
+			<?php
+		});
+
+		// Add the color picker to the 'Edit Category' screen
+		add_action('category_edit_form_fields', function ($term) {
+			$value = get_term_meta($term->term_id, 'archive_category_color', true); // Get the current color value
+			?>
+			<tr class="form-field">
+				<th scope="row">
+					<label for="archive_category_color"><?php esc_html_e('Archive Color', 'kadence'); ?></label>
+				</th>
+				<td>
+					<input type="text" name="archive_category_color" id="archive_category_color" class="color-field" value="<?php echo esc_attr($value); ?>" />
+					<p class="description"><?php esc_html_e('Color for the archive category label.', 'kadence'); ?></p>
+				</td>
+			</tr>
+			<?php
+		});
+
+		// Save the selected color when creating a new category
+		add_action('create_category', function ($term_id) {
+			if (isset($_POST['archive_category_color'])) {
+				// Validate and update color value
+				update_term_meta($term_id, 'archive_category_color', sanitize_hex_color($_POST['archive_category_color']));
+			}
+			if (isset($_POST['archive_category_hover_color'])) {
+				// Validate and update hover color value
+				update_term_meta($term_id, 'archive_category_hover_color', sanitize_hex_color($_POST['archive_category_hover_color']));
+			}
+		});
+
+		// Save the selected color when editing an existing category
+		add_action('edited_category', function ($term_id) {
+			if (isset($_POST['archive_category_color'])) {
+				// Validate and update color value
+				update_term_meta($term_id, 'archive_category_color', sanitize_hex_color($_POST['archive_category_color']));
+			}
+			if (isset($_POST['archive_category_hover_color'])) {
+				// Validate and update hover color value
+				update_term_meta($term_id, 'archive_category_hover_color', sanitize_hex_color($_POST['archive_category_hover_color']));
+			}
+		});
+
+		// Add the hover color picker to the 'Add New Category' screen
+		add_action('category_add_form_fields', function ($taxonomy) {
+			?>
+			<div class="form-field">
+				<label for="archive_category_hover_color"><?php esc_html_e('Archive Hover Color', 'kadence'); ?></label>
+				<input type="text" name="archive_category_hover_color" id="archive_category_hover_color" class="color-field" value="" />
+				<p class="description"><?php esc_html_e('Hover color for the archive category label.', 'kadence'); ?></p>
+			</div>
+			<?php
+		});
+		// Add the hover color picker to the 'Edit Category' screen
+		add_action('category_edit_form_fields', function ($term) {
+			$hover_value = get_term_meta($term->term_id, 'archive_category_hover_color', true); // Get the current hover color value
+			?>
+			<tr class="form-field">
+				<th scope="row">
+					<label for="archive_category_hover_color"><?php esc_html_e('Archive Hover Color', 'kadence'); ?></label>
+				</th>
+				<td>
+					<input type="text" name="archive_category_hover_color" id="archive_category_hover_color" class="color-field" value="<?php echo esc_attr($hover_value); ?>" />
+					<p class="description"><?php esc_html_e('Hover color for the archive category label.', 'kadence'); ?></p>
+				</td>
+			</tr>
+			<?php
+		});
+	}
 }
 Kadence_Dashboard_Settings::get_instance();

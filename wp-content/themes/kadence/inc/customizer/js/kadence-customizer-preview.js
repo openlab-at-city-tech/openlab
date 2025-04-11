@@ -251,7 +251,6 @@
 				});
 				if ( 'global' !== media ) css += '}';
 			});
-
 			// Add CSS string to <style> tag.
 			$style.html( css );
 		},
@@ -755,6 +754,9 @@
 			$style.html( css );
 		},
 		live_css : function( key, rules, newValue ) {
+			if ( rules?.[0]?.['id'] === 'base_font_family' ) {
+				key = 'base_font_family';
+			}
 			var styleID = 'kadence-customize-preview-css-' + key,
 			    $style = $( '#' + styleID ),
 				css = '',
@@ -873,7 +875,6 @@
 					cssArray[ rule['media'] ][ rule['selector'] ][ rule['property'] ] = formattedValue;
 				}
 			});
-
 				// Loop into the sorted array to build CSS string.
 			_.each( cssArray, function( selectors, media ) {
 				if ( 'global' !== media ) css += media + '{';
@@ -886,7 +887,6 @@
 				});
 				if ( 'global' !== media ) css += '}';
 			});
-
 			// Add CSS string to <style> tag.
 			$style.html( css );
 		},

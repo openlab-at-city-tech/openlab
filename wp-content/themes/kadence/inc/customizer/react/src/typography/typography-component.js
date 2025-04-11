@@ -491,7 +491,7 @@ class TypographyComponent extends Component {
 					>
 						<RangeControl
 							allowReset={ true }
-							initialPosition={ ( currentSize ? currentSize : placeholderSize ) }
+							initialPosition={ ( placeholderSize ) }
 							value={ currentSize }
 							onChange={ (val) => {
 								if ( val >= 0 ) {
@@ -524,7 +524,7 @@ class TypographyComponent extends Component {
 					>
 						<RangeControl
 							allowReset={ true }
-							initialPosition={ ( currentLineHeight ? currentLineHeight : placeholderLineHeight ) }
+							initialPosition={ ( placeholderLineHeight ) }
 							value={ currentLineHeight }
 							onChange={ (val) => {
 								if ( typeof(val) !== 'undefined' && val !== '' ) {
@@ -558,7 +558,7 @@ class TypographyComponent extends Component {
 						<RangeControl
 							allowReset={ true }
 							value={ currentLetterSpacing }
-							initialPosition={ ( currentLetterSpacing ? currentLetterSpacing : '' ) }
+							initialPosition={ ( '' ) }
 							onChange={ (val) => {
 								if ( typeof(val) !== 'undefined' && val !== '' ) {
 									let value = this.state.value;

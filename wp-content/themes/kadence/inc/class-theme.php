@@ -335,6 +335,9 @@ class Theme {
 		if ( defined( 'WPZOOM_RCB_VERSION' ) ) {
 			$components[] = new Zoom_Recipe_Card\Component();
 		}
+		if ( class_exists( '\SureCart' ) ) {
+			$components[] = new Surecart\Component();
+		}
 		return $components;
 	}
 }

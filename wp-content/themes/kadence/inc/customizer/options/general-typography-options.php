@@ -31,6 +31,7 @@ Theme_Customizer::add_settings(
 					'key'      => 'typography',
 				),
 				array(
+					'id'       => 'base_font_family',
 					'type'     => 'css',
 					'property' => '--global-body-font-family',
 					'selector' => 'body',

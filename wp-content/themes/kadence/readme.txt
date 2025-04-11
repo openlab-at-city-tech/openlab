@@ -2,9 +2,9 @@
 Contributors: britner
 Tags: translation-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
 Requires at least: 6.3
-Tested up to: 6.7
+Tested up to: 6.7.2
 Requires PHP: 7.4
-Stable tag: 1.2.12
+Stable tag: 1.2.21
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,49 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+
+= 1.2.21 | 4th April 2025 =
+* Fix: Issue with loading google fonts in footer.
+
+= 1.2.20 | 3rd April 2025 =
+* Fix: Scroll to top button not losing hover state on mobile after pressed.
+* Fix: Improvments to LifterLMS integration.
+* Fix: Issue with double loading google fonts in some situations.
+
+== 1.2.19 | 18th March 2025 ==
+* Update: Improve basic GiveWP support.
+
+== 1.2.18 | 7th March 2025 ==
+* Fix: broken top level links on menus.
+
+== 1.2.17 | 6th March 2025 ==
+* Update: Ability to activate mega menu (or dropdown menu) on click.
+* Update: Set different color for each post category
+* Fix: Google fonts in some areas not served locally.
+* Fix: The 'alignwide' style on the frontend.
+
+== 1.2.16 | 3rd February 2025 ==
+* Fix: Issue with some customizer components not loading.
+
+== 1.2.15 | 30th January 2025 ==
+* Add: Disable default sitemap option.
+* Fix: Threads Icon missing brand colors
+* Fix: LifterLMS Course Lesson Style border issue
+* Fix: Image block border styles
+* Fix: Customizer Typography settings reset button
+* Fix: Funnel Display font is not available in Customizer
+
+== 1.2.14 | 17th Dec 2024 ==
+* Update: Set current menu items based on url hash anchor changes.
+* Fix: Issue with simple lightbox captions on some blocks.
+* Fix: Issue with scroll to top not smoothly scrolling.
+
+== 1.2.13 | 5th Dec 2024 ==
+* Update: Improve tabbing through navigation.
+* Update: Surecart product style issue.
+* Fix: Possible issue with third-party plugins breaking customizer
+* Fix: Issue with scroll to top aria hidden.
+* Fix: Issue with bbpress reply date.
 
 == 1.2.12 | 19th November 2024 ==
 * Fix: Possible issue with woocommerce product image sizes.
