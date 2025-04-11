@@ -2,95 +2,115 @@
 
 class CMTT_SetupWizard{
 
-    //Common functions
+    public static $steps;
+    public static $wizard_url;
+    public static $wizard_path;
+    public static $options_slug = 'cmtt_';
+    public static $wizard_screen = 'cm-tooltip-glossary_page_cmtt_setup_wizard';
+    public static $setting_page_slug = CMTT_MENU_OPTION;
+    public static $plugin_basename;
 
-    public static $steps = [
-        1 => ['title' => 'Glossary Index Page',
-            'options' => [
-                0 => [
-                    'name' => 'cmtt_glossaryID',
-                    'title' => 'Create an Index Glossary Page?',
-                    'type' => 'bool',
-                    'value' => -1,
-                    'hint' => 'Automatically generate a Glossary Index Page and select it as the default one.'
-                ],
-                1 => [
-                    'name' => 'cmtt_glossaryListTiles',
-                    'title' => 'How should terms be displayed on the index page?',
-                    'type' => 'radio',
-                    'options' => [
-                        0 => [
-                            'title' => 'List',
-                            'value' => 0
-                        ],
-                        1 => [
-                            'title' => 'Tiles',
-                            'value' => 1
-                        ],
+
+    public static function init() {
+        self::$wizard_url = plugin_dir_url(__FILE__);
+        self::$wizard_path = plugin_dir_path(__FILE__);
+        self::$plugin_basename = plugin_basename(CMTT_PLUGIN_FILE);
+        self::setSteps();
+
+        add_action('admin_menu', [__CLASS__, 'add_submenu_page'],30);
+        add_action('activated_plugin', [__CLASS__, 'redirectAfterInstall'], 1, 2);
+        add_action('wp_ajax_cmtt_save_wizard_options',[__CLASS__,'saveOptions']);
+        add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueueAdminScripts' ] );
+    }
+    public static function setSteps()
+    {
+        self::$steps = [
+            1 => ['title' => 'Glossary Index Page',
+                'options' => [
+                    0 => [
+                        'name' => 'cmtt_glossaryID',
+                        'title' => 'Create an Index Glossary Page?',
+                        'type' => 'bool',
+                        'value' => -1,
+                        'hint' => 'Automatically generate a Glossary Index Page and select it as the default one.'
                     ],
-                    'hint' => 'Choose if the glossary base should be displayed as a list or tiles on the Glossary Index Page.'
-                ],
-                2 => [
-                    'name' => 'cmtt_glossaryOnPosttypes',
-                    'title' => 'Select the post types where you want to highlight glossary terms.',
-                    'type' => 'multicheckbox',
-                    'options' => [__CLASS__,'getPostTypes'],
-                    'hint' => 'Select the post types where you\'d like the Glossary Terms to be highlighted.'
-                ],
-            ]
-        ],
-        2 => ['title' =>'Terms Settings',
-            'options' => [
-                0 => [
-                    'name' => 'cmtt_glossaryTermLink',
-                    'title' => 'Add links to highlighted terms?',
-                    'type' => 'bool',
-                    'value' => 0,
-                    'hint' => 'Enable this option if you want to show links from posts or pages to the glossary term pages. This will only apply to Post / Pages and not to the Glossary Index page.'
-                ],
-                1 => [
-                    'name' => 'cmtt_glossaryTooltip',
-                    'title' => 'Show tooltips?',
-                    'type' => 'bool',
-                    'value' => 1,
-                    'hint' => 'Enable this option if you want to show tooltips for highlighted terms.'
-                ],
-                2 => [
-                    'name' => 'cmtt_glossaryCaseSensitive',
-                    'title' => 'Should terms be case-sensitive?',
-                    'type' => 'bool',
-                    'value' => 1,
-                    'hint' => 'Enable this option if you want glossary terms to be case-sensitive.'
+                    1 => [
+                        'name' => 'cmtt_glossaryListTiles',
+                        'title' => 'How should terms be displayed on the index page?',
+                        'type' => 'radio',
+                        'options' => [
+                            0 => [
+                                'title' => 'List',
+                                'value' => 0
+                            ],
+                            1 => [
+                                'title' => 'Tiles',
+                                'value' => 1
+                            ],
+                        ],
+                        'hint' => 'Choose if the glossary base should be displayed as a list or tiles on the Glossary Index Page.'
+                    ],
+                    2 => [
+                        'name' => 'cmtt_glossaryOnPosttypes',
+                        'title' => 'Select the post types where you want to highlight glossary terms.',
+                        'type' => 'multicheckbox',
+                        'options' => [__CLASS__, 'getPostTypes'],
+                        'hint' => 'Select the post types where you\'d like the Glossary Terms to be highlighted.'
+                    ],
+                ]
+            ],
+            2 => ['title' => 'Terms Settings',
+                'options' => [
+                    0 => [
+                        'name' => 'cmtt_glossaryTermLink',
+                        'title' => 'Add links to highlighted terms?',
+                        'type' => 'bool',
+                        'value' => 0,
+                        'hint' => 'Enable this option if you want to show links from posts or pages to the glossary term pages. This will only apply to Post / Pages and not to the Glossary Index page.'
+                    ],
+                    1 => [
+                        'name' => 'cmtt_glossaryTooltip',
+                        'title' => 'Show tooltips?',
+                        'type' => 'bool',
+                        'value' => 1,
+                        'hint' => 'Enable this option if you want to show tooltips for highlighted terms.'
+                    ],
+                    2 => [
+                        'name' => 'cmtt_glossaryCaseSensitive',
+                        'title' => 'Should terms be case-sensitive?',
+                        'type' => 'bool',
+                        'value' => 1,
+                        'hint' => 'Enable this option if you want glossary terms to be case-sensitive.'
+                    ],
                 ],
             ],
-        ],
-        3 => ['title' =>'Compatibility',
-            'options' => [
-                0 => [
-                    'name' => 'cmtt_glossaryTooltipHashContent',
-                    'title' => 'Move tooltip contents to footer?',
-                    'type' => 'bool',
-                    'value' => 1,
-                    'hint' => 'When this option is enabled, tooltip content will not be passed directly to JavaScript via the HTML attribute. This setting can improve compatibility with page builders, such as Elementor.'
-                ],
-                1 => [
-                    'name' => 'cmtt_script_in_footer',
-                    'title' => 'Load the scripts in footer?',
-                    'type' => 'bool',
-                    'value' => 1,
-                    'hint' => 'This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues. You can disable this option in the plugin settings if needed.'
-                ],
-                2 => [
-                    'name' => 'cmtt_glossaryTurnOnAmp',
-                    'title' => 'Show tooltips on AMP pages?',
-                    'type' => 'bool',
-                    'value' => 1,
-                    'hint' => 'Enable this option to make the plugin work correctly if you use either "AMP" plugin or "AMP for WP – Accelerated Mobile Pages" plugin.'
+            3 => ['title' => 'Compatibility',
+                'options' => [
+                    0 => [
+                        'name' => 'cmtt_glossaryTooltipHashContent',
+                        'title' => 'Move tooltip contents to footer?',
+                        'type' => 'bool',
+                        'value' => 1,
+                        'hint' => 'When this option is enabled, tooltip content will not be passed directly to JavaScript via the HTML attribute. This setting can improve compatibility with page builders, such as Elementor.'
+                    ],
+                    1 => [
+                        'name' => 'cmtt_script_in_footer',
+                        'title' => 'Load the scripts in footer?',
+                        'type' => 'bool',
+                        'value' => 1,
+                        'hint' => 'This setting loads JavaScript and CSS at the end of the page, which can improve initial page loading speed but may cause compatibility issues. You can disable this option in the plugin settings if needed.'
+                    ],
+                    2 => [
+                        'name' => 'cmtt_glossaryTurnOnAmp',
+                        'title' => 'Show tooltips on AMP pages?',
+                        'type' => 'bool',
+                        'value' => 1,
+                        'hint' => 'Enable this option to make the plugin work correctly if you use either "AMP" plugin or "AMP for WP – Accelerated Mobile Pages" plugin.'
+                    ],
                 ],
             ],
-        ],
-        4 => ['title' =>'Add First Term',
-            'content' => "<p><strong>To add a new term, follow these steps:</strong></p>
+            4 => ['title' => 'Add First Term',
+                'content' => "<p><strong>To add a new term, follow these steps:</strong></p>
             <ul style='list-style:pointer; padding: 0 15px; margin: 0; line-height: 1em;'>
                 <li>Go to \"<a href='post-new.php?post_type=glossary' target='_blank'>Add New</a>\" in the plugin menu.</li>
                 <li>Enter the term title.</li>
@@ -98,41 +118,44 @@ class CMTT_SetupWizard{
                 <li>Optionally, add a featured image.</li>
                 <li>Click the \"Publish\" button.</li>
             </ul><br/>
-            <img src='" . CMTT_PLUGIN_URL . "assets/img/wizard_step_4.png' width='700px' height='400px'/>"],
-        5 => ['title' =>'Glossary Dashboard',
-            'content' => "<p><strong>You can manage all your terms on the \"<a href='edit.php?post_type=glossary' target='_blank'>Glossary</a>\" dashboard located in the plugin menu:</strong></p>
-            <img src='". CMTT_PLUGIN_URL . "assets/img/wizard_step_5.png' width='850px' height='400px'/>"],
-        6 => ['title' =>'Glossary Index Link',
-            'content' => "<p><strong>You can always find the current link to the glossary index page in the plugin settings:</strong></p>
-            <img src='" . CMTT_PLUGIN_URL . "assets/img/wizard_step_6.png' width='700px' height='450px'/>"],
-    ];
-
-    public static $slug = 'cmtt';
-
-    public static function init() {
-        add_action('admin_menu', array(__CLASS__, 'add_submenu_page'),30);
-        add_action('wp_ajax_cmtt_save_wizard_options',[__CLASS__,'saveOptions']);
-        add_action( 'admin_enqueue_scripts', [ __CLASS__, 'enqueueAdminScripts' ] );
+            <img src='" . self::$wizard_url . "assets/img/wizard_step_4.png' width='700px' height='400px'/>"],
+            5 => ['title' => 'Glossary Dashboard',
+                'content' => "<p><strong>You can manage all your terms on the \"<a href='edit.php?post_type=glossary' target='_blank'>Glossary</a>\" dashboard located in the plugin menu:</strong></p>
+            <img src='" . self::$wizard_url . "assets/img/wizard_step_5.png' width='850px' height='400px'/>"],
+            6 => ['title' => 'Glossary Index Link',
+                'content' => "<p><strong>You can always find the current link to the glossary index page in the plugin settings:</strong></p>
+            <img src='" . self::$wizard_url . "assets/img/wizard_step_6.png' width='700px' height='450px'/>"],
+        ];
     }
 
     public static function add_submenu_page(){
         if(\CM\CMTT_Settings::get('cmtt_addWizardMenu', 1)){
-            add_submenu_page( CMTT_MENU_OPTION, 'Setup Wizard', 'Setup Wizard', 'manage_options', self::$slug . '_setup_wizard',[__CLASS__,'renderWizard'],20 );
+            add_submenu_page( CMTT_MENU_OPTION, 'Setup Wizard', 'Setup Wizard', 'manage_options', self::$options_slug . 'setup_wizard',[__CLASS__,'renderWizard'],20 );
         }
     }
 
     public static function enqueueAdminScripts(){
         $screen = get_current_screen();
-
-        if ($screen && $screen->id === 'cm-tooltip-glossary_page_cmtt_setup_wizard') {
-            wp_enqueue_style('wizard-css', CMTT_PLUGIN_URL . 'assets/css/wizard.css');
-            wp_enqueue_script('wizard-js', CMTT_PLUGIN_URL . 'assets/js/wizard.js');
+        if ($screen && $screen->id === self::$wizard_screen) {
+            wp_enqueue_style('wizard-css', self::$wizard_url . 'assets/wizard.css');
+            wp_enqueue_script('wizard-js', self::$wizard_url . 'assets/wizard.js');
             wp_localize_script('wizard-js', 'wizard_data', ['ajaxurl' => admin_url('admin-ajax.php')]);
         }
     }
 
+    public static function redirectAfterInstall($plugin, $network_activation = false){
+
+        if (self::$plugin_basename !== $plugin) {
+            return;
+        }
+        $activation_redirect_wizard = \CM\CMTT_Settings::get('cmtt_addWizardMenu',1);
+        $url = $activation_redirect_wizard ? admin_url( 'admin.php?page='.self::$options_slug.'setup_wizard' ) : admin_url('admin.php?page='.self::$options_slug.'settings');
+        wp_redirect($url);
+        exit();
+    }
+
     public static function renderWizard(){
-        require 'views/backend/wizard.php';
+        require 'view/wizard.php';
     }
 
     public static function renderSteps(){
@@ -311,26 +334,6 @@ class CMTT_SetupWizard{
                 'value' => $post_type->name];
         }
         return $options;
-    }
-
-    public static function outputPostTypes(){
-        $args    = array(
-            'public' => true,
-        );
-        $output_type = 'objects';
-        $operator    = 'and';
-        $post_types = get_post_types( $args, $output_type, $operator );
-        $selected   = \CM\CMTT_Settings::get( 'cmtt_glossaryOnPosttypes' );
-        if ( ! is_array( $selected ) ) {
-            $selected = array();
-        }
-        $output = '';
-        foreach ( $post_types as $post_type ) {
-            $checked = in_array($post_type->name,$selected)?'checked':'';
-            $output .= "<input type='checkbox' id='{$post_type->name}' name='cmtt_glossaryOnPosttypes[]' value='{$post_type->name}' {$checked}>
-                <label for='{$post_type->name}'>{$post_type->labels->singular_name}</label><br>";
-        }
-        return $output;
     }
 
     public static function saveOptions(){

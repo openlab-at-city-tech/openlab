@@ -3,7 +3,7 @@
     <p>Thank you for installing the CM Tooltip Glossary plugin!</p>
     <p>This plugin enhances your website by allowing you to create a glossary of terms related to your content and add interactive tooltips for those terms.</p>
     <p>This makes your content more informative and engaging for your visitors.</p>
-    <img class="img" src="<?php echo CMTT_PLUGIN_URL . 'assets/img/wizard_logo.png';?>">
+    <img class="img" src="<?php echo CMTT_SetupWizard::$wizard_url . 'assets/img/wizard_logo.png';?>">
     <p>To help you get started, we’ve created a quick setup wizard that will guide you through the following steps:</p>
     <ul>
         <li>• Configuring important settings</li>
