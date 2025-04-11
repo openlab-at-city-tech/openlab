@@ -2072,7 +2072,7 @@ function openlab_retired_themes_admin_notice() {
 	?>
 	<div class="notice notice-error">
 		<p>
-			<?php echo 'Please note: Theme theme you are using is outdated and has been retired. Please choose a new theme to avoid potential problems with your site. Find out how to <a href="https://openlab.citytech.cuny.edu/blog/help/changing-the-appearance-of-your-site-with-themes/">change your theme</a> in <a href="https://openlab.citytech.cuny.edu/">OpenLab Help</a>.'; ?>
+			<?php echo 'Please note: The theme you are using is outdated and has been retired. Please choose a new theme to avoid potential problems with your site. Find out how to <a href="https://openlab.citytech.cuny.edu/blog/help/changing-the-appearance-of-your-site-with-themes/">change your theme</a> in <a href="https://openlab.citytech.cuny.edu/">OpenLab Help</a>.'; ?>
 		</p>
 	</div>
 	<?php
