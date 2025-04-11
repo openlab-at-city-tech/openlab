@@ -2,8 +2,8 @@
 Contributors: wpradiant
 Tags: grid-layout, one-column, two-columns, right-sidebar, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, education
 Requires at least: 6.0
-Tested up to: 6.6
-Stable tag: 1.2
+Tested up to: 6.7
+Stable tag: 1.2.4
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -15,6 +15,37 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you.
 
 == Changelog ==
+
+= Version 1.2.4 =
+- Added single product template.
+- Added full width template.
+- Added free doc link in activation notice.
+- Added WordClever – AI content writer plugin recommendation in plugin-activation.php.
+- Resolved css error for sidebar latest post.
+- Resolved error for archive page.
+
+= Version 1.2.3 =
+- Updated index.html template.
+- Updated archive.html template.
+- Added checkout page template.
+- Resolved translation issue for 404-page.php and footer-default.php.
+- Updated pot file.
+
+= Version 1.2.2 =
+* Added single post left sidebar template.
+* Resolved error for cart page.
+* Resolved error for checkout page button.
+* Resolved css error for login page in responsive media.
+* Added css for submenu.
+
+= Version 1.2.1 =
+* Resolved scroll top icon error.
+* Resolved translation issue.
+* Resolved css error for single post and blog page sidebar.
+* Added css for related product.
+* Resolved css error for single post comment box.
+* Added css for single post image.
+* Resolved css error for single product page in responsive media.
 
 = Version 1.2 =
 - Added grid layout template.

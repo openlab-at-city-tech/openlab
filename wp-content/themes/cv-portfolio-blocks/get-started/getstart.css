@@ -355,3 +355,8 @@ p.blocks-text {
     border-color: #5440d4;
     color: #fff;
 }
+.notice-success #doc-button{
+    background-color: #17A2B8;
+    border-color: #17A2B8;
+    color: #fff;
+}

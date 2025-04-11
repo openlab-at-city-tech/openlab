@@ -55,6 +55,8 @@ function cv_portfolio_blocks_admin_notice() {
 	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW ); ?>" target="_blank" id="go-pro-button" class="button admin-button buy-now-button"><?php echo __('Buy Now ', 'cv-portfolio-blocks'); ?></a>
 
 	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_BUY_BUNDLE ); ?>" target="_blank" id="bundle-button" class="button admin-button bundle-button"><?php echo __('Get Bundle', 'cv-portfolio-blocks'); ?></a>
+
+	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_DOC_URL ); ?>" target="_blank" id="doc-button" class="button admin-button bundle-button"><?php echo __('Free Documentation', 'cv-portfolio-blocks'); ?></a>
 	            	</div>
 	            </div>
                 <div class="theme-hero-screens">

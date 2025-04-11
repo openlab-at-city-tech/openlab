@@ -1,15 +1,15 @@
-# Copyright (C) 2024 WP Radiant
+# Copyright (C) 2025 WP Radiant
 # This file is distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: CV Portfolio Blocks 1.1.8\n"
+"Project-Id-Version: CV Portfolio Blocks 1.2.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/theme/cv-portfolio-blocks\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-10-08T12:38:05+05:30\n"
+"POT-Creation-Date: 2025-02-12T13:07:44+05:30\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.10.0\n"
 "X-Domain: cv-portfolio-blocks\n"
@@ -32,6 +32,7 @@ msgstr ""
 
 #. Author of the theme
 #: style.css
+#: patterns/footer-default.php:83
 msgid "WP Radiant"
 msgstr ""
 
@@ -262,6 +263,18 @@ msgstr ""
 msgid "404 Page"
 msgstr ""
 
+#: patterns/404-page.php:15
+msgid "404"
+msgstr ""
+
+#: patterns/404-page.php:19
+msgid "Unfortunately we can’t find that page."
+msgstr ""
+
+#: patterns/404-page.php:23
+msgid "The page you are looking for doesnt exist or has been moved. Try another url or go to the site homepage."
+msgstr ""
+
 #: patterns/banner.php
 msgctxt "Pattern title"
 msgid "Banner"
@@ -269,6 +282,22 @@ msgstr ""
 
 #: patterns/banner.php:11
 msgid "Banner"
+msgstr ""
+
+#: patterns/banner.php:18
+msgid "WELCOME TO MY WORLD"
+msgstr ""
+
+#: patterns/banner.php:22
+msgid "Hi, Im Brad kane"
+msgstr ""
+
+#: patterns/banner.php:26
+msgid "A Professional Ui Developer"
+msgstr ""
+
+#: patterns/banner.php:33
+msgid "CONTACT ME"
 msgstr ""
 
 #: patterns/footer-default.php
@@ -280,6 +309,50 @@ msgstr ""
 msgid "Footer Default"
 msgstr ""
 
+#: patterns/footer-default.php:17
+msgid "About Us"
+msgstr ""
+
+#: patterns/footer-default.php:21
+msgid "Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+msgstr ""
+
+#: patterns/footer-default.php:27
+msgid "Quick Links"
+msgstr ""
+
+#: patterns/footer-default.php:46
+msgid "Hire Me"
+msgstr ""
+
+#: patterns/footer-default.php:62
+msgid "Contact Us"
+msgstr ""
+
+#: patterns/footer-default.php:66
+msgid "support@example.com"
+msgstr ""
+
+#: patterns/footer-default.php:74
+msgid "123, Red Hills, Chicago,IL, USA"
+msgstr ""
+
+#: patterns/footer-default.php:83
+msgid "Portfolio WordPress Theme "
+msgstr ""
+
+#: patterns/footer-default.php:83
+msgid " By "
+msgstr ""
+
+#: patterns/footer-default.php:83
+msgid "Proudly powered by"
+msgstr ""
+
+#: patterns/footer-default.php:83
+msgid "WordPress"
+msgstr ""
+
 #: patterns/post-category-section.php
 msgctxt "Pattern title"
 msgid "Post Category Section"
@@ -289,6 +362,34 @@ msgstr ""
 msgid "Post Category Section"
 msgstr ""
 
+#: patterns/post-category-section.php:27
+msgid "ABOUT ME"
+msgstr ""
+
+#: patterns/post-category-section.php:31
+msgid "I am a UI/UX Designer Based in USA"
+msgstr ""
+
+#: patterns/post-category-section.php:35
+msgid "UI Designer From USA, I Have rich Experience in ui design &amp; building and<br>customization lorem ipsum dummy text."
+msgstr ""
+
+#: patterns/post-category-section.php:39
+msgid "Lorem ipsum dolor sit amet, consectetur sed do eiusmod tencididunt ut before et dolore Lorem ipsum dolor sit amet, consectetur sed do eiusmod tencididunt ut before et dolore magnaa"
+msgstr ""
+
+#: patterns/post-category-section.php:43
+msgid "Age - 25 Years"
+msgstr ""
+
+#: patterns/post-category-section.php:43
+msgid "Email - support@example.com"
+msgstr ""
+
+#: patterns/post-category-section.php:43
+msgid "Freelancer - Available"
+msgstr ""
+
 #: patterns/primary-sidebar.php
 msgctxt "Pattern title"
 msgid "Primary Sidebar"
@@ -296,6 +397,27 @@ msgstr ""
 
 #: patterns/primary-sidebar.php:11
 msgid "Sidebar Section"
+msgstr ""
+
+#: patterns/primary-sidebar.php:17
+#: patterns/search.php:11
+msgid "Search"
+msgstr ""
+
+#: patterns/primary-sidebar.php:29
+msgid "Latest Posts"
+msgstr ""
+
+#: patterns/primary-sidebar.php:55
+msgid "Archieve"
+msgstr ""
+
+#: patterns/primary-sidebar.php:67
+msgid "Category"
+msgstr ""
+
+#: patterns/primary-sidebar.php:79
+msgid "Social"
 msgstr ""
 
 #: patterns/search-header.php
@@ -309,10 +431,6 @@ msgstr ""
 
 #: patterns/search.php
 msgctxt "Pattern title"
-msgid "Search"
-msgstr ""
-
-#: patterns/search.php:11
 msgid "Search"
 msgstr ""
 
@@ -428,7 +546,17 @@ msgstr ""
 
 #: theme.json
 msgctxt "Custom template name"
+msgid "Grid Layout(Archieve posts)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
 msgid "Single post (No Sidebar)"
+msgstr ""
+
+#: theme.json
+msgctxt "Custom template name"
+msgid "Single post (Sidebar on Left)"
 msgstr ""
 
 #: theme.json

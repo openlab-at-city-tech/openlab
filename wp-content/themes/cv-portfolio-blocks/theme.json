@@ -46,6 +46,13 @@
 	      ]
 	    },
 	    {
+	      "name": "single-post-on-left",
+	      "title": "Single post (Sidebar on Left)",
+	      "postTypes": [
+	        "post"
+	      ]
+	    },
+	    {
 	      "name": "page-sidebar-on-right",
 	      "title": "Page (Sidebar on Right)",
 	      "postTypes": [

@@ -4,3 +4,6 @@
 .customize-pane-parent{
   overflow-x: hidden !important;
 }
+.accordion-section-title button.accordion-trigger{
+  height: auto !important;
+}
