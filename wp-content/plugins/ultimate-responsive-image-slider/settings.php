@@ -231,8 +231,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Display Slider Post Title', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Slide_Title)) $WRIS_L3_Slide_Title = 1; ?>
-				<input type="radio" name="wl-l3-slide-title" id="wl-l3-slide-title" value="1" <?php if($WRIS_L3_Slide_Title == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-slide-title" id="wl-l3-slide-title" value="0" <?php if($WRIS_L3_Slide_Title == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-slide-title" value="1" <?php if($WRIS_L3_Slide_Title == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-slide-title" value="0" <?php if($WRIS_L3_Slide_Title == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show/hide slide title above slider', 'ultimate-responsive-image-slider'); ?>.
 					<a href="#" id="p1" data-tooltip="#s1"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -244,8 +244,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Display Slide Title', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Show_Slide_Title)) $WRIS_L3_Show_Slide_Title = 0; ?>
-				<input type="radio" name="wl-l3-show-slide-title" id="wl-l3-show-slide-title" value="1" <?php if($WRIS_L3_Show_Slide_Title == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-show-slide-title" id="wl-l3-show-slide-title" value="0" <?php if($WRIS_L3_Show_Slide_Title == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-show-slide-title" value="1" <?php if($WRIS_L3_Show_Slide_Title == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-show-slide-title" value="0" <?php if($WRIS_L3_Show_Slide_Title == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show/hide slide title over slides.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p2" data-tooltip="#s2"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -281,8 +281,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Display Slide Description', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Show_Slide_Desc)) $WRIS_L3_Show_Slide_Desc = 0; ?>
-				<input type="radio" name="wl-l3-show-slide-desc" id="wl-l3-show-slide-desc" value="1" <?php if($WRIS_L3_Show_Slide_Desc == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-show-slide-desc" id="wl-l3-show-slide-desc" value="0" <?php if($WRIS_L3_Show_Slide_Desc == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-show-slide-desc"value="1" <?php if($WRIS_L3_Show_Slide_Desc == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-show-slide-desc" value="0" <?php if($WRIS_L3_Show_Slide_Desc == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show/hide slide description over slides.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p5" data-tooltip="#s5"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -318,9 +318,9 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Auto Play Slide Show', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Auto_Slideshow)) $WRIS_L3_Auto_Slideshow = 1; ?>
-				<input type="radio" name="wl-l3-auto-slide" id="wl-l3-auto-slide" value="1" <?php if($WRIS_L3_Auto_Slideshow == 1 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Yes', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-auto-slide" id="wl-l3-auto-slide" value="2" <?php if($WRIS_L3_Auto_Slideshow == 2 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Yes with Stop on Mouse Hover', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-auto-slide" id="wl-l3-auto-slide" value="3" <?php if($WRIS_L3_Auto_Slideshow == 3 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('No', 'ultimate-responsive-image-slider'); ?>
+				<input type="radio" name="wl-l3-auto-slide" value="1" <?php if($WRIS_L3_Auto_Slideshow == 1 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Yes', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-auto-slide" value="2" <?php if($WRIS_L3_Auto_Slideshow == 2 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Yes with Stop on Mouse Hover', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-auto-slide" value="3" <?php if($WRIS_L3_Auto_Slideshow == 3 ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('No', 'ultimate-responsive-image-slider'); ?>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to auto slide enable or disable into slider.', 'ultimate-responsive-image-slider'); ?>
 					<!--<a href="#" id="p8" data-tooltip="#s8"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>-->
@@ -331,8 +331,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Slide Transition', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Transition)) $WRIS_L3_Transition = 1; ?>
-				<input type="radio" name="wl-l3-transition" id="wl-l3-transition" value="1" <?php if($WRIS_L3_Transition == 1 ) { echo esc_attr("checked"); } ?>> Fade &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-transition" id="wl-l3-transition" value="0" <?php if($WRIS_L3_Transition == 0 ) { echo esc_attr("checked"); } ?>> Slide
+				<input type="radio" name="wl-l3-transition" value="1" <?php if($WRIS_L3_Transition == 1 ) { echo esc_attr("checked"); } ?>> Fade &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-transition" value="0" <?php if($WRIS_L3_Transition == 0 ) { echo esc_attr("checked"); } ?>> Slide
 				<p class="description">
 					<?php esc_html_e('Select a transition effect you want to apply on slides.', 'ultimate-responsive-image-slider'); ?>
 					<!--<a href="#" id="p9" data-tooltip="#s9"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>-->
@@ -370,9 +370,9 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Slide Order', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Slide_Order)) $WRIS_L3_Slide_Order = "ASC"; ?>
-				<input type="radio" name="wl-l3-slide-order" id="wl-l3-slide-order" value="ASC" <?php if($WRIS_L3_Slide_Order == "ASC" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Ascending', 'ultimate-responsive-image-slider'); ?>  &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-slide-order" id="wl-l3-slide-order" value="DESC" <?php if($WRIS_L3_Slide_Order == "DESC" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Descending', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-slide-order" id="wl-l3-slide-order" value="shuffle" <?php if($WRIS_L3_Slide_Order == "shuffle" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Random', 'ultimate-responsive-image-slider'); ?>
+				<input type="radio" name="wl-l3-slide-order" value="ASC" <?php if($WRIS_L3_Slide_Order == "ASC" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Ascending', 'ultimate-responsive-image-slider'); ?>  &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-slide-order" value="DESC" <?php if($WRIS_L3_Slide_Order == "DESC" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Descending', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-slide-order" value="shuffle" <?php if($WRIS_L3_Slide_Order == "shuffle" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Random', 'ultimate-responsive-image-slider'); ?>
 				<p class="description">
 					<?php esc_html_e('Select a slide order you want to apply on slides', 'ultimate-responsive-image-slider'); ?>.
 					<!--<a href="#" id="p11" data-tooltip="#s11"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>-->
@@ -403,8 +403,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Show Thumbnail', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Slider_Navigation)) $WRIS_L3_Slider_Navigation = 1; ?>
-				<input type="radio" name="wl-l3-navigation" id="wl-l3-navigation" value="1" <?php if($WRIS_L3_Slider_Navigation == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-navigation" id="wl-l3-navigation" value="0" <?php if($WRIS_L3_Slider_Navigation == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-navigation" value="1" <?php if($WRIS_L3_Slider_Navigation == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-navigation" value="0" <?php if($WRIS_L3_Slider_Navigation == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show or hide thumbnail based navigation under slides.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p13" data-tooltip="#s13"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -416,8 +416,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Thumbnail Position', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Navigation_Position)) $WRIS_L3_Navigation_Position = "bottom"; ?>
-				<input type="radio" name="wl-l3-navigation-position" id="wl-l3-navigation-position" value="top" <?php if($WRIS_L3_Navigation_Position == "top" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Top', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-navigation-position" id="wl-l3-navigation-position" value="bottom" <?php if($WRIS_L3_Navigation_Position == "bottom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Bottom', 'ultimate-responsive-image-slider'); ?>
+				<input type="radio" name="wl-l3-navigation-position" value="top" <?php if($WRIS_L3_Navigation_Position == "top" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Top', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-navigation-position" value="bottom" <?php if($WRIS_L3_Navigation_Position == "bottom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Bottom', 'ultimate-responsive-image-slider'); ?>
 				<p class="description">
 					<?php esc_html_e('Select a thumbnail position to show above or below the slider.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p14" data-tooltip="#s14"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -429,8 +429,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Selected Thumbnail Style', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Thumbnail_Style)) $WRIS_L3_Thumbnail_Style = "border"; ?>
-				<input type="radio" name="wl-l3-thumbnail-style" id="wl-l3-thumbnail-style" value="border" <?php if($WRIS_L3_Thumbnail_Style == "border" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Border', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-thumbnail-style" id="wl-l3-thumbnail-style" value="pointer" <?php if($WRIS_L3_Thumbnail_Style == "pointer" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Pointer', 'ultimate-responsive-image-slider'); ?>
+				<input type="radio" name="wl-l3-thumbnail-style" value="border" <?php if($WRIS_L3_Thumbnail_Style == "border" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Border', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-thumbnail-style" value="pointer" <?php if($WRIS_L3_Thumbnail_Style == "pointer" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Pointer', 'ultimate-responsive-image-slider'); ?>
 				<p class="description">
 					<?php esc_html_e('Select a style to apply on select thumbnails.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p15" data-tooltip="#s15"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -455,8 +455,8 @@ jQuery(document).ready(function(){
 			<td>
 				<?php if(!isset($WRIS_L3_Thumbnail_Width)) $WRIS_L3_Thumbnail_Width = "120"; ?>
 				<?php if(!isset($WRIS_L3_Thumbnail_Height)) $WRIS_L3_Thumbnail_Height = "120"; ?>
-				<?php esc_html_e('Width', 'ultimate-responsive-image-slider'); ?> <input type="text" name="wl-l3-navigation-width" id="wl-l3-navigation-width" value="<?php echo esc_attr($WRIS_L3_Thumbnail_Width); ?>"> &nbsp;&nbsp;
-				<?php esc_html_e('Height', 'ultimate-responsive-image-slider'); ?> <input type="text" name="wl-l3-navigation-height" id="wl-l3-navigation-height" value="<?php echo esc_attr($WRIS_L3_Thumbnail_Height); ?>">
+				<?php esc_html_e('Width', 'ultimate-responsive-image-slider'); ?> <input type="number" name="wl-l3-navigation-width" id="wl-l3-navigation-width" value="<?php echo esc_attr($WRIS_L3_Thumbnail_Width); ?>">px &nbsp;&nbsp;
+				<?php esc_html_e('Height', 'ultimate-responsive-image-slider'); ?> <input type="number" name="wl-l3-navigation-height" id="wl-l3-navigation-height" value="<?php echo esc_attr($WRIS_L3_Thumbnail_Height); ?>">px
 				<p class="description">
 					<?php esc_html_e('Set custom height and width for thumbnails.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p17" data-tooltip="#s17"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -469,10 +469,10 @@ jQuery(document).ready(function(){
 			<td>
 				<?php if(!isset($WRIS_L3_Slider_Width)) $WRIS_L3_Slider_Width = 1000; ?>
 				<?php if(!isset($WRIS_L3_Width)) $WRIS_L3_Width = "custom"; ?>
-				<input type="radio" name="wl-l3-width" id="wl-l3-width" value="100%" <?php if($WRIS_L3_Width == "100%" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('100% Width', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-width" id="wl-l3-width" value="fullWidth" <?php if($WRIS_L3_Width == "fullWidth" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Full Width', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-width" id="wl-l3-width" value="custom" <?php if($WRIS_L3_Width == "custom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Custom', 'ultimate-responsive-image-slider'); ?>
-				<input type="text" name="wl-l3-slider-width" id="wl-l3-slider-width" value="<?php echo esc_attr($WRIS_L3_Slider_Width); ?>">
+				<input type="radio" name="wl-l3-width" value="100%" <?php if($WRIS_L3_Width == "100%" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('100% Width', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-width" value="fullWidth" <?php if($WRIS_L3_Width == "fullWidth" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Full Width', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-width" value="custom" <?php if($WRIS_L3_Width == "custom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Custom', 'ultimate-responsive-image-slider'); ?>
+				<input type="number" name="wl-l3-slider-width" id="wl-l3-slider-width" value="<?php echo esc_attr($WRIS_L3_Slider_Width); ?>">px
 				<p class="description">
 					<?php esc_html_e('Enter your desired width for slider. Default width is 1000px.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p18" data-tooltip="#s18"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -485,9 +485,9 @@ jQuery(document).ready(function(){
 			<td>
 				<?php if(!isset($WRIS_L3_Slider_Height)) $WRIS_L3_Slider_Height = 500; ?>
 				<?php if(!isset($WRIS_L3_Height)) $WRIS_L3_Height = "custom"; ?>
-				<input type="radio" name="wl-l3-height" id="wl-l3-height" value="auto" <?php if($WRIS_L3_Height == "auto" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Auto Height', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-height" id="wl-l3-height" value="custom" <?php if($WRIS_L3_Height == "custom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Custom', 'ultimate-responsive-image-slider'); ?>
-				<input type="text" name="wl-l3-slider-height" id="wl-l3-slider-height" value="<?php echo esc_attr($WRIS_L3_Slider_Height); ?>">
+				<input type="radio" name="wl-l3-height" value="auto" <?php if($WRIS_L3_Height == "auto" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Auto Height', 'ultimate-responsive-image-slider'); ?> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-height" value="custom" <?php if($WRIS_L3_Height == "custom" ) { echo esc_attr("checked"); } ?>> <?php esc_html_e('Custom', 'ultimate-responsive-image-slider'); ?>
+				<input type="number" name="wl-l3-slider-height" id="wl-l3-slider-height" value="<?php echo esc_attr($WRIS_L3_Slider_Height); ?>">px
 				<p class="description">
 					<?php esc_html_e('Enter your desired height for slider. Default height is 500px.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p19" data-tooltip="#s19"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -521,8 +521,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Slide Auto Scale Up', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Slider_Auto_Scale)) $WRIS_L3_Slider_Auto_Scale = 1; ?>
-				<input type="radio" name="wl-l3-slider-auto-scale" id="wl-l3-slider-auto-scale" value="1" <?php if($WRIS_L3_Slider_Auto_Scale == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> 
-				<input type="radio" name="wl-l3-slider-auto-scale" id="wl-l3-slider-auto-scale" value="0" <?php if($WRIS_L3_Slider_Auto_Scale == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-slider-auto-scale" value="1" <?php if($WRIS_L3_Slider_Auto_Scale == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> 
+				<input type="radio" name="wl-l3-slider-auto-scale" value="0" <?php if($WRIS_L3_Slider_Auto_Scale == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('If the slide can be scaled up more than its original size.', 'ultimate-responsive-image-slider'); ?>
 					<!--<a href="#" id="p21" data-tooltip="#s21"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>-->
@@ -534,8 +534,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Show Navigation Arrow', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Sliding_Arrow)) $WRIS_L3_Sliding_Arrow = 1; ?>
-				<input type="radio" name="wl-l3-sliding-arrow" id="wl-l3-sliding-arrow" value="1" <?php if($WRIS_L3_Sliding_Arrow == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-sliding-arrow" id="wl-l3-sliding-arrow" value="0" <?php if($WRIS_L3_Sliding_Arrow == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-sliding-arrow" value="1" <?php if($WRIS_L3_Sliding_Arrow == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-sliding-arrow" value="0" <?php if($WRIS_L3_Sliding_Arrow == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show or hide arrows on mouse hover on slide.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p22" data-tooltip="#s22"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -559,8 +559,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Show Navigation Bullets', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Navigation_Button)) $WRIS_L3_Navigation_Button = 1; ?>
-				<input type="radio" name="wl-l3-navigation-button" id="wl-l3-navigation-button" value="1" <?php if($WRIS_L3_Navigation_Button == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-navigation-button" id="wl-l3-navigation-button" value="0" <?php if($WRIS_L3_Navigation_Button == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-navigation-button" value="1" <?php if($WRIS_L3_Navigation_Button == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-navigation-button" value="0" <?php if($WRIS_L3_Navigation_Button == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option to show or hide slider navigation buttons under image slider.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p24" data-tooltip="#s24"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
@@ -584,8 +584,8 @@ jQuery(document).ready(function(){
 			<th scope="row"><label><?php esc_html_e('Full Screen Slide Show', 'ultimate-responsive-image-slider'); ?></label></th>
 			<td>
 				<?php if(!isset($WRIS_L3_Fullscreeen)) $WRIS_L3_Fullscreeen = 1; ?>
-				<input type="radio" name="wl-l3-fullscreen" id="wl-l3-fullscreen" value="1" <?php if($WRIS_L3_Fullscreeen == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
-				<input type="radio" name="wl-l3-fullscreen" id="wl-l3-fullscreen" value="0" <?php if($WRIS_L3_Fullscreeen == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
+				<input type="radio" name="wl-l3-fullscreen" value="1" <?php if($WRIS_L3_Fullscreeen == 1 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-check fa-2x"></i> &nbsp;&nbsp;
+				<input type="radio" name="wl-l3-fullscreen" value="0" <?php if($WRIS_L3_Fullscreeen == 0 ) { echo esc_attr("checked"); } ?>> <i class="fa fa-times fa-2x"></i>
 				<p class="description">
 					<?php esc_html_e('Select Yes/No option for full screen slide show.', 'ultimate-responsive-image-slider'); ?>
 					<a href="#" id="p26" data-tooltip="#s26"><?php esc_html_e('Preview', 'ultimate-responsive-image-slider'); ?></a>
