@@ -1152,7 +1152,7 @@ class Openlab_Clone_Course_Site {
 			// Get all published posts that aren't scheduled for deletion, ordered by post_date
 			$posts_to_update = $wpdb->get_results(
 				"SELECT ID, post_date, post_date_gmt FROM {$wpdb->posts}
-				 WHERE post_status = 'publish'
+				 WHERE post_status = 'publish' OR post_status = 'private'
 				 AND ID NOT IN (" . ( ! empty( $posts_to_delete_ids ) ? implode( ',', array_map( 'intval', $posts_to_delete_ids ) ) : '0' ) . ")
 				 ORDER BY post_date ASC"
 			);
