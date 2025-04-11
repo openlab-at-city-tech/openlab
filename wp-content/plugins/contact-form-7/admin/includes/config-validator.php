@@ -53,17 +53,17 @@ function wpcf7_admin_warnings_bulk_cv( $page, $action, $object ) {
 			esc_html( $message ),
 			$link
 		),
-		'type=warning'
+		array( 'type' => 'warning' )
 	);
 }
 
 add_action( 'wpcf7_admin_load', 'wpcf7_load_bulk_validate_page', 10, 2 );
 
 function wpcf7_load_bulk_validate_page( $page, $action ) {
-	if ( 'wpcf7' != $page
-	or 'validate' != $action
+	if ( 'wpcf7' !== $page
+	or 'validate' !== $action
 	or ! wpcf7_validate_configuration()
-	or 'POST' != $_SERVER['REQUEST_METHOD'] ) {
+	or 'POST' !== $_SERVER['REQUEST_METHOD'] ) {
 		return;
 	}
 
@@ -112,8 +112,8 @@ function wpcf7_admin_bulk_validate_page() {
 	$count = WPCF7_ContactForm::count();
 
 	$submit_text = sprintf(
+		/* translators: %s: number of contact forms */
 		_n(
-			/* translators: %s: number of contact forms */
 			"Validate %s contact form now",
 			"Validate %s contact forms now",
 			$count, 'contact-form-7'

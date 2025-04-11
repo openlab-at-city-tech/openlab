@@ -161,7 +161,7 @@ function wpcf7_convert_mime_to_ext( $mime ) {
 	if ( preg_match( '%^([a-z]+)/([*]|[a-z0-9.+-]+)$%i', $mime, $matches ) ) {
 		foreach ( $mime_types as $key => $val ) {
 			if ( '*' === $matches[2] and str_starts_with( $val, $matches[1] . '/' )
-		 	or $val === $matches[0] ) {
+			or $val === $matches[0] ) {
 				$results = array_merge( $results, explode( '|', $key ) );
 			}
 		}
@@ -209,7 +209,7 @@ function wpcf7_acceptable_filetypes( $types = 'default', $format = 'regex' ) {
 				if ( false === strpos( $type, '/' ) ) {
 					return sprintf( '.%s', trim( $type, '.' ) );
 				} elseif ( preg_match( '%^([a-z]+)/[*]$%i', $type, $matches ) ) {
-					if ( in_array( $matches[1], array( 'audio', 'video', 'image' ) ) ) {
+					if ( in_array( $matches[1], array( 'audio', 'video', 'image' ), true ) ) {
 						return $type;
 					} else {
 						return '';
@@ -360,9 +360,7 @@ function wpcf7_cleanup_upload_files( $seconds = 60, $max = 100 ) {
 
 	if ( $handle = opendir( $dir ) ) {
 		while ( false !== ( $file = readdir( $handle ) ) ) {
-			if ( '.' == $file
-			or '..' == $file
-			or '.htaccess' == $file ) {
+			if ( '.' === $file or '..' === $file or '.htaccess' === $file ) {
 				continue;
 			}
 
@@ -418,6 +416,6 @@ function wpcf7_file_display_warning_message( $page, $action, $object ) {
 			$uploads_dir
 		);
 
-		wp_admin_notice( esc_html( $message ), 'type=warning' );
+		wp_admin_notice( esc_html( $message ), array( 'type' => 'warning' ) );
 	}
 }

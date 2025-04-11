@@ -36,7 +36,7 @@ class WPCF7_Pipes {
 
 	private $pipes = array();
 
-	public function __construct( array $texts = null ) {
+	public function __construct( $texts = null ) {
 		foreach ( (array) $texts as $text ) {
 			$this->add_pipe( $text );
 		}
@@ -127,7 +127,7 @@ trait WPCF7_PipesHolder {
 			return $this->pipes[$field_name];
 		}
 
-		$result = new WPCF7_Pipes;
+		$result = new WPCF7_Pipes();
 
 		$tags = $this->scan_form_tags( array(
 			'name' => $field_name,

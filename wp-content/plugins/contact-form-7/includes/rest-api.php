@@ -3,7 +3,7 @@
 add_action(
 	'rest_api_init',
 	static function () {
-		$controller = new WPCF7_REST_Controller;
+		$controller = new WPCF7_REST_Controller();
 		$controller->register_routes();
 	},
 	10, 0
@@ -226,7 +226,7 @@ class WPCF7_REST_Controller {
 
 			$response['config_errors'] = $config_validator->collect_error_messages();
 
-			if ( 'save' == $context ) {
+			if ( 'save' === $context ) {
 				$config_validator->save();
 			}
 		}
@@ -293,7 +293,7 @@ class WPCF7_REST_Controller {
 
 			$response['config_errors'] = $config_validator->collect_error_messages();
 
-			if ( 'save' == $context ) {
+			if ( 'save' === $context ) {
 				$config_validator->save();
 			}
 		}
@@ -327,7 +327,7 @@ class WPCF7_REST_Controller {
 	}
 
 	public function create_feedback( WP_REST_Request $request ) {
-		$content_type = $request->get_header( 'Content-Type' );
+		$content_type = $request->get_header( 'Content-Type' ) ?? '';
 
 		if ( ! str_starts_with( $content_type, 'multipart/form-data' ) ) {
 			return new WP_Error( 'wpcf7_unsupported_media_type',

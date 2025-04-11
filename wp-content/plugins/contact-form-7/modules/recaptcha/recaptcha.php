@@ -56,9 +56,7 @@ function wpcf7_recaptcha_enqueue_scripts() {
 		array( 'in_footer' => true )
 	);
 
-	$assets = include(
-		wpcf7_plugin_path( 'modules/recaptcha/index.asset.php' )
-	);
+	$assets = include wpcf7_plugin_path( 'modules/recaptcha/index.asset.php' );
 
 	$assets = wp_parse_args( $assets, array(
 		'dependencies' => array(),
@@ -156,6 +154,7 @@ function wpcf7_recaptcha_verify_response( $spam, $submission ) {
 			$submission->add_spam_log( array(
 				'agent' => 'recaptcha',
 				'reason' => sprintf(
+					/* translators: 1: value of reCAPTCHA score 2: value of reCAPTCHA threshold */
 					__(
 						'reCAPTCHA score (%1$.2f) is lower than the threshold (%2$.2f).',
 						'contact-form-7'
@@ -254,15 +253,40 @@ function wpcf7_admin_warnings_recaptcha_v2_v3( $page, $action, $object ) {
 	}
 
 	$message = sprintf(
-		esc_html( __(
-			"API keys for reCAPTCHA v3 are different from those for v2; keys for v2 do not work with the v3 API. You need to register your sites again to get new keys for v3. For details, see %s.",
-			'contact-form-7'
-		) ),
+		esc_html(
+			/* translators: %s: link labeled 'reCAPTCHA (v3)' */
+			__(
+				"API keys for reCAPTCHA v3 are different from those for v2; keys for v2 do not work with the v3 API. You need to register your sites again to get new keys for v3. For details, see %s.",
+				'contact-form-7'
+			)
+		),
 		wpcf7_link(
 			__( 'https://contactform7.com/recaptcha/', 'contact-form-7' ),
 			__( 'reCAPTCHA (v3)', 'contact-form-7' )
 		)
 	);
 
-	wp_admin_notice( $message, 'type=warning' );
+	wp_admin_notice( $message, array( 'type' => 'warning' ) );
+}
+
+
+add_action( 'wpcf7_admin_warnings', 'wpcf7_captcha_future_warning', 10, 3 );
+
+function wpcf7_captcha_future_warning( $page, $action, $object ) {
+	$service = WPCF7_RECAPTCHA::get_instance();
+
+	if ( ! $service->is_active() ) {
+		return;
+	}
+
+	$message = wp_kses(
+		__( '<strong>Attention reCAPTCHA users:</strong> Google has a plan to make all reCAPTCHA users migrate to reCAPTCHA Enterprise. This means a cost increase for many of you. Learn about <a href="https://contactform7.com/2025/02/10/our-future-plans-for-captchas/">our future plans for CAPTCHAs</a> and the options you have.', 'contact-form-7' ),
+		array(
+			'a' => array( 'href' => true ),
+			'strong' => array(),
+		),
+		array( 'http', 'https' )
+	);
+
+	wp_admin_notice( $message, array( 'type' => 'warning' ) );
 }

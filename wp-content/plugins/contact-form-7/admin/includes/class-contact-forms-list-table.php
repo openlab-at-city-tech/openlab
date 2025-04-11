@@ -1,7 +1,7 @@
 <?php
 
 if ( ! class_exists( 'WP_List_Table' ) ) {
-	require_once( ABSPATH . 'wp-admin/includes/class-wp-list-table.php' );
+	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
 class WPCF7_Contact_Form_List_Table extends WP_List_Table {
@@ -42,19 +42,19 @@ class WPCF7_Contact_Form_List_Table extends WP_List_Table {
 		}
 
 		if ( ! empty( $_REQUEST['orderby'] ) ) {
-			if ( 'title' == $_REQUEST['orderby'] ) {
+			if ( 'title' === $_REQUEST['orderby'] ) {
 				$args['orderby'] = 'title';
-			} elseif ( 'author' == $_REQUEST['orderby'] ) {
+			} elseif ( 'author' === $_REQUEST['orderby'] ) {
 				$args['orderby'] = 'author';
-			} elseif ( 'date' == $_REQUEST['orderby'] ) {
+			} elseif ( 'date' === $_REQUEST['orderby'] ) {
 				$args['orderby'] = 'date';
 			}
 		}
 
 		if ( ! empty( $_REQUEST['order'] ) ) {
-			if ( 'asc' == strtolower( $_REQUEST['order'] ) ) {
+			if ( 'asc' === strtolower( $_REQUEST['order'] ) ) {
 				$args['order'] = 'ASC';
-			} elseif ( 'desc' == strtolower( $_REQUEST['order'] ) ) {
+			} elseif ( 'desc' === strtolower( $_REQUEST['order'] ) ) {
 				$args['order'] = 'DESC';
 			}
 		}
@@ -134,8 +134,8 @@ class WPCF7_Contact_Form_List_Table extends WP_List_Table {
 
 			if ( $count_errors = $config_validator->count_errors() ) {
 				$error_notice = sprintf(
+					/* translators: %s: number of errors detected */
 					_n(
-						/* translators: %s: number of errors detected */
 						'%s configuration error detected',
 						'%s configuration errors detected',
 						$count_errors, 'contact-form-7' ),

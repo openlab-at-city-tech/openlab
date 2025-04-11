@@ -56,7 +56,7 @@ function wpcf7_is_tel( $text ) {
 		$result = false;
 	}
 
-	if ( ! ( 6 < strlen( $text ) and strlen( $text ) < 16 ) ) {
+	if ( ! ( 5 < strlen( $text ) and strlen( $text ) < 16 ) ) {
 		$result = false;
 	}
 
@@ -216,7 +216,7 @@ function wpcf7_is_email_in_domain( $email, $domain ) {
 		do {
 			$site_domain = implode( '.', $domain_parts );
 
-			if ( $site_domain == $email_domain ) {
+			if ( $site_domain === $email_domain ) {
 				continue 2;
 			}
 

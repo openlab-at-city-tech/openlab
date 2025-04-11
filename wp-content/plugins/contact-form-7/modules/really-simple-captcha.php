@@ -271,9 +271,13 @@ function wpcf7_captcha_display_warning_message( $page, $action, $object ) {
 	wpcf7_init_captcha();
 
 	if ( ! is_dir( $uploads_dir ) or ! wp_is_writable( $uploads_dir ) ) {
-		$message = sprintf( __( 'This contact form contains CAPTCHA fields, but the temporary folder for the files (%s) does not exist or is not writable. You can create the folder or change its permission manually.', 'contact-form-7' ), $uploads_dir );
+		$message = sprintf(
+			/* translators: %s: Path to the temporary folder */
+			__( 'This contact form contains CAPTCHA fields, but the temporary folder for the files (%s) does not exist or is not writable. You can create the folder or change its permission manually.', 'contact-form-7' ),
+			$uploads_dir
+		);
 
-		wp_admin_notice( esc_html( $message ), 'type=warning' );
+		wp_admin_notice( esc_html( $message ), array( 'type' => 'warning' ) );
 	}
 
 	if (
@@ -282,7 +286,7 @@ function wpcf7_captcha_display_warning_message( $page, $action, $object ) {
 	) {
 		$message = __( "This contact form contains CAPTCHA fields, but the necessary libraries (GD and FreeType) are not available on your server.", 'contact-form-7' );
 
-		wp_admin_notice( esc_html( $message ), 'type=warning' );
+		wp_admin_notice( esc_html( $message ), array( 'type' => 'warning' ) );
 	}
 }
 
@@ -392,8 +396,7 @@ function wpcf7_captcha_tmp_url() {
 function wpcf7_captcha_url( $filename ) {
 	$url = path_join( wpcf7_captcha_tmp_url(), $filename );
 
-	if ( is_ssl()
-	and 'http:' == substr( $url, 0, 5 ) ) {
+	if ( is_ssl() and 'http:' === substr( $url, 0, 5 ) ) {
 		$url = 'https:' . substr( $url, 5 );
 	}
 
@@ -550,7 +553,7 @@ function wpcf7_captchac_options( $options ) {
 		preg_match( '%^fg:#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$%',
 			$fg_color, $fc_matches );
 
-		if ( 3 == strlen( $fc_matches[1] ) ) {
+		if ( 3 === strlen( $fc_matches[1] ) ) {
 			$r = substr( $fc_matches[1], 0, 1 );
 			$g = substr( $fc_matches[1], 1, 1 );
 			$b = substr( $fc_matches[1], 2, 1 );
@@ -560,7 +563,7 @@ function wpcf7_captchac_options( $options ) {
 				hexdec( $g . $g ),
 				hexdec( $b . $b ),
 			);
-		} elseif ( 6 == strlen( $fc_matches[1] ) ) {
+		} elseif ( 6 === strlen( $fc_matches[1] ) ) {
 			$r = substr( $fc_matches[1], 0, 2 );
 			$g = substr( $fc_matches[1], 2, 2 );
 			$b = substr( $fc_matches[1], 4, 2 );
@@ -580,7 +583,7 @@ function wpcf7_captchac_options( $options ) {
 		preg_match( '%^bg:#([0-9a-fA-F]{3}|[0-9a-fA-F]{6})$%',
 			$bg_color, $bc_matches );
 
-		if ( 3 == strlen( $bc_matches[1] ) ) {
+		if ( 3 === strlen( $bc_matches[1] ) ) {
 			$r = substr( $bc_matches[1], 0, 1 );
 			$g = substr( $bc_matches[1], 1, 1 );
 			$b = substr( $bc_matches[1], 2, 1 );
@@ -590,7 +593,7 @@ function wpcf7_captchac_options( $options ) {
 				hexdec( $g . $g ),
 				hexdec( $b . $b ),
 			);
-		} elseif ( 6 == strlen( $bc_matches[1] ) ) {
+		} elseif ( 6 === strlen( $bc_matches[1] ) ) {
 			$r = substr( $bc_matches[1], 0, 2 );
 			$g = substr( $bc_matches[1], 2, 2 );
 			$b = substr( $bc_matches[1], 4, 2 );

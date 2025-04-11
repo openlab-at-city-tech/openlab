@@ -19,7 +19,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 
 	public static function get_instance() {
 		if ( empty( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -134,7 +134,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 	}
 
 	public function load( $action = '' ) {
-		if ( 'auth_redirect' == $action ) {
+		if ( 'auth_redirect' === $action ) {
 			$code = isset( $_GET['code'] ) ? urldecode( $_GET['code'] ) : '';
 			$state = isset( $_GET['state'] ) ? urldecode( $_GET['state'] ) : '';
 
@@ -159,7 +159,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 			exit();
 		}
 
-		if ( 'setup' == $action and 'POST' == $_SERVER['REQUEST_METHOD'] ) {
+		if ( 'setup' === $action and 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			check_admin_referer( 'wpcf7-constant-contact-setup' );
 
 			if ( ! empty( $_POST['reset'] ) ) {
@@ -319,7 +319,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 		}
 
 		foreach ( (array) $selection as $key => $ids_or_names ) {
-			foreach( $contact_lists as $list_id => $list ) {
+			foreach ( $contact_lists as $list_id => $list ) {
 				if ( in_array( $list['list_id'], (array) $ids_or_names, true )
 				or in_array( $list['name'], (array) $ids_or_names, true ) ) {
 					$contact_lists[$list_id]['selected'][$key] = true;
@@ -343,7 +343,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 			case 'success':
 				wp_admin_notice(
 					esc_html( __( "Connection established.", 'contact-form-7' ) ),
-					'type=success'
+					array( 'type' => 'success' )
 				);
 
 				break;
@@ -354,14 +354,14 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 						esc_html( __( "Error", 'contact-form-7' ) ),
 						esc_html( __( "Failed to establish connection. Please double-check your configuration.", 'contact-form-7' ) )
 					),
-					'type=error'
+					array( 'type' => 'error' )
 				);
 
 				break;
 			case 'updated':
 				wp_admin_notice(
 					esc_html( __( "Configuration updated.", 'contact-form-7' ) ),
-					'type=success'
+					array( 'type' => 'success' )
 				);
 
 				break;
@@ -398,7 +398,7 @@ class WPCF7_ConstantContact extends WPCF7_Service_OAuth2 {
 			);
 		}
 
-		if ( 'setup' == $action ) {
+		if ( 'setup' === $action ) {
 			$this->display_setup();
 		} else {
 			echo sprintf(
