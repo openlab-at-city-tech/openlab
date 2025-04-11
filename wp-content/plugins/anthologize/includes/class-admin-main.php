@@ -467,7 +467,11 @@ if ( ! class_exists( 'Anthologize_Admin_Main' ) ) :
 
 			if ( isset( $_GET['action'] ) ) {
 				if ( $_GET['action'] == 'delete' && $project ) {
-					wp_delete_post( $project->ID );
+					check_admin_referer( 'anthologize_delete_project' );
+
+					if ( current_user_can( 'delete_post', $project->ID ) ) {
+						wp_delete_post( $project->ID );
+					}
 				}
 
 				if ( $_GET['action'] == 'edit' && $project ) {
@@ -551,9 +555,12 @@ if ( ! class_exists( 'Anthologize_Admin_Main' ) ) :
 							<?php
 							$controlActions   = array();
 							$the_id           = get_the_ID();
+
+							$delete_url = wp_nonce_url( admin_url( 'admin.php?page=anthologize&action=delete&project_id=' . $the_id ), 'anthologize_delete_project' );
+
 							$controlActions[] = '<a href="admin.php?page=anthologize_new_project&project_id=' . esc_attr( $the_id ) . '">' . __( 'Project Details', 'anthologize' ) . '</a>';
 							$controlActions[] = '<a href="admin.php?page=anthologize&action=edit&project_id=' . esc_attr( $the_id ) . '">' . __( 'Manage Parts', 'anthologize' ) . '</a>';
-							$controlActions[] = '<a href="admin.php?page=anthologize&action=delete&project_id=' . esc_attr( $the_id ) . '" class="confirm-delete">' . __( 'Delete Project', 'anthologize' ) . '</a>';
+							$controlActions[] = '<a href="' . esc_url( $delete_url ) . '" class="confirm-delete">' . __( 'Delete Project', 'anthologize' ) . '</a>';
 							?>
 
 							<?php if ( count( $controlActions ) ) : ?>

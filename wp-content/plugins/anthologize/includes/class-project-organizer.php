@@ -69,7 +69,7 @@ if ( ! class_exists( 'Anthologize_Project_Organizer' ) ) :
 				<div id="project-actions">
 					<a href="admin.php?page=anthologize_new_project&project_id=<?php echo esc_attr( $this->project_id ); ?>"><?php _e( 'Project Details', 'anthologize' ); ?></a> |
 					<a target="_blank" href="<?php echo esc_url( $this->preview_url( $this->project_id, 'anth_project' ) ); ?>"><?php _e( 'Preview Project', 'anthologize' ); ?></a> |
-					<a href="admin.php?page=anthologize&action=delete&project_id=<?php echo esc_attr( $this->project_id ); ?>" class="confirm-delete"><?php _e( 'Delete Project', 'anthologize' ); ?></a>
+					<a href="<?php echo esc_attr( wp_nonce_url( admin_url( 'admin.php?page=anthologize&action=delete&project_id=' . $this->project_id ), 'anthologize_delete_project' ) ); ?>" class="confirm-delete"><?php _e( 'Delete Project', 'anthologize' ); ?></a>
 				</div>
 			</h2>
 
