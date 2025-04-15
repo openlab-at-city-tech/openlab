@@ -668,11 +668,17 @@ OpenLab.utility = (function ($) {
 			$( '.collapsible-definition-label' ).on(
 				'click',
 				function( e ) {
-					$clicked = $( e.target );
-					$def     = $clicked.closest( '.collapsible-definition' );
+					const $clicked = $( e.target );
+					const $def     = $clicked.closest( '.collapsible-definition' );
+					const $icon    = $def.find( 'i.fa' );
 
-					$clicked.find( 'i' ).toggleClass( 'fa-caret-square-o-right' ).toggleClass( 'fa-caret-square-o-down' );
-					$clicked.closest( '.collapsible-definition' ).toggleClass( 'show-definition-text' );
+					if ( $def.hasClass( 'show-definition-text' ) ) {
+						$icon.removeClass( 'fa-chevron-circle-down' ).addClass( 'fa-chevron-circle-right' );
+						$def.removeClass( 'show-definition-text' );
+					} else {
+						$icon.removeClass( 'fa-chevron-circle-right' ).addClass( 'fa-chevron-circle-down' );
+						$def.addClass( 'show-definition-text' );
+					}
 				}
 			);
 		},
