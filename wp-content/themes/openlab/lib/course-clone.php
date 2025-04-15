@@ -1292,7 +1292,6 @@ class Openlab_Clone_Course_Site {
 			}
 
 			// Now see if that substring appears in post_content of any non-attachment post
-			_b( $needle );
 			$post_using_it = $wpdb->get_var( $wpdb->prepare( "
 				SELECT ID
 				  FROM {$wpdb->posts}
@@ -1300,7 +1299,6 @@ class Openlab_Clone_Course_Site {
 				   AND post_content LIKE %s
 				 LIMIT 1
 			", '%' . $wpdb->esc_like( $needle ) . '%' ) );
-			_b( $post_using_it );
 
 			// If not found, delete
 			if ( ! $post_using_it ) {
