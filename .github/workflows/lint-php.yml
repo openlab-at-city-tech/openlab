@@ -34,7 +34,7 @@ jobs:
         restore-keys: ${{ runner.os }}-composer-
 
     - name: Install dependencies
-      run: composer install --prefer-dist --no-suggest --no-progress && composer require php-parallel-lint/php-parallel-lint
+      run: composer install --no-dev --prefer-dist --no-suggest --no-progress && composer require php-parallel-lint/php-parallel-lint
 
     - name: Run PHP linter
       run: |
