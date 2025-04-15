@@ -27,7 +27,7 @@ add_action(
 		// Get current user info
 		$user = wp_get_current_user();
 		if ( ! $user || ! $user->exists() ) {
-			return false;
+			return;
 		}
 
 		$user_email = $user->user_email;
@@ -80,7 +80,7 @@ add_action(
 		);
 
 		// Send the email
-		return wp_mail( $user_email, $subject, $message, $headers );
+		wp_mail( $user_email, $subject, $message, $headers );
 	},
 	10,
 	3
