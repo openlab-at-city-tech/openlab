@@ -1222,46 +1222,91 @@ class Openlab_Clone_Course_Site {
 		}
 
 		if ( ! $clone_options['unused_media'] ) {
-			// Find all orphaned attachments with either:
-			// 1. post_parent = 0, or
-			// 2. post_parent pointing to a non-existent post
-			$orphaned_att_ids = $wpdb->get_col(
-				"SELECT p.ID
-				FROM {$wpdb->posts} p
-				WHERE p.post_type = 'attachment'
-				AND (
-					p.post_parent = 0
-					OR NOT EXISTS (
-						SELECT 1
-						FROM {$wpdb->posts} parent
-						WHERE parent.ID = p.post_parent
-						AND parent.post_type != 'attachment'
-					)
-				)"
-			);
-
-			$orphaned_att_ids = array_map( 'intval', $orphaned_att_ids );
-
-			// Exclude those that are used for header images.
-			$header_image_theme_mod = get_theme_mod( 'header_image_data' );
-			if ( $header_image_theme_mod && is_object( $header_image_theme_mod ) ) {
-				if ( isset( $header_image_theme_mod->attachment_id ) ) {
-					$orphaned_att_ids = array_diff( $orphaned_att_ids, array( (int) $header_image_theme_mod->attachment_id ) );
-				}
-			}
-
-			// Delete the orphaned attachments
-			if ( ! empty( $orphaned_att_ids ) ) {
-				foreach ( $orphaned_att_ids as $att_id ) {
-					wp_delete_attachment( $att_id, true );
-				}
-			}
+			$this->delete_orphaned_attachments();
 		}
 
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
 
 		restore_current_blog();
+	}
+
+	/**
+	 * Deletes orphaned attachments.
+	 */
+	protected function delete_orphaned_attachments() {
+		global $wpdb;
+
+		// 1) Gather orphaned attachments
+		$orphaned_att_ids = $wpdb->get_col("
+			SELECT p.ID
+			  FROM {$wpdb->posts} p
+			 WHERE p.post_type = 'attachment'
+			   AND (
+				 p.post_parent = 0
+				 OR NOT EXISTS (
+				   SELECT 1
+					 FROM {$wpdb->posts} parent
+					WHERE parent.ID = p.post_parent
+					  AND parent.post_type != 'attachment'
+				 )
+			   )
+		");
+
+		if ( empty( $orphaned_att_ids ) ) {
+			return;
+		}
+
+		// 2) Exclude attachments used as header images
+		$header_image_theme_mod = get_theme_mod( 'header_image_data' );
+		if ( $header_image_theme_mod && is_object( $header_image_theme_mod ) && ! empty( $header_image_theme_mod->attachment_id ) ) {
+			$orphaned_att_ids = array_diff( $orphaned_att_ids, [ (int) $header_image_theme_mod->attachment_id ] );
+		}
+
+		// 3) For each orphaned attachment, check if it appears in post_content
+		$upload_dir = wp_upload_dir(); // e.g. [ 'baseurl' => 'https://example.com/wp-content/blogs.dir/12345/files', ... ]
+		foreach ( $orphaned_att_ids as $attachment_id ) {
+			$file = get_post_meta( $attachment_id, '_wp_attached_file', true );
+			if ( ! $file ) {
+				wp_delete_attachment( $attachment_id, true );
+				continue;
+			}
+
+			// Build the full URL: "https://example.com/wp-content/blogs.dir/12345/files/2024/03/foo.jpg"
+			$attachment_url = trailingslashit( $upload_dir['baseurl'] ) . $file;
+
+			// Look for "/files/" portion (adjust this if your path is different)
+			$pos = strpos( $attachment_url, '/files/' );
+			if ( $pos === false ) {
+				// If we can’t find /files/, we’ll just do a naive substring search for the file minus extension.
+				$needle = pathinfo( $attachment_url, PATHINFO_FILENAME );
+			} else {
+				// Extract everything from "/files/" onward
+				$needle = substr( $attachment_url, $pos );
+
+				// Strip off the extension. e.g. "/files/2024/03/foo.jpg" → "/files/2024/03/foo"
+				$dot_pos = strrpos( $needle, '.' );
+				if ( $dot_pos !== false ) {
+					$needle = substr( $needle, 0, $dot_pos );
+				}
+			}
+
+			// Now see if that substring appears in post_content of any non-attachment post
+			_b( $needle );
+			$post_using_it = $wpdb->get_var( $wpdb->prepare( "
+				SELECT ID
+				  FROM {$wpdb->posts}
+				 WHERE post_type NOT IN ('attachment','nav_menu_item','revision')
+				   AND post_content LIKE %s
+				 LIMIT 1
+			", '%' . $wpdb->esc_like( $needle ) . '%' ) );
+			_b( $post_using_it );
+
+			// If not found, delete
+			if ( ! $post_using_it ) {
+				wp_delete_attachment( $attachment_id, true );
+			}
+		}
 	}
 
 	/**
