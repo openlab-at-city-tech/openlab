@@ -21,35 +21,37 @@ add_action( 'after_setup_theme', 'openlab_core_setup' );
 
 /* * creating a library to organize functions* */
 /* * core* */
-require_once( STYLESHEETPATH . '/lib/core/page-control.php' );
-require_once( STYLESHEETPATH . '/lib/core/frontend-admin.php' );
-require_once( STYLESHEETPATH . '/lib/core/backend-admin.php' );
+$stylesheet_path = defined( 'STYLESHEETPATH' ) ? STYLESHEETPATH : get_template_directory();
+$stylesheet_path = untrailingslashit( $stylesheet_path );
+require_once( $stylesheet_path . '/lib/core/page-control.php' );
+require_once( $stylesheet_path . '/lib/core/frontend-admin.php' );
+require_once( $stylesheet_path . '/lib/core/backend-admin.php' );
 
-require_once( STYLESHEETPATH . '/lib/wp-background-processing/wp-background-processing.php' );
-require_once( STYLESHEETPATH . '/lib/clone-wp-async-process.php' );
-require_once( STYLESHEETPATH . '/lib/course-clone.php' );
-require_once( STYLESHEETPATH . '/lib/header-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/post-types.php' );
-require_once( STYLESHEETPATH . '/lib/menus.php' );
-require_once( STYLESHEETPATH . '/lib/content-processing.php' );
-require_once( STYLESHEETPATH . '/lib/nav.php' );
-require_once( STYLESHEETPATH . '/lib/breadcrumbs.php' );
-require_once( STYLESHEETPATH . '/lib/shortcodes.php' );
-require_once( STYLESHEETPATH . '/lib/media-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/group-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/ajax-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/help-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/member-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/page-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/sidebar-funcs.php' );
-require_once( STYLESHEETPATH . '/lib/plugin-hooks.php' );
-require_once( STYLESHEETPATH . '/lib/theme-hooks.php' );
-require_once( STYLESHEETPATH . '/lib/group-announcements.php' );
-require_once( STYLESHEETPATH . '/lib/group-connections.php' );
-require_once( STYLESHEETPATH . '/lib/bp-auto-export-data.php' );
-require_once( STYLESHEETPATH . '/lib/two-factor.php' );
+require_once( $stylesheet_path . '/lib/wp-background-processing/wp-background-processing.php' );
+require_once( $stylesheet_path . '/lib/clone-wp-async-process.php' );
+require_once( $stylesheet_path . '/lib/course-clone.php' );
+require_once( $stylesheet_path . '/lib/header-funcs.php' );
+require_once( $stylesheet_path . '/lib/post-types.php' );
+require_once( $stylesheet_path . '/lib/menus.php' );
+require_once( $stylesheet_path . '/lib/content-processing.php' );
+require_once( $stylesheet_path . '/lib/nav.php' );
+require_once( $stylesheet_path . '/lib/breadcrumbs.php' );
+require_once( $stylesheet_path . '/lib/shortcodes.php' );
+require_once( $stylesheet_path . '/lib/media-funcs.php' );
+require_once( $stylesheet_path . '/lib/group-funcs.php' );
+require_once( $stylesheet_path . '/lib/ajax-funcs.php' );
+require_once( $stylesheet_path . '/lib/help-funcs.php' );
+require_once( $stylesheet_path . '/lib/member-funcs.php' );
+require_once( $stylesheet_path . '/lib/page-funcs.php' );
+require_once( $stylesheet_path . '/lib/sidebar-funcs.php' );
+require_once( $stylesheet_path . '/lib/plugin-hooks.php' );
+require_once( $stylesheet_path . '/lib/theme-hooks.php' );
+require_once( $stylesheet_path . '/lib/group-announcements.php' );
+require_once( $stylesheet_path . '/lib/group-connections.php' );
+require_once( $stylesheet_path . '/lib/bp-auto-export-data.php' );
+require_once( $stylesheet_path . '/lib/two-factor.php' );
 
-require_once( STYLESHEETPATH . '/lib/site-template.php' );
+require_once( $stylesheet_path . '/lib/site-template.php' );
 
 // Initialize async cloning.
 openlab_clone_async_process();
