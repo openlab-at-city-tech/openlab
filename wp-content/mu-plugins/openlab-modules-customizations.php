@@ -46,7 +46,7 @@ add_action(
 
 		// Build email content
 		$module_info = sprintf(
-			__( 'Module: %1$s %2$s', 'openlab-modules' ),
+			'<strong>Module</strong>: %1$s %2$s',
 			get_the_title( $module_id ),
 			get_permalink( $module_id )
 		);
@@ -54,7 +54,7 @@ add_action(
 		$section_info = '';
 		if ( ! $is_module ) {
 			$section_info = sprintf(
-				__( 'Section: %1$s %2$s', 'openlab-modules' ),
+				'<strong>Section</strong>: %1$s %2$s',
 				get_the_title( $post ),
 				get_permalink( $post )
 			);
@@ -65,8 +65,10 @@ add_action(
 			'Hi %1$s,
 
 	You have completed the following:
+
 	%2$s
 	%3$s
+
 	Well done!',
 			$display_name,
 			$module_info,
