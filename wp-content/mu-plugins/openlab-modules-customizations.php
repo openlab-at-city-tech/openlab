@@ -87,3 +87,16 @@ add_action(
 	10,
 	3
 );
+
+add_filter(
+	'openlab_modules_section_complete_message',
+	function( $message, $message_type ) {
+		if ( 'openlab_email' !== $message_type ) {
+			return $message;
+		}
+
+		return 'You have completed the activities on this page. You will receive an email confirming your completion.';
+	},
+	10,
+	2
+);
