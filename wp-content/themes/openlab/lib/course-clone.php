@@ -1056,6 +1056,12 @@ class Openlab_Clone_Course_Site {
 				continue;
 			}
 
+			// All 'trash' items should be deleted.
+			if ( 'trash' === $sp->post_status ) {
+				$posts_to_delete_ids[] = $sp->ID;
+				continue;
+			}
+
 			// If the 'clone drafts' option was set to 'no', set drafts to be deleted.
 			if ( ! $clone_options['draft_posts'] ) {
 				if ( 'draft' === $sp->post_status ) {
