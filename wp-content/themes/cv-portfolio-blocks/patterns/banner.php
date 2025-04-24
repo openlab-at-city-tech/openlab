@@ -15,22 +15,22 @@ return array(
 <div class="wp-block-group wow fadeInUp"><!-- wp:columns {"verticalAlignment":"center","align":"wide","className":"slider-banner"} -->
 <div class="wp-block-columns alignwide are-vertically-aligned-center slider-banner"><!-- wp:column {"verticalAlignment":"center","width":"50%"} -->
 <div class="wp-block-column is-vertically-aligned-center" style="flex-basis:50%"><!-- wp:paragraph {"style":{"color":{"text":"#81898b"}},"fontSize":"upper-heading","fontFamily":"poppins"} -->
-<p class="has-text-color has-poppins-font-family has-upper-heading-font-size" style="color:#81898b">'. esc_html('WELCOME TO MY WORLD','cv-portfolio-blocks') .'</p>
+<p class="has-text-color has-poppins-font-family has-upper-heading-font-size" style="color:#81898b">'. esc_html__('WELCOME TO MY WORLD','cv-portfolio-blocks') .'</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:heading {"style":{"typography":{"fontSize":"40px","fontStyle":"normal","fontWeight":"700"}},"textColor":"primary","className":"is-slide-heading","fontFamily":"poppins"} -->
-<h2 class="wp-block-heading is-slide-heading has-primary-color has-text-color has-poppins-font-family" style="font-size:40px;font-style:normal;font-weight:700">'. esc_html('Hi, Im Brad kane','cv-portfolio-blocks') .'</h2>
+<h2 class="wp-block-heading is-slide-heading has-primary-color has-text-color has-poppins-font-family" style="font-size:40px;font-style:normal;font-weight:700">'. esc_html__('Hi, Im Brad kane','cv-portfolio-blocks') .'</h2>
 <!-- /wp:heading -->
 
 <!-- wp:heading {"style":{"typography":{"fontSize":"40px","fontStyle":"normal","fontWeight":"700","lineHeight":"0.9"}},"textColor":"primary","className":"is-slide-heading","fontFamily":"poppins"} -->
-<h2 class="wp-block-heading is-slide-heading has-primary-color has-text-color has-poppins-font-family" style="font-size:40px;font-style:normal;font-weight:700;line-height:0.9">'. esc_html('A Professional Ui Developer','cv-portfolio-blocks') .'</h2>
+<h2 class="wp-block-heading is-slide-heading has-primary-color has-text-color has-poppins-font-family" style="font-size:40px;font-style:normal;font-weight:700;line-height:0.9">'. esc_html__('A Professional Ui Developer','cv-portfolio-blocks') .'</h2>
 <!-- /wp:heading -->
 
 <!-- wp:columns -->
 <div class="wp-block-columns"><!-- wp:column -->
 <div class="wp-block-column"><!-- wp:buttons -->
 <div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"accent","textColor":"background","style":{"border":{"radius":"5px"},"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"className":"theme-btn","fontSize":"medium","fontFamily":"poppins"} -->
-<div class="wp-block-button has-custom-font-size theme-btn has-poppins-font-family has-medium-font-size"><a class="wp-block-button__link has-background-color has-accent-background-color has-text-color has-background wp-element-button" href="#" style="border-radius:5px;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">'. esc_html('CONTACT ME','cv-portfolio-blocks') .'</a></div>
+<div class="wp-block-button has-custom-font-size theme-btn has-poppins-font-family has-medium-font-size"><a class="wp-block-button__link has-background-color has-accent-background-color has-text-color has-background wp-element-button" href="#" style="border-radius:5px;padding-top:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30)">'. esc_html__('CONTACT ME','cv-portfolio-blocks') .'</a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:column --></div>

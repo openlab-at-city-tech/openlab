@@ -328,7 +328,9 @@ class I18N {
 			],
 			'br'     => [],
 			'em'     => [],
+			'i' 		=> [],
 			'strong' => [],
+			'b'      => [],
 			'u'      => [],
 			'p'      => [ 'class' => [] ],
 			'div'    => [
@@ -338,54 +340,100 @@ class I18N {
 			'span'   => [
 				'class' => [],
 				'id'    => [],
-			],
+			]
 		];
 
 		return \array_merge_recursive( $allowedtags, $our_keys );
 	}
 
 	/**
-	 * NGG allow html tags for images alt/title/desc.
+	 * Sanitize text for alt/title/desc field.
 	 *
-	 * @param  string $content content.
+	 * @param string $content content.
 	 * @return string Sanitized content.
 	 */
-	public static function ngg_allowed_html_tags_for_images( $content ) {
-		// Decode HTML entities to ensure we work with raw HTML.
-		$content = html_entity_decode( $content, ENT_QUOTES | ENT_HTML5 );
-
-		// Allowed HTML tags.
-		$allowed_tags = [
-				'a'      => [
-						'href'   => [],
-						'title'  => [],
-						'target' => [],
-				],
-				'b'      => [],
-				'i'      => [],
-				'u'      => [],
-				'em'     => [],
-				'strong' => [],
-				'p'      => [],
-				'br'     => [],
-				'ul'     => [],
-				'ol'     => [],
-				'li'     => [],
-		];
-
-		// First, sanitize using wp_kses to allow only the permitted HTML tags.
-		$sanitized_input = wp_kses( $content, $allowed_tags );
+	public static function ngg_sanitize_text_alt_title_desc( $content ) {
+		// Step 1: Decode HTML entities to get rid of HTML entity encoding (for example, &lt; becomes <).
+		$content = self::ngg_decode_html_entities( $content );
 
 		// Strip backslashes that may have been added by wp_kses or other functions.
-		$sanitized_input = stripslashes( $sanitized_input );
+		$content = stripslashes( $content );
+		$content = str_replace( '`', '', $content );
 
-		// Enhanced regex to remove any event handler attributes, including malformed or encoded ones.
-		// It handles cases like: onload="alert(1)", onload='alert(1)', onload = 'alert(1)'
-		$sanitized_input = preg_replace( '/\s*on\w+\s*=\s*(["\'].*?["\']|[^ >]+)/i', '', $sanitized_input );
+		// Step 2: Remove specific dangerous patterns using regex.
+		// Remove <script> tags and anything inside them.
+		$content = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $content );
 
-		// Remove JavaScript expressions in attributes, like: href="javascript:alert(1)"
-		$sanitized_input = preg_replace( '/\s*(href|src)\s*=\s*(["\'])\s*javascript:[^"\']*/i', '', $sanitized_input );
+		// Remove inline event handlers like onclick, onload, etc.
+		$content = preg_replace( '/\bon\w+\s*=\s*["\'].*?["\']/i', '', $content );
 
-		return $sanitized_input;
+		// Remove dangerous JavaScript function calls (alert, prompt, confirm, etc.).
+		$content = preg_replace( '/\b(alert|prompt|confirm)\s*\(\s*["\']?.*?["\']?\s*\)/i', '', $content ); // standard function calls.
+
+		// Remove variations of alert(), prompt(), confirm(), including backticks and HTML entities.
+		$content = preg_replace( '/\b(alert|prompt|confirm)\s*\(\s*`?[^`]*`?\s*\)/i', '', $content ); // with backticks.
+
+		// Remove encoded JavaScript entities like &lt;script&gt;alert&lt;/script&gt; and others.
+		$content = preg_replace( '/(&#?x?([0-9a-f]+);?|&(?:[a-z0-9]+|#x?[0-9a-f]+);?)*alert/i', '', $content ); // HTML-encoded alert and script.
+		$content = preg_replace( '/(&#?x?([0-9a-f]+);?|&(?:[a-z0-9]+|#x?[0-9a-f]+);?)*script/i', '', $content ); // HTML-encoded script.
+
+		// Remove JavaScript URL protocols like "javascript:", "vbscript:", etc.
+		$content = preg_replace( '/(javascript|vbscript|data|file):/i', '', $content );
+
+		// Remove dangerous JavaScript functions (eval, window.location, document.cookie, etc.).
+		$content = preg_replace( '/(eval|window\.location|document\.cookie|document\.write)/i', '', $content );
+
+		// Remove HTML entities.
+		$content = preg_replace('/\&[^;]*;/', '', $content);
+
+		// Strip remaining unwanted HTML tags and attributes (you can customize this further).
+		$allowed_tags = self::get_kses_allowed_html();
+		$content      = wp_kses( $content, $allowed_tags );
+
+		// Clean up the content by re-encoding HTML entities, this ensures that no malicious code is stored in db.
+		$content = htmlspecialchars( $content, ENT_QUOTES, 'UTF-8' );
+
+		return $content;
+	}
+
+	/**
+	 * Function to decode sanitized HTML content before render.
+	 *
+	 * @param  mixed $content
+	 * @return void
+	 */
+	public static function ngg_decode_sanitized_html_content( $content ) {
+		$content = self::ngg_sanitize_text_alt_title_desc( $content );
+		$content = htmlspecialchars_decode( $content, ENT_QUOTES );
+		return $content;
+	}
+
+	/**
+	 * Function to return plain text for alt or title attributes.
+	 *
+	 * @param  mixed $text
+	 * @return void
+	 */
+	public static function ngg_plain_text_alt_title_attributes( $text ) {
+		$text = esc_attr( strip_tags( html_entity_decode( $text, ENT_QUOTES, 'UTF-8' ) ) );
+		return $text;
+	}
+
+	/**
+	 * Function to decode HTML entities recursively.
+	 *
+	 * @param  mixed $content
+	 * @return void
+	 */
+	public static function ngg_decode_html_entities( $content ) {
+		$previous_content = '';
+
+		// Keep decoding until no changes occur (i.e., fully decoded).
+		do {
+			$previous_content = $content;
+			$content = html_entity_decode($content, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+		} while ($previous_content !== $content);
+
+		return $content;
 	}
 }

@@ -15,6 +15,10 @@ class Clone_Async_Process extends WP_Async_Request {
 
 		$group_id = (int) $_POST['group_id'];
 
+		if ( ! defined( 'MINUTES_IN_SECONDS' ) ) {
+			define( 'MINUTES_IN_SECONDS', 60 );
+		}
+
 		$running = groups_get_groupmeta( $group_id, 'clone_in_progress', true );
 		if ( $running && ( ( time() - $running ) < ( 5 * MINUTES_IN_SECONDS ) ) ) {
 			return;

@@ -4,7 +4,7 @@
  *
  * @package     WP Accessibility
  * @author      Joe Dolson
- * @copyright   2012-2024 Joe Dolson
+ * @copyright   2012-2025 Joe Dolson
  * @license     GPL-2.0+
  *
  * @wordpress-plugin
@@ -17,11 +17,11 @@
  * Domain Path: /lang
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/license/gpl-2.0.txt
- * Version: 2.1.13
+ * Version: 2.1.17
  */
 
 /*
-	Copyright 2012-2024  Joe Dolson (email : joe@joedolson.com)
+	Copyright 2012-2025  Joe Dolson (email : joe@joedolson.com)
 
 	This program is free software; you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -86,7 +86,7 @@ function wpa_admin_menu() {
  * Install on activation.
  */
 function wpa_install() {
-	$wpa_version = '2.1.13';
+	$wpa_version = '2.1.17';
 	if ( 'true' !== get_option( 'wpa_installed' ) ) {
 		add_option( 'rta_from_tag_clouds', 'on' );
 		add_option( 'asl_styles_focus', '' );
@@ -351,6 +351,7 @@ function wpa_jquery_asl() {
 			array(
 				'url'  => get_rest_url( null, 'wp/v2/media' ),
 				'type' => $longdesc_type,
+				'home' => home_url(),
 				'text' => '<span class="dashicons dashicons-media-text" aria-hidden="true"></span><span class="screen-reader">' . __( 'Long Description', 'wp-accessibility' ) . '</span>',
 			)
 		);
@@ -733,6 +734,7 @@ function wpa_get_support_form() {
 	$theme_name    = $theme->get( 'Name' );
 	$theme_uri     = $theme->get( 'ThemeURI' );
 	$theme_parent  = $theme->get( 'Template' );
+	$theme_parent  = ( $theme_parent ) ? $theme_parent : __( 'None', 'wp-accessibility' );
 	$theme_version = $theme->get( 'Version' );
 
 	// plugin data.
@@ -779,7 +781,7 @@ $plugins_string
 		if ( ! wp_verify_nonce( $nonce, 'wpa-nonce' ) ) {
 			wp_die( 'WP Accessibility: Security check failed' );
 		}
-		$request     = ( ! empty( $_POST['support_request'] ) ) ? sanitize_textarea_field( stripslashes( $_POST['support_request'] ) ) : false;
+		$request     = ( ! empty( $_POST['support_request'] ) ) ? sanitize_textarea_field( wp_unslash( $_POST['support_request'] ) ) : false;
 		$has_donated = ( 'on' === $_POST['has_donated'] ) ? 'Donor' : 'No donation';
 		$subject     = "WP Accessibility support request. $has_donated";
 		$message     = $request . "\n\n" . $data;
@@ -792,13 +794,13 @@ $plugins_string
 		$from       = "From: $current_user->display_name <$from_email>\r\nReply-to: $current_user->display_name <$current_user->user_email>\r\n";
 
 		if ( ! $request ) {
-			echo "<div class='message error'><p>" . __( 'Please describe your problem.', 'wp-accessibility' ) . '</p></div>';
+			echo "<div class='message error'><p>" . esc_html__( 'Please describe your problem.', 'wp-accessibility' ) . '</p></div>';
 		} else {
 			wp_mail( 'plugins@joedolson.com', $subject, $message, $from );
 			if ( 'Donor' === $has_donated ) {
-				echo "<div class='message updated'><p>" . __( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'wp-accessibility' ) . '</p></div>';
+				echo "<div class='message updated'><p>" . esc_html__( 'Thank you for supporting the continuing development of this plug-in! I\'ll get back to you as soon as I can.', 'wp-accessibility' ) . '</p></div>';
 			} else {
-				echo "<div class='message updated'><p>" . __( 'I cannot provide support, but will treat your request as a bug report, and will incorporate any permanent solutions I discover into the plug-in.', 'wp-accessibility' ) . '</p></div>';
+				echo "<div class='message updated'><p>" . esc_html__( 'I cannot provide support, but will treat your request as a bug report, and will incorporate any permanent solutions I discover into the plug-in.', 'wp-accessibility' ) . '</p></div>';
 			}
 		}
 	}
@@ -859,6 +861,30 @@ function wpa_disable_editor_fullscreen_by_default() {
 	}
 }
 add_action( 'enqueue_block_editor_assets', 'wpa_disable_editor_fullscreen_by_default' );
+
+/**
+ * Remove the H1 heading from the headings block.
+ *
+ * @param array  $args Block type arguments array.
+ * @param string $block_type Block type declaration.
+ *
+ * @return array
+ */
+function wpa_remove_h1( $args, $block_type ) {
+	// The H1 is not allowed by default.
+	$allowed = get_option( 'wpa_allow_h1', '' );
+	if ( 'on' !== $allowed ) {
+		// Only proceed if the current block is a Heading.
+		if ( 'core/heading' !== $block_type ) {
+			return $args;
+		}
+
+		// Declare valid heading levels.
+		$args['attributes']['levelOptions']['default'] = array( 2, 3, 4, 5, 6 );
+	}
+	return $args;
+}
+add_filter( 'register_block_type_args', 'wpa_remove_h1', 10, 2 );
 
 /**
  * Insert content summary at top of article content.
@@ -949,7 +975,7 @@ function wpa_add_outer_box() {
 	$allowed = get_option( 'wpa_post_types', array() );
 	if ( is_array( $allowed ) ) {
 		foreach ( $allowed as $post_type ) {
-			add_meta_box( 'wpa_content_summary', __( 'Content Summary', 'wp-accessibility' ), 'wpa_add_inner_box', $post_type, 'normal', 'high' );
+			add_meta_box( 'wpa_content_summary_container', __( 'Content Summary', 'wp-accessibility' ), 'wpa_add_inner_box', $post_type, 'normal', 'high' );
 		}
 	}
 }

@@ -5,9 +5,9 @@ add_shortcode( 'URIS', 'Wpfrank_URIS_Shortcode' );
 function Wpfrank_URIS_Shortcode( $Id ) {
 
 	ob_start();
-	// slider JS CSS scripts
-	wp_enqueue_script('wpfrank-uris-jquery-sliderPro-js', URIS_PLUGIN_URL.'assets/js/jquery.sliderPro.js', array('jquery'), '1.5.0', true);
-	wp_enqueue_style('wpfrank-uris-slider-css', URIS_PLUGIN_URL.'assets/css/slider-pro.css');
+	// slider frontend JS CSS
+	wp_enqueue_script('wpfrank-uris-js');
+	wp_enqueue_style('wpfrank-uris-css');
 
 	//Load Saved Ultimate Responsive Image Slider Settings
 	if(!isset($Id['id'])) {

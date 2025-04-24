@@ -493,10 +493,13 @@ input:disabled+label {
 	.collapsible-definition-label {
 		cursor: pointer;
 		font-weight: 600;
-		text-decoration: underline;
 
-		&:hover {
-			text-decoration: none;
+		span {
+			text-decoration: underline;
+
+			&:hover {
+				text-decoration: none;
+			}
 		}
 	}
 
@@ -522,7 +525,7 @@ input:disabled+label {
 			display: block;
 		}
 
-		.collapsible-definition-label {
+		.collapsible-definition-label span {
 			text-decoration: none;
 
 			&:hover {
@@ -1885,6 +1888,39 @@ body form{
         width: 25%;
     }
 }
+
+.advanced-cloning-options-row {
+	margin-top: 24px;
+	margin-bottom: 14px;
+
+	&.disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	.advanced-cloning-options-gloss {
+		font-size: 14px;
+		margin-bottom: 12px;
+	}
+
+	.collapsible-definition-text {
+		padding: 16px;
+	}
+
+	fieldset {
+		margin-bottom: 24px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	label {
+		font-weight: normal;
+		padding-left: 16px;
+	}
+}
+
 .privacy-settings-note{
     padding-left: 20px;
     margin-top: -15px;
@@ -5745,6 +5781,23 @@ p.private-membership-indicator {
 
 /* Parsley.js styling for group create/edit forms */
 .group-validate-form {
+	.site-creation-tooltips-clone {
+		display: none;
+		visibility: hidden;
+	}
+
+	&.cloning {
+		.site-creation-tooltips-clone {
+			display: block;
+			visibility: visible;
+		}
+
+		.site-creation-tooltips-noclone {
+			display: none;
+			visibility: hidden;
+		}
+	}
+
     .error-container {
         font-weight: 400;
         border-radius: 4px;

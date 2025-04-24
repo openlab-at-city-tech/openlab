@@ -24,7 +24,7 @@ trait WPCF7_ConfigValidator_Mail {
 	 */
 	public function replace_mail_tags_with_minimum_input_callback( $matches ) {
 		// allow [[foo]] syntax for escaping a tag
-		if ( $matches[1] === '[' and $matches[4] === ']' ) {
+		if ( '[' === $matches[1] and ']' === $matches[4] ) {
 			return substr( $matches[0], 1, -1 );
 		}
 
@@ -273,7 +273,7 @@ trait WPCF7_ConfigValidator_Mail {
 
 			if (
 				in_array(
-					strtolower( $header_name ), array( 'reply-to', 'cc', 'bcc' )
+					strtolower( $header_name ), array( 'reply-to', 'cc', 'bcc' ), true
 				) and
 				'' !== $header_value and
 				$this->detect_invalid_mailbox_syntax( $section, $header_value )
@@ -283,7 +283,7 @@ trait WPCF7_ConfigValidator_Mail {
 			}
 
 			if (
-				in_array( strtolower( $header_name ), array( 'cc', 'bcc' ) ) and
+				in_array( strtolower( $header_name ), array( 'cc', 'bcc' ), true ) and
 				$this->detect_unsafe_email_without_protection( $section, $header_value )
 			) {
 				$unsafe_email_fields[] = $header_name;
@@ -396,7 +396,7 @@ trait WPCF7_ConfigValidator_Mail {
 				} elseif ( $this->detect_file_not_in_content_dir( $section, $line ) ) {
 					$files_out_of_content[] = $line;
 				} else {
-					$total_size += (int) @filesize( $path );
+					$total_size += (int) @filesize( path_join( WP_CONTENT_DIR, $line ) );
 				}
 			}
 		}
@@ -536,7 +536,7 @@ trait WPCF7_ConfigValidator_Mail {
 		$content = $this->replace_mail_tags( $content, array(
 			'callback' => function ( $matches ) use ( $example_email ) {
 				// allow [[foo]] syntax for escaping a tag
-				if ( $matches[1] === '[' and $matches[4] === ']' ) {
+				if ( '[' === $matches[1] and ']' === $matches[4] ) {
 					return substr( $matches[0], 1, -1 );
 				}
 

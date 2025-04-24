@@ -4,7 +4,7 @@
 	Tags: breadcrumb, breadcrumbs, breadcrumb nav, trail, woocommerce breadcrumb
 	Requires at least: 3.8
 	Tested up to: 6.7
-	Stable tag: 1.5.48
+	Stable tag: 1.5.49
 	License: GPLv2 or later
 	License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -121,6 +121,9 @@ use this short-code any where to display breadcrumb
 
 
 == Changelog ==
+
+	= 1.5.49 =
+    * 2024-12-06 - add - Display dynamically by custom action hooks
 
 	= 1.5.48 =
     * 2024-11-11 - fix - Limit by default value set to none

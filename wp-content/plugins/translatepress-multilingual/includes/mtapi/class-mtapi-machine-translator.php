@@ -82,7 +82,32 @@ class TRP_MTAPI_Machine_Translator extends TRP_Machine_Translator {
         $new_strings_chunks = array_chunk( $new_strings, $chunk_size, true );
 
         foreach( $new_strings_chunks as $new_strings_chunk ){
+            // exist early if quota for this website is = 0 character
+            // we exit here as well because we're doing the translation in chunks in a foreach.
+            $quota = get_transient('trp_mtapi_cached_quota');
+            if ( !$quota && is_numeric($quota) && $quota == 0) {
+                return array();
+            }
+
             $response = $this->send_request( $source_language, $target_language, $new_strings_chunk, $formality );
+
+            if ( is_array( $response ) && ! is_wp_error( $response ) && isset( $response['response'] ) &&
+                isset( $response['response']['code']) && $response['response']['code'] == 200 )
+            {
+                $translation_response = json_decode( $response['body'] );
+                // Only certain errors will stop MTAPI for 5 minutes trying out for new translations from the API.
+                $exception_message = (isset($translation_response->exception[0]->message)) ? $translation_response->exception[0]->message : '';
+
+                if ($exception_message == 'Site not found.'
+                    || $exception_message == 'Insufficient quota.'
+                    || $exception_message == 'Out of valid license dates.')
+                {
+                    set_transient("trp_mtapi_cached_quota", 0, 5*60);
+                }
+                if (isset($translation_response->quota) && is_numeric($translation_response->quota)) {
+                    set_transient("trp_mtapi_cached_quota", $translation_response->quota, 5*60);
+                }
+            }
 
 			// this is run only if "Log machine translation queries." is set to Yes.
 			$this->machine_translator_logger->log(array(

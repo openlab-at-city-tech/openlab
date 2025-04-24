@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/class-redux-core.php';
 
-Redux_Core::$version    = '4.5.0';
+Redux_Core::$version    = '4.5.7';
 Redux_Core::$redux_path = __DIR__;
 Redux_Core::instance();
 
@@ -49,10 +49,10 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		/**
 		 * ReduxFramework instance storage.
 		 *
-		 * @var null
+		 * @var null|ReduxFramework
 		 * @access public
 		 */
-		public static $instance = null;
+		public static ?ReduxFramework $instance;
 
 		/**
 		 * Redux current version.
@@ -62,7 +62,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_version = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static string $_version = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Absolute directory of the Redux instance.
@@ -72,7 +72,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_dir = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static string $_dir = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Full URL of the Redux instance.
@@ -82,7 +82,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_url = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static string $_url = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Current WordPress upload directory.
@@ -92,7 +92,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_upload_dir = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static string $_upload_dir = ''; // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Current WordPress upload URL
@@ -102,7 +102,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_upload_url; // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static string $_upload_url; // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Init
@@ -124,308 +124,231 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		/**
 		 * Array of field arrays.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $fields = array();
+		public ?array $fields = array();
+
+		/**
+		 * Array of field sections.
+		 *
+		 * @var null|array
+		 */
+		public ?array $field_sections = array();
 
 		/**
 		 * Array of field types.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $field_types = array();
+		public ?array $field_types = array();
 
 		/**
 		 * Array of field heads.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $field_head = array();
+		public ?array $field_head = array();
 
 		/**
 		 * Array of extensions by type used in the panel.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $extensions = array();
+		public ?array $extensions = array();
 
 		/**
 		 * Array of sections and fields arrays.
 		 *
-		 * @var array|mixed|void
+		 * @var null|array
 		 */
-		public $sections = array();
+		public ?array $sections = array();
 
 		/**
 		 * Array of generated errors from the panel for localization.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $errors = array();
+		public ?array $errors = array();
 
 		/**
 		 * Array of generated warnings from the panel for localization.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $warnings = array();
+		public ?array $warnings = array();
 
 		/**
 		 * Array of generated sanitize notices from the panel for localization.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $sanitize = array();
-
-		/**
-		 * Validation ran flag.
-		 *
-		 * @var bool
-		 */
-		public $validation_ran;
-
-		/**
-		 * No output flag.
-		 *
-		 * @var bool
-		 */
-		public $no_output;
+		public ?array $sanitize = array();
 
 		/**
 		 * Array of current option values.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $options = array();
+		public ?array $options = array();
 
 		/**
 		 * Array of option defaults.
 		 *
-		 * @var null
+		 * @var null|array
 		 */
-		public $options_defaults = null;
+		public ?array $options_defaults = null;
 
 		/**
 		 * Array of fields set to trigger the compiler hook.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $compiler_fields = array();
-
-		/**
-		 * Field folding information for localization.
-		 *
-		 * @var array
-		 */
-		public $required = array();
-
-		/**
-		 * Field child-folding information for localization.
-		 *
-		 * @var array
-		 */
-		public $required_child = array();
-
-		/**
-		 * Array of fonts used by the panel for localization.
-		 *
-		 * @var array
-		 */
-		public $fonts = array();
-
-		/**
-		 * Array of Google fonts used by the panel for localization.
-		 *
-		 * @var array
-		 */
-		public $google_array = array();
-
-		/**
-		 * Array of fields to be folded.
-		 *
-		 * @var array
-		 */
-		public $folds = array();
+		public ?array $compiler_fields = array();
 
 		/**
 		 * Array of fields with CSS output selectors.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $output = array();
+		public ?array $output = array();
 
 		/**
 		 * Autogenerated CSS appended to the header (snake case maintained for backward compatibility).
 		 *
-		 * @var string
+		 * @var null|string
 		 */
-		public $outputCSS = ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
+		public ?string $outputCSS = ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
 
 		/**
 		 * Autogenerated variables appended to dynamic output.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $output_variables = array();
+		public ?array $output_variables = array();
 
 		/**
 		 * CSS sent to the compiler hook (snake case maintained for backward compatibility).
 		 *
-		 * @var string
+		 * @var null|string
 		 */
-		public $compilerCSS = ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
-
-		/**
-		 * Array of fields that didn't pass the fold dependency test and are hidden.
-		 *
-		 * @var array
-		 */
-		public $fields_hidden = array();
-
-		/**
-		 * Array of fields to use as pointers in extensions.
-		 *
-		 * @var array
-		 */
-		public $field_sections = array();
-
-		/**
-		 * Values to generate google font CSS.
-		 *
-		 * @var string
-		 */
-		public $typography = array();
+		public ?string $compilerCSS = ''; // phpcs:ignore WordPress.NamingConventions.ValidVariableName
 
 		/**
 		 * Array of global arguments.
 		 *
-		 * @var array|mixed
+		 * @var array|null
 		 */
-		public $args = array();
+		public ?array $args = array();
 
 		/**
 		 * Used in customizer hooks.
 		 *
-		 * @var string
+		 * @var null|string
 		 */
-		public $old_opt_name = '';
-
-		/**
-		 * File system object used for I/O file operations.  DOnr the WordPress way.
-		 *
-		 * @var null|object
-		 */
-		public $filesystem = null;
-
-		/**
-		 * Array of various font groups used within the typography field.
-		 *
-		 * @var array
-		 */
-		public $font_groups = array();
+		public ?string $old_opt_name = '';
 
 		/**
 		 * Pointer to the Redux_Options_Default class.
 		 *
 		 * @var null|Redux_Options_Defaults
 		 */
-		public $options_defaults_class = null;
+		public ?Redux_Options_Defaults $options_defaults_class = null;
 
 		/**
 		 * Pointer to the Redux_Options class.
 		 *
 		 * @var null|Redux_Options_Constructor
 		 */
-		public $options_class = null;
+		public ?Redux_Options_Constructor $options_class = null;
 
 		/**
 		 * Pointer to the Redux_Required class
 		 *
 		 * @var null|Redux_Required
 		 */
-		public $required_class = null;
+		public ?Redux_Required $required_class = null;
 
 		/**
 		 * Pointer to the Redux_Output class.
 		 *
 		 * @var null|Redux_Output
 		 */
-		public $output_class = null;
+		public ?Redux_Output $output_class = null;
 
 		/**
 		 * Pointer to the Redux_Page_Render class.
 		 *
 		 * @var null|Redux_Page_Render
 		 */
-		public $render_class = null;
+		public ?Redux_Page_Render $render_class = null;
 
 		/**
 		 * Pointer to the Redux_Enqueue class.
 		 *
 		 * @var null|Redux_Enqueue
 		 */
-		public $enqueue_class = null;
+		public ?Redux_Enqueue $enqueue_class = null;
 
 		/**
 		 * Pointer to the Redux_Transients class.
 		 *
 		 * @var null|Redux_Transients
 		 */
-		public $transient_class = null;
+		public ?Redux_Transients $transient_class = null;
 
 		/**
 		 * Pointer to the Redux_wordPress_Data class.
 		 *
 		 * @var null|Redux_WordPress_Data
 		 */
-		public $wordpress_data = null;
+		public ?Redux_WordPress_Data $wordpress_data = null;
 
 		/**
 		 * Pointer to the Redux_Validation class.
 		 *
 		 * @var null|Redux_Validation
 		 */
-		public $validate_class = null;
+		public ?Redux_Validation $validate_class = null;
 
 		/**
 		 * Pointer to the Redux_Sanitize class.
 		 *
-		 * @var null|Redux_Validation
+		 * @var null|Redux_Sanitize
 		 */
-		public $sanitize_class = null;
+		public ?Redux_Sanitize $sanitize_class = null;
 
 		/**
 		 * Pointer to the Redux_Args class.
 		 *
 		 * @var null|Redux_Args
 		 */
-		public $args_class = null;
+		public ?Redux_Args $args_class = null;
 
 		/**
 		 * Array of active transients used by Redux.
 		 *
-		 * @var array
+		 * @var null|mixed
 		 */
 		public $transients = array();
 
 		/**
 		 * Array of localized repeater data.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $repeater_data = array();
+		public ?array $repeater_data = array();
 
 		/**
 		 * Array of localized data.
 		 *
-		 * @var array
+		 * @var null|array
 		 */
-		public $localize_data = array();
+		public ?array $localize_data = array();
 
 		/**
 		 * Array of checked transients used by Redux.
 		 *
-		 * @var array
+		 * @var null|mixed
 		 */
 		public $transients_check = array();
 
@@ -434,16 +357,25 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @var bool
 		 */
-		public $never_save_to_db;
+		public bool $never_save_to_db;
+
+		/**
+		 * File system object used for I/O file operations.  Done the WordPress way.
+		 *
+		 * @var null|object
+		 *
+		 * @deprecated 4.5.1
+		 */
+		public ?object $filesystem;
 
 		/**
 		 * Deprecated shim for v3 templates.
 		 *
-		 * @var array
+		 * @var null|array
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public $hidden_perm_sections = array();
+		public ?array $hidden_perm_sections = array();
 
 		/**
 		 * Deprecated shim for v3 as plugin check.
@@ -452,7 +384,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_as_plugin = false;  // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static bool $_as_plugin = false;  // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Deprecated shim for v3 as plugin check.
@@ -461,7 +393,7 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 *
 		 * @deprecated 4.0.0
 		 */
-		public static $_is_plugin = false;  // phpcs:ignore PSR2.Classes.PropertyDeclaration
+		public static bool $_is_plugin = false;  // phpcs:ignore PSR2.Classes.PropertyDeclaration
 
 		/**
 		 * Cloning is forbidden.
@@ -479,6 +411,19 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 		 */
 		public function __wakeup() {
 			_doing_it_wrong( __FUNCTION__, esc_html__( 'Cheatin&#8217; eh?', 'redux-framework' ), '4.0' );
+		}
+
+		/**
+		 * Add a deprecating notice for all the old themes that still use this method..
+		 *
+		 * @param object $filesystem Filesystem object.
+		 *
+		 * @since 4.0.0
+		 */
+		private function deprecated_filesystem( $filesystem ) {
+			//_deprecated_function( esc_html__( 'The global variable "$filesystem" of the ReduxFramework object', 'redux-framework' ), '4.5.1', 'Redux_Core::$filesystem' );
+
+			return $filesystem;
 		}
 
 		/**
@@ -531,7 +476,9 @@ if ( ! class_exists( 'ReduxFramework', false ) ) {
 			if ( ! empty( $this->args['opt_name'] ) ) {
 				new Redux_Instances( $this );
 
-				$this->filesystem = Redux_Filesystem::get_instance( $this );
+				Redux_Core::$filesystem = Redux_Filesystem::get_instance( $this );
+
+				$this->filesystem = $this->deprecated_filesystem( Redux_Core::$filesystem );
 
 				/**
 				 * Filter 'redux/options/{opt_name}/sections'

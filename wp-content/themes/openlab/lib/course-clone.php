@@ -95,6 +95,16 @@ function openlab_clone_create_form_catcher() {
 
 				groups_update_groupmeta( $new_group_id, 'clone_steps', $clone_steps );
 
+				// Collect information from Advanced Options.
+				$clone_options = [
+					'draft_posts'        => isset( $_POST['clone-draft-posts'] ) && 'yes' === $_POST['clone-draft-posts'],
+					'publish_posts'      => isset( $_POST['clone-publish-posts'] ) && 'yes' === $_POST['clone-publish-posts'],
+					'set_dates_to_today' => isset( $_POST['clone-set-dates-to-today'] ) && 'yes' === $_POST['clone-set-dates-to-today'],
+					'unused_media'       => isset( $_POST['clone-unused-media'] ) && 'yes' === $_POST['clone-unused-media'],
+				];
+
+				groups_update_groupmeta( $new_group_id, 'clone_options', $clone_options );
+
 				$async = openlab_clone_async_process();
 				$async->data( [ 'group_id' => $new_group_id ] )->dispatch();
 			}
@@ -882,6 +892,14 @@ class Openlab_Clone_Course_Site {
 			'tec_', // Forces The Events Calendar to reinitialize.
 		];
 
+		// Remove hidden plugins from active_plugins option.
+		if ( isset( $options['active_plugins'] ) ) {
+			$options['active_plugins'] = array_diff(
+				$options['active_plugins'],
+				openlab_get_hidden_plugins()
+			);
+		}
+
 		// now write them all back
 		switch_to_blog( $this->site_id );
 		foreach ( $options as $key => $value ) {
@@ -1014,15 +1032,52 @@ class Openlab_Clone_Course_Site {
 		];
 		self::copyr( $source_dir, $upload_dir['basedir'], $skip_dirs );
 
-		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts}" );
+		$site_posts          = $wpdb->get_results( "SELECT ID, guid, post_author, post_status, post_title, post_type FROM {$wpdb->posts} ORDER BY ID ASC" );
 		$source_group_admins = $this->get_source_group_admins();
 
-		$posts_to_delete_ids = [];
-		$atts_to_delete_ids  = [];
+		$clone_options = array_merge(
+			[
+				'draft_posts'        => true,
+				'publish_posts'      => true,
+				'set_dates_to_today' => true,
+				'unused_media'       => false,
+			],
+			(array) groups_get_groupmeta( $this->group_id, 'clone_options' )
+		);
+
+		$clone_options = array_map( 'boolval', $clone_options );
+
+		$posts_to_delete_ids      = [];
+		$atts_to_delete_ids       = [];
+		$drafts_to_be_deleted_ids = [];
 		foreach ( $site_posts as $sp ) {
 			// Skip Custom CSS post.
 			if ( 'custom_css' === $sp->post_type) {
 				continue;
+			}
+
+			// All 'trash' items should be deleted.
+			if ( 'trash' === $sp->post_status ) {
+				$posts_to_delete_ids[] = $sp->ID;
+				continue;
+			}
+
+			// If the 'clone drafts' option was set to 'no', set drafts to be deleted.
+			if ( ! $clone_options['draft_posts'] ) {
+				if ( 'draft' === $sp->post_status ) {
+					$posts_to_delete_ids[]      = $sp->ID;
+					$drafts_to_be_deleted_ids[] = $sp->ID;
+					continue;
+				}
+
+				/*
+				 * Also delete children of drafts. These should already be
+				 * mapped due to the ID ASC ordering of the query.
+				 */
+				if ( in_array( $sp->post_parent, $drafts_to_be_deleted_ids ) ) {
+					$posts_to_delete_ids[] = $sp->ID;
+					continue;
+				}
 			}
 
 			if ( ! is_super_admin( $sp->post_author ) && ! in_array( $sp->post_author, $source_group_admins ) && 'nav_menu_item' !== $sp->post_type ) {
@@ -1070,6 +1125,84 @@ class Openlab_Clone_Course_Site {
 			}
 		}
 
+		// If 'publish_posts' option is set to 'no', bulk update all published posts to draft.
+		if ( ! $clone_options['publish_posts'] && ! empty( $site_posts ) ) {
+			// Get IDs of all published posts that survived the previous filters
+			$published_post_ids = $wpdb->get_col( $wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_status = %s
+				 AND ID NOT IN (" . implode( ',', array_map( 'intval', $posts_to_delete_ids ) ) . ")",
+				'publish'
+			) );
+
+			if ( ! empty( $published_post_ids ) ) {
+				// Bulk update all published posts to draft
+				$wpdb->query( $wpdb->prepare(
+					"UPDATE {$wpdb->posts} SET post_status = %s WHERE ID IN (" .
+					implode( ',', array_map( 'intval', $published_post_ids ) ) . ")",
+					'draft'
+				) );
+
+				// Clear caches
+				foreach ( $published_post_ids as $post_id ) {
+					clean_post_cache( $post_id );
+				}
+			}
+		}
+
+		// After handling 'publish_posts' option but before the deletion operations
+		if ( $clone_options['set_dates_to_today'] && ! empty( $site_posts ) ) {
+			// Get current date
+			$today      = current_time( 'mysql' );
+			$today_date = current_time( 'Y-m-d' );
+
+			// Get all published posts that aren't scheduled for deletion, ordered by post_date
+			$posts_to_update = $wpdb->get_results(
+				"SELECT ID, post_date, post_date_gmt FROM {$wpdb->posts}
+				 WHERE post_status = 'publish' OR post_status = 'private'
+				 AND ID NOT IN (" . ( ! empty( $posts_to_delete_ids ) ? implode( ',', array_map( 'intval', $posts_to_delete_ids ) ) : '0' ) . ")
+				 ORDER BY post_date ASC"
+			);
+
+			if ( ! empty( $posts_to_update ) ) {
+				// Calculate time interval (in seconds) between posts to maintain order
+				// We'll distribute them across a 12-hour period
+				$total_posts      = count( $posts_to_update );
+				$seconds_per_post = min( 60, floor( ( 12 * 60 * 60 ) / $total_posts ) );
+
+				// Start time will be 8am today (or current time if it's after 8am)
+				$start_time = max(
+					strtotime( $today_date . ' 08:00:00' ),
+					strtotime( $today )
+				);
+
+				foreach ( $posts_to_update as $index => $post ) {
+					// Calculate the new date, each post is separated by $seconds_per_post
+					$new_date = date( 'Y-m-d H:i:s', $start_time + ( $index * $seconds_per_post ) );
+
+					// Calculate the GMT date based on site's timezone offset
+					$gmt_offset   = get_option( 'gmt_offset' );
+					$new_date_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $new_date ) - ( $gmt_offset * HOUR_IN_SECONDS ) );
+
+					// Update the post dates
+					$wpdb->update(
+						$wpdb->posts,
+						array(
+							'post_date'         => $new_date,
+							'post_date_gmt'     => $new_date_gmt,
+							'post_modified'     => $new_date,
+							'post_modified_gmt' => $new_date_gmt,
+						),
+						array(
+							'ID' => $post->ID,
+						)
+					);
+
+					// Clear post cache
+					clean_post_cache( $post->ID );
+				}
+			}
+		}
+
 		// Delete all edit locks.
 		$wpdb->delete(
 			$wpdb->postmeta,
@@ -1094,10 +1227,90 @@ class Openlab_Clone_Course_Site {
 			wp_delete_post( $post_id, true );
 		}
 
+		if ( ! $clone_options['unused_media'] ) {
+			$this->delete_orphaned_attachments();
+		}
+
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
 
 		restore_current_blog();
+	}
+
+	/**
+	 * Deletes orphaned attachments.
+	 */
+	protected function delete_orphaned_attachments() {
+		global $wpdb;
+
+		// 1) Gather orphaned attachments
+		$orphaned_att_ids = $wpdb->get_col("
+			SELECT p.ID
+			  FROM {$wpdb->posts} p
+			 WHERE p.post_type = 'attachment'
+			   AND (
+				 p.post_parent = 0
+				 OR NOT EXISTS (
+				   SELECT 1
+					 FROM {$wpdb->posts} parent
+					WHERE parent.ID = p.post_parent
+					  AND parent.post_type != 'attachment'
+				 )
+			   )
+		");
+
+		if ( empty( $orphaned_att_ids ) ) {
+			return;
+		}
+
+		// 2) Exclude attachments used as header images
+		$header_image_theme_mod = get_theme_mod( 'header_image_data' );
+		if ( $header_image_theme_mod && is_object( $header_image_theme_mod ) && ! empty( $header_image_theme_mod->attachment_id ) ) {
+			$orphaned_att_ids = array_diff( $orphaned_att_ids, [ (int) $header_image_theme_mod->attachment_id ] );
+		}
+
+		// 3) For each orphaned attachment, check if it appears in post_content
+		$upload_dir = wp_upload_dir(); // e.g. [ 'baseurl' => 'https://example.com/wp-content/blogs.dir/12345/files', ... ]
+		foreach ( $orphaned_att_ids as $attachment_id ) {
+			$file = get_post_meta( $attachment_id, '_wp_attached_file', true );
+			if ( ! $file ) {
+				wp_delete_attachment( $attachment_id, true );
+				continue;
+			}
+
+			// Build the full URL: "https://example.com/wp-content/blogs.dir/12345/files/2024/03/foo.jpg"
+			$attachment_url = trailingslashit( $upload_dir['baseurl'] ) . $file;
+
+			// Look for "/files/" portion (adjust this if your path is different)
+			$pos = strpos( $attachment_url, '/files/' );
+			if ( $pos === false ) {
+				// If we can’t find /files/, we’ll just do a naive substring search for the file minus extension.
+				$needle = pathinfo( $attachment_url, PATHINFO_FILENAME );
+			} else {
+				// Extract everything from "/files/" onward
+				$needle = substr( $attachment_url, $pos );
+
+				// Strip off the extension. e.g. "/files/2024/03/foo.jpg" → "/files/2024/03/foo"
+				$dot_pos = strrpos( $needle, '.' );
+				if ( $dot_pos !== false ) {
+					$needle = substr( $needle, 0, $dot_pos );
+				}
+			}
+
+			// Now see if that substring appears in post_content of any non-attachment post
+			$post_using_it = $wpdb->get_var( $wpdb->prepare( "
+				SELECT ID
+				  FROM {$wpdb->posts}
+				 WHERE post_type NOT IN ('attachment','nav_menu_item','revision')
+				   AND post_content LIKE %s
+				 LIMIT 1
+			", '%' . $wpdb->esc_like( $needle ) . '%' ) );
+
+			// If not found, delete
+			if ( ! $post_using_it ) {
+				wp_delete_attachment( $attachment_id, true );
+			}
+		}
 	}
 
 	/**
@@ -1242,9 +1455,14 @@ class Openlab_Clone_Course_Site {
 			wp_mkdir_p( $dest );
 		}
 
-		// Loop through the folder if it's not in the skip list
+		// Permissions may prevent us from accessing a directory. Skip rather than fatal.
 		$dir = dir( $source );
-		if( ! in_array( $source, $skip, true ) ) {
+		if ( ! $dir ) {
+			return false;
+		}
+
+		// Loop through the folder if it's not in the skip list
+		if ( ! in_array( $source, $skip, true ) ) {
 			while ( false !== $entry = $dir->read() ) {
 				// Skip pointers
 				if ( '.' === $entry || '..' === $entry ) {

@@ -1,34 +1,84 @@
 /**
 Style the Add-ons listing page
 */
-#trp-add-ons-listing .trp-main-header{
+#trp-settings__wrap{
+    padding: 32px;
+}
+
+#trp-settings__wrap .trp-settings-container thead, #trp-settings__wrap .trp-settings-container tfoot{
+    display: none;
+}
+
+#trp-addons .trp-settings-container .trp-button-secondary{
+    padding: 4px 12px;
+}
+
+#trp-settings__wrap .trp-settings-container table{
+    border-color: var(--trp-settings-light-gray-border-color);
+    border-radius: var(--trp-settings-radius-medium);
+    margin-top: 14px;
+}
+
+#trp-settings__wrap .trp-settings-container td{
+    padding: 12px 10px;
+}
+
+.trp-addon-description{
+    display: inline-block;
+    margin-top: 8px;
+}
+
+#trp-settings__wrap .trp-main-header{
     margin-bottom:30px;
 }
 
-#trp-add-ons-listing .trp-add-ons-section{
-    margin:40px 0;
-}
-
-#trp-add-ons-listing .tablenav{
+#trp-settings__wrap .tablenav{
     display:none;
 }
 
-#trp-add-ons-listing .column-add_on{
+#trp-settings__wrap .column-add_on{
     width:80%;
 }
 
-#trp-add-ons-listing .column-icon{
+#trp-settings__wrap .column-icon{
     width: 64px;
 }
 
-#trp-add-ons-listing .column-actions{
-    width:225px;
+#trp-settings__wrap .column-actions{
+    width:235px;
     vertical-align: middle !important;
 }
-#trp-add-ons-listing .trp-add-ons-search-box{
+#trp-settings__wrap .trp-add-ons-search-box{
     margin-bottom:40px;
 }
 
-#trp-add-ons-listing #trp-add-ons-search-input{
+#trp-settings__wrap #trp-add-ons-search-input{
     width:350px;
 }
+
+.trp-docs-btn{
+    display: inline-block;
+    margin-top: 8px;
+}
+
+.trp-bulk-actions__wrapper{
+    display: flex;
+    gap: 8px;
+}
+.trp-bulk-actions__wrapper a{
+    text-decoration: none;
+    color: var(--trp-settings-accent-color);
+    font-size: var(--trp-settings-primary-font-size);
+}
+
+.trp-bulk-actions__wrapper span{
+    color: var(--trp-settings-accent-color);
+    font-size: var(--trp-settings-primary-font-size);
+}
+
+@media screen and (max-width: 782px) {
+    #trp-settings__wrap .trp-settings-container td{
+        padding: 3px 8px 3px 35%;
+    }
+}
+

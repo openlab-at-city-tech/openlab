@@ -64,8 +64,8 @@ if ( ! empty( $image ) ) {
 			<?php echo $effect_code; ?>>
 			<img class="ngg-singlepic"
 				src="<?php echo esc_attr( $thumbnail_url ); ?>"
-				alt="<?php echo esc_attr( $image->alttext ); ?>"
-				title="<?php echo esc_attr( $image->alttext ); ?>"
+				alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+				title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 				<?php
 				if ( $width ) {
 					?>

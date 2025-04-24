@@ -78,7 +78,7 @@ function wpa_add_stats( $stats, $title, $type = 'view', $post_ID = 0 ) {
 	if ( $admin_only && ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
-	$stats  = json_encode( $stats );
+	$stats  = wp_json_encode( $stats );
 	$title  = str_replace( home_url(), '', $title );
 	$exists = wpa_get_post_by_title( $title );
 	if ( $exists ) {
@@ -104,7 +104,7 @@ function wpa_add_stats( $stats, $title, $type = 'view', $post_ID = 0 ) {
 				// If decode fails for any reason, move on, don't try to unset the timestamp.
 				$test_old->timestamp = '';
 			}
-			if ( json_encode( $test_stats ) !== json_encode( $test_old ) ) {
+			if ( wp_json_encode( $test_stats ) !== wp_json_encode( $test_old ) ) {
 				add_post_meta( $exists, '_wpa_old_event', array( $test_stats, $test_old ) );
 				// stats have changed; record the change.
 				add_post_meta( $exists, '_wpa_event', $stats );
@@ -133,7 +133,7 @@ function wpa_add_stats( $stats, $title, $type = 'view', $post_ID = 0 ) {
 		$terms = array( $type );
 		require_once ABSPATH . '/wp-admin/includes/dashboard.php';
 		$browser = wp_check_browser_version();
-		add_post_meta( $stat, '_wpa_browser', json_encode( $browser ) );
+		add_post_meta( $stat, '_wpa_browser', wp_json_encode( $browser ) );
 		$terms[] = $browser['name'];
 		$terms[] = $browser['platform'];
 		wp_set_object_terms( $stat, $terms, 'wpa-stats-type' );
@@ -543,7 +543,11 @@ function wpa_get_browser_stat( $post_ID ) {
 	$browser = get_post_meta( $post_ID, '_wpa_browser', true );
 	if ( $browser ) {
 		$browser = json_decode( $browser );
-		$browser = '<span class="wpa-browser"><img src="' . esc_url( $browser->img_src_ssl ) . '" alt="" width="20" height="20"> ' . esc_html( $browser->name . ' ' . $browser->version . '/' . $browser->platform ) . '</span>';
+		if ( is_object( $browser ) && property_exists( $browser, 'img_src_ssl' ) ) {
+			$browser = '<span class="wpa-browser"><img src="' . esc_url( $browser->img_src_ssl ) . '" alt="" width="20" height="20"> ' . esc_html( $browser->name . ' ' . $browser->version . '/' . $browser->platform ) . '</span>';
+		} else {
+			$browser = '';
+		}
 	} else {
 		$browser = __( 'Unknown browser', 'wp-accessibility' );
 	}

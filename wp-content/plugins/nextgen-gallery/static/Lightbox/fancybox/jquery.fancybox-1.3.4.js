@@ -95,7 +95,41 @@
 				title = selectedOpts.orig.attr('alt');
 			}
 
-			title = title.replace(/<[^>]*>/g, '');
+			// Define the allowed tags
+			const allowedTags = {
+				'A': ['href', 'class', 'title'],
+				'BR': [],
+				'EM': [],
+				'I': [],
+				'STRONG': [],
+				'B': [],
+				'U': [],
+				'P': ['class'],
+				'DIV': ['class', 'id'],
+				'SPAN': ['class', 'id']
+			};
+
+			function sanitizeTitle(title) {
+				const parser = new DOMParser();
+				const doc = parser.parseFromString(title, 'text/html');
+				const elements = doc.body.querySelectorAll('*');
+
+				elements.forEach(el => {
+					if (!allowedTags[el.tagName]) {
+						el.remove();
+					} else {
+						[...el.attributes].forEach(attr => {
+							if (!allowedTags[el.tagName].includes(attr.name)) {
+								el.removeAttribute(attr.name);
+							}
+						});
+					}
+				});
+
+				return doc.body.innerHTML;
+			}
+
+			title = sanitizeTitle(title);
 
 			href = selectedOpts.href || (obj.nodeName ? $(obj).attr('href') : obj.href) || null;
 

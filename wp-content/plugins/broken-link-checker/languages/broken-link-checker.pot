@@ -2,14 +2,14 @@
 # This file is distributed under the GPLv2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Broken Link Checker 2.4.1\n"
+"Project-Id-Version: Broken Link Checker 2.4.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/build\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-09-30T12:41:07+00:00\n"
+"POT-Creation-Date: 2024-12-02T13:52:14+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 
@@ -2252,11 +2252,11 @@ msgid "Unknown"
 msgstr ""
 
 #: legacy/includes/links.php:1029
-#: legacy/modules/checkers/http.php:313
-#: legacy/modules/checkers/http.php:317
+#: legacy/modules/checkers/http.php:330
+#: legacy/modules/checkers/http.php:334
 #: legacy/modules/extras/mediafire.php:115
-#: legacy/modules/extras/youtube.php:135
-#: legacy/modules/extras/youtube.php:230
+#: legacy/modules/extras/youtube.php:143
+#: legacy/modules/extras/youtube.php:238
 msgid "Unknown Error"
 msgstr ""
 
@@ -2272,8 +2272,8 @@ msgstr ""
 #: legacy/modules/extras/rapidshare.php:145
 #: legacy/modules/extras/rapidshare.php:151
 #: legacy/modules/extras/rapidshare.php:178
-#: legacy/modules/extras/youtube.php:141
-#: legacy/modules/extras/youtube.php:217
+#: legacy/modules/extras/youtube.php:149
+#: legacy/modules/extras/youtube.php:225
 msgctxt "link status"
 msgid "OK"
 msgstr ""
@@ -2346,33 +2346,37 @@ msgid_plural "%d months ago"
 msgstr[0] ""
 msgstr[1] ""
 
-#: legacy/modules/checkers/http.php:290
+#: legacy/modules/checkers/http.php:172
+msgid "Invalid URL"
+msgstr ""
+
+#: legacy/modules/checkers/http.php:307
 msgid "Server Not Found"
 msgstr ""
 
-#: legacy/modules/checkers/http.php:306
+#: legacy/modules/checkers/http.php:323
 msgid "Connection Failed"
 msgstr ""
 
-#: legacy/modules/checkers/http.php:360
-#: legacy/modules/checkers/http.php:449
+#: legacy/modules/checkers/http.php:377
+#: legacy/modules/checkers/http.php:466
 msgid "HTTP code : %d"
 msgstr ""
 
-#: legacy/modules/checkers/http.php:362
-#: legacy/modules/checkers/http.php:451
+#: legacy/modules/checkers/http.php:379
+#: legacy/modules/checkers/http.php:468
 msgid "(No response)"
 msgstr ""
 
-#: legacy/modules/checkers/http.php:380
+#: legacy/modules/checkers/http.php:397
 msgid "Most likely the connection timed out or the domain doesn't exist."
 msgstr ""
 
-#: legacy/modules/checkers/http.php:460
+#: legacy/modules/checkers/http.php:477
 msgid "Request timed out."
 msgstr ""
 
-#: legacy/modules/checkers/http.php:467
+#: legacy/modules/checkers/http.php:484
 msgid "Using WP HTTP"
 msgstr ""
 
@@ -2560,46 +2564,46 @@ msgstr ""
 msgid "Embedded YouTube playlist"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:140
+#: legacy/modules/extras/youtube.php:148
 msgid "Video OK"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:151
-#: legacy/modules/extras/youtube.php:154
+#: legacy/modules/extras/youtube.php:159
+#: legacy/modules/extras/youtube.php:162
 msgid "Video Not Found"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:173
-#: legacy/modules/extras/youtube.php:176
+#: legacy/modules/extras/youtube.php:181
+#: legacy/modules/extras/youtube.php:184
 msgid "Playlist Not Found"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:183
+#: legacy/modules/extras/youtube.php:191
 msgid "Playlist Restricted"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:190
+#: legacy/modules/extras/youtube.php:198
 msgid "This playlist has no entries or all entries have been deleted."
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:191
+#: legacy/modules/extras/youtube.php:199
 msgctxt "link status"
 msgid "Empty Playlist"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:201
+#: legacy/modules/extras/youtube.php:209
 msgid "Video status : %1$s%2$s"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:207
+#: legacy/modules/extras/youtube.php:215
 msgid "Video Restricted"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:216
+#: legacy/modules/extras/youtube.php:224
 msgid "Playlist OK"
 msgstr ""
 
-#: legacy/modules/extras/youtube.php:261
+#: legacy/modules/extras/youtube.php:269
 msgid "Unknown YouTube API response received."
 msgstr ""
 

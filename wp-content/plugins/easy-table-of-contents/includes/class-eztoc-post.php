@@ -1286,6 +1286,10 @@ class ezTOC_Post {
 			
 			$html = $this->createTOCParent($prefix, $toc_more);
 			$visiblityClass = '';
+			$visibilty_by_device = ezTOC_Option::get( 'visibility_hide_by_device' , ['mobile', 'desktop']);
+			if(get_post_meta( $this->post->ID, '_ez-toc-visibility_hide_by_device', true )){
+				$visibilty_by_device =  get_post_meta( $this->post->ID, '_ez-toc-visibility_hide_by_device', true );
+			}
 			if( ezTOC_Option::get( 'visibility_hide_by_default' ) && 'js' == ezTOC_Option::get( 'toc_loading' ) &&  ezTOC_Option::get( 'visibility' ))
 			{
 				$visiblityClass = "eztoc-toggle-hide-by-default";
@@ -1301,6 +1305,15 @@ class ezTOC_Post {
 			}elseif(is_array($options) && key_exists( 'visibility_hide_by_default', $options ) && $options['visibility_hide_by_default'] == false){
 				$visiblityClass = "";
 			}
+
+			if("eztoc-toggle-hide-by-default" == $visiblityClass){
+				if( function_exists('wp_is_mobile') &&  wp_is_mobile() ){
+					$visiblityClass = (in_array('mobile', $visibilty_by_device)) ? "eztoc-toggle-hide-by-default" : "";
+				}else{
+					$visiblityClass = (in_array('desktop', $visibilty_by_device)) ? "eztoc-toggle-hide-by-default" : "";
+				}
+			}
+			
 			$html  = apply_filters('ez_toc_add_custom_links',$html);
 			$html  = "<ul class='{$prefix}-list {$prefix}-list-level-1 $visiblityClass' >" . $html . "</ul>";
 		}
@@ -1340,11 +1353,11 @@ class ezTOC_Post {
 			if ( ezTOC_Option::get( 'show_heading_text' ) ) {
 					$htmlSticky .= '<div class="ez-toc-sticky-title-container">' . PHP_EOL;
 					$htmlSticky .= $this->get_toc_title_tag(  'sticky' );
-					$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="×"><span aria-hidden="true">×</span></a>' . PHP_EOL;
+					$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('×','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
 					$htmlSticky .= '</div>' . PHP_EOL;
 			} else {
 				$htmlSticky .= '<div class="ez-toc-sticky-title-container">' . PHP_EOL;
-				$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="Close"><span aria-hidden="true">×</span></a>' . PHP_EOL;
+				$htmlSticky .= '<a class="ez-toc-close-icon" href="#" onclick="ezTOC_hideBar(event)" aria-label="'.esc_attr__('Close','easy-table-of-contents').'"><span aria-hidden="true">×</span></a>' . PHP_EOL;
 				$htmlSticky .= '</div>' . PHP_EOL;
 			}
 			$htmlSticky  .= '<div id="ez-toc-sticky-container" class="ez-toc-sticky-container ' . implode( ' ', $classSticky ) . '">' . PHP_EOL;
@@ -1373,6 +1386,7 @@ class ezTOC_Post {
 		$class = array( 'ez-toc-v' . str_replace( '.', '_', ezTOC::VERSION ) );
 		$html  = '';
 
+
 		if ( $this->hasTOCItems() ) {
 			$wrapping_class_add = "";
 			if(ezTOC_Option::get( 'toc_wrapping' )){
@@ -1384,6 +1398,9 @@ class ezTOC_Post {
 			if ( !$toc_align || empty( $toc_align ) || $toc_align == 'none' ) {
 				$toc_align = ezTOC_Option::get( 'wrapping' );
 			}
+			if( isset( $options['wrapping'] ) ){
+				$toc_align = $options['wrapping'];
+			}	
 
 			// wrapping css classes
 			switch ( $toc_align ) {
@@ -1401,6 +1418,12 @@ class ezTOC_Post {
 				case 'none':					
 				default:
 					// do nothing
+			}
+
+			if( isset($options['class']) && !empty($options['class']) )
+			{
+				$class_from_attr = explode(' ', $options['class']);
+				$class = array_merge($class, $class_from_attr);
 			}
 
 	        $show_counter = (isset($options['no_counter']) && $options['no_counter'] == true ) ? false : true;
@@ -1542,7 +1565,7 @@ class ezTOC_Post {
 				$icon = apply_filters('ez_toc_modify_icon',$icon);
 				$label_below_html = apply_filters('ez_toc_label_below_html',$label_below_html, $read_time);
 		}							   
-		$html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" aria-label="Toggle Table of Content"><span class="ez-toc-js-icon-con">'.$icon.'</span></a>';
+		$html .= '<a href="#" class="ez-toc-pull-right ez-toc-btn ez-toc-btn-xs ez-toc-btn-default ez-toc-toggle" aria-label="'.esc_attr__('Toggle Table of Content','easy-table-of-contents').'"><span class="ez-toc-js-icon-con">'.$icon.'</span></a>';
 		 
 	}
 			$html .= '</span>';
@@ -1610,9 +1633,9 @@ class ezTOC_Post {
 				$html .= '<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '" class="ez-toc-cssicon-toggle-label">' .$header_label. $toc_icon . '</label>'.$label_below_html.'<input type="checkbox" ' . $inputCheckboxExludeStyle . ' id="ez-toc-cssicon-toggle-item-' . $cssIconID . '" '.$toggle_view.' />';
 			}else{
 				if(function_exists('ez_toc_pro_inline_css_func')){
-					$html .= '<div class="ez-toc-cssicon-toggle-label">'.$header_label.'<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '">' . $toc_icon . '</label></div>'.$label_below_html.'<input type="checkbox" ' . $inputCheckboxExludeStyle . ' id="ez-toc-cssicon-toggle-item-' . $cssIconID . '" '.$toggle_view.' aria-label="Toggle" />';
+					$html .= '<div class="ez-toc-cssicon-toggle-label">'.$header_label.'<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '">' . $toc_icon . '</label></div>'.$label_below_html.'<input type="checkbox" ' . $inputCheckboxExludeStyle . ' id="ez-toc-cssicon-toggle-item-' . $cssIconID . '" '.$toggle_view.' aria-label="'.esc_attr__('Toggle','easy-table-of-contents').'" />';
 				}else{
-					$html .= $header_label.'<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '" class="ez-toc-cssicon-toggle-label">' . $toc_icon . '</label>'.$label_below_html.'<input type="checkbox" ' . $inputCheckboxExludeStyle . ' id="ez-toc-cssicon-toggle-item-' . $cssIconID . '" '.$toggle_view.' aria-label="Toggle" />';
+					$html .= $header_label.'<label for="ez-toc-cssicon-toggle-item-' . $cssIconID . '" class="ez-toc-cssicon-toggle-label">' . $toc_icon . '</label>'.$label_below_html.'<input type="checkbox" ' . $inputCheckboxExludeStyle . ' id="ez-toc-cssicon-toggle-item-' . $cssIconID . '" '.$toggle_view.' aria-label="'.esc_attr__('Toggle','easy-table-of-contents').'" />';
 				}
 				
 				
@@ -1823,6 +1846,13 @@ class ezTOC_Post {
 			$anch_name = 'href="#" data-href';
 		}
 
+		if(ezTOC_Option::get( 'disable_toc_links' ,false ) ){
+			return sprintf(
+				'<a class=" ez-toc-heading-' . $count . '" role="button" title="%1$s">%2$s</a>',
+				esc_attr( wp_strip_all_tags( $title ) ),
+				$title
+			);
+		}
 		return sprintf(
 			'<a class="ez-toc-link ez-toc-heading-' . $count . '" '.$anch_name.'="%1$s" title="%2$s">%3$s</a>',
 			esc_url( $this->createTOCItemURL( $id, $page ) ),
@@ -1855,6 +1885,13 @@ class ezTOC_Post {
 
 		if ( $page === $current_page && $current_post ) {
 
+			/** 
+			 * Check if self reference link option is enabled if yes then append full url in href
+			 * @since 	2.0.73
+			*/
+			if ( ezTOC_Option::get( 'add_self_reference_link' ) ) { 
+				return trailingslashit( $anch_url ) . '#' . $id;
+			}
 			return (ezTOC_Option::get( 'add_request_uri' ) ? $_SERVER['REQUEST_URI'] : '') . '#' . $id;
 
 		} elseif ( 1 === $page ) {
@@ -1932,6 +1969,12 @@ class ezTOC_Post {
 			$toc_title = str_replace( '%PAGE_NAME%', get_the_title(), $toc_title );
 		}
 					
+		// Allow the TOC Title to be overridden on a per-post basis if set.
+		$post_heading_label = get_post_meta( get_the_ID(), '_ez-toc-header-label', true );
+		if ( !empty( $post_heading_label ) ) {
+			$toc_title = $post_heading_label;
+		}
+
 		if(isset($options['header_label'])){
 			$toc_title = $options['header_label'];
 		}

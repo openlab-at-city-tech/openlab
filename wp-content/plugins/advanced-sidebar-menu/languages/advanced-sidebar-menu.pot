@@ -5,7 +5,7 @@ msgstr ""
 "sidebar-menu\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2023-10-05 02:22-0500\n"
+"POT-Creation-Date: 2025-03-19 10:41-0400\n"
 "PO-Revision-Date: 2019-03-05 12:29-0500\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -35,7 +35,7 @@ msgstr ""
 
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:139
+#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:162
 #, javascript-format, php-format
 msgid "Display highest level parent %s"
 msgstr ""
@@ -43,8 +43,8 @@ msgstr ""
 #. translators: Selected taxonomy single label
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:149
-#: src/Widget/Page.php:150
+#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:179
+#: src/Widget/Page.php:172
 #, javascript-format, php-format
 msgid "Display menu when there is only the parent %s"
 msgstr ""
@@ -52,8 +52,8 @@ msgstr ""
 #. translators: Selected taxonomy plural label
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:158
-#: src/Widget/Page.php:160
+#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:188
+#: src/Widget/Page.php:182
 #, javascript-format, php-format
 msgid "Always display child %s"
 msgstr ""
@@ -62,133 +62,132 @@ msgstr ""
 msgid "Display"
 msgstr ""
 
-#. translators: {select html input}, {post type plural label}
+#. translators: {select HTML input}, {post type plural label}
 #. translators: {select html input}, {Selected post type plural label}
-#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:187
-#: src/Widget/Page.php:195
+#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:217
+#: src/Widget/Page.php:217
 #, javascript-format, php-format
 msgid "Display %1$s levels of child %2$s"
 msgstr ""
 
-#: js/src/gutenberg/blocks/Display.tsx:99 src/Widget/Category.php:172
-#: src/Widget/Page.php:181
+#: js/src/gutenberg/blocks/Display.tsx:100 src/Widget/Category.php:202
+#: src/Widget/Page.php:203
 msgid "- All -"
 msgstr ""
 
 #. translators: 1: Opening anchor tag, 2: Closing anchor tag
-#: js/src/gutenberg/blocks/ExcludeField.tsx:25
+#: js/src/gutenberg/blocks/ExcludeField.tsx:28
 #, javascript-format
 msgid "For more robust and intuitive exclusions use the %1$sPRO version%2$s."
 msgstr ""
 
 #. translators: Selected post type plural label
-#. translators: Selected taxonomy plural label
-#. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/ExcludeField.tsx:31 src/Widget/Category.php:273
-#: src/Widget/Page.php:255
-#, javascript-format, php-format
-msgid "%s to exclude (ids, comma separated)"
+#: js/src/gutenberg/blocks/ExcludeField.tsx:35
+#, javascript-format
+msgid "%s to exclude"
 msgstr ""
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:28 src/Notice.php:175
+#: js/src/gutenberg/blocks/ExcludeField.tsx:37
+msgid "ids, comma separated"
+msgstr ""
+
+#: js/src/gutenberg/blocks/InfoPanel.tsx:27 src/Notice.php:105
+#: src/Notice.php:184
 msgid "Go PRO"
 msgstr ""
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:34 src/Notice.php:97
+#: js/src/gutenberg/blocks/InfoPanel.tsx:33
 msgid "Advanced Sidebar Menu PRO"
 msgstr ""
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:43 src/Notice.php:111
+#: js/src/gutenberg/blocks/InfoPanel.tsx:42 src/Notice.php:118
 msgid "And so much more…"
 msgstr ""
 
-#: js/src/gutenberg/blocks/InfoPanel.tsx:53 src/Notice.php:119
+#: js/src/gutenberg/blocks/InfoPanel.tsx:52 src/Notice.php:126
 msgid "Upgrade"
 msgstr ""
 
-#: js/src/gutenberg/blocks/Preview.tsx:66
-#: js/src/gutenberg/blocks/pages/block.tsx:65 src/Widget/Page.php:55
+#: js/src/gutenberg/blocks/Preview.tsx:78
+#: js/src/gutenberg/blocks/pages/block.tsx:65 src/Widget/Page.php:79
 msgid "Advanced Sidebar - Pages"
 msgstr ""
 
-#: js/src/gutenberg/blocks/Preview.tsx:67
-#: js/src/gutenberg/blocks/Preview.tsx:74
-#: js/src/gutenberg/blocks/Preview.tsx:81
+#: js/src/gutenberg/blocks/Preview.tsx:79
+#: js/src/gutenberg/blocks/Preview.tsx:86
+#: js/src/gutenberg/blocks/Preview.tsx:93
 msgid "No preview available"
 msgstr ""
 
-#: js/src/gutenberg/blocks/Preview.tsx:73
-#: js/src/gutenberg/blocks/categories/block.tsx:65 src/Widget/Category.php:59
+#: js/src/gutenberg/blocks/Preview.tsx:85
+#: js/src/gutenberg/blocks/categories/block.tsx:65 src/Widget/Category.php:82
 msgid "Advanced Sidebar - Categories"
 msgstr ""
 
-#: js/src/gutenberg/blocks/Preview.tsx:80
+#: js/src/gutenberg/blocks/Preview.tsx:92
 msgid "Advanced Sidebar - Navigation"
 msgstr ""
 
-#: js/src/gutenberg/blocks/categories/Edit.tsx:57
-#: js/src/gutenberg/blocks/pages/Edit.tsx:62 src/Widget/Category.php:305
-#: src/Widget/Page.php:116 src/Widget/Page.php:286
+#: js/src/gutenberg/blocks/categories/Edit.tsx:61
+#: js/src/gutenberg/blocks/pages/Edit.tsx:65 src/Core.php:108
+msgid "Documentation"
+msgstr ""
+
+#: js/src/gutenberg/blocks/categories/Edit.tsx:69
+#: js/src/gutenberg/blocks/pages/Edit.tsx:73 src/Widget/Category.php:341
+#: src/Widget/Page.php:136 src/Widget/Page.php:312
 msgid "Title"
 msgstr ""
 
 #. translators: Selected taxonomy plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:76 src/Widget/Category.php:217
+#: js/src/gutenberg/blocks/categories/Edit.tsx:88 src/Widget/Category.php:249
 #, javascript-format, php-format
 msgid "Display %s on single posts"
 msgstr ""
 
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:91 src/Widget/Category.php:227
+#: js/src/gutenberg/blocks/categories/Edit.tsx:103
+#: src/Widget/Category.php:259
 #, javascript-format, php-format
 msgid "Display each single post's %s"
 msgstr ""
 
-#: js/src/gutenberg/blocks/categories/Edit.tsx:119
-#: js/src/gutenberg/blocks/pages/Edit.tsx:104
-msgid "block documentation"
-msgstr ""
-
-#: js/src/gutenberg/blocks/pages/Edit.tsx:80 src/Widget/Page.php:221
+#: js/src/gutenberg/blocks/pages/Edit.tsx:90 src/Widget/Page.php:245
 msgid "Order by"
 msgstr ""
 
-#: src/Blocks/Categories.php:25 src/Blocks/Pages.php:25
-#: src/Widget/Category.php:52
+#: src/Blocks/Categories.php:39 src/Blocks/Pages.php:39
+#: src/Widget/Category.php:74
 msgid ""
 "Creates a menu of all the categories using the parent/child relationship"
 msgstr ""
 
-#: src/Blocks/Categories.php:65 src/Blocks/Pages.php:58
+#: src/Blocks/Categories.php:80 src/Blocks/Pages.php:73
 msgid "menu"
 msgstr ""
 
-#: src/Blocks/Categories.php:66 src/Blocks/Pages.php:59
+#: src/Blocks/Categories.php:81 src/Blocks/Pages.php:74
 msgid "sidebar"
 msgstr ""
 
-#: src/Blocks/Categories.php:67
+#: src/Blocks/Categories.php:82
 msgid "taxonomy"
 msgstr ""
 
-#: src/Blocks/Categories.php:68
+#: src/Blocks/Categories.php:83
 msgid "term"
 msgstr ""
 
-#: src/Blocks/Pages.php:60
+#: src/Blocks/Pages.php:75
 msgid "pages"
 msgstr ""
 
-#: src/Core.php:64
+#: src/Core.php:68
 msgid "widget documentation"
 msgstr ""
 
-#: src/Core.php:104
-msgid "Documentation"
-msgstr ""
-
 #. translators: Link to PRO plugin {%1$s}[<a href="https://onpointplugins.com/product/advanced-sidebar-menu-pro/">]{%2$s}[</a>]
-#: src/Notice.php:69
+#: src/Notice.php:72
 #, php-format
 msgctxt "{<a>}{</a>}"
 msgid ""
@@ -196,59 +195,82 @@ msgid ""
 "%3$s+. Please update or deactivate the PRO version."
 msgstr ""
 
-#: src/Notice.php:127
+#: src/Notice.php:134
 msgid "Preview"
 msgstr ""
 
-#: src/Notice.php:160
+#: src/Notice.php:169
 msgid "PRO version widget options"
 msgstr ""
 
-#: src/Notice.php:189
+#: src/Notice.php:198
 msgid ""
 "Styling options including borders, bullets, colors, backgrounds, font size "
 "and weight."
 msgstr ""
 
-#: src/Notice.php:190
+#: src/Notice.php:199
 msgid "Accordion menus."
 msgstr ""
 
-#: src/Notice.php:191
+#: src/Notice.php:200
 msgid "Support for custom navigation menus from Appearance -> Menus."
 msgstr ""
 
-#: src/Notice.php:192
+#: src/Notice.php:201
 msgid "Select and display custom post types and taxonomies."
 msgstr ""
 
-#: src/Notice.php:193
+#: src/Notice.php:202
 msgid "Priority support with access to members only support area."
 msgstr ""
 
-#: src/Widget/Category.php:118
+#: src/Utils.php:103
+msgid "Page"
+msgstr ""
+
+#: src/Utils.php:103
+msgid "Pages"
+msgstr ""
+
+#: src/Widget/Category.php:131
+msgid "Category"
+msgstr ""
+
+#: src/Widget/Category.php:131
+msgid "Categories"
+msgstr ""
+
+#: src/Widget/Category.php:146
 msgid "In a new widget"
 msgstr ""
 
-#: src/Widget/Category.php:119
+#: src/Widget/Category.php:147
 msgid "In another list in the same widget"
 msgstr ""
 
 #. translators: Selected taxonomy single label
-#: src/Widget/Category.php:140
+#: src/Widget/Category.php:170
 #, php-format
 msgid "Display the highest level parent %s"
 msgstr ""
 
-#: src/Widget/Page.php:48
+#. translators: Selected taxonomy plural label
+#. translators: Selected post type plural label
+#: src/Widget/Category.php:307 src/Widget/Page.php:281
+#, php-format
+msgid "%s to exclude (ids, comma separated)"
+msgstr ""
+
+#: src/Widget/Page.php:71
 msgid "Creates a menu of all the pages using the parent/child relationship"
 msgstr ""
 
-#: src/Widget/Page.php:115
+#: src/Widget/Page.php:135
 msgid "Page Order"
 msgstr ""
 
-#: src/Widget/Page.php:117
+#: src/Widget/Page.php:137
 msgid "Published Date"
 msgstr ""
 

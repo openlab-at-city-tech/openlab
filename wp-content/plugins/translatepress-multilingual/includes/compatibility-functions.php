@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /** Compatibility functions with WP core and various themes and plugins*/
 
 /**
@@ -383,39 +387,6 @@ add_filter( 'woocommerce_product_variation_title', 'trp_woo_wrap_variation', 8, 
 function trp_woo_wrap_variation($name, $product, $title_base, $title_suffix){
     $separator  = '<span> - </span>';
     return $title_suffix ? $title_base . $separator . $title_suffix : $title_base;
-}
-
-
-/**
- * Compatibility with Query Monitor
- *
- * Remove their HTML and reappend it after translate_page function finishes
- */
-add_filter('trp_before_translate_content', 'trp_qm_strip_query_monitor_html', 10, 1 );
-function trp_qm_strip_query_monitor_html( $output ) {
-
-    $query_monitor = apply_filters( 'trp_query_monitor_begining_string', '<!-- Begin Query Monitor output -->' );
-    $pos = strpos( $output, $query_monitor );
-
-    if ( $pos !== false ){
-        global $trp_query_monitor_string;
-        $trp_query_monitor_string = substr( $output, $pos );
-        $output = substr( $output, 0, $pos );
-
-    }
-
-    return $output;
-}
-
-add_filter( 'trp_translated_html', 'trp_qm_reappend_query_monitor_html', 10, 1 );
-function trp_qm_reappend_query_monitor_html( $final_html ){
-    global $trp_query_monitor_string;
-
-    if ( isset( $trp_query_monitor_string ) && !empty( $trp_query_monitor_string ) ){
-        $final_html .= $trp_query_monitor_string;
-    }
-
-    return $final_html;
 }
 
 // trpgettext tags don't get escaped because they add <small> tags through a regex.
@@ -2049,12 +2020,23 @@ function trp_delete_slug_translation_from_duplicated_pages() {
  */
 if ( class_exists( 'QueryMonitor' ) ) {
     add_filter( 'trp_skip_gettext_processing', 'trp_exclude_query_monitor_strings', 10, 4 );
+    add_filter( 'trp_no_translate_selectors', 'trp_exclude_query_monitor_selector' );
+    add_filter( 'trp_skip_selectors_from_dynamic_translation', 'trp_exclude_query_monitor_selector' );
 }
 function trp_exclude_query_monitor_strings( $bool, $translation, $text, $domain ){
     if ( trim( $domain ) === 'query-monitor' ) return true;
 
     return $bool;
 }
+
+/**
+ * Exclude Query Monitor selector from being translated
+ */
+function trp_exclude_query_monitor_selector( $skip_selectors ) {
+    $skip_selectors[] = '#query-monitor-main';
+    return $skip_selectors;
+}
+
 
 /**
  * Compatibility with Complianz plugin blocking trp_data script
@@ -2256,7 +2238,7 @@ function trp_get_url_for_language_backwards_compatibility( $new_url, $url, $lang
 
     $upgrade = new TRP_Upgrade( $settings );
 
-    if ( $upgrade->is_pro_minimum_version_met() && ( !isset( $settings['trp_advanced_settings']['load_legacy_seo_pack'] ) || $settings['trp_advanced_settings']['load_legacy_seo_pack'] === 'no' ) ) return $new_url; // Abort -- New system can be used, process URL via get_slug_translated_url_for_language
+    if ( $upgrade->is_seo_pack_minimum_version_met() && ( !isset( $settings['trp_advanced_settings']['load_legacy_seo_pack'] ) || $settings['trp_advanced_settings']['load_legacy_seo_pack'] === 'no' ) ) return $new_url; // Abort -- New system can be used, process URL via get_slug_translated_url_for_language
 
     $url_converter = $trp->get_component( 'url_converter' );
 
@@ -2442,3 +2424,21 @@ function trp_get_url_for_language_backwards_compatibility( $new_url, $url, $lang
     return $new_url;
 }
 add_filter('trp_get_url_for_language', 'trp_get_url_for_language_backwards_compatibility', 10, 3 );
+
+/**
+ * Redirects to the translated version of the `redirect_url` based on the current language.
+ *
+ * @param string $redirect_url Original URL.
+ */
+function trp_compatibility_profile_builder_redirect( $redirect_url ) {
+    $trp_instance = TRP_Translate_Press::get_trp_instance();
+
+    global $TRP_LANGUAGE;
+
+    $url_converter  = $trp_instance->get_component( 'url_converter' );
+
+    return $url_converter->get_url_for_language( $TRP_LANGUAGE, $redirect_url, '' );
+}
+
+add_filter( 'wppb_register_redirect', 'trp_compatibility_profile_builder_redirect' );
+add_filter( 'wppb_edit_profile_redirect', 'trp_compatibility_profile_builder_redirect' );

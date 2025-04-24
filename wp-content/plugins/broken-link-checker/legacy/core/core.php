@@ -4461,7 +4461,8 @@ if ( ! class_exists( 'wsBrokenLinkChecker' ) ) {
 		 * @return void
 		 */
 		function load_language() {
-			$this->is_textdomain_loaded = load_plugin_textdomain( 'broken-link-checker', false, basename( dirname( $this->loader ) ) . '/languages' );
+			//$this->is_textdomain_loaded = load_plugin_textdomain( 'broken-link-checker', false, basename( dirname( $this->loader ) ) . '/languages' );
+			$this->is_textdomain_loaded = true;
 		}
 
 		protected static function get_default_log_directory() {

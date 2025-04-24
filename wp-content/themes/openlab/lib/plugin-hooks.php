@@ -4,23 +4,26 @@
  * Complete archive of plugin hooking for openlab theme, wds-citytech plugin, and mu-plugins
  * Includes actual hooks, related includes, and references for folder/file overwrites and hooks that need to stay elsewhere
  */
+
+$stylesheet_path = defined( 'STYLESHEETPATH' ) ? STYLESHEETPATH : get_template_directory();
+
 /**
  * Invite Anyone
  * See also: openlab/buddypress/members/single/invite-anyone.php for template overrides
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/invite-funcs.php';
+require_once $stylesheet_path . '/lib/plugin-mods/invite-funcs.php';
 
 /**
  * Event Organiser
  * BuddyPress Event Organiser
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/calendar-control.php';
+require_once $stylesheet_path . '/lib/plugin-mods/calendar-control.php';
 
 /**
  * Contact Form 7
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/contact-form-seven.php';
-require_once STYLESHEETPATH . '/lib/plugin-mods/contact-form-seven-module.php';
+require_once $stylesheet_path . '/lib/plugin-mods/contact-form-seven.php';
+require_once $stylesheet_path . '/lib/plugin-mods/contact-form-seven-module.php';
 
 /**
  * Plugin: Invite Anyone
@@ -34,19 +37,19 @@ add_filter( 'invite_anyone_send_friend_requests_on_acceptance', '__return_false'
  * Buddypress Group Documents
  * See also: mu-plugins/openlab-group-documents-privacy.php
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/files-funcs.php';
+require_once $stylesheet_path . '/lib/plugin-mods/files-funcs.php';
 
 /**
  * Plugin: BuddyPress Docs
  * See also: openlab/buddypress/groups/single/docs for template overrides
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/docs-funcs.php';
+require_once $stylesheet_path . '/lib/plugin-mods/docs-funcs.php';
 
 /**
  * BuddyPress Group Email Subscription
  * See also: openlab/buddypress/groups/single/notifications.php for template overrides
  */
-require_once STYLESHEETPATH . '/lib/plugin-mods/email-funcs.php';
+require_once $stylesheet_path . '/lib/plugin-mods/email-funcs.php';
 
 /**
  * Plugin: BuddyPress Group Email Subscription

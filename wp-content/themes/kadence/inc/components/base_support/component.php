@@ -192,7 +192,15 @@ class Component implements Component_Interface, Templating_Component_Interface {
 		} else {
 			return;
 		}
-		$starter_link = class_exists( '\\KadenceWP\\KadenceBlocks\\StellarWP\\Uplink\\Register' ) ? admin_url( 'admin.php?page=kadence-starter-templates' ) : admin_url( 'themes.php?page=kadence-starter-templates' );
+		$config = get_option( 'kadence_starter_templates_config', '' );
+		$use_site_assist = apply_filters( 'kadence_starter_site_assist_enabled', true );
+		if ( ! empty( $config ) ) {
+			$config = json_decode( $config, true );
+			if ( isset( $config['siteAssist'] ) && 'disable' === $config['siteAssist'] ) {
+				$use_site_assist = false;
+			}
+		}
+		$starter_link = $use_site_assist || class_exists( '\\KadenceWP\\KadenceBlocks\\StellarWP\\Uplink\\Register' ) ? admin_url( 'admin.php?page=kadence-starter-templates' ) : admin_url( 'themes.php?page=kadence-starter-templates' );
 		?>
 		<div id="kadence-notice-starter-templates" class="notice is-dismissible notice-info">
 			<div class="sub-notice-title"><?php echo esc_html__( 'Thanks for choosing the Kadence Theme!', 'kadence' ); ?></div>

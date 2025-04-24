@@ -6,6 +6,7 @@
  * @package Redux Framework
  */
 
+// phpcs:disable
 defined( 'ABSPATH' ) || exit;
 
 Redux::set_section(
@@ -20,15 +21,16 @@ Redux::set_section(
 				'id'          => 'opt-spinner',
 				'type'        => 'spinner',
 				'title'       => esc_html__( 'JQuery UI Spinner Example 1', 'your-textdomain-here' ),
-				'desc'        => esc_html__( 'JQuery UI spinner description. Min:20, max: 100, step:20, default value: 40', 'your-textdomain-here' ),
-				'default'     => '40',
+				'desc'        => esc_html__( 'JQuery UI spinner description. Min:20, max: 100, step:20, default value: 100', 'your-textdomain-here' ),
+				'default'     => '100',
 				'min'         => '20',
 				'step'        => '20',
 				'max'         => '100',
 				'suffix'      => '',
-				'output_unit' => '',
-				'output'      => array( '.heck-with-it' => 'max-width' ),
+				'output_unit' => 'px',
+				'output'      => array( '.content-area' => 'max-width' ),
 			),
 		),
 	)
 );
+// phpcs:enable

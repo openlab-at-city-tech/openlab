@@ -94,5 +94,12 @@ Theme_Customizer::add_settings(
 			'default'      => kadence()->default( 'enable_preload' ),
 			'label'        => esc_html__( 'Enable CSS Preload', 'kadence' ),
 		),
+		'disable_sitemap' => array(
+			'control_type' => 'kadence_switch_control',
+			'sanitize'     => 'kadence_sanitize_toggle',
+			'section'      => 'general_performance',
+			'default'      => kadence()->default( 'disable_sitemap' ),
+			'label'        => esc_html__( 'Disable Default Sitemap', 'kadence' ),
+		),
 	)
 );

@@ -2638,7 +2638,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                                             ?>
                                             <input class="button button-primary" style="background-color:green;" type="submit" value="Register Your Copy" />
                                             <div class="no-registration">
-                                                <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg(array('cminds_registration_hide' => 1), remove_query_arg('cminds_registration_show')); ?>">I don't want to register now</a>
+                                                <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_hide' => 1), remove_query_arg('cminds_registration_show'))); ?>">I don't want to register now</a>
                                             </div>
                                         </form>
                                     </td>
@@ -2659,7 +2659,7 @@ if (!class_exists(__NAMESPACE__ . '\CmindsFreePackage')) {
                 <?php else : ?>
                     <div class="cminds_registration_wrapper">
                         <div>
-                            <a class="cminds-registration-hide-button button" href="<?php echo add_query_arg(array('cminds_registration_show' => 1), remove_query_arg('cminds_registration_hide')); ?>">Show registration box</a>
+                            <a class="cminds-registration-hide-button button" href="<?php echo esc_url_raw(add_query_arg(array('cminds_registration_show' => 1), remove_query_arg('cminds_registration_hide'))); ?>">Show registration box</a>
                             <a href="<?php echo $this->getStoreUrl(); ?>" class="cminds_link orange" target="_blank">View all CreativeMidns Plugins</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Bundle')); ?>" class="cminds_link blue" target="_blank">View Bundles</a>
                             <a href="<?php echo $this->getStoreUrl(array('category' => 'Add-On')); ?>" class="cminds_link blue" target="_blank">View Add-Ons</a>

@@ -6,6 +6,7 @@
  * @package Redux Framework
  */
 
+// phpcs:disable
 defined( 'ABSPATH' ) || exit;
 
 if ( ! class_exists( 'Redux' ) ) {
@@ -150,6 +151,9 @@ $args = array(
 
 	// Shows the Import/Export panel when not used as a field.
 	'show_import_export'        => true,
+
+	// Shows the Options Object for debugging purposes. Show be set to false before deploying.
+	'show_options_object'       => true,
 
 	// The time transients will expire when the 'database' arg is set.
 	'transient_time'            => 60 * MINUTE_IN_SECONDS,
@@ -524,7 +528,6 @@ require_once Redux_Core::$dir . '../sample/sections/extensions/google-maps.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/icon-select.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/js-button.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/repeater.php';
-require_once Redux_Core::$dir . '../sample/sections/extensions/search.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/shortcodes.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/social-profiles.php';
 require_once Redux_Core::$dir . '../sample/sections/extensions/tabbed.php';
@@ -756,3 +759,4 @@ if ( ! function_exists( 'redux_custom_sanitize' ) ) {
 		return $return;
 	}
 }
+// phpcs:enable

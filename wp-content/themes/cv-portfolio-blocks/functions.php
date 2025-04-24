@@ -68,6 +68,8 @@ if ( ! function_exists( 'cv_portfolio_blocks_styles' ) ) :
 		// Enqueue theme stylesheet.
 		wp_enqueue_style( 'cv-portfolio-blocks-style' );
 
+		wp_enqueue_style( 'dashicons' );
+
 		wp_style_add_data( 'cv-portfolio-blocks-style', 'rtl', 'replace' );
 
 	}
@@ -83,7 +85,7 @@ function cv_portfolio_blocks_scripts() {
 		array('jquery') 
 	);
 	wp_enqueue_script(
-        'scroll-to-top', 
+        'cv-portfolio-scroll-to-top', 
         esc_url(get_template_directory_uri()) . '/assets/js/scroll-to-top.js', 
         array(), 
         null, 
@@ -97,6 +99,9 @@ require get_template_directory() . '/inc/block-pattern.php';
 
 // Add block Style
 require get_template_directory() . '/inc/block-style.php';
+
+// TGM
+require get_template_directory() . '/inc/tgm/plugin-activation.php';
 
 // Get Started
 require get_template_directory() . '/get-started/getstart.php';

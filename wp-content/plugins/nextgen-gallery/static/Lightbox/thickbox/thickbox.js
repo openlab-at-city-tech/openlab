@@ -36,9 +36,24 @@ function tb_click(){
 	var t = this.title || this.name || null;
 	var a = this.href || this.alt;
 	var g = this.rel || false;
+
+	t = ( this.getAttribute( 'data-view-title' ) ) ? this.getAttribute( 'data-view-title' ) : t ;
 	tb_show(t,a,g);
 	this.blur();
 	return false;
+}
+
+function sanitizeToPlainText(value) {
+	// Create a temporary element to decode HTML entities and remove HTML tags.
+	const tempDiv = jQuery("<div>").html(value);
+	let plainText = tempDiv.text(); // Get plain text (decodes entities and removes tags).
+	tempDiv.remove(); // Clean up the temporary element.
+
+	// Remove special characters, including quotes and backticks.
+	plainText = plainText.replace(/['"`~!@#$%^&*()_+=\[\]{}|;:,.<>?/\\-]/g, "");
+
+	// Trim any extra spaces.
+	return plainText.trim();
 }
 
 function tb_show(caption, url, imageGroup) {//function called when the user clicks on a thickbox link
@@ -141,7 +156,7 @@ function tb_show(caption, url, imageGroup) {//function called when the user clic
 
 			TB_WIDTH = imageWidth + 30;
 			TB_HEIGHT = imageHeight + 60;
-			jQuery("#TB_window").append("<a href='' id='TB_ImageOff'><span class='screen-reader-text'>"+thickboxL10n.close+"</span><img id='TB_Image' src='"+url+"' width='"+imageWidth+"' height='"+imageHeight+"' alt='"+caption+"'/></a>" + "<div id='TB_caption'>"+caption+"<div id='TB_secondLine'>" + TB_imageCount + TB_PrevHTML + TB_NextHTML + "</div></div><div id='TB_closeWindow'><button type='button' id='TB_closeWindowButton'><span class='screen-reader-text'>"+thickboxL10n.close+"</span><span class='tb-close-icon'></span></button></div>");
+			jQuery("#TB_window").append("<a href='' id='TB_ImageOff'><span class='screen-reader-text'>"+thickboxL10n.close+"</span><img id='TB_Image' src='"+url+"' width='"+imageWidth+"' height='"+imageHeight+"' alt='"+sanitizeToPlainText(caption)+"'/></a>" + "<div id='TB_caption'>"+caption+"<div id='TB_secondLine'>" + TB_imageCount + TB_PrevHTML + TB_NextHTML + "</div></div><div id='TB_closeWindow'><button type='button' id='TB_closeWindowButton'><span class='screen-reader-text'>"+thickboxL10n.close+"</span><span class='tb-close-icon'></span></button></div>");
 
 			jQuery("#TB_closeWindowButton").on( 'click', tb_remove );
 

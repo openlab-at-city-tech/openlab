@@ -363,6 +363,13 @@ class Renderer {
 				$retval = $controller->cache_action( $displayed_gallery );
 			}
 
+			if ( method_exists( $controller, 'index_action' ) ) {
+				if ( ( isset( $displayed_gallery->source ) && 'albums' === $displayed_gallery->source ) &&
+				( isset( $displayed_gallery->display_type ) && 'imagely-pro-search' !== $displayed_gallery->display_type ) ) {
+					$controller->index_action( $displayed_gallery, true );
+				}
+			}
+
 			// Output debug message.
 			$retval .= $this->debug_msg( 'Lookup!' );
 

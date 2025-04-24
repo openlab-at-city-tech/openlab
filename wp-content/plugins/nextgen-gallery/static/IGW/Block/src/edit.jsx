@@ -1,5 +1,3 @@
-import React from 'react';
-
 const body = document.body;
 
 class NGGModal extends React.Component {

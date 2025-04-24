@@ -68,7 +68,7 @@ class AttributionModal extends Component {
 		document.addEventListener( 'keydown', this.handleKeyDown );
 
 		// eslint-disable-next-line
-		document.addEventListener( 'focusin', this.handleFocusIn );
+		document.addEventListener( 'focusin', this.handleFocusIn, true );
 
 		// Set focus on the first input in .component-attributions-modal.
 		setTimeout( () => {
@@ -121,6 +121,8 @@ class AttributionModal extends Component {
 	}
 
 	handleFocusIn( event ) {
+		event.stopPropagation();
+
 		const isModal = event.target.closest( '.component-attributions-modal' );
 		if ( ! isModal ) {
 			return;

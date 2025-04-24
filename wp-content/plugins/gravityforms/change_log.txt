@@ -1,21 +1,108 @@
-### 2.9.1.2
-- Fixed an issue where invalid data on a multiple files upload field can cause the entry export to break on PHP 8+. Credit: The GravityKit Team.
-- API: Added GFAPI::maybe_process_feeds(), GFAPI::get_processed_feeds_meta(), and GFAPI::update_processed_feeds_meta().
-- API: Added the gform_allow_async_feed_reprocessing filter.
-- Fixed an issue where a typo was preventing styling from being applied to notifications.
-- Fixed an issue where the note added by the custom anti-spam filter is overridden when the Akismet integration is enabled.
-- Fixed an issue that causes form validation errors if a product field has a quantity of 0 and the form includes shipping and total fields.
+### 2.9.6.1
+- Fixed a PHP fatal error that occurs when the gform_form_switcher_forms filter returns an invalid value, or when a deleted form remains in the current users recent forms list.
 
-### 2.9.1.1
-- Fixed an issue where Hooks.js was not being added to the header when using certain hosting environments.
-- Fixed an accessibility issue that prevents the product quantity label from matching the input field.
+### 2.9.6 | 2025-04-08
+- Added a performance improvement by making the form switcher only show the most recent 10 forms.
+- Updated the [`gform_form_switcher_forms`](https://docs.gravityforms.com/gform_form_switcher_forms/) filter to allow developers to also filter the forms that show up in the form switcher search results.
+- Updated dropdowns in the admin to be more consistent.
+- Fixed an issue where `save_callback` is not called for fields located in tabs.
+- Fixed an issue where the submit button is replaced with a next button on the last page of a multi-page form when that page is hidden by conditional logic and fails validation.
+- Fixed an issue where the field map setting is not working when no conflict mode is enabled.
+- Fixed an issue where the form submits or the next page is displayed if the previous button does not include the `gform_previous_button` class when clicked. Note: When using filters like `gform_submit_button`, `gform_next_button`, or `gform_previous_button` to replace the input elements with button elements, make sure to keep the attributes from the original elements. [Example code](https://docs.gravityforms.com/gform_submit_button/#h-1-change-input-to-button).
+- Fixed an issue where a javascript error occurs if a calculation is attempted and the calculation field does not have an input.
+- API: Added inline documentation for the Foundation layer of the Theme Framework.
+- API: Added temporary blocking mechanism when version.php API calls return server errors (5xx) to prevent excessive failed requests.
+- API: Updated the generic map setting field to support using textareas when mapping to a custom value.
+
+### 2.9.5 | 2025-03-20
+- Fixed an issue where a javascript error is thrown when using multiple forms on the same page with conditional logic.
+- Fixed a bug that causes a PHP error when you try to duplicate a duplicate of a form. Credit: The GravityKit Team.
+- Fixed a JavaScript error that occurs when the selected option is not found in the pricing fields meta retrieved post render.
+- Fixed an issue where the total is not updated when the form is embedded using the shortcode, and the selected option field choices are being modified via a form filter based on a query argument.
+- Fixed various issues with the new Ajax submission functionality to make sure that hooks and filters are run and validation messages are displayed correctly.
+- Fixed a PHP notice that occurs on post or page display when the embedded form has been deleted.
+- Updated the form import confirmation message to display the count of both failed and successful forms and to include a link to the list of imported forms.
+- Removed hidden fields that provide instructions in the form templates.
+- AF: Fixed a PHP notice that occurs when creating or editing a coupon.
+- API: Added a new User Select field to the Settings API.
+- API: Updated the submission process to support submission method changes via the [gform/submission/pre_submission](https://docs.gravityforms.com/gform-submission-pre_submission/) filter.
+- API: Removed support for the SUBMISSION_METHOD_CUSTOM submission method.
+
+### 2.9.4 | 2025-02-25
+- Added the [`gform_feed_settings_before_fields`](http://docs.gravityforms.com/gform_feed_settings_before_fields/) filter to allow developers to change the content that is displayed before the feed settings.
+- Fixed an issue where field-specific validation was no longer running when No Duplicates setting was enabled.
+- Fixed an issue that prevents the form editor from working properly when the form doesn't have a submit button configured.
+- Fixed a styling issue with the generic field map setting where the merge tag link overlaps the input.
+- Fixed an issue where the Gravity Forms block is not rendering or working correctly in the site editor (iframed block editor).
+- Updated the form switcher so that it stays on the same settings page when switching forms.
+- Updated the minimum WordPress version to 6.5.
+- Updated the minimum PHP version to 7.4.
+- Updated the minimum WordPress version (for support) on the System Status page to 6.6.
+- API: Added GFAPI::update_entry_feed_status(), GFAPI::get_entry_feed_status(), and GFAPI::get_entry_feed_status_key().
+- AF: Added GFFeedAddOn::save_entry_feed_status(), GFFeedAddOn::post_process_feed(), and GFFeedAddOn::fulfill_entry().
+- AF: Updated GFFeedAddOn::maybe_process_feed() to support saving the feed processing result for compatible add-ons. This is dependent on the value returned by the add-ons process_feed() method:
+  + `void` or `null` when the feed status should not be saved.
+  + `false` or a `WP_Error` when a failed status should be saved. The `code`, `message`, and `data` properties from the `WP_Error` will also be saved.
+  + `true` or the `$entry` when a success status should be saved.
+
+### 2.9.3 | 2025-02-11
+- Added the [`gform_file_upload_tmp_dir`](http://docs.gravityforms.com/gform_file_upload_tmp_dir/) filter to allow developers to change the temporary directory used for file uploads.
+- Fixed an issue with conditional logic for numbers formatted as date or time.
+- Fixed an issue that causes the entry list to sometimes have display problems on mobile screens.
+- Fixed an issue where some icons are missing in compact view in the form editor.
+- Fixed an issue where Ajax submissions can abort when the field values block setting contains multiple parameters or when using a tabindex of -1.
+- Fixed an issue where Ajax submissions can abort when a third-party embed method passes a string instead of a boolean as the value of the $display_title or $display_description arguments of the gravity_form function.
+- Fixed an issue where calculations based on an Image Choice field only run if you click the input, not the image.
+- Fixed an issue where the form list page throws a JavaScript error if the user does not have the `gravityforms_create_form` capability.
+- Fixed an issue that allows the File Upload Field to bypass validation checks when using a maximum file constraint.
+- Fixed an issue where the `:value` of product fields in calculations uses price upon submission.
+- Fixed an issue where changing the 'gform_sticky_admin_messages' database values can cause a fatal error.
+- Fixed an issue with product fields that do not update the total when the markup is updated via custom code.
+- Removed "send you a birthday cake" custom validation message from template library forms.
+- Updated handling of images for the Image Choice field so that thumbnail sizes are only generated for images used in the field.
+- Updated the form preview to use the Orbital theme.
+- API: Updated the React components to support the use of the newly created internal component icon kit.
+
+### 2.9.2 | 2025-01-16
+- Added a screen reader announcement to the form editor when a new field is added to a form for improved accessibility.
+- Added security enhancements. Credit: mikemyers via Wordfence.
 - Added settings for "sort column" and "sort order" to the Screen Options settings on the form list page.
-- Fixed an issue where the `gform_allowable_tags` filter is not applied when using the filter without the optional `$form_id` property. Credit: The Gravity PDF team.
+- Added the [`gform_check_empty_index_file_exists`](https://docs.gravityforms.com/gform_check_empty_index_file_exists) filter to allow developers to check whether an empty index file exists before creating a new one.
+- Added the [`gform_value_pre_duplicate_check filter`](https://docs.gravityforms.com/gform_value_pre_duplicate_check) to allow filtering a field's value before checking if it has a duplicate value.
+- Fixed an issue that causes `GFFormDisplay::is_last_page()` to return the wrong result when the last page has a validation error.
+- Fixed an issue that causes a fatal error if an asset is enqueued incorrectly.
+- Fixed an issue that causes the Survey single line text field to have an invalid `aria-describedby` attribute.
+- Fixed an issue that prevents JS events from firing when an image in an Image Choice field is clicked.
+- Fixed an issue that prevents the Description Placement setting from showing in the form editor before the form is saved.
+- Fixed an issue that prevents the [`gform_progressbar_start_at_zero`](https://docs.gravityforms.com/gform_progressbar_start_at_zero) filter from working.
+- Fixed an issue that prevents the page dropdown on the confirmation settings page from finding pages when the permalinks are set to plain.
+- Fixed an issue where a custom progress bar implemented with the [`gform_progress_bar`](https://docs.gravityforms.com/gform_progress_bar) filter can throw an error in Gravity Forms 2.9.
+- Fixed a fatal error that could occur when the `GFCommon::replace_variables_prepopulate()` function is called with a non-string value.
+- Fixed an issue that prevents the product quantity label from matching the input field.
+- Fixed an issue that causes form validation errors if a product field has a quantity of 0 and the form includes shipping and total fields.
+- Fixed an issue that causes the repeater child fields to not use the [`gform_field_validation`](https://docs.gravityforms.com/gform_field_validation) filter custom message.
+- Fixed an issue that prevents the total from being calculated in some situations, including when using a product drop down with "Enable enhanced user interface" enabled.
+- Fixed an issue where Hooks.js is not being added to the header when using certain hosting environments.
+- Fixed an issue that prevents styling from being applied to notifications.
+- Fixed an issue where an empty error message is displayed if the theme or another plugin outputs an empty line in response to a resend notification AJAX request.
 - Fixed an issue where form block theme settings are visible when the default form theme is not Orbital.
-- Fixed a bug that prevents the `gform_progressbar_start_at_zero` filter from working.
-- Updated the reCAPTCHA field to use SVG images.
+- Fixed an issue where inserting a merge tag for a field with double quotes in the label is not working properly.
+- Fixed an issue where invalid data on a multiple file upload field can cause the entry export to break on PHP 8+. Credit: The GravityKit Team.
+- Fixed an issue where the [`gform_allowable_tags`](https://docs.gravityforms.com/gform_allowable_tags) filter is not applied when using the filter without the optional `$form_id` property. Credit: The Gravity PDF team.
+- Fixed an issue where the license status messages are not being displayed correctly on the System Settings Updates page.
+- Fixed an issue where the note added by the custom anti-spam filter is overridden when the Akismet integration is enabled.
+- Fixed an issue where the total field is not calculated correctly on certain forms with conditional logic animations enabled.
+- Fixed an issue where the values of a custom generic_map settings field are not populated in the form settings page.
+- Fixed an issue where unnecessary form count queries are executed outside Gravity Forms pages.
+- Updated the number field to display the aria-describedby attribute when a range is defined and validation fails.
+- Updated the preview of the reCAPTCHA field in the form editor.
+- Removed `GFForms::filter_query()` method which was deprecated in 2.8.13.
+- API: Added `GFAPI::maybe_process_feeds()`, `GFAPI::get_processed_feeds_meta()`, and `GFAPI::update_processed_feeds_meta()`.
+- API: Added the [`gform_allow_async_feed_reprocessing`](https://docs.gravityforms.com/gform_allow_async_feed_reprocessing) filter.
+- API: Fixed an issue where the entries endpoint "_labels" is not respecting admin label context for survey fields.
 - API: Updated the state management JS module to return a shallow copy of objects retrieved via the get method.
-- Added the `gform_check_empty_index_file_exists` filter to allow developers to check whether an empty index file exists before creating a new one.
+- API: added an action hook to add field settings to the choice options section of the form editor sidebar.
+
 
 ### 2.9.1 | 2024-12-12
 - Added detection of SQLite database to the system report.
@@ -115,7 +202,7 @@
 - API: Deprecated the `UpdateFieldChoices` function. Use `RefreshSelectedFieldPreview` instead.
 - API: Removed the deprecated form Theme Framework global CSS API properties.
 - API: Added the [`gform_entry_meta_pre_evaluate_conditional_logic`](https://docs.gravityforms.com/gform-entry-meta-pre-evaluate-conditional-logic) filter, so the entry meta fields supported for use with conditional logic can be customized before the rules are evaluated.
-- API: Added the [`gform_entries_action_links`](https://docs.gravityforms.com/gform-entries-action-links) filter to allow for modification of an entry action links in the form entries page.
+- API: Added the [`gform_entries_action_links`](https://docs.gravityforms.com/gform_entries_action_links/) filter to allow for modification of an entry action links in the form entries page.
 - API: Updated the product config logic so that it filters the form via the ['gform_pre_render'](https://docs.gravityforms.com/gform_pre_render/) filter.
 - API: Added a new Javascript event [`gform/post_init`](https://docs.gravityforms.com/gform-post-init/) that is triggered after the form has been initialized and can be used by add-ons to load necessary scripts after all Gravity Forms scripts are loaded.
 
@@ -174,7 +261,7 @@
 - Fixed memory exhaustion and performance issues caused by the Dom_Parser class being loaded on every request.
 - Fixed an issue with ajax-enabled multi-page forms with conditional logic, where fields that should be hidden by conditional logic are visible for a fraction of a second.
 - Fixed an issue where the conditional logic settings for the Address Field are displayed with wrong values if the [`gform_countries`](https://docs.gravityforms.com/gform_countries) filter is used to change the country list to include country codes.
-- API: Added the [`gformIsHidden`](https://docs.gravityforms.com/gformishidden) filter to allow developers to determine if a field is hidden by conditional logic. Credit: The Gravity Wiz Team.
+- API: Added the [`gformIsHidden`](https://docs.gravityforms.com/gform_is_hidden/) filter to allow developers to determine if a field is hidden by conditional logic. Credit: The Gravity Wiz Team.
 - API: Added the [`gform_generic_map_field_choices`](https://docs.gravityforms.com/gform_generic_map_field_choices) filter for options displayed in a Generic Field Map. Credit: The Gravity Wiz Team.
 
 ### 2.8.9 | 2024-04-30

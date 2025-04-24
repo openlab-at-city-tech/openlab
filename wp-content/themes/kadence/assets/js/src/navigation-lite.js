@@ -140,12 +140,14 @@
 					} );
 		
 					// Handle keyboard accessibility for traversing menu.
-					SUBMENUS[ i ].addEventListener( 'keydown', function( e ) {
-						// These specific selectors help us only select items that are visible.
-						var focusSelector = 'ul.toggle-show > li > a, ul.toggle-show > li > .dropdown-nav-special-toggle';
-		
+					SUBMENUS[ i ].addEventListener( 'keydown', function( e ) {		
 						// 9 is tab KeyMap
 						if ( 9 === e.keyCode ) {
+							var focusSelector =
+							'ul.toggle-show > li > a, ul.toggle-show > li > .dropdown-nav-special-toggle';
+							if ( SUBMENUS[ i ].parentNode.classList.contains('kadence-menu-mega-enabled') ) {
+								focusSelector = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]';
+							}
 							if ( e.shiftKey ) {
 								// Means we're tabbing out of the beginning of the submenu.
 								if ( window.kadence.isfirstFocusableElement (SUBMENUS[ i ], document.activeElement, focusSelector ) ) {
@@ -155,6 +157,12 @@
 							} else if ( window.kadence.islastFocusableElement( SUBMENUS[ i ], document.activeElement, focusSelector ) ) {
 								window.kadence.toggleSubMenu( SUBMENUS[ i ].parentNode, false );
 							}
+						}
+						// 27 is keymap for esc key.
+						if ( e.keyCode === 27 ) {
+							window.kadence.toggleSubMenu( SUBMENUS[ i ].parentNode, false );
+							// Move the focus back to the toggle.
+							SUBMENUS[ i ].parentNode.querySelector('.dropdown-nav-special-toggle').focus();
 						}
 					} );
 		
@@ -188,9 +196,11 @@
 			*/
 			if ( parentMenuItemToggled ) {
 				// Toggle "off" the submenu.
-				parentMenuItem.classList.remove( 'menu-item--toggled-on' );
-				subMenu.classList.remove( 'toggle-show' );
-				toggleButton.setAttribute( 'aria-label', ( dropdown_label ? kadenceConfig.screenReader.expandOf + ' ' + dropdown_label : kadenceConfig.screenReader.expand ) );
+				setTimeout(function () {
+					parentMenuItem.classList.remove( 'menu-item--toggled-on' );
+					subMenu.classList.remove( 'toggle-show' );
+					toggleButton.setAttribute( 'aria-label', ( dropdown_label ? kadenceConfig.screenReader.expandOf + ' ' + dropdown_label : kadenceConfig.screenReader.expand ) );
+				}, 5);
 
 				// Make sure all children are closed.
 				var subMenuItemsToggled = parentMenuItem.querySelectorAll( '.menu-item--toggled-on' );
@@ -482,6 +492,53 @@
 			sidebar.style.top = Math.floor( offsetSticky + 20 ) + 'px';
 			sidebar.style.maxHeight = 'calc( 100vh - ' + Math.floor( offsetSticky + 20 ) + 'px )';
 		},
+		initClickToOpen: function () {
+			// Find all <li> elements with the `menu-item--has-toggle` class
+			const toggleItems = document.querySelectorAll('li.menu-item--has-toggle');
+
+			toggleItems.forEach(function (item) {
+				const anchor = item.querySelector('a'); // Find the first child anchor inside <li>
+				const button = item.querySelector('button[class="dropdown-nav*"]'); // Find a button if it exists
+
+				[anchor, button].forEach(function (clickableTarget) {
+					if (clickableTarget) {
+						clickableTarget.addEventListener('click', function (e) {
+							e.preventDefault(); // Prevent default action for <a> or <button>
+
+							// Toggle the 'opened' class on the first child `ul.sub-menu`
+							const submenu = item.querySelector('ul.sub-menu');
+							if (submenu) {
+								const isOpen = submenu.classList.contains('opened');
+								submenu.classList.toggle('opened', !isOpen); // Toggle the 'opened' class
+
+								// Close other open submenus at the same level
+								const siblings = Array.from(item.parentNode.children).filter(sibling => sibling !== item);
+
+								siblings.forEach(function (sibling) {
+									const siblingSubmenu = sibling.querySelector(':scope > ul.sub-menu');
+									if (siblingSubmenu) {
+										siblingSubmenu.classList.remove('opened'); // Close sibling submenus
+									}
+								});
+
+								// Add a `click` listener on the document to close the menu when clicking outside
+								if (!isOpen) {
+									// If opening the menu, add the event listener
+									const handleClickOutside = (event) => {
+										if (!item.contains(event.target)) {
+											submenu.classList.remove('opened'); // Close the submenu
+											document.removeEventListener('click', handleClickOutside); // Remove the listener
+										}
+									};
+
+									document.addEventListener('click', handleClickOutside);
+								}
+							}
+						});
+					}
+				});
+			});
+		},
 		// Initiate the menus when the DOM loads.
 		init: function() {
 			window.kadence.initNavToggleSubmenus();
@@ -491,6 +548,7 @@
 			window.kadence.initOutlineToggle();
 			window.kadence.initStickySidebar();
 			window.kadence.initTransHeaderPadding();
+			window.kadence.initClickToOpen();
 		}
 	}
 	if ( 'loading' === document.readyState ) {

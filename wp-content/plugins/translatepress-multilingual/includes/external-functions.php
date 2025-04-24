@@ -1,6 +1,5 @@
 <?php
 
-
 /**
  * Trim strings.
  *

@@ -9,6 +9,7 @@ excludes=(
   './wp-content/plugins/anthologize/vendor/pear/file_archive/' # Not loaded because we have zlib.
   './wp-content/plugins/anthologize/vendor/pear/mime_type/' # Not loaded because we have zlib.
   './wp-content/plugins/out-of-the-box/vendors/phpThumb'
+  './vendor/' # We don't have any non-dev dependencies
 )
 
 separator='--exclude '

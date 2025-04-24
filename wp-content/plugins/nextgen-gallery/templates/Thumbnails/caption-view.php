@@ -1,6 +1,9 @@
-<?php $this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery ); ?>
+<?php
+use Imagely\NGG\Display\I18N;
 
-<div class="ngg-galleryoverview caption-view 
+$this->start_element( 'nextgen_gallery.gallery_container', 'container', $displayed_gallery ); ?>
+
+<div class="ngg-galleryoverview caption-view
 <?php
 if ( ! intval( $ajax_pagination ) ) {
 	echo ' ngg-ajax-pagination-none';}
@@ -25,12 +28,12 @@ if ( ! intval( $ajax_pagination ) ) {
 
 				$this->start_element( 'nextgen_gallery.image_panel', 'item', $image );
 				?>
-					<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box 
+					<div id="<?php echo esc_attr( 'ngg-image-' . $i ); ?>" class="ngg-gallery-thumbnail-box
 										<?php
 										if ( $number_of_columns > 0 && empty( $show_all_in_lightbox ) ) {
 											echo $column_class; }
 										?>
-					" 
+					"
 					<?php
 					if ( $style ) {
 										echo $style;}
@@ -47,8 +50,8 @@ if ( ! intval( $ajax_pagination ) ) {
 									data-description="<?php echo esc_attr( stripslashes( $image->description ) ); ?>"
 									data-image-slug="<?php echo esc_attr( $image->image_slug ); ?>"
 									<?php echo $effect_code; ?>>
-									<img title="<?php echo esc_attr( $image->alttext ); ?>"
-										alt="<?php echo esc_attr( $image->alttext ); ?>"
+									<img title="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
+										alt="<?php echo esc_attr( \Imagely\NGG\Display\I18N::ngg_plain_text_alt_title_attributes( $image->alttext ) ); ?>"
 										src="<?php echo esc_attr( $storage->get_image_url( $image, $thumbnail_size_name ) ); ?>"
 										width="<?php echo esc_attr( $thumb_size['width'] ); ?>"
 										height="<?php echo esc_attr( $thumb_size['height'] ); ?>"
@@ -56,7 +59,7 @@ if ( ! intval( $ajax_pagination ) ) {
 								</a>
 								<?php if ( ! isset( $image->hidden ) || ! $image->hidden ) { ?>
 									<span style="max-width: <?php print esc_attr( $thumb_size['width'] ); ?>px">
-										<?php print $image->description; ?>
+										<?php print \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->description ); // phpcs:ignore ?>
 									</span>
 								<?php } ?>
 							</div>

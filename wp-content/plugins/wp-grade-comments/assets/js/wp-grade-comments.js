@@ -1,13 +1,21 @@
 (function($) {
-	var $add_a_grade = $( '#olgc-add-a-grade' ),
-		$grade_entry = $( '.olgc-grade-entry' ),
-		$grade_input = $( '#olgc-grade' ),
-		$private_checkbox = $( '#olgc-private-comment' ),
-		$private_fallback = $( '#olgc-private-comment-fallback' ),
-		$comment_content_input = $( '#comment' ),
-		$reply_to_com = $( '.comment-reply-link' );
+	var $add_a_grade,
+		$grade_entry,
+		$grade_input,
+		$private_checkbox,
+		$private_fallback,
+		$comment_content_input,
+		$reply_to_com;
 
 	$( document ).ready( function() {
+		$add_a_grade = $( '#olgc-add-a-grade' );
+		$grade_entry = $( '.olgc-grade-entry' );
+		$grade_input = $( '#olgc-grade' );
+		$private_checkbox = $( '#olgc-private-comment' );
+		$private_fallback = $( '#olgc-private-comment-fallback' );
+		$comment_content_input = $( '#comment' );
+		$reply_to_com = $( '.comment-reply-link' );
+
 		toggle_grade_visibility();
 
 		$add_a_grade.on( 'click', function( e ) {

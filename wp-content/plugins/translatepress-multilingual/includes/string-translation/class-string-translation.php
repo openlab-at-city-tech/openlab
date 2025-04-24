@@ -1,6 +1,9 @@
 <?php
 
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_String_Translation {
     protected $settings;
 
@@ -66,6 +69,7 @@ class TRP_String_Translation {
 
 	        // Same hook as for Visual Editor save translations
             add_action( 'wp_ajax_trp_save_translations_' . $string_type_key, array( $this->string_type_apis[ $string_type_key ], 'save_strings' ) );
+            add_action( 'wp_ajax_trp_string_translation_delete_' . $string_type_key, array( $this->string_type_apis[ $string_type_key ], 'delete_strings' ) );
         }
     }
 
@@ -185,11 +189,12 @@ class TRP_String_Translation {
                 'trp_default' => array( 'name' => esc_html__( 'Bulk Actions', 'translatepress-multilingual' ) ),
                 'delete'      => array(
                     'name'  => esc_html__( 'Delete entries', 'translatepress-multilingual' ),
-                    'nonce' => wp_create_nonce( 'string_translation_save_strings_delete' )
+                    'nonce' => wp_create_nonce( 'string_translation_delete_strings' )
                 ),
             ),
             'actions'      => array(
-                'edit'   => esc_html__( 'Edit', 'translatepress-multilingual' )
+                'edit'   => esc_html__( 'Edit', 'translatepress-multilingual' ),
+                'delete' => esc_html__( 'Delete', 'translatepress-multilingual' )
             )
         );
         return apply_filters( 'trp_st_default_actions', $actions );
@@ -233,6 +238,7 @@ class TRP_String_Translation {
 	        'no_strings_match_query' => esc_html__( 'No strings match your query.', 'translatepress-multilingual' ),
 	        'no_strings_match_rescan'=> esc_html__( 'Try to rescan plugins and theme for strings.', 'translatepress-multilingual' ),
 	        'request_error'          => esc_html__( 'An error occurred while loading results. Most likely you were logged out. Reload page?', 'translatepress-multilingual' ),
+	        'found_in_translation'   => esc_html__( 'found in translation', 'translatepress-multilingual' ),
 
 	        'select_all'               => esc_html__( 'Select All', 'translatepress-multilingual' ),
 	        'select_visible'           => esc_html__( 'Select Visible', 'translatepress-multilingual' ),
@@ -245,6 +251,7 @@ class TRP_String_Translation {
 
 	        // specific bulk actions
 	        'delete_warning'             => esc_html__( 'Warning: This action cannot be undone. Deleting a string will remove its current translation. The original string will appear again in this interface after TranslatePress detects it. This action is NOT equivalent to excluding the string from being translated again.', 'translatepress-multilingual' ),
+	        'entries_deleted'            => esc_html__( '%d original entries and their translations were deleted.', 'translatepress-multilingual' ),
 
 	        // tooltips
 	        'next_page'                  => esc_html__( 'Navigate to next page', 'translatepress-multilingual' ),

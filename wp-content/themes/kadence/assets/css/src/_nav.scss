@@ -42,7 +42,20 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 		height: 1px;
 		overflow: hidden;
 	}
+}
+.header-navigation[class*="header-navigation-dropdown-animation-fade"]:not(.click-to-open) {
 	ul li:hover>ul, ul li.menu-item--toggled-on>ul, ul li:not(.menu-item--has-toggle):focus>ul {
+		opacity: 1;
+		visibility: visible;
+		transform: translate3d(0, 0, 0);
+		clip: auto;
+		height: auto;
+		overflow: visible;
+	}
+}
+// Handle Reveal Animation on click to open
+.header-navigation[class*="header-navigation-dropdown-animation-fade"].click-to-open {
+	ul li>ul.opened, ul li.menu-item--toggled-on>ul, ul li:not(.menu-item--has-toggle):focus>ul {
 		opacity: 1;
 		visibility: visible;
 		transform: translate3d(0, 0, 0);
@@ -132,9 +145,10 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 * If the dropdown toggle is active with JS, then
 * we'll take care of showing the submenu with JS.
 */
-.nav--toggle-sub li:hover > ul,
+.nav--toggle-sub:not(.click-to-open) li:hover > ul,
 .nav--toggle-sub li.menu-item--toggled-on > ul,
-.nav--toggle-sub li:not(.menu-item--has-toggle):focus > ul {
+.nav--toggle-sub li:not(.menu-item--has-toggle):focus > ul,
+.nav--toggle-sub.click-to-open li.menu-item--has-toggle > ul.opened{
 	display: block;
 }
 

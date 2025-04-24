@@ -8,9 +8,7 @@ if( ! class_exists( 'WP_List_Table' ) ) {
 }
 
 class TRP_Addons_List_Table extends WP_List_Table {
-
     public $header;
-
     public $section_header;
     public $section_versions;
     public $sections;
@@ -54,7 +52,6 @@ class TRP_Addons_List_Table extends WP_List_Table {
 
         wp_enqueue_style('trp-add-ons-listing-css', plugin_dir_url(__FILE__) . '/assets/css/tp-add-ons-listing.css', false);
         wp_enqueue_script('trp-add-ons-listing-js', plugin_dir_url(__FILE__) . '/assets/js/tp-add-ons-listing.js', array('jquery'));
-
     }
 
     /**
@@ -63,7 +60,6 @@ class TRP_Addons_List_Table extends WP_List_Table {
      */
     function get_columns(){
         $columns = array(
-            'cb'        	=> '<input type="checkbox" />', //Render a checkbox instead of text
             'icon'     	=> '',
             'add_on'    => __('Add-On', 'translatepress-multilingual' ), //phpcs:ignore
             'actions'     => '',
@@ -71,25 +67,7 @@ class TRP_Addons_List_Table extends WP_List_Table {
         return $columns;
     }
 
-    /**
-     * The checkbox column
-     * @param object $item
-     * @return string|void
-     */
-    function column_cb($item){
-        if( $item['type'] === 'add-on') {
-            in_array( $this->current_version, $this->section_versions ) ? $disabled = '' : $disabled = 'disabled';
-            return '<input type="checkbox" name="trp_add_ons[]" ' . checked($this->is_add_on_active($item['slug']), true, false) . ' '. $disabled .' value="' . $item['slug'] . '" />';
-        }elseif( $item['type'] === 'plugin') {
-            $all_wp_plugins = get_plugins();
-            array_key_exists( $item['slug'], $all_wp_plugins ) ? $disabled = '' : $disabled = 'disabled';//add disabled if the current version isn't eligible
-            if( empty($disabled) ){
-                is_plugin_active_for_network( $item['slug'] ) ? $disabled = 'disabled' : $disabled = '';
-            }
 
-            return '<input type="checkbox" name="trp_plugins[]" ' . checked(is_plugin_active($item['slug']), true, false) . ' '. $disabled .' value="' . $item['slug'] . '" />';
-        }
-    }
 
     /**
      * The icon column
@@ -106,7 +84,13 @@ class TRP_Addons_List_Table extends WP_List_Table {
      * @return string
      */
     function column_add_on($item){
-        return '<strong class="trp-add-ons-name">'. $item['name'] . '</strong><br/>'. $item['description'];
+        return '<strong class="trp-add-ons-name trp-accent-text-bold">'.
+                    $item['name'] .
+                '</strong><br/>' .
+
+                '<span class="trp-primary-text trp-addon-description">' .
+                    $item['description'] .
+                '</span>';
     }
 
     /**
@@ -118,25 +102,63 @@ class TRP_Addons_List_Table extends WP_List_Table {
 
         $action = '';
         //for plugins we can do something general
-        if( $item['type'] === 'plugin' ) {
-            ?>
-            <a class="button-primary right trp-recommended-plugin-buttons trp-install-and-activate" data-trp-plugin-slug="<?php echo esc_attr( $item['short-slug'] ); ?>" data-trp-action-performed="<?php esc_html_e( 'Installing...', 'translatepress-multilingual' );?>" <?php echo esc_html( $item['disabled'] ); ?>><?php echo wp_kses_post( $item['install_button'] ); ?></a>
-            <?php
+        if ( $item['type'] === 'plugin' ) {
+            if ( isset( $item['action'] ) && $item['action'] === 'deactivate' ) {
+                // Plugin is active, show deactivate button
+                $deactivate_url = esc_url(
+                    wp_nonce_url(
+                        add_query_arg([
+                            'trp_add_ons_action' => 'deactivate',
+                            'trp_plugins'        => $item['slug'],
+                            'page'               => sanitize_text_field( $_REQUEST['page'] ?? '' )
+                        ], admin_url('admin.php')),
+                        'trp_add_ons_action'
+                    )
+                );
 
+                $action = '<a class="right button trp-button-secondary" href="' . $deactivate_url . '">' . esc_html__('Deactivate', 'translatepress-multilingual') . '</a>';
+            }
+
+            elseif ( isset( $item['action'] ) && $item['action'] === 'activate') {
+                // Plugin is installed but not active, show activate button
+                $activate_url = esc_url(
+                    wp_nonce_url(
+                        add_query_arg([
+                            'trp_add_ons_action' => 'activate',
+                            'trp_plugins'        => $item['slug'],
+                            'page'               => sanitize_text_field($_REQUEST['page'] ?? '')
+                        ], admin_url('admin.php')),
+                        'trp_add_ons_action'
+                    )
+                );
+
+                $action = '<a class="right button trp-submit-btn" href="' . $activate_url . '">' . esc_html__('Activate', 'translatepress-multilingual') . '</a>';
+            }
+
+            else {
+                // Plugin is not installed or not active, show install and activate button
+                $action = '<a class="trp-submit-btn button-primary right trp-recommended-plugin-buttons trp-install-and-activate" 
+                        data-trp-plugin-slug="' . esc_attr($item['short-slug']) . '" 
+                        data-trp-action-performed="' . esc_html__('Installing...', 'translatepress-multilingual') . '" 
+                        ' . esc_html($item['disabled']) . '>'
+                    . wp_kses_post($item['install_button']) .
+                    '</a>';
+            }
         }
+
         elseif ( $item['type'] === 'add-on' ){//this is more complicated as there are multiple cases, I think it should be done through filters in each plugin
 
             in_array( $this->current_version, $this->section_versions ) ? $disabled = '' : $disabled = 'disabled'; //add disabled if the current version isn't eligible
 
             if ( $this->is_add_on_active( $item['slug'] ) ) {
-                $action = '<a class="right button button-secondary" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ) . '&trp_add_ons_action=deactivate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Deactivate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
+                $action = '<a class="right button trp-button-secondary" data-slug="' . $item['slug'] . '" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ) . '&trp_add_ons_action=deactivate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Deactivate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
             } else {
-                $action = '<a class="right button button-primary" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ). '&trp_add_ons_action=activate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Activate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
+                $action = '<a class="right button trp-submit-btn" '.$disabled.' href="'. esc_url( wp_nonce_url( add_query_arg( 'trp_add_ons', $item['slug'], admin_url( 'admin.php?page='. sanitize_text_field( $_REQUEST['page'] ). '&trp_add_ons_action=activate' ) ), 'trp_add_ons_action' ) ) .'">' . __('Activate', 'translatepress-multilingual') . '</a>';//phpcs:ignore
             }
         }
 
 
-        $documentation = '<a target="_blank" class="right" href="'. trp_add_affiliate_id_to_link( $item['doc_url'] ) . '">' . __( 'Documentation', 'translatepress-multilingual' ) . '</a>';//phpcs:ignore
+        $documentation = '<a target="_blank" class="right trp-docs-btn" href="'. trp_add_affiliate_id_to_link( $item['doc_url'] ) . '">' . __( 'Documentation', 'translatepress-multilingual' ) . '</a>';//phpcs:ignore
 
         return $action . $documentation;
     }
@@ -163,24 +185,6 @@ class TRP_Addons_List_Table extends WP_List_Table {
 
 
     /**
-     * Show our own search box, we don't use the default search of Table listing
-     */
-    function show_search_box(){
-        ?>
-        <p class="trp-add-ons-search-box">
-            <input type="text" id="trp-add-ons-search-input" name="s" value="" placeholder="<?php esc_html_e( 'Search for add-ons...', 'translatepress-multilingual' ); //phpcs:ignore ?>">
-        </p>
-        <?php
-    }
-
-    /**
-     * Show the submit button
-     */
-    function show_sumbit_button(){
-        ?>
-        <input type="submit" class="button-primary" value="<?php esc_html_e('Save Add-ons', 'translatepress-multilingual'); //phpcs:ignore?>">
-        <?php
-    }
 
     /**
      * This is the function that adds more sections (tables) to the listing
@@ -188,24 +192,75 @@ class TRP_Addons_List_Table extends WP_List_Table {
     function add_section(){
         ob_start();
         ?>
-        <div class="trp-add-ons-section">
+        <div class="trp-add-ons-section trp-settings-container">
             <?php if( !empty( $this->section_header ) ): ?>
 
-                <h2><?php echo esc_html( $this->section_header['title'] );?></h2>
+                <h2 class="trp-settings-primary-heading"><?php echo esc_html( $this->section_header['title'] );?></h2>
                 <?php if( !empty( $this->section_header ) ): ?>
-                    <p class="description"><?php echo wp_kses_post( $this->section_header['description'] ); ?></p>
+                    <p class="trp-primary-text"><?php echo wp_kses_post( $this->section_header['description'] ); ?></p>
                 <?php endif; ?>
+
+
             <?php endif; ?>
 
             <?php
-            foreach( $this->items as $item ) {
-                if( $item['type'] === 'add-on' )
-                    $this->all_addons[] = $item['slug'];
-                elseif( $item['type'] === 'plugin' )
-                    $this->all_plugins[] = $item['slug'];
-            }
-            $this->display(); /* this is the function from the table listing class */
+                foreach( $this->items as $item ) {
+                    if( $item['type'] === 'add-on' )
+                        $this->all_addons[] = $item['slug'];
+                    elseif( $item['type'] === 'plugin' )
+                        $this->all_plugins[] = $item['slug'];
+                }
+
+                $activate_args = [
+                    'trp_add_ons_action' => 'activate_all',
+                    'page' => sanitize_text_field($_REQUEST['page'] ?? '')
+                ];
+
+                if (!empty($this->all_addons)) {
+                    $activate_args['trp_add_ons'] = implode('|', $this->all_addons);
+                }
+
+                if (!empty($this->all_plugins)) {
+                    $activate_args['trp_plugins'] = implode('|', $this->all_plugins);
+                }
+
+                $activate_url = esc_url(
+                    wp_nonce_url(
+                        add_query_arg($activate_args, admin_url('admin.php')),
+                        'trp_add_ons_action'
+                    )
+                );
+
+                $deactivate_args = [
+                    'trp_add_ons_action' => 'deactivate_all',
+                    'page' => sanitize_text_field($_REQUEST['page'] ?? '')
+                ];
+
+                if (!empty($this->all_addons)) {
+                    $deactivate_args['trp_add_ons'] = implode('|', $this->all_addons);
+                }
+
+                if (!empty($this->all_plugins)) {
+                    $deactivate_args['trp_plugins'] = implode('|', $this->all_plugins);
+                }
+
+                $deactivate_url = esc_url(
+                    wp_nonce_url(
+                        add_query_arg($deactivate_args, admin_url('admin.php')),
+                        'trp_add_ons_action'
+                    )
+                );
             ?>
+            <div class="trp-bulk-actions__wrapper">
+                <a href="<?php echo $activate_url; // phpcs:ignore ?>" class="trp-activate-all"><?php esc_html_e('Activate all', 'translatepress-multilingual'); ?></a>
+                <span>/</span>
+                <a href="<?php echo $deactivate_url; // phpcs:ignore ?>" class="trp-deactivate-all"><?php esc_html_e('Deactivate all', 'translatepress-multilingual'); ?></a>
+            </div>
+
+            <?php
+                $this->display(); /* this is the function from the table listing class */
+            ?>
+
         </div>
         <?php
 
@@ -222,15 +277,8 @@ class TRP_Addons_List_Table extends WP_List_Table {
      */
     function display_addons(){
         ?>
-        <div class="wrap" id="trp-add-ons-listing">
-            <h1 class="trp-main-header"><?php echo esc_html( $this->header['title'] );?></h1>
-
+        <div class="wrap" id="trp-settings__wrap">
             <form id="trp-addons" method="post">
-
-                <?php $this->show_search_box(); ?>
-
-                <?php $this->show_sumbit_button(); ?>
-
                 <?php
 
                 if( !empty( $this->sections ) ){
@@ -239,12 +287,7 @@ class TRP_Addons_List_Table extends WP_List_Table {
                     }
                 }
                 ?>
-                <?php $this->show_sumbit_button(); ?>
 
-                <!-- For plugins, we also need to ensure that the form posts back to our current page -->
-                <input type="hidden" name="trp_all_add_ons" value="<?php echo esc_attr( implode( '|' ,$this->all_addons ) ); ?>" />
-                <input type="hidden" name="trp_all_plugins" value="<?php echo esc_attr( implode( '|' ,$this->all_plugins ) ); ?>" />
-                <input type="hidden" name="trp_add_ons_action" value="bulk_action" />
                 <?php wp_nonce_field('trp_add_ons_action'); ?>
             </form>
         </div>
@@ -265,44 +308,31 @@ add_action( 'admin_init', 'trp_add_ons_listing_process_actions', 1 );
 function trp_add_ons_listing_process_actions(){
     if (current_user_can( 'manage_options' ) && isset( $_REQUEST['trp_add_ons_action'] ) && isset($_REQUEST['_wpnonce']) && wp_verify_nonce( sanitize_text_field( $_REQUEST['_wpnonce'] ), 'trp_add_ons_action' ) ){
 
-        if( $_REQUEST['trp_add_ons_action'] === 'bulk_action' ){
-            if( !empty( $_POST['trp_all_plugins'] ) && !empty( $_POST['trp_all_add_ons'] ) ){//make sure we have all the data
-                //sanitize all data
-                $all_plugins = explode( '|', sanitize_text_field( $_POST['trp_all_plugins'] ) );
-                $all_add_ons = explode( '|', sanitize_text_field( $_POST['trp_all_add_ons'] ) );
-                $plugins_to_activate = array();
-                if( !empty($_POST['trp_plugins']) && is_array($_POST['trp_plugins']) ){
-                    $plugins_to_activate = array_map( 'sanitize_text_field', $_POST['trp_plugins'] );
-                }
-                $add_ons_to_activate = array();
-                if( !empty($_POST['trp_add_ons']) && is_array($_POST['trp_add_ons']) ){
-                    $add_ons_to_activate = array_map( 'sanitize_text_field', $_POST['trp_add_ons'] );
-                }
+        $add_ons_to_activate = !empty( $_GET['trp_add_ons'] )  ? explode('|', sanitize_text_field($_GET['trp_add_ons'])) : [];
+        $plugins_to_activate = !empty( $_GET['trp_plugins'] ) ? explode('|', sanitize_text_field($_GET['trp_plugins'])) : [];
 
-                foreach( $all_plugins as $plugin ){
-                    if( in_array( $plugin, $plugins_to_activate ) ){
-                        if( !is_plugin_active( $plugin ) ) {
-                            activate_plugin( $plugin );
-                        }
-                    }
-                    else{
-                        if( is_plugin_active( $plugin ) ) {
-                            deactivate_plugins( $plugin );
-                        }
-                    }
+        if ( $_REQUEST['trp_add_ons_action'] === 'activate_all' ) {
+            foreach ( $plugins_to_activate as $plugin ) {
+                if ( !is_plugin_active( $plugin ) ) {
+                    activate_plugin( $plugin );
                 }
-
-                foreach( $all_add_ons as $add_on ){
-                    if( in_array( $add_on, $add_ons_to_activate ) ){
-                        do_action( 'trp_add_ons_activate', $add_on );
-                    }
-                    else{
-                        do_action( 'trp_add_ons_deactivate', $add_on );
-                    }
-                }
-
+            }
+            foreach ( $add_ons_to_activate as $add_on ) {
+                do_action( 'trp_add_ons_activate', $add_on );
             }
         }
+
+        elseif ( $_REQUEST['trp_add_ons_action'] === 'deactivate_all' ) {
+            foreach ( $plugins_to_activate as $plugin ) {
+                if (is_plugin_active( $plugin ) ) {
+                    deactivate_plugins( $plugin );
+                }
+            }
+            foreach ( $add_ons_to_activate as $add_on ) {
+                do_action( 'trp_add_ons_deactivate', $add_on );
+            }
+        }
+
         elseif ( $_REQUEST['trp_add_ons_action'] === 'activate' ){
             if( !empty( $_REQUEST['trp_plugins'] ) ){//we have a plugin
                 $plugin_slug = sanitize_text_field( $_REQUEST['trp_plugins'] );

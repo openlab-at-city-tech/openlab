@@ -45,7 +45,7 @@ if ( ! class_exists( 'Kenta_Socials_Extension' ) ) {
 						'settings' => [
 							'color' => [ 'official' => '#557dbc' ],
 							'label' => 'Facebook',
-							'url'   => '',
+							'url'   => '#',
 							'share' => 'https://www.facebook.com/sharer/sharer.php?u={url}',
 							'icon'  => [ 'value' => 'fab fa-facebook', 'library' => 'fa-brands' ]
 						],
@@ -55,7 +55,7 @@ if ( ! class_exists( 'Kenta_Socials_Extension' ) ) {
 						'settings' => [
 							'color' => [ 'official' => '#000000' ],
 							'label' => 'Twitter',
-							'url'   => '',
+							'url'   => '#',
 							'share' => 'https://twitter.com/share?url={url}&text={text}',
 							'icon'  => [ 'value' => 'fab fa-x-twitter', 'library' => 'fa-brands' ]
 						],
@@ -65,7 +65,7 @@ if ( ! class_exists( 'Kenta_Socials_Extension' ) ) {
 						'settings' => [
 							'color' => [ 'official' => '#ed1376' ],
 							'label' => 'Instagram',
-							'url'   => '',
+							'url'   => '#',
 							'icon'  => [ 'value' => 'fab fa-instagram', 'library' => 'fa-brands' ]
 						],
 					],

@@ -6,6 +6,7 @@
  * @package Redux Framework
  */
 
+// phpcs:disable
 defined( 'ABSPATH' ) || exit;
 
 Redux::set_section(
@@ -32,12 +33,13 @@ Redux::set_section(
 				'type'          => 'slider',
 				'title'         => esc_html__( 'Slider Example 2 with Steps (5)', 'your-textdomain-here' ),
 				'subtitle'      => esc_html__( 'This example displays the value in a text box', 'your-textdomain-here' ),
-				'desc'          => esc_html__( 'Slider description. Min: 0, max: 300, step: 5, default value: 75', 'your-textdomain-here' ),
-				'default'       => 75,
+				'desc'          => esc_html__( 'Slider description. Min: 0, max: 800, step: 5, default value: 75', 'your-textdomain-here' ),
+				'default'       => 750,
 				'min'           => 0,
 				'step'          => 5,
-				'max'           => 300,
+				'max'           => 800,
 				'display_value' => 'text',
+				'output'        => array( '.site-content' => 'max-width' ),
 			),
 			array(
 				'id'            => 'opt-slider-select',
@@ -54,6 +56,10 @@ Redux::set_section(
 				'max'           => '500',
 				'display_value' => 'select',
 				'handles'       => 2,
+				'output'        => array(
+					1 => array( '.site-footer' => 'max-width' ),
+					2 => array( '.site-footer' => 'min-width' ),
+				),
 			),
 			array(
 				'id'            => 'opt-slider-float',
@@ -72,3 +78,4 @@ Redux::set_section(
 		'subsection' => true,
 	)
 );
+// phpcs:enable

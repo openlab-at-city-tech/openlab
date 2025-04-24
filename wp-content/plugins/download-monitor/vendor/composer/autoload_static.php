@@ -304,6 +304,9 @@ class ComposerStaticInit8333af2c3447f1bf579f784754a6299d
         'WPChill\\DownloadMonitor\\Shop\\Util\\TemplateInjector' => __DIR__ . '/../..' . '/src/Shop/Util/TemplateInjector.php',
         'WPChill\\DownloadMonitor\\Util\\ExtensionLoader' => __DIR__ . '/../..' . '/src/Util/ExtensionLoader.php',
         'WPChill\\DownloadMonitor\\Util\\PageCreator' => __DIR__ . '/../..' . '/src/Util/PageCreator.php',
+        'WPChill_About_Us' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-about-us.php',
+        'WPChill_Notifications' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-notifications.php',
+        'WPChill_Rest_Api' => __DIR__ . '/../..' . '/includes/admin/wpchill/class-wpchill-rest-api.php',
         'WPChill_Welcome' => __DIR__ . '/../..' . '/includes/submodules/banner/class-wpchill-welcome.php',
         'WP_DLM' => __DIR__ . '/../..' . '/src/DLM.php',
     );

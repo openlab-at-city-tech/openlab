@@ -177,7 +177,7 @@ jQuery( document ).ready(
 					var thisval = $( v ).val();
 					var thisid  = '#noo_' + thisval + '_options';
 
-					if ( noo == thisval) {
+					if ( noo == thisval ) {
 						$( thisid ).find( 'input' ).each(
 							function(index,element){
 												$( element ).removeClass( 'disabled-opt' );
@@ -193,7 +193,7 @@ jQuery( document ).ready(
 							}
 						);
 
-									//for external site note
+						// for external site note
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).removeClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).removeClass( 'disabled' );
@@ -217,7 +217,7 @@ jQuery( document ).ready(
 							}
 						);
 
-									//for external site note
+						// for external site note
 						if ($( this ).attr( 'id' ) === 'new_or_old_external') {
 							$( '#check-note' ).addClass( 'disabled-opt' );
 							$( '#wds-website-external #find-feeds' ).addClass( 'disabled' );
@@ -226,6 +226,14 @@ jQuery( document ).ready(
 				}
 			);
 
+			if ( 'clone' == noo ) {
+				showAdvancedCloningOptions();
+				$( '#cloned-site-url' ).show();
+			} else {
+				hideAdvancedCloningOptions();
+				$( '#cloned-site-url' ).hide();
+			}
+
 			// Remove any existing selected-* classes
 			$('#site-options').removeClass(function (index, className) {
 						 return (className.match(/(^|\s)selected-\S+/g) || []).join(' ');
@@ -233,7 +241,6 @@ jQuery( document ).ready(
 
 			// Add the new selected class based on the value
 			$('#site-options').addClass('selected-' + noo);
-			console.log('selected-' + noo);
 
 			var efr = $( '#external-feed-results' );
 			if ( 'external' == noo ) {
@@ -241,6 +248,14 @@ jQuery( document ).ready(
 			} else {
 				$( efr ).hide();
 			}
+		}
+
+		function showAdvancedCloningOptions() {
+			$( '.advanced-cloning-options-row' ).show();
+		}
+
+		function hideAdvancedCloningOptions() {
+			$( '.advanced-cloning-options-row' ).hide();
 		}
 
 		function disable_gc_form() {
@@ -400,6 +415,8 @@ jQuery( document ).ready(
 
 					enable_gc_form();
 					unmark_loading( $( e.target ) );
+
+					$( '#check-note' ).hide();
 				}
 			);
 		}
@@ -410,6 +427,8 @@ jQuery( document ).ready(
 			$group_to_clone = $( '#group-to-clone' );
 
 			if ( 'on' == on_or_off ) {
+				$form.addClass( 'cloning' );
+
 				// Check "Clone a course" near the top
 				$( '#create-or-clone-clone' ).attr( 'checked', true );
 
@@ -435,7 +454,10 @@ jQuery( document ).ready(
 				// Hide 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).hide();
 				$( '#wds-website-existing' ).hide();
+				showAdvancedCloningOptions();
 			} else {
+				$( form ).removeClass( 'cloning' );
+
 				// Show the Site Details section.
 				$( '#panel-site-details' ).show();
 
@@ -450,6 +472,7 @@ jQuery( document ).ready(
 				// Show 'Create a new site' and 'Use an existing site'
 				$( '#wds-website' ).show();
 				$( '#wds-website-existing' ).show();
+				hideAdvancedCloningOptions();
 
 				group_id_to_clone = 0;
 			}
@@ -705,7 +728,6 @@ jQuery( document ).ready(
 		function catchOutgoingFetches() {
 			// Save a reference to the original fetch function
 			const originalFetch = window.fetch;
-			console.log('monkey patching...')
 
 			window.fetch = async function(resource, init) {
 				const { endpoint } = window.SiteTemplatePicker;

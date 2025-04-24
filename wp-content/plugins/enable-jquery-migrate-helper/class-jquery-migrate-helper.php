@@ -413,7 +413,7 @@ class jQuery_Migrate_Helper {
 		} else {
 			if ( 'yes' === get_option( '_jquery_migrate_modern_deprecations', 'no' ) ) {
 				self::set_script( $scripts, 'jquery-migrate', $assets_url . 'jquery-migrate/jquery-migrate-3.4.1-wp.js', array(), '3.4.1-wp' );
-				self::set_script( $scripts, 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.6.4-wp' );
+				self::set_script( $scripts, 'jquery', false, array( 'jquery-core', 'jquery-migrate' ), '3.7.1' );
 			}
 		}
 	}

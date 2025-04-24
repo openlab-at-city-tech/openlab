@@ -22,7 +22,7 @@ function wpt_clear_rate_limits() {
 }
 
 /**
- * Logs successful Tweets for rate limiting.
+ * Logs successful status updates for rate limiting.
  *
  * @param int    $auth Author.
  * @param string $ts Timestamp.
@@ -33,7 +33,7 @@ function wpt_log_success( $auth, $ts, $post_ID ) {
 		return;
 	}
 
-	// get record of recent Tweets.
+	// get record of recent updates.
 	$rate_limit = get_option( 'wpt_rate_limits' );
 	if ( ! is_array( $rate_limit ) ) {
 		$rate_limit = array();
@@ -54,15 +54,15 @@ function wpt_log_success( $auth, $ts, $post_ID ) {
 }
 
 /**
- * Test Tweets against rate limiting rules.
+ * Test updates against rate limiting rules.
  *
  * @param int $post_ID Post ID.
  * @param int $auth Author ID.
  *
- * @return boolean True if OK to Tweet.
+ * @return boolean True if OK to post update.
  */
 function wpt_test_rate_limit( $post_ID, $auth ) {
-	// record of recent Tweets.
+	// record of recent updates.
 	$rate_limit = get_option( 'wpt_rate_limits' );
 	$return     = true;
 	if ( ! $rate_limit ) {
@@ -101,8 +101,17 @@ function wpt_test_rate_limit( $post_ID, $auth ) {
  */
 function wpt_default_rate_limit( $term = false ) {
 	$limit = ( '' !== get_option( 'wpt_default_rate_limit' ) ) ? get_option( 'wpt_default_rate_limit' ) : 10;
-	$limit = ( '0' === (string) $limit ) ? 1 : $limit;
-
+	$limit = ( 0 === (int) $limit ) ? 1 : $limit;
+	/**
+	 * Filter the default rate limit.
+	 *
+	 * @hook wpt_default_rate_limit
+	 *
+	 * @param {int} $limit Integer number of posts allowed.
+	 * @param {int|bool} $term  Term ID or false for default value.
+	 *
+	 * @return {int}
+	 */
 	return apply_filters( 'wpt_default_rate_limit', $limit, $term );
 }
 
@@ -112,7 +121,7 @@ function wpt_default_rate_limit( $term = false ) {
  * @param string $term Term ID.
  * @uses filter wpt_default_rate_limit
  *
- * @return integer Number of Tweets allowed per hour in this category.
+ * @return integer Number of status updates allowed per hour in this category.
  */
 function wpt_get_rate_limit( $term ) {
 	$limits = get_option( 'wpt_rate_limit' );
@@ -150,7 +159,7 @@ function wpt_term_rate_limits() {
  */
 function wpt_save_term_rate_limit( $term_id, $tax_id ) {
 	$limits     = get_option( 'wpt_rate_limit' );
-	$option_set = isset( $_POST['wpt_rate_limit'] ) ? sanitize_text_field( $_POST['wpt_rate_limit'] ) : wpt_default_rate_limit( $term_id );
+	$option_set = isset( $_POST['wpt_rate_limit'] ) ? sanitize_text_field( wp_unslash( $_POST['wpt_rate_limit'] ) ) : wpt_default_rate_limit( $term_id );
 	if ( isset( $_POST['taxonomy'] ) ) {
 		if ( isset( $_POST['wpt_rate_limit'] ) ) {
 			$limits[ $term_id ] = $option_set;
@@ -172,7 +181,7 @@ function wpt_edit_term_rate_limit( $term, $taxonomy ) {
 	?>
 	<tr class="form-field">
 		<th valign="top" scope="row">
-			<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-to-twitter' ); ?></label>
+			<label for="wpt_rate_limit"><?php esc_html_e( 'Max updates per hour on this term', 'wp-to-twitter' ); ?></label>
 		</th>
 		<td>
 			<input type='number' size='4' value='<?php echo esc_attr( $option_set ); ?>' name='wpt_rate_limit' id='wpt_rate_limit' />
@@ -190,15 +199,13 @@ function wpt_add_term_rate_limit( $term ) {
 	$default = wpt_default_rate_limit();
 	?>
 	<div class="form-field">
-		<label for="wpt_rate_limit"><?php _e( 'Max Tweets per hour on this term', 'wp-to-twitter' ); ?></label> <input type='number' value='<?php echo esc_attr( $default ); ?>' id='wpt_rate_limit' name='wpt_rate_limit' />
+		<label for="wpt_rate_limit"><?php esc_html_e( 'Max updates per hour on this term', 'wp-to-twitter' ); ?></label> <input type='number' value='<?php echo esc_attr( $default ); ?>' id='wpt_rate_limit' name='wpt_rate_limit' />
 	</div>
 	<?php
 }
 
 /**
  * View rate limit status.
- *
- * @return string Rate limit info.
  */
 function wpt_view_rate_limits() {
 	$limits = get_option( 'wpt_rate_limits' );
@@ -207,32 +214,49 @@ function wpt_view_rate_limits() {
 	}
 	$next_scheduled = human_time_diff( wp_next_scheduled( 'wptratelimits' ), time() );
 	if ( is_array( $limits ) ) {
-		$output = '<ul>';
+		?>
+		<ul>
+		<?php
 		foreach ( $limits as $auth => $term ) {
-			$author  = ( 0 === (int) $auth ) ? get_option( 'wtt_twitter_username' ) : get_user_meta( $auth, 'wtt_twitter_username', true );
-			$output .= "<li><h4><a href='https://twitter.com/$author'>@$author</a>:</h4><ul>";
-			foreach ( $term as $id => $value ) {
-				$count         = count( $value );
-				$term_array    = explode( '+', $id );
-				$t             = $term_array[0];
-				$x             = $term_array[1];
-				$limit         = wpt_get_rate_limit( $t );
-				$term_object   = get_term( $t, $x );
-				$term_label    = $term_object->name;
-				$rate_limiting = ( $count >= $limit ) ? 'rate-limited' : 'active';
-				$dashicon      = ( $count >= $limit ) ? "<span class='dashicons dashicons-no' aria-hidden='true'></span>" : "<span class='dashicons dashicons-yes' aria-hidden='true'></span>";
-				$output       .= "<li class='$rate_limiting'>$dashicon<strong>$term_label</strong>: ";
-				// Translators: Number of tweets sent, number allowed.
-				$output .= sprintf( _n( '%1$s Tweet sent, %2$s allowed.', '%1$s Tweets sent, %2$s allowed.', $count, 'wp-to-twitter' ), "<strong>$count</strong>", "<strong>$limit</strong>" ) . '</li>';
-			}
-			$output .= '</ul>';
+			$author = ( 0 === (int) $auth ) ? get_option( 'wtt_twitter_username' ) : get_user_meta( $auth, 'wtt_twitter_username', true );
+			?>
+			<li><h4><a href='https://x.com/$author'>@<?php echo esc_html( $author ); ?></a>:</h4><ul>
+				<?php
+				foreach ( $term as $id => $value ) {
+					$count         = count( $value );
+					$term_array    = explode( '+', $id );
+					$t             = $term_array[0];
+					$x             = $term_array[1];
+					$limit         = wpt_get_rate_limit( $t );
+					$term_object   = get_term( $t, $x );
+					$term_label    = $term_object->name;
+					$rate_limiting = ( $count >= $limit ) ? 'rate-limited' : 'active';
+					$dashicon      = ( $count >= $limit ) ? "<span class='dashicons dashicons-no' aria-hidden='true'></span>" : "<span class='dashicons dashicons-yes' aria-hidden='true'></span>";
+					?>
+					<li class='<?php echo esc_attr( $rate_limiting ); ?>'>
+						<?php wp_kses_post( $dashicon . $term_label ); ?>:
+					<?php
+					// Translators: Number of tweets sent, number allowed.
+					echo wp_kses_post( sprintf( _n( '%1$s update sent, %2$s allowed.', '%1$s updates sent, %2$s allowed.', $count, 'wp-to-twitter' ), "<strong>$count</strong>", "<strong>$limit</strong>" ) );
+					?>
+					</li>
+					<?php
+				}
+				?>
+			</ul>
+			<?php
 		}
-		$output .= '</ul>';
+		?>
+		</ul>
+		<?php
 	} else {
-		$output = __( 'No Tweets have been sent this hour.', 'wp-to-twitter' );
+		?>
+		<p><?php esc_html_e( 'No updates have been sent this hour.', 'wp-to-twitter' ); ?></p>
+		<?php
 	}
 	// Translators: Time until next scheduled rate limiting reset.
-	$next = wpautop( sprintf( __( ' Next reset in %s.', 'wp-to-twitter' ), $next_scheduled ) );
-
-	return $output . $next;
+	$next = sprintf( __( 'Next reset in %s.', 'wp-to-twitter' ), $next_scheduled );
+	?>
+	<p><?php echo esc_html( $next ); ?></p>
+	<?php
 }

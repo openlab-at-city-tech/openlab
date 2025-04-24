@@ -1,0 +1,26 @@
+/* probably temporary */
+.webwork-question-form input, .webwork-question-form textarea { width: 100%; }
+
+
+.webwork-ask-a-question label {
+	font-weight: bold;
+}
+
+.webwork-ask-a-question p.description {
+	font-size: .8em;
+	font-style: italic;
+}
+
+.section-content-hide {
+	display: none;
+}
+
+.section-content {
+	border: 2px solid #ccc;
+	margin: 6px 30px;
+	padding: 10px 30px;
+}
+
+.webwork-question-form {
+	margin-top: 2em;
+}

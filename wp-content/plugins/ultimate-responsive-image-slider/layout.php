@@ -167,8 +167,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 #slider-pro-3-<?php echo esc_attr($post_id); ?> .title-in-bg {
 	background: rgba(255, 255, 255, 0.7); !important;
 	white-space: unset !important;
-	max-width: 90%;
-	min-width: 40%;
 	transform: initial !important;
 	-webkit-transform: initial !important;
 	font-size: 14px !important;
@@ -181,8 +179,6 @@ document.addEventListener("DOMContentLoaded", function(event) {
 #slider-pro-3-<?php echo esc_attr($post_id); ?> .desc-in-bg {
 	background: rgba(<?php echo esc_attr($WRIS_L3_Desc_BgColor); ?>, <?php echo esc_attr("0.7"); ?>) !important;
 	white-space: unset !important;
-	width: 80% !important;
-	min-width: 30%;
 	transform: initial !important;
 	-webkit-transform: initial !important;
 	font-size: 13px !important;
@@ -251,8 +247,8 @@ if($WRIS_L3_Slide_Title) { ?>
 
 							<?php if($slide_title != "" && $WRIS_L3_Show_Slide_Title) { ?>
 							<p class="sp-layer sp-white sp-padding title-in title-in-bg hide-small-screen" 
-								data-position="centerCenter"
-								data-vertical="-14%"
+								data-position="bottomCenter"
+								data-vertical="12%"
 								data-show-transition="left" data-show-delay="500">
 								<?php echo esc_html( $slide_title ); ?>
 							</p>
@@ -260,8 +256,8 @@ if($WRIS_L3_Slide_Title) { ?>
 
 							<?php if($slide_description != "" && $WRIS_L3_Show_Slide_Desc) { ?>
 							<p class="sp-layer sp-black sp-padding desc-in desc-in-bg hide-medium-screen" 
-								data-position="centerCenter"
-								data-vertical="14%"
+								data-position="bottomCenter"
+								data-vertical="0%"
 								data-show-transition="right" data-show-delay="500">
 								<?php 
 								if ( strlen( $slide_description ) > 300 ) {

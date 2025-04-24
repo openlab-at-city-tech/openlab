@@ -13,12 +13,10 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit();
 } else {
 	delete_option( 'wpt_post_types' );
-	delete_option( 'jd_twit_remote' );
 	delete_option( 'jd_post_excerpt' );
 
 	delete_option( 'comment-published-update' );
 	delete_option( 'comment-published-text' );
-	delete_option( 'wpt_status_message_last' );
 	delete_option( 'wtt_twitter_username' );
 	// Su.pr API.
 	delete_option( 'suprapi' );
@@ -49,7 +47,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	delete_option( 'wpt_inline_edits' );
 
 	// Note that default options are set.
-	delete_option( 'twitterInitialised' );
 	delete_option( 'wpt_twitter_setup' );
 	delete_option( 'wp_twitter_failure' );
 	delete_option( 'twitterlogin' );
@@ -64,7 +61,6 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	// Special Options.
 	delete_option( 'jd_twit_prepend' );
 	delete_option( 'jd_twit_append' );
-	delete_option( 'jd_twit_remote' );
 	delete_option( 'twitter-analytics-campaign' );
 	delete_option( 'use-twitter-analytics' );
 	delete_option( 'jd_twit_custom_url' );
@@ -72,6 +68,9 @@ if ( ! defined( 'ABSPATH' ) && ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	delete_option( 'jd_strip_nonan' );
 	delete_option( 'wpt_auto_tweet_allowed' );
 	delete_option( 'wpt_tweet_length' );
+	delete_option( 'wpt_x_length' );
+	delete_option( 'wpt_mastodon_length' );
+	delete_option( 'wpt_bluesky_length' );
 	delete_option( 'wpt_permit_feed_styles' );
 
 	delete_option( 'jd_individual_twitter_users' );

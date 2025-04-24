@@ -975,6 +975,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'unit' => 'em',
 					),
 					'primary_navigation_stretch' => false,
+					'primary_navigation_open_type' => 'hover',
 					'primary_navigation_fill_stretch' => false,
 					'primary_navigation_style'   => 'standard',
 					'primary_navigation_color'   => array(
@@ -2642,6 +2643,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 
 					// enable_preload css style sheets.
 					'enable_preload' => false,
+					'disable_sitemap' => false,
 					'breadcrumb_engine' => '',
 					'breadcrumb_home_icon' => false,
 					// Post Archive.

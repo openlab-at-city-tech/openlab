@@ -3,7 +3,7 @@
 Plugin Name: Anthologize
 Plugin URI: http://anthologize.org
 Description: Use the power of WordPress to transform your content into a book.
-Version: 0.8.2
+Version: 0.8.3
 Text Domain: anthologize
 Author: One Week | One Tool
 Author URI: http://oneweekonetool.org
@@ -30,7 +30,7 @@ modifications of TDPDF must comply with its license.
 */
 
 if ( ! defined( 'ANTHOLOGIZE_VERSION' ) )
-	define( 'ANTHOLOGIZE_VERSION', '0.8.2' );
+	define( 'ANTHOLOGIZE_VERSION', '0.8.3' );
 
 require dirname( __FILE__ ) . '/vendor/autoload.php';
 

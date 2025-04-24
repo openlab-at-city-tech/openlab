@@ -2390,3 +2390,17 @@ function breadcrumb_recursive_sanitize_arr($array)
 
     return $array;
 }
+
+
+$display_after_action = get_option('display_after_action');
+
+if (!empty($display_after_action)) {
+    $display_after_action_priority = get_option('display_after_action_priority');
+
+    add_action($display_after_action, "breadcrumb_display_after_action", $display_after_action_priority);
+
+    function breadcrumb_display_after_action()
+    {
+        echo do_shortcode("[breadcrumb]");
+    }
+}

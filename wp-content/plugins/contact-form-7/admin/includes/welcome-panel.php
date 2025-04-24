@@ -88,16 +88,15 @@ class WPCF7_WelcomePanelColumn_Donation extends WPCF7_WelcomePanelColumn {
 
 	protected function content() {
 		return array(
-			esc_html( __( "It is hard to continue development and support for this plugin without contributions from users like you.", 'contact-form-7' ) ),
+			esc_html( __( "It is hard to continue to maintain this plugin without support from users like you.", 'contact-form-7' ) ),
 			sprintf(
-				/* translators: %s: link labeled 'making a donation' */
-				esc_html( __( 'If you enjoy using Contact Form 7 and find it useful, please consider %s.', 'contact-form-7' ) ),
+				/* translators: %s: link labeled 'contribute to the project' */
+				esc_html( __( 'There are several ways for you to %s: testing, coding, translating it into your local languages, helping other users, financial donations, etc, etc. We equally welcome you regardless of the way you contribute.', 'contact-form-7' ) ),
 				wpcf7_link(
-					__( 'https://contactform7.com/donate/', 'contact-form-7' ),
-					__( 'making a donation', 'contact-form-7' )
+					__( 'https://contactform7.com/contributing/', 'contact-form-7' ),
+					__( 'contribute to the project', 'contact-form-7' )
 				)
 			),
-			esc_html( __( "Your donation will help encourage and support the plugin&#8217;s continued development and better user support.", 'contact-form-7' ) ),
 		);
 	}
 }
@@ -277,7 +276,7 @@ function wpcf7_welcome_panel_screen_settings( $screen_settings, $screen ) {
 	);
 
 	$checkbox_id = 'wpcf7-welcome-panel-show';
-	$checked = ! in_array( wpcf7_version( 'only_major=1' ), $vers );
+	$checked = ! in_array( wpcf7_version( 'only_major=1' ), $vers, true );
 
 	$checkbox = sprintf(
 		'<input %s />',
@@ -293,7 +292,7 @@ function wpcf7_welcome_panel_screen_settings( $screen_settings, $screen ) {
 <legend>%1$s</legend>
 <label for="%2$s">%3$s %4$s</label>
 </fieldset>',
- 		esc_html( __( 'Welcome panel', 'contact-form-7' ) ),
+		esc_html( __( 'Welcome panel', 'contact-form-7' ) ),
 		esc_attr( $checkbox_id ),
 		$checkbox,
 		esc_html( __( 'Show welcome panel', 'contact-form-7' ) )

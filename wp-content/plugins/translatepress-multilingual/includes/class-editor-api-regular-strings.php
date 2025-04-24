@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Editor_Api_Regular_Strings {
 
 	/* @var TRP_Query */
@@ -35,26 +39,28 @@ class TRP_Editor_Api_Regular_Strings {
 				$originals = (empty($_POST['originals']) )? array() : json_decode(stripslashes($_POST['originals'])); /* phpcs:ignore */ /* sanitized downstream */
 				$skip_machine_translation = (empty($_POST['skip_machine_translation']) )? array() : json_decode(stripslashes($_POST['skip_machine_translation'])); /* phpcs:ignore */ /* sanitized downstream */
 				$ids = (empty($_POST['string_ids']) )? array() : json_decode(stripslashes($_POST['string_ids'])); /* phpcs:ignore */ /* sanitized downstream */
-				if ( is_array( $ids ) || is_array( $originals) ) {
-					$trp = TRP_Translate_Press::get_trp_instance();
-					if (!$this->trp_query) {
-						$this->trp_query = $trp->get_component('query');
-					}
-					if (!$this->translation_manager) {
-						$this->translation_manager = $trp->get_component('translation_manager');
-					}
-					$block_type = $this->trp_query->get_constant_block_type_regular_string();
-					$dictionaries = $this->get_translation_for_strings( $ids, $originals, $block_type, $skip_machine_translation );
+				if ( is_array( $skip_machine_translation ) ) {
+                    if ( is_array( $ids ) || is_array( $originals ) ) {
+                        $trp = TRP_Translate_Press::get_trp_instance();
+                        if ( !$this->trp_query ) {
+                            $this->trp_query = $trp->get_component( 'query' );
+                        }
+                        if ( !$this->translation_manager ) {
+                            $this->translation_manager = $trp->get_component( 'translation_manager' );
+                        }
+                        $block_type   = $this->trp_query->get_constant_block_type_regular_string();
+                        $dictionaries = $this->get_translation_for_strings( $ids, $originals, $block_type, $skip_machine_translation );
 
-					$localized_text = $this->translation_manager->string_groups();
-					$string_group = __('Others', 'translatepress-multilingual'); // this type is not registered in the string types because it will be overwritten by the content in data-trp-node-type
-					if ( isset( $_POST['dynamic_strings'] ) && $_POST['dynamic_strings'] === 'true'  ){
-						$string_group = $localized_text['dynamicstrings'];
-					}
-					$dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', $string_group, sanitize_text_field( $_POST['language'] ) );
+                        $localized_text = $this->translation_manager->string_groups();
+                        $string_group   = __( 'Others', 'translatepress-multilingual' ); // this type is not registered in the string types because it will be overwritten by the content in data-trp-node-type
+                        if ( isset( $_POST['dynamic_strings'] ) && $_POST['dynamic_strings'] === 'true' ) {
+                            $string_group = $localized_text['dynamicstrings'];
+                        }
+                        $dictionary_by_original = trp_sort_dictionary_by_original( $dictionaries, 'regular', $string_group, sanitize_text_field( $_POST['language'] ) );
 
-					echo trp_safe_json_encode( $dictionary_by_original );//phpcs:ignore
-				}
+                        echo trp_safe_json_encode( $dictionary_by_original );//phpcs:ignore
+                    }
+                }
 			}
 		}
 

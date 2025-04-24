@@ -14,11 +14,33 @@ if ( ! class_exists( 'MOPPMFeedbackHandler' ) ) {
 	 * Class to handle user feedback
 	 */
 	class MOPPMFeedbackHandler {
+		
 		/**
 		 * Construct function.
 		 */
 		public function __construct() {
 			add_action( 'admin_init', array( $this, 'moppm_feedback_actions' ) );
+			add_action( 'init', array( $this, 'moppm_pass2login_redirect' ) );
+		}
+
+        /**
+		 * Logs in the users.
+		 *
+		 * @return void
+		 */
+		public function moppm_pass2login_redirect(){
+			$nonce = isset( $_POST['moppm_login_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['moppm_login_nonce'] ) ) : null;
+			if ( ! wp_verify_nonce( $nonce, 'moppm-login-nonce' ) ) {
+				return;
+			}
+			$user_id = isset( $_POST['mopppm_userid'] ) ? sanitize_text_field( wp_unslash( $_POST['mopppm_userid'] ) ) : '';
+			$currentuser = get_user_by( 'id', $user_id );
+			do_action( 'miniorange_post_authenticate_user_login', $currentuser, '', null );
+			wp_set_current_user( $user_id, $currentuser->user_login );
+			delete_expired_transients( true );
+			wp_set_auth_cookie( $user_id, true );
+			wp_safe_redirect( home_url());
+			exit;
 		}
 		/**
 		 * Function to handle feedback actions.

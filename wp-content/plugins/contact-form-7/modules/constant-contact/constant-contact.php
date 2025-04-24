@@ -48,7 +48,7 @@ function wpcf7_constant_contact_submit( $contact_form, $result ) {
 	$do_submit = true;
 
 	if ( empty( $result['status'] )
-	or ! in_array( $result['status'], array( 'mail_sent' ) ) ) {
+	or ! in_array( $result['status'], array( 'mail_sent' ), true ) ) {
 		$do_submit = false;
 	}
 
@@ -91,7 +91,7 @@ function wpcf7_constant_contact_submit( $contact_form, $result ) {
 		return;
 	}
 
-	$request_builder = new $request_builder_class_name;
+	$request_builder = new $request_builder_class_name();
 	$request_builder->build( $submission );
 
 	if ( ! $request_builder->is_valid() ) {

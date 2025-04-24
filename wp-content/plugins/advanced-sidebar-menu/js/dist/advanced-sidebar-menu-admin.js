@@ -2,7 +2,17 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 501:
+/***/ 1669:
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = jQuery;
+
+/***/ }),
+
+/***/ 9425:
 /*!********************************!*\
   !*** ./js/src/pcss/admin.pcss ***!
   \********************************/
@@ -14,16 +24,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
-
-/***/ }),
-
-/***/ 1669:
-/*!*************************!*\
-  !*** external "jQuery" ***!
-  \*************************/
-/***/ ((module) => {
-
-module.exports = jQuery;
 
 /***/ })
 
@@ -84,11 +84,13 @@ module.exports = jQuery;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
+// This entry needs to be wrapped in an IIFE because it needs to be isolated against other modules in the chunk.
+(() => {
 /*!********************************!*\
   !*** ./js/src/widget-admin.ts ***!
   \********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 501);
+/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 9425);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ 1669);
 
 
@@ -204,6 +206,8 @@ window.advancedSidebarMenuAdmin = {
 $(document).on('widget-added', function () {
   window.advancedSidebarMenuAdmin.init();
 });
+})();
+
 /******/ })()
 ;
 //# sourceMappingURL=advanced-sidebar-menu-admin.js.map

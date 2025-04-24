@@ -1,6 +1,9 @@
 <?php
 
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Gettext_Scan {
 
     protected $settings;

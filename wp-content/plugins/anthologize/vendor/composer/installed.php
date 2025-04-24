@@ -3,7 +3,7 @@
         'name' => 'chnm/anthologize',
         'pretty_version' => '0.8.x-dev',
         'version' => '0.8.9999999.9999999-dev',
-        'reference' => 'ab984c003a2ace922d87f1e7f29d78110f401804',
+        'reference' => '1e60e8f970f44326fabf5c33edbb7df31f16ee55',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'chnm/anthologize' => array(
             'pretty_version' => '0.8.x-dev',
             'version' => '0.8.9999999.9999999-dev',
-            'reference' => 'ab984c003a2ace922d87f1e7f29d78110f401804',
+            'reference' => '1e60e8f970f44326fabf5c33edbb7df31f16ee55',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

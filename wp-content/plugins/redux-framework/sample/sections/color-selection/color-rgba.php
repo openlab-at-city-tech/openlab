@@ -6,6 +6,7 @@
  * @package Redux Framework
  */
 
+// phpcs:disable
 defined( 'ABSPATH' ) || exit;
 
 Redux::set_section(
@@ -23,7 +24,7 @@ Redux::set_section(
 				'subtitle' => esc_html__( 'Gives you the RGBA color.', 'your-textdomain-here' ),
 				'default'  => array(
 					'color' => '#7e33dd',
-					'alpha' => '.8',
+					'alpha' => .8,
 				),
 				'output'   => array(
 					'color'     => '.posted-on, .wp-block-post-date a',
@@ -33,3 +34,4 @@ Redux::set_section(
 		),
 	)
 );
+// phpcs:enable

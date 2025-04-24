@@ -81,15 +81,15 @@ add_action( 'comment_form_logged_in_after', 'olgc_leave_comment_checkboxes' );
  *
  * @since 1.0.0
  *
- * @param array $args Arguments from `comment_form()`.
- * @return array
+ * @param string
+ * @return string
  */
-function olgc_leave_comment_after_comment_fields( $args ) {
+function olgc_leave_comment_after_comment_fields( $comment_fields ) {
 	if ( ! olgc_is_instructor() ) {
-		return $args;
+		return $comment_fields;
 	}
 
-	$args['comment_notes_after'] .= '
+	$comment_fields .= '
 	<div class="olgc-grade-entry">
 		<label for="olgc-grade">' . __( 'Grade:', 'wp-grade-comments' ) . '</label> <input type="text" maxlength="5" name="olgc-grade" id="olgc-grade" />
 	</div>
@@ -98,9 +98,9 @@ function olgc_leave_comment_after_comment_fields( $args ) {
 		' . __( 'NOTE: Private response and grade will only be visible to instructors and the post\'s author.', 'wp-grade-comments' ) . '
 	</div>' . wp_nonce_field( 'olgc-grade-entry-' . get_the_ID(), '_olgc_nonce', false, false );
 
-	return $args;
+	return $comment_fields;
 }
-add_filter( 'comment_form_defaults', 'olgc_leave_comment_after_comment_fields', 1000 );
+add_filter( 'comment_form_field_comment', 'olgc_leave_comment_after_comment_fields', 1000 );
 
 /**
  * Catch and save values after comment submit.

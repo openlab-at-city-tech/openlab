@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /** Post title */
 add_filter( 'trp_register_advanced_settings', 'trp_register_disable_post_container_tags_for_post_title', 510 );
 function trp_register_disable_post_container_tags_for_post_title( $settings_array ){
@@ -8,8 +12,9 @@ function trp_register_disable_post_container_tags_for_post_title( $settings_arra
 		'type'          => 'checkbox',
 		'label'         => esc_html__( 'Disable post container tags for post title', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'It disables search indexing the post title in translated languages.<br/>Useful when the title of the post doesn\'t allow HTML thus breaking the page.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
-        'id'            =>'debug',
-	);
+        'id'            => 'debug',
+        'container'     => 'debug'
+    );
 	return $settings_array;
 }
 
@@ -32,7 +37,8 @@ function trp_register_disable_post_container_tags_for_post_content( $settings_ar
         'type'          => 'checkbox',
         'label'         => esc_html__( 'Disable post container tags for post content', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'It disables search indexing the post content in translated languages.<br/>Useful when the content of the post doesn\'t allow HTML thus breaking the page.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
-        'id'            =>'debug',
+        'id'            => 'debug',
+        'container'     => 'debug'
     );
     return $settings_array;
 }

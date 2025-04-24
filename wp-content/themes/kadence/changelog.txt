@@ -1,3 +1,46 @@
+= 1.2.21 | 4th April 2025 =
+* Fix: Issue with loading google fonts in footer.
+
+= 1.2.20 | 3rd April 2025 =
+* Fix: Scroll to top button not losing hover state on mobile after pressed.
+* FIx: Improvments to LifterLMS integration.
+* Fix: Issue with double loading google fonts in some situations.
+
+== 1.2.19 | 18th March 2025 ==
+* Update: Improve basic GiveWP support.
+
+== 1.2.18 | 7th March 2025 ==
+* Fix: broken top level links on menus
+
+== 1.2.17 | 6th March 2025 ==
+* Update: Ability to activate mega menu (or dropdown menu) on click.
+* Update: Set different color for each post category
+* Fix: Google fonts in some areas not served locally.
+* Fix: The 'alignwide' style on the frontend.
+
+== 1.2.16 | 3rd February 2025 ==
+* Fix: Issue with some customizer components not loading.
+
+== 1.2.15 | 30th January 2025 ==
+* Add: Disable default sitemap option.
+* Fix: Threads Icon missing brand colors
+* Fix: LifterLMS Course Lesson Style border issue
+* Fix: Image block border styles
+* Fix: Customizer Typography settings reset button
+* Fix: Funnel Display font is not available in Customizer
+
+== 1.2.14 | 17th Dec 2024 ==
+* Update: Set current menu items based on url hash anchor changes.
+* Fix: Issue with simple lightbox captions on some blocks.
+* Fix: Issue with scroll to top not smoothly scrolling.
+
+== 1.2.13 | 5th Dec 2024 ==
+* Update: Improve tabbing through navigation.
+* Update: Surecart product style issue.
+* Fix: Possible issue with third-party plugins breaking customizer
+* Fix: Issue with scroll to top aria hidden.
+* Fix: Issue with bbpress reply date.
+
 == 1.2.12 | 19th November 2024 ==
 * Fix: Possible issue with woocommerce product image sizes.
 

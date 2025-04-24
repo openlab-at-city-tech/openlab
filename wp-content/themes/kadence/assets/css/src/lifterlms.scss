@@ -155,9 +155,6 @@
 .llms-syllabus-wrapper.kadence-syllabus-style-tiles {
 	text-align: center;
 	.llms-section-title {
-		margin-top: 1.5rem;
-		border-bottom: 0;
-		background: transparent;
 		width:100%;
 	}
 	.llms-course-wrap {
@@ -171,6 +168,9 @@
 	
 	.llms-lesson-preview {
 		border-bottom: 0;
+		border-top: 0;
+		border-left: 0;
+		border-right: 0;
 		padding: 1rem;
 		.llms-lesson-link {
 			padding: 0;
@@ -191,9 +191,6 @@
 .llms-syllabus-wrapper.kadence-syllabus-style-center {
 	text-align: center;
 	.llms-section-title {
-		margin-top: 1.5rem;
-		border-bottom: 0;
-		background: transparent;
 		width:100%;
 	}
 	.llms-course-wrap {
@@ -221,6 +218,10 @@
 				padding: 0;
 			}
 		}
+	}
+
+	.llms-lesson-preview:last-child {
+		border-bottom: 1px solid var(--global-palette7) ;
 	}
 }
 .llms-course-nav {
@@ -555,4 +556,12 @@ body:not( .elementor-page ) .llms-loop-item-content {
 .llms-loop-item-content .llms-loop-title {
 	margin-top: 5px;
 	margin-bottom: 0;
+}
+
+// v8.0.2 fix
+#review_box label {
+	display: block;
+}
+.llms-favorite-wrapper button {
+	color: var(--global-palette4);
 }

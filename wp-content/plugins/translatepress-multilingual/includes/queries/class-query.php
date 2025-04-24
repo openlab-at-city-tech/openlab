@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Query
  *
@@ -829,25 +833,6 @@ class TRP_Query{
         return $dictionary;
     }
 
-    /**
-     * Return custom table name for given language code.
-     *
-     * @param string $language_code         Language code.
-     * @param string $default_language      Default language. Defaults to the one from settings.
-     * @return string                       Table name.
-     */
-    public function get_table_name( $language_code, $default_language = null, $only_prefix = false ){
-        if ( $default_language == null ) {
-            $default_language = $this->settings['default-language'];
-        }
-        if ( (!trp_is_valid_language_code($language_code) && $only_prefix === false) || !trp_is_valid_language_code($default_language) ){
-            /* there's are other checks that display an admin notice for this kind of errors */
-            return 'trp_language_code_is_invalid_error';
-        }
-
-        return apply_filters( 'trp_table_name_dictionary', $this->db->prefix . 'trp_dictionary_' . strtolower( $default_language ) . '_'. strtolower( $language_code ), $this->db->prefix, $language_code, $default_language );
-    }
-
     public function get_language_code_from_table_name( $table_name, $default_language = null ){
 	    if ( $default_language == null ) {
 		    $default_language = $this->settings['default-language'];
@@ -921,6 +906,25 @@ class TRP_Query{
         return $dictionary;
     }
 
+    /**
+     * Return custom table name for given language code.
+     *
+     * @param string $language_code         Language code.
+     * @param string $default_language      Default language. Defaults to the one from settings.
+     * @return string                       Table name.
+     */
+    public function get_table_name( $language_code, $default_language = null, $only_prefix = false ){
+        if ( $default_language == null ) {
+            $default_language = $this->settings['default-language'];
+        }
+        if ( (!trp_is_valid_language_code($language_code) && $only_prefix === false) || !trp_is_valid_language_code($default_language) ){
+            /* there's are other checks that display an admin notice for this kind of errors */
+            return 'trp_language_code_is_invalid_error';
+        }
+
+        return apply_filters( 'trp_table_name_dictionary', $this->db->prefix . 'trp_dictionary_' . strtolower( $default_language ) . '_'. strtolower( $language_code ), $this->db->prefix, $language_code, $default_language );
+    }
+
     public function get_gettext_table_name( $language_code ){
         if ( !trp_is_valid_language_code($language_code) ){
             /* there's are other checks that display an admin notice for this kind of errors */
@@ -941,7 +945,7 @@ class TRP_Query{
      */
     public function get_string_rows( $id_array, $original_array, $language_code, $output = OBJECT_K, $is_original_id_array = false ){
         $original_id = ($is_original_id_array) ? ' original_id, ' : '';
-        $select_query = "SELECT " . $original_id . "id, original, translated, status, block_type FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE ";
+        $select_query = "SELECT " . $original_id . "id, original, translated, status, block_type, original_id FROM `" . sanitize_text_field( $this->get_table_name( $language_code ) ) . "` WHERE ";
 
         $prepared_query1 = '';
         if ( is_array( $original_array ) && count ( $original_array ) > 0 ) {
@@ -1099,151 +1103,192 @@ class TRP_Query{
 	/**
 	 * Removes duplicate rows of regular strings table
 	 *
-	 * (original, translated, status, block_type) have to be identical.
+	 * (original, block_type) have to be identical.
 	 * Only the row with the lowest ID remains
 	 *
-	 * https://stackoverflow.com/a/25206828
 	 *
-	 * @param $table
+	 * @param $language_code
+     * @param $inferior_limit
+     * @param $batch_size
+     * @param $extra_params
 	 */
-	public function remove_duplicate_rows_in_dictionary_table( $language_code, $inferior_limit, $batch_size ) {
-		$table_name = $this->get_table_name( $language_code );
+	public function remove_duplicate_rows_in_dictionary_table( $language_code, $inferior_limit, $batch_size, $extra_params ) {
+        $table_name = $this->get_table_name( $language_code );
+
+        // encoding the original so we don't brake it with sanitize_text_field() inside class-upgrade.php
+        $trp_last_original   = isset($extra_params['trp_last_original']) ? $extra_params['trp_last_original'] : '';
+        $trp_last_id         = isset($extra_params['trp_last_id']) ? $extra_params['trp_last_id'] : 0;
+
         if ($this->table_exists($table_name)) {
-            $last_id = $this->get_last_id( $table_name );
-            $query = $this->get_remove_identical_duplicates_query( $table_name, $inferior_limit, 'regular' );
-            $this->db->query( $query );
-            if ( $inferior_limit > $last_id ) {
-                return true;
+            $query = $this->db->prepare(
+                "SELECT id, original, translated, block_type domain FROM $table_name 
+                        WHERE (original > %s OR (original = %s AND id > %d)) 
+                        ORDER BY original, id 
+                        LIMIT %d",
+                $trp_last_original,
+                $trp_last_original,
+                $trp_last_id,
+                $batch_size
+            );
+
+            $results = $this->db->get_results($query, ARRAY_A);
+
+            if (!empty($results)){
+                $last_row = end($results);
+                $trp_last_original = $last_row['original'];
+                $trp_last_id = $last_row['id'];
+
+                // Step 2: Use PHP to group IDs by 'original' + 'domain'
+                $duplicates = [];
+
+                foreach ($results as $row) {
+                    $block_type = !empty($row['block_type']) ? strval($row['block_type']) : '';
+                    $key = $row['original'] . $row['domain'] . $block_type;
+                    $id = $row['id'];
+                    $translated = $row['translated'];
+
+                    if (!isset($duplicates[$key])) {
+                        $duplicates[$key] = [];
+                    }
+                    if (!empty($translated)){
+                        // place translated records to the beginning of the array.
+                        array_unshift($duplicates[$key], $id);
+                    } else {
+                        $duplicates[$key][] = $id;
+                    }
+                }
+
+                // Step 3: Collect IDs to delete, keeping one per duplicate
+                $ids_to_delete = [];
+                foreach ($duplicates as $ids) {
+                    if (count($ids) > 1) {
+                        // Keep the first ID, delete the rest
+                        array_shift($ids);
+                        $ids_to_delete = array_merge($ids_to_delete, $ids);
+                    }
+                }
+
+                if (!empty($ids_to_delete)) {
+                    $ids_string = implode(',', array_map('intval', $ids_to_delete));
+                    $delete_query = "DELETE FROM $table_name WHERE id IN ($ids_string)";
+                    $this->db->query( $delete_query );
+                }
             }
-            return false;
+
+            $extra_params = array(
+                'trp_last_original' => $trp_last_original,
+                'trp_last_id' => $trp_last_id
+            );
+
+            if ( empty($results) ) {
+                $finalize_with_language = true;
+            } else {
+                $finalize_with_language = false;
+            }
         }else{
-            return true;
+            $finalize_with_language = true;
         }
+
+        return array(
+            'finalize_with_language' => $finalize_with_language,
+            'extra_params' => $extra_params
+        );
     }
 
     /**
      * Removes duplicate rows of gettext strings table
      *
-     * (original, translated, domain, status) have to be identical.
+     * (original, domain) have to be identical.
      * Only the row with the lowest ID remains
      *
-     * @param $table
-     */
-    /**
      * @param $language_code
      * @param $inferior_limit 1000, 2000
      * @param $batch_size
-     * @return bool|int
+     * @param $extra_params
+     * @return array
      */
-	public function remove_duplicate_rows_in_gettext_table( $language_code, $inferior_limit, $batch_size ){
+	public function remove_duplicate_rows_in_gettext_table( $language_code, $inferior_limit, $batch_size, $extra_params = array() ){
         $table_name = $this->get_gettext_table_name( $language_code );
+
+        // encoding the original so we don't brake it with sanitize_text_field() inside class-upgrade.php
+        $trp_last_original   = isset($extra_params['trp_last_original']) ? $extra_params['trp_last_original'] : '';
+        $trp_last_id         = isset($extra_params['trp_last_id']) ? $extra_params['trp_last_id'] : 0;
+
         if ($this->table_exists($table_name)) {
-            $last_id = $this->get_last_id( $table_name );
-            $query = $this->get_remove_identical_duplicates_query( $table_name, $inferior_limit, 'gettext' );
-            $this->db->query( $query );
-            if ( $inferior_limit > $last_id ) {
-                return true;
+            $query = $this->db->prepare(
+                "SELECT id, original, translated, plural_form domain FROM $table_name 
+                        WHERE (original > %s OR (original = %s AND id > %d)) 
+                        ORDER BY original, id 
+                        LIMIT %d",
+                $trp_last_original,
+                $trp_last_original,
+                $trp_last_id,
+                $batch_size
+            );
+
+            $results = $this->db->get_results($query, ARRAY_A);
+
+            if (!empty($results)){
+                $last_row = end($results);
+                $trp_last_original = $last_row['original'];
+                $trp_last_id = $last_row['id'];
+
+                // Step 2: Use PHP to group IDs by 'original' + 'domain'
+                $duplicates = [];
+
+                foreach ($results as $row) {
+                    $plural = !empty($row['plural_form']) ? strval($row['plural_form']) : '';
+                    $key = $row['original'] . $row['domain'] . $plural;
+                    $id = $row['id'];
+                    $translated = $row['translated'];
+
+                    if (!isset($duplicates[$key])) {
+                        $duplicates[$key] = [];
+                    }
+                    if (!empty($translated)){
+                        // place translated records to the beginning of the array.
+                        array_unshift($duplicates[$key], $id);
+                    } else {
+                        $duplicates[$key][] = $id;
+                    }
+                }
+
+                // Step 3: Collect IDs to delete, keeping one per duplicate
+                $ids_to_delete = [];
+                foreach ($duplicates as $ids) {
+                    if (count($ids) > 1) {
+                        // Keep the first ID, delete the rest
+                        array_shift($ids);
+                        $ids_to_delete = array_merge($ids_to_delete, $ids);
+                    }
+                }
+
+                if (!empty($ids_to_delete)) {
+                    $ids_string = implode(',', array_map('intval', $ids_to_delete));
+                    $delete_query = "DELETE FROM $table_name WHERE id IN ($ids_string)";
+                    $this->db->query( $delete_query );
+                }
             }
-            return false;
+
+            $extra_params = array(
+                'trp_last_original' => $trp_last_original,
+                'trp_last_id' => $trp_last_id
+            );
+
+            if ( empty($results) ) {
+                $finalize_with_language = true;
+            } else {
+                $finalize_with_language = false;
+            }
         }else{
-            return true;
+            $finalize_with_language = true;
         }
+
+        return array(
+            'finalize_with_language' => $finalize_with_language,
+            'extra_params' => $extra_params
+        );
     }
-
-    /**
-     * Function that builds the query string for removing identical entries
-     * @param $table_name
-     * @param $batch
-     * @param $type string possible values are 'regular' or 'gettext'
-     * @return string
-     */
-    private function get_remove_identical_duplicates_query( $table_name, $inferior_limit, $type ){
-        $charset_collate = $this->db->get_charset_collate();
-        $charset = "utf8mb4";
-        if( strpos( 'latin1', $charset_collate ) === 0 )
-            $charset = "latin1";
-
-        $query = '	DELETE `b`
-					FROM
-					    ' . $table_name . ' AS `a`,
-					    ' . $table_name . ' AS `b`
-					WHERE
-					    -- IMPORTANT: Ensures one version remains
-					    `a`.ID < ' . $inferior_limit . '
-					    AND `b`.ID < ' . $inferior_limit . '
-					    AND `a`.`ID` < `b`.`ID`
-
-					    -- Check for all duplicates. Binary ensure case sensitive comparison
-					    AND (`a`.`original` COLLATE '.$charset.'_bin = `b`.`original` OR `a`.`original` IS NULL AND `b`.`original` IS NULL)
-					    AND (`a`.`translated` COLLATE '.$charset.'_bin = `b`.`translated` OR `a`.`translated` IS NULL AND `b`.`translated` IS NULL)
-					    AND (`a`.`status` = `b`.`status` OR `a`.`status` IS NULL AND `b`.`status` IS NULL)';
-        if($type === 'gettext')
-            $query .= 'AND (`a`.`domain` = `b`.`domain` OR `a`.`domain` IS NULL AND `b`.`domain` IS NULL)';
-        else if($type === 'regular')
-            $query .= 'AND (`a`.`block_type` = `b`.`block_type` OR `a`.`block_type` IS NULL AND `b`.`block_type` IS NULL)';
-        $query .=	    ';';
-        return $query;
-    }
-
-	/**
-	 * Removes a row if translation status 0, if the original exists translated
-	 *
-	 * Only the original with translation remains
-	 */
-	public function remove_untranslated_strings_if_translation_available( $language_code, $inferior_limit, $batch_size ){
-		$table_name = $this->get_table_name( $language_code );
-
-        if ($this->table_exists($table_name)) {
-            $query = $this->get_remove_untranslated_duplicates_query( $table_name, 'regular' );
-            $this->db->query( $query );
-        }
-        return true;
-	}
-
-    /**
-     * Removes a row if translation status 0, if the original exists translated in gettext tables
-     *
-     * Only the original with translation remains
-     */
-    public function remove_untranslated_strings_if_gettext_translation_available( $language_code, $inferior_limit, $batch_size ){
-        $table_name = $this->get_gettext_table_name( $language_code );
-
-        if ($this->table_exists($table_name)) {
-            $query = $this->get_remove_untranslated_duplicates_query( $table_name, 'gettext' );
-            $this->db->query( $query );
-        }
-        return true;
-    }
-
-    /**
-     * Function that builds the query string for removing identical entries
-     * @param $table_name
-     * @param $batch
-     * @param $type string possible values are 'regular' or 'gettext'
-     * @return string
-     */
-    private function get_remove_untranslated_duplicates_query( $table_name, $type ){
-        $charset_collate = $this->db->get_charset_collate();
-        $charset = "utf8mb4";
-        if( strpos( 'latin1', $charset_collate ) === 0 )
-            $charset = "latin1";
-
-        $query = '	DELETE `a`
-						FROM
-						    ' . $table_name . ' AS `a`,
-						    ' . $table_name . ' AS `b`
-						WHERE
-						    (`a`.`original` COLLATE '.$charset.'_bin = `b`.`original` OR `a`.`original` IS NULL AND `b`.`original` IS NULL)
-						    AND (`a`.`status` = 0 )
-						    AND (`b`.`status` != 0 )';
-        if($type === 'gettext')
-            $query .= 'AND (`a`.`domain` = `b`.`domain` OR `a`.`domain` IS NULL AND `b`.`domain` IS NULL)';
-        else if($type === 'regular')
-            $query .= 'AND (`a`.`block_type` = `b`.`block_type` OR `a`.`block_type` IS NULL AND `b`.`block_type` IS NULL)';
-        $query .=	    ';';
-        return $query;
-    }
-
 
     /**
      * Removes CDATA from original and dictionary tables.

@@ -2,8 +2,8 @@
 Contributors: photocrati, imagely
 Tags: gallery, wordpress gallery plugin, photo gallery, image gallery, slideshow
 Requires at least: 5.5.4
-Stable tag: 3.59.6
-Tested up to: 6.6
+Stable tag: 3.59.10
+Tested up to: 6.7.1
 License: GPLv3
 Requires PHP: 7.0
 
@@ -13,44 +13,45 @@ The most popular gallery plugin that lets you create galleries and albums in sec
 
 = WordPress Gallery Plugin =
 
-NextGEN Gallery has been the industry's standard **WordPress gallery plugin** since 2007 and continues to receive over 1.5 million new downloads per year. It's easy to use for simple photo galleries, but powerful enough for the most demanding photographers, visual artists, and imaging professionals who need a comprehensive gallery solution.
+NextGEN Gallery has been the industry's standard **WordPress gallery plugin** since 2007 and continues to receive over 1.5 million new downloads per year. It's easy to use for simple photo galleries, but powerful enough for the most demanding photographers, visual artists, and imaging professionals who need a comprehensive photo gallery solution.
 
-NextGEN Gallery offers complete WordPress gallery management with the ability to batch upload photos, import metadata, easily add, delete, rearrange photos and create an unlimited number of galleries.
+NextGEN Gallery offers complete WordPress gallery management with the ability to batch upload photos, import metadata, easily add, delete, rearrange photos and create an unlimited number of galleries. You can even simply provide a zip file or choose a folder to upload photos.
 
-But our gallery plugin doesn't stop there!
+But our photo gallery plugin doesn't stop there!
 
 > <strong>NextGEN Pro</strong><br/>
-> This plugin is the lite version of the NextGEN Gallery plugin, which offers all the gallery features you'll need like albums, lightboxes, backups, search, sharing, print fulfillment, eCommerce, and tons more. [Click here to purchase the best photo gallery plugin for WordPress now!](https://www.imagely.com?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
+> This plugin is the lite version of the NextGEN Gallery plugin, which offers all the gallery features you'll need like photo albums, lightboxes, backups, search, sharing, filtering, print fulfillment, eCommerce, animations,  and tons more. [Click here to purchase the best photo gallery plugin for WordPress now!](https://www.imagely.com?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion)
 
-The free version of NextGEN gallery provides three main gallery styles (slideshow, thumbnail, and imagebrowser galleries) and two album styles (compact and extended), all of which come with a wide array of options for controlling size, style, timing, transitions, controls, lightbox effects, and more. Learn more about <a href="https://www.imagely.com/wordpress-gallery-plugin?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion" target="_blank">NextGEN WordPress Gallery Plugin features.</a>
+The free version of NextGEN gallery provides three main gallery styles (slideshow, thumbnail, and imagebrowser galleries) and two album styles (compact and extended), all of which come with a wide array of options for controlling size, style, timing, transitions, controls, lightbox effects, and more. Learn more about <a href="https://www.imagely.com/?utm_source=wprepo&utm_medium=link&utm_campaign=liteversion" target="_blank">NextGEN WordPress Gallery Plugin features.</a>
 
-The best gets better with full support for the Gutenberg block editor. Now you can add a photo gallery or album anywhere on your site, with a page builder type feel directly in the WordPress editor.
+The best gets better with full support for the Gutenberg block editor. Now you can add a photo gallery or album anywhere on your site, with a page builder type feel directly in the WordPress editor. We truly make creating, building, and editing galleries easy.
 
 = Feature List =
 We've built NextGEN Gallery to be extremely powerful and full of features.
 
-* **Albums** Organize multiple galleries into albums for easy sorting and viewing
+* **Albums** Organize multiple photo galleries into albums for easy sorting and viewing
 * **Tags** Group multiple images together with tags, with easy-to-update renaming and management
-* **eCommerce** Sell images from your gallery, or sell entire galleries with our built in payment processing
+* **eCommerce** Sell images from your photo gallery, or sell entire galleries with our built in payment processing. Works with Stripe and PayPal.
 * **Slideshows** Make your galleries automatically rotate through a series of images
 * **Themes** Access 84+ different types of themes to showcase your galleries
 * **Animations** Create visual interest with 25+ different types of animations for each gallery
-* **Watermarks** Protect your work with image and text-based watermarks
+* **Watermarks** Protect your work with image and text-based watermarks.
 * **Capabilities** Customize who can read, edit, and publish galleries with refined permsisions controls
 * **Image Proofing** Let your customers choose which photos to purchase and improve your workflow.
 * **Print Fulfillment** Sell your photos and ship prints directly to customers with automated print lab fulfillment and zero commissions
 * **Auto Tax calculations** Automatically calculate sales tax when required for your customers.
 * **Coupons** Offer discounts and incentives to increase your gallery sales
-* **Lightroom Integration** Automatically sync and create photo galleries from Adobe Lightroom into NextGEN Gallery
+* **Lightroom Integration** Automatically sync and create photo galleries from Adobe Lightroom into NextGEN Gallery without any need to update your website.
 * **Social Sharing** Create viral social media opportunities when your images are optimized for Open Graph and X
-* **Image Commenting** * Add deep engagement to your images within the lightbox
+* **Image Commenting** * Add deep engagement to your images within the lightbox to increase gallery engagement
 * **Deep Linking** Link directly to a specific image from one of your galleries
 * **Frontend Search** * Add powerful filtering for your gallery based on tags
 * **Hover Captions** * Add social sharing, tiles, and descriptions for each image
 * **Digital Downloads** Offer digital downloads of your images for free, or chage for them with our eCommerce gallery plugin
+* **Right Click Disable** prevent images in your galleries from being downloaded with easy right click and drag/drop protection.
 * **Customization** * We've built in lots of individual customizations for each of our features so that you can make NextGEN Gallery perfect for you
 
-As you can see, we've built a gallery plugin that is suitable for everyone! Want a specific or missing feature? Just let us know.
+As you can see, we've built a photo gallery plugin that is suitable for everyone! Want a specific or missing feature? Just let us know.
 
 
 **NEXTGEN GALLERY DEMOS**<br>
@@ -72,7 +73,7 @@ As you can see, we've built a gallery plugin that is suitable for everyone! Want
 
 = About Imagely =
 
-NextGEN Gallery is a WordPress gallery plugin maintained by Imagely. We're the WordPress photography experts. In addition to NextGEN Gallery, NextGEN Plus, and NextGEN Pro, we also make WordPress themes for photographers, providing turnkey websites for photographers.
+NextGEN Gallery is a WordPress gallery plugin maintained by Imagely. We're the WordPress photography experts. In addition to NextGEN Gallery, NextGEN Plus, and NextGEN Pro, we also make WordPress themes for photographers, providing beautiful turnkey websites for photographers.
 
 
 Learn more or connect with us:<br>
@@ -122,7 +123,7 @@ This is often due to the URL paths to the CSS and JavaScript files used by the L
 
 = Do you have documentation or tutorials? =
 
-Yes. See <a href="https://www.imagely.com/docs/nextgen-gallery/" target="_blank">NextGEN Gallery Documentation</a>.
+Yes. See <a href="https://www.imagely.com/docs/" target="_blank">NextGEN Gallery Documentation</a>.
 
 = Will this gallery plugin work with my theme? =
 
@@ -131,7 +132,7 @@ Yup, NextGEN is a popular and well-established WordPress gallery plugin, and has
 
 = Are the photo galleries flash based? =
 
-Nope, we use no flash elements.
+Nope, we do not use flash elements.
 
 
 = Are the galleries mobile friendly? =
@@ -146,7 +147,7 @@ In simple terms, Albums are collections of galleries. So Galleries contain your 
 
 = Can I upload multiple images at once? =
 
-Yes, you can batch upload entire photo galleries at one time.
+Yes, you can batch upload entire photo galleries at one time or even include zip folders.
 
 
 = Can I password protect galleries? =
@@ -195,12 +196,25 @@ For more information, feel free to visit the official website for the NextGEN Ga
 
 
 == Changelog ==
+= V3.59.10 - 01.28.2024 =
+* Fixed: Frontend search not working in some cases
+
+= V3.59.9 - 01.16.2024 =
+* Fixed: Title and caption allowed html tags.
+
+= V3.59.8 - 01.06.2024 =
+* Fixed: Apostrophes not being added to image title
+* Improved: Fields sanitization
+
+= V3.59.7 - 12.05.2024 =
+* Fixed: Links and styles on about page
+* Fixed: Readme update
+
 = V3.59.6 - 11.05.2024 =
 * Fixed: Title and captions escaping
 * Added: Onboarding wizard
 * Added: Optional usage tracking
 * Fixed: Blurry images on cropping
-
 
 = V3.59.5 - 09.24.2024 =
 * Fixed: Improved security

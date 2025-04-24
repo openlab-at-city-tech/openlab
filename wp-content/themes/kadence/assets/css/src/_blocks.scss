@@ -42,6 +42,10 @@
 .wp-block-image {
 	margin-bottom: 0;
 }
+// Fix Gutenberg Image block custom border.
+.wp-block-image.has-custom-border img {
+	border-style: solid;
+}
 figure.wp-block-image.aligncenter img {
     display: inline-block;
 }

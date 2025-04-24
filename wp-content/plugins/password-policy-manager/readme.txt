@@ -4,9 +4,9 @@ Contributors: miniOrange
 Tags:  Reset Password, Password Security, Strong password, Secure Password, Password strength, password score, force password change, Users password manager, Generate Random Passwords, One Click password reset, password audit report, Enforce strong password
 Donate link: https://miniorange.com
 Requires at least: 4.6
-Tested up to: 6.5
+Tested up to: 6.7.2
 Requires PHP: 5.3.0
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: MIT/Expat
 License URI: https://docs.miniorange.com/mit-license
 
@@ -179,6 +179,12 @@ For any customization related queries or if you require any assistance, email us
 2. Check for password strength
 
 == Changelog ==
+
+= 2.0.2 =
+
+* Bug fixes
+* Improvement - Password Reset Form
+* Compatibility with WP 6.7.2
 
 = 2.0.1 =
 

@@ -1,5 +1,42 @@
 == Changelog ==
 
+= 2.0.73 12/03/2025 =
+* New: Added a Sitemap Feature #835
+* Tweak: Some TOC Headings Not Working When Added with Elementor Plugin #857
+* Tweak: Improvement done in the Appearance Section of the Easy TOC Plugin #858
+* New: Added an Option to Add Self-Referencing Links with Domain Anchors in Easy TOC #859
+* New: Delete All Data When Uninstalling the Plugin #863
+* Compatibility: Added compatibility with the theme Divi Child #864
+* Bug: Code improvement in widget toc shortcode #870
+
+= 2.0.72 27/01/2025 =
+* New: Expand/Collapse Option for Device Target in TOC for Improved Usability #824
+* New: Easy TOC Integration with Yoast SEO Schema #821
+* New: Generate TOC without Links #796
+* Bug: Conflict issue with customization settings #840
+* Bug: Headings issue with the Kadence Child theme in the product category. #820
+* Bug: 'Header Label‘ Option Not Updating in CATEGORY, TAG individually #852
+* Bug: The Read Time option's label field is not visible #853
+* Fix: Customisation of widget title tag  #855
+* Bug: On multisite, When plugin activated, It goes to not found page #802
+* Fix: Need an option for Translating the 'Toggle Table of Content' aria-label' #860
+* Compatibility: We need to make compatibility with YOOtheme. #856
+
+= 2.0.71 09/12/2024 =
+* New: Support for more attributes in shortcode #828
+* New: Automatically short the title in ETOC #830
+* New: Floating layout for Sticky ETOC #844
+* Bug: cookie "ezTOC_hidetoc-0" does not have an appropriate "SameSite" attribute value #822
+* Bug: TOC Short code causing 500 error on Uncode theme #831
+* Bug: The Sticky Toc title does not shift to the right in the option Heading Text Direction selected as Right to Left is selected #833
+* Bug: 'Header Label' Option Not Updating in post individually #837
+* Fix: Issue with "TOC open on load" option in Sticky TOC feature. #815
+* Fix: TOC conflict with Avada Builder plugin and Custom Child Theme #775
+* Fix: Undefined Array Key 'navigation_scroll_bar' in class-eztoc-widgetsticky.php #842
+* Fix: Error in Google search console when enabling Create by Mediavine #841
+* Fix: Compatibility with Customize Post Categories for WPBakery Page Builder plugin & Publisher Theme #843
+* Compatibility: Tested with Wordpress 6.7 #836
+
 = 2.0.70 17/10/2024 =
 * New: One click migration for Table of Contents plus plugin #826
 * New: Add missing parameters in sticky widget shortcode #812

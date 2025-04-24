@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 class TRP_Machine_Translation_Tab {
 
     private $settings;
@@ -10,7 +14,7 @@ class TRP_Machine_Translation_Tab {
 
         add_action( 'plugins_loaded', array( $this, 'add_upsell_filter' ) );
         add_filter( 'trp_machine_translate_slug', array( $this, 'add_enable_auto_translate_slug_filter' ) );
-
+        add_action( 'wp_ajax_test_api_key', array( $this, 'test_api_key' ) );
     }
 
     /*
@@ -67,12 +71,13 @@ class TRP_Machine_Translation_Tab {
         $trp = TRP_Translate_Press::get_trp_instance();
         $machine_translator = $trp->get_component( 'machine_translator' );
         $settings = array();
-        $machine_translation_keys = array( 'machine-translation', 'translation-engine', 'google-translate-key', 'deepl-api-type', 'deepl-api-key', 'block-crawlers', 'automatically-translate-slug', 'machine_translation_limit', 'machine_translation_log' );
+        $machine_translation_keys = array( 'machine-translation', 'translation-engine', 'google-translate-key', 'deepl-api-type', 'deepl-api-key', 'block-crawlers', 'automatically-translate-slug', 'machine_translation_limit', 'machine_translation_log', 'machine_translation_limit_enabled' );
         foreach( $machine_translation_keys as $key ){
             if( isset( $mt_settings[$key] ) ){
                 $settings[$key] = $mt_settings[$key];
             }
         }
+
         if( !empty( $settings['machine-translation'] ) ) {
             $settings['machine-translation'] = sanitize_text_field( $settings['machine-translation'] );
         }else
@@ -91,6 +96,11 @@ class TRP_Machine_Translation_Tab {
             $settings['block-crawlers'] = sanitize_text_field( $settings['block-crawlers']  );
         else
             $settings['block-crawlers'] = 'no';
+
+        if( !empty( $settings['machine_translation_limit_enabled'] ) )
+            $settings['machine_translation_limit_enabled'] = sanitize_text_field( $settings['machine_translation_limit_enabled'] );
+        else
+            $settings['machine_translation_limit_enabled'] = 'no';
 
         if( $free_version || !$seo_pack_active ){
             $mt_settings_option = get_option( 'trp_machine_translation_settings' );
@@ -196,7 +206,6 @@ class TRP_Machine_Translation_Tab {
         $correct_key = $machine_translator->is_correct_api_key();
         $display_recheck_button = false;
 
-
         if ( 'yes' === $this->settings['trp_machine_translation_settings']['machine-translation'] &&
             !empty( $machine_translator->get_api_key() ) &&
             !$machine_translator->check_languages_availability($this->settings['translation-languages']) &&
@@ -206,76 +215,54 @@ class TRP_Machine_Translation_Tab {
             $language_names = $trp_languages->get_language_names( $this->settings['translation-languages'], 'english_name' );
 
             ?>
-            <tr id="trp_unsupported_languages">
-                <th scope=row><?php esc_html_e( 'Unsupported languages', 'translatepress-multilingual' ); ?></th>
-                <td>
-                    <ul class="trp-unsupported-languages">
-                        <?php
-                        foreach ( $this->settings['translation-languages'] as $language_code ) {
-                            if ( !$machine_translator->check_languages_availability( array( $language_code ) ) ) {
-                                echo '<li>' . esc_html( $language_names[$language_code] ) . '</li>';
-                            }
+            <div class="trp-settings-container" id="trp_unsupported_languages">
+                <h3 class="trp-settings-primary-heading"><?php esc_html_e( 'Unsupported languages', 'translatepress-multilingual' ); ?></h3>
+                <div class="trp-settings-separator"></div>
+
+                <ul class="trp-unsupported-languages">
+                    <?php
+                    foreach ( $this->settings['translation-languages'] as $language_code ) {
+                        if ( !$machine_translator->check_languages_availability( array( $language_code ) ) ) {
+                            echo '<li class="trp-primary-text-bold">' . esc_html( $language_names[$language_code] ) . '</li>';
+                            echo '<div class="trp-settings-separator" style="width: 65%;"></div>';
                         }
-                        ?>
-                   </ul>
-                  <p class="description">
-                       <?php echo wp_kses( __( 'The selected automatic translation engine does not provide support for these languages.<br>You can still manually translate pages in these languages using the Translation Editor.', 'translatepress-multilingual' ), array( 'br' => array() ) ); ?>
-                   </p>
-                </td>
-            </tr>
+                    }
+                    ?>
+                </ul>
+                <p class="trp-primary-text">
+                    <?php echo wp_kses( __( 'The selected automatic translation engine does not provide support for these languages.<br>You can still manually translate pages in these languages using the Translation Editor.', 'translatepress-multilingual' ), array( 'br' => array() ) ); ?>
+                </p>
 
-            <?php
-        }
+            </div>
 
-        $data = get_option('trp_db_stored_data', array() );
-        if (isset($data['trp_mt_supported_languages'][$this->settings['trp_machine_translation_settings']['translation-engine']]['formality-supported-languages'])){
-            $languages_that_support_formality = $data['trp_mt_supported_languages'][$this->settings['trp_machine_translation_settings']['translation-engine']]['formality-supported-languages'];
-            $show_formality = false;
-            foreach ($languages_that_support_formality as $value){
-                if($value == "false"){
-                    $show_formality = true;
-                    break;
-                }
-            }
-            if ( 'yes' === $this->settings['trp_machine_translation_settings']['machine-translation'] &&
-                !empty( $machine_translator->get_api_key() ) &&
-                $show_formality &&
-                $correct_key != null
-            ){
-                $display_recheck_button = true;
-                $language_names = $trp_languages->get_language_names( $this->settings['translation-languages'], 'english_name' );
-                ?>
-                <tr id="trp_unsupported_languages">
-                    <th scope=row><?php esc_html_e( 'Languages without formality', 'translatepress-multilingual' ); ?></th>
-                <td>
-                    <ul class="trp-unsupported-languages">
-                        <?php
-                        foreach ( $this->settings['translation-languages'] as $language_code ) {
-                            if ( isset($languages_that_support_formality[$language_code]) && $languages_that_support_formality[$language_code] == "false" || !array_key_exists( $language_code, $languages_that_support_formality ) ) {
-                                echo '<li>' . esc_html( $language_names[$language_code] ) . '</li>';
-                            }
-                        }
-                        ?>
-                    </ul>
-                    <p class="description">
-                        <?php echo wp_kses( sprintf(__( 'The selected automatic translation engine provides only <a href="%s" target="_blank">default formality</a> settings for these languages for now.<br>Automatic translation will still work if available for these languages. It will just not use the formality setting from TranslatePress <a href="%s" target="_self"> General Tab</a> for the languages listed above.', 'translatepress-multilingual' ), esc_url('https://www.deepl.com/docs-api/translating-text/'), esc_url(admin_url('options-general.php?page=translate-press'))), array('a' => array('href' => array(), 'target' =>array(), 'title' => array()), 'br' => array()) ); ?>
-                    </p>
-                </td>
-                </tr>
-                <?php
-            }
-        }
-        if ( 'yes' === $this->settings['trp_machine_translation_settings']['machine-translation'] && $display_recheck_button ){
-            ?>
-
-            <tr id="trp_recheck_supported_languages">
-                <th scope=row></th>
-                <td>
-                    <a href="<?php echo esc_url( admin_url( 'admin.php?page=trp_machine_translation&trp_recheck_supported_languages=1&trp_recheck_supported_languages_nonce=' . wp_create_nonce('trp_recheck_supported_languages') ) ); ?>" class="button-secondary"><?php esc_html_e( 'Recheck supported languages', 'translatepress-multilingual' ); ?></a>
-                    <p><i><?php echo wp_kses_post( sprintf( __( '(last checked on %s)', 'translatepress-multilingual' ), esc_html( $machine_translator->get_last_checked_supported_languages() ) ) ); ?> </i></p>
-                </td>
-            </tr>
             <?php
         }
     }
+
+    public function test_api_key(){
+        check_ajax_referer( 'trp_test_api_nonce', 'security' );
+
+        $trp                = TRP_Translate_Press::get_trp_instance();
+        $machine_translator = $trp->get_component( 'machine_translator' );
+
+        $response           = $machine_translator->test_request();
+
+        if ( is_wp_error( $response ) ) {
+            wp_send_json_error([
+                'message' => esc_html__('API key validation failed.', 'translatepress-multilingual'),
+                'error'   => $response->get_error_message()
+            ]);
+        }
+
+        ob_start();
+        print_r( $response );
+        $full_response = ob_get_clean();
+
+        wp_send_json_success([
+            'message'      => esc_html__('API key verification was successful.', 'translatepress-multilingual'),
+            'response'     => $response,
+            'raw_response' => $full_response
+        ]);
+    }
+
 }

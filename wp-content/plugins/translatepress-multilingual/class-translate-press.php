@@ -1,5 +1,8 @@
 <?php
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Translate_Press
  *
@@ -66,7 +69,7 @@ class TRP_Translate_Press{
         define( 'TRP_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
         define( 'TRP_PLUGIN_BASE', plugin_basename( __DIR__ . '/index.php' ) );
         define( 'TRP_PLUGIN_SLUG', 'translatepress-multilingual' );
-        define( 'TRP_PLUGIN_VERSION', '2.9.0' );
+        define( 'TRP_PLUGIN_VERSION', '2.9.10' );
 
 	    wp_cache_add_non_persistent_groups(array('trp'));
 
@@ -108,6 +111,8 @@ class TRP_Translate_Press{
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-normalization.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-table-creation.php';
         require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-insert-update.php';
+        require_once TRP_PLUGIN_DIR . 'includes/queries/class-regular-delete.php';
+        require_once TRP_PLUGIN_DIR . 'includes/queries/class-gettext-delete.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-url-converter.php';
         require_once TRP_PLUGIN_DIR . 'includes/class-uri.php';
 	    require_once TRP_PLUGIN_DIR . 'includes/class-upgrade.php';

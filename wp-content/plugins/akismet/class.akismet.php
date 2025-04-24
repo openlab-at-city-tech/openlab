@@ -256,6 +256,10 @@ class Akismet {
 			return $commentdata;
 		}
 
+		if ( ! isset( $commentdata['comment_meta'] ) ) {
+			$commentdata['comment_meta'] = array();
+		}
+
 		self::$last_comment_result = null;
 
 		// Skip the Akismet check if the comment matches the Disallowed Keys list.
@@ -268,7 +272,14 @@ class Akismet {
 			$comment_agent        = isset( $commentdata['comment_agent'] ) ? $commentdata['comment_agent'] : '';
 
 			if ( wp_check_comment_disallowed_list( $comment_author, $comment_author_email, $comment_author_url, $comment_content, $comment_author_ip, $comment_agent ) ) {
+				$commentdata['akismet_result'] = 'skipped';
+				$commentdata['comment_meta']['akismet_result'] = 'skipped';
+
+				$commentdata['akismet_skipped_microtime'] = microtime( true );
+				$commentdata['comment_meta']['akismet_skipped_microtime'] = $commentdata['akismet_skipped_microtime'];
+
 				self::set_last_comment( $commentdata );
+
 				return $commentdata;
 			}
 		}
@@ -378,13 +389,23 @@ class Akismet {
 
 		$commentdata['akismet_result'] = $response[1];
 
+		if ( 'true' === $response[1] || 'false' === $response[1] ) {
+			$commentdata['comment_meta']['akismet_result'] = $response[1];
+		} else {
+			$commentdata['comment_meta']['akismet_error'] = time();
+		}
+
 		if ( isset( $response[0]['x-akismet-pro-tip'] ) ) {
 			$commentdata['akismet_pro_tip'] = $response[0]['x-akismet-pro-tip'];
+			$commentdata['comment_meta']['akismet_pro_tip'] = $response[0]['x-akismet-pro-tip'];
 		}
 
 		if ( isset( $response[0]['x-akismet-guid'] ) ) {
 			$commentdata['akismet_guid'] = $response[0]['x-akismet-guid'];
+			$commentdata['comment_meta']['akismet_guid'] = $response[0]['x-akismet-guid'];
 		}
+
+		$commentdata['comment_meta']['akismet_as_submitted'] = $commentdata['comment_as_submitted'];
 
 		if ( isset( $response[0]['x-akismet-error'] ) ) {
 			// An error occurred that we anticipated (like a suspended key) and want the user to act on.
@@ -454,6 +475,7 @@ class Akismet {
 
 	public static function set_last_comment( $comment ) {
 		if ( is_null( $comment ) ) {
+			// This never happens in our code.
 			self::$last_comment = null;
 		} else {
 			// We filter it here so that it matches the filtered comment data that we'll have to compare against later.
@@ -473,12 +495,11 @@ class Akismet {
 		// wp_insert_comment() might be called in other contexts, so make sure this is the same comment
 		// as was checked by auto_check_comment
 		if ( is_object( $comment ) && ! empty( self::$last_comment ) && is_array( self::$last_comment ) ) {
-			if ( self::matches_last_comment( $comment ) ) {
+			if ( self::matches_last_comment_by_id( $id ) ) {
 				load_plugin_textdomain( 'akismet' );
 
 				// normal result: true or false
 				if ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'true' ) {
-					update_comment_meta( $comment->comment_ID, 'akismet_result', 'true' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-spam' );
 					if ( $comment->comment_approved != 'spam' ) {
 						self::update_comment_history(
@@ -488,7 +509,6 @@ class Akismet {
 						);
 					}
 				} elseif ( isset( self::$last_comment['akismet_result'] ) && self::$last_comment['akismet_result'] == 'false' ) {
-					update_comment_meta( $comment->comment_ID, 'akismet_result', 'false' );
 					self::update_comment_history( $comment->comment_ID, '', 'check-ham' );
 					// Status could be spam or trash, depending on the WP version and whether this change applies:
 					// https://core.trac.wordpress.org/changeset/34726
@@ -503,44 +523,21 @@ class Akismet {
 							self::update_comment_history( $comment->comment_ID, '', 'status-changed-' . $comment->comment_approved );
 						}
 					}
-				} elseif ( ! isset( self::$last_comment['akismet_result'] ) ) {
-					// akismet_result isn't set, so the comment wasn't sent to Akismet.
-					update_comment_meta( $comment->comment_ID, 'akismet_skipped', 'true' );
-					$caught_by_disallowed_list = false;
-
-					if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-						$caught_by_disallowed_list = wp_check_comment_disallowed_list( $comment->comment_author, $comment->comment_author_email, $comment->comment_author_url, $comment->comment_content, $comment->comment_author_IP, $comment->comment_agent );
-					}
-
-					if ( $caught_by_disallowed_list ) {
-						self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
-						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped-disallowed' );
-					} else {
-						// Add a generic skipped history item.
-						self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped' );
-					}
+				} elseif ( isset( self::$last_comment['akismet_result'] ) && 'skipped' == self::$last_comment['akismet_result'] ) {
+					// The comment wasn't sent to Akismet because it matched the disallowed comment keys.
+					self::update_comment_history( $comment->comment_ID, '', 'wp-disallowed' );
+					self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped-disallowed' );
+				} else if ( ! isset( self::$last_comment['akismet_result'] ) ) {
+					// Add a generic skipped history item.
+					self::update_comment_history( $comment->comment_ID, '', 'akismet-skipped' );
 				} else {
 					// abnormal result: error
-					update_comment_meta( $comment->comment_ID, 'akismet_error', time() );
 					self::update_comment_history(
 						$comment->comment_ID,
 						'',
 						'check-error',
 						array( 'response' => substr( self::$last_comment['akismet_result'], 0, 50 ) )
 					);
-				}
-
-				// record the complete original data as submitted for checking
-				if ( isset( self::$last_comment['comment_as_submitted'] ) ) {
-					update_comment_meta( $comment->comment_ID, 'akismet_as_submitted', self::$last_comment['comment_as_submitted'] );
-				}
-
-				if ( isset( self::$last_comment['akismet_pro_tip'] ) ) {
-					update_comment_meta( $comment->comment_ID, 'akismet_pro_tip', self::$last_comment['akismet_pro_tip'] );
-				}
-
-				if ( isset( self::$last_comment['akismet_guid'] ) ) {
-					update_comment_meta( $comment->comment_ID, 'akismet_guid', self::$last_comment['akismet_guid'] );
 				}
 			}
 		}
@@ -1015,6 +1012,8 @@ class Akismet {
 			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
 
+		$comment['comment_check_response'] = self::last_comment_check_response( $comment_id );
+
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-spam' );
 
 		$response = self::http_post( self::build_query( $comment ), 'submit-spam' );
@@ -1081,6 +1080,8 @@ class Akismet {
 		if ( ! is_null( $post ) ) {
 			$comment['comment_post_modified_gmt'] = $post->post_modified_gmt;
 		}
+
+		$comment['comment_check_response'] = self::last_comment_check_response( $comment_id );
 
 		$comment = apply_filters( 'akismet_request_args', $comment, 'submit-ham' );
 
@@ -1246,7 +1247,12 @@ class Akismet {
 	}
 
 	/**
-	 * Do these two comments, without checking the comment_ID, "match"?
+	 * Using the unique values that we assign, do we consider these two comments
+	 * to be the same instance of a comment?
+	 *
+	 * The only fields that matter in $comment1 and $comment2 are akismet_guid and akismet_skipped_microtime.
+	 * We set both of these during the comment-check call, and if the comment has been saved to the DB,
+	 * we save them as comment meta and add them back into the comment array before comparing the comments.
 	 *
 	 * @param mixed $comment1 A comment object or array.
 	 * @param mixed $comment2 A comment object or array.
@@ -1256,58 +1262,55 @@ class Akismet {
 		$comment1 = (array) $comment1;
 		$comment2 = (array) $comment2;
 
-		// Set default values for these strings that we check in order to simplify
-		// the checks and avoid PHP warnings.
-		if ( ! isset( $comment1['comment_author'] ) ) {
-			$comment1['comment_author'] = '';
+		if ( ! empty( $comment1['akismet_guid'] ) && ! empty( $comment2['akismet_guid'] ) ) {
+			// If the comment got sent to the API and got a response, it will have a GUID.
+
+			return ( $comment1['akismet_guid'] == $comment2['akismet_guid'] );
+		} else if ( ! empty( $comment1['akismet_skipped_microtime'] ) && ! empty( $comment2['akismet_skipped_microtime'] ) ) {
+			// It won't have a GUID if it didn't get sent to the API because it matched the disallowed list,
+			// but it should have a microtimestamp to use here for matching against the comment DB entry it matches.
+			return ( strval( $comment1['akismet_skipped_microtime'] ) == strval( $comment2['akismet_skipped_microtime'] ) );
 		}
 
-		if ( ! isset( $comment2['comment_author'] ) ) {
-			$comment2['comment_author'] = '';
-		}
-
-		if ( ! isset( $comment1['comment_author_email'] ) ) {
-			$comment1['comment_author_email'] = '';
-		}
-
-		if ( ! isset( $comment2['comment_author_email'] ) ) {
-			$comment2['comment_author_email'] = '';
-		}
-
-		$comments_match = (
-				isset( $comment1['comment_post_ID'], $comment2['comment_post_ID'] )
-			&& intval( $comment1['comment_post_ID'] ) == intval( $comment2['comment_post_ID'] )
-			&& (
-				// The comment author length max is 255 characters, limited by the TINYTEXT column type.
-				// If the comment author includes multibyte characters right around the 255-byte mark, they
-				// may be stripped when the author is saved in the DB, so a 300+ char author may turn into
-				// a 253-char author when it's saved, not 255 exactly.  The longest possible character is
-				// theoretically 6 bytes, so we'll only look at the first 248 bytes to be safe.
-				substr( $comment1['comment_author'], 0, 248 ) == substr( $comment2['comment_author'], 0, 248 )
-				|| substr( stripslashes( $comment1['comment_author'] ), 0, 248 ) == substr( $comment2['comment_author'], 0, 248 )
-				|| substr( $comment1['comment_author'], 0, 248 ) == substr( stripslashes( $comment2['comment_author'] ), 0, 248 )
-				// Certain long comment author names will be truncated to nothing, depending on their encoding.
-				|| ( ! $comment1['comment_author'] && strlen( $comment2['comment_author'] ) > 248 )
-				|| ( ! $comment2['comment_author'] && strlen( $comment1['comment_author'] ) > 248 )
-				)
-			&& (
-				// The email max length is 100 characters, limited by the VARCHAR(100) column type.
-				// Same argument as above for only looking at the first 93 characters.
-				substr( $comment1['comment_author_email'], 0, 93 ) == substr( $comment2['comment_author_email'], 0, 93 )
-				|| substr( stripslashes( $comment1['comment_author_email'] ), 0, 93 ) == substr( $comment2['comment_author_email'], 0, 93 )
-				|| substr( $comment1['comment_author_email'], 0, 93 ) == substr( stripslashes( $comment2['comment_author_email'] ), 0, 93 )
-				// Very long emails can be truncated and then stripped if the [0:100] substring isn't a valid address.
-				|| ( ! $comment1['comment_author_email'] && strlen( $comment2['comment_author_email'] ) > 100 )
-				|| ( ! $comment2['comment_author_email'] && strlen( $comment1['comment_author_email'] ) > 100 )
-			)
-		);
-
-		return $comments_match;
+		return false;
 	}
 
-	// Does the supplied comment match the details of the one most recently stored in self::$last_comment?
+	/**
+	 * Does the supplied comment match the details of the one most recently stored in self::$last_comment?
+	 *
+	 * @param array $comment
+	 * @return bool Whether the comment supplied as an argument is a match for the one we have stored in $last_comment.
+	 */
 	public static function matches_last_comment( $comment ) {
-		return self::comments_match( self::$last_comment, $comment );
+		if ( ! self::$last_comment ) {
+			return false;
+		}
+
+		return self::comments_match( $comment, self::$last_comment );
+	}
+
+	/**
+	 * Because of the order of operations, we don't always know the comment ID of the comment that we're checking,
+	 * so we have to be able to match the comment we cached locally with the comment from the DB.
+	 *
+	 * @param int $comment_id
+	 * @return bool Whether the comment represented by $comment_id is a match for the one we have stored in $last_comment.
+	 */
+	public static function matches_last_comment_by_id( $comment_id ) {
+		return self::matches_last_comment( self::get_fields_for_comment_matching( $comment_id ) );
+	}
+
+	/**
+	 * Given a comment ID, retrieve the values that we use for matching comments together.
+	 *
+	 * @param int $comment_id
+	 * @return array An array containing akismet_guid and akismet_skipped_microtime. Either or both may be falsy, but we hope that at least one is a string.
+	 */
+	public static function get_fields_for_comment_matching( $comment_id ) {
+		return array(
+			'akismet_guid' => get_comment_meta( $comment_id, 'akismet_guid', true ),
+			'akismet_skipped_microtime' => get_comment_meta( $comment_id, 'akismet_skipped_microtime', true ),
+		);
 	}
 
 	private static function get_user_agent() {
@@ -1353,7 +1356,7 @@ class Akismet {
 			return $approved;
 		}
 
-		// Only do this if it's the correct comment
+		// Only do this if it's the correct comment.
 		if ( ! self::matches_last_comment( $comment ) ) {
 			self::log( "comment_is_spam mismatched comment, returning unaltered $approved" );
 			return $approved;
@@ -1390,14 +1393,14 @@ class Akismet {
 	 */
 	public static function disable_moderation_emails_if_unreachable( $emails, $comment_id ) {
 		if ( ! empty( self::$prevent_moderation_email_for_these_comments ) && ! empty( $emails ) ) {
-			$comment = get_comment( $comment_id );
+			$matching_fields = self::get_fields_for_comment_matching( $comment_id );
 
-			if ( $comment ) {
-				foreach ( self::$prevent_moderation_email_for_these_comments as $possible_match ) {
-					if ( self::comments_match( $possible_match, $comment ) ) {
-						update_comment_meta( $comment_id, 'akismet_delayed_moderation_email', true );
-						return array();
-					}
+			// self::$prevent_moderation_email_for_these_comments is an array of $commentdata objects
+			// saved immediately after the comment-check request completes.
+			foreach ( self::$prevent_moderation_email_for_these_comments as $possible_match ) {
+				if ( self::comments_match( $possible_match, $matching_fields ) ) {
+					update_comment_meta( $comment_id, 'akismet_delayed_moderation_email', true );
+					return array();
 				}
 			}
 		}
@@ -1901,20 +1904,36 @@ p {
 	}
 
 	/**
-	 * Controls the display of a privacy related notice underneath the comment form using the `akismet_comment_form_privacy_notice` option and filter respectively.
-	 * Default is top not display the notice, leaving the choice to site admins, or integrators.
+	 * Controls the display of a privacy related notice underneath the comment
+	 * form using the `akismet_comment_form_privacy_notice` option and filter
+	 * respectively.
+	 *
+	 * Default is to not display the notice, leaving the choice to site admins,
+	 * or integrators.
 	 */
 	public static function display_comment_form_privacy_notice() {
 		if ( 'display' !== apply_filters( 'akismet_comment_form_privacy_notice', get_option( 'akismet_comment_form_privacy_notice', 'hide' ) ) ) {
 			return;
 		}
+
 		echo apply_filters(
 			'akismet_comment_form_privacy_notice_markup',
-			'<p class="akismet_comment_form_privacy_notice">' . sprintf(
-				/* translators: %s: Akismet privacy URL */
-				__( 'This site uses Akismet to reduce spam. <a href="%s" target="_blank" rel="nofollow noopener">Learn how your comment data is processed</a>.', 'akismet' ),
-				'https://akismet.com/privacy/'
-			) . '</p>'
+			'<p class="akismet_comment_form_privacy_notice">' .
+				wp_kses(
+					sprintf(
+						/* translators: %s: Akismet privacy URL */
+						__( 'This site uses Akismet to reduce spam. <a href="%s" target="_blank" rel="nofollow noopener">Learn how your comment data is processed.</a>', 'akismet' ),
+						'https://akismet.com/privacy/'
+					),
+					array(
+						'a' => array(
+							'href' => array(),
+							'target' => array(),
+							'rel' => array(),
+						),
+					)
+				) .
+			'</p>'
 		);
 	}
 
@@ -1977,5 +1996,68 @@ p {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Check the comment history to find out what the most recent comment-check
+	 * response said about this comment.
+	 *
+	 * This value is then included in submit-ham and submit-spam requests to allow
+	 * us to know whether the comment is actually a missed spam/ham or if it's
+	 * just being reclassified after either never being checked or being mistakenly
+	 * marked as ham/spam.
+	 *
+	 * @param int $comment_id The comment ID.
+	 * @return string 'true', 'false', or an empty string if we don't have a record
+	 *                of comment-check being called.
+	 */
+	public static function last_comment_check_response( $comment_id ) {
+		$history = self::get_comment_history( $comment_id );
+
+		if ( $history ) {
+			$history = array_reverse( $history );
+
+			foreach ( $history as $akismet_history_entry ) {
+				// We've always been consistent in how history entries are formatted
+				// but comment_meta is writable by everyone, so don't assume that all
+				// entries contain the expected parts.
+
+				if ( ! is_array( $akismet_history_entry ) ) {
+					continue;
+				}
+
+				if ( ! isset( $akismet_history_entry['event'] ) ) {
+					continue;
+				}
+
+				if ( in_array(
+					$akismet_history_entry['event'],
+					array(
+						'recheck-spam',
+						'check-spam',
+						'cron-retry-spam',
+						'webhook-spam',
+						'webhook-spam-noaction',
+					),
+					true
+				) ) {
+					return 'true';
+				} elseif ( in_array(
+					$akismet_history_entry['event'],
+					array(
+						'recheck-ham',
+						'check-ham',
+						'cron-retry-ham',
+						'webhook-ham',
+						'webhook-ham-noaction',
+					),
+					true
+				) ) {
+					return 'false';
+				}
+			}
+		}
+
+		return '';
 	}
 }

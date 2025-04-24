@@ -538,9 +538,12 @@ abstract class DriverBase {
 			unset( $entity->extras );
 			foreach ( explode( ',', $extras ) as $extra ) {
 				if ( $extra ) {
-					list($key, $value) = explode( '@@', $extra );
-					if ( $this->has_defined_column( $key ) && ! isset( $entity->key ) && $key !== 'extras_post_id' ) {
-						$entity->$key = $value;
+					$parts = explode( '@@', $extra );
+					if ( count( $parts ) === 2 ) { // Ensure we have exactly two parts.
+						list( $key, $value ) = $parts;
+						if ( $this->has_defined_column( $key ) && ! isset( $entity->$key ) && $key !== 'extras_post_id' ) {
+							$entity->$key = $value;
+						}
 					}
 				}
 			}

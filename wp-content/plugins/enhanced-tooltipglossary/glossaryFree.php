@@ -45,6 +45,7 @@ class CMTT_Free {
 
 		add_action( 'admin_notices', array( __CLASS__, 'cmtt_glossary_admin_notice_wp33' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'cmtt_glossary_admin_notice_mbstring' ) );
+		add_action( 'admin_notices', array( __CLASS__, 'cmtt_glossary_admin_notice_iconv' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'cmtt_glossary_admin_notice_client_pagination' ) );
 		add_action( 'admin_print_footer_scripts', array( __CLASS__, 'cmtt_quicktags' ) );
 		add_action( 'add_meta_boxes', array( __CLASS__, 'cmtt_RegisterBoxes' ) );
@@ -473,7 +474,7 @@ class CMTT_Free {
 		include_once CMTT_PLUGIN_DIR . 'glossaryIndex.php';
 		include_once CMTT_PLUGIN_DIR . 'amp.php';
 		include_once CMTT_PLUGIN_DIR . 'functions.php';
-		include_once CMTT_PLUGIN_DIR . 'wizard.php';
+		include_once CMTT_PLUGIN_DIR . 'wizard/wizard.php';
 
 		do_action( 'cmtt_include_files_after' );
 	}
@@ -2494,6 +2495,18 @@ class CMTT_Free {
 		if ( ! $mb_support ) {
 			$message = sprintf( __( '%s since version 2.6.0 requires "mbstring" PHP extension to work! ', 'cm-tooltip-glossary' ), CMTT_NAME );
 			$message .= '<a href="http://www.php.net/manual/en/mbstring.installation.php" target="_blank">(' . __( 'Installation instructions.', 'cm-tooltip-glossary' ) . '</a>';
+			cminds_show_message( $message, true );
+		}
+	}
+
+	/**
+	 * Adds a notice about iconv not being installed
+	 */
+	public static function cmtt_glossary_admin_notice_iconv() {
+        $iconv_support = extension_loaded( 'iconv' );
+
+		if ( ! $iconv_support ) {
+			$message = sprintf( __( '%s requires "iconv" PHP extension to work! ', 'cm-tooltip-glossary' ), CMTT_NAME );
 			cminds_show_message( $message, true );
 		}
 	}

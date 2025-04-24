@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="ngg-imagebrowser" id="<?php echo $image->anchor; ?>" data-nextgen-gallery-id="<?php echo $displayed_gallery->id(); ?>">
 
-	<h3><?php echo \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $image->alttext ); ?></h3>
+	<h3><?php echo \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->alttext ); ?></h3>
 
 	<div class="pic"><?php echo $image->href_link; ?></div>
 	<div class="ngg-imagebrowser-nav">
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<a class="ngg-browser-next" id="ngg-next-<?php echo $image->next_pid; ?>" href="<?php echo \Imagely\NGG\Util\Router::esc_url( $image->next_image_link ); ?>"><?php _e( 'Next', 'nggallery' ); ?> &#9658;</a>
 		</div>
 		<div class="counter"><?php _e( 'Picture', 'nggallery' ); ?> <?php echo $image->number; ?> <?php _e( 'of', 'nggallery' ); ?> <?php echo $image->total; ?></div>
-		<div class="ngg-imagebrowser-desc"><p><?php echo \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $image->description ); ?></p></div>
+		<div class="ngg-imagebrowser-desc"><p><?php echo \Imagely\NGG\Display\I18N::ngg_decode_sanitized_html_content( $image->description ); ?></p></div>
 		<!-- Exif data -->
 		<h3><?php _e( 'Meta data', 'nggallery' ); ?></h3>
 		<table class="exif-data">

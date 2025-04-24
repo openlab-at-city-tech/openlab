@@ -116,7 +116,7 @@ class LegacyImage {
 		// at the bottom we default to returning $this->_cache[$name].
 		switch ( $name ) {
 			case 'alttext':
-				$this->_cache['alttext'] = ( empty( $this->_cache['alttext'] ) ) ? ' ' :  \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->_cache['alttext'] );
+				$this->_cache['alttext'] = ( empty( $this->_cache['alttext'] ) ) ? ' ' :  \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $this->_cache['alttext'] );
 				return $this->_cache['alttext'];
 
 			case 'author':
@@ -125,7 +125,7 @@ class LegacyImage {
 				return $this->_cache['author'];
 
 			case 'caption':
-				$caption = \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->__get( 'description' ) );
+				$caption = \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $this->__get( 'description' ) );
 				if ( empty( $caption ) ) {
 					$caption = '&nbsp;';
 				}
@@ -133,7 +133,7 @@ class LegacyImage {
 				return $this->_cache['caption'];
 
 			case 'description':
-				$this->_cache['description'] = ( empty( $this->_cache['description'] ) ) ? ' ' :  \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->_cache['description'] );
+				$this->_cache['description'] = ( empty( $this->_cache['description'] ) ) ? ' ' :  \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $this->_cache['description'] );
 				return $this->_cache['description'];
 
 			case 'galdesc':
@@ -154,9 +154,8 @@ class LegacyImage {
 
 			case 'imageHTML':
 				$tmp                       = '<a href="' . $this->__get( 'imageURL' ) . '" title="'
-					. \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->__get( 'description' ) )
-					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '>' . '<img alt="' . \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->__get( 'alttext' ) )
-					. '" src="' . $this->__get( 'imageURL' ) . '"/>' . '</a>';
+					. esc_attr( $this->__get( 'description' ) )
+					. '" ' . $this->get_thumbcode( $this->__get( 'name' ) ) . '>' . '<img alt="' . esc_attr( $this->__get( 'alttext' ) ) . '" src="' . $this->__get( 'imageURL' ) . '"/>' . '</a>';
 				$this->_cache['href']      = $tmp;
 				$this->_cache['imageHTML'] = $tmp;
 				return $this->_cache['imageHTML'];
@@ -409,8 +408,8 @@ class LegacyImage {
 		$retval .= ' data-image-id="' . $this->__get( 'id' ) . '"';
 		$retval .= ' data-src="' . $this->__get( 'imageURL' ) . '"';
 		$retval .= ' data-thumbnail="' . $this->__get( 'thumbnailURL' ) . '"';
-		$retval .= ' data-title="' . \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->__get( 'alttext' ) ) . '"';
-		$retval .= ' data-description="' . \Imagely\NGG\Display\I18N::ngg_allowed_html_tags_for_images( $this->__get( 'description' ) ) . '"';
+		$retval .= ' data-title="' . \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $this->__get( 'alttext' ) ) . '"';
+		$retval .= ' data-description="' . \Imagely\NGG\Display\I18N::ngg_sanitize_text_alt_title_desc( $this->__get( 'description' ) ) . '"';
 
 		$this->_cache['thumbcode'] = $retval;
 		return $retval;

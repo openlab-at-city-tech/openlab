@@ -2,8 +2,8 @@
 Contributors: wordpressdotorg, clorith, azaozz
 Tags: jquery, javascript, update
 Requires at least: 5.4
-Tested up to: 6.3
-Stable tag: 1.4.0
+Tested up to: 6.7
+Stable tag: 1.4.1
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -56,6 +56,11 @@ Deprecated notices means that the Migration tool is in place making sure these f
 3. That's it! The plugin handles the rest automatically for you.
 
 == Changelog ==
+
+= v 1.4.1 (2024-12-25) =
+- Update jQuery version reference to match WordPress core.
+- Tested on latest WordPress core release.
+- Added some more urgency to the weekly reminder email if outdated jQuery versions are used, as they may not include the latest security patches.
 
 = v 1.4.0 (2023-07-31) =
 * Fixed a bug where an empty error text would cause the plugin scripts from working properly.

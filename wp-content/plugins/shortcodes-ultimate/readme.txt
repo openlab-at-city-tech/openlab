@@ -3,10 +3,10 @@ Contributors: gn_themes
 License: GPLv3
 Donate link: https://getshortcodes.com/pricing/
 Tags: posts, carousel, shortcode, toggle, columns
-Stable tag: 7.3.1
+Stable tag: 7.3.5
 Requires PHP: 5.4
 Requires at least: 5.0
-Tested up to: 6.7
+Tested up to: 6.8
 
 
 A comprehensive collection of visual components for your site
@@ -139,6 +139,31 @@ Upgrade normally
 
 == Changelog ==
 
+
+
+= 7.3.5
+
+- Updated Freemius SDK
+- Tested with WordPress 6.8
+
+
+= 7.3.4
+
+This update features security improvements and is recommended for all users
+
+- Fixed warning "Function _load_textdomain_just_in_time was called incorrectly"
+- Tested with PHP 8.3
+
+
+= 7.3.3
+
+- Fixed an issue in [su_qrcode] where the `&` character was encoded incorrectly
+
+
+= 7.3.2
+
+- [su_qrcode] updated to better handle QR code data
+- Updated Freemius SDK
 
 
 = 7.3.1

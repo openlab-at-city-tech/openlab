@@ -1,6 +1,19 @@
+#wp2t .wpt-options-metabox {
+	display: grid;
+	gap: 10px;
+}
+
+#wp2t .wpt-options {
+	display: grid;
+	gap: 10px;
+}
+
 #wp2t .jtw {
     position: relative;
-	padding-bottom: 1rem;
+}
+
+#wp2t .wpt-not-allowed {
+	margin-bottom: 1rem;
 }
 
 #wp2t .jtw textarea {
@@ -9,49 +22,120 @@
 }
 
 #wp2t .counter {
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    font-size: 1.1em;
     font-weight: 600;
-    color: #666;
-}
-
-#wpt_custom_retweets .jtw2 label {
-	display: inline-block;
-	width: 4em;
-}
-
-#wpt_custom_retweets {
-	padding: .5em;
-	border: 1px solid #eee; 
-}
-
-#wpt_selected_image img {
-	width: 100%;
-	max-width: 100%;
-	height: auto;
 }
 
 .edit-post-meta-boxes-area #wp2t.postbox > .inside {
 	padding: 0 12px 12px;
 }
 
-.wp-to-twitter .panel-toggle {
+#wp2t .history ul li {
+	padding: 6px;
+	word-wrap: break-word;
+}
+
+.wpt-options-metabox .notice.inline {
+	margin-left: 0;
+	margin-right: 0;
+}
+
+.wpt-options-metabox .notice.inline p {
 	margin-bottom: 0;
 }
 
-#wpt_custom_retweets fieldset {
-	margin: 1em 0;
-	border-bottom: 1px solid #ccc;
+#wp2t .history ul li em {
+	margin-top: .5rem;
+	display: block;
+}
+
+#wp2t .wpt-intents {
+	display: flex;
+	gap: 6px;
+	flex-wrap: wrap;
+}
+
+#wp2t .wpt-intents a {
+	display: block;
+}
+
+#wp2t .wpt-template-wrapper pre,
+#wp2t .wpt-template-wrapper h4 {
+	margin: 0;
+}
+
+#wp2t .wpt-template {
+	text-wrap: auto;
+	background: #f3f3f3;
+	padding: 4px;
+}
+
+#wp2t .wpt-intents a:hover {
+	outline: 2px solid;
+	background: #fff;
+}
+
+#wp2t .wpt-intents img {
+	width: 20px;
+	height: auto;
+	display: block;
+	padding: 4px;
+}
+
+#wp2t .service-selector {
+	display: flex;
+	flex-wrap: wrap;
+	column-gap: 20px;
+	align-items: center;
+	margin: 0;
+	justify-content: space-around;
+}
+
+legend.variant-selector {
+	font-size: 1em;
+	font-weight: 600;
+}
+
+#wp2t .service-selector li {
+	display: flex;
+	align-items: center;
+	padding: 4px;
+	gap: 4px;
+	margin: 0;
+}
+
+#wp2t .service-selector li input {
+	margin-right: 0;
+}
+
+#wp2t .service-selector li img {
+	width: 20px;
+	height: auto;
+}
+
+#wp2t .service-selector li.disabled-service img {
+	opacity: .3;
+}
+
+#wp2t h3 {
+	margin: 0;
+	font-size: .9rem;
+}
+
+#wp2t #notes h3 {
+	margin-bottom: 10px;
+}
+
+#wp2t .wpt-error {
+	border-left: 4px solid #b32d2e;
+	padding-left: 4px;
 }
 
 #wp2t .warning {
-    color: #700;
+    color: #8a2424;
 }
 
 #wp2t .exceeded {
-    color: #e00;
+    color: #d63638;
 }
 
 #wp2t code span {
@@ -59,76 +143,39 @@
     cursor: pointer;
 }
 
-#wp2t p.disabled {
-    font-weight: 400;
-	font-style: italic;
-    background: #ffd;
-    padding: 4px 12px;
-    font-size: 1.1em;
-	margin: .5em -12px -12px;
+.tweet-toggle {
+	width: 100%;
+	text-align: left;
 }
 
-#wp2t .wpt-options .disabled {
-    color: #888;
-    border: 1px solid #ddd;
-    background: #eee;
-    border-bottom: none;
-    padding: 2px;
-    border-radius: 4px 4px 0 0;
-}
-
-#side-sortables #wp2t .jtw {
-    margin: 0;
+#wp2t p,
+#wp2t .jtw {
     width: 100%;
+	margin: 0;
 }
 
-#side-sortables #wp2t .jtw textarea {
+#wp2t .jtw textarea {
     height: 120px;
 }
 
-#wp2t .wpt_auth_users {
-    margin: 0;
-    padding: 0;
-}
-
-#wp2t .wpt_auth_users select {
-	width: calc( 100% - 24px );
-	max-height: 21em;
-}
-
-.panel-toggle a {
-	display: block;
-	padding: 2px;
-	background: rgba( 240,240,240, .9 );
-	border: 1px solid rgba( 240,240,240, .9 );
-	text-decoration: none;
-}
-
-.panel-toggle a:hover, .panel-toggle a:focus {
-	border: 1px solid rgba( 220,220,220, 1 );
-}
-
-.wp-to-twitter .dashicons {
+#wp2t .dashicons {
 	font-size: inherit;
 	line-height: inherit;
 }
 
-.wp-to-twitter .dashicons-clock,
-.wp-to-twitter .dashicons-upload {
-	font-size: 20px;
-	line-height: 1.4;
+.wpt-options-metabox {
+	display: grid;
+	gap: 10px;
 }
 
-.wpt-options {
-	column-count: 3;
+#normal-sortables .wpt-options-metabox {
+	grid-template-columns: repeat( 3, 1fr );
+	column-gap: 24px;
 }
 
-.free .wpt-options {
-	column-count: 2;
-}
-
-#side-sortables .wpt-options {
-	column-count: 1;
+.wpt-pro-reposting {
+	display: grid;
+	gap: 10px;
 }
 
 .wpt-debug-details {
@@ -142,54 +189,26 @@
 	white-space: normal;
 	height: auto;
 	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
-.wpt-player-card-settings {
-	padding: .5em;
-	margin: -.5em -.5em 0;
-	background: rgba( 0,0,0,.05 );
-}
-.wpt-player-card-settings input {
-	width: 100%;
-}
-.wpt-player-card-settings select {
-	width: calc(100% - 34px);
-}
-
-button.time div {
-    vertical-align: text-bottom;
+#wp2t-debug .wpt-debug-log button[aria-expanded=true] .dashicons-plus::before {
+	content: "\f460";
 }
 
 .wpt-support {
     clear: both;
-}
-
-.wpt-options .tabs {
-    margin: 0;
-    position: relative;
-    top: 3px;
-}
-
-.wpt-options .tabs li {
-    display: inline;
-    margin: 0 auto;
-    line-height: 1;
-}
-
-.wpt-options .tabs a {
-    display: inline-block;
-}
-
-.wpt-options .tabs a.active {
-    background: #fefefe;
-	color: #444;
-	font-weight: 600;
+	padding: .5rem 0;
+	text-align: right;
 }
 
 .wptab .inline-list {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 2px;
+	margin: 0;
 }
 
 .wptab .inline-list li {
@@ -208,12 +227,8 @@ button.time div {
 	background-color: #e6e6e7;
 }
 
-.wpt_log, #wpt_set_tweet_time {
+.wpt_log {
 	padding: .5rem 0;
-}
-
-#wpt_set_tweet_time {
-	display: flex;
 }
 
 .tweet-buttons .wpt-buttons {
@@ -238,27 +253,35 @@ button.time div {
 }
 
 .toggle-btn-group {
-	margin: .5em auto .5em !important;
+	margin: .5em 0 !important;
 	width: auto;
+	max-width: 20em;
 }
 
 .wptab .toggle-btn-group {
 	margin: .25em -5px .25em;
+	max-width: 100%;
 }
 
-.toggle-btn-group:after {
+.wpt-flex {
+	display: flex;
+	align-items: end;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.toggle-btn-group::after {
     content: "";
     display: table;
     clear: both;
 }
 
 .toggle-btn-group label {
-    padding: .25em 0;
+    padding: .5em 0;
     float: left;
     text-align: center;
     cursor: pointer;
     background-color: #f3f3f3;
-	display: inline-block;
 	width: 50%;
     text-decoration: underline;	
 	color: #6e6e6e;
@@ -285,6 +308,7 @@ button.time div {
 	vertical-align: bottom;
 }
 
+.toggle-btn-group:has(input:focus),
 .toggle-btn-group label:hover,
 .toggle-btn-group label:focus {
     background-color: #ddd;

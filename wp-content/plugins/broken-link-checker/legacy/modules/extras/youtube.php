@@ -40,8 +40,16 @@ class blcYouTubeChecker extends blcChecker {
 			'result_hash'    => '',
 		);
 
+		$url = wp_http_validate_url( $url );
+		if ( empty( $url ) ) {
+			$result['status_text'] = 'Invalid URL';
+			$result['status_code'] = BLC_LINK_STATUS_UNKNOWN;
+			
+			return $result;
+		}
+
 		$components = @parse_url( $url );
-		if ( isset( $components['query'] ) ) {
+		if ( ! empty( $components['query'] ) && isset( $components['query'] ) ) {
 			parse_str( $components['query'], $query );
 		} else {
 			$query = array();

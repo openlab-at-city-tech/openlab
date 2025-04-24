@@ -44,6 +44,9 @@ class Component implements Component_Interface {
 	 * Adds the action and filter hooks to integrate with WordPress.
 	 */
 	public function initialize() {
+		// New Visual Builder Styles.
+		add_action( 'givewp_donation_form_enqueue_scripts', array( $this, 'update_visual_builder_template_styles' ), 10 );
+		add_action( 'givewp_donation_form_enqueue_scripts', array( $this, 'update_visual_builder_template_fonts' ), 15 );
 		add_action( 'wp_print_styles', array( $this, 'override_iframe_template_styles' ), 10 );
 		add_action( 'wp_print_styles', array( $this, 'add_iframe_fonts' ), 20 );
 		add_action( 'give_default_wrapper_start', array( $this, 'output_content_wrapper' ) );
@@ -207,13 +210,120 @@ class Component implements Component_Interface {
 				wp_enqueue_style(
 					'kadence-givewp-iframe-fonts',
 					get_webfont_url( $google_fonts_url ),
-					'give-sequoia-template-css',
+					array('give-sequoia-template-css'),
 					KADENCE_VERSION
 				);
 			} else {
-				wp_enqueue_style( 'kadence-givewp-iframe-fonts', $google_fonts_url, 'give-sequoia-template-css', KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+				wp_enqueue_style( 'kadence-givewp-iframe-fonts', $google_fonts_url, array('give-sequoia-template-css'), KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			}
 		}
+	}
+	/**
+	 * Add Visual Builder Styles.
+	 */
+	public function update_visual_builder_template_fonts() {
+		// Enqueue Google Fonts.
+		$google_fonts = apply_filters( 'kadence_theme_givewp_google_fonts_array', self::$google_fonts );
+		if ( empty( $google_fonts ) ) {
+			return '';
+		}
+		$link    = '';
+		$sub_add = array();
+		$subsets = kadence()->option( 'google_subsets' );
+		foreach ( $google_fonts as $key => $gfont_values ) {
+			if ( ! empty( $link ) ) {
+				$link .= '%7C'; // Append a new font to the string.
+			}
+			$link .= $gfont_values['fontfamily'];
+			if ( ! empty( $gfont_values['fontvariants'] ) ) {
+				$link .= ':';
+				$link .= implode( ',', $gfont_values['fontvariants'] );
+			}
+			if ( ! empty( $gfont_values['fontsubsets'] ) && is_array( $gfont_values['fontsubsets'] ) ) {
+				foreach ( $gfont_values['fontsubsets'] as $subkey ) {
+					if ( ! empty( $subkey ) && ! isset( $sub_add[ $subkey ] ) ) {
+						$sub_add[] = $subkey;
+					}
+				}
+			}
+		}
+		$args = array(
+			'family' => $link,
+		);
+		if ( ! empty( $subsets ) ) {
+			$available = array( 'latin-ext', 'cyrillic', 'cyrillic-ext', 'greek', 'greek-ext', 'vietnamese', 'arabic', 'khmer', 'chinese', 'chinese-simplified', 'tamil', 'bengali', 'devanagari', 'hebrew', 'korean', 'thai', 'telugu' );
+			foreach ( $subsets as $key => $enabled ) {
+				if ( $enabled && in_array( $key, $available, true ) ) {
+					if ( 'chinese' === $key ) {
+						$key = 'chinese-traditional';
+					}
+					if ( ! isset( $sub_add[ $key ] ) ) {
+						$sub_add[] = $key;
+					}
+				}
+			}
+			if ( $sub_add ) {
+				$args['subset'] = implode( ',', $sub_add );
+			}
+		}
+		if ( apply_filters( 'kadence_givewp_display_swap_google_fonts', true ) ) {
+			$args['display'] = 'swap';
+		}
+		$google_fonts_url = add_query_arg( apply_filters( 'kadence_theme_givewp_google_fonts_query_args', $args ), 'https://fonts.googleapis.com/css' );
+		if ( ! empty( $google_fonts_url ) ) {
+			if ( kadence()->option( 'load_fonts_local' ) ) {
+				if ( kadence()->option( 'preload_fonts_local' ) && apply_filters( 'kadence_local_fonts_preload', true ) ) {
+					print_webfont_preload( $google_fonts_url );
+				}
+				wp_enqueue_style(
+					'kadence-givewp-visual-iframe-fonts',
+					get_webfont_url( $google_fonts_url ),
+					array(),
+					KADENCE_VERSION
+				);
+			} else {
+				wp_enqueue_style( 'kadence-givewp-visual-iframe-fonts', $google_fonts_url, array(), KADENCE_VERSION ); // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+			}
+		}
+	}
+	/**
+	 * Add Visual Builder Styles.
+	 */
+	public function update_visual_builder_template_styles() {
+		$css                    = new Kadence_CSS();
+		$media_query            = array();
+		$media_query['mobile']  = apply_filters( 'kadence_mobile_media_query', '(max-width: 767px)' );
+		$media_query['tablet']  = apply_filters( 'kadence_tablet_media_query', '(max-width: 1024px)' );
+		$media_query['desktop'] = apply_filters( 'kadence_desktop_media_query', '(min-width: 1025px)' );
+		// Globals.
+		$css->set_selector( ':root' );
+		$css->add_property( '--global-palette1', kadence()->palette_option( 'palette1' ) );
+		$css->add_property( '--global-palette2', kadence()->palette_option( 'palette2' ) );
+		$css->add_property( '--global-palette3', kadence()->palette_option( 'palette3' ) );
+		$css->add_property( '--global-palette4', kadence()->palette_option( 'palette4' ) );
+		$css->add_property( '--global-palette5', kadence()->palette_option( 'palette5' ) );
+		$css->add_property( '--global-palette6', kadence()->palette_option( 'palette6' ) );
+		$css->add_property( '--global-palette7', kadence()->palette_option( 'palette7' ) );
+		$css->add_property( '--global-palette8', kadence()->palette_option( 'palette8' ) );
+		$css->add_property( '--global-palette9', kadence()->palette_option( 'palette9' ) );
+		$css->add_property( '--global-palette-highlight', $css->render_color( kadence()->sub_option( 'link_color', 'highlight' ) ) );
+		$css->add_property( '--global-palette-highlight-alt', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt' ) ) );
+		$css->add_property( '--global-palette-highlight-alt2', $css->render_color( kadence()->sub_option( 'link_color', 'highlight-alt2' ) ) );
+		$css->add_property( '--global-palette-btn-bg', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-bg-hover', $css->render_color_or_gradient( kadence()->sub_option( 'buttons_background', 'hover' ) ) );
+		$css->add_property( '--global-palette-btn', $css->render_color( kadence()->sub_option( 'buttons_color', 'color' ) ) );
+		$css->add_property( '--global-palette-btn-hover', $css->render_color( kadence()->sub_option( 'buttons_color', 'hover' ) ) );
+		$css->add_property( '--global-body-font-family', $css->render_font_family( kadence()->option( 'base_font' ), '' ) );
+		$css->add_property( '--global-heading-font-family', $css->render_font_family( kadence()->option( 'heading_font' ) ) );
+		$css->add_property( '--global-fallback-font', apply_filters( 'kadence_theme_global_typography_fallback', 'sans-serif' ) );
+		$css->add_property( '--global-display-fallback-font', apply_filters( 'kadence_theme_global_display_typography_fallback', 'sans-serif' ) );
+
+		$css->set_selector( 'body .givewp-donation-form' );
+		$css->add_property( '--font-family', 'var(--global-body-font-family)' );
+		$css->set_selector( '.givewp-layouts-headerTitle' );
+		$css->add_property( '--font-family', 'var(--global-heading-font-family )' );
+		self::$google_fonts = $css->fonts_output();
+		wp_add_inline_style( 'givewp-base-form-styles', $css->css_output() );
 	}
 	/**
 	 * Add basic theme styling to iframe.

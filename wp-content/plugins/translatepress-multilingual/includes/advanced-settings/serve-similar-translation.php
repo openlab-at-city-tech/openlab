@@ -1,14 +1,19 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter('trp_register_advanced_settings', 'serve_similar_translation', 1050);
 function serve_similar_translation($settings_array)
 {
     $settings_array[] = array(
-        'name' => 'serve_similar_translation',
-        'type' => 'checkbox',
+        'name'  => 'serve_similar_translation',
+        'type'  => 'checkbox',
         'label' => esc_html__('Automatic Translation Memory', 'translatepress-multilingual'),
-        'description' => wp_kses(__('Serve same translation for similar text. The strings need to have a percentage of 95% similarity.<br>Helps prevent losing existing translation when correcting typos or making minor adjustments to the original text. <br>If a translation already exists for a very similar original string, it will automatically be used for the current original string.<br>Does not work when making changes to a text that is part of a translation block unless the new text is manually merged again in a translation block.<br>Each string needs to have a minimum of 50 characters.', 'translatepress-multilingual'), array('br' => array())) . '<br><p class="trp-error-inline">' . esc_html__( 'WARNING: This feature can negatively impact page loading times in secondary languages, particularly with large databases (for example websites with a lot of pages or products). If you experience slow loading times, disable this and try again.', 'translatepress-multilingual') . '</p>',
+        'description'   => wp_kses(__('Serve same translation for similar text. The strings need to have a percentage of 95% similarity.<br>Helps prevent losing existing translation when correcting typos or making minor adjustments to the original text. <br>If a translation already exists for a very similar original string, it will automatically be used for the current original string.<br>Does not work when making changes to a text that is part of a translation block unless the new text is manually merged again in a translation block.<br>Each string needs to have a minimum of 50 characters.', 'translatepress-multilingual'), array('br' => array())) . '<br><p class="trp-settings-warning" style="width: 100%;">' . esc_html__( 'WARNING: This feature can negatively impact page loading times in secondary languages, particularly with large databases (for example websites with a lot of pages or products). If you experience slow loading times, disable this and try again.', 'translatepress-multilingual') . '</p>',
         'id'            => 'miscellaneous_options',
+        'container'     => 'miscellaneous_options'
     );
     return $settings_array;
 }

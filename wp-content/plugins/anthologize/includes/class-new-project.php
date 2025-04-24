@@ -125,6 +125,7 @@ if ( ! class_exists( 'Anthologize_New_Project' ) ) :
 		function display() {
 
 			if ( isset( $_POST['save_project'] ) ) {
+				check_admin_referer( 'anthologize_new_project' );
 				$this->save_project();
 				return;
 			}
@@ -158,22 +159,18 @@ if ( ! class_exists( 'Anthologize_New_Project' ) ) :
 				<table class="form-table">
 				<tr valign="top">
 					<th scope="row"><label for="project-title"><?php _e( 'Project Title', 'anthologize' ); ?></label></th>
-					<td><input type="text" name="post_title" id="project-title" value="
 					<?php
-					if ( $project ) {
-						echo esc_attr( $project->post_title );}
+					$existing_project_title = $project ? $project->post_title : '';
 					?>
-					"></td>
+					<td><input type="text" name="post_title" id="project-title" value="<?php echo esc_attr( $existing_project_title ); ?>"></td>
 				</tr>
 
 				<tr valign="top">
 					<th scope="row"><label for="project-subtitle"><?php _e( 'Subtitle', 'anthologize' ); ?></label>
-					<td><input type="text" name="anthologize_meta[subtitle]" id="project-subtitle" value="
 					<?php
-					if ( $project && ! empty( $meta['subtitle'] ) ) {
-						echo esc_attr( $meta['subtitle'] );}
+					$existing_subtitle = $project ? $meta['subtitle'] : '';
 					?>
-					" /></td>
+					<td><input type="text" name="anthologize_meta[subtitle]" id="project-subtitle" value="<?php echo esc_attr( $existing_subtitle ); ?>" /></td>
 				</tr>
 
 				<?php /* Hidden until there is a more straightforward way to display projects on the front end of WP */ ?>
@@ -194,12 +191,11 @@ if ( ! class_exists( 'Anthologize_New_Project' ) ) :
 
 
 				<div class="anthologize-button"><input type="submit" name="save_project" value="<?php _e( 'Save Project', 'anthologize' ); ?>"></div>
-			<input type="hidden" name="project_id" value="
-			<?php
-			if ( $project ) {
-				echo esc_attr( $project->ID );}
-			?>
-			">
+			<?php $existing_project_id = $project ? $project->ID : ''; ?>
+			<input type="hidden" name="project_id" value="<?php echo esc_attr( $existing_project_id ); ?>">
+
+			<?php wp_nonce_field( 'anthologize_new_project' ); ?>
+
 			</form>
 
 		</div>

@@ -8,7 +8,7 @@ class Ed1 {
              */
     Ed1.params = function () {
       // Custom test names
-      ed11yLang.en.emptyWpButton = {title: 'Empty Wordpress Button'};
+      ed11yLang.en.emptyWpButton = {title: 'Empty Link'};
 
       let queryString = window.location.search;
       let urlParams = new URLSearchParams(queryString);

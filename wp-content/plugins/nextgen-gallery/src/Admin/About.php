@@ -4,8 +4,8 @@
  *
  * @since 1.8.1
  *
- * @package Envira_Gallery
- * @author  Envira Gallery Team
+ * @package Imagely_Gallery
+ * @author  Imagely Gallery Team
  */
 
 namespace Imagely\NGG\Admin;
@@ -15,20 +15,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Imagely\NGG\Util\Installer_Skin;
-
 /**
  * Welcome Class
  *
  * @since 1.7.0
  *
- * @package Envira_Gallery
- * @author  Envira Gallery Team <support@enviragallery.com>
+ * @package Imagely_Gallery
+ * @author  Imagely Gallery Team <support@imagely.com>
  */
 class About {
 
 	/**
-	 * Envira Welcome Pages.
+	 * Imagely Welcome Pages.
 	 *
 	 * @var array
 	 */
@@ -125,7 +123,7 @@ class About {
 
 		global $current_screen;
 
-		if ( ! empty( $current_screen->base ) && strpos( $current_screen->base, 'nextgen-gallery_page' ) !== false ) {
+		if ( ! empty( $current_screen->base ) && strpos( $current_screen->base, 'nextgen-gallery-about-us' ) !== false ) {
 
 			wp_register_style( NGG_PLUGIN_SLUG . '-about-style', plugins_url( 'assets/css/about.css', NGG_PLUGIN_FILE ), [], NGG_PLUGIN_VERSION );
 			wp_enqueue_style( NGG_PLUGIN_SLUG . '-about-style' );
@@ -194,7 +192,7 @@ class About {
 					'icon'        => $images_url . 'plugin-mi.png',
 					'name'        => esc_html__( 'MonsterInsights Pro', 'nggallery' ),
 					'description' => esc_html__( 'The leading WordPress analytics plugin that shows you how people find and use your website, so you can make data driven decisions to grow your business. Properly set up Google Analytics without writing code.', 'nggallery' ),
-					'url'         => 'https://www.monsterinsights.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://www.monsterinsights.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -210,7 +208,7 @@ class About {
 					'icon'        => $images_url . 'plugin-smtp.png',
 					'name'        => esc_html__( 'WP Mail SMTP Pro', 'nggallery' ),
 					'description' => esc_html__( "Improve your WordPress email deliverability and make sure that your website emails reach user's inbox with the #1 SMTP plugin for WordPress. Over 3 million websites use it to fix WordPress email issues.", 'nggallery' ),
-					'url'         => 'https://wpmailsmtp.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://wpmailsmtp.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -226,7 +224,7 @@ class About {
 					'icon'        => $images_url . 'plugin-aioseo.png',
 					'name'        => esc_html__( 'AIOSEO Pro', 'nggallery' ),
 					'description' => esc_html__( "The original WordPress SEO plugin and toolkit that improves your website's search rankings. Comes with all the SEO features like Local SEO, WooCommerce SEO, sitemaps, SEO optimizer, schema, and more.", 'nggallery' ),
-					'url'         => 'https://aioseo.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://aioseo.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -242,7 +240,7 @@ class About {
 					'icon'        => $images_url . 'plugin-seedprod.png',
 					'name'        => esc_html__( 'SeedProd Pro', 'nggallery' ),
 					'description' => esc_html__( 'The fastest drag & drop landing page builder for WordPress. Create custom landing pages without writing code, connect them with your CRM, collect subscribers, and grow your audience. Trusted by 1 million sites.', 'nggallery' ),
-					'url'         => 'https://www.seedprod.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://www.seedprod.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -258,7 +256,7 @@ class About {
 					'icon'        => $images_url . 'plugin-rp.png',
 					'name'        => esc_html__( 'RafflePress Pro', 'nggallery' ),
 					'description' => esc_html__( 'Turn your website visitors into brand ambassadors! Easily grow your email list, website traffic, and social media followers with the most powerful giveaways & contests plugin for WordPress.', 'nggallery' ),
-					'url'         => 'https://rafflepress.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://rafflepress.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -283,7 +281,7 @@ class About {
 					'icon'        => $images_url . 'plugin-sb-instagram.png',
 					'name'        => esc_html__( 'Smash Balloon Instagram Feeds Pro', 'nggallery' ),
 					'description' => esc_html__( 'Easily display Instagram content on your WordPress site without writing any code. Comes with multiple templates, ability to show content from multiple accounts, hashtags, and more. Trusted by 1 million websites.', 'nggallery' ),
-					'url'         => 'https://smashballoon.com/instagram-feed/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://smashballoon.com/instagram-feed/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -299,7 +297,7 @@ class About {
 					'icon'        => $images_url . 'plugin-sb-fb.png',
 					'name'        => esc_html__( 'Smash Balloon Facebook Feeds Pro', 'nggallery' ),
 					'description' => esc_html__( 'Easily display Facebook content on your WordPress site without writing any code. Comes with multiple templates, ability to embed albums, group content, reviews, live videos, comments, and reactions.', 'nggallery' ),
-					'url'         => 'https://smashballoon.com/custom-facebook-feed/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://smashballoon.com/custom-facebook-feed/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -315,7 +313,7 @@ class About {
 					'icon'        => $images_url . 'plugin-sb-youtube.png',
 					'name'        => esc_html__( 'Smash Balloon YouTube Feeds Pro', 'nggallery' ),
 					'description' => esc_html__( 'Easily display YouTube videos on your WordPress site without writing any code. Comes with multiple layouts, ability to embed live streams, video filtering, ability to combine multiple channel videos, and more.', 'nggallery' ),
-					'url'         => 'https://smashballoon.com/youtube-feed/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://smashballoon.com/youtube-feed/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -331,7 +329,7 @@ class About {
 					'icon'        => $images_url . 'plugin-sb-twitter.png',
 					'name'        => esc_html__( 'Smash Balloon Twitter Feeds Pro', 'nggallery' ),
 					'description' => esc_html__( 'Easily display Twitter content in WordPress without writing any code. Comes with multiple layouts, ability to combine multiple Twitter feeds, Twitter card support, tweet moderation, and more.', 'nggallery' ),
-					'url'         => 'https://smashballoon.com/custom-twitter-feeds/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://smashballoon.com/custom-twitter-feeds/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -348,7 +346,7 @@ class About {
 				'name'        => esc_html__( 'SearchWP', 'nggallery' ),
 				'description' => esc_html__( 'The most advanced WordPress search plugin. Customize your WordPress search algorithm, reorder search results, track search metrics, and everything you need to leverage search to grow your business.', 'nggallery' ),
 				'wporg'       => false,
-				'url'         => 'https://searchwp.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+				'url'         => 'https://searchwp.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 				'act'         => 'go-to-url',
 			],
 			'affiliate-wp/affiliate-wp.php'                => [
@@ -356,7 +354,7 @@ class About {
 				'name'        => esc_html__( 'AffiliateWP', 'nggallery' ),
 				'description' => esc_html__( 'The #1 affiliate management plugin for WordPress. Easily create an affiliate program for your eCommerce store or membership site within minutes and start growing your sales with the power of referral marketing.', 'nggallery' ),
 				'wporg'       => false,
-				'url'         => 'https://affiliatewp.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+				'url'         => 'https://affiliatewp.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 				'act'         => 'go-to-url',
 			],
 			'stripe/stripe-checkout.php'                   => [
@@ -371,7 +369,7 @@ class About {
 					'icon'        => $images_url . 'plugin-wp-simple-pay.png',
 					'name'        => esc_html__( 'WP Simple Pay Pro', 'nggallery' ),
 					'description' => esc_html__( 'The #1 Stripe payments plugin for WordPress. Start accepting one-time and recurring payments on your WordPress site without setting up a shopping cart. No code required.', 'nggallery' ),
-					'url'         => 'https://wpsimplepay.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://wpsimplepay.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -397,7 +395,7 @@ class About {
 					'icon'        => $images_url . 'plugin-sugarcalendar.png',
 					'name'        => esc_html__( 'Sugar Calendar Pro', 'nggallery' ),
 					'description' => esc_html__( 'A simple & powerful event calendar plugin for WordPress that comes with all the event management features including payments, scheduling, timezones, ticketing, recurring events, and more.', 'nggallery' ),
-					'url'         => 'https://sugarcalendar.com/?utm_source=enviragallerylite&utm_medium=link&utm_campaign=About%20Envira',
+					'url'         => 'https://sugarcalendar.com/?utm_source=imagelylite&utm_medium=link&utm_campaign=About%20Imagely',
 					'act'         => 'go-to-url',
 				],
 			],
@@ -438,7 +436,7 @@ class About {
 	}
 
 	/**
-	 * Register the Welcome submenu item for Envira.
+	 * Register the Welcome submenu item for Imagely.
 	 *
 	 * @since 1.8.1
 	 *
@@ -483,10 +481,9 @@ class About {
 					admin_url(
 						add_query_arg(
 							[
-								'post_type' => 'envira',
-								'page'      => 'nextgen-about-us',
+								'page' => 'nextgen-gallery-about-us',
 							],
-							'edit.php'
+							'admin.php'
 						)
 					)
 				);
@@ -520,7 +517,7 @@ class About {
 					<p><?php esc_html_e( 'Yup, we know a thing or two about building awesome products that customers love.', 'nggallery' ); ?></p>
 				</div>
 				<div class="image">
-					<img src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/about/team.jpg' ); ?> ">
+					<img alt="<?php esc_attr_e( 'Team', 'nggallery' ); ?>" src="<?php echo esc_url( trailingslashit( NGG_PLUGIN_URI ) . 'assets/images/about/team.jpg' ); ?> ">
 				</div>
 			</div>
 
@@ -557,7 +554,7 @@ class About {
 			<div class="nextgen-am-plugins">
 				<div class="nextgen-am-plugins-main">
 					<div>
-						<img src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
+						<img alt="<?php esc_attr_e( 'Icon', 'nggallery' ); ?>" src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
 					</div>
 					<div>
 						<h3><?php echo esc_html( $plugin['name'] ); ?></h3>
@@ -582,7 +579,7 @@ class About {
 							<div class="nextgen-am-plugins">
 							<div class="nextgen-am-plugins-main">
 								<div>
-									<img src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
+									<img alt="<?php esc_attr_e( 'Icon', 'nggallery' ); ?>" src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
 								</div>
 								<div>
 									<h3><?php echo esc_html( $plugin['name'] ); ?></h3>
@@ -605,7 +602,7 @@ class About {
 				<div class="nextgen-am-plugins">
 							<div class="nextgen-am-plugins-main">
 								<div>
-									<img src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
+									<img alt="<?php esc_attr_e( 'Icon', 'nggallery' ); ?>" src="<?php echo esc_attr( $plugin['icon'] ); ?>" width="64px" />
 								</div>
 								<div>
 									<h3><?php echo esc_html( $plugin['name'] ); ?></h3>
@@ -677,7 +674,7 @@ class About {
 
 		// Deactivate the addon.
 		if ( isset( $_POST['basename'] ) ) {
-			$deactivate = deactivate_plugins( sanitize_text_field( wp_unslash( $_POST['basename'] ) ) );
+			deactivate_plugins( sanitize_text_field( wp_unslash( $_POST['basename'] ) ) );
 		}
 
 		echo wp_json_encode( true );

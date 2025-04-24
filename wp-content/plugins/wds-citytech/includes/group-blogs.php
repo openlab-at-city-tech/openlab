@@ -685,26 +685,41 @@ function wds_bp_group_meta() {
 								switch ( $group_type ) {
 									case 'course':
 										?>
-										<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. We recommend the following format:</p>
+										<div class="site-creation-tooltips-noclone">
+											<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an existing or external site, select the option below.</p>
 
-										<ul class="ol-tooltip">
-											<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
-											<li class="hyphenate">smithadv1100sp2012</li>
-										</ul>
+											<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
 
-										<p class="ol-tooltip">If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+											<ul class="ol-tooltip">
+												<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+												<li class="hyphenate">Smithadv1100sp2025</li>
+											</ul>
+										</div>
+
+										<div class="site-creation-tooltips-clone">
+											<p class="ol-tooltip">Take a moment to consider the address for your site. You will not be able to change it once you've created it. If you are linking to an external site, select that option and enter the URL.</p>
+
+											<p class="ol-tooltip">We recommend the format below. If you teach multiple sections on the OpenLab, consider adding other identifying information to the address. Please note that all addresses must be unique.</p>
+
+											<ul class="ol-tooltip">
+												<li class="hyphenate">FacultyLastNameCourseCodeSemYear</li>
+												<li class="hyphenate">smithadv1100sp2025</li>
+											</ul>
+										</div>
+
 										<?php
 										break;
 
 									case 'project':
-										?>
-										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu.</p>
-										<?php
-										break;
-
 									case 'club':
 										?>
-										<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it.  If you are linking to an existing site, select from the drop-down menu. </p>
+										<div class="site-creation-tooltips-noclone">
+											<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an existing or external site, select the option below.</p>
+										</div>
+
+										<div class="site-creation-tooltips-clone">
+											<p class="ol-tooltip">Please take a moment to consider the address for your site. You will not be able to change it once you’ve created it. If you are linking to an external site, select that option and enter the URL.</p>
+										</div>
 										<?php
 										break;
 								}
@@ -739,7 +754,77 @@ function wds_bp_group_meta() {
 											</div>
 											<input name="blog-id-to-clone" value="" type="hidden" />
 										</div>
+
 										<p id="cloned-site-url"></p>
+
+										<div class="row advanced-cloning-options-row">
+											<?php
+
+											$advanced_option_markup = '
+												<fieldset>
+													<legend>Clone posts and pages that are currently set to draft (unpublished)?</legend>
+													<p class="advanced-cloning-options-gloss">
+														If you have pages and posts in draft (unpublished) on the site you are cloning, those will be copied over to the new site. If you do not wish to clone draft items, change the setting below.
+													</p>
+													<label>
+														<input type="radio" name="clone-draft-posts" value="yes" checked> Yes
+													</label>
+													<br>
+													<label>
+														<input type="radio" name="clone-draft-posts" value="no"> No: Do not clone draft posts and pages
+													</label>
+												</fieldset>
+
+												<fieldset>
+													<legend>Publish all currently-published posts and pages on your new site?</legend>
+													<p class="advanced-cloning-options-gloss">
+														All posts and pages that are published on the site you are cloning will also be published on the new site. If you would prefer to publish them gradually, you may wish to set them to draft on the new site by changing the setting below.
+													</p>
+													<label>
+														<input type="radio" name="clone-publish-posts" value="yes" checked> Yes
+													</label>
+													<br>
+													<label>
+														<input type="radio" name="clone-publish-posts" value="no"> No: Set all currently-published posts and pages to draft
+													</label>
+												</fieldset>
+
+												<fieldset>
+													<legend>Set post and page publication dates to today (while maintaining the current publication order)?</legend>
+													<p class="advanced-cloning-options-gloss">
+														Post and page publication dates will be set to today on your new site, but the current publication order will be maintained. This prevents posts and pages from appearing out of date, especially if you are cloning an older site. You can choose to keep the existing publication dates by changing the setting below.
+													</p>
+													<label>
+														<input type="radio" name="clone-set-dates-to-today" value="yes" checked> Yes
+													</label>
+													<br>
+													<label>
+														<input type="radio" name="clone-set-dates-to-today" value="no"> No: Keep the existing publication dates
+													</label>
+												</fieldset>
+
+												<fieldset>
+													<legend>Clone unused media library items?</legend>
+													<p class="advanced-cloning-options-gloss">
+														Media library items that are not being used in a page or post will not be cloned to the new site, allowing you to save space on your new site. If you would like to clone unused items, change the setting below.
+													</p>
+													<label>
+														<input type="radio" name="clone-unused-media" value="yes"> Yes
+													</label>
+													<br>
+													<label>
+														<input type="radio" name="clone-unused-media" value="no" checked> No
+													</label>
+												</fieldset>
+											';
+
+											openlab_render_collapsible_definition(
+												'advanced-cloning-options',
+												'More Options',
+												$advanced_option_markup
+											);
+											?>
+										</div>
 									</div>
 
 								</div>
@@ -750,7 +835,7 @@ function wds_bp_group_meta() {
 								<div id="noo_new_options">
 									<div id="noo_new_options-div" class="row">
 										<?php if ( 'portfolio' === $group_type ) : ?>
-											<p style="padding: 0 5px 10px 5px">Depending on the privacy settings you choose, your <?php echo esc_html( $group_label ); ?> URL may be publicly visible, so you may not wish to include your full name. Your <?php echo esc_html( $group_label ); ?> URL cannot be changed.</p>
+											<p style="padding: 0 5px 10px 5px">Depending on the privacy settings you choose, your <?php echo esc_html( $group_label ); ?> URL may be publicly visible, so you may not wish to include your full name. Your <?php echo esc_html( $group_label ); ?> URL cannot be changed. If you are linking to an existing or external site, select the option below.</p>
 										<?php endif; ?>
 
 										<div class="radio col-sm-6">
@@ -840,7 +925,7 @@ function wds_bp_group_meta() {
 									</div>
 								</div>
 							</div>
-							<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="italics disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will push new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
+							<div id="check-note-wrapper" style="display:<?php echo esc_attr( $show_website ); ?>"><div colspan="2"><p id="check-note" class="disabled-opt">Note: Please click the Check button to search for Post and Comment feeds for your external site. Doing so will ull new activity to your <?php echo esc_html( ucfirst( $group_type ) ); ?> Profile page. If no feeds are detected, you may type in the Post and Comment feed URLs directly or just leave blank.</p></div></div>
 						</div>
 					</div><!-- #site-options -->
 				<?php endif; ?>
@@ -1968,60 +2053,31 @@ Comment URL: %s',
 add_action( 'wp_insert_comment', 'openlab_olpc_notify_comment_author_of_reply', 20, 2 );
 
 /**
- * Show a notice on the dashboard of cloned course sites.
+ * Show a notice to sites running retired themes.
  */
-function openlab_cloned_course_notice() {
-	global $current_blog;
-
+function openlab_retired_themes_admin_notice() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
-	// Don't show for sites created before 2016-03-09.
-	$latest     = new DateTime( '2016-03-09' );
-	$registered = new DateTime( $current_blog->registered );
-	if ( $latest > $registered ) {
+	$theme          = wp_get_theme();
+	$allowed_themes = WP_Theme::get_allowed_on_network();
+
+	$theme_is_allowed = isset( $allowed_themes[ $theme->get_stylesheet() ] ) || isset( $allowed_themes[ $theme->get_template() ] );
+
+	if ( $theme_is_allowed ) {
 		return;
 	}
-
-	// Allow dismissal.
-	if ( get_option( 'openlab-clone-notice-dismissed' ) ) {
-		return;
-	}
-
-	// Only show for cloned courses.
-	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
-	if ( ! groups_get_groupmeta( $group_id, 'clone_source_group_id' ) ) {
-		return;
-	}
-
-	// Groan
-	$dismiss_url = $_SERVER['REQUEST_URI'];
-	$nonce       = wp_create_nonce( 'ol_clone_dismiss' );
-	$dismiss_url = add_query_arg( 'ol-clone-dismiss', '1', $dismiss_url );
-	$dismiss_url = add_query_arg( '_wpnonce', $nonce, $dismiss_url );
 
 	?>
-	<style type="text/css">
-		.ol-cloned-message {
-			position: relative;
-		}
-		.ol-cloned-message > p > span {
-			width: 80%;
-		}
-		.ol-clone-message-dismiss {
-			position: absolute;
-			right: 15px;
-		}
-	</style>
-	<div class="updated fade ol-cloned-message">
-		<p><span>Please Note: Your cloned site has been published. Please preview the site and make any adjustments (ie: set selected pages and posts to draft) as needed. <strong>This is a change to cloning functionality, which used to keep posts and pages in draft.</strong></span>
-		<a class="ol-clone-message-dismiss" href="<?php echo esc_attr( esc_url( $dismiss_url ) ); ?>">Dismiss</a>
+	<div class="notice notice-error">
+		<p>
+			<?php echo 'Please note: The theme you are using is outdated and has been retired. Please choose a new theme to avoid potential problems with your site. Find out how to <a href="https://openlab.citytech.cuny.edu/blog/help/changing-the-appearance-of-your-site-with-themes/">change your theme</a> in <a href="https://openlab.citytech.cuny.edu/">OpenLab Help</a>.'; ?>
 		</p>
 	</div>
 	<?php
 }
-add_action( 'admin_notices', 'openlab_cloned_course_notice' );
+add_action( 'admin_notices', 'openlab_retired_themes_admin_notice' );
 
 /**
  * Catch cloned course notice dismissals.

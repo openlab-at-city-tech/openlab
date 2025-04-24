@@ -1,4 +1,8 @@
 <?php
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 // add conditional language shortcode
 add_shortcode( 'trp_language', 'trp_language_content');
 

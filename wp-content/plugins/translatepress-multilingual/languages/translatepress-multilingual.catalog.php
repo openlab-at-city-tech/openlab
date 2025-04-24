@@ -1,7 +1,7 @@
 <?php __("", "translatepress-multilingual"); ?>
 <?php __("Plugin activated.", "translatepress-multilingual"); ?>
 <?php __("Could not install. Try again from <a href=\"%s\" >Plugins Dashboard.</a>", "translatepress-multilingual"); ?>
-<?php __("Please update the TranslatePress - Multilingual plugin to version 2.0.5 at least for %s to work properly", "translatepress-multilingual"); ?>
+<?php __("Please update the TranslatePress - Multilingual plugin to version %1$s or higher to ensure %2$s functions correctly.", "translatepress-multilingual"); ?>
 <?php __("Please install and activate the TranslatePress - Multilingual plugin", "translatepress-multilingual"); ?>
 <?php __("Install & Activate", "translatepress-multilingual"); ?>
 <?php __("Please update TranslatePress - Multilingual to version %2$s or newer. Your currently installed version of TranslatePress - Multilingual is no longer compatible with the current version of %1$s.", "translatepress-multilingual"); ?>
@@ -11,7 +11,6 @@
 <?php __("<strong>TranslatePress</strong> requires at least PHP version 5.6.20+ to run. It is the <a href=\"%s\">minimum requirement of the latest WordPress version</a>. Please contact your server administrator to update your PHP version.", "translatepress-multilingual"); ?>
 <?php __("Advanced", "translatepress-multilingual"); ?>
 <?php __("Settings saved.", "translatepress-multilingual"); ?>
-<?php __("Yes", "translatepress-multilingual"); ?>
 <?php __("Are you sure you want to remove this item?", "translatepress-multilingual"); ?>
 <?php __("Remove", "translatepress-multilingual"); ?>
 <?php __("Add", "translatepress-multilingual"); ?>
@@ -48,6 +47,7 @@
 <?php __("Dismiss this notice.", "translatepress-multilingual"); ?>
 <?php __("Logged errors", "translatepress-multilingual"); ?>
 <?php __("These are the most recent 5 errors logged by TranslatePress:", "translatepress-multilingual"); ?>
+<?php __("Yes", "translatepress-multilingual"); ?>
 <?php __("Why are these errors occuring", "translatepress-multilingual"); ?>
 <?php __("If TranslatePress detects something wrong when executing queries on your database, it may disable the Automatic Translation feature in order to avoid any extra charging by Google/DeepL. Automatic Translation needs to be manually turned on, after you solve the issues.", "translatepress-multilingual"); ?>
 <?php __("The SQL errors detected can occur for various reasons including missing tables, missing permissions for the SQL user to create tables or perform other operations, problems after site migration or changes to SQL server configuration.", "translatepress-multilingual"); ?>
@@ -69,13 +69,10 @@
 <?php __("DeepL", "translatepress-multilingual"); ?>
 <?php __("Unsupported languages", "translatepress-multilingual"); ?>
 <?php __("The selected automatic translation engine does not provide support for these languages.<br>You can still manually translate pages in these languages using the Translation Editor.", "translatepress-multilingual"); ?>
-<?php __("Languages without formality", "translatepress-multilingual"); ?>
-<?php __("The selected automatic translation engine provides only <a href=\"%s\" target=\"_blank\">default formality</a> settings for these languages for now.<br>Automatic translation will still work if available for these languages. It will just not use the formality setting from TranslatePress <a href=\"%s\" target=\"_self\"> General Tab</a> for the languages listed above.", "translatepress-multilingual"); ?>
-<?php __("Recheck supported languages", "translatepress-multilingual"); ?>
-<?php __("(last checked on %s)", "translatepress-multilingual"); ?>
+<?php __("API key validation failed.", "translatepress-multilingual"); ?>
+<?php __("API key verification was successful.", "translatepress-multilingual"); ?>
 <?php __("Please enter your Google Translate key.", "translatepress-multilingual"); ?>
 <?php __("Please enter your DeepL API key.", "translatepress-multilingual"); ?>
-<?php __("You are not using a permalink structure! Please <a href=\"%s\">enable</a> one or install our <a href=\"%s\">\"Language by GET parameter\"</a> addon, so that TranslatePress can function properly.", "translatepress-multilingual"); ?>
 <?php __("Your <strong>TranslatePress</strong> license will expire on %1$s. Please %2$sRenew Your Licence%3$s to continue receiving access to product downloads, automatic updates and support.", "translatepress-multilingual"); ?>
 <?php __("Something went wrong, please try again.", "translatepress-multilingual"); ?>
 <?php __("Your <strong>TranslatePress</strong> license has expired. <br/>Please %1$sRenew Your Licence%2$s to continue receiving access to product downloads, automatic updates and support. %3$sRenew now %4$s", "translatepress-multilingual"); ?>
@@ -107,6 +104,8 @@
 <?php __("Top Left", "translatepress-multilingual"); ?>
 <?php __("Dark", "translatepress-multilingual"); ?>
 <?php __("Light", "translatepress-multilingual"); ?>
+<?php __("Deactivate", "translatepress-multilingual"); ?>
+<?php __("Activate", "translatepress-multilingual"); ?>
 <?php __("Invalid language code. Please try again.", "translatepress-multilingual"); ?>
 <?php __("Language codes can contain only A-Z a-z 0-9 - _ characters. Check your language codes in TranslatePress General Settings.", "translatepress-multilingual"); ?>
 <?php __("Error! Duplicate URL slug values.", "translatepress-multilingual"); ?>
@@ -121,13 +120,15 @@
 <?php __("Settings", "translatepress-multilingual"); ?>
 <?php __("Activate License", "translatepress-multilingual"); ?>
 <?php __("Pro Features", "translatepress-multilingual"); ?>
-<?php __("Image source", "translatepress-multilingual"); ?>
+<?php __("Source", "translatepress-multilingual"); ?>
+<?php __("Srcset", "translatepress-multilingual"); ?>
 <?php __("Alt attribute", "translatepress-multilingual"); ?>
 <?php __("Title attribute", "translatepress-multilingual"); ?>
 <?php __("Anchor link", "translatepress-multilingual"); ?>
 <?php __("Placeholder attribute", "translatepress-multilingual"); ?>
 <?php __("Submit attribute", "translatepress-multilingual"); ?>
 <?php __("Text", "translatepress-multilingual"); ?>
+<?php __("Video Poster", "translatepress-multilingual"); ?>
 <?php __("plural form", "translatepress-multilingual"); ?>
 <?php __("one", "translatepress-multilingual"); ?>
 <?php __("few", "translatepress-multilingual"); ?>
@@ -208,11 +209,15 @@
 <?php __("String List", "translatepress-multilingual"); ?>
 <?php __("Gettext Strings", "translatepress-multilingual"); ?>
 <?php __("Images", "translatepress-multilingual"); ?>
+<?php __("Videos", "translatepress-multilingual"); ?>
+<?php __("Audios", "translatepress-multilingual"); ?>
 <?php __("Dynamically Added Strings", "translatepress-multilingual"); ?>
 <?php __("Translation Editor", "translatepress-multilingual"); ?>
 <?php __("Edit translations by visually selecting them on each site page", "translatepress-multilingual"); ?>
 <?php __("String Translation", "translatepress-multilingual"); ?>
 <?php __("Edit url slug translations, plugins and theme translation (emails, forms etc.)", "translatepress-multilingual"); ?>
+<?php __("Current User", "translatepress-multilingual"); ?>
+<?php __("Logged Out", "translatepress-multilingual"); ?>
 <?php __("Translate Page", "translatepress-multilingual"); ?>
 <?php __("Opens post in the translation editor. Post must be saved as draft or published beforehand.", "translatepress-multilingual"); ?>
 <?php __("Security check", "translatepress-multilingual"); ?>
@@ -223,6 +228,8 @@
 <?php __("IMPORTANT: It is strongly recommended to first backup the database!\nAre you sure you want to continue?", "translatepress-multilingual"); ?>
 <?php __("Run the updater", "translatepress-multilingual"); ?>
 <?php __("Updating will allow editing translations of slugs. Existing translation will still work as expected.", "translatepress-multilingual"); ?>
+<?php __("Please activate the SEO Addon from <br/>WordPress -> Settings -> TranslatePress -> Addons section", "translatepress-multilingual"); ?>
+<?php __("Go to Addons", "translatepress-multilingual"); ?>
 <?php __("The SEO Pack add-on allows translation of all the URL slugs:", "translatepress-multilingual"); ?>
 <?php __("Taxonomy slugs", "translatepress-multilingual"); ?>
 <?php __("Term slugs", "translatepress-multilingual"); ?>
@@ -250,7 +257,6 @@
 <?php __("Removing cdata dictionary strings for language %s...", "translatepress-multilingual"); ?>
 <?php __("Removing untranslated dictionary links for language %s...", "translatepress-multilingual"); ?>
 <?php __("Removing duplicated gettext strings for language %s...", "translatepress-multilingual"); ?>
-<?php __("Removing untranslated gettext strings where translation is available for language %s...", "translatepress-multilingual"); ?>
 <?php __("Removing duplicated dictionary strings for language %s...", "translatepress-multilingual"); ?>
 <?php __("Removing untranslated dictionary strings where translation is available for language %s...", "translatepress-multilingual"); ?>
 <?php __("Inserting original strings for language %s...", "translatepress-multilingual"); ?>
@@ -277,7 +283,7 @@
 <?php __("Successfully updated database!", "translatepress-multilingual"); ?>
 <?php __(" done.", "translatepress-multilingual"); ?>
 <?php __("All individual TranslatePress add-on plugins <a href=\"%1$s\" target=\"_blank\">have been discontinued</a> and are now included in the premium Personal, Business and Developer versions of TranslatePress. Please log into your <a href=\"%2$s\" target=\"_blank\">account page</a>, download the new premium version and install it. Your individual addons settings will be ported over.", "translatepress-multilingual"); ?>
-<?php __("Please <strong> update %1$s </strong> to version %2$s or newer.<br>Your currently installed version of %1$s is deprecated. The plugin will continue to work as expected. However, newer versions have improved functionality and compatibility with various permalink structures. ", "translatepress-multilingual"); ?>
+<?php __("We’ve redesigned the <strong>%1$s</strong> settings for a better experience!<br>To ensure full compatibility with the new settings structure and avoid potential layout discrepancies, please update to version <strong>%2$s</strong> or newer.<br>Your current version of <strong>%1$s</strong> may not fully support these improvements, but the plugin will continue to function as expected.", "translatepress-multilingual"); ?>
 <?php __("TranslatePress", "translatepress-multilingual"); ?>
 <?php __("<strong>TranslatePress</strong> requires <strong><a href=\"http://php.net/manual/en/book.mbstring.php\">Multibyte String PHP library</a></strong>. Please contact your server administrator to install it on your server.", "translatepress-multilingual"); ?>
 <?php __("Detected long query limitation on WPEngine hosting. Some large pages may appear untranslated. You can remove limitation by adding the following to your site’s wp-config.php: define( 'WPE_GOVERNOR', false ); ", "translatepress-multilingual"); ?>
@@ -285,7 +291,6 @@
 <?php __("The Language code of the added custom language cannot be empty.", "translatepress-multilingual"); ?>
 <?php __("The Language code of the added custom language is invalid.", "translatepress-multilingual"); ?>
 <?php __("The Automatic Translation Code of the added custom language is invalid.", "translatepress-multilingual"); ?>
-<?php __("TranslatePress Settings", "translatepress-multilingual"); ?>
 <?php __("TranslatePress Add-ons", "translatepress-multilingual"); ?>
 <?php __("You must first purchase this version to have access to the addon %1$shere%2$s", "translatepress-multilingual"); ?>
 <?php __("Advanced Add-ons", "translatepress-multilingual"); ?>
@@ -299,7 +304,7 @@
 <?php __("These addons extend your translation plugin and are available in the Business and Developer plans.", "translatepress-multilingual"); ?>
 <?php __("DeepL Automatic Translation", "translatepress-multilingual"); ?>
 <?php __("Automatically translate your website through the DeepL API.", "translatepress-multilingual"); ?>
-<?php __("Automatically redirects new visitors to their preferred language based on browser settings or IP address and remembers the last visited language.", "translatepress-multilingual"); ?>
+<?php __("Prompts visitors to switch to their preferred language based on their browser settings or IP address and remembers the last visited language.", "translatepress-multilingual"); ?>
 <?php __("Translator Accounts", "translatepress-multilingual"); ?>
 <?php __("Create translator accounts for new users or allow existing users that are not administrators to translate your website.", "translatepress-multilingual"); ?>
 <?php __("Browse As User Role", "translatepress-multilingual"); ?>
@@ -314,31 +319,29 @@
 <?php __("Accept user payments, create subscription plans and restrict content on your membership site.", "translatepress-multilingual"); ?>
 <?php __("WP Webhooks Automator", "translatepress-multilingual"); ?>
 <?php __("Create no-code automations and workflows on your WordPress site. Easily connect your plugins, sites and apps together.", "translatepress-multilingual"); ?>
-<?php __("TranslatePress Advanced Settings", "translatepress-multilingual"); ?>
 <?php __("Save Changes", "translatepress-multilingual"); ?>
 <?php __("TranslatePress Errors", "translatepress-multilingual"); ?>
 <?php __("There are no logged errors.", "translatepress-multilingual"); ?>
-<?php __("Seamless, automated & correct translations with TranslatePress AI", "translatepress-multilingual"); ?>
-<?php __("Are you tired of the slow, manual effort of translating your website?", "translatepress-multilingual"); ?>
-<?php __("With TranslatePress AI, experience the future of website translation.", "translatepress-multilingual"); ?>
-<?php __("Automatically translate your entire website", "translatepress-multilingual"); ?>
-<?php __("Accurate and fast translations", "translatepress-multilingual"); ?>
-<?php __("Your message in a language your users understand.", "translatepress-multilingual"); ?>
-<?php __("Extra features from our paid versions: extra languages, SEO support and more...", "translatepress-multilingual"); ?>
-<?php __("Get a License Today", "translatepress-multilingual"); ?>
-<?php __("Already purchased a pro version?", "translatepress-multilingual"); ?>
-<?php __("Leave the Free version installed.", "translatepress-multilingual"); ?>
-<?php __("Install and activate the Pro version ", "translatepress-multilingual"); ?>
-<?php __("A prompt will appear on this page asking you to enter your license key.", "translatepress-multilingual"); ?>
-<?php __("License Key", "translatepress-multilingual"); ?>
 <?php __("Deactivate License", "translatepress-multilingual"); ?>
-<?php __("Your license is invalid", "translatepress-multilingual"); ?>
-<?php __("Active on this site", "translatepress-multilingual"); ?>
-<?php __("Enter your license key.", "translatepress-multilingual"); ?>
-<?php __("TranslatePress Automatic Translation", "translatepress-multilingual"); ?>
+<?php __("Your License Key is valid.", "translatepress-multilingual"); ?>
+<?php __("Your License Key is invalid.", "translatepress-multilingual"); ?>
+<?php __("Your License has expired.", "translatepress-multilingual"); ?>
+<?php __("Enjoy seamless, automated and correct translations with TranslatePress AI", "translatepress-multilingual"); ?>
+<?php __("Are you tired of the slow, manual effort of translating your website? Experience the future of website translation with TranslatePress AI.", "translatepress-multilingual"); ?>
+<?php __("Automatically translate your entire website", "translatepress-multilingual"); ?>
+<?php __("Accurate and Fast Translations", "translatepress-multilingual"); ?>
+<?php __("Your message in a language your users understand", "translatepress-multilingual"); ?>
+<?php __("Extra Features from the paid versions: Extra languages, SEO support and much more...", "translatepress-multilingual"); ?>
+<?php __("Get a License Today", "translatepress-multilingual"); ?>
+<?php __("Already purchased a Premium version?", "translatepress-multilingual"); ?>
+<?php __("Go to your %1$s", "translatepress-multilingual"); ?>
+<?php __("TranslatePress.com Account", "translatepress-multilingual"); ?>
+<?php __("Download & Install the Pro plugin", "translatepress-multilingual"); ?>
+<?php __("Learn More", "translatepress-multilingual"); ?>
+<?php __("License Key", "translatepress-multilingual"); ?>
+<?php __("Manage your license in your %1$s.", "translatepress-multilingual"); ?>
+<?php __("Account Page", "translatepress-multilingual"); ?>
 <?php __("Enable Automatic Translation", "translatepress-multilingual"); ?>
-<?php __("No", "translatepress-multilingual"); ?>
-<?php __("Enable or disable the automatic translation of the site. To minimize translation costs, each untranslated string is automatically translated only once, then stored in the database.", "translatepress-multilingual"); ?>
 <?php __("To use <strong>DeepL</strong> for automatic translation, activate this Pro add-on from the <a href=\"%1$s\" target=\"_self\" title=\"%2$s\">%2$s</a>.", "translatepress-multilingual"); ?>
 <?php __("<strong>DeepL</strong> automatic translation is available as a <a href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>.", "translatepress-multilingual"); ?>
 <?php __("By upgrading you'll get access to all paid add-ons, premium support and help fund the future development of TranslatePress.", "translatepress-multilingual"); ?>
@@ -347,27 +350,34 @@
 <?php __("Please note that DeepL API usage is paid separately. See <a href=\"https://www.deepl.com/pro.html#developer\">DeepL pricing information</a>.", "translatepress-multilingual"); ?>
 <?php __("TranslatePress Pro Add-ons", "translatepress-multilingual"); ?>
 <?php __("Test API credentials", "translatepress-multilingual"); ?>
-<?php __("Click here to check if the selected translation engine is configured correctly.", "translatepress-multilingual"); ?>
+<?php __("Check if the selected translation engine is configured correctly.", "translatepress-multilingual"); ?>
 <?php __("Alternative Engines", "translatepress-multilingual"); ?>
 <?php __("Switch to TranslatePress AI", "translatepress-multilingual"); ?>
-<?php __("Learn More!", "translatepress-multilingual"); ?>
 <?php __("Integrate machine translation directly with your WordPress website.", "translatepress-multilingual"); ?>
 <?php __("More info", "translatepress-multilingual"); ?>
-<?php __("Choose which engine you want to use in order to automatically translate your website.", "translatepress-multilingual"); ?>
+<?php __("Choose which engine you want to use in order to %1$s automatically translate your website.", "translatepress-multilingual"); ?>
+<?php __("Automatic Translation Settings", "translatepress-multilingual"); ?>
 <?php __("Block Crawlers", "translatepress-multilingual"); ?>
 <?php __("Block crawlers from triggering automatic translations on your website.<br>This will not prevent crawlers from accessing this site's pages.", "translatepress-multilingual"); ?>
 <?php __("Automatically Translate Slugs", "translatepress-multilingual"); ?>
 <?php __("Generate automatic translations of slugs for posts, pages and Custom Post Types.<br/>The slugs will be automatically translated starting with the second refresh of each page.", "translatepress-multilingual"); ?>
-<?php __("This feature is available only in the paid version. <a href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a> and unlock more premium features.", "translatepress-multilingual"); ?>
-<?php __("Upgrade TranslatePress", "translatepress-multilingual"); ?>
-<?php __("<br/>Requires <a href=\"https://translatepress.com/docs/addons/seo-pack/\" title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\"> SEO Pack Add-on</a> to be installed and activated.", "translatepress-multilingual"); ?>
+<?php __("This feature is only available in the paid version. Upgrade TranslatePress and unlock more premium features.", "translatepress-multilingual"); ?>
+<?php __("Requires <a href=\"%s\" title=\"TranslatePress Add-on SEO Pack documentation\" target=\"_blank\">SEO Pack Add-on</a> to be installed and activated.", "translatepress-multilingual"); ?>
+<?php __("Upgrade now", "translatepress-multilingual"); ?>
 <?php __("Limit machine translation / characters per day", "translatepress-multilingual"); ?>
 <?php __("Add a limit to the number of automatically translated characters so you can better budget your project.", "translatepress-multilingual"); ?>
-<?php __("Today's character count:", "translatepress-multilingual"); ?>
+<?php __("characters per day", "translatepress-multilingual"); ?>
+<?php __("Today's Character Count: ", "translatepress-multilingual"); ?>
 <?php __("Log machine translation queries.", "translatepress-multilingual"); ?>
 <?php __("Only enable for testing purposes. Can impact performance.<br>All records are stored in the wp_trp_machine_translation_log database table. Use a plugin like <a href=\"https://wordpress.org/plugins/wp-data-access/\" target=\"_blank\">WP Data Access</a> to browse the logs or directly from your database manager (PHPMyAdmin, etc.)", "translatepress-multilingual"); ?>
+<?php __("Test API Credentials", "translatepress-multilingual"); ?>
+<?php __("HTTP Referrer: ", "translatepress-multilingual"); ?>
+<?php __("Use this HTTP Referrer if the API lets you restrict key usage from its Dashboard.", "translatepress-multilingual"); ?>
+<?php __("Response", "translatepress-multilingual"); ?>
+<?php __("Response Body", "translatepress-multilingual"); ?>
+<?php __("Entire Response From wp_remote_get():", "translatepress-multilingual"); ?>
 <?php __("All Languages", "translatepress-multilingual"); ?>
-<?php __("Language", "translatepress-multilingual"); ?>
+<?php __("Select the languages you wish to make your website available in.", "translatepress-multilingual"); ?>
 <?php __("Formality", "translatepress-multilingual"); ?>
 <?php __("Code", "translatepress-multilingual"); ?>
 <?php __("Slug", "translatepress-multilingual"); ?>
@@ -375,24 +385,20 @@
 <?php __("Formal", "translatepress-multilingual"); ?>
 <?php __("Informal", "translatepress-multilingual"); ?>
 <?php __("Are you sure you want to remove this language?", "translatepress-multilingual"); ?>
-<?php __("Choose...", "translatepress-multilingual"); ?>
 <?php __("Custom Languages", "translatepress-multilingual"); ?>
-<?php __("Select the languages you wish to make your website available in.<br>The Formality field is used by Automatic Translation to decide whether the translated text should lean towards formal or informal language. For now, it is supported only for a few languages and only by <a href=\"%s\" target=\"_blank\">DeepL</a>.", "translatepress-multilingual"); ?>
-<?php __("To add <strong>more than two languages</strong> and support for SEO Title, Description, Slug and more check out <a href=\"%1$s\" target=\"_blank\" title=\"%2$s\">%2$s</a>.", "translatepress-multilingual"); ?>
-<?php __("TranslatePress Advanced Add-ons", "translatepress-multilingual"); ?>
-<?php __("Not only are you getting extra features and premium support, but you also help fund the future development of TranslatePress.", "translatepress-multilingual"); ?>
-<?php __("TranslatePress Advanced Add-ons", "translatepress-multilingual"); ?>
-<?php __("To add <strong>more than two languages</strong> activate the <strong>Extra Languages Add-on</strong> from <a href=\"%s\" class=\"trp-translatepress-account-page\" target=\"_blank\" title=\"Add-ons page\">the Add-ons Page</a>. Once activated, you'll be able to add unlimited languages.", "translatepress-multilingual"); ?>
+<?php __("Adding more than two languages is a paid feature. Upgrade TranslatePress and unlock more premium features.", "translatepress-multilingual"); ?>
+<?php __("Website Languages", "translatepress-multilingual"); ?>
 <?php __("Default Language", "translatepress-multilingual"); ?>
 <?php __("Select the original language of your content.", "translatepress-multilingual"); ?>
 <?php __("WARNING. Changing the default language will invalidate existing translations.", "translatepress-multilingual"); ?>
 <?php __("Even changing from en_US to en_GB, because they are treated as two different languages.", "translatepress-multilingual"); ?>
 <?php __("In most cases changing the default flag is all it is needed: ", "translatepress-multilingual"); ?>
 <?php __("replace the default flag", "translatepress-multilingual"); ?>
-<?php __("Native language name", "translatepress-multilingual"); ?>
-<?php __("Select Yes if you want to display languages in their native names. Otherwise, languages will be displayed in English.", "translatepress-multilingual"); ?>
+<?php __("Language Settings", "translatepress-multilingual"); ?>
+<?php __("Use Native language name", "translatepress-multilingual"); ?>
+<?php __("Check if you want to display languages in their native names. Otherwise, languages will be displayed in English.", "translatepress-multilingual"); ?>
 <?php __("Use a subdirectory for the default language", "translatepress-multilingual"); ?>
-<?php __("Select Yes if you want to add the subdirectory in the URL for the default language.</br>By selecting Yes, the default language seen by website visitors will become the first one in the \"All Languages\" list.", "translatepress-multilingual"); ?>
+<?php __("Check if you want to add the subdirectory in the URL for the default language.</br>By checking this option, the default language seen by website visitors will become the first one in the \"All Languages\" list.", "translatepress-multilingual"); ?>
 <?php __("Force language in custom links", "translatepress-multilingual"); ?>
 <?php __("Select Yes if you want to force custom links without language encoding to keep the currently selected language.", "translatepress-multilingual"); ?>
 <?php __("Language Switcher", "translatepress-multilingual"); ?>
@@ -425,14 +431,8 @@
 <?php __("Active, Deactivated, installed version and settings", "translatepress-multilingual"); ?>
 <?php __("Privacy Policy", "translatepress-multilingual"); ?>
 <?php __("Terms of Service", "translatepress-multilingual"); ?>
-<?php __("API Key from settings page:", "translatepress-multilingual"); ?>
-<?php __("HTTP Referrer:", "translatepress-multilingual"); ?>
-<?php __("Use this HTTP Referrer if the API lets you restrict key usage from its Dashboard.", "translatepress-multilingual"); ?>
-<?php __("Response:", "translatepress-multilingual"); ?>
-<?php __("Response Body:", "translatepress-multilingual"); ?>
-<?php __("Entire Response From wp_remote_get():", "translatepress-multilingual"); ?>
 <?php __("Optimize TranslatePress database tables", "translatepress-multilingual"); ?>
-<?php __("<strong>IMPORTANT NOTE: Before performing this action it is strongly recommended to first backup the database.</strong><br><br>", "translatepress-multilingual"); ?>
+<?php __("<strong>IMPORTANT NOTE:</strong> Before performing this action it is strongly recommended to first backup the database.", "translatepress-multilingual"); ?>
 <?php __("IMPORTANT: It is strongly recommended to first backup the database!! Are you sure you want to continue?", "translatepress-multilingual"); ?>
 <?php __("Operations to perform", "translatepress-multilingual"); ?>
 <?php __("Remove CDATA for original and dictionary strings", "translatepress-multilingual"); ?>
@@ -444,22 +444,23 @@
 <?php __("Remove duplicate rows for dictionary strings", "translatepress-multilingual"); ?>
 <?php __("Cleans up all trp_dictionary_* tables of duplicate rows. These tables contain translations for user-inputted strings such as post content, post title, menus etc.", "translatepress-multilingual"); ?>
 <?php __("Remove duplicate rows for original dictionary strings", "translatepress-multilingual"); ?>
-<?php __("Cleans up all trp_original_strings table of duplicate rows. This table contains strings in the default language, without any translation.<br>The trp_original_meta table, which contains meta information that refers to the post parent’s id, is also regenerated.<br>Such duplicates can appear in exceptional situations of unexpected behavior.", "translatepress-multilingual"); ?>
-<?php __("Replace gettext strings that have original id NULL with the correct original ids", "translatepress-multilingual"); ?>
-<?php __("Fixes an edge case issue where some gettext strings have the original id incorrectly set to NULL, causing problems in the Translation Editor.<br>This operation corrects the original ids in the trp_gettext_* tables.<br>Only check this option if you encountered an issue in the Translation Editor where clicking the green pencil did not bring up the gettext string for translation in the left sidebar.<br>Otherwise, please leave this option unchecked because it's an intensive operation.", "translatepress-multilingual"); ?>
+<?php __("Cleans up all trp_original_strings table of duplicate rows. This table contains strings in the default language, without any translation.<br>The trp_original_meta table, which contains meta information that refers to the post parent’s ID, is also regenerated.<br>Such duplicates can appear in exceptional situations of unexpected behavior.", "translatepress-multilingual"); ?>
+<?php __("Replace gettext strings that have original ID NULL with the correct original IDs", "translatepress-multilingual"); ?>
+<?php __("Fixes an edge case issue where some gettext strings have the original ID incorrectly set to NULL, causing problems in the Translation Editor.<br>This operation corrects the original IDs in the trp_gettext_* tables.<br>Only check this option if you encountered an issue in the Translation Editor where clicking the green pencil did not bring up the gettext string for translation in the left sidebar.<br>Otherwise, please leave this option unchecked because it's an intensive operation.", "translatepress-multilingual"); ?>
 <?php __("Optimize Database", "translatepress-multilingual"); ?>
 <?php __("TranslatePress Database Updater", "translatepress-multilingual"); ?>
-<?php __("Updating TranslatePress tables", "translatepress-multilingual"); ?>
+<?php __("Updating TranslatePress tables. Please leave this window open.", "translatepress-multilingual"); ?>
 <?php __("Automatic and manual slug translation changes performed when <strong>TranslatePress - Multilingual</strong> 2.8.4 was active had to be removed because of some issues with that version. All slug translations from before that version are now in use. Thank you for understanding!", "translatepress-multilingual"); ?>
 <?php __("If you absolutely need them, the removed translations can be found in tables trp_slug_original_obsolete and trp_slug_translation_obsolete.", "translatepress-multilingual"); ?>
 <?php __("Limit this menu item to the following languages", "translatepress-multilingual"); ?>
 <?php __("Date format", "translatepress-multilingual"); ?>
 <?php __("Customize the date formatting per each translated language.<br/>Leave empty for default WP setting or see more information <a href=\"https://wordpress.org/support/article/formatting-date-and-time/\" title=\"Formatting Date and Time\" target=\"_blank\">here</a>", "translatepress-multilingual"); ?>
-<?php __("To edit an existing TranslatePress language, input the language code and fill in only the columns you want to overwrite (e.g. Language name, Flag).<br>You can also add new custom languages. They will be available under General settings, All Languages list, where the URL slug can be edited.<br>For custom flag, first upload the image in media library then paste the URL.<br>Changing or deleting a custom language will impact translations and site URL's.<br>The Language code and the Automatic Translation Code should contain only alphabetical values, numerical values, \"-\" and \"_\".<br>The Automatic Translation codes can be found on <a href = \"https://cloud.google.com/translate/docs/languages\" target = \"_blank\">Google ISO Codes</a> and <a href = \"https://www.deepl.com/docs-api/translating-text/\" target = \"_blank\">DeepL Target Codes</a>.", "translatepress-multilingual"); ?>
+<?php __("To edit an existing TranslatePress language, input the language code and fill in only the columns you want to overwrite (e.g. Language name, Flag).<br>You can also add new custom languages. They will be available under General settings, All Languages list, where the URL slug can be edited.", "translatepress-multilingual"); ?>
+<?php __("For custom flag, first upload the image in media library then paste the URL.<br>Changing or deleting a custom language will impact translations and site URL's.<br>The Language code and the ISO Code should contain only alphabetical values, numerical values, \"-\" and \"_\".<br>The ISO Codes can be found on <a href = \"https://cloud.google.com/translate/docs/languages\" target = \"_blank\">Google ISO Codes</a> and <a href = \"https://www.deepl.com/docs-api/translating-text/\" target = \"_blank\">DeepL Target Codes</a>.", "translatepress-multilingual"); ?>
 <?php __("Language code", "translatepress-multilingual"); ?>
 <?php __("Language name", "translatepress-multilingual"); ?>
 <?php __("Native name", "translatepress-multilingual"); ?>
-<?php __("Automatic translation code", "translatepress-multilingual"); ?>
+<?php __("ISO Code", "translatepress-multilingual"); ?>
 <?php __("Flag URL", "translatepress-multilingual"); ?>
 <?php __("Text RTL", "translatepress-multilingual"); ?>
 <?php __("Custom language", "translatepress-multilingual"); ?>
@@ -524,9 +525,11 @@
 <?php __("It helps remove possible duplicate translations, clear unnecessary data and repair possible metadata issues.", "translatepress-multilingual"); ?>
 <?php __("<a href=\"%s\" target=\"_blank\">Here</a> you can observe the last 5 SQL errors relevant to TranslatePress if they exist.", "translatepress-multilingual"); ?>
 <?php __("Troubleshooting", "translatepress-multilingual"); ?>
-<?php __("Exclude strings", "translatepress-multilingual"); ?>
+<?php __("Exclude Gettext strings", "translatepress-multilingual"); ?>
 <?php __("Debug", "translatepress-multilingual"); ?>
+<?php __("Custom languages", "translatepress-multilingual"); ?>
 <?php __("Miscellaneous options", "translatepress-multilingual"); ?>
+<?php __("Exclude strings & pages", "translatepress-multilingual"); ?>
 <?php __("Automatic Translation Memory", "translatepress-multilingual"); ?>
 <?php __("Serve same translation for similar text. The strings need to have a percentage of 95% similarity.<br>Helps prevent losing existing translation when correcting typos or making minor adjustments to the original text. <br>If a translation already exists for a very similar original string, it will automatically be used for the current original string.<br>Does not work when making changes to a text that is part of a translation block unless the new text is manually merged again in a translation block.<br>Each string needs to have a minimum of 50 characters.", "translatepress-multilingual"); ?>
 <?php __("WARNING: This feature can negatively impact page loading times in secondary languages, particularly with large databases (for example websites with a lot of pages or products). If you experience slow loading times, disable this and try again.", "translatepress-multilingual"); ?>
@@ -538,6 +541,7 @@
 <?php __("Filters gettext wrapping such as #!trpst#trp-gettext from all updated post meta. Does not affect previous post meta. <br/><strong>Database backup is recommended before switching on.</strong>", "translatepress-multilingual"); ?>
 <?php __("Google Translate v2", "translatepress-multilingual"); ?>
 <?php __("Google Translate API Key", "translatepress-multilingual"); ?>
+<?php __("Add your API Key here...", "translatepress-multilingual"); ?>
 <?php __("Visit <a href=\"https://cloud.google.com/docs/authentication/api-keys\" target=\"_blank\">this link</a> to see how you can set up an API key, <strong>control API costs</strong> and set HTTP referrer restrictions.", "translatepress-multilingual"); ?>
 <?php __("Your HTTP referrer is: %s", "translatepress-multilingual"); ?>
 <?php __("There was an error on the server processing your Google Translate key.", "translatepress-multilingual"); ?>
@@ -545,10 +549,9 @@
 <?php __("Please check your TranslatePress license key.", "translatepress-multilingual"); ?>
 <?php __("TranslatePress AI", "translatepress-multilingual"); ?>
 <?php __("No Active License Detected for this website.", "translatepress-multilingual"); ?>
-<?php __("Add a license by visiting the %1$s tab:", "translatepress-multilingual"); ?>
-<?php __("Register License", "translatepress-multilingual"); ?>
+<?php __("Add a license by visiting the %1$s tab.", "translatepress-multilingual"); ?>
 <?php __("You have a valid %s license.", "translatepress-multilingual"); ?>
-<?php __("Quota: <span id=\"trp-ai-quota-number\">%s</span> available words remaining.", "translatepress-multilingual"); ?>
+<?php __(" words remaining. ", "translatepress-multilingual"); ?>
 <?php __("Recheck", "translatepress-multilingual"); ?>
 <?php __("Rechecking...", "translatepress-multilingual"); ?>
 <?php __("Done.", "translatepress-multilingual"); ?>
@@ -561,8 +564,10 @@
 <?php __("Bulk Actions", "translatepress-multilingual"); ?>
 <?php __("Delete entries", "translatepress-multilingual"); ?>
 <?php __("Edit", "translatepress-multilingual"); ?>
+<?php __("Delete", "translatepress-multilingual"); ?>
 <?php __("Filter", "translatepress-multilingual"); ?>
 <?php __("Clear filters", "translatepress-multilingual"); ?>
+<?php __("Language", "translatepress-multilingual"); ?>
 <?php __("Add New", "translatepress-multilingual"); ?>
 <?php __("Rescan plugins and theme for strings", "translatepress-multilingual"); ?>
 <?php __("Scanning plugins and theme for strings...", "translatepress-multilingual"); ?>
@@ -577,6 +582,7 @@
 <?php __("No strings match your query.", "translatepress-multilingual"); ?>
 <?php __("Try to rescan plugins and theme for strings.", "translatepress-multilingual"); ?>
 <?php __("An error occurred while loading results. Most likely you were logged out. Reload page?", "translatepress-multilingual"); ?>
+<?php __("found in translation", "translatepress-multilingual"); ?>
 <?php __("Select All", "translatepress-multilingual"); ?>
 <?php __("Select Visible", "translatepress-multilingual"); ?>
 <?php __("You are about to perform this action on all the strings matching your filter, not just the visibly checked. To perform the action only to the visible strings click \"Select Visible\" from the table header dropdown.", "translatepress-multilingual"); ?>
@@ -585,6 +591,7 @@
 <?php __("The word typed was incorrect. Action was cancelled.", "translatepress-multilingual"); ?>
 <?php __("in", "translatepress-multilingual"); ?>
 <?php __("Warning: This action cannot be undone. Deleting a string will remove its current translation. The original string will appear again in this interface after TranslatePress detects it. This action is NOT equivalent to excluding the string from being translated again.", "translatepress-multilingual"); ?>
+<?php __("%d original entries and their translations were deleted.", "translatepress-multilingual"); ?>
 <?php __("Navigate to next page", "translatepress-multilingual"); ?>
 <?php __("Navigate to previous page", "translatepress-multilingual"); ?>
 <?php __("Navigate to first page", "translatepress-multilingual"); ?>
@@ -617,10 +624,9 @@
 <?php __("Filter by Translation Block", "translatepress-multilingual"); ?>
 <?php __("URL Slugs Translation", "translatepress-multilingual"); ?>
 <?php __("String Translation Editor", "translatepress-multilingual"); ?>
-<?php __("Active*", "translatepress-multilingual"); ?>
-<?php __("Select the languages you wish to make your website available in.", "translatepress-multilingual"); ?>
-<?php __("<br>The Formality field is used by Automatic Translation to decide whether the translated text should lean towards formal or informal language. For now, it is supported only for a few languages and only by <a href=\"%s\" target=\"_blank\">DeepL</a>.", "translatepress-multilingual"); ?>
-<?php __("<br>* The inactive languages will still be visible and active for the admin. For other users they won't be visible in the language switchers and won't be accessible either.", "translatepress-multilingual"); ?>
+<?php __("The Formality field is used by Automatic Translation to decide whether the translated text should lean towards formal or informal language. For now, it is supported only for a few languages and only by DeepL.", "translatepress-multilingual"); ?>
+<?php __("The inactive languages will still be visible and active for the admin. For other users they won't be visible in the language switchers and won't be accessible either.", "translatepress-multilingual"); ?>
+<?php __("This language does not support formality. ", "translatepress-multilingual"); ?>
 <?php __("Post Slug", "translatepress-multilingual"); ?>
 <?php __("First by browser language, then IP address (recommended)", "translatepress-multilingual"); ?>
 <?php __("First by IP address, then by browser language", "translatepress-multilingual"); ?>
@@ -632,15 +638,17 @@
 <?php __("Hello bar before the content", "translatepress-multilingual"); ?>
 <?php __("WARNING. Cannot determine your language preference based on your current IP.<br>This is most likely because the website is on a local environment.", "translatepress-multilingual"); ?>
 <?php __("Go to <a href=\"%s\" target=\"_self\">Advanced</a> tab to change this feature's settings", "translatepress-multilingual"); ?>
-<?php __("Method of language detection", "translatepress-multilingual"); ?>
+<?php __("User Language Detection Method", "translatepress-multilingual"); ?>
 <?php __("Select how the language should be detected for first time visitors.<br>The visitor's last displayed language will be remembered through cookies.", "translatepress-multilingual"); ?>
-<?php __("Pop-up to notify the user of the detected language", "translatepress-multilingual"); ?>
-<?php __("Select the type of pop-up you wish to appear.", "translatepress-multilingual"); ?>
-<?php __("Write the text you wish to appear in the pop-up.", "translatepress-multilingual"); ?>
+<?php __("User Notification Popup", "translatepress-multilingual"); ?>
+<?php __("A popup appears asking the user if they want to be redirected.", "translatepress-multilingual"); ?>
+<?php __("Popup Type", "translatepress-multilingual"); ?>
+<?php __("Popup Text", "translatepress-multilingual"); ?>
 <?php __("The same text is displayed in all languages. <br>A selecting language switcher will be appended to the pop-up. The detected language is pre-selected.", "translatepress-multilingual"); ?>
-<?php __("Write the text you wish to appear on the button.", "translatepress-multilingual"); ?>
+<?php __("Button Text", "translatepress-multilingual"); ?>
+<?php __("Write the text you wish to appear on the button..", "translatepress-multilingual"); ?>
+<?php __("Close Button Text", "translatepress-multilingual"); ?>
 <?php __("Write the text you wish to appear on the close button. Leave empty for just the close button.", "translatepress-multilingual"); ?>
-<?php __("Choose if you want the user to be redirected directly.<br>* Not recommended because it may cause indexing issues for search engines.", "translatepress-multilingual"); ?>
 <?php __("Bad request. There was an error accessing the DeepL API.", "translatepress-multilingual"); ?>
 <?php __("The API key entered is invalid.", "translatepress-multilingual"); ?>
 <?php __("The API resource could not be found.", "translatepress-multilingual"); ?>

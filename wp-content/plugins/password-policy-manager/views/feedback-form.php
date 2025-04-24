@@ -111,8 +111,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</div>
 	</div>
 
-	</div>
-
 	<script>
 
 		jQuery("[name='moppm_feedback']").change((e)=>{

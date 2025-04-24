@@ -30,7 +30,7 @@ echo '
 						</tr>
 						<tr>
 							<td>
-								   <textarea id="query" name="query" class="moppm_mo_settings_textarea" style="resize:vertical; width:100%;" cols="52" rows="7" onkeyup="mo_wpns_valid(this)" onblur="mo_wpns_valid(this)" onkeypress="mo_wpns_valid(this)" placeholder="Write your query here"></textarea>
+								   <textarea id="query" name="query" class="moppm_mo_settings_textarea" cols="52" rows="7" placeholder="Write your query here"></textarea>
 							</td>
 						</tr>
 					</table>

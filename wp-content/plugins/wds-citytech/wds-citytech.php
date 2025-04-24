@@ -80,6 +80,11 @@ add_action( 'bp_init', 'openlab_load_custom_bp_functions' );
  */
 add_filter( 'login_headerurl', function() { return get_site_url( 1 ); } );
 
+/**
+ * Don't load language dropdown on login page.
+ */
+add_filter( 'login_display_language_dropdown', '__return_false' );
+
 global $wpdb;
 //date_default_timezone_set( 'America/New_York' );
 
@@ -2861,6 +2866,9 @@ add_filter(
 		$types['ctb|stb']         = 'application/octet-stream';
 		$types['dwg|dxf|acd|dwt'] = 'application/acad';
 		$types['vwx']             = 'application/vnd.vectorworks';
+
+		// Photoshop - #3515
+		$types['psd'] = 'image/vnd.adobe.photoshop';
 
 		return $types;
 	}

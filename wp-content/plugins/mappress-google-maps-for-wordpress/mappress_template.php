@@ -171,7 +171,7 @@ class Mappress_Template extends Mappress_Obj {
 		$props = array();
 		foreach($tokens as $token)
 			$props[$token] = get_metadata($otype, $oid, $token, true);
-		return apply_filters('mappress_poi_props', $props, $oid, $poi, 'user');
+		return apply_filters('mappress_poi_props', $props, $oid, $poi, $otype);
 	}
 
 	static function get_custom_tokens($otype) {

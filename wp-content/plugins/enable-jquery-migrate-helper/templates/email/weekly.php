@@ -35,7 +35,7 @@ $logs = get_option( 'jqmh_logs', array() );
 
 <p>
 	<strong>
-		 <?php _e( 'Your site is running a legacy version of jQuery, modern functionality is currently not available to your plugins, themes or WordPress itself.', 'enable-jquery-migrate-helper' ); ?>
+		 <?php _e( 'Your site is running a legacy version of jQuery, modern functionality and recent security enhancements within the jQuery library are currently not available to your plugins, themes or WordPress itself.', 'enable-jquery-migrate-helper' ); ?>
 	</strong>
 </p>
 

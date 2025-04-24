@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_translation_for_gettext_strings', 523 );
 function trp_translation_for_gettext_strings( $settings_array ){
     $settings_array[] = array(
@@ -7,7 +11,8 @@ function trp_translation_for_gettext_strings( $settings_array ){
         'type'          => 'checkbox',
         'label'         => esc_html__( 'Disable translation for gettext strings', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Gettext Strings are strings outputted by themes and plugins. <br> Translating these types of strings through TranslatePress can be unnecessary if they are already translated using the .po/.mo translation file system.<br>Enabling this option can improve the page load performance of your site in certain cases. The disadvantage is that you can no longer edit gettext translations using TranslatePress, nor benefit from automatic translation on these strings.', 'translatepress-multilingual' ), array( 'br' => array()) ),
-        'id'            =>'debug',
+        'id'            => 'debug',
+        'container'     => 'debug'
         );
     return $settings_array;
 }

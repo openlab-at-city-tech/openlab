@@ -205,8 +205,9 @@ class Page extends Menu_Abstract implements Menu {
 
 		do_action( 'advanced-sidebar-menu/menus/page/render', $this );
 
-		$output = require Core::instance()->get_template_part( 'page_list.php' );
-		echo apply_filters( 'advanced-sidebar-menu/menus/page/output', $output, $this->get_current_post(), $this->args, $this->instance, $this );
+		$crumb = '';
+		$output = require Core::instance()->get_template_part( 'page_list.php', $crumb );
+		echo apply_filters( 'advanced-sidebar-menu/menus/page/output', $crumb . $output, $this->get_current_post(), $this->args, $this->instance, $this );
 
 		do_action( 'advanced-sidebar-menu/menus/page/render/after', $this );
 

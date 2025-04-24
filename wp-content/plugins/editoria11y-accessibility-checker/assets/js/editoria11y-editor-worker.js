@@ -1,8 +1,9 @@
 const allPorts = [];
+// eslint-disable-next-line no-undef
 onconnect = (e) => {
 	const port = e.ports[0];
 	allPorts.push(port);
-	port.addEventListener("message", (e) => {
+	port.addEventListener('message', (e) => {
 		allPorts.forEach(port => {
 			port.postMessage(e.data);
 		});

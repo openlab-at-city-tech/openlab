@@ -1,4 +1,9 @@
 <?php
+
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Check_Invalid_Text
  *

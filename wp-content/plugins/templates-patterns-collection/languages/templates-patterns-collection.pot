@@ -1,0 +1,1742 @@
+# Copyright (C) 2025 Themeisle
+# This file is distributed under the GPLv3.
+msgid ""
+msgstr ""
+"Project-Id-Version: Starter Sites & Templates by Neve 1.2.19\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/templates-patterns-collection\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2025-02-05T15:30:55+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.11.0\n"
+"X-Domain: templates-patterns-collection\n"
+
+#. Plugin Name of the plugin
+#: templates-patterns-collection.php
+msgid "Starter Sites & Templates by Neve"
+msgstr ""
+
+#. Description of the plugin
+#: templates-patterns-collection.php
+msgid "This plugin gives you access to 100+ templates and ready-to-use starter sites. Neve theme is used for all the designs."
+msgstr ""
+
+#. Author of the plugin
+#: templates-patterns-collection.php
+msgid "Themeisle"
+msgstr ""
+
+#. Author URI of the plugin
+#: templates-patterns-collection.php
+msgid "https://themeisle.com"
+msgstr ""
+
+#: includes/Admin.php:533
+#: assets/src/Components/Header.js:25
+#: assets/src/Components/Header.js:128
+msgid "Starter Sites"
+msgstr ""
+
+#: includes/Admin.php:534
+msgid "Onboarding"
+msgstr ""
+
+#: includes/Admin.php:544
+#: includes/Admin.php:545
+msgid "Starter Templates"
+msgstr ""
+
+#: includes/Admin.php:570
+#: includes/Admin.php:571
+#: includes/TI_Beaver.php:35
+#: includes/TI_Beaver.php:37
+#: assets/src/Components/Header.js:125
+#: editor/src/components/tpc-templates-button.js:18
+#: editor/src/index.js:17
+#: editor/src/plugins/extension.js:403
+#: editor/src/plugins/extension.js:408
+#: editor/src/plugins/site-editor-extension.js:325
+#: editor/src/plugins/site-editor-extension.js:330
+msgid "Templates Cloud"
+msgstr ""
+
+#: includes/Admin.php:596
+#: includes/Admin.php:597
+#: includes/Elementor.php:94
+#: includes/TI_Beaver.php:403
+#: assets/src/Components/Header.js:30
+#: assets/src/Components/Header.js:134
+#: editor/src/components/header.js:17
+msgid "My Library"
+msgstr ""
+
+#: includes/Admin.php:604
+#: includes/Admin.php:605
+#: assets/src/Components/Header.js:32
+#: assets/src/Components/Header.js:137
+msgid "Settings"
+msgstr ""
+
+#. translators: %s - Theme name
+#: includes/Admin.php:782
+msgid "Choose from multiple unique demos, specially designed for you, that can be installed with a single click. You just need to choose your favorite, and we will take care of everything else."
+msgstr ""
+
+#: includes/Admin.php:826
+msgid "Support"
+msgstr ""
+
+#: includes/Admin.php:831
+msgid "Feature request"
+msgstr ""
+
+#: includes/Admin.php:836
+msgid "Leave a review"
+msgstr ""
+
+#: includes/Admin.php:841
+msgid "Documentation"
+msgstr ""
+
+#: includes/Admin.php:1245
+msgid "Hi! We've noticed you were using a child theme of Zelle before. To make your transition easier, we can help you keep the same homepage settings you had before but in original Zelle's style, by converting it into an Elementor template."
+msgstr ""
+
+#: includes/Admin.php:1275
+#: includes/TI_Beaver.php:417
+#: assets/src/Components/CloudLibrary/ListItem.js:137
+#: assets/src/Components/CloudLibrary/ListItem.js:336
+#: assets/src/Components/CloudLibrary/PreviewFrame.js:17
+#: assets/src/Components/StarterSiteCard.js:61
+#: editor/src/components/list-item.js:115
+#: editor/src/components/list-item.js:376
+msgid "Preview"
+msgstr ""
+
+#: includes/Admin.php:1276
+#: includes/TI_Beaver.php:418
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:412
+#: assets/src/Components/CloudLibrary/ListItem.js:147
+#: assets/src/Components/CloudLibrary/ListItem.js:346
+#: assets/src/Components/PreviewFrame.js:95
+#: assets/src/Components/StarterSiteCard.js:69
+#: beaver/src/components/preview.js:40
+#: editor/src/components/import-modal.js:247
+#: editor/src/components/list-item.js:123
+#: editor/src/components/list-item.js:385
+#: editor/src/components/preview.js:82
+msgid "Import"
+msgstr ""
+
+#: includes/Admin.php:1277
+msgid "Get the PRO version!"
+msgstr ""
+
+#: includes/Admin.php:1278
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:410
+#: editor/src/components/import-modal.js:243
+msgid "Importing"
+msgstr ""
+
+#: includes/Admin.php:1279
+#: includes/Elementor.php:104
+#: includes/TI_Beaver.php:392
+#: assets/src/Components/Migration.js:165
+#: onboarding/src/Components/SiteSettings.js:262
+msgid "Cancel"
+msgstr ""
+
+#: includes/Admin.php:1280
+msgid "Loading"
+msgstr ""
+
+#: includes/Admin.php:1281
+#: assets/src/Components/ImportModal.js:751
+#: assets/src/Components/Migration.js:198
+msgid "View Website"
+msgstr ""
+
+#: includes/Admin.php:1282
+#: assets/src/Components/ImportModal.js:752
+msgid "Add your own content"
+msgstr ""
+
+#: includes/Admin.php:1283
+msgid "Back to Sites Library"
+msgstr ""
+
+#: includes/Admin.php:1284
+msgid "Note"
+msgstr ""
+
+#: includes/Admin.php:1285
+msgid "Advanced Options"
+msgstr ""
+
+#: includes/Admin.php:1286
+#: assets/src/Components/ImportModal.js:368
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:183
+msgid "Plugins"
+msgstr ""
+
+#: includes/Admin.php:1287
+#: assets/src/Components/Settings/Settings.js:148
+msgid "General"
+msgstr ""
+
+#: includes/Admin.php:1288
+msgid "Keep current layout"
+msgstr ""
+
+#: includes/Admin.php:1289
+#: includes/Elementor.php:119
+#: includes/TI_Beaver.php:430
+#: assets/src/Components/CloudLibrary/Filters.js:167
+#: assets/src/Components/CloudLibrary/Filters.js:190
+#: editor/src/components/filters.js:108
+msgid "Search"
+msgstr ""
+
+#: includes/Admin.php:1290
+#: assets/src/Components/ImportModal.js:208
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:57
+msgid "Content"
+msgstr ""
+
+#: includes/Admin.php:1291
+#: assets/src/Components/ImportModal.js:216
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:65
+msgid "Customizer"
+msgstr ""
+
+#: includes/Admin.php:1292
+#: assets/src/Components/ImportModal.js:220
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:69
+msgid "Widgets"
+msgstr ""
+
+#: includes/Admin.php:1293
+#: assets/src/Components/ImportModal.js:210
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:59
+msgid "We recommend you backup your website content before attempting a full site import."
+msgstr ""
+
+#: includes/Admin.php:1294
+msgid "Due to copyright issues, some of the demo images will not be imported and will be replaced by placeholder images."
+msgstr ""
+
+#: includes/Admin.php:1295
+msgid "Some of the demo images will not be imported and will be replaced by placeholder images."
+msgstr ""
+
+#: includes/Admin.php:1296
+msgid "Here is our own collection of related images you can use for your site."
+msgstr ""
+
+#: includes/Admin.php:1297
+#: assets/src/Components/Migration.js:131
+msgid "Content was successfully imported. Enjoy your new site!"
+msgstr ""
+
+#: includes/Admin.php:1298
+msgid "Available in the PRO version"
+msgstr ""
+
+#: includes/Admin.php:1299
+msgid "Copy error code"
+msgstr ""
+
+#: includes/Admin.php:1300
+msgid "Download error log"
+msgstr ""
+
+#: includes/Admin.php:1301
+msgid "To import this demo you have to install the following plugins:"
+msgstr ""
+
+#. translators: 1 - 'here'.
+#: includes/Admin.php:1304
+msgid "It seems that Rest API is not working properly on your website. Read about how you can fix it %1$s."
+msgstr ""
+
+#: includes/Admin.php:1305
+msgid "here"
+msgstr ""
+
+#. translators: 1 - 'get in touch'.
+#: includes/Admin.php:1309
+msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Please %1$s with us with the error code below, so we can help you fix this."
+msgstr ""
+
+#: includes/Admin.php:1310
+#: includes/Admin.php:1320
+msgid "get in touch"
+msgstr ""
+
+#. translators: 1 - 'troubleshooting guide'.
+#: includes/Admin.php:1314
+msgid "Hi! It seems there is a configuration issue with your server that's causing the import to fail. Take a look at our %1$s to see if any of the proposed solutions work."
+msgstr ""
+
+#: includes/Admin.php:1315
+msgid "troubleshooting guide"
+msgstr ""
+
+#. translators: 1 - 'get in touch'.
+#: includes/Admin.php:1319
+msgid "If none of the solutions in the guide work, please %1$s with us with the error code below, so we can help you fix this."
+msgstr ""
+
+#. translators: %s - 'WP_Filesystem'.
+#: includes/Admin.php:1324
+msgid "It seems that %s is not available. You can contact your site administrator or hosting provider to help you enable it."
+msgstr ""
+
+#: includes/Admin.php:1367
+msgid "Nonce verification failed"
+msgstr ""
+
+#: includes/Admin.php:1377
+msgid "No logs found"
+msgstr ""
+
+#. translators: %s: templates location.
+#: includes/Elementor.php:68
+#: includes/Elementor.php:100
+#: includes/TI_Beaver.php:409
+msgid "Save to %s"
+msgstr ""
+
+#: includes/Elementor.php:71
+#: includes/TI_Beaver.php:387
+msgid "Save Templates"
+msgstr ""
+
+#: includes/Elementor.php:72
+#: includes/TI_Beaver.php:388
+#: assets/src/Components/CloudLibrary/ListItem.js:245
+#: editor/src/components/list-item.js:160
+#: editor/src/components/list-item.js:253
+#: editor/src/plugins/extension.js:522
+#: editor/src/plugins/site-editor-extension.js:412
+msgid "Template Name"
+msgstr ""
+
+#: includes/Elementor.php:73
+#: includes/Elementor.php:134
+#: includes/TI_Beaver.php:389
+#: includes/TI_Beaver.php:491
+#: beaver/src/components/preview.js:23
+#: editor/src/components/preview.js:65
+#: editor/src/plugins/extension.js:111
+msgid "Template"
+msgstr ""
+
+#: includes/Elementor.php:74
+#: includes/Elementor.php:123
+#: includes/TI_Beaver.php:390
+#: includes/TI_Beaver.php:435
+#: editor/src/plugins/extension.js:536
+#: editor/src/plugins/site-editor-extension.js:426
+msgid "Save"
+msgstr ""
+
+#: includes/Elementor.php:75
+#: includes/TI_Beaver.php:391
+#: editor/src/plugins/extension.js:433
+#: editor/src/plugins/site-editor-extension.js:361
+msgid "Automatically sync to the cloud"
+msgstr ""
+
+#: includes/Elementor.php:76
+msgid "Template Saved."
+msgstr ""
+
+#: includes/Elementor.php:77
+#: editor/src/components/publish-button.js:63
+msgid "Template Published."
+msgstr ""
+
+#: includes/Elementor.php:78
+#: editor/src/components/publish-button.js:53
+msgid "Template Unpublished."
+msgstr ""
+
+#. translators: %s: Templates Cloud
+#: includes/Elementor.php:83
+msgid "Import from %s"
+msgstr ""
+
+#. translators: %s: Templates Cloud
+#: includes/Elementor.php:89
+msgid "Add Template from %s:"
+msgstr ""
+
+#: includes/Elementor.php:93
+#: includes/TI_Beaver.php:402
+#: assets/src/Components/Header.js:26
+#: assets/src/Components/Header.js:131
+msgid "Page Templates"
+msgstr ""
+
+#: includes/Elementor.php:97
+#: includes/TI_Beaver.php:406
+msgid "Sync Library"
+msgstr ""
+
+#: includes/Elementor.php:103
+#: includes/TI_Beaver.php:413
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:191
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:286
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:320
+#: assets/src/Components/InstallModal.js:163
+#: assets/src/Components/Migration.js:161
+#: assets/src/Components/OnboardingContent.js:153
+#: assets/src/Components/PreviewFrame.js:47
+msgid "Close"
+msgstr ""
+
+#: includes/Elementor.php:105
+#: includes/TI_Beaver.php:414
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:272
+#: assets/src/Components/CloudLibrary/ListItem.js:155
+#: assets/src/Components/CloudLibrary/ListItem.js:268
+#: assets/src/Components/CloudLibrary/ListItem.js:272
+#: assets/src/Components/CloudLibrary/ListItem.js:277
+#: assets/src/Components/CloudLibrary/ListItem.js:299
+#: editor/src/components/list-item.js:130
+#: editor/src/components/list-item.js:279
+#: editor/src/components/list-item.js:286
+#: editor/src/components/list-item.js:300
+#: editor/src/components/list-item.js:327
+msgid "Edit"
+msgstr ""
+
+#: includes/Elementor.php:106
+msgid "Duplicate"
+msgstr ""
+
+#: includes/Elementor.php:107
+#: includes/TI_Beaver.php:415
+#: assets/src/Components/CloudLibrary/ListItem.js:190
+#: assets/src/Components/CloudLibrary/ListItem.js:314
+#: assets/src/Components/CloudLibrary/ListItem.js:324
+#: editor/src/components/list-item.js:213
+#: editor/src/components/list-item.js:345
+#: editor/src/components/list-item.js:361
+msgid "Delete"
+msgstr ""
+
+#: includes/Elementor.php:108
+msgid "Insert"
+msgstr ""
+
+#: includes/Elementor.php:109
+msgid "Back to Library"
+msgstr ""
+
+#: includes/Elementor.php:112
+#: includes/TI_Beaver.php:421
+#: assets/src/Components/CloudLibrary/Filters.js:120
+#: editor/src/components/filters.js:30
+msgid "Sort by"
+msgstr ""
+
+#: includes/Elementor.php:114
+#: includes/TI_Beaver.php:423
+#: assets/src/Components/CloudLibrary/Filters.js:11
+#: editor/src/components/filters.js:10
+msgid "Name"
+msgstr ""
+
+#: includes/Elementor.php:115
+#: includes/TI_Beaver.php:424
+#: assets/src/Components/CloudLibrary/Filters.js:10
+#: editor/src/components/filters.js:9
+msgid "Date"
+msgstr ""
+
+#: includes/Elementor.php:116
+#: includes/TI_Beaver.php:425
+#: assets/src/Components/CloudLibrary/Filters.js:12
+#: editor/src/components/filters.js:11
+msgid "Last Modified"
+msgstr ""
+
+#: includes/Elementor.php:117
+#: includes/TI_Beaver.php:426
+msgid "Actions"
+msgstr ""
+
+#: includes/Elementor.php:120
+#: includes/TI_Beaver.php:431
+msgid "Search Templates"
+msgstr ""
+
+#. translators: %s: Templates Cloud
+#: includes/Elementor.php:126
+#: includes/TI_Beaver.php:438
+msgid "Save your page to %s"
+msgstr ""
+
+#: includes/Elementor.php:129
+msgid "Enter Template Name"
+msgstr ""
+
+#: includes/Elementor.php:130
+#: includes/TI_Beaver.php:441
+#: editor/src/components/template-predefine.js:92
+#: editor/src/plugins/extension.js:451
+msgid "Screenshot URL"
+msgstr ""
+
+#: includes/Elementor.php:131
+#: includes/TI_Beaver.php:442
+#: editor/src/components/template-predefine.js:105
+#: editor/src/plugins/extension.js:464
+msgid "Site Slug"
+msgstr ""
+
+#: includes/Elementor.php:132
+#: includes/TI_Beaver.php:443
+#: editor/src/components/publish-button.js:104
+msgid "Publish"
+msgstr ""
+
+#: includes/Elementor.php:133
+#: includes/TI_Beaver.php:444
+#: editor/src/components/publish-button.js:100
+msgid "Unpublish"
+msgstr ""
+
+#: includes/Sites_Listing.php:46
+#: includes/Sites_Listing.php:56
+msgid "Want to keep using Zelle's homepage?"
+msgstr ""
+
+#: includes/Sites_Listing.php:47
+#: includes/Sites_Listing.php:57
+msgid "Hi! We've noticed you were using Zelle before. To make your transition easier, we can help you keep the same beautiful homepage you had before, by converting it into an Elementor template. This option will also import your homepage content."
+msgstr ""
+
+#: includes/TI_Beaver.php:36
+msgid "Templates Cloud by Neve."
+msgstr ""
+
+#: includes/TI_Beaver.php:393
+msgid "Import Failed"
+msgstr ""
+
+#: includes/TI_Beaver.php:394
+msgid "Export Failed"
+msgstr ""
+
+#: includes/TI_Beaver.php:398
+#: editor/src/components/templates-content.js:215
+msgid "No templates available. Add a new one?"
+msgstr ""
+
+#: includes/TI_Beaver.php:399
+#: assets/src/Components/CloudLibrary/ListItem.js:89
+#: editor/src/components/list-item.js:76
+msgid "Are you sure you want to delete this template?"
+msgstr ""
+
+#: includes/TI_Beaver.php:400
+#: assets/src/Components/CloudLibrary/ListItem.js:265
+#: editor/src/components/list-item.js:276
+msgid "This template is synced to a page."
+msgstr ""
+
+#: includes/TI_Beaver.php:412
+#: assets/src/Components/CloudLibrary/ListItem.js:216
+#: assets/src/Components/CloudLibrary/ListItem.js:277
+#: assets/src/Components/CloudLibrary/ListItem.js:299
+#: editor/src/components/list-item.js:169
+#: editor/src/components/list-item.js:296
+#: editor/src/components/list-item.js:323
+msgid "Update"
+msgstr ""
+
+#: includes/TI_Beaver.php:416
+#: assets/src/Components/CloudLibrary/ListItem.js:323
+#: editor/src/components/list-item.js:357
+msgid "Deleting"
+msgstr ""
+
+#: includes/TI_Beaver.php:427
+#: assets/src/Components/CloudLibrary/Filters.js:198
+#: editor/src/components/filters.js:119
+msgid "List View"
+msgstr ""
+
+#: includes/TI_Beaver.php:428
+#: assets/src/Components/CloudLibrary/Filters.js:205
+#: editor/src/components/filters.js:126
+msgid "Grid View"
+msgstr ""
+
+#: includes/TI_Beaver.php:432
+#: assets/src/Components/CloudLibrary/Filters.js:181
+#: editor/src/components/filters.js:96
+msgid "Clear search query"
+msgstr ""
+
+#: includes/TI_Beaver.php:462
+#: editor/src/plugins/extension.js:391
+msgid "Save to Templates Cloud"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:100
+msgid "No templates for this starter site."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:129
+msgid "Back to Starter Sites"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:140
+#: assets/src/Components/StarterSiteCard.js:117
+msgid "Premium"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:149
+msgid "You can import individual pages or bulk-import all of them."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:159
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:222
+msgid "Import Starter Site"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:166
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:413
+msgid "Import All Pages"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:175
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:244
+msgid "Upgrade"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/DemoSiteTemplatesImport.js:233
+msgid "Import Page"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:11
+#: assets/src/Components/Settings/Settings.js:18
+msgid "Plugin version"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:15
+msgid "Feedback Response"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:16
+msgid "Checked option from feedback"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:19
+#: assets/src/Components/Settings/Settings.js:22
+msgid "Feedback Details"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:20
+#: assets/src/Components/Settings/Settings.js:23
+msgid "Text from the above text area"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:25
+#: assets/src/Components/Settings/Settings.js:9
+msgid "There was a problem submitting your feedback."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:26
+#: assets/src/Components/Settings/Settings.js:10
+msgid "Please provide a feedback before submitting the form."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:27
+#: assets/src/Components/Settings/Settings.js:11
+msgid "Thank you for helping us improve Templates Cloud!"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:138
+msgid "Help us improve and let us know how are you using Templates Cloud."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:147
+msgid "Try again"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:155
+msgid "Share feedback"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:178
+msgid "How are you using Templates Cloud?"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:185
+msgid "To store my templates in the cloud"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:186
+msgid "To share templates with the clients"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:187
+#: assets/src/utils/common.js:43
+msgid "Other"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:197
+msgid "Tell us more …"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:212
+#: assets/src/Components/Settings/Settings.js:103
+msgid "We value privacy, that's why no domain name, email address or IP addresses are collected after you submit the survey. Below is a detailed view of all data that Themeisle will receive if you fill in this survey."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:235
+#: assets/src/Components/Settings/Settings.js:126
+msgid "Submit feedback"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/FeedbackNotice.js:246
+#: assets/src/Components/Settings/Settings.js:137
+msgid "What info do we collect?"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Filters.js:21
+#: assets/src/Components/CloudLibrary/Library.js:95
+msgid "Gutenberg"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Filters.js:25
+#: assets/src/Components/CloudLibrary/Library.js:99
+msgid "Elementor"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Filters.js:29
+#: assets/src/Components/CloudLibrary/Library.js:103
+msgid "Beaver"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Filters.js:53
+#: assets/src/Components/EditorSelector.js:30
+#: assets/src/Components/EditorSelector.js:72
+#: assets/src/Components/EditorTabs.js:43
+#: assets/src/Components/Search.js:111
+#: assets/src/Components/Search.js:171
+#: onboarding/src/Components/EditorSelector.js:53
+#: onboarding/src/Components/EditorSelector.js:87
+msgid "Builder Logo"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Filters.js:156
+#: editor/src/components/filters.js:66
+msgid "Show FSE Templates"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:229
+msgid "Import done!"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:236
+msgid "Template was successfully imported!"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:240
+msgid "Templates were successfully imported!"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:263
+msgid "Visit"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:299
+msgid "An error occurred!"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:306
+msgid "Please refresh the page and try again."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:334
+msgid "This import will add a new Full Site Editing template to your site."
+msgstr ""
+
+#. translators: %s  the name of the template
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:343
+msgid "The %s template will be imported as a page into your site. This import will install & activate the page builder plugin if not already installed."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:349
+msgid "All the templates that are included in this starter site, will be imported as pages. This import will install & activate the page builder plugin if not already installed."
+msgstr ""
+
+#. translators: name of starter site
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:372
+msgid "Import the %s template"
+msgstr ""
+
+#. translators: name of template
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:377
+msgid "Import all templates from %s"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/ImportTemplatesModal.js:397
+msgid "I want to import the entire site"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:383
+msgid "Upgrade to PRO"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:392
+msgid "I already have a key"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:409
+msgid "Templates Cloud is a PRO Feature"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:413
+msgid "Unlock the Templates Cloud features and save your pages or posts in the cloud."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:497
+msgid "No Templates Found"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:503
+msgid "There are no templates yet"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:509
+msgid "You can add a page or post to the cloud by accessing it with the WordPress or Elementor/Beaver editor. Learn more about this in our docs."
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:520
+msgid "Learn more"
+msgstr ""
+
+#: assets/src/Components/CloudLibrary/Library.js:535
+msgid "Import Template"
+msgstr ""
+
+#: assets/src/Components/Header.js:100
+#: editor/src/components/header.js:81
+msgid "Re-sync Library"
+msgstr ""
+
+#: assets/src/Components/Header.js:108
+msgid "Sync"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:102
+#: assets/src/Components/ImportModal.js:143
+#: onboarding/src/Components/Steps/CustomizeSite.js:44
+#: onboarding/src/Components/Steps/CustomizeSite.js:86
+msgid "Something went wrong while loading the site data. Please refresh the page and try again."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:165
+msgid "Import the entire site including customizer options, pages, content and plugins."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:179
+msgid "Neve"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:180
+msgid "In order to import the starter site, Neve theme has to be installed and activated."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:191
+msgid "Install required theme"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:222
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:71
+msgid "Widgets will be moved to the Inactive Widgets sidebar and can be retrieved from there."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:228
+msgid "Enable performance features for my site"
+msgstr ""
+
+#. translators: %s is Optimole plugin name.
+#: assets/src/Components/ImportModal.js:236
+msgid "Optimize and speed up your site with our trusted addon, <a><span>%s</span><icon/></a>. It’s free."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:237
+msgid "Optimole"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:268
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:82
+msgid "Cleanup previous import"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:272
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:86
+msgid "This will remove any plugins, images, customizer options, widgets posts and pages added by the previous demo import"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:290
+msgid "Import settings"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:410
+msgid "Additional plugins are required for this Starter Site in order to work properly."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:455
+#: assets/src/Components/InstallModal.js:52
+#: onboarding/src/Components/Steps/Import.js:91
+msgid "Could not install theme."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:476
+#: assets/src/Components/InstallModal.js:67
+#: onboarding/src/Components/Steps/Import.js:112
+msgid "Could not activate theme."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:663
+#: onboarding/src/Components/Steps/Import.js:265
+msgid "Something went wrong while cleaning the previous import."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:667
+#: assets/src/Components/Migration.js:47
+#: onboarding/src/Components/Steps/Import.js:269
+msgid "Something went wrong while installing the necessary plugins."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:671
+#: assets/src/Components/Migration.js:63
+#: onboarding/src/Components/Steps/Import.js:273
+msgid "Something went wrong while importing the website content."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:675
+#: onboarding/src/Components/Steps/Import.js:277
+msgid "Something went wrong while updating the customizer settings."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:679
+#: onboarding/src/Components/Steps/Import.js:281
+msgid "Something went wrong while importing the widgets."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:683
+#: onboarding/src/Components/Steps/Import.js:285
+msgid "Something went wrong while installing the performance addon."
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:742
+msgid "View Website & Subscribe"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:746
+msgid "Skip and add your own content"
+msgstr ""
+
+#. translators: name of starter site
+#: assets/src/Components/ImportModal.js:819
+msgid "Import %s as a complete site"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:827
+msgid "Content was successfully imported"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:851
+msgid "Learn more about this starter site"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:898
+msgid "Stay up-to-date on news, tips and product updates"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:905
+#: onboarding/src/Components/ImportForm.js:132
+msgid "Enter your email"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:936
+msgid "I want to import just the templates"
+msgstr ""
+
+#: assets/src/Components/ImportModal.js:954
+msgid "Import entire site"
+msgstr ""
+
+#: assets/src/Components/ImportModalError.js:49
+#: onboarding/src/Components/ImportError.js:49
+msgid "Error code"
+msgstr ""
+
+#: assets/src/Components/ImportModalError.js:54
+#: onboarding/src/Components/ImportError.js:54
+msgid "Error log"
+msgstr ""
+
+#: assets/src/Components/ImportModalError.js:56
+#: onboarding/src/Components/ImportError.js:56
+msgid "Download Logs File"
+msgstr ""
+
+#: assets/src/Components/ImportModalError.js:60
+#: onboarding/src/Components/ImportError.js:63
+msgid "See logs"
+msgstr ""
+
+#: assets/src/Components/ImportModalNote.js:13
+msgid "To import this demo you have to install the following plugins"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:9
+#: onboarding/src/Components/ImportProgress.js:6
+msgid "Cleanup previous Import"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:17
+#: onboarding/src/Components/ImportProgress.js:10
+msgid "Installing and Activating the Theme"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:25
+#: onboarding/src/Components/ImportProgress.js:14
+msgid "Installing Plugins"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:30
+#: onboarding/src/Components/ImportProgress.js:15
+msgid "Importing Content"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:35
+#: onboarding/src/Components/ImportProgress.js:16
+msgid "Importing Customizer Settings"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:43
+#: onboarding/src/Components/ImportProgress.js:20
+msgid "Importing Widgets"
+msgstr ""
+
+#: assets/src/Components/ImportStepper.js:48
+#: onboarding/src/Components/ImportProgress.js:21
+msgid "Installing Performance Features"
+msgstr ""
+
+#. translators: %s: Error message.
+#: assets/src/Components/InstallModal.js:31
+msgid "An error has ocurred: %s"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:89
+msgid "Install and Activate Neve"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:102
+msgid "Logo"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:116
+msgid "In order to import the starter site, Neve theme has to be installed and activated. Click the button below to install and activate Neve"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:142
+msgid "Installing"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:143
+msgid "Activating"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:147
+msgid "Install and Activate"
+msgstr ""
+
+#: assets/src/Components/InstallModal.js:151
+#: assets/src/Components/License.js:131
+msgid "Activate"
+msgstr ""
+
+#: assets/src/Components/License.js:72
+msgid "Can not activate this license!"
+msgstr ""
+
+#: assets/src/Components/License.js:115
+msgid "License Key"
+msgstr ""
+
+#: assets/src/Components/License.js:130
+msgid "Deactivate"
+msgstr ""
+
+#: assets/src/Components/Migration.js:82
+#: assets/src/Components/Migration.js:240
+msgid "Migrate"
+msgstr ""
+
+#: assets/src/Components/Migration.js:105
+msgid "The following plugins will be installed"
+msgstr ""
+
+#: assets/src/Components/Migration.js:141
+msgid "Migrating"
+msgstr ""
+
+#: assets/src/Components/Migration.js:177
+msgid "Start Migration"
+msgstr ""
+
+#: assets/src/Components/Migration.js:189
+msgid "Edit Content"
+msgstr ""
+
+#: assets/src/Components/Migration.js:252
+msgid "Something went wrong. Please reload the page and try again."
+msgstr ""
+
+#: assets/src/Components/Migration.js:260
+msgid "Dismissed"
+msgstr ""
+
+#: assets/src/Components/Migration.js:269
+#: assets/src/Components/NewTCNotice.js:50
+msgid "Dismiss"
+msgstr ""
+
+#: assets/src/Components/NewTCNotice.js:37
+msgid "We've launched a dedicated Templates Cloud plugin that offers advanced permission controls and additional features. Try it out from your Themeisle account."
+msgstr ""
+
+#: assets/src/Components/NewTCNotice.js:41
+msgid "If you already have templates saved in the cloud, you can still use them in this plugin."
+msgstr ""
+
+#: assets/src/Components/OnboardingContent.js:140
+msgid "Starter sites could not be loaded. Please refresh and try again."
+msgstr ""
+
+#: assets/src/Components/OnboardingContent.js:171
+#: onboarding/src/Components/Sites.js:211
+msgid "No results found."
+msgstr ""
+
+#: assets/src/Components/OnboardingContent.js:176
+msgid "You can try a different search or use one of the categories below."
+msgstr ""
+
+#: assets/src/Components/PreviewFrame.js:55
+msgid "Previous"
+msgstr ""
+
+#: assets/src/Components/PreviewFrame.js:67
+msgid "Next"
+msgstr ""
+
+#: assets/src/Components/PreviewFrame.js:84
+msgid "Upgrade and Import"
+msgstr ""
+
+#: assets/src/Components/Search.js:232
+msgid "Search for a starter site"
+msgstr ""
+
+#: assets/src/Components/Settings/Settings.js:83
+msgid "What's one thing you need in Templates Cloud?"
+msgstr ""
+
+#: assets/src/Components/Settings/Settings.js:89
+msgid "Tell us how can we help you better with Templates Cloud"
+msgstr ""
+
+#: assets/src/Components/Settings/Settings.js:149
+msgid "Feedback"
+msgstr ""
+
+#: assets/src/Components/Settings/Settings.js:199
+msgid "Useful links"
+msgstr ""
+
+#: assets/src/Components/StarterSiteCard.js:52
+msgid "New"
+msgstr ""
+
+#: assets/src/Components/StarterSiteCard.js:79
+msgid "Unlock access with Business plan"
+msgstr ""
+
+#: assets/src/Components/StarterSiteCard.js:95
+msgid "View Pages"
+msgstr ""
+
+#: assets/src/utils/common.js:29
+#: assets/src/utils/common.js:38
+#: onboarding/src/utils/common.js:7
+msgid "Business"
+msgstr ""
+
+#: assets/src/utils/common.js:30
+msgid "Ecommerce"
+msgstr ""
+
+#: assets/src/utils/common.js:31
+msgid "Fashion"
+msgstr ""
+
+#: assets/src/utils/common.js:32
+msgid "Blogging"
+msgstr ""
+
+#: assets/src/utils/common.js:33
+msgid "Photography"
+msgstr ""
+
+#: assets/src/utils/common.js:36
+msgid "All Categories"
+msgstr ""
+
+#: assets/src/utils/common.js:37
+#: onboarding/src/Components/Filters.js:9
+msgid "Free"
+msgstr ""
+
+#: assets/src/utils/common.js:39
+msgid "Portfolio"
+msgstr ""
+
+#: assets/src/utils/common.js:40
+#: onboarding/src/Components/FeaturesList.js:67
+msgid "WooCommerce"
+msgstr ""
+
+#: assets/src/utils/common.js:41
+msgid "Blog"
+msgstr ""
+
+#: assets/src/utils/common.js:42
+msgid "Personal"
+msgstr ""
+
+#: assets/src/utils/site-import.js:69
+msgid "Import successful"
+msgstr ""
+
+#: assets/src/utils/site-import.js:99
+msgid "All imports are successful"
+msgstr ""
+
+#: beaver/src/components/preview.js:28
+#: editor/src/components/preview.js:70
+msgid "Close Preview"
+msgstr ""
+
+#: editor/src/components/content.js:39
+msgid "We are still working on this. Please check back later. Thank you!"
+msgstr ""
+
+#: editor/src/components/filters.js:80
+msgid "Search for a template…"
+msgstr ""
+
+#: editor/src/components/header.js:96
+msgid "Close Modal"
+msgstr ""
+
+#: editor/src/components/import-modal.js:178
+msgid "Something went wrong while importing. Please try again."
+msgstr ""
+
+#: editor/src/components/publish-button.js:79
+msgid "Something happened when publishing the template."
+msgstr ""
+
+#: editor/src/components/publish-button.js:99
+msgid "Unpublishing"
+msgstr ""
+
+#: editor/src/components/publish-button.js:103
+msgid "Publishing"
+msgstr ""
+
+#: editor/src/components/template-predefine.js:64
+#: editor/src/plugins/extension.js:160
+#: elementor/src/components/export.js:103
+msgid "Template Data Refreshed."
+msgstr ""
+
+#: editor/src/components/template-predefine.js:77
+#: editor/src/plugins/extension.js:172
+msgid "Something happened when refreshing the template data."
+msgstr ""
+
+#: editor/src/components/template-predefine.js:89
+#: editor/src/plugins/extension.js:444
+msgid "Publish Settings"
+msgstr ""
+
+#: editor/src/components/template-predefine.js:97
+#: editor/src/plugins/extension.js:456
+#: elementor/src/components/export.js:255
+msgid "Use `{generate_ss}` to publish this and have a screenshot automatically generated. Otherwise use the url to point to an image location for the template preview."
+msgstr ""
+
+#: editor/src/components/template-predefine.js:107
+#: editor/src/plugins/extension.js:469
+#: elementor/src/components/export.js:279
+msgid "Use `general` to publish this as a global template. Otherwise use the starter site slug to make it available as a single page for the starter site."
+msgstr ""
+
+#: editor/src/components/template-predefine.js:120
+msgid "Previewer URL"
+msgstr ""
+
+#: editor/src/components/template-predefine.js:122
+msgid "Provide a URL to a previewer for this template. This will be used to display a preview of the template in the editor."
+msgstr ""
+
+#: editor/src/components/template-predefine.js:163
+#: editor/src/plugins/extension.js:502
+#: elementor/src/components/export.js:325
+msgid "Refresh"
+msgstr ""
+
+#: editor/src/index.js:18
+msgid "A cloud based templates library which enables you to create ready-made website in no time."
+msgstr ""
+
+#: editor/src/plugins/extension.js:217
+#: editor/src/plugins/extension.js:318
+#: editor/src/plugins/site-editor-extension.js:175
+#: editor/src/plugins/site-editor-extension.js:266
+msgid "Could not save template, check that the template is not empty."
+msgstr ""
+
+#: editor/src/plugins/extension.js:229
+#: editor/src/plugins/extension.js:330
+#: editor/src/plugins/site-editor-extension.js:217
+msgid "Template saved."
+msgstr ""
+
+#: editor/src/plugins/extension.js:415
+#: editor/src/plugins/site-editor-extension.js:337
+msgid "Save this page as a template in your Templates Cloud library."
+msgstr ""
+
+#: editor/src/plugins/extension.js:426
+#: editor/src/plugins/site-editor-extension.js:354
+msgid "Save Page to Templates Cloud"
+msgstr ""
+
+#: editor/src/plugins/extension.js:515
+#: editor/src/plugins/site-editor-extension.js:405
+msgid "Save Template"
+msgstr ""
+
+#: editor/src/plugins/site-editor-extension.js:139
+#: editor/src/plugins/site-editor-extension.js:159
+msgid "FSE Template"
+msgstr ""
+
+#: editor/src/plugins/site-editor-extension.js:186
+msgid "You are not allowed to save templates."
+msgstr ""
+
+#: editor/src/plugins/site-editor-extension.js:197
+msgid "Could not save template, invalid template ID."
+msgstr ""
+
+#: editor/src/plugins/site-editor-extension.js:377
+msgid "Import a template from your Templates Cloud library."
+msgstr ""
+
+#: editor/src/plugins/site-editor-extension.js:382
+msgid "Import from Templates Cloud"
+msgstr ""
+
+#: elementor/src/components/templates-content.js:153
+msgid "No templates found. Check again later!"
+msgstr ""
+
+#: elementor/src/components/templates-content.js:160
+msgid "No templates available. Try adding few templates."
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:126
+msgid "Advanced Settings"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/ImportOptionsControl.js:189
+msgid "The following plugins are required for this Starter Site in order to work properly:"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/LogoControl.js:26
+msgid "Upload a logo"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/LogoControl.js:47
+msgid "Select or upload image"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/LogoControl.js:58
+msgid "Uploaded image"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/LogoControl.js:75
+msgid "Remove"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/LogoControl.js:81
+msgid "Change"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/PaletteControl.js:41
+msgid "Color Palette"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/SiteNameControl.js:23
+msgid "Business Name"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/TypographyControl.js:29
+msgid "Typography"
+msgstr ""
+
+#: onboarding/src/Components/CustomizeControls/TypographyControl.js:45
+msgid "Default"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:19
+msgid "Site Builder"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:20
+msgid "Build beautiful pages with a simple drag-and-drop page builder."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:25
+msgid "Contact Form"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:26
+msgid "Create forms to capture leads and feedback."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:31
+msgid "Image Optimization"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:32
+msgid "Make your site faster with automatic image optimization."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:37
+msgid "Caching"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:38
+msgid "Supercharge your site’s speed with powerful caching."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:43
+#: onboarding/src/utils/common.js:9
+msgid "eCommerce"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:44
+msgid "Set up your store and start accepting payments via Stripe."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:49
+msgid "AI ChatBot"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:50
+msgid "Keep visitors engaged with an intelligent AI chatbot."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:61
+msgid "Tables and Chart"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:62
+msgid "A powerful and easy to use plugin for responsive charts & tables."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:68
+msgid "Build any commerce solution you can imagine."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:73
+msgid "Easy Digital Downloads"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:74
+msgid "Sell digital products with ease and manage your online store efficiently."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:79
+msgid "EDD Blocks"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:80
+msgid "Easily display Easy Digital Downloads products in Gutenberg Editor."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:85
+msgid "Recipe Card Blocks"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:86
+msgid "Easily create and share mouthwatering recipes."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:91
+msgid "Amelia"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:92
+msgid "Booking system for appointments and event booking."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:97
+msgid "Estatik"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:98
+msgid "Full-featured WordPress real estate plugin."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:103
+msgid "WP Job Openings"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:104
+msgid "Plugin for setting up a job listing page for your WordPress website."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:109
+msgid "Pods"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:110
+msgid "A framework for creating, managing, and deploying customized content types and fields for any project."
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:115
+msgid "Membership Plugin"
+msgstr ""
+
+#: onboarding/src/Components/FeaturesList.js:116
+msgid "Membership plugin that allows you to monetize content access."
+msgstr ""
+
+#: onboarding/src/Components/Filters.js:8
+msgid "All"
+msgstr ""
+
+#: onboarding/src/Components/Header.js:54
+msgid "Import Templates"
+msgstr ""
+
+#: onboarding/src/Components/Header.js:62
+msgid "Exit to dashboard"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:18
+msgid "I am a…"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:22
+msgid "Beginner"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:26
+msgid "Intermediate"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:30
+msgid "Expert"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:37
+msgid "I build this site for…"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:44
+msgid "Myself"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:48
+msgid "My Company"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:52
+msgid "My Client"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:118
+msgid "You're all set. Tell us a bit about yourself."
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:163
+msgid "Submit and view site"
+msgstr ""
+
+#: onboarding/src/Components/ImportForm.js:176
+msgid "Skip and view site"
+msgstr ""
+
+#: onboarding/src/Components/Sites.js:216
+msgid "You can try a different search or use another category."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:40
+msgid "Customize design"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:41
+msgid "Select features"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:43
+msgid "Enhance your website with powerful plugins to fulfil your needs."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:48
+msgid "Customize the design of your site, such as color and typography."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:54
+msgid "This is a Premium Starter Site!"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:58
+msgid "Upgrade to Neve Business plan to enjoy unlimited access to all templates in the library."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:65
+msgid "If you are an existing Neve Pro customer, please install the premium version of the plugin from your Themeisle <a></a>."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:76
+msgid "account dashboard"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:85
+msgid "If you have any questions, feel free to <a></a>."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:96
+msgid "contact us"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:157
+msgid "Selected Template"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:212
+msgid "Unlock Access"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:229
+msgid "Continue"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:248
+msgid "Import Website"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:261
+msgid "Start Import"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:264
+msgid "Start Import?"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:265
+msgid "This will override theme settings and add content to your current site."
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:271
+msgid "Already a customer"
+msgstr ""
+
+#: onboarding/src/Components/SiteSettings.js:292
+msgid "Go back"
+msgstr ""
+
+#: onboarding/src/Components/StarterSiteCard.js:56
+msgid "PRO"
+msgstr ""
+
+#: onboarding/src/Components/Steps/Import.js:321
+msgid "We are importing your new site…"
+msgstr ""
+
+#: onboarding/src/Components/Steps/Import.js:327
+msgid "Sit tight as we import a website based on your preferences."
+msgstr ""
+
+#: onboarding/src/Components/Steps/Import.js:349
+msgid "Import complete."
+msgstr ""
+
+#: onboarding/src/Components/Steps/Import.js:354
+msgid "Enjoy your site!"
+msgstr ""
+
+#: onboarding/src/Components/Steps/SiteList.js:13
+msgid "Unlock Access to all premium templates with Neve Business plan. <a></a>."
+msgstr ""
+
+#: onboarding/src/Components/Steps/SiteList.js:24
+msgid "Get Started"
+msgstr ""
+
+#: onboarding/src/Components/Steps/SiteList.js:51
+msgid "Choose a design"
+msgstr ""
+
+#: onboarding/src/Components/Steps/Welcome.js:45
+msgid "What type of website are you creating?"
+msgstr ""
+
+#: onboarding/src/Components/Steps/Welcome.js:51
+msgid "Pick a category and we will provide you with relevant suggestions so you can find the starter site that works best for you."
+msgstr ""
+
+#: onboarding/src/Components/Steps/Welcome.js:62
+msgid "Or search for a site"
+msgstr ""
+
+#: onboarding/src/utils/common.js:8
+msgid "Education"
+msgstr ""
+
+#: onboarding/src/utils/common.js:10
+msgid "News"
+msgstr ""
+
+#: onboarding/src/utils/common.js:11
+msgid "Non-Profit"
+msgstr ""
+
+#: onboarding/src/utils/common.js:12
+msgid "Health"
+msgstr ""

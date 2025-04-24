@@ -7,7 +7,7 @@ ed11yInit.editorType = false; // onPage, inIframe, outsideIframe
 // Prevent multiple inits in modules that re-trigger the document context.
 ed11yInit.once = false;
 ed11yInit.noRun = '.editor-styles-wrapper > .is-root-container.wp-site-blocks, .edit-site-visual-editor__editor-canvas';
-ed11yInit.editRoot = '.editor-styles-wrapper > .is-root-container:not(.wp-site-blocks)';
+ed11yInit.editRoot = '.editor-styles-wrapper > .is-root-container:not(.wp-site-blocks)'; // differentiate page from iframe
 ed11yInit.scrollRoot = false;
 
 
@@ -44,7 +44,7 @@ ed11yInit.syncDismissals = function () {
     sendDismissal(e.detail);
   }, false);
 
-}
+};
 
 
 ed11yInit.getOptions = function() {
@@ -54,17 +54,19 @@ ed11yInit.getOptions = function() {
     new RegExp(ed11yInit.options.linkStringsNewWindows, 'g') :
     /window|\stab|download/g;
   ed11yInit.options['inlineAlerts'] = false;
+  ed11yInit.autoDetectShadowComponents = false; // too slow for editor.
   ed11yInit.options.checkRoots = ed11yInit.editRoot;
-  ed11yInit.options['preventCheckingIfPresent'] = !!ed11yInit.noRun ?
+  ed11yInit.options['preventCheckingIfPresent'] = ed11yInit.noRun ?
     ed11yInit.noRun + ', .block-editor-block-preview__content-iframe' :
     '.block-editor-block-preview__content-iframe';
-  ;
+
   ed11yInit.options['ignoreAllIfAbsent'] = ed11yInit.editRoot;
   if (ed11yInit.scrollRoot) {
     ed11yInit.options['editableContent'] = ed11yInit.scrollRoot;
   }
-  ed11yInit.options['ignoreByKey'] = { img: '' };
+  //ed11yInit.options['ignoreByKey'] = { img: '' }; Restore default ignores.
   ed11yInit.options['headingsOnlyFromCheckRoots'] = true;
+  ed11yInit.options['ignoreAriaOnElements'] = 'h1,h2,h3,h4,h5,h6';
   ed11yInit.options['altPlaceholder'] = 'This image has an empty alt attribute;';
 
   // WordPress does not render empty post titles, so we don't need to flag them.
@@ -73,7 +75,7 @@ ed11yInit.getOptions = function() {
   ed11yInit.options['buttonZIndex'] = 99999;
   ed11yInit.options['alertMode'] = ed11yInit.options['liveCheck'] &&  ed11yInit.options['liveCheck'] === 'errors' ? 'userPreference' : 'active';
   ed11yInit.options['editorHeadingLevel'] = [{
-    selector: '.editor-styles-wrapper> .is-root-container',
+    selector: '.editor-styles-wrapper > .is-root-container',
     previousHeading: 1,
   }];
 };
@@ -96,14 +98,14 @@ ed11yInit.recheck = (forceFull) => {
     if (!ed11yInit.waiting) {
       // Wait and start debouncing.
       ed11yInit.waiting = true;
-      window.setTimeout(() => {ed11yInit.recheck(forceFull)}, nextRun, forceFull);
+      window.setTimeout(() => {ed11yInit.recheck(forceFull);}, nextRun, forceFull);
     }
   } else {
     // Check now.
     ed11yInit.nextCheck = Date.now() + 1000 + Ed11y.browserLag;
     ed11yInit.waiting = false;
     if (ed11yInit.once && !Ed11y.running && Ed11y.panel && Ed11y.roots) {
-      window.setTimeout((forceFull) => {
+      window.setTimeout(() => {
         // Quick align.
         Ed11y.incrementalAlign();
         Ed11y.alignPending = false;
@@ -114,7 +116,7 @@ ed11yInit.recheck = (forceFull) => {
           if (forceFull) {
             Ed11y.forceFullCheck = true;
           }
-          Ed11y.incrementalCheck()
+          Ed11y.incrementalCheck();
         }
       }, 250 + Ed11y.browserLag, forceFull);
       window.setTimeout((forceFull) => {
@@ -123,7 +125,7 @@ ed11yInit.recheck = (forceFull) => {
           if (forceFull) {
             Ed11y.forceFullCheck = true;
           }
-          Ed11y.incrementalCheck()
+          Ed11y.incrementalCheck();
         }
       }, 1250 + Ed11y.browserLag, forceFull);
     } else {
@@ -132,21 +134,30 @@ ed11yInit.recheck = (forceFull) => {
       }
     }
   }
-}
+};
 
 ed11yInit.ed11yShutMenu = () => {
   if (Ed11y.openTip.button) {
     if (ed11yInit.editorType === 'inIframe') {
       ed11yInit.innerWorker.port.postMessage([true, false]);
     } else {
-      wp.data.dispatch('core/block-editor').clearSelectedBlock()
+      // eslint-disable-next-line no-undef
+      wp.data.dispatch('core/block-editor').clearSelectedBlock();
     }
   }
-}
+};
 document.addEventListener('ed11yPop', function() {
   window.setTimeout(() => {
     ed11yInit.ed11yShutMenu();
   }, 1000);
+});
+document.addEventListener('ed11yPop', (e) => {
+  const alreadyDecorated = e.detail.tip.dataset.alreadyDecorated;
+  if (e.detail.result.element.matches('img') && !alreadyDecorated) {
+    const transferFocus = e.detail.tip.shadowRoot.querySelector('.ed11y-transfer-focus');
+    transferFocus?.parentNode.style.setProperty('display', 'none');
+  }
+  e.detail.tip.dataset.alreadyDecorated = 'true';
 });
 
 ed11yInit.interaction = false;
@@ -160,7 +171,7 @@ ed11yInit.createObserver = function () {
     if (message.data[1]) {
       ed11yInit.recheck(false);
     }
-  }
+  };
   ed11yInit.innerWorker.port.start();
   if (ed11yInit.editorType === 'inIframe') {
     return;
@@ -193,34 +204,36 @@ ed11yInit.createObserver = function () {
     }
   };
   const ed11yObserver = new MutationObserver(ed11yMutationCallback);
-  ed11yObserver.observe(ed11yTargetNode, ed11yObserverConfig)
+  ed11yObserver.observe(ed11yTargetNode, ed11yObserverConfig);
 };
 
 ed11yInit.ed11yOuterInit = function() {
 
   // Tell iframe if block editor might be up to something.
+  // eslint-disable-next-line no-undef
   ed11yInit.outerWorker = window.SharedWorker ? new SharedWorker(ed11yVars.worker) : false;
-  window.addEventListener('keyup', (e) => {
+  window.addEventListener('keyup', () => {
     // Arrow changes of radio and select controls.
-    ed11yInit.outerWorker.port.postMessage([false, true])
+    ed11yInit.outerWorker.port.postMessage([false, true]);
   });
-  window.addEventListener('click', (e) => {
-    ed11yInit.outerWorker.port.postMessage([false, true])
+  window.addEventListener('click', () => {
+    ed11yInit.outerWorker.port.postMessage([false, true]);
   });
 
   // Clear active block selection when a tip opens to hide floating menup.
   ed11yInit.outerWorker.port.onmessage = (message) => {
     if (message.data[0]) {
+      // eslint-disable-next-line no-undef
       wp.data.dispatch('core/block-editor').clearSelectedBlock();
     }
-  }
+  };
 
   ed11yInit.outerWorker.port.onmessageerror = (data) => {
     console.warn(data);
-  }
+  };
   ed11yInit.outerWorker.port.onerror = (data) => {
     console.warn(data);
-  }
+  };
   ed11yInit.outerWorker.port.start();
 };
 
@@ -273,12 +286,13 @@ const ed11yClassicInsertScripts = function() {
 
 // Initiate Editoria11y create alert link, initiate content change watcher.
 ed11yInit.ed11yPageInit = function () {
+  // eslint-disable-next-line no-undef
   ed11yInit.innerWorker = window.SharedWorker ? new SharedWorker(ed11yVars.worker) : false;
   window.setTimeout(() => {
     ed11yInit.getOptions();
     ed11yInit.firstCheck();
     ed11yInit.syncDismissals();
-  },1000)
+  },1000);
   window.setTimeout(() => {
     ed11yInit.createObserver();
     ed11yInit.recheck(true);
@@ -295,6 +309,7 @@ ed11yInit.findCompatibleEditor = function () {
   } else if (document.querySelector('body' + ed11yInit.editRoot)) {
     // inside iFrame
     ed11yInit.editorType = 'inIframe';
+    ed11yInit.editRoot = '.editor-visual-editor__post-title-wrapper:not(:has([data-rich-text-placeholder])), .editor-styles-wrapper > .is-root-container:not(.wp-site-blocks)'; // include title
     ed11yInit.scrollRoot = 'body';
     ed11yInit.ed11yPageInit();
   } else if (document.querySelector('[class*="-visual-editor"] iframe')) {
@@ -302,8 +317,8 @@ ed11yInit.findCompatibleEditor = function () {
     ed11yInit.ed11yOuterInit();
   } else if ( document.querySelector('#editor .editor-styles-wrapper')) {
     ed11yInit.editorType = 'onPage';
-    // Todo: H1 is missing because .editor-visual-editor__post-title-wrapper always computes to "add title" due to aria label.
-    ed11yInit.editRoot = '#editor .is-root-container';
+    // Todo: Is this still being called?
+    ed11yInit.editRoot = '.editor-visual-editor__post-title-wrapper:not(:has([data-rich-text-placeholder])), #editor .is-root-container'; // include title
     ed11yInit.scrollRoot = '.interface-interface-skeleton__content';
     ed11yInit.ed11yPageInit();
   } else if (document.getElementById('content_ifr')) {
@@ -319,7 +334,7 @@ ed11yInit.findCompatibleEditor = function () {
 };
 
 // Scan page for compatible editors once page has loaded.
-window.addEventListener("load", () => {
+window.addEventListener('load', () => {
   window.setTimeout(() => {
     if (!ed11yInit.editorType) {
       ed11yInit.findCompatibleEditor();

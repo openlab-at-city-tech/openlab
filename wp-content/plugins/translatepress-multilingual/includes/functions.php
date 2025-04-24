@@ -1,5 +1,8 @@
 <?php
 
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Outputs language switcher.
  *
@@ -197,6 +200,8 @@ function trp_add_affiliate_id_to_link( $link ){
  * Do not confuse with trim.
  */
 function trp_sanitize_string( $filtered, $execute_wp_kses = true ){
+    if (!is_string($filtered)) return '';
+
 	$filtered = preg_replace( '/<script\b[^>]*>(.*?)<\/script>/is', '', $filtered );
 
 	// don't remove \r \n \t. They are part of the translation, they give structure and context to the text.
@@ -555,11 +560,20 @@ function trp_bulk_debug($debug = false, $logger = array()){
  * @return bool
  */
 function trp_is_paid_version() {
-	$licence = get_option( 'trp_license_key' );
+	// Check if TranslatePress paid plugins are active
+	$paid_plugins = array(
+		'TranslatePress - Personal'  => 'translatepress-personal/index.php',
+		'TranslatePress - Business'  => 'translatepress-business/index.php',
+		'TranslatePress - Developer' => 'translatepress-developer/index.php'
+	);
 
-	if ( ! empty( $licence ) ) {
-		return true;
-	}
+
+    $active_plugins = get_option('active_plugins', array());
+    foreach ($paid_plugins as $plugin_file) {
+        if (is_array($active_plugins) && in_array($plugin_file, $active_plugins)) {
+            return true;
+        }
+    }
 
 	//list of class names
 	$addons = apply_filters( 'trp_paid_addons', array(

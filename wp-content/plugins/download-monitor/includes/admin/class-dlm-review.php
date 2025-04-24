@@ -6,8 +6,16 @@ class DLM_Review {
 	private $messages;
 	private $link = 'https://wordpress.org/support/plugin/%s/reviews/#new-post';
 	private $slug = 'download-monitor';
-	
-	function __construct() {
+
+	public function __construct() {
+		add_action( 'init', array( $this, 'init' ) );
+	}
+
+	public function init() {
+
+		if ( ! is_admin() ) {
+			return;
+		}
 
 		$this->messages = array(
 			'notice'  => esc_html__( "Hi there! Stoked to see you're using Download Monitor for a few days now - hope you like it! And if you do, please consider rating it. It would mean the world to us.  Keep on rocking!", 'download-monitor' ),
@@ -20,15 +28,6 @@ class DLM_Review {
 			$this->messages = wp_parse_args( $args['messages'], $this->messages );
 		}
 
-		add_action( 'init', array( $this, 'init' ) );
-
-	}
-
-	public function init() {
-		if ( ! is_admin() ) {
-			return;
-		}
-
 		$this->value = $this->value();
 
 		if ( $this->check() ) {
@@ -39,17 +38,15 @@ class DLM_Review {
 		}
 
 		add_filter( 'dlm_uninstall_db_options', array( $this, 'uninstall_options' ) );
-
 	}
 
 	private function check() {
 
-		if ( ! current_user_can('manage_options') ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return false;
 		}
 
 		return( time() > $this->value );
-
 	}
 
 	private function value() {
@@ -61,27 +58,54 @@ class DLM_Review {
 
 		$value = time() + DAY_IN_SECONDS;
 		update_option( 'download-monitor-rate-time', $value );
-		
-		return $value;
 
+		return $value;
 	}
 
 	public function five_star_wp_rate_notice() {
 
-		$url = sprintf( $this->link, $this->slug );
+		$url            = sprintf( $this->link, $this->slug );
+		$url            = apply_filters( 'dlm_review_link', $url );
+		$this->messages = apply_filters( 'dlm_review_messages', $this->messages );
 
-		?>
-		<div id="<?php echo esc_attr( $this->slug ) ?>-download-monitor-review-notice" class="notice notice-success is-dismissible" style="margin-top:30px;">
-			<p><?php echo sprintf( esc_html( $this->messages['notice'] ), esc_attr( $this->value ) ) ; ?></p>
-			<p class="actions">
-				<a id="download-monitor-rate" href="<?php echo esc_url( $url ) ?>" target="_blank" class="button button-primary download-monitor-review-button">
-					<?php echo esc_html( $this->messages['rate'] ); ?>
-				</a>
-				<a id="download-monitor-later" href="#" style="margin-left:10px" class="download-monitor-review-button"><?php echo esc_html( $this->messages['rated'] ); ?></a>
-				<a id="download-monitor-no-rate" href="#" style="margin-left:10px" class="download-monitor-review-button"><?php echo esc_html( $this->messages['no_rate'] ); ?></a>
-			</p>
-		</div>
-		<?php
+		$notice = array(
+			'title'       => 'Rate Us',
+			'message'     => sprintf( esc_html( $this->messages['notice'] ), esc_html( $this->value ) ),
+			'status'      => 'success',
+			'dismissible' => false,
+			'actions'     => array(
+				array(
+					'label'   => esc_html( $this->messages['rated'] ),
+					'id'      => 'download-monitor-later',
+					'class'   => 'download-monitor-review-button',
+					'dismiss' => true,
+					'callback' => 'handleDlmButtonClick',
+				),
+				array(
+					'label'   => esc_html( $this->messages['no_rate'] ),
+					'id'      => 'download-monitor-no-rate',
+					'class'   => 'download-monitor-review-button',
+					'dismiss' => true,
+					'callback' => 'handleDlmButtonClick',
+				),
+				array(
+					'label'   => esc_html( $this->messages['rate'] ),
+					'id'      => 'download-monitor-rate',
+					'url'     => esc_url( $url ),
+					'class'   => 'download-monitor-review-button',
+					'variant' => 'primary',
+					'target'  => '_BLANK',
+					'dismiss' => true,
+					'callback' => 'handleDlmButtonClick',
+				),
+			),
+			'source'      => array(
+				'slug' => 'download-monitor',
+				'name' => 'Download Monitor',
+			),
+		);
+
+		WPChill_Notifications::add_notification( 'dlm-five-star-rate', $notice );
 	}
 
 	public function ajax() {
@@ -98,14 +122,12 @@ class DLM_Review {
 
 		$time = get_option( 'download-monitor-rate-time' );
 
-		if ( 'download-monitor-rate' === $_POST['check'] ) {
-			$time = time() + YEAR_IN_SECONDS * 1;
-		}elseif ( 'download-monitor-later' === $_POST['check'] ) {
+		if ( 'download-monitor-rate' === $_POST['check'] || 'download-monitor-no-rate' === $_POST['check'] ) {
+			$time = time() + YEAR_IN_SECONDS * 5;
+		} else {
 			$time = time() + WEEK_IN_SECONDS;
-		}elseif ( 'download-monitor-no-rate' === $_POST['check'] ) {
-			$time = time() + YEAR_IN_SECONDS * 1;
 		}
-		
+
 		update_option( 'download-monitor-rate-time', $time );
 		wp_die( 'ok' );
 	}
@@ -116,42 +138,22 @@ class DLM_Review {
 
 	public function ajax_script() {
 
-		$ajax_nonce = wp_create_nonce( "download-monitor-review" );
+		$ajax_nonce = wp_create_nonce( 'download-monitor-review' );
 
 		?>
-
 		<script type="text/javascript">
-			jQuery( document ).ready( function( $ ){
 
-				$( '.download-monitor-review-button' ).on('click', function( evt ){
-					var href = $(this).attr('href'),
-						id = $(this).attr('id');
+		function handleDlmButtonClick( element ) {
+			console.error('clicky');
+			var data = {
+				action: 'download-monitor_review',
+				security: '<?php echo esc_js( $ajax_nonce ); ?>',
+				check: element.url ? 'download-monitor-rate' : element.id
+			};
 
-					if ( 'download-monitor-rate' != id ) {
-						evt.preventDefault();
-					}
-
-					var data = {
-						action: 'download-monitor_review',
-						security: '<?php echo $ajax_nonce; ?>',
-						check: id
-					};
-
-					if ( 'download-monitor-rated' === id ) {
-						data['download-monitor-review'] = 1;
-					}
-
-					$.post( '<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data, function( response ) {
-						$( '#<?php echo esc_attr( $this->slug ); ?>-download-monitor-review-notice' ).slideUp( 'fast', function() {
-							$( this ).remove();
-						} );
-					});
-
-				} );
-
-			});
+			jQuery.post('<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>', data );
+		}
 		</script>
-
 		<?php
 	}
 

@@ -12,7 +12,7 @@ class WPCF7_Sendinblue extends WPCF7_Service {
 
 	public static function get_instance() {
 		if ( empty( self::$instance ) ) {
-			self::$instance = new self;
+			self::$instance = new self();
 		}
 
 		return self::$instance;
@@ -81,7 +81,7 @@ class WPCF7_Sendinblue extends WPCF7_Service {
 	}
 
 	public function load( $action = '' ) {
-		if ( 'setup' == $action and 'POST' == $_SERVER['REQUEST_METHOD'] ) {
+		if ( 'setup' === $action and 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 			check_admin_referer( 'wpcf7-sendinblue-setup' );
 
 			if ( ! empty( $_POST['reset'] ) ) {
@@ -124,7 +124,7 @@ class WPCF7_Sendinblue extends WPCF7_Service {
 					esc_html( __( "Error", 'contact-form-7' ) ),
 					esc_html( __( "You have not been authenticated. Make sure the provided API key is correct.", 'contact-form-7' ) )
 				),
-				'type=error'
+				array( 'type' => 'error' )
 			);
 		}
 
@@ -135,14 +135,14 @@ class WPCF7_Sendinblue extends WPCF7_Service {
 					esc_html( __( "Error", 'contact-form-7' ) ),
 					esc_html( __( "Invalid key values.", 'contact-form-7' ) )
 				),
-				'type=error'
+				array( 'type' => 'error' )
 			);
 		}
 
 		if ( 'success' === $message ) {
 			wp_admin_notice(
 				esc_html( __( "Settings saved.", 'contact-form-7' ) ),
-				'type=success'
+				array( 'type' => 'success' )
 			);
 		}
 	}
@@ -168,7 +168,7 @@ class WPCF7_Sendinblue extends WPCF7_Service {
 			);
 		}
 
-		if ( 'setup' == $action ) {
+		if ( 'setup' === $action ) {
 			$this->display_setup();
 		} else {
 			echo sprintf(

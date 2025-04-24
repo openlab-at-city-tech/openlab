@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter( 'trp_register_advanced_settings', 'trp_show_regular_tab_in_string_translation', 525 );
 function trp_show_regular_tab_in_string_translation( $settings_array ){
 	$settings_array[] = array(
@@ -7,8 +11,9 @@ function trp_show_regular_tab_in_string_translation( $settings_array ){
 		'type'          => 'checkbox',
 		'label'         => esc_html__( 'Show regular strings tab in String Translation', 'translatepress-multilingual' ),
 		'description'   => wp_kses( __( 'Adds an additional tab on the String Translation interface that allows editing translations of user-inputted strings.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
-        'id'            =>'debug',
-	);
+        'id'            => 'debug',
+        'container'     => 'debug'
+    );
 	return $settings_array;
 }
 

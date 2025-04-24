@@ -1,4 +1,9 @@
 <?php
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
+
 /**
  * Class that adds a misc notice
  *
@@ -330,20 +335,6 @@ class TRP_Trigger_Plugin_Notifications{
 
         $notifications = TRP_Plugin_Notifications::get_instance();
 
-        /* only show this notice if there isn't a pretty permalink structure enabled */
-        if( !get_option('permalink_structure') ) {
-            /* this must be unique */
-            $notification_id = 'trp_new_add_on_invoices';
-
-            $message = '<img style="float: left; margin: 10px 12px 10px 0; max-width: 80px;" src="' . TRP_PLUGIN_URL . 'assets/images/get_param_addon.jpg" />';
-            $message .= '<p style="margin-top: 16px;padding-right:30px;">' . sprintf( __('You are not using a permalink structure! Please <a href="%s">enable</a> one or install our <a href="%s">"Language by GET parameter"</a> addon, so that TranslatePress can function properly.', 'translatepress-multilingual' ), admin_url('options-permalink.php'),admin_url('admin.php?page=trp_addons_page#language-by-get-parameter') ) . '</p>';
-            //make sure to use the trp_dismiss_admin_notification arg
-            $message .= '<a href="' . add_query_arg(array('trp_dismiss_admin_notification' => $notification_id)) . '" type="button" class="notice-dismiss"><span class="screen-reader-text">' . esc_html__('Dismiss this notice.', 'translatepress-multilingual') . '</span></a>';
-
-            $notifications->add_notification($notification_id, $message, 'trp-notice trp-narrow notice notice-info', true, array('translate-press'));
-        }
-
-
         /* License Notifications */
         $license_details = get_option( 'trp_license_details' );
         $is_demosite = ( strpos(site_url(), 'https://demo.translatepress.com' ) !== false );
@@ -441,7 +432,7 @@ class TRP_Trigger_Plugin_Notifications{
             /* this must be unique */
             $notification_id = 'trp_machine_translation_quota_exceeded_'. date('Ymd');
 
-            $message = '<img style="float: left; margin: 10px 12px 10px 0; max-width: 80px;" src="' . TRP_PLUGIN_URL . 'assets/images/get_param_addon.jpg" />';
+            $message = '';
             $message .= '<p style="margin-top: 16px;padding-right:30px;">';
                 $message .= sprintf( __( 'The daily quota for machine translation characters exceeded. Please check the <strong>TranslatePress -> <a href="%s">Automatic Translation</a></strong> page for more information.', 'translatepress-multilingual' ), admin_url( 'admin.php?page=trp_machine_translation' ) );
             $message .= '</p>';

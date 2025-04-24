@@ -2,10 +2,10 @@
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 /**
- * Plugin Name:       Ultimate Responsive Image Slider - 3.5.15
+ * Plugin Name:       Ultimate Responsive Image Slider - 3.5.16
  * Plugin URI:        http://wpfrank.com/
  * Description:	  Add unlimited image slides using Ultimate Responsive Image Slider in any Page and Post content to give an attractive mode to represent contents.
- * Version:           3.5.15
+ * Version:           3.5.16
  * Requires at least: 4.0
  * Requires PHP:      4.0
  * Author:            FARAZFRANK
@@ -30,7 +30,7 @@ along with Ultimate Responsive Image Slider. If not, see http://www.gnu.org/lice
 
 //Constant Variable
 define("URIS_PLUGIN_URL", plugin_dir_url(__FILE__));
-define("URIS_PLUGIN_VER", '3.5.15');
+define("URIS_PLUGIN_VER", '3.5.16');
 
 // Apply default settings on activation
 register_activation_hook( __FILE__, 'WRIS_DefaultSettingsPro' );
@@ -346,18 +346,18 @@ class URIS {
 									<p>
 										<label><?php esc_html_e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($slide_id); ?></label><br>
 										<label><?php esc_html_e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
-										<input type="hidden" id="unique_string[]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
-										<input type="hidden" id="rpgp_image_id[]" name="rpgp_image_id[]" value="<?php echo esc_attr($slide_id); ?>">
-										<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" class="uris-slide-input-text" value="<?php echo esc_attr( $slide_title ); ?>" placeholder="<?php esc_attr_e('Enter Slide Title', 'ultimate-responsive-image-slider'); ?>" >
+										<input type="hidden" id="unique_string[<?php echo esc_attr($slide_id); ?>]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
+										<input type="hidden" id="rpgp_image_id[<?php echo esc_attr($slide_id); ?>]" name="rpgp_image_id[]" value="<?php echo esc_attr($slide_id); ?>">
+										<input type="text" id="rpgp_image_label[<?php echo esc_attr($slide_id); ?>]" name="rpgp_image_label[]" class="uris-slide-input-text" value="<?php echo esc_attr( $slide_title ); ?>" placeholder="<?php esc_attr_e('Enter Slide Title', 'ultimate-responsive-image-slider'); ?>" >
 									</p>
 									<p>
 										<label><?php esc_html_e('Slide Descriptions', 'ultimate-responsive-image-slider'); ?></label>
-										<textarea rows="4" cols="50" id="rpgp_image_desc[]" name="rpgp_image_desc[]" class="urisp_richeditbox_<?php echo esc_attr( $i ); ?> uris-slide-input-text" placeholder="<?php esc_attr_e( 'Enter Slide Description', 'ultimate-responsive-image-slider' ); ?>"><?php echo esc_textarea( $slide_description ); ?></textarea>
+										<textarea rows="4" cols="50" id="rpgp_image_desc[<?php echo esc_attr($slide_id); ?>]" name="rpgp_image_desc[]" class="urisp_richeditbox_<?php echo esc_attr( $i ); ?> uris-slide-input-text" placeholder="<?php esc_attr_e( 'Enter Slide Description', 'ultimate-responsive-image-slider' ); ?>"><?php echo esc_textarea( $slide_description ); ?></textarea>
 										<button type="button" class="btn btn-md btn-info btn-block" data-toggle="modal" data-target="#myModal" onclick="urisp_richeditor(<?php echo esc_attr($i); ?>)"><?php esc_attr_e('Use Rich Text Editor', 'ultimate-responsive-image-slider'); ?> <i class="fa fa-edit"></i></button>
 									</p>
 									<p>
 										<label><?php esc_html_e('Slide Alt Text', 'ultimate-responsive-image-slider'); ?></label>
-										<input type="text" id="rpgp_image_alt[]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php esc_attr_e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
+										<input type="text" id="rpgp_image_alt[<?php echo esc_attr($slide_id); ?>]" name="rpgp_image_alt[]" class="uris-slide-input-text" value="<?php echo esc_attr($slide_alt); ?>" placeholder="<?php esc_attr_e('Max Length 125 Characters', 'ultimate-responsive-image-slider'); ?>">
 									</p>
 								</div>
 							</li>
@@ -545,9 +545,9 @@ class URIS {
 					<p>
 						<label><?php esc_html_e('Slide ID', 'ultimate-responsive-image-slider'); ?>: <?php echo esc_html($id); ?></label><br>
 						<label><?php esc_html_e('Slide Title', 'ultimate-responsive-image-slider'); ?></label>
-						<input type="hidden" id="unique_string[]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
-						<input type="hidden" id="rpgp_image_id[]" name="rpgp_image_id[]" value="<?php echo esc_attr($id); ?>">
-						<input type="text" id="rpgp_image_label[]" name="rpgp_image_label[]" value="<?php echo esc_attr($slide_title); ?>" placeholder="<?php esc_attr_e('Enter Slide Title Here', 'ultimate-responsive-image-slider'); ?>" class="uris-slide-input-text">
+						<input type="hidden" id="unique_string[<?php echo esc_attr($id); ?>]" name="unique_string[]" value="<?php echo esc_attr($UniqueString); ?>" />
+						<input type="hidden" id="rpgp_image_id[<?php echo esc_attr($id); ?>]" name="rpgp_image_id[]" value="<?php echo esc_attr($id); ?>">
+						<input type="text" id="rpgp_image_label[<?php echo esc_attr($id); ?>]" name="rpgp_image_label[]" value="<?php echo esc_attr($slide_title); ?>" placeholder="<?php esc_attr_e('Enter Slide Title Here', 'ultimate-responsive-image-slider'); ?>" class="uris-slide-input-text">
 					</p>
 					<p>
 						<label><?php esc_html_e('Slide Description', 'ultimate-responsive-image-slider'); ?></label>
@@ -709,6 +709,13 @@ function uris_menu_pages() {
 			require_once('help-and-support.php');
 		}
 	}
+}
+
+// urisp frontend JS CSS
+add_action("wp_enqueue_scripts", "uris_scripts");
+function uris_scripts() { 
+	wp_register_script('wpfrank-uris-js', URIS_PLUGIN_URL.'assets/js/jquery.sliderPro.js', array('jquery'), '1.6.2', array( 'strategy' => 'defer', 'in_footer' => true));
+	wp_register_style('wpfrank-uris-css', URIS_PLUGIN_URL.'assets/css/slider-pro.css', array(), '1.6.2', 'all');
 }
 
 // URIS Shortcode

@@ -1,0 +1,44 @@
+.ss-card {
+  max-width: 100%;
+  border: 1px solid $border;
+  border-radius: $card-radius;
+  overflow: hidden;
+  margin-bottom: 14px;
+  position: relative;
+  border: 2px solid transparent;
+
+  &:hover {
+    border: 2px solid #3498db;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+
+  .ss-badge{
+    position: absolute;
+    right: 15px;
+    top: 16px;
+    background: $dark-bg;
+    color: $inverted-text;
+    padding: 4px 10px;
+    font-size: 11.5px;
+    font-weight: 700;
+    border-radius: 5px;
+  }
+
+  .ss-image {
+    aspect-ratio: 0.84 / 1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-color: transparentize($dark-bg, .75);
+  }
+}
+
+.ss-title {
+  color: $main-text;
+  text-align: center;
+  margin: 0;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+}

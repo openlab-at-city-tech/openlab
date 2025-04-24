@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Class TRP_Translation_Render
  *
@@ -126,8 +130,10 @@ class TRP_Translation_Render{
 	    $string_groups = $this->translation_manager->string_groups();
 
         $node_type_categories = apply_filters( 'trp_node_type_categories', array(
-            $string_groups['metainformation'] => array( 'meta_desc', 'page_title', 'meta_desc_img' ),
-            $string_groups['images']          => array( 'image_src' )
+            $string_groups['metainformation']   => array( 'meta_desc', 'page_title', 'meta_desc_img' ),
+            $string_groups['images']            => array( 'image_src', 'picture_source_srcset', 'picture_image_src' ),
+            $string_groups['videos']             => array( 'video_src', 'video_poster', 'video_source_src'),
+            $string_groups['audios']             => array( 'audio_src', 'audio_source_src'),
         ));
 
         foreach( $node_type_categories as $category_name => $node_groups ){
@@ -911,7 +917,7 @@ class TRP_Translation_Render{
                 if ( $current_node_accessor[ 'attribute' ] ){
                     $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->getAttribute( $accessor ) );
                     $node_manual['node']->setAttribute( $accessor, str_replace( $translateable_string_manual, esc_attr( $translated_strings_manual[$i] ), $node_manual['node']->getAttribute( $accessor ) ) );
-                    do_action( 'trp_set_translation_for_attribute', $node_manual['node'], $accessor, $translateable_strings_manual[$i] );
+                    do_action( 'trp_set_translation_for_attribute', $node_manual['node'], $accessor, $translated_strings_manual[$i] );
                 }else{
                     $translateable_string_manual = $this->maybe_correct_translatable_string( $translateable_strings_manual[$i], $node_manual['node']->$accessor );
                     $nodes[$i]['node']->$accessor = str_replace( $translateable_string_manual, trp_sanitize_string($translated_strings_manual[$i]), $node_manual['node']->$accessor );
@@ -982,8 +988,7 @@ class TRP_Translation_Render{
                 }
 
             }
-
-            if ( $preview_mode ) {
+            if ( $preview_mode && !empty($translated_string_ids) ) {
                 if ( $accessor == 'outertext' && $nodes[$i]['type'] != 'button' ) {
                     $outertext_details = '<translate-press data-trp-translate-id="' . $translated_string_ids[$translateable_strings[$i]]->id . '" data-trp-node-group="' . $this->get_node_type_category( $nodes[$i]['type'] ) . '"';
                     if ( $this->get_node_description( $nodes[$i] ) ) {
@@ -992,9 +997,26 @@ class TRP_Translation_Render{
                     $outertext_details .= '>' . $nodes[$i]['node']->outertext . '</translate-press>';
                     $nodes[$i]['node']->outertext = $outertext_details;
                 } else {
-                    if( $nodes[$i]['type'] == 'button' || $nodes[$i]['type'] == 'option' ){
+                    // button, option  can not be detected by the pencil, but the parent can.
+                    if( $nodes[$i]['type'] == 'button' ||
+                        $nodes[$i]['type'] == 'option' )
+                    {
                         $nodes[$i]['node'] = $nodes[$i]['node']->parent();
                     }
+
+                    // video without a src can't be detected. So when we detect a video > source tag
+                    // we add the ID to the parent video tag as well
+                    if( $nodes[$i]['type'] == 'video_source_src' ||
+                        $nodes[$i]['type'] == 'audio_source_src' ||
+                        $nodes[$i]['type'] == 'picture_source_srcset')
+                    {
+                        $parent = $nodes[$i]['node']->parent();
+                        if (!array_key_exists('src', $parent->attr)){
+                            $parent->setAttribute('data-trp-translate-id-' . $accessor, $translated_string_ids[ $translateable_strings[$i] ]->id );
+                            $parent->setAttribute('data-trp-node-group-' . $accessor, $this->get_node_type_category( $nodes[$i]['type'] ) );
+                        }
+                    }
+
 	                $nodes[$i]['node']->setAttribute('data-trp-translate-id-' . $accessor, $translated_string_ids[ $translateable_strings[$i] ]->id );
                     $nodes[$i]['node']->setAttribute('data-trp-node-group-' . $accessor, $this->get_node_type_category( $nodes[$i]['type'] ) );
 
@@ -1009,7 +1031,8 @@ class TRP_Translation_Render{
 
 
         // We need to save here in order to access the translated links too.
-        if( apply_filters('tp_handle_custom_links_in_translation_blocks', false) ) {
+        $handle_custom_links_in_translation_blocks = $this->settings['force-language-to-custom-links'] == 'yes';
+        if( apply_filters('tp_handle_custom_links_in_translation_blocks', $handle_custom_links_in_translation_blocks) ) {
             $html_string = $html->save();
             $html = TranslatePress\str_get_html($html_string, true, true, TRP_DEFAULT_TARGET_CHARSET, false, TRP_DEFAULT_BR_TEXT, TRP_DEFAULT_SPAN_TEXT);
             if ( $html === false ){
@@ -1088,7 +1111,6 @@ class TRP_Translation_Render{
         // based on this we're filtering wp_redirect to include the proper URL when returning to the current page.
         foreach ( $html->find('form') as $k => $row ){
             $form_action      = $row->action;
-            $processed_action = null;
             $is_admin_link    = $this->is_admin_link( $form_action, $admin_url, $wp_login_url );
             $skip_this_action = apply_filters( 'trp_skip_form_action', false, $form_action );
 
@@ -1102,21 +1124,31 @@ class TRP_Translation_Render{
                     && $this->settings['force-language-to-custom-links'] == 'yes'
                     && !$is_external_link
                     && strpos( $form_action, '#TRPLINKPROCESSED' ) === false ) {
-                        $action = $this->url_converter->get_path_no_lang_slug_from_url( $form_action );
-
-                        $processed_action = $this->url_converter->get_url_for_language( $TRP_LANGUAGE, $action );
+                    /* $form_action can have language slug in a secondary language but the path slugs in original language.
+                     * By converting to default language first, it helps set the language slug to default language
+                     * while keeping the path slugs unchanged (no language coincidences should appear because we check
+                     * for uniqueness between secondary language translations and originals other than its own)
+                     * Use filter trp_change_form_action to hardcode particular cases
+                     */
+                    $action_in_default_language = $this->url_converter->get_url_for_language( $this->settings['default-language'], $form_action, '' );
+                    $action_in_current_language = $this->url_converter->get_url_for_language( $TRP_LANGUAGE, $action_in_default_language, '' );
+                    $row->action                = apply_filters( 'trp_change_form_action', $action_in_current_language, $action_in_default_language, $TRP_LANGUAGE );
                 }
 
-                if ( isset( $processed_action ) )
-                    $row->action = str_replace( '#TRPLINKPROCESSED', '', esc_url( $processed_action ) );
+                // this should happen regardless of whether we made changes above
+                $row->action = str_replace( '#TRPLINKPROCESSED', '', esc_url( $row->action ) );
             }
         }
 
         foreach ( $html->find('link') as $link ) {
-            if ( isset($link->href) ) {
+            if ( isset( $link->href ) ) {
+                if ( isset( $link->rel ) && ( $link->rel == 'next' || $link->rel == 'prev' ) )
+                    $link->href = $this->url_converter->get_url_for_language( $TRP_LANGUAGE, $link->href );
+
                 $link->href = str_replace('#TRPLINKPROCESSED', '', $link->href);
             }
         }
+
         return $html;
     }
 
@@ -1196,7 +1228,7 @@ class TRP_Translation_Render{
      * Hooked to trp_allow_machine_translation_for_string
      */
     public function allow_machine_translation_for_string( $allow, $entity_decoded_trimmed_string, $current_node_accessor_selector, $node_accessor ){
-    	$skip_attributes = apply_filters( 'trp_skip_machine_translation_for_attr', array( 'href', 'src' ) );
+    	$skip_attributes = apply_filters( 'trp_skip_machine_translation_for_attr', array( 'href', 'src', 'poster', 'srcset' ) );
 	    if ( in_array( $current_node_accessor_selector, $skip_attributes ) ){
 	    	// do not machine translate href and src
 	    	return false;
@@ -1733,7 +1765,42 @@ class TRP_Translation_Render{
                 'selector' => '[aria-label]',
                 'accessor' => 'aria-label',
                 'attribute' => true
-            )
+            ),
+            'video_src' => array(
+                'selector' => 'video[src]',
+                'accessor' => 'src',
+                'attribute' => true
+            ),
+            'video_poster' => array(
+                'selector' => 'video[poster]',
+                'accessor' => 'poster',
+                'attribute' => true
+            ),
+            'video_source_src' => array(
+                'selector' => 'video source[src]',
+                'accessor' => 'src',
+                'attribute' => true
+            ),
+            'audio_src' => array(
+                'selector' => 'audio[src]',
+                'accessor' => 'src',
+                'attribute' => true
+            ),
+            'audio_source_src' => array(
+                'selector' => 'audio source[src]',
+                'accessor' => 'src',
+                'attribute' => true
+            ),
+            'picture_image_src' => array(
+                'selector' => 'picture image[src]',
+                'accessor' => 'src',
+                'attribute' => true
+            ),
+            'picture_source_srcset' => array(
+                'selector' => 'picture source[srcset]',
+                'accessor' => 'srcset',
+                'attribute' => true
+            ),
 	    ));
     }
 

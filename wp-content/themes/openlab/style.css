@@ -7706,9 +7706,11 @@ input:disabled + label {
 .collapsible-definition .collapsible-definition-label {
   cursor: pointer;
   font-weight: 600;
+}
+.collapsible-definition .collapsible-definition-label span {
   text-decoration: underline;
 }
-.collapsible-definition .collapsible-definition-label:hover {
+.collapsible-definition .collapsible-definition-label span:hover {
   text-decoration: none;
 }
 .collapsible-definition .collapsible-definition-text {
@@ -7728,10 +7730,10 @@ input:disabled + label {
 .collapsible-definition.show-definition-text .collapsible-definition-text {
   display: block;
 }
-.collapsible-definition.show-definition-text .collapsible-definition-label {
+.collapsible-definition.show-definition-text .collapsible-definition-label span {
   text-decoration: none;
 }
-.collapsible-definition.show-definition-text .collapsible-definition-label:hover {
+.collapsible-definition.show-definition-text .collapsible-definition-label span:hover {
   text-decoration: underline;
 }
 .import-acknowledge label {
@@ -8898,6 +8900,31 @@ body form .checkbox-list-container {
 }
 .groupblog-setup th {
   width: 25%;
+}
+.advanced-cloning-options-row {
+  margin-top: 24px;
+  margin-bottom: 14px;
+}
+.advanced-cloning-options-row.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+.advanced-cloning-options-row .advanced-cloning-options-gloss {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.advanced-cloning-options-row .collapsible-definition-text {
+  padding: 16px;
+}
+.advanced-cloning-options-row fieldset {
+  margin-bottom: 24px;
+}
+.advanced-cloning-options-row fieldset:last-child {
+  margin-bottom: 0;
+}
+.advanced-cloning-options-row label {
+  font-weight: normal;
+  padding-left: 16px;
 }
 .privacy-settings-note {
   padding-left: 20px;
@@ -12472,6 +12499,18 @@ p.private-membership-indicator {
   color: #333;
 }
 /* Parsley.js styling for group create/edit forms */
+.group-validate-form .site-creation-tooltips-clone {
+  display: none;
+  visibility: hidden;
+}
+.group-validate-form.cloning .site-creation-tooltips-clone {
+  display: block;
+  visibility: visible;
+}
+.group-validate-form.cloning .site-creation-tooltips-noclone {
+  display: none;
+  visibility: hidden;
+}
 .group-validate-form .error-container {
   font-weight: 400;
   border-radius: 4px;

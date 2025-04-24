@@ -1878,6 +1878,7 @@ ul.accordion-section-content.open {
   box-shadow: 0 0 0 2px var(--lotta-primary-outline, rgba(24, 144, 255, 0.2));
 }
 
+.lotta-query-tags,
 .lotta-tags {
   --tag-remove-bg: #ffc7c7;
   --tags-border-color: var(--lotta-border-color, #ccc);
@@ -1887,21 +1888,30 @@ ul.accordion-section-content.open {
   background: var(--lotta-background-focus, #ffffff);
   border: 1px solid var(--lotta-border-color, #ccc);
 }
-.lotta-tags:focus, .lotta-tags.tagify--focus {
+.lotta-query-tags:focus, .lotta-query-tags.tagify--focus,
+.lotta-tags:focus,
+.lotta-tags.tagify--focus {
   border-color: var(--lotta-primary-color, #096dd9);
   box-shadow: 0 0 0 2px var(--lotta-primary-outline, rgba(24, 144, 255, 0.2));
 }
+.lotta-query-tags .tagify__tag div::before,
 .lotta-tags .tagify__tag div::before {
   border: 1px solid var(--lotta-border-color, #ccc);
+  background-color: var(--lotta-background-color, #f0f0f1);
   --tag-bg: var(--lotta-background-color, #f0f0f1);
 }
-.lotta-tags .tagify__tag:focus div::before, .lotta-tags .tagify__tag:hover:not([readonly]) div::before {
+.lotta-query-tags .tagify__tag:focus div::before, .lotta-query-tags .tagify__tag:hover:not([readonly]) div::before,
+.lotta-tags .tagify__tag:focus div::before,
+.lotta-tags .tagify__tag:hover:not([readonly]) div::before {
   border: 1px solid var(--lotta-primary-color, #096dd9);
+  background-color: var(--lotta-primary-color, #e6f7ff);
   --tag-hover: var(--lotta-primary-color, #e6f7ff);
 }
+.lotta-query-tags .tagify__tag__removeBtn,
 .lotta-tags .tagify__tag__removeBtn {
   flex-shrink: 0;
 }
+.lotta-query-tags .tagify__tag__removeBtn:hover + div::before,
 .lotta-tags .tagify__tag__removeBtn:hover + div::before {
   transition: all 0.2s;
   background-color: var(--tag-remove-bg);

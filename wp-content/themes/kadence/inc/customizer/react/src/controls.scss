@@ -1790,3 +1790,7 @@ p.kt-box-shadow-title {
 		}
 	}
 }
+// Fix because other plugins are breaking the load with bad code that outputs css before the html tag.
+#customize-theme-controls .accordion-section-title button.accordion-trigger {
+    max-height: fit-content;
+}

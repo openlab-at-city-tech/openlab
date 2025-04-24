@@ -2201,10 +2201,16 @@ class CMTT_Glossary_Index {
 	 * @static
 	 */
 	public static function mb_string_compare( $s1, $s2 ) {
-		return strcmp(
-			iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', self::decode_characters( $s1 ) ),
-			iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', self::decode_characters( $s2 ) )
-		);
+	    if(function_exists('iconv')){
+            return strcmp(
+                iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', self::decode_characters( $s1 ) ),
+                iconv( 'UTF-8', 'ISO-8859-1//TRANSLIT', self::decode_characters( $s2 ) )
+            );
+        }
+        return strcmp(
+            self::decode_characters( $s1 ) ,
+            self::decode_characters( $s2 )
+        );
 	}
 
 	/**

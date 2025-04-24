@@ -1,5 +1,9 @@
 <?php
 
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 add_filter('trp_register_advanced_settings', 'trp_register_force_slash_in_home_url', 1071);
 function trp_register_force_slash_in_home_url($settings_array)
 {
@@ -9,6 +13,7 @@ function trp_register_force_slash_in_home_url($settings_array)
         'label' => esc_html__('Force slash at end of home url:', 'translatepress-multilingual'),
         'description' => wp_kses(__('Ads a slash at the end of the home_url() function', 'translatepress-multilingual'), array('br' => array())),
         'id'            => 'miscellaneous_options',
+        'container'     => 'miscellaneous_options'
     );
     return $settings_array;
 }

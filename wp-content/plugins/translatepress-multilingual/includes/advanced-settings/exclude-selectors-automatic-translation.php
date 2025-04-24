@@ -1,4 +1,9 @@
 <?php
+
+
+if ( !defined('ABSPATH' ) )
+    exit();
+
 /**
  * Add automatic translate exclude selectors.
  */
@@ -12,7 +17,8 @@ function trp_register_exclude_selectors_automatic_translation( $settings_array )
         ),
         'label'         => esc_html__( 'Exclude selectors only from automatic translation', 'translatepress-multilingual' ),
         'description'   => wp_kses( __( 'Do not automatically translate strings that are found in html nodes matching these selectors.<br>Excludes all the children of HTML nodes matching these selectors from being automatically translated.<br>Manual translation of these strings is still possible.', 'translatepress-multilingual' ), array( 'br' => array() ) ),
-        'id'            =>'exclude_strings',
+        'id'            => 'exclude_strings',
+        'container'     => 'exclude_selectors_at',
     );
     return $settings_array;
 }

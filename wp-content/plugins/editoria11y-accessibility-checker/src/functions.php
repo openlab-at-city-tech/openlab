@@ -173,7 +173,7 @@ add_action( 'admin_enqueue_scripts', 'ed11y_enqueue_editor_content_assets' );
 function ed11y_get_params( $user ) {
 
 	// Get settings array from cache, if available.
-	$ed1vals = get_site_transient( 'editoria11y_settings' );
+	$ed1vals = get_site_transient( 'editoria11y_settinges' );
 	if ( false === $ed1vals ) {
 		$settings                            = ed11y_get_plugin_settings( false, true );
 		$ed1vals                             = array();
@@ -190,6 +190,7 @@ function ed11y_get_params( $user ) {
 		$ed1vals['liveCheck']                = $settings['ed11y_livecheck'];
 		$ed1vals['customTests']              = $settings['ed11y_custom_tests'];
 		$ed1vals['cssLocation']              = trailingslashit( ED11Y_ASSETS ) . 'lib/editoria11y.min.css';
+		$ed1vals['adminUrl']                 = get_admin_url();
 		set_site_transient( 'editoria11y_settings', $ed1vals, 360 );
 	}
 
@@ -326,6 +327,22 @@ function ed11y_init() {
 	}
 }
 add_action( 'wp_footer', 'ed11y_init' );
+
+/**
+ * Add id to images if absent for edit links.
+ *
+ * @param Object $attr Existing image tag attributes.
+ * @param Object $attachment Available metadata.
+ *
+ * @return Object
+ */
+function ed11y_add_attachment_id_on_images( $attr, $attachment ) {
+	if ( ! isset( $attr['data-id'] ) && $attachment->ID ) {
+		$attr['data-id'] = $attachment->ID;
+	}
+	return $attr;
+}
+add_filter( 'wp_get_attachment_image_attributes', 'ed11y_add_attachment_id_on_images', 10, 2 );
 
 /**
  * Preserve query Args
