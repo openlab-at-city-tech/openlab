@@ -11617,11 +11617,8 @@ body.single-event #content .eo-event-venue-map {
 }
 @media (max-width: 767px) {
   .profile-type {
-    margin-bottom: 0;
-    margin-top: -10px;
-    font-size: 12px;
-    height: 26px;
-    line-height: 198%;
+    display: none;
+    visibility: hidden;
   }
 }
 #profile-edit-form .error {
