@@ -34,12 +34,12 @@ function get_primary_menu_id() {
 }
 
 /**
- * Insert "Home" menu item in the primary menu.
+ * Insert "Home" menu item in the primary menu on Classic themes.
  *
  * @param int $menu_id  Optional. Primary menu ID.
  * @return void
  */
-function add_home_menu_item( $menu_id = null ) {
+function add_home_menu_item_classic( $menu_id = null ) {
 	if ( ! $menu_id ) {
 		$menu_id = get_primary_menu_id();
 	}
@@ -60,18 +60,18 @@ function add_home_menu_item( $menu_id = null ) {
 			'menu-item-classes'  => 'menu-item menu-item-home',
 		]
 	);
-	
+
 	return true;
 }
 
 /**
- * Insert "Group Profile" menu item in the primary menu.
+ * Insert "Group Profile" menu item in the primary menu on Classic themes.
  *
  * @param int $group_id Group ID.
  * @param int $menu_id  Optional. Primary menu ID.
  * @return void
  */
-function add_group_menu_item( $group_id = 0, $menu_id = null ) {
+function add_group_menu_item_classic( $group_id = 0, $menu_id = null ) {
 	if ( ! $menu_id ) {
 		$menu_id = get_primary_menu_id();
 	}
@@ -95,8 +95,115 @@ function add_group_menu_item( $group_id = 0, $menu_id = null ) {
 			'menu-item-classes'  => 'menu-item menu-item-group-profile-link',
 		]
 	);
-	
+
 	return true;
+}
+
+/**
+ * Gets the "primary" wp_navigation post ID.
+ *
+ * @return int
+ */
+function get_primary_wp_navigation_id() {
+	$wp_navigation_posts = get_posts(
+		[
+			'post_type'      => 'wp_navigation',
+			'posts_per_page' => -1,
+		]
+	);
+
+	// Heuristic: assume the first one is the primary menu.
+	if ( ! empty( $wp_navigation_posts ) ) {
+		return (int) $wp_navigation_posts[0]->ID;
+	}
+
+	return 0;
+}
+
+/**
+ * Insert "Group Profile" menu item in the primary menu on Block themes.
+ *
+ * @param int $group_id Group ID.
+ * @return void
+ */
+function add_group_menu_item_block( $group_id = 0 ) {
+	$navigation_post_id = get_primary_wp_navigation_id();
+	if ( empty( $navigation_post_id ) ) {
+		return;
+	}
+
+	$navigation_post = get_post( $navigation_post_id );
+	if ( ! $navigation_post || 'wp_navigation' !== $navigation_post->post_type ) {
+		return;
+	}
+
+	$blocks = parse_blocks( $navigation_post->post_content );
+
+	$group      = groups_get_group( $group_id );
+	$group_type = ucfirst( groups_get_groupmeta( $group_id, 'wds_group_type' ) );
+
+	$group_profile_block = [
+		'blockName' => 'core/navigation-link',
+		'attrs'     => [
+			'url'   => bp_get_group_permalink( $group ),
+			'label' => sprintf( '%s Profile', $group_type ),
+			'id'    => 'group-profile-link',
+			'kind'  => 'custom',
+		],
+		'innerHTML' => '<a href="' . esc_url( home_url() ) . '" id="group-profile-link">' . sprintf( '%s Profile', $group_type ) . '</a>',
+	];
+
+	array_unshift( $blocks, $group_profile_block );
+
+	$new_content = serialize_blocks( $blocks );
+
+	$updated = wp_update_post(
+		[
+			'ID'           => $navigation_post_id,
+			'post_content' => $new_content,
+		]
+	);
+}
+
+/**
+ * Insert "Home" menu item in the primary menu on Block themes.
+ *
+ * @return void
+ */
+function add_home_menu_item_block() {
+	$navigation_post_id = get_primary_wp_navigation_id();
+	if ( empty( $navigation_post_id ) ) {
+		return;
+	}
+
+	$navigation_post = get_post( $navigation_post_id );
+	if ( ! $navigation_post || 'wp_navigation' !== $navigation_post->post_type ) {
+		return;
+	}
+
+	$blocks = parse_blocks( $navigation_post->post_content );
+
+	$home_block = [
+		'blockName' => 'core/navigation-link',
+		'attrs'     => [
+			'url'   => home_url(),
+			'label' => 'Home',
+			'id'    => 'home-link',
+			'kind'  => 'custom',
+		],
+		'innerHTML' => '<a href="' . esc_url( home_url() ) . '" id="home-link">Home</a>',
+	];
+
+	array_unshift( $blocks, $home_block );
+
+	$new_content = serialize_blocks( $blocks );
+
+	$updated = wp_update_post(
+		[
+			'ID'           => $navigation_post_id,
+			'post_content' => $new_content,
+		]
+	);
 }
 
 /**
@@ -265,7 +372,7 @@ function setup_nav_menu_item( $menu_item ) {
 
 	$group_id = openlab_get_group_id_by_blog_id( get_current_blog_id() );
 	$group    = groups_get_group( $group_id );
-	
+
 	// Hide "Group Profile" when a group is inaccessible.
 	if ( ! $group->is_visible ) {
 		$menu_item->_invalid = true;

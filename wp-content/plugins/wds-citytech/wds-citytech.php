@@ -1443,8 +1443,23 @@ function ra_copy_blog_page( $group_id ) {
 								add_filter( 'to/get_terms_orderby/ignore', '__return_true' );
 							}
 
-							OpenLab\NavMenus\add_group_menu_item( $group_id );
-							OpenLab\NavMenus\add_home_menu_item();
+							$wp_navigation_posts = get_posts(
+								[
+									'post_type'      => 'wp_navigation',
+									'posts_per_page' => 1,
+									'post_status'    => 'publish',
+								]
+							);
+
+							$use_block_navigation = ! empty( $wp_navigation_posts ) && ! empty( $wp_navigation_posts[0]->ID );
+
+							if ( $use_block_navigation ) {
+								OpenLab\NavMenus\add_group_menu_item_block( $group_id );
+								OpenLab\NavMenus\add_home_menu_item_block();
+							} else {
+								OpenLab\NavMenus\add_group_menu_item_classic( $group_id );
+								OpenLab\NavMenus\add_home_menu_item_classic();
+							}
 
 							if ( $taxonomy_terms_order_is_active ) {
 								remove_filter( 'to/get_terms_orderby/ignore', '__return_true' );
