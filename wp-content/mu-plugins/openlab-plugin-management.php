@@ -87,6 +87,7 @@ function openlab_get_hidden_plugins() {
 		'query-monitor/query-monitor.php',
 		'quiz-maker/quiz-maker.php',
 		'rederly.php',
+		'redux-framework/redux-framework.php', // #3526
 		'setmore-plus/setmore-plus.php', // #3438
 		'share-this/sharethis.php', // #3438
 		'simple-drop-cap/simple-drop-cap.php',
