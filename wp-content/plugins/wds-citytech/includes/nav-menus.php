@@ -145,12 +145,13 @@ function add_group_menu_item_block( $group_id = 0 ) {
 	$group_profile_block = [
 		'blockName' => 'core/navigation-link',
 		'attrs'     => [
-			'url'   => bp_get_group_permalink( $group ),
-			'label' => sprintf( '%s Profile', $group_type ),
-			'id'    => 'group-profile-link',
-			'kind'  => 'custom',
+			'url'       => bp_get_group_permalink( $group ),
+			'label'     => sprintf( '%s Profile', $group_type ),
+			'id'        => 'group-profile-link',
+			'kind'      => 'custom',
+			'className' => 'group-profile-link',
 		],
-		'innerHTML' => '<a href="' . esc_url( home_url() ) . '" id="group-profile-link">' . sprintf( '%s Profile', $group_type ) . '</a>',
+		'innerHTML' => '<a class="group-profile-link" href="' . esc_url( home_url() ) . '" id="group-profile-link">' . sprintf( '%s Profile', $group_type ) . '</a>',
 	];
 
 	array_unshift( $blocks, $group_profile_block );
@@ -186,12 +187,13 @@ function add_home_menu_item_block() {
 	$home_block = [
 		'blockName' => 'core/navigation-link',
 		'attrs'     => [
-			'url'   => home_url(),
-			'label' => 'Home',
-			'id'    => 'home-link',
-			'kind'  => 'custom',
+			'url'       => home_url(),
+			'label'     => 'Home',
+			'id'        => 'home-link',
+			'kind'      => 'custom',
+			'className' => 'home-link',
 		],
-		'innerHTML' => '<a href="' . esc_url( home_url() ) . '" id="home-link">Home</a>',
+		'innerHTML' => '<a class="home-link" href="' . esc_url( home_url() ) . '" id="home-link">Home</a>',
 	];
 
 	array_unshift( $blocks, $home_block );

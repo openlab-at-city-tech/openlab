@@ -582,11 +582,13 @@ a.close-popup-login {
     padding: 0;
 }
 
+.wp-block-navigation-item.group-profile-link a:before,
 .menu-item-group-profile-link a:before {
 	content: '[';
 	margin-right: 6px;
 }
 
+.wp-block-navigation-item.group-profile-link a:after,
 .menu-item-group-profile-link a:after {
 	content: ']';
 	margin-left: 6px;
