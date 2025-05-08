@@ -1454,8 +1454,8 @@ function ra_copy_blog_page( $group_id ) {
 							$use_block_navigation = ! empty( $wp_navigation_posts ) && ! empty( $wp_navigation_posts[0]->ID );
 
 							if ( $use_block_navigation ) {
-								OpenLab\NavMenus\add_group_menu_item_block( $group_id );
 								OpenLab\NavMenus\add_home_menu_item_block();
+								OpenLab\NavMenus\add_group_menu_item_block( $group_id );
 							} else {
 								OpenLab\NavMenus\add_group_menu_item_classic( $group_id );
 								OpenLab\NavMenus\add_home_menu_item_classic();
