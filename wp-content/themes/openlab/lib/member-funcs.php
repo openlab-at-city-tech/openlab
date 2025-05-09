@@ -1121,15 +1121,20 @@ function openlab_member_header() {
 			<span class="icon-bar"></span>
 		</button>
 	</h1>
-	<?php if ( bp_is_user_activity() ) : ?>
-		<div class="clearfix hidden-xs">
+
+	<?php /* Last activity is visible only to super admins */ ?>
+	<?php if ( is_super_admin() ) : ?>
+		<?php if ( bp_is_user_activity() ) : ?>
+			<div class="clearfix hidden-xs">
+				<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
+			</div>
+		<?php endif; ?>
+		<div class="clearfix visible-xs">
+			<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
 			<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
 		</div>
 	<?php endif; ?>
-	<div class="clearfix visible-xs">
-		<span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
-		<div class="info-line pull-right"><span class="timestamp info-line-timestamp"><span class="fa fa-undo" aria-hidden="true"></span> <?php bp_last_activity( bp_displayed_user_id() ); ?></span></div>
-	</div>
+
 	<?php
 }
 

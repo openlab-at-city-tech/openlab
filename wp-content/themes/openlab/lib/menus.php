@@ -837,7 +837,7 @@ function openlab_submenu_gen( $items, $timestamp = false, $current_item = null )
         $i++;
     }
 
-    if ($timestamp) {
+    if ( is_super_admin() && $timestamp ) {
         $submenu .= '--><li class="info-line pull-right visible-lg"><span class="timestamp info-line-timestamp">' . bp_get_last_activity(bp_displayed_user_id()) . '</span></li><!--';
     }
 
