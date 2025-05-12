@@ -25,7 +25,7 @@ if ( ! $user_favorites ) {
 
 <div class="flyout-menu" id="favorites-flyout" role="menu">
 	<div class="flyout-heading">
-		<i class="fa fa-bookmark-o" aria-hidden="true"></i>
+		<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 		<span>My Favorites</span>
 	</div>
 	<ul class="flyout-menu-items">

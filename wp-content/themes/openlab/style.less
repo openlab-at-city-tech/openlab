@@ -341,42 +341,6 @@ blockquote {
 		padding: 0;
 	}
 
-	svg.navbar-icon {
-		height: 20px;
-
-		.svg-bg {
-			fill: transparent;
-		}
-
-		.svg-stroke {
-			fill: #333;
-		}
-
-		&.navbar-icon-bookmark {
-			.svg-stroke {
-				stroke: #333;
-				fill: white;
-			}
-		}
-	}
-
-	button[aria-expanded="true"] svg.navbar-icon {
-		.svg-bg {
-			fill: @lightTeal;
-		}
-
-		.svg-stroke {
-			fill: @darkTeal;
-		}
-
-		&.navbar-icon-bookmark {
-			.svg-stroke {
-				stroke: @darkTeal;
-				fill: @lightTeal;
-			}
-		}
-	}
-
 	button.navbar-flyout-toggle:hover,
 	.navbar-action-link-link:hover {
 		opacity: 0.7;
@@ -389,10 +353,46 @@ blockquote {
 	}
 }
 
+svg.navbar-icon {
+	height: 20px;
+
+	.svg-bg {
+		fill: transparent;
+	}
+
+	.svg-stroke {
+		fill: #333;
+	}
+
+	&.navbar-icon-bookmark {
+		.svg-stroke {
+			stroke: #333;
+			fill: transparent;
+		}
+	}
+}
+
+button[aria-expanded="true"] svg.navbar-icon {
+	.svg-bg {
+		fill: @lightTeal;
+	}
+
+	.svg-stroke {
+		fill: @darkTeal;
+	}
+
+	&.navbar-icon-bookmark {
+		.svg-stroke {
+			stroke: @darkTeal;
+			fill: @lightTeal;
+		}
+	}
+}
+
 .openlab-navbar-flyouts {
 	--flyout-h-padding: 16px;
-
 	position: relative;
+
 	.flyout-menu {
 		position: absolute;
 		background: #fff;
@@ -448,9 +448,49 @@ blockquote {
 		gap: 6px;
 		font-weight: @bold;
 		padding: 12px var(--flyout-h-padding);
+	}
 
-		i.fa {
-			font-size: 18px;
+	.flyout-menu-items {
+		font-weight: 700;
+
+		.flyout-submenu {
+			font-weight: @normal;
+		}
+	}
+
+
+	button.flyout-submenu-toggle {
+		background: none;
+		padding: 0;
+		outline: none;
+		border: none;
+		text-align: left;
+		width: 100%;
+		padding: 0 var(--flyout-h-padding);
+		position: relative;
+		padding-right: 1.5rem; // make space for the arrow
+
+		&[aria-expanded="true"],
+		&:hover {
+			background: @10gray;
+		}
+
+		&::after {
+			content: '';
+			position: absolute;
+			right: var(--flyout-h-padding); // 4px for the border
+			top: calc(50% - 1px);
+			transform: translateY(-50%) rotate(45deg);
+			width: 8px;
+			height: 8px;
+			border-right: 2px solid #333;
+			border-bottom: 2px solid #333;
+			transition: transform 0.2s ease;
+		}
+
+		&[aria-expanded="true"]::after {
+			top: calc(50% + 2px);
+			transform: translateY(-50%) rotate(-135deg); // points up
 		}
 	}
 }

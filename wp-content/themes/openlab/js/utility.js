@@ -820,11 +820,44 @@ OpenLab.utility = (function ($) {
 						const updatedMenuRect = menu.getBoundingClientRect();
 						const spillover = updatedMenuRect.right - window.innerWidth;
 						if ( spillover > 0 ) {
-							const adjustedLeft = updatedMenuRect.left - spillover;
+							const adjustedLeft = updatedMenuRect.left - flyoutContainerRect.left - spillover - 20;
 							menu.style.left = `${adjustedLeft}px`;
 						}
 					}
 				});
+			});
+
+			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
+			submenuToggles.forEach( toggle => {
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+
+					const isOpen = this.getAttribute('aria-expanded') === 'true';
+					const submenuId = this.getAttribute('aria-controls');
+					const submenu = document.getElementById(submenuId);
+
+					// Close all other open submenus
+					submenuToggles.forEach(otherToggle => {
+					const otherSubmenuId = otherToggle.getAttribute('aria-controls');
+					const otherSubmenu = document.getElementById(otherSubmenuId);
+
+					otherToggle.setAttribute('aria-expanded', 'false');
+						otherSubmenu.hidden = true;
+					});
+
+					// Toggle this one
+					if (!isOpen) {
+						this.setAttribute('aria-expanded', 'true');
+						submenu.hidden = false;
+					} else {
+						this.setAttribute('aria-expanded', 'false');
+						submenu.hidden = true;
+					}
+				});
+			});
+
+			document.querySelectorAll('.flyout-submenu').forEach(menu => {
+				menu.hidden = true;
 			});
 		},
 		setUpItemList: function() {
