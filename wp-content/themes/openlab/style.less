@@ -402,7 +402,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 }
 
 .openlab-navbar-flyouts {
-	--flyout-h-padding: 16px;
+	--flyout-h-padding: 20px;
 	position: relative;
 
 	.flyout-menu {
@@ -476,6 +476,21 @@ button[aria-expanded="true"] svg.navbar-icon {
 
 			img {
 				margin-left: 3px;
+			}
+		}
+
+		li {
+			position: relative;
+			&.has-unread::after {
+				background: @orange;
+				content: '';
+				position: absolute;
+				top: 15px;
+				left: 8px;
+				width: 7px;
+				height: 7px;
+				display: block;
+				border-radius: 50%;
 			}
 		}
 	}

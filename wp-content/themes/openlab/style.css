@@ -7556,7 +7556,7 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   fill: #e0f5f1;
 }
 .openlab-navbar-flyouts {
-  --flyout-h-padding: 16px;
+  --flyout-h-padding: 20px;
   position: relative;
 }
 .openlab-navbar-flyouts .flyout-menu {
@@ -7618,6 +7618,20 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 }
 .openlab-navbar-flyouts .flyout-menu-items .my-openlab-logout img {
   margin-left: 3px;
+}
+.openlab-navbar-flyouts .flyout-menu-items li {
+  position: relative;
+}
+.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after {
+  background: #ec6348;
+  content: '';
+  position: absolute;
+  top: 15px;
+  left: 8px;
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
 }
 .openlab-navbar-flyouts button.flyout-submenu-toggle {
   background: none;
