@@ -339,11 +339,41 @@ blockquote {
 		border: none;
 		color: @black;
 		padding: 0;
+	}
 
-		.fa-stack {
-			width: 20px;
-			height: 20px;
-			line-height: 20px;
+	svg.navbar-icon {
+		height: 20px;
+
+		.svg-bg {
+			fill: transparent;
+		}
+
+		.svg-stroke {
+			fill: #333;
+		}
+
+		&.navbar-icon-bookmark {
+			.svg-stroke {
+				stroke: #333;
+				fill: white;
+			}
+		}
+	}
+
+	button[aria-expanded="true"] svg.navbar-icon {
+		.svg-bg {
+			fill: @lightTeal;
+		}
+
+		.svg-stroke {
+			fill: @darkTeal;
+		}
+
+		&.navbar-icon-bookmark {
+			.svg-stroke {
+				stroke: @darkTeal;
+				fill: @lightTeal;
+			}
 		}
 	}
 
@@ -353,21 +383,9 @@ blockquote {
 	}
 
 	.navbar-action-link-toggleable {
+		align-items: center;
+		display: flex;
 		position: relative;
-	}
-
-	.fa-stack-bg {
-		color: transparent;
-	}
-
-	button[aria-expanded="true"] {
-		.fa-stack-bg {
-			color: @lightTeal;
-		}
-
-		.fa-stack-outline {
-			color: @darkTeal;
-		}
 	}
 }
 

@@ -62,18 +62,17 @@ $navbar_nav_menu_items = [
 				<div class="navbar-action-link-favorites navbar-action-link-toggleable">
 					<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="favorites-flyout">
 						<span class="screen-reader-text">Favorites</span>
-
-						<span class="fa-stack">
-							<i class="fa fa-bookmark fa-stack-1x fa-stack-bg" aria-hidden="true"></i>
-							<i class="fa fa-bookmark-o fa-stack-1x fa-stack-outline" aria-hidden="true"></i>
-						</span>
+						<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 					</button>
 
 				</div>
 
 				<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
 					<span class="screen-reader-text">My OpenLab</span>
-					<i class="fa fa-user-circle-o" aria-hidden="true"></i>
+					<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
+						<span class="screen-reader-text">My OpenLab</span>
+						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+					</button>
 				</div>
 			</div>
 		<?php else : ?>
@@ -93,5 +92,6 @@ $navbar_nav_menu_items = [
 <div class="openlab-navbar-flyouts">
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
+		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>
 	<?php endif; ?>
 </div>

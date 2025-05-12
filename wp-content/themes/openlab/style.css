@@ -7512,26 +7512,37 @@ blockquote .h6 {
   color: #000000;
   padding: 0;
 }
-.openlab-navbar button.navbar-flyout-toggle .fa-stack {
-  width: 20px;
+.openlab-navbar svg.navbar-icon {
   height: 20px;
-  line-height: 20px;
+}
+.openlab-navbar svg.navbar-icon .svg-bg {
+  fill: transparent;
+}
+.openlab-navbar svg.navbar-icon .svg-stroke {
+  fill: #333;
+}
+.openlab-navbar svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
+  stroke: #333;
+  fill: white;
+}
+.openlab-navbar button[aria-expanded="true"] svg.navbar-icon .svg-bg {
+  fill: #e0f5f1;
+}
+.openlab-navbar button[aria-expanded="true"] svg.navbar-icon .svg-stroke {
+  fill: #3ba49b;
+}
+.openlab-navbar button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
+  stroke: #3ba49b;
+  fill: #e0f5f1;
 }
 .openlab-navbar button.navbar-flyout-toggle:hover,
 .openlab-navbar .navbar-action-link-link:hover {
   opacity: 0.7;
 }
 .openlab-navbar .navbar-action-link-toggleable {
+  align-items: center;
+  display: flex;
   position: relative;
-}
-.openlab-navbar .fa-stack-bg {
-  color: transparent;
-}
-.openlab-navbar button[aria-expanded="true"] .fa-stack-bg {
-  color: #e0f5f1;
-}
-.openlab-navbar button[aria-expanded="true"] .fa-stack-outline {
-  color: #3ba49b;
 }
 .openlab-navbar-flyouts {
   --flyout-h-padding: 16px;
