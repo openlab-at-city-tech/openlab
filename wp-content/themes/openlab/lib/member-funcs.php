@@ -2265,3 +2265,36 @@ function openlab_get_my_dashboard_url( $user_id ) {
 	$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
 	return $primary_site_url . '/wp-admin/my-sites.php';
 }
+
+/**
+ * Gets the unread counts for a user.
+ *
+ * @param int $user_id User ID.
+ * @return array
+ */
+function openlab_get_user_unread_counts( $user_id ) {
+	$user_unread_messages_count = bp_get_total_unread_messages_count();
+	$user_group_invites_count   = groups_get_invites_for_user();
+	$user_friend_request_count  = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+
+	$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
+	if ( $user_groups ) {
+		$connection_invitations = \OpenLab\Connections\Invitation::get(
+			[
+				'invitee_group_id' => array_keys( $user_groups ),
+				'pending_only'     => true,
+			]
+		);
+
+		$user_connection_invites_count = count( $connection_invitations );
+	} else {
+		$user_connection_invites_count = 0;
+	}
+
+	return [
+		'messages'          => $user_unread_messages_count,
+		'group_invites'     => $user_group_invites_count,
+		'friend_requests'   => count( $user_friend_request_count ),
+		'connection_invites' => $user_connection_invites_count,
+	];
+}

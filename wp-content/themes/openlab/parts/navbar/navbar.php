@@ -25,6 +25,17 @@ $navbar_nav_menu_items = [
 		'url'  => home_url( 'portfolios' ),
 	],
 ];
+
+$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+$has_any_unread = (
+	$user_unread_counts['messages'] > 0 ||
+	$user_unread_counts['friend_requests'] > 0 ||
+	$user_unread_counts['group_invites'] > 0
+);
+
+$my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
+
 ?>
 
 <nav class="openlab-navbar" role="navigation">
@@ -69,7 +80,7 @@ $navbar_nav_menu_items = [
 
 				<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
 					<span class="screen-reader-text">My OpenLab</span>
-					<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
+					<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
 						<span class="screen-reader-text">My OpenLab</span>
 						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
 					</button>

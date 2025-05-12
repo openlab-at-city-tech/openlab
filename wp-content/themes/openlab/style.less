@@ -339,6 +339,18 @@ blockquote {
 		border: none;
 		color: @black;
 		padding: 0;
+
+		&.has-unread::after {
+			background: @orange;
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			width: 7px;
+			height: 7px;
+			display: block;
+			border-radius: 50%;
+		}
 	}
 
 	button.navbar-flyout-toggle:hover,

@@ -7512,6 +7512,17 @@ blockquote .h6 {
   color: #000000;
   padding: 0;
 }
+.openlab-navbar button.navbar-flyout-toggle.has-unread::after {
+  background: #ec6348;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
+}
 .openlab-navbar button.navbar-flyout-toggle:hover,
 .openlab-navbar .navbar-action-link-link:hover {
   opacity: 0.7;

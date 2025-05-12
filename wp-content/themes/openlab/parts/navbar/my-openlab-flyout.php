@@ -7,6 +7,8 @@ if ( ! is_user_logged_in() ) {
 	return;
 }
 
+$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
 $my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
 
 $links = [
@@ -86,6 +88,7 @@ $links[] = [
 
 $links[] = [
 	'text'     => 'My Friends',
+	'class'    => $user_unread_counts['friends'] ? 'has-unread' : '',
 	'children' => [
 		[
 			'text' => 'Friend List',
@@ -100,6 +103,7 @@ $links[] = [
 
 $links[] = [
 	'text'     => 'My Messages',
+	'class'    => $user_unread_counts['messages'] ? 'has-unread' : '',
 	'children' => [
 		[
 			'text' => 'Inbox',
@@ -118,6 +122,7 @@ $links[] = [
 
 $links[] = [
 	'text'     => 'My Invitations',
+	'class'    => $user_unread_counts['invites'] ? 'has-unread' : '',
 	'children' => [
 		[
 			'text' => 'Invitations Received',
