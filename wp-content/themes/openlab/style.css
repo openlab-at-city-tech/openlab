@@ -7534,7 +7534,7 @@ blockquote .h6 {
   position: relative;
 }
 svg.navbar-icon {
-  height: 20px;
+  height: 24px;
 }
 svg.navbar-icon .svg-bg {
   fill: transparent;
@@ -7542,9 +7542,15 @@ svg.navbar-icon .svg-bg {
 svg.navbar-icon .svg-stroke {
   fill: #333;
 }
+svg.navbar-icon.navbar-icon-bookmark {
+  height: 21px;
+}
 svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   stroke: #333;
   fill: transparent;
+}
+svg.navbar-icon.navbar-icon-my-openlab {
+  height: 22px;
 }
 button[aria-expanded="true"] svg.navbar-icon .svg-bg {
   fill: #e0f5f1;

@@ -32,14 +32,14 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 		<div class="navbar-action-link-search">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'search' ) ); ?>">
 				<span class="screen-reader-text">Search</span>
-				<i class="fa fa-search" aria-hidden="true"></i>
+				<?php get_template_part( 'parts/navbar/search-icon' ); ?>
 			</a>
 		</div>
 
 		<div class="navbar-action-link-help">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'blog/help/openlab-help' ) ); ?>">
 				<span class="screen-reader-text">Help</span>
-				<i class="fa fa-question-circle-o" aria-hidden="true"></i>
+				<?php get_template_part( 'parts/navbar/help-icon' ); ?>
 			</a>
 		</div>
 
