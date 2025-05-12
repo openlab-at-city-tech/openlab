@@ -138,37 +138,14 @@ function openlab_footer_bar() {
 add_action('bp_before_header', 'openlab_header_bar', 10);
 add_action('bp_before_footer', 'openlab_footer_bar', 6);
 
-function openlab_custom_menu_items($items, $menu) {
-    global $post, $bp;
-
-    if ($menu->theme_location == 'main') {
-
-        $opl_link = '';
-
-        $classes = '';
-
-        if (is_user_logged_in()) {
-            $class = '';
-            if (bp_is_my_profile() || bp_is_current_action('create') || is_page('my-courses') || is_page('my-projects') || is_page('my-clubs')) {
-                $class = 'class="current-menu-item"';
-            }
-            $opl_link = '<li ' . $class . '>';
-            $opl_link .= '<a href="' . bp_loggedin_user_domain() . '">My OpenLab</a>';
-            $opl_link .= '</li>';
-        }
-
-        return $items . $opl_link;
-    } else if ($menu->theme_location == 'aboutmenu') {
-
-        $items = str_replace('Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items);
-
-        return $items;
-    } else {
-        return $items;
+function openlab_custom_menu_items( $items, $menu ) {
+    if ( 'aboutmenu' === $menu->theme_location ) {
+        $items = str_replace( 'Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items );
     }
-}
 
-add_filter('wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2);
+	return $items;
+}
+add_filter( 'wp_nav_menu_items', 'openlab_custom_menu_items', 10, 2 );
 
 function openlab_form_classes($classes) {
 

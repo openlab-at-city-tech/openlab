@@ -241,6 +241,180 @@ blockquote {
         }
     }
 }
+
+// Main navbar.
+.openlab-navbar {
+	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+	position: relative;
+	z-index: 1;
+	align-items: center;
+	display: flex;
+	height: 100px;
+	background: white;
+	margin-bottom: 6px;
+	overflow: visible;
+	z-index: 1000;
+
+	.shadow-mask-left,
+	.shadow-mask-right {
+	  position: absolute;
+	  top: 0;
+	  height: 100px; /* match your navbar */
+	  width: 10px;
+	  background: white;
+	  z-index: 2;
+	  pointer-events: none;
+	}
+
+	.shadow-mask-left {
+	  left: -10px;
+	}
+
+	.shadow-mask-right {
+	  right: -10px;
+	}
+
+	header {
+		height: 100px;
+		margin: 0;
+
+		a {
+			display: block;
+			background: url("images/openlab-logo-full.png") no-repeat center;
+			background-size: 100% auto;
+			height: 100%;
+			width: 185px;
+		}
+	}
+
+	.navbar-nav-menu {
+		display: flex;
+		flex: 1;
+		justify-content: space-between;
+
+		ul {
+			display: flex;
+			flex: 1;
+			gap: 30px;
+			justify-content: flex-start;
+			list-style-type: none;
+
+			font-family: @font-family-sans-serif;
+			font-weight: 700;
+			font-size: 16px;
+			line-height: 100%;
+			letter-spacing: 0%;
+
+			a {
+				text-decoration: none;
+
+				&:hover {
+					text-decoration: underline;
+				}
+			}
+		}
+	}
+
+	.navbar-action-links {
+		align-items: center;
+		display: flex;
+		gap: 20px;
+
+		i.fa {
+			margin: 0;
+			font-size: 20px;
+		}
+	}
+
+	.navbar-action-logged-in {
+		border-left: 2px solid #ddd;
+		border-right: 2px solid #ddd;
+		display: flex;
+		gap: 20px;
+		padding: 2px 24px;
+	}
+
+	button.navbar-flyout-toggle {
+		background: none;
+		border: none;
+		color: @black;
+		padding: 0;
+
+		.fa-stack {
+			width: 20px;
+			height: 20px;
+			line-height: 20px;
+		}
+	}
+
+	button.navbar-flyout-toggle:hover,
+	.navbar-action-link-link:hover {
+		opacity: 0.7;
+	}
+
+	.navbar-action-link-toggleable {
+		position: relative;
+	}
+
+	.fa-stack-bg {
+		color: transparent;
+	}
+
+	button[aria-expanded="true"] {
+		.fa-stack-bg {
+			color: @lightTeal;
+		}
+
+		.fa-stack-outline {
+			color: @darkTeal;
+		}
+	}
+}
+
+.openlab-navbar-flyouts {
+	position: relative;
+	.flyout-menu {
+		position: absolute;
+		background: #fff;
+		border: 1px solid #ccc;
+		z-index: 500;
+		width: max-content;
+		margin-top: -2px;
+		min-width: 200px;
+		padding: 0.5rem 0;
+		opacity: 0;
+		visibility: hidden;
+
+		transition: opacity 0.2s ease, visibility 0.2s ease;
+		pointer-events: none;
+
+		ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		li a {
+			display: block;
+			padding: 0.5rem 1rem;
+			text-decoration: none;
+		}
+
+		li a:hover,
+		li a:focus {
+			background-color: #f0f0f0;
+		}
+
+		&.is-open {
+			z-index: 1000;
+
+			opacity: 1;
+			pointer-events: auto;
+			visibility: visible;
+		}
+	}
+}
+
 //
 // Pagination (multiple pages)
 // --------------------------------------------------
@@ -707,72 +881,6 @@ input:disabled+label {
     padding: 15px;
     #signup_validation_code{
         margin-left: 10px;
-    }
-}
-/**header**/
-.navbar-default{
-    background: transparent;
-    border: none;
-    margin-bottom: 80px;
-    .main-nav-wrapper{
-        background: #fff;
-        position: relative;
-        border-bottom: 1px solid @10gray;
-        @media(max-width: @screen-xs-max){
-            top: 114px;
-            border-bottom: none;
-        }
-    }
-    .container-fluid{
-        margin: 0 auto;
-        ul.nav{
-            margin: 0;
-            padding: 0;
-            li{
-                margin:0;
-                a{
-                    color: @70gray;
-                    display: block;
-                    text-decoration: none;
-                    font-weight: @bold;
-                    line-height: 150%;
-                    padding: 21px 15px;
-                    &:hover,
-                        &:focus {
-                        text-decoration: underline;
-                    }
-                    @media(max-width: @screen-sm-max){
-                        font-size: 13px;
-                        padding: 22px 11px;
-                    }
-                }
-                &:first-child{
-                    a{
-                        @media (min-width: @screen-md){
-                            //padding-left: 30px;
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-.navbar-default .current-menu-item a,
-.navbar-right .current-menu-item {
-	background: @cyan;
-	color: @black;
-}
-.sidebar-mobile-dropdown{
-    .navbar.navbar-default{
-        @media(max-width: @screen-xs-max){
-            margin-bottom: 59px;
-        }
-        &.navbar-location-footer{
-            margin-bottom: 0;
-            .main-nav-wrapper {
-                border-top: 1px solid @10gray;
-            }
-        }
     }
 }
 .checkbox{

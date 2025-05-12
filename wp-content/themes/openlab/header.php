@@ -16,14 +16,15 @@
     </head>
 
     <body <?php body_class(); ?>>
-        
+
         <?php echo openlab_primary_skip_link(); ?>
-        
+
         <div class="page-table">
-            
+
         <div class="page-table-row expanded">
-            <?php do_action('bp_before_header') ?>
             <div class="container-fluid">
+				<?php get_template_part( 'parts/navbar' ); ?>
+
                 <div id="header" class="row">
                     <?php do_action('bp_header') ?>
                 </div><!-- #header -->

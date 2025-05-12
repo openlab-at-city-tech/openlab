@@ -25,6 +25,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
 			OpenLab.utility.initClickableCards();
 			OpenLab.utility.initPortfolioProfileLinkToggle();
+			OpenLab.utility.setUpNav();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -778,6 +779,53 @@ OpenLab.utility = (function ($) {
 					});
 				})
 			}
+		},
+		setUpNav: function() {
+			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+				toggle.addEventListener('click', (e) => {
+					const menuId = toggle.getAttribute('aria-controls');
+					const menu = document.getElementById(menuId);
+					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+					// Close all open menus
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(b => {
+						b.classList.remove('is-open');
+					});
+
+					document.querySelectorAll('.flyout-menu').forEach(b => {
+						b.classList.remove('is-open');
+					});
+
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(b => {
+						b.setAttribute('aria-expanded', 'false');
+					});
+
+					// Toggle current menu
+					if ( ! isOpen ) {
+						toggle.setAttribute('aria-expanded', 'true');
+						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+						menu.classList.add( 'is-open' );
+
+						const navbar = document.querySelector( '.openlab-navbar' );
+						const menuRect = menu.getBoundingClientRect();
+						const toggleRect = toggle.getBoundingClientRect();
+						const navbarRect = navbar.getBoundingClientRect();
+						const flyoutContainerRect = document.querySelector( '.openlab-navbar-flyouts' ).getBoundingClientRect();
+
+						// Position flyout-menu to match left edge of toggle.
+						const newLeft = toggleRect.left - flyoutContainerRect.left;
+						menu.style.left = `${newLeft}px`;
+
+						// Ensure that the flyout-menu is within the viewport.
+						const updatedMenuRect = menu.getBoundingClientRect();
+						const spillover = updatedMenuRect.right - window.innerWidth;
+						if ( spillover > 0 ) {
+							const adjustedLeft = updatedMenuRect.left - spillover;
+							menu.style.left = `${adjustedLeft}px`;
+						}
+					}
+				});
+			});
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings

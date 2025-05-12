@@ -7427,6 +7427,149 @@ blockquote .h6 {
     padding-right: 7px;
   }
 }
+.openlab-navbar {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  display: flex;
+  height: 100px;
+  background: white;
+  margin-bottom: 6px;
+  overflow: visible;
+  z-index: 1000;
+}
+.openlab-navbar .shadow-mask-left,
+.openlab-navbar .shadow-mask-right {
+  position: absolute;
+  top: 0;
+  height: 100px;
+  /* match your navbar */
+  width: 10px;
+  background: white;
+  z-index: 2;
+  pointer-events: none;
+}
+.openlab-navbar .shadow-mask-left {
+  left: -10px;
+}
+.openlab-navbar .shadow-mask-right {
+  right: -10px;
+}
+.openlab-navbar header {
+  height: 100px;
+  margin: 0;
+}
+.openlab-navbar header a {
+  display: block;
+  background: url("images/openlab-logo-full.png") no-repeat center;
+  background-size: 100% auto;
+  height: 100%;
+  width: 185px;
+}
+.openlab-navbar .navbar-nav-menu {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+}
+.openlab-navbar .navbar-nav-menu ul {
+  display: flex;
+  flex: 1;
+  gap: 30px;
+  justify-content: flex-start;
+  list-style-type: none;
+  font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+.openlab-navbar .navbar-nav-menu ul a {
+  text-decoration: none;
+}
+.openlab-navbar .navbar-nav-menu ul a:hover {
+  text-decoration: underline;
+}
+.openlab-navbar .navbar-action-links {
+  align-items: center;
+  display: flex;
+  gap: 20px;
+}
+.openlab-navbar .navbar-action-links i.fa {
+  margin: 0;
+  font-size: 20px;
+}
+.openlab-navbar .navbar-action-logged-in {
+  border-left: 2px solid #ddd;
+  border-right: 2px solid #ddd;
+  display: flex;
+  gap: 20px;
+  padding: 2px 24px;
+}
+.openlab-navbar button.navbar-flyout-toggle {
+  background: none;
+  border: none;
+  color: #000000;
+  padding: 0;
+}
+.openlab-navbar button.navbar-flyout-toggle .fa-stack {
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+.openlab-navbar button.navbar-flyout-toggle:hover,
+.openlab-navbar .navbar-action-link-link:hover {
+  opacity: 0.7;
+}
+.openlab-navbar .navbar-action-link-toggleable {
+  position: relative;
+}
+.openlab-navbar .fa-stack-bg {
+  color: transparent;
+}
+.openlab-navbar button[aria-expanded="true"] .fa-stack-bg {
+  color: #e0f5f1;
+}
+.openlab-navbar button[aria-expanded="true"] .fa-stack-outline {
+  color: #3ba49b;
+}
+.openlab-navbar-flyouts {
+  position: relative;
+}
+.openlab-navbar-flyouts .flyout-menu {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  z-index: 500;
+  width: max-content;
+  margin-top: -2px;
+  min-width: 200px;
+  padding: 0.5rem 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+  pointer-events: none;
+}
+.openlab-navbar-flyouts .flyout-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.openlab-navbar-flyouts .flyout-menu li a {
+  display: block;
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+}
+.openlab-navbar-flyouts .flyout-menu li a:hover,
+.openlab-navbar-flyouts .flyout-menu li a:focus {
+  background-color: #f0f0f0;
+}
+.openlab-navbar-flyouts .flyout-menu.is-open {
+  z-index: 1000;
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
 .pagination {
   margin: 0;
 }
@@ -7885,69 +8028,6 @@ input:disabled + label {
 }
 #validation-code #signup_validation_code {
   margin-left: 10px;
-}
-/**header**/
-.navbar-default {
-  background: transparent;
-  border: none;
-  margin-bottom: 80px;
-}
-.navbar-default .main-nav-wrapper {
-  background: #fff;
-  position: relative;
-  border-bottom: 1px solid #dddddd;
-}
-@media (max-width: 767px) {
-  .navbar-default .main-nav-wrapper {
-    top: 114px;
-    border-bottom: none;
-  }
-}
-.navbar-default .container-fluid {
-  margin: 0 auto;
-}
-.navbar-default .container-fluid ul.nav {
-  margin: 0;
-  padding: 0;
-}
-.navbar-default .container-fluid ul.nav li {
-  margin: 0;
-}
-.navbar-default .container-fluid ul.nav li a {
-  color: #444444;
-  display: block;
-  text-decoration: none;
-  font-weight: 700;
-  line-height: 150%;
-  padding: 21px 15px;
-}
-.navbar-default .container-fluid ul.nav li a:hover,
-.navbar-default .container-fluid ul.nav li a:focus {
-  text-decoration: underline;
-}
-@media (max-width: 991px) {
-  .navbar-default .container-fluid ul.nav li a {
-    font-size: 13px;
-    padding: 22px 11px;
-  }
-}
-@media (min-width: 992px) {
-}
-.navbar-default .current-menu-item a,
-.navbar-right .current-menu-item {
-  background: #63dfd2;
-  color: #000000;
-}
-@media (max-width: 767px) {
-  .sidebar-mobile-dropdown .navbar.navbar-default {
-    margin-bottom: 59px;
-  }
-}
-.sidebar-mobile-dropdown .navbar.navbar-default.navbar-location-footer {
-  margin-bottom: 0;
-}
-.sidebar-mobile-dropdown .navbar.navbar-default.navbar-location-footer .main-nav-wrapper {
-  border-top: 1px solid #dddddd;
 }
 .checkbox.checkbox-float {
   float: left;
