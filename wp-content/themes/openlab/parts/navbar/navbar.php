@@ -1,30 +1,5 @@
 <?php
-$navbar_nav_menu_items = [
-	'about' => [
-		'text' => 'About',
-		'url'  => home_url( 'about' ),
-	],
-	'people' => [
-		'text' => 'People',
-		'url'  => home_url( 'members' ),
-	],
-	'courses' => [
-		'text' => 'Courses',
-		'url'  => home_url( 'courses' ),
-	],
-	'projects' => [
-		'text' => 'Projects',
-		'url'  => home_url( 'projects' ),
-	],
-	'clubs' => [
-		'text' => 'Clubs',
-		'url'  => home_url( 'clubs' ),
-	],
-	'portfolios' => [
-		'text' => 'Portfolios',
-		'url'  => home_url( 'portfolios' ),
-	],
-];
+$navbar_nav_menu_items = openlab_get_global_nav_links();
 
 $user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
 
@@ -90,9 +65,11 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 
 		<?php endif; ?>
 
-		<div class="navbar-action-link-main-menu navbar-action-link-hoverable">
-			<span class="screen-reader-text">Main Menu</span>
-			<i class="fa fa-bars" aria-hidden="true"></i>
+		<div class="navbar-action-link-main-menu navbar-action-link-toggleable">
+			<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="main-menu-flyout">
+				<span class="screen-reader-text">Main Menu</span>
+				<?php get_template_part( 'parts/navbar/menu-icon' ); ?>
+			</button>
 		</div>
 	</div>
 
@@ -105,4 +82,6 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>
 	<?php endif; ?>
+
+	<?php get_template_part( 'parts/navbar/main-menu-flyout' ); ?>
 </div>

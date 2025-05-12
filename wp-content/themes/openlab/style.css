@@ -7494,6 +7494,7 @@ blockquote .h6 {
   align-items: center;
   display: flex;
   gap: 20px;
+  padding-right: 10px;
 }
 .openlab-navbar .navbar-action-links i.fa {
   margin: 0;
@@ -7566,7 +7567,6 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   z-index: 500;
   width: max-content;
   margin-top: -6px;
-  min-width: 200px;
   padding: 0;
   opacity: 0;
   visibility: hidden;
@@ -7622,12 +7622,32 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .openlab-navbar-flyouts .flyout-menu-items li {
   position: relative;
 }
-.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after {
+.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after:not(.my-openlab-main-menu-link) {
   background: #ec6348;
   content: '';
   position: absolute;
   top: 15px;
   left: 8px;
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
+}
+.openlab-navbar-flyouts .flyout-menu-items li a {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+}
+.openlab-navbar-flyouts .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon {
+  display: inline-block;
+  position: relative;
+}
+.openlab-navbar-flyouts .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon::after {
+  background: #ec6348;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
   width: 7px;
   height: 7px;
   display: block;
@@ -7642,7 +7662,7 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   width: 100%;
   padding: 0 var(--flyout-h-padding);
   position: relative;
-  padding-right: 1.5rem;
+  padding-right: 60px;
 }
 .openlab-navbar-flyouts button.flyout-submenu-toggle[aria-expanded="true"],
 .openlab-navbar-flyouts button.flyout-submenu-toggle:hover {

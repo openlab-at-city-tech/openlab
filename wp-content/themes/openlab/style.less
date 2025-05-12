@@ -319,6 +319,7 @@ blockquote {
 		align-items: center;
 		display: flex;
 		gap: 20px;
+		padding-right: 10px;
 
 		i.fa {
 			margin: 0;
@@ -412,7 +413,6 @@ button[aria-expanded="true"] svg.navbar-icon {
 		z-index: 500;
 		width: max-content;
 		margin-top: -6px;
-		min-width: 200px;
 		padding: 0;
 		opacity: 0;
 		visibility: hidden;
@@ -481,7 +481,8 @@ button[aria-expanded="true"] svg.navbar-icon {
 
 		li {
 			position: relative;
-			&.has-unread::after {
+
+			&.has-unread::after:not(.my-openlab-main-menu-link) {
 				background: @orange;
 				content: '';
 				position: absolute;
@@ -491,6 +492,31 @@ button[aria-expanded="true"] svg.navbar-icon {
 				height: 7px;
 				display: block;
 				border-radius: 50%;
+			}
+
+			a {
+				align-items: center;
+				display: flex;
+				gap: 4px;
+			}
+		}
+
+		.my-openlab-main-menu-link.has-unread {
+			.flyout-menu-icon {
+				display: inline-block;
+				position: relative;
+
+				&::after {
+					background: @orange;
+					content: '';
+					position: absolute;
+					top: 0;
+					right: 0;
+					width: 7px;
+					height: 7px;
+					display: block;
+					border-radius: 50%;
+				}
 			}
 		}
 	}
@@ -504,7 +530,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 		width: 100%;
 		padding: 0 var(--flyout-h-padding);
 		position: relative;
-		padding-right: 1.5rem; // make space for the arrow
+		padding-right: 60px;
 
 		&[aria-expanded="true"],
 		&:hover {

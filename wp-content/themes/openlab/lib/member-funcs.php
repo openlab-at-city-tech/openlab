@@ -2273,9 +2273,17 @@ function openlab_get_my_dashboard_url( $user_id ) {
  * @return array
  */
 function openlab_get_user_unread_counts( $user_id ) {
+	static $counts;
+
+	if ( isset( $counts ) ) {
+		return $counts;
+	}
+
 	$user_unread_messages_count = bp_get_total_unread_messages_count();
 	$user_group_invites_count   = groups_get_invites_for_user();
-	$user_friend_request_count  = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+
+	$user_friend_requests      = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+	$user_friend_request_count = count( $user_friend_requests );
 
 	$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
 	if ( $user_groups ) {
@@ -2291,10 +2299,49 @@ function openlab_get_user_unread_counts( $user_id ) {
 		$user_connection_invites_count = 0;
 	}
 
-	return [
-		'messages'          => $user_unread_messages_count,
-		'group_invites'     => $user_group_invites_count,
-		'friend_requests'   => count( $user_friend_request_count ),
+	$counts = [
+		'messages'           => $user_unread_messages_count,
+		'group_invites'      => $user_group_invites_count,
+		'friend_requests'    => $user_friend_request_count,
 		'connection_invites' => $user_connection_invites_count,
+	];
+
+	return $counts;
+}
+
+/**
+ * Gets a list of global nav links.
+ *
+ * These links ("About", etc) are shared between the top-level desktop
+ * navbar and the hamburger menu.
+ *
+ * @return array
+ */
+function openlab_get_global_nav_links() {
+	return [
+		'about' => [
+			'text' => 'About',
+			'url'  => home_url( 'about' ),
+		],
+		'people' => [
+			'text' => 'People',
+			'url'  => home_url( 'members' ),
+		],
+		'courses' => [
+			'text' => 'Courses',
+			'url'  => home_url( 'courses' ),
+		],
+		'projects' => [
+			'text' => 'Projects',
+			'url'  => home_url( 'projects' ),
+		],
+		'clubs' => [
+			'text' => 'Clubs',
+			'url'  => home_url( 'clubs' ),
+		],
+		'portfolios' => [
+			'text' => 'Portfolios',
+			'url'  => home_url( 'portfolios' ),
+		],
 	];
 }
