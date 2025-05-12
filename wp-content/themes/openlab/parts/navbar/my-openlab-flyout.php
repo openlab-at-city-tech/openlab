@@ -7,6 +7,8 @@ if ( ! is_user_logged_in() ) {
 	return;
 }
 
+$my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
+
 $links = [
 	[
 		'text'     => 'My Settings',
@@ -21,7 +23,7 @@ $links = [
 			],
 			[
 				'text' => 'Notifications',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'notifications' ] ) ),
+				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'notifications' ] ) ),
 			],
 			[
 				'text' => 'Privacy & Data',
@@ -38,93 +40,109 @@ $links = [
 		'children' => [
 			[
 				'text' => 'All',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'activity' ] ) ),
+				'href' => $my_activity_url,
 			],
 			[
 				'text' => 'Mine',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'activity', 'just-me' ] ) ),
+				'href' => add_query_arg( 'type', 'mine', $my_activity_url ),
 			],
 			[
 				'text' => 'Favorites',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'activity', 'favorites' ] ) ),
+				'href' => add_query_arg( 'type', 'favorites', $my_activity_url ),
 			],
 			[
 				'text' => '@Mentions',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'activity', 'mentions' ] ) ),
+				'href' => add_query_arg( 'type', 'mentions', $my_activity_url ),
 			],
 			[
 				'text' => 'Starred',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'activity', 'starred' ] ) ),
+				'href' => add_query_arg( 'type', 'starred', $my_activity_url ),
 			],
 		],
 	],
-	[
+];
+
+if ( openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
+	$links[] = [
 		'text' => 'My Portfolio',
-		'href' => home_url( '/portfolio' ),
-	],
-	[
-		'text' => 'My Courses',
-		'href' => home_url( '/courses/my-courses' ),
-	],
-	[
-		'text' => 'My Projects',
-		'href' => home_url( '/projects/my-projects' ),
-	],
-	[
-		'text' => 'My Clubs',
-		'href' => home_url( '/clubs/my-clubs' ),
-	],
-	[
-		'text'     => 'My Friends',
-		'children' => [
-			[
-				'text' => 'Requests Received',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
-			],
+		'href' => openlab_get_user_portfolio_url( bp_loggedin_user_id() ),
+	];
+}
+
+$links[] = [
+	'text' => 'My Courses',
+	'href' => home_url( '/courses/my-courses' ),
+];
+
+$links[] = [
+	'text' => 'My Projects',
+	'href' => home_url( '/projects/my-projects' ),
+];
+
+$links[] = [
+	'text' => 'My Clubs',
+	'href' => home_url( '/clubs/my-clubs' ),
+];
+
+$links[] = [
+	'text'     => 'My Friends',
+	'children' => [
+		[
+			'text' => 'Friend List',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
+		],
+		[
+			'text' => 'Requests Received',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
 		],
 	],
-	[
-		'text'     => 'My Messages',
-		'children' => [
-			[
-				'text' => 'Inbox',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
-			],
-			[
-				'text' => 'Sent',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
-			],
-			[
-				'text' => 'Compose',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
-			],
+];
+
+$links[] = [
+	'text'     => 'My Messages',
+	'children' => [
+		[
+			'text' => 'Inbox',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+		],
+		[
+			'text' => 'Sent',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
+		],
+		[
+			'text' => 'Compose',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
 		],
 	],
-	[
-		'text'     => 'My Invitations',
-		'children' => [
-			[
-				'text' => 'Invitations Received',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
-			],
-			[
-				'text' => 'Invite New Members',
-				'href' => home_url( '/invite' ),
-			],
-			[
-				'text' => 'Sent Invitations',
-				'href' => home_url( '/invite/sent' ),
-			],
+];
+
+$links[] = [
+	'text'     => 'My Invitations',
+	'children' => [
+		[
+			'text' => 'Invitations Received',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
+		],
+		[
+			'text' => 'Invite New Members',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone' ] ) ),
+		],
+		[
+			'text' => 'Sent Invitations',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone', 'sent-invites' ] ) ),
 		],
 	],
-	[
-		'text' => 'My Dashboard',
-		'href' => admin_url(),
-	],
-	[
-		'text' => 'Sign Out',
-		'href' => wp_logout_url(),
-	],
+];
+
+$links[] = [
+	'text' => 'My Dashboard',
+	'href' => openlab_get_my_dashboard_url( bp_loggedin_user_id() ),
+];
+
+$links[] = [
+	'class' => 'my-openlab-logout',
+	'text'  => 'Sign Out',
+	'href'  => wp_logout_url(),
 ];
 
 ?>
@@ -138,9 +156,18 @@ $links = [
 		<?php foreach ( $links as $link ) : ?>
 			<?php
 			$has_children = ! empty( $link['children'] );
-			$li_class     = $has_children ? 'has-children' : '';
+
+			$li_classes = [];
+			if ( $has_children ) {
+				$li_classes[] = 'has-children';
+			}
+
+			if ( ! empty( $link['class'] ) ) {
+				$li_classes[] = $link['class'];
+			}
+
 			?>
-			<li class="<?php echo esc_attr( $li_class ); ?>">
+			<li class="<?php echo esc_attr( implode( ' ', $li_classes ) ); ?>">
 				<?php if ( $has_children ) : ?>
 					<?php $submenu_id = sanitize_title( $link['text'] ) . '-submenu'; ?>
 					<button class="flyout-submenu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="<?php echo esc_attr( $submenu_id ); ?>">
@@ -158,6 +185,10 @@ $links = [
 				<?php else : ?>
 					<a href="<?php echo esc_url( $link['href'] ); ?>">
 						<?php echo esc_html( $link['text'] ); ?>
+
+						<?php if ( 'my-openlab-logout' === $link['class'] ) : ?>
+							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/log-out.png' ); ?>" alt="Logout Icon" class="logout-icon" aria-hidden="true" />
+						<?php endif; ?>
 					</a>
 				<?php endif; ?>
 			</li>

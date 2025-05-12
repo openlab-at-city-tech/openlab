@@ -203,15 +203,7 @@ function openlab_member_sidebar_menu( $mobile = false ) {
                     <li class="sq-bullet <?php if (bp_is_current_action('invites') || bp_is_current_action('sent-invites') || bp_is_current_action('invite-new-members')) : ?>selected-page<?php endif ?> mol-invites my-invites"><a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup($invite_count); ?></a></li>
                 <?php endif ?>
 
-                <?php
-                // My Dashboard points to the my-sites.php Dashboard panel for this user. However,
-                // this panel only works if looking at a site where the user has Dashboard-level
-                // permissions. So we have to find a valid site for the logged in user.
-                $primary_site_id = get_user_meta(bp_loggedin_user_id(), 'primary_blog', true);
-                $primary_site_url = set_url_scheme(get_blog_option($primary_site_id, 'siteurl'));
-                ?>
-
-                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo $primary_site_url . '/wp-admin/my-sites.php' ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></li>
+                <li class="sq-bullet mol-dashboard my-dashboard"><a href="<?php echo esc_url( openlab_get_my_dashboard_url( bp_loggedin_user_id() ) ); ?>">My Dashboard <span class="fa fa-chevron-circle-right" aria-hidden="true"></span></a></li>
 
             </ul>
 

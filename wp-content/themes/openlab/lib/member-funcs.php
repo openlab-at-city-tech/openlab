@@ -2249,3 +2249,19 @@ function openlab_add_noindex_to_user_profile() {
 	}
 }
 add_action( 'wp_head', 'openlab_add_noindex_to_user_profile', 0 );
+
+/**
+ * Gets the 'My Dashboard' URL for a user.
+ *
+ * My Dashboard points to the my-sites.php Dashboard panel for this user.
+ * However, this panel only works if looking at a site where the user has
+ * Dashboard-level permissions. So we have to find a valid site for
+ * the logged in user.
+ *
+ * @return string
+ */
+function openlab_get_my_dashboard_url( $user_id ) {
+	$primary_site_id = get_user_meta( $user_id, 'primary_blog', true );
+	$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
+	return $primary_site_url . '/wp-admin/my-sites.php';
+}

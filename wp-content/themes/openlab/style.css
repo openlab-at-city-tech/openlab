@@ -7602,6 +7602,12 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .openlab-navbar-flyouts .flyout-menu-items .flyout-submenu {
   font-weight: 400;
 }
+.openlab-navbar-flyouts .flyout-menu-items .my-openlab-logout a {
+  color: #F56A6A;
+}
+.openlab-navbar-flyouts .flyout-menu-items .my-openlab-logout img {
+  margin-left: 3px;
+}
 .openlab-navbar-flyouts button.flyout-submenu-toggle {
   background: none;
   padding: 0;
