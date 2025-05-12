@@ -244,7 +244,7 @@ blockquote {
 
 // Main navbar.
 .openlab-navbar {
-	box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
 	position: relative;
 	z-index: 1;
 	align-items: center;
@@ -372,6 +372,8 @@ blockquote {
 }
 
 .openlab-navbar-flyouts {
+	--flyout-h-padding: 16px;
+
 	position: relative;
 	.flyout-menu {
 		position: absolute;
@@ -379,9 +381,9 @@ blockquote {
 		border: 1px solid #ccc;
 		z-index: 500;
 		width: max-content;
-		margin-top: -2px;
+		margin-top: -6px;
 		min-width: 200px;
-		padding: 0.5rem 0;
+		padding: 0;
 		opacity: 0;
 		visibility: hidden;
 
@@ -394,10 +396,17 @@ blockquote {
 			padding: 0;
 		}
 
+		li {
+			margin: 0;
+			line-height: 36px;
+		}
+
 		li a {
-			display: block;
-			padding: 0.5rem 1rem;
 			text-decoration: none;
+			display: block;
+			height: 100%;
+			padding: 0 var(--flyout-h-padding);
+			width: 100%;
 		}
 
 		li a:hover,
@@ -406,11 +415,24 @@ blockquote {
 		}
 
 		&.is-open {
-			z-index: 1000;
+			z-index: 500;
 
 			opacity: 1;
 			pointer-events: auto;
 			visibility: visible;
+		}
+	}
+
+	.flyout-heading {
+		align-items: center;
+		background: @lightTeal;
+		display: flex;
+		gap: 6px;
+		font-weight: @bold;
+		padding: 12px var(--flyout-h-padding);
+
+		i.fa {
+			font-size: 18px;
 		}
 	}
 }

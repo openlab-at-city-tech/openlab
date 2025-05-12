@@ -7428,7 +7428,7 @@ blockquote .h6 {
   }
 }
 .openlab-navbar {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
   position: relative;
   z-index: 1;
   align-items: center;
@@ -7534,6 +7534,7 @@ blockquote .h6 {
   color: #3ba49b;
 }
 .openlab-navbar-flyouts {
+  --flyout-h-padding: 16px;
   position: relative;
 }
 .openlab-navbar-flyouts .flyout-menu {
@@ -7542,9 +7543,9 @@ blockquote .h6 {
   border: 1px solid #ccc;
   z-index: 500;
   width: max-content;
-  margin-top: -2px;
+  margin-top: -6px;
   min-width: 200px;
-  padding: 0.5rem 0;
+  padding: 0;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.2s ease, visibility 0.2s ease;
@@ -7555,20 +7556,37 @@ blockquote .h6 {
   margin: 0;
   padding: 0;
 }
+.openlab-navbar-flyouts .flyout-menu li {
+  margin: 0;
+  line-height: 36px;
+}
 .openlab-navbar-flyouts .flyout-menu li a {
-  display: block;
-  padding: 0.5rem 1rem;
   text-decoration: none;
+  display: block;
+  height: 100%;
+  padding: 0 var(--flyout-h-padding);
+  width: 100%;
 }
 .openlab-navbar-flyouts .flyout-menu li a:hover,
 .openlab-navbar-flyouts .flyout-menu li a:focus {
   background-color: #f0f0f0;
 }
 .openlab-navbar-flyouts .flyout-menu.is-open {
-  z-index: 1000;
+  z-index: 500;
   opacity: 1;
   pointer-events: auto;
   visibility: visible;
+}
+.openlab-navbar-flyouts .flyout-heading {
+  align-items: center;
+  background: #e0f5f1;
+  display: flex;
+  gap: 6px;
+  font-weight: 700;
+  padding: 12px var(--flyout-h-padding);
+}
+.openlab-navbar-flyouts .flyout-heading i.fa {
+  font-size: 18px;
 }
 .pagination {
   margin: 0;
