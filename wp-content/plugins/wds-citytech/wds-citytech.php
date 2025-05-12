@@ -3349,6 +3349,10 @@ add_action(
 		];
 
 		$callback = function( $value ) {
+			if ( ! is_array( $value ) ) {
+				$value = [];
+			}
+
 			$value['who_can_upload'] = 2;
 			return $value;
 		};
