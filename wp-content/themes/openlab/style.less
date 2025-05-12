@@ -352,6 +352,16 @@ blockquote {
 			display: block;
 			border-radius: 50%;
 		}
+
+		&.navbar-flyout-toggle-login {
+			align-items: center;
+			background: @lightTeal;
+			border-radius: 8px;
+			display: flex;
+			font-weight: @bold;
+			gap: 6px;
+			padding: 12px 15px;
+		}
 	}
 
 	button.navbar-flyout-toggle:hover,
@@ -456,6 +466,34 @@ button[aria-expanded="true"] svg.navbar-icon {
 			opacity: 1;
 			pointer-events: auto;
 			visibility: visible;
+		}
+
+		&.flyout-menu-login {
+			min-width: 300px;
+
+			& > div {
+				padding: 24px;
+			}
+
+			label {
+				font-weight: @normal;
+			}
+
+			.btn {
+				background: @80gray;
+				color: @white;
+				font-size: 13.5px;
+			}
+
+			.navbar-forgot-password {
+				margin-bottom: 20px;
+				text-align: right;
+			}
+
+			.flyout-menu-login-register {
+				background: @5gray;
+				text-align: center;
+			}
 		}
 	}
 

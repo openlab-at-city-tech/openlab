@@ -50,7 +50,6 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 						<span class="screen-reader-text">Favorites</span>
 						<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
 					</button>
-
 				</div>
 
 				<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
@@ -62,7 +61,12 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 				</div>
 			</div>
 		<?php else : ?>
-
+			<div class="navbar-action-link-login navbar-action-link-toggleable">
+				<button class="navbar-flyout-toggle navbar-flyout-toggle-login" aria-haspopup="true" aria-expanded="false" aria-controls="login-flyout">
+					<span>Sign In</span>
+					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+				</button>
+			</div>
 		<?php endif; ?>
 
 		<div class="navbar-action-link-main-menu navbar-action-link-toggleable">
@@ -81,6 +85,8 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>
+	<?php else : ?>
+		<?php get_template_part( 'parts/navbar/login-flyout' ); ?>
 	<?php endif; ?>
 
 	<?php get_template_part( 'parts/navbar/main-menu-flyout' ); ?>

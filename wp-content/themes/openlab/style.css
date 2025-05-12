@@ -7524,6 +7524,15 @@ blockquote .h6 {
   display: block;
   border-radius: 50%;
 }
+.openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login {
+  align-items: center;
+  background: #e0f5f1;
+  border-radius: 8px;
+  display: flex;
+  font-weight: 700;
+  gap: 6px;
+  padding: 12px 15px;
+}
 .openlab-navbar button.navbar-flyout-toggle:hover,
 .openlab-navbar .navbar-action-link-link:hover {
   opacity: 0.7;
@@ -7604,6 +7613,28 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   opacity: 1;
   pointer-events: auto;
   visibility: visible;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login {
+  min-width: 300px;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login > div {
+  padding: 24px;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login label {
+  font-weight: 400;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .btn {
+  background: #333333;
+  color: #ffffff;
+  font-size: 13.5px;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .navbar-forgot-password {
+  margin-bottom: 20px;
+  text-align: right;
+}
+.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .flyout-menu-login-register {
+  background: #f0f0f0;
+  text-align: center;
 }
 .openlab-navbar-flyouts .flyout-heading {
   align-items: center;
