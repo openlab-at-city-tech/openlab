@@ -2345,3 +2345,16 @@ function openlab_get_global_nav_links() {
 		],
 	];
 }
+
+/**
+ * Don't allow access to the /members/ page.
+ *
+ * @return void
+ */
+function openlab_restrict_members_page() {
+	if ( bp_is_directory() && bp_is_members_directory() ) {
+		wp_redirect( home_url( 'people' ) );
+		exit;
+	}
+}
+add_action( 'template_redirect', 'openlab_restrict_members_page' );
