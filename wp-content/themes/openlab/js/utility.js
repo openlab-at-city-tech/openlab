@@ -810,7 +810,8 @@ OpenLab.utility = (function ($) {
 						const menuRect = menu.getBoundingClientRect();
 						const toggleRect = toggle.getBoundingClientRect();
 						const navbarRect = navbar.getBoundingClientRect();
-						const flyoutContainerRect = document.querySelector( '.openlab-navbar-flyouts' ).getBoundingClientRect();
+						const flyoutContainer = document.querySelector( '.openlab-navbar-flyouts' );
+						const flyoutContainerRect = flyoutContainer.getBoundingClientRect();
 
 						// Position flyout-menu to match left edge of toggle.
 						const newLeft = toggleRect.left - flyoutContainerRect.left;
@@ -818,9 +819,13 @@ OpenLab.utility = (function ($) {
 
 						// Ensure that the flyout-menu is within the viewport.
 						const updatedMenuRect = menu.getBoundingClientRect();
+						const flyoutParentRect = flyoutContainer.getBoundingClientRect();
+
+						const menuLeftRelative = updatedMenuRect.left - flyoutParentRect.left;
 						const spillover = updatedMenuRect.right - window.innerWidth;
-						if ( spillover > 0 ) {
-							const adjustedLeft = updatedMenuRect.left - flyoutContainerRect.left - spillover - 20;
+
+						if (spillover > 0) {
+							const adjustedLeft = Math.max(menuLeftRelative - spillover - 20, 0);
 							menu.style.left = `${adjustedLeft}px`;
 						}
 					}
@@ -858,6 +863,32 @@ OpenLab.utility = (function ($) {
 
 			document.querySelectorAll('.flyout-submenu').forEach(menu => {
 				menu.hidden = true;
+			});
+
+			document.addEventListener('click', function (e) {
+				const nav = document.querySelector('.openlab-navbar');
+				const isClickInsideNav = nav.contains(e.target);
+
+				if (!isClickInsideNav) {
+					// Close all open flyout menus
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
+						el.classList.remove('is-open')
+					);
+					document.querySelectorAll('.flyout-menu').forEach(el =>
+						el.classList.remove('is-open')
+					);
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+
+					// Close all submenus too
+					document.querySelectorAll('.flyout-submenu').forEach(el => {
+						el.hidden = true;
+					});
+					document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+				}
 			});
 		},
 		setUpItemList: function() {

@@ -14,9 +14,15 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 ?>
 
 <nav class="openlab-navbar" role="navigation">
-	<header class="navbar-logo pull-left"><a href="<?php echo bp_get_root_url(); ?>"><span class="screen-reader-text">OpenLab at City Tech</span></a></header>
+	<header class="navbar-logo pull-left">
+		<a href="<?php echo bp_get_root_url(); ?>">
+			<span class="screen-reader-text">OpenLab at City Tech</span>
+			<span class="hidden-xs"><?php include( ABSPATH . '/wp-content/mu-plugins/parts/persistent/svg-logo.php' ); ?></span>
+			<span class="visible-xs"><?php include( ABSPATH . '/wp-content/mu-plugins/parts/persistent/svg-logo-notext.php' ); ?></span>
+		</a>
+	</header>
 
-	<div class="navbar-nav-menu">
+	<div class="navbar-nav-menu hidden-sm hidden-xs">
 		<ul class="navbar-nav">
 			<?php foreach ( $navbar_nav_menu_items as $item ) : ?>
 				<li class="navbar-nav-item">
