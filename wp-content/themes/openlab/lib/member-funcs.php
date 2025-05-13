@@ -2325,7 +2325,7 @@ function openlab_get_global_nav_links() {
 		],
 		'people' => [
 			'text' => 'People',
-			'url'  => home_url( 'members' ),
+			'url'  => home_url( 'people' ),
 		],
 		'courses' => [
 			'text' => 'Courses',
