@@ -867,7 +867,8 @@ OpenLab.utility = (function ($) {
 
 			document.addEventListener('click', function (e) {
 				const nav = document.querySelector('.openlab-navbar');
-				const isClickInsideNav = nav.contains(e.target);
+				const flyoutContainer = document.querySelector('.openlab-navbar-flyouts');
+				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
 
 				if (!isClickInsideNav) {
 					// Close all open flyout menus
