@@ -658,7 +658,7 @@ function bp_parse_ajax_referer_query( $referer_query ) {
  * @param WP_Query $query The WordPress query object.
  * @return true
  */
-function bp_reset_query( $bp_request = '', WP_Query $query = null ) {
+function bp_reset_query( $bp_request = '', ?WP_Query $query = null ) {
 	global $wp;
 
 	// Get BuddyPress main instance.
