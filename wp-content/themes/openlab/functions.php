@@ -270,6 +270,7 @@ function enqueue_less_styles($tag, $handle) {
 
 add_filter('style_loader_tag', 'enqueue_less_styles', 5, 2);
 
+
 /**
  * Get content with formatting in place
  * @param type $more_link_text
@@ -472,3 +473,15 @@ function openlab_render_collapsible_definition( $type, $label, $content ) {
 	</div>
 	<?php
 }
+
+/**
+ * Never show admin bar on front end of main site.
+ */
+function openlab_remove_admin_bar( $show ) {
+	if ( ! is_admin() ) {
+		return false;
+	}
+
+	return $show;
+}
+add_filter( 'show_admin_bar', 'openlab_remove_admin_bar' );

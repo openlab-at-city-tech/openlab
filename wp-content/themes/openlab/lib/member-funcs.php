@@ -2249,3 +2249,99 @@ function openlab_add_noindex_to_user_profile() {
 	}
 }
 add_action( 'wp_head', 'openlab_add_noindex_to_user_profile', 0 );
+
+/**
+ * Gets the 'My Dashboard' URL for a user.
+ *
+ * My Dashboard points to the my-sites.php Dashboard panel for this user.
+ * However, this panel only works if looking at a site where the user has
+ * Dashboard-level permissions. So we have to find a valid site for
+ * the logged in user.
+ *
+ * @return string
+ */
+function openlab_get_my_dashboard_url( $user_id ) {
+	$primary_site_id = get_user_meta( $user_id, 'primary_blog', true );
+	$primary_site_url = set_url_scheme( get_blog_option( $primary_site_id, 'siteurl' ) );
+	return $primary_site_url . '/wp-admin/my-sites.php';
+}
+
+/**
+ * Gets the unread counts for a user.
+ *
+ * @param int $user_id User ID.
+ * @return array
+ */
+function openlab_get_user_unread_counts( $user_id ) {
+	static $counts;
+
+	if ( isset( $counts ) ) {
+		return $counts;
+	}
+
+	$user_unread_messages_count = bp_get_total_unread_messages_count();
+	$user_group_invites_count   = groups_get_invites_for_user();
+
+	$user_friend_requests      = friends_get_friendship_request_user_ids( bp_loggedin_user_id() );
+	$user_friend_request_count = count( $user_friend_requests );
+
+	$user_groups = bp_get_user_groups( bp_loggedin_user_id(), [ 'is_admin' => true ] );
+	if ( $user_groups ) {
+		$connection_invitations = \OpenLab\Connections\Invitation::get(
+			[
+				'invitee_group_id' => array_keys( $user_groups ),
+				'pending_only'     => true,
+			]
+		);
+
+		$user_connection_invites_count = count( $connection_invitations );
+	} else {
+		$user_connection_invites_count = 0;
+	}
+
+	$counts = [
+		'messages'           => $user_unread_messages_count,
+		'group_invites'      => $user_group_invites_count,
+		'friend_requests'    => $user_friend_request_count,
+		'connection_invites' => $user_connection_invites_count,
+	];
+
+	return $counts;
+}
+
+/**
+ * Gets a list of global nav links.
+ *
+ * These links ("About", etc) are shared between the top-level desktop
+ * navbar and the hamburger menu.
+ *
+ * @return array
+ */
+function openlab_get_global_nav_links() {
+	return [
+		'about' => [
+			'text' => 'About',
+			'url'  => home_url( 'about' ),
+		],
+		'people' => [
+			'text' => 'People',
+			'url'  => home_url( 'members' ),
+		],
+		'courses' => [
+			'text' => 'Courses',
+			'url'  => home_url( 'courses' ),
+		],
+		'projects' => [
+			'text' => 'Projects',
+			'url'  => home_url( 'projects' ),
+		],
+		'clubs' => [
+			'text' => 'Clubs',
+			'url'  => home_url( 'clubs' ),
+		],
+		'portfolios' => [
+			'text' => 'Portfolios',
+			'url'  => home_url( 'portfolios' ),
+		],
+	];
+}

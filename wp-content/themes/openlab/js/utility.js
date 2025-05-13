@@ -25,6 +25,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
 			OpenLab.utility.initClickableCards();
 			OpenLab.utility.initPortfolioProfileLinkToggle();
+			OpenLab.utility.setUpNav();
 
 			//EO Calendar JS filtering
 			if (typeof wp !== 'undefined' && typeof wp.hooks !== 'undefined') {
@@ -778,6 +779,117 @@ OpenLab.utility = (function ($) {
 					});
 				})
 			}
+		},
+		setUpNav: function() {
+			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
+				toggle.addEventListener('click', (e) => {
+					const menuId = toggle.getAttribute('aria-controls');
+					const menu = document.getElementById(menuId);
+					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+
+					// Close all open menus
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(b => {
+						b.classList.remove('is-open');
+					});
+
+					document.querySelectorAll('.flyout-menu').forEach(b => {
+						b.classList.remove('is-open');
+					});
+
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(b => {
+						b.setAttribute('aria-expanded', 'false');
+					});
+
+					// Toggle current menu
+					if ( ! isOpen ) {
+						toggle.setAttribute('aria-expanded', 'true');
+						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+						menu.classList.add( 'is-open' );
+
+						const navbar = document.querySelector( '.openlab-navbar' );
+						const menuRect = menu.getBoundingClientRect();
+						const toggleRect = toggle.getBoundingClientRect();
+						const navbarRect = navbar.getBoundingClientRect();
+						const flyoutContainer = document.querySelector( '.openlab-navbar-flyouts' );
+						const flyoutContainerRect = flyoutContainer.getBoundingClientRect();
+
+						// Position flyout-menu to match left edge of toggle.
+						const newLeft = toggleRect.left - flyoutContainerRect.left;
+						menu.style.left = `${newLeft}px`;
+
+						// Ensure that the flyout-menu is within the viewport.
+						const updatedMenuRect = menu.getBoundingClientRect();
+						const flyoutParentRect = flyoutContainer.getBoundingClientRect();
+
+						const menuLeftRelative = updatedMenuRect.left - flyoutParentRect.left;
+						const spillover = updatedMenuRect.right - window.innerWidth;
+
+						if (spillover > 0) {
+							const adjustedLeft = Math.max(menuLeftRelative - spillover - 20, 0);
+							menu.style.left = `${adjustedLeft}px`;
+						}
+					}
+				});
+			});
+
+			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
+			submenuToggles.forEach( toggle => {
+				toggle.addEventListener('click', function (e) {
+					e.preventDefault();
+
+					const isOpen = this.getAttribute('aria-expanded') === 'true';
+					const submenuId = this.getAttribute('aria-controls');
+					const submenu = document.getElementById(submenuId);
+
+					// Close all other open submenus
+					submenuToggles.forEach(otherToggle => {
+					const otherSubmenuId = otherToggle.getAttribute('aria-controls');
+					const otherSubmenu = document.getElementById(otherSubmenuId);
+
+					otherToggle.setAttribute('aria-expanded', 'false');
+						otherSubmenu.hidden = true;
+					});
+
+					// Toggle this one
+					if (!isOpen) {
+						this.setAttribute('aria-expanded', 'true');
+						submenu.hidden = false;
+					} else {
+						this.setAttribute('aria-expanded', 'false');
+						submenu.hidden = true;
+					}
+				});
+			});
+
+			document.querySelectorAll('.flyout-submenu').forEach(menu => {
+				menu.hidden = true;
+			});
+
+			document.addEventListener('click', function (e) {
+				const nav = document.querySelector('.openlab-navbar');
+				const isClickInsideNav = nav.contains(e.target);
+
+				if (!isClickInsideNav) {
+					// Close all open flyout menus
+					document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
+						el.classList.remove('is-open')
+					);
+					document.querySelectorAll('.flyout-menu').forEach(el =>
+						el.classList.remove('is-open')
+					);
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+
+					// Close all submenus too
+					document.querySelectorAll('.flyout-submenu').forEach(el => {
+						el.hidden = true;
+					});
+					document.querySelectorAll('.flyout-submenu-toggle').forEach(el =>
+						el.setAttribute('aria-expanded', 'false')
+					);
+				}
+			});
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings
