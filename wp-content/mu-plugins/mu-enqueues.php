@@ -70,9 +70,11 @@ function openlab_mu_enqueue() {
         wp_register_script('openlab-nav-js', plugins_url('js', __FILE__) . '/openlab/openlab.nav.js', array('jquery'), $js_ver, true);
         wp_enqueue_script('openlab-nav-js');
         wp_localize_script(
-                'openlab-nav-js', 'utilityVars', array(
-            'loginForm' => openlab_get_loginform(),
-                )
+			'openlab-nav-js',
+			'utilityVars',
+			array(
+				'loginForm' => openlab_get_loginform(),
+			)
         );
 
         wp_register_script('openlab-theme-fixes-js', plugins_url('js', __FILE__) . '/openlab/openlab.theme.fixes.js', array('jquery'), $js_ver, true);
@@ -267,33 +269,6 @@ function openlab_truncation_prep() {
 
 add_action('wp_head', 'openlab_truncation_prep', 2);
 add_action('admin_head', 'openlab_truncation_prep', 2);
-
-function admin_bar_padding_in_admin() {
-    ?>
-
-    <style type="text/css" media="screen">
-        html.wp-toolbar {
-            padding-top: 0;
-        }
-        html.wp-toolbar #wpcontent,
-        html.wp-toolbar #adminmenuwrap{
-            padding-top: 50px;
-        }
-        @media (max-width: 767px){
-            html.wp-toolbar #wpcontent,
-            html.wp-toolbar #adminmenuwrap{
-                padding-top: 115px;
-            }
-            html.wp-toolbar #wpbody{
-                padding-top: 0;
-            }
-        }
-    </style>
-
-    <?php
-}
-
-add_action('admin_footer', 'admin_bar_padding_in_admin');
 
 function admin_bar_device_width_detection() {
 	// Don't load on widgets or other API requests.

@@ -29,30 +29,6 @@ function openlab_sitewide_header($location = 'header') {
     <?php
 }
 
-function openlab_sitewide_header_to_admin_and_group_sites() {
-	// Don't load on widgets or other API requests.
-	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
-		return;
-	}
-
-	if ( ! cboxol_show_admin_bar_for_anonymous_users( get_current_blog_id() ) && ! is_user_logged_in() ) {
-		return;
-	}
-
-    if (get_current_blog_id() !== 1 || is_admin()) {
-        ?>
-
-        <nav class="navbar navbar-default oplb-bs navbar-location-oplb-bs visible-xs" role="navigation">
-            <?php openlab_sitewide_header(); ?>
-        </nav>
-
-        <?php
-    }
-}
-
-add_action('wp_footer', 'openlab_sitewide_header_to_admin_and_group_sites');
-add_action('in_admin_header', 'openlab_sitewide_header_to_admin_and_group_sites');
-
 function openlab_mu_site_wide_bp_search( $mode = 'desktop', $location = '' ) {
     $mobile_mup = '';
 

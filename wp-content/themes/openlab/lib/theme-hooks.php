@@ -120,13 +120,6 @@ function openlab_main_menu( $location = 'header' ) {
     <?php
 }
 
-/**
- * Main menu in header
- */
-function openlab_header_bar() {
-    openlab_main_menu('header');
-}
-
 /*
  * Main menu in footer
  */
@@ -135,7 +128,6 @@ function openlab_footer_bar() {
     openlab_main_menu('footer');
 }
 
-add_action('bp_before_header', 'openlab_header_bar', 10);
 add_action('bp_before_footer', 'openlab_footer_bar', 6);
 
 function openlab_custom_menu_items( $items, $menu ) {
