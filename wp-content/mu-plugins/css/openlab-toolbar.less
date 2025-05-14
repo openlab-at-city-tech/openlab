@@ -141,12 +141,19 @@
 	position: relative;
 
 	a {
+		padding: 0;
+		display: inline-block;
+		font-weight: 700;
+	}
+
+	& > a {
 		align-items: center;
 		display: flex;
 		gap: 8px;
+		padding: 0 8px;
 	}
 
-	.logo-wrapper {
+	.openlab-logo {
 		display: none;
 	}
 
@@ -156,15 +163,48 @@
 	}
 
 	.ab-sub-wrapper {
-		position: absolute;
+		left: auto;
 		right: 0;
+	}
+
+	.openlab-sign-in-info {
+		.ab-empty-item {
+			display: none !important;
+			visibility: hidden;
+		}
+
+		min-width: 300px;
+		padding: 0 16px;
+	}
+
+	.openlab-sign-in-info-container {
+		display: flex;
+		gap: 12px;
+	}
+
+	.openlab-sign-in-info-sitename {
+		font-weight: 700;
+		line-height: 1.4em;
+	}
+
+	.openlab-sign-in-info-logo {
+		flex: 48px 0 0;
+		img {
+			height: 48px;
+			width: 48px;;
+		}
+	}
+
+	.openlab-sign-in-info-tagline {
+		font-size: 12px;
+		line-height: 1.4em;
 	}
 
 	@media screen and (max-width: @block-editor-breakpoint-tablet) {
 		display: block;
 		padding: 0 12px;
 
-		.logo-wrapper {
+		.openlab-logo {
 			display: inline-block;
 		}
 

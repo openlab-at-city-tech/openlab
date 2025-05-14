@@ -101,8 +101,9 @@ class OpenLab_Admin_Bar {
 		$openlab_logo = ob_get_clean();
 
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
+		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.png' );
 
-		$title = "<span>Sign In</span> <span class='logo-wrapper hidden-xs'>$openlab_logo</span><img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
+		$title = "<span>Sign In</span> <img class='openlab-logo hidden-xs' src='$openlab_logo_url' alt='OpenLab at City Tech' /><img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
 
 		$wp_admin_bar->add_node(
 			array(
@@ -122,14 +123,37 @@ class OpenLab_Admin_Bar {
 			)
 		);
 
-		$info_title = '<div class="openlab-sign-in-info-sitename">OpenLab at City Tech</div><div class="openlab-sign-in-info-tagline">A place to learn, work, and share</div>';
+		$info_title = sprintf(
+			'<div class="openlab-sign-in-info-container">
+				<div class="openlab-sign-in-info-logo"><img src="%s" alt="OpenLab at City Tech" /></div>
+				<div class="openlab-sign-in-info-text">
+					<div class="openlab-sign-in-info-sitename">OpenLab at City Tech</div>
+					<div class="openlab-sign-in-info-tagline">A place to learn, work, and share</div>
+
+					<div class="openlab-sign-in-info-signin">
+						<a href="%s">Sign In</a>
+					</div>
+
+					<div class="openlab-sign-up-info-sign-up">
+						Need an account? <a href="%s">Sign Up</a>
+					</div>
+				</div>
+			</div>',
+			$openlab_logo_url,
+			wp_login_url(),
+			bp_get_signup_page()
+		);
 
 		$wp_admin_bar->add_node(
-			array(
+			[
 				'parent' => 'openlab-sign-in-actions',
 				'id'     => 'openlab-sign-in-info',
-				'title'  => $info_title,
-			)
+				'title'  => false,
+				'meta'   => array(
+					'class' => 'openlab-sign-in-info',
+					'html'  => $info_title,
+				),
+			]
 		);
 	}
 
