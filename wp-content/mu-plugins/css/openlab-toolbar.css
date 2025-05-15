@@ -179,6 +179,11 @@
   #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .my-openlab-logo {
     display: none;
   }
+  #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .ab-sub-wrapper {
+    left: auto;
+    top: auto;
+    width: 100%;
+  }
 }
 @media screen and (max-width: 600px) {
   #wpadminbar .ab-top-menu > .menupop > .ab-sub-wrapper {
