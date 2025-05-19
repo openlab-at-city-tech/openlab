@@ -3172,18 +3172,24 @@ a.external-link {
                     }
                 }
                 ul{
-                    display: none;
-                    margin: 0;
-                    padding: 0;
+					border-left: 1px solid @30gray;
+                    margin: 0 0 8px 20px;
                     list-style-type: none;
+					padding: 0;
                     li{
-                        // margin: 1px 0 0 15px;
                         a{
-                            color: @70gray;
-                            border-left: 1px solid @30gray;
-                            padding: 10px 15px;
-                            margin: 1px 0 0 15px;
+							font-weight: 300;
+							line-height: 2.3em;
+                            padding: 0 15px;
+                            margin: 1px 0 0 0;
                         }
+
+						&.selected-page {
+							& > a {
+								background: transparent;
+								font-weight: @bold;
+							}
+						}
                     }
                 }
                 &.current-menu-item{

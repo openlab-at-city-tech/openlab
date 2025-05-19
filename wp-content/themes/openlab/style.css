@@ -10063,16 +10063,20 @@ a.external-link::after {
   color: #000000;
 }
 .sidebar .sidebar-block ul.sidebar-nav li ul {
-  display: none;
-  margin: 0;
-  padding: 0;
+  border-left: 1px solid #bbbbbb;
+  margin: 0 0 8px 20px;
   list-style-type: none;
+  padding: 0;
 }
 .sidebar .sidebar-block ul.sidebar-nav li ul li a {
-  color: #444444;
-  border-left: 1px solid #bbbbbb;
-  padding: 10px 15px;
-  margin: 1px 0 0 15px;
+  font-weight: 300;
+  line-height: 2.3em;
+  padding: 0 15px;
+  margin: 1px 0 0 0;
+}
+.sidebar .sidebar-block ul.sidebar-nav li ul li.selected-page > a {
+  background: transparent;
+  font-weight: 700;
 }
 .sidebar .sidebar-block ul.sidebar-nav li.current-menu-item ul {
   display: block;
