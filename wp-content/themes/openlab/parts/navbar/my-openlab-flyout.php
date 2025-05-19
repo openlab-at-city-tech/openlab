@@ -14,28 +14,7 @@ $my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activ
 $links = [
 	[
 		'text'     => 'My Settings',
-		'children' => [
-			[
-				'text' => 'Edit Profile',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ),
-			],
-			[
-				'text' => 'Account Info',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings' ] ) ),
-			],
-			[
-				'text' => 'Notifications',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'notifications' ] ) ),
-			],
-			[
-				'text' => 'Privacy & Data',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'data' ] ) ),
-			],
-			[
-				'text' => 'Delete Account',
-				'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'delete-account' ] ) ),
-			],
-		],
+		'children' => openlab_my_settings_submenu_items(),
 	],
 	[
 		'text'     => 'My Activity',
