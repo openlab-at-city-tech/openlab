@@ -161,10 +161,20 @@ class OpenLab_Admin_Bar {
 	 * Change 'Howdy' message to 'Hi'
 	 */
 	public function change_howdy_to_hi( $wp_admin_bar ) {
+		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.png' );
+		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
+
+		$title = sprintf(
+			'<span class="howdy hidden-xs">Hi, %s</span> <img class="openlab-logo visible-xs" src="%s" alt="OpenLab at City Tech" /><img class="my-openlab-logo hidden-xs" src="%s" alt="My OpenLab" />',
+			bp_get_loggedin_user_fullname(),
+			$openlab_logo_url,
+			$my_openlab_logo_url
+		);
+
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'my-account',
-				'title' => sprintf( '<span class="hi-username">Hi, %s</span>', bp_get_loggedin_user_fullname() ),
+				'title' => $title,
 				'meta'  => array(
 					'class' => 'user-display-name',
 				),

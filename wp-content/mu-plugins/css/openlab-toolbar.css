@@ -15,6 +15,25 @@
     top: -46px;
   }
 }
+@media screen and (max-width: 782px) {
+  #wpadminbar .hidden-xs {
+    display: none;
+  }
+}
+#wpadminbar .visible-xs {
+  display: none;
+}
+@media screen and (max-width: 782px) {
+  #wpadminbar .visible-xs {
+    display: block;
+  }
+}
+@media screen and (max-width: 782px) {
+  #wpadminbar .openlab-logo,
+  #wpadminbar .my-openlab-logo {
+    height: 32px !important;
+  }
+}
 #wpadminbar li.admin-bar-menu-openlab-logo {
   background: white;
 }
@@ -51,34 +70,18 @@
   }
 }
 #wpadminbar #wp-admin-bar-my-account > .ab-item {
-  padding-right: 22px;
+  align-items: center;
+  display: flex;
+  gap: 6px;
   position: relative;
 }
 #wpadminbar #wp-admin-bar-my-account > .ab-item:before {
   content: '';
 }
-#wpadminbar #wp-admin-bar-my-account > .ab-item:after {
-  background: url('../img/my-openlab-icon.png') no-repeat center center;
-  background-size: 16px;
-  content: '';
-  display: block;
-  float: none;
-  height: 16px;
-  position: absolute;
-  right: 5px;
-  left: auto;
-  top: calc(50% - 8px);
-  width: 16px;
-}
 @media screen and (max-width: 782px) {
-  #wpadminbar #wp-admin-bar-my-account > .ab-item:after {
-    background-size: 30px;
-    height: 30px;
-    width: 30px;
-    top: calc(50% - 15px);
-  }
-  #wpadminbar #wp-admin-bar-my-account > .ab-item .hi-username {
-    display: none;
+  #wpadminbar #wp-admin-bar-my-account > .ab-item {
+    padding-right: 8px;
+    width: auto;
   }
 }
 #wpadminbar #wp-admin-bar-user-info {
@@ -121,6 +124,10 @@
 #wpadminbar .my-openlab-link {
   padding: 0 !important;
 }
+#wpadminbar .my-openlab-logo {
+  display: inline-block;
+  height: 20px;
+}
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in {
   position: relative;
 }
@@ -142,10 +149,6 @@
 }
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-logo {
   display: none;
-}
-#wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .my-openlab-logo {
-  display: inline-block;
-  height: 20px;
 }
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .ab-sub-wrapper {
   left: auto;
