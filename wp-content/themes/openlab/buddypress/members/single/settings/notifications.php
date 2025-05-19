@@ -14,7 +14,7 @@ do_action('bp_before_member_settings_template');
     <form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/notifications'; ?>" method="post" class="standard-form form-panel" id="settings-form">
 
         <div class="panel panel-default">
-            <div class="panel-heading">Email Notifications</div>
+            <div class="panel-heading">Notification Settings</div>
             <div class="panel-body">
 
                 <p><?php _e('Send a notification by email when:', 'buddypress'); ?></p>
