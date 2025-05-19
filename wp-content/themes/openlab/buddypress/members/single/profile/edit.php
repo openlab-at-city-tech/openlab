@@ -62,7 +62,10 @@ $social_fields = openlab_social_media_fields();
                         <p class="description">
 							<?php echo openlab_get_profile_field_helper_text( 'display_name' ); ?>
 						</p>
+
                     </div>
+
+					<p>Want to choose who can see the information below? Go to <a href="<?php echo bp_members_get_user_url( bp_displayed_user_id(), bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ); ?>">Privacy Settings</a>.</p>
                     <?php $display_name_shown = true ?>
                 <?php } ?>
 
