@@ -161,27 +161,12 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 
 					<?php if ( $is_settings ) : ?>
 						<ul class="sidebar-submenu">
-							<li class="<?php openlab_selected_page_class( bp_is_user_profile_edit() ); ?>">
-								<a href="<?php echo bp_members_get_user_url( bp_displayed_user_id(), bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ); ?>">Edit Profile</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_user_change_avatar() ); ?>">
-								<a href="<?php echo bp_members_get_user_url( bp_displayed_user_id(), bp_members_get_path_chunks( [ 'profile', 'change-avatar' ] ) ); ?>">Change Avatar</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_user_settings() && ! bp_is_current_action( 'privacy' ) && ! bp_is_current_action( 'notifications' ) && ! bp_is_current_action( 'data' ) && ! bp_is_current_action( 'delete-account' ) ); ?>">
-								<a href="<?php echo $dud . bp_get_settings_slug() ?>">Account Info</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_current_action( 'privacy' ) ); ?>">
-								<a href="<?php echo $dud . bp_get_settings_slug() ?>/privacy/">Privacy Settings</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_current_action( 'notifications' ) ); ?>">
-								<a href="<?php echo $dud . bp_get_settings_slug() ?>/notifications/">Notification Settings</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_current_action( 'data' ) ); ?>">
-								<a href="<?php echo $dud . bp_get_settings_slug() ?>/data/">Data Export</a>
-							</li>
-							<li class="<?php openlab_selected_page_class( bp_is_current_action( 'delete-account' ) ); ?>">
-								<a href="<?php echo $dud . bp_get_settings_slug() ?>/delete-account/">Delete Account</a>
-							</li>
+							<?php $settings_submenu_items = openlab_my_settings_submenu_items(); ?>
+							<?php foreach ( $settings_submenu_items as $item ) : ?>
+								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+								</li>
+							<?php endforeach; ?>
 						</ul>
 					<?php endif; ?>
 				</li>

@@ -2358,3 +2358,48 @@ function openlab_restrict_members_page() {
 	}
 }
 add_action( 'template_redirect', 'openlab_restrict_members_page' );
+
+/**
+ * Gets the submenu items for 'My Settings'.
+ *
+ * @return array
+ */
+function openlab_my_settings_submenu_items() {
+	return [
+		'edit-profile'          => [
+			'text'       => 'Edit Profile',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'edit' ] ) ),
+			'is_current' => bp_is_user_profile_edit(),
+		],
+		'change-avatar'          => [
+			'text'       => 'Change Avatar',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'profile', 'change-avatar' ] ) ),
+			'is_current' => bp_is_user_change_avatar(),
+		],
+		'account-info'          => [
+			'text'       => 'Account Info',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'general' ),
+		],
+		'privacy-settings'      => [
+			'text'       => 'Privacy Settings',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'data' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'privacy' ),
+		],
+		'notification-settings' => [
+			'text'       => 'Notification Settings',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'notifications' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'notifications' ),
+		],
+		'data-export'           => [
+			'text'       => 'Data Export',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'data' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'data' ),
+		],
+		'delete-account'        => [
+			'text'       => 'Delete Account',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'delete-account' ] ) ),
+			'is_current' => bp_is_user_settings() && bp_is_current_action( 'delete-account' ),
+		],
+	];
+}

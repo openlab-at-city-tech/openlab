@@ -344,7 +344,20 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
             break;
         default:
             $submenu_text = 'My Settings<span aria-hidden="true">:</span> ';
-            $menu = openlab_profile_settings_submenu();
+
+			$my_settings_submenu_items  = openlab_my_settings_submenu_items();
+			$current_submenu_item_title = '';
+			foreach ( $my_settings_submenu_items as $item ) {
+				if ( $item['is_current'] ) {
+					$current_submenu_item_title = $item['text'];
+					break;
+				}
+			}
+
+			$menu = sprintf(
+				'<ul class="nav nav-inline"><li class="submenu-item item-edit-profile current-menu-item first-item">%s</li></ul>',
+				$current_submenu_item_title
+			);
     }
 
     $extras = openlab_get_submenu_extras();
@@ -403,6 +416,7 @@ function openlab_profile_settings_submenu() {
 		$dud . 'settings/data' => 'Data Export',
         $dud . 'settings/delete-account' => 'Delete Account',
     );
+
     return openlab_submenu_gen($menu_list, true);
 }
 
