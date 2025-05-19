@@ -95,6 +95,22 @@ do_action( 'bp_before_member_settings_template' ); ?>
 			</div>
 		</div>
 
+		<div class="panel panel-default panel-display-and-username-privacy">
+			<div class="panel-heading">Display Name and Username Privacy</div>
+
+			<div class="panel-body">
+				<div class="panel-subheading">Display Name</div>
+				<div class="privacy-panel-options">
+					<p>Your Display Name will appear on your public OpenLab profile and wherever you post on the OpenLab. Because your Display Name is public, you don't need to use your real name or your full name. Your Display Name can be changed at any time by editing your profile. ← links to edit profile screen.</p>
+				</div>
+
+				<div class="panel-subheading">Username</div>
+				<div class="privacy-panel-options">
+					<p>You use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. You cannot change your username yourself. Please contact us for assistance if you have concerns.</p>
+				</div>
+			</div>
+		</div>
+
 		<input type="submit" name="save" id="save" class="btn btn-primary" value="Save Changes" />
 
 		<?php wp_nonce_field( 'bp_settings_privacy' ); ?>
