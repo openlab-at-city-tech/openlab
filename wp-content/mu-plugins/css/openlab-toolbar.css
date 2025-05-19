@@ -2,6 +2,11 @@
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
 /**vendor**/
 @import "select2/select2.css";
+@media screen and (max-width: 782px) {
+  body.wp-admin #wpadminbar {
+    top: 0;
+  }
+}
 #wpadminbar {
   /* Prevent hover background on logo */
 }
@@ -119,6 +124,11 @@
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in {
   position: relative;
 }
+@media screen and (max-width: 782px) {
+  #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in {
+    position: static;
+  }
+}
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in a {
   padding: 0;
   display: inline-block;
@@ -153,9 +163,20 @@
   display: flex;
   gap: 12px;
 }
+#wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-signin,
+#wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-signin > a,
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-sitename {
   font-weight: 700;
   line-height: 1.4em;
+  font-size: 16px;
+}
+#wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-signin {
+  margin-top: 12px;
+}
+@media screen and (max-width: 782px) {
+  #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in #wp-admin-bar-openlab-sign-in-actions {
+    padding: 12px;
+  }
 }
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-logo {
   flex: 48px 0 0;
@@ -163,6 +184,11 @@
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-logo img {
   height: 48px;
   width: 48px;
+}
+@media screen and (max-width: 782px) {
+  #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-logo {
+    display: none;
+  }
 }
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .openlab-sign-in-info-tagline {
   font-size: 12px;
@@ -178,11 +204,6 @@
   }
   #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .my-openlab-logo {
     display: none;
-  }
-  #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in .ab-sub-wrapper {
-    left: auto;
-    top: auto;
-    width: 100%;
   }
 }
 @media screen and (max-width: 600px) {

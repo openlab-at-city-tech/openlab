@@ -8,6 +8,12 @@
 
 @import "select2/select2.css";
 
+body.wp-admin #wpadminbar {
+	@media screen and (max-width: @block-editor-breakpoint-tablet) {
+		top: 0;
+	}
+}
+
 #wpadminbar {
 	@media screen and (max-width: @block-editor-breakpoint-tablet) {
 		top: -46px;
@@ -140,6 +146,10 @@
 #wp-toolbar > ul > li#wp-admin-bar-openlab-sign-in {
 	position: relative;
 
+	@media screen and (max-width: @block-editor-breakpoint-tablet) {
+		position: static;
+	}
+
 	a {
 		padding: 0;
 		display: inline-block;
@@ -182,9 +192,23 @@
 		gap: 12px;
 	}
 
+
+	.openlab-sign-in-info-signin,
+	.openlab-sign-in-info-signin > a,
 	.openlab-sign-in-info-sitename {
 		font-weight: 700;
 		line-height: 1.4em;
+		font-size: 16px;
+	}
+
+	.openlab-sign-in-info-signin {
+		margin-top: 12px;
+	}
+
+	#wp-admin-bar-openlab-sign-in-actions {
+		@media screen and (max-width: @block-editor-breakpoint-tablet) {
+			padding: 12px;
+		}
 	}
 
 	.openlab-sign-in-info-logo {
@@ -192,6 +216,10 @@
 		img {
 			height: 48px;
 			width: 48px;;
+		}
+
+		@media screen and (max-width: @block-editor-breakpoint-tablet) {
+			display: none;
 		}
 	}
 
@@ -210,12 +238,6 @@
 
 		.my-openlab-logo {
 			display: none;
-		}
-
-		.ab-sub-wrapper {
-			left: auto;
-			top: auto;
-			width: 100%;
 		}
 	}
 }
