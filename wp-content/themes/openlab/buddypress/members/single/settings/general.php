@@ -19,7 +19,7 @@ $account_type = openlab_get_user_member_type( bp_displayed_user_id() );
     <form action="<?php echo bp_displayed_user_domain() . bp_get_settings_slug() . '/general'; ?>" method="post" class="standard-form form-panel" id="settings-form">
 
         <div class="panel panel-default">
-            <div class="panel-heading">Account Settings</div>
+            <div class="panel-heading">Account Info</div>
                 <div class="panel-body">
 	            	<?php do_action( 'template_notices' ); ?>
 
