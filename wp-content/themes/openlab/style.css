@@ -8015,6 +8015,14 @@ input:disabled + label {
 .privacy-panel-option .field-visibility-settings {
   margin-bottom: 0;
 }
+@media (max-width: 767px) {
+  .privacy-panel-option {
+    align-items: flex-start;
+    flex-direction: column;
+    padding: 12px 0 0;
+    margin-bottom: 24px;
+  }
+}
 .panel-button-group .panel:last-of-type {
   margin-bottom: 20px;
 }
