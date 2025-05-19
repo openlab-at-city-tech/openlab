@@ -425,9 +425,10 @@ function openlab_get_xprofile_visibility_levels() {
 /**
  * Generates the markup for xprofile field visibility selector.
  *
- * @param int $field_id The ID of the field.
+ * @param int  $field_id       The ID of the field.
+ * @param bool $include_labels Whether to include labels. Defaults to true.
  */
-function openlab_xprofile_field_visibility_selector( $field_id = null ) {
+function openlab_xprofile_field_visibility_selector( $field_id = null, $include_labels = true) {
 	if ( ! $field_id ) {
 		$field_id = bp_get_the_profile_field_id();
 	}
@@ -436,9 +437,11 @@ function openlab_xprofile_field_visibility_selector( $field_id = null ) {
 
 	$selected_value = bp_is_register_page() ? '' : xprofile_get_field_visibility_level( $field_id, bp_displayed_user_id() );
 
-	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility', $field_id ) ) : ?>
+	if ( bp_current_user_can( 'bp_xprofile_change_field_visibility' ) ) : ?>
 		<div class="field-visibility-settings" id="field-visibility-settings-<?php echo esc_attr( $field_id ); ?>">
-			<label for="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">Who can see this?</label>
+			<?php if ( $include_labels ) : ?>
+				<label for="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">Who can see this?</label>
+			<?php endif; ?>
 
 			<select name="<?php echo esc_attr( 'field_' . $field_id . '_visibility' ); ?>" id="field-visibility-settings-select-<?php echo esc_attr( $field_id ); ?>">
 				<?php if ( bp_is_register_page() ) : ?>

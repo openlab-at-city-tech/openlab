@@ -834,7 +834,38 @@ input:disabled+label {
             }
         }
     }
+	.panel-subheading {
+		font-weight: @bold;
+		border-bottom: 1px solid @panel-default-border;
+		padding-bottom: 4px;
+	}
 }
+
+.privacy-panel-option {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	justify-content: space-between;
+	padding: 12px 0;
+
+	label {
+		flex: 1;
+		font-weight: normal;
+	}
+
+	.field-visibility-options {
+		align-items: center;
+		display: flex;
+		flex: 1;
+		gap: 10px;
+		justify-content: flex-end;
+	}
+
+	.field-visibility-settings {
+		margin-bottom: 0;
+	}
+}
+
 .panel-button-group{
     .panel{
         &:last-of-type{

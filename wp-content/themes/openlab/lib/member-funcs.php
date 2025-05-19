@@ -2360,6 +2360,58 @@ function openlab_restrict_members_page() {
 add_action( 'template_redirect', 'openlab_restrict_members_page' );
 
 /**
+ * Adds 'Privacy Settings' to the 'My Settings' menu.
+ *
+ * @param array $settings Settings.
+ */
+function openlab_add_privacy_settings() {
+	$args = [
+		'name'            => 'Privacy Settings',
+		'slug'            => 'privacy',
+		'parent_slug'     => bp_get_settings_slug(),
+		'screen_function' => 'bp_settings_screen_general',
+		'position'        => 20,
+		'user_has_access' => bp_is_my_profile() || current_user_can( 'bp_moderate' ),
+	];
+
+	bp_core_new_subnav_item( $args );
+}
+add_filter( 'bp_setup_nav', 'openlab_add_privacy_settings', 30 );
+
+/**
+ * Save routine for the 'Privacy Settings' page.
+ *
+ * @return void
+ */
+function openlab_privacy_settings_save_cb() {
+	if ( ! bp_is_user_settings() || ! bp_is_current_action( 'privacy' ) ) {
+		return;
+	}
+
+	if ( ! bp_is_my_profile() && ! current_user_can( 'bp_moderate' ) ) {
+		return;
+	}
+
+	if ( empty( $_POST ) ) {
+		return;
+	}
+
+	check_admin_referer( 'bp_settings_privacy' );
+
+	$profile_privacy_field_ids = ! empty( $_POST['profile-privacy-field-ids'] ) ? wp_parse_id_list( $_POST['profile-privacy-field-ids'] ) : [];
+	foreach ( $profile_privacy_field_ids as $profile_privacy_field_id ) {
+		$post_key = 'field_' . $profile_privacy_field_id . '_visibility' ;
+		$visibility = isset( $_POST[ $post_key ] ) ? sanitize_text_field( $_POST[ $post_key ] ) : '';
+		if ( ! $visibility ) {
+			continue;
+		}
+
+		xprofile_set_field_visibility_level( $profile_privacy_field_id, bp_displayed_user_id(), $visibility );
+	}
+}
+add_action( 'bp_actions', 'openlab_privacy_settings_save_cb' );
+
+/**
  * Gets the submenu items for 'My Settings'.
  *
  * @return array
@@ -2383,7 +2435,7 @@ function openlab_my_settings_submenu_items() {
 		],
 		'privacy-settings'      => [
 			'text'       => 'Privacy Settings',
-			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'data' ] ) ),
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ),
 			'is_current' => bp_is_user_settings() && bp_is_current_action( 'privacy' ),
 		],
 		'notification-settings' => [
