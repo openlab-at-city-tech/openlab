@@ -19,6 +19,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 <?php echo openlab_submenu_markup(); ?>
 
 <div id="item-body" role="main">
+	<?php do_action( 'template_notices' ); ?>
 
 	<form class="standard-form form-panel" id="bp-privacy" method="post">
 		<div class="panel panel-default">

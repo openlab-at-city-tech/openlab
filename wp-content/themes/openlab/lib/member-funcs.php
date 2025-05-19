@@ -2408,6 +2408,10 @@ function openlab_privacy_settings_save_cb() {
 
 		xprofile_set_field_visibility_level( $profile_privacy_field_id, bp_displayed_user_id(), $visibility );
 	}
+
+	bp_core_add_message( 'Your privacy settings have been saved.', 'success' );
+	bp_core_redirect( bp_displayed_user_url( bp_members_get_path_chunks( [ 'settings', 'privacy' ] ) ) );
+	exit;
 }
 add_action( 'bp_actions', 'openlab_privacy_settings_save_cb' );
 
