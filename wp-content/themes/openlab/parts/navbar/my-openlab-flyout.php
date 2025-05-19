@@ -67,7 +67,7 @@ $links[] = [
 
 $links[] = [
 	'text'     => 'My Friends',
-	'class'    => $user_unread_counts['friends'] ? 'has-unread' : '',
+	'class'    => $user_unread_counts['friend_requests'] ? 'has-unread' : '',
 	'children' => [
 		[
 			'text' => 'Friend List',
@@ -101,7 +101,7 @@ $links[] = [
 
 $links[] = [
 	'text'     => 'My Invitations',
-	'class'    => $user_unread_counts['invites'] ? 'has-unread' : '',
+	'class'    => $user_unread_counts['group_invites'] ? 'has-unread' : '',
 	'children' => [
 		[
 			'text' => 'Invitations Received',
@@ -170,7 +170,7 @@ $links[] = [
 					<a href="<?php echo esc_url( $link['href'] ); ?>">
 						<?php echo esc_html( $link['text'] ); ?>
 
-						<?php if ( 'my-openlab-logout' === $link['class'] ) : ?>
+						<?php if ( isset( $link['class'] ) && 'my-openlab-logout' === $link['class'] ) : ?>
 							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/log-out.png' ); ?>" alt="Logout Icon" class="logout-icon" aria-hidden="true" />
 						<?php endif; ?>
 					</a>
