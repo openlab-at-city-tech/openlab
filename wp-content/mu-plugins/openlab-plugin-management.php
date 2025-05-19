@@ -59,6 +59,7 @@ function openlab_get_hidden_plugins() {
 		'ewww-image-optimizer/ewww-image-optimizer.php',
 		'featured-content-gallery/content-gallery.php',
 		'fix-simplepie-errors/_fix-simplepie-errors.php',
+		'git-it-write/git-it-write.php', // #3511
 		'google-document-embedder/gviewer.php',
 		'google-maps-embed/cets_EmbedGmaps.php',
 		'gp-media-library/gp-media-library.php',
