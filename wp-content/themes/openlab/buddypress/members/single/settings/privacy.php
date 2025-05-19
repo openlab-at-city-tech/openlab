@@ -95,7 +95,7 @@ do_action( 'bp_before_member_settings_template' ); ?>
 			</div>
 		</div>
 
-		<div class="panel panel-default panel-display-and-username-privacy">
+		<div class="panel panel-default panel-privacy-info">
 			<div class="panel-heading">Display Name and Username Privacy</div>
 
 			<div class="panel-body">
@@ -107,6 +107,31 @@ do_action( 'bp_before_member_settings_template' ); ?>
 				<div class="panel-subheading">Username</div>
 				<div class="privacy-panel-options">
 					<p>You use your username to sign in, and it will also be displayed in the URL of your public OpenLab member profile. You cannot change your username yourself. Please contact us for assistance if you have concerns.</p>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-default panel-privacy-info">
+			<div class="panel-heading">Privacy in Courses, Projects, Clubs and Portfolios</div>
+
+			<div class="panel-body">
+				<div class="panel-subheading">Membership in a Course, Project or Club</div>
+				<div class="privacy-panel-options">
+					<p>There are a few ways to control your privacy when you are a <strong>member</strong> of a course, project, or club.</p>
+					<ul>
+						<li>If you don’t want to appear in the membership list of a public course, project, or club, you can <a href="https://openlab.citytech.cuny.edu/blog/help/hiding-your-membership-in-a-course-project-or-club/">hide your membership</a>.</li>
+						<li>When you write a post on a site that is visible to anyone or to any OpenLab Member, you can choose to <a href="https://openlab.citytech.cuny.edu/blog/help/writing-a-post-block-editor#additionalprivacysettings">make that post visible</a> only to members of the site.</li>
+					</ul>
+				</div>
+
+				<div class="panel-subheading">Admin of a Course, Project, Club, or Portfolio</div>
+				<div class="privacy-panel-options">
+					<p>There are a few ways to control privacy when you are an <strong>admin</strong> of a course, project, or club.</p>
+
+					<ul>
+						<li>There are various privacy options available for the profile and site of any course, project, club, and portfolio. You can <a href="https://openlab.citytech.cuny.edu/blog/help/changing-privacy-and-other-settings-for-a-course-project-or-club/">choose the combination of settings</a> that work best for you.</li>
+						<li>When you write a post or create a page on a site that is visible to anyone or to any OpenLab Member, you can choose to <a href="https://openlab.citytech.cuny.edu/blog/help/writing-a-post-block-editor#additionalprivacysettings">make that post or page visible</a> only to members of the site.</li>
+					</ul>
 				</div>
 			</div>
 		</div>

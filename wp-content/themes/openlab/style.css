@@ -7858,7 +7858,7 @@ input[type="submit"] {
 .panel-privacy-membership-settings .panel-body label {
   font-weight: normal;
 }
-.panel-display-and-username-privacy .privacy-panel-options {
+.panel-privacy-info .privacy-panel-options {
   margin-top: 8px;
 }
 .radio label,
