@@ -75,6 +75,23 @@ do_action( 'bp_before_member_settings_template' ); ?>
 				<?php endif; ?>
 
 				<input type="hidden" name="profile-privacy-field-ids" value="<?php echo esc_attr( implode( ',', $field_ids ) ); ?>" />
+
+				<?php if ( openlab_user_has_portfolio( bp_displayed_user_id() ) && ( ! openlab_group_is_hidden( openlab_get_user_portfolio_id() ) ) ) : ?>
+					<div class="panel-subheading">My <?php openlab_portfolio_label( [ 'case' => 'upper' ] ); ?></div>
+
+					<div class="privacy-panel-options">
+						<div class="privacy-panel-option">
+							<label for="portfolio-visibility">Include a link to My Portfolio on My Profile</label>
+
+							<div class="field-visibility-options">
+								<select id="portfolio-visibility" name="portfolio-visibility">
+									<option value="1" <?php selected( openlab_show_portfolio_link_on_user_profile() ); ?>>Enabled</option>
+									<option value="0" <?php selected( openlab_show_portfolio_link_on_user_profile(), false ); ?>>Disabled</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				<?php endif; ?>
 			</div>
 		</div>
 

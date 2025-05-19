@@ -7991,6 +7991,9 @@ input:disabled + label {
   border-bottom: 1px solid #ddd;
   padding-bottom: 4px;
 }
+.privacy-panel-options {
+  margin-bottom: 24px;
+}
 .privacy-panel-option {
   display: flex;
   gap: 10px;

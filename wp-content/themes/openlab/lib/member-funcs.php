@@ -2197,29 +2197,6 @@ function openlab_user_social_links_save( $user_id ) {
 add_action( 'xprofile_updated_profile', 'openlab_user_social_links_save' );
 
 /**
- * AJAX callback for 'openlab_portfolio_link_visibility'.
- *
- * @return void
- */
-function openlab_portfolio_link_visibility_ajax_cb() {
-	$verified = wp_verify_nonce( $_GET['nonce'], 'openlab_portfolio_link_visibility' );
-
-	if ( ! $verified ) {
-		wp_send_json_error( 'Invalid nonce' );
-	}
-
-	if ( ! is_user_logged_in() ) {
-		wp_send_json_error( 'Not logged in' );
-	}
-
-	$enabled = 'enabled' === $_GET['state'];
-	openlab_save_show_portfolio_link_on_user_profile( get_current_user_id(), $enabled );
-
-	wp_send_json_success();
-}
-add_action( 'wp_ajax_openlab_portfolio_link_visibility', 'openlab_portfolio_link_visibility_ajax_cb' );
-
-/**
  * Determines whether a user's profile should have the noindex meta tag.
  *
  * @param int $user_id User ID.
@@ -2407,6 +2384,11 @@ function openlab_privacy_settings_save_cb() {
 		}
 
 		xprofile_set_field_visibility_level( $profile_privacy_field_id, bp_displayed_user_id(), $visibility );
+	}
+
+	$portfolio_visibility = isset( $_POST['portfolio-visibility'] ) ? (bool) $_POST['portfolio-visibility'] : null;
+	if ( ! is_null( $portfolio_visibility ) ) {
+		openlab_save_show_portfolio_link_on_user_profile( bp_displayed_user_id(), $portfolio_visibility );
 	}
 
 	bp_core_add_message( 'Your privacy settings have been saved.', 'success' );
