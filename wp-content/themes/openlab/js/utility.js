@@ -24,6 +24,7 @@ OpenLab.utility = (function ($) {
 			OpenLab.utility.initCollapsibleDefinitions();
 			OpenLab.utility.loadWhatsHappeningAtCityTech()
 			OpenLab.utility.initClickableCards();
+			OpenLab.utility.initAvatarUploadCustomizations();
 			OpenLab.utility.setUpNav();
 
 			//EO Calendar JS filtering
@@ -744,6 +745,26 @@ OpenLab.utility = (function ($) {
 
 				card.style.cursor = 'pointer';
 			});
+		},
+		initAvatarUploadCustomizations: function() {
+			const avatarUploadForm = document.getElementById( 'avatar-upload-form' );
+			if ( ! avatarUploadForm ) {
+				return;
+			}
+
+			const checkButton = () => {
+				const fileInput = avatarUploadForm.querySelector( 'input[type="file"]' );
+				const submitButton = avatarUploadForm.querySelector( 'input[type="submit"]' );
+
+				if ( fileInput.value ) {
+					submitButton.removeAttribute( 'disabled' );
+				} else {
+					submitButton.setAttribute( 'disabled', 'disabled' );
+				}
+			}
+
+			checkButton();
+			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
 		setUpNav: function() {
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
