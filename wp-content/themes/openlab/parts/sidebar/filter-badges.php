@@ -22,7 +22,7 @@ if ( ! $badges ) {
 $badges = array_filter(
 	$badges,
 	function( $badge ) {
-		return 'department-resources' !== $badge->get_slug();
+		return 'resource' !== $badge->get_slug();
 	}
 );
 
