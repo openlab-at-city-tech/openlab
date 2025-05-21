@@ -326,8 +326,8 @@ if ( openlab_is_resources_directory() ) {
 <?php
 
 if ( openlab_is_resources_directory() ) {
-	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_resources', 10, 3 );
-	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_resources', 10, 3 );
+	remove_filter( 'bp_groups_get_paged_groups_sql', 'openlab_filter_groups_query_for_resources', 10 );
+	remove_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_resources', 10 );
 }
 
 // If this is a my- page, set up the 'inactive' sort.
