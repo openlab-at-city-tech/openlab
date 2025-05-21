@@ -11,6 +11,10 @@ if ( $is_search ) {
     $group_type = "people";
     $group_slug = $group_type;
     $sidebar_title = 'Find People';
+} elseif ( openlab_is_resources_directory() ) {
+	// The Resources directory functionally mimics the Projects directory.
+	$group_type    = 'project';
+	$sidebar_title = 'Find a Resource';
 } else {
     $sidebar_title = 'Find a ' . ucfirst( $group_type );
 }
@@ -20,6 +24,8 @@ if ( bp_is_members_directory() ) {
 	$reset_url = home_url( 'people' );
 } elseif ( openlab_is_search_results_page() ) {
 	$reset_url = home_url( 'search' );
+} elseif ( openlab_is_resources_directory() ) {
+	$reset_url = home_url( 'resources' );
 } else {
 	$reset_url = home_url( $group_slug );
 }

@@ -488,3 +488,10 @@ function openlab_remove_admin_bar( $show ) {
 	return $show;
 }
 add_filter( 'show_admin_bar', 'openlab_remove_admin_bar' );
+
+/**
+ * Is this the Resources page?
+ */
+function openlab_is_resources_directory() {
+	return is_page( 'resources' );
+}

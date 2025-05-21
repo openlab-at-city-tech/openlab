@@ -18,6 +18,14 @@ if ( ! $badges ) {
 	return;
 }
 
+// Don't show the Resources badge.
+$badges = array_filter(
+	$badges,
+	function( $badge ) {
+		return 'department-resources' !== $badge->get_slug();
+	}
+);
+
 $current_badges = openlab_get_current_filter( 'badges' );
 
 ?>

@@ -2667,3 +2667,50 @@ add_filter(
 	50,
 	2
 );
+
+/**
+ * Filter callback for 'Resources' group query.
+ *
+ * @param string $sql       SQL query.
+ * @param array  $sql_parts SQL parts.
+ * @param array  $args      Query arguments.
+ * @return string
+ */
+function openlab_filter_groups_query_for_resources( $sql, $sql_parts, $args ) {
+	global $wpdb;
+	static $groups_with_resource_badges_ids = null;
+
+	if ( null === $groups_with_resource_badges_ids ) {
+		$resource_badge_keys = [ 'fylc', 'citytech-oer', 'department-model', 'department-resource' ];
+		$resource_badges     = array_filter(
+			\OpenLab\Badges\Badge::get(),
+			function( $badge ) use ( $resource_badge_keys ) {
+				return in_array( $badge->get_slug(), $resource_badge_keys, true );
+			}
+		);
+
+		$resource_badge_term_ids = array_map(
+			function( $badge ) {
+				return $badge->get_id();
+			},
+			$resource_badges
+		);
+
+		$groups_with_resource_badges_ids = bp_get_objects_in_term( $resource_badge_term_ids, 'openlab_badge' );
+		if ( empty( $groups_with_resource_badges_ids ) ) {
+			$groups_with_resource_badges_ids = [ 0 ];
+		} else {
+			$groups_with_resource_badges_ids = array_unique( $groups_with_resource_badges_ids );
+		}
+	}
+
+	$sql_clause_template = 'g.id IN (' . implode( ', ', array_fill( 0, count( $groups_with_resource_badges_ids ), '%d' ) ) . ')';
+
+	$sql_clause = $wpdb->prepare( $sql_clause_template, ...$groups_with_resource_badges_ids );
+
+	if ( false !== strpos( $sql, 'WHERE' ) ) {
+		$sql = preg_replace( '/\bWHERE\b/i', 'WHERE ' . $sql_clause . ' AND ', $sql, 1 );
+	}
+
+	return $sql;
+}

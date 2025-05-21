@@ -2320,6 +2320,10 @@ function openlab_get_global_nav_links() {
 			'text' => 'Portfolios',
 			'url'  => home_url( 'portfolios' ),
 		],
+		'resources' => [
+			'text' => 'Resources',
+			'url'  => home_url( 'resources' ),
+		],
 	];
 }
 
