@@ -36,7 +36,7 @@
                                 </p>
 
                                 <?php if ( bp_get_user_has_avatar() ) : ?>
-                                        <p><em>If you’d like to reset your avatar to the default OpenLab avatar, please use the reset button.</em> <a class="btn btn-primary no-deco" href="<?php bp_avatar_delete_link(); ?>">Reset My Avatar</a></p>
+                                        <p><em>If you’d like to reset your avatar to the default OpenLab avatar, please use the reset button. <a href="<?php bp_avatar_delete_link(); ?>">Reset My Avatar</a></em></p>
                                 <?php endif; ?>
 
                                 <?php wp_nonce_field( 'bp_avatar_upload' ) ?>
