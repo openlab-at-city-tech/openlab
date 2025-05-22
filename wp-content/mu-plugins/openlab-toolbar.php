@@ -96,12 +96,8 @@ class OpenLab_Admin_Bar {
 	 * Adds the Sign In menu.
 	 */
 	public function add_sign_in_menu( $wp_admin_bar ) {
-		ob_start();
-		include WPMU_PLUGIN_DIR . '/parts/persistent/svg-logo-notext.php';
-		$openlab_logo = ob_get_clean();
-
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
-		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.png' );
+		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
 
 		$title = "<span>Sign In</span> <img class='openlab-logo hidden-xs' src='$openlab_logo_url' alt='OpenLab at City Tech' /><img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
 
@@ -161,7 +157,7 @@ class OpenLab_Admin_Bar {
 	 * Change 'Howdy' message to 'Hi'
 	 */
 	public function change_howdy_to_hi( $wp_admin_bar ) {
-		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.png' );
+		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
 
 		$title = sprintf(
