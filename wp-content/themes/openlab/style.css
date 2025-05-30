@@ -7663,7 +7663,7 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .openlab-navbar-flyouts .flyout-menu-items li {
   position: relative;
 }
-.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after:not(.my-openlab-main-menu-link) {
+.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after {
   background: #ec6348;
   content: '';
   position: absolute;
