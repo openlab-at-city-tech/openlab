@@ -244,6 +244,8 @@ blockquote {
 
 // Main navbar.
 .openlab-navbar {
+	@navbar-icon-gap: 36px;
+
 	box-shadow: 0px 4px 4px 0px #00000040;
 	position: relative;
 	justify-content: space-between;
@@ -325,20 +327,12 @@ blockquote {
 	.navbar-action-links {
 		align-items: center;
 		display: flex;
-		gap: 20px;
+		gap: @navbar-icon-gap;
 
 		i.fa {
 			margin: 0;
 			font-size: 20px;
 		}
-	}
-
-	.navbar-action-logged-in {
-		border-left: 2px solid #ddd;
-		border-right: 2px solid #ddd;
-		display: flex;
-		gap: 20px;
-		padding: 2px 24px;
 	}
 
 	button.navbar-flyout-toggle {
@@ -362,12 +356,18 @@ blockquote {
 		&.navbar-flyout-toggle-login {
 			align-items: center;
 			background: @lightTeal;
-			border-radius: 8px;
 			display: flex;
-			font-weight: @bold;
-			gap: 6px;
-			padding: 12px 15px;
+			font-weight: @semibold;
+			font-size: 16px;
+			gap: 10px;
+			height: 80px;
+			padding: 0 15px;
 			white-space: nowrap;
+
+
+			.navbar-icon-my-openlab {
+				height: 25px;
+			}
 		}
 	}
 
@@ -384,7 +384,7 @@ blockquote {
 }
 
 svg.navbar-icon {
-	height: 24px;
+	height: 27px;
 
 	.svg-bg {
 		fill: transparent;
@@ -401,10 +401,6 @@ svg.navbar-icon {
 			stroke: #333;
 			fill: transparent;
 		}
-	}
-
-	&.navbar-icon-my-openlab {
-		height: 22px;
 	}
 }
 

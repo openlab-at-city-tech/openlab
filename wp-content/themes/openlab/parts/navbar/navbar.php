@@ -50,21 +50,19 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 		</div>
 
 		<?php if ( is_user_logged_in() ) : ?>
-			<div class="navbar-action-logged-in">
-				<div class="navbar-action-link-favorites navbar-action-link-toggleable">
-					<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="favorites-flyout">
-						<span class="screen-reader-text">Favorites</span>
-						<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
-					</button>
-				</div>
+			<div class="navbar-action-link-favorites navbar-action-link-toggleable">
+				<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="favorites-flyout">
+					<span class="screen-reader-text">Favorites</span>
+					<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
+				</button>
+			</div>
 
-				<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
+			<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
+				<span class="screen-reader-text">My OpenLab</span>
+				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
 					<span class="screen-reader-text">My OpenLab</span>
-					<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
-						<span class="screen-reader-text">My OpenLab</span>
-						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
-					</button>
-				</div>
+					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+				</button>
 			</div>
 		<?php else : ?>
 			<div class="navbar-action-link-login navbar-action-link-toggleable">

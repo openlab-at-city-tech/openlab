@@ -7496,18 +7496,11 @@ blockquote .h6 {
 .openlab-navbar .navbar-action-links {
   align-items: center;
   display: flex;
-  gap: 20px;
+  gap: 36px;
 }
 .openlab-navbar .navbar-action-links i.fa {
   margin: 0;
   font-size: 20px;
-}
-.openlab-navbar .navbar-action-logged-in {
-  border-left: 2px solid #ddd;
-  border-right: 2px solid #ddd;
-  display: flex;
-  gap: 20px;
-  padding: 2px 24px;
 }
 .openlab-navbar button.navbar-flyout-toggle {
   background: none;
@@ -7529,12 +7522,16 @@ blockquote .h6 {
 .openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login {
   align-items: center;
   background: #e0f5f1;
-  border-radius: 8px;
   display: flex;
-  font-weight: 700;
-  gap: 6px;
-  padding: 12px 15px;
+  font-weight: 600;
+  font-size: 16px;
+  gap: 10px;
+  height: 80px;
+  padding: 0 15px;
   white-space: nowrap;
+}
+.openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login .navbar-icon-my-openlab {
+  height: 25px;
 }
 .openlab-navbar button.navbar-flyout-toggle:hover,
 .openlab-navbar .navbar-action-link-link:hover {
@@ -7546,7 +7543,7 @@ blockquote .h6 {
   position: relative;
 }
 svg.navbar-icon {
-  height: 24px;
+  height: 27px;
 }
 svg.navbar-icon .svg-bg {
   fill: transparent;
@@ -7560,9 +7557,6 @@ svg.navbar-icon.navbar-icon-bookmark {
 svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   stroke: #333;
   fill: transparent;
-}
-svg.navbar-icon.navbar-icon-my-openlab {
-  height: 22px;
 }
 button[aria-expanded="true"] svg.navbar-icon .svg-bg {
   fill: #e0f5f1;
