@@ -7428,18 +7428,19 @@ blockquote .h6 {
   }
 }
 .openlab-navbar {
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px 4px 4px 0px #00000040;
   position: relative;
   justify-content: space-between;
   z-index: 1;
   align-items: center;
   display: flex;
   gap: 20px;
-  height: 100px;
+  height: 80px;
   background: white;
-  margin-bottom: 6px;
+  margin-bottom: 48px;
   overflow: visible;
   z-index: 1000;
+  padding: 0 42px 0 32px;
 }
 .openlab-navbar .shadow-mask-left,
 .openlab-navbar .shadow-mask-right {
@@ -7496,7 +7497,6 @@ blockquote .h6 {
   align-items: center;
   display: flex;
   gap: 20px;
-  padding-right: 10px;
 }
 .openlab-navbar .navbar-action-links i.fa {
   margin: 0;

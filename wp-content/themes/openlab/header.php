@@ -22,9 +22,9 @@
         <div class="page-table">
 
         <div class="page-table-row expanded">
-            <div class="container-fluid">
-				<?php get_template_part( 'parts/navbar/navbar' ); ?>
+			<?php get_template_part( 'parts/navbar/navbar' ); ?>
 
+            <div class="container-fluid">
                 <div id="header" class="row">
                     <?php do_action('bp_header') ?>
                 </div><!-- #header -->
