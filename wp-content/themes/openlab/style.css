@@ -7568,96 +7568,102 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   stroke: #3ba49b;
   fill: #e0f5f1;
 }
-.openlab-navbar-flyouts {
+.openlab-navbar-drawer {
   --flyout-h-padding: 20px;
-  position: relative;
-}
-.openlab-navbar-flyouts .flyout-menu {
-  position: absolute;
+  --flyout-menu-item-height: 60px;
   background: #fff;
-  border: 1px solid #ccc;
+  border-left: 5px solid #3ba49b;
+  position: fixed;
+  right: 0;
+  top: 80px;
+  height: 100%;
+  width: 356px;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
   z-index: 500;
-  width: max-content;
-  min-width: 150px;
-  margin-top: -6px;
-  padding: 0;
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  pointer-events: none;
 }
-.openlab-navbar-flyouts .flyout-menu ul {
+.openlab-navbar-drawer.is-open {
+  transform: translateX(0);
+}
+.openlab-navbar-drawer .flyout-menu {
+  display: none;
+  padding: 0;
+  position: relative;
+  visibility: hidden;
+}
+.openlab-navbar-drawer .flyout-menu.is-open {
+  display: block;
+  visibility: visible;
+}
+.openlab-navbar-drawer .flyout-menu ul {
   list-style: none;
   margin: 0;
   padding: 0;
 }
-.openlab-navbar-flyouts .flyout-menu li {
+.openlab-navbar-drawer .flyout-menu li {
+  border-bottom: 1px solid #ddd;
   margin: 0;
-  line-height: 36px;
+  line-height: var(--flyout-menu-item-height);
 }
-.openlab-navbar-flyouts .flyout-menu li a {
+.openlab-navbar-drawer .flyout-menu li a {
   text-decoration: none;
   display: block;
   height: 100%;
   padding: 0 var(--flyout-h-padding);
   width: 100%;
 }
-.openlab-navbar-flyouts .flyout-menu li a:hover,
-.openlab-navbar-flyouts .flyout-menu li a:focus {
+.openlab-navbar-drawer .flyout-menu li a:hover,
+.openlab-navbar-drawer .flyout-menu li a:focus {
   background-color: #f0f0f0;
 }
-.openlab-navbar-flyouts .flyout-menu.is-open {
-  z-index: 500;
-  opacity: 1;
-  pointer-events: auto;
-  visibility: visible;
-}
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login {
-  min-width: 300px;
-}
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login > div {
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login > div {
   padding: 24px;
 }
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login label {
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login label {
   font-weight: 400;
 }
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .btn {
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login .btn {
   background: #333333;
   color: #ffffff;
   font-size: 13.5px;
 }
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .navbar-forgot-password {
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login .navbar-forgot-password {
   margin-bottom: 20px;
   text-align: right;
 }
-.openlab-navbar-flyouts .flyout-menu.flyout-menu-login .flyout-menu-login-register {
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login .flyout-menu-login-register {
   background: #f0f0f0;
   text-align: center;
 }
-.openlab-navbar-flyouts .flyout-heading {
+.openlab-navbar-drawer .flyout-heading {
   align-items: center;
   background: #e0f5f1;
   display: flex;
   gap: 6px;
+  line-height: var(--flyout-menu-item-height);
   font-weight: 700;
-  padding: 12px var(--flyout-h-padding);
+  padding: 0 var(--flyout-h-padding);
 }
-.openlab-navbar-flyouts .flyout-menu-items {
+.openlab-navbar-drawer .flyout-heading button:focus,
+.openlab-navbar-drawer .flyout-heading a:focus {
+  text-decoration: underline;
+}
+.openlab-navbar-drawer .flyout-menu-items {
   font-weight: 700;
 }
-.openlab-navbar-flyouts .flyout-menu-items .flyout-submenu {
+.openlab-navbar-drawer .flyout-menu-items .flyout-submenu {
   font-weight: 400;
 }
-.openlab-navbar-flyouts .flyout-menu-items .my-openlab-logout a {
+.openlab-navbar-drawer .flyout-menu-items .my-openlab-logout a {
   color: #F56A6A;
 }
-.openlab-navbar-flyouts .flyout-menu-items .my-openlab-logout img {
+.openlab-navbar-drawer .flyout-menu-items .my-openlab-logout img {
   margin-left: 3px;
 }
-.openlab-navbar-flyouts .flyout-menu-items li {
+.openlab-navbar-drawer .flyout-menu-items li {
   position: relative;
 }
-.openlab-navbar-flyouts .flyout-menu-items li.has-unread::after {
+.openlab-navbar-drawer .flyout-menu-items li.has-unread::after {
   background: #ec6348;
   content: '';
   position: absolute;
@@ -7668,16 +7674,16 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   display: block;
   border-radius: 50%;
 }
-.openlab-navbar-flyouts .flyout-menu-items li a {
+.openlab-navbar-drawer .flyout-menu-items li a {
   align-items: center;
   display: flex;
   gap: 4px;
 }
-.openlab-navbar-flyouts .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon {
+.openlab-navbar-drawer .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon {
   display: inline-block;
   position: relative;
 }
-.openlab-navbar-flyouts .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon::after {
+.openlab-navbar-drawer .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon::after {
   background: #ec6348;
   content: '';
   position: absolute;
@@ -7688,7 +7694,7 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   display: block;
   border-radius: 50%;
 }
-.openlab-navbar-flyouts button.flyout-submenu-toggle {
+.openlab-navbar-drawer button.flyout-action-button {
   background: none;
   padding: 0;
   outline: none;
@@ -7699,25 +7705,50 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   position: relative;
   padding-right: 60px;
 }
-.openlab-navbar-flyouts button.flyout-submenu-toggle[aria-expanded="true"],
-.openlab-navbar-flyouts button.flyout-submenu-toggle:hover {
+.openlab-navbar-drawer button.flyout-submenu-toggle:focus,
+.openlab-navbar-drawer button.flyout-submenu-toggle:hover {
   background: #dddddd;
 }
-.openlab-navbar-flyouts button.flyout-submenu-toggle::after {
+.openlab-navbar-drawer button.flyout-submenu-toggle::after {
   content: '';
   position: absolute;
   right: var(--flyout-h-padding);
   top: calc(50% - 1px);
-  transform: translateY(-50%) rotate(45deg);
+  transform: translateY(-50%) rotate(315deg);
   width: 8px;
   height: 8px;
   border-right: 2px solid #333;
   border-bottom: 2px solid #333;
   transition: transform 0.2s ease;
 }
-.openlab-navbar-flyouts button.flyout-submenu-toggle[aria-expanded="true"]::after {
+.openlab-navbar-drawer button.flyout-submenu-toggle[aria-expanded="true"]::after {
   top: calc(50% + 2px);
   transform: translateY(-50%) rotate(-135deg);
+}
+.openlab-navbar-drawer button.flyout-subnav-back {
+  align-items: center;
+  display: flex;
+  gap: 0px;
+  /* Chevron SVG has a ton of whitespace */
+  padding-left: 0;
+}
+.openlab-navbar-drawer button.flyout-subnav-back .back-button-text {
+  padding-left: 12px;
+}
+.openlab-navbar-drawer .drawer-panel {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.3s ease;
+  transform: translateX(100%);
+  pointer-events: none;
+}
+.openlab-navbar-drawer .drawer-panel.active {
+  transform: translateX(0);
+  pointer-events: auto;
+}
+.openlab-navbar-drawer .drawer-panel.previous {
+  transform: translateX(-100%);
 }
 .pagination {
   margin: 0;

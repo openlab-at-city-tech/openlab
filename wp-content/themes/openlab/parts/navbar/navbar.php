@@ -85,7 +85,7 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 	<div class="shadow-mask-right"></div>
 </nav>
 
-<div class="openlab-navbar-flyouts">
+<div class="openlab-navbar-drawer" aria-hidden="true">
 	<?php if ( is_user_logged_in() ) : ?>
 		<?php get_template_part( 'parts/navbar/favorites-flyout' ); ?>
 		<?php get_template_part( 'parts/navbar/my-openlab-flyout' ); ?>

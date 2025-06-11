@@ -767,82 +767,83 @@ OpenLab.utility = (function ($) {
 			avatarUploadForm.addEventListener( 'change', checkButton );
 		},
 		setUpNav: function() {
+			const drawer = document.querySelector('.openlab-navbar-drawer');
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
 				toggle.addEventListener('click', (e) => {
-					const menuId = toggle.getAttribute('aria-controls');
-					const menu = document.getElementById(menuId);
+					e.preventDefault();
+
 					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
-					// Close all open menus
+					// Close all open menus.
 					document.querySelectorAll('.navbar-action-link-toggleable').forEach(b => {
 						b.classList.remove('is-open');
 					});
+
+					document.querySelectorAll('.navbar-flyout-toggle').forEach(button => {
+						button.setAttribute('aria-expanded', 'false');
+					} )
 
 					document.querySelectorAll('.flyout-menu').forEach(b => {
 						b.classList.remove('is-open');
 					});
 
-					document.querySelectorAll('.navbar-flyout-toggle').forEach(b => {
-						b.setAttribute('aria-expanded', 'false');
+					document.querySelectorAll('.drawer-panel').forEach(panel => {
+						panel.classList.remove('active', 'previous');
 					});
 
-					// Toggle current menu
-					if ( ! isOpen ) {
+					if ( isOpen ) {
+						drawer.setAttribute('aria-hidden', 'true');
+						drawer.classList.remove('is-open');
+
+					} else {
+						const menuId = toggle.getAttribute('aria-controls');
+						const menu = document.getElementById(menuId);
+						menu.classList.add('is-open');
+
+						const defaultPanelId = menu.getAttribute('data-default-panel');
+						if ( defaultPanelId ) {
+							const defaultPanel = document.getElementById(defaultPanelId);
+
+							defaultPanel.classList.add('active');
+							defaultPanel.setAttribute('aria-hidden', 'false');
+							console.log( 'Removed aria-hidden from default panel', defaultPanel );
+						}
+
+						drawer.setAttribute('aria-hidden', 'false');
+						drawer.classList.add('is-open');
+
 						toggle.setAttribute('aria-expanded', 'true');
 						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
-						menu.classList.add( 'is-open' );
-
-						const navbar = document.querySelector( '.openlab-navbar' );
-						const menuRect = menu.getBoundingClientRect();
-						const toggleRect = toggle.getBoundingClientRect();
-						const navbarRect = navbar.getBoundingClientRect();
-						const flyoutContainer = document.querySelector( '.openlab-navbar-flyouts' );
-						const flyoutContainerRect = flyoutContainer.getBoundingClientRect();
-
-						// Position flyout-menu to match left edge of toggle.
-						const newLeft = toggleRect.left - flyoutContainerRect.left;
-						menu.style.left = `${newLeft}px`;
-
-						// Ensure that the flyout-menu is within the viewport.
-						const updatedMenuRect = menu.getBoundingClientRect();
-						const flyoutParentRect = flyoutContainer.getBoundingClientRect();
-
-						const menuLeftRelative = updatedMenuRect.left - flyoutParentRect.left;
-						const spillover = updatedMenuRect.right - window.innerWidth;
-
-						if (spillover > 0) {
-							const adjustedLeft = Math.max(menuLeftRelative - spillover - 20, 0);
-							menu.style.left = `${adjustedLeft}px`;
-						}
 					}
 				});
 			});
 
 			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
 			submenuToggles.forEach( toggle => {
+				toggle.addEventListener('pointerdown', function (e) {
+					e.preventDefault();
+					OpenLab.utility.switchToNavPanel( this.getAttribute('data-target') );
+				});
+
+				toggle.addEventListener('keydown', function (e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						OpenLab.utility.switchToNavPanel( this.getAttribute('data-target') );
+					}
+				});
+			});
+
+			const backToggles = document.querySelectorAll('.flyout-subnav-back');
+			backToggles.forEach( toggle => {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
+					OpenLab.utility.switchToNavPanel( 'panel-root' );
+				});
 
-					const isOpen = this.getAttribute('aria-expanded') === 'true';
-					const submenuId = this.getAttribute('aria-controls');
-					const submenu = document.getElementById(submenuId);
-
-					// Close all other open submenus
-					submenuToggles.forEach(otherToggle => {
-					const otherSubmenuId = otherToggle.getAttribute('aria-controls');
-					const otherSubmenu = document.getElementById(otherSubmenuId);
-
-					otherToggle.setAttribute('aria-expanded', 'false');
-						otherSubmenu.hidden = true;
-					});
-
-					// Toggle this one
-					if (!isOpen) {
-						this.setAttribute('aria-expanded', 'true');
-						submenu.hidden = false;
-					} else {
-						this.setAttribute('aria-expanded', 'false');
-						submenu.hidden = true;
+				toggle.addEventListener('keydown', function (e) {
+					if (e.key === 'Enter' || e.key === ' ') {
+						e.preventDefault();
+						OpenLab.utility.switchToNavPanel( 'panel-root' );
 					}
 				});
 			});
@@ -853,7 +854,7 @@ OpenLab.utility = (function ($) {
 
 			document.addEventListener('click', function (e) {
 				const nav = document.querySelector('.openlab-navbar');
-				const flyoutContainer = document.querySelector('.openlab-navbar-flyouts');
+				const flyoutContainer = document.querySelector('.openlab-navbar-drawer');
 				const isClickInsideNav = nav.contains(e.target) || flyoutContainer.contains(e.target);
 
 				if (!isClickInsideNav) {
@@ -877,6 +878,21 @@ OpenLab.utility = (function ($) {
 					);
 				}
 			});
+		},
+		switchToNavPanel: function( panelId ) {
+				const targetPanel = document.getElementById(panelId);
+
+				document.querySelectorAll('.drawer-panel').forEach(panel => {
+				const isTarget = panel === targetPanel;
+					panel.setAttribute('aria-hidden', String(!isTarget));
+					panel.classList.toggle('active', isTarget);
+				});
+
+				// Switch focus to the first button or link in the targetPanel.
+				const firstFocusable = targetPanel.querySelector('.drawer-list').querySelector('button, a');
+				if (firstFocusable) {
+					firstFocusable.focus();
+				}
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings

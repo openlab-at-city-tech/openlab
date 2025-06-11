@@ -421,24 +421,35 @@ button[aria-expanded="true"] svg.navbar-icon {
 	}
 }
 
-.openlab-navbar-flyouts {
+.openlab-navbar-drawer {
 	--flyout-h-padding: 20px;
-	position: relative;
+	--flyout-menu-item-height: 60px;
+
+	background: #fff;
+	border-left: 5px solid @darkTeal;
+	position: fixed;
+	right: 0;
+	top: 80px;
+	height: 100%;
+	width: 356px;
+	transform: translateX(100%);
+	transition: transform 0.3s ease-in-out;
+	z-index: 500;
+
+	&.is-open {
+		transform: translateX(0);
+	}
 
 	.flyout-menu {
-		position: absolute;
-		background: #fff;
-		border: 1px solid #ccc;
-		z-index: 500;
-		width: max-content;
-		min-width: 150px;
-		margin-top: -6px;
+		display: none;
 		padding: 0;
-		opacity: 0;
+		position: relative;
 		visibility: hidden;
 
-		transition: opacity 0.2s ease, visibility 0.2s ease;
-		pointer-events: none;
+		&.is-open {
+			display: block;
+			visibility: visible;
+		}
 
 		ul {
 			list-style: none;
@@ -447,8 +458,9 @@ button[aria-expanded="true"] svg.navbar-icon {
 		}
 
 		li {
+			border-bottom: 1px solid #ddd;
 			margin: 0;
-			line-height: 36px;
+			line-height: var(--flyout-menu-item-height);
 		}
 
 		li a {
@@ -464,17 +476,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 			background-color: #f0f0f0;
 		}
 
-		&.is-open {
-			z-index: 500;
-
-			opacity: 1;
-			pointer-events: auto;
-			visibility: visible;
-		}
-
 		&.flyout-menu-login {
-			min-width: 300px;
-
 			& > div {
 				padding: 24px;
 			}
@@ -506,8 +508,14 @@ button[aria-expanded="true"] svg.navbar-icon {
 		background: @lightTeal;
 		display: flex;
 		gap: 6px;
+		line-height: var(--flyout-menu-item-height);
 		font-weight: @bold;
-		padding: 12px var(--flyout-h-padding);
+		padding: 0 var(--flyout-h-padding);
+
+		button:focus,
+		a:focus {
+			text-decoration: underline;
+		}
 	}
 
 	.flyout-menu-items {
@@ -569,7 +577,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 		}
 	}
 
-	button.flyout-submenu-toggle {
+	button.flyout-action-button {
 		background: none;
 		padding: 0;
 		outline: none;
@@ -579,8 +587,10 @@ button[aria-expanded="true"] svg.navbar-icon {
 		padding: 0 var(--flyout-h-padding);
 		position: relative;
 		padding-right: 60px;
+	}
 
-		&[aria-expanded="true"],
+	button.flyout-submenu-toggle {
+		&:focus,
 		&:hover {
 			background: @10gray;
 		}
@@ -590,7 +600,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 			position: absolute;
 			right: var(--flyout-h-padding); // 4px for the border
 			top: calc(50% - 1px);
-			transform: translateY(-50%) rotate(45deg);
+			transform: translateY(-50%) rotate(315deg);
 			width: 8px;
 			height: 8px;
 			border-right: 2px solid #333;
@@ -601,6 +611,35 @@ button[aria-expanded="true"] svg.navbar-icon {
 		&[aria-expanded="true"]::after {
 			top: calc(50% + 2px);
 			transform: translateY(-50%) rotate(-135deg); // points up
+		}
+	}
+
+	button.flyout-subnav-back {
+		align-items: center;
+		display: flex;
+		gap: 0px; /* Chevron SVG has a ton of whitespace */
+		padding-left: 0;
+
+		.back-button-text {
+			padding-left: 12px;
+		}
+	}
+
+	.drawer-panel {
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		transition: transform 0.3s ease;
+		transform: translateX(100%);
+		pointer-events: none; // Prevents interaction when not visible
+
+		&.active {
+			transform: translateX(0);
+			pointer-events: auto; // Allows interaction when visible
+		}
+
+		&.previous {
+			transform: translateX(-100%);
 		}
 	}
 }
