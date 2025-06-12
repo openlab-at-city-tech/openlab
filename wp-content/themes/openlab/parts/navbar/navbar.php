@@ -14,7 +14,7 @@ $my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-up
 		</a>
 	</header>
 
-	<div class="navbar-nav-menu hidden-sm hidden-xs">
+	<div class="navbar-nav-menu hidden-md hidden-sm hidden-xs">
 		<ul class="navbar-nav">
 			<?php foreach ( $navbar_nav_menu_items as $item ) : ?>
 				<li class="navbar-nav-item">

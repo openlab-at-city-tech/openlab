@@ -7504,6 +7504,11 @@ blockquote .h6 {
 .openlab-navbar .navbar-nav-menu ul a:hover {
   text-decoration: underline;
 }
+@media (max-width: 1200px) {
+  .openlab-navbar .navbar-nav-menu {
+    display: none;
+  }
+}
 .openlab-navbar .navbar-action-links {
   align-items: center;
   display: flex;
