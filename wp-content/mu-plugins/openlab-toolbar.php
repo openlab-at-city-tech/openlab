@@ -156,7 +156,7 @@ class OpenLab_Admin_Bar {
 				</div>
 			</div>',
 			$openlab_logo_url,
-			wp_login_url(),
+			wp_login_url( home_url() ),
 			bp_get_signup_page()
 		);
 
