@@ -422,11 +422,12 @@ button[aria-expanded="true"] svg.navbar-icon {
 }
 
 .openlab-navbar-drawer {
-	--flyout-h-padding: 20px;
+	--flyout-h-padding: 36px;
 	--flyout-menu-item-height: 60px;
 
 	background: #fff;
 	border-left: 5px solid @darkTeal;
+	font-size: 18px;
 	position: fixed;
 	right: 0;
 	top: 80px;
@@ -461,6 +462,26 @@ button[aria-expanded="true"] svg.navbar-icon {
 			border-bottom: 1px solid #ddd;
 			margin: 0;
 			line-height: var(--flyout-menu-item-height);
+
+			&.my-openlab-logout {
+				font-weight: @bold;
+
+				a {
+					align-items: center;
+					color: #F56A6A;
+					display: flex;
+					gap: 12px;
+
+					&::after {
+						content: '';
+						background: url('images/log-out.svg') no-repeat center center;
+						height: 18px;
+						width: 20px;
+						display: inline-block;
+						margin-top: 1px;
+					}
+				}
+			}
 		}
 
 		li a {
@@ -509,7 +530,7 @@ button[aria-expanded="true"] svg.navbar-icon {
 		display: flex;
 		gap: 6px;
 		line-height: var(--flyout-menu-item-height);
-		font-weight: @bold;
+		font-weight: @semibold;
 		padding: 0 var(--flyout-h-padding);
 
 		button:focus,
@@ -586,43 +607,28 @@ button[aria-expanded="true"] svg.navbar-icon {
 		width: 100%;
 		padding: 0 var(--flyout-h-padding);
 		position: relative;
-		padding-right: 60px;
 	}
 
 	button.flyout-submenu-toggle {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+
 		&:focus,
 		&:hover {
 			background: @10gray;
 		}
 
-		&::after {
-			content: '';
-			position: absolute;
-			right: var(--flyout-h-padding); // 4px for the border
-			top: calc(50% - 1px);
-			transform: translateY(-50%) rotate(315deg);
-			width: 8px;
-			height: 8px;
-			border-right: 2px solid #333;
-			border-bottom: 2px solid #333;
-			transition: transform 0.2s ease;
-		}
-
-		&[aria-expanded="true"]::after {
-			top: calc(50% + 2px);
-			transform: translateY(-50%) rotate(-135deg); // points up
+		.right-chevron svg {
+			height: 16px;
 		}
 	}
 
 	button.flyout-subnav-back {
 		align-items: center;
 		display: flex;
-		gap: 0px; /* Chevron SVG has a ton of whitespace */
+		gap: 12px;
 		padding-left: 0;
-
-		.back-button-text {
-			padding-left: 12px;
-		}
 	}
 
 	.drawer-panel {

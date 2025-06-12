@@ -11,6 +11,9 @@ $user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
 
 $my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
 
+$left_chevron_svg  = '<svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 1.23077L0.999999 8.61539L9 16" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+$right_chevron_svg = '<svg width="10" height="18" viewBox="0 0 10 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 17L9 9L0.999999 1" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
 $root_panel = [
 	'my-settings' => [
 		'text'   => 'My Settings',
@@ -151,11 +154,7 @@ $panels = [
 					<span>My OpenLab</span>
 				<?php else : ?>
 					<button class="nav-item flyout-action-button flyout-subnav-back" data-back="panel-root">
-						<span>
-							<svg width="32" height="31" viewBox="0 0 32 31" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M20 8.23077L12 15.6154L20 23" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-							</svg>
-						</span>
+						<span class="chevron-left"><?php echo $left_chevron_svg; ?></span>
 
 						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
 
@@ -178,7 +177,8 @@ $panels = [
 						?>
 						<li class="<?php echo esc_attr( $class_attr ); ?>">
 							<button class="nav-item has-submenu flyout-action-button flyout-submenu-toggle" data-target="panel-<?php echo esc_attr( $item['target'] ); ?>">
-								<?php echo esc_html( $item['text'] ); ?>
+								<span><?php echo esc_html( $item['text'] ); ?></span>
+								<span class="right-chevron"><?php echo $right_chevron_svg; ?></span>
 							</button>
 						</li>
 					<?php elseif ( ! empty( $item['href'] ) ) : ?>
@@ -192,49 +192,4 @@ $panels = [
 			</ul>
 		</div>
 	<?php endforeach; ?>
-
-	<?php /*
-	<ul class="flyout-menu-items">
-		<?php foreach ( $links as $link ) : ?>
-			<?php
-			$has_children = ! empty( $link['children'] );
-
-			$li_classes = [];
-			if ( $has_children ) {
-				$li_classes[] = 'has-children';
-			}
-
-			if ( ! empty( $link['class'] ) ) {
-				$li_classes[] = $link['class'];
-			}
-
-			?>
-			<li class="<?php echo esc_attr( implode( ' ', $li_classes ) ); ?>">
-				<?php if ( $has_children ) : ?>
-					<?php $submenu_id = sanitize_title( $link['text'] ) . '-submenu'; ?>
-					<button class="flyout-submenu-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="<?php echo esc_attr( $submenu_id ); ?>">
-						<?php echo esc_html( $link['text'] ); ?>
-					</button>
-					<ul class="flyout-submenu" id="<?php echo esc_attr( $submenu_id ); ?>">
-						<?php foreach ( $link['children'] as $child ) : ?>
-							<li>
-								<a href="<?php echo esc_url( $child['href'] ); ?>">
-									<?php echo esc_html( $child['text'] ); ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				<?php else : ?>
-					<a href="<?php echo esc_url( $link['href'] ); ?>">
-						<?php echo esc_html( $link['text'] ); ?>
-
-						<?php if ( isset( $link['class'] ) && 'my-openlab-logout' === $link['class'] ) : ?>
-							<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/images/log-out.png' ); ?>" alt="Logout Icon" class="logout-icon" aria-hidden="true" />
-						<?php endif; ?>
-					</a>
-				<?php endif; ?>
-			</li>
-		<?php endforeach; ?>
-	</ul>
-	*/ ?>
 </div>

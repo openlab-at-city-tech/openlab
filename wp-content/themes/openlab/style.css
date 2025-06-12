@@ -7569,10 +7569,11 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   fill: #e0f5f1;
 }
 .openlab-navbar-drawer {
-  --flyout-h-padding: 20px;
+  --flyout-h-padding: 36px;
   --flyout-menu-item-height: 60px;
   background: #fff;
   border-left: 5px solid #3ba49b;
+  font-size: 18px;
   position: fixed;
   right: 0;
   top: 80px;
@@ -7604,6 +7605,23 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   border-bottom: 1px solid #ddd;
   margin: 0;
   line-height: var(--flyout-menu-item-height);
+}
+.openlab-navbar-drawer .flyout-menu li.my-openlab-logout {
+  font-weight: 700;
+}
+.openlab-navbar-drawer .flyout-menu li.my-openlab-logout a {
+  align-items: center;
+  color: #F56A6A;
+  display: flex;
+  gap: 12px;
+}
+.openlab-navbar-drawer .flyout-menu li.my-openlab-logout a::after {
+  content: '';
+  background: url('images/log-out.svg') no-repeat center center;
+  height: 18px;
+  width: 20px;
+  display: inline-block;
+  margin-top: 1px;
 }
 .openlab-navbar-drawer .flyout-menu li a {
   text-decoration: none;
@@ -7641,7 +7659,7 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   display: flex;
   gap: 6px;
   line-height: var(--flyout-menu-item-height);
-  font-weight: 700;
+  font-weight: 600;
   padding: 0 var(--flyout-h-padding);
 }
 .openlab-navbar-drawer .flyout-heading button:focus,
@@ -7703,37 +7721,24 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   width: 100%;
   padding: 0 var(--flyout-h-padding);
   position: relative;
-  padding-right: 60px;
+}
+.openlab-navbar-drawer button.flyout-submenu-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle:focus,
 .openlab-navbar-drawer button.flyout-submenu-toggle:hover {
   background: #dddddd;
 }
-.openlab-navbar-drawer button.flyout-submenu-toggle::after {
-  content: '';
-  position: absolute;
-  right: var(--flyout-h-padding);
-  top: calc(50% - 1px);
-  transform: translateY(-50%) rotate(315deg);
-  width: 8px;
-  height: 8px;
-  border-right: 2px solid #333;
-  border-bottom: 2px solid #333;
-  transition: transform 0.2s ease;
-}
-.openlab-navbar-drawer button.flyout-submenu-toggle[aria-expanded="true"]::after {
-  top: calc(50% + 2px);
-  transform: translateY(-50%) rotate(-135deg);
+.openlab-navbar-drawer button.flyout-submenu-toggle .right-chevron svg {
+  height: 16px;
 }
 .openlab-navbar-drawer button.flyout-subnav-back {
   align-items: center;
   display: flex;
-  gap: 0px;
-  /* Chevron SVG has a ton of whitespace */
+  gap: 12px;
   padding-left: 0;
-}
-.openlab-navbar-drawer button.flyout-subnav-back .back-button-text {
-  padding-left: 12px;
 }
 .openlab-navbar-drawer .drawer-panel {
   position: absolute;

@@ -869,6 +869,10 @@ OpenLab.utility = (function ($) {
 						el.setAttribute('aria-expanded', 'false')
 					);
 
+					const drawer = document.querySelector('.openlab-navbar-drawer');
+					drawer.setAttribute('aria-hidden', 'true')
+					drawer.classList.remove('is-open');
+
 					// Close all submenus too
 					document.querySelectorAll('.flyout-submenu').forEach(el => {
 						el.hidden = true;
