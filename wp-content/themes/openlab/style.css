@@ -7496,11 +7496,13 @@ blockquote .h6 {
 .openlab-navbar .navbar-action-links {
   align-items: center;
   display: flex;
-  gap: 36px;
+  gap: 26px;
 }
-.openlab-navbar .navbar-action-links i.fa {
-  margin: 0;
-  font-size: 20px;
+.openlab-navbar .navbar-action-link {
+  padding: 0 4px;
+}
+.openlab-navbar .navbar-action-link.navbar-action-link-toggleable {
+  padding: 0 0;
 }
 .openlab-navbar button.navbar-flyout-toggle {
   background: none;
@@ -7518,6 +7520,9 @@ blockquote .h6 {
   height: 7px;
   display: block;
   border-radius: 50%;
+}
+.openlab-navbar button.navbar-flyout-toggle[aria-expanded="true"].has-unread::after {
+  content: none;
 }
 .openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login {
   align-items: center;
@@ -7558,15 +7563,21 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   stroke: #333;
   fill: transparent;
 }
-button[aria-expanded="true"] svg.navbar-icon .svg-bg {
-  fill: #e0f5f1;
+.navbar-action-link-toggleable .icon-close,
+.navbar-action-link-toggleable .icon-default {
+  display: inline-block;
+  text-align: center;
+  width: 28px;
+  vertical-align: middle;
 }
-button[aria-expanded="true"] svg.navbar-icon .svg-stroke {
-  fill: #3ba49b;
+.navbar-action-link-toggleable .icon-close {
+  display: none;
 }
-button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
-  stroke: #3ba49b;
-  fill: #e0f5f1;
+.navbar-action-link-toggleable button[aria-expanded="true"] .icon-close {
+  display: inline-block;
+}
+.navbar-action-link-toggleable button[aria-expanded="true"] .icon-default {
+  display: none;
 }
 .openlab-navbar-drawer {
   --flyout-h-padding: 36px;

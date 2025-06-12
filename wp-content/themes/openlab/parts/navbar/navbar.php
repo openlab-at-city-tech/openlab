@@ -35,14 +35,14 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 	</div>
 
 	<div class="navbar-action-links">
-		<div class="navbar-action-link-search">
+		<div class="navbar-action-link navbar-action-link-search">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'search' ) ); ?>">
 				<span class="screen-reader-text">Search</span>
 				<?php get_template_part( 'parts/navbar/search-icon' ); ?>
 			</a>
 		</div>
 
-		<div class="navbar-action-link-help">
+		<div class="navbar-action-link navbar-action-link-help">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'blog/help/openlab-help' ) ); ?>">
 				<span class="screen-reader-text">Help</span>
 				<?php get_template_part( 'parts/navbar/help-icon' ); ?>
@@ -50,33 +50,37 @@ $my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
 		</div>
 
 		<?php if ( is_user_logged_in() ) : ?>
-			<div class="navbar-action-link-favorites navbar-action-link-toggleable">
+			<div class="navbar-action-link navbar-action-link-favorites navbar-action-link-toggleable">
 				<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="favorites-flyout">
 					<span class="screen-reader-text">Favorites</span>
-					<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
+					<span class="icon-default"><?php get_template_part( 'parts/navbar/favorites-icon' ); ?></span>
+					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
 				</button>
 			</div>
 
-			<div class="navbar-action-link-my-openlab navbar-action-link-toggleable">
+			<div class="navbar-action-link navbar-action-link-my-openlab navbar-action-link-toggleable">
 				<span class="screen-reader-text">My OpenLab</span>
 				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
 					<span class="screen-reader-text">My OpenLab</span>
-					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+					<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
+					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
 				</button>
 			</div>
 		<?php else : ?>
-			<div class="navbar-action-link-login navbar-action-link-toggleable">
+			<div class="navbar-action-link navbar-action-link-login navbar-action-link-toggleable">
 				<button class="navbar-flyout-toggle navbar-flyout-toggle-login" aria-haspopup="true" aria-expanded="false" aria-controls="login-flyout">
 					<span>Sign In</span>
-					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+					<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
+					<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
 				</button>
 			</div>
 		<?php endif; ?>
 
-		<div class="navbar-action-link-main-menu navbar-action-link-toggleable">
+		<div class="navbar-action-link navbar-action-link-main-menu navbar-action-link-toggleable">
 			<button class="navbar-flyout-toggle" aria-haspopup="true" aria-expanded="false" aria-controls="main-menu-flyout">
 				<span class="screen-reader-text">Main Menu</span>
-				<?php get_template_part( 'parts/navbar/menu-icon' ); ?>
+				<span class="icon-default"><?php get_template_part( 'parts/navbar/menu-icon' ); ?></span>
+				<span class="icon-close"><?php get_template_part( 'parts/navbar/close-icon' ); ?></span>
 			</button>
 		</div>
 	</div>
