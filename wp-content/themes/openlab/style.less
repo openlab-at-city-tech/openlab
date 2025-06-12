@@ -514,7 +514,11 @@ svg.navbar-icon {
 
 		&.flyout-menu-login {
 			& > div {
-				padding: 24px;
+				padding: 40px;
+
+				&.flyout-menu-login-register {
+					padding: 24px 40px;
+				}
 			}
 
 			label {
@@ -523,11 +527,15 @@ svg.navbar-icon {
 
 			.btn {
 				background: @80gray;
+				border-radius: 5px;
 				color: @white;
-				font-size: 13.5px;
+				font-size: 16px;
+				line-height: 40px;
+				padding: 0;
 			}
 
 			.navbar-forgot-password {
+				font-size: 13px;
 				margin-bottom: 20px;
 				text-align: right;
 			}

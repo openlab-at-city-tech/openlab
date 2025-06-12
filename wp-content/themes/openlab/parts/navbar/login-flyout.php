@@ -15,7 +15,7 @@
 			<input class="form-control input" type="password" name="pwd" id="navbar-user-pass" value="" />
 
 			<div class="navbar-forgot-password">
-				<a class="forgot-password-link small-text roll-over-loss" href="<?php echo esc_attr( site_url( 'wp-login.php?action=lostpassword', 'login' ) ); ?>">Forgot Password?</a>
+				<a class="forgot-password-link roll-over-loss" href="<?php echo esc_attr( site_url( 'wp-login.php?action=lostpassword', 'login' ) ); ?>">Forgot Password?</a>
 			</div>
 
 			<input class="btn btn-block link-btn semibold" type="submit" name="wp-submit" id="navbar-wp-submit" value="Sign In" tabindex="0" />

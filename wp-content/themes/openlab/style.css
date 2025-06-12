@@ -7646,17 +7646,24 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   background-color: #f0f0f0;
 }
 .openlab-navbar-drawer .flyout-menu.flyout-menu-login > div {
-  padding: 24px;
+  padding: 40px;
+}
+.openlab-navbar-drawer .flyout-menu.flyout-menu-login > div.flyout-menu-login-register {
+  padding: 24px 40px;
 }
 .openlab-navbar-drawer .flyout-menu.flyout-menu-login label {
   font-weight: 400;
 }
 .openlab-navbar-drawer .flyout-menu.flyout-menu-login .btn {
   background: #333333;
+  border-radius: 5px;
   color: #ffffff;
-  font-size: 13.5px;
+  font-size: 16px;
+  line-height: 40px;
+  padding: 0;
 }
 .openlab-navbar-drawer .flyout-menu.flyout-menu-login .navbar-forgot-password {
+  font-size: 13px;
   margin-bottom: 20px;
   text-align: right;
 }
