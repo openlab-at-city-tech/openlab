@@ -90,61 +90,77 @@ $panels = [
 	'root'             => $root_panel,
 	'settings-submenu' => $settings_submenu,
 	'activity-submenu' => [
-		'all'       => [
+		'my-activity-submenu-heading' => [
+			'text'  => 'My Activity',
+			'class' => 'flyout-subnav-heading',
+		],
+		'all'                         => [
 			'text' => 'All',
 			'href' => $my_activity_url,
 		],
-		'mine'      => [
+		'mine'                        => [
 			'text' => 'Mine',
 			'href' => add_query_arg( 'type', 'mine', $my_activity_url ),
 		],
-		'favorites' => [
+		'favorites'                   => [
 			'text' => 'Favorites',
 			'href' => add_query_arg( 'type', 'favorites', $my_activity_url ),
 		],
-		'mentions'  => [
+		'mentions'                    => [
 			'text' => '@Mentions',
 			'href' => add_query_arg( 'type', 'mentions', $my_activity_url ),
 		],
-		'starred'   => [
+		'starred'                     => [
 			'text' => 'Starred',
 			'href' => add_query_arg( 'type', 'starred', $my_activity_url ),
 		],
 	],
 	'friends-submenu'  => [
-		'friend-list'     => [
+		'my-friends-submenu-heading' => [
+			'text'  => 'My Friends',
+			'class' => 'flyout-subnav-heading',
+		],
+		'friend-list'                => [
 			'text' => 'Friend List',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
 		],
-		'friend-requests' => [
+		'friend-requests'            => [
 			'text' => 'Requests Received',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
 		],
 	],
 	'messages-submenu' => [
-		'inbox'   => [
+		'my-messages-submenu-heading' => [
+			'text'  => 'My Messages',
+			'class' => 'flyout-subnav-heading',
+		],
+		'inbox'                       => [
 			'text' => 'Inbox',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
 		],
-		'sent'    => [
+		'sent'                        => [
 			'text' => 'Sent',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
 		],
-		'compose' => [
+		'compose'                     => [
 			'text' => 'Compose',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
 		],
 	],
 	'invitations-submenu' => [
-		'received-invitations' => [
+		'my-invitations-submenu-heading' => [
+			'text'  => 'My Invitations',
+			'class' => 'flyout-subnav-heading',
+		],
+		'received-invitations'           => [
 			'text' => 'Invitations Received',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
 		],
-		'send-invitations'     => [
+		'send-invitations'               => [
 			'text' => 'Invite New Members',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone' ] ) ),
 		],
-		'sent-invitations'     => [
+		'sent-invitations'               => [
 			'text' => 'Sent Invitations',
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone', 'sent-invites' ] ) ),
 		],
@@ -170,8 +186,10 @@ $panels = [
 		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" aria-hidden="true">
 			<div class="flyout-heading">
 				<?php if ( 'root' === $panel_id ) : ?>
-					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
-					<span>My OpenLab</span>
+					<a href="<?php echo esc_url( bp_loggedin_user_url() ); ?>">
+						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+						<span>My OpenLab</span>
+					</a>
 				<?php else : ?>
 					<button class="nav-item flyout-action-button flyout-subnav-back" data-back="panel-root">
 						<span class="chevron-left"><?php echo $left_chevron_svg; ?></span>

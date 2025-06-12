@@ -552,25 +552,22 @@ svg.navbar-icon {
 		a:focus {
 			text-decoration: underline;
 		}
+
+		a {
+			align-items: center;
+			display: flex;
+			gap: 6px;
+			height: 100%;
+			width: 100%;
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
 	}
 
-	.flyout-menu-items {
-		font-weight: 700;
-
-		.flyout-submenu {
-			font-weight: @normal;
-		}
-
-		.my-openlab-logout {
-			a {
-				color: #F56A6A;
-			}
-
-			img {
-				margin-left: 3px;
-			}
-		}
-
+	.drawer-list {
 		li {
 			position: relative;
 
@@ -578,8 +575,8 @@ svg.navbar-icon {
 				background: @orange;
 				content: '';
 				position: absolute;
-				top: 15px;
-				left: 8px;
+				top: calc( 50% - 3.5px );
+				left: 16px;
 				width: 7px;
 				height: 7px;
 				display: block;

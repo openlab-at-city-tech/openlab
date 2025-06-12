@@ -7677,42 +7677,41 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .openlab-navbar-drawer .flyout-heading a:focus {
   text-decoration: underline;
 }
-.openlab-navbar-drawer .flyout-menu-items {
-  font-weight: 700;
+.openlab-navbar-drawer .flyout-heading a {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  height: 100%;
+  width: 100%;
+  text-decoration: none;
 }
-.openlab-navbar-drawer .flyout-menu-items .flyout-submenu {
-  font-weight: 400;
+.openlab-navbar-drawer .flyout-heading a:hover {
+  text-decoration: underline;
 }
-.openlab-navbar-drawer .flyout-menu-items .my-openlab-logout a {
-  color: #F56A6A;
-}
-.openlab-navbar-drawer .flyout-menu-items .my-openlab-logout img {
-  margin-left: 3px;
-}
-.openlab-navbar-drawer .flyout-menu-items li {
+.openlab-navbar-drawer .drawer-list li {
   position: relative;
 }
-.openlab-navbar-drawer .flyout-menu-items li.has-unread::after {
+.openlab-navbar-drawer .drawer-list li.has-unread::after {
   background: #ec6348;
   content: '';
   position: absolute;
-  top: 15px;
-  left: 8px;
+  top: calc(50% - 3.5px);
+  left: 16px;
   width: 7px;
   height: 7px;
   display: block;
   border-radius: 50%;
 }
-.openlab-navbar-drawer .flyout-menu-items li a {
+.openlab-navbar-drawer .drawer-list li a {
   align-items: center;
   display: flex;
   gap: 4px;
 }
-.openlab-navbar-drawer .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon {
+.openlab-navbar-drawer .drawer-list .my-openlab-main-menu-link.has-unread .flyout-menu-icon {
   display: inline-block;
   position: relative;
 }
-.openlab-navbar-drawer .flyout-menu-items .my-openlab-main-menu-link.has-unread .flyout-menu-icon::after {
+.openlab-navbar-drawer .drawer-list .my-openlab-main-menu-link.has-unread .flyout-menu-icon::after {
   background: #ec6348;
   content: '';
   position: absolute;

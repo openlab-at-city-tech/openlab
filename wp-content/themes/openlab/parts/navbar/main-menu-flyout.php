@@ -31,9 +31,11 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 
 <div class="flyout-menu" id="main-menu-flyout" role="menu">
 	<div class="flyout-heading">
-		<span>OpenLab</span>
+		<a href="<?php echo esc_url( home_url() ); ?>">
+			<span>OpenLab</span>
+		</a>
 	</div>
-	<ul class="flyout-menu-items">
+	<ul class="drawer-list">
 		<?php foreach ( $all_nav_links as $link_key => $link ) : ?>
 			<?php $li_class = isset( $link['class'] ) ? $link['class'] : ''; ?>
 			<li class="<?php echo esc_attr( $li_class ); ?>">
