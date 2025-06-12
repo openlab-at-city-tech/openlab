@@ -30,26 +30,36 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 ?>
 
 <div class="flyout-menu" id="main-menu-flyout" role="menu">
-	<div class="flyout-heading">
-		<a href="<?php echo esc_url( home_url() ); ?>">
-			<span>OpenLab</span>
-		</a>
-	</div>
-	<ul class="drawer-list">
-		<?php foreach ( $all_nav_links as $link_key => $link ) : ?>
-			<?php $li_class = isset( $link['class'] ) ? $link['class'] : ''; ?>
-			<li class="<?php echo esc_attr( $li_class ); ?>">
-				<a href="<?php echo esc_url( $link['url'] ); ?>" class="flyout-menu-link">
-					<?php if ( 'my-openlab' === $link_key ) : ?>
-						<span class="flyout-menu-icon">
-							<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
-						</span>
-					<?php endif; ?>
+	<div class="drawer-panel-submenu">
+		<div class="flyout-heading">
+			<a href="<?php echo esc_url( home_url() ); ?>">
+				<span>OpenLab</span>
+			</a>
+		</div>
+		<ul class="drawer-list">
+			<?php foreach ( $all_nav_links as $link_key => $link ) : ?>
+				<?php
+				$li_classes = [ 'drawer-item' ];
+				if ( isset( $link['class'] ) ) {
+					$li_classes[] = $link['class'];
+				}
 
-					<span>
-						<?php echo esc_html( $link['text'] ); ?>
-					</span>
-				</a>
-		<?php endforeach; ?>
-	</ul>
+				$li_class = implode( ' ', array_map( 'sanitize_html_class', $li_classes ) );
+				?>
+
+				<li class="<?php echo esc_attr( $li_class ); ?>">
+					<a href="<?php echo esc_url( $link['url'] ); ?>" class="flyout-menu-link">
+						<?php if ( 'my-openlab' === $link_key ) : ?>
+							<span class="flyout-menu-icon">
+								<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+							</span>
+						<?php endif; ?>
+
+						<span>
+							<?php echo esc_html( $link['text'] ); ?>
+						</span>
+					</a>
+			<?php endforeach; ?>
+		</ul>
+	</div>
 </div>

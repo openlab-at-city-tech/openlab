@@ -24,17 +24,19 @@ if ( ! $user_favorites ) {
 ?>
 
 <div class="flyout-menu" id="favorites-flyout" role="menu">
-	<div class="flyout-heading">
-		<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
-		<span>My Favorites</span>
+	<div class="drawer-panel-submenu">
+		<div class="flyout-heading">
+			<?php get_template_part( 'parts/navbar/favorites-icon' ); ?>
+			<span>My Favorites</span>
+		</div>
+		<ul class="drawer-list">
+			<?php foreach ( $user_favorites as $user_favorite ) : ?>
+				<li class="drawer-item">
+					<a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
+						<?php echo esc_html( $user_favorite->get_group_name() ); ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
+		</ul>
 	</div>
-	<ul class="flyout-menu-items">
-		<?php foreach ( $user_favorites as $user_favorite ) : ?>
-			<li>
-				<a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
-					<?php echo esc_html( $user_favorite->get_group_name() ); ?>
-				</a>
-			</li>
-		<?php endforeach; ?>
-	</ul>
 </div>
