@@ -243,9 +243,11 @@ blockquote {
 }
 
 // Main navbar.
-.openlab-navbar {
-	@navbar-icon-gap: 26px;
+@navbar-height: 80px;
+@navbar-height-mobile: 64px;
+@navbar-icon-gap: 26px;
 
+.openlab-navbar {
 	box-shadow: 0px 4px 4px 0px #00000040;
 	position: relative;
 	justify-content: space-between;
@@ -253,12 +255,17 @@ blockquote {
 	align-items: center;
 	display: flex;
 	gap: 20px;
-	height: 80px;
+	height: @navbar-height;
 	background: white;
 	margin-bottom: 48px;
 	overflow: visible;
 	z-index: 1000;
 	padding: 0 42px 0 32px;
+
+	@media (max-width: @screen-xs-max){
+		height: @navbar-height-mobile;
+		padding: 0 16px 0 12px;
+	}
 
 	.shadow-mask-left,
 	.shadow-mask-right {
@@ -293,6 +300,10 @@ blockquote {
 	.navbar-logo {
 		svg {
 			height: 57px;
+
+			@media (max-width: @screen-xs-max) {
+				height: 45px;
+			}
 		}
 	}
 
@@ -360,10 +371,15 @@ blockquote {
 			font-weight: @semibold;
 			font-size: 16px;
 			gap: 10px;
-			height: 80px;
+			height: @navbar-height;
 			padding: 0 15px;
 			white-space: nowrap;
 
+			@media (max-width: @screen-xs-max) {
+				gap: 8px;
+				height: @navbar-height-mobile;
+				padding: 0 12px;
+			}
 
 			.navbar-icon-my-openlab {
 				height: 25px;
@@ -418,6 +434,10 @@ svg.navbar-icon {
 			fill: transparent;
 		}
 	}
+
+	@media (max-width: @screen-xs-max) {
+		height: 22px;
+	}
 }
 
 .navbar-action-link-toggleable {
@@ -450,14 +470,20 @@ svg.navbar-icon {
 	background: #fff;
 	border-left: 5px solid @darkTeal;
 	font-size: 18px;
-	position: fixed;
+	position: absolute;
 	right: 0;
-	top: 80px;
+	top: @navbar-height;
 	height: 100%;
 	width: 356px;
 	transform: translateX(100%);
 	transition: transform 0.3s ease-in-out;
 	z-index: 500;
+
+	@media (max-width: @screen-xs-max) {
+		border-left: 0;
+		top: @navbar-height-mobile;
+		width: 100%;
+	}
 
 	&.is-open {
 		transform: translateX(0);
