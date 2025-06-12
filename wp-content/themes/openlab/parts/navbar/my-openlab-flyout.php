@@ -76,9 +76,19 @@ $root_panel += [
 	],
 ];
 
+$settings_submenu = array_merge(
+	[
+		'my-settings-submenu-heading' => [
+			'text'  => 'My Settings',
+			'class' => 'flyout-subnav-heading',
+		]
+	],
+	openlab_my_settings_submenu_items()
+);
+
 $panels = [
 	'root'             => $root_panel,
-	'settings-submenu' => openlab_my_settings_submenu_items(),
+	'settings-submenu' => $settings_submenu,
 	'activity-submenu' => [
 		'all'       => [
 			'text' => 'All',
@@ -147,7 +157,17 @@ $panels = [
 <div class="flyout-menu" id="my-openlab-flyout" role="menu" data-default-panel="panel-root">
 
 	<?php foreach ( $panels as $panel_id => $items ) : ?>
-		<div class="drawer-panel" id="panel-<?php echo esc_attr( $panel_id ); ?>" aria-hidden="true">
+		<?php
+		$panel_classes = [ 'drawer-panel' ];
+		if ( 'root' === $panel_id ) {
+			$panel_classes[] = 'drawer-panel-root';
+		} else {
+			$panel_classes[] = 'drawer-panel-submenu';
+		}
+
+		$panel_classes_string = implode( ' ', array_map( 'sanitize_html_class', $panel_classes ) );
+		?>
+		<div class="<?php echo esc_attr( $panel_classes_string ); ?>" id="panel-<?php echo esc_attr( $panel_id ); ?>" aria-hidden="true">
 			<div class="flyout-heading">
 				<?php if ( 'root' === $panel_id ) : ?>
 					<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
@@ -186,6 +206,10 @@ $panels = [
 							<a class="nav-item" href="<?php echo esc_url( $item['href'] ); ?>">
 								<?php echo esc_html( $item['text'] ); ?>
 							</a>
+						</li>
+					<?php else : ?>
+						<li class="<?php echo esc_attr( $class_attr ); ?>">
+							<span class="nav-item"><?php echo esc_html( $item['text'] ); ?></span>
 						</li>
 					<?php endif; ?>
 				<?php endforeach; ?>

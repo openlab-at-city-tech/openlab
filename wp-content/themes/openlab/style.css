@@ -7740,6 +7740,10 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   gap: 12px;
   padding-left: 0;
 }
+.openlab-navbar-drawer .flyout-subnav-heading {
+  padding: 0 var(--flyout-h-padding);
+  font-weight: 700;
+}
 .openlab-navbar-drawer .drawer-panel {
   position: absolute;
   width: 100%;
@@ -7754,6 +7758,10 @@ button[aria-expanded="true"] svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 }
 .openlab-navbar-drawer .drawer-panel.previous {
   transform: translateX(-100%);
+}
+.openlab-navbar-drawer .drawer-panel-submenu .drawer-item:not(.flyout-subnav-heading) {
+  font-size: 16px;
+  font-weight: normal;
 }
 .pagination {
   margin: 0;

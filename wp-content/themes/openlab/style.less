@@ -631,6 +631,11 @@ button[aria-expanded="true"] svg.navbar-icon {
 		padding-left: 0;
 	}
 
+	.flyout-subnav-heading {
+		padding: 0 var(--flyout-h-padding);
+		font-weight: @bold;
+	}
+
 	.drawer-panel {
 		position: absolute;
 		width: 100%;
@@ -646,6 +651,13 @@ button[aria-expanded="true"] svg.navbar-icon {
 
 		&.previous {
 			transform: translateX(-100%);
+		}
+	}
+
+	.drawer-panel-submenu {
+		.drawer-item:not(.flyout-subnav-heading) {
+			font-size: 16px;
+			font-weight: normal;
 		}
 	}
 }

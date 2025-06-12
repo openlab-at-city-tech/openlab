@@ -806,7 +806,6 @@ OpenLab.utility = (function ($) {
 
 							defaultPanel.classList.add('active');
 							defaultPanel.setAttribute('aria-hidden', 'false');
-							console.log( 'Removed aria-hidden from default panel', defaultPanel );
 						}
 
 						drawer.setAttribute('aria-hidden', 'false');
@@ -822,13 +821,13 @@ OpenLab.utility = (function ($) {
 			submenuToggles.forEach( toggle => {
 				toggle.addEventListener('pointerdown', function (e) {
 					e.preventDefault();
-					OpenLab.utility.switchToNavPanel( this.getAttribute('data-target') );
+					OpenLab.utility.switchToNavPanel( this.getAttribute('data-target'), false );
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						OpenLab.utility.switchToNavPanel( this.getAttribute('data-target') );
+						OpenLab.utility.switchToNavPanel( this.getAttribute('data-target'), true );
 					}
 				});
 			});
@@ -837,13 +836,13 @@ OpenLab.utility = (function ($) {
 			backToggles.forEach( toggle => {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
-					OpenLab.utility.switchToNavPanel( 'panel-root' );
+					OpenLab.utility.switchToNavPanel( 'panel-root', false );
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						OpenLab.utility.switchToNavPanel( 'panel-root' );
+						OpenLab.utility.switchToNavPanel( 'panel-root', true );
 					}
 				});
 			});
@@ -883,7 +882,7 @@ OpenLab.utility = (function ($) {
 				}
 			});
 		},
-		switchToNavPanel: function( panelId ) {
+		switchToNavPanel: function( panelId, switchFocus ) {
 				const targetPanel = document.getElementById(panelId);
 
 				document.querySelectorAll('.drawer-panel').forEach(panel => {
@@ -892,10 +891,18 @@ OpenLab.utility = (function ($) {
 					panel.classList.toggle('active', isTarget);
 				});
 
-				// Switch focus to the first button or link in the targetPanel.
-				const firstFocusable = targetPanel.querySelector('.drawer-list').querySelector('button, a');
-				if (firstFocusable) {
-					firstFocusable.focus();
+				if ( switchFocus ) {
+					// Switch focus to the first button or link in the targetPanel.
+					const firstFocusable = targetPanel.querySelector('.drawer-list').querySelector('button, a');
+					if (firstFocusable) {
+						firstFocusable.focus();
+					}
+				} else {
+					// Simply blur, to avoid focus on a hidden element.
+					const focusedElement = document.activeElement;
+					if ( focusedElement && focusedElement.blur ) {
+						focusedElement.blur();
+					}
 				}
 		},
 		setUpItemList: function() {
