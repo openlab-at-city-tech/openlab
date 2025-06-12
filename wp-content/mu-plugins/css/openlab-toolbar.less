@@ -2,6 +2,9 @@
 
 @block-editor-breakpoint-tablet: 782px;
 
+@adminbar-light-text-color: #f0f0f1;
+@adminbar-dark-text-color: #a7aaad;
+
 /**importing bootstrap inside of a wrapper class to avoid conflicts with admin and group site styles**/
 
 /**vendor**/
@@ -54,6 +57,11 @@ body.wp-admin #wpadminbar {
 			align-items: center;
 			display: flex;
 		}
+
+		.ab-item:focus {
+			background: white !important;
+			opacity: .7;
+		}
 	}
 
 	li.admin-bar-menu-openlab-logo-notext {
@@ -103,14 +111,19 @@ body.wp-admin #wpadminbar {
 
 	#wp-admin-bar-user-info {
 		font-size: 14px;
+		margin-bottom: 0;
+
 		.username {
+			color: @adminbar-light-text-color;
 			font-size: 14px;
-			margin-bottom: .5em;
-			font-weight: 700;
 
 			@media screen and (max-width: @block-editor-breakpoint-tablet) {
 				font-size: 18px;
 			}
+		}
+
+		.nicename {
+			font-size: 11px;
 		}
 
 		@media screen and (max-width: @block-editor-breakpoint-tablet) {
@@ -119,14 +132,14 @@ body.wp-admin #wpadminbar {
 	}
 
 	#wp-admin-bar-my-openlab-link {
-		margin-bottom: 24px;
+		margin-bottom: 8px;
 
 		@media screen and (max-width: @block-editor-breakpoint-tablet) {
 			margin-bottom: 0;
 		}
 
 		a {
-			font-weight: 700;
+			color: @adminbar-light-text-color;
 		}
 	}
 
@@ -145,6 +158,21 @@ body.wp-admin #wpadminbar {
 	.my-openlab-logo {
 		display: inline-block;
 		height: 20px;
+	}
+}
+
+#wpadminbar .admin-bar-menu-openlab-logo-mobile {
+	margin-left: 12px;
+
+	.logo-wrapper {
+		display: flex;
+		height: 100%;
+		align-items: center;
+
+		img {
+			border-radius: 50%;
+			height: 22px !important;
+		}
 	}
 }
 
@@ -196,9 +224,9 @@ body.wp-admin #wpadminbar {
 	.openlab-sign-in-info-signin,
 	.openlab-sign-in-info-signin > a,
 	.openlab-sign-in-info-sitename {
-		font-weight: 700;
+		font-weight: normal;
 		line-height: 1.4em;
-		font-size: 16px;
+		font-size: 14px;
 	}
 
 	.openlab-sign-in-info-signin {
@@ -213,6 +241,15 @@ body.wp-admin #wpadminbar {
 
 	.openlab-sign-in-info-logo {
 		flex: 48px 0 0;
+
+		.openlab-sign-in-info-logo-wrap {
+			background: white;
+			display: inline-block;
+			padding: 8px;
+			height: 48px;
+			width: 48px;
+		}
+
 		img {
 			height: 48px;
 			width: 48px;;
@@ -230,14 +267,35 @@ body.wp-admin #wpadminbar {
 
 	@media screen and (max-width: @block-editor-breakpoint-tablet) {
 		display: block;
+		color: @adminbar-light-text-color;
 		padding: 0 12px;
+		font-size: 16px !important;
+
+		a {
+			color: @adminbar-light-text-color;
+		}
 
 		.openlab-logo {
 			display: inline-block;
 		}
 
-		.my-openlab-logo {
-			display: none;
+		.openlab-sign-in-info-tagline {
+			color: @adminbar-dark-text-color;
+			font-size: 11px !important;
+		}
+
+		.openlab-sign-in-info {
+			padding: 0 4px;
+		}
+
+		.openlab-sign-up-info-sign-up {
+			color: @adminbar-dark-text-color;
+			font-size: 11px !important;
+
+			a {
+				color: @adminbar-light-text-color;
+				font-size: 11px !important;
+			}
 		}
 	}
 }

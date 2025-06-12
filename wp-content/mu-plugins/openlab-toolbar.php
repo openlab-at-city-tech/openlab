@@ -90,6 +90,26 @@ class OpenLab_Admin_Bar {
 				),
 			)
 		);
+
+		// We add a separate, mobile only item, which appears only for logged-out users.
+		if ( ! is_user_logged_in() ) {
+			$mobile_title = sprintf(
+				'<span class="logo-wrapper"><img class="openlab-logo" src="%s" alt="OpenLab at City Tech" /></span>',
+				home_url( 'wp-content/mu-plugins/img/openlab-notext-circle.svg' )
+			);
+
+			$wp_admin_bar->add_node(
+				array(
+					'id'    => 'openlab-mobile',
+					'title' => $mobile_title,
+					'href'  => bp_get_root_domain(),
+					'meta'  => array(
+						'tabindex' => 90,
+						'class'    => 'admin-bar-menu admin-bar-menu-openlab-logo-mobile visible-xs',
+					),
+				)
+			);
+		}
 	}
 
 	/**
@@ -99,7 +119,7 @@ class OpenLab_Admin_Bar {
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
 		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
 
-		$title = "<span>Sign In</span> <img class='openlab-logo hidden-xs' src='$openlab_logo_url' alt='OpenLab at City Tech' /><img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
+		$title = "<span>Sign In</span> <img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
 
 		$wp_admin_bar->add_node(
 			array(
@@ -121,7 +141,7 @@ class OpenLab_Admin_Bar {
 
 		$info_title = sprintf(
 			'<div class="openlab-sign-in-info-container">
-				<div class="openlab-sign-in-info-logo"><img src="%s" alt="OpenLab at City Tech" /></div>
+				<div class="openlab-sign-in-info-logo"><span class="openlab-sign-in-info-logo-wrap"><img src="%s" alt="OpenLab at City Tech" /></span></div>
 				<div class="openlab-sign-in-info-text">
 					<div class="openlab-sign-in-info-sitename">OpenLab at City Tech</div>
 					<div class="openlab-sign-in-info-tagline">A place to learn, work, and share</div>
@@ -157,13 +177,11 @@ class OpenLab_Admin_Bar {
 	 * Change 'Howdy' message to 'Hi'
 	 */
 	public function change_howdy_to_hi( $wp_admin_bar ) {
-		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
 		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
 
 		$title = sprintf(
-			'<span class="howdy hidden-xs">Hi, %s</span> <img class="openlab-logo visible-xs" src="%s" alt="OpenLab at City Tech" /><img class="my-openlab-logo hidden-xs" src="%s" alt="My OpenLab" />',
+			'<span class="howdy hidden-xs">Hi, %s</span> <img class="my-openlab-logo hidden-xs" src="%s" alt="My OpenLab" />',
 			bp_get_loggedin_user_fullname(),
-			$openlab_logo_url,
 			$my_openlab_logo_url
 		);
 
@@ -194,6 +212,8 @@ class OpenLab_Admin_Bar {
 		$user_avatar = get_avatar( $user_id, 64 );
 		$user_name   = bp_get_loggedin_user_fullname();
 
+		$user = get_user_by( 'id', $user_id );
+
 		$wp_admin_bar->add_group(
 			array(
 				'parent' => 'my-account',
@@ -202,9 +222,10 @@ class OpenLab_Admin_Bar {
 		);
 
 		$user_info = sprintf(
-			'<span class="user-avatar">%s</span><span class="username">%s</span>',
+			'<span class="user-avatar">%s</span><span class="username-and-nicename"><span class="username">%s</span><span class="nicename">%s</span></span>',
 			$user_avatar,
-			$user_name
+			$user_name,
+			$user->user_nicename
 		);
 
 		$wp_admin_bar->add_node(
