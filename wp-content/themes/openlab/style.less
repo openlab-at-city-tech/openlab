@@ -345,15 +345,6 @@ blockquote {
 		padding: 0;
 
 		&.has-unread::after {
-			background: @orange;
-			content: '';
-			position: absolute;
-			top: 0;
-			right: 0;
-			width: 7px;
-			height: 7px;
-			display: block;
-			border-radius: 50%;
 		}
 
 		&[aria-expanded="true"] {
@@ -389,6 +380,22 @@ blockquote {
 		align-items: center;
 		display: flex;
 		position: relative;
+	}
+}
+
+button.has-unread-upper-dot .icon-default {
+	position: relative;
+
+	&::after {
+		background: @orange;
+		content: '';
+		position: absolute;
+		top: 0;
+		right: 0;
+		width: 7px;
+		height: 7px;
+		display: block;
+		border-radius: 50%;
 	}
 }
 

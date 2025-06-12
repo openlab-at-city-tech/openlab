@@ -3,15 +3,7 @@
  * Main Menu flyout for main site nav.
  */
 
-$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
-
-$has_any_unread = (
-	$user_unread_counts['messages'] > 0 ||
-	$user_unread_counts['friend_requests'] > 0 ||
-	$user_unread_counts['group_invites'] > 0
-);
-
-$my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
+$my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread' : '';
 
 $all_nav_links = [];
 
@@ -41,7 +33,7 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 				<?php
 				$li_classes = [ 'drawer-item' ];
 				if ( isset( $link['class'] ) ) {
-					$li_classes[] = $link['class'];
+					$li_classes += explode( ' ', $link['class'] );
 				}
 
 				$li_class = implode( ' ', array_map( 'sanitize_html_class', $li_classes ) );

@@ -1,15 +1,7 @@
 <?php
 $navbar_nav_menu_items = openlab_get_global_nav_links();
 
-$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
-
-$has_any_unread = (
-	$user_unread_counts['messages'] > 0 ||
-	$user_unread_counts['friend_requests'] > 0 ||
-	$user_unread_counts['group_invites'] > 0
-);
-
-$my_openlab_has_unread_class = $has_any_unread ? 'has-unread' : '';
+$my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-upper-dot' : '';
 
 ?>
 

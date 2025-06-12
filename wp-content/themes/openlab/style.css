@@ -7510,17 +7510,6 @@ blockquote .h6 {
   color: #000000;
   padding: 0;
 }
-.openlab-navbar button.navbar-flyout-toggle.has-unread::after {
-  background: #ec6348;
-  content: '';
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 7px;
-  height: 7px;
-  display: block;
-  border-radius: 50%;
-}
 .openlab-navbar button.navbar-flyout-toggle[aria-expanded="true"].has-unread::after {
   content: none;
 }
@@ -7546,6 +7535,20 @@ blockquote .h6 {
   align-items: center;
   display: flex;
   position: relative;
+}
+button.has-unread-upper-dot .icon-default {
+  position: relative;
+}
+button.has-unread-upper-dot .icon-default::after {
+  background: #ec6348;
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 7px;
+  height: 7px;
+  display: block;
+  border-radius: 50%;
 }
 svg.navbar-icon {
   height: 27px;

@@ -2287,6 +2287,24 @@ function openlab_get_user_unread_counts( $user_id ) {
 }
 
 /**
+ * Gets whether the user has any unread counts.
+ *
+ * @return bool
+ */
+function openlab_user_has_unread_counts() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	$has_any_unread = (
+		$user_unread_counts['messages'] > 0 ||
+		$user_unread_counts['friend_requests'] > 0 ||
+		$user_unread_counts['group_invites'] > 0
+	);
+
+	return $has_any_unread;
+}
+
+
+/**
  * Gets a list of global nav links.
  *
  * These links ("About", etc) are shared between the top-level desktop

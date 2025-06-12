@@ -9,6 +9,8 @@ if ( ! is_user_logged_in() ) {
 
 $user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
 
+$my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-upper-dot' : '';
+
 $my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
 
 $left_chevron_svg  = '<svg width="10" height="17" viewBox="0 0 10 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 1.23077L0.999999 8.61539L9 16" stroke="#333333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -191,10 +193,10 @@ $panels = [
 						<span>My OpenLab</span>
 					</a>
 				<?php else : ?>
-					<button class="nav-item flyout-action-button flyout-subnav-back" data-back="panel-root">
+					<button class="nav-item flyout-action-button flyout-subnav-back <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" data-back="panel-root">
 						<span class="chevron-left"><?php echo $left_chevron_svg; ?></span>
 
-						<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
+						<span class="icon-default"><?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?></span>
 
 						<span class="back-button-text">Back to My OpenLab</span>
 					</button>
