@@ -26,6 +26,18 @@ $badges = array_filter(
 	}
 );
 
+// Don't show the First Year Learning Community badge on the Projects and Resources directory.
+$badges = array_filter(
+	$badges,
+	function( $badge ) use ( $group_type ) {
+		if ( 'fylc' !== $badge->get_slug() ) {
+			return true;
+		}
+
+		return 'project' !== $group_type && ! openlab_is_resources_directory();
+	}
+);
+
 $current_badges = openlab_get_current_filter( 'badges' );
 
 ?>
