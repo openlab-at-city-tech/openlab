@@ -193,6 +193,8 @@ if ( openlab_is_resources_directory() ) {
 	add_filter( 'bp_groups_get_total_groups_sql', 'openlab_filter_groups_query_for_resources', 10, 3 );
 }
 
+$show_group_type_flag = openlab_is_search_results_page() || openlab_is_resources_directory();
+
 ?>
 
 <?php if ( bp_has_groups( $group_args ) ) : ?>
@@ -250,7 +252,7 @@ if ( openlab_is_resources_directory() ) {
 				<div class="group-item-wrapper">
 					<div class="row">
 						<div class="item-avatar alignleft col-xs-6">
-							<?php if ( openlab_is_search_results_page() ) : ?>
+							<?php if ( $show_group_type_flag ) : ?>
 								<div class="group-type-flag"><?php echo openlab_get_group_type_label( [ 'case' => 'upper' ] ); ?></div>
 							<?php endif; ?>
 
