@@ -840,6 +840,7 @@ function validateFileSize(file, maxUploadFileSize) {
  * @param $0.onFileChange       Function called each time a file or a temporary representation of the file is available.
  * @param $0.wpAllowedMimeTypes List of allowed mime types and file extensions.
  * @param $0.signal             Abort signal.
+ * @param $0.multiple           Whether to allow multiple files to be uploaded.
  */
 function uploadMedia({
   wpAllowedMimeTypes,
@@ -849,13 +850,21 @@ function uploadMedia({
   maxUploadFileSize,
   onError,
   onFileChange,
-  signal
+  signal,
+  multiple = true
 }) {
+  if (!multiple && filesList.length > 1) {
+    onError?.(new Error((0,external_wp_i18n_namespaceObject.__)('Only one file can be used here.')));
+    return;
+  }
   const validFiles = [];
   const filesSet = [];
   const setAndUpdateFiles = (index, value) => {
-    if (filesSet[index]?.url) {
-      (0,external_wp_blob_namespaceObject.revokeBlobURL)(filesSet[index].url);
+    // For client-side media processing, this is handled by the upload-media package.
+    if (!window.__experimentalMediaProcessing) {
+      if (filesSet[index]?.url) {
+        (0,external_wp_blob_namespaceObject.revokeBlobURL)(filesSet[index].url);
+      }
     }
     filesSet[index] = value;
     onFileChange?.(filesSet.filter(attachment => attachment !== null));
@@ -888,12 +897,15 @@ function uploadMedia({
     }
     validFiles.push(mediaFile);
 
-    // Set temporary URL to create placeholder media file, this is replaced
-    // with final file from media gallery when upload is `done` below.
-    filesSet.push({
-      url: (0,external_wp_blob_namespaceObject.createBlobURL)(mediaFile)
-    });
-    onFileChange?.(filesSet);
+    // For client-side media processing, this is handled by the upload-media package.
+    if (!window.__experimentalMediaProcessing) {
+      // Set temporary URL to create placeholder media file, this is replaced
+      // with final file from media gallery when upload is `done` below.
+      filesSet.push({
+        url: (0,external_wp_blob_namespaceObject.createBlobURL)(mediaFile)
+      });
+      onFileChange?.(filesSet);
+    }
   }
   validFiles.map(async (file, index) => {
     try {
@@ -902,9 +914,11 @@ function uploadMedia({
     } catch (error) {
       // Reset to empty on failure.
       setAndUpdateFiles(index, null);
+
+      // @wordpress/api-fetch throws any response that isn't in the 200 range as-is.
       let message;
-      if (error instanceof Error) {
-        message = error.message;
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        message = typeof error.message === 'string' ? error.message : String(error.message);
       } else {
         message = (0,external_wp_i18n_namespaceObject.sprintf)(
         // translators: %s: file name

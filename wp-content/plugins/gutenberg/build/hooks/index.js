@@ -493,7 +493,6 @@ function createDidHook(hooks, storeKey) {
 /* harmony default export */ const build_module_createDidHook = (createDidHook);
 
 ;// ./packages/hooks/build-module/createHooks.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */

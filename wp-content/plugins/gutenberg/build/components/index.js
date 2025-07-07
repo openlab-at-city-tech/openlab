@@ -380,7 +380,174 @@ module.exports.strategies = {
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-var GradientParser = {};
+var GradientParser = (GradientParser || {});
+
+GradientParser.stringify = (function() {
+
+  var visitor = {
+
+    'visit_linear-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_repeating-linear-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_radial-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_repeating-radial-gradient': function(node) {
+      return visitor.visit_gradient(node);
+    },
+
+    'visit_gradient': function(node) {
+      var orientation = visitor.visit(node.orientation);
+      if (orientation) {
+        orientation += ', ';
+      }
+
+      return node.type + '(' + orientation + visitor.visit(node.colorStops) + ')';
+    },
+
+    'visit_shape': function(node) {
+      var result = node.value,
+          at = visitor.visit(node.at),
+          style = visitor.visit(node.style);
+
+      if (style) {
+        result += ' ' + style;
+      }
+
+      if (at) {
+        result += ' at ' + at;
+      }
+
+      return result;
+    },
+
+    'visit_default-radial': function(node) {
+      var result = '',
+          at = visitor.visit(node.at);
+
+      if (at) {
+        result += at;
+      }
+      return result;
+    },
+
+    'visit_extent-keyword': function(node) {
+      var result = node.value,
+          at = visitor.visit(node.at);
+
+      if (at) {
+        result += ' at ' + at;
+      }
+
+      return result;
+    },
+
+    'visit_position-keyword': function(node) {
+      return node.value;
+    },
+
+    'visit_position': function(node) {
+      return visitor.visit(node.value.x) + ' ' + visitor.visit(node.value.y);
+    },
+
+    'visit_%': function(node) {
+      return node.value + '%';
+    },
+
+    'visit_em': function(node) {
+      return node.value + 'em';
+    },
+
+    'visit_px': function(node) {
+      return node.value + 'px';
+    },
+
+    'visit_literal': function(node) {
+      return visitor.visit_color(node.value, node);
+    },
+
+    'visit_hex': function(node) {
+      return visitor.visit_color('#' + node.value, node);
+    },
+
+    'visit_rgb': function(node) {
+      return visitor.visit_color('rgb(' + node.value.join(', ') + ')', node);
+    },
+
+    'visit_rgba': function(node) {
+      return visitor.visit_color('rgba(' + node.value.join(', ') + ')', node);
+    },
+
+    'visit_color': function(resultColor, node) {
+      var result = resultColor,
+          length = visitor.visit(node.length);
+
+      if (length) {
+        result += ' ' + length;
+      }
+      return result;
+    },
+
+    'visit_angular': function(node) {
+      return node.value + 'deg';
+    },
+
+    'visit_directional': function(node) {
+      return 'to ' + node.value;
+    },
+
+    'visit_array': function(elements) {
+      var result = '',
+          size = elements.length;
+
+      elements.forEach(function(element, i) {
+        result += visitor.visit(element);
+        if (i < size - 1) {
+          result += ', ';
+        }
+      });
+
+      return result;
+    },
+
+    'visit': function(element) {
+      if (!element) {
+        return '';
+      }
+      var result = '';
+
+      if (element instanceof Array) {
+        return visitor.visit_array(element, result);
+      } else if (element.type) {
+        var nodeVisitor = visitor['visit_' + element.type];
+        if (nodeVisitor) {
+          return nodeVisitor(element);
+        } else {
+          throw Error('Missing visitor visit_' + element.type);
+        }
+      } else {
+        throw Error('Invalid node.');
+      }
+    }
+
+  };
+
+  return function(root) {
+    return visitor.visit(root);
+  };
+})();
+
+// Copyright (c) 2014 Rafael Caricio. All rights reserved.
+// Use of this source code is governed by a BSD-style license that can be
+// found in the LICENSE file.
+
+var GradientParser = (GradientParser || {});
 
 GradientParser.parse = (function() {
 
@@ -476,7 +643,7 @@ GradientParser.parse = (function() {
         error('Missing (');
       }
 
-      result = callback(captures);
+      var result = callback(captures);
 
       if (!scan(tokens.endCall)) {
         error('Missing )');
@@ -529,12 +696,21 @@ GradientParser.parse = (function() {
     if (radialType) {
       radialType.at = matchAtPosition();
     } else {
-      var defaultPosition = matchPositioning();
-      if (defaultPosition) {
-        radialType = {
-          type: 'default-radial',
-          at: defaultPosition
-        };
+      var extent = matchExtentKeyword();
+      if (extent) {
+        radialType = extent;
+        var positionAt = matchAtPosition();
+        if (positionAt) {
+          radialType.at = positionAt;
+        }
+      } else {
+        var defaultPosition = matchPositioning();
+        if (defaultPosition) {
+          radialType = {
+            type: 'default-radial',
+            at: defaultPosition
+          };
+        }
       }
     }
 
@@ -714,7 +890,8 @@ GradientParser.parse = (function() {
   };
 })();
 
-exports.parse = (GradientParser || {}).parse;
+exports.parse = GradientParser.parse;
+exports.stringify = GradientParser.stringify;
 
 
 /***/ }),
@@ -1760,7 +1937,7 @@ module.exports = window["React"];
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -1945,7 +2122,6 @@ __webpack_require__.d(__webpack_exports__, {
   __unstableDisclosureContent: () => (/* reexport */ disclosure_DisclosureContent),
   __unstableGetAnimateClassName: () => (/* reexport */ getAnimateClassName),
   __unstableMotion: () => (/* reexport */ motion),
-  __unstableMotionContext: () => (/* reexport */ MotionContext),
   __unstableUseAutocompleteProps: () => (/* reexport */ useAutocompleteProps),
   __unstableUseCompositeState: () => (/* reexport */ useCompositeState),
   __unstableUseNavigateRegions: () => (/* reexport */ useNavigateRegions),
@@ -1996,7 +2172,7 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/3YLGPPWQ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/3YLGPPWQ.js
 "use client";
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -2211,7 +2387,7 @@ function defaultValue(...values) {
 var external_React_ = __webpack_require__(1609);
 var external_React_namespaceObject = /*#__PURE__*/__webpack_require__.t(external_React_, 2);
 var external_React_default = /*#__PURE__*/__webpack_require__.n(external_React_);
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/SK3NAZA3.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/SK3NAZA3.js
 "use client";
 
 
@@ -2269,7 +2445,7 @@ function mergeProps(base, overrides) {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/HWOIWM4O.js
+;// ./node_modules/@ariakit/core/esm/__chunks/DTR5TSDJ.js
 "use client";
 
 // src/utils/dom.ts
@@ -2279,9 +2455,13 @@ function checkIsBrowser() {
   return typeof window !== "undefined" && !!((_a = window.document) == null ? void 0 : _a.createElement);
 }
 function getDocument(node) {
-  return node ? node.ownerDocument || node : document;
+  if (!node) return document;
+  if ("self" in node) return node.document;
+  return node.ownerDocument || document;
 }
 function getWindow(node) {
+  if (!node) return self;
+  if ("self" in node) return node.self;
   return getDocument(node).defaultView || window;
 }
 function getActiveElement(node, activeDescendant = false) {
@@ -2405,14 +2585,17 @@ function scrollIntoViewIfNeeded(element, arg) {
 }
 function getScrollingElement(element) {
   if (!element) return null;
+  const isScrollableOverflow = (overflow) => {
+    if (overflow === "auto") return true;
+    if (overflow === "scroll") return true;
+    return false;
+  };
   if (element.clientHeight && element.scrollHeight > element.clientHeight) {
     const { overflowY } = getComputedStyle(element);
-    const isScrollable = overflowY !== "visible" && overflowY !== "hidden";
-    if (isScrollable) return element;
+    if (isScrollableOverflow(overflowY)) return element;
   } else if (element.clientWidth && element.scrollWidth > element.clientWidth) {
     const { overflowX } = getComputedStyle(element);
-    const isScrollable = overflowX !== "visible" && overflowX !== "hidden";
-    if (isScrollable) return element;
+    if (isScrollableOverflow(overflowX)) return element;
   }
   return getScrollingElement(element.parentElement) || document.scrollingElement || document.body;
 }
@@ -2437,10 +2620,39 @@ function setSelectionRange(element, ...args) {
     element.setSelectionRange(...args);
   }
 }
+function sortBasedOnDOMPosition(items, getElement) {
+  const pairs = items.map((item, index) => [index, item]);
+  let isOrderDifferent = false;
+  pairs.sort(([indexA, a], [indexB, b]) => {
+    const elementA = getElement(a);
+    const elementB = getElement(b);
+    if (elementA === elementB) return 0;
+    if (!elementA || !elementB) return 0;
+    if (isElementPreceding(elementA, elementB)) {
+      if (indexA > indexB) {
+        isOrderDifferent = true;
+      }
+      return -1;
+    }
+    if (indexA < indexB) {
+      isOrderDifferent = true;
+    }
+    return 1;
+  });
+  if (isOrderDifferent) {
+    return pairs.map(([_, item]) => item);
+  }
+  return items;
+}
+function isElementPreceding(a, b) {
+  return Boolean(
+    b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
+  );
+}
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/US4USQPI.js
+;// ./node_modules/@ariakit/core/esm/__chunks/QAGXQEUG.js
 "use client";
 
 
@@ -2581,7 +2793,7 @@ function addGlobalEventListener(type, listener, options, scope = window) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/Z32BISHQ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ABQUS43J.js
 "use client";
 
 
@@ -2672,7 +2884,7 @@ function useId(defaultId) {
   const [id, setId] = (0,external_React_.useState)(defaultId);
   useSafeLayoutEffect(() => {
     if (defaultId || id) return;
-    const random = Math.random().toString(36).substr(2, 6);
+    const random = Math.random().toString(36).slice(2, 8);
     setId(`id-${random}`);
   }, [defaultId, id]);
   return defaultId || id;
@@ -2701,20 +2913,20 @@ function useTagName(refOrElement, type) {
   return tagName;
 }
 function useAttribute(refOrElement, attributeName, defaultValue) {
-  const [attribute, setAttribute] = (0,external_React_.useState)(defaultValue);
-  useSafeLayoutEffect(() => {
+  const initialValue = useInitialValue(defaultValue);
+  const [attribute, setAttribute] = (0,external_React_.useState)(initialValue);
+  (0,external_React_.useEffect)(() => {
     const element = refOrElement && "current" in refOrElement ? refOrElement.current : refOrElement;
     if (!element) return;
     const callback = () => {
       const value = element.getAttribute(attributeName);
-      if (value == null) return;
-      setAttribute(value);
+      setAttribute(value == null ? initialValue : value);
     };
     const observer = new MutationObserver(callback);
     observer.observe(element, { attributeFilter: [attributeName] });
     callback();
     return () => observer.disconnect();
-  }, [refOrElement, attributeName]);
+  }, [refOrElement, attributeName, initialValue]);
   return attribute;
 }
 function useUpdateEffect(effect, deps) {
@@ -2812,7 +3024,7 @@ function resetMouseMoving() {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/EQQLU3CG.js
+;// ./node_modules/@ariakit/core/esm/__chunks/BCALMBPZ.js
 "use client";
 
 
@@ -2987,7 +3199,7 @@ function mergeStore(...stores) {
     return Object.assign(state, nextState);
   }, {});
   const store = createStore(initialState, ...stores);
-  return store;
+  return Object.assign({}, ...stores, store);
 }
 function throwOnConflictingProps(props, store) {
   if (true) return;
@@ -3026,7 +3238,7 @@ If there's a particular need for this, please submit a feature request at https:
 
 // EXTERNAL MODULE: ./node_modules/use-sync-external-store/shim/index.js
 var shim = __webpack_require__(422);
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/2GXGCHW6.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YV4JVR4I.js
 "use client";
 
 
@@ -3059,6 +3271,47 @@ function useStoreState(store, keyOrSelector = identity) {
   };
   return useSyncExternalStore(storeSubscribe, getSnapshot, getSnapshot);
 }
+function useStoreStateObject(store, object) {
+  const objRef = external_React_.useRef(
+    {}
+  );
+  const storeSubscribe = external_React_.useCallback(
+    (callback) => {
+      if (!store) return noopSubscribe();
+      return subscribe(store, null, callback);
+    },
+    [store]
+  );
+  const getSnapshot = () => {
+    const state = store == null ? void 0 : store.getState();
+    let updated = false;
+    const obj = objRef.current;
+    for (const prop in object) {
+      const keyOrSelector = object[prop];
+      if (typeof keyOrSelector === "function") {
+        const value = keyOrSelector(state);
+        if (value !== obj[prop]) {
+          obj[prop] = value;
+          updated = true;
+        }
+      }
+      if (typeof keyOrSelector === "string") {
+        if (!state) continue;
+        if (!PBFD2E7P_hasOwnProperty(state, keyOrSelector)) continue;
+        const value = state[keyOrSelector];
+        if (value !== obj[prop]) {
+          obj[prop] = value;
+          updated = true;
+        }
+      }
+    }
+    if (updated) {
+      objRef.current = _3YLGPPWQ_spreadValues({}, obj);
+    }
+    return objRef.current;
+  };
+  return useSyncExternalStore(storeSubscribe, getSnapshot, getSnapshot);
+}
 function useStoreProps(store, props, key, setKey) {
   const value = PBFD2E7P_hasOwnProperty(props, key) ? props[key] : void 0;
   const setValue = setKey ? props[setKey] : void 0;
@@ -3081,7 +3334,7 @@ function useStoreProps(store, props, key, setKey) {
     });
   });
 }
-function _2GXGCHW6_useStore(createStore, props) {
+function YV4JVR4I_useStore(createStore, props) {
   const [store, setStore] = external_React_.useState(() => createStore(props));
   useSafeLayoutEffect(() => init(store), [store]);
   const useState2 = external_React_.useCallback(
@@ -3100,7 +3353,7 @@ function _2GXGCHW6_useStore(createStore, props) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TCAGH6BH.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/C3IKGW5T.js
 "use client";
 
 
@@ -3119,7 +3372,7 @@ function useCollectionStore(props = {}) {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/6DHTHWXD.js
+;// ./node_modules/@ariakit/core/esm/__chunks/CYQWQL4J.js
 "use client";
 
 
@@ -3127,35 +3380,6 @@ function useCollectionStore(props = {}) {
 
 
 // src/collection/collection-store.ts
-function isElementPreceding(a, b) {
-  return Boolean(
-    b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
-  );
-}
-function sortBasedOnDOMPosition(items) {
-  const pairs = items.map((item, index) => [index, item]);
-  let isOrderDifferent = false;
-  pairs.sort(([indexA, a], [indexB, b]) => {
-    const elementA = a.element;
-    const elementB = b.element;
-    if (elementA === elementB) return 0;
-    if (!elementA || !elementB) return 0;
-    if (isElementPreceding(elementA, elementB)) {
-      if (indexA > indexB) {
-        isOrderDifferent = true;
-      }
-      return -1;
-    }
-    if (indexA < indexB) {
-      isOrderDifferent = true;
-    }
-    return 1;
-  });
-  if (isOrderDifferent) {
-    return pairs.map(([_, item]) => item);
-  }
-  return items;
-}
 function getCommonParent(items) {
   var _a;
   const firstItem = items.find((item) => !!item.element);
@@ -3195,7 +3419,7 @@ function createCollectionStore(props = {}) {
   );
   const collection = createStore(initialState, props.store);
   const sortItems = (renderedItems) => {
-    const sortedItems = sortBasedOnDOMPosition(renderedItems);
+    const sortedItems = sortBasedOnDOMPosition(renderedItems, (i) => i.element);
     privateStore.setState("renderedItems", sortedItems);
     collection.setState("renderedItems", sortedItems);
   };
@@ -3288,7 +3512,7 @@ function createCollectionStore(props = {}) {
       if (!id) return null;
       let item = itemsMap.get(id);
       if (!item) {
-        const { items: items2 } = collection.getState();
+        const { items: items2 } = privateStore.getState();
         item = items2.find((item2) => item2.id === id);
         if (item) {
           itemsMap.set(id, item);
@@ -3332,7 +3556,7 @@ function reverseArray(array) {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/D7EIQZAU.js
+;// ./node_modules/@ariakit/core/esm/__chunks/AJZ4BYF3.js
 "use client";
 
 
@@ -3357,11 +3581,6 @@ function getEnabledItems(items, excludeId) {
     }
     return !item.disabled;
   });
-}
-function getOppositeOrientation(orientation) {
-  if (orientation === "vertical") return "horizontal";
-  if (orientation === "horizontal") return "vertical";
-  return;
 }
 function getItemsInRow(items, rowId) {
   return items.filter((item) => item.rowId === rowId);
@@ -3450,6 +3669,11 @@ function createCompositeStore(props = {}) {
     props.defaultActiveId
   );
   const initialState = _chunks_3YLGPPWQ_spreadProps(_chunks_3YLGPPWQ_spreadValues({}, collection.getState()), {
+    id: defaultValue(
+      props.id,
+      syncState == null ? void 0 : syncState.id,
+      `id-${Math.random().toString(36).slice(2, 8)}`
+    ),
     activeId,
     baseElement: defaultValue(syncState == null ? void 0 : syncState.baseElement, null),
     includesBaseElement: defaultValue(
@@ -3484,40 +3708,50 @@ function createCompositeStore(props = {}) {
       });
     })
   );
-  const getNextId = (items, orientation, hasNullItem, skip) => {
+  const getNextId = (direction = "next", options = {}) => {
     var _a2, _b;
-    const { activeId: activeId2, rtl, focusLoop, focusWrap, includesBaseElement } = composite.getState();
-    const isHorizontal = orientation !== "vertical";
-    const isRTL = rtl && isHorizontal;
-    const allItems = isRTL ? reverseArray(items) : items;
+    const defaultState = composite.getState();
+    const {
+      skip = 0,
+      activeId: activeId2 = defaultState.activeId,
+      focusShift = defaultState.focusShift,
+      focusLoop = defaultState.focusLoop,
+      focusWrap = defaultState.focusWrap,
+      includesBaseElement = defaultState.includesBaseElement,
+      renderedItems = defaultState.renderedItems,
+      rtl = defaultState.rtl
+    } = options;
+    const isVerticalDirection = direction === "up" || direction === "down";
+    const isNextDirection = direction === "next" || direction === "down";
+    const canReverse = isNextDirection ? rtl && !isVerticalDirection : !rtl || isVerticalDirection;
+    const canShift = focusShift && !skip;
+    let items = !isVerticalDirection ? renderedItems : flatten2DArray(
+      normalizeRows(groupItemsByRows(renderedItems), activeId2, canShift)
+    );
+    items = canReverse ? reverseArray(items) : items;
+    items = isVerticalDirection ? verticalizeItems(items) : items;
     if (activeId2 == null) {
-      return (_a2 = findFirstEnabledItem(allItems)) == null ? void 0 : _a2.id;
+      return (_a2 = findFirstEnabledItem(items)) == null ? void 0 : _a2.id;
     }
-    const activeItem = allItems.find((item) => item.id === activeId2);
+    const activeItem = items.find((item) => item.id === activeId2);
     if (!activeItem) {
-      return (_b = findFirstEnabledItem(allItems)) == null ? void 0 : _b.id;
+      return (_b = findFirstEnabledItem(items)) == null ? void 0 : _b.id;
     }
-    const isGrid = !!activeItem.rowId;
-    const activeIndex = allItems.indexOf(activeItem);
-    const nextItems = allItems.slice(activeIndex + 1);
+    const isGrid = items.some((item) => item.rowId);
+    const activeIndex = items.indexOf(activeItem);
+    const nextItems = items.slice(activeIndex + 1);
     const nextItemsInRow = getItemsInRow(nextItems, activeItem.rowId);
-    if (skip !== void 0) {
+    if (skip) {
       const nextEnabledItemsInRow = getEnabledItems(nextItemsInRow, activeId2);
       const nextItem2 = nextEnabledItemsInRow.slice(skip)[0] || // If we can't find an item, just return the last one.
       nextEnabledItemsInRow[nextEnabledItemsInRow.length - 1];
       return nextItem2 == null ? void 0 : nextItem2.id;
     }
-    const oppositeOrientation = getOppositeOrientation(
-      // If it's a grid and orientation is not set, it's a next/previous call,
-      // which is inherently horizontal. up/down will call next with orientation
-      // set to vertical by default (see below on up/down methods).
-      isGrid ? orientation || "horizontal" : orientation
-    );
-    const canLoop = focusLoop && focusLoop !== oppositeOrientation;
-    const canWrap = isGrid && focusWrap && focusWrap !== oppositeOrientation;
-    hasNullItem = hasNullItem || !isGrid && canLoop && includesBaseElement;
+    const canLoop = focusLoop && (isVerticalDirection ? focusLoop !== "horizontal" : focusLoop !== "vertical");
+    const canWrap = isGrid && focusWrap && (isVerticalDirection ? focusWrap !== "horizontal" : focusWrap !== "vertical");
+    const hasNullItem = isNextDirection ? (!isGrid || isVerticalDirection) && canLoop && includesBaseElement : isVerticalDirection ? includesBaseElement : false;
     if (canLoop) {
-      const loopItems = canWrap && !hasNullItem ? allItems : getItemsInRow(allItems, activeItem.rowId);
+      const loopItems = canWrap && !hasNullItem ? items : getItemsInRow(items, activeItem.rowId);
       const sortedItems = flipItems(loopItems, activeId2, hasNullItem);
       const nextItem2 = findFirstEnabledItem(sortedItems, activeId2);
       return nextItem2 == null ? void 0 : nextItem2.id;
@@ -3558,69 +3792,48 @@ function createCompositeStore(props = {}) {
       var _a2;
       return (_a2 = findFirstEnabledItem(reverseArray(composite.getState().renderedItems))) == null ? void 0 : _a2.id;
     },
-    next: (skip) => {
-      const { renderedItems, orientation } = composite.getState();
-      return getNextId(renderedItems, orientation, false, skip);
+    next: (options) => {
+      if (options !== void 0 && typeof options === "number") {
+        options = { skip: options };
+      }
+      return getNextId("next", options);
     },
-    previous: (skip) => {
-      var _a2;
-      const { renderedItems, orientation, includesBaseElement } = composite.getState();
-      const isGrid = !!((_a2 = findFirstEnabledItem(renderedItems)) == null ? void 0 : _a2.rowId);
-      const hasNullItem = !isGrid && includesBaseElement;
-      return getNextId(
-        reverseArray(renderedItems),
-        orientation,
-        hasNullItem,
-        skip
-      );
+    previous: (options) => {
+      if (options !== void 0 && typeof options === "number") {
+        options = { skip: options };
+      }
+      return getNextId("previous", options);
     },
-    down: (skip) => {
-      const {
-        activeId: activeId2,
-        renderedItems,
-        focusShift,
-        focusLoop,
-        includesBaseElement
-      } = composite.getState();
-      const shouldShift = focusShift && !skip;
-      const verticalItems = verticalizeItems(
-        flatten2DArray(
-          normalizeRows(groupItemsByRows(renderedItems), activeId2, shouldShift)
-        )
-      );
-      const canLoop = focusLoop && focusLoop !== "horizontal";
-      const hasNullItem = canLoop && includesBaseElement;
-      return getNextId(verticalItems, "vertical", hasNullItem, skip);
+    down: (options) => {
+      if (options !== void 0 && typeof options === "number") {
+        options = { skip: options };
+      }
+      return getNextId("down", options);
     },
-    up: (skip) => {
-      const { activeId: activeId2, renderedItems, focusShift, includesBaseElement } = composite.getState();
-      const shouldShift = focusShift && !skip;
-      const verticalItems = verticalizeItems(
-        reverseArray(
-          flatten2DArray(
-            normalizeRows(
-              groupItemsByRows(renderedItems),
-              activeId2,
-              shouldShift
-            )
-          )
-        )
-      );
-      const hasNullItem = includesBaseElement;
-      return getNextId(verticalItems, "vertical", hasNullItem, skip);
+    up: (options) => {
+      if (options !== void 0 && typeof options === "number") {
+        options = { skip: options };
+      }
+      return getNextId("up", options);
     }
   });
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/UVQLZ7T5.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/4CMBR7SL.js
 "use client";
+
+
 
 
 
 // src/composite/composite-store.ts
 
+function useCompositeStoreOptions(props) {
+  const id = useId(props.id);
+  return _3YLGPPWQ_spreadValues({ id }, props);
+}
 function useCompositeStoreProps(store, update, props) {
   store = useCollectionStoreProps(store, update, props);
   useStoreProps(store, props, "activeId", "setActiveId");
@@ -3634,13 +3847,14 @@ function useCompositeStoreProps(store, update, props) {
   return store;
 }
 function useCompositeStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createCompositeStore, props);
+  props = useCompositeStoreOptions(props);
+  const [store, update] = YV4JVR4I_useStore(createCompositeStore, props);
   return useCompositeStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5VQZOHHZ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/5VQZOHHZ.js
 "use client";
 
 // src/composite/utils.ts
@@ -3718,7 +3932,7 @@ function isItem(store, element, exclude) {
 
 ;// external "ReactJSXRuntime"
 const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/HKOOKEDE.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/LMDWO4NN.js
 "use client";
 
 
@@ -3735,7 +3949,7 @@ function forwardRef2(render) {
 function memo2(Component, propsAreEqual) {
   return external_React_.memo(Component, propsAreEqual);
 }
-function HKOOKEDE_createElement(Type, props) {
+function LMDWO4NN_createElement(Type, props) {
   const _a = props, { wrapElement, render } = _a, rest = __objRest(_a, ["wrapElement", "render"]);
   const mergedRef = useMergeRefs(props.ref, getRefProperty(render));
   let element;
@@ -3800,7 +4014,7 @@ function createStoreContext(providers = [], scopedProviders = []) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/FMYQNSCK.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/VDHZ5F7K.js
 "use client";
 
 
@@ -3814,22 +4028,22 @@ var CollectionScopedContextProvider = ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WENSINUV.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/P7GR5CS5.js
 "use client";
 
 
 
 // src/composite/composite-context.tsx
 
-var WENSINUV_ctx = createStoreContext(
+var P7GR5CS5_ctx = createStoreContext(
   [CollectionContextProvider],
   [CollectionScopedContextProvider]
 );
-var useCompositeContext = WENSINUV_ctx.useContext;
-var useCompositeScopedContext = WENSINUV_ctx.useScopedContext;
-var useCompositeProviderContext = WENSINUV_ctx.useProviderContext;
-var CompositeContextProvider = WENSINUV_ctx.ContextProvider;
-var CompositeScopedContextProvider = WENSINUV_ctx.ScopedContextProvider;
+var useCompositeContext = P7GR5CS5_ctx.useContext;
+var useCompositeScopedContext = P7GR5CS5_ctx.useScopedContext;
+var useCompositeProviderContext = P7GR5CS5_ctx.useProviderContext;
+var CompositeContextProvider = P7GR5CS5_ctx.ContextProvider;
+var CompositeScopedContextProvider = P7GR5CS5_ctx.ScopedContextProvider;
 var CompositeItemContext = (0,external_React_.createContext)(
   void 0
 );
@@ -3839,7 +4053,7 @@ var CompositeRowContext = (0,external_React_.createContext)(
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/SWN3JYXT.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/SWN3JYXT.js
 "use client";
 
 // src/focusable/focusable-context.tsx
@@ -4057,7 +4271,7 @@ function focusIntoView(element, options) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/HGZKAGPL.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/LVA2YJMS.js
 "use client";
 
 
@@ -4088,6 +4302,15 @@ var alwaysFocusVisibleInputTypes = [
   "datetime",
   "datetime-local"
 ];
+var safariFocusAncestorSymbol = Symbol("safariFocusAncestor");
+function isSafariFocusAncestor(element) {
+  if (!element) return false;
+  return !!element[safariFocusAncestorSymbol];
+}
+function markSafariFocusAncestor(element, value) {
+  if (!element) return;
+  element[safariFocusAncestorSymbol] = value;
+}
 function isAlwaysFocusVisible(element) {
   const { tagName, readOnly, type } = element;
   if (tagName === "TEXTAREA" && !readOnly) return true;
@@ -4248,8 +4471,11 @@ var useFocusable = createHook(
       };
       const options = { capture: true, once: true };
       element.addEventListener("focusin", onFocus, options);
+      const focusableContainer = getClosestFocusable(element.parentElement);
+      markSafariFocusAncestor(focusableContainer, true);
       queueBeforeEvent(element, "mouseup", () => {
         element.removeEventListener("focusin", onFocus, true);
+        markSafariFocusAncestor(focusableContainer, false);
         if (receivedFocus) return;
         focusIfNeeded(element);
       });
@@ -4264,6 +4490,7 @@ var useFocusable = createHook(
       if (!hasFocus(element)) return;
       onFocusVisible == null ? void 0 : onFocusVisible(event);
       if (event.defaultPrevented) return;
+      element.dataset.focusVisible = "true";
       setFocusVisible(true);
     };
     const onKeyDownCaptureProp = props.onKeyDownCapture;
@@ -4356,12 +4583,12 @@ var useFocusable = createHook(
 );
 var Focusable = forwardRef2(function Focusable2(props) {
   const htmlProps = useFocusable(props);
-  return HKOOKEDE_createElement(TagName, htmlProps);
+  return LMDWO4NN_createElement(TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TW35PKTK.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ITI7HKP4.js
 "use client";
 
 
@@ -4378,7 +4605,7 @@ var Focusable = forwardRef2(function Focusable2(props) {
 
 
 
-var TW35PKTK_TagName = "div";
+var ITI7HKP4_TagName = "div";
 function isGrid(items) {
   return items.some((item) => !!item.rowId);
 }
@@ -4583,7 +4810,7 @@ var useComposite = createHook(
       if (event.defaultPrevented) return;
       if (!store) return;
       if (!isSelfTarget(event)) return;
-      const { orientation, items, renderedItems, activeId: activeId2 } = store.getState();
+      const { orientation, renderedItems, activeId: activeId2 } = store.getState();
       const activeItem = getEnabledItem(store, activeId2);
       if ((_a2 = activeItem == null ? void 0 : activeItem.element) == null ? void 0 : _a2.isConnected) return;
       const isVertical = orientation !== "horizontal";
@@ -4593,7 +4820,7 @@ var useComposite = createHook(
       if (isHorizontalKey && isTextField(event.currentTarget)) return;
       const up = () => {
         if (grid) {
-          const item = items && findFirstEnabledItemInTheLastRow(items);
+          const item = findFirstEnabledItemInTheLastRow(renderedItems);
           return item == null ? void 0 : item.id;
         }
         return store == null ? void 0 : store.last();
@@ -4648,9 +4875,9 @@ var useComposite = createHook(
     return props;
   }
 );
-var TW35PKTK_Composite = forwardRef2(function Composite2(props) {
+var ITI7HKP4_Composite = forwardRef2(function Composite2(props) {
   const htmlProps = useComposite(props);
-  return HKOOKEDE_createElement(TW35PKTK_TagName, htmlProps);
+  return LMDWO4NN_createElement(ITI7HKP4_TagName, htmlProps);
 });
 
 
@@ -4668,7 +4895,7 @@ var TW35PKTK_Composite = forwardRef2(function Composite2(props) {
 const CompositeContext = (0,external_wp_element_namespaceObject.createContext)({});
 const context_useCompositeContext = () => (0,external_wp_element_namespaceObject.useContext)(CompositeContext);
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/7HVFURXT.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/7HVFURXT.js
 "use client";
 
 // src/group/group-label-context.tsx
@@ -4677,7 +4904,7 @@ var GroupLabelContext = (0,external_React_.createContext)(void 0);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ZPO4YZYE.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/36LIF33V.js
 "use client";
 
 
@@ -4688,7 +4915,7 @@ var GroupLabelContext = (0,external_React_.createContext)(void 0);
 
 
 
-var ZPO4YZYE_TagName = "div";
+var _36LIF33V_TagName = "div";
 var useGroup = createHook(
   function useGroup2(props) {
     const [labelId, setLabelId] = (0,external_React_.useState)();
@@ -4706,19 +4933,19 @@ var useGroup = createHook(
 );
 var Group = forwardRef2(function Group2(props) {
   const htmlProps = useGroup(props);
-  return HKOOKEDE_createElement(ZPO4YZYE_TagName, htmlProps);
+  return LMDWO4NN_createElement(_36LIF33V_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IEKMDIUY.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YORGHBM4.js
 "use client";
 
 
 
 
 // src/composite/composite-group.tsx
-var IEKMDIUY_TagName = "div";
+var YORGHBM4_TagName = "div";
 var useCompositeGroup = createHook(
   function useCompositeGroup2(_a) {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
@@ -4726,9 +4953,9 @@ var useCompositeGroup = createHook(
     return props;
   }
 );
-var IEKMDIUY_CompositeGroup = forwardRef2(function CompositeGroup2(props) {
+var YORGHBM4_CompositeGroup = forwardRef2(function CompositeGroup2(props) {
   const htmlProps = useCompositeGroup(props);
-  return HKOOKEDE_createElement(IEKMDIUY_TagName, htmlProps);
+  return LMDWO4NN_createElement(YORGHBM4_TagName, htmlProps);
 });
 
 
@@ -4758,14 +4985,14 @@ const CompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(functi
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IEKMDIUY_CompositeGroup, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(YORGHBM4_CompositeGroup, {
     store: store,
     ...props,
     ref: ref
   });
 });
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IGFP5YPG.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YUOJWFSO.js
 "use client";
 
 
@@ -4775,7 +5002,7 @@ const CompositeGroup = (0,external_wp_element_namespaceObject.forwardRef)(functi
 // src/group/group-label.tsx
 
 
-var IGFP5YPG_TagName = "div";
+var YUOJWFSO_TagName = "div";
 var useGroupLabel = createHook(
   function useGroupLabel2(props) {
     const setLabelId = (0,external_React_.useContext)(GroupLabelContext);
@@ -4793,27 +5020,27 @@ var useGroupLabel = createHook(
 );
 var GroupLabel = forwardRef2(function GroupLabel2(props) {
   const htmlProps = useGroupLabel(props);
-  return HKOOKEDE_createElement(IGFP5YPG_TagName, htmlProps);
+  return LMDWO4NN_createElement(YUOJWFSO_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/Y2MAXF6C.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/SWSPTQMT.js
 "use client";
 
 
 
 
 // src/composite/composite-group-label.tsx
-var Y2MAXF6C_TagName = "div";
+var SWSPTQMT_TagName = "div";
 var useCompositeGroupLabel = createHook(function useCompositeGroupLabel2(_a) {
   var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
   props = useGroupLabel(props);
   return props;
 });
-var Y2MAXF6C_CompositeGroupLabel = forwardRef2(function CompositeGroupLabel2(props) {
+var SWSPTQMT_CompositeGroupLabel = forwardRef2(function CompositeGroupLabel2(props) {
   const htmlProps = useCompositeGroupLabel(props);
-  return HKOOKEDE_createElement(Y2MAXF6C_TagName, htmlProps);
+  return LMDWO4NN_createElement(SWSPTQMT_TagName, htmlProps);
 });
 
 
@@ -4843,12 +5070,115 @@ const CompositeGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(f
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Y2MAXF6C_CompositeGroupLabel, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SWSPTQMT_CompositeGroupLabel, {
     store: store,
     ...props,
     ref: ref
   });
 });
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/UQQRIHDV.js
+"use client";
+
+
+
+
+
+// src/composite/composite-hover.tsx
+
+
+
+
+var UQQRIHDV_TagName = "div";
+function getMouseDestination(event) {
+  const relatedTarget = event.relatedTarget;
+  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
+    return relatedTarget;
+  }
+  return null;
+}
+function hoveringInside(event) {
+  const nextElement = getMouseDestination(event);
+  if (!nextElement) return false;
+  return contains(event.currentTarget, nextElement);
+}
+var symbol = Symbol("composite-hover");
+function movingToAnotherItem(event) {
+  let dest = getMouseDestination(event);
+  if (!dest) return false;
+  do {
+    if (PBFD2E7P_hasOwnProperty(dest, symbol) && dest[symbol]) return true;
+    dest = dest.parentElement;
+  } while (dest);
+  return false;
+}
+var useCompositeHover = createHook(
+  function useCompositeHover2(_a) {
+    var _b = _a, {
+      store,
+      focusOnHover = true,
+      blurOnHoverEnd = !!focusOnHover
+    } = _b, props = __objRest(_b, [
+      "store",
+      "focusOnHover",
+      "blurOnHoverEnd"
+    ]);
+    const context = useCompositeContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const isMouseMoving = useIsMouseMoving();
+    const onMouseMoveProp = props.onMouseMove;
+    const focusOnHoverProp = useBooleanEvent(focusOnHover);
+    const onMouseMove = useEvent((event) => {
+      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
+      if (event.defaultPrevented) return;
+      if (!isMouseMoving()) return;
+      if (!focusOnHoverProp(event)) return;
+      if (!hasFocusWithin(event.currentTarget)) {
+        const baseElement = store == null ? void 0 : store.getState().baseElement;
+        if (baseElement && !hasFocus(baseElement)) {
+          baseElement.focus();
+        }
+      }
+      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
+    });
+    const onMouseLeaveProp = props.onMouseLeave;
+    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
+    const onMouseLeave = useEvent((event) => {
+      var _a2;
+      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
+      if (event.defaultPrevented) return;
+      if (!isMouseMoving()) return;
+      if (hoveringInside(event)) return;
+      if (movingToAnotherItem(event)) return;
+      if (!focusOnHoverProp(event)) return;
+      if (!blurOnHoverEndProp(event)) return;
+      store == null ? void 0 : store.setActiveId(null);
+      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
+    });
+    const ref = (0,external_React_.useCallback)((element) => {
+      if (!element) return;
+      element[symbol] = true;
+    }, []);
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
+      ref: useMergeRefs(ref, props.ref),
+      onMouseMove,
+      onMouseLeave
+    });
+    return removeUndefinedValues(props);
+  }
+);
+var UQQRIHDV_CompositeHover = memo2(
+  forwardRef2(function CompositeHover2(props) {
+    const htmlProps = useCompositeHover(props);
+    return LMDWO4NN_createElement(UQQRIHDV_TagName, htmlProps);
+  })
+);
+
+
 
 ;// ./packages/components/build-module/composite/hover.js
 /**
@@ -4875,14 +5205,14 @@ const CompositeHover = (0,external_wp_element_namespaceObject.forwardRef)(functi
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(IEKMDIUY_CompositeGroup, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(UQQRIHDV_CompositeHover, {
     store: store,
     ...props,
     ref: ref
   });
 });
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/PLQDTVXM.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/RZ4GPYOB.js
 "use client";
 
 
@@ -4892,7 +5222,7 @@ const CompositeHover = (0,external_wp_element_namespaceObject.forwardRef)(functi
 // src/collection/collection-item.tsx
 
 
-var PLQDTVXM_TagName = "div";
+var RZ4GPYOB_TagName = "div";
 var useCollectionItem = createHook(
   function useCollectionItem2(_a) {
     var _b = _a, {
@@ -4927,12 +5257,12 @@ var useCollectionItem = createHook(
 );
 var CollectionItem = forwardRef2(function CollectionItem2(props) {
   const htmlProps = useCollectionItem(props);
-  return HKOOKEDE_createElement(PLQDTVXM_TagName, htmlProps);
+  return LMDWO4NN_createElement(RZ4GPYOB_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/NAXN2XAB.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/KUU7WJ55.js
 "use client";
 
 
@@ -4945,7 +5275,7 @@ var CollectionItem = forwardRef2(function CollectionItem2(props) {
 
 
 
-var NAXN2XAB_TagName = "button";
+var KUU7WJ55_TagName = "button";
 function isNativeClick(event) {
   if (!event.isTrusted) return false;
   const element = event.currentTarget;
@@ -4957,16 +5287,12 @@ function isNativeClick(event) {
   }
   return false;
 }
-var symbol = Symbol("command");
+var KUU7WJ55_symbol = Symbol("command");
 var useCommand = createHook(
   function useCommand2(_a) {
     var _b = _a, { clickOnEnter = true, clickOnSpace = true } = _b, props = __objRest(_b, ["clickOnEnter", "clickOnSpace"]);
     const ref = (0,external_React_.useRef)(null);
-    const tagName = useTagName(ref);
-    const type = props.type;
-    const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
-      () => !!tagName && isButton({ tagName, type })
-    );
+    const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(false);
     (0,external_React_.useEffect)(() => {
       if (!ref.current) return;
       setIsNativeButton(isButton(ref.current));
@@ -4974,7 +5300,7 @@ var useCommand = createHook(
     const [active, setActive] = (0,external_React_.useState)(false);
     const activeRef = (0,external_React_.useRef)(false);
     const disabled = disabledFromProps(props);
-    const [isDuplicate, metadataProps] = useMetadataProps(props, symbol, true);
+    const [isDuplicate, metadataProps] = useMetadataProps(props, KUU7WJ55_symbol, true);
     const onKeyDownProp = props.onKeyDown;
     const onKeyDown = useEvent((event) => {
       onKeyDownProp == null ? void 0 : onKeyDownProp(event);
@@ -5048,12 +5374,12 @@ var useCommand = createHook(
 );
 var Command = forwardRef2(function Command2(props) {
   const htmlProps = useCommand(props);
-  return HKOOKEDE_createElement(NAXN2XAB_TagName, htmlProps);
+  return LMDWO4NN_createElement(KUU7WJ55_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/3CCTMYB6.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/P2CTZE2T.js
 "use client";
 
 
@@ -5071,7 +5397,7 @@ var Command = forwardRef2(function Command2(props) {
 
 
 
-var _3CCTMYB6_TagName = "button";
+var P2CTZE2T_TagName = "button";
 function isEditableElement(element) {
   if (isTextbox(element)) return true;
   return element.tagName === "INPUT" && !isButton(element);
@@ -5153,21 +5479,65 @@ var useCompositeItem = createHook(
     const id = useId(props.id);
     const ref = (0,external_React_.useRef)(null);
     const row = (0,external_React_.useContext)(CompositeRowContext);
-    const rowId = useStoreState(store, (state) => {
-      if (rowIdProp) return rowIdProp;
-      if (!state) return;
-      if (!(row == null ? void 0 : row.baseElement)) return;
-      if (row.baseElement !== state.baseElement) return;
-      return row.id;
-    });
     const disabled = disabledFromProps(props);
     const trulyDisabled = disabled && !props.accessibleWhenDisabled;
+    const {
+      rowId,
+      baseElement,
+      isActiveItem,
+      ariaSetSize,
+      ariaPosInSet,
+      isTabbable
+    } = useStoreStateObject(store, {
+      rowId(state) {
+        if (rowIdProp) return rowIdProp;
+        if (!state) return;
+        if (!(row == null ? void 0 : row.baseElement)) return;
+        if (row.baseElement !== state.baseElement) return;
+        return row.id;
+      },
+      baseElement(state) {
+        return (state == null ? void 0 : state.baseElement) || void 0;
+      },
+      isActiveItem(state) {
+        return !!state && state.activeId === id;
+      },
+      ariaSetSize(state) {
+        if (ariaSetSizeProp != null) return ariaSetSizeProp;
+        if (!state) return;
+        if (!(row == null ? void 0 : row.ariaSetSize)) return;
+        if (row.baseElement !== state.baseElement) return;
+        return row.ariaSetSize;
+      },
+      ariaPosInSet(state) {
+        if (ariaPosInSetProp != null) return ariaPosInSetProp;
+        if (!state) return;
+        if (!(row == null ? void 0 : row.ariaPosInSet)) return;
+        if (row.baseElement !== state.baseElement) return;
+        const itemsInRow = state.renderedItems.filter(
+          (item) => item.rowId === rowId
+        );
+        return row.ariaPosInSet + itemsInRow.findIndex((item) => item.id === id);
+      },
+      isTabbable(state) {
+        if (!(state == null ? void 0 : state.renderedItems.length)) return true;
+        if (state.virtualFocus) return false;
+        if (tabbable) return true;
+        if (state.activeId === null) return false;
+        const item = store == null ? void 0 : store.item(state.activeId);
+        if (item == null ? void 0 : item.disabled) return true;
+        if (!(item == null ? void 0 : item.element)) return true;
+        return state.activeId === id;
+      }
+    });
     const getItem = (0,external_React_.useCallback)(
       (item) => {
+        var _a2;
         const nextItem = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, item), {
           id: id || item.id,
           rowId,
-          disabled: !!trulyDisabled
+          disabled: !!trulyDisabled,
+          children: (_a2 = item.element) == null ? void 0 : _a2.textContent
         });
         if (getItemProp) {
           return getItemProp(nextItem);
@@ -5287,10 +5657,6 @@ var useCompositeItem = createHook(
         }
       }
     });
-    const baseElement = useStoreState(
-      store,
-      (state) => (state == null ? void 0 : state.baseElement) || void 0
-    );
     const providerValue = (0,external_React_.useMemo)(
       () => ({ id, baseElement }),
       [id, baseElement]
@@ -5300,33 +5666,6 @@ var useCompositeItem = createHook(
       (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(CompositeItemContext.Provider, { value: providerValue, children: element }),
       [providerValue]
     );
-    const isActiveItem = useStoreState(
-      store,
-      (state) => !!state && state.activeId === id
-    );
-    const ariaSetSize = useStoreState(store, (state) => {
-      if (ariaSetSizeProp != null) return ariaSetSizeProp;
-      if (!state) return;
-      if (!(row == null ? void 0 : row.ariaSetSize)) return;
-      if (row.baseElement !== state.baseElement) return;
-      return row.ariaSetSize;
-    });
-    const ariaPosInSet = useStoreState(store, (state) => {
-      if (ariaPosInSetProp != null) return ariaPosInSetProp;
-      if (!state) return;
-      if (!(row == null ? void 0 : row.ariaPosInSet)) return;
-      if (row.baseElement !== state.baseElement) return;
-      const itemsInRow = state.renderedItems.filter(
-        (item) => item.rowId === rowId
-      );
-      return row.ariaPosInSet + itemsInRow.findIndex((item) => item.id === id);
-    });
-    const isTabbable = useStoreState(store, (state) => {
-      if (!(state == null ? void 0 : state.renderedItems.length)) return true;
-      if (state.virtualFocus) return false;
-      if (tabbable) return true;
-      return state.activeId === id;
-    });
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
       id,
       "data-active-item": isActiveItem || void 0
@@ -5350,10 +5689,10 @@ var useCompositeItem = createHook(
     }));
   }
 );
-var _3CCTMYB6_CompositeItem = memo2(
+var P2CTZE2T_CompositeItem = memo2(
   forwardRef2(function CompositeItem2(props) {
     const htmlProps = useCompositeItem(props);
-    return HKOOKEDE_createElement(_3CCTMYB6_TagName, htmlProps);
+    return LMDWO4NN_createElement(P2CTZE2T_TagName, htmlProps);
   })
 );
 
@@ -5384,23 +5723,14 @@ const CompositeItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-
-  // If the active item is not connected, Composite may end up in a state
-  // where none of the items are tabbable. In this case, we force all items to
-  // be tabbable, so that as soon as an item received focus, it becomes active
-  // and Composite goes back to working as expected.
-  const tabbable = useStoreState(store, state => {
-    return state?.activeId !== null && !store?.item(state?.activeId)?.element?.isConnected;
-  });
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_3CCTMYB6_CompositeItem, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(P2CTZE2T_CompositeItem, {
     store: store,
-    tabbable: tabbable,
     ...props,
     ref: ref
   });
 });
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/6BE7QOX5.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/J2LQO3EC.js
 "use client";
 
 
@@ -5411,7 +5741,7 @@ const CompositeItem = (0,external_wp_element_namespaceObject.forwardRef)(functio
 
 
 
-var _6BE7QOX5_TagName = "div";
+var J2LQO3EC_TagName = "div";
 var useCompositeRow = createHook(
   function useCompositeRow2(_a) {
     var _b = _a, {
@@ -5446,9 +5776,9 @@ var useCompositeRow = createHook(
     return removeUndefinedValues(props);
   }
 );
-var _6BE7QOX5_CompositeRow = forwardRef2(function CompositeRow2(props) {
+var J2LQO3EC_CompositeRow = forwardRef2(function CompositeRow2(props) {
   const htmlProps = useCompositeRow(props);
-  return HKOOKEDE_createElement(_6BE7QOX5_TagName, htmlProps);
+  return LMDWO4NN_createElement(J2LQO3EC_TagName, htmlProps);
 });
 
 
@@ -5478,12 +5808,128 @@ const CompositeRow = (0,external_wp_element_namespaceObject.forwardRef)(function
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_6BE7QOX5_CompositeRow, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(J2LQO3EC_CompositeRow, {
     store: store,
     ...props,
     ref: ref
   });
 });
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/T7VMP3TM.js
+"use client";
+
+
+
+
+
+
+// src/composite/composite-typeahead.tsx
+
+
+
+
+var T7VMP3TM_TagName = "div";
+var chars = "";
+function clearChars() {
+  chars = "";
+}
+function isValidTypeaheadEvent(event) {
+  const target = event.target;
+  if (target && isTextField(target)) return false;
+  if (event.key === " " && chars.length) return true;
+  return event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey && /^[\p{Letter}\p{Number}]$/u.test(event.key);
+}
+function isSelfTargetOrItem(event, items) {
+  if (isSelfTarget(event)) return true;
+  const target = event.target;
+  if (!target) return false;
+  const isItem = items.some((item) => item.element === target);
+  return isItem;
+}
+function T7VMP3TM_getEnabledItems(items) {
+  return items.filter((item) => !item.disabled);
+}
+function itemTextStartsWith(item, text) {
+  var _a;
+  const itemText = ((_a = item.element) == null ? void 0 : _a.textContent) || item.children || // The composite item object itself doesn't include a value property, but
+  // other components like Select do. Since CompositeTypeahead is a generic
+  // component that can be used with those as well, we also consider the value
+  // property as a fallback for the typeahead text content.
+  "value" in item && item.value;
+  if (!itemText) return false;
+  return normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
+}
+function getSameInitialItems(items, char, activeId) {
+  if (!activeId) return items;
+  const activeItem = items.find((item) => item.id === activeId);
+  if (!activeItem) return items;
+  if (!itemTextStartsWith(activeItem, char)) return items;
+  if (chars !== char && itemTextStartsWith(activeItem, chars)) return items;
+  chars = char;
+  return _5VQZOHHZ_flipItems(
+    items.filter((item) => itemTextStartsWith(item, chars)),
+    activeId
+  ).filter((item) => item.id !== activeId);
+}
+var useCompositeTypeahead = createHook(function useCompositeTypeahead2(_a) {
+  var _b = _a, { store, typeahead = true } = _b, props = __objRest(_b, ["store", "typeahead"]);
+  const context = useCompositeContext();
+  store = store || context;
+  invariant(
+    store,
+     false && 0
+  );
+  const onKeyDownCaptureProp = props.onKeyDownCapture;
+  const cleanupTimeoutRef = (0,external_React_.useRef)(0);
+  const onKeyDownCapture = useEvent((event) => {
+    onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
+    if (event.defaultPrevented) return;
+    if (!typeahead) return;
+    if (!store) return;
+    if (!isValidTypeaheadEvent(event)) {
+      return clearChars();
+    }
+    const { renderedItems, items, activeId, id } = store.getState();
+    let enabledItems = T7VMP3TM_getEnabledItems(
+      items.length > renderedItems.length ? items : renderedItems
+    );
+    const document = getDocument(event.currentTarget);
+    const selector = `[data-offscreen-id="${id}"]`;
+    const offscreenItems = document.querySelectorAll(selector);
+    for (const element of offscreenItems) {
+      const disabled = element.ariaDisabled === "true" || "disabled" in element && !!element.disabled;
+      enabledItems.push({ id: element.id, element, disabled });
+    }
+    if (offscreenItems.length) {
+      enabledItems = sortBasedOnDOMPosition(enabledItems, (i) => i.element);
+    }
+    if (!isSelfTargetOrItem(event, enabledItems)) return clearChars();
+    event.preventDefault();
+    window.clearTimeout(cleanupTimeoutRef.current);
+    cleanupTimeoutRef.current = window.setTimeout(() => {
+      chars = "";
+    }, 500);
+    const char = event.key.toLowerCase();
+    chars += char;
+    enabledItems = getSameInitialItems(enabledItems, char, activeId);
+    const item = enabledItems.find((item2) => itemTextStartsWith(item2, chars));
+    if (item) {
+      store.move(item.id);
+    } else {
+      clearChars();
+    }
+  });
+  props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
+    onKeyDownCapture
+  });
+  return removeUndefinedValues(props);
+});
+var T7VMP3TM_CompositeTypeahead = forwardRef2(function CompositeTypeahead2(props) {
+  const htmlProps = useCompositeTypeahead(props);
+  return LMDWO4NN_createElement(T7VMP3TM_TagName, htmlProps);
+});
+
+
 
 ;// ./packages/components/build-module/composite/typeahead.js
 /**
@@ -5510,7 +5956,7 @@ const CompositeTypeahead = (0,external_wp_element_namespaceObject.forwardRef)(fu
   // legacy compat layer. The `store` prop is documented, but its type is
   // obfuscated to discourage its use outside of the component's internals.
   const store = (_props$store = props.store) !== null && _props$store !== void 0 ? _props$store : context.store;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(_6BE7QOX5_CompositeRow, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(T7VMP3TM_CompositeTypeahead, {
     store: store,
     ...props,
     ref: ref
@@ -5601,7 +6047,7 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     store
   }), [store]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TW35PKTK_Composite, {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ITI7HKP4_Composite, {
     disabled: disabled,
     store: store,
     ...props,
@@ -5754,7 +6200,7 @@ const Composite = Object.assign((0,external_wp_element_namespaceObject.forwardRe
   })
 });
 
-;// ./node_modules/@ariakit/core/esm/__chunks/6E4KKOSB.js
+;// ./node_modules/@ariakit/core/esm/__chunks/RCQ5P4YE.js
 "use client";
 
 
@@ -5818,7 +6264,7 @@ function createDisclosureStore(props = {}) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KGK2TTFO.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/WYCIER3C.js
 "use client";
 
 
@@ -5833,13 +6279,13 @@ function useDisclosureStoreProps(store, update, props) {
   return Object.assign(store, { disclosure: props.disclosure });
 }
 function useDisclosureStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createDisclosureStore, props);
+  const [store, update] = YV4JVR4I_useStore(createDisclosureStore, props);
   return useDisclosureStoreProps(store, update, props);
 }
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/YOHCVXJB.js
+;// ./node_modules/@ariakit/core/esm/__chunks/FZZ2AVHF.js
 "use client";
 
 
@@ -5850,7 +6296,7 @@ function createDialogStore(props = {}) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/QYS5FHDY.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/BM6PGYQY.js
 "use client";
 
 
@@ -5861,13 +6307,13 @@ function useDialogStoreProps(store, update, props) {
   return useDisclosureStoreProps(store, update, props);
 }
 function useDialogStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createDialogStore, props);
+  const [store, update] = YV4JVR4I_useStore(createDialogStore, props);
   return useDialogStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CBC47ZYL.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/O2PQ2652.js
 "use client";
 
 
@@ -5887,7 +6333,7 @@ function usePopoverStore(props = {}) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/XMDAT5SM.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/FTXTWCCT.js
 "use client";
 
 
@@ -5907,7 +6353,7 @@ function useHovercardStore(props = {}) {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/3UYWTADI.js
+;// ./node_modules/@ariakit/core/esm/__chunks/ME2CUF3F.js
 "use client";
 
 
@@ -5958,7 +6404,7 @@ function createPopoverStore(_a = {}) {
 
 
 
-;// ./node_modules/@ariakit/core/esm/__chunks/EACLTACN.js
+;// ./node_modules/@ariakit/core/esm/__chunks/JTLIIJ4U.js
 "use client";
 
 
@@ -6023,7 +6469,7 @@ function createTooltipStore(props = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/2D53SX6Q.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YTDK2NGG.js
 "use client";
 
 
@@ -6036,19 +6482,19 @@ function useTooltipStoreProps(store, update, props) {
   return useHovercardStoreProps(store, update, props);
 }
 function useTooltipStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createTooltipStore, props);
+  const [store, update] = YV4JVR4I_useStore(createTooltipStore, props);
   return useTooltipStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/AXRBYZQP.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/XL7CSKGW.js
 "use client";
 
 
 // src/role/role.tsx
-var AXRBYZQP_TagName = "div";
-var AXRBYZQP_elements = [
+var XL7CSKGW_TagName = "div";
+var XL7CSKGW_elements = [
   "a",
   "button",
   "details",
@@ -6085,14 +6531,14 @@ var useRole = createHook(
 var Role = forwardRef2(
   // @ts-expect-error
   function Role2(props) {
-    return HKOOKEDE_createElement(AXRBYZQP_TagName, props);
+    return LMDWO4NN_createElement(XL7CSKGW_TagName, props);
   }
 );
 Object.assign(
   Role,
-  AXRBYZQP_elements.reduce((acc, element) => {
+  XL7CSKGW_elements.reduce((acc, element) => {
     acc[element] = forwardRef2(function Role3(props) {
-      return HKOOKEDE_createElement(element, props);
+      return LMDWO4NN_createElement(element, props);
     });
     return acc;
   }, {})
@@ -6100,78 +6546,78 @@ Object.assign(
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/RGUP62TM.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/S6EF7IVO.js
 "use client";
 
 
 // src/disclosure/disclosure-context.tsx
-var RGUP62TM_ctx = createStoreContext();
-var useDisclosureContext = RGUP62TM_ctx.useContext;
-var useDisclosureScopedContext = RGUP62TM_ctx.useScopedContext;
-var useDisclosureProviderContext = RGUP62TM_ctx.useProviderContext;
-var DisclosureContextProvider = RGUP62TM_ctx.ContextProvider;
-var DisclosureScopedContextProvider = RGUP62TM_ctx.ScopedContextProvider;
+var S6EF7IVO_ctx = createStoreContext();
+var useDisclosureContext = S6EF7IVO_ctx.useContext;
+var useDisclosureScopedContext = S6EF7IVO_ctx.useScopedContext;
+var useDisclosureProviderContext = S6EF7IVO_ctx.useProviderContext;
+var DisclosureContextProvider = S6EF7IVO_ctx.ContextProvider;
+var DisclosureScopedContextProvider = S6EF7IVO_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/DU4D3UCJ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/RS7LB2H4.js
 "use client";
 
 
 
 // src/dialog/dialog-context.tsx
 
-var DU4D3UCJ_ctx = createStoreContext(
+var RS7LB2H4_ctx = createStoreContext(
   [DisclosureContextProvider],
   [DisclosureScopedContextProvider]
 );
-var useDialogContext = DU4D3UCJ_ctx.useContext;
-var useDialogScopedContext = DU4D3UCJ_ctx.useScopedContext;
-var useDialogProviderContext = DU4D3UCJ_ctx.useProviderContext;
-var DialogContextProvider = DU4D3UCJ_ctx.ContextProvider;
-var DialogScopedContextProvider = DU4D3UCJ_ctx.ScopedContextProvider;
+var useDialogContext = RS7LB2H4_ctx.useContext;
+var useDialogScopedContext = RS7LB2H4_ctx.useScopedContext;
+var useDialogProviderContext = RS7LB2H4_ctx.useProviderContext;
+var DialogContextProvider = RS7LB2H4_ctx.ContextProvider;
+var DialogScopedContextProvider = RS7LB2H4_ctx.ScopedContextProvider;
 var DialogHeadingContext = (0,external_React_.createContext)(void 0);
 var DialogDescriptionContext = (0,external_React_.createContext)(void 0);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/54MGSIOI.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/MTZPJQMC.js
 "use client";
 
 
 
 // src/popover/popover-context.tsx
-var _54MGSIOI_ctx = createStoreContext(
+var MTZPJQMC_ctx = createStoreContext(
   [DialogContextProvider],
   [DialogScopedContextProvider]
 );
-var usePopoverContext = _54MGSIOI_ctx.useContext;
-var usePopoverScopedContext = _54MGSIOI_ctx.useScopedContext;
-var usePopoverProviderContext = _54MGSIOI_ctx.useProviderContext;
-var PopoverContextProvider = _54MGSIOI_ctx.ContextProvider;
-var PopoverScopedContextProvider = _54MGSIOI_ctx.ScopedContextProvider;
+var usePopoverContext = MTZPJQMC_ctx.useContext;
+var usePopoverScopedContext = MTZPJQMC_ctx.useScopedContext;
+var usePopoverProviderContext = MTZPJQMC_ctx.useProviderContext;
+var PopoverContextProvider = MTZPJQMC_ctx.ContextProvider;
+var PopoverScopedContextProvider = MTZPJQMC_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CTQR3VDU.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/EM5CXX6A.js
 "use client";
 
 
 
 // src/hovercard/hovercard-context.tsx
-var CTQR3VDU_ctx = createStoreContext(
+var EM5CXX6A_ctx = createStoreContext(
   [PopoverContextProvider],
   [PopoverScopedContextProvider]
 );
-var useHovercardContext = CTQR3VDU_ctx.useContext;
-var useHovercardScopedContext = CTQR3VDU_ctx.useScopedContext;
-var useHovercardProviderContext = CTQR3VDU_ctx.useProviderContext;
-var HovercardContextProvider = CTQR3VDU_ctx.ContextProvider;
-var HovercardScopedContextProvider = CTQR3VDU_ctx.ScopedContextProvider;
+var useHovercardContext = EM5CXX6A_ctx.useContext;
+var useHovercardScopedContext = EM5CXX6A_ctx.useScopedContext;
+var useHovercardProviderContext = EM5CXX6A_ctx.useProviderContext;
+var HovercardContextProvider = EM5CXX6A_ctx.ContextProvider;
+var HovercardScopedContextProvider = EM5CXX6A_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/QA27FYGF.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/BYC7LY2E.js
 "use client";
 
 
@@ -6183,7 +6629,7 @@ var HovercardScopedContextProvider = CTQR3VDU_ctx.ScopedContextProvider;
 
 
 
-var QA27FYGF_TagName = "a";
+var BYC7LY2E_TagName = "a";
 var useHovercardAnchor = createHook(
   function useHovercardAnchor2(_a) {
     var _b = _a, { store, showOnHover = true } = _b, props = __objRest(_b, ["store", "showOnHover"]);
@@ -6265,30 +6711,30 @@ var useHovercardAnchor = createHook(
 );
 var HovercardAnchor = forwardRef2(function HovercardAnchor2(props) {
   const htmlProps = useHovercardAnchor(props);
-  return HKOOKEDE_createElement(QA27FYGF_TagName, htmlProps);
+  return LMDWO4NN_createElement(BYC7LY2E_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TWCRTUOB.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/F4IYJ42G.js
 "use client";
 
 
 
 // src/tooltip/tooltip-context.tsx
-var TWCRTUOB_ctx = createStoreContext(
+var F4IYJ42G_ctx = createStoreContext(
   [HovercardContextProvider],
   [HovercardScopedContextProvider]
 );
-var useTooltipContext = TWCRTUOB_ctx.useContext;
-var useTooltipScopedContext = TWCRTUOB_ctx.useScopedContext;
-var useTooltipProviderContext = TWCRTUOB_ctx.useProviderContext;
-var TooltipContextProvider = TWCRTUOB_ctx.ContextProvider;
-var TooltipScopedContextProvider = TWCRTUOB_ctx.ScopedContextProvider;
+var useTooltipContext = F4IYJ42G_ctx.useContext;
+var useTooltipScopedContext = F4IYJ42G_ctx.useScopedContext;
+var useTooltipProviderContext = F4IYJ42G_ctx.useProviderContext;
+var TooltipContextProvider = F4IYJ42G_ctx.ContextProvider;
+var TooltipScopedContextProvider = F4IYJ42G_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/tooltip/tooltip-anchor.js
+;// ./node_modules/@ariakit/react-core/esm/tooltip/tooltip-anchor.js
 "use client";
 
 
@@ -6408,11 +6854,11 @@ var useTooltipAnchor = createHook(
 );
 var TooltipAnchor = forwardRef2(function TooltipAnchor2(props) {
   const htmlProps = useTooltipAnchor(props);
-  return HKOOKEDE_createElement(tooltip_anchor_TagName, htmlProps);
+  return LMDWO4NN_createElement(tooltip_anchor_TagName, htmlProps);
 });
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/X7QOZUD3.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/X7QOZUD3.js
 "use client";
 
 // src/hovercard/utils/polygon.ts
@@ -6497,7 +6943,7 @@ function getElementPolygon(element, enterPoint) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/63XF7ACK.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/63XF7ACK.js
 "use client";
 
 // src/dialog/utils/is-backdrop.ts
@@ -6513,7 +6959,7 @@ function _63XF7ACK_isBackdrop(element, ...ids) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/K2ZF5NU7.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/K2ZF5NU7.js
 "use client";
 
 // src/dialog/utils/orchestrate.ts
@@ -6606,7 +7052,7 @@ function setCSSProperty(element, property, value) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/AOUGVQZ3.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/AOUGVQZ3.js
 "use client";
 
 
@@ -6674,7 +7120,7 @@ function createWalkTreeSnapshot(id, elements) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/2PGBN2Y4.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/2PGBN2Y4.js
 "use client";
 
 
@@ -6735,7 +7181,7 @@ function markTreeOutside(id, elements) {
 
 ;// external "ReactDOM"
 const external_ReactDOM_namespaceObject = window["ReactDOM"];
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/BSEL4YAF.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/VGCJ63VH.js
 "use client";
 
 
@@ -6749,12 +7195,12 @@ const external_ReactDOM_namespaceObject = window["ReactDOM"];
 
 
 
-var BSEL4YAF_TagName = "div";
+var VGCJ63VH_TagName = "div";
 function afterTimeout(timeoutMs, cb) {
   const timeoutId = setTimeout(cb, timeoutMs);
   return () => clearTimeout(timeoutId);
 }
-function BSEL4YAF_afterPaint(cb) {
+function VGCJ63VH_afterPaint(cb) {
   let raf = requestAnimationFrame(() => {
     raf = requestAnimationFrame(cb);
   });
@@ -6808,19 +7254,17 @@ var useDisclosureContent = createHook(function useDisclosureContent2(_a) {
       setTransition(null);
       return;
     }
-    return BSEL4YAF_afterPaint(() => {
+    return VGCJ63VH_afterPaint(() => {
       setTransition(open ? "enter" : mounted ? "leave" : null);
     });
   }, [animated, contentElement, open, mounted]);
   useSafeLayoutEffect(() => {
     if (!store) return;
     if (!animated) return;
+    if (!transition) return;
+    if (!contentElement) return;
     const stopAnimation = () => store == null ? void 0 : store.setState("animating", false);
     const stopAnimationSync = () => (0,external_ReactDOM_namespaceObject.flushSync)(stopAnimation);
-    if (!transition || !contentElement) {
-      stopAnimation();
-      return;
-    }
     if (transition === "leave" && open) return;
     if (transition === "enter" && !open) return;
     if (typeof animated === "number") {
@@ -6871,7 +7315,9 @@ var useDisclosureContent = createHook(function useDisclosureContent2(_a) {
   const hidden = isHidden(mounted, props.hidden, alwaysVisible);
   const styleProp = props.style;
   const style = (0,external_React_.useMemo)(() => {
-    if (hidden) return _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, styleProp), { display: "none" });
+    if (hidden) {
+      return _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, styleProp), { display: "none" });
+    }
     return styleProp;
   }, [hidden, styleProp]);
   props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
@@ -6888,7 +7334,7 @@ var useDisclosureContent = createHook(function useDisclosureContent2(_a) {
 });
 var DisclosureContentImpl = forwardRef2(function DisclosureContentImpl2(props) {
   const htmlProps = useDisclosureContent(props);
-  return HKOOKEDE_createElement(BSEL4YAF_TagName, htmlProps);
+  return LMDWO4NN_createElement(VGCJ63VH_TagName, htmlProps);
 });
 var DisclosureContent = forwardRef2(function DisclosureContent2(_a) {
   var _b = _a, {
@@ -6908,8 +7354,9 @@ var DisclosureContent = forwardRef2(function DisclosureContent2(_a) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/UQBPM777.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/63FEHJZV.js
 "use client";
+
 
 
 
@@ -6928,8 +7375,8 @@ function DialogBackdrop({
 }) {
   const ref = (0,external_React_.useRef)(null);
   const disclosure = useDisclosureStore({ disclosure: store });
-  const contentElement = store.useState("contentElement");
-  useSafeLayoutEffect(() => {
+  const contentElement = useStoreState(store, "contentElement");
+  (0,external_React_.useEffect)(() => {
     const backdrop2 = ref.current;
     const dialog = contentElement;
     if (!backdrop2) return;
@@ -6968,7 +7415,22 @@ function DialogBackdrop({
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ESSM74HH.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/IGR4SXG2.js
+"use client";
+
+// src/dialog/utils/is-focus-trap.ts
+function isFocusTrap(element, ...ids) {
+  if (!element) return false;
+  const attr = element.getAttribute("data-focus-trap");
+  if (attr == null) return false;
+  if (!ids.length) return true;
+  if (attr === "") return false;
+  return ids.some((id) => attr === id);
+}
+
+
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ESSM74HH.js
 "use client";
 
 
@@ -6995,7 +7457,7 @@ function disableAccessibilityTreeOutside(id, elements) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/677M2CI3.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/677M2CI3.js
 "use client";
 
 // src/dialog/utils/supports-inert.ts
@@ -7005,8 +7467,9 @@ function supportsInert() {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/NSFBIL2Z.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/KZAQFFOU.js
 "use client";
+
 
 
 
@@ -7051,6 +7514,7 @@ function disableTreeOutside(id, elements) {
     elements,
     (element) => {
       if (_63XF7ACK_isBackdrop(element, ...ids)) return;
+      if (isFocusTrap(element, ...ids)) return;
       cleanups.unshift(disableTree(element, elements));
     },
     (element) => {
@@ -7069,7 +7533,7 @@ function disableTreeOutside(id, elements) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/YJS26JVG.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YKJECYU7.js
 "use client";
 
 
@@ -7109,7 +7573,7 @@ function useRootDialog({
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KB6RR6FL.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/BGQ3KQ5M.js
 "use client";
 
 
@@ -7179,7 +7643,7 @@ function usePreventBodyScroll(contentElement, contentId, enabled) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/T3RMEPVH.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/TOU75OXH.js
 "use client";
 
 
@@ -7220,7 +7684,7 @@ function useNestedDialogs(store) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/HLTQOHKZ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/HLTQOHKZ.js
 "use client";
 
 // src/dialog/utils/use-previous-mouse-down-ref.ts
@@ -7243,8 +7707,10 @@ function usePreviousMouseDownRef(enabled) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/43UOHFGG.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/WBDYNH73.js
 "use client";
+
+
 
 
 
@@ -7284,7 +7750,7 @@ function useEventOutside({
   domReady
 }) {
   const callListener = useEvent(listener);
-  const open = store.useState("open");
+  const open = useStoreState(store, "open");
   const focusedRef = (0,external_React_.useRef)(false);
   useSafeLayoutEffect(() => {
     if (!open) return;
@@ -7311,6 +7777,7 @@ function useEventOutside({
       if (isMouseEventOnDialog(event, contentElement)) return;
       const focused = focusedRef.current;
       if (focused && !isElementMarked(target, contentElement.id)) return;
+      if (isSafariFocusAncestor(target)) return;
       callListener(event);
     };
     return addGlobalEventListener(type, onEvent, capture);
@@ -7323,7 +7790,7 @@ function shouldHideOnInteractOutside(hideOnInteractOutside, event) {
   return !!hideOnInteractOutside;
 }
 function useHideOnInteractOutside(store, hideOnInteractOutside, domReady) {
-  const open = store.useState("open");
+  const open = useStoreState(store, "open");
   const previousMouseDownRef = usePreviousMouseDownRef(open);
   const props = { store, domReady, capture: true };
   useEventOutside(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
@@ -7359,7 +7826,7 @@ function useHideOnInteractOutside(store, hideOnInteractOutside, domReady) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/6GXEOXGT.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/6GXEOXGT.js
 "use client";
 
 // src/dialog/utils/prepend-hidden-dismiss.ts
@@ -7392,7 +7859,7 @@ function prependHiddenDismiss(container, onClick) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/HT3UEUDM.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ZWYATQFU.js
 "use client";
 
 
@@ -7401,7 +7868,7 @@ function prependHiddenDismiss(container, onClick) {
 
 // src/focusable/focusable-container.tsx
 
-var HT3UEUDM_TagName = "div";
+var ZWYATQFU_TagName = "div";
 var useFocusableContainer = createHook(function useFocusableContainer2(_a) {
   var _b = _a, { autoFocusOnShow = true } = _b, props = __objRest(_b, ["autoFocusOnShow"]);
   props = useWrapElement(
@@ -7413,12 +7880,12 @@ var useFocusableContainer = createHook(function useFocusableContainer2(_a) {
 });
 var FocusableContainer = forwardRef2(function FocusableContainer2(props) {
   const htmlProps = useFocusableContainer(props);
-  return HKOOKEDE_createElement(HT3UEUDM_TagName, htmlProps);
+  return LMDWO4NN_createElement(ZWYATQFU_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CZ4GFWYL.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/CZ4GFWYL.js
 "use client";
 
 // src/heading/heading-context.tsx
@@ -7427,7 +7894,7 @@ var HeadingContext = (0,external_React_.createContext)(0);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5M6RIVE2.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/5M6RIVE2.js
 "use client";
 
 
@@ -7445,13 +7912,13 @@ function HeadingLevel({ level, children }) {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ILNAUGA4.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/XX67R432.js
 "use client";
 
 
 
 // src/visually-hidden/visually-hidden.tsx
-var ILNAUGA4_TagName = "span";
+var XX67R432_TagName = "span";
 var useVisuallyHidden = createHook(
   function useVisuallyHidden2(props) {
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
@@ -7472,19 +7939,19 @@ var useVisuallyHidden = createHook(
 );
 var VisuallyHidden = forwardRef2(function VisuallyHidden2(props) {
   const htmlProps = useVisuallyHidden(props);
-  return HKOOKEDE_createElement(ILNAUGA4_TagName, htmlProps);
+  return LMDWO4NN_createElement(XX67R432_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/LWDIJ7XK.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/W3VI7GFU.js
 "use client";
 
 
 
 
 // src/focus-trap/focus-trap.tsx
-var LWDIJ7XK_TagName = "span";
+var W3VI7GFU_TagName = "span";
 var useFocusTrap = createHook(
   function useFocusTrap2(props) {
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
@@ -7505,12 +7972,12 @@ var useFocusTrap = createHook(
 );
 var FocusTrap = forwardRef2(function FocusTrap2(props) {
   const htmlProps = useFocusTrap(props);
-  return HKOOKEDE_createElement(LWDIJ7XK_TagName, htmlProps);
+  return LMDWO4NN_createElement(W3VI7GFU_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/AOQQTIBO.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/AOQQTIBO.js
 "use client";
 
 // src/portal/portal-context.tsx
@@ -7519,7 +7986,7 @@ var PortalContext = (0,external_React_.createContext)(null);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/UNZQGRPO.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/O37CNYMR.js
 "use client";
 
 
@@ -7535,7 +8002,7 @@ var PortalContext = (0,external_React_.createContext)(null);
 
 
 
-var UNZQGRPO_TagName = "div";
+var O37CNYMR_TagName = "div";
 function getRootElement(element) {
   return getDocument(element).body;
 }
@@ -7549,7 +8016,7 @@ function getPortalElement(element, portalElement) {
   return portalElement;
 }
 function getRandomId(prefix = "id") {
-  return `${prefix ? `${prefix}-` : ""}${Math.random().toString(36).substr(2, 6)}`;
+  return `${prefix ? `${prefix}-` : ""}${Math.random().toString(36).slice(2, 8)}`;
 }
 function queueFocus(element) {
   queueMicrotask(() => {
@@ -7669,6 +8136,7 @@ var usePortal = createHook(function usePortal2(_a) {
           FocusTrap,
           {
             ref: innerBeforeRef,
+            "data-focus-trap": props.id,
             className: "__focus-trap-inner-before",
             onFocus: (event) => {
               if (isFocusEventOutside(event, portalNode)) {
@@ -7684,6 +8152,7 @@ var usePortal = createHook(function usePortal2(_a) {
           FocusTrap,
           {
             ref: innerAfterRef,
+            "data-focus-trap": props.id,
             className: "__focus-trap-inner-after",
             onFocus: (event) => {
               if (isFocusEventOutside(event, portalNode)) {
@@ -7703,6 +8172,7 @@ var usePortal = createHook(function usePortal2(_a) {
           FocusTrap,
           {
             ref: outerBeforeRef,
+            "data-focus-trap": props.id,
             className: "__focus-trap-outer-before",
             onFocus: (event) => {
               const fromOuter = event.relatedTarget === outerAfterRef.current;
@@ -7721,6 +8191,7 @@ var usePortal = createHook(function usePortal2(_a) {
           FocusTrap,
           {
             ref: outerAfterRef,
+            "data-focus-trap": props.id,
             className: "__focus-trap-outer-after",
             onFocus: (event) => {
               if (isFocusEventOutside(event, portalNode)) {
@@ -7760,12 +8231,12 @@ var usePortal = createHook(function usePortal2(_a) {
 });
 var Portal = forwardRef2(function Portal2(props) {
   const htmlProps = usePortal(props);
-  return HKOOKEDE_createElement(UNZQGRPO_TagName, htmlProps);
+  return LMDWO4NN_createElement(O37CNYMR_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TT2355LN.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/JC64G2H7.js
 "use client";
 
 
@@ -7796,8 +8267,8 @@ var Portal = forwardRef2(function Portal2(props) {
 
 
 
-var TT2355LN_TagName = "div";
-var TT2355LN_isSafariBrowser = isSafari();
+var JC64G2H7_TagName = "div";
+var JC64G2H7_isSafariBrowser = isSafari();
 function isAlreadyFocusingAnotherElement(dialog) {
   const activeElement = getActiveElement();
   if (!activeElement) return false;
@@ -7870,13 +8341,14 @@ var useDialog = createHook(function useDialog2(_a) {
   });
   const { portalRef, domReady } = usePortalRef(portal, props.portalRef);
   const preserveTabOrderProp = props.preserveTabOrder;
-  const preserveTabOrder = store.useState(
+  const preserveTabOrder = useStoreState(
+    store,
     (state) => preserveTabOrderProp && !modal && state.mounted
   );
   const id = useId(props.id);
-  const open = store.useState("open");
-  const mounted = store.useState("mounted");
-  const contentElement = store.useState("contentElement");
+  const open = useStoreState(store, "open");
+  const mounted = useStoreState(store, "mounted");
+  const contentElement = useStoreState(store, "contentElement");
   const hidden = isHidden(mounted, props.hidden, props.alwaysVisible);
   usePreventBodyScroll(contentElement, id, preventBodyScroll && !hidden);
   useHideOnInteractOutside(store, hideOnInteractOutside, domReady);
@@ -7891,7 +8363,7 @@ var useDialog = createHook(function useDialog2(_a) {
     if (dialog && contains(dialog, activeElement)) return;
     store.setDisclosureElement(activeElement);
   }, [store, open]);
-  if (TT2355LN_isSafariBrowser) {
+  if (JC64G2H7_isSafariBrowser) {
     (0,external_React_.useEffect)(() => {
       if (!mounted) return;
       const { disclosureElement } = store.getState();
@@ -7916,6 +8388,24 @@ var useDialog = createHook(function useDialog2(_a) {
       };
     }, [store, mounted]);
   }
+  (0,external_React_.useEffect)(() => {
+    if (!mounted) return;
+    if (!domReady) return;
+    const dialog = ref.current;
+    if (!dialog) return;
+    const win = getWindow(dialog);
+    const viewport = win.visualViewport || win;
+    const setViewportHeight = () => {
+      var _a2, _b2;
+      const height = (_b2 = (_a2 = win.visualViewport) == null ? void 0 : _a2.height) != null ? _b2 : win.innerHeight;
+      dialog.style.setProperty("--dialog-viewport-height", `${height}px`);
+    };
+    setViewportHeight();
+    viewport.addEventListener("resize", setViewportHeight);
+    return () => {
+      viewport.removeEventListener("resize", setViewportHeight);
+    };
+  }, [mounted, domReady]);
   (0,external_React_.useEffect)(() => {
     if (!modal) return;
     if (!mounted) return;
@@ -7995,7 +8485,7 @@ var useDialog = createHook(function useDialog2(_a) {
     setAutoFocusEnabled(true);
     queueMicrotask(() => {
       element.focus();
-      if (!TT2355LN_isSafariBrowser) return;
+      if (!JC64G2H7_isSafariBrowser) return;
       element.scrollIntoView({ block: "nearest", inline: "nearest" });
     });
   }, [
@@ -8164,7 +8654,7 @@ function createDialogComponent(Component, useProviderContext = useDialogProvider
 var Dialog = createDialogComponent(
   forwardRef2(function Dialog2(props) {
     const htmlProps = useDialog(props);
-    return HKOOKEDE_createElement(TT2355LN_TagName, htmlProps);
+    return LMDWO4NN_createElement(JC64G2H7_TagName, htmlProps);
   }),
   useDialogProviderContext
 );
@@ -8172,6 +8662,11 @@ var Dialog = createDialogComponent(
 
 
 ;// ./node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
+/**
+ * Custom positioning reference element.
+ * @see https://floating-ui.com/docs/virtual-elements
+ */
+
 const floating_ui_utils_sides = (/* unused pure expression or super */ null && (['top', 'right', 'bottom', 'left']));
 const alignments = (/* unused pure expression or super */ null && (['start', 'end']));
 const floating_ui_utils_placements = /*#__PURE__*/(/* unused pure expression or super */ null && (floating_ui_utils_sides.reduce((acc, side) => acc.concat(side, side + "-" + alignments[0], side + "-" + alignments[1]), [])));
@@ -8211,8 +8706,9 @@ function getOppositeAxis(axis) {
 function getAxisLength(axis) {
   return axis === 'y' ? 'height' : 'width';
 }
+const yAxisSides = /*#__PURE__*/new Set(['top', 'bottom']);
 function floating_ui_utils_getSideAxis(placement) {
-  return ['top', 'bottom'].includes(floating_ui_utils_getSide(placement)) ? 'y' : 'x';
+  return yAxisSides.has(floating_ui_utils_getSide(placement)) ? 'y' : 'x';
 }
 function getAlignmentAxis(placement) {
   return getOppositeAxis(floating_ui_utils_getSideAxis(placement));
@@ -8237,19 +8733,19 @@ function getExpandedPlacements(placement) {
 function floating_ui_utils_getOppositeAlignmentPlacement(placement) {
   return placement.replace(/start|end/g, alignment => oppositeAlignmentMap[alignment]);
 }
+const lrPlacement = ['left', 'right'];
+const rlPlacement = ['right', 'left'];
+const tbPlacement = ['top', 'bottom'];
+const btPlacement = ['bottom', 'top'];
 function getSideList(side, isStart, rtl) {
-  const lr = ['left', 'right'];
-  const rl = ['right', 'left'];
-  const tb = ['top', 'bottom'];
-  const bt = ['bottom', 'top'];
   switch (side) {
     case 'top':
     case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
+      if (rtl) return isStart ? rlPlacement : lrPlacement;
+      return isStart ? lrPlacement : rlPlacement;
     case 'left':
     case 'right':
-      return isStart ? tb : bt;
+      return isStart ? tbPlacement : btPlacement;
     default:
       return [];
   }
@@ -8286,12 +8782,21 @@ function floating_ui_utils_getPaddingObject(padding) {
   };
 }
 function floating_ui_utils_rectToClientRect(rect) {
+  const {
+    x,
+    y,
+    width,
+    height
+  } = rect;
   return {
-    ...rect,
-    top: rect.y,
-    left: rect.x,
-    right: rect.x + rect.width,
-    bottom: rect.y + rect.height
+    width,
+    height,
+    top: y,
+    left: x,
+    right: x + width,
+    bottom: y + height,
+    x,
+    y
   };
 }
 
@@ -8359,7 +8864,7 @@ function computeCoordsFromPlacement(_ref, placement, rtl) {
 
 /**
  * Computes the `x` and `y` coordinates that will place the floating element
- * next to a reference element when it is given a certain positioning strategy.
+ * next to a given reference element.
  *
  * This export does not have any `platform` interface logic. You will need to
  * write one for the platform you are using Floating UI with.
@@ -8437,7 +8942,6 @@ const computePosition = async (reference, floating, config) => {
         } = computeCoordsFromPlacement(rects, statefulPlacement, rtl));
       }
       i = -1;
-      continue;
     }
   }
   return {
@@ -8487,9 +8991,10 @@ async function detectOverflow(state, options) {
     strategy
   }));
   const rect = elementContext === 'floating' ? {
-    ...rects.floating,
     x,
-    y
+    y,
+    width: rects.floating.width,
+    height: rects.floating.height
   } : rects.reference;
   const offsetParent = await (platform.getOffsetParent == null ? void 0 : platform.getOffsetParent(elements.floating));
   const offsetScale = (await (platform.isElement == null ? void 0 : platform.isElement(offsetParent))) ? (await (platform.getScale == null ? void 0 : platform.getScale(offsetParent))) || {
@@ -8500,6 +9005,7 @@ async function detectOverflow(state, options) {
     y: 1
   };
   const elementClientRect = floating_ui_utils_rectToClientRect(platform.convertOffsetParentRelativeRectToViewportRelativeRect ? await platform.convertOffsetParentRelativeRectToViewportRelativeRect({
+    elements,
     rect,
     offsetParent,
     strategy
@@ -8527,7 +9033,8 @@ const arrow = options => ({
       placement,
       rects,
       platform,
-      elements
+      elements,
+      middlewareData
     } = state;
     // Since `element` is required, we don't Partial<> the type.
     const {
@@ -8575,16 +9082,20 @@ const arrow = options => ({
 
     // If the reference is small enough that the arrow's padding causes it to
     // to point to nothing for an aligned placement, adjust the offset of the
-    // floating element itself. This stops `shift()` from taking action, but can
-    // be worked around by calling it again after the `arrow()` if desired.
-    const shouldAddOffset = floating_ui_utils_getAlignment(placement) != null && center != offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
-    const alignmentOffset = shouldAddOffset ? center < min$1 ? min$1 - center : max - center : 0;
+    // floating element itself. To ensure `shift()` continues to take action,
+    // a single reset is performed when this is true.
+    const shouldAddOffset = !middlewareData.arrow && floating_ui_utils_getAlignment(placement) != null && center !== offset && rects.reference[length] / 2 - (center < min$1 ? minPadding : maxPadding) - arrowDimensions[length] / 2 < 0;
+    const alignmentOffset = shouldAddOffset ? center < min$1 ? center - min$1 : center - max : 0;
     return {
-      [axis]: coords[axis] - alignmentOffset,
+      [axis]: coords[axis] + alignmentOffset,
       data: {
         [axis]: offset,
-        centerOffset: center - offset + alignmentOffset
-      }
+        centerOffset: center - offset - alignmentOffset,
+        ...(shouldAddOffset && {
+          alignmentOffset
+        })
+      },
+      reset: shouldAddOffset
     };
   }
 });
@@ -8706,7 +9217,7 @@ const flip = function (options) {
     name: 'flip',
     options,
     async fn(state) {
-      var _middlewareData$flip;
+      var _middlewareData$arrow, _middlewareData$flip;
       const {
         placement,
         middlewareData,
@@ -8724,11 +9235,21 @@ const flip = function (options) {
         flipAlignment = true,
         ...detectOverflowOptions
       } = floating_ui_utils_evaluate(options, state);
+
+      // If a reset by the arrow was caused due to an alignment offset being
+      // added, we should skip any logic now since `flip()` has already done its
+      // work.
+      // https://github.com/floating-ui/floating-ui/issues/2549#issuecomment-1719601643
+      if ((_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+        return {};
+      }
       const side = floating_ui_utils_getSide(placement);
+      const initialSideAxis = floating_ui_utils_getSideAxis(initialPlacement);
       const isBasePlacement = floating_ui_utils_getSide(initialPlacement) === initialPlacement;
       const rtl = await (platform.isRTL == null ? void 0 : platform.isRTL(elements.floating));
       const fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipAlignment ? [getOppositePlacement(initialPlacement)] : getExpandedPlacements(initialPlacement));
-      if (!specifiedFallbackPlacements && fallbackAxisSideDirection !== 'none') {
+      const hasFallbackAxisSideDirection = fallbackAxisSideDirection !== 'none';
+      if (!specifiedFallbackPlacements && hasFallbackAxisSideDirection) {
         fallbackPlacements.push(...getOppositeAxisPlacements(initialPlacement, flipAlignment, fallbackAxisSideDirection, rtl));
       }
       const placements = [initialPlacement, ...fallbackPlacements];
@@ -8753,16 +9274,22 @@ const flip = function (options) {
         const nextIndex = (((_middlewareData$flip2 = middlewareData.flip) == null ? void 0 : _middlewareData$flip2.index) || 0) + 1;
         const nextPlacement = placements[nextIndex];
         if (nextPlacement) {
-          // Try next placement and re-run the lifecycle.
-          return {
-            data: {
-              index: nextIndex,
-              overflows: overflowsData
-            },
-            reset: {
-              placement: nextPlacement
-            }
-          };
+          const ignoreCrossAxisOverflow = checkCrossAxis === 'alignment' ? initialSideAxis !== floating_ui_utils_getSideAxis(nextPlacement) : false;
+          if (!ignoreCrossAxisOverflow ||
+          // We leave the current main axis only if every placement on that axis
+          // overflows the main axis.
+          overflowsData.every(d => d.overflows[0] > 0 && floating_ui_utils_getSideAxis(d.placement) === initialSideAxis)) {
+            // Try next placement and re-run the lifecycle.
+            return {
+              data: {
+                index: nextIndex,
+                overflows: overflowsData
+              },
+              reset: {
+                placement: nextPlacement
+              }
+            };
+          }
         }
 
         // First, find the candidates that fit on the mainAxis side of overflow,
@@ -8774,8 +9301,17 @@ const flip = function (options) {
           switch (fallbackStrategy) {
             case 'bestFit':
               {
-                var _overflowsData$map$so;
-                const placement = (_overflowsData$map$so = overflowsData.map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$map$so[0];
+                var _overflowsData$filter2;
+                const placement = (_overflowsData$filter2 = overflowsData.filter(d => {
+                  if (hasFallbackAxisSideDirection) {
+                    const currentSideAxis = floating_ui_utils_getSideAxis(d.placement);
+                    return currentSideAxis === initialSideAxis ||
+                    // Create a bias to the `y` side axis due to horizontal
+                    // reading directions favoring greater width.
+                    currentSideAxis === 'y';
+                  }
+                  return true;
+                }).map(d => [d.placement, d.overflows.filter(overflow => overflow > 0).reduce((acc, overflow) => acc + overflow, 0)]).sort((a, b) => a[1] - b[1])[0]) == null ? void 0 : _overflowsData$filter2[0];
                 if (placement) {
                   resetPlacement = placement;
                 }
@@ -8999,8 +9535,11 @@ const inline = function (options) {
   };
 };
 
+const originSides = /*#__PURE__*/new Set(['left', 'top']);
+
 // For type backwards-compatibility, the `OffsetOptions` type was also
 // Derivable.
+
 async function convertValueToCoords(state, options) {
   const {
     placement,
@@ -9011,7 +9550,7 @@ async function convertValueToCoords(state, options) {
   const side = floating_ui_utils_getSide(placement);
   const alignment = floating_ui_utils_getAlignment(placement);
   const isVertical = floating_ui_utils_getSideAxis(placement) === 'y';
-  const mainAxisMulti = ['left', 'top'].includes(side) ? -1 : 1;
+  const mainAxisMulti = originSides.has(side) ? -1 : 1;
   const crossAxisMulti = rtl && isVertical ? -1 : 1;
   const rawValue = floating_ui_utils_evaluate(options, state);
 
@@ -9025,10 +9564,9 @@ async function convertValueToCoords(state, options) {
     crossAxis: 0,
     alignmentAxis: null
   } : {
-    mainAxis: 0,
-    crossAxis: 0,
-    alignmentAxis: null,
-    ...rawValue
+    mainAxis: rawValue.mainAxis || 0,
+    crossAxis: rawValue.crossAxis || 0,
+    alignmentAxis: rawValue.alignmentAxis
   };
   if (alignment && typeof alignmentAxis === 'number') {
     crossAxis = alignment === 'end' ? alignmentAxis * -1 : alignmentAxis;
@@ -9057,15 +9595,27 @@ const offset = function (options) {
     name: 'offset',
     options,
     async fn(state) {
+      var _middlewareData$offse, _middlewareData$arrow;
       const {
         x,
-        y
+        y,
+        placement,
+        middlewareData
       } = state;
       const diffCoords = await convertValueToCoords(state, options);
+
+      // If the placement is the same and the arrow caused an alignment offset
+      // then we don't need to change the positioning coordinates.
+      if (placement === ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse.placement) && (_middlewareData$arrow = middlewareData.arrow) != null && _middlewareData$arrow.alignmentOffset) {
+        return {};
+      }
       return {
         x: x + diffCoords.x,
         y: y + diffCoords.y,
-        data: diffCoords
+        data: {
+          ...diffCoords,
+          placement
+        }
       };
     }
   };
@@ -9138,7 +9688,11 @@ const shift = function (options) {
         ...limitedCoords,
         data: {
           x: limitedCoords.x - x,
-          y: limitedCoords.y - y
+          y: limitedCoords.y - y,
+          enabled: {
+            [mainAxis]: checkMainAxis,
+            [crossAxis]: checkCrossAxis
+          }
         }
       };
     }
@@ -9196,7 +9750,7 @@ const limitShift = function (options) {
       if (checkCrossAxis) {
         var _middlewareData$offse, _middlewareData$offse2;
         const len = mainAxis === 'y' ? 'width' : 'height';
-        const isOriginSide = ['top', 'left'].includes(floating_ui_utils_getSide(placement));
+        const isOriginSide = originSides.has(floating_ui_utils_getSide(placement));
         const limitMin = rects.reference[crossAxis] - rects.floating[len] + (isOriginSide ? ((_middlewareData$offse = middlewareData.offset) == null ? void 0 : _middlewareData$offse[crossAxis]) || 0 : 0) + (isOriginSide ? 0 : computedOffset.crossAxis);
         const limitMax = rects.reference[crossAxis] + rects.reference[len] + (isOriginSide ? 0 : ((_middlewareData$offse2 = middlewareData.offset) == null ? void 0 : _middlewareData$offse2[crossAxis]) || 0) - (isOriginSide ? computedOffset.crossAxis : 0);
         if (crossAxisCoord < limitMin) {
@@ -9227,6 +9781,7 @@ const size = function (options) {
     name: 'size',
     options,
     async fn(state) {
+      var _state$middlewareData, _state$middlewareData2;
       const {
         placement,
         rects,
@@ -9254,17 +9809,18 @@ const size = function (options) {
         widthSide = side;
         heightSide = alignment === 'end' ? 'top' : 'bottom';
       }
-      const overflowAvailableHeight = height - overflow[heightSide];
-      const overflowAvailableWidth = width - overflow[widthSide];
+      const maximumClippingHeight = height - overflow.top - overflow.bottom;
+      const maximumClippingWidth = width - overflow.left - overflow.right;
+      const overflowAvailableHeight = floating_ui_utils_min(height - overflow[heightSide], maximumClippingHeight);
+      const overflowAvailableWidth = floating_ui_utils_min(width - overflow[widthSide], maximumClippingWidth);
       const noShift = !state.middlewareData.shift;
       let availableHeight = overflowAvailableHeight;
       let availableWidth = overflowAvailableWidth;
-      if (isYAxis) {
-        const maximumClippingWidth = width - overflow.left - overflow.right;
-        availableWidth = alignment || noShift ? floating_ui_utils_min(overflowAvailableWidth, maximumClippingWidth) : maximumClippingWidth;
-      } else {
-        const maximumClippingHeight = height - overflow.top - overflow.bottom;
-        availableHeight = alignment || noShift ? floating_ui_utils_min(overflowAvailableHeight, maximumClippingHeight) : maximumClippingHeight;
+      if ((_state$middlewareData = state.middlewareData.shift) != null && _state$middlewareData.enabled.x) {
+        availableWidth = maximumClippingWidth;
+      }
+      if ((_state$middlewareData2 = state.middlewareData.shift) != null && _state$middlewareData2.enabled.y) {
+        availableHeight = maximumClippingHeight;
       }
       if (noShift && !alignment) {
         const xMin = floating_ui_utils_max(overflow.left, 0);
@@ -9297,147 +9853,7 @@ const size = function (options) {
 
 
 
-;// ./node_modules/@floating-ui/dom/node_modules/@floating-ui/utils/dist/floating-ui.utils.mjs
-/**
- * Custom positioning reference element.
- * @see https://floating-ui.com/docs/virtual-elements
- */
-
-const dist_floating_ui_utils_sides = (/* unused pure expression or super */ null && (['top', 'right', 'bottom', 'left']));
-const floating_ui_utils_alignments = (/* unused pure expression or super */ null && (['start', 'end']));
-const dist_floating_ui_utils_placements = /*#__PURE__*/(/* unused pure expression or super */ null && (dist_floating_ui_utils_sides.reduce((acc, side) => acc.concat(side, side + "-" + floating_ui_utils_alignments[0], side + "-" + floating_ui_utils_alignments[1]), [])));
-const dist_floating_ui_utils_min = Math.min;
-const dist_floating_ui_utils_max = Math.max;
-const floating_ui_utils_round = Math.round;
-const floating_ui_utils_floor = Math.floor;
-const floating_ui_utils_createCoords = v => ({
-  x: v,
-  y: v
-});
-const floating_ui_utils_oppositeSideMap = {
-  left: 'right',
-  right: 'left',
-  bottom: 'top',
-  top: 'bottom'
-};
-const floating_ui_utils_oppositeAlignmentMap = {
-  start: 'end',
-  end: 'start'
-};
-function floating_ui_utils_clamp(start, value, end) {
-  return dist_floating_ui_utils_max(start, dist_floating_ui_utils_min(value, end));
-}
-function dist_floating_ui_utils_evaluate(value, param) {
-  return typeof value === 'function' ? value(param) : value;
-}
-function dist_floating_ui_utils_getSide(placement) {
-  return placement.split('-')[0];
-}
-function dist_floating_ui_utils_getAlignment(placement) {
-  return placement.split('-')[1];
-}
-function floating_ui_utils_getOppositeAxis(axis) {
-  return axis === 'x' ? 'y' : 'x';
-}
-function floating_ui_utils_getAxisLength(axis) {
-  return axis === 'y' ? 'height' : 'width';
-}
-function dist_floating_ui_utils_getSideAxis(placement) {
-  return ['top', 'bottom'].includes(dist_floating_ui_utils_getSide(placement)) ? 'y' : 'x';
-}
-function floating_ui_utils_getAlignmentAxis(placement) {
-  return floating_ui_utils_getOppositeAxis(dist_floating_ui_utils_getSideAxis(placement));
-}
-function dist_floating_ui_utils_getAlignmentSides(placement, rects, rtl) {
-  if (rtl === void 0) {
-    rtl = false;
-  }
-  const alignment = dist_floating_ui_utils_getAlignment(placement);
-  const alignmentAxis = floating_ui_utils_getAlignmentAxis(placement);
-  const length = floating_ui_utils_getAxisLength(alignmentAxis);
-  let mainAlignmentSide = alignmentAxis === 'x' ? alignment === (rtl ? 'end' : 'start') ? 'right' : 'left' : alignment === 'start' ? 'bottom' : 'top';
-  if (rects.reference[length] > rects.floating[length]) {
-    mainAlignmentSide = floating_ui_utils_getOppositePlacement(mainAlignmentSide);
-  }
-  return [mainAlignmentSide, floating_ui_utils_getOppositePlacement(mainAlignmentSide)];
-}
-function floating_ui_utils_getExpandedPlacements(placement) {
-  const oppositePlacement = floating_ui_utils_getOppositePlacement(placement);
-  return [dist_floating_ui_utils_getOppositeAlignmentPlacement(placement), oppositePlacement, dist_floating_ui_utils_getOppositeAlignmentPlacement(oppositePlacement)];
-}
-function dist_floating_ui_utils_getOppositeAlignmentPlacement(placement) {
-  return placement.replace(/start|end/g, alignment => floating_ui_utils_oppositeAlignmentMap[alignment]);
-}
-function floating_ui_utils_getSideList(side, isStart, rtl) {
-  const lr = ['left', 'right'];
-  const rl = ['right', 'left'];
-  const tb = ['top', 'bottom'];
-  const bt = ['bottom', 'top'];
-  switch (side) {
-    case 'top':
-    case 'bottom':
-      if (rtl) return isStart ? rl : lr;
-      return isStart ? lr : rl;
-    case 'left':
-    case 'right':
-      return isStart ? tb : bt;
-    default:
-      return [];
-  }
-}
-function floating_ui_utils_getOppositeAxisPlacements(placement, flipAlignment, direction, rtl) {
-  const alignment = dist_floating_ui_utils_getAlignment(placement);
-  let list = floating_ui_utils_getSideList(dist_floating_ui_utils_getSide(placement), direction === 'start', rtl);
-  if (alignment) {
-    list = list.map(side => side + "-" + alignment);
-    if (flipAlignment) {
-      list = list.concat(list.map(dist_floating_ui_utils_getOppositeAlignmentPlacement));
-    }
-  }
-  return list;
-}
-function floating_ui_utils_getOppositePlacement(placement) {
-  return placement.replace(/left|right|bottom|top/g, side => floating_ui_utils_oppositeSideMap[side]);
-}
-function floating_ui_utils_expandPaddingObject(padding) {
-  return {
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    ...padding
-  };
-}
-function dist_floating_ui_utils_getPaddingObject(padding) {
-  return typeof padding !== 'number' ? floating_ui_utils_expandPaddingObject(padding) : {
-    top: padding,
-    right: padding,
-    bottom: padding,
-    left: padding
-  };
-}
-function dist_floating_ui_utils_rectToClientRect(rect) {
-  const {
-    x,
-    y,
-    width,
-    height
-  } = rect;
-  return {
-    width,
-    height,
-    top: y,
-    left: x,
-    right: x + width,
-    bottom: y + height,
-    x,
-    y
-  };
-}
-
-
-
-;// ./node_modules/@floating-ui/dom/node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
+;// ./node_modules/@floating-ui/utils/dist/floating-ui.utils.dom.mjs
 function hasWindow() {
   return typeof window !== 'undefined';
 }
@@ -9482,6 +9898,7 @@ function isShadowRoot(value) {
   }
   return value instanceof ShadowRoot || value instanceof floating_ui_utils_dom_getWindow(value).ShadowRoot;
 }
+const invalidOverflowDisplayValues = /*#__PURE__*/new Set(['inline', 'contents']);
 function isOverflowElement(element) {
   const {
     overflow,
@@ -9489,26 +9906,32 @@ function isOverflowElement(element) {
     overflowY,
     display
   } = floating_ui_utils_dom_getComputedStyle(element);
-  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !['inline', 'contents'].includes(display);
+  return /auto|scroll|overlay|hidden|clip/.test(overflow + overflowY + overflowX) && !invalidOverflowDisplayValues.has(display);
 }
+const tableElements = /*#__PURE__*/new Set(['table', 'td', 'th']);
 function isTableElement(element) {
-  return ['table', 'td', 'th'].includes(getNodeName(element));
+  return tableElements.has(getNodeName(element));
 }
+const topLayerSelectors = [':popover-open', ':modal'];
 function isTopLayer(element) {
-  return [':popover-open', ':modal'].some(selector => {
+  return topLayerSelectors.some(selector => {
     try {
       return element.matches(selector);
-    } catch (e) {
+    } catch (_e) {
       return false;
     }
   });
 }
+const transformProperties = ['transform', 'translate', 'scale', 'rotate', 'perspective'];
+const willChangeValues = ['transform', 'translate', 'scale', 'rotate', 'perspective', 'filter'];
+const containValues = ['paint', 'layout', 'strict', 'content'];
 function isContainingBlock(elementOrCss) {
   const webkit = isWebKit();
   const css = isElement(elementOrCss) ? floating_ui_utils_dom_getComputedStyle(elementOrCss) : elementOrCss;
 
   // https://developer.mozilla.org/en-US/docs/Web/CSS/Containing_block#identifying_the_containing_block
-  return css.transform !== 'none' || css.perspective !== 'none' || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || ['transform', 'perspective', 'filter'].some(value => (css.willChange || '').includes(value)) || ['paint', 'layout', 'strict', 'content'].some(value => (css.contain || '').includes(value));
+  // https://drafts.csswg.org/css-transforms-2/#individual-transforms
+  return transformProperties.some(value => css[value] ? css[value] !== 'none' : false) || (css.containerType ? css.containerType !== 'normal' : false) || !webkit && (css.backdropFilter ? css.backdropFilter !== 'none' : false) || !webkit && (css.filter ? css.filter !== 'none' : false) || willChangeValues.some(value => (css.willChange || '').includes(value)) || containValues.some(value => (css.contain || '').includes(value));
 }
 function getContainingBlock(element) {
   let currentNode = getParentNode(element);
@@ -9526,8 +9949,9 @@ function isWebKit() {
   if (typeof CSS === 'undefined' || !CSS.supports) return false;
   return CSS.supports('-webkit-backdrop-filter', 'none');
 }
+const lastTraversableNodeNames = /*#__PURE__*/new Set(['html', 'body', '#document']);
 function isLastTraversableNode(node) {
-  return ['html', 'body', '#document'].includes(getNodeName(node));
+  return lastTraversableNodeNames.has(getNodeName(node));
 }
 function floating_ui_utils_dom_getComputedStyle(element) {
   return floating_ui_utils_dom_getWindow(element).getComputedStyle(element);
@@ -9598,7 +10022,6 @@ function getFrameElement(win) {
 
 
 
-
 function getCssDimensions(element) {
   const css = floating_ui_utils_dom_getComputedStyle(element);
   // In testing environments, the `width` and `height` properties are empty
@@ -9608,7 +10031,7 @@ function getCssDimensions(element) {
   const hasOffset = isHTMLElement(element);
   const offsetWidth = hasOffset ? element.offsetWidth : width;
   const offsetHeight = hasOffset ? element.offsetHeight : height;
-  const shouldFallback = floating_ui_utils_round(width) !== offsetWidth || floating_ui_utils_round(height) !== offsetHeight;
+  const shouldFallback = round(width) !== offsetWidth || round(height) !== offsetHeight;
   if (shouldFallback) {
     width = offsetWidth;
     height = offsetHeight;
@@ -9627,7 +10050,7 @@ function unwrapElement(element) {
 function getScale(element) {
   const domElement = unwrapElement(element);
   if (!isHTMLElement(domElement)) {
-    return floating_ui_utils_createCoords(1);
+    return createCoords(1);
   }
   const rect = domElement.getBoundingClientRect();
   const {
@@ -9635,8 +10058,8 @@ function getScale(element) {
     height,
     $
   } = getCssDimensions(domElement);
-  let x = ($ ? floating_ui_utils_round(rect.width) : rect.width) / width;
-  let y = ($ ? floating_ui_utils_round(rect.height) : rect.height) / height;
+  let x = ($ ? round(rect.width) : rect.width) / width;
+  let y = ($ ? round(rect.height) : rect.height) / height;
 
   // 0, NaN, or Infinity should always fallback to 1.
 
@@ -9652,7 +10075,7 @@ function getScale(element) {
   };
 }
 
-const noOffsets = /*#__PURE__*/floating_ui_utils_createCoords(0);
+const noOffsets = /*#__PURE__*/createCoords(0);
 function getVisualOffsets(element) {
   const win = floating_ui_utils_dom_getWindow(element);
   if (!isWebKit() || !win.visualViewport) {
@@ -9682,7 +10105,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   }
   const clientRect = element.getBoundingClientRect();
   const domElement = unwrapElement(element);
-  let scale = floating_ui_utils_createCoords(1);
+  let scale = createCoords(1);
   if (includeScale) {
     if (offsetParent) {
       if (isElement(offsetParent)) {
@@ -9692,7 +10115,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
       scale = getScale(element);
     }
   }
-  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : floating_ui_utils_createCoords(0);
+  const visualOffsets = shouldAddVisualOffsets(domElement, isFixedStrategy, offsetParent) ? getVisualOffsets(domElement) : createCoords(0);
   let x = (clientRect.left + visualOffsets.x) / scale.x;
   let y = (clientRect.top + visualOffsets.y) / scale.y;
   let width = clientRect.width / scale.x;
@@ -9701,7 +10124,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
     const win = floating_ui_utils_dom_getWindow(domElement);
     const offsetWin = offsetParent && isElement(offsetParent) ? floating_ui_utils_dom_getWindow(offsetParent) : offsetParent;
     let currentWin = win;
-    let currentIFrame = currentWin.frameElement;
+    let currentIFrame = getFrameElement(currentWin);
     while (currentIFrame && offsetParent && offsetWin !== currentWin) {
       const iframeScale = getScale(currentIFrame);
       const iframeRect = currentIFrame.getBoundingClientRect();
@@ -9715,7 +10138,7 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
       x += left;
       y += top;
       currentWin = floating_ui_utils_dom_getWindow(currentIFrame);
-      currentIFrame = currentWin.frameElement;
+      currentIFrame = getFrameElement(currentWin);
     }
   }
   return floating_ui_utils_rectToClientRect({
@@ -9726,15 +10149,29 @@ function getBoundingClientRect(element, includeScale, isFixedStrategy, offsetPar
   });
 }
 
-const topLayerSelectors = [':popover-open', ':modal'];
-function floating_ui_dom_isTopLayer(floating) {
-  return topLayerSelectors.some(selector => {
-    try {
-      return floating.matches(selector);
-    } catch (e) {
-      return false;
-    }
-  });
+// If <html> has a CSS width greater than the viewport, then this will be
+// incorrect for RTL.
+function getWindowScrollBarX(element, rect) {
+  const leftScroll = getNodeScroll(element).scrollLeft;
+  if (!rect) {
+    return getBoundingClientRect(getDocumentElement(element)).left + leftScroll;
+  }
+  return rect.left + leftScroll;
+}
+
+function getHTMLOffset(documentElement, scroll, ignoreScrollbarX) {
+  if (ignoreScrollbarX === void 0) {
+    ignoreScrollbarX = false;
+  }
+  const htmlRect = documentElement.getBoundingClientRect();
+  const x = htmlRect.left + scroll.scrollLeft - (ignoreScrollbarX ? 0 :
+  // RTL <body> scrollbar.
+  getWindowScrollBarX(documentElement, htmlRect));
+  const y = htmlRect.top + scroll.scrollTop;
+  return {
+    x,
+    y
+  };
 }
 
 function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
@@ -9746,7 +10183,7 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
   } = _ref;
   const isFixed = strategy === 'fixed';
   const documentElement = getDocumentElement(offsetParent);
-  const topLayer = elements ? floating_ui_dom_isTopLayer(elements.floating) : false;
+  const topLayer = elements ? isTopLayer(elements.floating) : false;
   if (offsetParent === documentElement || topLayer && isFixed) {
     return rect;
   }
@@ -9754,8 +10191,8 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
     scrollLeft: 0,
     scrollTop: 0
   };
-  let scale = floating_ui_utils_createCoords(1);
-  const offsets = floating_ui_utils_createCoords(0);
+  let scale = createCoords(1);
+  const offsets = createCoords(0);
   const isOffsetParentAnElement = isHTMLElement(offsetParent);
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
@@ -9768,22 +10205,17 @@ function convertOffsetParentRelativeRectToViewportRelativeRect(_ref) {
       offsets.y = offsetRect.y + offsetParent.clientTop;
     }
   }
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll, true) : createCoords(0);
   return {
     width: rect.width * scale.x,
     height: rect.height * scale.y,
-    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x,
-    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y
+    x: rect.x * scale.x - scroll.scrollLeft * scale.x + offsets.x + htmlOffset.x,
+    y: rect.y * scale.y - scroll.scrollTop * scale.y + offsets.y + htmlOffset.y
   };
 }
 
 function getClientRects(element) {
   return Array.from(element.getClientRects());
-}
-
-function getWindowScrollBarX(element) {
-  // If <html> has a CSS width greater than the viewport, then this will be
-  // incorrect for RTL.
-  return getBoundingClientRect(getDocumentElement(element)).left + getNodeScroll(element).scrollLeft;
 }
 
 // Gets the entire size of the scrollable document area, even extending outside
@@ -9792,12 +10224,12 @@ function getDocumentRect(element) {
   const html = getDocumentElement(element);
   const scroll = getNodeScroll(element);
   const body = element.ownerDocument.body;
-  const width = dist_floating_ui_utils_max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
-  const height = dist_floating_ui_utils_max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
+  const width = floating_ui_utils_max(html.scrollWidth, html.clientWidth, body.scrollWidth, body.clientWidth);
+  const height = floating_ui_utils_max(html.scrollHeight, html.clientHeight, body.scrollHeight, body.clientHeight);
   let x = -scroll.scrollLeft + getWindowScrollBarX(element);
   const y = -scroll.scrollTop;
   if (floating_ui_utils_dom_getComputedStyle(body).direction === 'rtl') {
-    x += dist_floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
+    x += floating_ui_utils_max(html.clientWidth, body.clientWidth) - width;
   }
   return {
     width,
@@ -9832,12 +10264,13 @@ function getViewportRect(element, strategy) {
   };
 }
 
+const absoluteOrFixed = /*#__PURE__*/new Set(['absolute', 'fixed']);
 // Returns the inner client rect, subtracting scrollbars if present.
 function getInnerBoundingClientRect(element, strategy) {
   const clientRect = getBoundingClientRect(element, true, strategy === 'fixed');
   const top = clientRect.top + element.clientTop;
   const left = clientRect.left + element.clientLeft;
-  const scale = isHTMLElement(element) ? getScale(element) : floating_ui_utils_createCoords(1);
+  const scale = isHTMLElement(element) ? getScale(element) : createCoords(1);
   const width = element.clientWidth * scale.x;
   const height = element.clientHeight * scale.y;
   const x = left * scale.x;
@@ -9860,9 +10293,10 @@ function getClientRectFromClippingAncestor(element, clippingAncestor, strategy) 
   } else {
     const visualOffsets = getVisualOffsets(element);
     rect = {
-      ...clippingAncestor,
       x: clippingAncestor.x - visualOffsets.x,
-      y: clippingAncestor.y - visualOffsets.y
+      y: clippingAncestor.y - visualOffsets.y,
+      width: clippingAncestor.width,
+      height: clippingAncestor.height
     };
   }
   return floating_ui_utils_rectToClientRect(rect);
@@ -9895,7 +10329,7 @@ function getClippingElementAncestors(element, cache) {
     if (!currentNodeIsContaining && computedStyle.position === 'fixed') {
       currentContainingBlockComputedStyle = null;
     }
-    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && ['absolute', 'fixed'].includes(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
+    const shouldDropCurrentNode = elementIsFixed ? !currentNodeIsContaining && !currentContainingBlockComputedStyle : !currentNodeIsContaining && computedStyle.position === 'static' && !!currentContainingBlockComputedStyle && absoluteOrFixed.has(currentContainingBlockComputedStyle.position) || isOverflowElement(currentNode) && !currentNodeIsContaining && hasFixedPositionAncestor(element, currentNode);
     if (shouldDropCurrentNode) {
       // Drop non-containing blocks.
       result = result.filter(ancestor => ancestor !== currentNode);
@@ -9918,15 +10352,15 @@ function getClippingRect(_ref) {
     rootBoundary,
     strategy
   } = _ref;
-  const elementClippingAncestors = boundary === 'clippingAncestors' ? getClippingElementAncestors(element, this._c) : [].concat(boundary);
+  const elementClippingAncestors = boundary === 'clippingAncestors' ? isTopLayer(element) ? [] : getClippingElementAncestors(element, this._c) : [].concat(boundary);
   const clippingAncestors = [...elementClippingAncestors, rootBoundary];
   const firstClippingAncestor = clippingAncestors[0];
   const clippingRect = clippingAncestors.reduce((accRect, clippingAncestor) => {
     const rect = getClientRectFromClippingAncestor(element, clippingAncestor, strategy);
-    accRect.top = dist_floating_ui_utils_max(rect.top, accRect.top);
-    accRect.right = dist_floating_ui_utils_min(rect.right, accRect.right);
-    accRect.bottom = dist_floating_ui_utils_min(rect.bottom, accRect.bottom);
-    accRect.left = dist_floating_ui_utils_max(rect.left, accRect.left);
+    accRect.top = floating_ui_utils_max(rect.top, accRect.top);
+    accRect.right = floating_ui_utils_min(rect.right, accRect.right);
+    accRect.bottom = floating_ui_utils_min(rect.bottom, accRect.bottom);
+    accRect.left = floating_ui_utils_max(rect.left, accRect.left);
     return accRect;
   }, getClientRectFromClippingAncestor(element, firstClippingAncestor, strategy));
   return {
@@ -9957,7 +10391,13 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
     scrollLeft: 0,
     scrollTop: 0
   };
-  const offsets = floating_ui_utils_createCoords(0);
+  const offsets = createCoords(0);
+
+  // If the <body> scrollbar appears on the left (e.g. RTL systems). Use
+  // Firefox with layout.scrollbar.side = 3 in about:config to test this.
+  function setLeftRTLScrollbarOffset() {
+    offsets.x = getWindowScrollBarX(documentElement);
+  }
   if (isOffsetParentAnElement || !isOffsetParentAnElement && !isFixed) {
     if (getNodeName(offsetParent) !== 'body' || isOverflowElement(documentElement)) {
       scroll = getNodeScroll(offsetParent);
@@ -9967,17 +10407,25 @@ function getRectRelativeToOffsetParent(element, offsetParent, strategy) {
       offsets.x = offsetRect.x + offsetParent.clientLeft;
       offsets.y = offsetRect.y + offsetParent.clientTop;
     } else if (documentElement) {
-      offsets.x = getWindowScrollBarX(documentElement);
+      setLeftRTLScrollbarOffset();
     }
   }
-  const x = rect.left + scroll.scrollLeft - offsets.x;
-  const y = rect.top + scroll.scrollTop - offsets.y;
+  if (isFixed && !isOffsetParentAnElement && documentElement) {
+    setLeftRTLScrollbarOffset();
+  }
+  const htmlOffset = documentElement && !isOffsetParentAnElement && !isFixed ? getHTMLOffset(documentElement, scroll) : createCoords(0);
+  const x = rect.left + scroll.scrollLeft - offsets.x - htmlOffset.x;
+  const y = rect.top + scroll.scrollTop - offsets.y - htmlOffset.y;
   return {
     x,
     y,
     width: rect.width,
     height: rect.height
   };
+}
+
+function isStaticPositioned(element) {
+  return floating_ui_utils_dom_getComputedStyle(element).position === 'static';
 }
 
 function getTrueOffsetParent(element, polyfill) {
@@ -9987,35 +10435,56 @@ function getTrueOffsetParent(element, polyfill) {
   if (polyfill) {
     return polyfill(element);
   }
-  return element.offsetParent;
+  let rawOffsetParent = element.offsetParent;
+
+  // Firefox returns the <html> element as the offsetParent if it's non-static,
+  // while Chrome and Safari return the <body> element. The <body> element must
+  // be used to perform the correct calculations even if the <html> element is
+  // non-static.
+  if (getDocumentElement(element) === rawOffsetParent) {
+    rawOffsetParent = rawOffsetParent.ownerDocument.body;
+  }
+  return rawOffsetParent;
 }
 
 // Gets the closest ancestor positioned element. Handles some edge cases,
 // such as table ancestors and cross browser bugs.
 function getOffsetParent(element, polyfill) {
-  const window = floating_ui_utils_dom_getWindow(element);
-  if (!isHTMLElement(element) || floating_ui_dom_isTopLayer(element)) {
-    return window;
+  const win = floating_ui_utils_dom_getWindow(element);
+  if (isTopLayer(element)) {
+    return win;
+  }
+  if (!isHTMLElement(element)) {
+    let svgOffsetParent = getParentNode(element);
+    while (svgOffsetParent && !isLastTraversableNode(svgOffsetParent)) {
+      if (isElement(svgOffsetParent) && !isStaticPositioned(svgOffsetParent)) {
+        return svgOffsetParent;
+      }
+      svgOffsetParent = getParentNode(svgOffsetParent);
+    }
+    return win;
   }
   let offsetParent = getTrueOffsetParent(element, polyfill);
-  while (offsetParent && isTableElement(offsetParent) && floating_ui_utils_dom_getComputedStyle(offsetParent).position === 'static') {
+  while (offsetParent && isTableElement(offsetParent) && isStaticPositioned(offsetParent)) {
     offsetParent = getTrueOffsetParent(offsetParent, polyfill);
   }
-  if (offsetParent && (getNodeName(offsetParent) === 'html' || getNodeName(offsetParent) === 'body' && floating_ui_utils_dom_getComputedStyle(offsetParent).position === 'static' && !isContainingBlock(offsetParent))) {
-    return window;
+  if (offsetParent && isLastTraversableNode(offsetParent) && isStaticPositioned(offsetParent) && !isContainingBlock(offsetParent)) {
+    return win;
   }
-  return offsetParent || getContainingBlock(element) || window;
+  return offsetParent || getContainingBlock(element) || win;
 }
 
 const getElementRects = async function (data) {
   const getOffsetParentFn = this.getOffsetParent || getOffsetParent;
   const getDimensionsFn = this.getDimensions;
+  const floatingDimensions = await getDimensionsFn(data.floating);
   return {
     reference: getRectRelativeToOffsetParent(data.reference, await getOffsetParentFn(data.floating), data.strategy),
     floating: {
       x: 0,
       y: 0,
-      ...(await getDimensionsFn(data.floating))
+      width: floatingDimensions.width,
+      height: floatingDimensions.height
     }
   };
 };
@@ -10037,6 +10506,10 @@ const platform = {
   isRTL
 };
 
+function rectsAreEqual(a, b) {
+  return a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+
 // https://samthor.au/2021/observing-dom/
 function observeMove(element, onMove) {
   let io = null;
@@ -10056,26 +10529,27 @@ function observeMove(element, onMove) {
       threshold = 1;
     }
     cleanup();
+    const elementRectForRootMargin = element.getBoundingClientRect();
     const {
       left,
       top,
       width,
       height
-    } = element.getBoundingClientRect();
+    } = elementRectForRootMargin;
     if (!skip) {
       onMove();
     }
     if (!width || !height) {
       return;
     }
-    const insetTop = floating_ui_utils_floor(top);
-    const insetRight = floating_ui_utils_floor(root.clientWidth - (left + width));
-    const insetBottom = floating_ui_utils_floor(root.clientHeight - (top + height));
-    const insetLeft = floating_ui_utils_floor(left);
+    const insetTop = floor(top);
+    const insetRight = floor(root.clientWidth - (left + width));
+    const insetBottom = floor(root.clientHeight - (top + height));
+    const insetLeft = floor(left);
     const rootMargin = -insetTop + "px " + -insetRight + "px " + -insetBottom + "px " + -insetLeft + "px";
     const options = {
       rootMargin,
-      threshold: dist_floating_ui_utils_max(0, dist_floating_ui_utils_min(1, threshold)) || 1
+      threshold: floating_ui_utils_max(0, floating_ui_utils_min(1, threshold)) || 1
     };
     let isFirstUpdate = true;
     function handleObserve(entries) {
@@ -10085,12 +10559,24 @@ function observeMove(element, onMove) {
           return refresh();
         }
         if (!ratio) {
+          // If the reference is clipped, the ratio is 0. Throttle the refresh
+          // to prevent an infinite loop of updates.
           timeoutId = setTimeout(() => {
             refresh(false, 1e-7);
-          }, 100);
+          }, 1000);
         } else {
           refresh(false, ratio);
         }
+      }
+      if (ratio === 1 && !rectsAreEqual(elementRectForRootMargin, element.getBoundingClientRect())) {
+        // It's possible that even though the ratio is reported as 1, the
+        // element is not actually fully within the IntersectionObserver's root
+        // area anymore. This can happen under performance constraints. This may
+        // be a bug in the browser's IntersectionObserver implementation. To
+        // work around this, we compare the element's bounding rect now with
+        // what it was at the time we created the IntersectionObserver. If they
+        // are not equal then the element moved, so we refresh.
+        refresh();
       }
       isFirstUpdate = false;
     }
@@ -10103,7 +10589,7 @@ function observeMove(element, onMove) {
         // Handle <iframe>s
         root: root.ownerDocument
       });
-    } catch (e) {
+    } catch (_e) {
       io = new IntersectionObserver(handleObserve, options);
     }
     io.observe(element);
@@ -10169,7 +10655,7 @@ function autoUpdate(reference, floating, update, options) {
   }
   function frameLoop() {
     const nextRefRect = getBoundingClientRect(reference);
-    if (prevRefRect && (nextRefRect.x !== prevRefRect.x || nextRefRect.y !== prevRefRect.y || nextRefRect.width !== prevRefRect.width || nextRefRect.height !== prevRefRect.height)) {
+    if (prevRefRect && !rectsAreEqual(prevRefRect, nextRefRect)) {
       update();
     }
     prevRefRect = nextRefRect;
@@ -10190,6 +10676,25 @@ function autoUpdate(reference, floating, update, options) {
     }
   };
 }
+
+/**
+ * Resolves with an object of overflow side offsets that determine how much the
+ * element is overflowing a given clipping boundary on each side.
+ * - positive = overflowing the boundary by that number of pixels
+ * - negative = how many pixels left before it will overflow
+ * - 0 = lies flush with the boundary
+ * @see https://floating-ui.com/docs/detectOverflow
+ */
+const floating_ui_dom_detectOverflow = (/* unused pure expression or super */ null && (detectOverflow$1));
+
+/**
+ * Modifies the placement by translating the floating element along the
+ * specified axes.
+ * A number (shorthand for `mainAxis` or distance), or an axes configuration
+ * object may be passed.
+ * @see https://floating-ui.com/docs/offset
+ */
+const floating_ui_dom_offset = offset;
 
 /**
  * Optimizes the visibility of the floating element by choosing the placement
@@ -10273,7 +10778,7 @@ const floating_ui_dom_computePosition = (reference, floating, options) => {
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/JS55N6L7.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/T6C2RYFI.js
 "use client";
 
 
@@ -10286,7 +10791,7 @@ const floating_ui_dom_computePosition = (reference, floating, options) => {
 
 
 
-var JS55N6L7_TagName = "div";
+var T6C2RYFI_TagName = "div";
 function createDOMRect(x = 0, y = 0, width = 0, height = 0) {
   if (typeof DOMRect === "function") {
     return new DOMRect(x, y, width, height);
@@ -10330,7 +10835,7 @@ function roundByDPR(value) {
   return Math.round(value * dpr) / dpr;
 }
 function getOffsetMiddleware(arrowElement, props) {
-  return offset(({ placement }) => {
+  return floating_ui_dom_offset(({ placement }) => {
     var _a;
     const arrowOffset = ((arrowElement == null ? void 0 : arrowElement.clientHeight) || 0) / 2;
     const finalGutter = typeof props.gutter === "number" ? props.gutter + arrowOffset : (_a = props.gutter) != null ? _a : arrowOffset;
@@ -10627,14 +11132,14 @@ var usePopover = createHook(
 var Popover = createDialogComponent(
   forwardRef2(function Popover2(props) {
     const htmlProps = usePopover(props);
-    return HKOOKEDE_createElement(JS55N6L7_TagName, htmlProps);
+    return LMDWO4NN_createElement(T6C2RYFI_TagName, htmlProps);
   }),
   usePopoverProviderContext
 );
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/HQFKUKP3.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/KQKDTOT4.js
 "use client";
 
 
@@ -10652,7 +11157,7 @@ var Popover = createDialogComponent(
 
 
 
-var HQFKUKP3_TagName = "div";
+var KQKDTOT4_TagName = "div";
 function isMovingOnHovercard(target, card, anchor, nested) {
   if (hasFocusWithin(card)) return true;
   if (!target) return false;
@@ -10882,15 +11387,16 @@ var useHovercard = createHook(
 var Hovercard = createDialogComponent(
   forwardRef2(function Hovercard2(props) {
     const htmlProps = useHovercard(props);
-    return HKOOKEDE_createElement(HQFKUKP3_TagName, htmlProps);
+    return LMDWO4NN_createElement(KQKDTOT4_TagName, htmlProps);
   }),
   useHovercardProviderContext
 );
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/tooltip/tooltip.js
+;// ./node_modules/@ariakit/react-core/esm/tooltip/tooltip.js
 "use client";
+
 
 
 
@@ -10996,7 +11502,7 @@ var useTooltip = createHook(
 var Tooltip = createDialogComponent(
   forwardRef2(function Tooltip2(props) {
     const htmlProps = useTooltip(props);
-    return HKOOKEDE_createElement(tooltip_TagName, htmlProps);
+    return LMDWO4NN_createElement(tooltip_TagName, htmlProps);
   }),
   useTooltipProviderContext
 );
@@ -11302,7 +11808,6 @@ const computePopoverPosition = c => c === null || Number.isNaN(c) ? undefined : 
 /**
  * External dependencies
  */
-
 
 
 
@@ -14527,7 +15032,6 @@ function useContextSystem(props, namespace) {
 }
 
 ;// ./packages/components/build-module/context/context-connect.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -14675,7 +15179,7 @@ function extends_extends() {
   }, extends_extends.apply(null, arguments);
 }
 
-;// ./node_modules/@emotion/styled/node_modules/@emotion/memoize/dist/emotion-memoize.esm.js
+;// ./node_modules/@emotion/is-prop-valid/node_modules/@emotion/memoize/dist/emotion-memoize.esm.js
 function emotion_memoize_esm_memoize(fn) {
   var cache = Object.create(null);
   return function (arg) {
@@ -14686,7 +15190,7 @@ function emotion_memoize_esm_memoize(fn) {
 
 
 
-;// ./node_modules/@emotion/styled/node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
+;// ./node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
 
 
 var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
@@ -15485,6 +15989,9 @@ const COLORS = Object.freeze({
    */
   gray: GRAY,
   // TODO: Stop exporting this when everything is migrated to `theme` or `ui`
+  /**
+   * @deprecated Prefer theme-ready variables in `COLORS.theme`.
+   */
   white,
   alert: ALERT,
   /**
@@ -15514,7 +16021,6 @@ const CONTROL_PROPS = {
   controlPaddingXLarge: 12 * 1.3334,
   // TODO: Deprecate
 
-  controlBackgroundColor: COLORS.white,
   controlBoxShadowFocus: `0 0 0 0.5px ${COLORS.theme.accent}`,
   controlHeight: CONTROL_HEIGHT,
   controlHeightXSmall: `calc( ${CONTROL_HEIGHT} * 0.6 )`,
@@ -27817,7 +28323,7 @@ function text_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried t
  * Internal dependencies
  */
 
-const Text = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.gray[900], ";line-height:", config_values.fontLineHeightBase, ";margin:0;text-wrap:balance;text-wrap:pretty;" + ( true ? "" : 0),  true ? "" : 0);
+const Text = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.theme.foreground, ";line-height:", config_values.fontLineHeightBase, ";margin:0;text-wrap:balance;text-wrap:pretty;" + ( true ? "" : 0),  true ? "" : 0);
 const styles_block =  true ? {
   name: "4zleql",
   styles: "display:block"
@@ -27862,7 +28368,7 @@ var dist = __webpack_require__(9664);
  * @property {string | Record<string, unknown>}                           [highlightClassName='']   Classname to apply to highlighted text or a Record of classnames to apply to given text (which should be the key).
  * @property {import('react').AllHTMLAttributes<HTMLDivElement>['style']} [highlightStyle={}]       Styles to apply to highlighted text.
  * @property {keyof JSX.IntrinsicElements}                                [highlightTag='mark']     Tag to use for the highlighted text.
- * @property {import('highlight-words-core').FindAllArgs['sanitize']}     [sanitize]                Custom `santize` function to pass to `highlight-words-core`.
+ * @property {import('highlight-words-core').FindAllArgs['sanitize']}     [sanitize]                Custom `sanitize` function to pass to `highlight-words-core`.
  * @property {string[]}                                                   [searchWords=[]]          Words to search for and highlight.
  * @property {string}                                                     [unhighlightClassName=''] Classname to apply to unhighlighted text.
  * @property {import('react').AllHTMLAttributes<HTMLDivElement>['style']} [unhighlightStyle]        Style to apply to unhighlighted text.
@@ -28143,6 +28649,8 @@ function useText(props) {
     sx.optimalTextColor = null;
     if (optimizeReadabilityFor) {
       const isOptimalTextColorDark = getOptimalTextShade(optimizeReadabilityFor) === 'dark';
+
+      // Should not use theme colors
       sx.optimalTextColor = isOptimalTextColorDark ? /*#__PURE__*/emotion_react_browser_esm_css({
         color: COLORS.gray[900]
       },  true ? "" : 0,  true ? "" : 0) : /*#__PURE__*/emotion_react_browser_esm_css({
@@ -28424,7 +28932,7 @@ const dragStyles = ({
 
 const Input = /*#__PURE__*/emotion_styled_base_browser_esm("input",  true ? {
   target: "em5sgkm3"
-} : 0)("&&&{background-color:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:", COLORS.theme.foreground, ";display:block;font-family:inherit;margin:0;outline:none;width:100%;", dragStyles, " ", disabledStyles, " ", fontSizeStyles, " ", sizeStyles, " ", customPaddings, " &::-webkit-input-placeholder{line-height:normal;}}" + ( true ? "" : 0));
+} : 0)("&&&{background-color:transparent;box-sizing:border-box;border:none;box-shadow:none!important;color:", COLORS.theme.foreground, ";display:block;font-family:inherit;margin:0;outline:none;width:100%;", dragStyles, " ", disabledStyles, " ", fontSizeStyles, " ", sizeStyles, " ", customPaddings, " &::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&[type='email'],&[type='url']{direction:ltr;}}" + ( true ? "" : 0));
 const BaseLabel = /*#__PURE__*/emotion_styled_base_browser_esm(text_component,  true ? {
   target: "em5sgkm2"
 } : 0)("&&&{", baseLabelTypography, ";box-sizing:border-box;display:block;padding-top:0;padding-bottom:0;max-width:100%;z-index:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}" + ( true ? "" : 0));
@@ -30873,18 +31381,18 @@ function useInputControlStateReducer(stateReducer = initialStateReducer, initial
 
 ;// ./packages/components/build-module/utils/with-ignore-ime-events.js
 /**
- * A higher-order function that wraps a keydown event handler to ensure it is not an IME event.
+ * A higher-order function that wraps a keyboard event handler to ensure it is not an IME event.
  *
  * In CJK languages, an IME (Input Method Editor) is used to input complex characters.
- * During an IME composition, keydown events (e.g. Enter or Escape) can be fired
+ * During an IME composition, keyboard events (e.g. Enter or Escape) can be fired
  * which are intended to control the IME and not the application.
  * These events should be ignored by any application logic.
  *
- * @param keydownHandler The keydown event handler to execute after ensuring it was not an IME event.
+ * @param handler The keyboard event handler to execute after ensuring it was not an IME event.
  *
  * @return A wrapped version of the given event handler that ignores IME events.
  */
-function withIgnoreIMEEvents(keydownHandler) {
+function withIgnoreIMEEvents(handler) {
   return event => {
     const {
       isComposing
@@ -30896,7 +31404,7 @@ function withIgnoreIMEEvents(keydownHandler) {
     event.keyCode === 229) {
       return;
     }
-    keydownHandler(event);
+    handler(event);
   };
 }
 
@@ -31064,19 +31572,6 @@ function InputField({
     }
   });
   const dragProps = isDragEnabled ? dragGestureProps() : {};
-  /*
-   * Works around the odd UA (e.g. Firefox) that does not focus inputs of
-   * type=number when their spinner arrows are pressed.
-   */
-  let handleOnMouseDown;
-  if (type === 'number') {
-    handleOnMouseDown = event => {
-      props.onMouseDown?.(event);
-      if (event.currentTarget !== event.currentTarget.ownerDocument.activeElement) {
-        event.currentTarget.focus();
-      }
-    };
-  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Input, {
     ...props,
     ...dragProps,
@@ -31088,7 +31583,6 @@ function InputField({
     onBlur: handleOnBlur,
     onChange: handleOnChange,
     onKeyDown: withIgnoreIMEEvents(handleOnKeyDown),
-    onMouseDown: handleOnMouseDown,
     ref: ref,
     inputSize: size
     // Fallback to `''` to avoid "uncontrolled to controlled" warning.
@@ -31311,6 +31805,27 @@ const BaseControl = Object.assign(contextConnectWithoutRef(UnconnectedBaseContro
 });
 /* harmony default export */ const base_control = (BaseControl);
 
+;// ./packages/components/build-module/utils/deprecated-36px-size.js
+/**
+ * WordPress dependencies
+ */
+
+function maybeWarnDeprecated36pxSize({
+  componentName,
+  __next40pxDefaultSize,
+  size,
+  __shouldNotWarnDeprecated36pxSize
+}) {
+  if (__shouldNotWarnDeprecated36pxSize || __next40pxDefaultSize || size !== undefined && size !== 'default') {
+    return;
+  }
+  external_wp_deprecated_default()(`36px default size for wp.components.${componentName}`, {
+    since: '6.8',
+    version: '7.1',
+    hint: 'Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.'
+  });
+}
+
 ;// ./packages/components/build-module/input-control/index.js
 /**
  * External dependencies
@@ -31332,6 +31847,7 @@ const BaseControl = Object.assign(contextConnectWithoutRef(UnconnectedBaseContro
 
 
 
+
 const input_control_noop = () => {};
 function input_control_useUniqueId(idProp) {
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(InputControl);
@@ -31341,6 +31857,7 @@ function input_control_useUniqueId(idProp) {
 function UnforwardedInputControl(props, ref) {
   const {
     __next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize,
     __unstableStateReducer: stateReducer = state => state,
     __unstableInputWidth,
     className,
@@ -31371,6 +31888,12 @@ function UnforwardedInputControl(props, ref) {
   const helpProp = !!help ? {
     'aria-describedby': `${id}__help`
   } : {};
+  maybeWarnDeprecated36pxSize({
+    componentName: 'InputControl',
+    __next40pxDefaultSize,
+    size,
+    __shouldNotWarnDeprecated36pxSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     className: classes,
     help: help,
@@ -31424,6 +31947,7 @@ function UnforwardedInputControl(props, ref) {
  *
  *   return (
  *  	<InputControl
+ * 			__next40pxDefaultSize
  *  		value={ value }
  *  		onChange={ ( nextValue ) => setValue( nextValue ?? '' ) }
  *  	/>
@@ -31494,6 +32018,15 @@ function Dashicon({
  */
 
 
+/**
+ * Renders a raw icon without any initial styling or wrappers.
+ *
+ * ```jsx
+ * import { wordpress } from '@wordpress/icons';
+ *
+ * <Icon icon={ wordpress } />
+ * ```
+ */
 function Icon({
   icon = null,
   size = 'string' === typeof icon ? 20 : 24,
@@ -31879,9 +32412,9 @@ function getPrecision(value) {
 /**
  * Clamps a value based on a min/max range.
  *
- * @param {number} value The value.
- * @param {number} min   The minimum range.
- * @param {number} max   The maximum range.
+ * @param {number|string} value The value.
+ * @param {number}        min   The minimum range.
+ * @param {number}        max   The maximum range.
  *
  * @return {number} The clamped value.
  */
@@ -31891,22 +32424,25 @@ function math_clamp(value, min, max) {
 }
 
 /**
- * Clamps a value based on a min/max range with rounding
+ * Rounds a value to the nearest step offset by a minimum.
  *
- * @param {number | string} value The value.
- * @param {number}          min   The minimum range.
- * @param {number}          max   The maximum range.
- * @param {number}          step  A multiplier for the value.
+ * @param {number|string} value The value.
+ * @param {number}        min   The minimum range.
+ * @param {number}        step  The increment for the value.
  *
- * @return {number} The rounded and clamped value.
+ * @return {number} The value as a valid step.
  */
-function roundClamp(value = 0, min = Infinity, max = Infinity, step = 1) {
+function ensureValidStep(value, min, step) {
   const baseValue = getNumber(value);
   const stepValue = getNumber(step);
-  const precision = getPrecision(step);
-  const rounded = Math.round(baseValue / stepValue) * stepValue;
-  const clampedValue = math_clamp(rounded, min, max);
-  return precision ? getNumber(clampedValue.toFixed(precision)) : clampedValue;
+  const precision = Math.max(getPrecision(step), getPrecision(min));
+  const realMin = Math.abs(min) === Infinity ? 0 : min;
+  // If the step is not a factor of the minimum then the step must be
+  // offset by the minimum.
+  const tare = realMin % stepValue ? realMin : 0;
+  const rounded = Math.round((baseValue - tare) / stepValue) * stepValue;
+  const fromMin = rounded + tare;
+  return precision ? getNumber(fromMin.toFixed(precision)) : fromMin;
 }
 
 ;// ./packages/components/build-module/h-stack/utils.js
@@ -32166,6 +32702,7 @@ const HStack = contextConnect(UnconnectedHStack, 'HStack');
 
 
 
+
 const number_control_noop = () => {};
 function UnforwardedNumberControl(props, forwardedRef) {
   const {
@@ -32188,8 +32725,15 @@ function UnforwardedNumberControl(props, forwardedRef) {
     size = 'default',
     suffix,
     onChange = number_control_noop,
+    __shouldNotWarnDeprecated36pxSize,
     ...restProps
   } = useDeprecated36pxDefaultSizeProp(props);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'NumberControl',
+    size,
+    __next40pxDefaultSize: restProps.__next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize
+  });
   if (hideHTMLArrows) {
     external_wp_deprecated_default()('wp.components.NumberControl hideHTMLArrows prop ', {
       alternative: 'spinControls="none"',
@@ -32202,12 +32746,14 @@ function UnforwardedNumberControl(props, forwardedRef) {
   const isStepAny = step === 'any';
   const baseStep = isStepAny ? 1 : ensureNumber(step);
   const baseSpin = ensureNumber(spinFactor) * baseStep;
-  const baseValue = roundClamp(0, min, max, baseStep);
   const constrainValue = (value, stepOverride) => {
-    // When step is "any" clamp the value, otherwise round and clamp it.
-    // Use '' + to convert to string for use in input value attribute.
-    return isStepAny ? '' + Math.min(max, Math.max(min, ensureNumber(value))) : '' + roundClamp(value, min, max, stepOverride !== null && stepOverride !== void 0 ? stepOverride : baseStep);
+    // When step is not "any" the value must be a valid step.
+    if (!isStepAny) {
+      value = ensureValidStep(value, min, stepOverride !== null && stepOverride !== void 0 ? stepOverride : baseStep);
+    }
+    return `${math_clamp(value, min, max)}`;
   };
+  const baseValue = constrainValue(0);
   const autoComplete = typeProp === 'number' ? 'off' : undefined;
   const classes = dist_clsx('components-number-control', className);
   const cx = useCx();
@@ -32314,8 +32860,8 @@ function UnforwardedNumberControl(props, forwardedRef) {
     hideHTMLArrows: spinControls !== 'native',
     isDragEnabled: isDragEnabled,
     label: label,
-    max: max,
-    min: min,
+    max: max === Infinity ? undefined : max,
+    min: min === -Infinity ? undefined : min,
     ref: mergedRef,
     required: required,
     step: step,
@@ -32329,6 +32875,7 @@ function UnforwardedNumberControl(props, forwardedRef) {
       return (_stateReducerProp = stateReducerProp?.(baseState, action)) !== null && _stateReducerProp !== void 0 ? _stateReducerProp : baseState;
     },
     size: size,
+    __shouldNotWarnDeprecated36pxSize: true,
     suffix: spinControls === 'custom' ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [suffix, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
         marginBottom: 0,
@@ -32537,12 +33084,12 @@ function UnforwardedAnglePickerControl(props, ref) {
     gap: 2,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_block_component, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(number_control, {
+        __next40pxDefaultSize: true,
         label: label,
         className: "components-angle-picker-control__input-field",
         max: 360,
         min: 0,
         onChange: handleOnNumberChange,
-        size: "__unstable-large",
         step: "1",
         value: value,
         spinControls: "none",
@@ -32577,7 +33124,7 @@ function UnforwardedAnglePickerControl(props, ref) {
  *     <AnglePickerControl
  *       value={ angle }
  *       onChange={ setAngle }
- *     </>
+ *     />
  *   );
  * }
  * ```
@@ -32613,7 +33160,7 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
  */
 const ALL_UNICODE_DASH_CHARACTERS = new RegExp(/[\u007e\u00ad\u2053\u207b\u208b\u2212\p{Pd}]/gu);
 const normalizeTextString = value => {
-  return remove_accents_default()(value).toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
+  return remove_accents_default()(value).normalize('NFKC').toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
 };
 
 /**
@@ -32747,7 +33294,7 @@ function getDefaultUseItems(autocompleter) {
   };
 }
 
-;// ./packages/components/node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.esm.js
+;// ./node_modules/@floating-ui/react-dom/dist/floating-ui.react-dom.mjs
 
 
 
@@ -32760,7 +33307,7 @@ function getDefaultUseItems(autocompleter) {
  * This wraps the core `arrow` middleware to allow React refs as the element.
  * @see https://floating-ui.com/docs/arrow
  */
-const floating_ui_react_dom_esm_arrow = options => {
+const floating_ui_react_dom_arrow = options => {
   function isRef(value) {
     return {}.hasOwnProperty.call(value, 'current');
   }
@@ -32780,7 +33327,8 @@ const floating_ui_react_dom_esm_arrow = options => {
           }).fn(state);
         }
         return {};
-      } else if (element) {
+      }
+      if (element) {
         return floating_ui_dom_arrow({
           element,
           padding
@@ -32805,11 +33353,13 @@ function deepEqual(a, b) {
   if (typeof a === 'function' && a.toString() === b.toString()) {
     return true;
   }
-  let length, i, keys;
-  if (a && b && typeof a == 'object') {
+  let length;
+  let i;
+  let keys;
+  if (a && b && typeof a === 'object') {
     if (Array.isArray(a)) {
       length = a.length;
-      if (length != b.length) return false;
+      if (length !== b.length) return false;
       for (i = length; i-- !== 0;) {
         if (!deepEqual(a[i], b[i])) {
           return false;
@@ -32838,6 +33388,8 @@ function deepEqual(a, b) {
     }
     return true;
   }
+
+  // biome-ignore lint/suspicious/noSelfCompare: in source
   return a !== a && b !== b;
 }
 
@@ -32849,7 +33401,7 @@ function getDPR(element) {
   return win.devicePixelRatio || 1;
 }
 
-function floating_ui_react_dom_esm_roundByDPR(element, value) {
+function floating_ui_react_dom_roundByDPR(element, value) {
   const dpr = getDPR(element);
   return Math.round(value * dpr) / dpr;
 }
@@ -32864,7 +33416,7 @@ function useLatestRef(value) {
 
 /**
  * Provides data to position a floating element.
- * @see https://floating-ui.com/docs/react
+ * @see https://floating-ui.com/docs/useFloating
  */
 function useFloating(options) {
   if (options === void 0) {
@@ -32898,22 +33450,23 @@ function useFloating(options) {
   const [_reference, _setReference] = external_React_.useState(null);
   const [_floating, _setFloating] = external_React_.useState(null);
   const setReference = external_React_.useCallback(node => {
-    if (node != referenceRef.current) {
+    if (node !== referenceRef.current) {
       referenceRef.current = node;
       _setReference(node);
     }
-  }, [_setReference]);
+  }, []);
   const setFloating = external_React_.useCallback(node => {
     if (node !== floatingRef.current) {
       floatingRef.current = node;
       _setFloating(node);
     }
-  }, [_setFloating]);
+  }, []);
   const referenceEl = externalReference || _reference;
   const floatingEl = externalFloating || _floating;
   const referenceRef = external_React_.useRef(null);
   const floatingRef = external_React_.useRef(null);
   const dataRef = external_React_.useRef(data);
+  const hasWhileElementsMounted = whileElementsMounted != null;
   const whileElementsMountedRef = useLatestRef(whileElementsMounted);
   const platformRef = useLatestRef(platform);
   const update = external_React_.useCallback(() => {
@@ -32957,17 +33510,18 @@ function useFloating(options) {
       isMountedRef.current = false;
     };
   }, []);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: `hasWhileElementsMounted` is intentionally included.
   index(() => {
     if (referenceEl) referenceRef.current = referenceEl;
     if (floatingEl) floatingRef.current = floatingEl;
     if (referenceEl && floatingEl) {
       if (whileElementsMountedRef.current) {
         return whileElementsMountedRef.current(referenceEl, floatingEl, update);
-      } else {
-        update();
       }
+      update();
     }
-  }, [referenceEl, floatingEl, update, whileElementsMountedRef]);
+  }, [referenceEl, floatingEl, update, whileElementsMountedRef, hasWhileElementsMounted]);
   const refs = external_React_.useMemo(() => ({
     reference: referenceRef,
     floating: floatingRef,
@@ -32987,8 +33541,8 @@ function useFloating(options) {
     if (!elements.floating) {
       return initialStyles;
     }
-    const x = floating_ui_react_dom_esm_roundByDPR(elements.floating, data.x);
-    const y = floating_ui_react_dom_esm_roundByDPR(elements.floating, data.y);
+    const x = floating_ui_react_dom_roundByDPR(elements.floating, data.x);
+    const y = floating_ui_react_dom_roundByDPR(elements.floating, data.y);
     if (transform) {
       return {
         ...initialStyles,
@@ -33152,15 +33706,8 @@ const SlotFillContext = (0,external_wp_element_namespaceObject.createContext)(in
 function useSlot(name) {
   const registry = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
   const slot = (0,external_wp_compose_namespaceObject.useObservableValue)(registry.slots, name);
-  const api = (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    updateSlot: fillProps => registry.updateSlot(name, fillProps),
-    unregisterSlot: ref => registry.unregisterSlot(name, ref),
-    registerFill: ref => registry.registerFill(name, ref),
-    unregisterFill: ref => registry.unregisterFill(name, ref)
-  }), [name, registry]);
   return {
-    ...slot,
-    ...api
+    ...slot
   };
 }
 
@@ -33169,46 +33716,23 @@ function useSlot(name) {
  * WordPress dependencies
  */
 
+
+
 /**
  * Internal dependencies
  */
 
 const initialValue = {
+  slots: (0,external_wp_compose_namespaceObject.observableMap)(),
+  fills: (0,external_wp_compose_namespaceObject.observableMap)(),
   registerSlot: () => {},
   unregisterSlot: () => {},
   registerFill: () => {},
   unregisterFill: () => {},
-  getSlot: () => undefined,
-  getFills: () => [],
-  subscribe: () => () => {}
+  updateFill: () => {}
 };
 const context_SlotFillContext = (0,external_wp_element_namespaceObject.createContext)(initialValue);
 /* harmony default export */ const context = (context_SlotFillContext);
-
-;// ./packages/components/build-module/slot-fill/use-slot.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-/**
- * React hook returning the active slot given a name.
- *
- * @param name Slot name.
- * @return Slot object.
- */
-const use_slot_useSlot = name => {
-  const {
-    getSlot,
-    subscribe
-  } = (0,external_wp_element_namespaceObject.useContext)(context);
-  return (0,external_wp_element_namespaceObject.useSyncExternalStore)(subscribe, () => getSlot(name), () => getSlot(name));
-};
-/* harmony default export */ const use_slot = (use_slot_useSlot);
 
 ;// ./packages/components/build-module/slot-fill/fill.js
 /**
@@ -33220,46 +33744,24 @@ const use_slot_useSlot = name => {
  * Internal dependencies
  */
 
-
 function Fill({
   name,
   children
 }) {
-  const {
-    registerFill,
-    unregisterFill
-  } = (0,external_wp_element_namespaceObject.useContext)(context);
-  const slot = use_slot(name);
-  const ref = (0,external_wp_element_namespaceObject.useRef)({
-    name,
-    children
-  });
+  const registry = (0,external_wp_element_namespaceObject.useContext)(context);
+  const instanceRef = (0,external_wp_element_namespaceObject.useRef)({});
+  const childrenRef = (0,external_wp_element_namespaceObject.useRef)(children);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    const refValue = ref.current;
-    registerFill(name, refValue);
-    return () => unregisterFill(name, refValue);
-    // The useLayoutEffects here are written to fire at specific times, and introducing new dependencies could cause unexpected changes in behavior.
-    // We'll leave them as-is until a more detailed investigation/refactor can be performed.
-  }, []);
-  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    ref.current.children = children;
-    if (slot) {
-      slot.forceUpdate();
-    }
-    // The useLayoutEffects here are written to fire at specific times, and introducing new dependencies could cause unexpected changes in behavior.
-    // We'll leave them as-is until a more detailed investigation/refactor can be performed.
+    childrenRef.current = children;
   }, [children]);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    if (name === ref.current.name) {
-      // Ignore initial effect.
-      return;
-    }
-    unregisterFill(ref.current.name, ref.current);
-    ref.current.name = name;
-    registerFill(name, ref.current);
-    // The useLayoutEffects here are written to fire at specific times, and introducing new dependencies could cause unexpected changes in behavior.
-    // We'll leave them as-is until a more detailed investigation/refactor can be performed.
-  }, [name]);
+    const instance = instanceRef.current;
+    registry.registerFill(name, instance, childrenRef.current);
+    return () => registry.unregisterFill(name, instance);
+  }, [registry, name]);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    registry.updateFill(name, instanceRef.current, childrenRef.current);
+  });
   return null;
 }
 
@@ -33271,6 +33773,7 @@ function Fill({
 /**
  * WordPress dependencies
  */
+
 
 
 /**
@@ -33287,86 +33790,53 @@ function Fill({
 function isFunction(maybeFunc) {
   return typeof maybeFunc === 'function';
 }
-class SlotComponent extends external_wp_element_namespaceObject.Component {
-  constructor(props) {
-    super(props);
-    this.isUnmounted = false;
-  }
-  componentDidMount() {
-    const {
-      registerSlot
-    } = this.props;
-    this.isUnmounted = false;
-    registerSlot(this.props.name, this);
-  }
-  componentWillUnmount() {
-    const {
-      unregisterSlot
-    } = this.props;
-    this.isUnmounted = true;
-    unregisterSlot(this.props.name, this);
-  }
-  componentDidUpdate(prevProps) {
-    const {
-      name,
-      unregisterSlot,
-      registerSlot
-    } = this.props;
-    if (prevProps.name !== name) {
-      unregisterSlot(prevProps.name, this);
-      registerSlot(name, this);
+function addKeysToChildren(children) {
+  return external_wp_element_namespaceObject.Children.map(children, (child, childIndex) => {
+    if (!child || typeof child === 'string') {
+      return child;
     }
-  }
-  forceUpdate() {
-    if (this.isUnmounted) {
-      return;
+    let childKey = childIndex;
+    if (typeof child === 'object' && 'key' in child && child?.key) {
+      childKey = child.key;
     }
-    super.forceUpdate();
-  }
-  render() {
-    var _getFills;
-    const {
-      children,
-      name,
-      fillProps = {},
-      getFills
-    } = this.props;
-    const fills = ((_getFills = getFills(name, this)) !== null && _getFills !== void 0 ? _getFills : []).map(fill => {
-      const fillChildren = isFunction(fill.children) ? fill.children(fillProps) : fill.children;
-      return external_wp_element_namespaceObject.Children.map(fillChildren, (child, childIndex) => {
-        if (!child || typeof child === 'string') {
-          return child;
-        }
-        let childKey = childIndex;
-        if (typeof child === 'object' && 'key' in child && child?.key) {
-          childKey = child.key;
-        }
-        return (0,external_wp_element_namespaceObject.cloneElement)(child, {
-          key: childKey
-        });
-      });
-    }).filter(
-    // In some cases fills are rendered only when some conditions apply.
-    // This ensures that we only use non-empty fills when rendering, i.e.,
-    // it allows us to render wrappers only when the fills are actually present.
-    element => !(0,external_wp_element_namespaceObject.isEmptyElement)(element));
-    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: isFunction(children) ? children(fills) : fills
+    return (0,external_wp_element_namespaceObject.cloneElement)(child, {
+      key: childKey
     });
-  }
+  });
 }
-const Slot = props => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(context.Consumer, {
-  children: ({
-    registerSlot,
-    unregisterSlot,
-    getFills
-  }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SlotComponent, {
-    ...props,
-    registerSlot: registerSlot,
-    unregisterSlot: unregisterSlot,
-    getFills: getFills
-  })
-});
+function Slot(props) {
+  var _useObservableValue;
+  const registry = (0,external_wp_element_namespaceObject.useContext)(context);
+  const instanceRef = (0,external_wp_element_namespaceObject.useRef)({});
+  const {
+    name,
+    children,
+    fillProps = {}
+  } = props;
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    const instance = instanceRef.current;
+    registry.registerSlot(name, instance);
+    return () => registry.unregisterSlot(name, instance);
+  }, [registry, name]);
+  let fills = (_useObservableValue = (0,external_wp_compose_namespaceObject.useObservableValue)(registry.fills, name)) !== null && _useObservableValue !== void 0 ? _useObservableValue : [];
+  const currentSlot = (0,external_wp_compose_namespaceObject.useObservableValue)(registry.slots, name);
+
+  // Fills should only be rendered in the currently registered instance of the slot.
+  if (currentSlot !== instanceRef.current) {
+    fills = [];
+  }
+  const renderedFills = fills.map(fill => {
+    const fillChildren = isFunction(fill.children) ? fill.children(fillProps) : fill.children;
+    return addKeysToChildren(fillChildren);
+  }).filter(
+  // In some cases fills are rendered only when some conditions apply.
+  // This ensures that we only use non-empty fills when rendering, i.e.,
+  // it allows us to render wrappers only when the fills are actually present.
+  element => !(0,external_wp_element_namespaceObject.isEmptyElement)(element));
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: isFunction(children) ? children(renderedFills) : renderedFills
+  });
+}
 /* harmony default export */ const slot = (Slot);
 
 ;// ./packages/components/node_modules/uuid/dist/esm-browser/rng.js
@@ -33456,7 +33926,6 @@ function v4(options, buf, offset) {
 
 /* harmony default export */ const esm_browser_v4 = (v4);
 ;// ./packages/components/build-module/style-provider/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -33513,52 +33982,31 @@ function StyleProvider(props) {
  */
 
 
+
 /**
  * Internal dependencies
  */
 
 
 
-function fill_useForceUpdate() {
-  const [, setState] = (0,external_wp_element_namespaceObject.useState)({});
-  const mountedRef = (0,external_wp_element_namespaceObject.useRef)(true);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    mountedRef.current = true;
-    return () => {
-      mountedRef.current = false;
-    };
-  }, []);
-  return () => {
-    if (mountedRef.current) {
-      setState({});
-    }
-  };
-}
-function fill_Fill(props) {
+function fill_Fill({
+  name,
+  children
+}) {
   var _slot$fillProps;
-  const {
-    name,
-    children
-  } = props;
-  const {
-    registerFill,
-    unregisterFill,
-    ...slot
-  } = useSlot(name);
-  const rerender = fill_useForceUpdate();
-  const ref = (0,external_wp_element_namespaceObject.useRef)({
-    rerender
-  });
+  const registry = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
+  const slot = (0,external_wp_compose_namespaceObject.useObservableValue)(registry.slots, name);
+  const instanceRef = (0,external_wp_element_namespaceObject.useRef)({});
+
+  // We register fills so we can keep track of their existence.
+  // Slots can use the `useSlotFills` hook to know if there're already fills
+  // registered so they can choose to render themselves or not.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // We register fills so we can keep track of their existence.
-    // Some Slot implementations need to know if there're already fills
-    // registered so they can choose to render themselves or not.
-    registerFill(ref);
-    return () => {
-      unregisterFill(ref);
-    };
-  }, [registerFill, unregisterFill]);
-  if (!slot.ref || !slot.ref.current) {
+    const instance = instanceRef.current;
+    registry.registerFill(name, instance);
+    return () => registry.unregisterFill(name, instance);
+  }, [registry, name]);
+  if (!slot || !slot.ref.current) {
     return null;
   }
 
@@ -33597,30 +34045,26 @@ function slot_Slot(props, forwardedRef) {
     as,
     // `children` is not allowed. However, if it is passed,
     // it will be displayed as is, so remove `children`.
-    // @ts-ignore
     children,
     ...restProps
   } = props;
-  const {
-    registerSlot,
-    unregisterSlot,
-    ...registry
-  } = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
+  const registry = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
   const ref = (0,external_wp_element_namespaceObject.useRef)(null);
+
+  // We don't want to unregister and register the slot whenever
+  // `fillProps` change, which would cause the fill to be re-mounted. Instead,
+  // we can just update the slot (see hook below).
+  // For more context, see https://github.com/WordPress/gutenberg/pull/44403#discussion_r994415973
+  const fillPropsRef = (0,external_wp_element_namespaceObject.useRef)(fillProps);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    registerSlot(name, ref, fillProps);
-    return () => {
-      unregisterSlot(name, ref);
-    };
-    // We don't want to unregister and register the slot whenever
-    // `fillProps` change, which would cause the fill to be re-mounted. Instead,
-    // we can just update the slot (see hook below).
-    // For more context, see https://github.com/WordPress/gutenberg/pull/44403#discussion_r994415973
-  }, [registerSlot, unregisterSlot, name]);
-  // fillProps may be an update that interacts with the layout, so we
-  // useLayoutEffect.
+    fillPropsRef.current = fillProps;
+  }, [fillProps]);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    registry.updateSlot(name, fillProps);
+    registry.registerSlot(name, ref, fillPropsRef.current);
+    return () => registry.unregisterSlot(name, ref);
+  }, [registry, name]);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    registry.updateSlot(name, ref, fillPropsRef.current);
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(component, {
     as: as,
@@ -33650,34 +34094,39 @@ function createSlotRegistry() {
   const slots = (0,external_wp_compose_namespaceObject.observableMap)();
   const fills = (0,external_wp_compose_namespaceObject.observableMap)();
   const registerSlot = (name, ref, fillProps) => {
-    const slot = slots.get(name);
     slots.set(name, {
-      ...slot,
-      ref: ref || slot?.ref,
-      fillProps: fillProps || slot?.fillProps || {}
+      ref,
+      fillProps
     });
   };
   const unregisterSlot = (name, ref) => {
-    // Make sure we're not unregistering a slot registered by another element
-    // See https://github.com/WordPress/gutenberg/pull/19242#issuecomment-590295412
-    if (slots.get(name)?.ref === ref) {
-      slots.delete(name);
-    }
-  };
-  const updateSlot = (name, fillProps) => {
     const slot = slots.get(name);
     if (!slot) {
+      return;
+    }
+
+    // Make sure we're not unregistering a slot registered by another element
+    // See https://github.com/WordPress/gutenberg/pull/19242#issuecomment-590295412
+    if (slot.ref !== ref) {
+      return;
+    }
+    slots.delete(name);
+  };
+  const updateSlot = (name, ref, fillProps) => {
+    const slot = slots.get(name);
+    if (!slot) {
+      return;
+    }
+    if (slot.ref !== ref) {
       return;
     }
     if (external_wp_isShallowEqual_default()(slot.fillProps, fillProps)) {
       return;
     }
-    slot.fillProps = fillProps;
-    const slotFills = fills.get(name);
-    if (slotFills) {
-      // Force update fills.
-      slotFills.forEach(fill => fill.current.rerender());
-    }
+    slots.set(name, {
+      ref,
+      fillProps
+    });
   };
   const registerFill = (name, ref) => {
     fills.set(name, [...(fills.get(name) || []), ref]);
@@ -33715,86 +34164,71 @@ function SlotFillProvider({
  */
 
 
-
 /**
  * Internal dependencies
  */
 
 
+
 function provider_createSlotRegistry() {
-  const slots = {};
-  const fills = {};
-  let listeners = [];
-  function registerSlot(name, slot) {
-    const previousSlot = slots[name];
-    slots[name] = slot;
-    triggerListeners();
-
-    // Sometimes the fills are registered after the initial render of slot
-    // But before the registerSlot call, we need to rerender the slot.
-    forceUpdateSlot(name);
-
-    // If a new instance of a slot is being mounted while another with the
-    // same name exists, force its update _after_ the new slot has been
-    // assigned into the instance, such that its own rendering of children
-    // will be empty (the new Slot will subsume all fills for this name).
-    if (previousSlot) {
-      previousSlot.forceUpdate();
-    }
-  }
-  function registerFill(name, instance) {
-    fills[name] = [...(fills[name] || []), instance];
-    forceUpdateSlot(name);
+  const slots = (0,external_wp_compose_namespaceObject.observableMap)();
+  const fills = (0,external_wp_compose_namespaceObject.observableMap)();
+  function registerSlot(name, instance) {
+    slots.set(name, instance);
   }
   function unregisterSlot(name, instance) {
     // If a previous instance of a Slot by this name unmounts, do nothing,
     // as the slot and its fills should only be removed for the current
     // known instance.
-    if (slots[name] !== instance) {
+    if (slots.get(name) !== instance) {
       return;
     }
-    delete slots[name];
-    triggerListeners();
+    slots.delete(name);
+  }
+  function registerFill(name, instance, children) {
+    fills.set(name, [...(fills.get(name) || []), {
+      instance,
+      children
+    }]);
   }
   function unregisterFill(name, instance) {
-    var _fills$name$filter;
-    fills[name] = (_fills$name$filter = fills[name]?.filter(fill => fill !== instance)) !== null && _fills$name$filter !== void 0 ? _fills$name$filter : [];
-    forceUpdateSlot(name);
-  }
-  function getSlot(name) {
-    return slots[name];
-  }
-  function getFills(name, slotInstance) {
-    // Fills should only be returned for the current instance of the slot
-    // in which they occupy.
-    if (slots[name] !== slotInstance) {
-      return [];
+    const fillsForName = fills.get(name);
+    if (!fillsForName) {
+      return;
     }
-    return fills[name];
+    fills.set(name, fillsForName.filter(fill => fill.instance !== instance));
   }
-  function forceUpdateSlot(name) {
-    const slot = getSlot(name);
-    if (slot) {
-      slot.forceUpdate();
+  function updateFill(name, instance, children) {
+    const fillsForName = fills.get(name);
+    if (!fillsForName) {
+      return;
     }
-  }
-  function triggerListeners() {
-    listeners.forEach(listener => listener());
-  }
-  function subscribe(listener) {
-    listeners.push(listener);
-    return () => {
-      listeners = listeners.filter(l => l !== listener);
-    };
+    const fillForInstance = fillsForName.find(f => f.instance === instance);
+    if (!fillForInstance) {
+      return;
+    }
+    if (fillForInstance.children === children) {
+      return;
+    }
+    fills.set(name, fillsForName.map(f => {
+      if (f.instance === instance) {
+        // Replace with new record with updated `children`.
+        return {
+          instance,
+          children
+        };
+      }
+      return f;
+    }));
   }
   return {
+    slots,
+    fills,
     registerSlot,
     unregisterSlot,
     registerFill,
     unregisterFill,
-    getSlot,
-    getFills,
-    subscribe
+    updateFill
   };
 }
 function provider_SlotFillProvider({
@@ -33888,20 +34322,17 @@ function createSlotFill(key) {
     ...props
   });
   SlotComponent.displayName = `${baseName}Slot`;
+  /**
+   * @deprecated 6.8.0
+   * Please use `slotFill.name` instead of `slotFill.Slot.__unstableName`.
+   */
   SlotComponent.__unstableName = key;
   return {
+    name: key,
     Fill: FillComponent,
     Slot: SlotComponent
   };
 }
-const createPrivateSlotFill = name => {
-  const privateKey = Symbol(name);
-  const privateSlotFill = createSlotFill(privateKey);
-  return {
-    privateKey,
-    ...privateSlotFill
-  };
-};
 
 ;// ./packages/components/build-module/popover/overlay-middlewares.js
 /**
@@ -33978,6 +34409,13 @@ function overlayMiddlewares() {
  */
 
 const SLOT_NAME = 'Popover';
+
+/**
+ * Virtual padding to account for overflow boundaries.
+ *
+ * @type {number}
+ */
+const OVERFLOW_PADDING = 8;
 
 // An SVG displaying a triangle facing down, filled with a solid
 // color and bordered in such a way to create an arrow-like effect.
@@ -34088,7 +34526,8 @@ const UnforwardedPopover = (props, forwardedRef) => {
   const isExpanded = expandOnMobile && isMobileViewport;
   const hasArrow = !isExpanded && !noArrow;
   const normalizedPlacementFromProps = position ? positionToPlacement(position) : placementProp;
-  const middleware = [...(placementProp === 'overlay' ? overlayMiddlewares() : []), offset(offsetProp), computedFlipProp && floating_ui_dom_flip(), computedResizeProp && floating_ui_dom_size({
+  const middleware = [...(placementProp === 'overlay' ? overlayMiddlewares() : []), floating_ui_dom_offset(offsetProp), computedFlipProp && floating_ui_dom_flip(), computedResizeProp && floating_ui_dom_size({
+    padding: OVERFLOW_PADDING,
     apply(sizeProps) {
       var _refs$floating$curren;
       const {
@@ -34102,7 +34541,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
 
       // Reduce the height of the popover to the available space.
       Object.assign(firstElementChild.style, {
-        maxHeight: `${sizeProps.availableHeight}px`,
+        maxHeight: `${Math.max(0, sizeProps.availableHeight)}px`,
         overflow: 'auto'
       });
     }
@@ -34110,7 +34549,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
     crossAxis: true,
     limiter: floating_ui_dom_limitShift(),
     padding: 1 // Necessary to avoid flickering at the edge of the viewport.
-  }), floating_ui_react_dom_esm_arrow({
+  }), floating_ui_react_dom_arrow({
     element: arrowRef
   })];
   const slotName = (0,external_wp_element_namespaceObject.useContext)(slotNameContext) || __unstableSlotName;
@@ -34276,6 +34715,18 @@ const UnforwardedPopover = (props, forwardedRef) => {
   });
 };
 
+// Export the PopoverSlot individually to allow typescript to pick the types up.
+const PopoverSlot = (0,external_wp_element_namespaceObject.forwardRef)(({
+  name = SLOT_NAME
+}, ref) => {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(slot_fill_Slot, {
+    bubblesVirtually: true,
+    name: name,
+    className: "popover-slot",
+    ref: ref
+  });
+});
+
 /**
  * `Popover` renders its content in a floating modal. If no explicit anchor is passed via props, it anchors to its parent element by default.
  *
@@ -34299,22 +34750,22 @@ const UnforwardedPopover = (props, forwardedRef) => {
  * ```
  *
  */
-const popover_Popover = contextConnect(UnforwardedPopover, 'Popover');
-function PopoverSlot({
-  name = SLOT_NAME
-}, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(slot_fill_Slot, {
-    bubblesVirtually: true,
-    name: name,
-    className: "popover-slot",
-    ref: ref
-  });
-}
-
-// @ts-expect-error For Legacy Reasons
-popover_Popover.Slot = (0,external_wp_element_namespaceObject.forwardRef)(PopoverSlot);
-// @ts-expect-error For Legacy Reasons
-popover_Popover.__unstableSlotNameProvider = slotNameContext.Provider;
+const popover_Popover = Object.assign(contextConnect(UnforwardedPopover, 'Popover'), {
+  /**
+   * Renders a slot that is used internally by Popover for rendering content.
+   */
+  Slot: Object.assign(PopoverSlot, {
+    displayName: 'Popover.Slot'
+  }),
+  /**
+   * Provides a context to manage popover slot names.
+   *
+   * This is marked as unstable and should not be used directly.
+   */
+  __unstableSlotNameProvider: Object.assign(slotNameContext.Provider, {
+    displayName: 'Popover.__unstableSlotNameProvider'
+  })
+});
 /* harmony default export */ const popover = (popover_Popover);
 
 ;// ./packages/components/build-module/autocomplete/autocompleter-ui.js
@@ -34357,6 +34808,7 @@ function ListBox({
     children: items.map((option, index) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
       id: `components-autocomplete-item-${instanceId}-${option.key}`,
       role: "option",
+      __next40pxDefaultSize: true,
       "aria-selected": index === selectedIndex,
       accessibleWhenDisabled: true,
       disabled: option.isDisabled,
@@ -34476,8 +34928,32 @@ function useOnClickOutside(ref, handler) {
   }, [handler, ref]);
 }
 
+;// ./packages/components/build-module/utils/get-node-text.js
+const getNodeText = node => {
+  if (node === null) {
+    return '';
+  }
+  switch (typeof node) {
+    case 'string':
+    case 'number':
+      return node.toString();
+    case 'object':
+      {
+        if (node instanceof Array) {
+          return node.map(getNodeText).join('');
+        }
+        if ('props' in node) {
+          return getNodeText(node.props.children);
+        }
+        return '';
+      }
+    default:
+      return '';
+  }
+};
+/* harmony default export */ const get_node_text = (getNodeText);
+
 ;// ./packages/components/build-module/autocomplete/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -34499,33 +34975,7 @@ function useOnClickOutside(ref, handler) {
 
 
 
-const getNodeText = node => {
-  if (node === null) {
-    return '';
-  }
-  switch (typeof node) {
-    case 'string':
-    case 'number':
-      return node.toString();
-      break;
-    case 'boolean':
-      return '';
-      break;
-    case 'object':
-      {
-        if (node instanceof Array) {
-          return node.map(getNodeText).join('');
-        }
-        if ('props' in node) {
-          return getNodeText(node.props.children);
-        }
-        break;
-      }
-    default:
-      return '';
-  }
-  return '';
-};
+
 const EMPTY_FILTERED_OPTIONS = [];
 
 // Used for generating the instance ID
@@ -34620,7 +35070,7 @@ function useAutocomplete({
           setSelectedIndex(newIndex);
           // See the related PR as to why this is necessary: https://github.com/WordPress/gutenberg/pull/54902.
           if ((0,external_wp_keycodes_namespaceObject.isAppleOS)()) {
-            (0,external_wp_a11y_namespaceObject.speak)(getNodeText(filteredOptions[newIndex].label), 'assertive');
+            (0,external_wp_a11y_namespaceObject.speak)(get_node_text(filteredOptions[newIndex].label), 'assertive');
           }
           break;
         }
@@ -34629,7 +35079,7 @@ function useAutocomplete({
           const newIndex = (selectedIndex + 1) % filteredOptions.length;
           setSelectedIndex(newIndex);
           if ((0,external_wp_keycodes_namespaceObject.isAppleOS)()) {
-            (0,external_wp_a11y_namespaceObject.speak)(getNodeText(filteredOptions[newIndex].label), 'assertive');
+            (0,external_wp_a11y_namespaceObject.speak)(get_node_text(filteredOptions[newIndex].label), 'assertive');
           }
           break;
         }
@@ -34764,11 +35214,12 @@ function useAutocomplete({
   const listBoxId = isExpanded ? `components-autocomplete-listbox-${instanceId}` : undefined;
   const activeId = isExpanded ? `components-autocomplete-item-${instanceId}-${selectedKey}` : null;
   const hasSelection = record.start !== undefined;
+  const showPopover = !!textContent && hasSelection && !!AutocompleterUI;
   return {
     listBoxId,
     activeId,
     onKeyDown: withIgnoreIMEEvents(handleKeyDown),
-    popover: hasSelection && AutocompleterUI && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AutocompleterUI, {
+    popover: showPopover && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AutocompleterUI, {
       className: className,
       filterValue: filterValue,
       instanceId: instanceId,
@@ -35012,8 +35463,6 @@ function useBorderBoxControlLinkedButton(props) {
 
 
 
-
-
 const BorderBoxControlLinkedButton = (props, forwardedRef) => {
   const {
     className,
@@ -35021,19 +35470,14 @@ const BorderBoxControlLinkedButton = (props, forwardedRef) => {
     ...buttonProps
   } = useBorderBoxControlLinkedButton(props);
   const label = isLinked ? (0,external_wp_i18n_namespaceObject.__)('Unlink sides') : (0,external_wp_i18n_namespaceObject.__)('Link sides');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-    text: label,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(component, {
-      className: className,
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-        ...buttonProps,
-        size: "small",
-        icon: isLinked ? library_link : link_off,
-        iconSize: 24,
-        "aria-label": label,
-        ref: forwardedRef
-      })
-    })
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+    ...buttonProps,
+    size: "small",
+    icon: isLinked ? library_link : link_off,
+    iconSize: 24,
+    label: label,
+    ref: forwardedRef,
+    className: className
   });
 };
 const ConnectedBorderBoxControlLinkedButton = contextConnect(BorderBoxControlLinkedButton, 'BorderBoxControlLinkedButton');
@@ -35156,7 +35600,7 @@ const toggleGroupControl = ({
   isBlock,
   isDeselectable,
   size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("background:", COLORS.ui.background, ";border:1px solid transparent;border-radius:", config_values.radiusSmall, ";display:inline-flex;min-width:0;position:relative;", toggleGroupControlSize(size), " ", !isDeselectable && enclosingBorders(isBlock), "@media not ( prefers-reduced-motion ){&[data-indicator-animated]::before{transition-property:transform,border-radius;transition-duration:0.2s;transition-timing-function:ease-out;}}&::before{content:'';position:absolute;pointer-events:none;background:", COLORS.gray[900], ";outline:2px solid transparent;outline-offset:-3px;--antialiasing-factor:100;border-radius:calc(\n\t\t\t\t", config_values.radiusXSmall, " /\n\t\t\t\t\t(\n\t\t\t\t\t\tvar( --selected-width, 0 ) /\n\t\t\t\t\t\t\tvar( --antialiasing-factor )\n\t\t\t\t\t)\n\t\t\t)/", config_values.radiusXSmall, ";left:-1px;width:calc( var( --antialiasing-factor ) * 1px );height:calc( var( --selected-height, 0 ) * 1px );transform-origin:left top;transform:translateX( calc( var( --selected-left, 0 ) * 1px ) ) scaleX(\n\t\t\t\tcalc(\n\t\t\t\t\tvar( --selected-width, 0 ) / var( --antialiasing-factor )\n\t\t\t\t)\n\t\t\t);}" + ( true ? "" : 0),  true ? "" : 0);
+}) => /*#__PURE__*/emotion_react_browser_esm_css("background:", COLORS.ui.background, ";border:1px solid transparent;border-radius:", config_values.radiusSmall, ";display:inline-flex;min-width:0;position:relative;", toggleGroupControlSize(size), " ", !isDeselectable && enclosingBorders(isBlock), "@media not ( prefers-reduced-motion ){&[data-indicator-animated]::before{transition-property:transform,border-radius;transition-duration:0.2s;transition-timing-function:ease-out;}}&::before{content:'';position:absolute;pointer-events:none;background:", COLORS.theme.foreground, ";outline:2px solid transparent;outline-offset:-3px;--antialiasing-factor:100;border-radius:calc(\n\t\t\t\t", config_values.radiusXSmall, " /\n\t\t\t\t\t(\n\t\t\t\t\t\tvar( --selected-width, 0 ) /\n\t\t\t\t\t\t\tvar( --antialiasing-factor )\n\t\t\t\t\t)\n\t\t\t)/", config_values.radiusXSmall, ";left:-1px;width:calc( var( --antialiasing-factor ) * 1px );height:calc( var( --selected-height, 0 ) * 1px );transform-origin:left top;transform:translateX( calc( var( --selected-left, 0 ) * 1px ) ) scaleX(\n\t\t\t\tcalc(\n\t\t\t\t\tvar( --selected-width, 0 ) / var( --antialiasing-factor )\n\t\t\t\t)\n\t\t\t);}" + ( true ? "" : 0),  true ? "" : 0);
 const enclosingBorders = isBlock => {
   const enclosingBorder = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.ui.border, ";" + ( true ? "" : 0),  true ? "" : 0);
   return /*#__PURE__*/emotion_react_browser_esm_css(isBlock && enclosingBorder, " &:hover{border-color:", COLORS.ui.borderHover, ";}&:focus-within{border-color:", COLORS.ui.borderFocus, ";box-shadow:", config_values.controlBoxShadowFocus, ";z-index:1;outline:2px solid transparent;outline-offset:-2px;}" + ( true ? "" : 0),  true ? "" : 0);
@@ -35220,7 +35664,7 @@ function createRadioStore(_a = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/DYHFBFEH.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/4BXJGRNH.js
 "use client";
 
 
@@ -35233,31 +35677,31 @@ function useRadioStoreProps(store, update, props) {
   return store;
 }
 function useRadioStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createRadioStore, props);
+  const [store, update] = YV4JVR4I_useStore(createRadioStore, props);
   return useRadioStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/SOKV3TSX.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/UVUMR3WP.js
 "use client";
 
 
 
 // src/radio/radio-context.tsx
-var SOKV3TSX_ctx = createStoreContext(
+var UVUMR3WP_ctx = createStoreContext(
   [CompositeContextProvider],
   [CompositeScopedContextProvider]
 );
-var useRadioContext = SOKV3TSX_ctx.useContext;
-var useRadioScopedContext = SOKV3TSX_ctx.useScopedContext;
-var useRadioProviderContext = SOKV3TSX_ctx.useProviderContext;
-var RadioContextProvider = SOKV3TSX_ctx.ContextProvider;
-var RadioScopedContextProvider = SOKV3TSX_ctx.ScopedContextProvider;
+var useRadioContext = UVUMR3WP_ctx.useContext;
+var useRadioScopedContext = UVUMR3WP_ctx.useScopedContext;
+var useRadioProviderContext = UVUMR3WP_ctx.useProviderContext;
+var RadioContextProvider = UVUMR3WP_ctx.ContextProvider;
+var RadioScopedContextProvider = UVUMR3WP_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/radio/radio-group.js
+;// ./node_modules/@ariakit/react-core/esm/radio/radio-group.js
 "use client";
 
 
@@ -35298,7 +35742,7 @@ var useRadioGroup = createHook(
 );
 var RadioGroup = forwardRef2(function RadioGroup2(props) {
   const htmlProps = useRadioGroup(props);
-  return HKOOKEDE_createElement(radio_group_TagName, htmlProps);
+  return LMDWO4NN_createElement(radio_group_TagName, htmlProps);
 });
 
 
@@ -35369,7 +35813,6 @@ function useComputeControlledOrUncontrolledValue(valueProp) {
 /**
  * External dependencies
  */
-
 
 
 
@@ -35833,10 +36276,12 @@ rect, {
 
 
 
+
 function UnconnectedToggleGroupControl(props, forwardedRef) {
   const {
     __nextHasNoMarginBottom = false,
     __next40pxDefaultSize = false,
+    __shouldNotWarnDeprecated36pxSize,
     className,
     isAdaptiveWidth = false,
     isBlock = false,
@@ -35854,7 +36299,7 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
   const [selectedElement, setSelectedElement] = (0,external_wp_element_namespaceObject.useState)();
   const [controlElement, setControlElement] = (0,external_wp_element_namespaceObject.useState)();
   const refs = (0,external_wp_compose_namespaceObject.useMergeRefs)([setControlElement, forwardedRef]);
-  const selectedRect = useTrackElementOffsetRect(value || value === 0 ? selectedElement : undefined);
+  const selectedRect = useTrackElementOffsetRect(value !== null && value !== undefined ? selectedElement : undefined);
   useAnimatedOffsetRect(controlElement, selectedRect, {
     prefix: 'selected',
     dataAttribute: 'indicator-animated',
@@ -35868,6 +36313,12 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
     size: normalizedSize
   }), isBlock && toggle_group_control_styles_block, className), [className, cx, isBlock, isDeselectable, normalizedSize]);
   const MainControl = isDeselectable ? ToggleGroupControlAsButtonGroup : ToggleGroupControlAsRadioGroup;
+  maybeWarnDeprecated36pxSize({
+    componentName: 'ToggleGroupControl',
+    size,
+    __next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(base_control, {
     help: help,
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
@@ -35917,6 +36368,7 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
  *       value="vertical"
  *       isBlock
  *       __nextHasNoMarginBottom
+ *       __next40pxDefaultSize
  *     >
  *       <ToggleGroupControlOption value="horizontal" label="Horizontal" />
  *       <ToggleGroupControlOption value="vertical" label="Vertical" />
@@ -35928,7 +36380,7 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
 const ToggleGroupControl = contextConnect(UnconnectedToggleGroupControl, 'ToggleGroupControl');
 /* harmony default export */ const toggle_group_control_component = (ToggleGroupControl);
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/K7FXVWIT.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/NLEBE274.js
 "use client";
 
 
@@ -35940,7 +36392,7 @@ const ToggleGroupControl = contextConnect(UnconnectedToggleGroupControl, 'Toggle
 // src/radio/radio.tsx
 
 
-var K7FXVWIT_TagName = "input";
+var NLEBE274_TagName = "input";
 function getIsChecked(value, storeValue) {
   if (storeValue === void 0) return;
   if (value != null && storeValue != null) {
@@ -35979,7 +36431,7 @@ var useRadio = createHook(function useRadio2(_a) {
     store == null ? void 0 : store.setActiveId(id);
   }, [store, isChecked, id]);
   const onChangeProp = props.onChange;
-  const tagName = useTagName(ref, K7FXVWIT_TagName);
+  const tagName = useTagName(ref, NLEBE274_TagName);
   const nativeRadio = isNativeRadio(tagName, props.type);
   const disabled = disabledFromProps(props);
   const [propertyUpdated, schedulePropertyUpdate] = useForceUpdate();
@@ -36003,6 +36455,7 @@ var useRadio = createHook(function useRadio2(_a) {
       event.stopPropagation();
       return;
     }
+    if ((store == null ? void 0 : store.getState().value) === value) return;
     if (!nativeRadio) {
       event.currentTarget.checked = true;
       schedulePropertyUpdate();
@@ -36053,7 +36506,7 @@ var useRadio = createHook(function useRadio2(_a) {
 var Radio = memo2(
   forwardRef2(function Radio2(props) {
     const htmlProps = useRadio(props);
-    return HKOOKEDE_createElement(K7FXVWIT_TagName, htmlProps);
+    return LMDWO4NN_createElement(NLEBE274_TagName, htmlProps);
   })
 );
 
@@ -36085,11 +36538,11 @@ const buttonView = ({
   isIcon,
   isPressed,
   size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.radiusXSmall, ";color:", COLORS.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;@media not ( prefers-reduced-motion ){transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;}user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&[disabled]{opacity:0.4;cursor:default;}&:active{background:", config_values.controlBackgroundColor, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
+}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.radiusXSmall, ";color:", COLORS.theme.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;@media not ( prefers-reduced-motion ){transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;}user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&[disabled]{opacity:0.4;cursor:default;}&:active{background:", COLORS.ui.background, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
   size
 }), " ", isPressed && pressed, ";" + ( true ? "" : 0),  true ? "" : 0);
-const pressed = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.white, ";&:active{background:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
-const deselectable = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.gray[900], ";&:focus{box-shadow:inset 0 0 0 1px ", COLORS.white, ",0 0 0 ", config_values.borderWidthFocus, " ", COLORS.theme.accent, ";outline:2px solid transparent;}" + ( true ? "" : 0),  true ? "" : 0);
+const pressed = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.theme.foregroundInverted, ";&:active{background:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
+const deselectable = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.theme.foreground, ";&:focus{box-shadow:inset 0 0 0 1px ", COLORS.ui.background, ",0 0 0 ", config_values.borderWidthFocus, " ", COLORS.theme.accent, ";outline:2px solid transparent;}" + ( true ? "" : 0),  true ? "" : 0);
 const ButtonContentView = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "et6ln9s0"
 } : 0)("display:flex;font-size:", config_values.fontSize, ";line-height:1;" + ( true ? "" : 0));
@@ -36100,7 +36553,7 @@ const isIconStyles = ({
     default: '30px',
     '__unstable-large': '32px'
   };
-  return /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.gray[900], ";height:", iconButtonSizes[size], ";aspect-ratio:1;padding-left:0;padding-right:0;" + ( true ? "" : 0),  true ? "" : 0);
+  return /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.theme.foreground, ";height:", iconButtonSizes[size], ";aspect-ratio:1;padding-left:0;padding-right:0;" + ( true ? "" : 0),  true ? "" : 0);
 };
 
 ;// ./packages/components/build-module/toggle-group-control/toggle-group-control-option-base/component.js
@@ -36307,7 +36760,7 @@ function UnforwardedToggleGroupControlOptionIcon(props, ref) {
  *
  * function Example() {
  *  return (
- *    <ToggleGroupControl __nextHasNoMarginBottom>
+ *    <ToggleGroupControl __nextHasNoMarginBottom __next40pxDefaultSize>
  *      <ToggleGroupControlOptionIcon
  *        value="uppercase"
  *        label="Uppercase"
@@ -36757,7 +37210,7 @@ const InputControlSuffixWrapperWithClickThrough = /*#__PURE__*/emotion_styled_ba
  * Return an SVG icon.
  *
  * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
+ *                                                          size is a number specifying the icon size in pixels
  *                                                          Other props will be passed to wrapped SVG component
  * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
@@ -36835,6 +37288,7 @@ const SelectControlChevronDown = () => {
 
 
 
+
 function select_control_useUniqueId(idProp) {
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(SelectControl);
   const id = `inspector-select-control-${instanceId}`;
@@ -36877,6 +37331,7 @@ function UnforwardedSelectControl(props, ref) {
     variant = 'default',
     __next40pxDefaultSize = false,
     __nextHasNoMarginBottom = false,
+    __shouldNotWarnDeprecated36pxSize,
     ...restProps
   } = useDeprecated36pxDefaultSizeProp(props);
   const id = select_control_useUniqueId(idProp);
@@ -36904,6 +37359,12 @@ function UnforwardedSelectControl(props, ref) {
     });
   };
   const classes = dist_clsx('components-select-control', className);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'SelectControl',
+    __next40pxDefaultSize,
+    size,
+    __shouldNotWarnDeprecated36pxSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     help: help,
     id: id,
@@ -36957,6 +37418,7 @@ function UnforwardedSelectControl(props, ref) {
  *
  *   return (
  *     <SelectControl
+ *       __next40pxDefaultSize
  *       __nextHasNoMarginBottom
  *       label="Size"
  *       value={ size }
@@ -37203,28 +37665,16 @@ const trackBackgroundColor = ({
 };
 const Track = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk9"
-} : 0)("background-color:currentColor;border-radius:", config_values.radiusFull, ";height:", railHeight, "px;pointer-events:none;display:block;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;", trackBackgroundColor, ";" + ( true ? "" : 0));
+} : 0)("background-color:currentColor;border-radius:", config_values.radiusFull, ";height:", railHeight, "px;pointer-events:none;display:block;position:absolute;margin-top:", (rangeHeightValue - railHeight) / 2, "px;top:0;.is-marked &{@media not ( prefers-reduced-motion ){transition:width ease 0.1s;}}", trackBackgroundColor, ";" + ( true ? "" : 0));
 const MarksWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk8"
 } : 0)( true ? {
-  name: "l7tjj5",
-  styles: "display:block;pointer-events:none;position:relative;width:100%;user-select:none"
+  name: "g5kg28",
+  styles: "display:block;pointer-events:none;position:relative;width:100%;user-select:none;margin-top:17px"
 } : 0);
-const markFill = ({
-  disabled,
-  isFilled
-}) => {
-  let backgroundColor = isFilled ? 'currentColor' : COLORS.gray[300];
-  if (disabled) {
-    backgroundColor = COLORS.gray[400];
-  }
-  return /*#__PURE__*/emotion_react_browser_esm_css({
-    backgroundColor
-  },  true ? "" : 0,  true ? "" : 0);
-};
 const Mark = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk7"
-} : 0)("height:", thumbSize, "px;left:0;position:absolute;top:9px;width:1px;", markFill, ";" + ( true ? "" : 0));
+} : 0)("position:absolute;left:0;top:-4px;height:4px;width:2px;transform:translateX( -50% );background-color:", COLORS.ui.background, ";z-index:1;" + ( true ? "" : 0));
 const markLabelFill = ({
   isFilled
 }) => {
@@ -37234,7 +37684,7 @@ const markLabelFill = ({
 };
 const MarkLabel = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk6"
-} : 0)("color:", COLORS.gray[300], ";font-size:11px;position:absolute;top:22px;white-space:nowrap;", rtl({
+} : 0)("color:", COLORS.gray[300], ";font-size:11px;position:absolute;top:8px;white-space:nowrap;", rtl({
   left: 0
 }), ";", rtl({
   transform: 'translateX( -50% )'
@@ -37246,7 +37696,7 @@ const thumbColor = ({
 }) => disabled ? /*#__PURE__*/emotion_react_browser_esm_css("background-color:", COLORS.gray[400], ";" + ( true ? "" : 0),  true ? "" : 0) : /*#__PURE__*/emotion_react_browser_esm_css("background-color:", COLORS.theme.accent, ";" + ( true ? "" : 0),  true ? "" : 0);
 const ThumbWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk5"
-} : 0)("align-items:center;display:flex;height:", thumbSize, "px;justify-content:center;margin-top:", (rangeHeightValue - thumbSize) / 2, "px;outline:0;pointer-events:none;position:absolute;top:0;user-select:none;width:", thumbSize, "px;border-radius:", config_values.radiusRound, ";", thumbColor, ";", rtl({
+} : 0)("align-items:center;display:flex;height:", thumbSize, "px;justify-content:center;margin-top:", (rangeHeightValue - thumbSize) / 2, "px;outline:0;pointer-events:none;position:absolute;top:0;user-select:none;width:", thumbSize, "px;border-radius:", config_values.radiusRound, ";z-index:3;.is-marked &{@media not ( prefers-reduced-motion ){transition:left ease 0.1s;}}", thumbColor, ";", rtl({
   marginLeft: -10
 }), ";", rtl({
   transform: 'translateX( 4.5px )'
@@ -37365,7 +37815,6 @@ function RangeMark(props) {
       ...otherProps,
       "aria-hidden": "true",
       className: classes,
-      isFilled: isFilled,
       style: style
     }), label && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MarkLabel, {
       "aria-hidden": "true",
@@ -37578,6 +38027,7 @@ function useTooltipPosition({
 
 
 
+
 const range_control_noop = () => {};
 
 /**
@@ -37629,6 +38079,7 @@ function UnforwardedRangeControl(props, forwardedRef) {
     trackColor,
     value: valueProp,
     withInputField = true,
+    __shouldNotWarnDeprecated36pxSize,
     ...otherProps
   } = props;
   const [value, setValue] = useControlledRangeValue({
@@ -37730,6 +38181,14 @@ function UnforwardedRangeControl(props, forwardedRef) {
   const offsetStyle = {
     [(0,external_wp_i18n_namespaceObject.isRTL)() ? 'right' : 'left']: fillValueOffset
   };
+
+  // Add default size deprecation warning.
+  maybeWarnDeprecated36pxSize({
+    componentName: 'RangeControl',
+    __next40pxDefaultSize,
+    size: undefined,
+    __shouldNotWarnDeprecated36pxSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     __associatedWPComponentName: "RangeControl",
@@ -37822,7 +38281,8 @@ function UnforwardedRangeControl(props, forwardedRef) {
         step: step
         // @ts-expect-error TODO: Investigate if the `null` value is necessary
         ,
-        value: inputSliderValue
+        value: inputSliderValue,
+        __shouldNotWarnDeprecated36pxSize: true
       }), allowReset && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ActionRightWrapper, {
         children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
           className: "components-range-control__reset"
@@ -37855,16 +38315,18 @@ function UnforwardedRangeControl(props, forwardedRef) {
  * import { useState } from '@wordpress/element';
  *
  * const MyRangeControl = () => {
- *   const [ isChecked, setChecked ] = useState( true );
+ *   const [ value, setValue ] = useState();
  *   return (
  *     <RangeControl
  *       __nextHasNoMarginBottom
+ *       __next40pxDefaultSize
  *       help="Please select how transparent you would like this."
- *       initialPosition={50}
+ *       initialPosition={ 50 }
  *       label="Opacity"
- *       max={100}
- *       min={0}
- *       onChange={() => {}}
+ *       max={ 100 }
+ *       min={ 0 }
+ *       value={ value }
+ *       onChange={ setValue }
  *     />
  *   );
  * };
@@ -37890,15 +38352,14 @@ const RangeControl = (0,external_wp_element_namespaceObject.forwardRef)(Unforwar
 
 
 
-
 const NumberControlWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(number_control,  true ? {
-  target: "ez9hsf47"
+  target: "ez9hsf46"
 } : 0)("width:", space(24), ";" + ( true ? "" : 0));
 const styles_SelectControl = /*#__PURE__*/emotion_styled_base_browser_esm(select_control,  true ? {
-  target: "ez9hsf46"
-} : 0)("margin-left:", space(-2), ";width:5em;" + ( true ? "" : 0));
-const styles_RangeControl = /*#__PURE__*/emotion_styled_base_browser_esm(range_control,  true ? {
   target: "ez9hsf45"
+} : 0)("margin-left:", space(-2), ";" + ( true ? "" : 0));
+const styles_RangeControl = /*#__PURE__*/emotion_styled_base_browser_esm(range_control,  true ? {
+  target: "ez9hsf44"
 } : 0)("flex:1;margin-right:", space(2), ";" + ( true ? "" : 0));
 
 // Make the Hue circle picker not go out of the bar.
@@ -37908,20 +38369,32 @@ const interactiveHueStyles = `
 	margin-left: ${space(1)};
 }`;
 const AuxiliaryColorArtefactWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "ez9hsf44"
+  target: "ez9hsf43"
 } : 0)("padding-top:", space(2), ";padding-right:0;padding-left:0;padding-bottom:0;" + ( true ? "" : 0));
 const AuxiliaryColorArtefactHStackHeader = /*#__PURE__*/emotion_styled_base_browser_esm(h_stack_component,  true ? {
-  target: "ez9hsf43"
+  target: "ez9hsf42"
 } : 0)("padding-left:", space(4), ";padding-right:", space(4), ";" + ( true ? "" : 0));
 const ColorInputWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_component,  true ? {
-  target: "ez9hsf42"
+  target: "ez9hsf41"
 } : 0)("padding-top:", space(4), ";padding-left:", space(4), ";padding-right:", space(3), ";padding-bottom:", space(5), ";" + ( true ? "" : 0));
 const ColorfulWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "ez9hsf41"
-} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
-const CopyButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   target: "ez9hsf40"
-} : 0)("&&&&&{min-width:", space(6), ";padding:0;>svg{margin-right:0;}}" + ( true ? "" : 0));
+} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:", config_values.radiusFull, ";margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
+
+;// ./packages/icons/build-module/library/check.js
+/**
+ * WordPress dependencies
+ */
+
+
+const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
+  })
+});
+/* harmony default export */ const library_check = (check);
 
 ;// ./packages/icons/build-module/library/copy.js
 /**
@@ -37996,14 +38469,17 @@ const ColorCopyButton = props => {
       }
     };
   }, []);
+  const isCopied = copiedColor === color.toHex();
+  const label = isCopied ? (0,external_wp_i18n_namespaceObject.__)('Copied!') : (0,external_wp_i18n_namespaceObject.__)('Copy');
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
     delay: 0,
     hideOnClick: false,
-    text: copiedColor === color.toHex() ? (0,external_wp_i18n_namespaceObject.__)('Copied!') : (0,external_wp_i18n_namespaceObject.__)('Copy'),
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CopyButton, {
-      size: "small",
+    text: label,
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Button, {
+      size: "compact",
+      "aria-label": label,
       ref: copyRef,
-      icon: library_copy,
+      icon: isCopied ? library_check : library_copy,
       showTooltip: false
     })
   });
@@ -38080,6 +38556,7 @@ const InputWithSlider = ({
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
     spacing: 4,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NumberControlWrapper, {
+      __next40pxDefaultSize: true,
       min: min,
       max: max,
       label: label,
@@ -38093,8 +38570,7 @@ const InputWithSlider = ({
           children: abbreviation
         })
       }),
-      spinControls: "none",
-      size: "__unstable-large"
+      spinControls: "none"
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_RangeControl, {
       __nextHasNoMarginBottom: true,
       __next40pxDefaultSize: true,
@@ -38513,6 +38989,7 @@ const UnconnectedColorPicker = (props, forwardedRef) => {
         justify: "space-between",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_SelectControl, {
           __nextHasNoMarginBottom: true,
+          size: "compact",
           options: options,
           value: colorType,
           onChange: nextColorType => setColorType(nextColorType),
@@ -38632,21 +39109,6 @@ const LegacyAdapter = props => {
 
 const CircularOptionPickerContext = (0,external_wp_element_namespaceObject.createContext)({});
 
-;// ./packages/icons/build-module/library/check.js
-/**
- * WordPress dependencies
- */
-
-
-const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z"
-  })
-});
-/* harmony default export */ const library_check = (check);
-
 ;// ./packages/components/build-module/circular-option-picker/circular-option-picker-option.js
 /**
  * External dependencies
@@ -38666,16 +39128,17 @@ const check = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(exte
 
 
 
-
 function UnforwardedOptionAsButton(props, forwardedRef) {
   const {
     isPressed,
+    label,
     ...additionalProps
   } = props;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
     ...additionalProps,
     "aria-pressed": isPressed,
-    ref: forwardedRef
+    ref: forwardedRef,
+    label: label
   });
 }
 const OptionAsButton = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedOptionAsButton);
@@ -38683,6 +39146,7 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
   const {
     id,
     isSelected,
+    label,
     ...additionalProps
   } = props;
   const {
@@ -38702,7 +39166,8 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
       ...additionalProps,
       role: "option",
       "aria-selected": !!isSelected,
-      ref: forwardedRef
+      ref: forwardedRef,
+      label: label
     }),
     id: id
   });
@@ -38723,22 +39188,22 @@ function Option({
   const commonProps = {
     id,
     className: 'components-circular-option-picker__option',
+    __next40pxDefaultSize: true,
     ...additionalProps
   };
   const isListbox = setActiveId !== undefined;
   const optionControl = isListbox ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsOption, {
     ...commonProps,
+    label: tooltipText,
     isSelected: isSelected
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OptionAsButton, {
     ...commonProps,
+    label: tooltipText,
     isPressed: isSelected
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: dist_clsx(className, 'components-circular-option-picker__option-wrapper'),
-    children: [tooltipText ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-      text: tooltipText,
-      children: optionControl
-    }) : optionControl, isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+    children: [optionControl, isSelected && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
       icon: library_check,
       ...selectedIconProps
     })]
@@ -38809,6 +39274,7 @@ function ButtonAction({
   ...additionalProps
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+    __next40pxDefaultSize: true,
     className: dist_clsx('components-circular-option-picker__clear', className),
     variant: "tertiary",
     ...additionalProps,
@@ -38862,7 +39328,6 @@ function ButtonAction({
  * 						style={ { backgroundColor: color, color } }
  * 						isSelected={ index === currentColor }
  * 						onClick={ () => setCurrentColor( index ) }
- * 						aria-label={ name }
  * 					/>
  * 				);
  * 			} ) }
@@ -38930,6 +39395,7 @@ function ButtonsCircularOptionPicker(props) {
   }), [baseId]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ...additionalProps,
+    role: "group",
     id: baseId,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(CircularOptionPickerContext.Provider, {
       value: contextValue,
@@ -38979,7 +39445,34 @@ CircularOptionPicker.DropdownLinkAction = DropdownLinkAction;
 
 
 
+
 /* harmony default export */ const build_module_circular_option_picker = (circular_option_picker);
+
+;// ./packages/components/build-module/circular-option-picker/utils.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Computes the common props for the CircularOptionPicker.
+ */
+function getComputeCircularOptionPickerCommonProps(asButtons, loop, ariaLabel, ariaLabelledby) {
+  const metaProps = asButtons ? {
+    asButtons: true
+  } : {
+    asButtons: false,
+    loop
+  };
+  const labelProps = {
+    'aria-labelledby': ariaLabelledby,
+    'aria-label': ariaLabelledby ? undefined : ariaLabel || (0,external_wp_i18n_namespaceObject.__)('Custom color picker')
+  };
+  return {
+    metaProps,
+    labelProps
+  };
+}
 
 ;// ./packages/components/build-module/v-stack/hook.js
 /**
@@ -39108,7 +39601,7 @@ function useHeading(props) {
   const {
     as: asProp,
     level = 2,
-    color = COLORS.gray[900],
+    color = COLORS.theme.foreground,
     isBlock = true,
     weight = config_values.fontWeightHeading,
     ...otherProps
@@ -39404,12 +39897,7 @@ function SinglePalette({
           backgroundColor: color,
           color
         },
-        onClick: isSelected ? clearColor : () => onChange(color, index),
-        "aria-label": name ?
-        // translators: %s: The name of the color e.g: "vivid red".
-        (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Color: %s'), name) :
-        // translators: %s: color hex code e.g: "#f00".
-        (0,external_wp_i18n_namespaceObject.sprintf)((0,external_wp_i18n_namespaceObject.__)('Color code: %s'), color)
+        onClick: isSelected ? clearColor : () => onChange(color, index)
       }, `${color}-${index}`);
     });
   }, [colors, value, onChange, clearColor]);
@@ -39522,7 +40010,7 @@ function UnforwardedColorPalette(props, forwardedRef) {
   const displayValue = value?.replace(/^var\((.+)\)$/, '$1');
   const customColorAccessibleLabel = !!displayValue ? (0,external_wp_i18n_namespaceObject.sprintf)(
   // translators: 1: The name of the color e.g: "vivid red". 2: The color's hex code e.g: "#f00".
-  (0,external_wp_i18n_namespaceObject.__)('Custom color picker. The currently selected color is called "%1$s" and has a value of "%2$s".'), buttonLabelName, displayValue) : (0,external_wp_i18n_namespaceObject.__)('Custom color picker.');
+  (0,external_wp_i18n_namespaceObject.__)('Custom color picker. The currently selected color is called "%1$s" and has a value of "%2$s".'), buttonLabelName, displayValue) : (0,external_wp_i18n_namespaceObject.__)('Custom color picker');
   const paletteCommonProps = {
     clearColor,
     onChange,
@@ -39530,35 +40018,14 @@ function UnforwardedColorPalette(props, forwardedRef) {
   };
   const actions = !!clearable && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker.ButtonAction, {
     onClick: clearColor,
+    accessibleWhenDisabled: true,
+    disabled: !value,
     children: (0,external_wp_i18n_namespaceObject.__)('Clear')
   });
-  let metaProps;
-  if (asButtons) {
-    metaProps = {
-      asButtons: true
-    };
-  } else {
-    const _metaProps = {
-      asButtons: false,
-      loop
-    };
-    if (ariaLabel) {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': ariaLabel
-      };
-    } else if (ariaLabelledby) {
-      metaProps = {
-        ..._metaProps,
-        'aria-labelledby': ariaLabelledby
-      };
-    } else {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': (0,external_wp_i18n_namespaceObject.__)('Custom color picker.')
-      };
-    }
-  }
+  const {
+    metaProps,
+    labelProps
+  } = getComputeCircularOptionPickerCommonProps(asButtons, loop, ariaLabel, ariaLabelledby);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(v_stack_component, {
     spacing: 3,
     ref: forwardedRef,
@@ -39599,6 +40066,7 @@ function UnforwardedColorPalette(props, forwardedRef) {
       })
     }), (colors.length > 0 || actions) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker, {
       ...metaProps,
+      ...labelProps,
       actions: actions,
       options: hasMultipleColorOrigins ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MultiplePalettes, {
         ...paletteCommonProps,
@@ -39693,6 +40161,7 @@ const UnitSelect = /*#__PURE__*/emotion_styled_base_browser_esm("select",  true 
 } : 0)("&&&{appearance:none;background:transparent;border-radius:", config_values.radiusXSmall, ";border:none;display:block;outline:none;margin:0;min-height:auto;font-family:inherit;", baseUnitLabelStyles, ";", unitSelectSizes, ";&:not( :disabled ){cursor:pointer;}}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/border-control/styles.js
+function border_control_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
@@ -39745,7 +40214,10 @@ const swatchGap = 12;
 const borderControlPopoverControls = /*#__PURE__*/emotion_react_browser_esm_css("width:", swatchSize * 6 + swatchGap * 5, "px;>div:first-of-type>", StyledLabel, "{margin-bottom:0;}&& ", StyledLabel, "+button:not( .has-text ){min-width:24px;padding:0;}" + ( true ? "" : 0),  true ? "" : 0);
 const borderControlPopoverContent = /*#__PURE__*/emotion_react_browser_esm_css( true ? "" : 0,  true ? "" : 0);
 const borderColorIndicator = /*#__PURE__*/emotion_react_browser_esm_css( true ? "" : 0,  true ? "" : 0);
-const resetButton = /*#__PURE__*/emotion_react_browser_esm_css("justify-content:center;width:100%;&&{border-top:", config_values.borderWidth, " solid ", COLORS.gray[400], ";border-top-left-radius:0;border-top-right-radius:0;}" + ( true ? "" : 0),  true ? "" : 0);
+const resetButtonWrapper =  true ? {
+  name: "1ghe26v",
+  styles: "display:flex;justify-content:flex-end;margin-top:12px"
+} : 0;
 const borderSlider = () => /*#__PURE__*/emotion_react_browser_esm_css("flex:1 1 60%;", rtl({
   marginRight: space(3)
 })(), ";" + ( true ? "" : 0),  true ? "" : 0);
@@ -40111,15 +40583,16 @@ const useCustomUnits = ({
   defaultValues
 }) => {
   const customUnitsToReturn = filterUnitsWithSettings(availableUnits, units);
-  if (defaultValues) {
-    customUnitsToReturn.forEach((unit, i) => {
-      if (defaultValues[unit.value]) {
-        const [parsedDefaultValue] = parseQuantityAndUnitFromRawValue(defaultValues[unit.value]);
-        customUnitsToReturn[i].default = parsedDefaultValue;
-      }
-    });
+  if (!defaultValues) {
+    return customUnitsToReturn;
   }
-  return customUnitsToReturn;
+  return customUnitsToReturn.map(unit => {
+    const [defaultValue] = defaultValues[unit.value] ? parseQuantityAndUnitFromRawValue(defaultValues[unit.value]) : [];
+    return {
+      ...unit,
+      default: defaultValue
+    };
+  });
 };
 
 /**
@@ -40217,8 +40690,8 @@ function useBorderControlDropdown(props) {
   const popoverContentClassName = (0,external_wp_element_namespaceObject.useMemo)(() => {
     return cx(borderControlPopoverContent);
   }, [cx]);
-  const resetButtonClassName = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return cx(resetButton);
+  const resetButtonWrapperClassName = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    return cx(resetButtonWrapper);
   }, [cx]);
   return {
     ...otherProps,
@@ -40234,7 +40707,7 @@ function useBorderControlDropdown(props) {
     onReset,
     popoverContentClassName,
     popoverControlsClassName,
-    resetButtonClassName,
+    resetButtonWrapperClassName,
     size,
     __experimentalIsRenderedInSidebar
   };
@@ -40336,7 +40809,7 @@ const BorderControlDropdown = (props, forwardedRef) => {
     onStyleChange,
     popoverContentClassName,
     popoverControlsClassName,
-    resetButtonClassName,
+    resetButtonWrapperClassName,
     size,
     __unstablePopoverProps,
     ...otherProps
@@ -40347,7 +40820,7 @@ const BorderControlDropdown = (props, forwardedRef) => {
   } = border || {};
   const colorObject = getColorObject(color, colors);
   const toggleAriaLabel = getToggleAriaLabel(color, colorObject, style, enableStyle);
-  const showResetButton = color || style && style !== 'none';
+  const enableResetButton = color || style && style !== 'none';
   const dropdownPosition = __experimentalIsRenderedInSidebar ? 'bottom left' : undefined;
   const renderToggle = ({
     onToggle
@@ -40367,12 +40840,10 @@ const BorderControlDropdown = (props, forwardedRef) => {
       })
     })
   });
-  const renderContent = ({
-    onClose
-  }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_content_wrapper, {
+  const renderContent = () => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(dropdown_content_wrapper, {
       paddingSize: "medium",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(v_stack_component, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(v_stack_component, {
         className: popoverControlsClassName,
         spacing: 6,
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(color_palette, {
@@ -40389,20 +40860,20 @@ const BorderControlDropdown = (props, forwardedRef) => {
           value: style,
           onChange: onStyleChange
         })]
-      })
-    }), showResetButton && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_content_wrapper, {
-      paddingSize: "none",
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-        className: resetButtonClassName,
-        variant: "tertiary",
-        onClick: () => {
-          onReset();
-          onClose();
-        },
-        __next40pxDefaultSize: true,
-        children: (0,external_wp_i18n_namespaceObject.__)('Reset')
-      })
-    })]
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+        className: resetButtonWrapperClassName,
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+          variant: "tertiary",
+          onClick: () => {
+            onReset();
+          },
+          disabled: !enableResetButton,
+          accessibleWhenDisabled: true,
+          __next40pxDefaultSize: true,
+          children: (0,external_wp_i18n_namespaceObject.__)('Reset')
+        })
+      })]
+    })
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown, {
     renderToggle: renderToggle,
@@ -40502,6 +40973,7 @@ function UnitSelectControl({
 
 
 
+
 function UnforwardedUnitControl(unitControlProps, forwardedRef) {
   const {
     __unstableStateReducer,
@@ -40522,8 +40994,15 @@ function UnforwardedUnitControl(unitControlProps, forwardedRef) {
     units: unitsProp = CSS_UNITS,
     value: valueProp,
     onFocus: onFocusProp,
+    __shouldNotWarnDeprecated36pxSize,
     ...props
   } = useDeprecated36pxDefaultSizeProp(unitControlProps);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'UnitControl',
+    __next40pxDefaultSize: props.__next40pxDefaultSize,
+    size,
+    __shouldNotWarnDeprecated36pxSize
+  });
   if ('unit' in unitControlProps) {
     external_wp_deprecated_default()('UnitControl unit prop', {
       since: '5.6',
@@ -40626,6 +41105,7 @@ function UnforwardedUnitControl(unitControlProps, forwardedRef) {
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ValueInput, {
     ...props,
+    __shouldNotWarnDeprecated36pxSize: true,
     autoComplete: autoComplete,
     className: classes,
     disabled: disabled,
@@ -40656,33 +41136,13 @@ function UnforwardedUnitControl(unitControlProps, forwardedRef) {
  * const Example = () => {
  *   const [ value, setValue ] = useState( '10px' );
  *
- *   return <UnitControl onChange={ setValue } value={ value } />;
+ *   return <UnitControl __next40pxDefaultSize onChange={ setValue } value={ value } />;
  * };
  * ```
  */
 const UnitControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedUnitControl);
 
 /* harmony default export */ const unit_control = (UnitControl);
-
-;// ./packages/components/build-module/utils/deprecated-36px-size.js
-/**
- * WordPress dependencies
- */
-
-function maybeWarnDeprecated36pxSize({
-  componentName,
-  __next40pxDefaultSize,
-  size
-}) {
-  if (__next40pxDefaultSize || size !== undefined && size !== 'default') {
-    return;
-  }
-  external_wp_deprecated_default()(`36px default size for wp.components.${componentName}`, {
-    since: '6.8',
-    version: '7.1',
-    hint: 'Set the `__next40pxDefaultSize` prop to true to start opting into the new default size, which will become the default in a future version.'
-  });
-}
 
 ;// ./packages/components/build-module/border-control/border-control/hook.js
 /**
@@ -40720,12 +41180,14 @@ function useBorderControl(props) {
     width,
     __experimentalIsRenderedInSidebar = false,
     __next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize,
     ...otherProps
   } = useContextSystem(props, 'BorderControl');
   maybeWarnDeprecated36pxSize({
     componentName: 'BorderControl',
     __next40pxDefaultSize,
-    size
+    size,
+    __shouldNotWarnDeprecated36pxSize
   });
   const computedSize = size === 'default' && __next40pxDefaultSize ? '__unstable-large' : size;
   const [widthValue, originalWidthUnit] = parseQuantityAndUnitFromRawValue(border?.width);
@@ -40899,6 +41361,8 @@ const UnconnectedBorderControl = (props, forwardedRef) => {
       spacing: 4,
       className: innerWrapperClassName,
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(unit_control, {
+        __next40pxDefaultSize: __next40pxDefaultSize,
+        __shouldNotWarnDeprecated36pxSize: true,
         prefix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
           marginRight: 1,
           marginBottom: 0,
@@ -40937,7 +41401,8 @@ const UnconnectedBorderControl = (props, forwardedRef) => {
         step: ['px', '%'].includes(widthUnit) ? 1 : 0.1,
         value: widthValue || undefined,
         withInputField: false,
-        __next40pxDefaultSize: __next40pxDefaultSize
+        __next40pxDefaultSize: __next40pxDefaultSize,
+        __shouldNotWarnDeprecated36pxSize: true
       })]
     })]
   });
@@ -41244,13 +41709,14 @@ const BorderBoxControlSplitControls = (props, forwardedRef) => {
     enableStyle,
     isCompact: true,
     __experimentalIsRenderedInSidebar,
-    size
+    size,
+    __shouldNotWarnDeprecated36pxSize: true
   };
   const mergedRef = (0,external_wp_compose_namespaceObject.useMergeRefs)([setPopoverAnchor, forwardedRef]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(grid_component, {
     ...otherProps,
     ref: mergedRef,
-    gap: 4,
+    gap: 3,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(border_box_control_visualizer_component, {
       value: value,
       size: size
@@ -41695,6 +42161,7 @@ const UnconnectedBorderBoxControl = (props, forwardedRef) => {
         withSlider: true,
         width: size === '__unstable-large' ? '116px' : '110px',
         __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
+        __shouldNotWarnDeprecated36pxSize: true,
         size: size
       }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(border_box_control_split_controls_component, {
         colors: colors,
@@ -41757,6 +42224,381 @@ const UnconnectedBorderBoxControl = (props, forwardedRef) => {
  */
 const BorderBoxControl = contextConnect(UnconnectedBorderBoxControl, 'BorderBoxControl');
 /* harmony default export */ const border_box_control_component = (BorderBoxControl);
+
+;// ./packages/icons/build-module/library/settings.js
+/**
+ * WordPress dependencies
+ */
+
+
+const settings = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "m19 7.5h-7.628c-.3089-.87389-1.1423-1.5-2.122-1.5-.97966 0-1.81309.62611-2.12197 1.5h-2.12803v1.5h2.12803c.30888.87389 1.14231 1.5 2.12197 1.5.9797 0 1.8131-.62611 2.122-1.5h7.628z"
+  }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "m19 15h-2.128c-.3089-.8739-1.1423-1.5-2.122-1.5s-1.8131.6261-2.122 1.5h-7.628v1.5h7.628c.3089.8739 1.1423 1.5 2.122 1.5s1.8131-.6261 2.122-1.5h2.128z"
+  })]
+});
+/* harmony default export */ const library_settings = (settings);
+
+;// ./packages/components/build-module/box-control/utils.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const CUSTOM_VALUE_SETTINGS = {
+  px: {
+    max: 300,
+    step: 1
+  },
+  '%': {
+    max: 100,
+    step: 1
+  },
+  vw: {
+    max: 100,
+    step: 1
+  },
+  vh: {
+    max: 100,
+    step: 1
+  },
+  em: {
+    max: 10,
+    step: 0.1
+  },
+  rm: {
+    max: 10,
+    step: 0.1
+  },
+  svw: {
+    max: 100,
+    step: 1
+  },
+  lvw: {
+    max: 100,
+    step: 1
+  },
+  dvw: {
+    max: 100,
+    step: 1
+  },
+  svh: {
+    max: 100,
+    step: 1
+  },
+  lvh: {
+    max: 100,
+    step: 1
+  },
+  dvh: {
+    max: 100,
+    step: 1
+  },
+  vi: {
+    max: 100,
+    step: 1
+  },
+  svi: {
+    max: 100,
+    step: 1
+  },
+  lvi: {
+    max: 100,
+    step: 1
+  },
+  dvi: {
+    max: 100,
+    step: 1
+  },
+  vb: {
+    max: 100,
+    step: 1
+  },
+  svb: {
+    max: 100,
+    step: 1
+  },
+  lvb: {
+    max: 100,
+    step: 1
+  },
+  dvb: {
+    max: 100,
+    step: 1
+  },
+  vmin: {
+    max: 100,
+    step: 1
+  },
+  svmin: {
+    max: 100,
+    step: 1
+  },
+  lvmin: {
+    max: 100,
+    step: 1
+  },
+  dvmin: {
+    max: 100,
+    step: 1
+  },
+  vmax: {
+    max: 100,
+    step: 1
+  },
+  svmax: {
+    max: 100,
+    step: 1
+  },
+  lvmax: {
+    max: 100,
+    step: 1
+  },
+  dvmax: {
+    max: 100,
+    step: 1
+  }
+};
+const LABELS = {
+  all: (0,external_wp_i18n_namespaceObject.__)('All sides'),
+  top: (0,external_wp_i18n_namespaceObject.__)('Top side'),
+  bottom: (0,external_wp_i18n_namespaceObject.__)('Bottom side'),
+  left: (0,external_wp_i18n_namespaceObject.__)('Left side'),
+  right: (0,external_wp_i18n_namespaceObject.__)('Right side'),
+  vertical: (0,external_wp_i18n_namespaceObject.__)('Top and bottom sides'),
+  horizontal: (0,external_wp_i18n_namespaceObject.__)('Left and right sides')
+};
+const DEFAULT_VALUES = {
+  top: undefined,
+  right: undefined,
+  bottom: undefined,
+  left: undefined
+};
+const ALL_SIDES = ['top', 'right', 'bottom', 'left'];
+
+/**
+ * Gets an items with the most occurrence within an array
+ * https://stackoverflow.com/a/20762713
+ *
+ * @param arr Array of items to check.
+ * @return The item with the most occurrences.
+ */
+function utils_mode(arr) {
+  return arr.sort((a, b) => arr.filter(v => v === a).length - arr.filter(v => v === b).length).pop();
+}
+
+/**
+ * Gets the merged input value and unit from values data.
+ *
+ * @param values         Box values.
+ * @param availableSides Available box sides to evaluate.
+ *
+ * @return A value + unit for the 'all' input.
+ */
+function getMergedValue(values = {}, availableSides = ALL_SIDES) {
+  const sides = normalizeSides(availableSides);
+  if (sides.every(side => values[side] === values[sides[0]])) {
+    return values[sides[0]];
+  }
+  return undefined;
+}
+
+/**
+ * Checks if the values are mixed.
+ *
+ * @param values         Box values.
+ * @param availableSides Available box sides to evaluate.
+ * @return Whether the values are mixed.
+ */
+function isValueMixed(values = {}, availableSides = ALL_SIDES) {
+  const sides = normalizeSides(availableSides);
+  return sides.some(side => values[side] !== values[sides[0]]);
+}
+
+/**
+ * Determine the most common unit selection to use as a fallback option.
+ *
+ * @param selectedUnits Current unit selections for individual sides.
+ * @return  Most common unit selection.
+ */
+function getAllUnitFallback(selectedUnits) {
+  if (!selectedUnits || typeof selectedUnits !== 'object') {
+    return undefined;
+  }
+  const filteredUnits = Object.values(selectedUnits).filter(Boolean);
+  return utils_mode(filteredUnits);
+}
+
+/**
+ * Checks to determine if values are defined.
+ *
+ * @param values Box values.
+ *
+ * @return  Whether values are mixed.
+ */
+function isValuesDefined(values) {
+  return values && Object.values(values).filter(
+  // Switching units when input is empty causes values only
+  // containing units. This gives false positive on mixed values
+  // unless filtered.
+  value => !!value && /\d/.test(value)).length > 0;
+}
+
+/**
+ * Get initial selected side, factoring in whether the sides are linked,
+ * and whether the vertical / horizontal directions are grouped via splitOnAxis.
+ *
+ * @param isLinked    Whether the box control's fields are linked.
+ * @param splitOnAxis Whether splitting by horizontal or vertical axis.
+ * @return The initial side.
+ */
+function getInitialSide(isLinked, splitOnAxis) {
+  let initialSide = 'all';
+  if (!isLinked) {
+    initialSide = splitOnAxis ? 'vertical' : 'top';
+  }
+  return initialSide;
+}
+
+/**
+ * Normalizes provided sides configuration to an array containing only top,
+ * right, bottom and left. This essentially just maps `horizontal` or `vertical`
+ * to their appropriate sides to facilitate correctly determining value for
+ * all input control.
+ *
+ * @param sides Available sides for box control.
+ * @return Normalized sides configuration.
+ */
+function normalizeSides(sides) {
+  const filteredSides = [];
+  if (!sides?.length) {
+    return ALL_SIDES;
+  }
+  if (sides.includes('vertical')) {
+    filteredSides.push(...['top', 'bottom']);
+  } else if (sides.includes('horizontal')) {
+    filteredSides.push(...['left', 'right']);
+  } else {
+    const newSides = ALL_SIDES.filter(side => sides.includes(side));
+    filteredSides.push(...newSides);
+  }
+  return filteredSides;
+}
+
+/**
+ * Applies a value to an object representing top, right, bottom and left sides
+ * while taking into account any custom side configuration.
+ *
+ * @deprecated
+ *
+ * @param currentValues The current values for each side.
+ * @param newValue      The value to apply to the sides object.
+ * @param sides         Array defining valid sides.
+ *
+ * @return Object containing the updated values for each side.
+ */
+function applyValueToSides(currentValues, newValue, sides) {
+  external_wp_deprecated_default()('applyValueToSides', {
+    since: '6.8',
+    version: '7.0'
+  });
+  const newValues = {
+    ...currentValues
+  };
+  if (sides?.length) {
+    sides.forEach(side => {
+      if (side === 'vertical') {
+        newValues.top = newValue;
+        newValues.bottom = newValue;
+      } else if (side === 'horizontal') {
+        newValues.left = newValue;
+        newValues.right = newValue;
+      } else {
+        newValues[side] = newValue;
+      }
+    });
+  } else {
+    ALL_SIDES.forEach(side => newValues[side] = newValue);
+  }
+  return newValues;
+}
+
+/**
+ * Return the allowed sides based on the sides configuration.
+ *
+ * @param sides Sides configuration.
+ * @return Allowed sides.
+ */
+function getAllowedSides(sides) {
+  const allowedSides = new Set(!sides ? ALL_SIDES : []);
+  sides?.forEach(allowedSide => {
+    if (allowedSide === 'vertical') {
+      allowedSides.add('top');
+      allowedSides.add('bottom');
+    } else if (allowedSide === 'horizontal') {
+      allowedSides.add('right');
+      allowedSides.add('left');
+    } else {
+      allowedSides.add(allowedSide);
+    }
+  });
+  return allowedSides;
+}
+
+/**
+ * Checks if a value is a preset value.
+ *
+ * @param value     The value to check.
+ * @param presetKey The preset key to check against.
+ * @return Whether the value is a preset value.
+ */
+function isValuePreset(value, presetKey) {
+  return value.startsWith(`var:preset|${presetKey}|`);
+}
+
+/**
+ * Returns the index of the preset value in the presets array.
+ *
+ * @param value     The value to check.
+ * @param presetKey The preset key to check against.
+ * @param presets   The array of presets to search.
+ * @return The index of the preset value in the presets array.
+ */
+function getPresetIndexFromValue(value, presetKey, presets) {
+  if (!isValuePreset(value, presetKey)) {
+    return undefined;
+  }
+  const match = value.match(new RegExp(`^var:preset\\|${presetKey}\\|(.+)$`));
+  if (!match) {
+    return undefined;
+  }
+  const slug = match[1];
+  const index = presets.findIndex(preset => {
+    return preset.slug === slug;
+  });
+  return index !== -1 ? index : undefined;
+}
+
+/**
+ * Returns the preset value from the index.
+ *
+ * @param index     The index of the preset value in the presets array.
+ * @param presetKey The preset key to check against.
+ * @param presets   The array of presets to search.
+ * @return The preset value from the index.
+ */
+function getPresetValueFromIndex(index, presetKey, presets) {
+  const preset = presets[index];
+  return `var:preset|${presetKey}|${preset.slug}`;
+}
 
 ;// ./packages/components/build-module/box-control/styles/box-control-icon-styles.js
 
@@ -41922,320 +42764,14 @@ const FlexedRangeControl = /*#__PURE__*/emotion_styled_base_browser_esm(range_co
   target: "e1jovhle0"
 } : 0)("width:100%;margin-inline-end:", space(2), ";" + ( true ? "" : 0));
 
-;// ./packages/components/build-module/box-control/utils.js
+;// ./packages/components/build-module/box-control/input-control.js
 /**
  * WordPress dependencies
  */
 
 
-/**
- * Internal dependencies
- */
 
-const CUSTOM_VALUE_SETTINGS = {
-  px: {
-    max: 300,
-    step: 1
-  },
-  '%': {
-    max: 100,
-    step: 1
-  },
-  vw: {
-    max: 100,
-    step: 1
-  },
-  vh: {
-    max: 100,
-    step: 1
-  },
-  em: {
-    max: 10,
-    step: 0.1
-  },
-  rm: {
-    max: 10,
-    step: 0.1
-  },
-  svw: {
-    max: 100,
-    step: 1
-  },
-  lvw: {
-    max: 100,
-    step: 1
-  },
-  dvw: {
-    max: 100,
-    step: 1
-  },
-  svh: {
-    max: 100,
-    step: 1
-  },
-  lvh: {
-    max: 100,
-    step: 1
-  },
-  dvh: {
-    max: 100,
-    step: 1
-  },
-  vi: {
-    max: 100,
-    step: 1
-  },
-  svi: {
-    max: 100,
-    step: 1
-  },
-  lvi: {
-    max: 100,
-    step: 1
-  },
-  dvi: {
-    max: 100,
-    step: 1
-  },
-  vb: {
-    max: 100,
-    step: 1
-  },
-  svb: {
-    max: 100,
-    step: 1
-  },
-  lvb: {
-    max: 100,
-    step: 1
-  },
-  dvb: {
-    max: 100,
-    step: 1
-  },
-  vmin: {
-    max: 100,
-    step: 1
-  },
-  svmin: {
-    max: 100,
-    step: 1
-  },
-  lvmin: {
-    max: 100,
-    step: 1
-  },
-  dvmin: {
-    max: 100,
-    step: 1
-  },
-  vmax: {
-    max: 100,
-    step: 1
-  },
-  svmax: {
-    max: 100,
-    step: 1
-  },
-  lvmax: {
-    max: 100,
-    step: 1
-  },
-  dvmax: {
-    max: 100,
-    step: 1
-  }
-};
-const LABELS = {
-  all: (0,external_wp_i18n_namespaceObject.__)('All sides'),
-  top: (0,external_wp_i18n_namespaceObject.__)('Top side'),
-  bottom: (0,external_wp_i18n_namespaceObject.__)('Bottom side'),
-  left: (0,external_wp_i18n_namespaceObject.__)('Left side'),
-  right: (0,external_wp_i18n_namespaceObject.__)('Right side'),
-  mixed: (0,external_wp_i18n_namespaceObject.__)('Mixed'),
-  vertical: (0,external_wp_i18n_namespaceObject.__)('Top and bottom sides'),
-  horizontal: (0,external_wp_i18n_namespaceObject.__)('Left and right sides')
-};
-const DEFAULT_VALUES = {
-  top: undefined,
-  right: undefined,
-  bottom: undefined,
-  left: undefined
-};
-const ALL_SIDES = ['top', 'right', 'bottom', 'left'];
 
-/**
- * Gets an items with the most occurrence within an array
- * https://stackoverflow.com/a/20762713
- *
- * @param arr Array of items to check.
- * @return The item with the most occurrences.
- */
-function utils_mode(arr) {
-  return arr.sort((a, b) => arr.filter(v => v === a).length - arr.filter(v => v === b).length).pop();
-}
-
-/**
- * Gets the 'all' input value and unit from values data.
- *
- * @param values         Box values.
- * @param selectedUnits  Box units.
- * @param availableSides Available box sides to evaluate.
- *
- * @return A value + unit for the 'all' input.
- */
-function getAllValue(values = {}, selectedUnits, availableSides = ALL_SIDES) {
-  const sides = normalizeSides(availableSides);
-  const parsedQuantitiesAndUnits = sides.map(side => parseQuantityAndUnitFromRawValue(values[side]));
-  const allParsedQuantities = parsedQuantitiesAndUnits.map(value => {
-    var _value$;
-    return (_value$ = value[0]) !== null && _value$ !== void 0 ? _value$ : '';
-  });
-  const allParsedUnits = parsedQuantitiesAndUnits.map(value => value[1]);
-  const commonQuantity = allParsedQuantities.every(v => v === allParsedQuantities[0]) ? allParsedQuantities[0] : '';
-
-  /**
-   * The typeof === 'number' check is important. On reset actions, the incoming value
-   * may be null or an empty string.
-   *
-   * Also, the value may also be zero (0), which is considered a valid unit value.
-   *
-   * typeof === 'number' is more specific for these cases, rather than relying on a
-   * simple truthy check.
-   */
-  let commonUnit;
-  if (typeof commonQuantity === 'number') {
-    commonUnit = utils_mode(allParsedUnits);
-  } else {
-    var _getAllUnitFallback;
-    // Set meaningful unit selection if no commonQuantity and user has previously
-    // selected units without assigning values while controls were unlinked.
-    commonUnit = (_getAllUnitFallback = getAllUnitFallback(selectedUnits)) !== null && _getAllUnitFallback !== void 0 ? _getAllUnitFallback : utils_mode(allParsedUnits);
-  }
-  return [commonQuantity, commonUnit].join('');
-}
-
-/**
- * Determine the most common unit selection to use as a fallback option.
- *
- * @param selectedUnits Current unit selections for individual sides.
- * @return  Most common unit selection.
- */
-function getAllUnitFallback(selectedUnits) {
-  if (!selectedUnits || typeof selectedUnits !== 'object') {
-    return undefined;
-  }
-  const filteredUnits = Object.values(selectedUnits).filter(Boolean);
-  return utils_mode(filteredUnits);
-}
-
-/**
- * Checks to determine if values are mixed.
- *
- * @param values        Box values.
- * @param selectedUnits Box units.
- * @param sides         Available box sides to evaluate.
- *
- * @return Whether values are mixed.
- */
-function isValuesMixed(values = {}, selectedUnits, sides = ALL_SIDES) {
-  const allValue = getAllValue(values, selectedUnits, sides);
-  const isMixed = isNaN(parseFloat(allValue));
-  return isMixed;
-}
-
-/**
- * Checks to determine if values are defined.
- *
- * @param values Box values.
- *
- * @return  Whether values are mixed.
- */
-function isValuesDefined(values) {
-  return values && Object.values(values).filter(
-  // Switching units when input is empty causes values only
-  // containing units. This gives false positive on mixed values
-  // unless filtered.
-  value => !!value && /\d/.test(value)).length > 0;
-}
-
-/**
- * Get initial selected side, factoring in whether the sides are linked,
- * and whether the vertical / horizontal directions are grouped via splitOnAxis.
- *
- * @param isLinked    Whether the box control's fields are linked.
- * @param splitOnAxis Whether splitting by horizontal or vertical axis.
- * @return The initial side.
- */
-function getInitialSide(isLinked, splitOnAxis) {
-  let initialSide = 'all';
-  if (!isLinked) {
-    initialSide = splitOnAxis ? 'vertical' : 'top';
-  }
-  return initialSide;
-}
-
-/**
- * Normalizes provided sides configuration to an array containing only top,
- * right, bottom and left. This essentially just maps `horizontal` or `vertical`
- * to their appropriate sides to facilitate correctly determining value for
- * all input control.
- *
- * @param sides Available sides for box control.
- * @return Normalized sides configuration.
- */
-function normalizeSides(sides) {
-  const filteredSides = [];
-  if (!sides?.length) {
-    return ALL_SIDES;
-  }
-  if (sides.includes('vertical')) {
-    filteredSides.push(...['top', 'bottom']);
-  } else if (sides.includes('horizontal')) {
-    filteredSides.push(...['left', 'right']);
-  } else {
-    const newSides = ALL_SIDES.filter(side => sides.includes(side));
-    filteredSides.push(...newSides);
-  }
-  return filteredSides;
-}
-
-/**
- * Applies a value to an object representing top, right, bottom and left sides
- * while taking into account any custom side configuration.
- *
- * @param currentValues The current values for each side.
- * @param newValue      The value to apply to the sides object.
- * @param sides         Array defining valid sides.
- *
- * @return Object containing the updated values for each side.
- */
-function applyValueToSides(currentValues, newValue, sides) {
-  const newValues = {
-    ...currentValues
-  };
-  if (sides?.length) {
-    sides.forEach(side => {
-      if (side === 'vertical') {
-        newValues.top = newValue;
-        newValues.bottom = newValue;
-      } else if (side === 'horizontal') {
-        newValues.left = newValue;
-        newValues.right = newValue;
-      } else {
-        newValues[side] = newValue;
-      }
-    });
-  } else {
-    ALL_SIDES.forEach(side => newValues[side] = newValue);
-  }
-  return newValues;
-}
-
-;// ./packages/components/build-module/box-control/all-input-control.js
-/**
- * WordPress dependencies
- */
 
 /**
  * Internal dependencies
@@ -42245,102 +42781,59 @@ function applyValueToSides(currentValues, newValue, sides) {
 
 
 
-const all_input_control_noop = () => {};
-function AllInputControl({
+
+const box_control_input_control_noop = () => {};
+function getSidesToModify(side, sides, isAlt) {
+  const allowedSides = getAllowedSides(sides);
+  let modifiedSides = [];
+  switch (side) {
+    case 'all':
+      modifiedSides = ['top', 'bottom', 'left', 'right'];
+      break;
+    case 'horizontal':
+      modifiedSides = ['left', 'right'];
+      break;
+    case 'vertical':
+      modifiedSides = ['top', 'bottom'];
+      break;
+    default:
+      modifiedSides = [side];
+  }
+  if (isAlt) {
+    switch (side) {
+      case 'top':
+        modifiedSides.push('bottom');
+        break;
+      case 'bottom':
+        modifiedSides.push('top');
+        break;
+      case 'left':
+        modifiedSides.push('left');
+        break;
+      case 'right':
+        modifiedSides.push('right');
+        break;
+    }
+  }
+  return modifiedSides.filter(s => allowedSides.has(s));
+}
+function BoxInputControl({
   __next40pxDefaultSize,
-  onChange = all_input_control_noop,
-  onFocus = all_input_control_noop,
+  onChange = box_control_input_control_noop,
+  onFocus = box_control_input_control_noop,
   values,
-  sides,
   selectedUnits,
   setSelectedUnits,
+  sides,
+  side,
+  min = 0,
+  presets,
+  presetKey,
   ...props
 }) {
   var _CUSTOM_VALUE_SETTING, _CUSTOM_VALUE_SETTING2;
-  const inputId = (0,external_wp_compose_namespaceObject.useInstanceId)(AllInputControl, 'box-control-input-all');
-  const allValue = getAllValue(values, selectedUnits, sides);
-  const hasValues = isValuesDefined(values);
-  const isMixed = hasValues && isValuesMixed(values, selectedUnits, sides);
-  const allPlaceholder = isMixed ? LABELS.mixed : undefined;
-  const [parsedQuantity, parsedUnit] = parseQuantityAndUnitFromRawValue(allValue);
+  const defaultValuesToModify = getSidesToModify(side, sides);
   const handleOnFocus = event => {
-    onFocus(event, {
-      side: 'all'
-    });
-  };
-  const onValueChange = next => {
-    const isNumeric = next !== undefined && !isNaN(parseFloat(next));
-    const nextValue = isNumeric ? next : undefined;
-    const nextValues = applyValueToSides(values, nextValue, sides);
-    onChange(nextValues);
-  };
-  const sliderOnChange = next => {
-    onValueChange(next !== undefined ? [next, parsedUnit].join('') : undefined);
-  };
-
-  // Set selected unit so it can be used as fallback by unlinked controls
-  // when individual sides do not have a value containing a unit.
-  const handleOnUnitChange = unit => {
-    const newUnits = applyValueToSides(selectedUnits, unit, sides);
-    setSelectedUnits(newUnits);
-  };
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledUnitControl, {
-      ...props,
-      __next40pxDefaultSize: __next40pxDefaultSize,
-      className: "component-box-control__unit-control",
-      disableUnits: isMixed,
-      id: inputId,
-      isPressEnterToChange: true,
-      value: allValue,
-      onChange: onValueChange,
-      onUnitChange: handleOnUnitChange,
-      onFocus: handleOnFocus,
-      placeholder: allPlaceholder,
-      label: LABELS.all,
-      hideLabelFromVision: true
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedRangeControl, {
-      __nextHasNoMarginBottom: true,
-      __next40pxDefaultSize: __next40pxDefaultSize,
-      "aria-controls": inputId,
-      label: LABELS.all,
-      hideLabelFromVision: true,
-      onChange: sliderOnChange,
-      min: 0,
-      max: (_CUSTOM_VALUE_SETTING = CUSTOM_VALUE_SETTINGS[parsedUnit !== null && parsedUnit !== void 0 ? parsedUnit : 'px']?.max) !== null && _CUSTOM_VALUE_SETTING !== void 0 ? _CUSTOM_VALUE_SETTING : 10,
-      step: (_CUSTOM_VALUE_SETTING2 = CUSTOM_VALUE_SETTINGS[parsedUnit !== null && parsedUnit !== void 0 ? parsedUnit : 'px']?.step) !== null && _CUSTOM_VALUE_SETTING2 !== void 0 ? _CUSTOM_VALUE_SETTING2 : 0.1,
-      value: parsedQuantity !== null && parsedQuantity !== void 0 ? parsedQuantity : 0,
-      withInputField: false
-    })]
-  });
-}
-
-;// ./packages/components/build-module/box-control/input-controls.js
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-const input_controls_noop = () => {};
-function BoxInputControls({
-  __next40pxDefaultSize,
-  onChange = input_controls_noop,
-  onFocus = input_controls_noop,
-  values,
-  selectedUnits,
-  setSelectedUnits,
-  sides,
-  ...props
-}) {
-  const generatedId = (0,external_wp_compose_namespaceObject.useInstanceId)(BoxInputControls, 'box-control-input');
-  const createHandleOnFocus = side => event => {
     onFocus(event, {
       side
     });
@@ -42348,14 +42841,22 @@ function BoxInputControls({
   const handleOnChange = nextValues => {
     onChange(nextValues);
   };
-  const handleOnValueChange = (side, next, extra) => {
+  const handleRawOnValueChange = next => {
+    const nextValues = {
+      ...values
+    };
+    defaultValuesToModify.forEach(modifiedSide => {
+      nextValues[modifiedSide] = next;
+    });
+    handleOnChange(nextValues);
+  };
+  const handleOnValueChange = (next, extra) => {
     const nextValues = {
       ...values
     };
     const isNumeric = next !== undefined && !isNaN(parseFloat(next));
     const nextValue = isNumeric ? next : undefined;
-    nextValues[side] = nextValue;
-
+    const modifiedSides = getSidesToModify(side, sides,
     /**
      * Supports changing pair sides. For example, holding the ALT key
      * when changing the TOP will also update BOTTOM.
@@ -42363,194 +42864,118 @@ function BoxInputControls({
     // @ts-expect-error - TODO: event.altKey is only present when the change event was
     // triggered by a keyboard event. Should this feature be implemented differently so
     // it also works with drag events?
-    if (extra?.event.altKey) {
-      switch (side) {
-        case 'top':
-          nextValues.bottom = nextValue;
-          break;
-        case 'bottom':
-          nextValues.top = nextValue;
-          break;
-        case 'left':
-          nextValues.right = nextValue;
-          break;
-        case 'right':
-          nextValues.left = nextValue;
-          break;
-      }
-    }
+    !!extra?.event.altKey);
+    modifiedSides.forEach(modifiedSide => {
+      nextValues[modifiedSide] = nextValue;
+    });
     handleOnChange(nextValues);
   };
-  const createHandleOnUnitChange = side => next => {
+  const handleOnUnitChange = next => {
     const newUnits = {
       ...selectedUnits
     };
-    newUnits[side] = next;
-    setSelectedUnits(newUnits);
-  };
-
-  // Filter sides if custom configuration provided, maintaining default order.
-  const filteredSides = sides?.length ? ALL_SIDES.filter(side => sides.includes(side)) : ALL_SIDES;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: filteredSides.map(side => {
-      var _CUSTOM_VALUE_SETTING, _CUSTOM_VALUE_SETTING2;
-      const [parsedQuantity, parsedUnit] = parseQuantityAndUnitFromRawValue(values[side]);
-      const computedUnit = values[side] ? parsedUnit : selectedUnits[side];
-      const inputId = [generatedId, side].join('-');
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InputWrapper, {
-        expanded: true,
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedBoxControlIcon, {
-          side: side,
-          sides: sides
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-          placement: "top-end",
-          text: LABELS[side],
-          children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledUnitControl, {
-            ...props,
-            __next40pxDefaultSize: __next40pxDefaultSize,
-            className: "component-box-control__unit-control",
-            id: inputId,
-            isPressEnterToChange: true,
-            value: [parsedQuantity, computedUnit].join(''),
-            onChange: (nextValue, extra) => handleOnValueChange(side, nextValue, extra),
-            onUnitChange: createHandleOnUnitChange(side),
-            onFocus: createHandleOnFocus(side),
-            label: LABELS[side],
-            hideLabelFromVision: true
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedRangeControl, {
-          __nextHasNoMarginBottom: true,
-          __next40pxDefaultSize: __next40pxDefaultSize,
-          "aria-controls": inputId,
-          label: LABELS[side],
-          hideLabelFromVision: true,
-          onChange: newValue => {
-            handleOnValueChange(side, newValue !== undefined ? [newValue, computedUnit].join('') : undefined);
-          },
-          min: 0,
-          max: (_CUSTOM_VALUE_SETTING = CUSTOM_VALUE_SETTINGS[computedUnit !== null && computedUnit !== void 0 ? computedUnit : 'px']?.max) !== null && _CUSTOM_VALUE_SETTING !== void 0 ? _CUSTOM_VALUE_SETTING : 10,
-          step: (_CUSTOM_VALUE_SETTING2 = CUSTOM_VALUE_SETTINGS[computedUnit !== null && computedUnit !== void 0 ? computedUnit : 'px']?.step) !== null && _CUSTOM_VALUE_SETTING2 !== void 0 ? _CUSTOM_VALUE_SETTING2 : 0.1,
-          value: parsedQuantity !== null && parsedQuantity !== void 0 ? parsedQuantity : 0,
-          withInputField: false
-        })]
-      }, `box-control-${side}`);
-    })
-  });
-}
-
-;// ./packages/components/build-module/box-control/axial-input-controls.js
-/**
- * WordPress dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-const groupedSides = ['vertical', 'horizontal'];
-function AxialInputControls({
-  __next40pxDefaultSize,
-  onChange,
-  onFocus,
-  values,
-  selectedUnits,
-  setSelectedUnits,
-  sides,
-  ...props
-}) {
-  const generatedId = (0,external_wp_compose_namespaceObject.useInstanceId)(AxialInputControls, `box-control-input`);
-  const createHandleOnFocus = side => event => {
-    if (!onFocus) {
-      return;
-    }
-    onFocus(event, {
-      side
+    defaultValuesToModify.forEach(modifiedSide => {
+      newUnits[modifiedSide] = next;
     });
-  };
-  const handleOnValueChange = (side, next) => {
-    if (!onChange) {
-      return;
-    }
-    const nextValues = {
-      ...values
-    };
-    const isNumeric = next !== undefined && !isNaN(parseFloat(next));
-    const nextValue = isNumeric ? next : undefined;
-    if (side === 'vertical') {
-      nextValues.top = nextValue;
-      nextValues.bottom = nextValue;
-    }
-    if (side === 'horizontal') {
-      nextValues.left = nextValue;
-      nextValues.right = nextValue;
-    }
-    onChange(nextValues);
-  };
-  const createHandleOnUnitChange = side => next => {
-    const newUnits = {
-      ...selectedUnits
-    };
-    if (side === 'vertical') {
-      newUnits.top = next;
-      newUnits.bottom = next;
-    }
-    if (side === 'horizontal') {
-      newUnits.left = next;
-      newUnits.right = next;
-    }
     setSelectedUnits(newUnits);
   };
-
-  // Filter sides if custom configuration provided, maintaining default order.
-  const filteredSides = sides?.length ? groupedSides.filter(side => sides.includes(side)) : groupedSides;
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: filteredSides.map(side => {
-      var _CUSTOM_VALUE_SETTING, _CUSTOM_VALUE_SETTING2;
-      const [parsedQuantity, parsedUnit] = parseQuantityAndUnitFromRawValue(side === 'vertical' ? values.top : values.left);
-      const selectedUnit = side === 'vertical' ? selectedUnits.top : selectedUnits.left;
-      const inputId = [generatedId, side].join('-');
-      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InputWrapper, {
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedBoxControlIcon, {
-          side: side,
-          sides: sides
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-          placement: "top-end",
-          text: LABELS[side],
-          children: /*#__PURE__*/(0,external_React_.createElement)(StyledUnitControl, {
-            ...props,
-            __next40pxDefaultSize: __next40pxDefaultSize,
-            className: "component-box-control__unit-control",
-            id: inputId,
-            isPressEnterToChange: true,
-            value: [parsedQuantity, selectedUnit !== null && selectedUnit !== void 0 ? selectedUnit : parsedUnit].join(''),
-            onChange: newValue => handleOnValueChange(side, newValue),
-            onUnitChange: createHandleOnUnitChange(side),
-            onFocus: createHandleOnFocus(side),
-            label: LABELS[side],
-            hideLabelFromVision: true,
-            key: side
-          })
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedRangeControl, {
-          __nextHasNoMarginBottom: true,
+  const mergedValue = getMergedValue(values, defaultValuesToModify);
+  const hasValues = isValuesDefined(values);
+  const isMixed = hasValues && defaultValuesToModify.length > 1 && isValueMixed(values, defaultValuesToModify);
+  const [parsedQuantity, parsedUnit] = parseQuantityAndUnitFromRawValue(mergedValue);
+  const computedUnit = hasValues ? parsedUnit : selectedUnits[defaultValuesToModify[0]];
+  const generatedId = (0,external_wp_compose_namespaceObject.useInstanceId)(BoxInputControl, 'box-control-input');
+  const inputId = [generatedId, side].join('-');
+  const isMixedUnit = defaultValuesToModify.length > 1 && mergedValue === undefined && defaultValuesToModify.some(s => selectedUnits[s] !== computedUnit);
+  const usedValue = mergedValue === undefined && computedUnit ? computedUnit : mergedValue;
+  const mixedPlaceholder = isMixed || isMixedUnit ? (0,external_wp_i18n_namespaceObject.__)('Mixed') : undefined;
+  const hasPresets = presets && presets.length > 0 && presetKey;
+  const hasPresetValue = hasPresets && mergedValue !== undefined && !isMixed && isValuePreset(mergedValue, presetKey);
+  const [showCustomValueControl, setShowCustomValueControl] = (0,external_wp_element_namespaceObject.useState)(!hasPresets || !hasPresetValue && !isMixed && mergedValue !== undefined);
+  const presetIndex = hasPresetValue ? getPresetIndexFromValue(mergedValue, presetKey, presets) : undefined;
+  const marks = hasPresets ? [{
+    value: 0,
+    label: '',
+    tooltip: (0,external_wp_i18n_namespaceObject.__)('None')
+  }].concat(presets.map((preset, index) => {
+    var _preset$name;
+    return {
+      value: index + 1,
+      label: '',
+      tooltip: (_preset$name = preset.name) !== null && _preset$name !== void 0 ? _preset$name : preset.slug
+    };
+  })) : [];
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InputWrapper, {
+    expanded: true,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedBoxControlIcon, {
+      side: side,
+      sides: sides
+    }), showCustomValueControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
+        placement: "top-end",
+        text: LABELS[side],
+        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(StyledUnitControl, {
+          ...props,
+          min: min,
+          __shouldNotWarnDeprecated36pxSize: true,
           __next40pxDefaultSize: __next40pxDefaultSize,
-          "aria-controls": inputId,
+          className: "component-box-control__unit-control",
+          id: inputId,
+          isPressEnterToChange: true,
+          disableUnits: isMixed || isMixedUnit,
+          value: usedValue,
+          onChange: handleOnValueChange,
+          onUnitChange: handleOnUnitChange,
+          onFocus: handleOnFocus,
           label: LABELS[side],
-          hideLabelFromVision: true,
-          onChange: newValue => handleOnValueChange(side, newValue !== undefined ? [newValue, selectedUnit !== null && selectedUnit !== void 0 ? selectedUnit : parsedUnit].join('') : undefined),
-          min: 0,
-          max: (_CUSTOM_VALUE_SETTING = CUSTOM_VALUE_SETTINGS[selectedUnit !== null && selectedUnit !== void 0 ? selectedUnit : 'px']?.max) !== null && _CUSTOM_VALUE_SETTING !== void 0 ? _CUSTOM_VALUE_SETTING : 10,
-          step: (_CUSTOM_VALUE_SETTING2 = CUSTOM_VALUE_SETTINGS[selectedUnit !== null && selectedUnit !== void 0 ? selectedUnit : 'px']?.step) !== null && _CUSTOM_VALUE_SETTING2 !== void 0 ? _CUSTOM_VALUE_SETTING2 : 0.1,
-          value: parsedQuantity !== null && parsedQuantity !== void 0 ? parsedQuantity : 0,
-          withInputField: false
-        })]
-      }, side);
-    })
-  });
+          placeholder: mixedPlaceholder,
+          hideLabelFromVision: true
+        })
+      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedRangeControl, {
+        __nextHasNoMarginBottom: true,
+        __next40pxDefaultSize: __next40pxDefaultSize,
+        __shouldNotWarnDeprecated36pxSize: true,
+        "aria-controls": inputId,
+        label: LABELS[side],
+        hideLabelFromVision: true,
+        onChange: newValue => {
+          handleOnValueChange(newValue !== undefined ? [newValue, computedUnit].join('') : undefined);
+        },
+        min: isFinite(min) ? min : 0,
+        max: (_CUSTOM_VALUE_SETTING = CUSTOM_VALUE_SETTINGS[computedUnit !== null && computedUnit !== void 0 ? computedUnit : 'px']?.max) !== null && _CUSTOM_VALUE_SETTING !== void 0 ? _CUSTOM_VALUE_SETTING : 10,
+        step: (_CUSTOM_VALUE_SETTING2 = CUSTOM_VALUE_SETTINGS[computedUnit !== null && computedUnit !== void 0 ? computedUnit : 'px']?.step) !== null && _CUSTOM_VALUE_SETTING2 !== void 0 ? _CUSTOM_VALUE_SETTING2 : 0.1,
+        value: parsedQuantity !== null && parsedQuantity !== void 0 ? parsedQuantity : 0,
+        withInputField: false
+      })]
+    }), hasPresets && !showCustomValueControl && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedRangeControl, {
+      __next40pxDefaultSize: true,
+      className: "spacing-sizes-control__range-control",
+      value: presetIndex !== undefined ? presetIndex + 1 : 0,
+      onChange: newIndex => {
+        const newValue = newIndex === 0 || newIndex === undefined ? undefined : getPresetValueFromIndex(newIndex - 1, presetKey, presets);
+        handleRawOnValueChange(newValue);
+      },
+      withInputField: false,
+      "aria-valuenow": presetIndex !== undefined ? presetIndex + 1 : 0,
+      "aria-valuetext": marks[presetIndex !== undefined ? presetIndex + 1 : 0].tooltip,
+      renderTooltipContent: index => marks[!index ? 0 : index].tooltip,
+      min: 0,
+      max: marks.length - 1,
+      marks: marks,
+      label: LABELS[side],
+      hideLabelFromVision: true,
+      __nextHasNoMarginBottom: true
+    }), hasPresets && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      label: showCustomValueControl ? (0,external_wp_i18n_namespaceObject.__)('Use size preset') : (0,external_wp_i18n_namespaceObject.__)('Set custom size'),
+      icon: library_settings,
+      onClick: () => {
+        setShowCustomValueControl(!showCustomValueControl);
+      },
+      isPressed: showCustomValueControl,
+      size: "small",
+      iconSize: 24
+    })]
+  }, `box-control-${side}`);
 }
 
 ;// ./packages/components/build-module/box-control/linked-button.js
@@ -42565,22 +42990,18 @@ function AxialInputControls({
  */
 
 
-
 function LinkedButton({
   isLinked,
   ...props
 }) {
   const label = isLinked ? (0,external_wp_i18n_namespaceObject.__)('Unlink sides') : (0,external_wp_i18n_namespaceObject.__)('Link sides');
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tooltip, {
-    text: label,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-      ...props,
-      className: "component-box-control__linked-button",
-      size: "small",
-      icon: isLinked ? library_link : link_off,
-      iconSize: 24,
-      "aria-label": label
-    })
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+    ...props,
+    className: "component-box-control__linked-button",
+    size: "small",
+    icon: isLinked ? library_link : link_off,
+    iconSize: 24,
+    label: label
   });
 }
 
@@ -42592,10 +43013,10 @@ function LinkedButton({
 
 
 
+
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -42620,23 +43041,24 @@ function box_control_useUniqueId(idProp) {
  * used as an input control for values like `padding` or `margin`.
  *
  * ```jsx
+ * import { useState } from 'react';
  * import { BoxControl } from '@wordpress/components';
- * import { useState } from '@wordpress/element';
  *
  * function Example() {
- * 	const [ values, setValues ] = useState( {
- * 		top: '50px',
- * 		left: '10%',
- * 		right: '10%',
- * 		bottom: '50px',
- * 	} );
+ *   const [ values, setValues ] = useState( {
+ *     top: '50px',
+ *     left: '10%',
+ *     right: '10%',
+ *     bottom: '50px',
+ *   } );
  *
- * 	return (
- * 		<BoxControl
- * 			values={ values }
- * 			onChange={ ( nextValues ) => setValues( nextValues ) }
- * 		/>
- * 	);
+ *   return (
+ *     <BoxControl
+ *       __next40pxDefaultSize
+ *       values={ values }
+ *       onChange={ setValues }
+ *     />
+ *   );
  * };
  * ```
  */
@@ -42652,6 +43074,8 @@ function BoxControl({
   splitOnAxis = false,
   allowReset = true,
   resetValues = DEFAULT_VALUES,
+  presets,
+  presetKey,
   onMouseOver,
   onMouseOut
 }) {
@@ -42662,7 +43086,7 @@ function BoxControl({
   const hasInitialValue = isValuesDefined(valuesProp);
   const hasOneSide = sides?.length === 1;
   const [isDirty, setIsDirty] = (0,external_wp_element_namespaceObject.useState)(hasInitialValue);
-  const [isLinked, setIsLinked] = (0,external_wp_element_namespaceObject.useState)(!hasInitialValue || !isValuesMixed(inputValues) || hasOneSide);
+  const [isLinked, setIsLinked] = (0,external_wp_element_namespaceObject.useState)(!hasInitialValue || !isValueMixed(inputValues) || hasOneSide);
   const [side, setSide] = (0,external_wp_element_namespaceObject.useState)(getInitialSide(isLinked, splitOnAxis));
 
   // Tracking selected units via internal state allows filtering of CSS unit
@@ -42697,6 +43121,8 @@ function BoxControl({
     setIsDirty(false);
   };
   const inputControlProps = {
+    onMouseOver,
+    onMouseOut,
     ...inputProps,
     onChange: handleOnChange,
     onFocus: handleOnFocus,
@@ -42706,10 +43132,21 @@ function BoxControl({
     setSelectedUnits,
     sides,
     values: inputValues,
-    onMouseOver,
-    onMouseOut,
-    __next40pxDefaultSize
+    __next40pxDefaultSize,
+    presets,
+    presetKey
   };
+  maybeWarnDeprecated36pxSize({
+    componentName: 'BoxControl',
+    __next40pxDefaultSize,
+    size: undefined
+  });
+  const sidesToRender = getAllowedSides(sides);
+  if (presets && !presetKey || !presets && presetKey) {
+    const definedProp = presets ? 'presets' : 'presetKey';
+    const missingProp = presets ? 'presetKey' : 'presets';
+     false ? 0 : void 0;
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(grid_component, {
     id: id,
     columns: 3,
@@ -42719,23 +43156,23 @@ function BoxControl({
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BaseControl.VisualLabel, {
       id: headingId,
       children: label
-    }), isLinked && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(InputWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(FlexedBoxControlIcon, {
-        side: side,
-        sides: sides
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AllInputControl, {
+    }), isLinked && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InputWrapper, {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BoxInputControl, {
+        side: "all",
         ...inputControlProps
-      })]
+      })
     }), !hasOneSide && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LinkedButtonWrapper, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(LinkedButton, {
         onClick: toggleLinked,
         isLinked: isLinked
       })
-    }), !isLinked && splitOnAxis && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AxialInputControls, {
+    }), !isLinked && splitOnAxis && ['vertical', 'horizontal'].map(axis => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BoxInputControl, {
+      side: axis,
       ...inputControlProps
-    }), !isLinked && !splitOnAxis && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BoxInputControls, {
+    }, axis)), !isLinked && !splitOnAxis && Array.from(sidesToRender).map(axis => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(BoxInputControl, {
+      side: axis,
       ...inputControlProps
-    }), allowReset && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResetButton, {
+    }, axis)), allowReset && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ResetButton, {
       className: "component-box-control__reset-button",
       variant: "secondary",
       size: "small",
@@ -42758,6 +43195,7 @@ function BoxControl({
  */
 
 
+
 /**
  * Internal dependencies
  */
@@ -42765,9 +43203,16 @@ function BoxControl({
 function UnforwardedButtonGroup(props, ref) {
   const {
     className,
+    __shouldNotWarnDeprecated,
     ...restProps
   } = props;
   const classes = dist_clsx('components-button-group', className);
+  if (!__shouldNotWarnDeprecated) {
+    external_wp_deprecated_default()('wp.components.ButtonGroup', {
+      since: '6.8',
+      alternative: 'wp.components.__experimentalToggleGroupControl'
+    });
+  }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ref: ref,
     role: "group",
@@ -42779,6 +43224,8 @@ function UnforwardedButtonGroup(props, ref) {
 /**
  * ButtonGroup can be used to group any related buttons together. To emphasize
  * related buttons, a group should share a common container.
+ *
+ * @deprecated Use `ToggleGroupControl` instead.
  *
  * ```jsx
  * import { Button, ButtonGroup } from '@wordpress/components';
@@ -43452,13 +43899,13 @@ function UnconnectedCardBody(props, forwardedRef) {
 const CardBody = contextConnect(UnconnectedCardBody, 'CardBody');
 /* harmony default export */ const card_body_component = (CardBody);
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/LOI6GHIP.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/A3CZKICO.js
 "use client";
 
 
 
 // src/separator/separator.tsx
-var LOI6GHIP_TagName = "hr";
+var A3CZKICO_TagName = "hr";
 var useSeparator = createHook(
   function useSeparator2(_a) {
     var _b = _a, { orientation = "horizontal" } = _b, props = __objRest(_b, ["orientation"]);
@@ -43471,7 +43918,7 @@ var useSeparator = createHook(
 );
 var Separator = forwardRef2(function Separator2(props) {
   const htmlProps = useSeparator(props);
-  return HKOOKEDE_createElement(LOI6GHIP_TagName, htmlProps);
+  return LMDWO4NN_createElement(A3CZKICO_TagName, htmlProps);
 });
 
 
@@ -44020,9 +44467,11 @@ function ClipboardButton({
     }
   });
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (timeoutIdRef.current) {
-      clearTimeout(timeoutIdRef.current);
-    }
+    return () => {
+      if (timeoutIdRef.current) {
+        clearTimeout(timeoutIdRef.current);
+      }
+    };
   }, []);
   const classes = dist_clsx('components-clipboard-button', className);
 
@@ -44082,7 +44531,7 @@ const item =  true ? {
   styles: "box-sizing:border-box;width:100%;display:block;margin:0;color:inherit"
 } : 0;
 const bordered = /*#__PURE__*/emotion_react_browser_esm_css("border:1px solid ", config_values.surfaceBorderColor, ";" + ( true ? "" : 0),  true ? "" : 0);
-const separated = /*#__PURE__*/emotion_react_browser_esm_css(">*:not( marquee )>*{border-bottom:1px solid ", config_values.surfaceBorderColor, ";}>*:last-of-type>*:not( :focus ){border-bottom-color:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
+const separated = /*#__PURE__*/emotion_react_browser_esm_css(">*:not( marquee )>*{border-bottom:1px solid ", config_values.surfaceBorderColor, ";}>*:last-of-type>*{border-bottom-color:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
 const styles_borderRadius = config_values.radiusSmall;
 const styles_spacedAround = /*#__PURE__*/emotion_react_browser_esm_css("border-radius:", styles_borderRadius, ";" + ( true ? "" : 0),  true ? "" : 0);
 const styles_rounded = /*#__PURE__*/emotion_react_browser_esm_css("border-radius:", styles_borderRadius, ";>*:first-of-type>*{border-top-left-radius:", styles_borderRadius, ";border-top-right-radius:", styles_borderRadius, ";}>*:last-of-type>*{border-bottom-left-radius:", styles_borderRadius, ";border-bottom-right-radius:", styles_borderRadius, ";}" + ( true ? "" : 0),  true ? "" : 0);
@@ -44517,6 +44966,7 @@ function ControlPointButton({
       "aria-describedby": descriptionId,
       "aria-haspopup": "true",
       "aria-expanded": isOpen,
+      __next40pxDefaultSize: true,
       className: dist_clsx('components-custom-gradient-picker__control-point-button', {
         'is-active': isOpen
       }),
@@ -44697,6 +45147,7 @@ function InsertPoint({
       isOpen,
       onToggle
     }) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      __next40pxDefaultSize: true,
       "aria-expanded": isOpen,
       "aria-haspopup": "true",
       onClick: () => {
@@ -45232,6 +45683,7 @@ const GradientTypePicker = ({
 function CustomGradientPicker({
   value,
   onChange,
+  enableAlpha = true,
   __experimentalIsRenderedInSidebar = false
 }) {
   const {
@@ -45260,6 +45712,7 @@ function CustomGradientPicker({
     className: "components-custom-gradient-picker",
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(CustomGradientBar, {
       __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
+      disableAlpha: !enableAlpha,
       background: background,
       hasGradient: hasGradient,
       value: controlPoints,
@@ -45396,79 +45849,57 @@ function Component(props) {
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SingleOrigin, {
     ...additionalProps
   });
-  let metaProps;
-  if (asButtons) {
-    metaProps = {
-      asButtons: true
-    };
-  } else {
-    const _metaProps = {
-      asButtons: false,
-      loop
-    };
-    if (ariaLabel) {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': ariaLabel
-      };
-    } else if (ariaLabelledby) {
-      metaProps = {
-        ..._metaProps,
-        'aria-labelledby': ariaLabelledby
-      };
-    } else {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': (0,external_wp_i18n_namespaceObject.__)('Custom color picker.')
-      };
-    }
-  }
+  const {
+    metaProps,
+    labelProps
+  } = getComputeCircularOptionPickerCommonProps(asButtons, loop, ariaLabel, ariaLabelledby);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker, {
     ...metaProps,
+    ...labelProps,
     actions: actions,
     options: options
   });
 }
 
 /**
- *  GradientPicker is a React component that renders a color gradient picker to
+ * GradientPicker is a React component that renders a color gradient picker to
  * define a multi step gradient. There's either a _linear_ or a _radial_ type
  * available.
  *
  * ```jsx
- *import { GradientPicker } from '@wordpress/components';
- *import { useState } from '@wordpress/element';
+ * import { useState } from 'react';
+ * import { GradientPicker } from '@wordpress/components';
  *
- *const myGradientPicker = () => {
- *	const [ gradient, setGradient ] = useState( null );
+ * const MyGradientPicker = () => {
+ *   const [ gradient, setGradient ] = useState( null );
  *
- *	return (
- *		<GradientPicker
- *			value={ gradient }
- *			onChange={ ( currentGradient ) => setGradient( currentGradient ) }
- *			gradients={ [
- *				{
- *					name: 'JShine',
- *					gradient:
- *						'linear-gradient(135deg,#12c2e9 0%,#c471ed 50%,#f64f59 100%)',
- *					slug: 'jshine',
- *				},
- *				{
- *					name: 'Moonlit Asteroid',
- *					gradient:
- *						'linear-gradient(135deg,#0F2027 0%, #203A43 0%, #2c5364 100%)',
- *					slug: 'moonlit-asteroid',
- *				},
- *				{
- *					name: 'Rastafarie',
- *					gradient:
- *						'linear-gradient(135deg,#1E9600 0%, #FFF200 0%, #FF0000 100%)',
- *					slug: 'rastafari',
- *				},
- *			] }
- *		/>
- *	);
- *};
+ *   return (
+ *     <GradientPicker
+ *       value={ gradient }
+ *       onChange={ ( currentGradient ) => setGradient( currentGradient ) }
+ *       gradients={ [
+ *         {
+ *           name: 'JShine',
+ *           gradient:
+ *             'linear-gradient(135deg,#12c2e9 0%,#c471ed 50%,#f64f59 100%)',
+ *           slug: 'jshine',
+ *         },
+ *         {
+ *           name: 'Moonlit Asteroid',
+ *           gradient:
+ *             'linear-gradient(135deg,#0F2027 0%, #203A43 0%, #2c5364 100%)',
+ *           slug: 'moonlit-asteroid',
+ *         },
+ *         {
+ *           name: 'Rastafarie',
+ *           gradient:
+ *             'linear-gradient(135deg,#1E9600 0%, #FFF200 0%, #FF0000 100%)',
+ *           slug: 'rastafari',
+ *         },
+ *       ] }
+ *     />
+ *   );
+ * };
  *```
  *
  */
@@ -45478,6 +45909,7 @@ function GradientPicker({
   onChange,
   value,
   clearable = true,
+  enableAlpha = true,
   disableCustomGradients = false,
   __experimentalIsRenderedInSidebar,
   headingLevel = 2,
@@ -45488,6 +45920,7 @@ function GradientPicker({
     spacing: gradients.length ? 4 : 0,
     children: [!disableCustomGradients && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_gradient_picker, {
       __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
+      enableAlpha: enableAlpha,
       value: value,
       onChange: onChange
     }), (gradients.length > 0 || clearable) && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Component, {
@@ -45499,6 +45932,8 @@ function GradientPicker({
       value: value,
       actions: clearable && !disableCustomGradients && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker.ButtonAction, {
         onClick: clearGradient,
+        accessibleWhenDisabled: true,
+        disabled: !value,
         children: (0,external_wp_i18n_namespaceObject.__)('Clear')
       }),
       headingLevel: headingLevel
@@ -45910,6 +46345,7 @@ function UnconnectedDropdownMenu(dropdownMenuProps) {
         ...mergedMenuProps,
         role: "menu",
         children: [dropdown_menu_isFunction(children) ? children(props) : null, controlSets?.flatMap((controlSet, indexOfSet) => controlSet.map((control, indexOfControl) => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+          __next40pxDefaultSize: true,
           onClick: event => {
             event.stopPropagation();
             props.onClose();
@@ -46110,6 +46546,7 @@ function NameInput({
   label
 }) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(NameInputControl, {
+    size: "compact",
     label: label,
     hideLabelFromVision: true,
     value: value,
@@ -46657,7 +47094,6 @@ function SuggestionsList({
   const listRef = (0,external_wp_compose_namespaceObject.useRefEffect)(listNode => {
     // only have to worry about scrolling selected suggestion into view
     // when already expanded.
-    let rafId;
     if (selectedIndex > -1 && scrollIntoView && listNode.children[selectedIndex]) {
       listNode.children[selectedIndex].scrollIntoView({
         behavior: 'instant',
@@ -46665,11 +47101,6 @@ function SuggestionsList({
         inline: 'nearest'
       });
     }
-    return () => {
-      if (rafId !== undefined) {
-        cancelAnimationFrame(rafId);
-      }
-    };
   }, [selectedIndex, scrollIntoView]);
   const handleHover = suggestion => {
     return () => {
@@ -46682,12 +47113,12 @@ function SuggestionsList({
     };
   };
   const computeSuggestionMatch = suggestion => {
-    const matchText = displayTransform(match).toLocaleLowerCase();
+    const matchText = displayTransform(match).normalize('NFKC').toLocaleLowerCase();
     if (matchText.length === 0) {
       return null;
     }
     const transformedSuggestion = displayTransform(suggestion);
-    const indexOfMatch = transformedSuggestion.toLocaleLowerCase().indexOf(matchText);
+    const indexOfMatch = transformedSuggestion.normalize('NFKC').toLocaleLowerCase().indexOf(matchText);
     return {
       suggestionBeforeMatch: transformedSuggestion.substring(0, indexOfMatch),
       suggestionMatch: transformedSuggestion.substring(indexOfMatch, indexOfMatch + matchText.length),
@@ -46764,6 +47195,94 @@ function SuggestionsList({
   });
 }, 'withFocusOutside'));
 
+;// ./packages/components/build-module/spinner/styles.js
+
+function spinner_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+const spinAnimation = emotion_react_browser_esm_keyframes`
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
+ `;
+const StyledSpinner = /*#__PURE__*/emotion_styled_base_browser_esm("svg",  true ? {
+  target: "ea4tfvq2"
+} : 0)("width:", config_values.spinnerSize, "px;height:", config_values.spinnerSize, "px;display:inline-block;margin:5px 11px 0;position:relative;color:", COLORS.theme.accent, ";overflow:visible;opacity:1;background-color:transparent;" + ( true ? "" : 0));
+const commonPathProps =  true ? {
+  name: "9s4963",
+  styles: "fill:transparent;stroke-width:1.5px"
+} : 0;
+const SpinnerTrack = /*#__PURE__*/emotion_styled_base_browser_esm("circle",  true ? {
+  target: "ea4tfvq1"
+} : 0)(commonPathProps, ";stroke:", COLORS.gray[300], ";" + ( true ? "" : 0));
+const SpinnerIndicator = /*#__PURE__*/emotion_styled_base_browser_esm("path",  true ? {
+  target: "ea4tfvq0"
+} : 0)(commonPathProps, ";stroke:currentColor;stroke-linecap:round;transform-origin:50% 50%;animation:1.4s linear infinite both ", spinAnimation, ";" + ( true ? "" : 0));
+
+;// ./packages/components/build-module/spinner/index.js
+/**
+ * External dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+function UnforwardedSpinner({
+  className,
+  ...props
+}, forwardedRef) {
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(StyledSpinner, {
+    className: dist_clsx('components-spinner', className),
+    viewBox: "0 0 100 100",
+    width: "16",
+    height: "16",
+    xmlns: "http://www.w3.org/2000/svg",
+    role: "presentation",
+    focusable: "false",
+    ...props,
+    ref: forwardedRef,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SpinnerTrack, {
+      cx: "50",
+      cy: "50",
+      r: "50",
+      vectorEffect: "non-scaling-stroke"
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SpinnerIndicator, {
+      d: "m 50 0 a 50 50 0 0 1 50 50",
+      vectorEffect: "non-scaling-stroke"
+    })]
+  });
+}
+/**
+ * `Spinner` is a component used to notify users that their action is being processed.
+ *
+ * ```jsx
+ * import { Spinner } from '@wordpress/components';
+ *
+ * function Example() {
+ * 	return <Spinner />;
+ * }
+ * ```
+ */
+const Spinner = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedSpinner);
+/* harmony default export */ const spinner = (Spinner);
+
 ;// ./packages/components/build-module/combobox-control/index.js
 /**
  * External dependencies
@@ -46782,6 +47301,8 @@ function SuggestionsList({
 /**
  * Internal dependencies
  */
+
+
 
 
 
@@ -46835,6 +47356,7 @@ const getIndexOfMatchingSuggestion = (selectedSuggestion, matchingSuggestions) =
  * 	const [ filteredOptions, setFilteredOptions ] = useState( options );
  * 	return (
  * 		<ComboboxControl
+ * 			__next40pxDefaultSize
  * 			__nextHasNoMarginBottom
  * 			label="Font Size"
  * 			value={ fontSize }
@@ -46868,6 +47390,7 @@ function ComboboxControl(props) {
     help,
     allowReset = true,
     className,
+    isLoading = false,
     messages = {
       selected: (0,external_wp_i18n_namespaceObject.__)('Item selected.')
     },
@@ -47013,6 +47536,11 @@ function ComboboxControl(props) {
       (0,external_wp_a11y_namespaceObject.speak)(message, 'polite');
     }
   }, [matchingSuggestions, isExpanded]);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'ComboboxControl',
+    __next40pxDefaultSize,
+    size: undefined
+  });
 
   // Disable reason: There is no appropriate role which describes the
   // input container intended accessible usability.
@@ -47048,20 +47576,18 @@ function ComboboxControl(props) {
               selectedSuggestionIndex: getIndexOfMatchingSuggestion(selectedSuggestion, matchingSuggestions),
               onChange: onInputChange
             })
-          }), allowReset && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(flex_item_component, {
-            children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-              className: "components-combobox-control__reset",
-              icon: close_small
-              // Disable reason: Focus returns to input field when reset is clicked.
-              // eslint-disable-next-line no-restricted-syntax
-              ,
-              disabled: !value,
-              onClick: handleOnReset,
-              onKeyDown: handleResetStopPropagation,
-              label: (0,external_wp_i18n_namespaceObject.__)('Reset')
-            })
+          }), isLoading && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spinner, {}), allowReset && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+            size: "small",
+            icon: close_small
+            // Disable reason: Focus returns to input field when reset is clicked.
+            // eslint-disable-next-line no-restricted-syntax
+            ,
+            disabled: !value,
+            onClick: handleOnReset,
+            onKeyDown: handleResetStopPropagation,
+            label: (0,external_wp_i18n_namespaceObject.__)('Reset')
           })]
-        }), isExpanded && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(suggestions_list, {
+        }), isExpanded && !isLoading && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(suggestions_list, {
           instanceId: instanceId
           // The empty string for `value` here is not actually used, but is
           // just a quick way to satisfy the TypeScript requirements of SuggestionsList.
@@ -47266,7 +47792,6 @@ function useCompositeState(legacyStateOptions = {}) {
 }
 
 ;// ./packages/components/build-module/modal/aria-helper.js
-/* wp:polyfill */
 const LIVE_REGION_ARIA_ROLES = new Set(['alert', 'status', 'log', 'marquee', 'timer']);
 const hiddenElementsByDepth = [];
 
@@ -47392,7 +47917,6 @@ function useModalExitAnimation() {
 }
 
 ;// ./packages/components/build-module/modal/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -47656,9 +48180,9 @@ function UnforwardedModal(props, forwardedRef) {
             }), headerActions, isDismissible && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
               children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
                 marginBottom: 0,
-                marginLeft: 3
+                marginLeft: 2
               }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-                size: "small",
+                size: "compact",
                 onClick: event => closeModal().then(() => onRequestClose(event)),
                 icon: library_close,
                 label: closeButtonLabel || (0,external_wp_i18n_namespaceObject.__)('Close')
@@ -47898,7 +48422,7 @@ const UnconnectedConfirmDialog = (props, forwardedRef) => {
 const ConfirmDialog = contextConnect(UnconnectedConfirmDialog, 'ConfirmDialog');
 /* harmony default export */ const confirm_dialog_component = (ConfirmDialog);
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/DWZ7E5TJ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/VEVQD5MH.js
 "use client";
 
 
@@ -47909,15 +48433,15 @@ const ConfirmDialog = contextConnect(UnconnectedConfirmDialog, 'ConfirmDialog');
 var ComboboxListRoleContext = (0,external_React_.createContext)(
   void 0
 );
-var DWZ7E5TJ_ctx = createStoreContext(
+var VEVQD5MH_ctx = createStoreContext(
   [PopoverContextProvider, CompositeContextProvider],
   [PopoverScopedContextProvider, CompositeScopedContextProvider]
 );
-var useComboboxContext = DWZ7E5TJ_ctx.useContext;
-var useComboboxScopedContext = DWZ7E5TJ_ctx.useScopedContext;
-var useComboboxProviderContext = DWZ7E5TJ_ctx.useProviderContext;
-var ComboboxContextProvider = DWZ7E5TJ_ctx.ContextProvider;
-var ComboboxScopedContextProvider = DWZ7E5TJ_ctx.ScopedContextProvider;
+var useComboboxContext = VEVQD5MH_ctx.useContext;
+var useComboboxScopedContext = VEVQD5MH_ctx.useScopedContext;
+var useComboboxProviderContext = VEVQD5MH_ctx.useProviderContext;
+var ComboboxContextProvider = VEVQD5MH_ctx.ContextProvider;
+var ComboboxScopedContextProvider = VEVQD5MH_ctx.ScopedContextProvider;
 var ComboboxItemValueContext = (0,external_React_.createContext)(
   void 0
 );
@@ -48068,7 +48592,7 @@ function createSelectStore(_a = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/X5LAA6JI.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/S5WQ44SQ.js
 "use client";
 
 
@@ -48079,6 +48603,13 @@ function createSelectStore(_a = {}) {
 
 // src/select/select-store.ts
 
+function useSelectStoreOptions(props) {
+  const combobox = useComboboxProviderContext();
+  props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
+    combobox: props.combobox !== void 0 ? props.combobox : combobox
+  });
+  return useCompositeStoreOptions(props);
+}
 function useSelectStoreProps(store, update, props) {
   useUpdateEffect(update, [props.combobox]);
   useStoreProps(store, props, "value", "setValue");
@@ -48093,17 +48624,14 @@ function useSelectStoreProps(store, update, props) {
   );
 }
 function useSelectStore(props = {}) {
-  const combobox = useComboboxProviderContext();
-  props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
-    combobox: props.combobox !== void 0 ? props.combobox : combobox
-  });
-  const [store, update] = _2GXGCHW6_useStore(createSelectStore, props);
+  props = useSelectStoreOptions(props);
+  const [store, update] = YV4JVR4I_useStore(createSelectStore, props);
   return useSelectStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KZ2S4ZC5.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/KPEX55MY.js
 "use client";
 
 
@@ -48111,21 +48639,21 @@ function useSelectStore(props = {}) {
 
 // src/select/select-context.tsx
 
-var KZ2S4ZC5_ctx = createStoreContext(
+var KPEX55MY_ctx = createStoreContext(
   [PopoverContextProvider, CompositeContextProvider],
   [PopoverScopedContextProvider, CompositeScopedContextProvider]
 );
-var useSelectContext = KZ2S4ZC5_ctx.useContext;
-var useSelectScopedContext = KZ2S4ZC5_ctx.useScopedContext;
-var useSelectProviderContext = KZ2S4ZC5_ctx.useProviderContext;
-var SelectContextProvider = KZ2S4ZC5_ctx.ContextProvider;
-var SelectScopedContextProvider = KZ2S4ZC5_ctx.ScopedContextProvider;
+var useSelectContext = KPEX55MY_ctx.useContext;
+var useSelectScopedContext = KPEX55MY_ctx.useScopedContext;
+var useSelectProviderContext = KPEX55MY_ctx.useProviderContext;
+var SelectContextProvider = KPEX55MY_ctx.ContextProvider;
+var SelectScopedContextProvider = KPEX55MY_ctx.ScopedContextProvider;
 var SelectItemCheckedContext = (0,external_React_.createContext)(false);
 var SelectHeadingContext = (0,external_React_.createContext)(null);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/select/select-label.js
+;// ./node_modules/@ariakit/react-core/esm/select/select-label.js
 "use client";
 
 
@@ -48175,12 +48703,12 @@ var useSelectLabel = createHook(
 var SelectLabel = memo2(
   forwardRef2(function SelectLabel2(props) {
     const htmlProps = useSelectLabel(props);
-    return HKOOKEDE_createElement(select_label_TagName, htmlProps);
+    return LMDWO4NN_createElement(select_label_TagName, htmlProps);
   })
 );
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/3R3N43YO.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/X5NMLKT6.js
 "use client";
 
 
@@ -48190,11 +48718,11 @@ var SelectLabel = memo2(
 // src/button/button.tsx
 
 
-var _3R3N43YO_TagName = "button";
+var X5NMLKT6_TagName = "button";
 var useButton = createHook(
   function useButton2(props) {
     const ref = (0,external_React_.useRef)(null);
-    const tagName = useTagName(ref, _3R3N43YO_TagName);
+    const tagName = useTagName(ref, X5NMLKT6_TagName);
     const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
       () => !!tagName && isButton({ tagName, type: props.type })
     );
@@ -48211,14 +48739,14 @@ var useButton = createHook(
     return props;
   }
 );
-var _3R3N43YO_Button = forwardRef2(function Button2(props) {
+var X5NMLKT6_Button = forwardRef2(function Button2(props) {
   const htmlProps = useButton(props);
-  return HKOOKEDE_createElement(_3R3N43YO_TagName, htmlProps);
+  return LMDWO4NN_createElement(X5NMLKT6_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/O3TNZQBF.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/P4IRICAX.js
 "use client";
 
 
@@ -48229,8 +48757,8 @@ var _3R3N43YO_Button = forwardRef2(function Button2(props) {
 // src/disclosure/disclosure.tsx
 
 
-var O3TNZQBF_TagName = "button";
-var O3TNZQBF_symbol = Symbol("disclosure");
+var P4IRICAX_TagName = "button";
+var P4IRICAX_symbol = Symbol("disclosure");
 var useDisclosure = createHook(
   function useDisclosure2(_a) {
     var _b = _a, { store, toggleOnClick = true } = _b, props = __objRest(_b, ["store", "toggleOnClick"]);
@@ -48254,7 +48782,7 @@ var useDisclosure = createHook(
     }, [disclosureElement, store, open]);
     const onClickProp = props.onClick;
     const toggleOnClickProp = useBooleanEvent(toggleOnClick);
-    const [isDuplicate, metadataProps] = useMetadataProps(props, O3TNZQBF_symbol, true);
+    const [isDuplicate, metadataProps] = useMetadataProps(props, P4IRICAX_symbol, true);
     const onClick = useEvent((event) => {
       onClickProp == null ? void 0 : onClickProp(event);
       if (event.defaultPrevented) return;
@@ -48277,12 +48805,12 @@ var useDisclosure = createHook(
 );
 var Disclosure = forwardRef2(function Disclosure2(props) {
   const htmlProps = useDisclosure(props);
-  return HKOOKEDE_createElement(O3TNZQBF_TagName, htmlProps);
+  return LMDWO4NN_createElement(P4IRICAX_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KCVNYWKF.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/AXB53BZF.js
 "use client";
 
 
@@ -48292,7 +48820,7 @@ var Disclosure = forwardRef2(function Disclosure2(props) {
 // src/dialog/dialog-disclosure.tsx
 
 
-var KCVNYWKF_TagName = "button";
+var AXB53BZF_TagName = "button";
 var useDialogDisclosure = createHook(
   function useDialogDisclosure2(_a) {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
@@ -48312,12 +48840,12 @@ var useDialogDisclosure = createHook(
 );
 var DialogDisclosure = forwardRef2(function DialogDisclosure2(props) {
   const htmlProps = useDialogDisclosure(props);
-  return HKOOKEDE_createElement(KCVNYWKF_TagName, htmlProps);
+  return LMDWO4NN_createElement(AXB53BZF_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/74NFH3UH.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/OMU7RWRV.js
 "use client";
 
 
@@ -48325,7 +48853,7 @@ var DialogDisclosure = forwardRef2(function DialogDisclosure2(props) {
 
 
 // src/popover/popover-anchor.tsx
-var _74NFH3UH_TagName = "div";
+var OMU7RWRV_TagName = "div";
 var usePopoverAnchor = createHook(
   function usePopoverAnchor2(_a) {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
@@ -48339,12 +48867,12 @@ var usePopoverAnchor = createHook(
 );
 var PopoverAnchor = forwardRef2(function PopoverAnchor2(props) {
   const htmlProps = usePopoverAnchor(props);
-  return HKOOKEDE_createElement(_74NFH3UH_TagName, htmlProps);
+  return LMDWO4NN_createElement(OMU7RWRV_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IZAFJHVY.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/QYJ6MIDR.js
 "use client";
 
 
@@ -48356,7 +48884,7 @@ var PopoverAnchor = forwardRef2(function PopoverAnchor2(props) {
 // src/popover/popover-disclosure.tsx
 
 
-var IZAFJHVY_TagName = "button";
+var QYJ6MIDR_TagName = "button";
 var usePopoverDisclosure = createHook(function usePopoverDisclosure2(_a) {
   var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
   const context = usePopoverProviderContext();
@@ -48384,12 +48912,12 @@ var usePopoverDisclosure = createHook(function usePopoverDisclosure2(_a) {
 });
 var PopoverDisclosure = forwardRef2(function PopoverDisclosure2(props) {
   const htmlProps = usePopoverDisclosure(props);
-  return HKOOKEDE_createElement(IZAFJHVY_TagName, htmlProps);
+  return LMDWO4NN_createElement(QYJ6MIDR_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CAGM4AEJ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/DR55NYVS.js
 "use client";
 
 
@@ -48399,7 +48927,7 @@ var PopoverDisclosure = forwardRef2(function PopoverDisclosure2(props) {
 
 
 
-var CAGM4AEJ_TagName = "span";
+var DR55NYVS_TagName = "span";
 var pointsMap = {
   top: "4,10 8,6 12,10",
   right: "6,4 10,8 6,12",
@@ -48450,13 +48978,13 @@ var usePopoverDisclosureArrow = createHook(function usePopoverDisclosureArrow2(_
 var PopoverDisclosureArrow = forwardRef2(
   function PopoverDisclosureArrow2(props) {
     const htmlProps = usePopoverDisclosureArrow(props);
-    return HKOOKEDE_createElement(CAGM4AEJ_TagName, htmlProps);
+    return LMDWO4NN_createElement(DR55NYVS_TagName, htmlProps);
   }
 );
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/2UJDTHC7.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/UD53QJDV.js
 "use client";
 
 
@@ -48464,7 +48992,7 @@ var PopoverDisclosureArrow = forwardRef2(
 
 
 // src/select/select-arrow.tsx
-var _2UJDTHC7_TagName = "span";
+var UD53QJDV_TagName = "span";
 var useSelectArrow = createHook(
   function useSelectArrow2(_a) {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
@@ -48476,116 +49004,12 @@ var useSelectArrow = createHook(
 );
 var SelectArrow = forwardRef2(function SelectArrow2(props) {
   const htmlProps = useSelectArrow(props);
-  return HKOOKEDE_createElement(_2UJDTHC7_TagName, htmlProps);
+  return LMDWO4NN_createElement(UD53QJDV_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/DS36B3MQ.js
-"use client";
-
-
-
-
-
-
-// src/composite/composite-typeahead.tsx
-
-
-
-
-var DS36B3MQ_TagName = "div";
-var chars = "";
-function clearChars() {
-  chars = "";
-}
-function isValidTypeaheadEvent(event) {
-  const target = event.target;
-  if (target && isTextField(target)) return false;
-  if (event.key === " " && chars.length) return true;
-  return event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey && /^[\p{Letter}\p{Number}]$/u.test(event.key);
-}
-function isSelfTargetOrItem(event, items) {
-  if (isSelfTarget(event)) return true;
-  const target = event.target;
-  if (!target) return false;
-  const isItem = items.some((item) => item.element === target);
-  return isItem;
-}
-function DS36B3MQ_getEnabledItems(items) {
-  return items.filter((item) => !item.disabled);
-}
-function itemTextStartsWith(item, text) {
-  var _a;
-  const itemText = ((_a = item.element) == null ? void 0 : _a.textContent) || item.children || // The composite item object itself doesn't include a value property, but
-  // other components like Select do. Since CompositeTypeahead is a generic
-  // component that can be used with those as well, we also consider the value
-  // property as a fallback for the typeahead text content.
-  "value" in item && item.value;
-  if (!itemText) return false;
-  return normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
-}
-function getSameInitialItems(items, char, activeId) {
-  if (!activeId) return items;
-  const activeItem = items.find((item) => item.id === activeId);
-  if (!activeItem) return items;
-  if (!itemTextStartsWith(activeItem, char)) return items;
-  if (chars !== char && itemTextStartsWith(activeItem, chars)) return items;
-  chars = char;
-  return _5VQZOHHZ_flipItems(
-    items.filter((item) => itemTextStartsWith(item, chars)),
-    activeId
-  ).filter((item) => item.id !== activeId);
-}
-var useCompositeTypeahead = createHook(function useCompositeTypeahead2(_a) {
-  var _b = _a, { store, typeahead = true } = _b, props = __objRest(_b, ["store", "typeahead"]);
-  const context = useCompositeContext();
-  store = store || context;
-  invariant(
-    store,
-     false && 0
-  );
-  const onKeyDownCaptureProp = props.onKeyDownCapture;
-  const cleanupTimeoutRef = (0,external_React_.useRef)(0);
-  const onKeyDownCapture = useEvent((event) => {
-    onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
-    if (event.defaultPrevented) return;
-    if (!typeahead) return;
-    if (!store) return;
-    const { renderedItems, items, activeId } = store.getState();
-    if (!isValidTypeaheadEvent(event)) return clearChars();
-    let enabledItems = DS36B3MQ_getEnabledItems(
-      renderedItems.length ? renderedItems : items
-    );
-    if (!isSelfTargetOrItem(event, enabledItems)) return clearChars();
-    event.preventDefault();
-    window.clearTimeout(cleanupTimeoutRef.current);
-    cleanupTimeoutRef.current = window.setTimeout(() => {
-      chars = "";
-    }, 500);
-    const char = event.key.toLowerCase();
-    chars += char;
-    enabledItems = getSameInitialItems(enabledItems, char, activeId);
-    const item = enabledItems.find((item2) => itemTextStartsWith(item2, chars));
-    if (item) {
-      store.move(item.id);
-    } else {
-      clearChars();
-    }
-  });
-  props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
-    onKeyDownCapture
-  });
-  return removeUndefinedValues(props);
-});
-var DS36B3MQ_CompositeTypeahead = forwardRef2(function CompositeTypeahead2(props) {
-  const htmlProps = useCompositeTypeahead(props);
-  return HKOOKEDE_createElement(DS36B3MQ_TagName, htmlProps);
-});
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/select/select.js
+;// ./node_modules/@ariakit/react-core/esm/select/select.js
 "use client";
 
 
@@ -48819,11 +49243,11 @@ var useSelect = createHook(function useSelect2(_a) {
 });
 var select_Select = forwardRef2(function Select2(props) {
   const htmlProps = useSelect(props);
-  return HKOOKEDE_createElement(select_TagName, htmlProps);
+  return LMDWO4NN_createElement(select_TagName, htmlProps);
 });
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KHUR3XXK.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/XRBJGF7I.js
 "use client";
 
 
@@ -48838,7 +49262,7 @@ var select_Select = forwardRef2(function Select2(props) {
 
 
 
-var KHUR3XXK_TagName = "div";
+var XRBJGF7I_TagName = "div";
 var SelectListContext = (0,external_React_.createContext)(null);
 var useSelectList = createHook(
   function useSelectList2(_a) {
@@ -48946,13 +49370,14 @@ var useSelectList = createHook(
 );
 var SelectList = forwardRef2(function SelectList2(props) {
   const htmlProps = useSelectList(props);
-  return HKOOKEDE_createElement(KHUR3XXK_TagName, htmlProps);
+  return LMDWO4NN_createElement(XRBJGF7I_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/select/select-popover.js
+;// ./node_modules/@ariakit/react-core/esm/select/select-popover.js
 "use client";
+
 
 
 
@@ -49013,128 +49438,14 @@ var useSelectPopover = createHook(
 var SelectPopover = createDialogComponent(
   forwardRef2(function SelectPopover2(props) {
     const htmlProps = useSelectPopover(props);
-    return HKOOKEDE_createElement(select_popover_TagName, htmlProps);
+    return LMDWO4NN_createElement(select_popover_TagName, htmlProps);
   }),
   useSelectProviderContext
 );
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OBZMLI6J.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/YF2ICFG4.js
 "use client";
-
-
-
-
-
-// src/composite/composite-hover.tsx
-
-
-
-
-var OBZMLI6J_TagName = "div";
-function getMouseDestination(event) {
-  const relatedTarget = event.relatedTarget;
-  if ((relatedTarget == null ? void 0 : relatedTarget.nodeType) === Node.ELEMENT_NODE) {
-    return relatedTarget;
-  }
-  return null;
-}
-function hoveringInside(event) {
-  const nextElement = getMouseDestination(event);
-  if (!nextElement) return false;
-  return contains(event.currentTarget, nextElement);
-}
-var OBZMLI6J_symbol = Symbol("composite-hover");
-function movingToAnotherItem(event) {
-  let dest = getMouseDestination(event);
-  if (!dest) return false;
-  do {
-    if (PBFD2E7P_hasOwnProperty(dest, OBZMLI6J_symbol) && dest[OBZMLI6J_symbol]) return true;
-    dest = dest.parentElement;
-  } while (dest);
-  return false;
-}
-var useCompositeHover = createHook(
-  function useCompositeHover2(_a) {
-    var _b = _a, {
-      store,
-      focusOnHover = true,
-      blurOnHoverEnd = !!focusOnHover
-    } = _b, props = __objRest(_b, [
-      "store",
-      "focusOnHover",
-      "blurOnHoverEnd"
-    ]);
-    const context = useCompositeContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const isMouseMoving = useIsMouseMoving();
-    const onMouseMoveProp = props.onMouseMove;
-    const focusOnHoverProp = useBooleanEvent(focusOnHover);
-    const onMouseMove = useEvent((event) => {
-      onMouseMoveProp == null ? void 0 : onMouseMoveProp(event);
-      if (event.defaultPrevented) return;
-      if (!isMouseMoving()) return;
-      if (!focusOnHoverProp(event)) return;
-      if (!hasFocusWithin(event.currentTarget)) {
-        const baseElement = store == null ? void 0 : store.getState().baseElement;
-        if (baseElement && !hasFocus(baseElement)) {
-          baseElement.focus();
-        }
-      }
-      store == null ? void 0 : store.setActiveId(event.currentTarget.id);
-    });
-    const onMouseLeaveProp = props.onMouseLeave;
-    const blurOnHoverEndProp = useBooleanEvent(blurOnHoverEnd);
-    const onMouseLeave = useEvent((event) => {
-      var _a2;
-      onMouseLeaveProp == null ? void 0 : onMouseLeaveProp(event);
-      if (event.defaultPrevented) return;
-      if (!isMouseMoving()) return;
-      if (hoveringInside(event)) return;
-      if (movingToAnotherItem(event)) return;
-      if (!focusOnHoverProp(event)) return;
-      if (!blurOnHoverEndProp(event)) return;
-      store == null ? void 0 : store.setActiveId(null);
-      (_a2 = store == null ? void 0 : store.getState().baseElement) == null ? void 0 : _a2.focus();
-    });
-    const ref = (0,external_React_.useCallback)((element) => {
-      if (!element) return;
-      element[OBZMLI6J_symbol] = true;
-    }, []);
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
-      ref: useMergeRefs(ref, props.ref),
-      onMouseMove,
-      onMouseLeave
-    });
-    return removeUndefinedValues(props);
-  }
-);
-var OBZMLI6J_CompositeHover = memo2(
-  forwardRef2(function CompositeHover2(props) {
-    const htmlProps = useCompositeHover(props);
-    return HKOOKEDE_createElement(OBZMLI6J_TagName, htmlProps);
-  })
-);
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/select/select-item.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -49149,7 +49460,7 @@ var OBZMLI6J_CompositeHover = memo2(
 
 
 
-var select_item_TagName = "div";
+var YF2ICFG4_TagName = "div";
 function isSelected(storeValue, itemValue) {
   if (itemValue == null) return;
   if (storeValue == null) return false;
@@ -49186,6 +49497,26 @@ var useSelectItem = createHook(
     );
     const id = useId(props.id);
     const disabled = disabledFromProps(props);
+    const { listElement, multiSelectable, selected, autoFocus } = useStoreStateObject(store, {
+      listElement: "listElement",
+      multiSelectable(state) {
+        return Array.isArray(state.value);
+      },
+      selected(state) {
+        return isSelected(state.value, value);
+      },
+      autoFocus(state) {
+        if (value == null) return false;
+        if (state.value == null) return false;
+        if (state.activeId !== id && (store == null ? void 0 : store.item(state.activeId))) {
+          return false;
+        }
+        if (Array.isArray(state.value)) {
+          return state.value[state.value.length - 1] === value;
+        }
+        return state.value === value;
+      }
+    });
     const getItem = (0,external_React_.useCallback)(
       (item) => {
         const nextItem = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, item), {
@@ -49198,9 +49529,6 @@ var useSelectItem = createHook(
         return nextItem;
       },
       [disabled, value, getItemProp]
-    );
-    const multiSelectable = store.useState(
-      (state) => Array.isArray(state.value)
     );
     hideOnClick = hideOnClick != null ? hideOnClick : value != null && !multiSelectable;
     const onClickProp = props.onClick;
@@ -49224,22 +49552,11 @@ var useSelectItem = createHook(
         store == null ? void 0 : store.hide();
       }
     });
-    const selected = store.useState((state) => isSelected(state.value, value));
     props = useWrapElement(
       props,
       (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectItemCheckedContext.Provider, { value: selected != null ? selected : false, children: element }),
       [selected]
     );
-    const listElement = store.useState("listElement");
-    const autoFocus = store.useState((state) => {
-      if (value == null) return false;
-      if (state.value == null) return false;
-      if (state.activeId !== id && (store == null ? void 0 : store.item(state.activeId))) return false;
-      if (Array.isArray(state.value)) {
-        return state.value[state.value.length - 1] === value;
-      }
-      return state.value === value;
-    });
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
       id,
       role: getPopupItemRole(listElement),
@@ -49273,12 +49590,13 @@ var useSelectItem = createHook(
 var SelectItem = memo2(
   forwardRef2(function SelectItem2(props) {
     const htmlProps = useSelectItem(props);
-    return HKOOKEDE_createElement(select_item_TagName, htmlProps);
+    return LMDWO4NN_createElement(YF2ICFG4_TagName, htmlProps);
   })
 );
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/EYKMH5G5.js
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/EYKMH5G5.js
 "use client";
 
 // src/checkbox/checkbox-checked-context.tsx
@@ -49287,7 +49605,7 @@ var CheckboxCheckedContext = (0,external_React_.createContext)(false);
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/RPLYUYNN.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/5JCRYSSV.js
 "use client";
 
 
@@ -49297,7 +49615,7 @@ var CheckboxCheckedContext = (0,external_React_.createContext)(false);
 
 
 
-var RPLYUYNN_TagName = "span";
+var _5JCRYSSV_TagName = "span";
 var checkmark = /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
   "svg",
   {
@@ -49343,12 +49661,12 @@ var useCheckboxCheck = createHook(
 );
 var CheckboxCheck = forwardRef2(function CheckboxCheck2(props) {
   const htmlProps = useCheckboxCheck(props);
-  return HKOOKEDE_createElement(RPLYUYNN_TagName, htmlProps);
+  return LMDWO4NN_createElement(_5JCRYSSV_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/select/select-item-check.js
+;// ./node_modules/@ariakit/react-core/esm/select/select-item-check.js
 "use client";
 
 
@@ -49377,7 +49695,7 @@ var useSelectItemCheck = createHook(
 );
 var SelectItemCheck = forwardRef2(function SelectItemCheck2(props) {
   const htmlProps = useSelectItemCheck(props);
-  return HKOOKEDE_createElement(select_item_check_TagName, htmlProps);
+  return LMDWO4NN_createElement(select_item_check_TagName, htmlProps);
 });
 
 
@@ -49492,13 +49810,12 @@ const WithHintItemHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  t
 } : 0)("color:", COLORS.theme.gray[600], ";text-align:initial;line-height:", config_values.fontLineHeightBase, ";padding-inline-end:", space(1), ";margin-block:", space(1), ";" + ( true ? "" : 0));
 const SelectedItemCheck = /*#__PURE__*/emotion_styled_base_browser_esm(SelectItemCheck,  true ? {
   target: "e1p3eej70"
-} : 0)("display:flex;align-items:center;margin-inline-start:", space(2), ";align-self:start;margin-block-start:2px;font-size:0;", WithHintItemWrapper, "~&,&:not(:empty){font-size:24px;}" + ( true ? "" : 0));
+} : 0)("display:flex;align-items:center;margin-inline-start:", space(2), ";fill:currentColor;align-self:start;margin-block-start:2px;font-size:0;", WithHintItemWrapper, "~&,&:not(:empty){font-size:24px;}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/custom-select-control-v2/custom-select.js
 /**
  * External dependencies
  */
-
 
 
 /**
@@ -49669,6 +49986,7 @@ CustomSelectItem.displayName = 'CustomSelectControlV2.Item';
 
 
 
+
 function custom_select_control_useDeprecatedProps({
   __experimentalShowSelectedHint,
   ...otherProps
@@ -49702,6 +50020,7 @@ function getDescribedBy(currentValue, describedBy) {
 function CustomSelectControl(props) {
   const {
     __next40pxDefaultSize = false,
+    __shouldNotWarnDeprecated36pxSize,
     describedBy,
     options,
     onChange,
@@ -49711,6 +50030,12 @@ function CustomSelectControl(props) {
     showSelectedHint = false,
     ...restProps
   } = custom_select_control_useDeprecatedProps(props);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'CustomSelectControl',
+    __next40pxDefaultSize,
+    size,
+    __shouldNotWarnDeprecated36pxSize
+  });
   const descriptionId = (0,external_wp_compose_namespaceObject.useInstanceId)(CustomSelectControl, 'custom-select-control__description');
 
   // Forward props + store from v2 implementation
@@ -49769,9 +50094,7 @@ function CustomSelectControl(props) {
       })
     }, key);
   });
-  const {
-    value: currentValue
-  } = store.getState();
+  const currentValue = useStoreState(store, 'value');
   const renderSelectedValueHint = () => {
     const selectedOptionHint = options?.map(applyOptionDeprecations)?.find(({
       name
@@ -54463,6 +54786,7 @@ function date_Day({
     // an already focused element.
   }, [isFocusable]);
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(DayButton, {
+    __next40pxDefaultSize: true,
     ref: ref,
     className: "components-datetime__date__day" // Unused, for backwards compatibility.
     ,
@@ -54694,6 +55018,7 @@ function UnforwardedToggleGroupControlOption(props, ref) {
  *       value="vertical"
  *       isBlock
  *       __nextHasNoMarginBottom
+ *       __next40pxDefaultSize
  *     >
  *       <ToggleGroupControlOption value="horizontal" label="Horizontal" />
  *       <ToggleGroupControlOption value="vertical" label="Vertical" />
@@ -55302,6 +55627,7 @@ const findSizeBySlug = (sizes, slug) => sizes.find(size => slug === size.slug);
 
 
 
+
 const dimension_control_CONTEXT_VALUE = {
   BaseControl: {
     // Temporary during deprecation grace period: Overrides the underlying `__associatedWPComponentName`
@@ -55326,6 +55652,7 @@ const dimension_control_CONTEXT_VALUE = {
  *
  * 	return (
  * 		<DimensionControl
+ * 			__next40pxDefaultSize
  * 			__nextHasNoMarginBottom
  * 			label={ 'Padding' }
  * 			icon={ 'desktop' }
@@ -55350,6 +55677,11 @@ function DimensionControl(props) {
   external_wp_deprecated_default()('wp.components.DimensionControl', {
     since: '6.7',
     version: '7.0'
+  });
+  maybeWarnDeprecated36pxSize({
+    componentName: 'DimensionControl',
+    __next40pxDefaultSize,
+    size: undefined
   });
   const onChangeSpacingSize = val => {
     const theSize = findSizeBySlug(sizes, val);
@@ -55381,6 +55713,7 @@ function DimensionControl(props) {
     value: dimension_control_CONTEXT_VALUE,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(select_control, {
       __next40pxDefaultSize: __next40pxDefaultSize,
+      __shouldNotWarnDeprecated36pxSize: true,
       __nextHasNoMarginBottom: __nextHasNoMarginBottom,
       className: dist_clsx(className, 'block-editor-dimension-control'),
       label: selectLabel,
@@ -55439,7 +55772,14 @@ const {
  * const MyDisabled = () => {
  * 	const [ isDisabled, setIsDisabled ] = useState( true );
  *
- * 	let input = <TextControl label="Input" onChange={ () => {} } />;
+ *	let input = (
+ *		<TextControl
+ *			__next40pxDefaultSize
+ *			__nextHasNoMarginBottom
+ *			label="Input"
+ *			onChange={ () => {} }
+ *		/>
+ *	);
  * 	if ( isDisabled ) {
  * 		input = <Disabled>{ input }</Disabled>;
  * 	}
@@ -55805,19 +56145,24 @@ const upload = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ext
  */
 function DropZoneComponent({
   className,
+  icon = library_upload,
   label,
   onFilesDrop,
   onHTMLDrop,
   onDrop,
+  isEligible = () => true,
   ...restProps
 }) {
   const [isDraggingOverDocument, setIsDraggingOverDocument] = (0,external_wp_element_namespaceObject.useState)();
   const [isDraggingOverElement, setIsDraggingOverElement] = (0,external_wp_element_namespaceObject.useState)();
-  const [type, setType] = (0,external_wp_element_namespaceObject.useState)();
+  const [isActive, setIsActive] = (0,external_wp_element_namespaceObject.useState)();
   const ref = (0,external_wp_compose_namespaceObject.__experimentalUseDropZone)({
     onDrop(event) {
-      const files = event.dataTransfer ? (0,external_wp_dom_namespaceObject.getFilesFromDataTransfer)(event.dataTransfer) : [];
-      const html = event.dataTransfer?.getData('text/html');
+      if (!event.dataTransfer) {
+        return;
+      }
+      const files = (0,external_wp_dom_namespaceObject.getFilesFromDataTransfer)(event.dataTransfer);
+      const html = event.dataTransfer.getData('text/html');
 
       /**
        * From Windows Chrome 96, the `event.dataTransfer` returns both file object and HTML.
@@ -55833,26 +56178,29 @@ function DropZoneComponent({
     },
     onDragStart(event) {
       setIsDraggingOverDocument(true);
-      let _type = 'default';
+      if (!event.dataTransfer) {
+        return;
+      }
 
       /**
        * From Windows Chrome 96, the `event.dataTransfer` returns both file object and HTML.
        * The order of the checks is important to recognize the HTML drop.
        */
-      if (event.dataTransfer?.types.includes('text/html')) {
-        _type = 'html';
+      if (event.dataTransfer.types.includes('text/html')) {
+        setIsActive(!!onHTMLDrop);
       } else if (
       // Check for the types because sometimes the files themselves
       // are only available on drop.
-      event.dataTransfer?.types.includes('Files') || (event.dataTransfer ? (0,external_wp_dom_namespaceObject.getFilesFromDataTransfer)(event.dataTransfer) : []).length > 0) {
-        _type = 'file';
+      event.dataTransfer.types.includes('Files') || (0,external_wp_dom_namespaceObject.getFilesFromDataTransfer)(event.dataTransfer).length > 0) {
+        setIsActive(!!onFilesDrop);
+      } else {
+        setIsActive(!!onDrop && isEligible(event.dataTransfer));
       }
-      setType(_type);
     },
     onDragEnd() {
       setIsDraggingOverElement(false);
       setIsDraggingOverDocument(false);
-      setType(undefined);
+      setIsActive(undefined);
     },
     onDragEnter() {
       setIsDraggingOverElement(true);
@@ -55862,10 +56210,9 @@ function DropZoneComponent({
     }
   });
   const classes = dist_clsx('components-drop-zone', className, {
-    'is-active': (isDraggingOverDocument || isDraggingOverElement) && (type === 'file' && onFilesDrop || type === 'html' && onHTMLDrop || type === 'default' && onDrop),
+    'is-active': isActive,
     'is-dragging-over-document': isDraggingOverDocument,
-    'is-dragging-over-element': isDraggingOverElement,
-    [`is-dragging-${type}`]: !!type
+    'is-dragging-over-element': isDraggingOverElement
   });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     ...restProps,
@@ -55876,7 +56223,7 @@ function DropZoneComponent({
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
         className: "components-drop-zone__content-inner",
         children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-          icon: library_upload,
+          icon: icon,
           className: "components-drop-zone__content-icon"
         }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
           className: "components-drop-zone__content-text",
@@ -56052,7 +56399,6 @@ function DuotoneSwatch({
 
 
 
-
 function ColorOption({
   label,
   value,
@@ -56067,23 +56413,19 @@ function ColorOption({
   const contentId = `${idRoot}__content`;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      __next40pxDefaultSize: true,
       className: "components-color-list-picker__swatch-button",
+      id: labelId,
       onClick: () => setIsOpen(prev => !prev),
       "aria-expanded": isOpen,
       "aria-controls": contentId,
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(h_stack_component, {
-        justify: "flex-start",
-        spacing: 2,
-        children: [value ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(color_indicator, {
-          colorValue: value,
-          className: "components-color-list-picker__swatch-color"
-        }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
-          icon: library_swatch
-        }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
-          id: labelId,
-          children: label
-        })]
-      })
+      icon: value ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(color_indicator, {
+        colorValue: value,
+        className: "components-color-list-picker__swatch-color"
+      }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
+        icon: library_swatch
+      }),
+      text: label
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       role: "group",
       id: contentId,
@@ -56266,40 +56608,20 @@ function DuotonePicker({
       }
     }, slug);
   });
-  let metaProps;
-  if (asButtons) {
-    metaProps = {
-      asButtons: true
-    };
-  } else {
-    const _metaProps = {
-      asButtons: false,
-      loop
-    };
-    if (ariaLabel) {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': ariaLabel
-      };
-    } else if (ariaLabelledby) {
-      metaProps = {
-        ..._metaProps,
-        'aria-labelledby': ariaLabelledby
-      };
-    } else {
-      metaProps = {
-        ..._metaProps,
-        'aria-label': (0,external_wp_i18n_namespaceObject.__)('Custom color picker.')
-      };
-    }
-  }
+  const {
+    metaProps,
+    labelProps
+  } = getComputeCircularOptionPickerCommonProps(asButtons, loop, ariaLabel, ariaLabelledby);
   const options = unsetable ? [unsetOption, ...duotoneOptions] : duotoneOptions;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker, {
     ...otherProps,
     ...metaProps,
+    ...labelProps,
     options: options,
     actions: !!clearable && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_circular_option_picker.ButtonAction, {
       onClick: () => onChange(undefined),
+      accessibleWhenDisabled: true,
+      disabled: !value,
       children: (0,external_wp_i18n_namespaceObject.__)('Clear')
     }),
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
@@ -56336,7 +56658,6 @@ function DuotonePicker({
 /* harmony default export */ const duotone_picker = (DuotonePicker);
 
 ;// ./packages/components/build-module/external-link/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -56471,7 +56792,7 @@ const MediaWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ?
 } : 0);
 const MediaContainer = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm7"
-} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:auto;}" + ( true ? "" : 0));
+} : 0)("align-items:center;border-radius:", config_values.radiusSmall, ";cursor:pointer;display:inline-flex;justify-content:center;margin:auto;position:relative;height:100%;&:after{border-radius:inherit;bottom:0;box-shadow:inset 0 0 0 1px rgba( 0, 0, 0, 0.1 );content:'';left:0;pointer-events:none;position:absolute;right:0;top:0;}img,video{border-radius:inherit;box-sizing:border-box;display:block;height:auto;margin:0;max-height:100%;max-width:100%;pointer-events:none;user-select:none;width:100%;}" + ( true ? "" : 0));
 const MediaPlaceholder = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm6"
 } : 0)("background:", COLORS.gray[100], ";border-radius:inherit;box-sizing:border-box;height:", INITIAL_BOUNDS.height, "px;max-width:280px;min-width:", INITIAL_BOUNDS.width, "px;width:100%;" + ( true ? "" : 0));
@@ -57046,62 +57367,6 @@ function FocusableIframe({
   });
 }
 
-;// ./packages/icons/build-module/library/settings.js
-/**
- * WordPress dependencies
- */
-
-
-const settings = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "m19 7.5h-7.628c-.3089-.87389-1.1423-1.5-2.122-1.5-.97966 0-1.81309.62611-2.12197 1.5h-2.12803v1.5h2.12803c.30888.87389 1.14231 1.5 2.12197 1.5.9797 0 1.8131-.62611 2.122-1.5h7.628z"
-  }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "m19 15h-2.128c-.3089-.8739-1.1423-1.5-2.122-1.5s-1.8131.6261-2.122 1.5h-7.628v1.5h7.628c.3089.8739 1.1423 1.5 2.122 1.5s1.8131-.6261 2.122-1.5h2.128z"
-  })]
-});
-/* harmony default export */ const library_settings = (settings);
-
-;// ./packages/components/build-module/font-size-picker/utils.js
-/**
- * Internal dependencies
- */
-
-
-
-/**
- * Some themes use css vars for their font sizes, so until we
- * have the way of calculating them don't display them.
- *
- * @param value The value that is checked.
- * @return Whether the value is a simple css value.
- */
-function isSimpleCssValue(value) {
-  const sizeRegex = /^[\d\.]+(px|em|rem|vw|vh|%|svw|lvw|dvw|svh|lvh|dvh|vi|svi|lvi|dvi|vb|svb|lvb|dvb|vmin|svmin|lvmin|dvmin|vmax|svmax|lvmax|dvmax)?$/i;
-  return sizeRegex.test(String(value));
-}
-
-/**
- * If all of the given font sizes have the same unit (e.g. 'px'), return that
- * unit. Otherwise return null.
- *
- * @param fontSizes List of font sizes.
- * @return The common unit, or null.
- */
-function getCommonSizeUnit(fontSizes) {
-  const [firstFontSize, ...otherFontSizes] = fontSizes;
-  if (!firstFontSize) {
-    return null;
-  }
-  const [, firstUnit] = parseQuantityAndUnitFromRawValue(firstFontSize.size);
-  const areAllSizesSameUnit = otherFontSizes.every(fontSize => {
-    const [, unit] = parseQuantityAndUnitFromRawValue(fontSize.size);
-    return unit === firstUnit;
-  });
-  return areAllSizesSameUnit ? firstUnit : null;
-}
-
 ;// ./packages/components/build-module/font-size-picker/styles.js
 
 function font_size_picker_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
@@ -57116,25 +57381,38 @@ function font_size_picker_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You 
 
 
 
-
 const styles_Container = /*#__PURE__*/emotion_styled_base_browser_esm("fieldset",  true ? {
-  target: "e8tqeku4"
+  target: "e8tqeku3"
 } : 0)( true ? {
-  name: "1t1ytme",
-  styles: "border:0;margin:0;padding:0"
+  name: "k2q51s",
+  styles: "border:0;margin:0;padding:0;display:contents"
 } : 0);
 const styles_Header = /*#__PURE__*/emotion_styled_base_browser_esm(h_stack_component,  true ? {
-  target: "e8tqeku3"
+  target: "e8tqeku2"
 } : 0)("height:", space(4), ";" + ( true ? "" : 0));
 const HeaderToggle = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
-  target: "e8tqeku2"
+  target: "e8tqeku1"
 } : 0)("margin-top:", space(-1), ";" + ( true ? "" : 0));
 const HeaderLabel = /*#__PURE__*/emotion_styled_base_browser_esm(base_control.VisualLabel,  true ? {
-  target: "e8tqeku1"
-} : 0)("display:flex;gap:", space(1), ";justify-content:flex-start;margin-bottom:0;" + ( true ? "" : 0));
-const HeaderHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e8tqeku0"
-} : 0)("color:", COLORS.gray[700], ";" + ( true ? "" : 0));
+} : 0)("display:flex;gap:", space(1), ";justify-content:flex-start;margin-bottom:0;" + ( true ? "" : 0));
+
+;// ./packages/components/build-module/font-size-picker/utils.js
+/**
+ * Internal dependencies
+ */
+
+/**
+ * Some themes use css vars for their font sizes, so until we
+ * have the way of calculating them don't display them.
+ *
+ * @param value The value that is checked.
+ * @return Whether the value is a simple css value.
+ */
+function isSimpleCssValue(value) {
+  const sizeRegex = /^[\d\.]+(px|em|rem|vw|vh|%|svw|lvw|dvw|svh|lvh|dvh|vi|svi|lvi|dvi|vb|svb|lvb|dvb|vmin|svmin|lvmin|dvmin|vmax|svmax|lvmax|dvmax)?$/i;
+  return sizeRegex.test(String(value));
+}
 
 ;// ./packages/components/build-module/font-size-picker/font-size-picker-select.js
 /**
@@ -57148,15 +57426,10 @@ const HeaderHint = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? 
 
 
 
-
 const DEFAULT_OPTION = {
   key: 'default',
   name: (0,external_wp_i18n_namespaceObject.__)('Default'),
   value: undefined
-};
-const CUSTOM_OPTION = {
-  key: 'custom',
-  name: (0,external_wp_i18n_namespaceObject.__)('Custom')
 };
 const FontSizePickerSelect = props => {
   var _options$find;
@@ -57164,20 +57437,12 @@ const FontSizePickerSelect = props => {
     __next40pxDefaultSize,
     fontSizes,
     value,
-    disableCustomFontSizes,
     size,
-    onChange,
-    onSelectCustom
+    onChange
   } = props;
-  const areAllSizesSameUnit = !!getCommonSizeUnit(fontSizes);
   const options = [DEFAULT_OPTION, ...fontSizes.map(fontSize => {
     let hint;
-    if (areAllSizesSameUnit) {
-      const [quantity] = parseQuantityAndUnitFromRawValue(fontSize.size);
-      if (quantity !== undefined) {
-        hint = String(quantity);
-      }
-    } else if (isSimpleCssValue(fontSize.size)) {
+    if (isSimpleCssValue(fontSize.size)) {
       hint = String(fontSize.size);
     }
     return {
@@ -57186,10 +57451,11 @@ const FontSizePickerSelect = props => {
       value: fontSize.size,
       hint
     };
-  }), ...(disableCustomFontSizes ? [] : [CUSTOM_OPTION])];
-  const selectedOption = value ? (_options$find = options.find(option => option.value === value)) !== null && _options$find !== void 0 ? _options$find : CUSTOM_OPTION : DEFAULT_OPTION;
+  })];
+  const selectedOption = (_options$find = options.find(option => option.value === value)) !== null && _options$find !== void 0 ? _options$find : DEFAULT_OPTION;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(custom_select_control, {
     __next40pxDefaultSize: __next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize: true,
     className: "components-font-size-picker__select",
     label: (0,external_wp_i18n_namespaceObject.__)('Font size'),
     hideLabelFromVision: true,
@@ -57202,11 +57468,7 @@ const FontSizePickerSelect = props => {
     onChange: ({
       selectedItem
     }) => {
-      if (selectedItem === CUSTOM_OPTION) {
-        onSelectCustom();
-      } else {
-        onChange(selectedItem.value);
-      }
+      onChange(selectedItem.value);
     },
     size: size
   });
@@ -57263,6 +57525,7 @@ const FontSizePickerToggleGroup = props => {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(toggle_group_control_component, {
     __nextHasNoMarginBottom: true,
     __next40pxDefaultSize: __next40pxDefaultSize,
+    __shouldNotWarnDeprecated36pxSize: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Font size'),
     hideLabelFromVision: true,
     value: value,
@@ -57291,11 +57554,10 @@ const FontSizePickerToggleGroup = props => {
 
 
 
+
 /**
  * Internal dependencies
  */
-
-
 
 
 
@@ -57321,6 +57583,7 @@ const UnforwardedFontSizePicker = (props, ref) => {
     withSlider = false,
     withReset = true
   } = props;
+  const labelId = (0,external_wp_compose_namespaceObject.useInstanceId)(UnforwardedFontSizePicker, 'font-size-picker-label');
   const units = useCustomUnits({
     availableUnits: unitsProp
   });
@@ -57337,24 +57600,6 @@ const UnforwardedFontSizePicker = (props, ref) => {
   } else {
     currentPickerType = fontSizes.length > MAX_TOGGLE_GROUP_SIZES ? 'select' : 'togglegroup';
   }
-  const headerHint = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    switch (currentPickerType) {
-      case 'custom':
-        return (0,external_wp_i18n_namespaceObject.__)('Custom');
-      case 'togglegroup':
-        if (selectedFontSize) {
-          return selectedFontSize.name || T_SHIRT_NAMES[fontSizes.indexOf(selectedFontSize)];
-        }
-        break;
-      case 'select':
-        const commonUnit = getCommonSizeUnit(fontSizes);
-        if (commonUnit) {
-          return `(${commonUnit})`;
-        }
-        break;
-    }
-    return '';
-  }, [currentPickerType, selectedFontSize, fontSizes]);
   if (fontSizes.length === 0 && disableCustomFontSizes) {
     return null;
   }
@@ -57366,21 +57611,23 @@ const UnforwardedFontSizePicker = (props, ref) => {
   const [valueQuantity, valueUnit] = parseQuantityAndUnitFromRawValue(value, units);
   const isValueUnitRelative = !!valueUnit && ['em', 'rem', 'vw', 'vh'].includes(valueUnit);
   const isDisabled = value === undefined;
+  maybeWarnDeprecated36pxSize({
+    componentName: 'FontSizePicker',
+    __next40pxDefaultSize,
+    size
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_Container, {
     ref: ref,
-    className: "components-font-size-picker",
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(visually_hidden_component, {
-      as: "legend",
-      children: (0,external_wp_i18n_namespaceObject.__)('Font size')
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
+    className: "components-font-size-picker"
+    // This Container component renders a fieldset element that needs to be labeled.
+    ,
+    "aria-labelledby": labelId,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(spacer_component, {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_Header, {
         className: "components-font-size-picker__header",
-        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(HeaderLabel, {
-          "aria-label": `${(0,external_wp_i18n_namespaceObject.__)('Size')} ${headerHint || ''}`,
-          children: [(0,external_wp_i18n_namespaceObject.__)('Size'), headerHint && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeaderHint, {
-            className: "components-font-size-picker__header__hint",
-            children: headerHint
-          })]
+        children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeaderLabel, {
+          id: labelId,
+          children: (0,external_wp_i18n_namespaceObject.__)('Font size')
         }), !disableCustomFontSizes && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(HeaderToggle, {
           label: currentPickerType === 'custom' ? (0,external_wp_i18n_namespaceObject.__)('Use size preset') : (0,external_wp_i18n_namespaceObject.__)('Set custom size'),
           icon: library_settings,
@@ -57422,7 +57669,8 @@ const UnforwardedFontSizePicker = (props, ref) => {
           isBlock: true,
           children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(unit_control, {
             __next40pxDefaultSize: __next40pxDefaultSize,
-            label: (0,external_wp_i18n_namespaceObject.__)('Custom'),
+            __shouldNotWarnDeprecated36pxSize: true,
+            label: (0,external_wp_i18n_namespaceObject.__)('Font size'),
             labelPosition: "top",
             hideLabelFromVision: true,
             value: value,
@@ -57446,8 +57694,9 @@ const UnforwardedFontSizePicker = (props, ref) => {
             children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(range_control, {
               __nextHasNoMarginBottom: true,
               __next40pxDefaultSize: __next40pxDefaultSize,
+              __shouldNotWarnDeprecated36pxSize: true,
               className: "components-font-size-picker__custom-input",
-              label: (0,external_wp_i18n_namespaceObject.__)('Custom Size'),
+              label: (0,external_wp_i18n_namespaceObject.__)('Font size'),
               hideLabelFromVision: true,
               value: valueQuantity,
               initialPosition: fallbackFontSize,
@@ -57498,14 +57747,16 @@ const FontSizePicker = (0,external_wp_element_namespaceObject.forwardRef)(Unforw
  */
 
 
+
 /**
- * FormFileUpload is a component that allows users to select files from their local device.
+ * FormFileUpload allows users to select files from their local device.
  *
  * ```jsx
  * import { FormFileUpload } from '@wordpress/components';
  *
  * const MyFormFileUpload = () => (
  *   <FormFileUpload
+ *     __next40pxDefaultSize
  *     accept="image/*"
  *     onChange={ ( event ) => console.log( event.currentTarget.files ) }
  *   >
@@ -57514,6 +57765,7 @@ const FontSizePicker = (0,external_wp_element_namespaceObject.forwardRef)(Unforw
  * );
  * ```
  */
+
 function FormFileUpload({
   accept,
   children,
@@ -57527,6 +57779,14 @@ function FormFileUpload({
   const openFileDialog = () => {
     ref.current?.click();
   };
+  if (!render) {
+    maybeWarnDeprecated36pxSize({
+      componentName: 'FormFileUpload',
+      __next40pxDefaultSize: props.__next40pxDefaultSize,
+      // @ts-expect-error - We don't "officially" support all Button props but this likely happens.
+      size: props.size
+    });
+  }
   const ui = render ? render({
     openFileDialog
   }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
@@ -57534,10 +57794,10 @@ function FormFileUpload({
     ...props,
     children: children
   });
-  // @todo: Temporary fix a bug that prevents Chromium browsers from selecting ".heic" files
-  // from the file upload. See https://core.trac.wordpress.org/ticket/62268#comment:4.
-  // This can be removed once the Chromium fix is in the stable channel.
-  const compatAccept = !!accept?.includes('image/*') ? `${accept}, image/heic, image/heif` : accept;
+
+  // iOS browsers may not reliably handle 'audio/*' in the accept attribute.
+  // Adding explicit audio MIME types improves compatibility across all devices.
+  const compatAccept = accept?.includes('audio/*') ? `${accept}, audio/mp3, audio/x-m4a, audio/x-m4b, audio/x-m4p, audio/x-wav, audio/webm` : accept;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
     className: "components-form-file-upload",
     children: [ui, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("input", {
@@ -57726,7 +57986,6 @@ const TokensAndInputWrapperFlex = /*#__PURE__*/emotion_styled_base_browser_esm(f
 } : 0)("padding:7px;", boxSizingReset, " ", deprecatedPaddings, ";" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/form-token-field/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -57744,6 +58003,7 @@ const TokensAndInputWrapperFlex = /*#__PURE__*/emotion_styled_base_browser_esm(f
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -57807,6 +58067,11 @@ function FormTokenField(props) {
       hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version.'
     });
   }
+  maybeWarnDeprecated36pxSize({
+    componentName: 'FormTokenField',
+    size: undefined,
+    __next40pxDefaultSize
+  });
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(FormTokenField);
 
   // We reset to these initial values again in the onBlur
@@ -58121,9 +58386,9 @@ function FormTokenField(props) {
     if (match.length === 0) {
       _suggestions = _suggestions.filter(suggestion => !normalizedValue.includes(suggestion));
     } else {
-      match = match.toLocaleLowerCase();
+      match = match.normalize('NFKC').toLocaleLowerCase();
       _suggestions.forEach(suggestion => {
-        const index = suggestion.toLocaleLowerCase().indexOf(match);
+        const index = suggestion.normalize('NFKC').toLocaleLowerCase().indexOf(match);
         if (normalizedValue.indexOf(suggestion) === -1) {
           if (index === 0) {
             startsWithMatch.push(suggestion);
@@ -58398,6 +58663,8 @@ function Guide({
   className,
   contentLabel,
   finishButtonText = (0,external_wp_i18n_namespaceObject.__)('Finish'),
+  nextButtonText = (0,external_wp_i18n_namespaceObject.__)('Next'),
+  previousButtonText = (0,external_wp_i18n_namespaceObject.__)('Previous'),
   onFinish,
   pages = []
 }) {
@@ -58472,13 +58739,13 @@ function Guide({
           variant: "tertiary",
           onClick: goBack,
           __next40pxDefaultSize: true,
-          children: (0,external_wp_i18n_namespaceObject.__)('Previous')
+          children: previousButtonText
         }), canGoForward && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
           className: "components-guide__forward-button",
           variant: "primary",
           onClick: goForward,
           __next40pxDefaultSize: true,
-          children: (0,external_wp_i18n_namespaceObject.__)('Next')
+          children: nextButtonText
         }), !canGoForward && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
           className: "components-guide__finish-button",
           variant: "primary",
@@ -59063,7 +59330,7 @@ const ItemBaseUI = /*#__PURE__*/emotion_styled_base_browser_esm("li",  true ? {
   textAlign: 'left'
 }, {
   textAlign: 'right'
-}), " &:hover,&:focus:not( [aria-disabled='true'] ):active,&:active:not( [aria-disabled='true'] ):active{color:inherit;opacity:1;}}&.is-active{background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";>button,>a{color:", COLORS.white, ";opacity:1;}}>svg path{color:", COLORS.gray[600], ";}" + ( true ? "" : 0));
+}), " &:hover,&:focus:not( [aria-disabled='true'] ):active,&:active:not( [aria-disabled='true'] ):active{color:inherit;opacity:1;}}&.is-active{background-color:", COLORS.theme.accent, ";color:", COLORS.theme.accentInverted, ";>button,.components-button:hover,>a{color:", COLORS.theme.accentInverted, ";opacity:1;}}>svg path{color:", COLORS.gray[600], ";}" + ( true ? "" : 0));
 const ItemUI = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeiismy3"
 } : 0)("display:flex;align-items:center;height:auto;min-height:40px;margin:0;padding:", space(1.5), " ", space(4), ";font-weight:400;line-height:20px;width:100%;color:inherit;opacity:0.7;" + ( true ? "" : 0));
@@ -59215,6 +59482,7 @@ const useCreateNavigationTree = () => {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -59279,6 +59547,11 @@ function Navigation({
   const [slideOrigin, setSlideOrigin] = (0,external_wp_element_namespaceObject.useState)();
   const navigationTree = useCreateNavigationTree();
   const defaultSlideOrigin = (0,external_wp_i18n_namespaceObject.isRTL)() ? 'right' : 'left';
+  external_wp_deprecated_default()('wp.components.Navigation (and all subcomponents)', {
+    since: '6.8',
+    version: '7.1',
+    alternative: 'wp.components.Navigator'
+  });
   const setActiveMenu = (menuId, slideInOrigin = defaultSlideOrigin) => {
     if (!navigationTree.getMenu(menuId)) {
       return;
@@ -59400,6 +59673,7 @@ function UnforwardedNavigationBackButton({
   };
   const icon = (0,external_wp_i18n_namespaceObject.isRTL)() ? chevron_right : chevron_left;
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuBackButtonUI, {
+    __next40pxDefaultSize: true,
     className: classes,
     href: href,
     variant: "tertiary",
@@ -59708,6 +59982,7 @@ function NavigationItem(props) {
   };
   const itemProps = isText ? restProps : {
     as: build_module_button,
+    __next40pxDefaultSize: 'as' in restProps ? restProps.as === undefined : true,
     href,
     onClick: onItemClick,
     'aria-current': isActive ? 'page' : undefined,
@@ -59901,7 +60176,7 @@ function UnforwardedSearchControl({
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     BaseControl: {
       // Overrides the underlying BaseControl `__nextHasNoMarginBottom` via the context system
-      // to provide backwards compatibile margin for SearchControl.
+      // to provide backwards compatible margin for SearchControl.
       // (In a standard InputControl, the BaseControl `__nextHasNoMarginBottom` is always set to true.)
       _overrides: {
         __nextHasNoMarginBottom
@@ -62522,6 +62797,7 @@ const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 
 
 
+
 const tree_select_CONTEXT_VALUE = {
   BaseControl: {
     // Temporary during deprecation grace period: Overrides the underlying `__associatedWPComponentName`
@@ -62539,11 +62815,11 @@ function getSelectOptions(tree, level = 0) {
 }
 
 /**
- * TreeSelect component is used to generate select input fields.
+ * Generates a hierarchical select input.
  *
  * ```jsx
+ * import { useState } from 'react';
  * import { TreeSelect } from '@wordpress/components';
- * import { useState } from '@wordpress/element';
  *
  * const MyTreeSelect = () => {
  * 	const [ page, setPage ] = useState( 'p21' );
@@ -62551,6 +62827,7 @@ function getSelectOptions(tree, level = 0) {
  * 	return (
  * 		<TreeSelect
  * 			__nextHasNoMarginBottom
+ * 			__next40pxDefaultSize
  * 			label="Parent page"
  * 			noOptionLabel="No parent page"
  * 			onChange={ ( newPage ) => setPage( newPage ) }
@@ -62601,9 +62878,15 @@ function TreeSelect(props) {
       label: noOptionLabel
     }, ...getSelectOptions(tree)].filter(option => !!option);
   }, [noOptionLabel, tree]);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'TreeSelect',
+    size: restProps.size,
+    __next40pxDefaultSize: restProps.__next40pxDefaultSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ContextSystemProvider, {
     value: tree_select_CONTEXT_VALUE,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SelectControl, {
+      __shouldNotWarnDeprecated36pxSize: true,
       label,
       options,
       onChange,
@@ -62705,6 +62988,21 @@ function isSingleCategorySelection(props) {
 function isMultipleCategorySelection(props) {
   return 'categorySuggestions' in props;
 }
+const defaultOrderByOptions = [{
+  label: (0,external_wp_i18n_namespaceObject.__)('Newest to oldest'),
+  value: 'date/desc'
+}, {
+  label: (0,external_wp_i18n_namespaceObject.__)('Oldest to newest'),
+  value: 'date/asc'
+}, {
+  /* translators: Label for ordering posts by title in ascending order. */
+  label: (0,external_wp_i18n_namespaceObject.__)('A → Z'),
+  value: 'title/asc'
+}, {
+  /* translators: Label for ordering posts by title in descending order. */
+  label: (0,external_wp_i18n_namespaceObject.__)('Z → A'),
+  value: 'title/desc'
+}];
 
 /**
  * Controls to query for posts.
@@ -62712,7 +63010,7 @@ function isMultipleCategorySelection(props) {
  * ```jsx
  * const MyQueryControls = () => (
  *   <QueryControls
- *     { ...{ maxItems, minItems, numberOfItems, order, orderBy } }
+ *     { ...{ maxItems, minItems, numberOfItems, order, orderBy, orderByOptions } }
  *     onOrderByChange={ ( newOrderBy ) => {
  *       updateQuery( { orderBy: newOrderBy } )
  *     }
@@ -62737,6 +63035,7 @@ function QueryControls({
   numberOfItems,
   order,
   orderBy,
+  orderByOptions = defaultOrderByOptions,
   maxItems = DEFAULT_MAX_ITEMS,
   minItems = DEFAULT_MIN_ITEMS,
   onAuthorChange,
@@ -62755,21 +63054,7 @@ function QueryControls({
       __next40pxDefaultSize: true,
       label: (0,external_wp_i18n_namespaceObject.__)('Order by'),
       value: orderBy === undefined || order === undefined ? undefined : `${orderBy}/${order}`,
-      options: [{
-        label: (0,external_wp_i18n_namespaceObject.__)('Newest to oldest'),
-        value: 'date/desc'
-      }, {
-        label: (0,external_wp_i18n_namespaceObject.__)('Oldest to newest'),
-        value: 'date/asc'
-      }, {
-        /* translators: Label for ordering posts by title in ascending order. */
-        label: (0,external_wp_i18n_namespaceObject.__)('A → Z'),
-        value: 'title/asc'
-      }, {
-        /* translators: Label for ordering posts by title in descending order. */
-        label: (0,external_wp_i18n_namespaceObject.__)('Z → A'),
-        value: 'title/desc'
-      }],
+      options: orderByOptions,
       onChange: value => {
         if (typeof value !== 'string') {
           return;
@@ -62850,7 +63135,6 @@ const RadioGroupContext = (0,external_wp_element_namespaceObject.createContext)(
  */
 
 
-
 /**
  * Internal dependencies
  */
@@ -62905,6 +63189,7 @@ const radio_Radio = (0,external_wp_element_namespaceObject.forwardRef)(Unforward
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -62932,11 +63217,16 @@ function UnforwardedRadioGroup({
     store: radioStore,
     disabled
   }), [radioStore, disabled]);
+  external_wp_deprecated_default()('wp.components.__experimentalRadioGroup', {
+    alternative: 'wp.components.RadioControl or wp.components.__experimentalToggleGroupControl',
+    since: '6.8'
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RadioGroupContext.Provider, {
     value: contextValue,
     children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(RadioGroup, {
       store: radioStore,
       render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(button_group, {
+        __shouldNotWarnDeprecated: true,
         children: children
       }),
       "aria-label": label,
@@ -64379,7 +64669,15 @@ function UnforwardedResizableBox({
   ...props
 }, ref) {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(Resizable, {
-    className: dist_clsx('components-resizable-box__container', showHandle && 'has-show-handle', className),
+    className: dist_clsx('components-resizable-box__container', showHandle && 'has-show-handle', className)
+    // Add a focusable element within the drag handle. Unfortunately,
+    // `re-resizable` does not make them properly focusable by default,
+    // causing focus to move the the block wrapper which triggers block
+    // drag.
+    ,
+    handleComponent: Object.fromEntries(Object.keys(HANDLE_CLASSES).map(key => [key, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
+      tabIndex: -1
+    }, key)])),
     handleClasses: HANDLE_CLASSES,
     handleStyles: HANDLE_STYLES,
     ref: ref,
@@ -64713,6 +65011,7 @@ function SandBox({
  */
 
 
+
 const NOTICE_TIMEOUT = 10000;
 
 /**
@@ -64815,17 +65114,21 @@ function UnforwardedSnackbar({
       }), children, actions.map(({
         label,
         onClick,
-        url
-      }, index) => {
-        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
-          __next40pxDefaultSize: true,
-          href: url,
-          variant: "link",
-          onClick: event => onActionClick(event, onClick),
-          className: "components-snackbar__action",
-          children: label
-        }, index);
-      }), explicitDismiss && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+        url,
+        openInNewTab = false
+      }, index) => url !== undefined && openInNewTab ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_link, {
+        href: url,
+        onClick: event => onActionClick(event, onClick),
+        className: "components-snackbar__action",
+        children: label
+      }, index) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+        __next40pxDefaultSize: true,
+        href: url,
+        variant: "link",
+        onClick: event => onActionClick(event, onClick),
+        className: "components-snackbar__action",
+        children: label
+      }, index)), explicitDismiss && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
         role: "button",
         "aria-label": (0,external_wp_i18n_namespaceObject.__)('Dismiss this notice'),
         tabIndex: 0,
@@ -64959,94 +65262,6 @@ function SnackbarList({
 }
 /* harmony default export */ const snackbar_list = (SnackbarList);
 
-;// ./packages/components/build-module/spinner/styles.js
-
-function spinner_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
-/**
- * External dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-const spinAnimation = emotion_react_browser_esm_keyframes`
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
- `;
-const StyledSpinner = /*#__PURE__*/emotion_styled_base_browser_esm("svg",  true ? {
-  target: "ea4tfvq2"
-} : 0)("width:", config_values.spinnerSize, "px;height:", config_values.spinnerSize, "px;display:inline-block;margin:5px 11px 0;position:relative;color:", COLORS.theme.accent, ";overflow:visible;opacity:1;background-color:transparent;" + ( true ? "" : 0));
-const commonPathProps =  true ? {
-  name: "9s4963",
-  styles: "fill:transparent;stroke-width:1.5px"
-} : 0;
-const SpinnerTrack = /*#__PURE__*/emotion_styled_base_browser_esm("circle",  true ? {
-  target: "ea4tfvq1"
-} : 0)(commonPathProps, ";stroke:", COLORS.gray[300], ";" + ( true ? "" : 0));
-const SpinnerIndicator = /*#__PURE__*/emotion_styled_base_browser_esm("path",  true ? {
-  target: "ea4tfvq0"
-} : 0)(commonPathProps, ";stroke:currentColor;stroke-linecap:round;transform-origin:50% 50%;animation:1.4s linear infinite both ", spinAnimation, ";" + ( true ? "" : 0));
-
-;// ./packages/components/build-module/spinner/index.js
-/**
- * External dependencies
- */
-
-/**
- * Internal dependencies
- */
-
-/**
- * WordPress dependencies
- */
-
-
-function UnforwardedSpinner({
-  className,
-  ...props
-}, forwardedRef) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(StyledSpinner, {
-    className: dist_clsx('components-spinner', className),
-    viewBox: "0 0 100 100",
-    width: "16",
-    height: "16",
-    xmlns: "http://www.w3.org/2000/svg",
-    role: "presentation",
-    focusable: "false",
-    ...props,
-    ref: forwardedRef,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SpinnerTrack, {
-      cx: "50",
-      cy: "50",
-      r: "50",
-      vectorEffect: "non-scaling-stroke"
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SpinnerIndicator, {
-      d: "m 50 0 a 50 50 0 0 1 50 50",
-      vectorEffect: "non-scaling-stroke"
-    })]
-  });
-}
-/**
- * `Spinner` is a component used to notify users that their action is being processed.
- *
- * ```js
- *   import { Spinner } from '@wordpress/components';
- *
- *   function Example() {
- *     return <Spinner />;
- *   }
- * ```
- */
-const Spinner = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedSpinner);
-/* harmony default export */ const spinner = (Spinner);
-
 ;// ./packages/components/build-module/surface/component.js
 /**
  * External dependencies
@@ -65172,9 +65387,14 @@ function createTabStore(_a = {}) {
       tab.setState("selectedId", tabItem.id);
     })
   );
+  let syncActiveId = true;
   setup(
     tab,
     () => batch(tab, ["selectedId"], (state, prev) => {
+      if (!syncActiveId) {
+        syncActiveId = true;
+        return;
+      }
       if (parentComposite && state.selectedId === prev.selectedId) return;
       tab.setState("activeId", state.selectedId);
     })
@@ -65219,18 +65439,19 @@ function createTabStore(_a = {}) {
       selectedIdFromSelectedValue = tab.getState().selectedId;
     };
     const restoreSelectedId = () => {
+      syncActiveId = false;
       tab.setState("selectedId", selectedIdFromSelectedValue);
     };
     if (parentComposite && "setSelectElement" in parentComposite) {
       return chain(
         sync(parentComposite, ["value"], backupSelectedId),
-        sync(parentComposite, ["open"], restoreSelectedId)
+        sync(parentComposite, ["mounted"], restoreSelectedId)
       );
     }
     if (!combobox) return;
     return chain(
       sync(combobox, ["selectedValue"], backupSelectedId),
-      sync(combobox, ["open"], restoreSelectedId)
+      sync(combobox, ["mounted"], restoreSelectedId)
     );
   });
   return _chunks_3YLGPPWQ_spreadProps(_chunks_3YLGPPWQ_spreadValues(_chunks_3YLGPPWQ_spreadValues({}, composite), tab), {
@@ -65244,7 +65465,7 @@ function createTabStore(_a = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/JZUY7XL6.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/PY4NZ6HS.js
 "use client";
 
 
@@ -65261,7 +65482,7 @@ function useTabStoreProps(store, update, props) {
   store = useCompositeStoreProps(store, update, props);
   useStoreProps(store, props, "selectedId", "setSelectedId");
   useStoreProps(store, props, "selectOnMove");
-  const [panels, updatePanels] = _2GXGCHW6_useStore(() => store.panels, {});
+  const [panels, updatePanels] = YV4JVR4I_useStore(() => store.panels, {});
   useUpdateEffect(updatePanels, [store, updatePanels]);
   return Object.assign(
     (0,external_React_.useMemo)(() => _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, store), { panels }), [store, panels]),
@@ -65275,31 +65496,31 @@ function useTabStore(props = {}) {
     composite: props.composite !== void 0 ? props.composite : composite,
     combobox: props.combobox !== void 0 ? props.combobox : combobox
   });
-  const [store, update] = _2GXGCHW6_useStore(createTabStore, props);
+  const [store, update] = YV4JVR4I_useStore(createTabStore, props);
   return useTabStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/TNITL632.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/UYGDZTLQ.js
 "use client";
 
 
 
 // src/tab/tab-context.tsx
-var TNITL632_ctx = createStoreContext(
+var UYGDZTLQ_ctx = createStoreContext(
   [CompositeContextProvider],
   [CompositeScopedContextProvider]
 );
-var useTabContext = TNITL632_ctx.useContext;
-var useTabScopedContext = TNITL632_ctx.useScopedContext;
-var useTabProviderContext = TNITL632_ctx.useProviderContext;
-var TabContextProvider = TNITL632_ctx.ContextProvider;
-var TabScopedContextProvider = TNITL632_ctx.ScopedContextProvider;
+var useTabContext = UYGDZTLQ_ctx.useContext;
+var useTabScopedContext = UYGDZTLQ_ctx.useScopedContext;
+var useTabProviderContext = UYGDZTLQ_ctx.useProviderContext;
+var TabContextProvider = UYGDZTLQ_ctx.ContextProvider;
+var TabScopedContextProvider = UYGDZTLQ_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/tab/tab-list.js
+;// ./node_modules/@ariakit/react-core/esm/tab/tab-list.js
 "use client";
 
 
@@ -65349,11 +65570,11 @@ var useTabList = createHook(
 );
 var TabList = forwardRef2(function TabList2(props) {
   const htmlProps = useTabList(props);
-  return HKOOKEDE_createElement(tab_list_TagName, htmlProps);
+  return LMDWO4NN_createElement(tab_list_TagName, htmlProps);
 });
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/tab/tab.js
+;// ./node_modules/@ariakit/react-core/esm/tab/tab.js
 "use client";
 
 
@@ -65444,13 +65665,14 @@ var useTab = createHook(function useTab2(_a) {
       accessibleWhenDisabled,
       store: store.composite,
       shouldRegisterItem: canRegisterComposedItem && shouldRegisterItem,
+      rowId: props.rowId,
       render: props.render
     };
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
       render: /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(
-        _3CCTMYB6_CompositeItem,
+        P2CTZE2T_CompositeItem,
         _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, defaultProps), {
-          render: store.combobox && store.composite !== store.combobox ? /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(_3CCTMYB6_CompositeItem, _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, defaultProps), { store: store.combobox })) : defaultProps.render
+          render: store.combobox && store.composite !== store.combobox ? /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(P2CTZE2T_CompositeItem, _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, defaultProps), { store: store.combobox })) : defaultProps.render
         })
       )
     });
@@ -65467,12 +65689,12 @@ var useTab = createHook(function useTab2(_a) {
 var Tab = memo2(
   forwardRef2(function Tab2(props) {
     const htmlProps = useTab(props);
-    return HKOOKEDE_createElement(tab_TagName, htmlProps);
+    return LMDWO4NN_createElement(tab_TagName, htmlProps);
   })
 );
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/tab/tab-panel.js
+;// ./node_modules/@ariakit/react-core/esm/tab/tab-panel.js
 "use client";
 
 
@@ -65495,7 +65717,6 @@ var Tab = memo2(
 
 
 
-
 var tab_panel_TagName = "div";
 var useTabPanel = createHook(
   function useTabPanel2(_a) {
@@ -65503,12 +65724,16 @@ var useTabPanel = createHook(
       store,
       unmountOnHide,
       tabId: tabIdProp,
-      getItem: getItemProp
+      getItem: getItemProp,
+      scrollRestoration,
+      scrollElement
     } = _b, props = __objRest(_b, [
       "store",
       "unmountOnHide",
       "tabId",
-      "getItem"
+      "getItem",
+      "scrollRestoration",
+      "scrollElement"
     ]);
     const context = useTabProviderContext();
     store = store || context;
@@ -65518,6 +65743,58 @@ var useTabPanel = createHook(
     );
     const ref = (0,external_React_.useRef)(null);
     const id = useId(props.id);
+    const tabId = useStoreState(
+      store.panels,
+      () => {
+        var _a2;
+        return tabIdProp || ((_a2 = store == null ? void 0 : store.panels.item(id)) == null ? void 0 : _a2.tabId);
+      }
+    );
+    const open = useStoreState(
+      store,
+      (state) => !!tabId && state.selectedId === tabId
+    );
+    const disclosure = useDisclosureStore({ open });
+    const mounted = useStoreState(disclosure, "mounted");
+    const scrollPositionRef = (0,external_React_.useRef)(
+      /* @__PURE__ */ new Map()
+    );
+    const getScrollElement = useEvent(() => {
+      const panelElement = ref.current;
+      if (!panelElement) return null;
+      if (!scrollElement) return panelElement;
+      if (typeof scrollElement === "function") {
+        return scrollElement(panelElement);
+      }
+      if ("current" in scrollElement) {
+        return scrollElement.current;
+      }
+      return scrollElement;
+    });
+    (0,external_React_.useEffect)(() => {
+      var _a2, _b2;
+      if (!scrollRestoration) return;
+      if (!mounted) return;
+      const element = getScrollElement();
+      if (!element) return;
+      if (scrollRestoration === "reset") {
+        element.scroll(0, 0);
+        return;
+      }
+      if (!tabId) return;
+      const position = scrollPositionRef.current.get(tabId);
+      element.scroll((_a2 = position == null ? void 0 : position.x) != null ? _a2 : 0, (_b2 = position == null ? void 0 : position.y) != null ? _b2 : 0);
+      const onScroll = () => {
+        scrollPositionRef.current.set(tabId, {
+          x: element.scrollLeft,
+          y: element.scrollTop
+        });
+      };
+      element.addEventListener("scroll", onScroll);
+      return () => {
+        element.removeEventListener("scroll", onScroll);
+      };
+    }, [scrollRestoration, mounted, tabId, getScrollElement, store]);
     const [hasTabbableChildren, setHasTabbableChildren] = (0,external_React_.useState)(false);
     (0,external_React_.useEffect)(() => {
       const element = ref.current;
@@ -65540,18 +65817,16 @@ var useTabPanel = createHook(
       onKeyDownProp == null ? void 0 : onKeyDownProp(event);
       if (event.defaultPrevented) return;
       if (!(store == null ? void 0 : store.composite)) return;
-      const state = store.getState();
-      const tab = createTabStore(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, state), { activeId: state.selectedId }));
-      tab.setState("renderedItems", state.renderedItems);
       const keyMap = {
-        ArrowLeft: tab.previous,
-        ArrowRight: tab.next,
-        Home: tab.first,
-        End: tab.last
+        ArrowLeft: store.previous,
+        ArrowRight: store.next,
+        Home: store.first,
+        End: store.last
       };
       const action = keyMap[event.key];
       if (!action) return;
-      const nextId = action();
+      const { selectedId } = store.getState();
+      const nextId = action({ activeId: selectedId });
       if (!nextId) return;
       event.preventDefault();
       store.move(nextId);
@@ -65561,17 +65836,6 @@ var useTabPanel = createHook(
       (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(TabScopedContextProvider, { value: store, children: element }),
       [store]
     );
-    const tabId = store.panels.useState(
-      () => {
-        var _a2;
-        return tabIdProp || ((_a2 = store == null ? void 0 : store.panels.item(id)) == null ? void 0 : _a2.tabId);
-      }
-    );
-    const open = store.useState(
-      (state) => !!tabId && state.selectedId === tabId
-    );
-    const disclosure = useDisclosureStore({ open });
-    const mounted = disclosure.useState("mounted");
     props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
       id,
       role: "tabpanel",
@@ -65593,7 +65857,7 @@ var useTabPanel = createHook(
 );
 var TabPanel = forwardRef2(function TabPanel2(props) {
   const htmlProps = useTabPanel(props);
-  return HKOOKEDE_createElement(tab_panel_TagName, htmlProps);
+  return LMDWO4NN_createElement(tab_panel_TagName, htmlProps);
 });
 
 
@@ -65601,7 +65865,6 @@ var TabPanel = forwardRef2(function TabPanel2(props) {
 /**
  * External dependencies
  */
-
 
 
 /**
@@ -65809,6 +66072,7 @@ const tab_panel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(Un
  */
 
 
+
 function UnforwardedTextControl(props, ref) {
   const {
     __nextHasNoMarginBottom,
@@ -65825,6 +66089,11 @@ function UnforwardedTextControl(props, ref) {
   } = props;
   const id = (0,external_wp_compose_namespaceObject.useInstanceId)(TextControl, 'inspector-text-control', idProp);
   const onChangeValue = event => onChange(event.target.value);
+  maybeWarnDeprecated36pxSize({
+    componentName: 'TextControl',
+    size: undefined,
+    __next40pxDefaultSize
+  });
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(base_control, {
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     __associatedWPComponentName: "TextControl",
@@ -65861,6 +66130,7 @@ function UnforwardedTextControl(props, ref) {
  *   return (
  *     <TextControl
  *       __nextHasNoMarginBottom
+ *       __next40pxDefaultSize
  *       label="Additional CSS Class"
  *       value={ className }
  *       onChange={ ( value ) => setClassName( value ) }
@@ -65917,7 +66187,7 @@ const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow
 const inputStyleFocus = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.theme.accent, ";box-shadow:0 0 0 calc( ", config_values.borderWidthFocus, " - ", config_values.borderWidth, " ) ", COLORS.theme.accent, ";outline:2px solid transparent;" + ( true ? "" : 0),  true ? "" : 0);
 const StyledTextarea = /*#__PURE__*/emotion_styled_base_browser_esm("textarea",  true ? {
   target: "e1w5nnrk0"
-} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{opacity:1;color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{opacity:1;color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
+} : 0)("width:100%;display:block;font-family:", font('default.fontFamily'), ";line-height:20px;background:", COLORS.theme.background, ";color:", COLORS.theme.foreground, ";padding:9px 11px;", inputStyleNeutral, ";font-size:", font('mobileTextMinFontSize'), ";", breakpoint('small'), "{font-size:", font('default.fontSize'), ";}&:focus{", inputStyleFocus, ";}&::-webkit-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.darkGrayPlaceholder, ";}.is-dark-theme &{&::-webkit-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&::-moz-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}&:-ms-input-placeholder{color:", COLORS.ui.lightGrayPlaceholder, ";}}" + ( true ? "" : 0));
 
 ;// ./packages/components/build-module/textarea-control/index.js
 /**
@@ -66199,25 +66469,25 @@ function UnforwardedToggleControl({
 const ToggleControl = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedToggleControl);
 /* harmony default export */ const toggle_control = (ToggleControl);
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/IIER4YBF.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/A3WPL2ZJ.js
 "use client";
 
 
 
 // src/toolbar/toolbar-context.tsx
-var IIER4YBF_ctx = createStoreContext(
+var A3WPL2ZJ_ctx = createStoreContext(
   [CompositeContextProvider],
   [CompositeScopedContextProvider]
 );
-var useToolbarContext = IIER4YBF_ctx.useContext;
-var useToolbarScopedContext = IIER4YBF_ctx.useScopedContext;
-var useToolbarProviderContext = IIER4YBF_ctx.useProviderContext;
-var ToolbarContextProvider = IIER4YBF_ctx.ContextProvider;
-var ToolbarScopedContextProvider = IIER4YBF_ctx.ScopedContextProvider;
+var useToolbarContext = A3WPL2ZJ_ctx.useContext;
+var useToolbarScopedContext = A3WPL2ZJ_ctx.useScopedContext;
+var useToolbarProviderContext = A3WPL2ZJ_ctx.useProviderContext;
+var ToolbarContextProvider = A3WPL2ZJ_ctx.ContextProvider;
+var ToolbarScopedContextProvider = A3WPL2ZJ_ctx.ScopedContextProvider;
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/FGSEH62K.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/BOLVLGVE.js
 "use client";
 
 
@@ -66225,7 +66495,7 @@ var ToolbarScopedContextProvider = IIER4YBF_ctx.ScopedContextProvider;
 
 
 // src/toolbar/toolbar-item.tsx
-var FGSEH62K_TagName = "button";
+var BOLVLGVE_TagName = "button";
 var useToolbarItem = createHook(
   function useToolbarItem2(_a) {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
@@ -66238,7 +66508,7 @@ var useToolbarItem = createHook(
 var ToolbarItem = memo2(
   forwardRef2(function ToolbarItem2(props) {
     const htmlProps = useToolbarItem(props);
-    return HKOOKEDE_createElement(FGSEH62K_TagName, htmlProps);
+    return LMDWO4NN_createElement(BOLVLGVE_TagName, htmlProps);
   })
 );
 
@@ -66272,7 +66542,7 @@ const ToolbarContext = (0,external_wp_element_namespaceObject.createContext)(und
  */
 
 
-function toolbar_item_ToolbarItem({
+function UnforwardedToolbarItem({
   children,
   as: Component,
   ...props
@@ -66310,7 +66580,8 @@ function toolbar_item_ToolbarItem({
     render: render
   });
 }
-/* harmony default export */ const toolbar_item = ((0,external_wp_element_namespaceObject.forwardRef)(toolbar_item_ToolbarItem));
+const toolbar_item_ToolbarItem = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedToolbarItem);
+/* harmony default export */ const toolbar_item = (toolbar_item_ToolbarItem);
 
 ;// ./packages/components/build-module/toolbar/toolbar-button/toolbar-button-container.js
 
@@ -66371,6 +66642,7 @@ function UnforwardedToolbarButton(props, ref) {
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
         ref: ref,
         icon: restProps.icon,
+        size: "compact",
         label: title,
         shortcut: restProps.shortcut,
         "data-subscript": restProps.subscript,
@@ -66401,6 +66673,7 @@ function UnforwardedToolbarButton(props, ref) {
     ...restProps,
     ref: ref,
     children: toolbarItemProps => /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_button, {
+      size: "compact",
       label: title,
       isPressed: isActive,
       ...toolbarItemProps,
@@ -66613,7 +66886,7 @@ function createToolbarStore(props = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/GO2SPXQX.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/7M5THDKH.js
 "use client";
 
 
@@ -66624,13 +66897,13 @@ function useToolbarStoreProps(store, update, props) {
   return useCompositeStoreProps(store, update, props);
 }
 function useToolbarStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createToolbarStore, props);
+  const [store, update] = YV4JVR4I_useStore(createToolbarStore, props);
   return useToolbarStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/toolbar/toolbar.js
+;// ./node_modules/@ariakit/react-core/esm/toolbar/toolbar.js
 "use client";
 
 
@@ -66693,7 +66966,7 @@ var useToolbar = createHook(
 );
 var Toolbar = forwardRef2(function Toolbar2(props) {
   const htmlProps = useToolbar(props);
-  return HKOOKEDE_createElement(toolbar_TagName, htmlProps);
+  return LMDWO4NN_createElement(toolbar_TagName, htmlProps);
 });
 
 
@@ -66849,7 +67122,7 @@ const toolbar_Toolbar = (0,external_wp_element_namespaceObject.forwardRef)(Unfor
 
 
 
-function ToolbarDropdownMenu(props, ref) {
+function UnforwardedToolbarDropdownMenu(props, ref) {
   const accessibleToolbarState = (0,external_wp_element_namespaceObject.useContext)(toolbar_context);
   if (!accessibleToolbarState) {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(dropdown_menu, {
@@ -66872,7 +67145,8 @@ function ToolbarDropdownMenu(props, ref) {
     })
   });
 }
-/* harmony default export */ const toolbar_dropdown_menu = ((0,external_wp_element_namespaceObject.forwardRef)(ToolbarDropdownMenu));
+const ToolbarDropdownMenu = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedToolbarDropdownMenu);
+/* harmony default export */ const toolbar_dropdown_menu = (ToolbarDropdownMenu);
 
 ;// ./packages/components/build-module/tools-panel/styles.js
 
@@ -67610,6 +67884,7 @@ const UnconnectedToolsPanel = (props, forwardedRef) => {
  *         onDeselect={ () => setHeight() }
  *       >
  *         <UnitControl
+ *           __next40pxDefaultSize
  *           label={ __( 'Height' ) }
  *           onChange={ setHeight }
  *           value={ height }
@@ -67621,6 +67896,7 @@ const UnconnectedToolsPanel = (props, forwardedRef) => {
  *         onDeselect={ () => setWidth() }
  *       >
  *         <UnitControl
+ *           __next40pxDefaultSize
  *           label={ __( 'Width' ) }
  *           onChange={ setWidth }
  *           value={ width }
@@ -68314,7 +68590,10 @@ function UnforwardedTreeGridCell({
     ...props,
     role: "gridcell",
     children: withoutGridItem ? /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-      children: children
+      children: typeof children === 'function' ? children({
+        ...props,
+        ref
+      }) : children
     }) : /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(tree_grid_item, {
       ref: ref,
       children: children
@@ -68847,7 +69126,7 @@ function isComponentLike(object) {
  *                describing the component and the
  *                focus return characteristics.
  *
- * @return Higher Order Component with the focus restauration behaviour.
+ * @return Higher Order Component with the focus restoration behaviour.
  */
 /* harmony default export */ const with_focus_return = ((0,external_wp_compose_namespaceObject.createHigherOrderComponent)(
 // @ts-expect-error TODO: Reconcile with intended `createHigherOrderComponent` types
@@ -68986,7 +69265,7 @@ const with_focus_return_Provider = ({
   return Component;
 }, 'withNotices'));
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/LG4RFBHV.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/B2J376ND.js
 "use client";
 
 
@@ -68995,15 +69274,15 @@ const with_focus_return_Provider = ({
 
 // src/menu/menu-context.tsx
 
-var LG4RFBHV_menu = createStoreContext(
+var B2J376ND_menu = createStoreContext(
   [CompositeContextProvider, HovercardContextProvider],
   [CompositeScopedContextProvider, HovercardScopedContextProvider]
 );
-var useMenuContext = LG4RFBHV_menu.useContext;
-var useMenuScopedContext = LG4RFBHV_menu.useScopedContext;
-var useMenuProviderContext = LG4RFBHV_menu.useProviderContext;
-var MenuContextProvider = LG4RFBHV_menu.ContextProvider;
-var MenuScopedContextProvider = LG4RFBHV_menu.ScopedContextProvider;
+var useMenuContext = B2J376ND_menu.useContext;
+var useMenuScopedContext = B2J376ND_menu.useScopedContext;
+var useMenuProviderContext = B2J376ND_menu.useProviderContext;
+var MenuContextProvider = B2J376ND_menu.ContextProvider;
+var MenuScopedContextProvider = B2J376ND_menu.ScopedContextProvider;
 var useMenuBarContext = (/* unused pure expression or super */ null && (useMenubarContext));
 var useMenuBarScopedContext = (/* unused pure expression or super */ null && (useMenubarScopedContext));
 var useMenuBarProviderContext = (/* unused pure expression or super */ null && (useMenubarProviderContext));
@@ -69015,7 +69294,7 @@ var MenuItemCheckedContext = (0,external_React_.createContext)(
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WSQNIDGC.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/62UHHO2X.js
 "use client";
 
 
@@ -69026,12 +69305,12 @@ var menubar = createStoreContext(
   [CompositeContextProvider],
   [CompositeScopedContextProvider]
 );
-var WSQNIDGC_useMenubarContext = menubar.useContext;
-var WSQNIDGC_useMenubarScopedContext = menubar.useScopedContext;
-var WSQNIDGC_useMenubarProviderContext = menubar.useProviderContext;
-var WSQNIDGC_MenubarContextProvider = menubar.ContextProvider;
-var WSQNIDGC_MenubarScopedContextProvider = menubar.ScopedContextProvider;
-var WSQNIDGC_MenuItemCheckedContext = (0,external_React_.createContext)(
+var _62UHHO2X_useMenubarContext = menubar.useContext;
+var _62UHHO2X_useMenubarScopedContext = menubar.useScopedContext;
+var _62UHHO2X_useMenubarProviderContext = menubar.useProviderContext;
+var _62UHHO2X_MenubarContextProvider = menubar.ContextProvider;
+var _62UHHO2X_MenubarScopedContextProvider = menubar.ScopedContextProvider;
+var _62UHHO2X_MenuItemCheckedContext = (0,external_React_.createContext)(
   void 0
 );
 
@@ -69151,7 +69430,7 @@ function createMenuStore(_a = {}) {
 }
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/MS4VD4RJ.js
+;// ./node_modules/@ariakit/react-core/esm/__chunks/MRTXKBQF.js
 "use client";
 
 
@@ -69182,20 +69461,1161 @@ function useMenuStoreProps(store, update, props) {
 }
 function useMenuStore(props = {}) {
   const parent = useMenuContext();
-  const menubar = WSQNIDGC_useMenubarContext();
+  const menubar = _62UHHO2X_useMenubarContext();
   const combobox = useComboboxProviderContext();
   props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), {
     parent: props.parent !== void 0 ? props.parent : parent,
     menubar: props.menubar !== void 0 ? props.menubar : menubar,
     combobox: props.combobox !== void 0 ? props.combobox : combobox
   });
-  const [store, update] = _2GXGCHW6_useStore(createMenuStore, props);
+  const [store, update] = YV4JVR4I_useStore(createMenuStore, props);
   return useMenuStoreProps(store, update, props);
 }
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-button.js
+;// ./packages/components/build-module/menu/context.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const context_Context = (0,external_wp_element_namespaceObject.createContext)(undefined);
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/MVIULMNR.js
+"use client";
+
+
+
+
+
+
+
+
+
+// src/menu/menu-item.tsx
+
+
+
+
+var MVIULMNR_TagName = "div";
+function menuHasFocus(baseElement, items, currentTarget) {
+  var _a;
+  if (!baseElement) return false;
+  if (hasFocusWithin(baseElement)) return true;
+  const expandedItem = items == null ? void 0 : items.find((item) => {
+    var _a2;
+    if (item.element === currentTarget) return false;
+    return ((_a2 = item.element) == null ? void 0 : _a2.getAttribute("aria-expanded")) === "true";
+  });
+  const expandedMenuId = (_a = expandedItem == null ? void 0 : expandedItem.element) == null ? void 0 : _a.getAttribute("aria-controls");
+  if (!expandedMenuId) return false;
+  const doc = getDocument(baseElement);
+  const expandedMenu = doc.getElementById(expandedMenuId);
+  if (!expandedMenu) return false;
+  if (hasFocusWithin(expandedMenu)) return true;
+  return !!expandedMenu.querySelector("[role=menuitem][aria-expanded=true]");
+}
+var useMenuItem = createHook(
+  function useMenuItem2(_a) {
+    var _b = _a, {
+      store,
+      hideOnClick = true,
+      preventScrollOnKeyDown = true,
+      focusOnHover,
+      blurOnHoverEnd
+    } = _b, props = __objRest(_b, [
+      "store",
+      "hideOnClick",
+      "preventScrollOnKeyDown",
+      "focusOnHover",
+      "blurOnHoverEnd"
+    ]);
+    const menuContext = useMenuScopedContext(true);
+    const menubarContext = _62UHHO2X_useMenubarScopedContext();
+    store = store || menuContext || menubarContext;
+    invariant(
+      store,
+       false && 0
+    );
+    const onClickProp = props.onClick;
+    const hideOnClickProp = useBooleanEvent(hideOnClick);
+    const hideMenu = "hideAll" in store ? store.hideAll : void 0;
+    const isWithinMenu = !!hideMenu;
+    const onClick = useEvent((event) => {
+      onClickProp == null ? void 0 : onClickProp(event);
+      if (event.defaultPrevented) return;
+      if (isDownloading(event)) return;
+      if (isOpeningInNewTab(event)) return;
+      if (!hideMenu) return;
+      const popupType = event.currentTarget.getAttribute("aria-haspopup");
+      if (popupType === "menu") return;
+      if (!hideOnClickProp(event)) return;
+      hideMenu();
+    });
+    const contentElement = useStoreState(
+      store,
+      (state) => "contentElement" in state ? state.contentElement : null
+    );
+    const role = getPopupItemRole(contentElement, "menuitem");
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
+      role
+    }, props), {
+      onClick
+    });
+    props = useCompositeItem(_3YLGPPWQ_spreadValues({
+      store,
+      preventScrollOnKeyDown
+    }, props));
+    props = useCompositeHover(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
+      store
+    }, props), {
+      focusOnHover(event) {
+        const getFocusOnHover = () => {
+          if (typeof focusOnHover === "function") return focusOnHover(event);
+          if (focusOnHover != null) return focusOnHover;
+          return true;
+        };
+        if (!store) return false;
+        if (!getFocusOnHover()) return false;
+        const { baseElement, items } = store.getState();
+        if (isWithinMenu) {
+          if (event.currentTarget.hasAttribute("aria-expanded")) {
+            event.currentTarget.focus();
+          }
+          return true;
+        }
+        if (menuHasFocus(baseElement, items, event.currentTarget)) {
+          event.currentTarget.focus();
+          return true;
+        }
+        return false;
+      },
+      blurOnHoverEnd(event) {
+        if (typeof blurOnHoverEnd === "function") return blurOnHoverEnd(event);
+        if (blurOnHoverEnd != null) return blurOnHoverEnd;
+        return isWithinMenu;
+      }
+    }));
+    return props;
+  }
+);
+var MVIULMNR_MenuItem = memo2(
+  forwardRef2(function MenuItem2(props) {
+    const htmlProps = useMenuItem(props);
+    return LMDWO4NN_createElement(MVIULMNR_TagName, htmlProps);
+  })
+);
+
+
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/RNCDFVMF.js
+"use client";
+
+
+// src/checkbox/checkbox-context.tsx
+var RNCDFVMF_ctx = createStoreContext();
+var useCheckboxContext = RNCDFVMF_ctx.useContext;
+var useCheckboxScopedContext = RNCDFVMF_ctx.useScopedContext;
+var useCheckboxProviderContext = RNCDFVMF_ctx.useProviderContext;
+var CheckboxContextProvider = RNCDFVMF_ctx.ContextProvider;
+var CheckboxScopedContextProvider = RNCDFVMF_ctx.ScopedContextProvider;
+
+
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ASMQKSDT.js
+"use client";
+
+
+
+
+
+
+
+
+// src/checkbox/checkbox.tsx
+
+
+
+var ASMQKSDT_TagName = "input";
+function setMixed(element, mixed) {
+  if (mixed) {
+    element.indeterminate = true;
+  } else if (element.indeterminate) {
+    element.indeterminate = false;
+  }
+}
+function isNativeCheckbox(tagName, type) {
+  return tagName === "input" && (!type || type === "checkbox");
+}
+function getPrimitiveValue(value) {
+  if (Array.isArray(value)) {
+    return value.toString();
+  }
+  return value;
+}
+var useCheckbox = createHook(
+  function useCheckbox2(_a) {
+    var _b = _a, {
+      store,
+      name,
+      value: valueProp,
+      checked: checkedProp,
+      defaultChecked
+    } = _b, props = __objRest(_b, [
+      "store",
+      "name",
+      "value",
+      "checked",
+      "defaultChecked"
+    ]);
+    const context = useCheckboxContext();
+    store = store || context;
+    const [_checked, setChecked] = (0,external_React_.useState)(defaultChecked != null ? defaultChecked : false);
+    const checked = useStoreState(store, (state) => {
+      if (checkedProp !== void 0) return checkedProp;
+      if ((state == null ? void 0 : state.value) === void 0) return _checked;
+      if (valueProp != null) {
+        if (Array.isArray(state.value)) {
+          const primitiveValue = getPrimitiveValue(valueProp);
+          return state.value.includes(primitiveValue);
+        }
+        return state.value === valueProp;
+      }
+      if (Array.isArray(state.value)) return false;
+      if (typeof state.value === "boolean") return state.value;
+      return false;
+    });
+    const ref = (0,external_React_.useRef)(null);
+    const tagName = useTagName(ref, ASMQKSDT_TagName);
+    const nativeCheckbox = isNativeCheckbox(tagName, props.type);
+    const mixed = checked ? checked === "mixed" : void 0;
+    const isChecked = checked === "mixed" ? false : checked;
+    const disabled = disabledFromProps(props);
+    const [propertyUpdated, schedulePropertyUpdate] = useForceUpdate();
+    (0,external_React_.useEffect)(() => {
+      const element = ref.current;
+      if (!element) return;
+      setMixed(element, mixed);
+      if (nativeCheckbox) return;
+      element.checked = isChecked;
+      if (name !== void 0) {
+        element.name = name;
+      }
+      if (valueProp !== void 0) {
+        element.value = `${valueProp}`;
+      }
+    }, [propertyUpdated, mixed, nativeCheckbox, isChecked, name, valueProp]);
+    const onChangeProp = props.onChange;
+    const onChange = useEvent((event) => {
+      if (disabled) {
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      }
+      setMixed(event.currentTarget, mixed);
+      if (!nativeCheckbox) {
+        event.currentTarget.checked = !event.currentTarget.checked;
+        schedulePropertyUpdate();
+      }
+      onChangeProp == null ? void 0 : onChangeProp(event);
+      if (event.defaultPrevented) return;
+      const elementChecked = event.currentTarget.checked;
+      setChecked(elementChecked);
+      store == null ? void 0 : store.setValue((prevValue) => {
+        if (valueProp == null) return elementChecked;
+        const primitiveValue = getPrimitiveValue(valueProp);
+        if (!Array.isArray(prevValue)) {
+          return prevValue === primitiveValue ? false : primitiveValue;
+        }
+        if (elementChecked) {
+          if (prevValue.includes(primitiveValue)) {
+            return prevValue;
+          }
+          return [...prevValue, primitiveValue];
+        }
+        return prevValue.filter((v) => v !== primitiveValue);
+      });
+    });
+    const onClickProp = props.onClick;
+    const onClick = useEvent((event) => {
+      onClickProp == null ? void 0 : onClickProp(event);
+      if (event.defaultPrevented) return;
+      if (nativeCheckbox) return;
+      onChange(event);
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(CheckboxCheckedContext.Provider, { value: isChecked, children: element }),
+      [isChecked]
+    );
+    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
+      role: !nativeCheckbox ? "checkbox" : void 0,
+      type: nativeCheckbox ? "checkbox" : void 0,
+      "aria-checked": checked
+    }, props), {
+      ref: useMergeRefs(ref, props.ref),
+      onChange,
+      onClick
+    });
+    props = useCommand(_3YLGPPWQ_spreadValues({ clickOnEnter: !nativeCheckbox }, props));
+    return removeUndefinedValues(_3YLGPPWQ_spreadValues({
+      name: nativeCheckbox ? name : void 0,
+      value: nativeCheckbox ? valueProp : void 0,
+      checked: isChecked
+    }, props));
+  }
+);
+var Checkbox = forwardRef2(function Checkbox2(props) {
+  const htmlProps = useCheckbox(props);
+  return LMDWO4NN_createElement(ASMQKSDT_TagName, htmlProps);
+});
+
+
+
+;// ./node_modules/@ariakit/core/esm/checkbox/checkbox-store.js
+"use client";
+
+
+
+
+// src/checkbox/checkbox-store.ts
+function createCheckboxStore(props = {}) {
+  var _a;
+  throwOnConflictingProps(props, props.store);
+  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
+  const initialState = {
+    value: defaultValue(
+      props.value,
+      syncState == null ? void 0 : syncState.value,
+      props.defaultValue,
+      false
+    )
+  };
+  const checkbox = createStore(initialState, props.store);
+  return _chunks_3YLGPPWQ_spreadProps(_chunks_3YLGPPWQ_spreadValues({}, checkbox), {
+    setValue: (value) => checkbox.setState("value", value)
+  });
+}
+
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/HAVBGUA3.js
+"use client";
+
+
+
+// src/checkbox/checkbox-store.ts
+
+function useCheckboxStoreProps(store, update, props) {
+  useUpdateEffect(update, [props.store]);
+  useStoreProps(store, props, "value", "setValue");
+  return store;
+}
+function useCheckboxStore(props = {}) {
+  const [store, update] = YV4JVR4I_useStore(createCheckboxStore, props);
+  return useCheckboxStoreProps(store, update, props);
+}
+
+
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-item-checkbox.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/menu/menu-item-checkbox.tsx
+
+
+var menu_item_checkbox_TagName = "div";
+function menu_item_checkbox_getPrimitiveValue(value) {
+  if (Array.isArray(value)) {
+    return value.toString();
+  }
+  return value;
+}
+function getValue(storeValue, value, checked) {
+  if (value === void 0) {
+    if (Array.isArray(storeValue)) return storeValue;
+    return !!checked;
+  }
+  const primitiveValue = menu_item_checkbox_getPrimitiveValue(value);
+  if (!Array.isArray(storeValue)) {
+    if (checked) {
+      return primitiveValue;
+    }
+    return storeValue === primitiveValue ? false : storeValue;
+  }
+  if (checked) {
+    if (storeValue.includes(primitiveValue)) {
+      return storeValue;
+    }
+    return [...storeValue, primitiveValue];
+  }
+  return storeValue.filter((v) => v !== primitiveValue);
+}
+var useMenuItemCheckbox = createHook(
+  function useMenuItemCheckbox2(_a) {
+    var _b = _a, {
+      store,
+      name,
+      value,
+      checked,
+      defaultChecked: defaultCheckedProp,
+      hideOnClick = false
+    } = _b, props = __objRest(_b, [
+      "store",
+      "name",
+      "value",
+      "checked",
+      "defaultChecked",
+      "hideOnClick"
+    ]);
+    const context = useMenuScopedContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const defaultChecked = useInitialValue(defaultCheckedProp);
+    (0,external_React_.useEffect)(() => {
+      store == null ? void 0 : store.setValue(name, (prevValue = []) => {
+        if (!defaultChecked) return prevValue;
+        return getValue(prevValue, value, true);
+      });
+    }, [store, name, value, defaultChecked]);
+    (0,external_React_.useEffect)(() => {
+      if (checked === void 0) return;
+      store == null ? void 0 : store.setValue(name, (prevValue) => {
+        return getValue(prevValue, value, checked);
+      });
+    }, [store, name, value, checked]);
+    const checkboxStore = useCheckboxStore({
+      value: store.useState((state) => state.values[name]),
+      setValue(internalValue) {
+        store == null ? void 0 : store.setValue(name, () => {
+          if (checked === void 0) return internalValue;
+          const nextValue = getValue(internalValue, value, checked);
+          if (!Array.isArray(nextValue)) return nextValue;
+          if (!Array.isArray(internalValue)) return nextValue;
+          if (shallowEqual(internalValue, nextValue)) return internalValue;
+          return nextValue;
+        });
+      }
+    });
+    props = _3YLGPPWQ_spreadValues({
+      role: "menuitemcheckbox"
+    }, props);
+    props = useCheckbox(_3YLGPPWQ_spreadValues({
+      store: checkboxStore,
+      name,
+      value,
+      checked
+    }, props));
+    props = useMenuItem(_3YLGPPWQ_spreadValues({ store, hideOnClick }, props));
+    return props;
+  }
+);
+var MenuItemCheckbox = memo2(
+  forwardRef2(function MenuItemCheckbox2(props) {
+    const htmlProps = useMenuItemCheckbox(props);
+    return LMDWO4NN_createElement(menu_item_checkbox_TagName, htmlProps);
+  })
+);
+
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-item-radio.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/menu/menu-item-radio.tsx
+
+
+
+var menu_item_radio_TagName = "div";
+function menu_item_radio_getValue(prevValue, value, checked) {
+  if (checked === void 0) return prevValue;
+  if (checked) return value;
+  return prevValue;
+}
+var useMenuItemRadio = createHook(
+  function useMenuItemRadio2(_a) {
+    var _b = _a, {
+      store,
+      name,
+      value,
+      checked,
+      onChange: onChangeProp,
+      hideOnClick = false
+    } = _b, props = __objRest(_b, [
+      "store",
+      "name",
+      "value",
+      "checked",
+      "onChange",
+      "hideOnClick"
+    ]);
+    const context = useMenuScopedContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const defaultChecked = useInitialValue(props.defaultChecked);
+    (0,external_React_.useEffect)(() => {
+      store == null ? void 0 : store.setValue(name, (prevValue = false) => {
+        return menu_item_radio_getValue(prevValue, value, defaultChecked);
+      });
+    }, [store, name, value, defaultChecked]);
+    (0,external_React_.useEffect)(() => {
+      if (checked === void 0) return;
+      store == null ? void 0 : store.setValue(name, (prevValue) => {
+        return menu_item_radio_getValue(prevValue, value, checked);
+      });
+    }, [store, name, value, checked]);
+    const isChecked = store.useState((state) => state.values[name] === value);
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheckedContext.Provider, { value: !!isChecked, children: element }),
+      [isChecked]
+    );
+    props = _3YLGPPWQ_spreadValues({
+      role: "menuitemradio"
+    }, props);
+    props = useRadio(_3YLGPPWQ_spreadValues({
+      name,
+      value,
+      checked: isChecked,
+      onChange(event) {
+        onChangeProp == null ? void 0 : onChangeProp(event);
+        if (event.defaultPrevented) return;
+        const element = event.currentTarget;
+        store == null ? void 0 : store.setValue(name, (prevValue) => {
+          return menu_item_radio_getValue(prevValue, value, checked != null ? checked : element.checked);
+        });
+      }
+    }, props));
+    props = useMenuItem(_3YLGPPWQ_spreadValues({ store, hideOnClick }, props));
+    return props;
+  }
+);
+var MenuItemRadio = memo2(
+  forwardRef2(function MenuItemRadio2(props) {
+    const htmlProps = useMenuItemRadio(props);
+    return LMDWO4NN_createElement(menu_item_radio_TagName, htmlProps);
+  })
+);
+
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-group.js
+"use client";
+
+
+
+
+
+
+
+
+// src/menu/menu-group.tsx
+var menu_group_TagName = "div";
+var useMenuGroup = createHook(
+  function useMenuGroup2(props) {
+    props = useCompositeGroup(props);
+    return props;
+  }
+);
+var menu_group_MenuGroup = forwardRef2(function MenuGroup2(props) {
+  const htmlProps = useMenuGroup(props);
+  return LMDWO4NN_createElement(menu_group_TagName, htmlProps);
+});
+
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-group-label.js
+"use client";
+
+
+
+
+
+
+
+
+// src/menu/menu-group-label.tsx
+var menu_group_label_TagName = "div";
+var useMenuGroupLabel = createHook(
+  function useMenuGroupLabel2(props) {
+    props = useCompositeGroupLabel(props);
+    return props;
+  }
+);
+var MenuGroupLabel = forwardRef2(function MenuGroupLabel2(props) {
+  const htmlProps = useMenuGroupLabel(props);
+  return LMDWO4NN_createElement(menu_group_label_TagName, htmlProps);
+});
+
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/TP7N7UIH.js
+"use client";
+
+
+
+
+
+// src/composite/composite-separator.tsx
+
+var TP7N7UIH_TagName = "hr";
+var useCompositeSeparator = createHook(function useCompositeSeparator2(_a) {
+  var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+  const context = useCompositeContext();
+  store = store || context;
+  invariant(
+    store,
+     false && 0
+  );
+  const orientation = store.useState(
+    (state) => state.orientation === "horizontal" ? "vertical" : "horizontal"
+  );
+  props = useSeparator(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { orientation }));
+  return props;
+});
+var CompositeSeparator = forwardRef2(function CompositeSeparator2(props) {
+  const htmlProps = useCompositeSeparator(props);
+  return LMDWO4NN_createElement(TP7N7UIH_TagName, htmlProps);
+});
+
+
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-separator.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/menu/menu-separator.tsx
+var menu_separator_TagName = "hr";
+var useMenuSeparator = createHook(
+  function useMenuSeparator2(_a) {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    const context = useMenuContext();
+    store = store || context;
+    props = useCompositeSeparator(_3YLGPPWQ_spreadValues({ store }, props));
+    return props;
+  }
+);
+var MenuSeparator = forwardRef2(function MenuSeparator2(props) {
+  const htmlProps = useMenuSeparator(props);
+  return LMDWO4NN_createElement(menu_separator_TagName, htmlProps);
+});
+
+
+;// ./packages/components/build-module/menu/styles.js
+
+function menu_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const styles_ANIMATION_PARAMS = {
+  SCALE_AMOUNT_OUTER: 0.82,
+  SCALE_AMOUNT_CONTENT: 0.9,
+  DURATION: {
+    IN: '400ms',
+    OUT: '200ms'
+  },
+  EASING: 'cubic-bezier(0.33, 0, 0, 1)'
+};
+const CONTENT_WRAPPER_PADDING = space(1);
+const ITEM_PADDING_BLOCK = space(2);
+const ITEM_PADDING_INLINE = space(3);
+
+// TODO:
+// - border color and divider color are different from COLORS.theme variables
+// - lighter text color is not defined in COLORS.theme, should it be?
+// - lighter background color is not defined in COLORS.theme, should it be?
+const DEFAULT_BORDER_COLOR = COLORS.theme.gray[300];
+const DIVIDER_COLOR = COLORS.theme.gray[200];
+const LIGHTER_TEXT_COLOR = COLORS.theme.gray[700];
+const LIGHT_BACKGROUND_COLOR = COLORS.theme.gray[100];
+const TOOLBAR_VARIANT_BORDER_COLOR = COLORS.theme.foreground;
+const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationMedium}`;
+const TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${TOOLBAR_VARIANT_BORDER_COLOR}`;
+const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
+const PopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1wg7tti14"
+} : 0)("position:relative;background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusMedium, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overflow:hidden;@media not ( prefers-reduced-motion ){transition-property:transform,opacity;transition-timing-function:", styles_ANIMATION_PARAMS.EASING, ";transition-duration:", styles_ANIMATION_PARAMS.DURATION.IN, ";will-change:transform,opacity;opacity:0;&:has( [data-enter] ){opacity:1;}&:has( [data-leave] ){transition-duration:", styles_ANIMATION_PARAMS.DURATION.OUT, ";}&:has( [data-side='bottom'] ),&:has( [data-side='top'] ){transform:scaleY( ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " );}&:has( [data-side='bottom'] ){transform-origin:top;}&:has( [data-side='top'] ){transform-origin:bottom;}&:has( [data-enter][data-side='bottom'] ),&:has( [data-enter][data-side='top'] ),&:has( [data-leave][data-side='bottom'] ),&:has( [data-leave][data-side='top'] ){transform:scaleY( 1 );}}" + ( true ? "" : 0));
+const PopoverInnerWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1wg7tti13"
+} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;@media not ( prefers-reduced-motion ){transition:inherit;transform-origin:inherit;&[data-side='bottom'],&[data-side='top']{transform:scaleY(\n\t\t\t\tcalc(\n\t\t\t\t\t1 / ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " *\n\t\t\t\t\t\t", styles_ANIMATION_PARAMS.SCALE_AMOUNT_CONTENT, "\n\t\t\t\t)\n\t\t\t);}&[data-enter][data-side='bottom'],&[data-enter][data-side='top'],&[data-leave][data-side='bottom'],&[data-leave][data-side='top']{transform:scaleY( 1 );}}" + ( true ? "" : 0));
+const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.theme.accentInverted, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", PopoverInnerWrapper, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
+const styles_Item = /*#__PURE__*/emotion_styled_base_browser_esm(MVIULMNR_MenuItem,  true ? {
+  target: "e1wg7tti12"
+} : 0)(baseItem, ";" + ( true ? "" : 0));
+const styles_CheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
+  target: "e1wg7tti11"
+} : 0)(baseItem, ";" + ( true ? "" : 0));
+const styles_RadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
+  target: "e1wg7tti10"
+} : 0)(baseItem, ";" + ( true ? "" : 0));
+const ItemPrefixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
+  target: "e1wg7tti9"
+} : 0)("grid-column:1;", styles_CheckboxItem, ">&,", styles_RadioItem, ">&{min-width:", space(6), ";}", styles_CheckboxItem, ">&,", styles_RadioItem, ">&,&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
+const ItemContentWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1wg7tti8"
+} : 0)("grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:", space(3), ";pointer-events:none;" + ( true ? "" : 0));
+const ItemChildrenWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e1wg7tti7"
+} : 0)("flex:1;display:inline-flex;flex-direction:column;gap:", space(1), ";" + ( true ? "" : 0));
+const ItemSuffixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
+  target: "e1wg7tti6"
+} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", PopoverInnerWrapper, ") &,[aria-disabled='true'] *:not(", PopoverInnerWrapper, ") &{color:inherit;}" + ( true ? "" : 0));
+const styles_Group = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
+  target: "e1wg7tti5"
+} : 0)( true ? {
+  name: "49aokf",
+  styles: "display:contents"
+} : 0);
+const styles_GroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
+  target: "e1wg7tti4"
+} : 0)("grid-column:1/-1;padding-block-start:", space(3), ";padding-block-end:", space(2), ";padding-inline:", ITEM_PADDING_INLINE, ";" + ( true ? "" : 0));
+const styles_Separator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
+  target: "e1wg7tti3"
+} : 0)("grid-column:1/-1;border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? TOOLBAR_VARIANT_BORDER_COLOR : DIVIDER_COLOR, ";margin-block:", space(2), ";margin-inline:", ITEM_PADDING_INLINE, ";outline:2px solid transparent;" + ( true ? "" : 0));
+const SubmenuChevronIcon = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_icon,  true ? {
+  target: "e1wg7tti2"
+} : 0)("width:", space(1.5), ";", rtl({
+  transform: `scaleX(1)`
+}, {
+  transform: `scaleX(-1)`
+}), ";" + ( true ? "" : 0));
+const styles_ItemLabel = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+  target: "e1wg7tti1"
+} : 0)("font-size:", font('default.fontSize'), ";line-height:20px;color:inherit;" + ( true ? "" : 0));
+const styles_ItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+  target: "e1wg7tti0"
+} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";overflow-wrap:anywhere;[data-active-item]:not( [data-focus-visible] ) *:not( ", PopoverInnerWrapper, " ) &,[aria-disabled='true'] *:not( ", PopoverInnerWrapper, " ) &{color:inherit;}" + ( true ? "" : 0));
+
+;// ./packages/components/build-module/menu/item.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const item_Item = (0,external_wp_element_namespaceObject.forwardRef)(function Item({
+  prefix,
+  suffix,
+  children,
+  disabled = false,
+  hideOnClick = true,
+  store,
+  ...props
+}, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.Item can only be rendered inside a Menu component');
+  }
+
+  // In most cases, the menu store will be retrieved from context (ie. the store
+  // created by the top-level menu component). But in rare cases (ie.
+  // `Menu.SubmenuTriggerItem`), the context store wouldn't be correct. This is
+  // why the component accepts a `store` prop to override the context store.
+  const computedStore = store !== null && store !== void 0 ? store : menuContext.store;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_Item, {
+    ref: ref,
+    ...props,
+    accessibleWhenDisabled: true,
+    disabled: disabled,
+    hideOnClick: hideOnClick,
+    store: computedStore,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {
+      children: prefix
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-item-check.js
+"use client";
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// src/menu/menu-item-check.tsx
+
+var menu_item_check_TagName = "span";
+var useMenuItemCheck = createHook(
+  function useMenuItemCheck2(_a) {
+    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
+    const context = (0,external_React_.useContext)(MenuItemCheckedContext);
+    checked = checked != null ? checked : context;
+    props = useCheckboxCheck(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { checked }));
+    return props;
+  }
+);
+var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
+  const htmlProps = useMenuItemCheck(props);
+  return LMDWO4NN_createElement(menu_item_check_TagName, htmlProps);
+});
+
+
+;// ./packages/components/build-module/menu/checkbox-item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const CheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function CheckboxItem({
+  suffix,
+  children,
+  disabled = false,
+  hideOnClick = false,
+  ...props
+}, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.CheckboxItem can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_CheckboxItem, {
+    ref: ref,
+    ...props,
+    accessibleWhenDisabled: true,
+    disabled: disabled,
+    hideOnClick: hideOnClick,
+    store: menuContext.store,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
+      store: menuContext.store,
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
+      // Override some ariakit inline styles
+      ,
+      style: {
+        width: 'auto',
+        height: 'auto'
+      },
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+        icon: library_check,
+        size: 24
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// ./packages/components/build-module/menu/radio-item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const radioCheck = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Circle, {
+    cx: 12,
+    cy: 12,
+    r: 3
+  })
+});
+const RadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function RadioItem({
+  suffix,
+  children,
+  disabled = false,
+  hideOnClick = false,
+  ...props
+}, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.RadioItem can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_RadioItem, {
+    ref: ref,
+    ...props,
+    accessibleWhenDisabled: true,
+    disabled: disabled,
+    hideOnClick: hideOnClick,
+    store: menuContext.store,
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
+      store: menuContext.store,
+      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
+      // Override some ariakit inline styles
+      ,
+      style: {
+        width: 'auto',
+        height: 'auto'
+      },
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
+        icon: radioCheck,
+        size: 24
+      })
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(ItemContentWrapper, {
+      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemChildrenWrapper, {
+        children: children
+      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
+        children: suffix
+      })]
+    })]
+  });
+});
+
+;// ./packages/components/build-module/menu/group.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const group_Group = (0,external_wp_element_namespaceObject.forwardRef)(function Group(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.Group can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Group, {
+    ref: ref,
+    ...props,
+    store: menuContext.store
+  });
+});
+
+;// ./packages/components/build-module/menu/group-label.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const group_label_GroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function Group(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.GroupLabel can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_GroupLabel, {
+    ref: ref,
+    render:
+    /*#__PURE__*/
+    // @ts-expect-error The `children` prop is passed
+    (0,external_ReactJSXRuntime_namespaceObject.jsx)(text_component, {
+      upperCase: true,
+      variant: "muted",
+      size: "11px",
+      weight: 500,
+      lineHeight: "16px"
+    }),
+    ...props,
+    store: menuContext.store
+  });
+});
+
+;// ./packages/components/build-module/menu/separator.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const separator_Separator = (0,external_wp_element_namespaceObject.forwardRef)(function Separator(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.Separator can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_Separator, {
+    ref: ref,
+    ...props,
+    store: menuContext.store,
+    variant: menuContext.variant
+  });
+});
+
+;// ./packages/components/build-module/menu/item-label.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const ItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function ItemLabel(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.ItemLabel can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_ItemLabel, {
+    numberOfLines: 1,
+    ref: ref,
+    ...props
+  });
+});
+
+;// ./packages/components/build-module/menu/item-help-text.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const ItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function ItemHelpText(props, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.ItemHelpText can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_ItemHelpText, {
+    numberOfLines: 2,
+    ref: ref,
+    ...props
+  });
+});
+
+;// ./node_modules/@ariakit/react-core/esm/menu/menu-button.js
 "use client";
 
 
@@ -69291,7 +70711,8 @@ var useMenuButton = createHook(
         showMenu();
       }
     });
-    const dir = store.useState(
+    const dir = useStoreState(
+      store,
       (state) => state.placement.split("-")[0]
     );
     const onKeyDownProp = props.onKeyDown;
@@ -69388,11 +70809,115 @@ var useMenuButton = createHook(
 );
 var MenuButton = forwardRef2(function MenuButton2(props) {
   const htmlProps = useMenuButton(props);
-  return HKOOKEDE_createElement(menu_button_TagName, htmlProps);
+  return LMDWO4NN_createElement(menu_button_TagName, htmlProps);
 });
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/ULASSYJG.js
+;// ./packages/components/build-module/menu/trigger-button.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const TriggerButton = (0,external_wp_element_namespaceObject.forwardRef)(function TriggerButton({
+  children,
+  disabled = false,
+  ...props
+}, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store) {
+    throw new Error('Menu.TriggerButton can only be rendered inside a Menu component');
+  }
+  if (menuContext.store.parent) {
+    throw new Error('Menu.TriggerButton should not be rendered inside a nested Menu component. Use Menu.SubmenuTriggerItem instead.');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuButton, {
+    ref: ref,
+    ...props,
+    disabled: disabled,
+    store: menuContext.store,
+    children: children
+  });
+});
+
+;// ./packages/icons/build-module/library/chevron-right-small.js
+/**
+ * WordPress dependencies
+ */
+
+
+const chevronRightSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z"
+  })
+});
+/* harmony default export */ const chevron_right_small = (chevronRightSmall);
+
+;// ./packages/components/build-module/menu/submenu-trigger-item.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const SubmenuTriggerItem = (0,external_wp_element_namespaceObject.forwardRef)(function SubmenuTriggerItem({
+  suffix,
+  ...otherProps
+}, ref) {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  if (!menuContext?.store.parent) {
+    throw new Error('Menu.SubmenuTriggerItem can only be rendered inside a nested Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuButton, {
+    ref: ref,
+    accessibleWhenDisabled: true,
+    store: menuContext.store,
+    render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(item_Item, {
+      ...otherProps,
+      // The menu item needs to register and be part of the parent menu.
+      // Without specifying the store explicitly, the `Item` component
+      // would otherwise read the store via context and pick up the one from
+      // the sub-menu `Menu` component.
+      store: menuContext.store.parent,
+      suffix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
+        children: [suffix, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SubmenuChevronIcon, {
+          "aria-hidden": "true",
+          icon: chevron_right_small,
+          size: 24,
+          preserveAspectRatio: "xMidYMid slice"
+        })]
+      })
+    })
+  });
+});
+
+;// ./node_modules/@ariakit/react-core/esm/__chunks/ASGALOAX.js
 "use client";
 
 
@@ -69407,7 +70932,7 @@ var MenuButton = forwardRef2(function MenuButton2(props) {
 
 
 
-var ULASSYJG_TagName = "div";
+var ASGALOAX_TagName = "div";
 function useAriaLabelledBy(_a) {
   var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
   const [id, setId] = (0,external_React_.useState)(void 0);
@@ -69531,13 +71056,14 @@ var useMenuList = createHook(
 );
 var MenuList = forwardRef2(function MenuList2(props) {
   const htmlProps = useMenuList(props);
-  return HKOOKEDE_createElement(ULASSYJG_TagName, htmlProps);
+  return LMDWO4NN_createElement(ASGALOAX_TagName, htmlProps);
 });
 
 
 
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu.js
+;// ./node_modules/@ariakit/react-core/esm/menu/menu.js
 "use client";
+
 
 
 
@@ -69732,918 +71258,13 @@ var useMenu = createHook(function useMenu2(_a) {
 var Menu = createDialogComponent(
   forwardRef2(function Menu2(props) {
     const htmlProps = useMenu(props);
-    return HKOOKEDE_createElement(menu_TagName, htmlProps);
+    return LMDWO4NN_createElement(menu_TagName, htmlProps);
   }),
   useMenuProviderContext
 );
 
 
-;// ./packages/icons/build-module/library/chevron-right-small.js
-/**
- * WordPress dependencies
- */
-
-
-const chevronRightSmall = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M10.8622 8.04053L14.2805 12.0286L10.8622 16.0167L9.72327 15.0405L12.3049 12.0286L9.72327 9.01672L10.8622 8.04053Z"
-  })
-});
-/* harmony default export */ const chevron_right_small = (chevronRightSmall);
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/B6XZVSMQ.js
-"use client";
-
-
-
-
-
-
-
-
-
-// src/menu/menu-item.tsx
-
-
-
-
-var B6XZVSMQ_TagName = "div";
-function menuHasFocus(baseElement, items, currentTarget) {
-  var _a;
-  if (!baseElement) return false;
-  if (hasFocusWithin(baseElement)) return true;
-  const expandedItem = items == null ? void 0 : items.find((item) => {
-    var _a2;
-    if (item.element === currentTarget) return false;
-    return ((_a2 = item.element) == null ? void 0 : _a2.getAttribute("aria-expanded")) === "true";
-  });
-  const expandedMenuId = (_a = expandedItem == null ? void 0 : expandedItem.element) == null ? void 0 : _a.getAttribute("aria-controls");
-  if (!expandedMenuId) return false;
-  const doc = getDocument(baseElement);
-  const expandedMenu = doc.getElementById(expandedMenuId);
-  if (!expandedMenu) return false;
-  if (hasFocusWithin(expandedMenu)) return true;
-  return !!expandedMenu.querySelector("[role=menuitem][aria-expanded=true]");
-}
-var useMenuItem = createHook(
-  function useMenuItem2(_a) {
-    var _b = _a, {
-      store,
-      hideOnClick = true,
-      preventScrollOnKeyDown = true,
-      focusOnHover,
-      blurOnHoverEnd
-    } = _b, props = __objRest(_b, [
-      "store",
-      "hideOnClick",
-      "preventScrollOnKeyDown",
-      "focusOnHover",
-      "blurOnHoverEnd"
-    ]);
-    const menuContext = useMenuScopedContext(true);
-    const menubarContext = WSQNIDGC_useMenubarScopedContext();
-    store = store || menuContext || menubarContext;
-    invariant(
-      store,
-       false && 0
-    );
-    const onClickProp = props.onClick;
-    const hideOnClickProp = useBooleanEvent(hideOnClick);
-    const hideMenu = "hideAll" in store ? store.hideAll : void 0;
-    const isWithinMenu = !!hideMenu;
-    const onClick = useEvent((event) => {
-      onClickProp == null ? void 0 : onClickProp(event);
-      if (event.defaultPrevented) return;
-      if (isDownloading(event)) return;
-      if (isOpeningInNewTab(event)) return;
-      if (!hideMenu) return;
-      const popupType = event.currentTarget.getAttribute("aria-haspopup");
-      if (popupType === "menu") return;
-      if (!hideOnClickProp(event)) return;
-      hideMenu();
-    });
-    const contentElement = useStoreState(
-      store,
-      (state) => "contentElement" in state ? state.contentElement : null
-    );
-    const role = getPopupItemRole(contentElement, "menuitem");
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
-      role
-    }, props), {
-      onClick
-    });
-    props = useCompositeItem(_3YLGPPWQ_spreadValues({
-      store,
-      preventScrollOnKeyDown
-    }, props));
-    props = useCompositeHover(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
-      store
-    }, props), {
-      focusOnHover(event) {
-        const getFocusOnHover = () => {
-          if (typeof focusOnHover === "function") return focusOnHover(event);
-          if (focusOnHover != null) return focusOnHover;
-          return true;
-        };
-        if (!store) return false;
-        if (!getFocusOnHover()) return false;
-        const { baseElement, items } = store.getState();
-        if (isWithinMenu) {
-          if (event.currentTarget.hasAttribute("aria-expanded")) {
-            event.currentTarget.focus();
-          }
-          return true;
-        }
-        if (menuHasFocus(baseElement, items, event.currentTarget)) {
-          event.currentTarget.focus();
-          return true;
-        }
-        return false;
-      },
-      blurOnHoverEnd(event) {
-        if (typeof blurOnHoverEnd === "function") return blurOnHoverEnd(event);
-        if (blurOnHoverEnd != null) return blurOnHoverEnd;
-        return isWithinMenu;
-      }
-    }));
-    return props;
-  }
-);
-var B6XZVSMQ_MenuItem = memo2(
-  forwardRef2(function MenuItem2(props) {
-    const htmlProps = useMenuItem(props);
-    return HKOOKEDE_createElement(B6XZVSMQ_TagName, htmlProps);
-  })
-);
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/AUGWLYYL.js
-"use client";
-
-
-// src/checkbox/checkbox-context.tsx
-var AUGWLYYL_ctx = createStoreContext();
-var useCheckboxContext = AUGWLYYL_ctx.useContext;
-var useCheckboxScopedContext = AUGWLYYL_ctx.useScopedContext;
-var useCheckboxProviderContext = AUGWLYYL_ctx.useProviderContext;
-var CheckboxContextProvider = AUGWLYYL_ctx.ContextProvider;
-var CheckboxScopedContextProvider = AUGWLYYL_ctx.ScopedContextProvider;
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/L7GTXQJP.js
-"use client";
-
-
-
-
-
-
-
-
-// src/checkbox/checkbox.tsx
-
-
-
-var L7GTXQJP_TagName = "input";
-function setMixed(element, mixed) {
-  if (mixed) {
-    element.indeterminate = true;
-  } else if (element.indeterminate) {
-    element.indeterminate = false;
-  }
-}
-function isNativeCheckbox(tagName, type) {
-  return tagName === "input" && (!type || type === "checkbox");
-}
-function getPrimitiveValue(value) {
-  if (Array.isArray(value)) {
-    return value.toString();
-  }
-  return value;
-}
-var useCheckbox = createHook(
-  function useCheckbox2(_a) {
-    var _b = _a, {
-      store,
-      name,
-      value: valueProp,
-      checked: checkedProp,
-      defaultChecked
-    } = _b, props = __objRest(_b, [
-      "store",
-      "name",
-      "value",
-      "checked",
-      "defaultChecked"
-    ]);
-    const context = useCheckboxContext();
-    store = store || context;
-    const [_checked, setChecked] = (0,external_React_.useState)(defaultChecked != null ? defaultChecked : false);
-    const checked = useStoreState(store, (state) => {
-      if (checkedProp !== void 0) return checkedProp;
-      if ((state == null ? void 0 : state.value) === void 0) return _checked;
-      if (valueProp != null) {
-        if (Array.isArray(state.value)) {
-          const primitiveValue = getPrimitiveValue(valueProp);
-          return state.value.includes(primitiveValue);
-        }
-        return state.value === valueProp;
-      }
-      if (Array.isArray(state.value)) return false;
-      if (typeof state.value === "boolean") return state.value;
-      return false;
-    });
-    const ref = (0,external_React_.useRef)(null);
-    const tagName = useTagName(ref, L7GTXQJP_TagName);
-    const nativeCheckbox = isNativeCheckbox(tagName, props.type);
-    const mixed = checked ? checked === "mixed" : void 0;
-    const isChecked = checked === "mixed" ? false : checked;
-    const disabled = disabledFromProps(props);
-    const [propertyUpdated, schedulePropertyUpdate] = useForceUpdate();
-    (0,external_React_.useEffect)(() => {
-      const element = ref.current;
-      if (!element) return;
-      setMixed(element, mixed);
-      if (nativeCheckbox) return;
-      element.checked = isChecked;
-      if (name !== void 0) {
-        element.name = name;
-      }
-      if (valueProp !== void 0) {
-        element.value = `${valueProp}`;
-      }
-    }, [propertyUpdated, mixed, nativeCheckbox, isChecked, name, valueProp]);
-    const onChangeProp = props.onChange;
-    const onChange = useEvent((event) => {
-      if (disabled) {
-        event.stopPropagation();
-        event.preventDefault();
-        return;
-      }
-      setMixed(event.currentTarget, mixed);
-      if (!nativeCheckbox) {
-        event.currentTarget.checked = !event.currentTarget.checked;
-        schedulePropertyUpdate();
-      }
-      onChangeProp == null ? void 0 : onChangeProp(event);
-      if (event.defaultPrevented) return;
-      const elementChecked = event.currentTarget.checked;
-      setChecked(elementChecked);
-      store == null ? void 0 : store.setValue((prevValue) => {
-        if (valueProp == null) return elementChecked;
-        const primitiveValue = getPrimitiveValue(valueProp);
-        if (!Array.isArray(prevValue)) {
-          return prevValue === primitiveValue ? false : primitiveValue;
-        }
-        if (elementChecked) {
-          if (prevValue.includes(primitiveValue)) {
-            return prevValue;
-          }
-          return [...prevValue, primitiveValue];
-        }
-        return prevValue.filter((v) => v !== primitiveValue);
-      });
-    });
-    const onClickProp = props.onClick;
-    const onClick = useEvent((event) => {
-      onClickProp == null ? void 0 : onClickProp(event);
-      if (event.defaultPrevented) return;
-      if (nativeCheckbox) return;
-      onChange(event);
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(CheckboxCheckedContext.Provider, { value: isChecked, children: element }),
-      [isChecked]
-    );
-    props = _3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({
-      role: !nativeCheckbox ? "checkbox" : void 0,
-      type: nativeCheckbox ? "checkbox" : void 0,
-      "aria-checked": checked
-    }, props), {
-      ref: useMergeRefs(ref, props.ref),
-      onChange,
-      onClick
-    });
-    props = useCommand(_3YLGPPWQ_spreadValues({ clickOnEnter: !nativeCheckbox }, props));
-    return removeUndefinedValues(_3YLGPPWQ_spreadValues({
-      name: nativeCheckbox ? name : void 0,
-      value: nativeCheckbox ? valueProp : void 0,
-      checked: isChecked
-    }, props));
-  }
-);
-var Checkbox = forwardRef2(function Checkbox2(props) {
-  const htmlProps = useCheckbox(props);
-  return HKOOKEDE_createElement(L7GTXQJP_TagName, htmlProps);
-});
-
-
-
-;// ./node_modules/@ariakit/core/esm/checkbox/checkbox-store.js
-"use client";
-
-
-
-
-// src/checkbox/checkbox-store.ts
-function createCheckboxStore(props = {}) {
-  var _a;
-  throwOnConflictingProps(props, props.store);
-  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
-  const initialState = {
-    value: defaultValue(
-      props.value,
-      syncState == null ? void 0 : syncState.value,
-      props.defaultValue,
-      false
-    )
-  };
-  const checkbox = createStore(initialState, props.store);
-  return _chunks_3YLGPPWQ_spreadProps(_chunks_3YLGPPWQ_spreadValues({}, checkbox), {
-    setValue: (value) => checkbox.setState("value", value)
-  });
-}
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/EJOTW52C.js
-"use client";
-
-
-
-// src/checkbox/checkbox-store.ts
-
-function useCheckboxStoreProps(store, update, props) {
-  useUpdateEffect(update, [props.store]);
-  useStoreProps(store, props, "value", "setValue");
-  return store;
-}
-function useCheckboxStore(props = {}) {
-  const [store, update] = _2GXGCHW6_useStore(createCheckboxStore, props);
-  return useCheckboxStoreProps(store, update, props);
-}
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-item-checkbox.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/menu/menu-item-checkbox.tsx
-
-
-var menu_item_checkbox_TagName = "div";
-function menu_item_checkbox_getPrimitiveValue(value) {
-  if (Array.isArray(value)) {
-    return value.toString();
-  }
-  return value;
-}
-function getValue(storeValue, value, checked) {
-  if (value === void 0) {
-    if (Array.isArray(storeValue)) return storeValue;
-    return !!checked;
-  }
-  const primitiveValue = menu_item_checkbox_getPrimitiveValue(value);
-  if (!Array.isArray(storeValue)) {
-    if (checked) {
-      return primitiveValue;
-    }
-    return storeValue === primitiveValue ? false : storeValue;
-  }
-  if (checked) {
-    if (storeValue.includes(primitiveValue)) {
-      return storeValue;
-    }
-    return [...storeValue, primitiveValue];
-  }
-  return storeValue.filter((v) => v !== primitiveValue);
-}
-var useMenuItemCheckbox = createHook(
-  function useMenuItemCheckbox2(_a) {
-    var _b = _a, {
-      store,
-      name,
-      value,
-      checked,
-      defaultChecked: defaultCheckedProp,
-      hideOnClick = false
-    } = _b, props = __objRest(_b, [
-      "store",
-      "name",
-      "value",
-      "checked",
-      "defaultChecked",
-      "hideOnClick"
-    ]);
-    const context = useMenuScopedContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const defaultChecked = useInitialValue(defaultCheckedProp);
-    (0,external_React_.useEffect)(() => {
-      store == null ? void 0 : store.setValue(name, (prevValue = []) => {
-        if (!defaultChecked) return prevValue;
-        return getValue(prevValue, value, true);
-      });
-    }, [store, name, value, defaultChecked]);
-    (0,external_React_.useEffect)(() => {
-      if (checked === void 0) return;
-      store == null ? void 0 : store.setValue(name, (prevValue) => {
-        return getValue(prevValue, value, checked);
-      });
-    }, [store, name, value, checked]);
-    const checkboxStore = useCheckboxStore({
-      value: store.useState((state) => state.values[name]),
-      setValue(internalValue) {
-        store == null ? void 0 : store.setValue(name, () => {
-          if (checked === void 0) return internalValue;
-          const nextValue = getValue(internalValue, value, checked);
-          if (!Array.isArray(nextValue)) return nextValue;
-          if (!Array.isArray(internalValue)) return nextValue;
-          if (shallowEqual(internalValue, nextValue)) return internalValue;
-          return nextValue;
-        });
-      }
-    });
-    props = _3YLGPPWQ_spreadValues({
-      role: "menuitemcheckbox"
-    }, props);
-    props = useCheckbox(_3YLGPPWQ_spreadValues({
-      store: checkboxStore,
-      name,
-      value,
-      checked
-    }, props));
-    props = useMenuItem(_3YLGPPWQ_spreadValues({ store, hideOnClick }, props));
-    return props;
-  }
-);
-var MenuItemCheckbox = memo2(
-  forwardRef2(function MenuItemCheckbox2(props) {
-    const htmlProps = useMenuItemCheckbox(props);
-    return HKOOKEDE_createElement(menu_item_checkbox_TagName, htmlProps);
-  })
-);
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-item-radio.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/menu/menu-item-radio.tsx
-
-
-
-var menu_item_radio_TagName = "div";
-function menu_item_radio_getValue(prevValue, value, checked) {
-  if (checked === void 0) return prevValue;
-  if (checked) return value;
-  return prevValue;
-}
-var useMenuItemRadio = createHook(
-  function useMenuItemRadio2(_a) {
-    var _b = _a, {
-      store,
-      name,
-      value,
-      checked,
-      onChange: onChangeProp,
-      hideOnClick = false
-    } = _b, props = __objRest(_b, [
-      "store",
-      "name",
-      "value",
-      "checked",
-      "onChange",
-      "hideOnClick"
-    ]);
-    const context = useMenuScopedContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const defaultChecked = useInitialValue(props.defaultChecked);
-    (0,external_React_.useEffect)(() => {
-      store == null ? void 0 : store.setValue(name, (prevValue = false) => {
-        return menu_item_radio_getValue(prevValue, value, defaultChecked);
-      });
-    }, [store, name, value, defaultChecked]);
-    (0,external_React_.useEffect)(() => {
-      if (checked === void 0) return;
-      store == null ? void 0 : store.setValue(name, (prevValue) => {
-        return menu_item_radio_getValue(prevValue, value, checked);
-      });
-    }, [store, name, value, checked]);
-    const isChecked = store.useState((state) => state.values[name] === value);
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheckedContext.Provider, { value: !!isChecked, children: element }),
-      [isChecked]
-    );
-    props = _3YLGPPWQ_spreadValues({
-      role: "menuitemradio"
-    }, props);
-    props = useRadio(_3YLGPPWQ_spreadValues({
-      name,
-      value,
-      checked: isChecked,
-      onChange(event) {
-        onChangeProp == null ? void 0 : onChangeProp(event);
-        if (event.defaultPrevented) return;
-        const element = event.currentTarget;
-        store == null ? void 0 : store.setValue(name, (prevValue) => {
-          return menu_item_radio_getValue(prevValue, value, checked != null ? checked : element.checked);
-        });
-      }
-    }, props));
-    props = useMenuItem(_3YLGPPWQ_spreadValues({ store, hideOnClick }, props));
-    return props;
-  }
-);
-var MenuItemRadio = memo2(
-  forwardRef2(function MenuItemRadio2(props) {
-    const htmlProps = useMenuItemRadio(props);
-    return HKOOKEDE_createElement(menu_item_radio_TagName, htmlProps);
-  })
-);
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-group.js
-"use client";
-
-
-
-
-
-
-
-
-// src/menu/menu-group.tsx
-var menu_group_TagName = "div";
-var useMenuGroup = createHook(
-  function useMenuGroup2(props) {
-    props = useCompositeGroup(props);
-    return props;
-  }
-);
-var menu_group_MenuGroup = forwardRef2(function MenuGroup2(props) {
-  const htmlProps = useMenuGroup(props);
-  return HKOOKEDE_createElement(menu_group_TagName, htmlProps);
-});
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-group-label.js
-"use client";
-
-
-
-
-
-
-
-
-// src/menu/menu-group-label.tsx
-var menu_group_label_TagName = "div";
-var useMenuGroupLabel = createHook(
-  function useMenuGroupLabel2(props) {
-    props = useCompositeGroupLabel(props);
-    return props;
-  }
-);
-var MenuGroupLabel = forwardRef2(function MenuGroupLabel2(props) {
-  const htmlProps = useMenuGroupLabel(props);
-  return HKOOKEDE_createElement(menu_group_label_TagName, htmlProps);
-});
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/WEEEI3KU.js
-"use client";
-
-
-
-
-
-// src/composite/composite-separator.tsx
-
-var WEEEI3KU_TagName = "hr";
-var useCompositeSeparator = createHook(function useCompositeSeparator2(_a) {
-  var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-  const context = useCompositeContext();
-  store = store || context;
-  invariant(
-    store,
-     false && 0
-  );
-  const orientation = store.useState(
-    (state) => state.orientation === "horizontal" ? "vertical" : "horizontal"
-  );
-  props = useSeparator(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { orientation }));
-  return props;
-});
-var CompositeSeparator = forwardRef2(function CompositeSeparator2(props) {
-  const htmlProps = useCompositeSeparator(props);
-  return HKOOKEDE_createElement(WEEEI3KU_TagName, htmlProps);
-});
-
-
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-separator.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/menu/menu-separator.tsx
-var menu_separator_TagName = "hr";
-var useMenuSeparator = createHook(
-  function useMenuSeparator2(_a) {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    const context = useMenuContext();
-    store = store || context;
-    props = useCompositeSeparator(_3YLGPPWQ_spreadValues({ store }, props));
-    return props;
-  }
-);
-var MenuSeparator = forwardRef2(function MenuSeparator2(props) {
-  const htmlProps = useMenuSeparator(props);
-  return HKOOKEDE_createElement(menu_separator_TagName, htmlProps);
-});
-
-
-;// ./packages/components/build-module/menu/styles.js
-
-function menu_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
-/**
- * External dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const styles_ANIMATION_PARAMS = {
-  SCALE_AMOUNT_OUTER: 0.82,
-  SCALE_AMOUNT_CONTENT: 0.9,
-  DURATION: {
-    IN: '400ms',
-    OUT: '200ms'
-  },
-  EASING: 'cubic-bezier(0.33, 0, 0, 1)'
-};
-const CONTENT_WRAPPER_PADDING = space(1);
-const ITEM_PADDING_BLOCK = space(2);
-const ITEM_PADDING_INLINE = space(3);
-
-// TODO:
-// - border color and divider color are different from COLORS.theme variables
-// - lighter text color is not defined in COLORS.theme, should it be?
-// - lighter background color is not defined in COLORS.theme, should it be?
-const DEFAULT_BORDER_COLOR = COLORS.theme.gray[300];
-const DIVIDER_COLOR = COLORS.theme.gray[200];
-const LIGHTER_TEXT_COLOR = COLORS.theme.gray[700];
-const LIGHT_BACKGROUND_COLOR = COLORS.theme.gray[100];
-const TOOLBAR_VARIANT_BORDER_COLOR = COLORS.theme.foreground;
-const DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${DEFAULT_BORDER_COLOR}, ${config_values.elevationMedium}`;
-const TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${TOOLBAR_VARIANT_BORDER_COLOR}`;
-const GRID_TEMPLATE_COLS = 'minmax( 0, max-content ) 1fr';
-const MenuPopoverOuterWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1wg7tti14"
-} : 0)("position:relative;background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusMedium, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? TOOLBAR_VARIANT_BOX_SHADOW : DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overflow:hidden;@media not ( prefers-reduced-motion ){transition-property:transform,opacity;transition-timing-function:", styles_ANIMATION_PARAMS.EASING, ";transition-duration:", styles_ANIMATION_PARAMS.DURATION.IN, ";will-change:transform,opacity;opacity:0;&:has( [data-enter] ){opacity:1;}&:has( [data-leave] ){transition-duration:", styles_ANIMATION_PARAMS.DURATION.OUT, ";}&:has( [data-side='bottom'] ),&:has( [data-side='top'] ){transform:scaleY( ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " );}&:has( [data-side='bottom'] ){transform-origin:top;}&:has( [data-side='top'] ){transform-origin:bottom;}&:has( [data-enter][data-side='bottom'] ),&:has( [data-enter][data-side='top'] ),&:has( [data-leave][data-side='bottom'] ),&:has( [data-leave][data-side='top'] ){transform:scaleY( 1 );}}" + ( true ? "" : 0));
-const MenuPopoverInnerWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1wg7tti13"
-} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", CONTENT_WRAPPER_PADDING, ";overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;@media not ( prefers-reduced-motion ){transition:inherit;transform-origin:inherit;&[data-side='bottom'],&[data-side='top']{transform:scaleY(\n\t\t\t\tcalc(\n\t\t\t\t\t1 / ", styles_ANIMATION_PARAMS.SCALE_AMOUNT_OUTER, " *\n\t\t\t\t\t\t", styles_ANIMATION_PARAMS.SCALE_AMOUNT_CONTENT, "\n\t\t\t\t)\n\t\t\t);}&[data-enter][data-side='bottom'],&[data-enter][data-side='top'],&[data-leave][data-side='bottom'],&[data-leave][data-side='top']{transform:scaleY( 1 );}}" + ( true ? "" : 0));
-const baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:", GRID_TEMPLATE_COLS, ";align-items:center;@supports ( grid-template-columns: subgrid ){grid-template-columns:subgrid;}font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.theme.foreground, ";border-radius:", config_values.radiusSmall, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px ", COLORS.theme.accent, ";outline:2px solid transparent;}&:active,&[data-active]{}", MenuPopoverInnerWrapper, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", LIGHT_BACKGROUND_COLOR, ";color:", COLORS.theme.foreground, ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
-const styles_MenuItem = /*#__PURE__*/emotion_styled_base_browser_esm(B6XZVSMQ_MenuItem,  true ? {
-  target: "e1wg7tti12"
-} : 0)(baseItem, ";" + ( true ? "" : 0));
-const styles_MenuCheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
-  target: "e1wg7tti11"
-} : 0)(baseItem, ";" + ( true ? "" : 0));
-const styles_MenuRadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
-  target: "e1wg7tti10"
-} : 0)(baseItem, ";" + ( true ? "" : 0));
-const ItemPrefixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1wg7tti9"
-} : 0)("grid-column:1;", styles_MenuCheckboxItem, ">&,", styles_MenuRadioItem, ">&{min-width:", space(6), ";}", styles_MenuCheckboxItem, ">&,", styles_MenuRadioItem, ">&,&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
-const MenuItemContentWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1wg7tti8"
-} : 0)("grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:", space(3), ";pointer-events:none;" + ( true ? "" : 0));
-const MenuItemChildrenWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e1wg7tti7"
-} : 0)("flex:1;display:inline-flex;flex-direction:column;gap:", space(1), ";" + ( true ? "" : 0));
-const ItemSuffixWrapper = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
-  target: "e1wg7tti6"
-} : 0)("flex:0 1 fit-content;min-width:0;width:fit-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", LIGHTER_TEXT_COLOR, ";[data-active-item]:not( [data-focus-visible] ) *:not(", MenuPopoverInnerWrapper, ") &,[aria-disabled='true'] *:not(", MenuPopoverInnerWrapper, ") &{color:inherit;}" + ( true ? "" : 0));
-const styles_MenuGroup = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
-  target: "e1wg7tti5"
-} : 0)( true ? {
-  name: "49aokf",
-  styles: "display:contents"
-} : 0);
-const styles_MenuGroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
-  target: "e1wg7tti4"
-} : 0)("grid-column:1/-1;padding-block-start:", space(3), ";padding-block-end:", space(2), ";padding-inline:", ITEM_PADDING_INLINE, ";" + ( true ? "" : 0));
-const styles_MenuSeparator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
-  target: "e1wg7tti3"
-} : 0)("grid-column:1/-1;border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? TOOLBAR_VARIANT_BORDER_COLOR : DIVIDER_COLOR, ";margin-block:", space(2), ";margin-inline:", ITEM_PADDING_INLINE, ";outline:2px solid transparent;" + ( true ? "" : 0));
-const SubmenuChevronIcon = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_icon,  true ? {
-  target: "e1wg7tti2"
-} : 0)("width:", space(1.5), ";", rtl({
-  transform: `scaleX(1)`
-}, {
-  transform: `scaleX(-1)`
-}), ";" + ( true ? "" : 0));
-const styles_MenuItemLabel = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
-  target: "e1wg7tti1"
-} : 0)("font-size:", font('default.fontSize'), ";line-height:20px;color:inherit;" + ( true ? "" : 0));
-const styles_MenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
-  target: "e1wg7tti0"
-} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", LIGHTER_TEXT_COLOR, ";word-break:break-all;[data-active-item]:not( [data-focus-visible] ) *:not( ", MenuPopoverInnerWrapper, " ) &,[aria-disabled='true'] *:not( ", MenuPopoverInnerWrapper, " ) &{color:inherit;}" + ( true ? "" : 0));
-
-;// ./packages/components/build-module/menu/context.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-const MenuContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
-
-;// ./packages/components/build-module/menu/use-temporary-focus-visible-fix.js
-/**
- * WordPress dependencies
- */
-
-function useTemporaryFocusVisibleFix({
-  onBlur: onBlurProp
-}) {
-  const [focusVisible, setFocusVisible] = (0,external_wp_element_namespaceObject.useState)(false);
-  return {
-    'data-focus-visible': focusVisible || undefined,
-    onFocusVisible: () => {
-      (0,external_wp_element_namespaceObject.flushSync)(() => setFocusVisible(true));
-    },
-    onBlur: event => {
-      onBlurProp?.(event);
-      setFocusVisible(false);
-    }
-  };
-}
-
-;// ./packages/components/build-module/menu/item.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-const item_MenuItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItem({
-  prefix,
-  suffix,
-  children,
-  onBlur,
-  hideOnClick = true,
-  ...props
-}, ref) {
-  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
-  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
-    onBlur
-  });
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuItem, {
-    ref: ref,
-    ...props,
-    ...focusVisibleFixProps,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: menuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {
-      children: prefix
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-
-;// ./packages/components/node_modules/@ariakit/react-core/esm/menu/menu-item-check.js
-"use client";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// src/menu/menu-item-check.tsx
-
-var menu_item_check_TagName = "span";
-var useMenuItemCheck = createHook(
-  function useMenuItemCheck2(_a) {
-    var _b = _a, { store, checked } = _b, props = __objRest(_b, ["store", "checked"]);
-    const context = (0,external_React_.useContext)(MenuItemCheckedContext);
-    checked = checked != null ? checked : context;
-    props = useCheckboxCheck(_3YLGPPWQ_spreadProps(_3YLGPPWQ_spreadValues({}, props), { checked }));
-    return props;
-  }
-);
-var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
-  const htmlProps = useMenuItemCheck(props);
-  return HKOOKEDE_createElement(menu_item_check_TagName, htmlProps);
-});
-
-
-;// ./packages/components/build-module/menu/checkbox-item.js
+;// ./packages/components/build-module/menu/popover.js
 /**
  * External dependencies
  */
@@ -70654,7 +71275,6 @@ var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
  */
 
 
-
 /**
  * Internal dependencies
  */
@@ -70662,236 +71282,67 @@ var MenuItemCheck = forwardRef2(function MenuItemCheck2(props) {
 
 
 
-
-const MenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuCheckboxItem({
-  suffix,
+const menu_popover_Popover = (0,external_wp_element_namespaceObject.forwardRef)(function Popover({
+  gutter,
   children,
-  onBlur,
-  hideOnClick = false,
-  ...props
+  shift,
+  modal = true,
+  ...otherProps
 }, ref) {
-  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
-  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
-    onBlur
-  });
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuCheckboxItem, {
+  const menuContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+
+  // Extract the side from the applied placement — useful for animations.
+  // Using `currentPlacement` instead of `placement` to make sure that we
+  // use the final computed placement (including "flips" etc).
+  const appliedPlacementSide = useStoreState(menuContext?.store, 'currentPlacement')?.split('-')[0];
+  const hideOnEscape = (0,external_wp_element_namespaceObject.useCallback)(event => {
+    // Pressing Escape can cause unexpected consequences (ie. exiting
+    // full screen mode on MacOs, close parent modals...).
+    event.preventDefault();
+    // Returning `true` causes the menu to hide.
+    return true;
+  }, []);
+  const computedDirection = useStoreState(menuContext?.store, 'rtl') ? 'rtl' : 'ltr';
+  const wrapperProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    dir: computedDirection,
+    style: {
+      direction: computedDirection
+    }
+  }), [computedDirection]);
+  if (!menuContext?.store) {
+    throw new Error('Menu.Popover can only be rendered inside a Menu component');
+  }
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu, {
+    ...otherProps,
     ref: ref,
-    ...props,
-    ...focusVisibleFixProps,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: menuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
-      store: menuContext?.store,
-      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
-      // Override some ariakit inline styles
-      ,
-      style: {
-        width: 'auto',
-        height: 'auto'
-      },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-        icon: library_check,
-        size: 24
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-
-;// ./packages/components/build-module/menu/radio-item.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-const radioCheck = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Circle, {
-    cx: 12,
-    cy: 12,
-    r: 3
-  })
-});
-const MenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function MenuRadioItem({
-  suffix,
-  children,
-  onBlur,
-  hideOnClick = false,
-  ...props
-}, ref) {
-  // TODO: Remove when https://github.com/ariakit/ariakit/issues/4083 is fixed
-  const focusVisibleFixProps = useTemporaryFocusVisibleFix({
-    onBlur
-  });
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(styles_MenuRadioItem, {
-    ref: ref,
-    ...props,
-    ...focusVisibleFixProps,
-    accessibleWhenDisabled: true,
-    hideOnClick: hideOnClick,
-    store: menuContext?.store,
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemCheck, {
-      store: menuContext?.store,
-      render: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemPrefixWrapper, {})
-      // Override some ariakit inline styles
-      ,
-      style: {
-        width: 'auto',
-        height: 'auto'
-      },
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icons_build_module_icon, {
-        icon: radioCheck,
-        size: 24
-      })
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(MenuItemContentWrapper, {
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuItemChildrenWrapper, {
-        children: children
-      }), suffix && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(ItemSuffixWrapper, {
-        children: suffix
-      })]
-    })]
-  });
-});
-
-;// ./packages/components/build-module/menu/group.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const group_MenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function MenuGroup(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuGroup, {
-    ref: ref,
-    ...props,
-    store: menuContext?.store
-  });
-});
-
-;// ./packages/components/build-module/menu/group-label.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-const group_label_MenuGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function MenuGroup(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuGroupLabel, {
-    ref: ref,
-    render:
+    modal: modal,
+    store: menuContext.store
+    // Root menu has an 8px distance from its trigger,
+    // otherwise 0 (which causes the submenu to slightly overlap)
+    ,
+    gutter: gutter !== null && gutter !== void 0 ? gutter : menuContext.store.parent ? 0 : 8
+    // Align nested menu by the same (but opposite) amount
+    // as the menu container's padding.
+    ,
+    shift: shift !== null && shift !== void 0 ? shift : menuContext.store.parent ? -4 : 0,
+    hideOnHoverOutside: false,
+    "data-side": appliedPlacementSide,
+    wrapperProps: wrapperProps,
+    hideOnEscape: hideOnEscape,
+    unmountOnHide: true,
+    render: renderProps =>
     /*#__PURE__*/
-    // @ts-expect-error The `children` prop is passed
-    (0,external_ReactJSXRuntime_namespaceObject.jsx)(text_component, {
-      upperCase: true,
-      variant: "muted",
-      size: "11px",
-      weight: 500,
-      lineHeight: "16px"
+    // Two wrappers are needed for the entry animation, where the menu
+    // container scales with a different factor than its contents.
+    // The {...renderProps} are passed to the inner wrapper, so that the
+    // menu element is the direct parent of the menu item elements.
+    (0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverOuterWrapper, {
+      variant: menuContext.variant,
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(PopoverInnerWrapper, {
+        ...renderProps
+      })
     }),
-    ...props,
-    store: menuContext?.store
-  });
-});
-
-;// ./packages/components/build-module/menu/separator.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-const separator_MenuSeparator = (0,external_wp_element_namespaceObject.forwardRef)(function MenuSeparator(props, ref) {
-  const menuContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuSeparator, {
-    ref: ref,
-    ...props,
-    store: menuContext?.store,
-    variant: menuContext?.variant
-  });
-});
-
-;// ./packages/components/build-module/menu/item-label.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-const MenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItemLabel(props, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuItemLabel, {
-    numberOfLines: 1,
-    ref: ref,
-    ...props
-  });
-});
-
-;// ./packages/components/build-module/menu/item-help-text.js
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-
-
-const MenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function MenuItemHelpText(props, ref) {
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(styles_MenuItemHelpText, {
-    numberOfLines: 2,
-    ref: ref,
-    ...props
+    children: children
   });
 });
 
@@ -70901,11 +71352,9 @@ const MenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(func
  */
 
 
-
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -70924,35 +71373,27 @@ const MenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(func
 
 
 
-const UnconnectedMenu = (props, ref) => {
-  var _props$placement;
+
+
+const UnconnectedMenu = props => {
   const {
-    // Store props
-    open,
+    children,
     defaultOpen = false,
+    open,
     onOpenChange,
     placement,
-    // Menu trigger props
-    trigger,
-    // Menu props
-    gutter,
-    children,
-    shift,
-    modal = true,
     // From internal components context
-    variant,
-    // Rest
-    ...otherProps
+    variant
   } = useContextSystem(props, 'Menu');
-  const parentContext = (0,external_wp_element_namespaceObject.useContext)(MenuContext);
-  const computedDirection = (0,external_wp_i18n_namespaceObject.isRTL)() ? 'rtl' : 'ltr';
+  const parentContext = (0,external_wp_element_namespaceObject.useContext)(context_Context);
+  const rtl = (0,external_wp_i18n_namespaceObject.isRTL)();
 
   // If an explicit value for the `placement` prop is not passed,
   // apply a default placement of `bottom-start` for the root menu popover,
   // and of `right-start` for nested menu popovers.
-  let computedPlacement = (_props$placement = props.placement) !== null && _props$placement !== void 0 ? _props$placement : parentContext?.store ? 'right-start' : 'bottom-start';
+  let computedPlacement = placement !== null && placement !== void 0 ? placement : parentContext?.store ? 'right-start' : 'bottom-start';
   // Swap left/right in case of RTL direction
-  if (computedDirection === 'rtl') {
+  if (rtl) {
     if (/right/.test(computedPlacement)) {
       computedPlacement = computedPlacement.replace('right', 'left');
     } else if (/left/.test(computedPlacement)) {
@@ -70968,112 +71409,126 @@ const UnconnectedMenu = (props, ref) => {
     setOpen(willBeOpen) {
       onOpenChange?.(willBeOpen);
     },
-    rtl: computedDirection === 'rtl'
+    rtl
   });
   const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     store: menuStore,
     variant
   }), [menuStore, variant]);
-
-  // Extract the side from the applied placement — useful for animations.
-  // Using `currentPlacement` instead of `placement` to make sure that we
-  // use the final computed placement (including "flips" etc).
-  const appliedPlacementSide = useStoreState(menuStore, 'currentPlacement').split('-')[0];
-  if (menuStore.parent && !((0,external_wp_element_namespaceObject.isValidElement)(trigger) && item_MenuItem === trigger.type)) {
-    // eslint-disable-next-line no-console
-    console.warn('For nested Menus, the `trigger` should always be a `MenuItem`.');
-  }
-  const hideOnEscape = (0,external_wp_element_namespaceObject.useCallback)(event => {
-    // Pressing Escape can cause unexpected consequences (ie. exiting
-    // full screen mode on MacOs, close parent modals...).
-    event.preventDefault();
-    // Returning `true` causes the menu to hide.
-    return true;
-  }, []);
-  const wrapperProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    dir: computedDirection,
-    style: {
-      direction: computedDirection
-    }
-  }), [computedDirection]);
-  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuButton, {
-      ref: ref,
-      store: menuStore,
-      render: menuStore.parent ? (0,external_wp_element_namespaceObject.cloneElement)(trigger, {
-        // Add submenu arrow, unless a `suffix` is explicitly specified
-        suffix: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-          children: [trigger.props.suffix, /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(SubmenuChevronIcon, {
-            "aria-hidden": "true",
-            icon: chevron_right_small,
-            size: 24,
-            preserveAspectRatio: "xMidYMid slice"
-          })]
-        })
-      }) : trigger
-    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Menu, {
-      ...otherProps,
-      modal: modal,
-      store: menuStore
-      // Root menu has an 8px distance from its trigger,
-      // otherwise 0 (which causes the submenu to slightly overlap)
-      ,
-      gutter: gutter !== null && gutter !== void 0 ? gutter : menuStore.parent ? 0 : 8
-      // Align nested menu by the same (but opposite) amount
-      // as the menu container's padding.
-      ,
-      shift: shift !== null && shift !== void 0 ? shift : menuStore.parent ? -4 : 0,
-      hideOnHoverOutside: false,
-      "data-side": appliedPlacementSide,
-      wrapperProps: wrapperProps,
-      hideOnEscape: hideOnEscape,
-      unmountOnHide: true,
-      render: renderProps =>
-      /*#__PURE__*/
-      // Two wrappers are needed for the entry animation, where the menu
-      // container scales with a different factor than its contents.
-      // The {...renderProps} are passed to the inner wrapper, so that the
-      // menu element is the direct parent of the menu item elements.
-      (0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverOuterWrapper, {
-        variant: variant,
-        children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuPopoverInnerWrapper, {
-          ...renderProps
-        })
-      }),
-      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(MenuContext.Provider, {
-        value: contextValue,
-        children: children
-      })
-    })]
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(context_Context.Provider, {
+    value: contextValue,
+    children: children
   });
 };
-const menu_Menu = Object.assign(contextConnect(UnconnectedMenu, 'Menu'), {
-  Context: Object.assign(MenuContext, {
+
+/**
+ * Menu is a collection of React components that combine to render
+ * ARIA-compliant [menu](https://www.w3.org/WAI/ARIA/apg/patterns/menu/) and
+ * [menu button](https://www.w3.org/WAI/ARIA/apg/patterns/menubutton/) patterns.
+ *
+ * `Menu` itself is a wrapper component and context provider.
+ * It is responsible for managing the state of the menu and its items, and for
+ * rendering the `Menu.TriggerButton` (or the `Menu.SubmenuTriggerItem`)
+ * component, and the `Menu.Popover` component.
+ */
+const menu_Menu = Object.assign(contextConnectWithoutRef(UnconnectedMenu, 'Menu'), {
+  Context: Object.assign(context_Context, {
     displayName: 'Menu.Context'
   }),
-  Item: Object.assign(item_MenuItem, {
+  /**
+   * Renders a menu item inside the `Menu.Popover` or `Menu.Group` components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  Item: Object.assign(item_Item, {
     displayName: 'Menu.Item'
   }),
-  RadioItem: Object.assign(MenuRadioItem, {
+  /**
+   * Renders a radio menu item inside the `Menu.Popover` or `Menu.Group`
+   * components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  RadioItem: Object.assign(RadioItem, {
     displayName: 'Menu.RadioItem'
   }),
-  CheckboxItem: Object.assign(MenuCheckboxItem, {
+  /**
+   * Renders a checkbox menu item inside the `Menu.Popover` or `Menu.Group`
+   * components.
+   *
+   * It can optionally contain one instance of the `Menu.ItemLabel` component
+   * and one instance of the `Menu.ItemHelpText` component.
+   */
+  CheckboxItem: Object.assign(CheckboxItem, {
     displayName: 'Menu.CheckboxItem'
   }),
-  Group: Object.assign(group_MenuGroup, {
+  /**
+   * Renders a group for menu items.
+   *
+   * It should contain one instance of `Menu.GroupLabel` and one or more
+   * instances of `Menu.Item`, `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  Group: Object.assign(group_Group, {
     displayName: 'Menu.Group'
   }),
-  GroupLabel: Object.assign(group_label_MenuGroupLabel, {
+  /**
+   * Renders a label in a menu group.
+   *
+   * This component should be wrapped with `Menu.Group` so the
+   * `aria-labelledby` is correctly set on the group element.
+   */
+  GroupLabel: Object.assign(group_label_GroupLabel, {
     displayName: 'Menu.GroupLabel'
   }),
-  Separator: Object.assign(separator_MenuSeparator, {
+  /**
+   * Renders a divider between menu items or menu groups.
+   */
+  Separator: Object.assign(separator_Separator, {
     displayName: 'Menu.Separator'
   }),
-  ItemLabel: Object.assign(MenuItemLabel, {
+  /**
+   * Renders a menu item's label text. It should be wrapped with `Menu.Item`,
+   * `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  ItemLabel: Object.assign(ItemLabel, {
     displayName: 'Menu.ItemLabel'
   }),
-  ItemHelpText: Object.assign(MenuItemHelpText, {
+  /**
+   * Renders a menu item's help text. It should be wrapped with `Menu.Item`,
+   * `Menu.RadioItem`, or `Menu.CheckboxItem`.
+   */
+  ItemHelpText: Object.assign(ItemHelpText, {
     displayName: 'Menu.ItemHelpText'
+  }),
+  /**
+   * Renders a dropdown menu element that's controlled by a sibling
+   * `Menu.TriggerButton` component. It renders a popover and automatically
+   * focuses on items when the menu is shown.
+   *
+   * The only valid children of `Menu.Popover` are `Menu.Item`,
+   * `Menu.RadioItem`, `Menu.CheckboxItem`, `Menu.Group`, `Menu.Separator`,
+   * and `Menu` (for nested dropdown menus).
+   */
+  Popover: Object.assign(menu_popover_Popover, {
+    displayName: 'Menu.Popover'
+  }),
+  /**
+   * Renders a menu button that toggles the visibility of a sibling
+   * `Menu.Popover` component when clicked or when using arrow keys.
+   */
+  TriggerButton: Object.assign(TriggerButton, {
+    displayName: 'Menu.TriggerButton'
+  }),
+  /**
+   * Renders a menu item that toggles the visibility of a sibling
+   * `Menu.Popover` component when clicked or when using arrow keys.
+   *
+   * This component is used to create a nested dropdown menu.
+   */
+  SubmenuTriggerItem: Object.assign(SubmenuTriggerItem, {
+    displayName: 'Menu.SubmenuTriggerItem'
   })
 });
 /* harmony default export */ const build_module_menu = ((/* unused pure expression or super */ null && (menu_Menu)));
@@ -71311,11 +71766,6 @@ const styles_TabPanel = /*#__PURE__*/emotion_styled_base_browser_esm(TabPanel,  
 
 ;// ./packages/components/build-module/tabs/tab.js
 /**
- * External dependencies
- */
-
-
-/**
  * WordPress dependencies
  */
 
@@ -71342,15 +71792,6 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
     store,
     instanceId
   } = (_useTabsContext = useTabsContext()) !== null && _useTabsContext !== void 0 ? _useTabsContext : {};
-
-  // If the active item is not connected, the tablist may end up in a state
-  // where none of the tabs are tabbable. In this case, we force all tabs to
-  // be tabbable, so that as soon as an item received focus, it becomes active
-  // and Tablist goes back to working as expected.
-  // eslint-disable-next-line @wordpress/no-unused-vars-before-return
-  const tabbable = useStoreState(store, state => {
-    return state?.activeId !== null && !store?.item(state?.activeId)?.element?.isConnected;
-  });
   if (!store) {
      false ? 0 : void 0;
     return null;
@@ -71362,7 +71803,6 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
     id: instancedTabId,
     disabled: disabled,
     render: render,
-    tabbable: tabbable,
     ...otherProps,
     children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(TabChildren, {
       children: children
@@ -71663,11 +72103,14 @@ function internalToExternalTabId(internalId, instanceId) {
 }
 
 /**
- * Display one panel of content at a time with a tabbed interface, based on the
- * WAI-ARIA Tabs Pattern⁠.
+ * Tabs is a collection of React components that combine to render
+ * an [ARIA-compliant tabs pattern](https://www.w3.org/WAI/ARIA/apg/patterns/tabs/).
  *
- * @see https://www.w3.org/WAI/ARIA/apg/patterns/tabs/
- * ```
+ * Tabs organizes content across different screens, data sets, and interactions.
+ * It has two sections: a list of tabs, and the view to show when a tab is chosen.
+ *
+ * `Tabs` itself is a wrapper component and context provider.
+ * It is responsible for managing the state of the tabs, and rendering one instance of the `Tabs.TabList` component and one or more instances of the `Tab.TabPanel` component.
  */
 const Tabs = Object.assign(function Tabs({
   selectOnMove = true,
@@ -71728,12 +72171,26 @@ const Tabs = Object.assign(function Tabs({
     children: children
   });
 }, {
+  /**
+   * Renders a single tab.
+   *
+   * The currently active tab receives default styling that can be
+   * overridden with CSS targeting `[aria-selected="true"]`.
+   */
   Tab: Object.assign(tab_Tab, {
     displayName: 'Tabs.Tab'
   }),
+  /**
+   * A wrapper component for the `Tab` components.
+   *
+   * It is responsible for rendering the list of tabs.
+   */
   TabList: Object.assign(tablist_TabList, {
     displayName: 'Tabs.TabList'
   }),
+  /**
+   * Renders the content to display for a single tab once that tab is selected.
+   */
   TabPanel: Object.assign(tabpanel_TabPanel, {
     displayName: 'Tabs.TabPanel'
   }),
@@ -71754,6 +72211,138 @@ const {
   unlock
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I acknowledge private features are not for use in themes or plugins and doing so will break in the next version of WordPress.', '@wordpress/components');
 
+;// ./packages/icons/build-module/library/info.js
+/**
+ * WordPress dependencies
+ */
+
+
+const info = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M5.5 12a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0ZM12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm.75 4v1.5h-1.5V8h1.5Zm0 8v-5h-1.5v5h1.5Z"
+  })
+});
+/* harmony default export */ const library_info = (info);
+
+;// ./packages/icons/build-module/library/published.js
+/**
+ * WordPress dependencies
+ */
+
+
+const published = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M12 18.5a6.5 6.5 0 1 1 0-13 6.5 6.5 0 0 1 0 13ZM4 12a8 8 0 1 1 16 0 8 8 0 0 1-16 0Zm11.53-1.47-1.06-1.06L11 12.94l-1.47-1.47-1.06 1.06L11 15.06l4.53-4.53Z"
+  })
+});
+/* harmony default export */ const library_published = (published);
+
+;// ./packages/icons/build-module/library/caution.js
+/**
+ * WordPress dependencies
+ */
+
+
+const caution = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M5.5 12a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0ZM12 4a8 8 0 1 0 0 16 8 8 0 0 0 0-16Zm-.75 12v-1.5h1.5V16h-1.5Zm0-8v5h1.5V8h-1.5Z"
+  })
+});
+/* harmony default export */ const library_caution = (caution);
+
+;// ./packages/icons/build-module/library/error.js
+/**
+ * WordPress dependencies
+ */
+
+
+const error = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg",
+  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M12.218 5.377a.25.25 0 0 0-.436 0l-7.29 12.96a.25.25 0 0 0 .218.373h14.58a.25.25 0 0 0 .218-.372l-7.29-12.96Zm-1.743-.735c.669-1.19 2.381-1.19 3.05 0l7.29 12.96a1.75 1.75 0 0 1-1.525 2.608H4.71a1.75 1.75 0 0 1-1.525-2.608l7.29-12.96ZM12.75 17.46h-1.5v-1.5h1.5v1.5Zm-1.5-3h1.5v-5h-1.5v5Z"
+  })
+});
+/* harmony default export */ const library_error = (error);
+
+;// ./packages/components/build-module/badge/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Returns an icon based on the badge context.
+ *
+ * @return The corresponding icon for the provided context.
+ */
+
+function contextBasedIcon(intent = 'default') {
+  switch (intent) {
+    case 'info':
+      return library_info;
+    case 'success':
+      return library_published;
+    case 'warning':
+      return library_caution;
+    case 'error':
+      return library_error;
+    default:
+      return null;
+  }
+}
+function Badge({
+  className,
+  intent = 'default',
+  children,
+  ...props
+}) {
+  const icon = contextBasedIcon(intent);
+  const hasIcon = !!icon;
+  return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("span", {
+    className: dist_clsx('components-badge', className, {
+      [`is-${intent}`]: intent,
+      'has-icon': hasIcon
+    }),
+    ...props,
+    children: [hasIcon && /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(build_module_icon, {
+      icon: icon,
+      size: 16,
+      fill: "currentColor",
+      className: "components-badge__icon"
+    }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("span", {
+      className: "components-badge__content",
+      children: children
+    })]
+  });
+}
+/* harmony default export */ const badge = (Badge);
+
 ;// ./packages/components/build-module/private-apis.js
 /**
  * Internal dependencies
@@ -71766,15 +72355,18 @@ const {
 
 
 
+
 const privateApis = {};
 lock(privateApis, {
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
-  createPrivateSlotFill: createPrivateSlotFill,
   ComponentsContext: ComponentsContext,
   Tabs: Tabs,
   Theme: theme,
   Menu: menu_Menu,
-  kebabCase: kebabCase
+  kebabCase: kebabCase,
+  withIgnoreIMEEvents: withIgnoreIMEEvents,
+  Badge: badge,
+  normalizeTextString: normalizeTextString
 });
 
 ;// ./packages/components/build-module/index.js

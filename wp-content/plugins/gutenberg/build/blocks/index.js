@@ -5819,7 +5819,7 @@ if (true) {
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -5881,6 +5881,7 @@ __webpack_require__.d(__webpack_exports__, {
   parse: () => (/* reexport */ parser_parse),
   parseWithAttributeSchema: () => (/* reexport */ parseWithAttributeSchema),
   pasteHandler: () => (/* reexport */ pasteHandler),
+  privateApis: () => (/* reexport */ privateApis),
   rawHandler: () => (/* reexport */ rawHandler),
   registerBlockBindingsSource: () => (/* reexport */ registerBlockBindingsSource),
   registerBlockCollection: () => (/* reexport */ registerBlockCollection),
@@ -6688,7 +6689,7 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   fontFamily: {
     value: ['typography', 'fontFamily'],
-    support: ['typography', 'fontFamily'],
+    support: ['typography', '__experimentalFontFamily'],
     useEngine: true
   },
   fontSize: {
@@ -6698,12 +6699,12 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   fontStyle: {
     value: ['typography', 'fontStyle'],
-    support: ['typography', 'fontStyle'],
+    support: ['typography', '__experimentalFontStyle'],
     useEngine: true
   },
   fontWeight: {
     value: ['typography', 'fontWeight'],
-    support: ['typography', 'fontWeight'],
+    support: ['typography', '__experimentalFontWeight'],
     useEngine: true
   },
   lineHeight: {
@@ -6745,17 +6746,17 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
   },
   textDecoration: {
     value: ['typography', 'textDecoration'],
-    support: ['typography', 'textDecoration'],
+    support: ['typography', '__experimentalTextDecoration'],
     useEngine: true
   },
   textTransform: {
     value: ['typography', 'textTransform'],
-    support: ['typography', 'textTransform'],
+    support: ['typography', '__experimentalTextTransform'],
     useEngine: true
   },
   letterSpacing: {
     value: ['typography', 'letterSpacing'],
-    support: ['typography', 'letterSpacing'],
+    support: ['typography', '__experimentalLetterSpacing'],
     useEngine: true
   },
   writingMode: {
@@ -6799,14 +6800,6 @@ const __EXPERIMENTAL_PATHS_WITH_OVERRIDE = {
   'dimensions.aspectRatios': true,
   'typography.fontSizes': true,
   'spacing.spacingSizes': true
-};
-const TYPOGRAPHY_SUPPORTS_EXPERIMENTAL_TO_STABLE = {
-  __experimentalFontFamily: 'fontFamily',
-  __experimentalFontStyle: 'fontStyle',
-  __experimentalFontWeight: 'fontWeight',
-  __experimentalLetterSpacing: 'letterSpacing',
-  __experimentalTextDecoration: 'textDecoration',
-  __experimentalTextTransform: 'textTransform'
 };
 
 ;// external ["wp","warning"]
@@ -7925,6 +7918,17 @@ function getDefault(attributeSchema) {
 }
 
 /**
+ * Check if a block is registered.
+ *
+ * @param {string} name The block's name.
+ *
+ * @return {boolean} Whether the block is registered.
+ */
+function isBlockRegistered(name) {
+  return getBlockType(name) !== undefined;
+}
+
+/**
  * Ensure attributes contains only values defined by block type, and merge
  * default values for missing attributes.
  *
@@ -8015,6 +8019,25 @@ const __experimentalGetBlockAttributesNamesByRole = (...args) => {
 };
 
 /**
+ * Checks if a block is a content block by examining its attributes.
+ * A block is considered a content block if it has at least one attribute
+ * with a role of 'content'.
+ *
+ * @param {string} name The name of the block to check.
+ * @return {boolean}    Whether the block is a content block.
+ */
+function isContentBlock(name) {
+  const attributes = getBlockType(name)?.attributes;
+  if (!attributes) {
+    return false;
+  }
+  return !!Object.keys(attributes)?.some(attributeKey => {
+    const attribute = attributes[attributeKey];
+    return attribute?.role === 'content' || attribute?.__experimentalRole === 'content';
+  });
+}
+
+/**
  * Return a new object with the specified keys omitted.
  *
  * @param {Object} object Original object.
@@ -8027,7 +8050,6 @@ function omit(object, keys) {
 }
 
 ;// ./packages/blocks/build-module/store/reducer.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -8728,7 +8750,7 @@ const selectors_getBlockTypes = (0,external_wp_data_namespaceObject.createSelect
  * };
  * ```
  *
- * @return {Object?} Block Type.
+ * @return {?Object} Block Type.
  */
 function selectors_getBlockType(state, name) {
   return state.blockTypes[name];
@@ -9042,7 +9064,7 @@ function getCollections(state) {
  * };
  * ```
  *
- * @return {string?} Default block name.
+ * @return {?string} Default block name.
  */
 function selectors_getDefaultBlockName(state) {
   return state.defaultBlockName;
@@ -9078,7 +9100,7 @@ function selectors_getDefaultBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling non-block content.
+ * @return {?string} Name of the block for handling non-block content.
  */
 function getFreeformFallbackBlockName(state) {
   return state.freeformFallbackBlockName;
@@ -9114,7 +9136,7 @@ function getFreeformFallbackBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling unregistered blocks.
+ * @return {?string} Name of the block for handling unregistered blocks.
  */
 function getUnregisteredFallbackBlockName(state) {
   return state.unregisteredFallbackBlockName;
@@ -9150,7 +9172,7 @@ function getUnregisteredFallbackBlockName(state) {
  * };
  * ```
  *
- * @return {string?} Name of the block for handling the grouping of blocks.
+ * @return {?string} Name of the block for handling the grouping of blocks.
  */
 function selectors_getGroupingBlockName(state) {
   return state.groupingBlockName;
@@ -9511,24 +9533,6 @@ function mergeBlockVariations(bootstrappedVariations = [], clientVariations = []
   });
   return result;
 }
-function stabilizeSupports(rawSupports) {
-  if (!rawSupports) {
-    return rawSupports;
-  }
-
-  // Create a new object to avoid mutating the original. This ensures that
-  // custom block plugins that rely on immutable supports are not affected.
-  // See: https://github.com/WordPress/gutenberg/pull/66849#issuecomment-2463614281
-  const newSupports = {};
-  for (const [key, value] of Object.entries(rawSupports)) {
-    if (key === 'typography' && typeof value === 'object' && value !== null) {
-      newSupports.typography = Object.fromEntries(Object.entries(value).map(([typographyKey, typographyValue]) => [TYPOGRAPHY_SUPPORTS_EXPERIMENTAL_TO_STABLE[typographyKey] || typographyKey, typographyValue]));
-    } else {
-      newSupports[key] = value;
-    }
-  }
-  return newSupports;
-}
 
 /**
  * Takes the unprocessed block type settings, merges them with block type metadata
@@ -9561,43 +9565,25 @@ const processBlockType = (name, blockSettings) => ({
     // blockType.variations can be defined as a filePath.
     variations: mergeBlockVariations(Array.isArray(bootstrappedBlockType?.variations) ? bootstrappedBlockType.variations : [], Array.isArray(blockSettings?.variations) ? blockSettings.variations : [])
   };
-
-  // Stabilize any experimental supports before applying filters.
-  blockType.supports = stabilizeSupports(blockType.supports);
   const settings = (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType', blockType, name, null);
-
-  // Re-stabilize any experimental supports after applying filters.
-  // This ensures that any supports updated by filters are also stabilized.
-  blockType.supports = stabilizeSupports(blockType.supports);
   if (settings.description && typeof settings.description !== 'string') {
     external_wp_deprecated_default()('Declaring non-string block descriptions', {
       since: '6.2'
     });
   }
   if (settings.deprecated) {
-    settings.deprecated = settings.deprecated.map(deprecation => {
-      // Stabilize any experimental supports before applying filters.
-      let filteredDeprecation = {
-        ...deprecation,
-        supports: stabilizeSupports(deprecation.supports)
-      };
-      filteredDeprecation =
-      // Only keep valid deprecation keys.
-      (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType',
-      // Merge deprecation keys with pre-filter settings
-      // so that filters that depend on specific keys being
-      // present don't fail.
-      {
-        // Omit deprecation keys here so that deprecations
-        // can opt out of specific keys like "supports".
-        ...omit(blockType, DEPRECATED_ENTRY_KEYS),
-        ...filteredDeprecation
-      }, blockType.name, filteredDeprecation);
-      // Re-stabilize any experimental supports after applying filters.
-      // This ensures that any supports updated by filters are also stabilized.
-      filteredDeprecation.supports = stabilizeSupports(filteredDeprecation.supports);
-      return Object.fromEntries(Object.entries(filteredDeprecation).filter(([key]) => DEPRECATED_ENTRY_KEYS.includes(key)));
-    });
+    settings.deprecated = settings.deprecated.map(deprecation => Object.fromEntries(Object.entries(
+    // Only keep valid deprecation keys.
+    (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType',
+    // Merge deprecation keys with pre-filter settings
+    // so that filters that depend on specific keys being
+    // present don't fail.
+    {
+      // Omit deprecation keys here so that deprecations
+      // can opt out of specific keys like "supports".
+      ...omit(blockType, DEPRECATED_ENTRY_KEYS),
+      ...deprecation
+    }, blockType.name, deprecation)).filter(([key]) => DEPRECATED_ENTRY_KEYS.includes(key))));
   }
   if (!isPlainObject(settings)) {
      false ? 0 : void 0;
@@ -9979,7 +9965,7 @@ function removeBlockCollection(namespace) {
 
 /**
  * Add bootstrapped block type metadata to the store. These metadata usually come from
- * the `block.json` file and are either statically boostrapped from the server, or
+ * the `block.json` file and are either statically bootstrapped from the server, or
  * passed as the `metadata` parameter to the `registerBlockType` function.
  *
  * @param {string}      name      Block name.
@@ -10170,7 +10156,6 @@ function v4(options, buf, offset) {
 
 /* harmony default export */ const esm_browser_v4 = (v4);
 ;// ./packages/blocks/build-module/api/factory.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -10197,6 +10182,13 @@ function v4(options, buf, offset) {
  * @return {Object} Block object.
  */
 function createBlock(name, attributes = {}, innerBlocks = []) {
+  if (!isBlockRegistered(name)) {
+    return createBlock('core/missing', {
+      originalName: name,
+      originalContent: '',
+      originalUndelimitedContent: ''
+    });
+  }
   const sanitizedAttributes = __experimentalSanitizeBlockAttributes(name, attributes);
   const clientId = esm_browser_v4();
 
@@ -10240,8 +10232,18 @@ function createBlocksFromInnerBlocksTemplate(innerBlocksOrTemplate = []) {
  * @return {Object} A cloned block.
  */
 function __experimentalCloneSanitizedBlock(block, mergeAttributes = {}, newInnerBlocks) {
+  const {
+    name
+  } = block;
+  if (!isBlockRegistered(name)) {
+    return createBlock('core/missing', {
+      originalName: name,
+      originalContent: '',
+      originalUndelimitedContent: ''
+    });
+  }
   const clientId = esm_browser_v4();
-  const sanitizedAttributes = __experimentalSanitizeBlockAttributes(block.name, {
+  const sanitizedAttributes = __experimentalSanitizeBlockAttributes(name, {
     ...block.attributes,
     ...mergeAttributes
   });
@@ -10606,16 +10608,8 @@ function switchToBlockType(blocks, name) {
  * @return {Object} block.
  */
 const getBlockFromExample = (name, example) => {
-  try {
-    var _example$innerBlocks;
-    return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
-  } catch {
-    return createBlock('core/missing', {
-      originalName: name,
-      originalContent: '',
-      originalUndelimitedContent: ''
-    });
-  }
+  var _example$innerBlocks;
+  return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
 };
 
 ;// external ["wp","blockSerializationDefaultParser"]
@@ -11851,7 +11845,7 @@ const TEXT_NORMALIZATIONS = [identity, getTextWithCollapsedWhitespace];
  * "The ampersand must be followed by one of the names given in the named
  * character references section, using the same case."
  *
- * Tested aginst "12.5 Named character references":
+ * Tested against "12.5 Named character references":
  *
  * ```
  * const references = Array.from( document.querySelectorAll(
@@ -11906,7 +11900,7 @@ function isValidCharacterReference(text) {
 }
 
 /**
- * Subsitute EntityParser class for `simple-html-tokenizer` which uses the
+ * Substitute EntityParser class for `simple-html-tokenizer` which uses the
  * implementation of `decodeEntities` from `html-entities`, in order to avoid
  * bundling a massive named character reference.
  *
@@ -12418,7 +12412,6 @@ function convertLegacyBlockNameAndAttributes(name, attributes) {
   }
 
   // Convert Post Comment blocks in existing content to Comment blocks.
-  // TODO: Remove these checks when WordPress 6.0 is released.
   if (name === 'core/post-comment-author') {
     name = 'core/comment-author-name';
   }
@@ -13533,10 +13526,62 @@ function fixCustomClassname(blockAttributes, blockType, innerHTML) {
   return modifiedBlockAttributes;
 }
 
+;// ./packages/blocks/build-module/api/parser/fix-aria-label.js
+/**
+ * Internal dependencies
+ */
+
+
+const ARIA_LABEL_ATTR_SCHEMA = {
+  type: 'string',
+  source: 'attribute',
+  selector: '[data-aria-label] > *',
+  attribute: 'aria-label'
+};
+
+/**
+ * Given an HTML string, returns the aria-label attribute assigned to
+ * the root element in the markup.
+ *
+ * @param {string} innerHTML Markup string from which to extract the aria-label.
+ *
+ * @return {string} The aria-label assigned to the root element.
+ */
+function getHTMLRootElementAriaLabel(innerHTML) {
+  const parsed = parseWithAttributeSchema(`<div data-aria-label>${innerHTML}</div>`, ARIA_LABEL_ATTR_SCHEMA);
+  return parsed;
+}
+
+/**
+ * Given a parsed set of block attributes, if the block supports ariaLabel
+ * and an aria-label attribute is found, the aria-label attribute is assigned
+ * to the block attributes.
+ *
+ * @param {Object} blockAttributes Original block attributes.
+ * @param {Object} blockType       Block type settings.
+ * @param {string} innerHTML       Original block markup.
+ *
+ * @return {Object} Filtered block attributes.
+ */
+function fixAriaLabel(blockAttributes, blockType, innerHTML) {
+  if (!hasBlockSupport(blockType, 'ariaLabel', false)) {
+    return blockAttributes;
+  }
+  const modifiedBlockAttributes = {
+    ...blockAttributes
+  };
+  const ariaLabel = getHTMLRootElementAriaLabel(innerHTML);
+  if (ariaLabel) {
+    modifiedBlockAttributes.ariaLabel = ariaLabel;
+  }
+  return modifiedBlockAttributes;
+}
+
 ;// ./packages/blocks/build-module/api/parser/apply-built-in-validation-fixes.js
 /**
  * Internal dependencies
  */
+
 
 
 /**
@@ -13551,7 +13596,16 @@ function fixCustomClassname(blockAttributes, blockType, innerHTML) {
  * @return {WPBlock} Fixed block object
  */
 function applyBuiltInValidationFixes(block, blockType) {
-  const updatedBlockAttributes = fixCustomClassname(block.attributes, blockType, block.originalContent);
+  const {
+    attributes,
+    originalContent
+  } = block;
+  let updatedBlockAttributes = attributes;
+
+  // Fix block invalidation for className attribute.
+  updatedBlockAttributes = fixCustomClassname(attributes, blockType, originalContent);
+  // Fix block invalidation for ariaLabel attribute.
+  updatedBlockAttributes = fixAriaLabel(updatedBlockAttributes, blockType, originalContent);
   return {
     ...block,
     attributes: updatedBlockAttributes
@@ -13861,7 +13915,7 @@ function parseRawBlock(rawBlock, options) {
   // Try finding the type for known block name.
   let blockType = getBlockType(normalizedBlock.blockName);
 
-  // If not blockType is found for the specified name, fallback to the "unregistedBlockType".
+  // If not blockType is found for the specified name, fallback to the "unregisteredBlockType".
   if (!blockType) {
     normalizedBlock = createMissingBlockType(normalizedBlock);
     blockType = getBlockType(normalizedBlock.blockName);
@@ -14540,7 +14594,7 @@ function getBlockContentSchemaFromTransforms(transforms, context) {
 
 /**
  * Gets the block content schema, which is extracted and merged from all
- * registered blocks with raw transfroms.
+ * registered blocks with raw transforms.
  *
  * @param {string} context Set to "paste" when in paste context, where the
  *                         schema is more strict.
@@ -15110,7 +15164,7 @@ function htmlFormattingRemover(node) {
   }
 
   // Remove the trailing space if the text element is at the end of a block,
-  // is succeded by a line break element, or has a space in the next text
+  // is succeeded by a line break element, or has a space in the next text
   // node.
   if (newData[newData.length - 1] === ' ') {
     const nextSibling = getSibling(node, 'next');
@@ -15550,23 +15604,18 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 
     const blockType = getBlockType(name);
     const normalizedAttributes = normalizeAttributes((_blockType$attributes = blockType?.attributes) !== null && _blockType$attributes !== void 0 ? _blockType$attributes : {}, attributes);
-    let [blockName, blockAttributes] = convertLegacyBlockNameAndAttributes(name, normalizedAttributes);
-
-    // If a Block is undefined at this point, use the core/missing block as
-    // a placeholder for a better user experience.
-    if (undefined === getBlockType(blockName)) {
-      blockAttributes = {
-        originalName: name,
-        originalContent: '',
-        originalUndelimitedContent: ''
-      };
-      blockName = 'core/missing';
-    }
+    const [blockName, blockAttributes] = convertLegacyBlockNameAndAttributes(name, normalizedAttributes);
     return createBlock(blockName, blockAttributes, synchronizeBlocksWithTemplate([], innerBlocksTemplate));
   });
 }
 
 ;// ./packages/blocks/build-module/api/index.js
+/**
+ * Internal dependencies
+ */
+
+
+
 // The blocktype is the most important concept within the block API. It defines
 // all aspects of the block configuration and its interfaces, including `edit`
 // and `save`. The transforms specification allows converting one blocktype to
@@ -15582,7 +15631,7 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 //
 // This has multiple practical implications: when parsing, we can safely dispose
 // of any block boundary found within a block from the innerHTML property when
-// transfering to state. Not doing so would have a compounding effect on memory
+// transferring to state. Not doing so would have a compounding effect on memory
 // and uncertainty over the source of truth. This can be illustrated in how,
 // given a tree of `n` nested blocks, the entry node would have to contain the
 // actual content of each block while each subsequent block node in the state
@@ -15598,7 +15647,7 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 
 // While block transformations account for a specific surface of the API, there
 // are also raw transformations which handle arbitrary sources not made out of
-// blocks but producing block basaed on various heursitics. This includes
+// blocks but producing block basaed on various heuristics. This includes
 // pasting rich text or HTML data.
 
 
@@ -15663,6 +15712,10 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
 
 
 
+const privateApis = {};
+lock(privateApis, {
+  isContentBlock: isContentBlock
+});
 
 ;// ./packages/blocks/build-module/deprecated.js
 /**

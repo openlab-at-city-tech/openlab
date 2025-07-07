@@ -42,7 +42,8 @@ __webpack_require__.d(__webpack_exports__, {
   li: () => (/* reexport */ A),
   J0: () => (/* reexport */ h),
   FH: () => (/* reexport */ useWatch),
-  v4: () => (/* reexport */ withScope)
+  v4: () => (/* reexport */ withScope),
+  mh: () => (/* reexport */ withSyncEvent)
 });
 
 // EXTERNAL MODULE: ./node_modules/preact/dist/preact.module.js
@@ -121,7 +122,7 @@ const getContext = namespace => {
 
 /**
  * Retrieves a representation of the element where a function from the store
- * is being evalutated. Such representation is read-only, and contains a
+ * is being evaluated. Such representation is read-only, and contains a
  * reference to the DOM element, its props and a local reactive state.
  *
  * @return Element representation.
@@ -175,7 +176,6 @@ const getServerContext = namespace => {
 };
 
 ;// ./packages/interactivity/build-module/utils.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -274,7 +274,7 @@ function utils_useSignalEffect(callback) {
  * accessible whenever the function runs. This is primarily to make the scope
  * available inside hook callbacks.
  *
- * Asyncronous functions should use generators that yield promises instead of awaiting them.
+ * Asynchronous functions should use generators that yield promises instead of awaiting them.
  * See the documentation for details: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-interactivity/packages-interactivity-api-reference/#the-store
  *
  * @param func The passed function.
@@ -284,16 +284,21 @@ function utils_useSignalEffect(callback) {
 function withScope(func) {
   const scope = getScope();
   const ns = getNamespace();
+  let wrapped;
   if (func?.constructor?.name === 'GeneratorFunction') {
-    return async (...args) => {
+    wrapped = async (...args) => {
       const gen = func(...args);
       let value;
       let it;
+      let error;
       while (true) {
         setNamespace(ns);
         setScope(scope);
         try {
-          it = gen.next(value);
+          it = error ? gen.throw(error) : gen.next(value);
+          error = undefined;
+        } catch (e) {
+          throw e;
         } finally {
           resetScope();
           resetNamespace();
@@ -301,30 +306,39 @@ function withScope(func) {
         try {
           value = await it.value;
         } catch (e) {
-          setNamespace(ns);
-          setScope(scope);
-          gen.throw(e);
-        } finally {
-          resetScope();
-          resetNamespace();
+          error = e;
         }
         if (it.done) {
-          break;
+          if (error) {
+            throw error;
+          } else {
+            break;
+          }
         }
       }
       return value;
     };
+  } else {
+    wrapped = (...args) => {
+      setNamespace(ns);
+      setScope(scope);
+      try {
+        return func(...args);
+      } finally {
+        resetNamespace();
+        resetScope();
+      }
+    };
   }
-  return (...args) => {
-    setNamespace(ns);
-    setScope(scope);
-    try {
-      return func(...args);
-    } finally {
-      resetNamespace();
-      resetScope();
-    }
-  };
+
+  // If function was annotated via `withSyncEvent()`, maintain the annotation.
+  const syncAware = func;
+  if (syncAware.sync) {
+    const syncAwareWrapped = wrapped;
+    syncAwareWrapped.sync = true;
+    return syncAwareWrapped;
+  }
+  return wrapped;
 }
 
 /**
@@ -343,7 +357,7 @@ function useWatch(callback) {
 
 /**
  * Accepts a function that contains imperative code which runs only after the
- * element's first render, mainly useful for intialization logic.
+ * element's first render, mainly useful for initialization logic.
  *
  * This hook makes the element's scope available so functions like
  * `getElement()` and `getContext()` can be used inside the passed callback.
@@ -407,16 +421,17 @@ function useCallback(callback, inputs) {
 }
 
 /**
- * Pass a factory function and an array of inputs. `useMemo` will only recompute
- * the memoized value when one of the inputs has changed.
+ * Returns the memoized output of the passed factory function, allowing access
+ * to the current element's scope.
  *
  * This hook is equivalent to Preact's `useMemo` and makes the element's scope
  * available so functions like `getElement()` and `getContext()` can be used
- * inside the passed factory function.
+ * inside the passed factory function. Note that `useMemo` will only recompute
+ * the memoized value when one of the inputs has changed.
  *
  * @param factory Factory function that returns that value for memoization.
- * @param inputs  If present, the factory will only be run to recompute if
- *                the values in the list change (using `===`).
+ * @param inputs  If present, the factory will only be run to recompute if the
+ *                values in the list change (using `===`).
  *
  * @return The memoized value.
  */
@@ -485,8 +500,19 @@ const warn = message => {
  */
 const isPlainObject = candidate => Boolean(candidate && typeof candidate === 'object' && candidate.constructor === Object);
 
+/**
+ * Indicates that the passed `callback` requires synchronous access to the event object.
+ *
+ * @param callback The event callback.
+ * @return Altered event callback.
+ */
+function withSyncEvent(callback) {
+  const syncAware = callback;
+  syncAware.sync = true;
+  return syncAware;
+}
+
 ;// ./packages/interactivity/build-module/proxies/registry.js
-/* wp:polyfill */
 /**
  * Proxies for each object.
  */
@@ -678,7 +704,7 @@ class PropSignal {
   }
 
   /**
-   *  Update the internal signals for the value and the getter of the
+   *  Updates the internal signals for the value and the getter of the
    *  corresponding prop.
    *
    * @param param0
@@ -702,7 +728,6 @@ class PropSignal {
 }
 
 ;// ./packages/interactivity/build-module/proxies/state.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -728,7 +753,7 @@ const wellKnownSymbols = new Set(Object.getOwnPropertyNames(Symbol).map(key => S
 const proxyToProps = new WeakMap();
 
 /**
- *  Checks wether a {@link PropSignal | `PropSignal`} instance exists for the
+ *  Checks whether a {@link PropSignal | `PropSignal`} instance exists for the
  *  given property in the passed proxy.
  *
  * @param proxy Proxy of a state object or array.
@@ -979,7 +1004,8 @@ const deepMergeRecursive = (target, source, override = true) => {
 
       // Handle nested objects
     } else if (isPlainObject(source[key])) {
-      if (isNew || override && !isPlainObject(target[key])) {
+      const targetValue = Object.getOwnPropertyDescriptor(target, key)?.value;
+      if (isNew || override && !isPlainObject(targetValue)) {
         // Create a new object if the property is new or needs to be overridden
         target[key] = {};
         if (propSignal) {
@@ -987,9 +1013,10 @@ const deepMergeRecursive = (target, source, override = true) => {
           const ns = getNamespaceFromProxy(proxy);
           propSignal.setValue(proxifyState(ns, target[key]));
         }
+        deepMergeRecursive(target[key], source[key], override);
       }
       // Both target and source are plain objects, merge them recursively
-      if (isPlainObject(target[key])) {
+      else if (isPlainObject(targetValue)) {
         deepMergeRecursive(target[key], source[key], override);
       }
 
@@ -1012,7 +1039,7 @@ const deepMergeRecursive = (target, source, override = true) => {
 };
 
 /**
- * Recursively update prop values inside the passed `target` and nested plain
+ * Recursively updates prop values inside the passed `target` and nested plain
  * objects, using the values present in `source`. References to plain objects
  * are kept, only updating props containing primitives or arrays. Arrays are
  * replaced instead of merged or concatenated.
@@ -1104,7 +1131,6 @@ const proxifyStore = (namespace, obj, isRoot = true) => {
 };
 
 ;// ./packages/interactivity/build-module/proxies/context.js
-/* wp:polyfill */
 const contextObjectToProxy = new WeakMap();
 const contextObjectToFallback = new WeakMap();
 const contextProxies = new WeakSet();
@@ -1140,7 +1166,7 @@ const contextHandlers = {
 };
 
 /**
- * Wrap a context object with a proxy to reproduce the context stack. The proxy
+ * Wraps a context object with a proxy to reproduce the context stack. The proxy
  * uses the passed `inherited` context as a fallback to look up for properties
  * that don't exist in the given context. Also, updated properties are modified
  * where they are defined, or added to the main context when they don't exist.
@@ -1189,7 +1215,7 @@ const storeConfigs = new Map();
 const serverStates = new Map();
 
 /**
- * Get the defined config for the store with the passed namespace.
+ * Gets the defined config for the store with the passed namespace.
  *
  * @param namespace Store's namespace from which to retrieve the config.
  * @return Defined config for the given namespace.
@@ -1197,11 +1223,11 @@ const serverStates = new Map();
 const getConfig = namespace => storeConfigs.get(namespace || getNamespace()) || {};
 
 /**
- * Get the part of the state defined and updated from the server.
+ * Gets the part of the state defined and updated from the server.
  *
  * The object returned is read-only, and includes the state defined in PHP with
  * `wp_interactivity_state()`. When using `actions.navigate()`, this object is
- * updated to reflect the changes in its properites, without affecting the state
+ * updated to reflect the changes in its properties, without affecting the state
  * returned by `store()`. Directives can subscribe to those changes to update
  * the state if needed.
  *
@@ -1395,7 +1421,7 @@ const directiveCallbacks = {};
 const directivePriorities = {};
 
 /**
- * Register a new directive type in the Interactivity API runtime.
+ * Registers a new directive type in the Interactivity API runtime.
  *
  * @example
  * ```js
@@ -1498,7 +1524,9 @@ const resolve = (path, namespace) => {
 // Generate the evaluate function.
 const getEvaluate = ({
   scope
-}) => (entry, ...args) => {
+}) =>
+// TODO: When removing the temporarily remaining `value( ...args )` call below, remove the `...args` parameter too.
+(entry, ...args) => {
   let {
     value: path,
     namespace
@@ -1510,7 +1538,27 @@ const getEvaluate = ({
   const hasNegationOperator = path[0] === '!' && !!(path = path.slice(1));
   setScope(scope);
   const value = resolve(path, namespace);
-  const result = typeof value === 'function' ? value(...args) : value;
+  // Functions are returned without invoking them.
+  if (typeof value === 'function') {
+    // Except if they have a negation operator present, for backward compatibility.
+    // This pattern is strongly discouraged and deprecated, and it will be removed in a near future release.
+    // TODO: Remove this condition to effectively ignore negation operator when provided with a function.
+    if (hasNegationOperator) {
+      warn('Using a function with a negation operator is deprecated and will stop working in WordPress 6.9. Please use derived state instead.');
+      const functionResult = !value(...args);
+      resetScope();
+      return functionResult;
+    }
+    // Reset scope before return and wrap the function so it will still run within the correct scope.
+    resetScope();
+    return (...functionArgs) => {
+      setScope(scope);
+      const functionResult = value(...functionArgs);
+      resetScope();
+      return functionResult;
+    };
+  }
+  const result = value;
   resetScope();
   return hasNegationOperator ? !result : result;
 };
@@ -1619,7 +1667,6 @@ preact_module/* options */.fF.vnode = vnode => {
 };
 
 ;// ./packages/interactivity/build-module/directives.js
-/* wp:polyfill */
 // eslint-disable-next-line eslint-comments/disable-enable-pair
 /* eslint-disable react-hooks/exhaustive-deps */
 
@@ -1638,7 +1685,7 @@ preact_module/* options */.fF.vnode = vnode => {
 
 
 /**
- * Recursively clone the passed object.
+ * Recursively clones the passed object.
  *
  * @param source Source object.
  * @return Cloned object.
@@ -1652,13 +1699,53 @@ function deepClone(source) {
   }
   return source;
 }
+
+/**
+ * Wraps event object to warn about access of synchronous properties and methods.
+ *
+ * For all store actions attached to an event listener the event object is proxied via this function, unless the action
+ * uses the `withSyncEvent()` utility to indicate that it requires synchronous access to the event object.
+ *
+ * At the moment, the proxied event only emits warnings when synchronous properties or methods are being accessed. In
+ * the future this will be changed and result in an error. The current temporary behavior allows implementers to update
+ * their relevant actions to use `withSyncEvent()`.
+ *
+ * For additional context, see https://github.com/WordPress/gutenberg/issues/64944.
+ *
+ * @param event Event object.
+ * @return Proxied event object.
+ */
+function wrapEventAsync(event) {
+  const handler = {
+    get(target, prop, receiver) {
+      const value = target[prop];
+      switch (prop) {
+        case 'currentTarget':
+          warn(`Accessing the synchronous event.${prop} property in a store action without wrapping it in withSyncEvent() is deprecated and will stop working in WordPress 6.9. Please wrap the store action in withSyncEvent().`);
+          break;
+        case 'preventDefault':
+        case 'stopImmediatePropagation':
+        case 'stopPropagation':
+          warn(`Using the synchronous event.${prop}() function in a store action without wrapping it in withSyncEvent() is deprecated and will stop working in WordPress 6.9. Please wrap the store action in withSyncEvent().`);
+          break;
+      }
+      if (value instanceof Function) {
+        return function (...args) {
+          return value.apply(this === receiver ? target : this, args);
+        };
+      }
+      return value;
+    }
+  };
+  return new Proxy(event, handler);
+}
 const newRule = /(?:([\u0080-\uFFFF\w-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(}\s*)/g;
 const ruleClean = /\/\*[^]*?\*\/|  +/g;
 const ruleNewline = /\n+/g;
 const empty = ' ';
 
 /**
- * Convert a css style string into a object.
+ * Converts a css style string into a object.
  *
  * Made by Cristian Bote (@cristianbote) for Goober.
  * https://unpkg.com/browse/goober@2.1.13/src/core/astish.js
@@ -1696,7 +1783,15 @@ const getGlobalEventDirective = type => {
     directives[`on-${type}`].filter(isNonDefaultDirectiveSuffix).forEach(entry => {
       const eventName = entry.suffix.split('--', 1)[0];
       useInit(() => {
-        const cb = event => evaluate(entry, event);
+        const cb = event => {
+          const result = evaluate(entry);
+          if (typeof result === 'function') {
+            if (!result?.sync) {
+              event = wrapEventAsync(event);
+            }
+            result(event);
+          }
+        };
         const globalVar = type === 'window' ? window : document;
         globalVar.addEventListener(eventName, cb);
         return () => globalVar.removeEventListener(eventName, cb);
@@ -1721,7 +1816,10 @@ const getGlobalAsyncEventDirective = type => {
       useInit(() => {
         const cb = async event => {
           await splitTask();
-          evaluate(entry, event);
+          const result = evaluate(entry);
+          if (typeof result === 'function') {
+            result(event);
+          }
         };
         const globalVar = type === 'window' ? window : document;
         globalVar.addEventListener(eventName, cb, {
@@ -1803,7 +1901,10 @@ const getGlobalAsyncEventDirective = type => {
         if (true) {
           if (false) {}
         }
-        const result = evaluate(entry);
+        let result = evaluate(entry);
+        if (typeof result === 'function') {
+          result = result();
+        }
         if (true) {
           if (false) {}
         }
@@ -1826,7 +1927,10 @@ const getGlobalAsyncEventDirective = type => {
         if (true) {
           if (false) {}
         }
-        const result = evaluate(entry);
+        let result = evaluate(entry);
+        if (typeof result === 'function') {
+          result = result();
+        }
         if (true) {
           if (false) {}
         }
@@ -1862,7 +1966,13 @@ const getGlobalAsyncEventDirective = type => {
           if (true) {
             if (false) {}
           }
-          evaluate(entry, event);
+          const result = evaluate(entry);
+          if (typeof result === 'function') {
+            if (!result?.sync) {
+              event = wrapEventAsync(event);
+            }
+            result(event);
+          }
           if (true) {
             if (false) {}
           }
@@ -1895,7 +2005,10 @@ const getGlobalAsyncEventDirective = type => {
         }
         entries.forEach(async entry => {
           await splitTask();
-          evaluate(entry, event);
+          const result = evaluate(entry);
+          if (typeof result === 'function') {
+            result(event);
+          }
         });
       };
     });
@@ -1921,7 +2034,10 @@ const getGlobalAsyncEventDirective = type => {
   }) => {
     classNames.filter(isNonDefaultDirectiveSuffix).forEach(entry => {
       const className = entry.suffix;
-      const result = evaluate(entry);
+      let result = evaluate(entry);
+      if (typeof result === 'function') {
+        result = result();
+      }
       const currentClass = element.props.class || '';
       const classFinder = new RegExp(`(^|\\s)${className}(\\s|$)`, 'g');
       if (!result) {
@@ -1954,7 +2070,10 @@ const getGlobalAsyncEventDirective = type => {
   }) => {
     style.filter(isNonDefaultDirectiveSuffix).forEach(entry => {
       const styleProp = entry.suffix;
-      const result = evaluate(entry);
+      let result = evaluate(entry);
+      if (typeof result === 'function') {
+        result = result();
+      }
       element.props.style = element.props.style || {};
       if (typeof element.props.style === 'string') {
         element.props.style = cssStringToObject(element.props.style);
@@ -1989,7 +2108,10 @@ const getGlobalAsyncEventDirective = type => {
   }) => {
     bind.filter(isNonDefaultDirectiveSuffix).forEach(entry => {
       const attribute = entry.suffix;
-      const result = evaluate(entry);
+      let result = evaluate(entry);
+      if (typeof result === 'function') {
+        result = result();
+      }
       element.props[attribute] = result;
 
       /*
@@ -2077,7 +2199,10 @@ const getGlobalAsyncEventDirective = type => {
       return;
     }
     try {
-      const result = evaluate(entry);
+      let result = evaluate(entry);
+      if (typeof result === 'function') {
+        result = result();
+      }
       element.props.children = typeof result === 'object' ? null : result.toString();
     } catch (e) {
       element.props.children = null;
@@ -2091,7 +2216,13 @@ const getGlobalAsyncEventDirective = type => {
     },
     evaluate
   }) => {
-    run.forEach(entry => evaluate(entry));
+    run.forEach(entry => {
+      let result = evaluate(entry);
+      if (typeof result === 'function') {
+        result = result();
+      }
+      return result;
+    });
   });
 
   // data-wp-each--[item]
@@ -2115,9 +2246,16 @@ const getGlobalAsyncEventDirective = type => {
     const {
       namespace
     } = entry;
-    const list = evaluate(entry);
+    let iterable = evaluate(entry);
+    if (typeof iterable === 'function') {
+      iterable = iterable();
+    }
+    if (typeof iterable?.[Symbol.iterator] !== 'function') {
+      return;
+    }
     const itemProp = isNonDefaultDirectiveSuffix(entry) ? kebabToCamelCase(entry.suffix) : 'item';
-    return list.map(item => {
+    const result = [];
+    for (const item of iterable) {
       const itemContext = proxifyContext(proxifyState(namespace, {}), inheritedValue.client[namespace]);
       const mergedContext = {
         client: {
@@ -2139,11 +2277,12 @@ const getGlobalAsyncEventDirective = type => {
       const key = eachKey ? getEvaluate({
         scope
       })(eachKey[0]) : item;
-      return (0,preact_module.h)(Provider, {
+      result.push((0,preact_module.h)(Provider, {
         value: mergedContext,
         key
-      }, element.props.content);
-    });
+      }, element.props.content));
+    }
+    return result;
   }, {
     priority: 20
   });
@@ -2175,14 +2314,23 @@ const currentNamespace = () => {
 };
 const isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 
-// Regular expression for directive parsing.
+/**
+ * This regex pattern must be kept in sync with the server-side implementation in
+ * wp-includes/interactivity-api/class-wp-interactivity-api.php.
+ *
+ * The pattern validates directive attribute names to ensure consistency between
+ * client and server processing. Invalid directive names (containing characters like
+ * square brackets or colons) should be ignored by both client and server.
+ *
+ * @see https://github.com/WordPress/wordpress-develop/blob/trunk/src/wp-includes/interactivity-api/class-wp-interactivity-api.php
+ */
 const directiveParser = new RegExp(`^data-${directivePrefix}-` +
 // ${p} must be a prefix string, like 'wp'.
 // Match alphanumeric characters including hyphen-separated
 // segments. It excludes underscore intentionally to prevent confusion.
 // E.g., "custom-directive".
 '([a-z0-9]+(?:-[a-z0-9]+)*)' +
-// (Optional) Match '--' followed by any alphanumeric charachters. It
+// (Optional) Match '--' followed by any alphanumeric characters. It
 // excludes underscore intentionally to prevent confusion, but it can
 // contain multiple hyphens. E.g., "--custom-prefix--with-more-info".
 '(?:--([a-z0-9_-]+))?$', 'i' // Case insensitive.
@@ -2202,6 +2350,8 @@ const hydratedIslands = new WeakSet();
  * @return The resulting vDOM tree.
  */
 function toVdom(root) {
+  const nodesToRemove = new Set();
+  const nodesToReplace = new Set();
   const treeWalker = document.createTreeWalker(root, 205 // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
   );
   function walk(node) {
@@ -2211,22 +2361,19 @@ function toVdom(root) {
 
     // TEXT_NODE (3)
     if (nodeType === 3) {
-      return [node.data];
+      return node.data;
     }
 
     // CDATA_SECTION_NODE (4)
     if (nodeType === 4) {
-      var _nodeValue;
-      const next = treeWalker.nextSibling();
-      node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
-      return [node.nodeValue, next];
+      nodesToReplace.add(node);
+      return node.nodeValue;
     }
 
     // COMMENT_NODE (8) || PROCESSING_INSTRUCTION_NODE (7)
     if (nodeType === 8 || nodeType === 7) {
-      const next = treeWalker.nextSibling();
-      node.remove();
-      return [null, next];
+      nodesToRemove.add(node);
+      return null;
     }
     const elementNode = node;
     const {
@@ -2304,11 +2451,11 @@ function toVdom(root) {
       let child = treeWalker.firstChild();
       if (child) {
         while (child) {
-          const [vnode, nextChild] = walk(child);
+          const vnode = walk(child);
           if (vnode) {
             children.push(vnode);
           }
-          child = nextChild || treeWalker.nextSibling();
+          child = treeWalker.nextSibling();
         }
         treeWalker.parentNode();
       }
@@ -2318,9 +2465,15 @@ function toVdom(root) {
     if (island) {
       namespaces.pop();
     }
-    return [(0,preact_module.h)(localName, props, children)];
+    return (0,preact_module.h)(localName, props, children);
   }
-  return walk(treeWalker.currentNode);
+  const vdom = walk(treeWalker.currentNode);
+  nodesToRemove.forEach(node => node.remove());
+  nodesToReplace.forEach(node => {
+    var _nodeValue;
+    return node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
+  });
+  return vdom;
 }
 
 ;// ./packages/interactivity/build-module/init.js
@@ -2474,35 +2627,36 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  zj: () => (/* reexport */ build_module/* getConfig */.zj),
-  SD: () => (/* reexport */ build_module/* getContext */.SD),
-  V6: () => (/* reexport */ build_module/* getElement */.V6),
-  $K: () => (/* reexport */ build_module/* getServerContext */.$K),
-  vT: () => (/* reexport */ build_module/* getServerState */.vT),
-  jb: () => (/* reexport */ build_module/* privateApis */.jb),
-  yT: () => (/* reexport */ build_module/* splitTask */.yT),
-  M_: () => (/* reexport */ build_module/* store */.M_),
-  hb: () => (/* reexport */ build_module/* useCallback */.hb),
-  vJ: () => (/* reexport */ build_module/* useEffect */.vJ),
-  ip: () => (/* reexport */ build_module/* useInit */.ip),
-  Nf: () => (/* reexport */ build_module/* useLayoutEffect */.Nf),
-  Kr: () => (/* reexport */ build_module/* useMemo */.Kr),
-  li: () => (/* reexport */ build_module/* useRef */.li),
-  J0: () => (/* reexport */ build_module/* useState */.J0),
-  FH: () => (/* reexport */ build_module/* useWatch */.FH),
-  v4: () => (/* reexport */ build_module/* withScope */.v4)
+  zj: () => (/* reexport */ debug_build_module/* getConfig */.zj),
+  SD: () => (/* reexport */ debug_build_module/* getContext */.SD),
+  V6: () => (/* reexport */ debug_build_module/* getElement */.V6),
+  $K: () => (/* reexport */ debug_build_module/* getServerContext */.$K),
+  vT: () => (/* reexport */ debug_build_module/* getServerState */.vT),
+  jb: () => (/* reexport */ debug_build_module/* privateApis */.jb),
+  yT: () => (/* reexport */ debug_build_module/* splitTask */.yT),
+  M_: () => (/* reexport */ debug_build_module/* store */.M_),
+  hb: () => (/* reexport */ debug_build_module/* useCallback */.hb),
+  vJ: () => (/* reexport */ debug_build_module/* useEffect */.vJ),
+  ip: () => (/* reexport */ debug_build_module/* useInit */.ip),
+  Nf: () => (/* reexport */ debug_build_module/* useLayoutEffect */.Nf),
+  Kr: () => (/* reexport */ debug_build_module/* useMemo */.Kr),
+  li: () => (/* reexport */ debug_build_module/* useRef */.li),
+  J0: () => (/* reexport */ debug_build_module/* useState */.J0),
+  FH: () => (/* reexport */ debug_build_module/* useWatch */.FH),
+  v4: () => (/* reexport */ debug_build_module/* withScope */.v4),
+  mh: () => (/* reexport */ debug_build_module/* withSyncEvent */.mh)
 });
 
 // EXTERNAL MODULE: ./node_modules/preact/dist/preact.module.js
-var preact_module = __webpack_require__(622);
+var debug_preact_module = __webpack_require__(622);
 ;// ./node_modules/preact/devtools/dist/devtools.module.js
-var i;function debug_t(o,e){return n.__a&&n.__a(e),o}null!=(i="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:void 0)&&i.__PREACT_DEVTOOLS__&&i.__PREACT_DEVTOOLS__.attachPreact("10.24.2",preact_module/* options */.fF,{Fragment:preact_module/* Fragment */.FK,Component:preact_module/* Component */.uA});
+var debug_i;function debug_t(o,e){return n.__a&&n.__a(e),o}null!=(debug_i="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:void 0)&&debug_i.__PREACT_DEVTOOLS__&&debug_i.__PREACT_DEVTOOLS__.attachPreact("10.24.2",debug_preact_module/* options */.fF,{Fragment:debug_preact_module/* Fragment */.FK,Component:debug_preact_module/* Component */.uA});
 
 ;// ./node_modules/preact/debug/dist/debug.module.js
-var debug_module_t={};function r(){debug_module_t={}}function a(e){return e.type===preact_module/* Fragment */.FK?"Fragment":"function"==typeof e.type?e.type.displayName||e.type.name:"string"==typeof e.type?e.type:"#text"}var debug_module_i=[],s=[];function debug_c(){return debug_module_i.length>0?debug_module_i[debug_module_i.length-1]:null}var l=!0;function debug_u(e){return"function"==typeof e.type&&e.type!=preact_module/* Fragment */.FK}function debug_f(n){for(var e=[n],o=n;null!=o.__o;)e.push(o.__o),o=o.__o;return e.reduce(function(n,e){n+="  in "+a(e);var o=e.__source;return o?n+=" (at "+o.fileName+":"+o.lineNumber+")":l&&console.warn("Add @babel/plugin-transform-react-jsx-source to get a more detailed component stack. Note that you should not add it to production builds of your App for bundle size reasons."),l=!1,n+"\n"},"")}var d="function"==typeof WeakMap;function p(n){var e=[];return n.__k?(n.__k.forEach(function(n){n&&"function"==typeof n.type?e.push.apply(e,p(n)):n&&"string"==typeof n.type&&e.push(n.type)}),e):e}function h(n){return n?"function"==typeof n.type?null==n.__?null!=n.__e&&null!=n.__e.parentNode?n.__e.parentNode.localName:"":h(n.__):n.type:""}var v=preact_module/* Component */.uA.prototype.setState;function y(n){return"table"===n||"tfoot"===n||"tbody"===n||"thead"===n||"td"===n||"tr"===n||"th"===n}preact_module/* Component */.uA.prototype.setState=function(n,e){return null==this.__v&&null==this.state&&console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n'+debug_f(debug_c())),v.call(this,n,e)};var m=/^(address|article|aside|blockquote|details|div|dl|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|main|menu|nav|ol|p|pre|search|section|table|ul)$/,b=preact_module/* Component */.uA.prototype.forceUpdate;function w(n){var e=n.props,o=a(n),t="";for(var r in e)if(e.hasOwnProperty(r)&&"children"!==r){var i=e[r];"function"==typeof i&&(i="function "+(i.displayName||i.name)+"() {}"),i=Object(i)!==i||i.toString?i+"":Object.prototype.toString.call(i),t+=" "+r+"="+JSON.stringify(i)}var s=e.children;return"<"+o+t+(s&&s.length?">..</"+o+">":" />")}preact_module/* Component */.uA.prototype.forceUpdate=function(n){return null==this.__v?console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n'+debug_f(debug_c())):null==this.__P&&console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n'+debug_f(this.__v)),b.call(this,n)},preact_module/* options */.fF.__m=function(n,e){var o=n.type,t=e.map(function(n){return n&&n.localName}).filter(Boolean);console.error("Expected a DOM node of type "+o+" but found "+t.join(", ")+"as available DOM-node(s), this is caused by the SSR'd HTML containing different DOM-nodes compared to the hydrated one.\n\n"+debug_f(n))},function(){!function(){var n=preact_module/* options */.fF.__b,o=preact_module/* options */.fF.diffed,t=preact_module/* options */.fF.__,r=preact_module/* options */.fF.vnode,a=preact_module/* options */.fF.__r;preact_module/* options */.fF.diffed=function(n){debug_u(n)&&s.pop(),debug_module_i.pop(),o&&o(n)},preact_module/* options */.fF.__b=function(e){debug_u(e)&&debug_module_i.push(e),n&&n(e)},preact_module/* options */.fF.__=function(n,e){s=[],t&&t(n,e)},preact_module/* options */.fF.vnode=function(n){n.__o=s.length>0?s[s.length-1]:null,r&&r(n)},preact_module/* options */.fF.__r=function(n){debug_u(n)&&s.push(n),a&&a(n)}}();var n=!1,o=preact_module/* options */.fF.__b,r=preact_module/* options */.fF.diffed,c=preact_module/* options */.fF.vnode,l=preact_module/* options */.fF.__r,v=preact_module/* options */.fF.__e,b=preact_module/* options */.fF.__,g=preact_module/* options */.fF.__h,E=d?{useEffect:new WeakMap,useLayoutEffect:new WeakMap,lazyPropTypes:new WeakMap}:null,k=[];preact_module/* options */.fF.__e=function(n,e,o,t){if(e&&e.__c&&"function"==typeof n.then){var r=n;n=new Error("Missing Suspense. The throwing component was: "+a(e));for(var i=e;i;i=i.__)if(i.__c&&i.__c.__c){n=r;break}if(n instanceof Error)throw n}try{(t=t||{}).componentStack=debug_f(e),v(n,e,o,t),"function"!=typeof n.then&&setTimeout(function(){throw n})}catch(n){throw n}},preact_module/* options */.fF.__=function(n,e){if(!e)throw new Error("Undefined parent passed to render(), this is the second argument.\nCheck if the element is available in the DOM/has the correct id.");var o;switch(e.nodeType){case 1:case 11:case 9:o=!0;break;default:o=!1}if(!o){var t=a(n);throw new Error("Expected a valid HTML node as a second argument to render.\tReceived "+e+" instead: render(<"+t+" />, "+e+");")}b&&b(n,e)},preact_module/* options */.fF.__b=function(e){var r=e.type;if(n=!0,void 0===r)throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports"+w(e)+"\n\n"+debug_f(e));if(null!=r&&"object"==typeof r){if(void 0!==r.__k&&void 0!==r.__e)throw new Error("Invalid type passed to createElement(): "+r+"\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My"+a(e)+" = "+w(r)+";\n  let vnode = <My"+a(e)+" />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n"+debug_f(e));throw new Error("Invalid type passed to createElement(): "+(Array.isArray(r)?"array":r))}if(void 0!==e.ref&&"function"!=typeof e.ref&&"object"!=typeof e.ref&&!("$$typeof"in e))throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got ['+typeof e.ref+"] instead\n"+w(e)+"\n\n"+debug_f(e));if("string"==typeof e.type)for(var i in e.props)if("o"===i[0]&&"n"===i[1]&&"function"!=typeof e.props[i]&&null!=e.props[i])throw new Error("Component's \""+i+'" property should be a function, but got ['+typeof e.props[i]+"] instead\n"+w(e)+"\n\n"+debug_f(e));if("function"==typeof e.type&&e.type.propTypes){if("Lazy"===e.type.displayName&&E&&!E.lazyPropTypes.has(e.type)){var s="PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";try{var c=e.type();E.lazyPropTypes.set(e.type,!0),console.warn(s+"Component wrapped in lazy() is "+a(c))}catch(n){console.warn(s+"We will log the wrapped component's name once it is loaded.")}}var l=e.props;e.type.__f&&delete(l=function(n,e){for(var o in e)n[o]=e[o];return n}({},l)).ref,function(n,e,o,r,a){Object.keys(n).forEach(function(o){var i;try{i=n[o](e,o,r,"prop",null,"SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED")}catch(n){i=n}i&&!(i.message in debug_module_t)&&(debug_module_t[i.message]=!0,console.error("Failed prop type: "+i.message+(a&&"\n"+a()||"")))})}(e.type.propTypes,l,0,a(e),function(){return debug_f(e)})}o&&o(e)};var T,_=0;preact_module/* options */.fF.__r=function(e){l&&l(e),n=!0;var o=e.__c;if(o===T?_++:_=1,_>=25)throw new Error("Too many re-renders. This is limited to prevent an infinite loop which may lock up your browser. The component causing this is: "+a(e));T=o},preact_module/* options */.fF.__h=function(e,o,t){if(!e||!n)throw new Error("Hook can only be invoked from render methods.");g&&g(e,o,t)};var O=function(n,e){return{get:function(){var o="get"+n+e;k&&k.indexOf(o)<0&&(k.push(o),console.warn("getting vnode."+n+" is deprecated, "+e))},set:function(){var o="set"+n+e;k&&k.indexOf(o)<0&&(k.push(o),console.warn("setting vnode."+n+" is not allowed, "+e))}}},I={nodeName:O("nodeName","use vnode.type"),attributes:O("attributes","use vnode.props"),children:O("children","use vnode.props.children")},M=Object.create({},I);preact_module/* options */.fF.vnode=function(n){var e=n.props;if(null!==n.type&&null!=e&&("__source"in e||"__self"in e)){var o=n.props={};for(var t in e){var r=e[t];"__source"===t?n.__source=r:"__self"===t?n.__self=r:o[t]=r}}n.__proto__=M,c&&c(n)},preact_module/* options */.fF.diffed=function(e){var o,t=e.type,i=e.__;if(e.__k&&e.__k.forEach(function(n){if("object"==typeof n&&n&&void 0===n.type){var o=Object.keys(n).join(",");throw new Error("Objects are not valid as a child. Encountered an object with the keys {"+o+"}.\n\n"+debug_f(e))}}),e.__c===T&&(_=0),"string"==typeof t&&(y(t)||"p"===t||"a"===t||"button"===t)){var s=h(i);if(""!==s&&y(t))"table"===t&&"td"!==s&&y(s)?(console.log(s,i.__e),console.error("Improper nesting of table. Your <table> should not have a table-node parent."+w(e)+"\n\n"+debug_f(e))):"thead"!==t&&"tfoot"!==t&&"tbody"!==t||"table"===s?"tr"===t&&"thead"!==s&&"tfoot"!==s&&"tbody"!==s?console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot> parent."+w(e)+"\n\n"+debug_f(e)):"td"===t&&"tr"!==s?console.error("Improper nesting of table. Your <td> should have a <tr> parent."+w(e)+"\n\n"+debug_f(e)):"th"===t&&"tr"!==s&&console.error("Improper nesting of table. Your <th> should have a <tr>."+w(e)+"\n\n"+debug_f(e)):console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent."+w(e)+"\n\n"+debug_f(e));else if("p"===t){var c=p(e).filter(function(n){return m.test(n)});c.length&&console.error("Improper nesting of paragraph. Your <p> should not have "+c.join(", ")+"as child-elements."+w(e)+"\n\n"+debug_f(e))}else"a"!==t&&"button"!==t||-1!==p(e).indexOf(t)&&console.error("Improper nesting of interactive content. Your <"+t+"> should not have other "+("a"===t?"anchor":"button")+" tags as child-elements."+w(e)+"\n\n"+debug_f(e))}if(n=!1,r&&r(e),null!=e.__k)for(var l=[],u=0;u<e.__k.length;u++){var d=e.__k[u];if(d&&null!=d.key){var v=d.key;if(-1!==l.indexOf(v)){console.error('Following component has two or more children with the same key attribute: "'+v+'". This may cause glitches and misbehavior in rendering process. Component: \n\n'+w(e)+"\n\n"+debug_f(e));break}l.push(v)}}if(null!=e.__c&&null!=e.__c.__H){var b=e.__c.__H.__;if(b)for(var g=0;g<b.length;g+=1){var E=b[g];if(E.__H)for(var k=0;k<E.__H.length;k++)if((o=E.__H[k])!=o){var O=a(e);throw new Error("Invalid argument passed to hook. Hooks should not be called with NaN in the dependency array. Hook index "+g+" in component "+O+" was called with NaN.")}}}}}();
+var debug_debug_module_t={};function debug_r(){debug_debug_module_t={}}function debug_a(e){return e.type===debug_preact_module/* Fragment */.FK?"Fragment":"function"==typeof e.type?e.type.displayName||e.type.name:"string"==typeof e.type?e.type:"#text"}var debug_debug_module_i=[],debug_s=[];function debug_c(){return debug_debug_module_i.length>0?debug_debug_module_i[debug_debug_module_i.length-1]:null}var debug_l=!0;function debug_u(e){return"function"==typeof e.type&&e.type!=debug_preact_module/* Fragment */.FK}function debug_f(n){for(var e=[n],o=n;null!=o.__o;)e.push(o.__o),o=o.__o;return e.reduce(function(n,e){n+="  in "+debug_a(e);var o=e.__source;return o?n+=" (at "+o.fileName+":"+o.lineNumber+")":debug_l&&console.warn("Add @babel/plugin-transform-react-jsx-source to get a more detailed component stack. Note that you should not add it to production builds of your App for bundle size reasons."),debug_l=!1,n+"\n"},"")}var debug_d="function"==typeof WeakMap;function debug_p(n){var e=[];return n.__k?(n.__k.forEach(function(n){n&&"function"==typeof n.type?e.push.apply(e,debug_p(n)):n&&"string"==typeof n.type&&e.push(n.type)}),e):e}function debug_h(n){return n?"function"==typeof n.type?null==n.__?null!=n.__e&&null!=n.__e.parentNode?n.__e.parentNode.localName:"":debug_h(n.__):n.type:""}var debug_v=debug_preact_module/* Component */.uA.prototype.setState;function debug_y(n){return"table"===n||"tfoot"===n||"tbody"===n||"thead"===n||"td"===n||"tr"===n||"th"===n}debug_preact_module/* Component */.uA.prototype.setState=function(n,e){return null==this.__v&&null==this.state&&console.warn('Calling "this.setState" inside the constructor of a component is a no-op and might be a bug in your application. Instead, set "this.state = {}" directly.\n\n'+debug_f(debug_c())),debug_v.call(this,n,e)};var debug_m=/^(address|article|aside|blockquote|details|div|dl|fieldset|figcaption|figure|footer|form|h1|h2|h3|h4|h5|h6|header|hgroup|hr|main|menu|nav|ol|p|pre|search|section|table|ul)$/,debug_b=debug_preact_module/* Component */.uA.prototype.forceUpdate;function debug_w(n){var e=n.props,o=debug_a(n),t="";for(var r in e)if(e.hasOwnProperty(r)&&"children"!==r){var i=e[r];"function"==typeof i&&(i="function "+(i.displayName||i.name)+"() {}"),i=Object(i)!==i||i.toString?i+"":Object.prototype.toString.call(i),t+=" "+r+"="+JSON.stringify(i)}var s=e.children;return"<"+o+t+(s&&s.length?">..</"+o+">":" />")}debug_preact_module/* Component */.uA.prototype.forceUpdate=function(n){return null==this.__v?console.warn('Calling "this.forceUpdate" inside the constructor of a component is a no-op and might be a bug in your application.\n\n'+debug_f(debug_c())):null==this.__P&&console.warn('Can\'t call "this.forceUpdate" on an unmounted component. This is a no-op, but it indicates a memory leak in your application. To fix, cancel all subscriptions and asynchronous tasks in the componentWillUnmount method.\n\n'+debug_f(this.__v)),debug_b.call(this,n)},debug_preact_module/* options */.fF.__m=function(n,e){var o=n.type,t=e.map(function(n){return n&&n.localName}).filter(Boolean);console.error("Expected a DOM node of type "+o+" but found "+t.join(", ")+"as available DOM-node(s), this is caused by the SSR'd HTML containing different DOM-nodes compared to the hydrated one.\n\n"+debug_f(n))},function(){!function(){var n=debug_preact_module/* options */.fF.__b,o=debug_preact_module/* options */.fF.diffed,t=debug_preact_module/* options */.fF.__,r=debug_preact_module/* options */.fF.vnode,a=debug_preact_module/* options */.fF.__r;debug_preact_module/* options */.fF.diffed=function(n){debug_u(n)&&debug_s.pop(),debug_debug_module_i.pop(),o&&o(n)},debug_preact_module/* options */.fF.__b=function(e){debug_u(e)&&debug_debug_module_i.push(e),n&&n(e)},debug_preact_module/* options */.fF.__=function(n,e){debug_s=[],t&&t(n,e)},debug_preact_module/* options */.fF.vnode=function(n){n.__o=debug_s.length>0?debug_s[debug_s.length-1]:null,r&&r(n)},debug_preact_module/* options */.fF.__r=function(n){debug_u(n)&&debug_s.push(n),a&&a(n)}}();var n=!1,o=debug_preact_module/* options */.fF.__b,r=debug_preact_module/* options */.fF.diffed,c=debug_preact_module/* options */.fF.vnode,l=debug_preact_module/* options */.fF.__r,v=debug_preact_module/* options */.fF.__e,b=debug_preact_module/* options */.fF.__,g=debug_preact_module/* options */.fF.__h,E=debug_d?{useEffect:new WeakMap,useLayoutEffect:new WeakMap,lazyPropTypes:new WeakMap}:null,k=[];debug_preact_module/* options */.fF.__e=function(n,e,o,t){if(e&&e.__c&&"function"==typeof n.then){var r=n;n=new Error("Missing Suspense. The throwing component was: "+debug_a(e));for(var i=e;i;i=i.__)if(i.__c&&i.__c.__c){n=r;break}if(n instanceof Error)throw n}try{(t=t||{}).componentStack=debug_f(e),v(n,e,o,t),"function"!=typeof n.then&&setTimeout(function(){throw n})}catch(n){throw n}},debug_preact_module/* options */.fF.__=function(n,e){if(!e)throw new Error("Undefined parent passed to render(), this is the second argument.\nCheck if the element is available in the DOM/has the correct id.");var o;switch(e.nodeType){case 1:case 11:case 9:o=!0;break;default:o=!1}if(!o){var t=debug_a(n);throw new Error("Expected a valid HTML node as a second argument to render.\tReceived "+e+" instead: render(<"+t+" />, "+e+");")}b&&b(n,e)},debug_preact_module/* options */.fF.__b=function(e){var r=e.type;if(n=!0,void 0===r)throw new Error("Undefined component passed to createElement()\n\nYou likely forgot to export your component or might have mixed up default and named imports"+debug_w(e)+"\n\n"+debug_f(e));if(null!=r&&"object"==typeof r){if(void 0!==r.__k&&void 0!==r.__e)throw new Error("Invalid type passed to createElement(): "+r+"\n\nDid you accidentally pass a JSX literal as JSX twice?\n\n  let My"+debug_a(e)+" = "+debug_w(r)+";\n  let vnode = <My"+debug_a(e)+" />;\n\nThis usually happens when you export a JSX literal and not the component.\n\n"+debug_f(e));throw new Error("Invalid type passed to createElement(): "+(Array.isArray(r)?"array":r))}if(void 0!==e.ref&&"function"!=typeof e.ref&&"object"!=typeof e.ref&&!("$$typeof"in e))throw new Error('Component\'s "ref" property should be a function, or an object created by createRef(), but got ['+typeof e.ref+"] instead\n"+debug_w(e)+"\n\n"+debug_f(e));if("string"==typeof e.type)for(var i in e.props)if("o"===i[0]&&"n"===i[1]&&"function"!=typeof e.props[i]&&null!=e.props[i])throw new Error("Component's \""+i+'" property should be a function, but got ['+typeof e.props[i]+"] instead\n"+debug_w(e)+"\n\n"+debug_f(e));if("function"==typeof e.type&&e.type.propTypes){if("Lazy"===e.type.displayName&&E&&!E.lazyPropTypes.has(e.type)){var s="PropTypes are not supported on lazy(). Use propTypes on the wrapped component itself. ";try{var c=e.type();E.lazyPropTypes.set(e.type,!0),console.warn(s+"Component wrapped in lazy() is "+debug_a(c))}catch(n){console.warn(s+"We will log the wrapped component's name once it is loaded.")}}var l=e.props;e.type.__f&&delete(l=function(n,e){for(var o in e)n[o]=e[o];return n}({},l)).ref,function(n,e,o,r,a){Object.keys(n).forEach(function(o){var i;try{i=n[o](e,o,r,"prop",null,"SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED")}catch(n){i=n}i&&!(i.message in debug_debug_module_t)&&(debug_debug_module_t[i.message]=!0,console.error("Failed prop type: "+i.message+(a&&"\n"+a()||"")))})}(e.type.propTypes,l,0,debug_a(e),function(){return debug_f(e)})}o&&o(e)};var T,_=0;debug_preact_module/* options */.fF.__r=function(e){l&&l(e),n=!0;var o=e.__c;if(o===T?_++:_=1,_>=25)throw new Error("Too many re-renders. This is limited to prevent an infinite loop which may lock up your browser. The component causing this is: "+debug_a(e));T=o},debug_preact_module/* options */.fF.__h=function(e,o,t){if(!e||!n)throw new Error("Hook can only be invoked from render methods.");g&&g(e,o,t)};var O=function(n,e){return{get:function(){var o="get"+n+e;k&&k.indexOf(o)<0&&(k.push(o),console.warn("getting vnode."+n+" is deprecated, "+e))},set:function(){var o="set"+n+e;k&&k.indexOf(o)<0&&(k.push(o),console.warn("setting vnode."+n+" is not allowed, "+e))}}},I={nodeName:O("nodeName","use vnode.type"),attributes:O("attributes","use vnode.props"),children:O("children","use vnode.props.children")},M=Object.create({},I);debug_preact_module/* options */.fF.vnode=function(n){var e=n.props;if(null!==n.type&&null!=e&&("__source"in e||"__self"in e)){var o=n.props={};for(var t in e){var r=e[t];"__source"===t?n.__source=r:"__self"===t?n.__self=r:o[t]=r}}n.__proto__=M,c&&c(n)},debug_preact_module/* options */.fF.diffed=function(e){var o,t=e.type,i=e.__;if(e.__k&&e.__k.forEach(function(n){if("object"==typeof n&&n&&void 0===n.type){var o=Object.keys(n).join(",");throw new Error("Objects are not valid as a child. Encountered an object with the keys {"+o+"}.\n\n"+debug_f(e))}}),e.__c===T&&(_=0),"string"==typeof t&&(debug_y(t)||"p"===t||"a"===t||"button"===t)){var s=debug_h(i);if(""!==s&&debug_y(t))"table"===t&&"td"!==s&&debug_y(s)?(console.log(s,i.__e),console.error("Improper nesting of table. Your <table> should not have a table-node parent."+debug_w(e)+"\n\n"+debug_f(e))):"thead"!==t&&"tfoot"!==t&&"tbody"!==t||"table"===s?"tr"===t&&"thead"!==s&&"tfoot"!==s&&"tbody"!==s?console.error("Improper nesting of table. Your <tr> should have a <thead/tbody/tfoot> parent."+debug_w(e)+"\n\n"+debug_f(e)):"td"===t&&"tr"!==s?console.error("Improper nesting of table. Your <td> should have a <tr> parent."+debug_w(e)+"\n\n"+debug_f(e)):"th"===t&&"tr"!==s&&console.error("Improper nesting of table. Your <th> should have a <tr>."+debug_w(e)+"\n\n"+debug_f(e)):console.error("Improper nesting of table. Your <thead/tbody/tfoot> should have a <table> parent."+debug_w(e)+"\n\n"+debug_f(e));else if("p"===t){var c=debug_p(e).filter(function(n){return debug_m.test(n)});c.length&&console.error("Improper nesting of paragraph. Your <p> should not have "+c.join(", ")+"as child-elements."+debug_w(e)+"\n\n"+debug_f(e))}else"a"!==t&&"button"!==t||-1!==debug_p(e).indexOf(t)&&console.error("Improper nesting of interactive content. Your <"+t+"> should not have other "+("a"===t?"anchor":"button")+" tags as child-elements."+debug_w(e)+"\n\n"+debug_f(e))}if(n=!1,r&&r(e),null!=e.__k)for(var l=[],u=0;u<e.__k.length;u++){var d=e.__k[u];if(d&&null!=d.key){var v=d.key;if(-1!==l.indexOf(v)){console.error('Following component has two or more children with the same key attribute: "'+v+'". This may cause glitches and misbehavior in rendering process. Component: \n\n'+debug_w(e)+"\n\n"+debug_f(e));break}l.push(v)}}if(null!=e.__c&&null!=e.__c.__H){var b=e.__c.__H.__;if(b)for(var g=0;g<b.length;g+=1){var E=b[g];if(E.__H)for(var k=0;k<E.__H.length;k++)if((o=E.__H[k])!=o){var O=debug_a(e);throw new Error("Invalid argument passed to hook. Hooks should not be called with NaN in the dependency array. Hook index "+g+" in component "+O+" was called with NaN.")}}}}}();
 
 // EXTERNAL MODULE: ./packages/interactivity/build-module/index.js + 18 modules
-var build_module = __webpack_require__(615);
+var debug_build_module = __webpack_require__(615);
 ;// ./packages/interactivity/build-module/debug.js
 /**
  * External dependencies
@@ -2527,4 +2681,5 @@ var __webpack_exports__useRef = __webpack_exports__.li;
 var __webpack_exports__useState = __webpack_exports__.J0;
 var __webpack_exports__useWatch = __webpack_exports__.FH;
 var __webpack_exports__withScope = __webpack_exports__.v4;
-export { __webpack_exports__getConfig as getConfig, __webpack_exports__getContext as getContext, __webpack_exports__getElement as getElement, __webpack_exports__getServerContext as getServerContext, __webpack_exports__getServerState as getServerState, __webpack_exports__privateApis as privateApis, __webpack_exports__splitTask as splitTask, __webpack_exports__store as store, __webpack_exports__useCallback as useCallback, __webpack_exports__useEffect as useEffect, __webpack_exports__useInit as useInit, __webpack_exports__useLayoutEffect as useLayoutEffect, __webpack_exports__useMemo as useMemo, __webpack_exports__useRef as useRef, __webpack_exports__useState as useState, __webpack_exports__useWatch as useWatch, __webpack_exports__withScope as withScope };
+var __webpack_exports__withSyncEvent = __webpack_exports__.mh;
+export { __webpack_exports__getConfig as getConfig, __webpack_exports__getContext as getContext, __webpack_exports__getElement as getElement, __webpack_exports__getServerContext as getServerContext, __webpack_exports__getServerState as getServerState, __webpack_exports__privateApis as privateApis, __webpack_exports__splitTask as splitTask, __webpack_exports__store as store, __webpack_exports__useCallback as useCallback, __webpack_exports__useEffect as useEffect, __webpack_exports__useInit as useInit, __webpack_exports__useLayoutEffect as useLayoutEffect, __webpack_exports__useMemo as useMemo, __webpack_exports__useRef as useRef, __webpack_exports__useState as useState, __webpack_exports__useWatch as useWatch, __webpack_exports__withScope as withScope, __webpack_exports__withSyncEvent as withSyncEvent };

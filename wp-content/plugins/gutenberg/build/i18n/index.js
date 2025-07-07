@@ -296,7 +296,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -1027,7 +1027,6 @@ Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) 
 };
 
 ;// ./packages/i18n/build-module/create-i18n.js
-/* wp:polyfill */
 /**
  * External dependencies
  */

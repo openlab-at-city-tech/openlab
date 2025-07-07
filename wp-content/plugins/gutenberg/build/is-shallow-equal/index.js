@@ -46,12 +46,16 @@ __webpack_require__.d(__webpack_exports__, {
 
 ;// ./packages/is-shallow-equal/build-module/objects.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Returns true if the two objects are shallow equal, or false otherwise.
  *
- * @param {import('.').ComparableObject} a First object to compare.
- * @param {import('.').ComparableObject} b Second object to compare.
+ * @param a First object to compare.
+ * @param b Second object to compare.
  *
- * @return {boolean} Whether the two objects are shallow equal.
+ * @return Whether the two objects are shallow equal.
  */
 function isShallowEqualObjects(a, b) {
   if (a === b) {
@@ -84,10 +88,10 @@ function isShallowEqualObjects(a, b) {
 /**
  * Returns true if the two arrays are shallow equal, or false otherwise.
  *
- * @param {any[]} a First array to compare.
- * @param {any[]} b Second array to compare.
+ * @param a First array to compare.
+ * @param b Second array to compare.
  *
- * @return {boolean} Whether the two arrays are shallow equal.
+ * @return Whether the two arrays are shallow equal.
  */
 function isShallowEqualArrays(a, b) {
   if (a === b) {
@@ -112,19 +116,14 @@ function isShallowEqualArrays(a, b) {
 
 
 
-
-/**
- * @typedef {Record<string, any>} ComparableObject
- */
-
 /**
  * Returns true if the two arrays or objects are shallow equal, or false
  * otherwise. Also handles primitive values, just in case.
  *
- * @param {unknown} a First object or array to compare.
- * @param {unknown} b Second object or array to compare.
+ * @param a First object or array to compare.
+ * @param b Second object or array to compare.
  *
- * @return {boolean} Whether the two values are shallow equal.
+ * @return Whether the two values are shallow equal.
  */
 function isShallowEqual(a, b) {
   if (a && b) {

@@ -236,7 +236,7 @@ function InlineUI({
           type: image_name,
           attributes: {
             ...activeObjectAttributes,
-            style: width ? `width: ${editedWidth}px;` : '',
+            style: editedWidth ? `width: ${editedWidth}px;` : '',
             alt: editedAlt
           }
         };
@@ -595,7 +595,7 @@ function getFormatBoundary(value, format, startIndex = value.start, endIndex = v
   // Safe guard: start index cannot be less than 0.
   startIndex = startIndex < 0 ? 0 : startIndex;
 
-  // // Return the indicies of the "edges" as the boundaries.
+  // // Return the indices of the "edges" as the boundaries.
   return {
     start: startIndex,
     end: endIndex
@@ -654,7 +654,7 @@ const walkToEnd = partialRight(walkToBoundary, 'forwards');
 
 
 
-const LINK_SETTINGS = [...external_wp_blockEditor_namespaceObject.__experimentalLinkControl.DEFAULT_LINK_SETTINGS, {
+const LINK_SETTINGS = [...external_wp_blockEditor_namespaceObject.LinkControl.DEFAULT_LINK_SETTINGS, {
   id: 'nofollow',
   title: (0,external_wp_i18n_namespaceObject.__)('Mark as nofollow')
 }];
@@ -775,7 +775,7 @@ function InlineLinkUI({
       // As "replace" will operate on the first match only, it is
       // run only against the second half of the value which was
       // split at the active format's boundary. This avoids a bug
-      // with incorrectly targetted replacements.
+      // with incorrectly targeted replacements.
       // See: https://github.com/WordPress/gutenberg/issues/41771.
       // Note original formats will be lost when applying this change.
       // That is expected behaviour.
@@ -836,7 +836,7 @@ function InlineLinkUI({
     shift: true,
     focusOnMount: focusOnMount,
     constrainTabbing: true,
-    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.__experimentalLinkControl, {
+    children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_blockEditor_namespaceObject.LinkControl, {
       value: linkValue,
       onChange: onChangeLink,
       onRemove: removeLink,
@@ -1223,7 +1223,7 @@ const underline = {
  * Return an SVG icon.
  *
  * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
+ *                                                          size is a number specifying the icon size in pixels
  *                                                          Other props will be passed to wrapped SVG component
  * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
@@ -1406,7 +1406,11 @@ function ColorPicker({
       onChange(setColors(value, name, colors, {
         [property]: color
       }));
-    }
+    },
+    enableAlpha: true
+    // Prevent the text and color picker from overlapping.
+    ,
+    __experimentalIsRenderedInSidebar: true
   });
 }
 function InlineColorUI({
@@ -1503,7 +1507,7 @@ function TextColorEdit({
   const [allowCustomControl, colors = EMPTY_ARRAY] = (0,external_wp_blockEditor_namespaceObject.useSettings)('color.custom', 'color.palette');
   const [isAddingColor, setIsAddingColor] = (0,external_wp_element_namespaceObject.useState)(false);
   const colorIndicatorStyle = (0,external_wp_element_namespaceObject.useMemo)(() => fillComputedColors(contentRef.current, getActiveColors(value, text_color_name, colors)), [contentRef, value, colors]);
-  const hasColorsToChoose = colors.length || !allowCustomControl;
+  const hasColorsToChoose = !!colors.length || allowCustomControl;
   if (!hasColorsToChoose && !isActive) {
     return null;
   }

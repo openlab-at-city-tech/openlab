@@ -207,44 +207,13 @@ const errorNotices = (state = {}, action) => {
 
 ;// external ["wp","blockEditor"]
 const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
-;// ./packages/block-directory/build-module/store/utils/has-block-type.js
-/**
- * Check if a block list contains a specific block type. Recursively searches
- * through `innerBlocks` if they exist.
- *
- * @param {Object}   blockType A block object to search for.
- * @param {Object[]} blocks    The list of blocks to look through.
- *
- * @return {boolean} Whether the blockType is found.
- */
-function hasBlockType(blockType, blocks = []) {
-  if (!blocks.length) {
-    return false;
-  }
-  if (blocks.some(({
-    name
-  }) => name === blockType.name)) {
-    return true;
-  }
-  for (let i = 0; i < blocks.length; i++) {
-    if (hasBlockType(blockType, blocks[i].innerBlocks)) {
-      return true;
-    }
-  }
-  return false;
-}
-
 ;// ./packages/block-directory/build-module/store/selectors.js
 /**
  * WordPress dependencies
  */
 
 
-
-/**
- * Internal dependencies
- */
-
+const EMPTY_ARRAY = [];
 
 /**
  * Returns true if application is requesting for downloadable blocks.
@@ -269,7 +238,7 @@ function isRequestingDownloadableBlocks(state, filterValue) {
  */
 function getDownloadableBlocks(state, filterValue) {
   var _state$downloadableBl2;
-  return (_state$downloadableBl2 = state.downloadableBlocks[filterValue]?.results) !== null && _state$downloadableBl2 !== void 0 ? _state$downloadableBl2 : [];
+  return (_state$downloadableBl2 = state.downloadableBlocks[filterValue]?.results) !== null && _state$downloadableBl2 !== void 0 ? _state$downloadableBl2 : EMPTY_ARRAY;
 }
 
 /**
@@ -293,10 +262,22 @@ function getInstalledBlockTypes(state) {
  * @return {Array} Block type items.
  */
 const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
-  const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
-  return installedBlockTypes.filter(blockType => hasBlockType(blockType, usedBlockTree));
-}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
+  if (!installedBlockTypes.length) {
+    return EMPTY_ARRAY;
+  }
+  const {
+    getBlockName,
+    getClientIdsWithDescendants
+  } = select(external_wp_blockEditor_namespaceObject.store);
+  const installedBlockNames = installedBlockTypes.map(blockType => blockType.name);
+  const foundBlockNames = getClientIdsWithDescendants().flatMap(clientId => {
+    const blockName = getBlockName(clientId);
+    return installedBlockNames.includes(blockName) ? blockName : [];
+  });
+  const newBlockTypes = installedBlockTypes.filter(blockType => foundBlockNames.includes(blockType.name));
+  return newBlockTypes.length > 0 ? newBlockTypes : EMPTY_ARRAY;
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getClientIdsWithDescendants()]));
 
 /**
  * Returns the block types that have been installed on the server but are not
@@ -307,10 +288,22 @@ const getNewBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelec
  * @return {Array} Block type items.
  */
 const getUnusedBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (0,external_wp_data_namespaceObject.createSelector)(state => {
-  const usedBlockTree = select(external_wp_blockEditor_namespaceObject.store).getBlocks();
   const installedBlockTypes = getInstalledBlockTypes(state);
-  return installedBlockTypes.filter(blockType => !hasBlockType(blockType, usedBlockTree));
-}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getBlocks()]));
+  if (!installedBlockTypes.length) {
+    return EMPTY_ARRAY;
+  }
+  const {
+    getBlockName,
+    getClientIdsWithDescendants
+  } = select(external_wp_blockEditor_namespaceObject.store);
+  const installedBlockNames = installedBlockTypes.map(blockType => blockType.name);
+  const foundBlockNames = getClientIdsWithDescendants().flatMap(clientId => {
+    const blockName = getBlockName(clientId);
+    return installedBlockNames.includes(blockName) ? blockName : [];
+  });
+  const unusedBlockTypes = installedBlockTypes.filter(blockType => !foundBlockNames.includes(blockType.name));
+  return unusedBlockTypes.length > 0 ? unusedBlockTypes : EMPTY_ARRAY;
+}, state => [getInstalledBlockTypes(state), select(external_wp_blockEditor_namespaceObject.store).getClientIdsWithDescendants()]));
 
 /**
  * Returns true if a block plugin install is in progress.
@@ -547,7 +540,7 @@ const installBlockType = block => async ({
     });
 
     // Ensures that the block metadata is propagated to the editor when registered on the server.
-    const metadataFields = ['api_version', 'title', 'category', 'parent', 'icon', 'description', 'keywords', 'attributes', 'provides_context', 'uses_context', 'supports', 'styles', 'example', 'variations'];
+    const metadataFields = ['api_version', 'title', 'category', 'parent', 'ancestor', 'icon', 'description', 'keywords', 'attributes', 'provides_context', 'uses_context', 'selectors', 'supports', 'styles', 'example', 'variations', 'allowed_blocks', 'block_hooks'];
     await external_wp_apiFetch_default()({
       path: (0,external_wp_url_namespaceObject.addQueryArgs)(`/wp/v2/block-types/${name}`, {
         _fields: metadataFields
@@ -1245,7 +1238,9 @@ const resolvers_getDownloadableBlocks = filterValue => async ({
     });
     const blocks = results.map(result => Object.fromEntries(Object.entries(result).map(([key, value]) => [camelCase(key), value])));
     dispatch(receiveDownloadableBlocks(blocks, filterValue));
-  } catch {}
+  } catch {
+    dispatch(receiveDownloadableBlocks([], filterValue));
+  }
 };
 
 ;// ./packages/block-directory/build-module/store/index.js
@@ -1349,7 +1344,7 @@ const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
  * Return an SVG icon.
  *
  * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
+ *                                                          size is a number specifying the icon size in pixels
  *                                                          Other props will be passed to wrapped SVG component
  * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
@@ -1775,21 +1770,6 @@ function DownloadableBlocksInserterPanel({
 }
 /* harmony default export */ const inserter_panel = (DownloadableBlocksInserterPanel);
 
-;// ./packages/icons/build-module/library/block-default.js
-/**
- * WordPress dependencies
- */
-
-
-const blockDefault = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24",
-  children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(external_wp_primitives_namespaceObject.Path, {
-    d: "M19 8h-1V6h-5v2h-2V6H6v2H5c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-8c0-1.1-.9-2-2-2zm.5 10c0 .3-.2.5-.5.5H5c-.3 0-.5-.2-.5-.5v-8c0-.3.2-.5.5-.5h14c.3 0 .5.2.5.5v8z"
-  })
-});
-/* harmony default export */ const block_default = (blockDefault);
-
 ;// ./packages/block-directory/build-module/components/downloadable-blocks-panel/no-results.js
 /**
  * WordPress dependencies
@@ -1797,17 +1777,13 @@ const blockDefault = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.js
 
 
 
-
 function DownloadableBlocksNoResults() {
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
-    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)("div", {
+    children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "block-editor-inserter__no-results",
-      children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(icon, {
-        className: "block-editor-inserter__no-results-icon",
-        icon: block_default
-      }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
+      children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("p", {
         children: (0,external_wp_i18n_namespaceObject.__)('No results found.')
-      })]
+      })
     }), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
       className: "block-editor-inserter__tips",
       children: /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_components_namespaceObject.Tip, {
@@ -1839,7 +1815,7 @@ function DownloadableBlocksNoResults() {
 
 
 
-const EMPTY_ARRAY = [];
+const downloadable_blocks_panel_EMPTY_ARRAY = [];
 const useDownloadableBlocks = filterValue => (0,external_wp_data_namespaceObject.useSelect)(select => {
   const {
     getDownloadableBlocks,
@@ -1847,7 +1823,7 @@ const useDownloadableBlocks = filterValue => (0,external_wp_data_namespaceObject
     getInstalledBlockTypes
   } = select(store);
   const hasPermission = select(external_wp_coreData_namespaceObject.store).canUser('read', 'block-directory/search');
-  let downloadableBlocks = EMPTY_ARRAY;
+  let downloadableBlocks = downloadable_blocks_panel_EMPTY_ARRAY;
   if (hasPermission) {
     downloadableBlocks = getDownloadableBlocks(filterValue);
 
@@ -1872,7 +1848,7 @@ const useDownloadableBlocks = filterValue => (0,external_wp_data_namespaceObject
 
     // Return identical empty array when there are no blocks
     if (downloadableBlocks.length === 0) {
-      downloadableBlocks = EMPTY_ARRAY;
+      downloadableBlocks = downloadable_blocks_panel_EMPTY_ARRAY;
     }
   }
   return {
@@ -2021,7 +1997,6 @@ function CompactList({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -2034,7 +2009,6 @@ function InstalledBlocksPrePublishPanel() {
     return null;
   }
   return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
-    icon: block_default,
     title: (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %d: number of blocks (number).
     (0,external_wp_i18n_namespaceObject._n)('Added: %d block', 'Added: %d blocks', newBlockTypes.length), newBlockTypes.length),
@@ -2216,6 +2190,9 @@ const ModifiedWarning = ({
 
 
 (0,external_wp_plugins_namespaceObject.registerPlugin)('block-directory', {
+  // The icon is explicitly set to undefined to prevent PluginPrePublishPanel
+  // from rendering the fallback icon pluginIcon.
+  icon: undefined,
   render() {
     return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsxs)(external_ReactJSXRuntime_namespaceObject.Fragment, {
       children: [/*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(AutoBlockUninstaller, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(inserter_menu_downloadable_blocks_panel, {}), /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(InstalledBlocksPrePublishPanel, {})]

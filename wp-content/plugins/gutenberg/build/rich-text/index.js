@@ -211,7 +211,7 @@ const getFormatTypes = (0,external_wp_data_namespaceObject.createSelector)(state
  * };
  * ```
  *
- * @return {Object?} Format type.
+ * @return {?Object} Format type.
  */
 function getFormatType(state, name) {
   return state.formatTypes[name];
@@ -896,7 +896,18 @@ function toTree({
         innerHTML
       } = replacement;
       const formatType = get_format_type_getFormatType(type);
-      if (!isEditableTree && type === 'script') {
+      if (isEditableTree && type === '#comment') {
+        pointer = append(getParent(pointer), {
+          type: 'span',
+          attributes: {
+            contenteditable: 'false',
+            'data-rich-text-comment': attributes['data-rich-text-comment']
+          }
+        });
+        append(append(pointer, {
+          type: 'span'
+        }), attributes['data-rich-text-comment'].trim());
+      } else if (!isEditableTree && type === 'script') {
         pointer = append(getParent(pointer), fromFormat({
           type: 'script',
           isEditableTree
@@ -1061,6 +1072,14 @@ function createElementHTML({
   object,
   children
 }) {
+  if (type === '#comment') {
+    // We can't restore the original comment delimiters, because once parsed
+    // into DOM nodes, we don't have the information. But in the future we
+    // could allow comment handlers to specify custom delimiters, for
+    // example `</{comment-content}>` for Bits, where `comment-content`
+    // would be `/{bit-name}` or `__{translatable-string}` (TBD).
+    return `<!--${attributes['data-rich-text-comment']}-->`;
+  }
   let attributeString = '';
   for (const key in attributes) {
     if (!(0,external_wp_escapeHtml_namespaceObject.isValidAttributeName)(key)) {
@@ -1226,6 +1245,13 @@ class RichTextData {
       html
     }));
   }
+  /**
+   * Create a RichTextData instance from an HTML element.
+   *
+   * @param {HTMLElement}                    htmlElement The HTML element to create the instance from.
+   * @param {{preserveWhiteSpace?: boolean}} options     Options.
+   * @return {RichTextData} The RichTextData instance.
+   */
   static fromHTMLElement(htmlElement, options = {}) {
     const {
       preserveWhiteSpace = false
@@ -1247,6 +1273,12 @@ class RichTextData {
   }
   // We could expose `toHTMLElement` at some point as well, but we'd only use
   // it internally.
+  /**
+   * Convert the rich text value to an HTML string.
+   *
+   * @param {{preserveWhiteSpace?: boolean}} options Options.
+   * @return {string} The HTML string.
+   */
   toHTMLString({
     preserveWhiteSpace
   } = {}) {
@@ -1556,6 +1588,21 @@ function createFromElement({
       accumulator.text += text;
       continue;
     }
+    if (node.nodeType === node.COMMENT_NODE || node.nodeType === node.ELEMENT_NODE && node.tagName === 'SPAN' && node.hasAttribute('data-rich-text-comment')) {
+      const value = {
+        formats: [,],
+        replacements: [{
+          type: '#comment',
+          attributes: {
+            'data-rich-text-comment': node.nodeType === node.COMMENT_NODE ? node.nodeValue : node.getAttribute('data-rich-text-comment')
+          }
+        }],
+        text: OBJECT_REPLACEMENT_CHARACTER
+      };
+      accumulateSelection(accumulator, node, range, value);
+      mergePair(accumulator, value);
+      continue;
+    }
     if (node.nodeType !== node.ELEMENT_NODE) {
       continue;
     }
@@ -1853,14 +1900,14 @@ function join(values, separator = '') {
       text: separator
     });
   }
-  return normaliseFormats(values.reduce((accumlator, {
+  return normaliseFormats(values.reduce((accumulator, {
     formats,
     replacements,
     text
   }) => ({
-    formats: accumlator.formats.concat(separator.formats, formats),
-    replacements: accumlator.replacements.concat(separator.replacements, replacements),
-    text: accumlator.text + separator.text + text
+    formats: accumulator.formats.concat(separator.formats, formats),
+    replacements: accumulator.replacements.concat(separator.replacements, replacements),
+    text: accumulator.text + separator.text + text
   })));
 }
 
@@ -2380,9 +2427,13 @@ function to_dom_append(element, child) {
     attributes
   } = child;
   if (type) {
-    child = element.ownerDocument.createElement(type);
-    for (const key in attributes) {
-      child.setAttribute(key, attributes[key]);
+    if (type === '#comment') {
+      child = element.ownerDocument.createComment(attributes['data-rich-text-comment']);
+    } else {
+      child = element.ownerDocument.createElement(type);
+      for (const key in attributes) {
+        child.setAttribute(key, attributes[key]);
+      }
     }
   }
   return element.appendChild(child);
@@ -2786,7 +2837,7 @@ const external_wp_compose_namespaceObject = window["wp"]["compose"];
 function getFormatElement(range, editableContentElement, tagName, className) {
   let element = range.startContainer;
 
-  // Even if the active format is defined, the actualy DOM range's start
+  // Even if the active format is defined, the actually DOM range's start
   // container may be outside of the format's DOM element:
   // `a‸<strong>b</strong>` (DOM) while visually it's `a<strong>‸b</strong>`.
   // So at a given selection index, start with the deepest format DOM element.
@@ -3342,7 +3393,6 @@ function updateFormats({
 }
 
 ;// ./packages/rich-text/build-module/component/event-listeners/input-and-selection.js
-/* wp:polyfill */
 /**
  * Internal dependencies
  */
@@ -3860,7 +3910,7 @@ function useRichText({
   }
   const didMountRef = (0,external_wp_element_namespaceObject.useRef)(false);
 
-  // Value updates must happen synchonously to avoid overwriting newer values.
+  // Value updates must happen synchronously to avoid overwriting newer values.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (didMountRef.current && value !== _valueRef.current) {
       applyFromProps();
@@ -3868,7 +3918,7 @@ function useRichText({
     }
   }, [value]);
 
-  // Value updates must happen synchonously to avoid overwriting newer values.
+  // Value updates must happen synchronously to avoid overwriting newer values.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (!hadSelectionUpdateRef.current) {
       return;

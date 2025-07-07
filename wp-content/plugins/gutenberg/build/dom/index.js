@@ -134,7 +134,7 @@ __webpack_require__.d(tabbable_namespaceObject, {
  * @return {string} CSS selector.
  */
 function buildSelector(sequential) {
-  return [sequential ? '[tabindex]:not([tabindex^="-"])' : '[tabindex]', 'a[href]', 'button:not([disabled])', 'input:not([type="hidden"]):not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'iframe:not([tabindex^="-"])', 'object', 'embed', 'area[href]', '[contenteditable]:not([contenteditable=false])'].join(',');
+  return [sequential ? '[tabindex]:not([tabindex^="-"])' : '[tabindex]', 'a[href]', 'button:not([disabled])', 'input:not([type="hidden"]):not([disabled])', 'select:not([disabled])', 'textarea:not([disabled])', 'iframe:not([tabindex^="-"])', 'object', 'embed', 'summary', 'area[href]', '[contenteditable]:not([contenteditable=false])'].join(',');
 }
 
 /**
@@ -598,7 +598,7 @@ function isTextField(node) {
  *
  * @param {Element} element The HTML element.
  *
- * @return {boolean} Whether the input/textareaa element has some "selection".
+ * @return {boolean} Whether the input/textarea element has some "selection".
  */
 function inputFieldHasUncollapsedSelection(element) {
   if (!isHTMLInputElement(element) && !isTextField(element)) {
@@ -1855,7 +1855,10 @@ function cleanNodeList(nodeList, doc, schema, inline) {
           // TODO: Explore patching this in jsdom-jscore.
           if (node.classList && node.classList.length) {
             const mattchers = classes.map(item => {
-              if (typeof item === 'string') {
+              if (item === '*') {
+                // Keep all classes.
+                return () => true;
+              } else if (typeof item === 'string') {
                 return (/** @type {string} */className) => className === item;
               } else if (item instanceof RegExp) {
                 return (/** @type {string} */className) => item.test(className);

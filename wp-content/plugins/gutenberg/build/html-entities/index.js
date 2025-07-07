@@ -38,13 +38,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   decodeEntities: () => (/* binding */ decodeEntities)
 /* harmony export */ });
-/** @type {HTMLTextAreaElement} */
 let _decodeTextArea;
 
 /**
  * Decodes the HTML entities from a given string.
  *
- * @param {string} html String that contain HTML entities.
+ * @param html String that contain HTML entities.
  *
  * @example
  * ```js
@@ -54,9 +53,10 @@ let _decodeTextArea;
  * console.log( result ); // result will be "á"
  * ```
  *
- * @return {string} The decoded string.
+ * @return The decoded string.
  */
 function decodeEntities(html) {
+  var _decodeTextArea$textC;
   // Not a string, or no entities to decode.
   if ('string' !== typeof html || -1 === html.indexOf('&')) {
     return html;
@@ -71,7 +71,7 @@ function decodeEntities(html) {
     }
   }
   _decodeTextArea.innerHTML = html;
-  const decoded = _decodeTextArea.textContent;
+  const decoded = (_decodeTextArea$textC = _decodeTextArea.textContent) !== null && _decodeTextArea$textC !== void 0 ? _decodeTextArea$textC : '';
   _decodeTextArea.innerHTML = '';
 
   /**
@@ -91,7 +91,7 @@ function decodeEntities(html) {
    *
    * @see https://developer.mozilla.org/en-US/docs/Web/API/Node/textContent
    */
-  return /** @type {string} */decoded;
+  return decoded;
 }
 
 (window.wp = window.wp || {}).htmlEntities = __webpack_exports__;

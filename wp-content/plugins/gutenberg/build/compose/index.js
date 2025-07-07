@@ -2080,7 +2080,7 @@ module.exports.TinyEmitter = E;
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+// This entry needs to be wrapped in an IIFE because it needs to be in strict mode.
 (() => {
 "use strict";
 // ESM COMPAT FLAG
@@ -2946,7 +2946,6 @@ const throttle = (func, wait, options) => {
 };
 
 ;// ./packages/compose/build-module/utils/observable-map/index.js
-/* wp:polyfill */
 /**
  * A constructor (factory) for `ObservableMap`, a map-like key/value data structure
  * where the individual entries are observable: using the `subscribe` method, you can
@@ -3903,6 +3902,7 @@ function useFocusReturn(onFocusReturn) {
   }, [onFocusReturn]);
   return (0,external_wp_element_namespaceObject.useCallback)(node => {
     if (node) {
+      var _activeDocument$activ;
       // Set ref to be used when unmounting.
       ref.current = node;
 
@@ -3910,7 +3910,8 @@ function useFocusReturn(onFocusReturn) {
       if (focusedBeforeMount.current) {
         return;
       }
-      focusedBeforeMount.current = node.ownerDocument.activeElement;
+      const activeDocument = node.ownerDocument.activeElement instanceof window.HTMLIFrameElement ? node.ownerDocument.activeElement.contentDocument : node.ownerDocument;
+      focusedBeforeMount.current = (_activeDocument$activ = activeDocument?.activeElement) !== null && _activeDocument$activ !== void 0 ? _activeDocument$activ : null;
     } else if (focusedBeforeMount.current) {
       const isFocused = ref.current?.contains(ref.current?.ownerDocument.activeElement);
       if (ref.current?.isConnected && !isFocused) {
@@ -4503,7 +4504,6 @@ var mousetrap_default = /*#__PURE__*/__webpack_require__.n(mousetrap_mousetrap);
 // EXTERNAL MODULE: ./node_modules/mousetrap/plugins/global-bind/mousetrap-global-bind.js
 var mousetrap_global_bind = __webpack_require__(5760);
 ;// ./packages/compose/build-module/hooks/use-keyboard-shortcut/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -5283,7 +5283,7 @@ const external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
  *
  * @param list  New array.
  * @param state Current state.
- * @return First items present iin state.
+ * @return First items present in state.
  */
 function getFirstItemsPresentInState(list, state) {
   const firstItems = [];
@@ -5340,7 +5340,7 @@ function useAsyncList(list, config = {
  */
 
 
-// Disable reason: Object and object are distinctly different types in TypeScript and we mean the lowercase object in thise case
+// Disable reason: Object and object are distinctly different types in TypeScript and we mean the lowercase object in this case
 // but eslint wants to force us to use `Object`. See https://stackoverflow.com/questions/49464634/difference-between-object-and-object-in-typescript
 /* eslint-disable jsdoc/check-types */
 /**

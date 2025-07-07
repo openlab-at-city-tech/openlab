@@ -111,7 +111,6 @@
 			}
 		},
 		"color": {
-			"__experimentalDuotone": "> .wp-block-cover__image-background, > .wp-block-cover__video-background",
 			"heading": true,
 			"text": true,
 			"background": false,
@@ -139,6 +138,14 @@
 		},
 		"interactivity": {
 			"clientNavigation": true
+		},
+		"filter": {
+			"duotone": true
+		}
+	},
+	"selectors": {
+		"filter": {
+			"duotone": ".wp-block-cover > .wp-block-cover__image-background, .wp-block-cover > .wp-block-cover__video-background"
 		}
 	},
 	"editorStyle": "wp-block-cover-editor",

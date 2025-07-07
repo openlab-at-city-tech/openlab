@@ -10,9 +10,7 @@
  *
  * @since 6.3.0 Using block.json `viewScript` to register script, and update `view_script_handles()` only when needed.
  *
- * @param array    $attributes The block attributes.
- * @param string   $content    The saved content.
- * @param WP_Block $block      The parsed block.
+ * @param array $attributes The block attributes.
  *
  * @return string The search block markup.
  */
@@ -152,17 +150,22 @@ function gutenberg_render_block_core_search( $attributes ) {
 		}
 	}
 
-	$field_markup_classes = $is_button_inside ? $border_color_classes : '';
-	$field_markup         = sprintf(
-		'<div class="wp-block-search__inside-wrapper %s" %s>%s</div>',
-		esc_attr( $field_markup_classes ),
+	$field_markup_classes = array(
+		'wp-block-search__inside-wrapper',
+	);
+	if ( $is_button_inside && ! empty( $border_color_classes ) ) {
+		$field_markup_classes[] = $border_color_classes;
+	}
+	$field_markup       = sprintf(
+		'<div class="%s" %s>%s</div>',
+		esc_attr( implode( ' ', $field_markup_classes ) ),
 		$inline_styles['wrapper'],
 		$input . $query_params_markup . $button
 	);
-	$wrapper_attributes   = get_block_wrapper_attributes(
+	$wrapper_attributes = get_block_wrapper_attributes(
 		array( 'class' => $classnames )
 	);
-	$form_directives      = '';
+	$form_directives    = '';
 
 	// If it's interactive, add the directives.
 	if ( $is_expandable_searchfield ) {
@@ -177,9 +180,9 @@ function gutenberg_render_block_core_search( $attributes ) {
 			)
 		);
 		$form_directives      = '
-		 data-wp-interactive="core/search"'
-		. $form_context .
-		'data-wp-class--wp-block-search__searchfield-hidden="!context.isSearchInputVisible"
+		 data-wp-interactive="core/search"
+		 ' . $form_context . '
+		 data-wp-class--wp-block-search__searchfield-hidden="!context.isSearchInputVisible"
 		 data-wp-on-async--keydown="actions.handleSearchKeydown"
 		 data-wp-on-async--focusout="actions.handleSearchFocusout"
 		';

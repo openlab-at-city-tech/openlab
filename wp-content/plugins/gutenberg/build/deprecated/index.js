@@ -42,22 +42,13 @@ const external_wp_hooks_namespaceObject = window["wp"]["hooks"];
 /**
  * Object map tracking messages which have been logged, for use in ensuring a
  * message is only logged once.
- *
- * @type {Record<string, true | undefined>}
  */
 const logged = Object.create(null);
-
 /**
  * Logs a message to notify developers about a deprecated feature.
  *
- * @param {string} feature               Name of the deprecated feature.
- * @param {Object} [options]             Personalisation options
- * @param {string} [options.since]       Version in which the feature was deprecated.
- * @param {string} [options.version]     Version in which the feature will be removed.
- * @param {string} [options.alternative] Feature to use instead
- * @param {string} [options.plugin]      Plugin name if it's a plugin feature
- * @param {string} [options.link]        Link to documentation
- * @param {string} [options.hint]        Additional message to help transition away from the deprecated feature.
+ * @param {string}            feature   Name of the deprecated feature.
+ * @param {DeprecatedOptions} [options] Personalisation options
  *
  * @example
  * ```js
@@ -99,15 +90,9 @@ function deprecated(feature, options = {}) {
   /**
    * Fires whenever a deprecated feature is encountered
    *
-   * @param {string}  feature             Name of the deprecated feature.
-   * @param {?Object} options             Personalisation options
-   * @param {string}  options.since       Version in which the feature was deprecated.
-   * @param {?string} options.version     Version in which the feature will be removed.
-   * @param {?string} options.alternative Feature to use instead
-   * @param {?string} options.plugin      Plugin name if it's a plugin feature
-   * @param {?string} options.link        Link to documentation
-   * @param {?string} options.hint        Additional message to help transition away from the deprecated feature.
-   * @param {?string} message             Message sent to console.warn
+   * @param {string}            feature Name of the deprecated feature.
+   * @param {DeprecatedOptions} options Personalisation options
+   * @param {string}            message Message sent to console.warn
    */
   (0,external_wp_hooks_namespaceObject.doAction)('deprecated', feature, options, message);
 
@@ -115,8 +100,6 @@ function deprecated(feature, options = {}) {
   console.warn(message);
   logged[message] = true;
 }
-
-/** @typedef {import('utility-types').NonUndefined<Parameters<typeof deprecated>[1]>} DeprecatedOptions */
 
 (window.wp = window.wp || {}).deprecated = __webpack_exports__["default"];
 /******/ })()

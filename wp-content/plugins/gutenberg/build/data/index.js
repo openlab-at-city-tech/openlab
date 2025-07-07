@@ -1002,6 +1002,10 @@ function combine_reducers_combineReducers(reducers) {
 
 ;// ./packages/data/build-module/factory.js
 /**
+ * Internal dependencies
+ */
+
+/**
  * Creates a selector function that takes additional curried argument with the
  * registry `select` function. While a regular selector has signature
  * ```js
@@ -1036,10 +1040,10 @@ function combine_reducers_combineReducers(reducers) {
  * registry as argument. The registry binding happens automatically when registering the selector
  * with a store.
  *
- * @param {Function} registrySelector Function receiving a registry `select`
- *                                    function and returning a state selector.
+ * @param registrySelector Function receiving a registry `select`
+ *                         function and returning a state selector.
  *
- * @return {Function} Registry selector that can be registered with a store.
+ * @return Registry selector that can be registered with a store.
  */
 function createRegistrySelector(registrySelector) {
   const selectorsByRegistry = new WeakMap();
@@ -1063,8 +1067,6 @@ function createRegistrySelector(registrySelector) {
    * Flag indicating that the selector is a registry selector that needs the correct registry
    * reference to be assigned to `selector.registry` to make it work correctly.
    * be mapped as a registry selector.
-   *
-   * @type {boolean}
    */
   wrappedSelector.isRegistrySelector = true;
   return wrappedSelector;
@@ -1086,9 +1088,9 @@ function createRegistrySelector(registrySelector) {
  * When registering a control created with `createRegistryControl` with a store, the store
  * knows which calling convention to use when executing the control.
  *
- * @param {Function} registryControl Function receiving a registry object and returning a control.
+ * @param registryControl Function receiving a registry object and returning a control.
  *
- * @return {Function} Registry control that can be registered with a store.
+ * @return Registry control that can be registered with a store.
  */
 function createRegistryControl(registryControl) {
   registryControl.isRegistryControl = true;
@@ -2148,7 +2150,6 @@ function invalidateResolutionForStoreSelector(selectorName) {
 }
 
 ;// ./packages/data/build-module/redux-store/index.js
-/* wp:polyfill */
 /**
  * External dependencies
  */
@@ -2243,18 +2244,27 @@ function createResolversCache() {
     }
   };
 }
-function createBindingCache(bind) {
+function createBindingCache(getItem, bindItem) {
   const cache = new WeakMap();
   return {
-    get(item, itemName) {
+    get(itemName) {
+      const item = getItem(itemName);
+      if (!item) {
+        return null;
+      }
       let boundItem = cache.get(item);
       if (!boundItem) {
-        boundItem = bind(item, itemName);
+        boundItem = bindItem(item, itemName);
         cache.set(item, boundItem);
       }
       return boundItem;
     }
   };
+}
+function createPrivateProxy(publicItems, privateItems) {
+  return new Proxy(publicItems, {
+    get: (target, itemName) => privateItems.get(itemName) || Reflect.get(target, itemName)
+  });
 }
 
 /**
@@ -2313,42 +2323,68 @@ function createReduxStore(key, options) {
        */
       const listeners = new Set();
       const reducer = options.reducer;
+
+      // Object that every thunk function receives as the first argument. It contains the
+      // `registry`, `dispatch`, `select` and `resolveSelect` fields. Some of them are
+      // constructed as getters to avoid circular dependencies.
       const thunkArgs = {
         registry,
         get dispatch() {
-          return thunkActions;
+          return thunkDispatch;
         },
         get select() {
-          return thunkSelectors;
+          return thunkSelect;
         },
         get resolveSelect() {
-          return getResolveSelectors();
+          return resolveSelectors;
         }
       };
       const store = instantiateReduxStore(key, options, registry, thunkArgs);
+
       // Expose the private registration functions on the store
       // so they can be copied to a sub registry in registry.js.
       lock(store, privateRegistrationFunctions);
       const resolversCache = createResolversCache();
+
+      // Binds an action creator (`action`) to the `store`, making it a callable function.
+      // These are the functions that are returned by `useDispatch`, for example.
+      // It always returns a `Promise`, although actions are not always async. That's an
+      // unfortunate backward compatibility measure.
       function bindAction(action) {
         return (...args) => Promise.resolve(store.dispatch(action(...args)));
       }
+
+      /*
+       * Object with all public actions, both metadata and store actions.
+       */
       const actions = {
         ...mapValues(actions_namespaceObject, bindAction),
         ...mapValues(options.actions, bindAction)
       };
-      const boundPrivateActions = createBindingCache(bindAction);
-      const allActions = new Proxy(() => {}, {
-        get: (target, prop) => {
-          const privateAction = privateActions[prop];
-          return privateAction ? boundPrivateActions.get(privateAction, prop) : actions[prop];
-        }
+
+      // Object with both public and private actions. Private actions are accessed through a proxy,
+      // which looks them up in real time on the `privateActions` object. That's because private
+      // actions can be registered at any time with `registerPrivateActions`. Also once a private
+      // action creator is bound to the store, it is cached to give it a stable identity.
+      const allActions = createPrivateProxy(actions, createBindingCache(name => privateActions[name], bindAction));
+
+      // An object that implements the `dispatch` object that is passed to thunk functions.
+      // It is callable (`dispatch( action )`) and also has methods (`dispatch.foo()`) that
+      // correspond to bound registered actions, both public and private. Implemented with the proxy
+      // `get` method, delegating to `allActions`.
+      const thunkDispatch = new Proxy(action => store.dispatch(action), {
+        get: (target, name) => allActions[name]
       });
-      const thunkActions = new Proxy(allActions, {
-        apply: (target, thisArg, [action]) => store.dispatch(action)
-      });
+
+      // To the public `actions` object, add the "locked" `allActions` object. When used,
+      // `unlock( actions )` will return `allActions`, implementing a way how to get at the private actions.
       lock(actions, allActions);
-      const resolvers = options.resolvers ? mapResolvers(options.resolvers) : {};
+
+      // If we have selector resolvers, convert them to a normalized form.
+      const resolvers = options.resolvers ? mapValues(options.resolvers, mapResolver) : {};
+
+      // Bind a selector to the store. Call the selector with the current state, correct registry,
+      // and if there is a resolver, attach the resolver logic to the selector.
       function bindSelector(selector, selectorName) {
         if (selector.isRegistrySelector) {
           selector.registry = registry;
@@ -2356,8 +2392,7 @@ function createReduxStore(key, options) {
         const boundSelector = (...args) => {
           args = normalize(selector, args);
           const state = store.__unstableOriginalGetState();
-          // Before calling the selector, switch to the correct
-          // registry.
+          // Before calling the selector, switch to the correct registry.
           if (selector.isRegistrySelector) {
             selector.registry = registry;
           }
@@ -2365,7 +2400,7 @@ function createReduxStore(key, options) {
         };
 
         // Expose normalization method on the bound selector
-        // in order that it can be called when fullfilling
+        // in order that it can be called when fulfilling
         // the resolver.
         boundSelector.__unstableNormalizeArgs = selector.__unstableNormalizeArgs;
         const resolver = resolvers[selectorName];
@@ -2373,47 +2408,84 @@ function createReduxStore(key, options) {
           boundSelector.hasResolver = false;
           return boundSelector;
         }
-        return mapSelectorWithResolver(boundSelector, selectorName, resolver, store, resolversCache);
+        return mapSelectorWithResolver(boundSelector, selectorName, resolver, store, resolversCache, boundMetadataSelectors);
       }
-      function bindMetadataSelector(metaDataSelector) {
-        const boundSelector = (...args) => {
-          const state = store.__unstableOriginalGetState();
-          const originalSelectorName = args && args[0];
-          const originalSelectorArgs = args && args[1];
-          const targetSelector = options?.selectors?.[originalSelectorName];
 
+      // Metadata selectors are bound differently: different state (`state.metadata`), no resolvers,
+      // normalization depending on the target selector.
+      function bindMetadataSelector(metaDataSelector) {
+        const boundSelector = (selectorName, selectorArgs, ...args) => {
           // Normalize the arguments passed to the target selector.
-          if (originalSelectorName && targetSelector) {
-            args[1] = normalize(targetSelector, originalSelectorArgs);
+          if (selectorName) {
+            const targetSelector = options.selectors?.[selectorName];
+            if (targetSelector) {
+              selectorArgs = normalize(targetSelector, selectorArgs);
+            }
           }
-          return metaDataSelector(state.metadata, ...args);
+          const state = store.__unstableOriginalGetState();
+          return metaDataSelector(state.metadata, selectorName, selectorArgs, ...args);
         };
         boundSelector.hasResolver = false;
         return boundSelector;
       }
+
+      // Perform binding of both metadata and store selectors and combine them in one
+      // `selectors` object. These are all public selectors of the store.
+      const boundMetadataSelectors = mapValues(selectors_namespaceObject, bindMetadataSelector);
+      const boundSelectors = mapValues(options.selectors, bindSelector);
       const selectors = {
-        ...mapValues(selectors_namespaceObject, bindMetadataSelector),
-        ...mapValues(options.selectors, bindSelector)
+        ...boundMetadataSelectors,
+        ...boundSelectors
       };
-      const boundPrivateSelectors = createBindingCache(bindSelector);
+
+      // Cache of bould private selectors. They are bound only when first accessed, because
+      // new private selectors can be registered at any time (with `registerPrivateSelectors`).
+      // Once bound, they are cached to give them a stable identity.
+      const boundPrivateSelectors = createBindingCache(name => privateSelectors[name], bindSelector);
+      const allSelectors = createPrivateProxy(selectors, boundPrivateSelectors);
 
       // Pre-bind the private selectors that have been registered by the time of
       // instantiation, so that registry selectors are bound to the registry.
-      for (const [selectorName, selector] of Object.entries(privateSelectors)) {
-        boundPrivateSelectors.get(selector, selectorName);
+      for (const selectorName of Object.keys(privateSelectors)) {
+        boundPrivateSelectors.get(selectorName);
       }
-      const allSelectors = new Proxy(() => {}, {
-        get: (target, prop) => {
-          const privateSelector = privateSelectors[prop];
-          return privateSelector ? boundPrivateSelectors.get(privateSelector, prop) : selectors[prop];
-        }
+
+      // An object that implements the `select` object that is passed to thunk functions.
+      // It is callable (`select( selector )`) and also has methods (`select.foo()`) that
+      // correspond to bound registered selectors, both public and private. Implemented with the proxy
+      // `get` method, delegating to `allSelectors`.
+      const thunkSelect = new Proxy(selector => selector(store.__unstableOriginalGetState()), {
+        get: (target, name) => allSelectors[name]
       });
-      const thunkSelectors = new Proxy(allSelectors, {
-        apply: (target, thisArg, [selector]) => selector(store.__unstableOriginalGetState())
-      });
+
+      // To the public `selectors` object, add the "locked" `allSelectors` object. When used,
+      // `unlock( selectors )` will return `allSelectors`, implementing a way how to get at the private selectors.
       lock(selectors, allSelectors);
-      const resolveSelectors = mapResolveSelectors(selectors, store);
-      const suspendSelectors = mapSuspendSelectors(selectors, store);
+
+      // For each selector, create a function that calls the selector, waits for resolution and returns
+      // a promise that resolves when the resolution is finished.
+      const bindResolveSelector = mapResolveSelector(store, boundMetadataSelectors);
+
+      // Now apply this function to all bound selectors, public and private. We are excluding
+      // metadata selectors because they don't have resolvers.
+      const resolveSelectors = mapValues(boundSelectors, bindResolveSelector);
+      const allResolveSelectors = createPrivateProxy(resolveSelectors, createBindingCache(name => boundPrivateSelectors.get(name), bindResolveSelector));
+
+      // Lock the selectors so that `unlock( resolveSelectors )` returns `allResolveSelectors`.
+      lock(resolveSelectors, allResolveSelectors);
+
+      // Now, in a way very similar to `bindResolveSelector`, we create a function that maps
+      // selectors to functions that throw a suspense promise if not yet resolved.
+      const bindSuspendSelector = mapSuspendSelector(store, boundMetadataSelectors);
+      const suspendSelectors = {
+        ...boundMetadataSelectors,
+        // no special suspense behavior
+        ...mapValues(boundSelectors, bindSuspendSelector)
+      };
+      const allSuspendSelectors = createPrivateProxy(suspendSelectors, createBindingCache(name => boundPrivateSelectors.get(name), bindSuspendSelector));
+
+      // Lock the selectors so that `unlock( suspendSelectors )` returns 'allSuspendSelectors`.
+      lock(suspendSelectors, allSuspendSelectors);
       const getSelectors = () => selectors;
       const getActions = () => actions;
       const getResolveSelectors = () => resolveSelectors;
@@ -2462,7 +2534,7 @@ function createReduxStore(key, options) {
 
   // Expose the private registration functions on the store
   // descriptor. That's a natural choice since that's where the
-  // public actions and selectors are stored .
+  // public actions and selectors are stored.
   lock(storeDescriptor, privateRegistrationFunctions);
   return storeDescriptor;
 }
@@ -2509,113 +2581,99 @@ function instantiateReduxStore(key, options, registry, thunkArgs) {
 }
 
 /**
- * Maps selectors to functions that return a resolution promise for them
+ * Maps selectors to functions that return a resolution promise for them.
  *
- * @param {Object} selectors Selectors to map.
- * @param {Object} store     The redux store the selectors select from.
+ * @param {Object} store                  The redux store the selectors are bound to.
+ * @param {Object} boundMetadataSelectors The bound metadata selectors.
  *
- * @return {Object} Selectors mapped to their resolution functions.
+ * @return {Function} Function that maps selectors to resolvers.
  */
-function mapResolveSelectors(selectors, store) {
-  const {
-    getIsResolving,
-    hasStartedResolution,
-    hasFinishedResolution,
-    hasResolutionFailed,
-    isResolving,
-    getCachedResolvers,
-    getResolutionState,
-    getResolutionError,
-    hasResolvingSelectors,
-    countSelectorsByStatus,
-    ...storeSelectors
-  } = selectors;
-  return mapValues(storeSelectors, (selector, selectorName) => {
+function mapResolveSelector(store, boundMetadataSelectors) {
+  return (selector, selectorName) => {
     // If the selector doesn't have a resolver, just convert the return value
     // (including exceptions) to a Promise, no additional extra behavior is needed.
     if (!selector.hasResolver) {
       return async (...args) => selector.apply(null, args);
     }
-    return (...args) => {
-      return new Promise((resolve, reject) => {
-        const hasFinished = () => selectors.hasFinishedResolution(selectorName, args);
-        const finalize = result => {
-          const hasFailed = selectors.hasResolutionFailed(selectorName, args);
-          if (hasFailed) {
-            const error = selectors.getResolutionError(selectorName, args);
-            reject(error);
-          } else {
-            resolve(result);
-          }
-        };
-        const getResult = () => selector.apply(null, args);
-        // Trigger the selector (to trigger the resolver)
-        const result = getResult();
-        if (hasFinished()) {
-          return finalize(result);
+    return (...args) => new Promise((resolve, reject) => {
+      const hasFinished = () => {
+        return boundMetadataSelectors.hasFinishedResolution(selectorName, args);
+      };
+      const finalize = result => {
+        const hasFailed = boundMetadataSelectors.hasResolutionFailed(selectorName, args);
+        if (hasFailed) {
+          const error = boundMetadataSelectors.getResolutionError(selectorName, args);
+          reject(error);
+        } else {
+          resolve(result);
         }
-        const unsubscribe = store.subscribe(() => {
-          if (hasFinished()) {
-            unsubscribe();
-            finalize(getResult());
-          }
-        });
+      };
+      const getResult = () => selector.apply(null, args);
+
+      // Trigger the selector (to trigger the resolver)
+      const result = getResult();
+      if (hasFinished()) {
+        return finalize(result);
+      }
+      const unsubscribe = store.subscribe(() => {
+        if (hasFinished()) {
+          unsubscribe();
+          finalize(getResult());
+        }
       });
-    };
-  });
+    });
+  };
 }
 
 /**
  * Maps selectors to functions that throw a suspense promise if not yet resolved.
  *
- * @param {Object} selectors Selectors to map.
- * @param {Object} store     The redux store the selectors select from.
+ * @param {Object} store                  The redux store the selectors select from.
+ * @param {Object} boundMetadataSelectors The bound metadata selectors.
  *
- * @return {Object} Selectors mapped to their suspense functions.
+ * @return {Function} Function that maps selectors to their suspending versions.
  */
-function mapSuspendSelectors(selectors, store) {
-  return mapValues(selectors, (selector, selectorName) => {
+function mapSuspendSelector(store, boundMetadataSelectors) {
+  return (selector, selectorName) => {
     // Selector without a resolver doesn't have any extra suspense behavior.
     if (!selector.hasResolver) {
       return selector;
     }
     return (...args) => {
       const result = selector.apply(null, args);
-      if (selectors.hasFinishedResolution(selectorName, args)) {
-        if (selectors.hasResolutionFailed(selectorName, args)) {
-          throw selectors.getResolutionError(selectorName, args);
+      if (boundMetadataSelectors.hasFinishedResolution(selectorName, args)) {
+        if (boundMetadataSelectors.hasResolutionFailed(selectorName, args)) {
+          throw boundMetadataSelectors.getResolutionError(selectorName, args);
         }
         return result;
       }
       throw new Promise(resolve => {
         const unsubscribe = store.subscribe(() => {
-          if (selectors.hasFinishedResolution(selectorName, args)) {
+          if (boundMetadataSelectors.hasFinishedResolution(selectorName, args)) {
             resolve();
             unsubscribe();
           }
         });
       });
     };
-  });
+  };
 }
 
 /**
- * Convert resolvers to a normalized form, an object with `fulfill` method and
+ * Convert a resolver to a normalized form, an object with `fulfill` method and
  * optional methods like `isFulfilled`.
  *
- * @param {Object} resolvers Resolver to convert
+ * @param {Function} resolver Resolver to convert
  */
-function mapResolvers(resolvers) {
-  return mapValues(resolvers, resolver => {
-    if (resolver.fulfill) {
-      return resolver;
-    }
-    return {
-      ...resolver,
-      // Copy the enumerable properties of the resolver function.
-      fulfill: resolver // Add the fulfill method.
-    };
-  });
+function mapResolver(resolver) {
+  if (resolver.fulfill) {
+    return resolver;
+  }
+  return {
+    ...resolver,
+    // Copy the enumerable properties of the resolver function.
+    fulfill: resolver // Add the fulfill method.
+  };
 }
 
 /**
@@ -2623,22 +2681,20 @@ function mapResolvers(resolvers) {
  * Resolvers are side effects invoked once per argument set of a given selector call,
  * used in ensuring that the data needs for the selector are satisfied.
  *
- * @param {Object} selector       The selector function to be bound.
- * @param {string} selectorName   The selector name.
- * @param {Object} resolver       Resolver to call.
- * @param {Object} store          The redux store to which the resolvers should be mapped.
- * @param {Object} resolversCache Resolvers Cache.
+ * @param {Object} selector               The selector function to be bound.
+ * @param {string} selectorName           The selector name.
+ * @param {Object} resolver               Resolver to call.
+ * @param {Object} store                  The redux store to which the resolvers should be mapped.
+ * @param {Object} resolversCache         Resolvers Cache.
+ * @param {Object} boundMetadataSelectors The bound metadata selectors.
  */
-function mapSelectorWithResolver(selector, selectorName, resolver, store, resolversCache) {
+function mapSelectorWithResolver(selector, selectorName, resolver, store, resolversCache, boundMetadataSelectors) {
   function fulfillSelector(args) {
     const state = store.getState();
     if (resolversCache.isRunning(selectorName, args) || typeof resolver.isFulfilled === 'function' && resolver.isFulfilled(state, ...args)) {
       return;
     }
-    const {
-      metadata
-    } = store.__unstableOriginalGetState();
-    if (hasStartedResolution(metadata, selectorName, args)) {
+    if (boundMetadataSelectors.hasStartedResolution(selectorName, args)) {
       return;
     }
     resolversCache.markAsRunning(selectorName, args);
@@ -2710,7 +2766,6 @@ const coreDataStore = {
 /* harmony default export */ const store = (coreDataStore);
 
 ;// ./packages/data/build-module/utils/emitter.js
-/* wp:polyfill */
 /**
  * Create an event emitter.
  *
@@ -2754,7 +2809,6 @@ function createEmitter() {
 }
 
 ;// ./packages/data/build-module/registry.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -2804,7 +2858,7 @@ function getStoreName(storeNameOrDescriptor) {
  * configurations.
  *
  * @param {Object}  storeConfigs Initial store configurations.
- * @param {Object?} parent       Parent registry.
+ * @param {?Object} parent       Parent registry.
  *
  * @return {WPDataRegistry} Data registry.
  */
@@ -3590,7 +3644,6 @@ function useAsyncMode() {
 }
 
 ;// ./packages/data/build-module/components/use-select/index.js
-/* wp:polyfill */
 /**
  * WordPress dependencies
  */
@@ -3604,6 +3657,15 @@ function useAsyncMode() {
 
 
 const renderQueue = (0,external_wp_priorityQueue_namespaceObject.createQueue)();
+function warnOnUnstableReference(a, b) {
+  if (!a || !b) {
+    return;
+  }
+  const keys = typeof a === 'object' && typeof b === 'object' ? Object.keys(a).filter(k => a[k] !== b[k]) : [];
+
+  // eslint-disable-next-line no-console
+  console.warn('The `useSelect` hook returns different values when called with the same state and parameters.\n' + 'This can lead to unnecessary re-renders and performance issues if not fixed.\n\n' + 'Non-equal value keys: %s\n\n', keys.join(', '));
+}
 
 /**
  * @typedef {import('../../types').StoreDescriptor<C>} StoreDescriptor
