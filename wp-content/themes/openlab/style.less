@@ -249,7 +249,7 @@ blockquote {
 
 .openlab-navbar {
 	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-	position: relative;
+	position: fixed;
 	justify-content: space-between;
 	z-index: 1;
 	align-items: center;
@@ -261,6 +261,7 @@ blockquote {
 	overflow: visible;
 	z-index: 1000;
 	padding: 0 42px 0 32px;
+	width: 100%;
 
 	@media (max-width: @screen-xs-max){
 		height: @navbar-height-mobile;
@@ -403,6 +404,11 @@ blockquote {
 	}
 }
 
+.page-table {
+	padding-top: calc( @navbar-height + 24px );
+	padding-bottom: 48px; /* Space for the footer */
+}
+
 button.has-unread-upper-dot .icon-default {
 	position: relative;
 
@@ -475,13 +481,14 @@ svg.navbar-icon {
 	background: #fff;
 	border-left: 5px solid @darkTeal;
 	font-size: 18px;
-	position: absolute;
+	position: fixed;
 	right: 0;
 	top: @navbar-height;
-	height: 100%;
+	height: calc( 100% - @navbar-height );
 	width: 356px;
 	transform: translateX(100%);
 	transition: transform 0.3s ease-in-out;
+	overflow-y: scroll;
 	z-index: 500;
 
 	@media (max-width: @screen-xs-max) {

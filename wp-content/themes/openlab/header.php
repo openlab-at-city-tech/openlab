@@ -16,13 +16,13 @@
     </head>
 
     <body <?php body_class(); ?>>
+		<?php get_template_part( 'parts/navbar/navbar' ); ?>
 
         <?php echo openlab_primary_skip_link(); ?>
 
         <div class="page-table">
 
         <div class="page-table-row expanded">
-			<?php get_template_part( 'parts/navbar/navbar' ); ?>
 
             <div class="container-fluid">
                 <div id="header" class="row">
