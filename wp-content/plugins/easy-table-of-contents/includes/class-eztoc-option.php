@@ -915,6 +915,13 @@ text
 							'type' => 'checkbox',
 							'default' => false,
 						),
+						'show-toc-toolbar-classic' => array(
+							'id' => 'show-toc-toolbar-classic',
+							'name' => esc_html__( 'Shortcode Button in TinyMCE', 'easy-table-of-contents' ),
+							'desc' => esc_html__( 'This will display the TOC shortcode button in toolbar of classic editor.', 'easy-table-of-contents' ),
+							'type' => 'checkbox',
+							'default' => true,
+						),
 					)
 				),
                 'shortcode' => apply_filters(
@@ -1548,7 +1555,7 @@ text
 					'ez_toc_settings_import_export', array(
 						'delete-data-on-uninstall' => array(
 							'id' 		=> 'delete-data-on-uninstall',
-							'name' 		=> esc_html__( 'Delete data on uninstall', 'easy-table-of-contents' ),
+							'name' 		=> esc_html__( 'Delete Data on Uninstall', 'easy-table-of-contents' ),
 							'desc' 		=> 'This will remove all of its data when the plugin is deleted.',
 							'type' 		=> 'checkbox',
 							'default' 	=> false,
@@ -1772,6 +1779,7 @@ text
 				'generate_toc_link_ids'               => false,
 				'enable_memory_fix'					  => false,
 				'delete-data-on-uninstall'			  => false,
+				'show-toc-toolbar-classic'            => true,
 			);
 
 			return apply_filters( 'ez_toc_get_default_options', $defaults );

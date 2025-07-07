@@ -3,7 +3,7 @@
  * Plugin Name: Easy Table of Contents
  * Plugin URI: https://tocwp.com/
  * Description: Adds a user friendly and fully automatic way to create and display a table of contents generated from the page content.
- * Version: 2.0.73
+ * Version: 2.0.75
  * Author: Magazine3
  * Author URI: https://tocwp.com/
  * Text Domain: easy-table-of-contents
@@ -28,7 +28,7 @@
  * @package  Easy Table of Contents
  * @category Plugin
  * @author   Magazine3
- * @version  2.0.73
+ * @version  2.0.75
  */
 
 use Easy_Plugins\Table_Of_Contents\Debug;
@@ -52,7 +52,7 @@ if ( ! class_exists( 'ezTOC' ) ) {
 		 * @since 1.0
 		 * @var string
 		 */
-		const VERSION = '2.0.73';
+		const VERSION = '2.0.75';
 
 		/**
 		 * Stores the instance of this class.
@@ -824,8 +824,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 				$css .= 'div#ez-toc-container .ez-toc-title {font-size: ' . esc_attr( ezTOC_Option::get( 'title_font_size', 120 ) ) . esc_attr( ezTOC_Option::get( 'title_font_size_units', '%' ) ) . ';}';
 				$css .= 'div#ez-toc-container .ez-toc-title {font-weight: ' . esc_attr( ezTOC_Option::get( 'title_font_weight', 500 ) ) . ';}';
-				$css .= 'div#ez-toc-container ul li {font-size: ' . esc_attr(ezTOC_Option::get( 'font_size', 95 )) . esc_attr(ezTOC_Option::get( 'font_size_units', '%' )) . ';}';
-				$css .= 'div#ez-toc-container ul li {font-weight: ' . esc_attr( ezTOC_Option::get( 'font_weight', 500 ) ) . ';}';
+				$css .= 'div#ez-toc-container ul li , div#ez-toc-container ul li a {font-size: ' . esc_attr(ezTOC_Option::get( 'font_size', 95 )) . esc_attr(ezTOC_Option::get( 'font_size_units', '%' )) . ';}';
+				$css .= 'div#ez-toc-container ul li , div#ez-toc-container ul li a {font-weight: ' . esc_attr( ezTOC_Option::get( 'font_weight', 500 ) ) . ';}';
 				$css .= 'div#ez-toc-container nav ul ul li {font-size: ' . esc_attr( ezTOC_Option::get( 'child_font_size', 90 ) . esc_attr(ezTOC_Option::get( 'child_font_size_units', '%' ) )) . ';}';
 
 				if ( ezTOC_Option::get( 'theme' ) === 'custom' || ezTOC_Option::get( 'width' ) != 'auto' ) {
@@ -1403,7 +1403,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
                     'ez_toc_widget_sticky_after' => '',
                     'ez_toc_widget_sticky_after_widget' => '',
                     'ez_toc_widget_sticky_after_widget_container' => '',
-					'show_toggle'=> 'true'
+					'show_toggle'=> 'true',
+					'device_target'=> ''
                 ), $atts ) );
 
                 $widget_name = esc_html( 'ezTOC_WidgetSticky' );
@@ -1429,7 +1430,8 @@ if ( ! class_exists( 'ezTOC' ) ) {
 					'sidebar_sticky_size_unit' => ( ! empty ( $text_font_size_unit ) ) ? $text_font_size_unit : '%',
 					'sidebar_sticky_weight' => ( ! empty ( $text_font_weight ) ) ? $text_font_weight : '400',
 					'sidebar_sticky_color' => ( ! empty ( $text_font_color ) ) ? $text_font_color : '',
-					'show_toggle' => ( ! empty ( $show_toggle ) ) ? $show_toggle : ''
+					'show_toggle' => ( ! empty ( $show_toggle ) ) ? $show_toggle : '',
+					'device_target' => ( ! empty ( $device_target ) ) ? $device_target : ''
                 );
                 
                 if ( !is_a( $wp_widget_factory->widgets[ $widget_name ], 'WP_Widget' ) ):
@@ -1698,7 +1700,9 @@ if ( ! class_exists( 'ezTOC' ) ) {
 
 			Debug::log( 'post_eligible', 'Post eligible.', $isEligible );
 			$return_only_an = false; 
-			if(!$isEligible && (self::is_sidebar_hastoc() || is_active_widget( false, false, 'ezw_tco' ) || is_active_widget( false, false, 'ez_toc_widget_sticky' ) || ezTOC_Option::get('sticky-toggle') )){
+			$post_type = get_post_type( $ez_toc_current_post_id );
+			$sticky_enabled_on_post = in_array( $post_type, ezTOC_Option::get( 'sticky-post-types', array() ), true );
+			if(!$isEligible && (self::is_sidebar_hastoc() || is_active_widget( false, false, 'ezw_tco' ) || is_active_widget( false, false, 'ez_toc_widget_sticky' ) || ( ezTOC_Option::get('sticky-toggle') && $sticky_enabled_on_post ) )){
 				$isEligible = true;
 				$return_only_an = true;
 			}
@@ -1994,9 +1998,15 @@ if ( ! class_exists( 'ezTOC' ) ) {
 			   
 		
            if ( 'true' == get_user_option( 'rich_editing' ) ) {
-               add_filter( 'mce_external_plugins', array( __CLASS__, 'toc_add_tinymce_plugin'));
-               add_filter( 'mce_buttons', array( __CLASS__, 'toc_register_mce_button' ));
+			   $show_mce_button = true;
+			   if ( ! ezTOC_Option::get( 'show-toc-toolbar-classic', true ) ) {
+				   $show_mce_button = false;
+			   }
+			   if ( $show_mce_button ) {			
+				add_filter( 'mce_external_plugins', array( __CLASS__, 'toc_add_tinymce_plugin'));
+				add_filter( 'mce_buttons', array( __CLASS__, 'toc_register_mce_button' ));
                }
+			}
 			
 		}
 		
