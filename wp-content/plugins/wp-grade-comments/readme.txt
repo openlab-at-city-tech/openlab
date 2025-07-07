@@ -2,8 +2,8 @@
 Contributors: boonebgorges
 Tags: comments, grade, course, privacy
 Requires at least: 4.4
-Tested up to: 6.2
-Stable tag: 1.5.0
+Tested up to: 6.8
+Stable tag: 1.6.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,10 @@ This plugin was developed for the [https://openlab.citytech.cuny.edu](City Tech 
 3. Grades are visible on Dashboard > Posts.
 
 == Changelog ==
+
+= 1.6.0 =
+* Improved theme support, by modifying the way that the plugin's fields are appended to the comment form.
+* Ensure that the client-side initialization of form elements takes place late enough in the load process for compatibility with block themes.
 
 = 1.5.0 =
 * Allow post authors to post private comments.
