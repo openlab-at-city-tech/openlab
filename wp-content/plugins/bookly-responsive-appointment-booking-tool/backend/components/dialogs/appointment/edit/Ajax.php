@@ -387,7 +387,7 @@ class Ajax extends Lib\Base\Ajax
         $repeat = json_decode( self::parameter( 'repeat', '[]' ), true );
         $schedule = self::parameter( 'schedule', array() );
         $reschedule_type = self::parameter( 'reschedule_type', 'current' );
-        $customers = json_decode( self::parameter( 'customers', '[]' ), true );
+        $customers = self::parameter( 'customers', array() );
         $notification = self::parameter( 'notification', false );
         $internal_note = self::parameter( 'internal_note' );
         $created_from = self::parameter( 'created_from' );
@@ -426,7 +426,7 @@ class Ajax extends Lib\Base\Ajax
             (int) self::parameter( 'staff_id' ),
             (int) self::parameter( 'service_id' ),
             (int) self::parameter( 'location_id' ),
-            json_decode( self::parameter( 'customers', '[]' ), true )
+            self::parameter( 'customers', array() )
         );
 
         wp_send_json( $result );

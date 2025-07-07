@@ -8,7 +8,7 @@ abstract class ShortCode extends Component
     /** @var string */
     public static $code;
     /** @var array */
-    protected static $print_only = array( 'bookly-search-form', 'bookly-staff-form', 'bookly-services-form' );
+    protected static $print_only = array( 'bookly-search-form', 'bookly-staff-form', 'bookly-services-form', 'bookly-tags-form' );
 
     /**
      * @return void
@@ -19,7 +19,7 @@ abstract class ShortCode extends Component
         /** @var ShortCode $class */
         $class = get_called_class();
         // Register short code.
-        add_shortcode( $code, function ( $attributes ) use ( $class, $code ) {
+        add_shortcode( $code, function( $attributes ) use ( $class, $code ) {
             $key = 'assets-' . $code;
             if ( ! $class::hasInCache( $key . '-styles' ) ) {
                 $class::linkStyles();
@@ -34,13 +34,13 @@ abstract class ShortCode extends Component
         } );
 
         // Assets.
-        add_action( 'wp_enqueue_scripts', function () use ( $class ) {
+        add_action( 'wp_enqueue_scripts', function() use ( $class ) {
             if ( ShortCode::needToIncludeAsset( $class, 'styles' ) ) {
                 $class::linkStyles();
             }
         } );
 
-        add_action( 'wp_enqueue_scripts', function () use ( $class ) {
+        add_action( 'wp_enqueue_scripts', function() use ( $class ) {
             if ( ShortCode::needToIncludeAsset( $class, 'scripts' ) ) {
                 $class::linkScripts();
             }

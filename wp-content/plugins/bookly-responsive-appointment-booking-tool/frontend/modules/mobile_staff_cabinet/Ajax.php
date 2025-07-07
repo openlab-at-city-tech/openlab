@@ -59,6 +59,15 @@ class Ajax extends Lib\Base\Ajax
                     case 'services':
                         $response->services();
                         break;
+                    case 'notifications':
+                        $response->sendNotifications();
+                        break;
+                    case 'attachments':
+                        $response->deleteNotificationsAttachmentFiles();
+                        break;
+                    case 'settings':
+                        $response->settings();
+                        break;
                     default:
                         $response->setError( '400', 'UNKNOWN_REQUEST', 400 );
                 }

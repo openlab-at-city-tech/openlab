@@ -5,6 +5,7 @@ use Bookly\Backend\Components\Settings;
 use Bookly\Backend\Components\Ace;
 use Bookly\Backend\Modules\Settings\Codes;
 use Bookly\Lib\Entities\CustomerAppointment;
+
 ?>
 <form method="post" action="<?php echo esc_url( add_query_arg( 'tab', 'calendar' ) ) ?>">
     <div class="card-body">
@@ -12,7 +13,10 @@ use Bookly\Lib\Entities\CustomerAppointment;
         <?php Settings\Selects::renderSingle( 'bookly_cal_show_only_business_hours', __( 'Show only business hours in the calendar', 'bookly' ), __( 'If this setting is enabled then the visible hours in the calendar will be limited to the company\'s business hours', 'bookly' ) ) ?>
         <?php Settings\Selects::renderSingle( 'bookly_cal_show_only_staff_with_appointments', __( 'Show only staff members with appointments in Day view', 'bookly' ), __( 'If this setting is enabled then only staff members who have associated appointments will be displayed in the Day view', 'bookly' ) ) ?>
         <?php Settings\Selects::renderSingle( 'bookly_cal_show_new_appointments_badge', __( 'Show new appointments notifications', 'bookly' ), __( 'If enabled, you will see an indicator near \'Calendar\' for newly created appointments', 'bookly' ) ) ?>
-        <?php Settings\Selects::renderSingle( 'bookly_cal_month_view_style', __( 'Month view style', 'bookly' ), __( 'Select the style for displaying appointments in Month view', 'bookly' ), array( array( 'classic', __( 'Classic', 'bookly' ) ), array( 'minimalistic', __( 'Minimalistic', 'bookly' ) ) ) ) ?>
+        <?php Settings\Selects::renderSingle( 'bookly_cal_scrollable_calendar', __( 'Scrollable calendar', 'bookly' ), __( 'If enabled, the backend calendar will occupy part of the screen and remain scrollable. If disabled, it will take up more space and scroll along with the entire page.', 'bookly' ), array(), array( 'data-expand' => '1' ) ) ?>
+        <div class="border-left mt-3 ml-4 pl-3 bookly_cal_scrollable_calendar-expander"<?php if ( get_option( 'bookly_cal_scrollable_calendar', '1' ) !== '0' ) : ?> style="display:none;"<?php endif ?>>
+            <?php Settings\Selects::renderSingle( 'bookly_cal_month_view_style', __( 'Month view style', 'bookly' ), __( 'Select the style for displaying appointments in Month view', 'bookly' ), array( array( 'classic', __( 'Classic', 'bookly' ) ), array( 'minimalistic', __( 'Minimalistic', 'bookly' ) ) ) ) ?>
+        </div>
         <?php Settings\Selects::renderSingle( 'bookly_cal_coloring_mode', __( 'Coloring mode', 'bookly' ), __( 'If you select "By service", then the color will be taken from the service settings. If you select "By status", then the color will depend on the appointment status', 'bookly' ), array( array( 'service', __( 'By service', 'bookly' ) ), array( 'status', __( 'By status', 'bookly' ) ), array( 'staff', __( 'By staff', 'bookly' ) ) ) ) ?>
         <div class="border-left ml-4 pl-3 mb-3 bookly-js-colors-by bookly-js-colors-status form-row">
             <?php foreach ( $values['colors_status'] as $status => $color ): ?>

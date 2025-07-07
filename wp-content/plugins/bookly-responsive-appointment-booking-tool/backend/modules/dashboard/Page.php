@@ -20,6 +20,7 @@ class Page extends Lib\Base\Component
         wp_localize_script( 'bookly-dashboard.js', 'BooklyL10n', array(
             'datePicker' => Lib\Utils\DateTime::datePickerOptions(),
             'dateRange' => Lib\Utils\DateTime::dateRangeOptions( array( 'lastMonth' => __( 'Last month', 'bookly' ), ) ),
+            'based_on' => get_option( 'bookly_dashboard_based_on_appointment' ),
         ) );
 
         self::renderTemplate( 'index' );

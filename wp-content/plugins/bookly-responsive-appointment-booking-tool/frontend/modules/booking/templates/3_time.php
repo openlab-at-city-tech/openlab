@@ -18,7 +18,7 @@ use Bookly\Lib\Utils\Common;
             margin-right: 0;
         }
     </style>
-    <div class="bookly-input-wrap bookly-slot-calendar bookly-js-slot-calendar bookly-w-72 bookly-min-w-[200px]" style="margin-top:1.5px;">
+    <div class="bookly:input-wrap bookly-slot-calendar bookly-js-slot-calendar bookly:w-72 bookly:min-w-[200px]" style="margin-top:1.5px;">
         <input style="display: none" class="bookly-js-selected-date" type="text" value="" data-value="<?php echo esc_attr( $date ) ?>"/>
     </div>
 <?php endif ?>

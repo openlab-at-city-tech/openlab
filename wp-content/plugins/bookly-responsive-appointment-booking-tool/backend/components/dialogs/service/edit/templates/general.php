@@ -1,6 +1,9 @@
 <?php defined( 'ABSPATH' ) || exit; // Exit if accessed directly
 use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib\Entities\Service;
+use Bookly\Lib\Utils\Advertisement;
+use Bookly\Lib\Config;
+
 /**
  * @var array $service
  * @var array $categories_collection
@@ -11,6 +14,7 @@ use Bookly\Lib\Entities\Service;
 $service_id = $service['id'];
 ?>
 <div class="bookly-js-service-general-container">
+    <?php Advertisement::render( 'services-modal-general-tab', ! Config::proActive() ) ?>
     <input type="hidden" name="attachment_id" value="<?php echo esc_attr( $service['attachment_id'] ) ?>">
     <div class="row">
         <div class="col-md-auto">
@@ -55,12 +59,13 @@ $service_id = $service['id'];
                 <?php endforeach ?>
             </select>
         </div>
+        <?php Proxy\Pro::renderTags( $service ) ?>
     <?php endif ?>
     <?php if ( $service['type'] == Service::TYPE_SIMPLE ) : ?>
         <div class="form-group">
             <label><?php esc_html_e( 'Color', 'bookly' ) ?></label>
             <div class="bookly-color-picker">
-                <input name="color" value="<?php echo esc_attr( $service['color'] ) ?>" class="bookly-js-color-picker" data-last-color="<?php echo esc_attr( $service['color'] ) ?>" type="text" />
+                <input name="color" value="<?php echo esc_attr( $service['color'] ) ?>" class="bookly-js-color-picker" data-last-color="<?php echo esc_attr( $service['color'] ) ?>" type="text"/>
             </div>
         </div>
     <?php endif ?>

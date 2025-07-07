@@ -30,9 +30,8 @@ abstract class Gateway
     /** @var bool */
     protected $on_site = false;
 
-    public function __construct( Request $request = null )
+    public function __construct( Request $request )
     {
-        $request = $request ?: Request::getInstance();
         BooklyLib\Utils\Common::noCache();
         $this->request = $request;
     }

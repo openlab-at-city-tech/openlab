@@ -249,7 +249,6 @@ class Finder
         // Do search.
         $slots_count = 0;
         $available_slots_count = 0;
-        $do_break = false;
         $weekdays = $this->userData->getDays();
         $generator = $this->_generate();
         foreach ( $generator as $slots ) {
@@ -260,11 +259,6 @@ class Finder
                 break;
             }
             foreach ( $slots->all() as $slot ) {
-                if ( $do_break ) {
-                    // Flag there are more slots.
-                    $this->has_more_slots = true;
-                    break 2;
-                }
                 /** @var DatePoint $client_dp */
                 $client_dp = $slot->start()->toClientTz();
                 if ( $client_dp->lt( $this->client_start_dp ) ) {
@@ -287,8 +281,8 @@ class Finder
                         case 1:  // Immediate stop.
                             break 3;
                         case 2:  // Check whether there are more slots and then stop.
-                            $do_break = true;
-                            continue 2;
+                            $this->has_more_slots = true;
+                            break 3;
                     }
                 }
                 if ( ! $this->single_slot_per_day || ! isset ( $this->slots[ $group ] ) ) {
@@ -606,6 +600,7 @@ class Finder
             ->whereIn( 'h.staff_id', array_keys( $this->staff ) )
             ->whereRaw( 'h.repeat_event = 1 OR h.date >= %s', array( $this->start_dp->format( 'Y-m-d' ) ) )
             ->fetchArray();
+
         foreach ( $holidays as $holiday ) {
             $this->staff[ $holiday['staff_id'] ]->addHoliday( $holiday['date'] );
         }
@@ -675,6 +670,7 @@ class Finder
                     $padding_left,
                     $this->start_dp->modify( sprintf( '-%d days', $staff_preference_period_before ) )->format( 'Y-m-d' ),
                 ) )
+            ->whereLt( 'a.start_date', date_create()->modify( ( Lib\Config::getMaximumAvailableDaysForBooking() + 7 ) . ' days' )->format( 'Y-m-d' ) )
             ->groupBy( 'a.id' )
             ->fetchArray();
         foreach ( $bookings as $booking ) {

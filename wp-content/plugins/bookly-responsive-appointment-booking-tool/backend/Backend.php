@@ -14,30 +14,14 @@ abstract class Backend
 
         add_action( 'admin_menu', array( __CLASS__, 'addAdminMenu' ) );
 
-        add_action( 'all_admin_notices', function() use ( $bookly_page ) {
-            if ( ! Lib\Config::setupMode() ) {
-                if ( $bookly_page ) {
-                    // Subscribe notice.
-                    Components\Notices\Subscribe\Notice::render();
-                    // Lite rebranding notice.
-                    Components\Notices\Lite\Notice::render();
-                    // NPS notice.
-                    Components\Notices\Nps\Notice::render();
-                    // Collect stats notice.
-                    Components\Notices\Statistic\Notice::render();
-                    // Show Powered by Bookly notice.
-                    Components\Notices\PoweredBy\Notice::render();
-                    // Show SMS promotion notice.
-                    Components\Notices\Promotion\Notice::render();
-                    // Show renew auto-recharge notice.
-                    Components\Notices\RenewAutoRecharge\Notice::create( 'bookly-js-renew' )->render();
-                    // Show WPML re save notice.
-                    Components\Notices\Wpml\Notice::render();
-                }
-                // Let add-ons render admin notices.
-                Lib\Proxy\Shared::renderAdminNotices( $bookly_page );
-            }
-        }, 10, 0 );
+        if ( ! Lib\Config::setupMode() ) {
+            add_action( 'all_admin_notices', function() use ( $bookly_page ) {
+                Backend::renderNotices( $bookly_page );
+            } );
+            add_action( 'in_admin_header', function() use ( $bookly_page ) {
+                Backend::renderNotices( $bookly_page );
+            } );
+        }
 
         // for Site Health
         // Close current session, for fixing loopback request
@@ -65,6 +49,40 @@ abstract class Backend
                 Lib\Plugin::getVersion()
             );
         } );
+    }
+
+    /**
+     * @param bool $bookly_page
+     * @return void
+     */
+    public static function renderNotices( $bookly_page )
+    {
+        static $handled;
+
+        if ( ! $handled ) {
+            if ( $bookly_page ) {
+                // Subscribe notice.
+                Components\Notices\Subscribe\Notice::render();
+                // Lite rebranding notice.
+                Components\Notices\Lite\Notice::render();
+                // NPS notice.
+                Components\Notices\Nps\Notice::render();
+                // Collect stats notice.
+                Components\Notices\Statistic\Notice::render();
+                // Show Powered by Bookly notice.
+                Components\Notices\PoweredBy\Notice::render();
+                // Show SMS promotion notice.
+                Components\Notices\Promotion\Notice::render();
+                // Show renew auto-recharge notice.
+                Components\Notices\RenewAutoRecharge\Notice::create( 'bookly-js-renew' )->render();
+                // Show WPML re save notice.
+                Components\Notices\Wpml\Notice::render();
+            }
+            // Let add-ons render admin notices.
+            Lib\Proxy\Shared::renderAdminNotices( $bookly_page );
+        }
+
+        $handled = true;
     }
 
     /**
@@ -173,7 +191,7 @@ abstract class Backend
                 Modules\Shop\Page::addBooklyMenuItem();
 
                 if ( ! Lib\Config::proActive() ) {
-                    $submenu['bookly-menu'][] = array( esc_attr__( 'Get Bookly Pro', 'bookly' ) . ' <i class="fas fa-fw fa-certificate" style="color: #f4662f"></i>', 'read', Lib\Utils\Common::prepareUrlReferrers( 'https://codecanyon.net/item/bookly/7226091?ref=ladela', 'admin_menu' ), );
+                    $submenu['bookly-menu'][] = array( esc_attr__( 'Get Bookly Pro', 'bookly' ) . ' <i class="fas fa-fw fa-certificate" style="color: #f4662f"></i>', 'read', Lib\Utils\Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'admin_menu' ), );
                 }
 
                 // Bookly Cloud menu

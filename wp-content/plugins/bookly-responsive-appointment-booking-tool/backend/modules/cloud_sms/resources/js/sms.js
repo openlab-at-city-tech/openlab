@@ -501,7 +501,7 @@ jQuery(function ($) {
                         },
                         columns: mr.columns,
                         language: {
-                            zeroRecords: BooklyL10n.noResults,
+                            zeroRecords: BooklyL10n.zeroRecords,
                         },
                         row_with_checkbox: true
                     });

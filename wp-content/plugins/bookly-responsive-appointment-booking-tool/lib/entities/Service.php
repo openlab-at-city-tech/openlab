@@ -112,6 +112,8 @@ class Service extends Lib\Base\Entity
     /** @var string */
     protected $gateways;
     /** @var  string */
+    protected $tags;
+    /** @var  string */
     protected $visibility = Service::VISIBILITY_PUBLIC;
     /** @var  int */
     protected $position;
@@ -161,6 +163,7 @@ class Service extends Lib\Base\Entity
         'min_time_prior_booking' => array( 'format' => '%d' ),
         'min_time_prior_cancel' => array( 'format' => '%d' ),
         'gateways' => array( 'format' => '%s' ),
+        'tags' => array( 'format' => '%s' ),
         'visibility' => array( 'format' => '%s' ),
         'position' => array( 'format' => '%d', 'sequent' => true ),
     );
@@ -1409,6 +1412,30 @@ class Service extends Lib\Base\Entity
 
         return $this;
     }
+
+    /**
+     * Gets tags
+     *
+     * @return string
+     */
+    public function getTags()
+    {
+        return $this->tags;
+    }
+
+    /**
+     * Sets tags
+     *
+     * @param string $tags
+     * @return $this
+     */
+    public function setTags( $tags )
+    {
+        $this->tags = $tags;
+
+        return $this;
+    }
+
 
     /**
      * Gets visibility

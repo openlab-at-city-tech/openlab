@@ -194,6 +194,10 @@ class Appointment
                                 foreach ( $appointment->getCustomerAppointments( true ) as $ca ) {
                                     $ca_customer = $ca->getFields();
                                     $ca_customer['ca_id'] = $ca->getId();
+                                    // As a temporary solution for the timezone issue,
+                                    // the `timezone` value is being fetched via JavaScript
+                                    // and from the entity `time_zone`.
+                                    $ca_customer['timezone'] = $ca_customer['time_zone'];
                                     $ca_customer['extras'] = json_decode( $ca_customer['extras'], true );
                                     $ca_customer['custom_fields'] = json_decode( $ca_customer['custom_fields'], true );
                                     $ca_customers[] = $ca_customer;
@@ -256,7 +260,7 @@ class Appointment
                         ->setData( json_encode( array( 'all' => $list ) ) )
                         ->save();
 
-                    $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $list, 'changed_status' => array() );
+                    $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue->getInfo(), 'changed_status' => array() );
                 }
 
                 $response['data'] = array( 'resourceId' => $staff_id );  // make EventCalendar refetch events
@@ -393,7 +397,7 @@ class Appointment
                             ->setData( json_encode( array( 'all' => $list, 'changed_status' => $changed_status ) ) )
                             ->save();
 
-                        $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $list, 'changed_status' => $changed_status );
+                        $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue->getInfo(), 'changed_status' => $queue_changed_status->getInfo() );
                     }
 
                     self::_deleteSentReminders( $appointment, $modified );

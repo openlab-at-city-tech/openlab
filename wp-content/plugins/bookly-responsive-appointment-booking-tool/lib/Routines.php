@@ -267,9 +267,10 @@ abstract class Routines
 
     protected static function clearNotificationQueue()
     {
-        NotificationQueue::query()->delete()
-            ->whereRaw( 'created_at < DATE(NOW() - INTERVAL 2 DAY)', array() )
-            ->execute();
+        $list = NotificationQueue::query()->whereRaw( 'created_at < DATE(NOW() - INTERVAL 2 DAY)', array() )->find();
+        foreach ( $list as $notification ) {
+            $notification->delete();
+        }
     }
 
     protected static function clearSmsLog()

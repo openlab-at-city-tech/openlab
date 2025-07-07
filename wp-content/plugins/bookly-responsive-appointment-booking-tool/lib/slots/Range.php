@@ -36,12 +36,11 @@ class Range
      *
      * @param string $start  Format Y-m-d H:i[:s]
      * @param string $end    Format Y-m-d H:i[:s]
-     * @param RangeData $data
      * @return self
      */
-    public static function fromDates( $start, $end, RangeData $data = null )
+    public static function fromDates( $start, $end )
     {
-        return new static( DatePoint::fromStr( $start ), DatePoint::fromStr( $end ), $data );
+        return new static( DatePoint::fromStr( $start ), DatePoint::fromStr( $end ), null );
     }
 
     /**
@@ -49,12 +48,11 @@ class Range
      *
      * @param string $start  Format H:i[:s]
      * @param string $end    Format H:i[:s]
-     * @param RangeData $data
      * @return self
      */
-    public static function fromTimes( $start, $end, RangeData $data = null )
+    public static function fromTimes( $start, $end )
     {
-        return new static( TimePoint::fromStr( $start ), TimePoint::fromStr( $end ), $data );
+        return new static( TimePoint::fromStr( $start ), TimePoint::fromStr( $end ), null );
     }
 
     /**

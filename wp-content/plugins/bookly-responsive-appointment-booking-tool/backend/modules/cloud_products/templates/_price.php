@@ -41,8 +41,7 @@ $accept_pc = isset( $product['accept_pc'] ) && $product['accept_pc'];
         <?php endif ?>
     <?php endif ?>
     <?php if ( isset ( $product['next_billing_date'] ) ) : ?>
-        <div class="mt-2"><?php echo isset ( $product['cancel_on_renewal'] ) && ! $product['cancel_on_renewal'] ? esc_html__( 'Next billing date', 'bookly' ) : esc_html__( 'Deactivation date', 'bookly' ) ?>
-            : <?php echo Common::stripScripts( $product['next_billing_date'] ) ?></div>
+        <div class="mt-2"><?php echo isset ( $product['cancel_on_renewal'] ) && ! $product['cancel_on_renewal'] ? esc_html__( 'Next billing date', 'bookly' ) : esc_html__( 'Deactivation date', 'bookly' ) ?>: <?php echo Common::stripScripts( $product['next_billing_date'] ) ?></div>
     <?php endif ?>
     <?php if ( isset ( $product['usage'] ) ) : ?>
         <div class="small"><?php echo esc_html( $product['usage'] ) ?></div>

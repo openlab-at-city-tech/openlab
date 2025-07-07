@@ -41,6 +41,11 @@ class Ajax extends Page
                     case 'category_name':
                         $fields[] = 'c.name';
                         break;
+                    case 'tags':
+                        if ( Lib\Config::proActive() ) {
+                            $fields[] = 's.tags';
+                        }
+                        break;
                     case 'id':
                     case 'title':
                         $fields[] = 's.' . $column['data'];
@@ -82,6 +87,7 @@ class Ajax extends Page
                     ? sprintf( _n( '%d service', '%d services', $sub_services_count, 'bookly' ), $sub_services_count )
                     : Lib\Utils\DateTime::secondsToInterval( $service['duration'] ),
                 'online_meetings' => $service['online_meetings'],
+                'tags' => $service['tags'],
             );
         }
 

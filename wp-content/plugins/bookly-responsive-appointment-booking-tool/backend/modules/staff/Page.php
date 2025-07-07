@@ -41,8 +41,10 @@ class Page extends Lib\Base\Component
             'edit' => esc_attr__( 'Edit', 'bookly' ),
             'reorder' => esc_attr__( 'Reorder', 'bookly' ),
             'noResultFound' => esc_attr__( 'No result found', 'bookly' ),
-            'zeroRecords' => esc_attr__( 'No records.', 'bookly' ),
+            'zeroRecords' => __( 'No matching records found', 'bookly' ),
             'processing' => esc_attr__( 'Processing...', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'datatables' => $datatables,
         ) );
 

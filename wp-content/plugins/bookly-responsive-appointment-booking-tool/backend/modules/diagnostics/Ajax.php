@@ -4,6 +4,7 @@ namespace Bookly\Backend\Modules\Diagnostics;
 use Bookly\Backend\Modules\Diagnostics\Tests\Test;
 use Bookly\Backend\Modules\Diagnostics\Tools\Tool;
 use Bookly\Lib;
+use Bookly\Lib\Utils\Common;
 
 class Ajax extends Lib\Base\Ajax
 {
@@ -418,6 +419,273 @@ class Ajax extends Lib\Base\Ajax
     public static function setLogsExpire()
     {
         update_option( 'bookly_logs_expire', self::parameter( 'expire', 30 ) );
+
+        wp_send_json_success();
+    }
+
+    public static function importAppointments()
+    {
+        global $wpdb;
+
+        $name = $_FILES['files']['name'][0];
+        $parts = explode( '.', $name );
+        $extension = end( $parts );
+        $fs = Lib\Utils\Common::getFilesystem();
+        if ( ! in_array( strtolower( $extension ), array( 'csv' ), false ) ) {
+            $fs->delete( $_FILES['files']['tmp_name'][0], false, 'f' );
+            wp_send_json_error( array( 'error' => Lib\Utils\Common::getTranslatedOption( 'bookly_l10n_incorrect_file_type' ) ) );
+        }
+        $config = json_decode( self::parameter( 'config', '[]' ), true );
+        $durations = json_decode( self::parameter( 'durations', '[]' ), true );
+        $statuses = json_decode( self::parameter( 'statuses', '[]' ), true );
+        $prices = json_decode( self::parameter( 'prices', '[]' ), true );
+
+        $author_id = get_current_user_id();
+        $author = $author_id ? ( trim( get_user_meta( $author_id, 'first_name', true ) . ' ' . get_user_meta( $author_id, 'last_name', true ) ) ?: get_user_meta( $author_id, 'nickname', true ) ) : '';
+
+        $rollback_data = array(
+            'date' => current_time( 'mysql' ),
+            'staff' => array(),
+            'services' => array(),
+            'customers' => array(),
+            'appointments' => array(),
+            'orders' => array(),
+            'payments' => array()
+        );
+
+        @ini_set( 'auto_detect_line_endings', true );
+        if ( $fs->exists( $_FILES['files']['tmp_name'][0] ) ) {
+            $rows = $fs->get_contents_array( $_FILES['files']['tmp_name'][0] );
+            if ( $rows ) {
+                $wpdb->insert( $wpdb->prefix . 'bookly_log', array(
+                    'action' => 'debug',
+                    'target' => 'bookly-import',
+                    'author' => $author,
+                    'details' => 'Start',
+                    'comment' => 'Import from ' . $name,
+                    'ref' => $_SERVER['REMOTE_ADDR'],
+                    'created_at' => current_time( 'mysql' ),
+                ) );
+
+                $bookly_statuses = Lib\Entities\CustomerAppointment::getStatuses();
+                foreach ( $rows as $row_number => $row ) {
+                    $line = array_map( 'trim', str_getcsv( $row, $config['delimiter'], '"', "\\" ) );
+
+                    // Start Date
+                    if ( ! $start_date = strtotime( $line[ $config['start_date_column'] ] ) ) {
+                        continue;
+                    }
+                    // End Date/Duration
+                    if ( $config['end_date_column'] !== '-1' ) {
+                        if ( $end_date = strtotime( $line[ $config['end_date_column'] ] ) ) {
+                            // End Date
+                            $duration = $end_date - $start_date;
+                        } else {
+                            // Duration
+                            $duration = isset( $durations[ $line[ $config['end_date_column'] ] ] ) && $durations[ $line[ $config['end_date_column'] ] ] ? $durations[ $line[ $config['end_date_column'] ] ] * 60 : Lib\Config::getTimeSlotLength();
+                        }
+                    } else {
+                        $duration = $config['duration_default'] ? $config['duration_default'] * 60 : Lib\Config::getTimeSlotLength();
+                    }
+
+                    // Staff
+                    $staff = new Lib\Entities\Staff();
+                    $staff_name = $config['staff_name_column'] !== '-1' ? $line[ $config['staff_name_column'] ] : $config['staff_name_default'];
+                    if ( ! $staff->loadBy( array( 'full_name' => $staff_name ) ) ) {
+                        $staff
+                            ->setFullName( $staff_name )
+                            ->save();
+                        $rollback_data['staff'][] = $staff->getId();
+                    }
+
+                    // Price
+                    $price = number_format( floatval( preg_replace( '/[^\d\.]+/', '', $config['price_column'] !== '-1' ? ( isset( $prices[ $line[ $config['price_column'] ] ] ) ? $prices[ $line[ $config['price_column'] ] ] : $line[ $config['price_column'] ] ) : $config['price_default'] ) ), 2, '.', '' );
+
+                    // Service
+                    $service = new Lib\Entities\Service();
+                    $service_name = $config['service_name_column'] !== '-1' ? $line[ $config['service_name_column'] ] : $config['service_name_default'];
+                    if ( ! $service->loadBy( array( 'title' => $service_name, 'duration' => $duration ) ) ) {
+                        $service
+                            ->setTitle( $service_name )
+                            ->setPrice( $price )
+                            ->setDuration( $duration )
+                            ->save();
+                        $rollback_data['services'][] = $service->getId();
+                    }
+                    // StaffService
+                    $staff_service = new Lib\Entities\StaffService();
+                    if ( ! $staff_service->loadBy( array( 'staff_id' => $staff->getId(), 'service_id' => $service->getId() ) ) ) {
+                        $staff_service
+                            ->setStaffId( $staff->getId() )
+                            ->setServiceId( $service->getId() )
+                            ->setPrice( $price )
+                            ->save();
+                    }
+                    // Customer
+                    $customer = new Lib\Entities\Customer();
+                    $customer_data = array(
+                        'full_name' => $config['client_name_column'] !== '-1' ? $line[ $config['client_name_column'] ] : $config['client_name_default'],
+                    );
+                    if ( $config['client_email_column'] !== '' ) {
+                        $customer_data['email'] = $config['client_email_column'] !== '-1' ? $line[ $config['client_email_column'] ] : $config['client_email_default'];
+                    }
+                    if ( $config['client_phone_column'] !== '' ) {
+                        $customer_data['phone'] = $config['client_phone_column'] !== '-1' ? $line[ $config['client_phone_column'] ] : $config['client_phone_default'];
+                    }
+                    if ( ! $customer->loadBy( $customer_data ) ) {
+                        $customer
+                            ->setFullName( $customer_data['full_name'] )
+                            ->setEmail( isset( $customer_data['email'] ) ? $customer_data['email'] : '' )
+                            ->setPhone( isset( $customer_data['phone'] ) ? $customer_data['phone'] : '' )
+                            ->save();
+                        $rollback_data['customers'][] = $customer->getId();
+                    }
+                    //Appointment
+                    $appointment = new Lib\Entities\Appointment();
+                    $appointment
+                        ->setStaffId( $staff->getId() )
+                        ->setServiceId( $service->getId() )
+                        ->setCreatedFrom( 'import' )
+                        ->setStartDate( date( 'Y-m-d H:i:s', $start_date ) )
+                        ->setEndDate( date( 'Y-m-d H:i:s', $start_date + $duration ) )
+                        ->save();
+                    $rollback_data['appointments'][] = $appointment->getId();
+                    // Status
+                    if ( $config['status_column'] !== '-1' ) {
+                        $_status = $line[ $config['status_column'] ];
+                        $status = isset( $statuses[ $_status ] ) && in_array( $statuses[ $_status ], $bookly_statuses ) ? $statuses[ $_status ] : Lib\Config::getDefaultAppointmentStatus();
+                    } else {
+                        $status = $config['status_default'] ?: Lib\Config::getDefaultAppointmentStatus();
+                    }
+
+                    // Order
+                    $order = new Lib\Entities\Order();
+                    $order
+                        ->setToken( Common::generateToken( get_class( $order ), 'token' ) )
+                        ->save();
+                    $rollback_data['orders'][] = $order->getId();
+
+                    // Customer appointment
+                    $ca = new Lib\Entities\CustomerAppointment();
+                    $ca
+                        ->setAppointmentId( $appointment->getId() )
+                        ->setCustomerId( $customer->getId() )
+                        ->setStatus( $status )
+                        ->setCreatedAt( current_time( 'mysql' ) )
+                        ->setOrderId( $order->getId() )
+                        ->save();
+
+                    // Payment
+                    if ( $price > 0 ) {
+                        $payment = new Lib\Entities\Payment();
+                        $payment
+                            ->setType( Lib\Entities\Payment::TYPE_LOCAL )
+                            ->setOrderId( $order->getId() )
+                            ->setTotal( $price )
+                            ->setPaid( $price )
+                            ->setTax( 0 )
+                            ->save();
+                        $rollback_data['payments'][] = $payment->getId();
+
+                        $app_details = new Lib\DataHolders\Details\Appointment();
+                        $app_details
+                            ->setCa( $ca )
+                            ->setData( array(
+                                'service_price' => $price,
+                                'service_tax' => 0,
+                            ) )
+                            ->setPrice( $price );
+
+                        $details = $payment->getDetailsData();
+                        $details
+                            ->setCustomer( $customer )
+                            ->addDetails( $app_details )
+                            ->setData( array(
+                                'from_backend' => true
+                            ) );
+
+                        $ca->setPaymentId( $payment->getId() )->save();
+                        $payment->save();
+                    }
+                }
+            }
+        } else {
+            wp_send_json_error();
+        }
+
+        $wpdb->insert( $wpdb->prefix . 'bookly_log', array(
+            'action' => 'debug',
+            'target' => 'bookly-import',
+            'author' => $author,
+            'details' => serialize( $rollback_data ),
+            'comment' => 'Import from ' . $name,
+            'ref' => $_SERVER['REMOTE_ADDR'],
+            'created_at' => current_time( 'mysql' ),
+        ) );
+
+        foreach ( $rollback_data as $key => $value ) {
+            if ( is_array( $rollback_data[ $key ] ) && count( $rollback_data[ $key ] ) > 0 ) {
+                update_option( 'bookly_import_rollback_data', $rollback_data );
+                break;
+            }
+        }
+
+        wp_send_json_success( array(
+            'date' => Lib\Utils\DateTime::formatDateTime( $rollback_data['date'] ),
+            'staff' => count( $rollback_data['staff'] ),
+            'services' => count( $rollback_data['services'] ),
+            'customers' => count( $rollback_data['customers'] ),
+            'appointments' => count( $rollback_data['appointments'] ),
+        ) );
+    }
+
+    public static function rollbackAppointments()
+    {
+        global $wpdb;
+
+        $rollback_data = get_option( 'bookly_import_rollback_data' );
+
+        if ( $rollback_data ) {
+            $author_id = get_current_user_id();
+            $author = $author_id ? ( trim( get_user_meta( $author_id, 'first_name', true ) . ' ' . get_user_meta( $author_id, 'last_name', true ) ) ?: get_user_meta( $author_id, 'nickname', true ) ) : '';
+
+            $wpdb->insert( $wpdb->prefix . 'bookly_log', array(
+                'action' => 'debug',
+                'target' => 'bookly-import',
+                'author' => $author,
+                'details' => json_encode( $rollback_data ),
+                'comment' => 'Rollback',
+                'ref' => $_SERVER['REMOTE_ADDR'],
+                'created_at' => current_time( 'mysql' ),
+            ) );
+
+            if ( $appointments = $rollback_data['appointments'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Appointment::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $appointments ), '%s' ) ) ), $appointments ) );
+            }
+            if ( $staff = $rollback_data['staff'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Staff::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $staff ), '%s' ) ) ), $staff ) );
+            }
+            if ( $customers = $rollback_data['customers'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Customer::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $customers ), '%s' ) ) ), $customers ) );
+            }
+            if ( $services = $rollback_data['services'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Service::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $services ), '%s' ) ) ), $services ) );
+            }
+            if ( $payments = $rollback_data['payments'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Payment::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $payments ), '%s' ) ) ), $payments ) );
+            }
+            if ( $orders = $rollback_data['orders'] ) {
+                $wpdb->query( $wpdb->prepare( sprintf( 'DELETE FROM `' . Lib\Entities\Order::getTableName() . '` WHERE id IN (%s)',
+                    implode( ', ', array_fill( 0, count( $orders ), '%s' ) ) ), $orders ) );
+            }
+
+            delete_option( 'bookly_import_rollback_data' );
+        }
 
         wp_send_json_success();
     }

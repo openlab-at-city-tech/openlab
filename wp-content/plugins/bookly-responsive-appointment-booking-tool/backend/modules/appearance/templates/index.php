@@ -7,6 +7,7 @@ use Bookly\Backend\Components\Controls\Inputs;
 use Bookly\Backend\Components;
 use Bookly\Backend\Modules\Appearance\Proxy;
 use Bookly\Backend\Modules\Appearance;
+use Bookly\Lib\Utils\Advertisement;
 
 ?>
 <style type="text/css">
@@ -33,6 +34,8 @@ use Bookly\Backend\Modules\Appearance;
                 </div>
             </div>
         </div>
+    <?php else : ?>
+        <?php Advertisement::render( 'appearance-top-bar' ) ?>
     <?php endif ?>
     <div class="card mb-2">
         <div class="card-body">

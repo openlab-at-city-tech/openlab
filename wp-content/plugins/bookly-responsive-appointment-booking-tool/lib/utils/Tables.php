@@ -59,6 +59,7 @@ abstract class Tables
                     'customer_email' => esc_html__( 'Customer email', 'bookly' ),
                     'service_title' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_service' ) ),
                     'service_duration' => esc_html__( 'Duration', 'bookly' ),
+                    'service_price' => esc_html__( 'Price', 'bookly' ),
                     'status' => esc_html__( 'Status', 'bookly' ),
                     'payment' => esc_html__( 'Payment', 'bookly' ),
                     'notes' => esc_html( Common::getTranslatedOption( 'bookly_l10n_label_notes' ) ),
@@ -390,6 +391,7 @@ abstract class Tables
                     'staff_name' => 'staff.name',
                     'service_title' => 'service.title',
                     'service_duration' => 'service.duration',
+                    'service_price' => 'service.price',
                     'attachments' => 'attachment',
                     'online_meeting' => 'online_meeting_provider',
                 );
@@ -445,6 +447,7 @@ abstract class Tables
                 $columns = array(
                     'no' => false,
                     'internal_note' => false,
+                    'service_price' => false
                 );
                 break;
             case self::EMAIL_LOGS:

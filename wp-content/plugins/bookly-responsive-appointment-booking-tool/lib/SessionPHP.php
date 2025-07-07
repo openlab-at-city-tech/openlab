@@ -10,7 +10,9 @@ abstract class SessionPHP extends Session
             if ( get_option( 'bookly_gen_prevent_session_locking' ) ) {
                 self::writeClose();
                 // For PHP 7.2+ we need to re-implement session cookies to avoid errors and warnings
-                @ini_set( 'session.use_only_cookies', false );
+                if ( version_compare( PHP_VERSION, '8.4.0', '<' ) ) {
+                    @ini_set( 'session.use_only_cookies', false );
+                }
                 @ini_set( 'session.use_cookies', false );
                 @ini_set( 'session.use_trans_sid', false );
                 @ini_set( 'session.cache_limiter', null );

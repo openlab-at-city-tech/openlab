@@ -8,11 +8,11 @@ msgstr ""
 "Language: zh_TW\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 06:42+0000\n"
-"PO-Revision-Date: 2024-10-18 06:42+0000\n"
+"POT-Creation-Date: 2025-04-29 06:51+0000\n"
+"PO-Revision-Date: 2025-04-29 16:43+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Chinese (Taiwan)\n"
-"X-Loco-Version: 2.3.1; wp-6.6.2"
+"X-Loco-Version: 2.3.1; wp-6.7"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "您預約的發票＃{invoice_number}"
@@ -232,7 +232,7 @@ msgstr "使用說明"
 msgid ""
 "To setup %s integration, follow the instruction in <a href=\"%s\" "
 "target=\"_blank\">our documentation</a>"
-msgstr ""
+msgstr "要設定%s集成，請按照<a href=\"%s\" target=\"_blank\">我們文檔</a>中的指引"
 
 msgid "Application ID"
 msgstr "應用程式號"
@@ -1558,9 +1558,6 @@ msgstr "禁用更新服務"
 msgid "Disable price update"
 msgstr "禁用更新價錢"
 
-msgid "Hide create appointment button"
-msgstr "隱藏創建預約按鈕"
-
 msgid "Insert"
 msgstr "插入"
 
@@ -1647,6 +1644,12 @@ msgstr "選擇時間沒有預約。"
 
 msgid "Processing..."
 msgstr "處理..."
+
+msgid "No data available in table"
+msgstr "表中無資料可用"
+
+msgid "Loading..."
+msgstr "載入中…"
 
 msgid "No result found"
 msgstr "找不到結果"
@@ -1904,6 +1907,9 @@ msgstr "人數"
 msgid "Number of persons"
 msgstr "人數"
 
+msgid "Group Booking"
+msgstr "組別預約"
+
 msgid "Group bookings information format"
 msgstr "組別預約信息格式"
 
@@ -1916,9 +1922,6 @@ msgstr "[已訂/最大容量]"
 
 msgid "[Available left]"
 msgstr "[可用的剩餘]"
-
-msgid "Group Booking"
-msgstr "組別預約"
 
 msgid "Number of persons already in the list"
 msgstr "已在名單中的人數"
@@ -2007,6 +2010,9 @@ msgstr "顯示谷歌地圖字段"
 msgid "Google maps address"
 msgstr "Google地圖地址"
 
+msgid "Collaborative services"
+msgstr "協作服務"
+
 msgid "Do not allow to select a specific staff member"
 msgstr "不允許選擇某個員工"
 
@@ -2014,9 +2020,6 @@ msgid ""
 "If this option is enabled then customers won't be able to select a staff "
 "member for collaborative services in the first step of the booking form"
 msgstr "如果啟用此選項，那麼客戶將無法在預約表格的第一步中選擇提供協作服務的員工"
-
-msgid "Collaborative services"
-msgstr "協作服務"
 
 msgid "Collaborative"
 msgstr "協同合作"
@@ -2103,6 +2106,9 @@ msgstr "時區"
 
 msgid "Employee"
 msgstr "員工"
+
+msgid "WordPress password"
+msgstr "WordPress密碼"
 
 msgid "Profile"
 msgstr "簡介"
@@ -2251,7 +2257,7 @@ msgid "Invalid email."
 msgstr "無效的郵件地址。"
 
 msgid "Recharge your account with one of the standard amounts"
-msgstr ""
+msgstr "使用其中一個標準金額增值您的賬戶"
 
 msgid "Pending sender ID already exists."
 msgstr "待發件人ID已經存在。"
@@ -3179,6 +3185,17 @@ msgstr "無法將預約存進系統"
 msgid "%s has reached the limit of bookings for this service"
 msgstr "%s 已達到此服務的限制數量"
 
+#, php-format
+msgid ""
+"To get access to more <a href=\"%s\" target=\"_blank\">features</a>, "
+"lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly."
+msgstr ""
+"要獲取更多<a href=\"%s\" target=\"_blank\">功能</a>，終身免費更新和24小時客服支援，請升級至Bookly "
+"Pro版本。"
+
+msgid "Upgrade"
+msgstr "升級"
+
 msgid "No."
 msgstr "號"
 
@@ -3238,6 +3255,9 @@ msgstr "發件人ID"
 
 msgid "Cost"
 msgstr "成本"
+
+msgid "Resend"
+msgstr "重新發送"
 
 msgid "Template"
 msgstr "模板"
@@ -3495,8 +3515,8 @@ msgid ""
 "access"
 msgstr "您將刪除訪問令牌。請注意，令牌將被自動撤銷，因此與刪除令牌關聯的用戶將失去訪問權限"
 
-msgid "No records."
-msgstr "沒有記錄。"
+msgid "No matching records found"
+msgstr "沒有找到匹配記錄"
 
 msgid "Add service"
 msgstr "添加服務"
@@ -4019,6 +4039,15 @@ msgid ""
 "appointments"
 msgstr "如果啟用，將在“日曆”周圍看到新創建預約的標誌"
 
+msgid "Scrollable calendar"
+msgstr "可滾動日曆"
+
+msgid ""
+"If enabled, the backend calendar will occupy part of the screen and remain "
+"scrollable. If disabled, it will take up more space and scroll along with "
+"the entire page."
+msgstr "如啟用，則後端日曆將佔用熒幕的一部分並保持可滾動狀態。如禁用，則後端日曆將佔用更多空間並隨整個頁面滾動。"
+
 msgid "Month view style"
 msgstr "月視圖樣式"
 
@@ -4303,11 +4332,8 @@ msgstr "發件人ID發送請求。"
 msgid "Sender ID is reset to default."
 msgstr "發件人ID被重置為默認值。"
 
-msgid "No matching records found"
-msgstr ""
-
-msgid "No data available in table"
-msgstr ""
+msgid "No records."
+msgstr "沒有記錄。"
 
 msgid "enable"
 msgstr "啟用"
@@ -4592,14 +4618,176 @@ msgstr "成功"
 msgid "Warning"
 msgstr "警告"
 
+msgid "Import file"
+msgstr "導入文件"
+
+msgid "Service name"
+msgstr "服務名稱"
+
+msgid "Start date"
+msgstr "開始日期"
+
+msgid "End date / Duration"
+msgstr "結束日期/時長"
+
+msgid "Staff name"
+msgstr "工作人員名稱"
+
+msgid "Client name"
+msgstr "客戶名稱"
+
+msgid "Client email"
+msgstr "客戶電子郵箱地址"
+
+msgid "Client phone"
+msgstr "客戶電話號碼"
+
+msgid "Import"
+msgstr "導入"
+
+msgid "minutes"
+msgstr "分鐘"
+
+msgid "Empty value"
+msgstr "空值"
+
+msgid ""
+"By proceeding with the import process, the following actions will be "
+"performed:"
+msgstr "透過繼續進行導入流程，將執行如下操作："
+
+msgid ""
+"New staff members, services, customers, appointments and payments will be "
+"created based on the data in your CSV file."
+msgstr "新的工作人員、服務、客戶、預約和付款將根據您的CSV文件中的資料創建。"
+
+msgid ""
+"Services will be linked to staff members, and customers will be linked to "
+"their appointments."
+msgstr "服務將與工作人員相關聯，而客戶將與其預約相關聯。"
+
+msgid ""
+"If exact service duration data is unavailable, durations will be calculated "
+"based on the start and end times of appointments."
+msgstr "若沒有準確的服務時長資料，則根據預約的開始時間和結束時間來計算時長。"
+
+msgid ""
+"If a service, staff member, or customer already exists, the existing records "
+"will be used to avoid duplication."
+msgstr "若服務、工作人員或客戶已存在，則將使用現有的記錄來避免重複。"
+
+msgid ""
+"Instant notifications will not be sent, but all types of reminders will be "
+"sent."
+msgstr "即時通知將不會發送，但會發送所有類型的提醒。"
+
+msgid "Please note:"
+msgstr "請注意："
+
+msgid "Imported appointments will not be synced with external calendars."
+msgstr "導入的預約將不會與外部日曆同步。"
+
+msgid "You must fully understand the data you are importing and its impact."
+msgstr "您必須完全知悉正在導入的資料及其影響。"
+
+msgid ""
+"It is strongly recommended to back up your database before proceeding, as "
+"there will be no straightforward way to undo the changes made during the "
+"import."
+msgstr "強烈建議在繼續之前備份您的資料庫，因為沒有直接方法可以撤銷在導入過程中所做的更改。"
+
+msgid ""
+"If you're importing a large CSV file, make sure to check your server limits, "
+"as exceeding them may disrupt the import."
+msgstr "若要導入一個大型CSV文件，請確保您的服務器限制，因為超過限制可能會導致導入中斷。"
+
+msgid ""
+"If you still need to import a large file, you can split it into several "
+"parts and upload them one by one."
+msgstr "若您仍然需要導入一個大文件，您可以將其分成幾個部分，然後進行逐個上傳。"
+
+msgid "Choose CSV file to import"
+msgstr "選擇CSV文件來導入"
+
+#, php-format
+msgid ""
+"You can find full import guide in <a href=\"%s\" target=_blank>our "
+"documentation</a>."
+msgstr "您可以在<a href=\"%s\" target=_blank>我們文檔</a>中找到完整的導入指南。"
+
+msgid "I understand that I am proceeding with the import at my own risk."
+msgstr "我知悉我正在進行導入，風險由我自行承擔。"
+
+msgid "Proceed"
+msgstr "繼續"
+
+msgid ""
+"When importing data from a CSV file, map the columns in your file to the "
+"corresponding fields in Bookly."
+msgstr "從CSV文件導入資料時，將您文件中的列映射到Bookly中的相應字段。"
+
+msgid ""
+"Use the dropdown menus and input fields to specify which data from your CSV "
+"should be imported to each field."
+msgstr "使用下拉列表和輸入字段來指定應該將CSV中的哪些數據導入到每個字段中。"
+
+msgid "Set the corresponding duration in minutes."
+msgstr "設定相應時長（分鐘）。"
+
+msgid "Set the corresponding price in your currency."
+msgstr "設定相應價格（以您的貨幣）。"
+
+msgid ""
+"If the imported file does not contain a column for the status value, select "
+"Custom and set a default status for appointments."
+msgstr "若導入的文件不包含狀態值列，請選擇“自定義”並設定預約的默認狀態。"
+
+msgid "required"
+msgstr "必填"
+
+msgid "Something went wrong"
+msgstr "出錯了"
+
+msgid "You have a previously imported file detected."
+msgstr "檢測到一個您之前導入的文件。"
+
+msgid ""
+"If you encountered any issues during the import, you can roll back the "
+"import of this file."
+msgstr "若在導入過程中遇到任何問題，您可以回退該文件的導入。"
+
+msgid "Rollback"
+msgstr "回退"
+
+msgid "Import successful"
+msgstr "導入成功"
+
+msgid "Import results"
+msgstr "導入結果"
+
+msgid "Staff members imported"
+msgstr "導入的工作人員"
+
+msgid "Services imported"
+msgstr "導入的服務"
+
+msgid "Clients imported"
+msgstr "導入的客戶"
+
+msgid "Appointments imported"
+msgstr "導入的預約"
+
 msgid "End points"
 msgstr "終點"
 
 msgid "All actions"
 msgstr "所有操作"
 
-msgid "Clear logs"
-msgstr "清除日誌"
+msgid "Clear all logs"
+msgstr "清除所有日誌"
+
+msgid "Restore records"
+msgstr "恢復記錄"
 
 msgid "Keep logs"
 msgstr "保留日誌"
@@ -4778,6 +4966,9 @@ msgstr "新聞"
 
 msgid "More news"
 msgstr "更多新聞"
+
+msgid "Appointment at any time"
+msgstr "任何時間預約"
 
 msgid "No payments for selected period and criteria."
 msgstr "所選期間和條件下沒有付款。"
@@ -5079,6 +5270,12 @@ msgstr "立即獲得！"
 msgid ""
 "See the number of appointments and total revenue for the selected period"
 msgstr "查看選定期間的預約次數和總收入"
+
+msgid "Based on appointment date"
+msgstr "根據預約日期"
+
+msgid "Based on date of creation"
+msgstr "根據創建日期"
 
 msgid "End date of appointment"
 msgstr "預約完結日期"
@@ -5525,6 +5722,12 @@ msgstr "增加"
 msgid "Reset"
 msgstr "重置"
 
+msgid "Clone"
+msgstr "克隆"
+
+msgid "Add break"
+msgstr "添加休息"
+
 msgid "Notification settings"
 msgstr "通知設定"
 
@@ -5582,9 +5785,6 @@ msgstr "選擇預約狀態以發送通知。"
 msgid ""
 "Choose whether notification should be sent for specific services only or not."
 msgstr "選擇是否僅針對特定服務而發送通知。"
-
-msgid "days"
-msgstr "日期"
 
 msgid "before"
 msgstr "之前"
@@ -5997,7 +6197,7 @@ msgid "Column"
 msgstr "欄"
 
 msgid "Entries per page"
-msgstr ""
+msgstr "條目/每頁"
 
 msgid "Attach ICS file"
 msgstr "附加ICS文件"
@@ -6136,9 +6336,6 @@ msgstr "Google日曆整合"
 
 msgid "Advanced service and staff management"
 msgstr "高級服務和員工管理"
-
-msgid "Upgrade"
-msgstr "升級"
 
 #, php-format
 msgid ""
@@ -6339,9 +6536,6 @@ msgstr "記住我"
 
 msgid "Lost your password?"
 msgstr "忘記密碼？"
-
-msgid "Loading..."
-msgstr "載入中…"
 
 msgid "Powered by"
 msgstr "供應商"
@@ -6713,13 +6907,13 @@ msgid "Life Time"
 msgstr "終生"
 
 msgid "Days from the first booking"
-msgstr ""
+msgstr "天-首次預訂"
 
 msgid "Days from the creation"
-msgstr ""
+msgstr "天-已創建"
 
 msgid "Number of days"
-msgstr ""
+msgstr "天數"
 
 msgid "The period in days when the customer can use a package of services."
 msgstr "客戶可以使用服務包的天數。"
@@ -7216,8 +7410,11 @@ msgstr "用於顯示服務表單的自定義塊"
 msgid "A custom block for displaying staff form"
 msgstr "用於顯示員工表單的自定義塊"
 
+msgid "A custom block for displaying tags form"
+msgstr "用於顯示標籤表單的自定義塊"
+
 msgid "The calendar list is not available"
-msgstr ""
+msgstr "日曆列表不可用"
 
 msgid "no limit"
 msgstr "無限制"
@@ -7602,12 +7799,6 @@ msgid ""
 "bookings will be disabled."
 msgstr "如果您在{days}內沒有提供有效的購買代碼，您的預訂將被停用。"
 
-#, php-format
-msgid ""
-"To set up Zoom integration, follow the instructions in <a href=\"%s\" "
-"target=\"_blank\">our documentation</a>"
-msgstr "要設定Zoom集成，請按照<a href=\"%s\" target=\"_blank\">我們文檔</a>中的指引進行"
-
 msgid "Authentication"
 msgstr "身份驗證"
 
@@ -7805,6 +7996,14 @@ msgid ""
 "right service."
 msgstr "現代、快速、流暢的表單能讓您的客戶輕鬆找到正確的服務。"
 
+msgid "Tags form"
+msgstr "標簽表單"
+
+msgid ""
+"This form allows you to organize the structure and navigation based on tags "
+"assigned to services."
+msgstr "此表單允許您根據分配給服務的標籤來整理結構和導航。"
+
 msgid ""
 "Catalog view allows you to organize and display the services conveniently "
 "for your customers."
@@ -7853,6 +8052,9 @@ msgstr "處理後標題"
 msgid "Main color"
 msgstr "主要顏色"
 
+msgid "Hide form borders"
+msgstr "隱藏表單邊框"
+
 msgid "Show 'Book more' button"
 msgstr "顯示\"預定更多\"按鈕"
 
@@ -7885,6 +8087,9 @@ msgstr "隱藏分類步驟"
 
 msgid "Hide services step"
 msgstr "隱藏服務步驟"
+
+msgid "Hide tags step"
+msgstr "隱藏標籤步驟"
 
 msgid "Staff list"
 msgstr "員工列表"
@@ -7979,6 +8184,27 @@ msgstr "在員工姓名前顯示員工評級"
 
 msgid "Skip step"
 msgstr "跳過步驟"
+
+msgid "Initial view"
+msgstr "初始視圖"
+
+msgid "Form"
+msgstr "表單"
+
+msgid "Button title"
+msgstr "按鍵名稱"
+
+msgid "Add subsection"
+msgstr "添加子分區"
+
+msgid "Section title"
+msgstr "分區名稱"
+
+msgid "Allow skip"
+msgstr "允許跳過"
+
+msgid "Skip button title"
+msgstr "跳過按鍵名稱"
 
 msgid "Add new form"
 msgstr "添加新表單"
@@ -8141,9 +8367,6 @@ msgstr "此預約不存在。"
 msgid "Cancellation of this appointment is not allowed."
 msgstr "此預約不允許取消。"
 
-msgid "Import"
-msgstr "導入"
-
 msgid "Note"
 msgstr "註解"
 
@@ -8158,6 +8381,9 @@ msgstr "選擇文件"
 
 msgid "Date of birth"
 msgstr "出生日期"
+
+msgid "Skip first row of CSV file"
+msgstr "跳過CSV文件第一行"
 
 msgid "Analytics"
 msgstr "分析"
@@ -8640,9 +8866,6 @@ msgstr "您可以訪問軟件更新，包括功能的改進和重要的安全修
 
 msgid "Thank you for choosing Bookly Pro as your booking solution."
 msgstr "感謝選有Bookly Pro 作為您的預約解決方案。"
-
-msgid "Proceed"
-msgstr "繼續"
 
 msgid ""
 "Please contact your website administrator to verify your license by "
@@ -9239,6 +9462,9 @@ msgstr "通知員工從候補名單中設置預約的通知"
 msgid "Set appointment"
 msgstr "設置預約"
 
+msgid "Waiting List"
+msgstr "候補名單"
+
 msgid "Add customers to the waiting list despite the capacity value"
 msgstr "添加客戶到候補名單，不考慮容量值"
 
@@ -9267,9 +9493,6 @@ msgid ""
 "Set the URL of a page that is shown to clients when the setting of "
 "appointment from waiting list is not available anymore."
 msgstr "當從候補名單設置預約不再可用時，設置顯示給客戶的一個頁面的URL。"
-
-msgid "Waiting List"
-msgstr "候補名單"
 
 msgid "Show waiting list slots"
 msgstr "顯示候補名單"
@@ -9766,11 +9989,11 @@ msgstr "新折扣"
 msgid "Edit discount"
 msgstr "編輯折扣"
 
-msgid "Set maximum value for Quantity field."
-msgstr "設置數量字段的最大值。"
-
 msgid "Multiply Appointments"
 msgstr "乘以預約"
+
+msgid "Set maximum value for Quantity field."
+msgstr "設置數量字段的最大值。"
 
 msgid "Google Calendar event"
 msgstr "Google日曆活動"

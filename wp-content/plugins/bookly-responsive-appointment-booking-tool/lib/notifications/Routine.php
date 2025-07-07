@@ -614,4 +614,60 @@ abstract class Routine
         date_default_timezone_set( $original_timezone );
         // @codingStandardsIgnoreEnd
     }
+
+    /**
+     * Send notifications from queue
+     *
+     * @param array $notifications
+     * @param string $type
+     * @param string $queue_token
+     * @return void
+     */
+    public static function sendNotificationsAssociatedWithQueue( array $notifications, $type, $queue_token )
+    {
+        /** @var Lib\Entities\NotificationQueue $queue */
+        $queue = Lib\Entities\NotificationQueue::query()->where( 'token', $queue_token )->where( 'sent', 0 )->findOne();
+        if ( $queue ) {
+            $queue_data = json_decode( $queue->getData(), true );
+            if ( isset( $queue_data[ $type ] ) ) {
+                $cloud = Lib\Cloud\API::getInstance();
+                foreach ( $notifications as $queue_id ) {
+                    if ( isset( $queue_data[ $type ][ $queue_id ] ) ) {
+                        $notification = $queue_data[ $type ][ $queue_id ];
+                        $gateway = $notification['gateway'];
+                        if ( $gateway === 'sms' ) {
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_SMS_NOTIFICATIONS )->sendSms( $notification['address'], $notification['message'], $notification['impersonal'], $notification['type_id'] );
+                        } elseif ( $gateway === 'email' ) {
+                            Lib\Utils\Mail::send( $notification['address'], $notification['subject'], $notification['message'], $notification['headers'], isset( $notification['attachments'] ) ? $notification['attachments'] : array(), $notification['type_id'] );
+                        } elseif ( $gateway === 'voice' ) {
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_VOICE )->call( $notification['address'], $notification['message'], $notification['impersonal'] );
+                        } elseif ( $gateway === 'whatsapp' ) {
+                            $cloud->getProduct( Lib\Cloud\Account::PRODUCT_WHATSAPP )->send( $notification['address'], $notification['message'] );
+                        }
+                    }
+                }
+            }
+            self::deleteNotificationAttachmentFiles( $queue_data );
+
+            $queue->setSent( 1 )->save();
+        }
+    }
+
+    /**
+     * Delete attachment files
+     *
+     * @param array $queue_data
+     */
+    public static function deleteNotificationAttachmentFiles( $queue_data )
+    {
+        $fs = Lib\Utils\Common::getFilesystem();
+        foreach ( $queue_data as $data ) {
+            foreach ( $data as $message ) {
+                foreach ( $message['attachments'] as $file ) {
+                    $fs->delete( $file, false, 'f' );
+                }
+            }
+        }
+    }
+
 }

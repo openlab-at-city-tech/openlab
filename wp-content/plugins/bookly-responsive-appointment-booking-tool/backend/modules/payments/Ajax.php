@@ -41,7 +41,7 @@ class Ajax extends Lib\Base\Ajax
         }
         $payments = $query->fetchArray();
 
-        unset( $filter['created_at'] );
+        unset( $filter['created_at'], $filter['start_date'] );
 
         Lib\Utils\Tables::updateSettings( Lib\Utils\Tables::PAYMENTS, null, null, $filter );
 
@@ -118,10 +118,11 @@ class Ajax extends Lib\Base\Ajax
             ->groupBy( 'p.id' );
 
         // Filters.
-        list ( $start, $end ) = explode( ' - ', $filter['created_at'], 2 );
-        $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
-
-        $query->whereBetween( 'p.created_at', $start, $end );
+        if ( $filter['created_at'] != 'any' ) {
+            list ( $start, $end ) = explode( ' - ', $filter['created_at'], 2 );
+            $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
+            $query->whereBetween( 'p.created_at', $start, $end );
+        }
 
         if ( $filter['id'] != '' ) {
             $query->where( 'p.id', $filter['id'] );
@@ -145,6 +146,15 @@ class Ajax extends Lib\Base\Ajax
 
         if ( $filter['customer'] != '' ) {
             $query->where( 'ca.customer_id', $filter['customer'] );
+        }
+
+        if ( $filter['start_date'] === 'null' ) {
+            $query->where( 'a.start_date', null );
+        } else if ( $filter['start_date'] !== 'any' ) {
+            list ( $start, $end ) = explode( ' - ', $filter['start_date'], 2 );
+            $end = date( 'Y-m-d', strtotime( '+1 day', strtotime( $end ) ) );
+
+            $query->whereBetween( 'a.start_date', $start, $end );
         }
 
         return $query;

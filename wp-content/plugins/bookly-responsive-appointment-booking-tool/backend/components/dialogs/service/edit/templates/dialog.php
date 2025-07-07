@@ -2,6 +2,7 @@
 use Bookly\Backend\Components\Controls\Buttons;
 use Bookly\Backend\Components\Dialogs\Service\Edit\Proxy;
 use Bookly\Lib;
+
 ?>
 <div id="bookly-edit-service-modal" class="bookly-modal bookly-fade" tabindex=-1 role="dialog">
     <div class="modal-dialog modal-lg">
@@ -26,7 +27,14 @@ use Bookly\Lib;
                                     <span class="d-none d-lg-inline"><?php esc_html_e( 'Time', 'bookly' ) ?></span>
                                 </a>
                             </li>
-                            <?php Proxy\Pro::renderAdvancedTab() ?>
+                            <?php if ( Lib\Config::proActive() || Lib\Utils\Advertisement::isVisible( 'services-modal-advanced-tab' ) ) : ?>
+                                <li class="nav-item bookly-js-service bookly-js-service-simple bookly-js-service-collaborative bookly-js-service-compound">
+                                    <a id="bookly-services-advanced-tab" class="nav-link" href="#bookly-services-advanced" data-toggle="bookly-tab">
+                                        <i class="fas fa-fw fa-cogs mr-lg-1"></i>
+                                        <span class="d-none d-lg-inline"><?php esc_html_e( 'Advanced', 'bookly' ) ?></span>
+                                    </a>
+                                </li>
+                            <?php endif ?>
                             <?php Proxy\ServiceExtras::renderTab() ?>
                             <?php Proxy\ServiceSchedule::renderTab() ?>
                             <?php if ( Lib\Config::serviceScheduleActive() ): ?>

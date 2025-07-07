@@ -27,6 +27,8 @@ class Page extends Lib\Base\Component
             'are_you_sure' => __( 'Are you sure?', 'bookly' ),
             'zeroRecords' => __( 'No appointments for selected period.', 'bookly' ),
             'processing' => __( 'Processing...', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'loadingRecords' => __( 'Loading...', 'bookly' ),
             'edit' => __( 'Edit', 'bookly' ),
             'no_result_found' => __( 'No result found', 'bookly' ),
             'searching' => __( 'Searching', 'bookly' ),

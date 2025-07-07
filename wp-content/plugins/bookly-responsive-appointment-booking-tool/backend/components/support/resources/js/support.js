@@ -59,6 +59,7 @@ jQuery(function ($) {
                 });
             })
             .booklyPopover($.extend({
+                offset: '-111px 0',
                 placement: function (tip) {
                     $(tip)
                         .css({maxWidth:'none'})

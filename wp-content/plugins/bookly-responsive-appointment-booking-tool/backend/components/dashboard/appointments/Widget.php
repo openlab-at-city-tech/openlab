@@ -54,10 +54,11 @@ class Widget extends Lib\Base\Component
         $currencies = Lib\Utils\Price::getCurrencies();
 
         wp_localize_script( 'bookly-appointments-dashboard.js', 'BooklyAppointmentsWidgetL10n', array(
-            'csrfToken'    => Lib\Utils\Common::getCsrfToken(),
+            'csrfToken' => Lib\Utils\Common::getCsrfToken(),
             'appointments' => __( 'Appointments', 'bookly' ),
-            'revenue'      => __( 'Revenue', 'bookly' ),
-            'currency'     => $currencies[ Lib\Config::getCurrency() ]['symbol'],
+            'revenue' => __( 'Revenue', 'bookly' ),
+            'currency' => $currencies[ Lib\Config::getCurrency() ]['symbol'],
+            'based_on' => get_option( 'bookly_dashboard_based_on_appointment' ),
         ) );
     }
 }

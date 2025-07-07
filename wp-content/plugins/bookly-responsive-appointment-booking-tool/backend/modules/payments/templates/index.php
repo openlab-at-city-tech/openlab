@@ -23,11 +23,19 @@ use Bookly\Backend\Components\Controls;
                         <input class="form-control" type="text" id="bookly-filter-id" placeholder="<?php esc_attr_e( 'No.', 'bookly' ) ?>"/>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-5 mb-3 mb-md-0">
+                <div class="col-lg-2 col-md-3 mb-3 mb-md-0">
                     <button type="button" class="btn btn-block btn-default text-truncate text-left" id="bookly-filter-date" data-date="<?php echo date( 'Y-m-d', strtotime( '-30 day' ) ) ?> - <?php echo date( 'Y-m-d' ) ?>">
                         <i class="far fa-fw fa-calendar-alt"></i>
                         <span>
                             <?php echo Bookly\Lib\Utils\DateTime::formatDate( '-30 days' ) ?> - <?php echo Bookly\Lib\Utils\DateTime::formatDate( 'today' ) ?>
+                        </span>
+                    </button>
+                </div>
+                <div class="col-lg-2 col-md-2">
+                    <button type="button" class="btn btn-default w-100 mb-3 text-truncate text-left" id="bookly-filter-appointment-date" data-date="any">
+                        <i class="far fa-calendar-alt mr-1"></i>
+                        <span>
+                            <?php esc_html_e( 'Appointment at any time', 'bookly' ) ?>
                         </span>
                     </button>
                 </div>
@@ -42,7 +50,7 @@ use Bookly\Backend\Components\Controls;
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-4">
+                <div class="col-lg-1 col-md-4">
                     <div class="form-group">
                         <select class="form-control <?php echo esc_attr( $customers === false ? 'bookly-js-select-ajax' : 'bookly-js-select' ) ?>" id="bookly-filter-customer" data-placeholder="<?php esc_attr_e( 'Customer', 'bookly' ) ?>" <?php echo esc_attr( $customers === false ? 'data-ajax--action' : 'data-action' ) ?>="bookly_get_customers_list">
                         <?php if ( $customers !== false ) : ?>

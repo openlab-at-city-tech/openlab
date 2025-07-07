@@ -1,0 +1,1938 @@
+/*! tailwindcss v4.1.4 | MIT License | https://tailwindcss.com */
+@layer properties;
+@layer theme;
+@layer theme {
+  :root, :host {
+    --bookly-font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol",
+    "Noto Color Emoji";
+    --bookly-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+    monospace;
+    --bookly-color-red-50: oklch(97.1% 0.013 17.38);
+    --bookly-color-red-100: oklch(93.6% 0.032 17.717);
+    --bookly-color-red-500: oklch(63.7% 0.237 25.331);
+    --bookly-color-red-600: oklch(57.7% 0.245 27.325);
+    --bookly-color-red-700: oklch(50.5% 0.213 27.518);
+    --bookly-color-red-800: oklch(44.4% 0.177 26.899);
+    --bookly-color-amber-50: oklch(98.7% 0.022 95.277);
+    --bookly-color-amber-100: oklch(96.2% 0.059 95.617);
+    --bookly-color-amber-300: oklch(87.9% 0.169 91.605);
+    --bookly-color-amber-900: oklch(41.4% 0.112 45.904);
+    --bookly-color-green-500: oklch(72.3% 0.219 149.579);
+    --bookly-color-green-700: oklch(52.7% 0.154 150.069);
+    --bookly-color-sky-200: oklch(90.1% 0.058 230.902);
+    --bookly-color-slate-50: oklch(98.4% 0.003 247.858);
+    --bookly-color-slate-100: oklch(96.8% 0.007 247.896);
+    --bookly-color-slate-200: oklch(92.9% 0.013 255.508);
+    --bookly-color-slate-300: oklch(86.9% 0.022 252.894);
+    --bookly-color-slate-400: oklch(70.4% 0.04 256.788);
+    --bookly-color-slate-600: oklch(44.6% 0.043 257.281);
+    --bookly-color-gray-100: oklch(96.7% 0.003 264.542);
+    --bookly-color-gray-200: oklch(92.8% 0.006 264.531);
+    --bookly-color-gray-300: oklch(87.2% 0.01 258.338);
+    --bookly-color-gray-400: oklch(70.7% 0.022 261.325);
+    --bookly-color-gray-500: oklch(55.1% 0.027 264.364);
+    --bookly-color-gray-600: oklch(44.6% 0.03 256.802);
+    --bookly-color-gray-800: oklch(27.8% 0.033 256.848);
+    --bookly-color-black: #000;
+    --bookly-color-white: #fff;
+    --bookly-spacing: 0.25rem;
+    --bookly-breakpoint-xl: 80rem;
+    --bookly-text-xs: 0.75rem;
+    --bookly-text-xs--line-height: calc(1 / 0.75);
+    --bookly-text-sm: 0.875rem;
+    --bookly-text-sm--line-height: calc(1.25 / 0.875);
+    --bookly-text-base: 1rem;
+    --bookly-text-base--line-height: calc(1.5 / 1);
+    --bookly-text-lg: 1.125rem;
+    --bookly-text-lg--line-height: calc(1.75 / 1.125);
+    --bookly-text-xl: 1.25rem;
+    --bookly-text-xl--line-height: calc(1.75 / 1.25);
+    --bookly-text-2xl: 1.5rem;
+    --bookly-text-2xl--line-height: calc(2 / 1.5);
+    --bookly-text-3xl: 1.875rem;
+    --bookly-text-3xl--line-height: calc(2.25 / 1.875);
+    --bookly-text-4xl: 2.25rem;
+    --bookly-text-4xl--line-height: calc(2.5 / 2.25);
+    --bookly-font-weight-normal: 400;
+    --bookly-font-weight-medium: 500;
+    --bookly-font-weight-semibold: 600;
+    --bookly-font-weight-bold: 700;
+    --bookly-leading-normal: 1.5;
+    --bookly-radius-lg: 0.5rem;
+    --bookly-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+    --bookly-animate-spin: spin 1s linear infinite;
+    --bookly-default-transition-duration: 150ms;
+    --bookly-default-transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    --bookly-default-font-family: var(--bookly-font-sans);
+    --bookly-default-mono-font-family: var(--bookly-font-mono);
+    --bookly-color-default-border: var(--bookly-color-gray-200);
+  }
+}
+.bookly-css-root *, .bookly-css-root ::after, .bookly-css-root ::before, .bookly-css-root ::backdrop, .bookly-css-root ::file-selector-button {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border: 0 solid;
+}
+.bookly-css-root html, .bookly-css-root :host {
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+  tab-size: 4;
+  font-family: var(--bookly-default-font-family, ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");
+  font-feature-settings: var(--bookly-default-font-feature-settings, normal);
+  font-variation-settings: var(--bookly-default-font-variation-settings, normal);
+  -webkit-tap-highlight-color: transparent;
+}
+.bookly-css-root hr {
+  height: 0;
+  color: inherit;
+  border-top-width: 1px;
+}
+.bookly-css-root abbr:where([title]) {
+  -webkit-text-decoration: underline dotted;
+  text-decoration: underline dotted;
+}
+.bookly-css-root h1, .bookly-css-root h2, .bookly-css-root h3, .bookly-css-root h4, .bookly-css-root h5, .bookly-css-root h6 {
+  font-size: inherit;
+  font-weight: inherit;
+}
+.bookly-css-root a {
+  color: inherit;
+  -webkit-text-decoration: inherit;
+  text-decoration: inherit;
+}
+.bookly-css-root b, .bookly-css-root strong {
+  font-weight: bolder;
+}
+.bookly-css-root code, .bookly-css-root kbd, .bookly-css-root samp, .bookly-css-root pre {
+  font-family: var(--bookly-default-mono-font-family, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);
+  font-feature-settings: var(--bookly-default-mono-font-feature-settings, normal);
+  font-variation-settings: var(--bookly-default-mono-font-variation-settings, normal);
+  font-size: 1em;
+}
+.bookly-css-root small {
+  font-size: 80%;
+}
+.bookly-css-root sub, .bookly-css-root sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+.bookly-css-root sub {
+  bottom: -0.25em;
+}
+.bookly-css-root sup {
+  top: -0.5em;
+}
+.bookly-css-root table {
+  text-indent: 0;
+  border-color: inherit;
+  border-collapse: collapse;
+}
+.bookly-css-root :-moz-focusring {
+  outline: auto;
+}
+.bookly-css-root progress {
+  vertical-align: baseline;
+}
+.bookly-css-root summary {
+  display: list-item;
+}
+.bookly-css-root ol, .bookly-css-root ul, .bookly-css-root menu {
+  list-style: none;
+}
+.bookly-css-root img, .bookly-css-root svg, .bookly-css-root video, .bookly-css-root canvas, .bookly-css-root audio, .bookly-css-root iframe, .bookly-css-root embed, .bookly-css-root object {
+  display: block;
+  vertical-align: middle;
+}
+.bookly-css-root img, .bookly-css-root video {
+  max-width: 100%;
+  height: auto;
+}
+.bookly-css-root button, .bookly-css-root input, .bookly-css-root select, .bookly-css-root optgroup, .bookly-css-root textarea, .bookly-css-root ::file-selector-button {
+  font: inherit;
+  font-feature-settings: inherit;
+  font-variation-settings: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  border-radius: 0;
+  background-color: transparent;
+  opacity: 1;
+}
+.bookly-css-root :where(select:is([multiple], [size])) optgroup {
+  font-weight: bolder;
+}
+.bookly-css-root :where(select:is([multiple], [size])) optgroup option {
+  padding-inline-start: 20px;
+}
+.bookly-css-root ::file-selector-button {
+  margin-inline-end: 4px;
+}
+.bookly-css-root ::placeholder {
+  opacity: 1;
+}
+@supports (not (-webkit-appearance: -apple-pay-button)) or (contain-intrinsic-size: 1px) {
+  .bookly-css-root ::placeholder {
+    color: currentcolor;
+  }
+  @supports (color: color-mix(in lab, red, red)) {
+    .bookly-css-root ::placeholder {
+      color: color-mix(in oklab, currentcolor 50%, transparent);
+    }
+  }
+}
+.bookly-css-root textarea {
+  resize: vertical;
+}
+.bookly-css-root ::-webkit-search-decoration {
+  -webkit-appearance: none;
+}
+.bookly-css-root ::-webkit-date-and-time-value {
+  min-height: 1lh;
+  text-align: inherit;
+}
+.bookly-css-root ::-webkit-datetime-edit {
+  display: inline-flex;
+}
+.bookly-css-root ::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+.bookly-css-root ::-webkit-datetime-edit, .bookly-css-root ::-webkit-datetime-edit-year-field, .bookly-css-root ::-webkit-datetime-edit-month-field, .bookly-css-root ::-webkit-datetime-edit-day-field, .bookly-css-root ::-webkit-datetime-edit-hour-field, .bookly-css-root ::-webkit-datetime-edit-minute-field, .bookly-css-root ::-webkit-datetime-edit-second-field, .bookly-css-root ::-webkit-datetime-edit-millisecond-field, .bookly-css-root ::-webkit-datetime-edit-meridiem-field {
+  padding-block: 0;
+}
+.bookly-css-root :-moz-ui-invalid {
+  box-shadow: none;
+}
+.bookly-css-root button, .bookly-css-root input:where([type=button], [type=reset], [type=submit]), .bookly-css-root ::file-selector-button {
+  appearance: button;
+}
+.bookly-css-root ::-webkit-inner-spin-button, .bookly-css-root ::-webkit-outer-spin-button {
+  height: auto;
+}
+.bookly-css-root [hidden]:where(:not([hidden=until-found])) {
+  display: none !important;
+}
+.bookly-css-root .bookly\:pointer-events-none {
+  pointer-events: none !important;
+}
+.bookly-css-root .bookly\:absolute {
+  position: absolute !important;
+}
+.bookly-css-root .bookly\:fixed {
+  position: fixed !important;
+}
+.bookly-css-root .bookly\:relative {
+  position: relative !important;
+}
+.bookly-css-root .bookly\:inset-0 {
+  inset: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:inset-1 {
+  inset: calc(var(--bookly-spacing) * 1) !important;
+}
+.bookly-css-root .bookly\:start-0 {
+  inset-inline-start: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:start-3 {
+  inset-inline-start: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:end-0 {
+  inset-inline-end: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:end-3 {
+  inset-inline-end: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:top-0 {
+  top: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:top-1 {
+  top: calc(var(--bookly-spacing) * 1) !important;
+}
+.bookly-css-root .bookly\:top-2 {
+  top: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:top-4 {
+  top: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:top-5\.5 {
+  top: calc(var(--bookly-spacing) * 5.5) !important;
+}
+.bookly-css-root .bookly\:right-0 {
+  right: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:right-1 {
+  right: calc(var(--bookly-spacing) * 1) !important;
+}
+.bookly-css-root .bookly\:right-2 {
+  right: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:-bottom-6 {
+  bottom: calc(var(--bookly-spacing) * -6) !important;
+}
+.bookly-css-root .bookly\:bottom-0 {
+  bottom: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:bottom-2 {
+  bottom: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:left-0 {
+  left: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:left-1\/2 {
+  left: 50% !important;
+}
+.bookly-css-root .bookly\:z-0 {
+  z-index: 0 !important;
+}
+.bookly-css-root .bookly\:z-10 {
+  z-index: 10 !important;
+}
+.bookly-css-root .bookly\:z-\[1050\] {
+  z-index: 1050 !important;
+}
+.bookly-css-root .bookly\:z-\[100050\] {
+  z-index: 100050 !important;
+}
+.bookly-css-root .bookly\:col-span-1 {
+  grid-column: span 1/span 1 !important;
+}
+.bookly-css-root .bookly\:col-span-2 {
+  grid-column: span 2/span 2 !important;
+}
+.bookly-css-root .bookly\:float-right {
+  float: right !important;
+}
+.bookly-css-root .bookly\:-m-2 {
+  margin: calc(var(--bookly-spacing) * -2) !important;
+}
+.bookly-css-root .bookly\:m-0 {
+  margin: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:mx-2 {
+  margin-inline: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:mx-4 {
+  margin-inline: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:mx-auto {
+  margin-inline: auto !important;
+}
+.bookly-css-root .bookly\:my-0 {
+  margin-block: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:my-2 {
+  margin-block: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:my-3 {
+  margin-block: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:my-4 {
+  margin-block: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:ms-0 {
+  margin-inline-start: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:ms-2 {
+  margin-inline-start: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:ms-3 {
+  margin-inline-start: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:ms-4 {
+  margin-inline-start: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:me-0 {
+  margin-inline-end: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:me-2 {
+  margin-inline-end: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:me-3 {
+  margin-inline-end: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:-mt-1 {
+  margin-top: calc(var(--bookly-spacing) * -1) !important;
+}
+.bookly-css-root .bookly\:mt-2 {
+  margin-top: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:mt-4 {
+  margin-top: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:mt-36 {
+  margin-top: calc(var(--bookly-spacing) * 36) !important;
+}
+.bookly-css-root .bookly\:-mb-2 {
+  margin-bottom: calc(var(--bookly-spacing) * -2) !important;
+}
+.bookly-css-root .bookly\:-mb-4 {
+  margin-bottom: calc(var(--bookly-spacing) * -4) !important;
+}
+.bookly-css-root .bookly\:mb-0 {
+  margin-bottom: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:mb-0\.5 {
+  margin-bottom: calc(var(--bookly-spacing) * 0.5) !important;
+}
+.bookly-css-root .bookly\:mb-1 {
+  margin-bottom: calc(var(--bookly-spacing) * 1) !important;
+}
+.bookly-css-root .bookly\:mb-2 {
+  margin-bottom: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:mb-3 {
+  margin-bottom: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:mb-4 {
+  margin-bottom: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:ml-2 {
+  margin-left: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:box-border {
+  box-sizing: border-box !important;
+}
+.bookly-css-root .bookly\:box-content {
+  box-sizing: content-box !important;
+}
+.bookly-css-root .bookly\:block {
+  display: block !important;
+}
+.bookly-css-root .bookly\:flex {
+  display: flex !important;
+}
+.bookly-css-root .bookly\:grid {
+  display: grid !important;
+}
+.bookly-css-root .bookly\:hidden {
+  display: none !important;
+}
+.bookly-css-root .bookly\:inline {
+  display: inline !important;
+}
+.bookly-css-root .bookly\:inline-block {
+  display: inline-block !important;
+}
+.bookly-css-root .bookly\:inline-flex {
+  display: inline-flex !important;
+}
+.bookly-css-root .bookly\:h-0 {
+  height: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:h-5 {
+  height: calc(var(--bookly-spacing) * 5) !important;
+}
+.bookly-css-root .bookly\:h-8 {
+  height: calc(var(--bookly-spacing) * 8) !important;
+}
+.bookly-css-root .bookly\:h-10 {
+  height: calc(var(--bookly-spacing) * 10) !important;
+}
+.bookly-css-root .bookly\:h-11 {
+  height: calc(var(--bookly-spacing) * 11) !important;
+}
+.bookly-css-root .bookly\:h-14 {
+  height: calc(var(--bookly-spacing) * 14) !important;
+}
+.bookly-css-root .bookly\:h-16 {
+  height: calc(var(--bookly-spacing) * 16) !important;
+}
+.bookly-css-root .bookly\:h-20 {
+  height: calc(var(--bookly-spacing) * 20) !important;
+}
+.bookly-css-root .bookly\:h-full {
+  height: 100% !important;
+}
+.bookly-css-root .bookly\:max-h-12 {
+  max-height: calc(var(--bookly-spacing) * 12) !important;
+}
+.bookly-css-root .bookly\:min-h-full {
+  min-height: 100% !important;
+}
+.bookly-css-root .bookly\:w-0 {
+  width: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:w-0\.5 {
+  width: calc(var(--bookly-spacing) * 0.5) !important;
+}
+.bookly-css-root .bookly\:w-5 {
+  width: calc(var(--bookly-spacing) * 5) !important;
+}
+.bookly-css-root .bookly\:w-8 {
+  width: calc(var(--bookly-spacing) * 8) !important;
+}
+.bookly-css-root .bookly\:w-20 {
+  width: calc(var(--bookly-spacing) * 20) !important;
+}
+.bookly-css-root .bookly\:w-48 {
+  width: calc(var(--bookly-spacing) * 48) !important;
+}
+.bookly-css-root .bookly\:w-60 {
+  width: calc(var(--bookly-spacing) * 60) !important;
+}
+.bookly-css-root .bookly\:w-72 {
+  width: calc(var(--bookly-spacing) * 72) !important;
+}
+.bookly-css-root .bookly\:w-auto {
+  width: auto !important;
+}
+.bookly-css-root .bookly\:w-full {
+  width: 100% !important;
+}
+.bookly-css-root .bookly\:w-max {
+  width: max-content !important;
+}
+.bookly-css-root .bookly\:max-w-full {
+  max-width: 100% !important;
+}
+.bookly-css-root .bookly\:max-w-screen-xl {
+  max-width: var(--bookly-breakpoint-xl) !important;
+}
+.bookly-css-root .bookly\:min-w-6 {
+  min-width: calc(var(--bookly-spacing) * 6) !important;
+}
+.bookly-css-root .bookly\:min-w-\[200px\] {
+  min-width: 200px !important;
+}
+.bookly-css-root .bookly\:flex-1 {
+  flex: 1 !important;
+}
+.bookly-css-root .bookly\:shrink {
+  flex-shrink: 1 !important;
+}
+.bookly-css-root .bookly\:grow {
+  flex-grow: 1 !important;
+}
+.bookly-css-root .bookly\:grow-0 {
+  flex-grow: 0 !important;
+}
+.bookly-css-root .bookly\:grow-1 {
+  flex-grow: 1 !important;
+}
+.bookly-css-root .bookly\:basis-0\/12 {
+  flex-basis: 0% !important;
+}
+.bookly-css-root .bookly\:basis-1\/12 {
+  flex-basis: 8.3333333333% !important;
+}
+.bookly-css-root .bookly\:basis-2\/12 {
+  flex-basis: 16.6666666667% !important;
+}
+.bookly-css-root .bookly\:basis-3\/12 {
+  flex-basis: 25% !important;
+}
+.bookly-css-root .bookly\:basis-4\/12 {
+  flex-basis: 33.3333333333% !important;
+}
+.bookly-css-root .bookly\:basis-5\/12 {
+  flex-basis: 41.6666666667% !important;
+}
+.bookly-css-root .bookly\:basis-6\/12 {
+  flex-basis: 50% !important;
+}
+.bookly-css-root .bookly\:basis-7\/12 {
+  flex-basis: 58.3333333333% !important;
+}
+.bookly-css-root .bookly\:basis-8\/12 {
+  flex-basis: 66.6666666667% !important;
+}
+.bookly-css-root .bookly\:basis-9\/12 {
+  flex-basis: 75% !important;
+}
+.bookly-css-root .bookly\:basis-10\/12 {
+  flex-basis: 83.3333333333% !important;
+}
+.bookly-css-root .bookly\:basis-11\/12 {
+  flex-basis: 91.6666666667% !important;
+}
+.bookly-css-root .bookly\:basis-12\/12 {
+  flex-basis: 100% !important;
+}
+.bookly-css-root .bookly\:basis-full {
+  flex-basis: 100% !important;
+}
+.bookly-css-root .bookly\:-translate-x-1\/2 {
+  --tw-translate-x: calc(calc(1/2 * 100%) * -1) !important;
+  translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+}
+.bookly-css-root .bookly\:animate-spin {
+  animation: var(--bookly-animate-spin) !important;
+}
+.bookly-css-root .bookly\:cursor-default {
+  cursor: default !important;
+}
+.bookly-css-root .bookly\:cursor-pointer {
+  cursor: pointer !important;
+}
+.bookly-css-root .bookly\:appearance-none {
+  appearance: none !important;
+}
+.bookly-css-root .bookly\:grid-cols-1 {
+  grid-template-columns: repeat(1, minmax(0, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+}
+.bookly-css-root .bookly\:grid-cols-4 {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+.bookly-css-root .bookly\:flex-col {
+  flex-direction: column !important;
+}
+.bookly-css-root .bookly\:flex-row {
+  flex-direction: row !important;
+}
+.bookly-css-root .bookly\:flex-wrap {
+  flex-wrap: wrap !important;
+}
+.bookly-css-root .bookly\:content-center {
+  align-content: center !important;
+}
+.bookly-css-root .bookly\:items-center {
+  align-items: center !important;
+}
+.bookly-css-root .bookly\:items-start {
+  align-items: flex-start !important;
+}
+.bookly-css-root .bookly\:justify-between {
+  justify-content: space-between !important;
+}
+.bookly-css-root .bookly\:justify-center {
+  justify-content: center !important;
+}
+.bookly-css-root .bookly\:justify-end {
+  justify-content: flex-end !important;
+}
+.bookly-css-root .bookly\:justify-start {
+  justify-content: flex-start !important;
+}
+.bookly-css-root .bookly\:gap-3 {
+  gap: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:gap-4 {
+  gap: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:overflow-hidden {
+  overflow: hidden !important;
+}
+.bookly-css-root .bookly\:overflow-x-hidden {
+  overflow-x: hidden !important;
+}
+.bookly-css-root .bookly\:overflow-y-auto {
+  overflow-y: auto !important;
+}
+.bookly-css-root .bookly\:rounded {
+  border-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:rounded-full {
+  border-radius: calc(infinity * 1px) !important;
+}
+.bookly-css-root .bookly\:rounded-lg {
+  border-radius: var(--bookly-radius-lg) !important;
+}
+.bookly-css-root .bookly\:rounded-none {
+  border-radius: 0 !important;
+}
+.bookly-css-root .bookly\:rounded-s {
+  border-start-start-radius: 0.25rem !important;
+  border-end-start-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:rounded-s-none {
+  border-start-start-radius: 0 !important;
+  border-end-start-radius: 0 !important;
+}
+.bookly-css-root .bookly\:rounded-e {
+  border-start-end-radius: 0.25rem !important;
+  border-end-end-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:rounded-e-none {
+  border-start-end-radius: 0 !important;
+  border-end-end-radius: 0 !important;
+}
+.bookly-css-root .bookly\:rounded-t {
+  border-top-left-radius: 0.25rem !important;
+  border-top-right-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:rounded-r {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:rounded-b {
+  border-bottom-right-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}
+.bookly-css-root .bookly\:border {
+  border-style: var(--tw-border-style) !important;
+  border-width: 1px !important;
+}
+.bookly-css-root .bookly\:border-2 {
+  border-style: var(--tw-border-style) !important;
+  border-width: 2px !important;
+}
+.bookly-css-root .bookly\:border-x-0 {
+  border-inline-style: var(--tw-border-style) !important;
+  border-inline-width: 0px !important;
+}
+.bookly-css-root .bookly\:border-y {
+  border-block-style: var(--tw-border-style) !important;
+  border-block-width: 1px !important;
+}
+.bookly-css-root .bookly\:border-y-2 {
+  border-block-style: var(--tw-border-style) !important;
+  border-block-width: 2px !important;
+}
+.bookly-css-root .bookly\:border-e {
+  border-inline-end-style: var(--tw-border-style) !important;
+  border-inline-end-width: 1px !important;
+}
+.bookly-css-root .bookly\:border-t {
+  border-top-style: var(--tw-border-style) !important;
+  border-top-width: 1px !important;
+}
+.bookly-css-root .bookly\:border-b {
+  border-bottom-style: var(--tw-border-style) !important;
+  border-bottom-width: 1px !important;
+}
+.bookly-css-root .bookly\:border-b-0 {
+  border-bottom-style: var(--tw-border-style) !important;
+  border-bottom-width: 0px !important;
+}
+.bookly-css-root .bookly\:border-none {
+  --tw-border-style: none !important;
+  border-style: none !important;
+}
+.bookly-css-root .bookly\:border-solid {
+  --tw-border-style: solid !important;
+  border-style: solid !important;
+}
+.bookly-css-root .bookly\:border-amber-100 {
+  border-color: var(--bookly-color-amber-100) !important;
+}
+.bookly-css-root .bookly\:border-amber-300 {
+  border-color: var(--bookly-color-amber-300) !important;
+}
+.bookly-css-root .bookly\:border-default-border {
+  border-color: var(--bookly-color-default-border) !important;
+}
+.bookly-css-root .bookly\:border-gray-200 {
+  border-color: var(--bookly-color-gray-200) !important;
+}
+.bookly-css-root .bookly\:border-gray-500 {
+  border-color: var(--bookly-color-gray-500) !important;
+}
+.bookly-css-root .bookly\:border-green-500 {
+  border-color: var(--bookly-color-green-500) !important;
+}
+.bookly-css-root .bookly\:border-red-100 {
+  border-color: var(--bookly-color-red-100) !important;
+}
+.bookly-css-root .bookly\:border-red-500 {
+  border-color: var(--bookly-color-red-500) !important;
+}
+.bookly-css-root .bookly\:border-slate-100 {
+  border-color: var(--bookly-color-slate-100) !important;
+}
+.bookly-css-root .bookly\:border-slate-400 {
+  border-color: var(--bookly-color-slate-400) !important;
+}
+.bookly-css-root .bookly\:border-slate-600 {
+  border-color: var(--bookly-color-slate-600) !important;
+}
+.bookly-css-root .bookly\:bg-amber-50 {
+  background-color: var(--bookly-color-amber-50) !important;
+}
+.bookly-css-root .bookly\:bg-black\/50 {
+  background-color: var(--bookly-color-black) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-black\/50 {
+    background-color: color-mix(in oklab, var(--bookly-color-black) 50%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:bg-gray-100 {
+  background-color: var(--bookly-color-gray-100) !important;
+}
+.bookly-css-root .bookly\:bg-red-50 {
+  background-color: var(--bookly-color-red-50) !important;
+}
+.bookly-css-root .bookly\:bg-red-100 {
+  background-color: var(--bookly-color-red-100) !important;
+}
+.bookly-css-root .bookly\:bg-slate-50 {
+  background-color: var(--bookly-color-slate-50) !important;
+}
+.bookly-css-root .bookly\:bg-slate-100 {
+  background-color: var(--bookly-color-slate-100) !important;
+}
+.bookly-css-root .bookly\:bg-slate-300 {
+  background-color: var(--bookly-color-slate-300) !important;
+}
+.bookly-css-root .bookly\:bg-slate-400 {
+  background-color: var(--bookly-color-slate-400) !important;
+}
+.bookly-css-root .bookly\:bg-transparent {
+  background-color: transparent !important;
+}
+.bookly-css-root .bookly\:bg-white {
+  background-color: var(--bookly-color-white) !important;
+}
+.bookly-css-root .bookly\:bg-white\/95 {
+  background-color: var(--bookly-color-white) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:bg-white\/95 {
+    background-color: color-mix(in oklab, var(--bookly-color-white) 95%, transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:bg-none {
+  background-image: none !important;
+}
+.bookly-css-root .bookly\:object-cover {
+  object-fit: cover !important;
+}
+.bookly-css-root .bookly\:p-0 {
+  padding: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:p-0\.5 {
+  padding: calc(var(--bookly-spacing) * 0.5) !important;
+}
+.bookly-css-root .bookly\:p-2 {
+  padding: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:p-3 {
+  padding: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:p-4 {
+  padding: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:px-0 {
+  padding-inline: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:px-2 {
+  padding-inline: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:px-2\.5 {
+  padding-inline: calc(var(--bookly-spacing) * 2.5) !important;
+}
+.bookly-css-root .bookly\:px-3 {
+  padding-inline: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:px-4 {
+  padding-inline: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:px-5 {
+  padding-inline: calc(var(--bookly-spacing) * 5) !important;
+}
+.bookly-css-root .bookly\:py-0 {
+  padding-block: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:py-0\.5 {
+  padding-block: calc(var(--bookly-spacing) * 0.5) !important;
+}
+.bookly-css-root .bookly\:py-1 {
+  padding-block: calc(var(--bookly-spacing) * 1) !important;
+}
+.bookly-css-root .bookly\:py-2 {
+  padding-block: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:py-4 {
+  padding-block: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:pt-0 {
+  padding-top: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:pt-2 {
+  padding-top: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:pt-3 {
+  padding-top: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:pt-4 {
+  padding-top: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:pt-6 {
+  padding-top: calc(var(--bookly-spacing) * 6) !important;
+}
+.bookly-css-root .bookly\:pb-0 {
+  padding-bottom: calc(var(--bookly-spacing) * 0) !important;
+}
+.bookly-css-root .bookly\:pb-0\.5 {
+  padding-bottom: calc(var(--bookly-spacing) * 0.5) !important;
+}
+.bookly-css-root .bookly\:pb-2 {
+  padding-bottom: calc(var(--bookly-spacing) * 2) !important;
+}
+.bookly-css-root .bookly\:pb-4 {
+  padding-bottom: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:text-center {
+  text-align: center !important;
+}
+.bookly-css-root .bookly\:text-end {
+  text-align: end !important;
+}
+.bookly-css-root .bookly\:text-left {
+  text-align: left !important;
+}
+.bookly-css-root .bookly\:text-right {
+  text-align: right !important;
+}
+.bookly-css-root .bookly\:text-start {
+  text-align: start !important;
+}
+.bookly-css-root .bookly\:align-middle {
+  vertical-align: middle !important;
+}
+.bookly-css-root .bookly\:font-sans {
+  font-family: var(--bookly-font-sans) !important;
+}
+.bookly-css-root .bookly\:text-2xl {
+  font-size: var(--bookly-text-2xl) !important;
+  line-height: var(--tw-leading, var(--bookly-text-2xl--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-3xl {
+  font-size: var(--bookly-text-3xl) !important;
+  line-height: var(--tw-leading, var(--bookly-text-3xl--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-4xl {
+  font-size: var(--bookly-text-4xl) !important;
+  line-height: var(--tw-leading, var(--bookly-text-4xl--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-base {
+  font-size: var(--bookly-text-base) !important;
+  line-height: var(--tw-leading, var(--bookly-text-base--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-lg {
+  font-size: var(--bookly-text-lg) !important;
+  line-height: var(--tw-leading, var(--bookly-text-lg--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-sm {
+  font-size: var(--bookly-text-sm) !important;
+  line-height: var(--tw-leading, var(--bookly-text-sm--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-xl {
+  font-size: var(--bookly-text-xl) !important;
+  line-height: var(--tw-leading, var(--bookly-text-xl--line-height)) !important;
+}
+.bookly-css-root .bookly\:text-xs {
+  font-size: var(--bookly-text-xs) !important;
+  line-height: var(--tw-leading, var(--bookly-text-xs--line-height)) !important;
+}
+.bookly-css-root .bookly\:leading-4 {
+  --tw-leading: calc(var(--bookly-spacing) * 4) !important;
+  line-height: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:leading-normal {
+  --tw-leading: var(--bookly-leading-normal) !important;
+  line-height: var(--bookly-leading-normal) !important;
+}
+.bookly-css-root .bookly\:font-bold {
+  --tw-font-weight: var(--bookly-font-weight-bold) !important;
+  font-weight: var(--bookly-font-weight-bold) !important;
+}
+.bookly-css-root .bookly\:font-medium {
+  --tw-font-weight: var(--bookly-font-weight-medium) !important;
+  font-weight: var(--bookly-font-weight-medium) !important;
+}
+.bookly-css-root .bookly\:font-normal {
+  --tw-font-weight: var(--bookly-font-weight-normal) !important;
+  font-weight: var(--bookly-font-weight-normal) !important;
+}
+.bookly-css-root .bookly\:font-semibold {
+  --tw-font-weight: var(--bookly-font-weight-semibold) !important;
+  font-weight: var(--bookly-font-weight-semibold) !important;
+}
+.bookly-css-root .bookly\:break-words {
+  overflow-wrap: break-word !important;
+}
+.bookly-css-root .bookly\:text-ellipsis {
+  text-overflow: ellipsis !important;
+}
+.bookly-css-root .bookly\:whitespace-normal {
+  white-space: normal !important;
+}
+.bookly-css-root .bookly\:whitespace-nowrap {
+  white-space: nowrap !important;
+}
+.bookly-css-root .bookly\:text-amber-900 {
+  color: var(--bookly-color-amber-900) !important;
+}
+.bookly-css-root .bookly\:text-black {
+  color: var(--bookly-color-black) !important;
+}
+.bookly-css-root .bookly\:text-gray-200 {
+  color: var(--bookly-color-gray-200) !important;
+}
+.bookly-css-root .bookly\:text-gray-400 {
+  color: var(--bookly-color-gray-400) !important;
+}
+.bookly-css-root .bookly\:text-gray-600 {
+  color: var(--bookly-color-gray-600) !important;
+}
+.bookly-css-root .bookly\:text-gray-800 {
+  color: var(--bookly-color-gray-800) !important;
+}
+.bookly-css-root .bookly\:text-green-700 {
+  color: var(--bookly-color-green-700) !important;
+}
+.bookly-css-root .bookly\:text-red-500 {
+  color: var(--bookly-color-red-500) !important;
+}
+.bookly-css-root .bookly\:text-red-600 {
+  color: var(--bookly-color-red-600) !important;
+}
+.bookly-css-root .bookly\:text-red-700 {
+  color: var(--bookly-color-red-700) !important;
+}
+.bookly-css-root .bookly\:text-red-800 {
+  color: var(--bookly-color-red-800) !important;
+}
+.bookly-css-root .bookly\:text-slate-300 {
+  color: var(--bookly-color-slate-300) !important;
+}
+.bookly-css-root .bookly\:text-slate-400 {
+  color: var(--bookly-color-slate-400) !important;
+}
+.bookly-css-root .bookly\:text-slate-600 {
+  color: var(--bookly-color-slate-600) !important;
+}
+.bookly-css-root .bookly\:text-white {
+  color: var(--bookly-color-white) !important;
+}
+.bookly-css-root .bookly\:line-through {
+  text-decoration-line: line-through !important;
+}
+.bookly-css-root .bookly\:caret-gray-400 {
+  caret-color: var(--bookly-color-gray-400) !important;
+}
+.bookly-css-root .bookly\:opacity-0 {
+  opacity: 0% !important;
+}
+.bookly-css-root .bookly\:opacity-25 {
+  opacity: 25% !important;
+}
+.bookly-css-root .bookly\:opacity-50 {
+  opacity: 50% !important;
+}
+.bookly-css-root .bookly\:shadow-lg {
+  --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 4px 6px -4px var(--tw-shadow-color, rgb(0 0 0 / 0.1)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-none {
+  --tw-shadow: 0 0 #0000 !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-xl {
+  --tw-shadow: 0 20px 25px -5px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 8px 10px -6px var(--tw-shadow-color, rgb(0 0 0 / 0.1)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+.bookly-css-root .bookly\:shadow-gray-500\/10 {
+  --tw-shadow-color: var(--bookly-color-gray-500) !important;
+}
+@supports (color: color-mix(in lab, red, red)) {
+  .bookly-css-root .bookly\:shadow-gray-500\/10 {
+    --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--bookly-color-gray-500) 10%, transparent) var(--tw-shadow-alpha), transparent) !important;
+  }
+}
+.bookly-css-root .bookly\:drop-shadow-none {
+  --tw-drop-shadow: !important;
+  filter: var(--tw-blur, ) var(--tw-brightness, ) var(--tw-contrast, ) var(--tw-grayscale, ) var(--tw-hue-rotate, ) var(--tw-invert, ) var(--tw-saturate, ) var(--tw-sepia, ) var(--tw-drop-shadow, ) !important;
+}
+.bookly-css-root .bookly\:transition-all {
+  transition-property: all !important;
+  transition-timing-function: var(--tw-ease, var(--bookly-default-transition-timing-function)) !important;
+  transition-duration: var(--tw-duration, var(--bookly-default-transition-duration)) !important;
+}
+.bookly-css-root .bookly\:duration-200 {
+  --tw-duration: 200ms !important;
+  transition-duration: 200ms !important;
+}
+.bookly-css-root .bookly\:duration-500 {
+  --tw-duration: 500ms !important;
+  transition-duration: 500ms !important;
+}
+.bookly-css-root .bookly\:ease-in-out {
+  --tw-ease: var(--bookly-ease-in-out) !important;
+  transition-timing-function: var(--bookly-ease-in-out) !important;
+}
+.bookly-css-root .bookly\:outline-none {
+  --tw-outline-style: none !important;
+  outline-style: none !important;
+}
+.bookly-css-root .bookly\:not-hover\:bg-gray-200:not(*:hover) {
+  background-color: var(--bookly-color-gray-200) !important;
+}
+@media not (hover: hover) {
+  .bookly-css-root .bookly\:not-hover\:bg-gray-200 {
+    background-color: var(--bookly-color-gray-200) !important;
+  }
+}
+.bookly-css-root .bookly\:not-hover\:bg-white:not(*:hover) {
+  background-color: var(--bookly-color-white) !important;
+}
+@media not (hover: hover) {
+  .bookly-css-root .bookly\:not-hover\:bg-white {
+    background-color: var(--bookly-color-white) !important;
+  }
+}
+.bookly-css-root .bookly\:file\:-mt-4::file-selector-button {
+  margin-top: calc(var(--bookly-spacing) * -4) !important;
+}
+.bookly-css-root .bookly\:file\:mr-4::file-selector-button {
+  margin-right: calc(var(--bookly-spacing) * 4) !important;
+}
+.bookly-css-root .bookly\:file\:h-16::file-selector-button {
+  height: calc(var(--bookly-spacing) * 16) !important;
+}
+.bookly-css-root .bookly\:file\:border-0::file-selector-button {
+  border-style: var(--tw-border-style) !important;
+  border-width: 0px !important;
+}
+.bookly-css-root .bookly\:file\:p-3::file-selector-button {
+  padding: calc(var(--bookly-spacing) * 3) !important;
+}
+.bookly-css-root .bookly\:file\:text-sm::file-selector-button {
+  font-size: var(--bookly-text-sm) !important;
+  line-height: var(--tw-leading, var(--bookly-text-sm--line-height)) !important;
+}
+.bookly-css-root .bookly\:placeholder\:text-transparent::placeholder {
+  color: transparent !important;
+}
+.bookly-css-root .bookly\:before\:content-none::before {
+  content: var(--tw-content);
+  --tw-content: none !important;
+  content: none !important;
+}
+.bookly-css-root .bookly\:after\:content-none::after {
+  content: var(--tw-content);
+  --tw-content: none !important;
+  content: none !important;
+}
+.bookly-css-root .bookly\:last\:mb-0:last-child {
+  margin-bottom: calc(var(--bookly-spacing) * 0) !important;
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:border-gray-400:hover {
+    border-color: var(--bookly-color-gray-400) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:border-slate-400:hover {
+    border-color: var(--bookly-color-slate-400) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-gray-400:hover {
+    background-color: var(--bookly-color-gray-400) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-slate-50:hover {
+    background-color: var(--bookly-color-slate-50) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-slate-400:hover {
+    background-color: var(--bookly-color-slate-400) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:bg-white:hover {
+    background-color: var(--bookly-color-white) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-gray-600:hover {
+    color: var(--bookly-color-gray-600) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-slate-50:hover {
+    color: var(--bookly-color-slate-50) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-slate-100:hover {
+    color: var(--bookly-color-slate-100) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-slate-200:hover {
+    color: var(--bookly-color-slate-200) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-slate-600:hover {
+    color: var(--bookly-color-slate-600) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:text-white:hover {
+    color: var(--bookly-color-white) !important;
+  }
+}
+@media (hover: hover) {
+  .bookly-css-root .bookly\:hover\:opacity-80:hover {
+    opacity: 80% !important;
+  }
+}
+.bookly-css-root .bookly\:focus\:rounded-none:focus {
+  border-radius: 0 !important;
+}
+.bookly-css-root .bookly\:focus\:border-none:focus {
+  --tw-border-style: none !important;
+  border-style: none !important;
+}
+.bookly-css-root .bookly\:focus\:border-gray-300:focus {
+  border-color: var(--bookly-color-gray-300) !important;
+}
+.bookly-css-root .bookly\:focus\:border-gray-400:focus {
+  border-color: var(--bookly-color-gray-400) !important;
+}
+.bookly-css-root .bookly\:focus\:outline-hidden:focus {
+  --tw-outline-style: none !important;
+  outline-style: none !important;
+}
+@media (forced-colors: active) {
+  .bookly-css-root .bookly\:focus\:outline-hidden:focus {
+    outline: 2px solid transparent !important;
+    outline-offset: 2px !important;
+  }
+}
+.bookly-css-root .bookly\:focus\:outline-sky-200:focus {
+  outline-color: var(--bookly-color-sky-200) !important;
+}
+.bookly-css-root .bookly\:focus\:outline-none:focus {
+  --tw-outline-style: none !important;
+  outline-style: none !important;
+}
+.bookly-css-root .bookly\:active\:shadow-md:active {
+  --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgb(0 0 0 / 0.1)), 0 2px 4px -2px var(--tw-shadow-color, rgb(0 0 0 / 0.1)) !important;
+  box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
+}
+@media (width < 48rem) {
+  .bookly-css-root .bookly\:max-md\:mb-4 {
+    margin-bottom: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width < 48rem) {
+  .bookly-css-root .bookly\:max-md\:hidden {
+    display: none !important;
+  }
+}
+@media (width < 48rem) {
+  .bookly-css-root .bookly\:max-md\:p-4 {
+    padding: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:mb-2 {
+    margin-bottom: calc(var(--bookly-spacing) * 2) !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:mb-4 {
+    margin-bottom: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:hidden {
+    display: none !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:flex-col {
+    flex-direction: column !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:flex-row {
+    flex-direction: row !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-s {
+    border-start-start-radius: 0.25rem !important;
+    border-end-start-radius: 0.25rem !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-s-none {
+    border-start-start-radius: 0 !important;
+    border-end-start-radius: 0 !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-e {
+    border-start-end-radius: 0.25rem !important;
+    border-end-end-radius: 0.25rem !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-e-none {
+    border-start-end-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-t {
+    border-top-left-radius: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-t-none {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-b {
+    border-bottom-right-radius: 0.25rem !important;
+    border-bottom-left-radius: 0.25rem !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:rounded-b-none {
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-x {
+    border-inline-style: var(--tw-border-style) !important;
+    border-inline-width: 1px !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-y {
+    border-block-style: var(--tw-border-style) !important;
+    border-block-width: 1px !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-s {
+    border-inline-start-style: var(--tw-border-style) !important;
+    border-inline-start-width: 1px !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-e {
+    border-inline-end-style: var(--tw-border-style) !important;
+    border-inline-end-width: 1px !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-t {
+    border-top-style: var(--tw-border-style) !important;
+    border-top-width: 1px !important;
+  }
+}
+@media (width < 40rem) {
+  .bookly-css-root .bookly\:max-sm\:border-b {
+    border-bottom-style: var(--tw-border-style) !important;
+    border-bottom-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:ms-2 {
+    margin-inline-start: calc(var(--bookly-spacing) * 2) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:flex {
+    display: flex !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:grid {
+    display: grid !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:hidden {
+    display: none !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-0\/12 {
+    flex-basis: 0% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-1\/12 {
+    flex-basis: 8.3333333333% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-2\/12 {
+    flex-basis: 16.6666666667% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-3\/12 {
+    flex-basis: 25% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-4\/12 {
+    flex-basis: 33.3333333333% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-5\/12 {
+    flex-basis: 41.6666666667% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-6\/12 {
+    flex-basis: 50% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-7\/12 {
+    flex-basis: 58.3333333333% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-8\/12 {
+    flex-basis: 66.6666666667% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-9\/12 {
+    flex-basis: 75% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-10\/12 {
+    flex-basis: 83.3333333333% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-11\/12 {
+    flex-basis: 91.6666666667% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:basis-12\/12 {
+    flex-basis: 100% !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:grid-cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:flex-col {
+    flex-direction: column !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:flex-row {
+    flex-direction: row !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:gap-2 {
+    gap: calc(var(--bookly-spacing) * 2) !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-s {
+    border-start-start-radius: 0.25rem !important;
+    border-end-start-radius: 0.25rem !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-s-none {
+    border-start-start-radius: 0 !important;
+    border-end-start-radius: 0 !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-e {
+    border-start-end-radius: 0.25rem !important;
+    border-end-end-radius: 0.25rem !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-e-none {
+    border-start-end-radius: 0 !important;
+    border-end-end-radius: 0 !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-t {
+    border-top-left-radius: 0.25rem !important;
+    border-top-right-radius: 0.25rem !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-t-none {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-b {
+    border-bottom-right-radius: 0.25rem !important;
+    border-bottom-left-radius: 0.25rem !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:rounded-b-none {
+    border-bottom-right-radius: 0 !important;
+    border-bottom-left-radius: 0 !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-x {
+    border-inline-style: var(--tw-border-style) !important;
+    border-inline-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-y {
+    border-block-style: var(--tw-border-style) !important;
+    border-block-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-s {
+    border-inline-start-style: var(--tw-border-style) !important;
+    border-inline-start-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-e {
+    border-inline-end-style: var(--tw-border-style) !important;
+    border-inline-end-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-t {
+    border-top-style: var(--tw-border-style) !important;
+    border-top-width: 1px !important;
+  }
+}
+@media (width >= 40rem) {
+  .bookly-css-root .bookly\:sm\:border-b {
+    border-bottom-style: var(--tw-border-style) !important;
+    border-bottom-width: 1px !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:mb-0 {
+    margin-bottom: calc(var(--bookly-spacing) * 0) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:mb-4 {
+    margin-bottom: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:block {
+    display: block !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:flex {
+    display: flex !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:hidden {
+    display: none !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:w-60 {
+    width: calc(var(--bookly-spacing) * 60) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:grid-cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:gap-4 {
+    gap: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:px-6 {
+    padding-inline: calc(var(--bookly-spacing) * 6) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:pt-6 {
+    padding-top: calc(var(--bookly-spacing) * 6) !important;
+  }
+}
+@media (width >= 48rem) {
+  .bookly-css-root .bookly\:md\:pb-4 {
+    padding-bottom: calc(var(--bookly-spacing) * 4) !important;
+  }
+}
+@media (width >= 64rem) {
+  .bookly-css-root .bookly\:lg\:w-1\/2 {
+    width: 50% !important;
+  }
+}
+@media (width >= 64rem) {
+  .bookly-css-root .bookly\:lg\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 64rem) {
+  .bookly-css-root .bookly\:lg\:grid-cols-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 64rem) {
+  .bookly-css-root .bookly\:lg\:grid-cols-8 {
+    grid-template-columns: repeat(8, minmax(0, 1fr)) !important;
+  }
+}
+@media (width >= 80rem) {
+  .bookly-css-root .bookly\:xl\:w-1\/4 {
+    width: 25% !important;
+  }
+}
+@media (width >= 80rem) {
+  .bookly-css-root .bookly\:xl\:grid-cols-4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  }
+}
+.bookly-css-root .bookly\:rtl\:text-right:where(:dir(rtl), [dir=rtl], [dir=rtl] *) {
+  text-align: right !important;
+}
+.bookly-css-root .bookly-card-title {
+  right: 0.5em;
+  bottom: 0.5em;
+  width: max-content;
+  max-width: calc(100% - 1em);
+  max-height: calc(100% - 1em);
+}
+.bookly-css-root .bookly-card-title > div {
+  overflow: hidden;
+}
+.bookly-css-root .text-bookly:not(:hover) {
+  color: var(--bookly-color);
+}
+.bookly-css-root .fill-bookly {
+  fill: var(--bookly-color);
+}
+.bookly-css-root .hover\:text-bookly:hover {
+  color: var(--bookly-color) !important;
+}
+.bookly-css-root .hover\:bg-bookly:hover {
+  background-color: var(--bookly-color) !important;
+}
+.bookly-css-root .card:hover {
+  background-color: #FDFDFD !important;
+}
+.bookly-css-root .border-bookly {
+  border-color: var(--bookly-color);
+}
+.bookly-css-root .btn-check:focus + .btn-outline-bookly, .bookly-css-root .btn-outline-bookly:focus {
+  background-color: var(--bookly-color);
+  border-color: var(--bookly-color);
+  color: #000000;
+  box-shadow: 0 0 0 0.25rem rgba(128, 128, 128, 0.5);
+}
+.bookly-css-root .btn-check:checked + .btn-outline-bookly, .bookly-css-root .btn-check:active + .btn-outline-bookly, .bookly-css-root .btn-outline-bookly:active, .bookly-css-root .btn-outline-bookly.active, .bookly-css-root .btn-outline-bookly.dropdown-toggle.show {
+  background-color: var(--bookly-color);
+  border-color: var(--bookly-color);
+}
+.bookly-css-root .btn-check:checked + .btn-outline-bookly:focus, .bookly-css-root .btn-check:active + .btn-outline-bookly:focus, .bookly-css-root .btn-outline-bookly:active:focus, .bookly-css-root .btn-outline-bookly.active:focus, .bookly-css-root .btn-outline-bookly.dropdown-toggle.show:focus {
+  background-color: var(--bookly-color);
+  border-color: var(--bookly-color);
+  box-shadow: 0 0 0 0.25rem rgba(128, 128, 128, 0.5);
+}
+.bookly-css-root .btn-outline-bookly:disabled, .bookly-css-root .btn-outline-bookly.disabled {
+  color: var(--bookly-color) !important;
+  background-color: transparent;
+}
+.bookly-css-root .bg-bookly {
+  background-color: var(--bookly-color) !important;
+}
+.bookly-css-root .grid a.selected {
+  background-color: var(--bookly-color) !important;
+}
+@media (hover) {
+  .bookly-css-root .btn-outline-bookly:hover {
+    background-color: var(--bookly-color);
+    border-color: var(--bookly-color);
+  }
+}
+.bookly-css-root .bookly\:hover\:bg-white:hover {
+  background-color: var(--bookly-color-white) !important;
+}
+.bookly-css-root .iti {
+  display: block !important;
+}
+.bookly-css-root .bookly-search-form .iti__flag, .bookly-css-root .bookly-search-form-modal .iti__flag {
+  background-image: var(--bookly-flags-url) !important;
+}
+@media only screen and (min-resolution: 2dppx) {
+  .bookly-css-root .bookly-search-form .iti__flag, .bookly-css-root .bookly-search-form-modal .iti__flag {
+    background-image: url(var(--bookly-flags2x-url)) !important;
+  }
+}
+.bookly-css-root .bookly\:rtl\:-text-right {
+  text-align: var(--rtl-phone-align) !important;
+}
+.bookly-css-root .bookly-form .bookly-js-datepicker-calendar {
+  max-width: unset !important;
+}
+.bookly-css-root .bookly-form .bookly-js-datepicker-calendar button {
+  text-align: center !important;
+}
+.bookly-css-root .bookly-form .bookly-overflow-visible {
+  overflow: visible;
+}
+.bookly-css-root .bookly-fullscreen {
+  position: fixed !important;
+  z-index: 100049 !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  border-radius: 0 !important;
+  margin: 0 !important;
+  max-width: none;
+}
+
+.bookly\:inline-block {
+  display: inline-block;
+}
+
+@property --tw-translate-x {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-y {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-translate-z {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0;
+}
+@property --tw-border-style {
+  syntax: "*";
+  inherits: false;
+  initial-value: solid;
+}
+@property --tw-leading {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-font-weight {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 rgba(0, 0, 0, 0);
+}
+@property --tw-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-inset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 rgba(0, 0, 0, 0);
+}
+@property --tw-inset-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 rgba(0, 0, 0, 0);
+}
+@property --tw-inset-ring-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-inset-ring-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 rgba(0, 0, 0, 0);
+}
+@property --tw-ring-inset {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ring-offset-width {
+  syntax: "<length>";
+  inherits: false;
+  initial-value: 0px;
+}
+@property --tw-ring-offset-color {
+  syntax: "*";
+  inherits: false;
+  initial-value: #fff;
+}
+@property --tw-ring-offset-shadow {
+  syntax: "*";
+  inherits: false;
+  initial-value: 0 0 rgba(0, 0, 0, 0);
+}
+@property --tw-blur {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-brightness {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-contrast {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-grayscale {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-hue-rotate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-invert {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-opacity {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-saturate {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-sepia {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-color {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-drop-shadow-alpha {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 100%;
+}
+@property --tw-drop-shadow-size {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-duration {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-ease {
+  syntax: "*";
+  inherits: false;
+}
+@property --tw-content {
+  syntax: "*";
+  initial-value: "";
+  inherits: false;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@layer properties {
+  @supports ((-webkit-hyphens: none) and (not (margin-trim: inline))) or ((-moz-orient: inline) and (not (color: rgb(from red r g b)))) {
+    *, ::before, ::after, ::backdrop {
+      --tw-translate-x: 0;
+      --tw-translate-y: 0;
+      --tw-translate-z: 0;
+      --tw-border-style: solid;
+      --tw-leading: initial;
+      --tw-font-weight: initial;
+      --tw-shadow: 0 0 #0000;
+      --tw-shadow-color: initial;
+      --tw-shadow-alpha: 100%;
+      --tw-inset-shadow: 0 0 #0000;
+      --tw-inset-shadow-color: initial;
+      --tw-inset-shadow-alpha: 100%;
+      --tw-ring-color: initial;
+      --tw-ring-shadow: 0 0 #0000;
+      --tw-inset-ring-color: initial;
+      --tw-inset-ring-shadow: 0 0 #0000;
+      --tw-ring-inset: initial;
+      --tw-ring-offset-width: 0px;
+      --tw-ring-offset-color: #fff;
+      --tw-ring-offset-shadow: 0 0 #0000;
+      --tw-blur: initial;
+      --tw-brightness: initial;
+      --tw-contrast: initial;
+      --tw-grayscale: initial;
+      --tw-hue-rotate: initial;
+      --tw-invert: initial;
+      --tw-opacity: initial;
+      --tw-saturate: initial;
+      --tw-sepia: initial;
+      --tw-drop-shadow: initial;
+      --tw-drop-shadow-color: initial;
+      --tw-drop-shadow-alpha: 100%;
+      --tw-drop-shadow-size: initial;
+      --tw-duration: initial;
+      --tw-ease: initial;
+      --tw-content: "";
+    }
+  }
+}

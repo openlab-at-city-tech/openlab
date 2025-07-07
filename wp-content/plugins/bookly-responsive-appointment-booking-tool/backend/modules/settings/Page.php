@@ -63,6 +63,7 @@ class Page extends Lib\Base\Ajax
                     update_option( 'bookly_cal_coloring_mode', self::parameter( 'bookly_cal_coloring_mode' ) );
                     update_option( 'bookly_cal_show_new_appointments_badge', self::parameter( 'bookly_cal_show_new_appointments_badge' ) );
                     update_option( 'bookly_cal_last_seen_appointment', self::parameter( 'bookly_cal_last_seen_appointment' ) );
+                    update_option( 'bookly_cal_scrollable_calendar', self::parameter( 'bookly_cal_scrollable_calendar' ) );
                     foreach ( self::parameter( 'status' ) as $status => $color ) {
                         if ( in_array( $status, array( CustomerAppointment::STATUS_PENDING, CustomerAppointment::STATUS_APPROVED, CustomerAppointment::STATUS_CANCELLED, CustomerAppointment::STATUS_REJECTED, 'mixed' ) ) ) {
                             update_option( sprintf( 'bookly_appointment_status_%s_color', $status ), $color );
@@ -96,6 +97,8 @@ class Page extends Lib\Base\Ajax
                             update_option( 'bookly_cloud_stripe_metadata', $metadata );
                         }
                     }
+                    $currencies = Lib\Utils\Price::getCurrencies();
+                    do_action( 'wpml_register_single_string', 'bookly', 'currency_' . self::parameter( 'bookly_pmt_currency' ), $currencies[ self::parameter( 'bookly_pmt_currency' ) ]['symbol'] );
                     $alert['success'][] = __( 'Settings saved.', 'bookly' );
                     break;
                 case 'business_hours':  // Business hours form.
@@ -199,6 +202,8 @@ class Page extends Lib\Base\Ajax
             'stripeCloudMetadata' => get_option( 'bookly_cloud_stripe_metadata', array() ),
             'zeroRecords' => __( 'No records for selected period.', 'bookly' ),
             'processing' => __( 'Processing...', 'bookly' ),
+            'emptyTable' => __( 'No data available in table', 'bookly' ),
+            'loadingRecords' => __( 'Loading...', 'bookly' ),
         ) );
         $values = array();
         foreach ( Lib\Config::getTimeSlotLengthOptions() as $duration ) {

@@ -15,7 +15,8 @@ class ShortCode extends Lib\Base\ShortCode
     {
         $styles = array(
             'bookly' => array(
-                'frontend/resources/css/tailwind.css' => array( 'bookly-frontend-globals' ),
+                'backend/resources/tailwind/tailwind.css' => array( 'bookly-frontend-globals' ),
+                'frontend/resources/css/modern-booking-form-calendar.css' => array( 'bookly-frontend-globals' ),
                 'frontend/resources/css/bootstrap-icons.min.css' => array( 'bookly-frontend-globals' )
             ),
         );

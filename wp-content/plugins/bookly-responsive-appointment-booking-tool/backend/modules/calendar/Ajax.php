@@ -92,7 +92,7 @@ class Ajax extends Page
             ->whereLt( 'a.start_date', $end_date->format( 'Y-m-d H:i:s' ) )
             ->whereRaw( 'DATE_ADD(a.end_date, INTERVAL a.extras_duration SECOND) >= \'%s\'', array( $start_date->format( 'Y-m-d H:i:s' ) ) );
 
-        $service_ids = array_filter( explode( ',', self::parameter( 'service_ids' ) ) );
+        $service_ids = array_filter( explode( ',', self::parameter( 'service_ids', '' ) ) );
 
         if ( ! empty( $service_ids ) && ! in_array( 'all', $service_ids ) ) {
             $raw_where = array();

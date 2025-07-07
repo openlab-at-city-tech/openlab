@@ -9,11 +9,11 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 06:42+0000\n"
-"PO-Revision-Date: 2024-10-21 06:29+0000\n"
+"POT-Creation-Date: 2025-04-29 06:28+0000\n"
+"PO-Revision-Date: 2025-04-30 06:42+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: Russian\n"
-"X-Loco-Version: 2.3.1; wp-6.6.2"
+"X-Loco-Version: 2.3.1; wp-6.7"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr "Счёт №{invoice_number} за вашу запись"
@@ -1679,9 +1679,6 @@ msgstr "Отключить изменение сервисов"
 msgid "Disable price update"
 msgstr "Отключить изменение цены"
 
-msgid "Hide create appointment button"
-msgstr "Скрыть кнопку создания записи"
-
 msgid "Insert"
 msgstr "Вставить"
 
@@ -1768,6 +1765,12 @@ msgstr "Нет записей за выбранный период."
 
 msgid "Processing..."
 msgstr "Обработка..."
+
+msgid "No data available in table"
+msgstr "Данные в таблице отсутствуют"
+
+msgid "Loading..."
+msgstr "Загрузка..."
 
 msgid "No result found"
 msgstr "Результатов не найдено"
@@ -2042,6 +2045,9 @@ msgstr "Персоны"
 msgid "Number of persons"
 msgstr "Количество персон"
 
+msgid "Group Booking"
+msgstr "Групповое бронирование"
+
 msgid "Group bookings information format"
 msgstr "Формат отображения информации о групповых бронированиях"
 
@@ -2056,9 +2062,6 @@ msgstr "[Забронировано/Максимальная вместимос�
 
 msgid "[Available left]"
 msgstr "[Доступно]"
-
-msgid "Group Booking"
-msgstr "Групповое бронирование"
 
 msgid "Number of persons already in the list"
 msgstr "Количество человек состоящих в списке"
@@ -2159,6 +2162,9 @@ msgstr "Показывать поле google maps"
 msgid "Google maps address"
 msgstr "Адрес Google карты"
 
+msgid "Collaborative services"
+msgstr "Совместные сервисы"
+
 msgid "Do not allow to select a specific staff member"
 msgstr "Не позволять выбрать конкретного сотрудника"
 
@@ -2168,9 +2174,6 @@ msgid ""
 msgstr ""
 "Если эта настройка включена, клиенты не смогут выбрать сотрудника для "
 "совместных услуг на первом шаге формы бронирования"
-
-msgid "Collaborative services"
-msgstr "Совместные сервисы"
 
 msgid "Collaborative"
 msgstr "Совместный"
@@ -2257,6 +2260,9 @@ msgstr "Часовой пояс"
 
 msgid "Employee"
 msgstr "Работник"
+
+msgid "WordPress password"
+msgstr "Пароль WordPress"
 
 msgid "Profile"
 msgstr "Профиль"
@@ -3374,6 +3380,18 @@ msgstr "Не удалось сохранить запись в базе данн
 msgid "%s has reached the limit of bookings for this service"
 msgstr "Для %s достигнут предел бронирования этого сервиса"
 
+#, php-format
+msgid ""
+"To get access to more <a href=\"%s\" target=\"_blank\">features</a>, "
+"lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly."
+msgstr ""
+"Чтобы получить доступ к дополнительным <a href=\"%s\" target=\"_blank\">"
+"функциям</a>, бесплатным обновлениям и круглосуточной поддержке, обновите "
+"Bookly до версии Pro."
+
+msgid "Upgrade"
+msgstr "Обновить"
+
 msgid "No."
 msgstr "№"
 
@@ -3433,6 +3451,9 @@ msgstr "ID отправителя"
 
 msgid "Cost"
 msgstr "Стоимость"
+
+msgid "Resend"
+msgstr "Отправить повторно"
 
 msgid "Template"
 msgstr "Шаблон"
@@ -3718,8 +3739,8 @@ msgstr ""
 "автоматически отозваны, поэтому пользователи, связанные с удаленными "
 "токенами, потеряют доступ"
 
-msgid "No records."
-msgstr "Нет записей."
+msgid "No matching records found"
+msgstr "Соответствующих записей не найдено"
 
 msgid "Add service"
 msgstr "Добавить сервис"
@@ -4332,6 +4353,18 @@ msgstr ""
 "Если эта настройка включена, вы увидите индикатор новых записей рядом с "
 "'Календарём'"
 
+msgid "Scrollable calendar"
+msgstr "Прокрутка календаря"
+
+msgid ""
+"If enabled, the backend calendar will occupy part of the screen and remain "
+"scrollable. If disabled, it will take up more space and scroll along with "
+"the entire page."
+msgstr ""
+"Если включено, календарь в административной панели займет часть экрана и "
+"останется прокручиваемым. Если отключено, он будет занимать больше "
+"пространства и прокручиваться вместе со всей страницей."
+
 msgid "Month view style"
 msgstr "Стиль календаря в режиме \"Месяц\""
 
@@ -4644,11 +4677,8 @@ msgstr "Запрос отправлен."
 msgid "Sender ID is reset to default."
 msgstr "ID отправителя восстановлен до первоначального значения."
 
-msgid "No matching records found"
-msgstr "Соответствующих записей не найдено"
-
-msgid "No data available in table"
-msgstr "Данные в таблице отсутствуют"
+msgid "No records."
+msgstr "Нет записей."
 
 msgid "enable"
 msgstr "включить"
@@ -4958,14 +4988,203 @@ msgstr "Успех"
 msgid "Warning"
 msgstr "Предупреждение"
 
+msgid "Import file"
+msgstr "Импортировать файл"
+
+msgid "Service name"
+msgstr "Название сервиса"
+
+msgid "Start date"
+msgstr "Дата начала"
+
+msgid "End date / Duration"
+msgstr "Дата окончания / Продолжительность"
+
+msgid "Staff name"
+msgstr "Имя сотрудника"
+
+msgid "Client name"
+msgstr "Имя клиента"
+
+msgid "Client email"
+msgstr "Адрес эл. почты клиента"
+
+msgid "Client phone"
+msgstr "Номер телефона клиента"
+
+msgid "Import"
+msgstr "Импорт"
+
+msgid "minutes"
+msgstr "минут"
+
+msgid "Empty value"
+msgstr "Пустое значение"
+
+msgid ""
+"By proceeding with the import process, the following actions will be "
+"performed:"
+msgstr "Приступив к процессу импорта, будут выполнены следующие действия:"
+
+msgid ""
+"New staff members, services, customers, appointments and payments will be "
+"created based on the data in your CSV file."
+msgstr ""
+"Новые сотрудники, услуги, клиенты, записи и платежи будут созданы на основе "
+"данных в вашем CSV-файле."
+
+msgid ""
+"Services will be linked to staff members, and customers will be linked to "
+"their appointments."
+msgstr "Услуги будут привязаны к сотрудникам, а клиенты – к своим записям."
+
+msgid ""
+"If exact service duration data is unavailable, durations will be calculated "
+"based on the start and end times of appointments."
+msgstr ""
+"Если точные данные о продолжительности отсутствуют, длительность будет "
+"рассчитана на основе времени начала и окончания записей."
+
+msgid ""
+"If a service, staff member, or customer already exists, the existing records "
+"will be used to avoid duplication."
+msgstr ""
+"Если услуга, сотрудник или клиент уже существуют, будут использоваться "
+"существующие записи, чтобы избежать дублирования."
+
+msgid ""
+"Instant notifications will not be sent, but all types of reminders will be "
+"sent."
+msgstr ""
+"Мгновенные уведомления не будут отправлены, но будут отправляться все типы "
+"напоминаний."
+
+msgid "Please note:"
+msgstr "Обратите внимание:"
+
+msgid "Imported appointments will not be synced with external calendars."
+msgstr ""
+"Импортированные записи не будут синхронизированы с внешними календарями."
+
+msgid "You must fully understand the data you are importing and its impact."
+msgstr ""
+"Вы должны полностью понимать данные, которые вы импортируете, и их влияние."
+
+msgid ""
+"It is strongly recommended to back up your database before proceeding, as "
+"there will be no straightforward way to undo the changes made during the "
+"import."
+msgstr ""
+"Прежде чем продолжить, настоятельно рекомендуется создать резервную копию "
+"базы данных, поскольку не существует простого способа отменить изменения, "
+"внесенные во время импорта."
+
+msgid ""
+"If you're importing a large CSV file, make sure to check your server limits, "
+"as exceeding them may disrupt the import."
+msgstr ""
+"Если вы импортируете большой CSV-файл, обязательно проверьте ограничения "
+"вашего сервера, поскольку их превышение может привести к сбою импорта."
+
+msgid ""
+"If you still need to import a large file, you can split it into several "
+"parts and upload them one by one."
+msgstr ""
+"Если вам все же необходимо импортировать большой файл, вы можете разделить "
+"его на несколько частей и загрузить их по одной."
+
+msgid "Choose CSV file to import"
+msgstr "Выберите CSV-файл для импорта"
+
+#, php-format
+msgid ""
+"You can find full import guide in <a href=\"%s\" target=_blank>our "
+"documentation</a>."
+msgstr ""
+"Полное руководство по импорту можно найти в <a href=\"%s\" target=_blank>"
+"нашей документации</a>."
+
+msgid "I understand that I am proceeding with the import at my own risk."
+msgstr "Я понимаю, что выполняю импорт под свою ответственность."
+
+msgid "Proceed"
+msgstr "Продолжить"
+
+msgid ""
+"When importing data from a CSV file, map the columns in your file to the "
+"corresponding fields in Bookly."
+msgstr ""
+"При импорте данных из CSV-файла сопоставьте столбцы в вашем файле с "
+"соответствующими полями в Bookly."
+
+msgid ""
+"Use the dropdown menus and input fields to specify which data from your CSV "
+"should be imported to each field."
+msgstr ""
+"Используйте выпадающие списки и поля ввода, чтобы указать, какие данные из "
+"вашего CSV-файла следует импортировать в каждое поле."
+
+msgid "Set the corresponding duration in minutes."
+msgstr "Установите соответствующую продолжительность в минутах."
+
+msgid "Set the corresponding price in your currency."
+msgstr "Установите соответствующую стоимость в вашей валюте."
+
+msgid ""
+"If the imported file does not contain a column for the status value, select "
+"Custom and set a default status for appointments."
+msgstr ""
+"Если импортируемый файл не содержит столбца для значения статуса, выберите "
+"«Пользовательский» и установите статус по умолчанию для записей."
+
+msgid "required"
+msgstr "обязательно"
+
+msgid "Something went wrong"
+msgstr "Что-то пошло не так"
+
+msgid "You have a previously imported file detected."
+msgstr "У вас обнаружен ранее импортированный файл."
+
+msgid ""
+"If you encountered any issues during the import, you can roll back the "
+"import of this file."
+msgstr ""
+"Если во время импорта у вас возникли какие-либо проблемы, вы можете отменить "
+"импорт этого файла."
+
+msgid "Rollback"
+msgstr "Отменить изменения"
+
+msgid "Import successful"
+msgstr "Импорт выполнен успешно"
+
+msgid "Import results"
+msgstr "Результаты импорта"
+
+msgid "Staff members imported"
+msgstr "Сотрудников импортировано"
+
+msgid "Services imported"
+msgstr "Услуг импортировано"
+
+msgid "Clients imported"
+msgstr "Клиентов импортировано"
+
+msgid "Appointments imported"
+msgstr "Записей импортировано"
+
 msgid "End points"
 msgstr "End points"
 
 msgid "All actions"
 msgstr "Все действия"
 
-msgid "Clear logs"
-msgstr "Очистить журнал"
+msgid "Clear all logs"
+msgstr "Очистить все логи"
+
+msgid "Restore records"
+msgstr "Восстановить записи"
 
 msgid "Keep logs"
 msgstr "Хранить журнал"
@@ -5189,6 +5408,9 @@ msgstr "Новости"
 
 msgid "More news"
 msgstr "Другие новости"
+
+msgid "Appointment at any time"
+msgstr "Запись в любое время"
 
 msgid "No payments for selected period and criteria."
 msgstr "Нет платежей за выбранный период и по выбранным критериям."
@@ -5507,6 +5729,12 @@ msgstr "Установить!"
 msgid ""
 "See the number of appointments and total revenue for the selected period"
 msgstr "Смотреть количество записей и общий доход за выбранный период"
+
+msgid "Based on appointment date"
+msgstr "На основе даты записи"
+
+msgid "Based on date of creation"
+msgstr "На основе даты создания"
 
 msgid "End date of appointment"
 msgstr "Дата окончания записи"
@@ -5990,6 +6218,12 @@ msgstr "Добавить"
 msgid "Reset"
 msgstr "Сбросить"
 
+msgid "Clone"
+msgstr "Клонировать"
+
+msgid "Add break"
+msgstr "Добавить перерыв"
+
 msgid "Notification settings"
 msgstr "Настройки уведомления"
 
@@ -6054,9 +6288,6 @@ msgid ""
 "Choose whether notification should be sent for specific services only or not."
 msgstr ""
 "Выберите, следует ли отправлять уведомление только для определенных услуг."
-
-msgid "days"
-msgstr "дня"
 
 msgid "before"
 msgstr "до"
@@ -6670,9 +6901,6 @@ msgstr "Интеграция с Google Календарём"
 msgid "Advanced service and staff management"
 msgstr "Расширенные возможности управления сервисами и сотрудниками"
 
-msgid "Upgrade"
-msgstr "Обновить"
-
 #, php-format
 msgid ""
 "<b>Bookly Lite rebrands into Bookly with more features available.</b><br/>"
@@ -6903,9 +7131,6 @@ msgstr "Запомнить меня"
 
 msgid "Lost your password?"
 msgstr "Забыли пароль?"
-
-msgid "Loading..."
-msgstr "Загрузка..."
 
 msgid "Powered by"
 msgstr "Разработано"
@@ -7821,6 +8046,9 @@ msgstr "Пользовательский блок для отображения 
 msgid "A custom block for displaying staff form"
 msgstr "Пользовательский блок для отображения формы сотрудника"
 
+msgid "A custom block for displaying tags form"
+msgstr "Пользовательский блок для отображения формы с тегами"
+
 msgid "The calendar list is not available"
 msgstr "Список календаря недоступен"
 
@@ -8283,14 +8511,6 @@ msgstr ""
 "Если вы не предоставите действительный лицензионный ключ в течение {days}, "
 "доступ к вашим записям будет отключен."
 
-#, php-format
-msgid ""
-"To set up Zoom integration, follow the instructions in <a href=\"%s\" "
-"target=\"_blank\">our documentation</a>"
-msgstr ""
-"Чтобы настроить интеграцию с Zoom, следуйте инструкциям в <a href=\"%s\" "
-"target=\"_blank\">нашей документации</a>"
-
 msgid "Authentication"
 msgstr "Аутентификация"
 
@@ -8516,6 +8736,16 @@ msgstr ""
 "Современная и быстрая форма, позволяющая вашим клиентам легко находить "
 "нужную услугу."
 
+msgid "Tags form"
+msgstr "Форма с тегами"
+
+msgid ""
+"This form allows you to organize the structure and navigation based on tags "
+"assigned to services."
+msgstr ""
+"Эта форма позволяет организовать структуру и навигацию на основе тегов, "
+"назначенных услугам."
+
 msgid ""
 "Catalog view allows you to organize and display the services conveniently "
 "for your customers."
@@ -8572,6 +8802,9 @@ msgstr "Slug"
 msgid "Main color"
 msgstr "Основной цвет"
 
+msgid "Hide form borders"
+msgstr "Скрыть границы формы"
+
 msgid "Show 'Book more' button"
 msgstr "Показывать кнопку \"Забронировать ещё\""
 
@@ -8604,6 +8837,9 @@ msgstr "Скрыть шаг выбора категорий"
 
 msgid "Hide services step"
 msgstr "Скрыть шаг выбора сервисов"
+
+msgid "Hide tags step"
+msgstr "Скрыть шаг с тегами"
 
 msgid "Staff list"
 msgstr "Список сотрудников"
@@ -8702,6 +8938,27 @@ msgstr "Показывать рейтинг перед именем сотруд
 
 msgid "Skip step"
 msgstr "Пропустить шаг"
+
+msgid "Initial view"
+msgstr "Первоначальный вид"
+
+msgid "Form"
+msgstr "Форма"
+
+msgid "Button title"
+msgstr "Название кнопки"
+
+msgid "Add subsection"
+msgstr "Добавить подраздел"
+
+msgid "Section title"
+msgstr "Заголовок раздела"
+
+msgid "Allow skip"
+msgstr "Разрешить пропуск"
+
+msgid "Skip button title"
+msgstr "Название кнопки \"Пропустить\""
 
 msgid "Add new form"
 msgstr "Добавить новую форму"
@@ -8870,9 +9127,6 @@ msgstr "Этой записи не существует."
 msgid "Cancellation of this appointment is not allowed."
 msgstr "Отмена данной записи недопустима."
 
-msgid "Import"
-msgstr "Импорт"
-
 msgid "Note"
 msgstr "Заметка"
 
@@ -8890,6 +9144,9 @@ msgstr "Выберите файл"
 
 msgid "Date of birth"
 msgstr "Дата рождения"
+
+msgid "Skip first row of CSV file"
+msgstr "Пропустить первую строку CSV-файла"
 
 msgid "Analytics"
 msgstr "Аналитика"
@@ -9451,9 +9708,6 @@ msgid "Thank you for choosing Bookly Pro as your booking solution."
 msgstr ""
 "Благодарим вас за то, что выбрали Bookly Pro в качестве решения для "
 "бронирования услуг."
-
-msgid "Proceed"
-msgstr "Продолжить"
 
 msgid ""
 "Please contact your website administrator to verify your license by "
@@ -10091,6 +10345,9 @@ msgstr "Уведомление для сотрудника добавить за
 msgid "Set appointment"
 msgstr "Добавить запись"
 
+msgid "Waiting List"
+msgstr "Лист Ожидания"
+
 msgid "Add customers to the waiting list despite the capacity value"
 msgstr "Добавлять клиентов в лист ожидания несмотря на значение вместимости"
 
@@ -10127,9 +10384,6 @@ msgid ""
 msgstr ""
 "Укажите URL страницы, которая будет отображаться клиентам, когда создание "
 "записи из списка ожидания более не доступно."
-
-msgid "Waiting List"
-msgstr "Лист Ожидания"
 
 msgid "Show waiting list slots"
 msgstr "Показывать интервалы со списком ожидания"
@@ -10665,11 +10919,11 @@ msgstr "Новая скидка"
 msgid "Edit discount"
 msgstr "Редактировать скидку"
 
+msgid "Multiply Appointments"
+msgstr "Множественные Записи"
+
 msgid "Set maximum value for Quantity field."
 msgstr "Установите максимальное значение для поля Количество."
-
-msgid "Multiply Appointments"
-msgstr "Multiply Appointments"
 
 msgid "Google Calendar event"
 msgstr "Событие Google Календаря"

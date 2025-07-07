@@ -130,22 +130,26 @@ jQuery(function ($) {
     });
 
     $(document.body).on('bookly.dateRange.changed', {},
-        function (event, data) {
+        function (event, range, based_on) {
             $container.parent().booklyLoading(true);
+            if (based_on !== 'start_date') {
+                based_on = 'created_at';
+            }
             $.ajax({
-                url     : ajaxurl,
-                type    : 'POST',
-                data    : {
-                    action    : 'bookly_get_appointments_data_for_dashboard',
+                url: ajaxurl,
+                type: 'POST',
+                data: {
+                    action: 'bookly_get_appointments_data_for_dashboard',
                     csrf_token: BooklyAppointmentsWidgetL10n.csrfToken,
-                    range     : data
+                    based_on: based_on,
+                    range: range
                 },
                 dataType: 'json',
-                success : function (response) {
+                success: function(response) {
                     $container.parent().booklyLoading(false);
                     revenue.data = [];
                     total.data = [];
-                    $.each(response.data.days,function (date, item) {
+                    $.each(response.data.days, function(date, item) {
                         revenue.data.push(item.revenue);
                         total.data.push(item.total);
                     });
@@ -154,10 +158,10 @@ jQuery(function ($) {
                     totals.$pending.html(response.data.totals.pending);
                     totals.$total.html(response.data.totals.total);
 
-                    href.$revenue.attr('href', response.data.filters.revenue);
-                    href.$approved.attr('href',response.data.filters.approved);
-                    href.$pending.attr('href', response.data.filters.pending);
-                    href.$total.attr('href',   response.data.filters.total);
+                    href.$revenue.attr('href', response.data.filters[based_on].revenue);
+                    href.$approved.attr('href', response.data.filters[based_on].approved);
+                    href.$pending.attr('href', response.data.filters[based_on].pending);
+                    href.$total.attr('href', response.data.filters[based_on].total);
 
                     chart.data.labels = response.data.labels;
                     chart.update();
@@ -166,6 +170,6 @@ jQuery(function ($) {
         }
     );
     $dateFilter.on('change', function () {
-        $(document.body).trigger('bookly.dateRange.changed', [$dateFilter.val()]);
+        $(document.body).trigger('bookly.dateRange.changed', [$dateFilter.val(), BooklyAppointmentsWidgetL10n.based_on]);
     }).trigger('change');
 });

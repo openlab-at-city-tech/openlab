@@ -8,11 +8,11 @@ msgstr ""
 "Language: de_DE\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-10-18 06:42+0000\n"
-"PO-Revision-Date: 2024-10-21 06:23+0000\n"
+"POT-Creation-Date: 2025-05-05 08:17+0000\n"
+"PO-Revision-Date: 2025-05-06 11:07+0000\n"
 "Last-Translator: support@bookly.info\n"
 "Language-Team: German\n"
-"X-Loco-Version: 2.3.1; wp-6.6.2"
+"X-Loco-Version: 2.3.1; wp-6.7"
 
 msgid "Invoice #{invoice_number} for your appointment"
 msgstr ""
@@ -1733,9 +1733,6 @@ msgstr "Aktualisierung der Dienstleistungen deaktivieren"
 msgid "Disable price update"
 msgstr "Preisaktualisierung deaktivieren"
 
-msgid "Hide create appointment button"
-msgstr "Schaltfläche „Termin erstellen“ ausblenden"
-
 msgid "Insert"
 msgstr "Einfügen"
 
@@ -1833,6 +1830,12 @@ msgstr "Keine Termine für den ausgewählten Zeitraum."
 
 msgid "Processing..."
 msgstr "Wird verarbeitet..."
+
+msgid "No data available in table"
+msgstr "Keine Daten in der Tabelle verfügbar"
+
+msgid "Loading..."
+msgstr "Wird geladen ..."
 
 msgid "No result found"
 msgstr "Kein Ergebnis gefunden"
@@ -2121,6 +2124,9 @@ msgstr "Personen"
 msgid "Number of persons"
 msgstr "Personenanzahl"
 
+msgid "Group Booking"
+msgstr "Gruppenbuchung"
+
 msgid "Group bookings information format"
 msgstr "Gruppenbuchungs-Informationsformat"
 
@@ -2139,9 +2145,6 @@ msgstr ""
 # [Verbleibende Verfügbare] wrong
 msgid "[Available left]"
 msgstr "[Verfügbar übrig]"
-
-msgid "Group Booking"
-msgstr "Gruppenbuchung"
 
 msgid "Number of persons already in the list"
 msgstr "Anzahl der bereits in der Liste aufgeführten Personen"
@@ -2244,6 +2247,9 @@ msgstr "Google Maps anzeigen"
 msgid "Google maps address"
 msgstr "Adresse bei Google Maps"
 
+msgid "Collaborative services"
+msgstr "Kollaborative Dienstleistungen"
+
 msgid "Do not allow to select a specific staff member"
 msgstr "Auswahl eines bestimmten Mitarbeiters nicht zulassen"
 
@@ -2254,9 +2260,6 @@ msgstr ""
 "Ist diese Option aktiviert, können Kunden im ersten Schritt des "
 "Buchungsformulars keinen Mitarbeiter für kollaborative Dienstleistungen "
 "auswählen"
-
-msgid "Collaborative services"
-msgstr "Kollaborative Dienstleistungen"
 
 msgid "Collaborative"
 msgstr "Kollaborative"
@@ -2346,6 +2349,9 @@ msgstr "Zeitzone"
 
 msgid "Employee"
 msgstr "Mitarbeiter"
+
+msgid "WordPress password"
+msgstr "WordPress-Passwort"
 
 msgid "Profile"
 msgstr "Profil"
@@ -2513,7 +2519,7 @@ msgid "Invalid email."
 msgstr "Ungültige E-Mail."
 
 msgid "Recharge your account with one of the standard amounts"
-msgstr ""
+msgstr "Laden Sie Ihr Konto mit einem der Standardbeträge auf"
 
 msgid "Pending sender ID already exists."
 msgstr "Ausstehende Absender-ID bereits existiert bereits."
@@ -3497,6 +3503,18 @@ msgstr "Termin konnte nicht in Datenbank gespeichert werden."
 msgid "%s has reached the limit of bookings for this service"
 msgstr "%s hat die Buchungsgrenze für diese Dienstleistung erreicht"
 
+#, php-format
+msgid ""
+"To get access to more <a href=\"%s\" target=\"_blank\">features</a>, "
+"lifetime free updates and 24/7 support, upgrade to the Pro version of Bookly."
+msgstr ""
+"Um Zugang zu mehr <a href=\"%s\" target=\"_blank\">Funktionen</a>, "
+"lebenslangen kostenlosen Updates und 24/7-Support zu erhalten, upgraden Sie "
+"auf die Pro-Version von Bookly."
+
+msgid "Upgrade"
+msgstr "Upgrade"
+
 msgid "No."
 msgstr "Nr."
 
@@ -3563,6 +3581,9 @@ msgstr "Absender ID"
 
 msgid "Cost"
 msgstr "Kosten"
+
+msgid "Resend"
+msgstr "Erneut senden"
 
 msgid "Template"
 msgstr "Vorlage"
@@ -3855,8 +3876,8 @@ msgstr ""
 "beachten Sie, dass die Token automatisch widerrufen werden, sodass der/die "
 "mit dem/den gelöschten Token verbundene(n) Benutzer den Zugriff verlieren."
 
-msgid "No records."
-msgstr "Keine Einträge."
+msgid "No matching records found"
+msgstr "Es wurden keine übereinstimmenden Datensätze gefunden"
 
 msgid "Add service"
 msgstr "Dienstleistung hinzufügen"
@@ -4498,6 +4519,18 @@ msgstr ""
 "Wenn diese Option aktiviert ist, sehen Sie bei neu erstellten Terminen neben "
 "\"Kalender\" eine Markierung"
 
+msgid "Scrollable calendar"
+msgstr "Scrollbarer Kalender"
+
+msgid ""
+"If enabled, the backend calendar will occupy part of the screen and remain "
+"scrollable. If disabled, it will take up more space and scroll along with "
+"the entire page."
+msgstr ""
+"Wenn diese Option aktiviert ist, nimmt der Backend-Kalender einen Teil des "
+"Bildschirms ein und bleibt scrollbar. Wenn diese Funktion deaktiviert ist, "
+"nimmt er mehr Platz ein und scrollt mit der gesamten Seite."
+
 msgid "Month view style"
 msgstr "Monatsansicht-Stil"
 
@@ -4822,11 +4855,8 @@ msgstr "Absender-ID-Anforderung wird gesendet."
 msgid "Sender ID is reset to default."
 msgstr "Die Absender-ID wird auf den Standardwert zurückgesetzt."
 
-msgid "No matching records found"
-msgstr ""
-
-msgid "No data available in table"
-msgstr ""
+msgid "No records."
+msgstr "Keine Einträge."
 
 msgid "enable"
 msgstr "Aktivieren"
@@ -5149,14 +5179,213 @@ msgstr "Erfolg"
 msgid "Warning"
 msgstr "Warnung"
 
+msgid "Import file"
+msgstr "Datei importieren"
+
+msgid "Service name"
+msgstr "Name der Dienstleistung"
+
+msgid "Start date"
+msgstr "Startdatum"
+
+msgid "End date / Duration"
+msgstr "Enddatum/Dauer"
+
+msgid "Staff name"
+msgstr "Mitarbeitername"
+
+msgid "Client name"
+msgstr "Name des Kunden"
+
+msgid "Client email"
+msgstr "E-Mail-Adresse des Kunden"
+
+msgid "Client phone"
+msgstr "Telefonnummer des Kunden"
+
+msgid "Import"
+msgstr "Import"
+
+msgid "minutes"
+msgstr "Minuten"
+
+msgid "Empty value"
+msgstr "Leerer Wert"
+
+msgid ""
+"By proceeding with the import process, the following actions will be "
+"performed:"
+msgstr ""
+"Wenn Sie mit dem Importieren fortfahren, werden die folgenden Aktionen "
+"ausgeführt:"
+
+msgid ""
+"New staff members, services, customers, appointments and payments will be "
+"created based on the data in your CSV file."
+msgstr ""
+"Neue Mitarbeiter, Dienstleistungen, Kunden, Termine und Zahlungen werden "
+"basierend auf den Daten in Ihrer CSV-Datei erstellt."
+
+msgid ""
+"Services will be linked to staff members, and customers will be linked to "
+"their appointments."
+msgstr ""
+"Dienstleistungen werden mit den Mitarbeitern verknüpft, und die Kunden "
+"werden mit ihren Terminen verknüpft."
+
+msgid ""
+"If exact service duration data is unavailable, durations will be calculated "
+"based on the start and end times of appointments."
+msgstr ""
+"Wenn keine genauen Daten zur Dauer der Dienstleistung verfügbar sind, wird "
+"die Dauer anhand der Start- und Endzeiten der Termine berechnet."
+
+msgid ""
+"If a service, staff member, or customer already exists, the existing records "
+"will be used to avoid duplication."
+msgstr ""
+"Wenn bereits ein Dienst, ein Mitarbeiter oder ein Kunde vorhanden ist, "
+"werden die vorhandenen Datensätze verwendet, um eine doppelte Erfassung zu "
+"vermeiden."
+
+msgid ""
+"Instant notifications will not be sent, but all types of reminders will be "
+"sent."
+msgstr ""
+"Es werden keine Sofortbenachrichtigungen gesendet, aber es werden alle Arten "
+"von Erinnerungen gesendet."
+
+msgid "Please note:"
+msgstr "Bitte beachten Sie:"
+
+msgid "Imported appointments will not be synced with external calendars."
+msgstr ""
+"Importierte Termine werden nicht mit externen Kalendern synchronisiert."
+
+msgid "You must fully understand the data you are importing and its impact."
+msgstr ""
+"Sie müssen die Daten, die Sie importieren, und deren Auswirkungen "
+"vollständig verstehen."
+
+msgid ""
+"It is strongly recommended to back up your database before proceeding, as "
+"there will be no straightforward way to undo the changes made during the "
+"import."
+msgstr ""
+"Es wird dringend empfohlen, Ihre Datenbank zu sichern, bevor Sie fortfahren, "
+"da es keine einfache Möglichkeit gibt, die während des Imports vorgenommenen "
+"Änderungen rückgängig zu machen."
+
+msgid ""
+"If you're importing a large CSV file, make sure to check your server limits, "
+"as exceeding them may disrupt the import."
+msgstr ""
+"Wenn Sie eine große CSV-Datei importieren, überprüfen Sie unbedingt die "
+"Server-Limits, da eine Überschreitung zu einer Unterbrechung des Imports "
+"führen kann."
+
+msgid ""
+"If you still need to import a large file, you can split it into several "
+"parts and upload them one by one."
+msgstr ""
+"Wenn Sie dennoch eine große Datei importieren müssen, können Sie diese in "
+"mehrere Teile aufteilen und diese einzeln hochladen."
+
+msgid "Choose CSV file to import"
+msgstr "Wählen Sie die zu importierende CSV-Datei aus"
+
+#, php-format
+msgid ""
+"You can find full import guide in <a href=\"%s\" target=_blank>our "
+"documentation</a>."
+msgstr ""
+"Den vollständigen Leitfaden zum Importieren finden Sie in <a href=\"%s\" "
+"target=_blank>unserer Dokumentation</a>."
+
+msgid "I understand that I am proceeding with the import at my own risk."
+msgstr ""
+"Ich bin mir bewusst, dass ich den Import auf eigenes Risiko durchführe."
+
+# Weiter wrong
+msgid "Proceed"
+msgstr "Fahren Sie fort"
+
+msgid ""
+"When importing data from a CSV file, map the columns in your file to the "
+"corresponding fields in Bookly."
+msgstr ""
+"Wenn Sie Daten aus einer CSV-Datei importieren, ordnen Sie die Spalten in "
+"Ihrer Datei den entsprechenden Feldern in Bookly zu."
+
+msgid ""
+"Use the dropdown menus and input fields to specify which data from your CSV "
+"should be imported to each field."
+msgstr ""
+"Verwenden Sie die Dropdown-Menüs und Eingabefelder, um festzulegen, welche "
+"Daten aus Ihrer CSV-Datei in die einzelnen Felder importiert werden sollen."
+
+msgid "Set the corresponding duration in minutes."
+msgstr "Legen Sie die entsprechende Dauer in Minuten fest."
+
+msgid "Set the corresponding price in your currency."
+msgstr "Legen Sie den entsprechenden Preis in Ihrer Währung fest."
+
+msgid ""
+"If the imported file does not contain a column for the status value, select "
+"Custom and set a default status for appointments."
+msgstr ""
+"Wenn die importierte Datei keine Spalte für den Statuswert enthält, wählen "
+"Sie „Benutzerdefiniert“ aus und legen Sie einen Standardstatus für Termine "
+"fest."
+
+msgid "required"
+msgstr "erforderlich"
+
+msgid "Something went wrong"
+msgstr "Etwas ist schiefgelaufen"
+
+msgid "You have a previously imported file detected."
+msgstr "Sie haben eine zuvor importierte Datei erkannt."
+
+msgid ""
+"If you encountered any issues during the import, you can roll back the "
+"import of this file."
+msgstr ""
+"Wenn beim Importieren Probleme aufgetreten sind, können Sie das Importieren "
+"dieser Datei rückgängig machen."
+
+msgid "Rollback"
+msgstr "Rollback"
+
+msgid "Import successful"
+msgstr "Erfolgreich importiert"
+
+msgid "Import results"
+msgstr "Importergebnisse"
+
+msgid "Staff members imported"
+msgstr "Mitarbeiter importiert"
+
+msgid "Services imported"
+msgstr "Dienstleistungen importiert"
+
+msgid "Clients imported"
+msgstr "Kunden importiert"
+
+msgid "Appointments imported"
+msgstr "Termine importiert"
+
 msgid "End points"
 msgstr "Endpunkte"
 
 msgid "All actions"
 msgstr "Alle Aktionen"
 
-msgid "Clear logs"
-msgstr "Protokolle löschen"
+msgid "Clear all logs"
+msgstr "Alle Protokolle löschen"
+
+msgid "Restore records"
+msgstr "Datensätze wiederherstellen"
 
 msgid "Keep logs"
 msgstr "Protokolle führen"
@@ -5388,6 +5617,9 @@ msgstr "Neuigkeiten"
 
 msgid "More news"
 msgstr "Mehr Neuigkeiten"
+
+msgid "Appointment at any time"
+msgstr "Termin zu beliebiger Zeit"
 
 # Keine Zahlungen für den gewünschten Zeitraum und Bedingungen. wrong
 msgid "No payments for selected period and criteria."
@@ -5733,6 +5965,12 @@ msgid ""
 msgstr ""
 "Zeigt die Anzahl der Termine und den Gesamterlös für den ausgewählten "
 "Zeitraum an."
+
+msgid "Based on appointment date"
+msgstr "Basierend auf dem Datum des Termins"
+
+msgid "Based on date of creation"
+msgstr "Basierend auf dem Datum der Erstellung"
 
 msgid "End date of appointment"
 msgstr "Enddatum des Termins"
@@ -6236,6 +6474,12 @@ msgstr "Hinzufügen"
 msgid "Reset"
 msgstr "Zurücksetzen"
 
+msgid "Clone"
+msgstr "Klonen"
+
+msgid "Add break"
+msgstr "Pause hinzufügen"
+
 msgid "Notification settings"
 msgstr "Benachrichtigungseinstellungen"
 
@@ -6312,9 +6556,6 @@ msgid ""
 msgstr ""
 "Wählen Sie, ob die Benachrichtigung nur für bestimmte Dienstleistungen "
 "versendet werden soll oder nicht."
-
-msgid "days"
-msgstr "Tage"
 
 msgid "before"
 msgstr "vor"
@@ -6797,7 +7038,7 @@ msgid "Column"
 msgstr "Spalte"
 
 msgid "Entries per page"
-msgstr ""
+msgstr "Einträge pro Seite"
 
 msgid "Attach ICS file"
 msgstr "ICS-Datei anhängen"
@@ -6954,9 +7195,6 @@ msgstr "Google-Kalender-Integration"
 
 msgid "Advanced service and staff management"
 msgstr "Erweiterte Dienstleistungs- und Personalverwaltung"
-
-msgid "Upgrade"
-msgstr "Upgrade"
 
 #, php-format
 msgid ""
@@ -7215,9 +7453,6 @@ msgstr "Erinnere mich"
 
 msgid "Lost your password?"
 msgstr "Passwort vergessen?"
-
-msgid "Loading..."
-msgstr "Wird geladen ..."
 
 # Powered by wrong
 msgid "Powered by"
@@ -7635,13 +7870,13 @@ msgid "Life Time"
 msgstr "Nutzungsdauer"
 
 msgid "Days from the first booking"
-msgstr ""
+msgstr "Tage ab der ersten Buchung"
 
 msgid "Days from the creation"
-msgstr ""
+msgstr "Tage seit der Erstellung"
 
 msgid "Number of days"
-msgstr ""
+msgstr "Anzahl Tage"
 
 msgid "The period in days when the customer can use a package of services."
 msgstr ""
@@ -8205,8 +8440,11 @@ msgstr ""
 msgid "A custom block for displaying staff form"
 msgstr "Ein benutzerdefinierter Block für die Anzeige des Mitarbeiterformulars"
 
+msgid "A custom block for displaying tags form"
+msgstr "Ein benutzerdefinierter Block zur Anzeige des Tags-Formulars"
+
 msgid "The calendar list is not available"
-msgstr ""
+msgstr "Die Kalenderliste ist nicht verfügbar"
 
 msgid "no limit"
 msgstr "Kein Limit"
@@ -8698,14 +8936,6 @@ msgstr ""
 "Wenn Sie innerhalb von {days} keinen gültigen Bestellcode angeben, wird der "
 "Zugang zu Ihren Buchungen abgeschaltet."
 
-#, php-format
-msgid ""
-"To set up Zoom integration, follow the instructions in <a href=\"%s\" "
-"target=\"_blank\">our documentation</a>"
-msgstr ""
-"Um die Zoom-Integration einzurichten, folgen Sie den Anweisungen in <a "
-"href=\"%s\" target=\"_blank\">unserer Dokumentation</a>"
-
 msgid "Authentication"
 msgstr "Authentifizierung"
 
@@ -8939,6 +9169,16 @@ msgstr ""
 "Ein modernes, schnelles und einfaches Formular, mit dem Ihre Kunden leicht "
 "die richtige Dienstleistung finden können."
 
+msgid "Tags form"
+msgstr "Tags-Formular"
+
+msgid ""
+"This form allows you to organize the structure and navigation based on tags "
+"assigned to services."
+msgstr ""
+"Mit diesem Formular können Sie die Struktur und die Navigation auf der "
+"Grundlage der Tags organisieren, die Dienstleistungen zugewiesen sind."
+
 msgid ""
 "Catalog view allows you to organize and display the services conveniently "
 "for your customers."
@@ -8994,6 +9234,9 @@ msgstr "Slug"
 msgid "Main color"
 msgstr "Hauptfarbe"
 
+msgid "Hide form borders"
+msgstr "Formularränder ausblenden"
+
 msgid "Show 'Book more' button"
 msgstr "Schaltfläche \"Mehr buchen\" anzeigen"
 
@@ -9027,6 +9270,9 @@ msgstr "Schritt \"Kategorien\" ausblenden"
 
 msgid "Hide services step"
 msgstr "Schritt \"Dienstleistungen\" ausblenden"
+
+msgid "Hide tags step"
+msgstr "Tags-Schritt ausblenden"
 
 msgid "Staff list"
 msgstr "Mitarbeiterliste"
@@ -9126,6 +9372,27 @@ msgstr "Bewertung des Mitarbeiters vor dem Namen des Mitarbeiters anzeigen"
 
 msgid "Skip step"
 msgstr "Schritt überspringen"
+
+msgid "Initial view"
+msgstr "Ursprüngliche Ansicht"
+
+msgid "Form"
+msgstr "Formular"
+
+msgid "Button title"
+msgstr "Titel der Schaltfläche"
+
+msgid "Add subsection"
+msgstr "Unterpunkt hinzufügen"
+
+msgid "Section title"
+msgstr "Abschnittstitel"
+
+msgid "Allow skip"
+msgstr "Überspringen zulassen"
+
+msgid "Skip button title"
+msgstr "Titel der Schaltfläche zum Überspringen"
 
 msgid "Add new form"
 msgstr "Neues Formular hinzufügen"
@@ -9296,9 +9563,6 @@ msgstr "Dieser Termin existiert nicht."
 msgid "Cancellation of this appointment is not allowed."
 msgstr "Eine Stornierung dieses Termins ist nicht zulässig."
 
-msgid "Import"
-msgstr "Import"
-
 msgid "Note"
 msgstr "Hinweis"
 
@@ -9316,6 +9580,9 @@ msgstr "Datei auswählen"
 
 msgid "Date of birth"
 msgstr "Geburtsdatum"
+
+msgid "Skip first row of CSV file"
+msgstr "Erste Zeile der CSV-Datei überspringen"
 
 msgid "Analytics"
 msgstr "Analysen"
@@ -9920,10 +10187,6 @@ msgid "Thank you for choosing Bookly Pro as your booking solution."
 msgstr ""
 "Danke, dass Sie Bookly Pro als Ihre Buchungslösung gewählt haben.\n"
 "\n"
-
-# Weiter wrong
-msgid "Proceed"
-msgstr "Fahren Sie fort"
 
 # Bitte kontaktieren Sie Ihren Webseiten Administrator, um Ihre Lizenz bestätigen zu lassen, indem Sie einen gültigen Einkaufscode bieten. Mit dem Einkaufscode erhalten Sie Zugang zu Software Updates, inklusive verbesserten Funktionen und wichtige Sicherheitsupdates. Wenn Sie keinen gültigen Einkaufscode innerhalb {days} vorweisen, dann wird Ihr Zugang verweigert. wrong
 msgid ""
@@ -10601,6 +10864,9 @@ msgstr ""
 msgid "Set appointment"
 msgstr "Termin festlegen"
 
+msgid "Waiting List"
+msgstr "Warteliste"
+
 msgid "Add customers to the waiting list despite the capacity value"
 msgstr "Trotz Kapazitätswert Kunden auf die Warteliste setzen"
 
@@ -10638,9 +10904,6 @@ msgid ""
 msgstr ""
 "Legen Sie die URL einer Seite fest, die Kunden angezeigt wird, wenn die "
 "Buchung eines Termins aus der Warteliste nicht mehr möglich ist."
-
-msgid "Waiting List"
-msgstr "Warteliste"
 
 msgid "Show waiting list slots"
 msgstr "Wartelistenplätze anzeigen"
@@ -11225,11 +11488,11 @@ msgstr "Neuer Rabatt"
 msgid "Edit discount"
 msgstr "Rabatt ändern"
 
-msgid "Set maximum value for Quantity field."
-msgstr "Legen Sie den Maximalwert für das Feld Menge fest."
-
 msgid "Multiply Appointments"
 msgstr "Termine vervielfachen"
+
+msgid "Set maximum value for Quantity field."
+msgstr "Legen Sie den Maximalwert für das Feld Menge fest."
 
 msgid "Google Calendar event"
 msgstr "Google-Kalenderereignis"

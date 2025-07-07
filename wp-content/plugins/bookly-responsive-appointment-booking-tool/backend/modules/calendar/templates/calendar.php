@@ -88,6 +88,9 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                             </div>
                         </div>
                     </div>
+                    <div class="col-sm-auto mb-2 text-center">
+                        <button class="btn btn-default" id="bookly-calendar-fullscreen"><i class="fas fa-expand"></i></button>
+                    </div>
                 </div>
                 <div class="nav-scrollable nav-scrollable-pills justify-content-center justify-content-xl-start bookly-js-staff-pills <?php if ( count( $staff_members ) == 1 ) : ?>d-none<?php endif ?>">
                     <ul class="col-auto nav nav-pills flex-nowrap">
@@ -141,7 +144,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                             <li><?php esc_html_e( 'Add services you provide (up to five with a free version of Bookly) and assign them to a staff member.', 'bookly' ) ?></li>
                             <li><?php esc_html_e( 'Go to Posts/Pages and click on the \'Add Bookly booking form\' button in the page editor to publish the booking form on your website.', 'bookly' ) ?></li>
                         </ol>
-                        <p><?php printf( __( 'Bookly can boost your sales and scale together with your business. Get more features and remove the limits by upgrading to the paid version with the <a href="%s" target="_blank">Bookly Pro add-on</a>, which allows you to use a vast number of additional features and settings for booking services, install other add-ons for Bookly, and includes six months of customer support.', 'bookly' ), Common::prepareUrlReferrers( 'https://codecanyon.net/item/bookly/7226091?ref=ladela', 'welcome' ) ) ?></p>
+                        <p><?php printf( __( 'Bookly can boost your sales and scale together with your business. Get more features and remove the limits by upgrading to the paid version with the <a href="%s" target="_blank">Bookly Pro add-on</a>, which allows you to use a vast number of additional features and settings for booking services, install other add-ons for Bookly, and includes six months of customer support.', 'bookly' ), Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'welcome' ) ) ?></p>
                         <hr>
                         <a class="btn btn-success" href="<?php echo Common::escAdminUrl( Backend\Staff\Ajax::pageSlug() ) ?>">
                             <?php esc_html_e( 'Add Staff Members', 'bookly' ) ?>
@@ -149,7 +152,7 @@ use Bookly\Backend\Modules\Calendar\Proxy;
                         <a class="btn btn-success" href="<?php echo Common::escAdminUrl( Backend\Services\Ajax::pageSlug() ) ?>">
                             <?php esc_html_e( 'Add Services', 'bookly' ) ?>
                         </a>
-                        <a class="btn btn-success" href="<?php echo Common::prepareUrlReferrers( 'https://codecanyon.net/item/bookly/7226091?ref=ladela', 'welcome' ) ?>" target="_blank">
+                        <a class="btn btn-success" href="<?php echo Common::prepareUrlReferrers( 'https://www.booking-wp-plugin.com/pricing', 'welcome' ) ?>" target="_blank">
                             <?php esc_html_e( 'Try Bookly Pro add-on', 'bookly' ) ?>
                         </a>
                         <a class="btn btn-success" href="<?php echo Common::escAdminUrl( Backend\CloudProducts\Page::pageSlug() ) ?>">

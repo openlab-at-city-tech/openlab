@@ -79,6 +79,7 @@ class Page extends Lib\Base\Ajax
                 'delete' => __( 'Delete', 'bookly' ),
                 'are_you_sure' => __( 'Are you sure?', 'bookly' ),
                 'filterResourcesWithEvents' => Config::showOnlyStaffWithAppointmentsInCalendarDayView(),
+                'scrollable_calendar' => (int) get_option( 'bookly_cal_scrollable_calendar', '1' ),
                 'recurring_appointments' => array(
                     'active' => (int) Config::recurringAppointmentsActive(),
                     'title' => __( 'Recurring appointments', 'bookly' ),
@@ -113,7 +114,7 @@ class Page extends Lib\Base\Ajax
         $query
             ->addSelect(
                 'a.id, ca.id as ca_id, ca.series_id, a.staff_any, a.location_id, a.internal_note, a.start_date, DATE_ADD(a.end_date, INTERVAL a.extras_duration SECOND) AS end_date,
-                COALESCE(s.title,a.custom_service_name) AS service_name, COALESCE(s.color,"silver") AS service_color, s.info AS service_info,
+                COALESCE(s.title,a.custom_service_name) AS service_name, COALESCE(s.color,"#C0C0C0") AS service_color, s.info AS service_info,
                 COALESCE(ss.price,s.price,a.custom_service_price) AS service_price,
                 st.id AS staff_id,
                 st.full_name AS staff_name, st.email AS staff_email, st.info AS staff_info, st.phone AS staff_phone, st.color AS staff_color,

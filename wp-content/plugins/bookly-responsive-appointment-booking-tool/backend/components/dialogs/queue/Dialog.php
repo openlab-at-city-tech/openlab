@@ -25,7 +25,5 @@ class Dialog extends Lib\Base\Component
                 'close' => __( 'Close', 'bookly' ),
             )
         ) );
-
-        print '<div id="bookly-notifications-queue-dialog"></div>';
     }
 }

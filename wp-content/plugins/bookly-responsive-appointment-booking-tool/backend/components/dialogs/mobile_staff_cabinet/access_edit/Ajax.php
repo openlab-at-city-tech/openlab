@@ -68,7 +68,7 @@ class Ajax extends Lib\Base\Ajax
                 ->setData( json_encode( array( 'all' => $list ) ) )
                 ->save();
 
-            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $list );
+            $response['queue'] = array( 'token' => $db_queue->getToken(), 'all' => $queue->getInfo() );
         }
 
         wp_send_json_success( $response );

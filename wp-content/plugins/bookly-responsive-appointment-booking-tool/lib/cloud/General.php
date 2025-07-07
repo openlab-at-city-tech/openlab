@@ -5,8 +5,8 @@ use Bookly\Lib\Config;
 
 class General extends Base
 {
-    const GET_INFO                     = '/1.0/info';                                 //GET
-    const GET_PRODUCT_INFO             = '/1.0/products/%product%/info';              //GET
+    const GET_INFO = '/1.0/info';                                 //GET
+    const GET_PRODUCT_INFO = '/1.0/products/%product%/info';      //GET
 
     /** @var array */
     protected $products;
@@ -20,7 +20,7 @@ class General extends Base
      */
     public function setup()
     {
-        $this->products   = get_option( 'bookly_cloud_products', '' );
+        $this->products = get_option( 'bookly_cloud_products', '' );
         $this->promotions = get_option( 'bookly_cloud_promotions', '' );
     }
 
@@ -44,11 +44,14 @@ class General extends Base
 
                 update_option( 'bookly_cloud_products', $this->products );
                 update_option( 'bookly_cloud_promotions', $this->promotions );
+                if ( isset( $response['ads'] ) ) {
+                    update_option( 'bookly_advertisement', $this->localize( 'texts', $response['ads'] ) );
+                }
 
                 $this->info_is_loaded = true;
                 $this->api->dispatch( Events::GENERAL_INFO_LOADED, $response );
             } else {
-                $this->products   = array();
+                $this->products = array();
                 $this->promotions = array();
 
                 $this->info_is_loaded = false;
@@ -108,7 +111,7 @@ class General extends Base
             $this->loadInfo();
         }
 
-        $dismissed  = get_user_meta( get_current_user_id(), 'bookly_dismiss_cloud_promotion_notices', true ) ?: array();
+        $dismissed = get_user_meta( get_current_user_id(), 'bookly_dismiss_cloud_promotion_notices', true ) ?: array();
         foreach ( $this->promotions as $type => $promotion ) {
             if ( ! isset ( $dismissed[ $promotion['id'] ] ) || time() > $dismissed[ $promotion['id'] ] ) {
                 return $promotion;
@@ -122,7 +125,7 @@ class General extends Base
      * Go through items and set texts for the current locale only
      *
      * @param string $key
-     * @param array  $items
+     * @param array $items
      *
      * @return array
      */

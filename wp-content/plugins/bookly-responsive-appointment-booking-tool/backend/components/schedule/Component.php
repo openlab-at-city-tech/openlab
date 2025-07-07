@@ -26,6 +26,9 @@ class Component extends Lib\Base\Component implements \Iterator
     /** @var array */
     protected $keys;
 
+    /** @var bool */
+    protected $with_clone;
+
     /**
      * Constructor.
      *
@@ -33,31 +36,33 @@ class Component extends Lib\Base\Component implements \Iterator
      * @param string $end_name
      * @param bool $with_breaks
      */
-    public function __construct( $start_name, $end_name, $with_breaks = true )
+    public function __construct( $start_name, $end_name, $with_breaks = true, $with_clone = false )
     {
         $this->start_select = new Select( array(
-            'use_empty'   => true,
+            'use_empty' => true,
             'empty_value' => __( 'OFF', 'bookly' ),
-            'type'        => 'from',
-            'class'       => 'bookly-js-parent-range-start',
-            'name'        => $start_name
+            'type' => 'from',
+            'class' => 'bookly-js-parent-range-start',
+            'name' => $start_name
         ) );
         $this->end_select = new Select( array(
             'use_empty' => false,
-            'type'      => 'to',
-            'class'     => 'bookly-js-parent-range-end',
-            'name'      => $end_name
+            'type' => 'to',
+            'class' => 'bookly-js-parent-range-end',
+            'name' => $end_name
         ) );
 
         if ( $with_breaks ) {
             $this->breaks = array();
         }
+
+        $this->with_clone = $with_clone;
     }
 
     /**
      * Add working hours.
      *
-     * @param string $key   record key
+     * @param string $key record key
      * @param string $day_index
      * @param string $start
      * @param string $end
@@ -65,7 +70,7 @@ class Component extends Lib\Base\Component implements \Iterator
      */
     public function addHours( $key, $day_index, $start, $end )
     {
-        $this->hours[ $key ]      = new Range( $start, $end );
+        $this->hours[ $key ] = new Range( $start, $end );
         $this->keys[ $day_index ] = $key;
 
         return $this;
@@ -79,6 +84,16 @@ class Component extends Lib\Base\Component implements \Iterator
     public function withBreaks()
     {
         return is_array( $this->breaks );
+    }
+
+    /**
+     * Whether schedule have clone feature.
+     *
+     * @return bool
+     */
+    public function withClone()
+    {
+        return $this->with_clone;
     }
 
     /**
@@ -111,7 +126,7 @@ class Component extends Lib\Base\Component implements \Iterator
                 $flat[] = array(
                     'index' => $index,
                     'start' => $break->getStart(),
-                    'end'   => $break->getEnd(),
+                    'end' => $break->getEnd(),
                 );
             }
         }
@@ -131,7 +146,7 @@ class Component extends Lib\Base\Component implements \Iterator
         global $wp_locale;
 
         $start_of_week = (int) get_option( 'start_of_week' );
-        for ( $i = 1; $i <= 7; $i ++ ) {
+        for ( $i = 1; $i <= 7; $i++ ) {
             $day_index = ( $start_of_week + $i ) < 8 ? $start_of_week + $i : $start_of_week + $i - 7;
             $id = $this->keys[ $day_index ];
             $this->days[ $id ] = $wp_locale->weekday[ $day_index == 7 ? 6 : ( $day_index - 1 ) ];
@@ -161,13 +176,13 @@ class Component extends Lib\Base\Component implements \Iterator
         return self::renderTemplate( 'break_dialog', array(
             'start_select' => new Select( array(
                 'use_empty' => false,
-                'type'      => 'break_from',
-                'class'     => 'bookly-js-popover-range-start',
+                'type' => 'break_from',
+                'class' => 'bookly-js-popover-range-start',
             ) ),
-            'end_select'   => new Select( array(
+            'end_select' => new Select( array(
                 'use_empty' => false,
-                'type'      => 'to',
-                'class'     => 'bookly-js-popover-range-end',
+                'type' => 'to',
+                'class' => 'bookly-js-popover-range-end',
             ) ),
         ), $echo );
     }
