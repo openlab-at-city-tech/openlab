@@ -4,8 +4,8 @@ Plugin Site:       https://www.wpbeginner.com/
 Donate link:       https://www.wpbeginner.com/
 Tags:              lightbox, image, gallery, photo gallery, lightbox popup
 Requires at least: 3.0
-Tested up to:      6.5
-Stable tag:        3.0.6.7
+Tested up to:      6.9
+Stable tag:        3.0.6.8
 License:           GPLv2 or later
 License URI:       http://www.gnu.org/licenses/gpl-3.0.html
 
@@ -94,6 +94,9 @@ This plugin was created by <a href="https://syedbalkhi.com" rel="friend" title="
 5.  [WordPress Lightbox](https://wordpress.org/plugins/wp-lightbox-2) Front-end
 
 == Changelog ==
+
+= 3.0.6.8 =
+* Fix: Improved sanitization of plugin settings.
 
 = 3.0.6.7 =
 * Fix: Improved sanitization of plugin settings.

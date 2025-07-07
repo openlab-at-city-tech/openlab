@@ -3,7 +3,7 @@
  * Plugin Name: WP Lightbox 2
  * Plugin URI:  http://wpdevart.com/wordpress-lightbox-plugin
  * Description: WP Lightbox 2 adds stunning lightbox effects to images and galleries on your WordPress site.
- * Version:     3.0.6.7
+ * Version:     3.0.6.8
  * Author:      Syed Balkhi
  * Author URI:  http://syedbalkhi.com
  * License:     GNU General Public License, v2 (or newer)

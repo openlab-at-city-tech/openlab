@@ -21,6 +21,11 @@ class Lightbox {
         this.initialize();
         this.start(element);
     }
+	escapeHTML(input) {
+		const div = document.createElement('div');
+		div.textContent = input;
+		return div.innerHTML;
+	}
     initialize() {
         window.addEventListener('orientationchange', this.resizeListener.bind(this));
         window.addEventListener('resize', this.resizeListener.bind(this));
@@ -103,11 +108,11 @@ class Lightbox {
             clearTimeout(this.config.resizeTimeout);
             this.config.resizeTimeout = false;
         }
-        this.config.resizeTimeout = setTimeout(_ => { this.display.doScale(false); }, 50); //a delay to avoid duplicate event calls.		
+        this.config.resizeTimeout = setTimeout(_ => { this.display.doScale(false); }, 50); //a delay to avoid duplicate event calls.
     }
-    
+
     //code for IE8 check provided by http://kangax.github.com/cft/
-    
+
     // JQuery Call
     start(imageLink) {
         document.querySelectorAll("select, embed, object").forEach(element => {
@@ -131,7 +136,7 @@ class Lightbox {
         // if data is not provided by jsonData parameter
         if (!this.config.jsonData) {
             this.config.imageArray = [];
-            // if image is NOT part of a set..				
+            // if image is NOT part of a set..
             if (!imageLink.rel || (imageLink.rel == '')) {
                 // add single image to Lightbox.imageArray
                 var s = imageLink.title || imageLink.parentElement.firstChild.title || '';
@@ -174,13 +179,13 @@ class Lightbox {
                         }
                         let s = '';
                         if (title != '') {
-                            s = '<span id="titleText">' + title.replace(/<[^>]*>/g, '') + '</span>';
+                            s = '<span id="titleText">' + this.escapeHTML(title) + '</span>';
                         }
                         if (caption != '') {
                             if (title != '') {
                                 s += '<br />';
                             }
-                            s += '<span id="captionText">' + caption.replace(/<[^>]*>/g, '') + '</span>';
+                            s += '<span id="captionText">' + this.escapeHTML(caption) + '</span>';
                         }
                         this.config.imageArray.push([
                             a.href,

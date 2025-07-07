@@ -64,7 +64,7 @@ const Lightbox = require("./lightbox/Lightbox");
 			//followScroll: (haveConf && JQLBSettings.followScroll == '0') ? false : true,
 			strings: (haveConf && typeof JQLBSettings.help == 'string') ? JQLBSettings : default_strings
         });
-	});	
+	});
 })(jQuery);
 },{"./lightbox/Lightbox":6}],3:[function(require,module,exports){
 const $ = window.jQuery;
@@ -113,13 +113,13 @@ class Display {
                 lightboxImage.src = this.config.imageArray[this.config.activeImage][0];
             }
             this.doScale();  // once image is preloaded, resize image container
-            this.preloadNeighborImages();    
+            this.preloadNeighborImages();
         };
         this.config.imgPreloader.src = this.config.imageArray[this.config.activeImage][0];
     };
 
     doScale() {
-        this.updateDetails(); //Kevin: moved updateDetails() here, seems to work fine.    
+        this.updateDetails(); //Kevin: moved updateDetails() here, seems to work fine.
         const overlay = document.getElementById('overlay');
         if (!overlay || !this.config.imgPreloader) {
             return;
@@ -138,13 +138,13 @@ class Display {
             var displayWidth = maxWidth - this.config.marginSize;
             var ratio = 1;
             if (newHeight > displayHeight) {
-                ratio = displayHeight / newHeight; //ex. 600/1024 = 0.58					
+                ratio = displayHeight / newHeight; //ex. 600/1024 = 0.58
             }
             newWidth = newWidth * ratio;
             newHeight = newHeight * ratio;
             ratio = 1;
             if (newWidth > displayWidth) {
-                ratio = displayWidth / newWidth; //ex. 800/1280 == 0.62					
+                ratio = displayWidth / newWidth; //ex. 800/1280 == 0.62
             }
             newWidth = Math.round(newWidth * ratio);
             newHeight = Math.round(newHeight * ratio);
@@ -173,7 +173,7 @@ class Display {
         this.config.xScale = (widthNew / this.config.widthCurrent) * 100;
         this.config.yScale = (heightNew / this.config.heightCurrent) * 100;
         this.helper.setLightBoxPos(lightboxTop, lightboxLeft);
-        
+
         $('#imageDataContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear');
         $('#outerImageContainer').animate({ width: widthNew }, this.config.resizeSpeed, 'linear', _ => {
             $('#outerImageContainer').animate({ height: heightNew }, this.config.resizeSpeed, 'linear', _=> {
@@ -193,7 +193,7 @@ class Display {
         this.helper.show(document.getElementById("imageData"));
         this.helper.show(document.getElementById('caption'));
         //$('#imageDataContainer').slideDown(400);
-        //$("#imageDetails").hide().fadeIn(400);	
+        //$("#imageDetails").hide().fadeIn(400);
         this.helper.hide(document.getElementById("loading"));
         if (this.config.resizeSpeed > 0) {
             $('#lightboxImage').fadeIn("fast");
@@ -241,7 +241,7 @@ class Display {
         var pos = (this.config.imageArray.length > 1) ? this.config.strings.image + (this.config.activeImage + 1) + this.config.strings.of + this.config.imageArray.length : '';
         var link = (this.config.displayDownloadLink) ? '<a href="' + this.config.imageArray[this.config.activeImage][0] + '" id="downloadLink" target="' + this.config.linkTarget + '">' + this.config.strings.download + '</a>' : '';
         var next = '';
-        if (this.config.imageArray.length > 1 && !this.config.disableNavbarLinks) {	 // display previous / next text links   			           
+        if (this.config.imageArray.length > 1 && !this.config.disableNavbarLinks) {	 // display previous / next text links
             if ((this.config.activeImage) > 0 || this.config.loopImages) {
                 prev = '<a title="' + this.config.strings.prevLinkTitle + '" href="#" id="prevLinkText">' + this.config.strings.prevLinkText + "</a>";
             }
@@ -266,7 +266,7 @@ class Display {
         const nextLinkText = document.getElementById("nextLinkText");
         if (this.config.imageArray.length > 1) {
             this.helper.show(document.getElementById("hoverNav"));
-            // if loopImages is true, always show next and prev image buttons 
+            // if loopImages is true, always show next and prev image buttons
             if (this.config.loopImages) {
                 this.helper.show(prevLink);
                 this.helper.show(prevLinkText);
@@ -465,6 +465,11 @@ class Lightbox {
         this.initialize();
         this.start(element);
     }
+	escapeHTML(input) {
+		const div = document.createElement('div');
+		div.textContent = input;
+		return div.innerHTML;
+	}
     initialize() {
         window.addEventListener('orientationchange', this.resizeListener.bind(this));
         window.addEventListener('resize', this.resizeListener.bind(this));
@@ -547,11 +552,11 @@ class Lightbox {
             clearTimeout(this.config.resizeTimeout);
             this.config.resizeTimeout = false;
         }
-        this.config.resizeTimeout = setTimeout(_ => { this.display.doScale(false); }, 50); //a delay to avoid duplicate event calls.		
+        this.config.resizeTimeout = setTimeout(_ => { this.display.doScale(false); }, 50); //a delay to avoid duplicate event calls.
     }
-    
+
     //code for IE8 check provided by http://kangax.github.com/cft/
-    
+
     // JQuery Call
     start(imageLink) {
         document.querySelectorAll("select, embed, object").forEach(element => {
@@ -575,7 +580,7 @@ class Lightbox {
         // if data is not provided by jsonData parameter
         if (!this.config.jsonData) {
             this.config.imageArray = [];
-            // if image is NOT part of a set..				
+            // if image is NOT part of a set..
             if (!imageLink.rel || (imageLink.rel == '')) {
                 // add single image to Lightbox.imageArray
                 var s = imageLink.title || imageLink.parentElement.firstChild.title || '';
@@ -618,13 +623,13 @@ class Lightbox {
                         }
                         let s = '';
                         if (title != '') {
-                            s = '<span id="titleText">' + title.replace(/<[^>]*>/g, '') + '</span>';
+                            s = '<span id="titleText">' + this.escapeHTML(title) + '</span>';
                         }
                         if (caption != '') {
                             if (title != '') {
                                 s += '<br />';
                             }
-                            s += '<span id="captionText">' + caption.replace(/<[^>]*>/g, '') + '</span>';
+                            s += '<span id="captionText">' + this.escapeHTML(caption) + '</span>';
                         }
                         this.config.imageArray.push([
                             a.href,
