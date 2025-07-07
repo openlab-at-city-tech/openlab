@@ -44,7 +44,7 @@ function moppm_generate_id() {
 function moppm_reset_pass_form( $user ) {
 	$session_id = moppm_generate_id();
 	$user_id    = $user->ID;
-	set_transient( $session_id, $user_id, 90 );
+	set_transient( $session_id, array( 'moppm_user_id' => $user_id ), 90 );
 	$miniorange_logo = plugins_url( 'password-policy-manager' . DIRECTORY_SEPARATOR . 'includes' . DIRECTORY_SEPARATOR . 'images' . DIRECTORY_SEPARATOR . 'shield.png' );
 	?>
 	<html>
@@ -145,6 +145,7 @@ function moppm_reset_pass_form( $user ) {
 		    <input type="hidden" id="mopppm_userid" name="mopppm_userid" value=""/>
 			<input type="text" name="option" id="mopppm_login" hidden/>
 			<input type="hidden" name="moppm_login_nonce" value="<?php echo esc_attr( wp_create_nonce( 'moppm-login-nonce' ) ); ?>"/>
+			<input type="hidden" name="moppm_session_id" value="<?php echo esc_attr( $session_id ); ?>"/>
 		</form>   
 		<div id="moppm_message"></div>
 		<?php

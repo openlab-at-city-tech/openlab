@@ -306,7 +306,8 @@ if ( ! class_exists( 'MOPPM_Ajax' ) ) {
 			$newpass  = isset( $_POST['newpass'] ) ? $_POST['newpass'] : '';//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash ,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- do not sanitize and unslash password.
 			$newpass2 = isset( $_POST['newpass2'] ) ? $_POST['newpass2'] : '';//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash ,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- do not sanitize and unslash password.
 			$oldpass  = isset( $_POST['oldpass'] ) ? $_POST['oldpass'] : '';//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash ,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- do not sanitize and unslash password.
-			$user_id  = get_transient( $session_id );
+			$userdata = get_transient( $session_id );
+			$user_id  = $userdata['moppm_user_id'];
 			if ( ! $user_id ) {
 				wp_send_json_error( MOPPM_Messages::SESSION_TIMEOUT );
 			}
