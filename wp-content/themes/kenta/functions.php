@@ -9,7 +9,7 @@
 
 if ( ! defined( 'KENTA_VERSION' ) ) {
 	// Replace the version number of the theme on each release.
-	define( 'KENTA_VERSION', '1.4.6' );
+	define( 'KENTA_VERSION', '1.4.9' );
 }
 
 if ( ! defined( 'MIN_KENTA_CMP_VERSION' ) ) {
@@ -135,10 +135,12 @@ kenta_app( 'CZ' )->addPartial( 'kenta-footer-selective-css', '#kenta-footer-sele
 	echo \LottaFramework\Facades\Css::parse( apply_filters( 'kenta_filter_no_cache_dynamic_css', [] ) );
 } );
 
-/**
- * After lotta-framework boostrap
- */
-do_action( 'kenta_after_lotta_framework_bootstrap' );
+add_action( 'init', function () {
+	/**
+	 * After lotta-framework boostrap
+	 */
+	do_action( 'kenta_after_lotta_framework_bootstrap' );
+}, 0 ); // The widgets_init hook is fired as part of the init hook with a priority of 1, We have to trigger before it
 
 // support locally hosted google-fonts and we should do this after all options are loaded
 if ( kenta_app( 'CZ' )->checked( 'kenta_use_local_fonts' ) ) {

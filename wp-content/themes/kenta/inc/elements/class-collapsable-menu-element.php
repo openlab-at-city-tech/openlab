@@ -35,9 +35,7 @@ if ( ! class_exists( 'Kenta_Collapsable_Menu_Element' ) ) {
 		 */
 		public function after_register() {
 			// Register nav menu
-			add_action( 'after_setup_theme', function () {
-				register_nav_menu( $this->slug, $this->getLabel() );
-			} );
+			register_nav_menu( $this->slug, $this->getLabel() );
 		}
 
 		/**
