@@ -3,9 +3,7 @@
 Plugin Name: Breadcrumb
 Plugin URI: https://pickplugins.com/breadcrumb/
 Description: Awesome Breadcrumb for wordpress.
-Version: 1.5.49
-WC requires at least: 3.0.0
-WC tested up to: 7.2
+Version: 1.5.50
 Author: PickPlugins
 Author URI: http://pickplugins.com
 Text Domain: breadcrumb
