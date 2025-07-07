@@ -2232,6 +2232,8 @@ function trp_get_translation_woo_po_files_url( $default_language ) {
  * @return mixed|string|null
  */
 function trp_get_url_for_language_backwards_compatibility( $new_url, $url, $language ){
+    global $trp_current_url_term_slug, $trp_current_url_taxonomy;
+
     $trp = TRP_Translate_Press::get_trp_instance();
     $trp_settings = $trp->get_component( 'settings' );
     $settings = $trp_settings->get_settings();

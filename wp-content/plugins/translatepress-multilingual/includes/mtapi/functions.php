@@ -20,9 +20,14 @@ function trp_mtapi_add_settings( $mt_settings ){
 
     if (!isset($details['valid'][0])) $status = false;
 
+    $translatepress_version_name = (defined('TRANSLATE_PRESS')) ? TRANSLATE_PRESS : 'TranslatePress';
+
     //dd($status);
 	//dd(array($license, $status, $details));
     if ($status === false) : ?>
+
+    <div class="trp-get-free-license__container"
+        <?php if ($translatepress_version_name !== 'TranslatePress') echo 'style="background: #F6F7F7"'; ?>>
         <div class="trp-engine trp-automatic-translation-engine__container" id="mtapi">
             <span class="trp-primary-text-bold">
                 <img src="<?php echo esc_url(TRP_PLUGIN_URL.'assets/images/'); ?>ai-icon.svg" width="24" height="24"/>
@@ -38,19 +43,64 @@ function trp_mtapi_add_settings( $mt_settings ){
                     <?php esc_html_e('No Active License Detected for this website.', 'translatepress-multilingual'); ?>
                 </span>
             </div>
-
-            <span class="trp-secondary-text">
-                <?php
-                printf(
-                    esc_html__( 'Add a license by visiting the %1$s tab.', 'translatepress-multilingual' ),
-                    '<a href="' . esc_url( admin_url('admin.php?page=trp_license_key') ) . '" class="trp-settings-link"> '. esc_html__('License', 'translatepress-multilingual') . '</a>'
-                );
-                ?>
+<?php if ($translatepress_version_name == 'TranslatePress') :
+            ?>
+            <span class="trp-secondary-text trp-get-free-license-text">
+                <?php esc_html_e('In order to enable Automatic Translation using TranslatePress AI, you need a license key by creating a free account.', 'translatepress-multilingual'); ?>
             </span>
+<?php endif;?>
+            <div class="trp-automatic-translation-get-license-buttons">
+<?php if ( $translatepress_version_name == 'TranslatePress' ) : ?>
+                <a href="<?php echo esc_url( 'https://translatepress.com/tp-ai-free/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettingsAT&utm_campaign=tpaifree' ) ?>" class="trp-get-free-license-link trp-get-free-license-button button-primary" target="_blank" id="trp-enter-license-button">
+                    <?php esc_html_e( 'Create your Free Account', 'translatepress-multilingual' ); ?>
+                </a>
+
+                <span class="trp-secondary-text trp-text-auto"><?php esc_html_e(' or ', 'translatepress-multilingual'); ?></span>
+<?php endif;?>
+                <a href="<?php echo esc_url( admin_url('admin.php?page=trp_license_key') ) ?>" class="trp-enter-license-link trp-get-free-license-button trp-button-secondary" id="trp-enter-license-button">
+                        <?php esc_html_e( 'Enter your license key', 'translatepress-multilingual' ); ?>
+                </a>
+
+            </div>
         </div>
+
+        <?php if ( $translatepress_version_name == 'TranslatePress' ) : ?>
+        <div class="trp-automatic-translation-engine__upsale" id="tpai-upsale">
+            <span class="trp-primary-text-bold">
+                <?php esc_html_e('Your free account includes: ', 'translatepress-multilingual'); ?>
+            </span>
+
+            <span class="trp-secondary-text trp-check-text">
+                <img src="<?php echo esc_url(TRP_PLUGIN_URL.'assets/images/'); ?>green-circle-check.png" width="20px" height="20px"/>
+                <?php esc_html_e('Access to TranslatePress AI for instant automatic translations', 'translatepress-multilingual'); ?>
+            </span>
+
+            <span class="trp-secondary-text trp-check-text">
+                <img src="<?php echo esc_url(TRP_PLUGIN_URL.'assets/images/'); ?>green-circle-check.png" width="20px" height="20px"/>
+                <?php esc_html_e('2000 AI words to translate automatically', 'translatepress-multilingual'); ?>
+            </span>
+
+            <div class="trp-upsale-fill" id="<?php echo esc_html( $translatepress_version_name )  ?>" style="display: none;">
+                <span class="trp-primary-text trp-upsale-text-red">
+                   <?php esc_html_e("Get more AI Tokens and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); ?>
+                        <a href="https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettingsAT&utm_campaign=tpaifree" id="trp-upgrade-link" target="_blank">
+                            <span class="trp-upsale-text-link">
+                                <span><?php esc_html_e("Upgrade now", "translatepress-multilingual"); ?></span>
+                            <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 7.3252L7 17.3252M17 7.3252H8M17 7.3252V16.3252" stroke="#354052" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            </span>
+                        </a>
+                </span>
+
+            </div>
+        </div>
+                <?php endif; ?>
+    </div>
     <?php endif;
 
 	if ($status === 'valid') :
+
         $product_name = '<strong>' . str_replace('+', ' ', $details['valid'][0]->item_name) . '</strong>';
 
         // MTAPI_URL needs to be defined in wp-config.php for local host development
@@ -63,7 +113,15 @@ function trp_mtapi_add_settings( $mt_settings ){
 
         set_transient("trp_mtapi_cached_quota", $site_status['quota'], 5*60);
 
-        $quota       = ceil($site_status['quota'] / 5 );
+        $quota       = ($site_status['quota'] < 500) ? 0 : ceil($site_status['quota'] / 5 );
+
+        // this $total_quota is not correct due to quota_used should account for ALL websites added to this license.
+        // however, in case the site does have a user defined limit, the quota_used is correct.
+        // without further changes to mtapi we don't have a proper way of knowing what's the quota_used.
+        // will hide total_quota and let progress bar in place as the approximation is good enough
+    if ( !isset( $site_status['quota_used'])){
+        $site_status['quota_used'] = 0;
+    }
         $total_quota = ceil( ( $site_status['quota'] + $site_status['quota_used'] ) / 5 );
 
         $formatted_quota = number_format( $quota );
@@ -83,29 +141,29 @@ function trp_mtapi_add_settings( $mt_settings ){
             </svg>
 
             <span id="trp-mtapi-key" class="trp-primary-text"><?php
-                printf(esc_html__('You have a valid %s license.', 'translatepress-multilingual'),
+                printf(wp_kses(__('You have a valid %s <strong>license</strong>.', 'translatepress-multilingual'), array( 'strong' => array() ) ),
                     wp_kses( $product_name, array( 'strong' => array() ) )
                 ); ?>
             </span>
         </div>
 
         <span class="trp-secondary-text">
-            <?php echo "<strong>" . esc_html( $formatted_quota ) . "</strong>" . " / " . esc_html( $formatted_total_quota ) .  esc_html__( ' words remaining. ', 'translatepress-multilingual' ); ?>
+            <?php echo "<strong>" . esc_html( $formatted_quota ) . "</strong>" .  esc_html__( ' words remaining. ', 'translatepress-multilingual' ); ?>
 
-            <?php if ( isset( $site_status['exception'][0]['message'] ) && $site_status['exception'][0]['message'] == "Site not found." ){ ?>
+            <?php if ( isset( $site_status['exception'][0]['message'] ) && $site_status['exception'][0]['message'] == "Site not found." ) : ?>
                 <span id="trp-refresh-tpai">
                     <span id="trp-refresh-tpai-dashicon" class="dashicons dashicons-controls-repeat"></span>
-                    <span id="trp-refresh-tpai-text-recheck trp-primary-text">
+                    <span id="trp-refresh-tpai-text-recheck" class="trp-primary-text">
                         <?php esc_html_e( 'Recheck', 'translatepress-multilingual' ); ?>
                     </span>
                 </span>
-                <span id="trp-refresh-tpai-text-rechecking trp-primary-text" style="display:none">
+                <span id="trp-refresh-tpai-text-rechecking "  class="trp-primary-text" style="display:none">
                     <?php esc_html_e( 'Rechecking...', 'translatepress-multilingual' ); ?>
                 </span>
-                <span id="trp-refresh-tpai-text-done trp-primary-text" style="display:none">
+                <span id="trp-refresh-tpai-text-done" class="trp-primary-text" style="display:none">
                     <?php esc_html_e( 'Done.', 'translatepress-multilingual' ); ?>
                 </span>
-            <?php } ?>
+            <?php endif; ?>
         </span>
 
         <div class="trp-quota-bar">
@@ -121,6 +179,21 @@ function trp_mtapi_add_settings( $mt_settings ){
             ?>
         </span>
     </div>
+
+        <div class="trp-upsale-fill trp-upsale-fill-active-license" id="<?php echo esc_html( $translatepress_version_name )?>" style=" display: none " >
+                <span class="trp-primary-text trp-upsale-text-red">
+                   <?php esc_html_e("Get more AI Tokens and unlock all AI features with TranslatePress Pro.", "translatepress-multilingual"); ?>
+                        <a href="https://translatepress.com/pricing/?utm_source=wpbackend&utm_medium=clientsite&utm_content=tpsettingsAT&utm_campaign=tpaifree" id="trp-upgrade-link" target="_blank">
+                            <span class="trp-upsale-text-link">
+                                <span><?php esc_html_e("Upgrade now", "translatepress-multilingual"); ?></span>
+                            <svg width="20" height="20" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M17 7.3252L7 17.3252M17 7.3252H8M17 7.3252V16.3252" stroke="#354052" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            </span>
+                        </a>
+                </span>
+
+        </div>
 	<?php
 	endif;
 }
@@ -128,13 +201,13 @@ function trp_mtapi_add_settings( $mt_settings ){
 /**
  * Store url
  *
- * In order of priority MTAPI_STORE_URL, tpcom.local, translatepress.com
+ * In order of priority MTAPI_STORE_URL, tpcom.ddev.site, translatepress.com
  *
  * @return string
  */
 function trp_mtapi_get_store_url() {
     $store_url = ( !isset( $store_url ) ) ? ( ( defined( 'MTAPI_STORE_URL' ) ) ? MTAPI_STORE_URL : null ) : $store_url;
-    $store_url = ( !isset( $store_url ) ) ? ( ( defined( 'MTAPI_URL' ) && MTAPI_URL == 'http://mtapi.local' ) ? 'http://tpcom.local' : null ) : $store_url;
+    $store_url = ( !isset( $store_url ) ) ? ( ( defined( 'MTAPI_URL' ) && MTAPI_URL == 'https://mtapi.ddev.site' ) ? 'https://tpcom.ddev.site' : null ) : $store_url;
     return ( !isset( $store_url ) ) ? "https://translatepress.com" : $store_url;
 }
 
@@ -145,7 +218,11 @@ function trp_mtapi_get_store_url() {
  */
 add_filter( 'trp_machine_translation_sanitize_settings', 'trp_mtapi_sync_license', 10, 2 );
 function trp_mtapi_sync_license( $settings, $mt_settings ) {
-    if ( $settings['translation-engine'] === 'mtapi' ) {
+    if ( isset ( $_POST['option_page'] ) &&
+        $_POST['option_page'] === 'trp_machine_translation_settings' &&
+        current_user_can( apply_filters( 'trp_translating_capability', 'manage_options' ) ) &&
+        $settings['translation-engine'] === 'mtapi' )
+    {
         $license = get_option( 'trp_license_key' );
         $status  = get_option( 'trp_license_status' );
 
@@ -163,13 +240,14 @@ function trp_mtapi_sync_license( $settings, $mt_settings ) {
 function trp_mtapi_sync_license_call( $license_key ) {
     $trp = TRP_Translate_Press::get_trp_instance();
 
-    if ( !empty( $trp->active_pro_addons ) ) {
+    if ( !empty( $trp->tp_product_name ) ) {
 
         // data to send in our API request
         $api_params = array(
             'edd_action' => 'sync_mtapi_license',
             'license'    => $license_key,
-            'url'        => home_url()
+            'url'        => home_url(),
+            'version'    => TRP_PLUGIN_VERSION
         );
         $store_url  = trp_mtapi_get_store_url();
         // Call the custom API.
