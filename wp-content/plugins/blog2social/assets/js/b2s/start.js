@@ -56,7 +56,8 @@ jQuery(document).on('click', '.b2s-mail-btn', function () {
                 'b2s_security_nonce': jQuery('#b2s_security_nonce').val()
             }
         });
-        jQuery('.b2s-mail-update-area').hide();
+        jQuery('#b2s-mail-update-input').hide();
+        jQuery('.b2s-mail-btn').hide();
         jQuery('.b2s-mail-update-success').show();
     } else {
         jQuery('#b2s-mail-update-input').addClass('error');

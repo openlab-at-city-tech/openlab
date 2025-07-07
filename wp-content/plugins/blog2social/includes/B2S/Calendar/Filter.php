@@ -14,6 +14,8 @@ class B2S_Calendar_Filter {
         global $wpdb;
 
         $res = new B2S_Calendar_Filter();
+        //No User input in statement...function is only used in this class and statementsare prepared and safe in the respective context
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $items = $wpdb->get_results($sql);
         foreach ($items as $item) {
             if ($item->sched_date != "0000-00-00 00:00:00" && is_null($item->sched_data) && is_null($item->image_url) && (int) $item->relay_primary_post_id == 0) {
@@ -48,17 +50,14 @@ class B2S_Calendar_Filter {
         if (!is_numeric($id)) {
             return null;
         }
-        $sql = "SELECT {$wpdb->prefix}b2s_posts.sched_type, {$wpdb->prefix}b2s_posts.publish_date, {$wpdb->prefix}b2s_posts.sched_date as relay_primary_sched_date,"
+        return $wpdb->get_results($wpdb->prepare("SELECT {$wpdb->prefix}b2s_posts.sched_type, {$wpdb->prefix}b2s_posts.publish_date, {$wpdb->prefix}b2s_posts.sched_date as relay_primary_sched_date,"
                 . "{$wpdb->prefix}b2s_posts_sched_details.sched_data, "
                 . "{$wpdb->prefix}b2s_posts_sched_details.image_url, "
                 . "{$wpdb->prefix}b2s_posts.sched_details_id "
                 . "FROM {$wpdb->prefix}b2s_posts "
                 . "LEFT JOIN {$wpdb->prefix}b2s_posts_sched_details ON {$wpdb->prefix}b2s_posts.sched_details_id = {$wpdb->prefix}b2s_posts_sched_details.id "
                 . "INNER JOIN " . $wpdb->posts . " post ON post.ID = {$wpdb->prefix}b2s_posts.post_id "
-                . "WHERE {$wpdb->prefix}b2s_posts.id = %d ";
-
-        $sql = $wpdb->prepare($sql, array($id));
-        return $wpdb->get_results($sql);
+                . "WHERE {$wpdb->prefix}b2s_posts.id = %d ", array($id)));
     }
 
     /**
@@ -100,6 +99,7 @@ class B2S_Calendar_Filter {
                 . "WHERE {$wpdb->prefix}b2s_posts.publish_link = '' "
                 . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . $approvePosts . " ORDER BY sched_date";
 
+        
 
         $res = self::getBySql($sql);
 
@@ -107,6 +107,7 @@ class B2S_Calendar_Filter {
     }
 
     public static function getFilterNetworkAuthHtml($network_id = 0) {
+        
         global $wpdb;
         $addNotAdminPosts = (B2S_PLUGIN_ADMIN == false) ? $wpdb->prepare(' AND '.$wpdb->prefix.'b2s_posts.`blog_user_id` = %d', B2S_PLUGIN_BLOG_USER_ID) : '';
         $addNetwork = ($network_id != 19) ? $wpdb->prepare(' AND '.$wpdb->prefix.'b2s_posts_network_details.`network_id` = %d', $network_id) : ' AND ('.$wpdb->prefix.'b2s_posts_network_details.`network_id` = ' . $network_id . ' OR '.$wpdb->prefix.'b2s_posts_network_details.`network_id` = 8)'; //combine XING old and new
@@ -120,6 +121,9 @@ class B2S_Calendar_Filter {
                 . "WHERE {$wpdb->prefix}b2s_posts.sched_date != '0000-00-00 00:00:00' AND  {$wpdb->prefix}b2s_posts.publish_error_code= '' "
                 . "AND {$wpdb->prefix}b2s_posts.hide = '0' " . $addNotAdminPosts . $addNetwork . $approvePosts . " GROUP BY {$wpdb->prefix}b2s_posts.network_details_id";
 
+
+        //No User input in statement
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $result = $wpdb->get_results($sql);
         if (is_array($result) && !empty($result)) {
             $content = '<br>';
@@ -150,20 +154,20 @@ class B2S_Calendar_Filter {
         if ($filter == 1) {//published
             $where = "WHERE {$wpdb->prefix}b2s_posts.publish_date != '0000-00-00 00:00:00' "
                     . "AND publish_error_code = '' "
-                    . "AND {$wpdb->prefix}b2s_posts.publish_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "' "
+                    . "AND {$wpdb->prefix}b2s_posts.publish_date BETWEEN '" .  wp_date('Y-m-d H:i:s', strtotime($start), new DateTimeZone(date_default_timezone_get())) . "' AND '" .  wp_date('Y-m-d H:i:s', strtotime($end), new DateTimeZone(date_default_timezone_get())) . "' "
                     . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . " ORDER BY publish_date";
         } elseif ($filter == 2) {//scheduled
             $where = "WHERE {$wpdb->prefix}b2s_posts.sched_date != '0000-00-00 00:00:00' "
-                    . "AND {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "' "
+                    . "AND {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" .  wp_date('Y-m-d H:i:s', strtotime($start), new DateTimeZone(date_default_timezone_get())) . "' AND '" .  wp_date('Y-m-d H:i:s', strtotime($end), new DateTimeZone(date_default_timezone_get())) . "' "
                     . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . $approvePosts . " ORDER BY sched_date";
         } elseif ($filter == 5) {//reposter
-            $where = "WHERE {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "' "
+            $where = "WHERE {$wpdb->prefix}b2s_posts.sched_date BETWEEN '" .  wp_date('Y-m-d H:i:s', strtotime($start), new DateTimeZone(date_default_timezone_get())) . "' AND '" .  wp_date('Y-m-d H:i:s', strtotime($end), new DateTimeZone(date_default_timezone_get())) . "' "
                     . "AND {$wpdb->prefix}b2s_posts.sched_type = 5 "
                     . "AND {$wpdb->prefix}b2s_posts.hide = 0 " . $addNotAdminPosts . $addNetwork . $addNetworkDetails . $approvePosts . " ORDER BY sched_date";
         } else {//all
             $where = "WHERE {$wpdb->prefix}b2s_posts.hide = 0 "
-                    . "AND (({$wpdb->prefix}b2s_posts.sched_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "')  "
-                    . "OR ({$wpdb->prefix}b2s_posts.publish_date BETWEEN '" . date('Y-m-d H:i:s', strtotime($start)) . "' AND '" . date('Y-m-d H:i:s', strtotime($end)) . "')) "
+                    . "AND (({$wpdb->prefix}b2s_posts.sched_date BETWEEN '" .  wp_date('Y-m-d H:i:s', strtotime($start), new DateTimeZone(date_default_timezone_get())) . "' AND '" .  wp_date('Y-m-d H:i:s', strtotime($end), new DateTimeZone(date_default_timezone_get())) . "')  "
+                    . "OR ({$wpdb->prefix}b2s_posts.publish_date BETWEEN '" .  wp_date('Y-m-d H:i:s', strtotime($start), new DateTimeZone(date_default_timezone_get())) . "' AND '" .  wp_date('Y-m-d H:i:s', strtotime($end), new DateTimeZone(date_default_timezone_get())) . "')) "
                     . $addNotAdminPosts . $addNetwork . $addNetworkDetails . " ORDER BY publish_date, sched_date";
         }
 
@@ -239,6 +243,8 @@ class B2S_Calendar_Filter {
                 . "AND {$wpdb->prefix}b2s_posts.hide = 0 "
                 . "ORDER BY sched_date";
 
+        // No User input in statement
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, array($id));
 
         $rows = self::getBySql($sql)->getItems();
@@ -284,7 +290,9 @@ class B2S_Calendar_Filter {
                 . "WHERE {$wpdb->prefix}b2s_posts.post_id = %d "
                 . "AND {$wpdb->prefix}b2s_posts.hide = 0 "
                 . "ORDER BY sched_date";
-
+                
+        //No User input in statement
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $sql = $wpdb->prepare($sql, array($id));
 
         return self::getBySql($sql);

@@ -4,16 +4,15 @@ class B2S_Post_Tools {
 
     public static function updateUserSchedTimePost($post_id, $date, $time, $timezone) {
         global $wpdb;
-        $sql = $wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts WHERE id =%d AND blog_user_id = %d AND publish_date = %s", (int) $post_id, (int) get_current_user_id(), "0000-00-00 00:00:00");
-        $id = $wpdb->get_col($sql);
+        $id = $wpdb->get_col($wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts WHERE id =%d AND blog_user_id = %d AND publish_date = %s", (int) $post_id, (int) get_current_user_id(), "0000-00-00 00:00:00"));
         if (isset($id[0]) && $id[0] == $post_id) {
             $insert_time = strtotime($date . ' ' . $time);
             if ($insert_time < time()) {
                 $insert_time = time();
             }
-            $insert_datetime_utc = B2S_Util::getUTCForDate(date('Y-m-d H:i:s', $insert_time), $timezone * (-1));
-            $wpdb->update($wpdb->prefix.'b2s_posts', array('hook_action' => 2, 'sched_date' => date('Y-m-d H:i:s', $insert_time), 'sched_date_utc' => $insert_datetime_utc), array('id' => $post_id));
-            return array('result' => true, 'postId' => $post_id, 'time' => B2S_Util::getCustomDateFormat(date('Y-m-d H:i:s', $insert_time), substr(B2S_LANGUAGE, 0, 2)));
+            $insert_datetime_utc = B2S_Util::getUTCForDate( wp_date('Y-m-d H:i:s', $insert_time, new DateTimeZone(date_default_timezone_get())), $timezone * (-1));
+            $wpdb->update($wpdb->prefix.'b2s_posts', array('hook_action' => 2, 'sched_date' =>  wp_date('Y-m-d H:i:s', $insert_time, new DateTimeZone(date_default_timezone_get())), 'sched_date_utc' => $insert_datetime_utc), array('id' => $post_id));
+            return array('result' => true, 'postId' => $post_id, 'time' => B2S_Util::getCustomDateFormat( wp_date('Y-m-d H:i:s', $insert_time, new DateTimeZone(date_default_timezone_get())), substr(B2S_LANGUAGE, 0, 2)));
         }
         return array('result' => false);
     }
@@ -25,8 +24,8 @@ class B2S_Post_Tools {
         $tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
 
         foreach ($postIds as $v) {
-            $sql = $wpdb->prepare("SELECT b.id,b.post_id,b.post_for_relay,b.post_for_approve,b.sched_details_id,d.network_id,d.network_type FROM {$wpdb->prefix}b2s_posts b LEFT JOIN {$wpdb->prefix}b2s_posts_network_details d ON (d.id = b.network_details_id) WHERE b.id =%d AND b.publish_date = %s", (int) $v, "0000-00-00 00:00:00");
-            $row = $wpdb->get_row($sql);
+
+            $row = $wpdb->get_row($wpdb->prepare("SELECT b.id,b.post_id,b.post_for_relay,b.post_for_approve,b.sched_details_id,d.network_id,d.network_type FROM {$wpdb->prefix}b2s_posts b LEFT JOIN {$wpdb->prefix}b2s_posts_network_details d ON (d.id = b.network_details_id) WHERE b.id =%d AND b.publish_date = %s", (int) $v, "0000-00-00 00:00:00"));
             if (isset($row->id) && (int) $row->id == $v) {
                 if ((int) $row->post_for_approve == 1) {
                     $wpdb->update($wpdb->prefix.'b2s_posts', array('hide' => 1), array('id' => $v));
@@ -35,8 +34,7 @@ class B2S_Post_Tools {
                     if ($row->network_id != null && $row->network_type != null && (int) $row->sched_details_id > 0) {
                         if (isset($tosCrossPosting[$row->network_id][$row->network_type])) {
                             //get network_tos_group_id form sched_data
-                            $sql = $wpdb->prepare("SELECT sched_data FROM {$wpdb->prefix}b2s_posts_sched_details WHERE id =%d", (int) $row->sched_details_id);
-                            $schedData = $wpdb->get_col($sql);
+                            $schedData = $wpdb->get_col($wpdb->prepare("SELECT sched_data FROM {$wpdb->prefix}b2s_posts_sched_details WHERE id =%d", (int) $row->sched_details_id));
                             if (isset($schedData[0]) && !empty($schedData[0])) {
                                 $schedData = unserialize($schedData[0]);
                                 if ($schedData !== false && isset($schedData['network_tos_group_id']) && !empty($schedData['network_tos_group_id'])) {
@@ -76,8 +74,7 @@ class B2S_Post_Tools {
 
     public static function getAllRelayByPrimaryPostId($primary_post_id = 0) {
         global $wpdb;
-        $sqlData = $wpdb->prepare("SELECT `id`,`relay_delay_min` FROM `{$wpdb->prefix}b2s_posts` WHERE `hide` = 0 AND `sched_type` = 4  AND `{$wpdb->prefix}b2s_posts`.`publish_date` = '0000-00-00 00:00:00' AND `relay_primary_post_id` = %d ", $primary_post_id);
-        return $wpdb->get_results($sqlData);
+        return $wpdb->get_results($wpdb->prepare("SELECT `id`,`relay_delay_min` FROM `{$wpdb->prefix}b2s_posts` WHERE `hide` = 0 AND `sched_type` = 4  AND `{$wpdb->prefix}b2s_posts`.`publish_date` = '0000-00-00 00:00:00' AND `relay_primary_post_id` = %d ", $primary_post_id));
     }
 
     public static function deleteUserPublishPost($postIds = array()) {
@@ -86,8 +83,7 @@ class B2S_Post_Tools {
         $blogPostId = 0;
         $count = 0;
         foreach ($postIds as $v) {
-            $sql = $wpdb->prepare("SELECT id,v2_id,post_id FROM {$wpdb->prefix}b2s_posts WHERE id =%d", (int) $v);
-            $row = $wpdb->get_row($sql);
+            $row = $wpdb->get_row($wpdb->prepare("SELECT id,v2_id,post_id FROM {$wpdb->prefix}b2s_posts WHERE id =%d", (int) $v));
             if (isset($row->id) && (int) $row->id == $v) {
                 $hook_action = (isset($row->v2_id) && (int) $row->v2_id > 0) ? 0 : 4; //oldItems
                 $wpdb->update($wpdb->prefix.'b2s_posts', array('hook_action' => $hook_action, 'hide' => 1), array('id' => $v));
@@ -108,8 +104,8 @@ class B2S_Post_Tools {
         $blogPostId = 0;
         $count = 0;
         foreach ($postIds as $v) {
-            $sql = $wpdb->prepare("SELECT id,v2_id,post_id FROM {$wpdb->prefix}b2s_posts WHERE id =%d", (int) $v);
-            $row = $wpdb->get_row($sql);
+      
+            $row = $wpdb->get_row($wpdb->prepare("SELECT id,v2_id,post_id FROM {$wpdb->prefix}b2s_posts WHERE id =%d", (int) $v));
             if (isset($row->id) && (int) $row->id == $v) {
                 $hook_action = (isset($row->v2_id) && (int) $row->v2_id > 0) ? 0 : 4; //oldItems
                 $wpdb->update($wpdb->prefix.'b2s_posts', array('hide' => 1), array('id' => $v));
@@ -135,10 +131,11 @@ class B2S_Post_Tools {
             $optionUserTimeZone = $options->_getOption('user_time_zone');
             $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
             $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
-            $lastDate = date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($lastDate, $userTimeZoneOffset)));
+            $lastDate =  wp_date('Y-m-d H:i:s', strtotime(B2S_Util::getUTCForDate($lastDate, $userTimeZoneOffset)), new DateTimeZone(date_default_timezone_get()));
             global $wpdb;
-            $sql = $wpdb->prepare("SELECT count(id) AS noticeCount FROM {$wpdb->prefix}b2s_posts WHERE publish_date > '%s' AND publish_error_code != '' AND blog_user_id = %d", $lastDate, (int) $userId);
-            $row = $wpdb->get_row($sql);
+           
+            $row = $wpdb->get_row($wpdb->prepare("SELECT count(id) AS noticeCount FROM {$wpdb->prefix}b2s_posts WHERE publish_date > %s AND publish_error_code != '' AND blog_user_id = %d", $lastDate, (int) $userId));
+            
             if (isset($row->noticeCount)) {
                 return (int) $row->noticeCount;
             }
@@ -149,8 +146,7 @@ class B2S_Post_Tools {
     public static function countReadyForApprove($userId = 0) {
         if($userId > 0) {
             global $wpdb;
-            $sql = $wpdb->prepare("SELECT count(id) AS approveCount FROM {$wpdb->prefix}b2s_posts WHERE hide = %d AND publish_date = '%s' AND sched_date_utc <= '%s' AND post_for_approve = %d AND blog_user_id = %d", 0, '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 1, (int) $userId);
-            $row = $wpdb->get_row($sql);
+            $row = $wpdb->get_row($wpdb->prepare("SELECT count(id) AS approveCount FROM {$wpdb->prefix}b2s_posts WHERE hide = %d AND publish_date = %s AND sched_date_utc <= %s AND post_for_approve = %d AND blog_user_id = %d", 0, '0000-00-00 00:00:00', gmdate('Y-m-d H:i:s'), 1, (int) $userId));
             if (isset($row->approveCount)) {
                 return (int) $row->approveCount;
             }
@@ -160,8 +156,7 @@ class B2S_Post_Tools {
 
     public static function deletePostNoticeAll() {
         global $wpdb;
-        $query = $wpdb->prepare("UPDATE {$wpdb->prefix}b2s_posts SET hook_action = 0, hide = 1 WHERE publish_error_code != '' AND hide = 0");
-        $result = $wpdb->query($query);
+        $result = $wpdb->query("UPDATE {$wpdb->prefix}b2s_posts SET hook_action = 0, hide = 1 WHERE publish_error_code != '' AND hide = 0");
         if ((int) $result >= 0) {
             return array('result' => true);
         }

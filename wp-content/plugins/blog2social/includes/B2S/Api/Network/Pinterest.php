@@ -1,7 +1,7 @@
 <?php
 
 class B2S_Api_Network_Pinterest {
-
+   
     public $cookie = array();
     public $csrf = '';
     public $appVersion = '';
@@ -12,10 +12,11 @@ class B2S_Api_Network_Pinterest {
     private $pinterestCountryList = array();
 
     public function __construct($location = 'en') {
+      
         $this->pinterestCountryList = B2S_Tools::getCountryListByNetwork(6);
         $this->location = ((isset($this->pinterestCountryList[$location]) && isset($this->pinterestCountryList[$location]['url'])) ? $this->pinterestCountryList[$location]['url'] : 'https://www.pinterest.com/');
         $this->route = $this->location;
-        $this->host = parse_url($this->location, PHP_URL_HOST);
+        $this->host = wp_parse_url($this->location, PHP_URL_HOST);
         $this->origin = $this->location;
     }
 
@@ -43,7 +44,7 @@ class B2S_Api_Network_Pinterest {
         $header['Host'] = $this->host;
         $header['Origin'] = $this->origin;
         if ($csrf) {
-            $header['X-CSRFToken'] = substr(md5(microtime()), rand(0, 26), 5);
+            $header['X-CSRFToken'] = substr(md5(microtime()), wp_rand(0, 26), 5);
         }
         return $header;
     }
@@ -110,7 +111,7 @@ class B2S_Api_Network_Pinterest {
             }
         }
         if (empty($csrfToken)) {
-            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
+            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", wp_strip_all_tags($this->cutFromTo($content, '</head>', '</body>'))));
             return array('error' => 1, 'error_pos' => 2, 'location' => $this->route . 'login/', 'error_data' => 'CSRF verification failed - RESPONSE: ' . serialize($error_data) . '  COOKIE: ' . serialize($cookie), 'error_code' => 'invalid');
         }
         $headerData = $this->setHeader($this->route . 'login/', $this->route, 'POST', true);
@@ -145,14 +146,14 @@ class B2S_Api_Network_Pinterest {
         } elseif (is_array($response) && isset($response['resource_response']['error'])) {
             return array('error' => 1, 'error_pos' => 6, 'error_data' => serialize($response['resource_response']['error']), 'error_code' => 'login');
         } elseif (stripos($content, 'CSRF') !== false) {
-            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
+            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", wp_strip_all_tags($this->cutFromTo($content, '</head>', '</body>'))));
             return array('error' => 1, 'error_pos' => 6, 'error_data' => 'CSRF verification failed ' . serialize($error_data), 'error_code' => 'invalid');
         } elseif (stripos($content, 'suspicious activity') !== false) {
             return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest blocked logins from this IP because of suspicious activity', 'error_code' => 'http_request_failed');
         } elseif (stripos($content, 'bot!') !== false) {
             return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest has your ip in the list of potentially suspicious networks and blocked it', 'error_code' => 'http_request_failed');
         } else {
-            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", strip_tags($this->cutFromTo($content, '</head>', '</body>'))));
+            $error_data = trim(str_replace(array("\r\n", "\r", "\n"), " | ", wp_strip_all_tags($this->cutFromTo($content, '</head>', '</body>'))));
             return array('error' => 1, 'error_pos' => 6, 'error_data' => 'Pinterest login failed - unknown error ' . serialize($error_data), 'error_code' => 'access');
         }
         return array('error' => 1, 'error_pos' => 7, 'error_data' => 'Pinterest login failed - unknown error', 'error_code' => 'access');

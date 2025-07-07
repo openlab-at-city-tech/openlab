@@ -38,6 +38,8 @@ class B2S_Post_Filter {
     public function getAutorData() {
         global $wpdb;
         $sqlAuthors = "SELECT `ID`,`display_name` FROM `$wpdb->users`";
+        //NO User Input
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $this->postAuthor = $wpdb->get_results($sqlAuthors);
     }
 

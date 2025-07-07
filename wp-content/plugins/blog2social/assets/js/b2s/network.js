@@ -1220,7 +1220,7 @@ jQuery(document).on('click', '.b2s-edit-template-save-btn', function () {
         template_data[networkType]['format'] = jQuery('.b2s-edit-template-post-format[data-network-type="' + networkType + '"]').val();
         template_data[networkType]['content'] = jQuery('.b2s-edit-template-post-content[data-network-type="' + networkType + '"]').val();
         
-        if (jQuery('#b2s-edit-template-network-id').val() == 2){
+        if (jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 45){
             if (jQuery('.b2s-twitter-thread[data-network-type="' + networkType + '"]').is(':checked')) {
                 template_data[networkType]['twitterThreads'] = true;
             }else{
@@ -1655,8 +1655,8 @@ function generateExamplePost(template, content_range, exerpt_range) {
         template = template.replace(/{KEYWORDS}/g, keywords);
     }
     if (typeof jQuery('.b2s-edit-template-limit').val() != 'undefined' && jQuery('.b2s-edit-template-limit').val() > 0) {
-        if (template.length > jQuery('.b2s-edit-template-limit').val() || jQuery('#b2s-edit-template-network-id').val() == 2) {
-            if (jQuery('#b2s-edit-template-network-id').val() == 2 && jQuery('.b2s-edit-template-post-format').val() == 0) {
+        if (template.length > jQuery('.b2s-edit-template-limit').val() || jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 45) {
+            if ((jQuery('#b2s-edit-template-network-id').val() == 2 || jQuery('#b2s-edit-template-network-id').val() == 45) && jQuery('.b2s-edit-template-post-format').val() == 0) {
                 template = template.substring(0, (jQuery('.b2s-edit-template-limit').val() - 24));
             } else {
                 template = template.substring(0, jQuery('.b2s-edit-template-limit').val());

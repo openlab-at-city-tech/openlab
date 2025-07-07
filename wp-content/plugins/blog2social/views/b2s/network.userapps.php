@@ -117,7 +117,7 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
         </div>
     </div>
 
-    <input type="hidden" id="b2s-user-license" value="<?php echo $isPremium ?>">
+    <input type="hidden" id="b2s-user-license" value="<?php echo esc_attr($isPremium); ?>">
 
 
     <div class="modal fade" id="b2sXViolationModal" tabindex="-1" role="dialog" aria-labelledby="b2sXViolationModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
@@ -153,12 +153,31 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                             <p class="network-app-info" data-network-id="2" class="b2s-padding-bottom-5" style="display:none;">
                                 <?php esc_html_e('The APP-ID and Secret are needed to set up and authenticate a secure connection to your X (Twitter) account. Our guide will lead you through the process of obtaining your own App Key, the ID and the secret.', 'blog2social'); ?>
                                 <br>
-                                <?php echo sprintf(__('To obtain your App Key and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))); ?>
+                                <?php echo wp_kses(sprintf(
+                                    // translators: %s is a link
+                                    __('To obtain your App Key and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_faq'))),
+                                    array(
+                                        'a' => array(
+                                            'href' => array(),
+                                            'target' => array(),
+                                        )
+                                    )
+                                ); ?>
                             </p>
                             <p class="network-app-info" data-network-id="6" class="b2s-padding-bottom-5" style="display:none;">
                                 <?php esc_html_e('The APP-ID and Secret are needed to set up and authenticate a secure connection to your Pinterest account. Our guide will lead you through the process of obtaining your own App Key, the ID and the secret.', 'blog2social'); ?>
                                 <br>
-                                <?php echo sprintf(__('To obtain your App-Id and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_faq'))); ?>
+                                <?php echo wp_kses(sprintf(
+                                    // translators: %s is a link
+                                    __('To obtain your App-Id and Sercet, please refer to the following <a href="%s">guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('pinterest_faq'))),
+                                    array(
+                                        'a' => array(
+                                            'href' => array(),
+                                            'target' => array(),
+                                        )
+                                    )
+                                );
+                                ?>
                             </p>
 
 
@@ -260,7 +279,7 @@ $isPremium = (B2S_PLUGIN_USER_VERSION > 0 && !defined("B2S_PLUGIN_TRAIL_END")) ?
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a target="_blank" href="<?php echo B2S_Tools::getSupportLink('addon_apps'); ?> " class="btn btn-sm btn-success b2s-btn-buy-addon-apps-btn"><?php esc_html_e('purchase additional apps', 'blog2social') ?></a>
+                    <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('addon_apps')); ?> " class="btn btn-sm btn-success b2s-btn-buy-addon-apps-btn"><?php esc_html_e('purchase additional apps', 'blog2social') ?></a>
                 </div>
             </div>
         </div>

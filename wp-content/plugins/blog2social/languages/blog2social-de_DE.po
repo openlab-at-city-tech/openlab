@@ -365,6 +365,10 @@ msgstr "Dein Video wird hochgeladen."
 msgid "Your video will now be uploaded. After TikTok has processed your video, you can unlock it in your TikTok app."
 msgstr "Dein Video wird nun hochgeladen. Nachdem TikTok Dein Video verarbeitet hat, kannst Du es in Deiner TikTok-App freischalten."
 
+#: includes/B2S/Ship/Save.php:723
+msgid "Your image will be uploaded. If TikTok has successfully processed your image, you can unlock it in your TikTok app."
+msgstr "Dein Bild wird nun hochgeladen. Wenn TikTok Dein Bild erfolgreich verarbeitet hat, kannst Du es in Deiner TikTok-App freischalten."
+
 #: includes/B2S/Ship/Item.php:1414
 msgid "Unlisted"
 msgstr "Nicht gelistet"
@@ -392,9 +396,13 @@ msgstr "Status der Privatsphäre"
 msgid "cut & rotate image"
 msgstr "schneide & rotiere das Bild"
 
-#: includes/B2S/Ship/Item.php:478
+#: includes/B2S/Ship/Item.php:521
 msgid "Please note that video uploads need to be approved in the TikTok app."
 msgstr "Bitte beachte, dass Video-Uploads in der TikTok-App genehmigt werden müssen."
+
+#: includes/B2S/Ship/Item.php:478
+msgid "Please note that image uploads need to be approved in the TikTok app."
+msgstr "Bitte beachte, dass Image-Uploads in der TikTok-App genehmigt werden müssen."
 
 #: includes/B2S/Ship/Item.php:436
 msgid "You can ensure this by signing into YouTube and opening Video Manager > Partner Settings. Check if your account is verified"

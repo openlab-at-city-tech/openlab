@@ -4,15 +4,16 @@ require_once B2S_PLUGIN_DIR . 'includes/B2S/Ship/Navbar.php';
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Ship/Image.php';
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Ship/Portale.php';
 require_once B2S_PLUGIN_DIR . 'includes/B2S/Settings/Item.php';
-delete_option('B2S_PLUGIN_POST_META_TAGES_TWITTER_' . (int) $_GET['postId']);
-delete_option('B2S_PLUGIN_POST_META_TAGES_OG_' . (int) $_GET['postId']);
-delete_option('B2S_PLUGIN_POST_CONTENT_' . (int) $_GET['postId']);
+
+delete_option('B2S_PLUGIN_POST_META_TAGES_TWITTER_' . isset($_GET['postId'])? (int) $_GET['postId'] : 0);
+delete_option('B2S_PLUGIN_POST_META_TAGES_OG_' . isset($_GET['postId'])? (int) $_GET['postId'] : 0);
+delete_option('B2S_PLUGIN_POST_CONTENT_' . isset($_GET['postId'])? (int) $_GET['postId'] : 0);
 B2S_Tools::checkUserBlogUrl();
 $userLang = strtolower(substr(get_locale(), 0, 2));
 $tosCrossPosting = unserialize(B2S_PLUGIN_NETWORK_CROSSPOSTING_LIMIT);
 $postData = get_post((int) $_GET['postId']);
 $selProfile = isset($_GET['profile']) ? (int) $_GET['profile'] : 0;
-$selImg = (isset($_GET['img']) && !empty($_GET['img'])) ? base64_decode(sanitize_text_field($_GET['img'])) : '';
+$selImg = (isset($_GET['img']) && !empty($_GET['img'])) ? base64_decode(sanitize_text_field(wp_unslash($_GET['img']))) : '';
 $isVideo = (isset($_GET['isVideo']) && (int) $_GET['isVideo'] == 1) ? true : false;
 $exPostFormat = (isset($_GET['postFormat']) && $_GET['postFormat'] == '1') ? 1 : ((isset($_GET['postFormat']) && $_GET['postFormat'] == '2') ? 2 : 0);
 $postUrl = (isset($_GET['b2sPostType']) && $_GET['b2sPostType'] == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid);
@@ -27,7 +28,7 @@ if ($optionUserTimeFormat == false) {
 }
 $isPremium = (B2S_PLUGIN_USER_VERSION == 0) ? '<span class="label label-success">' . esc_html__("SMART", "blog2social") . '</span>' : '';
 $videoMeta = ($isVideo) ? wp_read_video_metadata(get_attached_file($postData->ID)) : null;
-$selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? date("Y-m-d", (strtotime(sanitize_text_field($_GET['schedDate']) . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600)) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate(sanitize_text_field($_GET['schedDateTime']), $userTimeZoneOffset * (-1)))) : '' );    //routing from calendar or curated content
+$selSchedDate = (isset($_GET['schedDate']) && !empty($_GET['schedDate'])) ? wp_date("Y-m-d", (strtotime(sanitize_text_field(wp_unslash($_GET['schedDate'])) . ' ' . B2S_Util::getCustomLocaleDateTime($userTimeZoneOffset, 'H:i:s')) + 3600),  new DateTimeZone(date_default_timezone_get())) : ( (isset($_GET['schedDateTime']) && !empty($_GET['schedDateTime'])) ? wp_date("Y-m-d H:i:s", strtotime(B2S_Util::getUTCForDate(sanitize_text_field(wp_unslash($_GET['schedDateTime'])), $userTimeZoneOffset * (-1))),  new DateTimeZone(date_default_timezone_get())) : '' );    //routing from calendar or curated content
 $b2sGeneralOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 $isDraft = false;
 $optionsOnboarding = new B2S_Options(B2S_PLUGIN_BLOG_USER_ID, "B2S_PLUGIN_ONBOARDING");
@@ -35,8 +36,7 @@ $onboarding = $optionsOnboarding->_getOption('onboarding_active');
 if (isset($_GET['postId']) && (int) $_GET['postId'] > 0) {
     global $wpdb;
     if ($wpdb->get_var("SHOW TABLES LIKE '{$wpdb->prefix}b2s_posts_drafts'") == $wpdb->prefix . 'b2s_posts_drafts') {
-        $sql = $wpdb->prepare("SELECT data, last_save_date, id FROM `{$wpdb->prefix}b2s_posts_drafts` WHERE `blog_user_id` = %d AND `post_id` = %d AND `save_origin` = %d", (int) B2S_PLUGIN_BLOG_USER_ID, (int) $_GET['postId'], 0);
-        $sqlResult = $wpdb->get_row($sql);
+        $sqlResult = $wpdb->get_row($wpdb->prepare("SELECT data, last_save_date, id FROM `{$wpdb->prefix}b2s_posts_drafts` WHERE `blog_user_id` = %d AND `post_id` = %d AND `save_origin` = %d", (int) B2S_PLUGIN_BLOG_USER_ID, (int) $_GET['postId'], 0));
         $draftData = (isset($sqlResult->data) && !empty($sqlResult->data)) ? unserialize($sqlResult->data) : '';
         $draftDate = (isset($sqlResult->last_save_date) && !empty($sqlResult->last_save_date)) ? $sqlResult->last_save_date : '';
         $draftId = (isset($sqlResult->id) && !empty($sqlResult->id)) ? $sqlResult->id : '';
@@ -54,9 +54,9 @@ $assWordsTotal = 0;
 $assOptions = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID, 'B2S_PLUGIN_USER_TOOL');
 $assOptionsData = $assOptions->_getOption(1);
 global $wpdb;
-$sql = $wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->prefix}b2s_user_tool` WHERE `blog_user_id` = %d AND `tool_id` = 1", (int) B2S_PLUGIN_BLOG_USER_ID);
-if ($wpdb->get_var($sql)) {
-    $sqlResult = $wpdb->get_row($sql);
+
+if ($wpdb->get_var($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->prefix}b2s_user_tool` WHERE `blog_user_id` = %d AND `tool_id` = 1", (int) B2S_PLUGIN_BLOG_USER_ID))) {
+    $sqlResult = $wpdb->get_row($wpdb->prepare("SELECT `id`, `access_token` FROM `{$wpdb->prefix}b2s_user_tool` WHERE `blog_user_id` = %d AND `tool_id` = 1", (int) B2S_PLUGIN_BLOG_USER_ID));
     if (isset($sqlResult->id) && (int) $sqlResult->id > 0 && isset($sqlResult->access_token) && !empty($sqlResult->access_token) && isset($assOptionsData['account']['words_open']) && isset($assOptionsData['account']['words_total'])) {
         $assConnected = true;
         $assWordsOpen = (int) $assOptionsData['account']['words_open'];
@@ -75,7 +75,7 @@ $mandantData = $navbar->getData();
             $onboardingPaused = 0;
         }
         ?>
-        <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+        <input type="hidden" id="b2s-toastee-paused" value='<?php echo esc_attr($onboardingPaused, "blog2social") ?>'>
         <div id="b2s-onboarding-toastee">
             <div id="b2s-onboarding-toastee-inner">
                 <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour", "blog2social") ?>
@@ -118,7 +118,7 @@ $mandantData = $navbar->getData();
                         <?php if (!$isVideo) { ?>
                             <div class="info b2s-text-bold b2s-text-xl"><?php esc_html_e('Title', 'blog2social') ?>: <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?></div>
                             <?php if (!isset($_GET['b2sPostType'])) { ?>
-                                <p class="info hidden-xs"># <?php echo esc_html($postData->ID); ?>  | <?php echo (isset($postStatus[trim(strtolower($postData->post_status))]) ? $postStatus[trim(strtolower($postData->post_status))] : '' ) . ' ' . esc_html__('on blog', 'blog2social') . ': ' . B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2)); ?></p>
+                                <p class="info hidden-xs"># <?php echo esc_html($postData->ID); ?>  | <?php echo (isset($postStatus[trim(strtolower($postData->post_status))]) ? esc_html($postStatus[trim(strtolower($postData->post_status))]) : '' ) . ' ' . esc_html__('on blog', 'blog2social') . ': ' .esc_html(B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2))); ?></p>
                                 <?php
                             }
                         } else {
@@ -132,13 +132,15 @@ $mandantData = $navbar->getData();
                                 <div class="add-padding-left pull-left">
                                     <b><?php esc_html_e('Video', 'blog2social') ?>:</b> <?php echo esc_html(B2S_Util::getTitleByLanguage($postData->post_title, $userLang)); ?><br>
                                     <b><?php esc_html_e('Type', 'blog2social') ?> :</b> <?php
-                                    echo esc_html__($postData->post_mime_type) . ' | ' .
-                                    esc_html__('Size', 'blog2social') . ': ' . esc_html__(size_format($videoMeta['filesize'])) . ' | ' . esc_html__('Length', 'blog2social') .
-                                    ':' . esc_html__($videoMeta['length']) . esc_html__('s', 'blog2social');
+                                    echo esc_html($postData->post_mime_type, 'blog2social') . ' | ' .
+                                    esc_html__('Size', 'blog2social') . ': ' . esc_html(size_format($videoMeta['filesize']), 'blog2social') . ' | ' . esc_html__('Length', 'blog2social') .
+                                    ':' . esc_html($videoMeta['length'], 'blog2social') . esc_html__('s', 'blog2social');
                                     ?>
                                     <br>
                                     <?php
-                                    echo sprintf(esc_html__('Uploaded by %s on %s', 'blog2social'), get_the_author_meta('display_name', $postData->post_author), B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2)))
+                                    echo esc_html(sprintf(
+                                        // translators: %s is the author and %s is the date
+                                        esc_html__('Uploaded by %1$s on %2$s', 'blog2social'), get_the_author_meta('display_name', $postData->post_author), B2S_Util::getCustomDateFormat($postData->post_date, substr(B2S_LANGUAGE, 0, 2))))
                                     ?>
                                 </div>
                             </div> 
@@ -148,7 +150,9 @@ $mandantData = $navbar->getData();
                             <div class="clearfix"></div>
                             <br>
                             <div class="info">
-                                <?php echo sprintf(esc_html__('This is your saved draft from %s', 'blog2social'), $draftDate);
+                                <?php echo esc_html(sprintf(
+                                    // translators: %s is the author and %s is the date
+                                    esc_html__('This is your saved draft from %s', 'blog2social'), esc_html($draftDate)));
                                 ?>
                                 <a class="btn-link b2s-text-underline deleteDraftBtn" data-b2s-draft-id="<?php echo esc_attr($draftId) ?>"><?php esc_html_e('delete', 'blog2social') ?></a>
                             </div>
@@ -199,7 +203,7 @@ $mandantData = $navbar->getData();
                                                     </div>
                                                 </div>
                                                 <div class="b2s-network-details-header">
-                                                    <h3><?php // NOTE Video Accounts (Add more...) (right site)              ?>
+                                                    <h3><?php // NOTE Video Accounts (Add more...) (right site)                ?>
                                                         <?php if (!$isVideo) { ?>
                                                             <?php echo esc_html(count($mandantData['auth'])); ?> <?php esc_html_e('Social Accounts', 'blog2social') ?>
                                                         <?php } else { ?>
@@ -256,42 +260,41 @@ $mandantData = $navbar->getData();
                                             }
 
                                             echo wp_kses($navbar->getItemHtml($channelData, (($isDraft) ? $draftData : array()), $isVideo), array(
-                                            'li' => array(
-                                            'class' => array(),
-                                            'data-mandant-id' => array(),
-                                            'data-mandant-default-id' => array(),
-                                            ),
-                                            'div' => array(
-                                            'class' => array(),
-                                            'onclick' => array(),
-                                            'data-instant-sharing' => array(),
-                                            'data-network-auth-id' => array(),
-                                            'data-network-type' => array(),
-                                            'data-network-kind' => array(),
-                                            'data-network-id' => array(),
-                                            'data-network-tos-group-id' => array(),
-                                            'data-network-display-name' => array(),
-                                            'data-meta-type' => array(),
-                                            'data-max-sched-date' => array(),
-                                            ),
-                                            'img' => array(
-                                            'alt' => array(),
-                                            'src' => array(),
-                                            ),
-                                            'h4' => array(),
-                                            'p' => array(),
-                                            'span' => array(
-                                            'class' => array(),
-                                            'data-network-auth-id' => array(),
-                                            'data-network-id' => array(),
-                                            'style' => array(),
-                                            )
+                                                'li' => array(
+                                                    'class' => array(),
+                                                    'data-mandant-id' => array(),
+                                                    'data-mandant-default-id' => array(),
+                                                ),
+                                                'div' => array(
+                                                    'class' => array(),
+                                                    'onclick' => array(),
+                                                    'data-instant-sharing' => array(),
+                                                    'data-network-auth-id' => array(),
+                                                    'data-network-type' => array(),
+                                                    'data-network-kind' => array(),
+                                                    'data-network-id' => array(),
+                                                    'data-network-tos-group-id' => array(),
+                                                    'data-network-display-name' => array(),
+                                                    'data-meta-type' => array(),
+                                                    'data-max-sched-date' => array(),
+                                                ),
+                                                'img' => array(
+                                                    'alt' => array(),
+                                                    'src' => array(),
+                                                ),
+                                                'h4' => array(),
+                                                'p' => array(),
+                                                'span' => array(
+                                                    'class' => array(),
+                                                    'data-network-auth-id' => array(),
+                                                    'data-network-id' => array(),
+                                                    'style' => array(),
+                                                )
                                             ));
-                                            
-                                            
+
                                             $orderArray[] = $channelData->networkAuthId;
                                             //Relay HTML Data - since V4.8.0
-                                            if ($channelData->networkId == 2 && !in_array($channelData->networkTypeId, $relayAccountData) && isset($channelData->networkUserName)) {
+                                            if ($channelData->networkId == 45 && !in_array($channelData->networkTypeId, $relayAccountData) && isset($channelData->networkUserName)) {
                                                 $relayAccountDataHtml .= '<option data-user-type-id="' . $channelData->networkTypeId . '" value="' . $channelData->networkAuthId . '">' . $channelData->networkUserName . '</option>';
                                                 array_push($relayAccountData, $channelData->networkTypeId);
                                                 //check Client db b2s_posts_network_details
@@ -319,7 +322,7 @@ $mandantData = $navbar->getData();
                                                 <div class="b2s-network-details-header b2s-margin-top-8">
 
                                                     <a href="#" class="btn btn-primary btn-sm b2s-network-setting-save b2s-loading-area-save-profile-change">
-<?php esc_html_e('Save network selection', 'blog2social') ?>
+                                                        <?php esc_html_e('Save network selection', 'blog2social') ?>
                                                     </a>
                                                     <a href="#" class="btn btn-link btn-sm hidden-sm b2s-network-setting-save b2s-network-setting-save-btn"><?php echo esc_html_e('Info', 'blog2social'); ?></a>
                                                 </div>
@@ -354,7 +357,7 @@ $mandantData = $navbar->getData();
                                         <small><?php esc_html_e('Loading...', 'blog2social') ?> .</small>
                                     </div>
 
-<?php if (defined("B2S_PLUGIN_NOTICE_SITE_URL") && B2S_PLUGIN_NOTICE_SITE_URL == false) { ?>
+                                    <?php if (defined("B2S_PLUGIN_NOTICE_SITE_URL") && B2S_PLUGIN_NOTICE_SITE_URL == false) { ?>
                                         <div class="b2s-info-blog-url-area">
                                             <div class="b2s-post-area col-md-9 del-padding-left">
                                                 <div class="panel panel-group text-center">
@@ -362,7 +365,7 @@ $mandantData = $navbar->getData();
                                                         <div class="panel panel-no-shadow">
                                                             <div class="panel-body panel-no-padding">
                                                                 <h4><br><p><?php esc_html_e('Notice: Please make sure, that your website address is reachable. The Social Networks do not allow postings from local installations.', 'blog2social') ?></p></h4>
-    <?php $settingsBlogUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/options-general.php'; ?>
+                                                                <?php $settingsBlogUrl = get_option('siteurl') . ((substr(get_option('siteurl'), -1, 1) == '/') ? '' : '/') . 'wp-admin/options-general.php'; ?>
                                                                 <a href="<?php echo esc_url($settingsBlogUrl); ?>" class="btn btn-primary"><?php esc_html_e('change website address', 'blog2social') ?></a>
                                                             </div>
                                                         </div>
@@ -371,7 +374,7 @@ $mandantData = $navbar->getData();
                                             </div>
                                         </div>
 
-<?php } else { ?>
+                                    <?php } else { ?>
 
                                         <form id="b2sNetworkSent" method="post">
                                             <div class="b2s-post-area col-md-9 del-padding-left">
@@ -404,14 +407,14 @@ $mandantData = $navbar->getData();
                                                 </div>
                                             </div>
                                             <input type="hidden" id="is_video" name="is_video" value="<?php echo (int) esc_attr(sanitize_text_field($isVideo)); ?>">
-                                            <input type="hidden" id="video_upload_url" name="video_upload_url" value="<?php echo (((int) $isVideo == 1) ? esc_html__(wp_get_attachment_url($postData->ID)) : ''); ?>">
+                                            <input type="hidden" id="video_upload_url" name="video_upload_url" value="<?php echo (((int) $isVideo == 1) ? esc_html(wp_get_attachment_url($postData->ID), 'blog2social') : ''); ?>">
                                             <input type="hidden" id="video_upload_size" name="video_upload_size" value="<?php echo (($videoMeta != null && isset($videoMeta['filesize'])) ? esc_attr($videoMeta['filesize']) : 0); ?>">
                                             <input type="hidden" id="publish_date" name="publish_date" value="">
                                             <input type="hidden" id="user_version" name="user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION); ?>">
                                             <input type="hidden" id="action" name="action" value="b2s_save_ship_data">
-                                            <input type='hidden' id='post_id' name="post_id" value='<?php echo (int) esc_attr(sanitize_text_field($_GET['postId'])); ?>'>
+                                            <input type='hidden' id='post_id' name="post_id" value='<?php echo (int) esc_attr(sanitize_text_field(wp_unslash($_GET['postId']))); ?>'>
                                             <input type='hidden' id='user_timezone' name="user_timezone" value="<?php echo esc_attr($userTimeZoneOffset); ?>">
-                                            <input type='hidden' id='user_timezone_text' name="user_timezone_text" value="<?php echo esc_attr('Time zone', 'blog2social') . ': (UTC ' . B2S_Util::humanReadableOffset($userTimeZoneOffset) . ') ' . $userTimeZone ?>">
+                                            <input type='hidden' id='user_timezone_text' name="user_timezone_text" value="<?php echo esc_attr('Time zone', 'blog2social') . ': (UTC ' . esc_attr(B2S_Util::humanReadableOffset($userTimeZoneOffset)) . ') ' . esc_attr($userTimeZone) ?>">
                                             <input type='hidden' id="default_titel" name="default_titel" value="<?php echo esc_attr(addslashes(B2S_Util::getTitleByLanguage($postData->post_title, $userLang))); ?>">
                                             <input type="hidden" id="b2sChangeOgMeta" name="change_og_meta" value="0">
                                             <input type="hidden" id="b2sRelayAccountData" name="relay_account_data" value="<?php echo esc_attr(base64_encode($relayAccountDataHtml)); ?>">
@@ -449,13 +452,13 @@ $mandantData = $navbar->getData();
                                                                 <a class="btn btn-primary" href="<?php echo esc_url($allPosts); ?>"><?php esc_html_e('Share new post on Social Media', 'blog2social') ?></a>
                                                             <?php } else { ?>
                                                                 <a class="btn btn-primary" href="<?php echo esc_url($videoPosts); ?>"><?php esc_html_e('Share new video post', 'blog2social') ?></a>
-    <?php } ?>
+                                                            <?php } ?>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </form>
-<?php } ?>
+                                    <?php } ?>
                                 </div>
                             </div>
                             </div>
@@ -520,10 +523,10 @@ $mandantData = $navbar->getData();
                                         </div>
                                         <div class="modal-body">
                                             <?php esc_html_e('You can re-share your post for a different sharing purpose, or to share on a different choice of networks, profiles, pages or groups, or with different comments or images, or if you want to share your blog post images to image networks only, or re-share them at different times. You may vary your comments and images in order to produce more variations of your social media posts to share more often without sharing the same message over and over again. Whatever your choose to do for re-sharing your post, you can simply click "Re-share this post" and you will be led to the preview page where your can select your networks and edit your texts, comments or images according to your current sharing preferences.', 'blog2social') ?>
-<?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
+                                            <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
                                                 <hr>
                                                 <h4><?php esc_html_e('You want re-share your blog post?', 'blog2social'); ?></h4>
-    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
+                                                <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
                                                 <br>
                                                 <br>
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
@@ -539,8 +542,17 @@ $mandantData = $navbar->getData();
                                                 <br>
                                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                                                 <br>
-                                                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
-<?php } ?>
+                                                <center> <?php echo wp_kses(sprintf(
+                                                    // translators: %s is a link
+                                                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                                                    array(
+                                                        'a' => array(
+                                                            'href' => array(),
+                                                            'target' => array(),
+                                                        ),
+                                                    ));
+                                                    ?> </center>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -557,9 +569,18 @@ $mandantData = $navbar->getData();
                                             <br><br>
                                             <?php esc_html_e('Your saved networks will be activated for your schedule (green checkmark) in the right side navigation. You can  select or deselect social network accounts at any time by clicking on them or connect new social networks on the "+ Add more" icon on top of the navigation bar.', 'blog2social') ?>
                                             <br><br>
-<?php esc_html_e('This allows you to adjust your network selection at any time and save it by clicking on "Save network selection".', 'blog2social') ?>
+                                            <?php esc_html_e('This allows you to adjust your network selection at any time and save it by clicking on "Save network selection".', 'blog2social') ?>
                                             <br><br>
-                                            <span class="b2s-bold"><?php esc_html_e('Note: ', 'blog2social') ?></span><?php echo sprintf(__('To define and save more network selections for your posting purposes, you can use the option "Multiple Network collections" (Premium feature) to define <a href="%s" target="_blank">multiple network collections in the social networks section</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_mandant_collection'))); ?>
+                                            <span class="b2s-bold"><?php esc_html_e('Note: ', 'blog2social') ?></span><?php echo wp_kses(sprintf(
+                                                // translators: %s is a link
+                                                __('To define and save more network selections for your posting purposes, you can use the option "Multiple Network collections" (Premium feature) to define <a href="%s" target="_blank">multiple network collections in the social networks section</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('network_mandant_collection'))),
+                                                array(
+                                                    'a' => array(
+                                                        'href' => array(),
+                                                        'target' => array(),
+                                                    ),
+                                                ));
+                                             ?>
                                         </div>
                                     </div>
                                 </div>
@@ -586,10 +607,10 @@ $mandantData = $navbar->getData();
                                             <br>
                                             <br>
 
-<?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
+                                            <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
                                                 <hr>
                                                 <h4><?php esc_html_e('You want to schedule your posts and use the Best Time Scheduler?', 'blog2social'); ?></h4>
-    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
+                                                <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
                                                 <br>
                                                 <br>
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
@@ -605,8 +626,12 @@ $mandantData = $navbar->getData();
                                                 <br>
                                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                                                 <br>
-                                                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
-<?php } ?>
+                                                <center> <?php echo wp_kses(sprintf(
+                                                    // translators: %s is a link
+                                                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                                                    array('a' => array('target' => array(), 'href' => array())));
+                                                    ?> </center>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -635,7 +660,7 @@ $mandantData = $navbar->getData();
                                             <br>
                                             <?php if (B2S_PLUGIN_USER_VERSION == 0) { ?>
                                                 <hr>
-    <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
+                                                <?php esc_html_e('With Blog2Social Premium you can:', 'blog2social') ?>
                                                 <br>
                                                 <br>
                                                 <span class="glyphicon glyphicon-ok glyphicon-success"></span> <?php esc_html_e('Post on pages and groups', 'blog2social') ?><br>
@@ -651,8 +676,12 @@ $mandantData = $navbar->getData();
                                                 <br>
                                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                                                 <br>
-                                                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
-<?php } ?>
+                                                <center> <?php echo wp_kses(sprintf(
+                                                    // translators: %s is a link
+                                                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                                                        array('a' => array('href' => array(), 'target' => array())));
+                                                    ?> </center>
+                                            <?php } ?>
                                         </div>
                                     </div>
                                 </div>
@@ -751,7 +780,7 @@ $mandantData = $navbar->getData();
                                             <h4 class="modal-title"><?php esc_html_e('About Xing guidelines for crossposting in groups', 'blog2social') ?> </h4>
                                         </div>
                                         <div class="modal-body">
-<?php esc_html_e('Good to know: Xing allows publishing identical content once within one group.', 'blog2social') ?>
+                                            <?php esc_html_e('Good to know: Xing allows publishing identical content once within one group.', 'blog2social') ?>
                                             <br><a href="<?php echo esc_url(B2S_Tools::getSupportLink('network_tos_blog_082018')); ?>" target="_blank"><?php esc_html_e('Learn more about the Xing guidelines.', 'blog2social') ?></a>
                                         </div>
                                     </div>
@@ -766,7 +795,7 @@ $mandantData = $navbar->getData();
                                             <h4 class="modal-title"><?php esc_html_e('About Xing guidelines for crossposting in groups', 'blog2social') ?> </h4>
                                         </div>
                                         <div class="modal-body">
-<?php esc_html_e('Good to know: Xing allows crossposting of identical content in up to 3 different groups.', 'blog2social') ?>
+                                            <?php esc_html_e('Good to know: Xing allows crossposting of identical content in up to 3 different groups.', 'blog2social') ?>
                                             <br><a href="<?php echo esc_url(B2S_Tools::getSupportLink('network_tos_blog_082018')); ?>" target="_blank"><?php esc_html_e('Learn more about the Xing guidelines.', 'blog2social') ?></a>
                                         </div>
                                     </div>
@@ -777,13 +806,13 @@ $mandantData = $navbar->getData();
 
                             <div id="b2s-post-ship-item-post-format-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="b2s-post-ship-item-post-format-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
                                 <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
+                                    <div class="modal-content" >
                                         <div class="modal-header">
                                             <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-post-ship-item-post-format-modal">&times;</button>
                                             <h4 class="modal-title"><?php esc_html_e('Choose your', 'blog2social') ?> <span id="b2s-post-ship-item-post-format-network-title"></span> <?php esc_html_e('Post Format', 'blog2social') ?>
                                                 <?php if (B2S_PLUGIN_USER_VERSION >= 2) { ?>
                                                     <?php esc_html_e('for:', 'blog2social') ?> <span id="b2s-post-ship-item-post-format-network-display-name"></span>
-<?php } ?>
+                                                <?php } ?>
                                             </h4>
                                         </div>
                                         <div class="modal-body">
@@ -804,13 +833,16 @@ $mandantData = $navbar->getData();
                                                         'br' => array(),
                                                         'a' => array(
                                                             'target' => array(),
-                                                            'href' => array()
+                                                            'href' => array(),
+                                                            'class' => array()
                                                         ),
                                                         'hr' => array(),
                                                         'span' => array(
                                                             'class' => array()
                                                         ),
-                                                        'label' => array(),
+                                                        'label' => array(
+                                                            'class' => array()
+                                                        ),
                                                         'input' => array(
                                                             'type' => array(),
                                                             'name' => array(),
@@ -822,15 +854,35 @@ $mandantData = $navbar->getData();
                                                             'data-network-id' => array(),
                                                             'data-post-format' => array(),
                                                             'data-network-count' => array(),
+                                                            'identifier'=>array()
                                                         ),
                                                         'img' => array(
                                                             'class' => array(),
-                                                            'src' => array()
+                                                            'src' => array(),
+                                                            'identifier'=>array(),
+                                                            'data-post-format' => array(),
+                                                            'data-post-wp-type' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-post-format' => array(),
+                                                        ),
+                                                        'button' => array(
+                                                            'type' => array(),
+                                                            'class' => array(),
+                                                            'data-post-wp-type' => array(),
+                                                            'data-post-format-type' => array(),
+                                                            'data-network-type' => array(),
+                                                            'data-network-id' => array(),
+                                                            'data-post-format' => array(),
+                                                            'data-network-count' => array(),
+                                                            'identifier'=>array()
                                                         )
                                                     ));
                                                     ?>
                                                 </div>
                                             </div>
+                                            <!--
                                             <div class="row">
                                                 <div class="col-xs-12">
                                                     <div class="text-center">
@@ -850,6 +902,7 @@ $mandantData = $navbar->getData();
                                                     </div>
                                                 </div>
                                             </div>
+                                            -->
                                         </div>
                                     </div>
                                 </div>
@@ -883,7 +936,17 @@ $mandantData = $navbar->getData();
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-<?php echo sprintf(__('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))); ?>
+                                                    <?php echo wp_kses(sprintf(
+                                                        // translators: %s is a link
+                                                        __('When you connect Blog2Social with your Instagram account, you might get a notification from Instagram that a server from Germany in the Cologne area is trying to access your account. This is a general security notification due to the fact that the Blog2Social server is located in this area. This is an automatic process that is necessary to establish a connection to Instagram. Rest assured, that this is a common and regular security notice to keep your account safe. <a href="%s" target="_blank">More information: How to connect with Instagram.</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_auth_faq'))),
+                                                    array(
+                                                        'a' => array(
+                                                            'href' => array(),
+                                                            'target' => array()
+                                                            )
+                                                        )
+                                                    );
+                                                    ?>
                                                     <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                                                 </div>
                                             </div>
@@ -908,10 +971,20 @@ $mandantData = $navbar->getData();
                                                     <br>
                                                     <?php esc_html_e('2. Your Instagram account is linked to a Facebook page.', 'blog2social') ?>
                                                     <br>
-<?php esc_html_e('3. Blog2Social has the permission to publish your posts.', 'blog2social') ?>
+                                                    <?php esc_html_e('3. Blog2Social has the permission to publish your posts.', 'blog2social') ?>
                                                     <br>
                                                     <br>
-<?php echo sprintf(__('You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))); ?>
+                                                    <?php echo wp_kses(sprintf(
+                                                        // translators: %s is a link
+                                                        __('You will find more information and detailed instructions in the <a href="%s" target="_blank">Instagram Business guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_business_auth_faq'))),
+                                                        array(
+                                                            'a' => array(
+                                                                'href' => array(),
+                                                                'target' => array()
+                                                                )
+                                                            )
+                                                        );
+                                                    ?>
                                                     <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                                                 </div>
                                             </div>
@@ -930,7 +1003,17 @@ $mandantData = $navbar->getData();
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-<?php echo sprintf(__('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))); ?>
+                                                    <?php echo wp_kses(sprintf(
+                                                        // translators: %s is a link
+                                                        __('Please make sure to log in with your account which manages your pages and <a href="%s" target="_blank">follow this guide to select all your pages</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_page_auth'))),
+                                                        array(
+                                                            'a' => array(
+                                                                'href' => array(),
+                                                                'target' => array()
+                                                                )
+                                                            )
+                                                        );
+                                                    ?>
                                                     <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                                                 </div>
                                             </div>
@@ -949,7 +1032,17 @@ $mandantData = $navbar->getData();
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-<?php echo sprintf(__('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))); ?>
+                                                    <?php echo wp_kses(sprintf(
+                                                        // translators: %s is a link
+                                                        __('Please make sure to log in with your account which manages your groups and <a href="%s" target="_blank">follow this guide to select all your groups</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('fb_group_auth'))),
+                                                        array(
+                                                            'a' => array(
+                                                                'href' => array(),
+                                                                'target' => array()
+                                                                )
+                                                            )
+                                                        );
+                                                    ?>
                                                     <button class="btn btn-primary pull-right b2s-add-network-continue-btn"><?php esc_html_e('Continue', 'blog2social'); ?></button>
                                                 </div>
                                             </div>
@@ -969,7 +1062,7 @@ $mandantData = $navbar->getData();
                                         <div class="modal-body">
                                             <div class="row">
                                                 <div class="col-md-12">
-<?php esc_html_e('The scheduling for your social media post has changed as a selected social media network is no longer connected to Blog2Social. Please check the network connections under "Networks" and make sure that the required networks are connected.', 'blog2social'); ?>
+                                                    <?php esc_html_e('The scheduling for your social media post has changed as a selected social media network is no longer connected to Blog2Social. Please check the network connections under "Networks" and make sure that the required networks are connected.', 'blog2social'); ?>
                                                 </div>
                                             </div>
                                         </div>
@@ -1007,8 +1100,8 @@ $mandantData = $navbar->getData();
                             <input type="hidden" id="b2sPostId" value="<?php echo esc_attr($postData->ID); ?>">
                             <input type="hidden" id="selSchedDate" value="<?php echo esc_attr($selSchedDate); ?>">
                             <input type="hidden" id="selProfile" value="<?php echo esc_attr($selProfile); ?>">   
-                            <input type="hidden" id="b2sPostType" value="<?php echo (isset($_GET['b2sPostType']) && sanitize_text_field($_GET['b2sPostType']) == 'ex') ? 'ex' : ''; ?>">
-                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field($_GET['b2sPostType']) == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
+                            <input type="hidden" id="b2sPostType" value="<?php echo (isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? 'ex' : ''; ?>">
+                            <input type="hidden" id="b2sDefault_url" name="default_url" value="<?php echo esc_attr((isset($_GET['b2sPostType']) && sanitize_text_field(wp_unslash($_GET['b2sPostType'])) == 'ex') ? (($exPostFormat == 0) ? $postData->guid : '') : (get_permalink($postData->ID) !== false ? get_permalink($postData->ID) : $postData->guid)); ?>">
                             <input type="hidden" id="b2sPortalImagePath" value="<?php echo esc_url(plugins_url('/assets/images/portale/', B2S_PLUGIN_FILE)); ?>">
                             <input type="hidden" id="b2sTosXingGroupCrosspostingLimit" value="<?php echo esc_attr($tosCrossPosting[19][2]); ?>">
                             <input type="hidden" id="b2sServerUrl" value="<?php echo esc_url(B2S_PLUGIN_SERVER_URL); ?>">
@@ -1018,8 +1111,8 @@ $mandantData = $navbar->getData();
                             <input type="hidden" id="b2sJsTextConnectionFail" value="<?php esc_html_e('The connection to the server failed. Please try again! You can find more information and solutions in the guide for server connection', 'blog2social') ?>">
                             <input type="hidden" id="b2sJsTextConnectionFailLink" value="<?php echo ($userLang == 'de') ? 'https://www.blog2social.com/de/faq/content/9/108/de/die-verbindung-zum-server-ist-fehlgeschlagen-bitte-versuche-es-erneut.html' : 'https://www.blog2social.com/en/faq/content/9/106/en/the-connection-to-the-server-failed-please-try-again.html'; ?>"> 
                             <input type="hidden" id="b2sJsTextConnectionFailLinkText" value="<?php esc_html_e('Give me more information', 'blog2social') ?>"> 
-                            <input type="hidden" id="b2sSelectedNetworkAuthId" value="<?php echo (isset($_GET['network_auth_id']) && (int) $_GET['network_auth_id'] > 0) ? (int) esc_attr(sanitize_text_field($_GET['network_auth_id'])) : ''; ?>">
-                            <input type="hidden" id="b2sMultiSelectedNetworkAuthId" value="<?php echo (isset($_GET['multi_network_auth_id']) && !empty($_GET['multi_network_auth_id'])) ? esc_attr(sanitize_text_field($_GET['multi_network_auth_id'])) : ''; ?>">
+                            <input type="hidden" id="b2sSelectedNetworkAuthId" value="<?php echo (isset($_GET['network_auth_id']) && (int) $_GET['network_auth_id'] > 0) ? (int) esc_attr(sanitize_text_field(wp_unslash($_GET['network_auth_id']))) : ''; ?>">
+                            <input type="hidden" id="b2sMultiSelectedNetworkAuthId" value="<?php echo (isset($_GET['multi_network_auth_id']) && !empty($_GET['multi_network_auth_id'])) ? esc_attr(sanitize_text_field(wp_unslash($_GET['multi_network_auth_id']))) : ''; ?>">
                             <input type="hidden" id="b2sDefaultNoImage" value="<?php echo esc_url(plugins_url('/assets/images/no-image.png', B2S_PLUGIN_FILE)); ?>">
                             <input type="hidden" id="isMetaChecked" value="<?php echo esc_attr($postData->ID); ?>">
                             <input type="hidden" id="isOgMetaChecked" value="<?php echo (isset($b2sGeneralOptions['og_active']) ? (int) $b2sGeneralOptions['og_active'] : 0); ?>">
@@ -1118,12 +1211,27 @@ $mandantData = $navbar->getData();
                                             <h4 class="modal-title licence-condition-daily-modal-title"><?php esc_html_e("You've reached your daily posting limit!", "blog2social") ?></h4>
                                             <?php if (B2S_PLUGIN_USER_VERSION > 0) { ?>
                                                 <h4 class="modal-title licence-condition-sched-modal-title b2s-info-display-none"><?php esc_html_e("You've reached your posting limit!", "blog2social") ?></h4> 
-<?php } ?>
+                                            <?php } ?>
                                         </div>
                                         <div class="modal-body">
                                             <p><?php esc_html_e('To increase your limit and enjoy more features, consider upgrading.', 'blog2social') ?></p>
                                             <br>
                                             <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade', 'blog2social') ?></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="modal fade b2s-info-share-as-story-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-info-share-as-story-modal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="b2s-modal-close close" data-modal-name=".b2s-info-share-as-story-modal">&times;</button>
+                                            <h4 class="modal-title"><?php esc_html_e("Share as Story", "blog2social") ?></h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <p><?php esc_html_e('In an Instagram or Facebook story, you can share photos and videos for a short time. The story can be accessed via the profile picture and disappears from the profile after 24 hours.', 'blog2social') ?></p>
                                         </div>
                                     </div>
                                 </div>

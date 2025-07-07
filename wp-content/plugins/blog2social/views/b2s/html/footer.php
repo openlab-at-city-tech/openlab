@@ -2,11 +2,11 @@
 <div class="b2s-footer">
     <div class="pull-left hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">
         <?php if (!B2S_System::isblockedArea('B2S_MENU_FOOTER', B2S_PLUGIN_ADMIN)) { ?>
-            <small> © <?php echo date('Y'); ?> <a target="_blank" href="https://www.adenion.de" rel="nofollow">Adenion GmbH</a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('privacy_policy')); ?>" rel="nofollow"><?php esc_html_e("Privacy Policy", "blog2social") ?></a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('term')); ?>" rel="nofollow"><?php esc_html_e("Terms", "blog2social") ?></a> | <?php esc_html_e("We never store your data from your social media profiles", "blog2social") ?></small>
+            <small> © <?php echo esc_html(wp_date('Y', null,  new DateTimeZone(date_default_timezone_get()))); ?> <a target="_blank" href="https://www.adenion.de" rel="nofollow">Adenion GmbH</a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('privacy_policy')); ?>" rel="nofollow"><?php esc_html_e("Privacy Policy", "blog2social") ?></a> | <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('term')); ?>" rel="nofollow"><?php esc_html_e("Terms", "blog2social") ?></a> | <?php esc_html_e("We never store your data from your social media profiles", "blog2social") ?></small>
         <?php } ?>
     </div>
     <div class="pull-right hidden-xs <?php echo isset($noLegend) || isset($noLegendCalender) ? 'hide' : ''; ?>">
-        <?php if (sanitize_text_field(wp_unslash($_GET['page'])) != 'blog2social-video') { ?>
+        <?php if (sanitize_text_field(wp_unslash(isset($_GET['page'])?$_GET['page']:"")) != 'blog2social-video') { ?>
             <small>
                 <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/video-icon.png', B2S_PLUGIN_FILE)); ?>" alt="video">  <?php esc_html_e('Video', 'blog2social') ?> 
                 <img class="img-width-9" src="<?php echo esc_url(plugins_url('/assets/images/b2s/post-icon.png', B2S_PLUGIN_FILE)); ?>" alt="beitrag">  <?php esc_html_e('Post', 'blog2social') ?> 
@@ -18,7 +18,7 @@
     </div>
 </div>
 <!--Footer Ende-->
-<?php if (sanitize_text_field(wp_unslash($_GET['page'])) != 'blog2social-calendar') { ?>
+<?php if (sanitize_text_field(wp_unslash(isset($_GET['page'])? $_GET['page'] : "")) != 'blog2social-calendar') { ?>
 
     <div class="modal fade" id="b2sPreFeatureModal" tabindex="-1" role="dialog" aria-labelledby="b2sPreFeatureModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
         <div class="modal-dialog">
@@ -44,7 +44,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                        ); 
+                        ?> </center>
                 </div>            
             </div>
         </div>
@@ -75,7 +84,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                            );
+                        ?> </center>
                 </div>
                 <div class="modal-body auth-network">
                     <b><?php esc_html_e('Activate Blog2Social PREMIUM PRO.', 'blog2social') ?></b>
@@ -93,7 +111,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                            );
+                        ?> </center>
                 </div>              
                 <div class="modal-body multi-image">
                     <b><?php esc_html_e('Activate Blog2Social PREMIUM PRO.', 'blog2social') ?></b>
@@ -111,7 +138,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                            );
+                        ?> </center>
                 </div>
                 <div class="modal-body network-humhub">
                     <b><?php esc_html_e('Discover HumHub, the latest network in Blog2Social!','blog2social') ?></b>
@@ -121,7 +157,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate','network_humhub')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above and Unlock HumHub!', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                        );
+                        ?> </center>
                 </div>
             </div>
         </div>
@@ -150,7 +195,16 @@
                     <br>
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to BUSINESS', 'blog2social') ?></a>
                     <br>
-                    <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                    <center> <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                        array(
+                            'a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                            )
+                        );
+                        ?> </center>
                 </div>             
             </div>
         </div>
@@ -191,16 +245,23 @@
                     </div>
                     <br>
                     <div class="row">
-
-
-
                         <?php if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
                             <div class="col-md-12"> 
 
                                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART or above ', 'blog2social') ?></a>
                                 <br>
-                                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                                <center> <?php echo wp_kses(sprintf(
+                                    // translators: %s is a link
+                                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                                    array(
+                                        'a' => array(
+                                            'href' => array(),
+                                            'target' => array()
+                                            )
+                                        )
+                                    );
+                                    ?> </center>
                             </div>
                         <?php } ?>
                     </div>
@@ -264,7 +325,15 @@
                         <br>
                         <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                         <br>
-                        <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                        <center> <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array('a' => array(
+                                'href' => array(), 
+                                'target' => array())
+                                )
+                            ); ?> 
+                            </center>
                     <?php } ?>
                 </div>
             </div>
@@ -304,7 +373,16 @@
                         <br>
                         <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                         <br>
-                        <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                        <center> <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array())
+                                )
+                            ); ?>
+                             </center>
                     <?php } ?>
                 </div>
             </div>
@@ -336,7 +414,15 @@
                 <div class="modal-body">
                     <p><?php
                         esc_html_e('Share your blog posts with the Auto Poster: Your blog posts will be shared automatically on your social media channels as soon as you publish or update a new post. You can also choose to autopost scheduled blog posts as soon as they are published.', 'blog2social');
-                        echo ' ' . sprintf(__('<a target="_blank" href="%s">Learn how to set up auto posting for your blog posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_m')));
+                        echo ' ' . wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('<a target="_blank" href="%s">Learn how to set up auto posting for your blog posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_m'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array())
+                                )
+                            );
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
@@ -359,7 +445,17 @@
                         <br>
                         <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                         <br>
-                        <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                        <center> <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                            ?> </center>
                     <?php } ?>
                 </div>
             </div>
@@ -376,7 +472,16 @@
                 <div class="modal-body">
                     <p><?php
                         esc_html_e('Share imported posts with the Auto Poster: Posts that you import via RSS feeds and plugins can be shared automatically on your social media channels.', 'blog2social');
-                        echo ' ' . sprintf(__('<a target="_blank" href="%s">Learn how to set up auto posting for imported posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_a')));
+                        echo ' ' . wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('<a target="_blank" href="%s">Learn how to set up auto posting for imported posts</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_poster_a'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
@@ -398,7 +503,17 @@
                         <br>
                         <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                         <br>
-                        <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                        <center> <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                            ?> </center>
                     <?php } ?>
                 </div>
             </div>
@@ -415,7 +530,17 @@
                 <div class="modal-body">
                     <?php esc_html_e('With Blog2Social you can transfer the Auto-Poster settings as a WordPress-administrator to other users if they have activated the same Blog2Social-Business license. This way, you can also assign social media accounts to other users, so they can auto-post without setting up these connections in each user account. Within these settings, you can also decide whether newly published or updated content from other users should be automatically shared. Users with an assigned Auto-Poster setting and an assigned social-media-network group will then share content automatically how you selected the content to be shared automatically.', 'blog2social') ?>
                     <br>
-                    <?php echo sprintf(__('You will get more information on how to assign the Auto-Poster settings in the <a target="_blank" href="%s">Auto-Poster guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_post_assign'))) ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('You will get more information on how to assign the Auto-Poster settings in the <a target="_blank" href="%s">Auto-Poster guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('auto_post_assign'))),
+                        array(
+                            'a' => array(
+                                'href' => array(),
+                                'target' => array()
+                                )
+                            )
+                        );
+                    ?>
                     <br>
                 </div>
             </div>
@@ -433,7 +558,16 @@
                 <div class="modal-body">
                     <p><?php
                         esc_html_e('Keep your social media feed updated automatically with your best content and save valuable time by reviving your evergreen content regularly. Automate your resharing process with Blog2Social, so you can use your time to create new content and interact with your community.', 'blog2social');
-                        echo ' ' . sprintf(__('<a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('re_post')));
+                        echo ' ' . wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('<a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('re_post'))),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
 
                         if (B2S_PLUGIN_USER_VERSION == 0) {
                             ?>
@@ -456,7 +590,17 @@
                         <br>
                         <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                         <br>
-                        <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                        <center> <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array(
+                                'a' => array(
+                                    'href' => array(),
+                                    'target' => array()
+                                    )
+                                )
+                            );
+                            ?> </center>
                     <?php } ?>
                 </div>
             </div>
@@ -471,10 +615,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="b2s-modal-close close" data-modal-name="#b2sInfoTwitterThreads" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title"><?php esc_html_e('Twitter Threads', 'blog2social') ?></h4>
+                <h4 class="modal-title"><?php esc_html_e('X Threads', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-                <?php esc_html_e('Use Twitter threads (now X posts) to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
+                <?php esc_html_e('Use X threads to share messages that deserve more than just 280 characters! Your copy will be shared in multiple connected tweets, each one with 280 characters, appearing underneath each other - like a thread.', 'blog2social') ?>
                 <br>
                 <br>
                 <?php esc_html_e('Tip: To define threaded posts as the default setting for your tweets, activate this function in your post templates for Twitter.', 'blog2social') ?>
@@ -531,16 +675,40 @@
                     <br>
                     <?php esc_html_e('Please note:', 'blog2social') ?><br>
                     <br>
-                    <?php echo sprintf(__('If you use other plugins for setting meta tags, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply and share your changes, please make sure you have <a target="_blank" href="%s">activated meta tag settings for Blog2Social only</a> and disable all meta tag settings in your other plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('If you use other plugins for setting meta tags, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply and share your changes, please make sure you have <a target="_blank" href="%s">activated meta tag settings for Blog2Social only</a> and disable all meta tag settings in your other plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                     <br>
                     <br>
                     <?php esc_html_e('If this post has been previously shared or scheduled, your current changes will also affect the appearance of previously shared or scheduled posts, as the networks will always pull the latest information from the open graph meta tags and automatically update any existing posts.', 'blog2social') ?><br>
                     <br>
                     <br>
-                    <?php echo sprintf(__('Your changes will not be applied to your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('Your changes will not be applied to your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                     <br>
                     <br>
-                    <?php echo sprintf(__('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">meta tag checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('yoast_warning_og_guide'))); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">meta tag checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('yoast_warning_og_guide'))),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                 </div>
                 <div class="meta-body modal-meta-content" data-meta-type="card" data-meta-origin="ship" style="display: none;">
                     <?php esc_html_e('What are Twitter Cards?', 'blog2social') ?>
@@ -557,16 +725,40 @@
                     <br>
                     <?php esc_html_e('Please note:', 'blog2social') ?><br>
                     <br>
-                    <?php echo sprintf(__('If you use other plugins for setting Twitter Cards, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply your changes, please make sure you have <a target="_blank" href="%s">activated Twitter Card settings for Blog2Social only</a> and disable all Twitter Card settings in your other  plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('If you use other plugins for setting Twitter Cards, such as Yoast SEO, the tags you customized with Blog2Social will be overwritten by the other plugins. To allow Blog2Social to apply your changes, please make sure you have <a target="_blank" href="%s">activated Twitter Card settings for Blog2Social only</a> and disable all Twitter Card settings in your other  plugins.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                     <br>
                     <br>
                     <?php esc_html_e('If this post was previously shared or scheduled, your current changes will also affect the look of previously shared or scheduled posts, as Twitter will always pull the most up-to-date information from the Twitter Card tags. If this post has already been shared, it may take up to 7 days for Twitter to update your current changes.', 'blog2social') ?><br>
                     <br>
                     <br>
-                    <?php echo sprintf(__('Your changes will not affect your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('Your changes will not affect your previously shared social media posts if you have manually disabled the meta tag options in your <a target="_blank" href="%s">Blog2Social settings</a>.', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                     <br>
                     <br>
-                    <?php echo sprintf(__('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">Twitter Card guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_card_guide'))); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('For more information on how to set meta tags correctly, you can take a look into the <a target="_blank" href="%s">Twitter Card guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('twitter_card_guide'))),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                 </div>
 
                 <?php if (B2S_PLUGIN_USER_VERSION == 0) {
@@ -591,7 +783,15 @@
                     <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to SMART and above', 'blog2social') ?></a>
                     <br>
                     <center>
-                        <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?>
+                        <?php echo wp_kses(sprintf(
+                            // translators: %s is a link
+                            __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                            array('a' => 
+                                array('target' => array(), 
+                                'href' => array())
+                                )
+                            );
+                            ?>
                     </center>
                     <?php
                 }
@@ -615,10 +815,26 @@
                     <?php esc_html_e('You are currently sharing this post as image post. Changes to title and description Meta Tag parameters will only be supported for link post formats. Please change your post format to link post to make individual changes to the title and description for your post preview.', 'blog2social'); ?>
                 </div>
                 <div class="isOgMetaChecked meta-text" style="display:none;">
-                    <?php echo sprintf(__('Your changes will have no effect on your social media posts on Facebook, if you have manually unchecked the Meta Tag options for Facebook in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(sprintf(
+                        // translators: %s is a link
+                        __('Your changes will have no effect on your social media posts on Facebook, if you have manually unchecked the Meta Tag options for Facebook in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                 </div>
                 <div class="isCardMetaChecked meta-text"  style="display:none;">
-                    <?php echo sprintf(__('Your changes will have no effect on your social media posts on Twitter, if you have manually unchecked the Meta Tag options for Twitter in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')); ?>
+                    <?php echo wp_kses(
+                        // translators: %s is a link
+                        sprintf(__('Your changes will have no effect on your social media posts on Twitter, if you have manually unchecked the Meta Tag options for Twitter in your Blog2Social <a target="_blank" href="%s">settings</a>', 'blog2social'), esc_url('admin.php?page=blog2social-settings')),
+                        array('a' => 
+                            array('target' => array(), 
+                            'href' => array())
+                            )
+                        );
+                    ?>
                 </div>
             </div>
         </div>
@@ -633,7 +849,27 @@
                     <span class="b2s-text-bold"><?php esc_html_e('Update news', 'blog2social'); ?></span>
                     <button type="button" class="b2s-modal-close close" data-modal-name="#b2s-changelog-modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
-                <?php echo B2S_Changelog::getChangelogContent(); ?>
+                <?php echo wp_kses(B2S_Changelog::getChangelogContent(),
+                    array(
+                        'a' => array(
+                            'target' => array(), 
+                            'href' => array(),
+                        'div' => array(
+                            'class' => array()
+                        ),
+                        'p' => array(
+                            'class' => array()
+                        ),
+                        'br'=> array(),
+                        'ul' => array(
+                            'class' => array()
+                        ),
+                        'li' => array(
+                            'class' => array()
+                        )
+                    )
+                    )
+                ); ?>
             </div>
         </div>
     </div>

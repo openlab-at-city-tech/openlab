@@ -10,8 +10,7 @@ class PRG_Ship_Item {
 
     public function getMandant() {
         global $wpdb;
-        $sqlUserData = $wpdb->prepare("SELECT * FROM `{$wpdb->prefix}b2s_user_contact` WHERE `blog_user_id` = %d", B2S_PLUGIN_BLOG_USER_ID);
-        $this->userData = $wpdb->get_row($sqlUserData);
+        $this->userData = $wpdb->get_row($wpdb->prepare("SELECT * FROM `{$wpdb->prefix}b2s_user_contact` WHERE `blog_user_id` = %d", B2S_PLUGIN_BLOG_USER_ID));
         return $this->userData;
     }
 

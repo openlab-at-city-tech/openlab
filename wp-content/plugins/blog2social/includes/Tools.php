@@ -80,6 +80,10 @@ class B2S_Tools {
                 $tokenInfo['B2S_PLUGIN_LICENCE_CONDITION'] = (array) $version->licence_condition;
             }
 
+            if(isset($version->network_condition)){
+                $tokenInfo['B2S_PLUGIN_NETWORK_CONDITION'] = (array) $version->network_condition;
+            }
+                
             if (!isset($version->version)) {
                 define('B2S_PLUGIN_NOTICE', 'CONNECTION');
             } else {
@@ -97,8 +101,7 @@ class B2S_Tools {
         $check = false;
         $blogUrl = get_option('home');
         global $wpdb;
-        $sql = "SELECT token,state_url FROM {$wpdb->prefix}b2s_user WHERE blog_user_id = %d";
-        $result = $wpdb->get_results($wpdb->prepare($sql, B2S_PLUGIN_BLOG_USER_ID));
+        $result = $wpdb->get_results($wpdb->prepare("SELECT token,state_url FROM {$wpdb->prefix}b2s_user WHERE blog_user_id = %d", B2S_PLUGIN_BLOG_USER_ID));
         if (is_array($result) && !empty($result) && isset($result[0]->token)) {
             if (isset($result[0]->state_url) && (int) $result[0]->state_url != 1) {
                 $checkBlogUrl = json_decode(B2S_Api_Post::post(B2S_PLUGIN_API_ENDPOINT, array('action' => 'getBlogUrl', 'token' => $result[0]->token, 'blog_url' => strtolower($blogUrl), 'state_url' => (int) $result[0]->state_url)));
@@ -129,22 +132,22 @@ class B2S_Tools {
                     $getTimeForPage = in_array($k, $allowPage) ? true : false;
                     $getTimeForGroup = in_array($k, $allowGroup) ? true : false;
                     if ($getTimeForPage) {
-                        $endProfile = date("H:i", strtotime('-30 minutes', strtotime($endProfile . ':00')));   //-30min
+                        $endProfile = wp_date("H:i", strtotime('-30 minutes', strtotime($endProfile . ':00')),  new DateTimeZone(date_default_timezone_get()));   //-30min
                     }
                     if ($getTimeForGroup) {
-                        $endProfile = date("H:i", strtotime('-30 minutes', strtotime($endProfile . ':00')));   //-30min
+                        $endProfile = wp_date("H:i", strtotime('-30 minutes', strtotime($endProfile . ':00')), new DateTimeZone(date_default_timezone_get()));   //-30min
                     }
                     $endProfile = (strpos($endProfile, ':') === false) ? $endProfile . ':00' : $endProfile;
                     $startProfle = (strpos($v[0], ':') === false) ? $v[0] . ':00' : $v[0];
-                    $dateTime = date('Y-m-d ' . B2S_Util::getRandomTime($startProfle, $endProfile) . ':00');
+                    $dateTime = wp_date('Y-m-d ' . B2S_Util::getRandomTime($startProfle, $endProfile) . ':00',null, new DateTimeZone(date_default_timezone_get()));
                     //Profile
-                    $userTimes[$k][0] = date($slug, strtotime($dateTime));
+                    $userTimes[$k][0] = wp_date($slug, strtotime($dateTime), new DateTimeZone(date_default_timezone_get()));
                     //Page
                     $dateTime = ($getTimeForPage) ? strtotime('+30 minutes', strtotime($dateTime)) : strtotime($dateTime);
-                    $userTimes[$k][1] = ($getTimeForPage) ? date($slug, $dateTime) : "";
+                    $userTimes[$k][1] = ($getTimeForPage) ? wp_date($slug, $dateTime, new DateTimeZone(date_default_timezone_get())) : "";
                     //Group
                     $dateTime = strtotime('+30 minutes', $dateTime);
-                    $userTimes[$k][2] = ($getTimeForGroup) ? date($slug, $dateTime) : "";
+                    $userTimes[$k][2] = ($getTimeForGroup) ? wp_date($slug, $dateTime, new DateTimeZone(date_default_timezone_get())) : "";
                 }
             }
         }
@@ -205,6 +208,9 @@ class B2S_Tools {
             return ($lang == 'en') ? 'https://en.blog2social.com/video-posting/' : 'https://de.blog2social.com/video-posting/';
         }
         
+        if($type == 'network_guide_re_sharer'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1165' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1162';
+        }
         
         if ($type == 'userTimeSettings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=artikel&cat=5&id=32&artlang=en' : 'https://www.blog2social.com/de/faq/index.php?action=artikel&cat=5&id=43&artlang=de';
@@ -279,6 +285,11 @@ class B2S_Tools {
         if ($type == 'faq_settings') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?action=show&cat=11' : 'https://www.blog2social.com/de/faq/index.php?action=show&cat=11';
         }
+        if($type == 'faq_postformats'){
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/content/4/131/en/social-media-post-formats-_-the-differences-between-image-post-and-link-post.html' : 'https://www.blog2social.com/de/faq/content/4/131/de/social-media-postformate-_-die-unterschiede-zwischen-bild_beitraegen-und-link_beitraegen.html?highlight=Post%20Format';
+            
+        }
+
         if ($type == 'browser_extension') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/webapp/extension/' : 'https://www.blog2social.com/de/webapp/extension/';
         }
@@ -417,7 +428,7 @@ class B2S_Tools {
         if ($type == 'network_guide_link_1') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1175' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1174';
         }
-        if ($type == 'network_guide_link_2') {
+        if ($type == 'network_guide_link_45') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1177' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1177';
         }
         if ($type == 'network_guide_link_3') {
@@ -477,8 +488,14 @@ class B2S_Tools {
         if ($type == 'network_guide_link_39') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1208' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1205';
         }
+        if ($type == 'network_guide_link_43') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1254' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1249';
+        }
         if ($type == 'network_guide_link_44') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1251' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1246';
+        }
+        if ($type == 'network_guide_link_46') {
+            return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1255' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1250';
         }
         if ($type == 'TOKEN') {
             return ($lang == 'en') ? 'https://www.blog2social.com/en/faq/index.php?solution_id=1181' : 'https://www.blog2social.com/de/faq/index.php?solution_id=1175';
@@ -549,10 +566,16 @@ class B2S_Tools {
         if ($type == "addon_post_volume") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=post_limit_yearly&token=' . B2S_PLUGIN_TOKEN;
         }
+        if ($type == "addon_network_integration") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network_integration&token=' . B2S_PLUGIN_TOKEN;
+        }
         if ($type == "addon_video") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=video&token=' . B2S_PLUGIN_TOKEN;
         }
         if ($type == "addon_social_account") {
+            return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network&token=' . B2S_PLUGIN_TOKEN;
+        }
+        if ($type == "addon_telegram") {
             return 'https://service.blog2social.com/login?redirectUrl=/checkout?mode=addon&type=network&token=' . B2S_PLUGIN_TOKEN;
         }
         if ($type == "addon_user_licence") {
@@ -581,15 +604,13 @@ class B2S_Tools {
         }
         $user = get_user_by('id', $user_id);
         global $wpdb;
-        $sql = $wpdb->prepare("SELECT token FROM `{$wpdb->prefix}b2s_user` WHERE `blog_user_id` = %d", $user->data->ID);
-        $userExist = $wpdb->get_row($sql);
+        $userExist = $wpdb->get_row($wpdb->prepare("SELECT token FROM `{$wpdb->prefix}b2s_user` WHERE `blog_user_id` = %d", $user->data->ID));
         if (empty($userExist) || !isset($userExist->token)) {
             $postData = array('action' => 'getToken', 'blog_user_id' => $user->data->ID, 'blog_url' => get_option('home'), 'email' => $user->data->user_email, 'is_multisite' => is_multisite());
             $result = json_decode(B2S_Tools::getToken($postData));
             if (isset($result->result) && (int) $result->result == 1 && isset($result->token)) {
                 $state_url = (isset($result->state_url)) ? (int) $result->state_url : 0;
-                $sqlInsertToken = $wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_user` (`token`, `blog_user_id`,`register_date`,`state_url`) VALUES (%s,%d,%s,%d);", $result->token, (int) $user->data->ID, date('Y-m-d H:i:s'), $state_url);
-                $wpdb->query($sqlInsertToken);
+                $wpdb->query($wpdb->prepare("INSERT INTO `{$wpdb->prefix}b2s_user` (`token`, `blog_user_id`,`register_date`,`state_url`) VALUES (%s,%d,%s,%d);", $result->token, (int) $user->data->ID, wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())), $state_url));
                 return $result->token;
             } else {
                 return false;
@@ -769,6 +790,19 @@ class B2S_Tools {
         return $array;
     }
 
+    public static function sanitize_array_textarea($array = array()) {
+        if (is_array($array) && !empty($array)) {
+            foreach ($array as $key => &$value) {
+                if (is_array($value)) {
+                    $value = self::sanitize_array_textarea($value);
+                } else {
+                    $value = sanitize_textarea_field($value);
+                }
+            }
+        }
+        return $array;
+    }
+
     public static function esc_html_array($array = array(), $kses = array()) {
         if (is_array($array) && !empty($array)) {
             foreach ($array as $key => &$value) {
@@ -785,8 +819,7 @@ class B2S_Tools {
     public static function hasUserMadePost($user_id) {
 
         global $wpdb;
-        $sql = "SELECT id FROM {$wpdb->prefix}b2s_posts WHERE blog_user_id = %d";
-        $posts = $wpdb->get_results($wpdb->prepare($sql, $user_id), ARRAY_A);
+        $posts = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts WHERE blog_user_id = %d", $user_id), ARRAY_A);
         if (isset($posts) && is_array($posts) && !empty($posts)) {
             return true;
         }
@@ -796,8 +829,7 @@ class B2S_Tools {
     public static function hasUserConnectedNetwork($user_id) {
 
         global $wpdb;
-        $sql = "SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE owner_blog_user_id = %d";
-        $networks = $wpdb->get_results($wpdb->prepare($sql, $user_id), ARRAY_A);
+        $networks = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE owner_blog_user_id = %d", $user_id), ARRAY_A);
         if (isset($networks) && is_array($networks) && !empty($networks)) {
             return true;
         }

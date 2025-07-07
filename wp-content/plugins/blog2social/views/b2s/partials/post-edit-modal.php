@@ -32,11 +32,12 @@
 
                             <?php if ($lock_user_id && $lock_user_id != get_current_user_id()) { ?>
                                 <div class="alert alert-danger">
-                                    <?php echo str_replace("%1", esc_html($lock_user->user_login), esc_html__('This post is blocked by %1', 'blog2social')); ?>.
+                                    <?php esc_html_e('This post is currently locked by another WordPress user.', 'blog2social'); ?>
                                 </div>
                             <?php } ?>
 
-                            <?php echo wp_kses($item->getEditHtml(), array(
+                            <?php
+                            echo wp_kses($item->getEditHtml(), array(
                                 'div' => array(
                                     'class' => array(),
                                     'data-network-auth-id' => array(),
@@ -132,7 +133,8 @@
                                     'value' => array(),
                                     'selected' => array()
                                 ),
-                            )); ?>
+                            ));
+                            ?>
                             <div class="pull-right">
                                 <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-user"><?php esc_html_e('Load My Times Settings', 'blog2social') ?></a>
                                 <a href="#" class="btn btn-primary btn-xs b2s-get-settings-sched-time-default"><?php esc_html_e('Load Best Times', 'blog2social') ?></a>
@@ -141,68 +143,68 @@
                             <div class="panel panel-group">
                                 <div class="b2s-post-item-details-release-area-details">
                                     <!-- deprecated Network Xing,G+ 8,10 -->
-                                    <?php if ($item->getNetworkId() == 8 || $item->getNetworkId() == 10) { ?>
+                                        <?php if ($item->getNetworkId() == 8 || $item->getNetworkId() == 10) { ?>
                                         <div class="network-tos-deprecated-warning alert alert-danger" style="display: none;" data-network-id="<?php echo esc_attr($item->getNetworkId()); ?>" data-network-count="0"  data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
                                             <?php
                                             if ($item->getNetworkId() == 8) {
                                                 esc_html_e("Please note: Your account is connected via an old XING API that is no longer supported by XING after March 31. Please connect your XING profile, as well as your XING company pages (Employer branding profiles) and business pages with the new XING interface in the Blog2Social network settings. To do this, go to the Blog2Social Networks section and connect your XING accounts with the new XING.", "blog2social");
                                                 ?>  <a href="<?php echo esc_url(B2S_Tools::getSupportLink('network_tos_blog_032019')); ?>" target="_blank"><?php esc_html_e('Learn more', 'blog2social') ?></a>
-                                            <?php
+                                                <?php
                                             } else {
                                                 esc_html_e("Please note: Google will shut down Google+ for all private accounts (profiles, pages, groups) on 2nd April 2019. You can find further information and the next steps, including how to download your photos and other content here:", "blog2social");
                                                 ?>  <a href="https://support.google.com/plus/answer/9195133" target="_blank">https://support.google.com/plus/answer/9195133</a> 
-                                            <?php } ?>
-                                        </div>
                                         <?php } ?>
+                                        </div>
+<?php } ?>
 
-                                        <ul class="list-group b2s-post-item-details-release-area-details-ul" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
-                                            <li class="list-group-item">
-                                                <div class="form-group b2s-post-item-details-release-area-details-row" data-network-count="1"  data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
-                                                        <?php if ((int) $item->getRelayPrimaryPostId() == 0) { ?>
-                                                        <div class="clearfix"></div>
-                                                        <label class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-date" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Date', 'blog2social'); ?></label>
-                                                        <label class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-time" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Time', 'blog2social'); ?></label>
-                                                        <div class="clearfix"></div>
-                                                        <div class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-date" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><input type="text" placeholder="<?php echo esc_attr__('Date', 'blog2social'); ?>" name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][date][0]" data-network-id="<?php echo esc_attr($item->getNetworkId()); ?>" data-network-type="<?php echo esc_attr($item->getNetworkType()); ?>" data-network-count="0" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>"  class="b2s-post-item-details-release-input-date form-control" value="<?php echo esc_attr((substr(B2S_LANGUAGE, 0, 2) == 'de') ? date('d.m.Y', $item->getSchedDate()) : date('Y-m-d', $item->getSchedDate())); ?>" style="min-width: 93px;"></div>
-                                                        <div class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-time" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><input type="text" placeholder="<?php echo esc_attr__('Time', 'blog2social'); ?>" name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][time][0]" data-network-id="<?php echo esc_attr($item->getNetworkId()); ?>" data-network-type="<?php echo esc_attr($item->getNetworkType()); ?>" data-network-count="0" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>"  class="b2s-post-item-details-release-input-time form-control" value="<?php echo esc_attr(date('H:i', $item->getSchedDate())); ?>"></div>
-                                                        <div class="col-xs-5 del-padding-left b2s-post-item-details-release-area-label-day" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1">
-                                                            <?php
-                                                            //is relay post ?
-                                                        } else {
-                                                            ?>
-                                                            <div class="clearfix"></div>
-                                                            <label class="col-xs-3 del-padding-left b2s-post-item-details-relay-area-label-delay" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Delay', 'blog2social'); ?></label>
-                                                            <div class="clearfix"></div>
-                                                            <div class="col-xs-3 del-padding-left b2s-post-item-details-relay-area-div-delay" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1">
-                                                                <select name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][post_relay_delay][0]" class="form-control b2s-select b2s-post-item-details-relay-input-delay" data-network-count="0"  data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
-                                                                    <option value="15" <?php echo (($item->getRelayDelayMin() == 15) ? 'selected' : ''); ?> >15 <?php esc_html_e('min', 'blog2social') ?></option>
-                                                                    <option value="30" <?php echo (($item->getRelayDelayMin() == 30) ? 'selected' : ''); ?>>30 <?php esc_html_e('min', 'blog2social') ?></option>
-                                                                    <option value="45" <?php echo (($item->getRelayDelayMin() == 45) ? 'selected' : ''); ?>>45 <?php esc_html_e('min', 'blog2social') ?></option>
-                                                                    <option value="60" <?php echo (($item->getRelayDelayMin() == 60) ? 'selected' : ''); ?>>60 <?php esc_html_e('min', 'blog2social') ?></option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-xs-9">
-                                                                <strong><?php esc_html_e('The orginal tweet is scheduled on:', 'blog2social') ?> <?php echo esc_html(B2S_Util::getCustomDateFormat($item->getRelayPrimarySchedDate(), substr(B2S_LANGUAGE, 0, 2))) ?></strong>
-                                                            </div>
-                                                        <?php } ?>
-                                                    </div>
+                                    <ul class="list-group b2s-post-item-details-release-area-details-ul" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
+                                        <li class="list-group-item">
+                                            <div class="form-group b2s-post-item-details-release-area-details-row" data-network-count="1"  data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
+<?php if ((int) $item->getRelayPrimaryPostId() == 0) { ?>
                                                     <div class="clearfix"></div>
-                                            </li>
-                                        </ul>
+                                                    <label class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-date" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Date', 'blog2social'); ?></label>
+                                                    <label class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-time" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Time', 'blog2social'); ?></label>
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-date" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><input type="text" placeholder="<?php echo esc_attr__('Date', 'blog2social'); ?>" name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][date][0]" data-network-id="<?php echo esc_attr($item->getNetworkId()); ?>" data-network-type="<?php echo esc_attr($item->getNetworkType()); ?>" data-network-count="0" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>"  class="b2s-post-item-details-release-input-date form-control" value="<?php echo esc_attr((substr(B2S_LANGUAGE, 0, 2) == 'de') ? wp_date('d.m.Y', $item->getSchedDate(),  new DateTimeZone(date_default_timezone_get())) : wp_date('Y-m-d', $item->getSchedDate(),  new DateTimeZone(date_default_timezone_get()))); ?>" style="min-width: 93px;"></div>
+                                                    <div class="col-xs-3 del-padding-left b2s-post-item-details-release-area-label-time" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><input type="text" placeholder="<?php echo esc_attr__('Time', 'blog2social'); ?>" name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][time][0]" data-network-id="<?php echo esc_attr($item->getNetworkId()); ?>" data-network-type="<?php echo esc_attr($item->getNetworkType()); ?>" data-network-count="0" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>"  class="b2s-post-item-details-release-input-time form-control" value="<?php echo esc_attr(wp_date('H:i', $item->getSchedDate(),  new DateTimeZone(date_default_timezone_get()))); ?>"></div>
+                                                    <div class="col-xs-5 del-padding-left b2s-post-item-details-release-area-label-day" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1">
+                                                        <?php
+                                                        //is relay post ?
+                                                    } else {
+                                                        ?>
+                                                        <div class="clearfix"></div>
+                                                        <label class="col-xs-3 del-padding-left b2s-post-item-details-relay-area-label-delay" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1"><?php esc_html_e('Delay', 'blog2social'); ?></label>
+                                                        <div class="clearfix"></div>
+                                                        <div class="col-xs-3 del-padding-left b2s-post-item-details-relay-area-div-delay" data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>" data-network-count="1">
+                                                            <select name="b2s[<?php echo esc_attr($item->getNetworkAuthId()); ?>][post_relay_delay][0]" class="form-control b2s-select b2s-post-item-details-relay-input-delay" data-network-count="0"  data-network-auth-id="<?php echo esc_attr($item->getNetworkAuthId()); ?>">
+                                                                <option value="15" <?php echo (($item->getRelayDelayMin() == 15) ? 'selected' : ''); ?> >15 <?php esc_html_e('min', 'blog2social') ?></option>
+                                                                <option value="30" <?php echo (($item->getRelayDelayMin() == 30) ? 'selected' : ''); ?>>30 <?php esc_html_e('min', 'blog2social') ?></option>
+                                                                <option value="45" <?php echo (($item->getRelayDelayMin() == 45) ? 'selected' : ''); ?>>45 <?php esc_html_e('min', 'blog2social') ?></option>
+                                                                <option value="60" <?php echo (($item->getRelayDelayMin() == 60) ? 'selected' : ''); ?>>60 <?php esc_html_e('min', 'blog2social') ?></option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-xs-9">
+                                                            <strong><?php esc_html_e('The orginal tweet is scheduled on:', 'blog2social') ?> <?php echo esc_html(B2S_Util::getCustomDateFormat($item->getRelayPrimarySchedDate(), substr(B2S_LANGUAGE, 0, 2))) ?></strong>
+                                                        </div>
+<?php } ?>
+                                                </div>
+                                                <div class="clearfix"></div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+<?php if (!$lock_user_id || $lock_user_id == get_current_user_id()) { ?>
+                                <div class="col-xs-12" style="margin-top: 20px;">
+                                    <div class="pull-left" style="line-height: 33px">
+                                        <span class="b2s-edit-post-delete btn btn-danger" data-post-for-relay="<?php echo esc_attr($item->getPostForRelay()); ?>" data-post-for-approve="<?php echo esc_attr($item->getPostForApprove()); ?>"  data-post-id="<?php echo esc_attr($item->getPostId()); ?>" data-b2s-id="<?php echo esc_attr($item->getB2SId()); ?>">
+                                            <span class="glyphicon glyphicon glyphicon-trash "></span> <?php echo esc_html(__("Delete", "blog2social")); ?>
+                                        </span>
+                                    </div>
+                                    <div class="pull-right">
+                                        <input class="btn btn-success pull-right b2s-edit-post-save-this" type="submit" value="<?php echo esc_attr__('Change details', 'blog2social'); ?>" data-post-id="<?php echo esc_attr($item->getPostId()); ?>" data-b2s-id="<?php echo esc_attr($item->getB2SId()); ?>">
                                     </div>
                                 </div>
-                                    <?php if (!$lock_user_id || $lock_user_id == get_current_user_id()) { ?>
-                                    <div class="col-xs-12" style="margin-top: 20px;">
-                                        <div class="pull-left" style="line-height: 33px">
-                                            <span class="b2s-edit-post-delete btn btn-danger" data-post-for-relay="<?php echo esc_attr($item->getPostForRelay()); ?>" data-post-for-approve="<?php echo esc_attr($item->getPostForApprove()); ?>"  data-post-id="<?php echo esc_attr($item->getPostId()); ?>" data-b2s-id="<?php echo esc_attr($item->getB2SId()); ?>">
-                                                <span class="glyphicon glyphicon glyphicon-trash "></span> <?php echo esc_html(__("Delete", "blog2social")); ?>
-                                            </span>
-                                        </div>
-                                        <div class="pull-right">
-                                            <input class="btn btn-success pull-right b2s-edit-post-save-this" type="submit" value="<?php echo esc_attr__('Change details', 'blog2social'); ?>" data-post-id="<?php echo esc_attr($item->getPostId()); ?>" data-b2s-id="<?php echo esc_attr($item->getB2SId()); ?>">
-                                        </div>
-                                    </div>
-                                <?php } ?>
+<?php } ?>
                         </form>
                     </div>
                 </div>

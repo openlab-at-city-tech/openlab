@@ -72,7 +72,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
                             <div class="b2s-sort-area">
                                 <span style="font-weight: bold; font-size: 24px;"><?php esc_html_e('Social Media Metrics Summary', 'blog2social') ?></span><a class="btn btn-link b2s-metrics-legend-info-modal-btn"><?php esc_html_e('Info', 'blog2social') ?></a>
                                 <div class="b2s-activity-search-content pull-right">
-                                    <input class="form-control" id="b2s-metrics-date-picker" value="<?php echo (substr(B2S_LANGUAGE, 0, 2) == 'de') ? date('d.m.Y', strtotime("-1 week")) : date('Y-m-d', strtotime("-1 week")); ?>" data-language='<?php echo (substr(B2S_LANGUAGE, 0, 2) == 'de' ? 'de' : 'en'); ?>' />
+                                    <input class="form-control" id="b2s-metrics-date-picker" value="<?php echo (substr(B2S_LANGUAGE, 0, 2) == 'de') ? esc_attr(wp_date('d.m.Y', strtotime("-1 week"), new DateTimeZone(date_default_timezone_get()))) : esc_attr(wp_date('Y-m-d', strtotime("-1 week"), new DateTimeZone(date_default_timezone_get()))); ?>" data-language='<?php echo (substr(B2S_LANGUAGE, 0, 2) == 'de' ? 'de' : 'en'); ?>' />
                                 </div>
                                 <br>
                                 <div class="b2s-metric-sub-area" style="background-color: #ddd; padding: 10px; margin-top: 10px;">

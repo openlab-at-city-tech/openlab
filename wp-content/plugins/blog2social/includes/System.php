@@ -29,12 +29,14 @@ class B2S_System {
                     $output .= esc_html__('Blog2Social used cURL. cURL is not installed in your PHP installation on your server. Install cURL and activate Blog2Social again.', 'blog2social');
                     $output .= (!$removeBreakline) ? '<br>' : ' ';
                     $output .= (!$removeBreakline) ? '<br>' : ' ';
+                    // translators: %s is a link
                     $output .= sprintf(__('<a href="%s" target="_blank">Please find more Information and help in our FAQ</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('system')));
                 }
                 if (!$status && $error == 'dbTable') {
                     $output .= esc_html__('Blog2Social does not seem to have permission to write in your WordPress database. Please assign Blog2Social the permission to write in the WordPress database. Please also make sure that your MySQL server runs on v5.5.3 or higher, or ask your server administrator to do it for you.', 'blog2social');
                     $output .= (!$removeBreakline) ? '<br>' : ' ';
                     $output .= (!$removeBreakline) ? '<br>' : ' ';
+                    // translators: %s is a link
                     $output .= sprintf(__('<a href="%s" target="_blank">Please find more Information and help in our FAQ</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('system')));
                 }
             }

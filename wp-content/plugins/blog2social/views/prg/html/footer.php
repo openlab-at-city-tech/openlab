@@ -2,7 +2,7 @@
 <div class="b2s-footer">
     <div class="pull-left hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">
         <?php if (!B2S_System::isblockedArea('B2S_MENU_FOOTER', B2S_PLUGIN_ADMIN)) { ?>
-            <small> © <?php echo date('Y'); ?> <a target="_blank" href="http://www.adenion.de" rel="nofollow">Adenion GmbH</a></small>
+            <small> © <?php echo esc_html(wp_date('Y', null,  new DateTimeZone(date_default_timezone_get()))); ?> <a target="_blank" href="http://www.adenion.de" rel="nofollow">Adenion GmbH</a></small>
         <?php } ?>
     </div>
     <div class="pull-right hidden-xs <?php echo isset($noLegend) ? 'hide' : ''; ?>">

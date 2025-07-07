@@ -198,13 +198,21 @@ class B2S_Network_Item {
                 $name = $this->networkTypeNameIndividual[$networkId][0];
             }
             if ($networkId == 24 && B2S_PLUGIN_USER_VERSION < 1) {
-                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sBusinessFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("BUSINESS", "blog2social") . '</button>';
+                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sBusinessFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("BUSINESS", "blog2social") . '</button>';
             } else if (($networkId == 38 || $networkId == 42) && B2S_PLUGIN_USER_VERSION < 2) {
-                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . (($networkId == 42) ? esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') : esc_attr__('You want to connect a network profile?', 'blog2social')) . '" data-type="' . (($networkId == 42) ? 'network-humhub' : 'auth-network') . '">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
-            } else if (($networkId == 25 || $networkId == 26 || $networkId == 27 || $networkId == 39 || $networkId == 44) && B2S_PLUGIN_USER_VERSION < 1) {
-                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
+                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . (($networkId == 42) ? esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') : esc_attr__('You want to connect a network profile?', 'blog2social')) . '" data-type="' . (($networkId == 42) ? 'network-humhub' : 'auth-network') . '">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
+            } else if (($networkId == 25 || $networkId == 26 || $networkId == 27 || $networkId == 36 || $networkId == 39 || $networkId == 45 || $networkId == 46) && B2S_PLUGIN_USER_VERSION < 1) {
+                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
             } else {
-                $html .= ($networkId != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $networkId == 18)) ? '<button onclick="wop(\'' . esc_url($b2sAuthUrl) . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn" data-network-type="0">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button class="btn btn-' . esc_attr(str_replace(' ', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
+                $html .= ($networkId != 18 || (B2S_PLUGIN_USER_VERSION >= 2 && $networkId == 18)) ? '<button onclick="wop(\'' . esc_url($b2sAuthUrl) . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=profile\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn" data-network-type="0">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button class="btn btn-' . esc_attr(str_replace(' ', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">+ ' . esc_html__('Profile', 'blog2social') . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
             }
         }
         if (in_array($networkId, $this->allowPage)) {
@@ -213,13 +221,21 @@ class B2S_Network_Item {
                 $name = $this->networkTypeNameIndividual[$networkId][1];
             }
             if ($networkId == 42 && B2S_PLUGIN_USER_VERSION < 2) {
-                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') . '" data-type="network-humhub">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
+                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('Expand Your Social Media Universe with HumHub!', 'blog2social') . '" data-type="network-humhub">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
             } else if ($networkId == 12) {
-                $html .= (B2S_PLUGIN_USER_VERSION >= 1) ? '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-network-add-instagram-business-info-btn" data-b2s-auth-url="' . esc_url($b2sAuthUrl) . '">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', $networkName)) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '"  data-type="auth-network">+ ' . esc_html__('Business', 'blog2social') . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
+                $html .= (B2S_PLUGIN_USER_VERSION >= 1) ? '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-network-add-instagram-business-info-btn" data-b2s-auth-url="' . esc_url($b2sAuthUrl) . '">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '"  data-type="auth-network">+ ' . esc_html__('Business', 'blog2social') . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
             } else if ($networkId == 6 && B2S_PLUGIN_USER_VERSION == 0) {
-                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
+                $html .= '<button href="#" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sPreFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network profile?', 'blog2social') . '" data-type="auth-network">' . sprintf(
+                    // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</button>';
             } else {
-                $html .= (B2S_PLUGIN_USER_VERSION > 1 || (B2S_PLUGIN_USER_VERSION == 0 && $networkId == 1) || $networkId == 6 || (B2S_PLUGIN_USER_VERSION == 1 && $networkId == 1)) ? (($networkId == 1) ? '<button class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', $networkName) . ' btn-sm b2s-network-auth-btn b2s-network-add-page-info-btn" data-b2s-auth-url="' . $b2sAuthUrl . '">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button onclick="wop(\'' . $b2sAuthUrl . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=page\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button href="#" class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', $networkName) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network page?', 'blog2social') . '"  data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
+                $html .= (B2S_PLUGIN_USER_VERSION > 1 || (B2S_PLUGIN_USER_VERSION == 0 && $networkId == 1) || $networkId == 6 || (B2S_PLUGIN_USER_VERSION == 1 && $networkId == 1)) ? (($networkId == 1) ? '<button class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName)) . ' btn-sm b2s-network-auth-btn b2s-network-add-page-info-btn" data-b2s-auth-url="' . $b2sAuthUrl . '">' . sprintf(
+                     // translators: %s is a link
+                    esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>' : '<button onclick="wop(\'' . $b2sAuthUrl . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=page\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button href="#" class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName)) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a network page?', 'blog2social') . '"  data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</button>';
             }
         }
         if (in_array($networkId, $this->allowGroup)) {
@@ -227,7 +243,9 @@ class B2S_Network_Item {
             if (isset($this->networkTypeNameIndividual[$networkId][2]) && !empty($this->networkTypeNameIndividual[$networkId][2])) {
                 $name = $this->networkTypeNameIndividual[$networkId][2];
             }
-            $html .= (B2S_PLUGIN_USER_VERSION > 1) ? (($networkId == 1) ? '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', $networkName)) . ' btn-sm b2s-network-auth-btn b2s-network-add-group-info-btn" data-b2s-auth-url="' . esc_url($b2sAuthUrl) . '">' . esc_html(sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name))) . '</button>' : '<button  onclick="wop(\'' . esc_url($b2sAuthUrl) . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=group\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName)) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a social media group?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</span></button>';
+            $html .= (B2S_PLUGIN_USER_VERSION > 1) ? (($networkId == 1) ? '<button class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn b2s-network-add-group-info-btn" data-b2s-auth-url="' . esc_url($b2sAuthUrl) . '">' . esc_html(sprintf(
+                 // translators: %s is a link
+                esc_html__('Connect %s', 'blog2social'), esc_html($name))) . '</button>' : '<button  onclick="wop(\'' . esc_url($b2sAuthUrl) . '&plugin_version=' . B2S_PLUGIN_VERSION . '&choose=group\', \'Blog2Social Network\'); return false;" class="btn btn-' . esc_attr(preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName))) . ' btn-sm b2s-network-auth-btn">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . '</button>') : '<button class="btn btn-' . preg_replace('/[^a-zA-Z0-9\']/', '', strtolower($networkName)) . ' btn-sm b2s-network-auth-btn b2s-btn-disabled b2sProFeatureModalBtn" data-title="' . esc_attr__('You want to connect a social media group?', 'blog2social') . '" data-type="auth-network">' . sprintf(esc_html__('Connect %s', 'blog2social'), esc_html($name)) . ' <span class="label label-success">' . esc_html__("PRO", "blog2social") . '</span></button>';
         }
         if (array_key_exists($networkId, unserialize(B2S_PLUGIN_NETWORK_SETTINGS_TEMPLATE_DEFAULT))) {
             $html .= (B2S_PLUGIN_USER_VERSION >= 1) ? '<button onclick="return false;" class="btn btn-default btn-sm b2s-network-auth-btn b2s-edit-template-btn" data-network-id="' . esc_attr($networkId) . '"><i class="glyphicon glyphicon-pencil"></i> ' . esc_html__('Edit Post Template', 'blog2social') . '</button>' : '<button onclick="return false;" class="btn btn-default btn-sm b2s-network-auth-btn b2s-edit-template-btn b2s-btn-disabled" data-network-id="' . esc_attr($networkId) . '"><i class="glyphicon glyphicon-pencil"></i> ' . esc_html__('Edit Post Template', 'blog2social') . ' <span class="label label-success">' . esc_html__("SMART", "blog2social") . '</span></button>';
@@ -277,13 +295,13 @@ class B2S_Network_Item {
         $isEdit = false;
         $html = '';
         $lastVisited = $this->options->_getOption('last_visited_network');
-        $this->options->_setOption('last_visited_network', date('Y-m-d H:i:s'));
+        $this->options->_setOption('last_visited_network',  wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())));
         if (isset($networkData[0])) {
             foreach ($networkData[0] as $k => $v) {
 
                 $isDeprecated = false;
                 $notAllow = ($v['notAllow'] !== false) ? true : false;
-                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <= date('Y-m-d')) ? true : false;
+                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? true : false;
                 $isApp = (isset($v['app_name']) && $v['app_name'] != '') ? true : false;
 
                 $borderClass = '';
@@ -307,7 +325,7 @@ class B2S_Network_Item {
                     $html .= '<div class="b2s-network-auth-list-info"><span class="glyphicon glyphicon-remove-circle"></span> ' . esc_html__('To reactivate this connection,', 'blog2social') . ' <a href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '"target="_blank">' . esc_html__('please upgrade', 'blog2social') . '</a></div>';
                 }
                 if (($networkId != 2 && !$isApp) && $isInterrupted && !$notAllow) {
-                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted"><span class="glyphicon glyphicon-remove-circle"></span> ' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] : date('d.m.Y', strtotime($v['expiredDate'])))) . '</div>';
+                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted"><span class="glyphicon glyphicon-remove-circle"></span> ' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] :  wp_date('d.m.Y', strtotime($v['expiredDate']), new DateTimeZone(date_default_timezone_get())))) . '</div>';
                 }
 
                 if ($networkId == 1) {
@@ -367,7 +385,7 @@ class B2S_Network_Item {
                     }
                     if (!$notAllow) {
                         $html .= '<a href="#" class="pull-right b2s-network-auth-settings-btn b2s-add-padding-network-team pull-right" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="0" data-network-mandant-id="' . esc_attr($mandantId) . '" data-connection-owner="' . esc_attr((($v['owner_blog_user_id'] !== false) ? $v['owner_blog_user_id'] : '0')) . '"><span class="glyphicon glyphicon-cog glyphicon-grey"></span></a>';
-                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] > date('Y-m-d')) {
+                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] >  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {
                             if (isset($this->modifyBoardAndGroup[$networkId])) {
                                 if (in_array(0, $this->modifyBoardAndGroup[$networkId]['TYPE'])) {
                                     $html .= '<a href="#" class="pull-right b2s-modify-board-and-group-network-btn b2s-add-padding-network-edit" data-modal-title="' . esc_attr($this->modifyBoardAndGroup[$networkId]['TITLE']) . '" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="0"><span class="glyphicon glyphicon-pencil glyphicon-grey"></span></a>';
@@ -397,7 +415,7 @@ class B2S_Network_Item {
 
                 $isDeprecated = false;
                 $notAllow = ($v['notAllow'] !== false) ? true : false;
-                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <= date('Y-m-d')) ? true : false;
+                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? true : false;
                 $isApp = (isset($v['app_name']) && $v['app_name'] != '') ? true : false;
 
                 $html .= '<li class="b2s-network-item-auth-list-li ' . (($isDeprecated) ? 'b2s-label-info-border-left deprecated' : (($notAllow) ? 'b2s-label-warning-border-left' : (($isInterrupted) ? 'b2s-label-danger-border-left' : ''))) . '" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-mandant-id="' . esc_attr($mandantId) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="1">';
@@ -407,7 +425,7 @@ class B2S_Network_Item {
                     $html .= '<div class="b2s-network-auth-list-info"><span class="glyphicon glyphicon-remove-circle"></span> ' . esc_html__('To reactivate this connection,', 'blog2social') . ' <a href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '"target="_blank">' . esc_html__('please upgrade', 'blog2social') . '</a></div>';
                 }
                 if ($isInterrupted && !$notAllow) {
-                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted">' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] : date('d.m.Y', strtotime($v['expiredDate'])))) . '</div>';
+                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted">' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] :  wp_date('d.m.Y', strtotime($v['expiredDate']), new DateTimeZone(date_default_timezone_get())))) . '</div>';
                 }
                 if ($v['owner_blog_user_id'] !== false) {
                     $displayName = stripslashes(get_user_by('id', $v['owner_blog_user_id'])->display_name);
@@ -466,7 +484,7 @@ class B2S_Network_Item {
                     }
                     if (!$notAllow) {
                         $html .= '<a href="#" class="pull-right b2s-network-auth-settings-btn b2s-add-padding-network-team pull-right" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="1" data-network-mandant-id="' . esc_attr($mandantId) . '" data-connection-owner="' . esc_attr((($v['owner_blog_user_id'] !== false) ? $v['owner_blog_user_id'] : '0')) . '"><span class="glyphicon glyphicon-cog glyphicon-grey"></span></a>';
-                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] > date('Y-m-d')) {
+                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] >  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {
                             if (isset($this->modifyBoardAndGroup[$networkId])) {
                                 if (in_array(1, $this->modifyBoardAndGroup[$networkId]['TYPE'])) {
                                     $html .= '<a href="#" class="pull-right b2s-modify-board-and-group-network-btn b2s-add-padding-network-edit" data-modal-title="' . esc_attr($this->modifyBoardAndGroup[$networkId]['TITLE']) . '" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="1"><span class="glyphicon glyphicon-pencil glyphicon-grey"></span></a>';
@@ -497,7 +515,7 @@ class B2S_Network_Item {
 
                 $isDeprecated = false;
                 $notAllow = ($v['notAllow'] !== false) ? true : false;
-                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <= date('Y-m-d')) ? true : false;
+                $isInterrupted = ($v['expiredDate'] != '0000-00-00' && $v['expiredDate'] <=  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? true : false;
 
                 $html .= '<li class="b2s-network-item-auth-list-li ' . (($isDeprecated) ? 'b2s-label-info-border-left deprecated' : (($notAllow) ? 'b2s-label-warning-border-left' : (($isInterrupted) ? 'b2s-label-danger-border-left' : ''))) . '" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-mandant-id="' . esc_attr($mandantId) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="2">';
 
@@ -507,7 +525,7 @@ class B2S_Network_Item {
                     $html .= '<div class="b2s-network-auth-list-info"><span class="glyphicon glyphicon-remove-circle"></span> ' . esc_html__('To reactivate this connection,', 'blog2social') . ' <a href="' . esc_url(B2S_Tools::getSupportLink('affiliate')) . '"target="_blank">' . esc_html__('please upgrade', 'blog2social') . '</a></div>';
                 }
                 if ($isInterrupted && !$notAllow) {
-                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted">' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] : date('d.m.Y', strtotime($v['expiredDate'])))) . '</div>';
+                    $html .= '<div class="b2s-network-auth-list-info" data-b2s-auth-info="isInterrupted">' . esc_html__('Connection is interrupted since', 'blog2social') . ' ' . esc_html(($sprache == 'en' ? $v['expiredDate'] :  wp_date('d.m.Y', strtotime($v['expiredDate']), new DateTimeZone(date_default_timezone_get())))) . '</div>';
                 }
 
                 if ($networkId == 1) {
@@ -546,7 +564,7 @@ class B2S_Network_Item {
                     }
                     if (!$notAllow) {
                         $html .= '<a href="#" class="pull-right b2s-network-auth-settings-btn b2s-add-padding-network-team pull-right" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="2" data-network-mandant-id="' . esc_attr($mandantId) . '" data-connection-owner="' . esc_attr((($v['owner_blog_user_id'] !== false) ? $v['owner_blog_user_id'] : '0')) . '"><span class="glyphicon glyphicon-cog glyphicon-grey"></span></a>';
-                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] > date('Y-m-d')) {
+                        if ($v['expiredDate'] == '0000-00-00' || $v['expiredDate'] >  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) {
                             if (isset($this->modifyBoardAndGroup[$networkId])) {
                                 if (in_array(2, $this->modifyBoardAndGroup[$networkId]['TYPE'])) {
                                     $html .= '<a href="#" class="pull-right b2s-modify-board-and-group-network-btn b2s-add-padding-network-edit" data-modal-title="' . esc_attr($this->modifyBoardAndGroup[$networkId]['TITLE']) . '" data-network-auth-id="' . esc_attr($v['networkAuthId']) . '" data-network-id="' . esc_attr($networkId) . '" data-network-type="2"><span class="glyphicon glyphicon-pencil glyphicon-grey"></span></a>';
@@ -599,7 +617,7 @@ class B2S_Network_Item {
             if (is_array($this->userSchedData) && isset($this->userSchedData['delay_day'][$network_auth_id]) && isset($this->userSchedData['time'][$network_auth_id]) && !empty($this->userSchedData['time'][$network_auth_id])) {
                 if ($type == 'time') {
                     $slug = ($this->lang == 'en') ? 'h:i A' : 'H:i';
-                    return date($slug, strtotime(date('Y-m-d ' . $this->userSchedData['time'][$network_auth_id] . ':00')));
+                    return  wp_date($slug, strtotime( wp_date('Y-m-d ' . $this->userSchedData['time'][$network_auth_id] . ':00', null, new DateTimeZone(date_default_timezone_get()))), new DateTimeZone(date_default_timezone_get()));
                 }
                 if ($type == 'day') {
                     return (int) $this->userSchedData['delay_day'][$network_auth_id];
@@ -612,7 +630,7 @@ class B2S_Network_Item {
                 foreach ($this->userSchedDataOld as $k => $v) {
                     if ((int) $network_id == (int) $v->network_id && (int) $network_type == (int) $v->network_type) {
                         $slug = ($this->lang == 'en') ? 'h:i A' : 'H:i';
-                        return date($slug, strtotime(date('Y-m-d ' . $v->sched_time . ':00')));
+                        return  wp_date($slug, strtotime( wp_date('Y-m-d ' . $v->sched_time . ':00', null, new DateTimeZone(date_default_timezone_get()))), new DateTimeZone(date_default_timezone_get()));
                     }
                 }
             }
@@ -654,7 +672,7 @@ class B2S_Network_Item {
                 foreach ($networkAuthAssignment['assignList'] as $k => $listUser) {
                     array_push($doneIds, $listUser['assign_blog_user_id']);
                     if (get_userdata($listUser['assign_blog_user_id']) !== false) {
-                        $current_user_date = date((strtolower(substr(B2S_LANGUAGE, 0, 2)) == 'de') ? 'd.m.Y' : 'Y-m-d', strtotime(B2S_Util::getUTCForDate($listUser['created_utc'], $userTimeZoneOffset)));
+                        $current_user_date =  wp_date((strtolower(substr(B2S_LANGUAGE, 0, 2)) == 'de') ? 'd.m.Y' : 'Y-m-d', strtotime(B2S_Util::getUTCForDate($listUser['created_utc'], $userTimeZoneOffset)), new DateTimeZone(date_default_timezone_get()));
                         $displayName = stripslashes(get_user_by('id', $listUser['assign_blog_user_id'])->display_name);
                         $assignList .= '<li class="b2s-network-item-auth-list-li">';
                         $assignList .= '<div class="pull-left" style="padding-top: 5px;"><span>' . esc_html(((empty($displayName) || $displayName == false) ? __("Unknown username", "blog2social") : $displayName)) . '</span></div>';
@@ -688,7 +706,9 @@ class B2S_Network_Item {
     }
 
     public function getUrlParameterSettings($networkAuthId, $networkId) {
-        $html = '<div class="col-md-12 b2s-text-bold"><span>' . sprintf(__('Define parameters that will be added to link posts on this network e.g. to create tracking links with UTM paramters. <a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('url_parameter'))) . '</span></div>';
+        $html = '<div class="col-md-12 b2s-text-bold"><span>' . sprintf(
+            // translators: %s is a link
+            __('Define parameters that will be added to link posts on this network e.g. to create tracking links with UTM paramters. <a target="_blank" href="%s">More information</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('url_parameter'))) . '</span></div>';
         $html .= '<div class="b2s-col-name">';
         $html .= '<div class="col-md-5 b2s-url-parameter-legend-text">' . esc_html__('Name', 'blog2social') . '</div>';
         $html .= '<div class="col-md-5 b2s-url-parameter-legend-text">' . esc_html__('Value', 'blog2social') . '</div>';
@@ -697,8 +717,7 @@ class B2S_Network_Item {
         $html .= '<ul class="b2s-url-parameter-list col-md-12">';
 
         global $wpdb;
-        $sqlGetData = $wpdb->prepare("SELECT `data` FROM `{$wpdb->prefix}b2s_posts_network_details` WHERE `network_auth_id` = %d", (int) $networkAuthId);
-        $dataString = $wpdb->get_var($sqlGetData);
+        $dataString = $wpdb->get_var($wpdb->prepare("SELECT `data` FROM `{$wpdb->prefix}b2s_posts_network_details` WHERE `network_auth_id` = %d", (int) $networkAuthId));
         $counter = 0;
         if ($dataString !== NULL && !empty($dataString)) {
             $data = unserialize($dataString);
@@ -716,7 +735,9 @@ class B2S_Network_Item {
 
         $html .= '</ul>';
         $html .= '<div class="col-md-12 padding-bottom-10"><button class="btn btn-sm btn-default b2s-url-parameter-add-btn" ' . (($counter >= 10) ? 'style="display:none;"' : '') . '>' . esc_html__('+ add Parameter', 'blog2social') . '</button></div>';
-        $html .= '<div class="col-md-12"><input type="checkbox" class="b2s-url-parameter-for-all-network" id="b2s-url-parameter-for-all-network"><label for="b2s-url-parameter-for-all-network"> ' . sprintf(esc_html__('Apply for all %s connections', 'blog2social'), unserialize(B2S_PLUGIN_NETWORK)[$networkId]) . '</label></div>';
+        $html .= '<div class="col-md-12"><input type="checkbox" class="b2s-url-parameter-for-all-network" id="b2s-url-parameter-for-all-network"><label for="b2s-url-parameter-for-all-network"> ' . sprintf(
+             // translators: %s is network name
+            esc_html__('Apply for all %s connections', 'blog2social'), unserialize(B2S_PLUGIN_NETWORK)[$networkId]) . '</label></div>';
         $html .= '<div class="col-md-6"><input type="checkbox" class="b2s-url-parameter-for-all" id="b2s-url-parameter-for-all"><label for="b2s-url-parameter-for-all"> ' . esc_html__('Apply for all connections', 'blog2social') . '</label></div>';
         $html .= '<div class="col-md-6"><button class="btn btn-sm btn-primary pull-right b2s-url-parameter-save-btn" data-network-auth-id="' . esc_attr($networkAuthId) . '" data-network-id="' . esc_attr($networkId) . '">' . esc_html__('save', 'blog2social') . '</button></div>';
         return $html;
@@ -784,9 +805,9 @@ class B2S_Network_Item {
             $post_excerpt = (function_exists('strip_shortcodes')) ? strip_shortcodes($post[0]['post_excerpt']) : $post[0]['post_excerpt'];
             $post_title = (function_exists('strip_shortcodes')) ? strip_shortcodes($post[0]['post_title']) : $post[0]['post_title'];
             $html .= '<input type="hidden" id="b2s_use_post" value="true">';
-            $html .= '<input type="hidden" id="b2s_post_content" value="' . "test" . esc_attr(strip_tags($post_content)) . '">';
-            $html .= '<input type="hidden" id="b2s_post_excerpt" value="' . esc_attr(strip_tags($post_excerpt)) . '">';
-            $html .= '<input type="hidden" id="b2s_post_title" value="' . esc_attr(strip_tags($post_title)) . '">';
+            $html .= '<input type="hidden" id="b2s_post_content" value="' . "test" . esc_attr(wp_strip_all_tags($post_content)) . '">';
+            $html .= '<input type="hidden" id="b2s_post_excerpt" value="' . esc_attr(wp_strip_all_tags($post_excerpt)) . '">';
+            $html .= '<input type="hidden" id="b2s_post_title" value="' . esc_attr(wp_strip_all_tags($post_title)) . '">';
             $html .= '<input type="hidden" id="b2s_post_author" value="' . esc_attr($author) . '">';
             $html .= '<input type="hidden" id="b2s_post_keywords" value="' . esc_attr($tags) . '">';
         } else {
@@ -818,7 +839,7 @@ class B2S_Network_Item {
             $html .= '</div>';
             if ($networkId == 1 || $networkId == 3 || $networkId == 19) {
                 $linkNoCache = B2S_Tools::getNoCacheData(B2S_PLUGIN_BLOG_USER_ID);
-                $html .= '<div class="pull-right"><input id="link-no-cache" type="checkbox" ' . ((isset($linkNoCache[$networkId]) && $linkNoCache[$networkId] == 1) ? 'checked' : '') . ' name="no_cache"> <label for="link-no-cache">' . esc_html__('Activate Instant Caching', 'blog2social') . '</label> <a href="#" class="b2s-info-btn vertical-middle del-padding-left b2sInfoNoCacheBtn">' . esc_html__('Info', 'Blog2Social') . '</a></div>';
+                $html .= '<div class="pull-right"><input id="link-no-cache" type="checkbox" ' . ((isset($linkNoCache[$networkId]) && $linkNoCache[$networkId] == 1) ? 'checked' : '') . ' name="no_cache"> <label for="link-no-cache">' . esc_html__('Activate Instant Caching', 'blog2social') . '</label> <a href="#" class="b2s-info-btn vertical-middle del-padding-left b2sInfoNoCacheBtn">' . esc_html__('Info', 'blog2social') . '</a></div>';
             }
             $html .= '<br>';
             $html .= '<hr>';
@@ -878,7 +899,7 @@ class B2S_Network_Item {
         if ($schema[$networkType]['format'] !== false) {
             $content .= '<div class="row">';
             $content .= '<div class="col-md-12 media-heading">';
-            $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Format', 'blog2social') . '</span> <a href="#" data-network-id="' . esc_attr($networkId) . '" class="b2s-info-btn del-padding-left b2sInfoFormatBtn">' . esc_html__('Info', 'Blog2Social') . '</a>';
+            $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Format', 'blog2social') . '</span> <a href="#" data-network-id="' . esc_attr($networkId) . '" class="b2s-info-btn del-padding-left b2sInfoFormatBtn">' . esc_html__('Info', 'blog2social') . '</a>';
             $content .= '<button class="pull-right btn btn-primary btn-xs b2s-edit-template-load-default" data-network-type="' . esc_attr($networkType) . '">' . esc_html__('Load default settings', 'blog2social') . '</button>';
             $content .= '</div>';
             $content .= '</div>';
@@ -898,7 +919,7 @@ class B2S_Network_Item {
         }
         $content .= '<div class="row">';
         $content .= '<div class="col-md-12 media-heading">';
-        $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Content', 'blog2social') . '</span> <a href="#" class="b2s-info-btn del-padding-left b2sInfoContentBtn">' . esc_html__('Info', 'Blog2Social') . '</a>';
+        $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Content', 'blog2social') . '</span> <a href="#" class="b2s-info-btn del-padding-left b2sInfoContentBtn">' . esc_html__('Info', 'blog2social') . '</a>';
         if ($schema[$networkType]['format'] === false) {
             $content .= '<button class="pull-right btn btn-primary btn-xs b2s-edit-template-load-default" data-network-type="' . esc_attr($networkType) . '">' . esc_html__('Load default settings', 'blog2social') . '</button>';
         }
@@ -943,7 +964,7 @@ class B2S_Network_Item {
         $content .= '</div>';
         $content .= '<div class="row">';
         $content .= '<div class="col-md-12 b2s-edit-template-link-info">';
-        if ($networkId != 44 && $networkId != 43 && $networkId != 12 && $networkId != 2 && $networkId != 3 && $networkId != 1) {
+        if ($networkId != 44 && $networkId != 45 && $networkId != 43 && $networkId != 12 && $networkId != 2 && $networkId != 3 && $networkId != 1) {
             if ($networkId == 11) {
                 $content .= '<i class="glyphicon glyphicon-info-sign"></i> ' . esc_html__('The link will be transmitted as a canonical link, i.e. in the source code of your page, in order to refer to the original source of the content and to increase the reach from search engines like Google.', 'blog2social');
             } else if ($networkId == 39) {
@@ -967,21 +988,21 @@ class B2S_Network_Item {
         }
         $content .= '</div>';
         $content .= '</div>';
-        if ($networkId == 1 || $networkId == 2 || $networkId == 3 || $networkId == 43 || $networkId == 44) {
+        if ($networkId == 1 || $networkId == 2 || $networkId == 3 || $networkId == 43 || $networkId == 45) {
             $content .= '<div class="row b2s-edit-template-enable-link-area" style="display:' . (($schema[$networkType]['format'] == 1) ? 'block' : 'none') . '" data-network-type="' . esc_attr($networkType) . '">';
             $content .= '<div class="col-md-12">';
             $content .= '<input class="b2s-edit-template-enable-link" data-network-type="' . esc_attr($networkType) . '" type="checkbox" ' . ((isset($schema[$networkType]['addLink']) && $schema[$networkType]['addLink'] == false) ? '' : 'checked="checked"') . ' id="b2s-edit-template-enable-link[' . esc_attr($networkType) . ']"><label for="b2s-edit-template-enable-link[' . esc_attr($networkType) . ']"> ' . esc_html__('Add a link-URL to the end of my image post.', 'blog2social') . '</label>';
             $content .= '</div>';
             $content .= '</div>';
         }
-        if ($networkId == 2) {
+        if ($networkId == 2 || $networkId == 45) {
             $threadChecked = '';
             if (isset($schema[$networkType]['twitterThreads'])) {
                 $threadChecked = $schema[$networkType]['twitterThreads'] ? 'checked="checked"' : '';
             }
 
             $content .= '<input type="checkbox" ' . $threadChecked . ' class="b2s-twitter-thread" id="b2s-twitter-thread[' . esc_attr($networkType) . ']" name="b2s-twitter-thread" data-network-type="' . esc_attr($networkType) . '" >';
-            $content .= '<label for="b2s-twitter-thread[' . esc_attr($networkType) . ']"> ' . esc_html__('Use twitter threads for posts with more than 280 characters.', 'blog2social') . '</label>';
+            $content .= '<label for="b2s-twitter-thread[' . esc_attr($networkType) . ']"> ' . esc_html__('Use X threads for posts with more than 280 characters.', 'blog2social') . '</label>';
         }
         if ($networkId == 12) {
             $content .= '<div class="row">';
@@ -1004,7 +1025,7 @@ class B2S_Network_Item {
         $content .= '<br>';
         $content .= '<div class="row">';
         $content .= '<div class="col-md-12 media-heading">';
-        $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Character limit', 'blog2social') . ' (CONTENT, EXCERPT)</span> <a href="#" class="b2s-info-btn del-padding-left b2sInfoCharacterLimitBtn">' . esc_html__('Info', 'Blog2Social') . '</a>';
+        $content .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Character limit', 'blog2social') . ' (CONTENT, EXCERPT)</span> <a href="#" class="b2s-info-btn del-padding-left b2sInfoCharacterLimitBtn">' . esc_html__('Info', 'blog2social') . '</a>';
         $content .= '</div>';
         $content .= '</div>';
         if (!function_exists('mb_strlen')) {
@@ -1037,7 +1058,7 @@ class B2S_Network_Item {
         } else {
             $networkKindName = unserialize(B2S_PLUGIN_NETWORK_KIND);
             foreach ($schema[$networkType]['short_text'] as $kind_id => $short_text) {
-                $deprecated = ((isset($defaultTemplate[$networkId][$networkType]['short_text'][$kind_id]['deprecated_date']) && $defaultTemplate[$networkId][$networkType]['short_text'][$kind_id]['deprecated_date'] < date('Y-m-d')) ? true : false);
+                $deprecated = ((isset($defaultTemplate[$networkId][$networkType]['short_text'][$kind_id]['deprecated_date']) && $defaultTemplate[$networkId][$networkType]['short_text'][$kind_id]['deprecated_date'] <  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()))) ? true : false);
                 if ($deprecated) {
                     $content .= '<div style="display: none;">';
                 }
@@ -1095,7 +1116,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-1">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-1" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-1" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-1">Blog2Social</span>';
@@ -1147,7 +1168,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-2">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-2" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-2" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-edit-template-preview-2">';
                 $preview .= '<div class="row">';
@@ -1216,7 +1237,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-3">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-3" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-3" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-3">Blog2Social</span>';
@@ -1268,7 +1289,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-12">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-12" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-12" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-edit-template-preview-profile-name-12">';
                 $preview .= '<span>Blog2Social</span>';
@@ -1302,7 +1323,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-19">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-19" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-19" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-19">Blog2Social</span>';
@@ -1364,7 +1385,7 @@ class B2S_Network_Item {
                 $preview .= '<p class="b2s-edit-template-preview-content" data-network-type="' . esc_attr($networkType) . '">' . preg_replace("/\n/", "<br>", esc_html($schema[$networkType]['content'])) . '</p>';
                 $preview .= '<div class="row" style="margin-top: 40px;">';
                 $preview .= '<div class="col-sm-2 b2s-pr-0">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-6" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-6" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-pl-0">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-6">Blog2Social</span>';
@@ -1383,7 +1404,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-17">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-17" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-17" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-17">Blog2Social</span>';
@@ -1437,7 +1458,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-16">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-16" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-16" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-16">Blog2Social</span>';
@@ -1456,7 +1477,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-7">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-7" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-7" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-7">Blog2Social</span>';
@@ -1559,7 +1580,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-18">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-18" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-18" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10">';
                 $preview .= '<span class="b2s-edit-template-preview-profile-name-18">Blog2Social</span>';
@@ -1594,7 +1615,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-24">';
                 $preview .= '<div class="row" style="padding-right: 10px;">';
                 $preview .= '<div class="col-sm-1">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-24" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-24" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 col-sm-push-1">';
                 $preview .= '<div class="b2s-edit-template-link-preview b2s-edit-template-preview-inner-border-24" data-network-type="' . esc_attr($networkType) . '" ' . (((int) $schema[$networkType]['format'] == 0) ? '' : 'style="display: none;"') . '>';
@@ -1720,7 +1741,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-38">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-2" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-2" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-edit-template-preview-38">';
                 $preview .= '<div class="row">';
@@ -1822,7 +1843,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-43">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-43" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-43" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-edit-template-preview-43">';
                 $preview .= '<div class="row">';
@@ -1876,7 +1897,7 @@ class B2S_Network_Item {
                 $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-44">';
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-2">';
-                $preview .= '<img class="b2s-edit-template-preview-profile-img-44" src="' . esc_url(plugins_url('/assets/images/b2s@64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-44" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '<div class="col-sm-10 b2s-edit-template-preview-44">';
                 $preview .= '<div class="row">';
@@ -1916,6 +1937,75 @@ class B2S_Network_Item {
                 $preview .= '<div class="row">';
                 $preview .= '<div class="col-sm-12">';
                 $preview .= '<img class="b2s-edit-template-preview-like-icons-44" src="' . esc_url(plugins_url('/assets/images/settings/like-icons-44.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                break;
+            case '45':
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-2">';
+                $preview .= '<span class="b2s-edit-template-section-headline">' . esc_html__('Preview', 'blog2social') . ':</span>';
+                $preview .= '</div>';
+                $preview .= '<div class="col-sm-8 b2s-edit-template-preview-border b2s-edit-template-preview-border-2">';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-2">';
+                $preview .= '<img class="b2s-edit-template-preview-profile-img-45" src="' . esc_url(plugins_url('/assets/images/b2s_64.png', B2S_PLUGIN_FILE)) . '">';
+                $preview .= '</div>';
+                $preview .= '<div class="col-sm-10 b2s-edit-template-preview-45">';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-12">';
+                $preview .= '<span class="b2s-edit-template-preview-profile-name-45">Blog2Social</span> <span class="b2s-edit-template-preview-profile-handle-45">@blog2social</span>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '<div class="b2s-edit-template-link-preview" data-network-type="' . esc_attr($networkType) . '" ' . (((int) $schema[$networkType]['format'] == 0) ? '' : 'style="display: none;"') . '>';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-12">';
+                $preview .= '<span class="b2s-edit-template-preview-content b2s-edit-template-preview-content-45" data-network-type="' . esc_attr($networkType) . '">' . preg_replace("/\n/", "<br>", esc_html($schema[$networkType]['content'])) . '</span>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $blogOptions = new B2S_Options(0, 'B2S_PLUGIN_GENERAL_OPTIONS');
+                if ($blogOptions->_getOption('card_default_type') == 0) {
+                    $preview .= '<div class="row b2s-edit-template-preview-link-meta-box-45">';
+                    $preview .= '<div class="col-sm-3 b2s-edit-template-preview-link-meta-box-image-45">';
+                    $preview .= '<img class="b2s-edit-template-preview-link-image b2s-edit-template-preview-link-image-45" src="' . esc_url($this->previewImage) . '">';
+                    $preview .= '</div>';
+                    $preview .= '<div class="col-sm-9" style="padding-top: 12px;">';
+                    $preview .= '<span>' . esc_html($title) . '</span><br>';
+                    $preview .= '<span class="b2s-edit-template-preview-link-meta-box-desc-45">' . esc_html($desc) . '</span><br>';
+                    $preview .= '<span class="b2s-edit-template-preview-link-meta-box-domain-45">' . esc_html($domain) . '</span>';
+                    $preview .= '</div>';
+                    $preview .= '</div>';
+                    $preview .= '</div>';
+                } else {
+                    $preview .= '<div class="row b2s-edit-template-preview-link-meta-box-45">';
+                    $preview .= '<div class="col-sm-12 b2s-edit-template-preview-link-meta-box-image-45-big">';
+                    $preview .= '<img class="b2s-edit-template-preview-link-image b2s-edit-template-preview-link-image-45-big" src="' . esc_url($this->previewImage) . '">';
+                    $preview .= '</div>';
+                    $preview .= '<div class="col-sm-12">';
+                    $preview .= '<span>' . esc_html($title) . '</span><br>';
+                    $preview .= '<span class="b2s-edit-template-preview-link-meta-box-desc-45">' . esc_html($desc) . '</span><br>';
+                    $preview .= '<span class="b2s-edit-template-preview-link-meta-box-domain-45">' . esc_html($domain) . '</span>';
+                    $preview .= '</div>';
+                    $preview .= '</div>';
+                    $preview .= '</div>';
+                }
+                $preview .= '<div class="b2s-edit-template-image-preview" data-network-type="' . esc_attr($networkType) . '" ' . (((int) $schema[$networkType]['format'] == 1) ? '' : 'style="display: none;"') . '>';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-12">';
+                $preview .= '<span class="b2s-edit-template-preview-content b2s-edit-template-preview-content-45" data-network-type="' . esc_attr($networkType) . '">' . preg_replace("/\n/", "<br>", esc_html($schema[$networkType]['content'])) . '</span>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-12">';
+                $preview .= '<img class="b2s-edit-template-preview-image-image b2s-edit-template-preview-image-image-45" src="' . esc_url($this->previewImage) . '">';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '</div>';
+                $preview .= '<div class="row">';
+                $preview .= '<div class="col-sm-12">';
+                $preview .= '<img class="b2s-edit-template-preview-like-icons-45" src="' . esc_url(plugins_url('/assets/images/settings/like-icons-45.png', B2S_PLUGIN_FILE)) . '">';
                 $preview .= '</div>';
                 $preview .= '</div>';
                 $preview .= '</div>';

@@ -23,7 +23,7 @@
                     </div>
                     <input type="text" name="username" id="username" placeholder="<?php esc_attr_e('E-Mail or Username', 'blog2social') ?>" required class="form-control input-lg"/>
                     <input type="password" class="form-control input-lg" id="password" placeholder="<?php esc_attr_e('Password', 'blog2social') ?>" required />
-                    <input type="hidden" name="postId" id="postId" value="<?php echo (int) $_GET['postId']; ?>">
+                    <input type="hidden" name="postId" id="postId" value="<?php echo esc_attr( isset($_GET['postId']) ? (int) $_GET['postId'] : 0); ?>">
                     <input type="hidden" name="token" value="<?php echo esc_attr(base64_encode(time())); ?>"/>
                     <button type="submit" name="submit" id="prgLoginBtn" class="btn btn-lg btn-primary btn-block"><?php esc_html_e('Sign in', 'blog2social') ?></button>
                     <div>

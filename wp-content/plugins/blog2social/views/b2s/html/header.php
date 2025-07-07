@@ -5,7 +5,7 @@ $wpUserData = wp_get_current_user();
 $meta = B2S_Meta::getInstance();
 $generalOptions = get_option('B2S_PLUGIN_GENERAL_OPTIONS');
 $b2sActive = $meta->is_b2s_active();
-$showYoast = (sanitize_text_field(wp_unslash($_GET['page'])) == 'blog2social-settings' && $meta->is_yoast_seo_active() && $b2sActive) ? 'block' : 'none';
+$showYoast = (sanitize_text_field(wp_unslash(isset($_GET['page'])? $_GET['page'] : "")) == 'blog2social-settings' && $meta->is_yoast_seo_active() && $b2sActive) ? 'block' : 'none';
 $showAioseop = ($meta->is_aioseop_active() && $b2sActive) ? 'block' : 'none';
 $showWebdaos = ($meta->is_webdados_active() && $b2sActive) ? 'block' : 'none';
 $getPages = unserialize(B2S_PLUGIN_PAGE_TITLE);
@@ -17,7 +17,7 @@ if ($autoPostCon !== false && is_array($autoPostCon) && isset($autoPostCon['coun
     $userTimeZone = ($optionUserTimeZone !== false) ? $optionUserTimeZone : get_option('timezone_string');
     $userTimeZoneOffset = (empty($userTimeZone)) ? get_option('gmt_offset') : B2S_Util::getOffsetToUtcByTimeZone($userTimeZone);
     $current_utc_datetime = gmdate('Y-m-d H:i:s');
-    $current_user_date = date('Y-m-d', strtotime(B2S_Util::getUTCForDate($current_utc_datetime, $userTimeZoneOffset)));
+    $current_user_date = wp_date('Y-m-d', strtotime(B2S_Util::getUTCForDate($current_utc_datetime, $userTimeZoneOffset)),  new DateTimeZone(date_default_timezone_get()));
     $con = unserialize(B2S_PLUGIN_AUTO_POST_LIMIT);
     $autoPostLimit = ($autoPostCon['count'] == $con[B2S_PLUGIN_USER_VERSION] && $current_user_date == $autoPostCon['last_call_date']) ? 'block' : 'none';
 }
@@ -69,7 +69,17 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 <div class="panel panel-group b2s-server-connection-fail" style="display: none;">
     <div class="panel-body">
         <span class="glyphicon glyphicon-remove glyphicon-danger"></span> 
-        <?php echo sprintf(__('The connection to the server failed. Please try again! You can find more information and solutions in the <a href="%s" target="_blank">guide for server connection</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('connection_guide'))); ?>
+        <?php echo wp_kses(sprintf(
+               // translators: %s is a link
+            __('The connection to the server failed. Please try again! You can find more information and solutions in the <a href="%s" target="_blank">guide for server connection</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('connection_guide'))),
+            array(
+                'a' => array(
+                    'href' => array(),
+                    'target' => array(),
+                    )
+                )
+            );
+        ?>
 
     </div>
 </div>
@@ -111,7 +121,17 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
         <br>
         <?php esc_html_e('Please make sure that you only use one plugin for setting meta tags so that the networks can display the link preview of your post correctly.', 'blog2social'); ?>
         <br>
-        <?php echo sprintf(__('You will find a checklist for setting Open Graph tags in the <a href="%s" target="_blank">Open Graph Tag guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('yoast_warning_og_guide'))); ?>
+        <?php echo wp_kses(sprintf(
+            // translators: %s is a link
+            __('You will find a checklist for setting Open Graph tags in the <a href="%s" target="_blank">Open Graph Tag guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('yoast_warning_og_guide'))),
+            array(
+                'a' => array(
+                    'href' => array(),
+                    'target' => array(),
+                    )
+                )
+            );
+        ?>
     </div>
 </div>
 
@@ -149,7 +169,16 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
                 if ((int) $_GET['deletedPostsNumber'] == 0) {
                     esc_html_e('No posts found', 'blog2social');
                 } else {
-                    echo sprintf(__('Deleted %s posts', 'blog2social'), (int) $_GET['deletedPostsNumber']);
+                    echo wp_kses(sprintf(
+                        // translators: %s num of posts
+                        __('Deleted %s posts', 'blog2social'), (int) $_GET['deletedPostsNumber']),
+                        array(
+                            'a' => array(
+                                'href' => array(),
+                                'target' => array()
+                            )
+                        )
+                    );
                 }
             } else {
                 esc_html_e('Posts could not be deleted.', 'blog2social');
@@ -241,12 +270,28 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
 </div>
 <div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-premium" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo sprintf(__('To connect more Twitter apps with your Twitter accounts, please upgrade your current Blog2Social license or get a Twitter app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', esc_url(B2S_Tools::getSupportLink('addon_apps'))), 'blog2social'); ?></a>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo wp_kses(sprintf(
+               // translators: %s is a link
+            __('To connect more Twitter apps with your Twitter accounts, please upgrade your current Blog2Social license or get a Twitter app add-on to your current license <a href="%s">Login with your Blog2Social account and continue to booking.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('addon_apps'))),
+            array('a' => array(
+                'href' => array(),
+                'target' => '_blank')
+            )
+        );
+        ?></a>
     </div>
 </div>
 <div class="panel panel-group b2s-user-app-alert b2s-user-apps-permission-free" style="display: none;">
     <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo sprintf(__('You have no more open app slots for this network. <a href="%s">Upgrade to a premium license to purchase additional slots.</a>', esc_url(B2S_Tools::getSupportLink('affiliate'))), 'blog2social'); ?></a>
+        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php echo wp_kses(sprintf(
+            // translators: %s is a link
+            __('You have no more open app slots for this network. <a href="%s">Upgrade to a premium license to purchase additional slots.</a>',  'blog2social'), esc_url(B2S_Tools::getSupportLink('affiliate'))),
+            array('a' => array(
+                'href' => array(),
+                'target' => '_blank')
+            )
+        );
+        ?></a>
     </div>
 </div>
 <div class="panel panel-group b2s-user-app-alert b2s-user-apps-success" style="display: none;">
@@ -289,23 +334,6 @@ $hideFinalTrailModal = $options->_getOption('hide_final_trail');
     </div>
 </div>
 
-<!-- Info Repost -->
-<div class="panel panel-group b2s-left-border-danger b2s-re-post-no-content" style="display: none;">
-    <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('No posts found. Please try again with different filter options.', 'blog2social'); ?>
-    </div>
-</div>
-<div class="panel panel-group b2s-left-border-danger b2s-re-post-content-in-queue" style="display: none;">
-    <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('The posts you tried to add are already in your sharing queue. If you want to re-schedule them, please delete the posts before adding them again.', 'blog2social'); ?>
-    </div>
-</div>
-<div class="panel panel-group b2s-left-border-danger b2s-re-post-limit-error" style="display: none;">
-    <div class="panel-body">
-        <span class="glyphicon glyphicon-remove glyphicon-danger"></span> <?php esc_html_e('Your limit for your quota of posts in your queue has been reached. Please delete posts from your queue before you add more', 'blog2social') . ((B2S_PLUGIN_USER_VERSION < 3) ? esc_html__(' or upgade your Blog2Social license to extend your quota.', 'blog2social') : '.'); ?>
-    </div>
-</div>
-
 <!--Rating-->
 <?php
 if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
@@ -314,7 +342,16 @@ if (!B2S_System::isblockedArea('B2S_MENU_MODUL_RATING', B2S_PLUGIN_ADMIN)) {
         <div class="panel panel-group b2s-notice">
             <div class="panel-body">
                 <h2 style="margin-top:0;font-size:20px;"><?php esc_html_e('RATE IT!', 'blog2social'); ?></h2>
-                <p> <?php echo sprintf(__("Hi, we noticed you just shared your %s. blog post with Blog2Social - that's awesome! Could you please do us a favor and give it a 5-star rating on WordPress? Just to help us spread the word and boost our motivation.", 'blog2social'), B2S_Rating::count()); ?>
+                <p> <?php echo wp_kses(sprintf(
+                    // translators: %s num of shared post
+                    __("Hi, we noticed you just shared your %s. blog post with Blog2Social - that's awesome! Could you please do us a favor and give it a 5-star rating on WordPress? Just to help us spread the word and boost our motivation.", 'blog2social'), B2S_Rating::count()),
+                    array('a' => array(
+                        'href' => array(),
+                        'target' => '_blank')
+                    )
+                );
+                
+                ?>
                 </p>
                 <p class="b2s-notice-buttons">
                     <a href="https://wordpress.org/support/plugin/blog2social/reviews/" class="b2s-allow-rating b2s-text-underline" target="_blank">
@@ -526,13 +563,24 @@ if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], un
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title"> <img src="<?php echo esc_url(plugins_url('/assets/images/b2s@32.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social"> <?php esc_html_e('We updated our Privacy Policy', 'blog2social') ?></h4>
+                <h4 class="modal-title"> <img src="<?php echo esc_url(plugins_url('/assets/images/b2s_32.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social"> <?php esc_html_e('We updated our Privacy Policy', 'blog2social') ?></h4>
             </div>
             <div class="modal-body b2s-scroll-modal-body b2s-modal-privacy-policy-scroll-content">
                 <p>
                     <?php
                     if ($b2sPrivacyPolicy !== false) {
-                        echo mb_convert_encoding($b2sPrivacyPolicy, 'UTF-8');
+                        echo wp_kses(mb_convert_encoding($b2sPrivacyPolicy, 'UTF-8'),
+                        array(
+                            'a' => array(
+                                'href' => array(),
+                                'target' => array(),
+                            ),
+                            'p' => array(),
+                            'br' => array(),
+                            'b' => array(),
+                        )
+                    );
+
                     }
                     ?> 
                 </p>
@@ -576,7 +624,7 @@ if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], un
     </div>
 </div>
 
-<?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(date('Y-m-d H:i:s', (strtotime('-7 day', strtotime(B2S_PLUGIN_TRAIL_END))))) < strtotime(gmdate('Y-m-d H:i:s')) && strtotime(B2S_PLUGIN_TRAIL_END) >= strtotime(gmdate('Y-m-d H:i:s')) && !$hide7DayTrail) { ?>
+<?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(wp_date('Y-m-d H:i:s', (strtotime('-7 day', strtotime(B2S_PLUGIN_TRAIL_END))),  new DateTimeZone(date_default_timezone_get()))) < strtotime(gmdate('Y-m-d H:i:s')) && strtotime(B2S_PLUGIN_TRAIL_END) >= strtotime(gmdate('Y-m-d H:i:s')) && !$hide7DayTrail) { ?>
     <?php
     $now = time();
     $your_date = strtotime(B2S_PLUGIN_TRAIL_END);
@@ -591,7 +639,9 @@ if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], un
                     <br>
                     <div class="row b2s-d-flex">
                         <div class="col-md-6 col-sm-12">
-                            <h2 class="b2s-bold"><?php echo sprintf(__('Your test licence expires in %d days.', 'blog2social'), esc_html($trial_days)); ?></h2>
+                            <h2 class="b2s-bold"><?php echo esc_html(sprintf(
+                                // translators: %s is expiration in days
+                                __('Your test licence expires in %d days.', 'blog2social'), $trial_days)); ?></h2>
                             <span><?php esc_html_e('While you\'re enjoying the trial, there is so much more that Blog2Social has to offer. Please upgrade to keep access to your premium features and benefit from:', 'blog2social'); ?></span>
                             <br>
                             <ul class="b2s-header-trial-modal-list">
@@ -619,110 +669,110 @@ if (isset($_GET['page']) && !empty($_GET['page']) && !in_array($_GET['page'], un
             </div>
         </div>
     </div>
-    <?php } ?>
+<?php } ?>
 
-    <?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < strtotime(gmdate('Y-m-d H:i:s')) && defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION == 0 && !$hideFinalTrailModal) { ?>
-        <div class="modal fade" id="b2s-final-trail-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-final-trail-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
-            <div class="modal-dialog">
-                <div class="modal-content modal-lg">
-                    <div class="modal-body" style="background-color: #f4f4f4;">
-                        <button type="button" class="close b2s-final-trail-modal-close" data-dismiss="modal">&times;</button>
+<?php if (defined("B2S_PLUGIN_TRAIL_END") && strtotime(B2S_PLUGIN_TRAIL_END) < strtotime(gmdate('Y-m-d H:i:s')) && defined('B2S_PLUGIN_USER_VERSION') && B2S_PLUGIN_USER_VERSION == 0 && !$hideFinalTrailModal) { ?>
+    <div class="modal fade" id="b2s-final-trail-modal" tabindex="-1" role="dialog" aria-labelledby="b2s-final-trail-modal" aria-hidden="true" data-backdrop="false" style="display:none; z-index: 1070;">
+        <div class="modal-dialog">
+            <div class="modal-content modal-lg">
+                <div class="modal-body" style="background-color: #f4f4f4;">
+                    <button type="button" class="close b2s-final-trail-modal-close" data-dismiss="modal">&times;</button>
+                    <br>
+                    <div class="row b2s-d-flex">
+                        <div class="col-md-6 col-sm-12">
+                            <h2 class="b2s-bold"><?php esc_html_e('Your test licence has expired.', 'blog2social'); ?></h2>
+                            <span><?php esc_html_e('While you enjoyed the trial, there is so much more that Blog2Social has to offer. Please upgrade now to regain access to your premium features and benefit from:', 'blog2social'); ?></span>
+                            <br>
+                            <ul class="b2s-header-trial-modal-list">
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Advanced scheduling capabilities for optimal posting times across multiple channels', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Automated posting and resharing to save time and maintain a consistent content stream', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Customizable templates for optimized social media presentation', 'blog2social'); ?></li>
+                                <li class="b2s-trial-modal-list"><?php esc_html_e('Flexible user and account settings and add-ons for efficient social media management', 'blog2social'); ?></li>
+                            </ul>
+                            <span><?php esc_html_e('These exclusive features can help you reach more people in less time. Unlock the full power of Blog2Social for your social media success.', 'blog2social'); ?></span>
+                            <br>
+                            <br>
+                            <span><?php esc_html_e('Find the perfect plan to suit your needs.', 'blog2social'); ?></span>
+                            <br>
+                            <br>
+                            <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn b2s-btn-success-new" target="_blank"><?php esc_html_e('Upgrade Blog2Social', 'blog2social'); ?></a>
+                            <br>
+                            <button type="button" class="btn btn-link b2s-hide-final-trial-btn"><small><?php esc_html_e('permanently hide', 'blog2social'); ?></small></button>
+                            <br>
+                        </div>
+                        <div class="col-md-6 col-sm-12 b2s-p-0 hidden-xs hidden-sm b2s-header-trial-image-container">
+                            <img class="b2s-header-trial-image" src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php } ?>
+
+<div class="modal fade b2sAssAuthModal" class="b2sAssAuthModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssAuthModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header b2s-modal-border-none">
+                <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
+                <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name=".b2sAssAuthModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="b2s-stepwizard">
+                        <div class="b2s-stepwizard-row setup-panel">
+                            <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
+                                <a href="#step-1" type="button" class="btn btn-danger b2s-ass-color b2s-stepwizard-btn-circle" disabled="disabled">1</a>
+                                <p><?php esc_html_e('Enter email address', 'blog2social') ?></p>
+                            </div>
+                            <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
+                                <a href="#step-2" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">2</a>
+                                <p><?php esc_html_e('Verify email address', 'blog2social') ?></p>
+                            </div>
+                            <div class="b2s-stepwizard-step">
+                                <a href="#step-3" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">3</a>
+                                <p><?php esc_html_e('Ready to go!', 'blog2social') ?></p>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <div class="row">
+                    <div class="b2s-ass-auth-step-1-content">
+                        <h2><?php esc_html_e('Connect AI assistant', 'blog2social') ?></h2>
+                        <p><?php esc_html_e('Connect with the AI assistant to get started.', 'blog2social') ?></p>
                         <br>
-                        <div class="row b2s-d-flex">
-                            <div class="col-md-6 col-sm-12">
-                                <h2 class="b2s-bold"><?php esc_html_e('Your test licence has expired.', 'blog2social'); ?></h2>
-                                <span><?php esc_html_e('While you enjoyed the trial, there is so much more that Blog2Social has to offer. Please upgrade now to regain access to your premium features and benefit from:', 'blog2social'); ?></span>
-                                <br>
-                                <ul class="b2s-header-trial-modal-list">
-                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Advanced scheduling capabilities for optimal posting times across multiple channels', 'blog2social'); ?></li>
-                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Automated posting and resharing to save time and maintain a consistent content stream', 'blog2social'); ?></li>
-                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Customizable templates for optimized social media presentation', 'blog2social'); ?></li>
-                                    <li class="b2s-trial-modal-list"><?php esc_html_e('Flexible user and account settings and add-ons for efficient social media management', 'blog2social'); ?></li>
-                                </ul>
-                                <span><?php esc_html_e('These exclusive features can help you reach more people in less time. Unlock the full power of Blog2Social for your social media success.', 'blog2social'); ?></span>
-                                <br>
-                                <br>
-                                <span><?php esc_html_e('Find the perfect plan to suit your needs.', 'blog2social'); ?></span>
-                                <br>
-                                <br>
-                                <a href="<?php echo esc_url(B2S_Tools::getSupportLink('b2s_premium_upgrade')); ?>" class="btn b2s-btn-success-new" target="_blank"><?php esc_html_e('Upgrade Blog2Social', 'blog2social'); ?></a>
-                                <br>
-                                <button type="button" class="btn btn-link b2s-hide-final-trial-btn"><small><?php esc_html_e('permanently hide', 'blog2social'); ?></small></button>
-                                <br>
-                            </div>
-                            <div class="col-md-6 col-sm-12 b2s-p-0 hidden-xs hidden-sm b2s-header-trial-image-container">
-                                <img class="b2s-header-trial-image" src="<?php echo esc_url(plugins_url('/assets/images/b2s/trial.png', B2S_PLUGIN_FILE)); ?>" alt="blog2social">
-                            </div>
+                        <p><b><?php esc_html_e('Use this email for verification', 'blog2social') ?></b></p>
+                        <div>
+                            <input type="radio" value="0" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-own" data-auth-email="<?php echo esc_attr($this->blogUserData->user_email); ?>" name="b2s-ass-auth-email" checked />
+                            <label for="b2s-ass-auth-email-own"> <?php echo esc_html($this->blogUserData->user_email); ?></label>
+                            <br>
+                            <input type="radio" value="1" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-other" name="b2s-ass-auth-email">
+                            <label for="b2s-ass-auth-email-other"> <?php esc_html_e('Use different email for verification', 'blog2social') ?></label>
+                        </div>
+                        <div class="pull-right"> 
+                            <button id="b2s-ass-auth-step1-btn" data-url="<?php echo esc_html(B2S_PLUGIN_SERVER_URL . '/auth/assistini.php?b2s_token=' . B2S_PLUGIN_TOKEN . '&sprache=' . substr(B2S_LANGUAGE, 0, 2)); ?>" data-auth-title="<?php echo esc_attr('Assistini Authorization', 'blog2social'); ?>" class="btn b2s-ass-btn"><?php esc_html_e('Send verification code', 'blog2social') ?></button>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-        <?php } ?>
-
-        <div class="modal fade b2sAssAuthModal" class="b2sAssAuthModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssAuthModal" aria-hidden="true" data-backdrop="false"  style="display:none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header b2s-modal-border-none">
-                        <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
-                        <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name=".b2sAssAuthModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="row">
-                            <div class="b2s-stepwizard">
-                                <div class="b2s-stepwizard-row setup-panel">
-                                    <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
-                                        <a href="#step-1" type="button" class="btn btn-danger b2s-ass-color b2s-stepwizard-btn-circle" disabled="disabled">1</a>
-                                        <p><?php esc_html_e('Enter email address', 'blog2social') ?></p>
-                                    </div>
-                                    <div class="b2s-stepwizard-step b2s-ass-stepwizard-step">
-                                        <a href="#step-2" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">2</a>
-                                        <p><?php esc_html_e('Verify email address', 'blog2social') ?></p>
-                                    </div>
-                                    <div class="b2s-stepwizard-step">
-                                        <a href="#step-3" type="button" class="btn btn-default b2s-stepwizard-btn-circle" disabled="disabled">3</a>
-                                        <p><?php esc_html_e('Ready to go!', 'blog2social') ?></p>
-                                    </div>
-                                </div>
-                            </div>    
+                    <div class="b2s-ass-auth-step-3-content" style="display:none;">
+                        <h2><?php esc_html_e('Connection established', 'blog2social') ?></h2>
+                        <p><?php esc_html_e('Congrats! You can now start using Assistini AI to optimize your social media posts.', 'blog2social') ?></p>
+                        <br>
+                        <div class="pull-right"> 
+                            <button id="b2s-ass-auth-step3-btn" class="btn b2s-ass-btn"><?php esc_html_e('Start now', 'blog2social') ?></button>
                         </div>
-                        <div class="row">
-                            <div class="b2s-ass-auth-step-1-content">
-                                <h2><?php esc_html_e('Connect AI assistant', 'blog2social') ?></h2>
-                                <p><?php esc_html_e('Connect with the AI assistant to get started.', 'blog2social') ?></p>
-                                <br>
-                                <p><b><?php esc_html_e('Use this email for verification', 'blog2social') ?></b></p>
-                                <div>
-                                    <input type="radio" value="0" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-own" data-auth-email="<?php echo $this->blogUserData->user_email; ?>" name="b2s-ass-auth-email" checked />
-                                    <label for="b2s-ass-auth-email-own"> <?php echo $this->blogUserData->user_email; ?></label>
-                                    <br>
-                                    <input type="radio" value="1" class="b2s-ass-auth-email-option" id="b2s-ass-auth-email-other" name="b2s-ass-auth-email">
-                                    <label for="b2s-ass-auth-email-other"> <?php esc_html_e('Use different email for verification', 'blog2social') ?></label>
-                                </div>
-                                <div class="pull-right"> 
-                                    <button id="b2s-ass-auth-step1-btn" data-url="<?php echo B2S_PLUGIN_SERVER_URL . '/auth/assistini.php?b2s_token=' . B2S_PLUGIN_TOKEN . '&sprache=' . substr(B2S_LANGUAGE, 0, 2) ?>" data-auth-title="<?php echo esc_attr('Assistini Authorization', 'blog2social'); ?>" class="btn b2s-ass-btn"><?php esc_html_e('Send verification code', 'blog2social') ?></button>
-                                </div>
-                            </div>
-                            <div class="b2s-ass-auth-step-3-content" style="display:none;">
-                                <h2><?php esc_html_e('Connection established', 'blog2social') ?></h2>
-                                <p><?php esc_html_e('Congrats! You can now start using Assistini AI to optimize your social media posts.', 'blog2social') ?></p>
-                                <br>
-                                <div class="pull-right"> 
-                                    <button id="b2s-ass-auth-step3-btn" class="btn b2s-ass-btn"><?php esc_html_e('Start now', 'blog2social') ?></button>
-                                </div>
-                            </div>
-                        </div>                
-
                     </div>
-                </div>
+                </div>                
 
             </div>
         </div>
+
+    </div>
+</div>
 
 <div class="modal fade" id="b2sAssSettingsModal" class="b2sAssSettingsModal" tabindex="-1" role="dialog" aria-labelledby="b2sAssSettingsModal" aria-hidden="true" data-backdrop="false" style="display:none;">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-header b2s-modal-border-none">
+            <div class="modal-header b2s-modal-border-none">
                 <img class="pull-left b2s-ass-img-logo" src="<?php echo esc_url(plugins_url('/assets/images/ass/assistini-logo.png', B2S_PLUGIN_FILE)); ?>" alt="Assistini"> 
                 <button type="button" class="b2s-modal-close close b2s-padding-15" data-modal-name="#b2sAssSettingsModal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>

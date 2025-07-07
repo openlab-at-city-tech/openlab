@@ -7,8 +7,10 @@ class B2S_Metrics_Item {
     }
     
     public function getNetworkCount() {
+        
         global $wpdb;
         $getNetworks = $wpdb->get_results("SELECT count(*) as networkCount, innerSelect.network_id FROM (SELECT network_id FROM {$wpdb->prefix}b2s_posts_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE (network_id = 2) OR (network_id = 1 AND network_type = 1) GROUP BY b2s_posts_network_details_id) as innerSelect GROUP BY innerSelect.network_id");
+        
         $networkCount = array(1 => 0, 2 => 0);
         if($getNetworks != null) {
             foreach($getNetworks as $key => $network) {
@@ -22,19 +24,20 @@ class B2S_Metrics_Item {
     }
     
     public function getInsightsData($filter_network_id = 0, $filter_dates = array()) {
-        $todayDate = date('Y-m-d');
-        $yesterdayDate = date("Y-m-d", time() - 60 * 60 * 24);
+
+        $todayDate =  wp_date('Y-m-d', null, new DateTimeZone(date_default_timezone_get()));
+        $yesterdayDate =  wp_date("Y-m-d", time() - 60 * 60 * 24, new DateTimeZone(date_default_timezone_get()));
         
-        $compareDate1 = date("Y-m-d", time() - 60 * 60 * 24 * 30);
-        $compareDate2 = date("Y-m-d", time() - 60 * 60 * 24);
+        $compareDate1 =  wp_date("Y-m-d", time() - 60 * 60 * 24 * 30, new DateTimeZone(date_default_timezone_get()));
+        $compareDate2 =  wp_date("Y-m-d", time() - 60 * 60 * 24, new DateTimeZone(date_default_timezone_get()));
         
         if(is_array($filter_dates) && !empty($filter_dates)) {
             if(count($filter_dates) == 1) {
-                $compareDate1 = date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24);
-                $compareDate2 = date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24 * 2);
+                $compareDate1 =  wp_date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24, new DateTimeZone(date_default_timezone_get()));
+                $compareDate2 =  wp_date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24 * 2, new DateTimeZone(date_default_timezone_get()));
             } else if(count($filter_dates) == 2) {
-                $compareDate1 = date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24);
-                $compareDate2 = date("Y-m-d", strtotime($filter_dates[1]));
+                $compareDate1 =  wp_date("Y-m-d", strtotime($filter_dates[0]) - 60 * 60 * 24, new DateTimeZone(date_default_timezone_get()));
+                $compareDate2 =  wp_date("Y-m-d", strtotime($filter_dates[1]), new DateTimeZone(date_default_timezone_get()));
             }
         }
         $date1 = date_create($compareDate1);
@@ -45,17 +48,27 @@ class B2S_Metrics_Item {
         if($filter_network_id > 0) {
             $filterNetworks = (String) $filter_network_id;
         }
-        
+
+        $networkIds = array_filter(array_map('intval', explode(',', $filterNetworks)));
+
+        $placeholders = implode(',', array_fill(0, count($networkIds), '%d'));
+
+        $params= array_merge($networkIds, array('%' . $todayDate . '%'));
+
         global $wpdb;
-        $sqlGetPostsToday = $wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$filterNetworks.")", '%' . $todayDate . '%');
-        $getPostsToday = $wpdb->get_results($sqlGetPostsToday);
-        $sqlGetPostsYesterday = $wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$filterNetworks.")", '%' . $yesterdayDate . '%');
-        $getPostsYesterday = $wpdb->get_results($sqlGetPostsYesterday);
         
-        $sqlGetPostsCompareDate1 = $wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$filterNetworks.")", '%' . $compareDate1 . '%');
-        $getPostsCompareDate1 = $wpdb->get_results($sqlGetPostsCompareDate1);
-        $sqlGetPostsCompareDate2 = $wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$filterNetworks.")", '%' . $compareDate2 . '%');
-        $getPostsCompareDate2 = $wpdb->get_results($sqlGetPostsCompareDate2);
+        //placeholders is safe variable
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $getPostsToday = $wpdb->get_results($wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$placeholders.")", $params));
+        //placeholders is safe variable
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $getPostsYesterday = $wpdb->get_results($wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$placeholders.")", $params));
+        //placeholders is safe variable
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $getPostsCompareDate1 = $wpdb->get_results($wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$placeholders.")", $params));
+        //placeholders is safe variable
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+        $getPostsCompareDate2 = $wpdb->get_results( $wpdb->prepare("SELECT insights.insight FROM {$wpdb->prefix}b2s_network_insights as insights LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as network ON insights.b2s_posts_network_details_id = network.id WHERE create_date LIKE %s AND network.network_id IN (".$placeholders.")", $params));
         
         $impressionsToday = 0;
         $engagementsToday = 0;
@@ -122,19 +135,27 @@ class B2S_Metrics_Item {
                 }
             }
         }
+
+        $compareDateTime= (isset($filter_dates) && !empty($filter_dates)) ? $compareDate2 : $todayDate;
+        $compareDateTimeSql = $compareDateTime . " 23:59:59";
+        $compareDate1Sql= $compareDate1 . " 00:00:00";
+
         $sqlGetPosts = "SELECT posts.id, insights.insight, insights.last_update, posts.post_id, posts.publish_date, b2s_favorites.blog_user_id as favorites_blog_user_id, insights.active "
         . "FROM {$wpdb->prefix}b2s_posts as posts "
         . "LEFT JOIN {$wpdb->prefix}b2s_posts_insights as insights ON posts.id = insights.b2s_posts_id ";
             $sqlGetPosts .="LEFT JOIN {$wpdb->prefix}b2s_posts_network_details as networkDetails ON posts.network_details_id = networkDetails.id ";
         $sqlGetPosts .= "LEFT JOIN ( SELECT post_id, blog_user_id FROM {$wpdb->prefix}b2s_posts_favorites WHERE blog_user_id = " . B2S_PLUGIN_BLOG_USER_ID . " ) as b2s_favorites ON posts.post_id = b2s_favorites.post_id "
         . "WHERE insights.id IS NOT NULL "
-        . "AND posts.publish_date >= '". $compareDate1. " 00:00:00' "
-        . "AND posts.publish_date <= '". ((isset($filter_dates) && !empty($filter_dates)) ? $compareDate2 : $todayDate). " 23:59:59' "
+        . $wpdb->prepare("AND posts.publish_date >= %s ", $compareDate1Sql)
+        . $wpdb->prepare("AND posts.publish_date <= %s ", $compareDateTimeSql)
         . "AND posts.hide = 0 ";
-            $sqlGetPosts .="AND networkDetails.network_id IN(" . $filterNetworks . ") ";
+        //placeholders is safe variable
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
+        $sqlGetPosts .= $wpdb->prepare("AND networkDetails.network_id IN(" . $placeholders . ") ", $networkIds);
         
         $sqlGetPosts .= " ORDER BY insights.id DESC ";
-        
+        //Statement is prepared
+        // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         $getPosts = $wpdb->get_results($sqlGetPosts);
         
         $postsData = array();
@@ -225,7 +246,9 @@ class B2S_Metrics_Item {
                                         ) . '</div>
                                     <div style="width: 44%;display: inline-block;">
                                         <strong><a target="_blank" href="'.esc_url(get_permalink($wpPostId)).'">'.esc_html($wpPostData->post_title).'</a></strong>
-                                        <p class="info hidden-xs"><a class="b2sGetB2SPostsByWpPost" data-post-id="'.esc_attr($wpPostId).'"><span class="b2s-publish-count" data-post-id="' . esc_attr($wpPostId) . '">'.esc_html($insightsData['count']).'</span> '.esc_html__('shared social media posts', 'blog2social').'</a> | ' . sprintf(esc_html__('latest share by %s', 'blog2social'), '<a href="' . esc_url(get_author_posts_url($lastPublish['user'])) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . '</p>
+                                        <p class="info hidden-xs"><a class="b2sGetB2SPostsByWpPost" data-post-id="'.esc_attr($wpPostId).'"><span class="b2s-publish-count" data-post-id="' . esc_attr($wpPostId) . '">'.esc_html($insightsData['count']).'</span> '.esc_html__('shared social media posts', 'blog2social').'</a> | ' . sprintf(
+                                             // translators: %s is a link
+                                            esc_html__('latest share by %s', 'blog2social'), '<a href="' . esc_url(get_author_posts_url($lastPublish['user'])) . '">' . esc_html((!empty($userInfoName) ? $userInfoName : '-')) . '</a>') . '</p>
                                     </div>
                                     <div style="width: 6%;display: inline-block;">
                                         <i class="glyphicon glyphicon-eye-open"></i> '.esc_html($insightsData['impressions']).'
@@ -267,14 +290,19 @@ class B2S_Metrics_Item {
     }
     
     private function getLastPost($post_id = 0) {
+        
         if ($post_id > 0) {
             global $wpdb;
             $addNotAdmin = (B2S_PLUGIN_ADMIN == false) ? $wpdb->prepare(' AND `blog_user_id` = %d', B2S_PLUGIN_BLOG_USER_ID) : '';
             $order = " `publish_date` DESC";
             $addWhere = ' AND `publish_error_code` = "" ';
             $where = " `post_for_approve`= 0 AND (`sched_date`= '0000-00-00 00:00:00' OR (`sched_type` = 3 AND `publish_date` != '0000-00-00 00:00:00')) " . $addWhere;
+            $addPostid= $wpdb->prepare(' AND `post_id` = %d', $post_id);
             $fields = "publish_date";
-            $sqlLast = "SELECT $fields, blog_user_id FROM `{$wpdb->prefix}b2s_posts` WHERE $where $addNotAdmin AND `hide` = 0 AND `post_id` = " . $post_id . " ORDER BY $order LIMIT 1";
+            $sqlLast = "SELECT $fields, blog_user_id FROM `{$wpdb->prefix}b2s_posts` WHERE $where $addNotAdmin AND `hide` = 0 $addPostid ORDER BY $order LIMIT 1";
+
+            //No unprepared User Input
+            // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
             $result = $wpdb->get_results($sqlLast);
             if (!empty($result)) {
                 $date = $result[0]->publish_date;
@@ -282,7 +310,7 @@ class B2S_Metrics_Item {
                 return array('date' => $date, 'user' => $user);
             }
         }
-        return array('date' => date('Y-m-d H:i:s'), 'user' => 0);
+        return array('date' =>  wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())), 'user' => 0);
     }
     
 }

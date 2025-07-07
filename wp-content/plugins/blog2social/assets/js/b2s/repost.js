@@ -71,9 +71,19 @@ curSource[0] = ajaxurl + '?action=b2s_get_calendar_events&filter_network_auth=al
 var newSource = new Array();
 
 jQuery(document).ready(function () {
-    renderCalender();
+    if (jQuery("#b2sUserVersion").val() == 0) {
+        jQuery('.b2s-re-post-show-calender-btn').hide();
+        jQuery('.b2s-re-post-show-list-btn').hide();
+    }
     jQuery(".b2s-loading-area").hide();
 });
+
+
+
+jQuery(document).on('click', '.b2s-re-post-show-calender-btn', function () {
+    renderCalender();
+});
+
 
 jQuery(document).on('click', '.b2s-re-post-settings-header', function () {
     if (jQuery('.b2s-re-post-settings-area').is(':visible')) {
@@ -156,6 +166,9 @@ jQuery(document).on('click', '.b2s-re-post-submit-btn', function () {
                         jQuery('#b2s-licence-condition').show();
                         jQuery('.b2s-re-post-submit-btn').prop('disabled', true);
                     }
+                    //Network Condition
+                    jQuery('#current_network_open_sched_post_quota').html(data.currentNetwork45OpenSchedLimit);
+
 
                 }
                 renderCalender();
@@ -354,7 +367,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-multi-btn', function () 
                         jQuery('.b2s-re-post-submit-btn').removeAttr('disabled');
                     }
                 }
-                renderCalender();
+                refreshCalender();
             } else {
                 if (data.error == 'nonce') {
                     jQuery('.b2s-nonce-check-fail').show();
@@ -410,7 +423,7 @@ jQuery(document).on('click', '.b2s-sched-delete-confirm-btn', function () {
                     }
                 }
                 jQuery('.b2s-post-remove-success').show();
-                
+
                 //Licence Condition
                 if (jQuery("#b2sUserVersion").val() > 0) {
                     jQuery('#current_licence_open_sched_post_quota').html(data.currentOpenSchedLimit);
@@ -492,7 +505,7 @@ function showEditSchedPost(b2s_id, post_id, network_auth_id, network_type, netwo
         if (typeof network_id != 'undefined' && jQuery.inArray(network_id.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
-        if ((network_id == "2" || network_id == "24") && jQuery('#isCardMetaChecked').val() == "1") {
+        if ((network_id == "2" || network_id == "24" || network_id == "45") && jQuery('#isCardMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
         if (isMetaChecked && jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val() == "0") {
@@ -872,7 +885,7 @@ function showEditSchedCalendarPost(b2s_id, post_id, network_auth_id, network_typ
         if (typeof network_id != 'undefined' && jQuery.inArray(network_id.toString(), ogMetaNetworks) != -1 && jQuery('#isOgMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
-        if ((network_id == "2" || network_id == "24") && jQuery('#isCardMetaChecked').val() == "1") {
+        if ((network_id == "2" || network_id == "24" || network_id == "45") && jQuery('#isCardMetaChecked').val() == "1") {
             isMetaChecked = true;
         }
         if (isMetaChecked && jQuery('.b2sNetworkSettingsPostFormatCurrent[data-network-type="' + network_type + '"][data-network-id="' + network_id + '"]').val() == "0") {
@@ -1086,5 +1099,4 @@ function renderCalender() {
         }
 
     });
-    refreshCalender();
 }

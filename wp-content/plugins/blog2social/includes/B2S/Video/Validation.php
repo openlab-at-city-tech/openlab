@@ -39,13 +39,19 @@ class B2S_Video_Validation {
                         if ((int) $network->network_id == (int) $networkId && (int) $network->network_type == (int) $networkType) {
                             if (($video_meta['filesize'] / 1024) >= $network->video_max_size) {
                                 $mfs = $network->video_max_size / 1024;
-                                return array('result' => false, 'content' => sprintf(__('Your video is exceeding the maximum file size of %s Megabyte. Please compress your video file or select a video with a smaller file size.', 'blog2social'),sanitize_text_field($mfs)));
+                                return array('result' => false, 'content' => sprintf(
+                                      // translators: %s is size
+                                    __('Your video is exceeding the maximum file size of %s Megabyte. Please compress your video file or select a video with a smaller file size.', 'blog2social'),sanitize_text_field($mfs)));
                             }
                             if ($video_meta['length'] >= $network->video_max_length) {
-                                return array('result' => false, 'content' => sprintf(__('Your video is exceeding the maximum length. The maximum video length for this network is %s seconds. Please select a shorter video.', 'blog2social'), sanitize_text_field($network->video_max_length)));
+                                return array('result' => false, 'content' => sprintf(
+                                    // translators: %s is length
+                                    __('Your video is exceeding the maximum length. The maximum video length for this network is %s seconds. Please select a shorter video.', 'blog2social'), sanitize_text_field($network->video_max_length)));
                             }
                             if (strpos($network->video_format, strtolower($video_meta['fileformat'])) === false) {
-                                return array('result' => false, 'content' => sprintf(__('Please check the file format of your video. This network only supports the following video formats: %s', 'blog2social'), sanitize_text_field($network->video_format)));
+                                return array('result' => false, 'content' => sprintf(
+                                    // translators: %s is format
+                                    __('Please check the file format of your video. This network only supports the following video formats: %s', 'blog2social'), sanitize_text_field($network->video_format)));
                             }
                             
                             if(($networkId == 1 && $networkType == 1) || $networkId == 12) {
@@ -61,15 +67,21 @@ class B2S_Video_Validation {
                                 );
 
                                 if (strpos($reelSupport['reel_format'], strtolower($video_meta['fileformat'])) === false) {
-                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Please check the file type of your video. This network only supports the following video types: %s', 'blog2social'), sanitize_text_field($reelSupport['reel_format']))));
+                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                        // translators: %s formats
+                                        __('Please check the file type of your video. This network only supports the following video types: %s', 'blog2social'), sanitize_text_field($reelSupport['reel_format']))));
                                 }
                                 
                                 if ($video_meta['length'] < $reelSupport['reel_min_length']) {
-                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Your video is below the minimum length. The minimum video length for this network is %s seconds. Please select a longer video.', 'blog2social'), sanitize_text_field($reelSupport['reel_min_length']))));
+                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                        // translators: %s is seconds
+                                        __('Your video is below the minimum length. The minimum video length for this network is %s seconds. Please select a longer video.', 'blog2social'), sanitize_text_field($reelSupport['reel_min_length']))));
                                 }
 
                                 if ($video_meta['length'] >= $reelSupport['reel_max_length']) {
-                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Your video exceeds the maximum length. The maximum video length for this network is %s seconds. Please select a shorter video.', 'blog2social'), sanitize_text_field($reelSupport['reel_max_length']))));
+                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                        // translators: %s is seconds
+                                        __('Your video exceeds the maximum length. The maximum video length for this network is %s seconds. Please select a shorter video.', 'blog2social'), sanitize_text_field($reelSupport['reel_max_length']))));
                                 }
 
                                 $dataForReels = $this->getMetaDataForReels($videoFileForAnalyse);
@@ -81,16 +93,22 @@ class B2S_Video_Validation {
                                 $returnRotate = $this->checkRotateForVideo($video_meta['width'], $video_meta['height'], $video_meta['fileformat'], $dataForReels['rotate']);
                                 
                                 if ($dataForReels['frame_rate'] < $reelSupport['reel_min_framerate']) {
-                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Your video frame rate is too low. The minimum frame rate is %s.', 'blog2social'), sanitize_text_field($reelSupport['reel_aspect_ratio']))));
+                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                        // translators: %s is framerate
+                                        __('Your video frame rate is too low. The minimum frame rate is %s.', 'blog2social'), sanitize_text_field($reelSupport['reel_aspect_ratio']))));
                                 }
 
                                 if(strtolower($video_meta['fileformat'])){
                                     if($this->getAspectRatio($returnRotate['resolution_x'], $returnRotate['resolution_y']) != $reelSupport['reel_aspect_ratio']) {
-                                        return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Your video does not have the correct %s aspect ratio.', 'blog2social'), sanitize_text_field($reelSupport['reel_aspect_ratio']))));
+                                        return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                            // translators: %s is aspect ratio
+                                            __('Your video does not have the correct %s aspect ratio.', 'blog2social'), sanitize_text_field($reelSupport['reel_aspect_ratio']))));
                                     }
                                 }
                                 if($returnRotate['resolution_x'] < $reelSupport['reel_min_resolution_x'] || $returnRotate['resolution_y'] < $reelSupport['reel_min_resolution_y']) {
-                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(__('Your video resolution is too low. The minimum resolution for this network is %s x %s (%sp).', 'blog2social'), sanitize_text_field($reelSupport['reel_min_resolution_x']), sanitize_text_field($reelSupport['reel_min_resolution_y']), sanitize_text_field($reelSupport['reel_min_resolution_x']))));
+                                    return array('result' => true, 'canReel' => array('result' => false, 'content' => sprintf(
+                                        // translators: %s is pixel widsh %s is pixel height
+                                        __('Your video resolution is too low. The minimum resolution for this network is %1$s x %2$s (%3$s).', 'blog2social'), sanitize_text_field($reelSupport['reel_min_resolution_x']), sanitize_text_field($reelSupport['reel_min_resolution_y']), sanitize_text_field($reelSupport['reel_min_resolution_x']))));
                                 }
 
                                 return array('result' => true, 'canReel' => array('result' => true));

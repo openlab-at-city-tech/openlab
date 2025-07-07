@@ -6,9 +6,9 @@ require_once (B2S_PLUGIN_DIR . 'includes/PRG/Post/Item.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 /* Sort */
 $currentPage = isset($_GET['b2sPage']) ? (int) $_GET['b2sPage'] : 1;
-$prgSortPostType = isset($_GET['prgSortPostType']) ? trim(sanitize_text_field($_GET['prgSortPostType'])) : "";
+$prgSortPostType = isset($_GET['prgSortPostType']) ? trim(sanitize_text_field(wp_unslash($_GET['prgSortPostType']))) : "";
 $prgSortPostStatus = isset($_GET['prgSortPostStatus']) ? (in_array(trim($_GET['prgSortPostStatus']), array('publish', 'future', 'pending')) ? trim(sanitize_text_field(wp_unslash($_GET['prgSortPostStatus']))) : "") : "";
-$prgSortPostTitle = isset($_GET['prgSortPostTitle']) ? trim(sanitize_text_field($_GET['prgSortPostTitle'])) : "";
+$prgSortPostTitle = isset($_GET['prgSortPostTitle']) ? trim(sanitize_text_field(wp_unslash($_GET['prgSortPostTitle']))) : "";
 $prgSortPostAuthor = isset($_GET['prgSortPostAuthor']) ? (int) $_GET['prgSortPostAuthor'] : 0;
 $prgUserLang = strtolower(substr(get_locale(), 0, 2));
 ?>

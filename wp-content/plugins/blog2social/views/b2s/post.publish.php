@@ -4,7 +4,8 @@ wp_nonce_field('b2s_security_nonce', 'b2s_security_nonce');
 require_once (B2S_PLUGIN_DIR . 'includes/B2S/Post/Filter.php');
 require_once (B2S_PLUGIN_DIR . 'includes/Util.php');
 require_once(B2S_PLUGIN_DIR . 'includes/Options.php');
-$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim(sanitize_text_field($_GET['b2sShowByDate']))) ? trim(sanitize_text_field(wp_unslash($_GET['b2sShowByDate']))) : "") : ""; //YYYY-mm-dd
+// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+$b2sShowByDate = isset($_GET['b2sShowByDate']) ? (preg_match("#^[0-9\-.\]]+$#", trim(sanitize_text_field(wp_unslash($_GET['b2sShowByDate'])))) ? trim(sanitize_text_field(wp_unslash(wp_unslash($_GET['b2sShowByDate'])))) : "") : ""; //YYYY-mm-dd
 $options = new B2S_Options((int) B2S_PLUGIN_BLOG_USER_ID);
 $optionPostFilters = $options->_getOption('post_filters');
 $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostFilters['postsPerPage'] > 0) ? (int) $optionPostFilters['postsPerPage'] : 25;

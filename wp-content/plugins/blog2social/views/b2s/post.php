@@ -19,7 +19,7 @@ $postsPerPage = (isset($optionPostFilters['postsPerPage']) && (int) $optionPostF
             $onboardingPaused = 0;
         }
         ?>
-        <input type="hidden" id="b2s-toastee-paused" value='<?php esc_attr_e($onboardingPaused) ?>'>
+        <input type="hidden" id="b2s-toastee-paused" value='<?php echo esc_attr($onboardingPaused, "blog2social") ?>'>
         <div id="b2s-onboarding-toastee">
             <div id="b2s-onboarding-toastee-inner">
                 <h3 class="b2s-onboarding-toastee-title"><?php esc_html_e("Blog2Social Tour", "blog2social") ?>

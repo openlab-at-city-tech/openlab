@@ -196,9 +196,16 @@ if ($optionUserTimeFormat == false) {
                                 <div class="tab-pane" id="b2s-times">
                                     <p><?php esc_html_e('Use the pre-defined best time settings or define your own best time settings for sharing  your posts . Posting at the right time can be essential to make sure your content is most likely be seen.', 'blog2social') ?></p>
                                     <br>
-                                    <p><?php echo sprintf(__('You will find more information about the pre-defined best time settings by Blog2Social in this <a href="%s" target="_blank">best time guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('besttimes_blogpost'))); ?></p>
+                                    <p><?php echo wp_kses(sprintf(
+                                        // translators: %s is a link
+                                        __('You will find more information about the pre-defined best time settings by Blog2Social in this <a href="%s" target="_blank">best time guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('besttimes_blogpost'))),
+                                        array('a' => array('href' => array(), 'target' => array()))); ?></p>
                                     <br>
-                                    <p><?php echo sprintf(__('An instruction on how to define your own best times is explained in the guide "<a href="%s" target="_blank">How do I set my own time setting to post on social media?</a>".', 'blog2social'), esc_url(B2S_Tools::getSupportLink('besttimes_faq'))); ?></p>
+                                    <p><?php echo wp_kses(sprintf(
+                                        // translators: %s is a link
+                                        __('An instruction on how to define your own best times is explained in the guide "<a href="%s" target="_blank">How do I set my own time setting to post on social media?</a>".', 'blog2social'), esc_url(B2S_Tools::getSupportLink('besttimes_faq'))),
+                                        array('a' => array('href' => array(), 'target' => array())));
+                                    ?></p>
                                     <br>
                                     <a href="admin.php?page=blog2social-network" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-time"></i> <?php esc_html_e('Check, edit or define your social media time settings', 'blog2social') ?></a>
                                 </div>
@@ -213,7 +220,11 @@ if ($optionUserTimeFormat == false) {
                                         <li class="list-group-item"><?php esc_html_e('Author: The author of the post.', 'blog2social') ?></li>
                                         <li class="list-group-item"><?php esc_html_e('Price: The price of your product, if you have installed WooCommerce on your website/ blog.', 'blog2social') ?></li>
                                     </ul>
-                                    <p><?php echo sprintf(__('You will find more information on how to use post templates for your social media posts in this <a href="%s" target="_blank">post template guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('template_faq'))); ?></p>
+                                    <p><?php echo wp_kses(sprintf(
+                                        // translators: %s is a link
+                                        __('You will find more information on how to use post templates for your social media posts in this <a href="%s" target="_blank">post template guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('template_faq'))),
+                                        array('a' => array('href' => array(), 'target' => array())));
+                                    ?></p>
                                     <br>
                                     <a href="admin.php?page=blog2social-network" class="btn btn-sm btn-primary"><i class="glyphicon glyphicon-pencil"></i> <?php esc_html_e('Define your post templates for each social media network', 'blog2social') ?></a>
                                 </div>
@@ -234,7 +245,7 @@ if ($optionUserTimeFormat == false) {
 <input type="hidden" id="b2sLang" value="<?php echo esc_attr(substr(B2S_LANGUAGE, 0, 2)); ?>">
 <input type="hidden" id="b2sUserTimeFormat" value="<?php echo esc_attr($optionUserTimeFormat); ?>">
 <input type="hidden" id="b2sUserLang" value="<?php echo esc_attr(strtolower(substr(get_locale(), 0, 2))); ?>">
-<input type="hidden" id="b2sShowSection" value="<?php echo (isset($_GET['show']) ? esc_attr(sanitize_text_field($_GET['show'])) : ''); ?>">
+<input type="hidden" id="b2sShowSection" value="<?php echo (isset($_GET['show']) ? esc_attr(sanitize_text_field(wp_unslash($_GET['show']))) : ''); ?>">
 <input type="hidden" id="b2s_wp_media_headline" value="<?php esc_html_e('Select or upload an image from media gallery', 'blog2social') ?>">
 <input type="hidden" id="b2s_wp_media_btn" value="<?php esc_html_e('Use image', 'blog2social') ?>">
 <input type="hidden" id="b2s_user_version" value="<?php echo esc_attr(B2S_PLUGIN_USER_VERSION) ?>">
@@ -249,7 +260,10 @@ if ($optionUserTimeFormat == false) {
                 <h4 class="modal-title"><?php esc_html_e('Allow shortcodes in my social media posts (e.g. Page Builder)', 'blog2social') ?></h4>
             </div>
             <div class="modal-body">
-                <?php echo sprintf(__('Some WordPress plugins use short codes, e.g. Page Builder plugins. When a shortcode is inserted in a WordPress post or WordPress page, WordPress calls the function that is included in the shortcode and performs the corresponding actions as soon as you publish your post on your Wordpress website. If you like Blog2Social to consider shortcodes when posting to social media and automatically insert the defined content in your social media post, activate this feature. You will find more information about the function of shortcodes and which plugins are supported by Blog2Social in the following <a href="%s" target="_blank">shortcode guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('allow_shortcodes'))); ?>
+                <?php echo wp_kses(sprintf(
+                    // translators: %s is a link
+                    __('Some WordPress plugins use short codes, e.g. Page Builder plugins. When a shortcode is inserted in a WordPress post or WordPress page, WordPress calls the function that is included in the shortcode and performs the corresponding actions as soon as you publish your post on your Wordpress website. If you like Blog2Social to consider shortcodes when posting to social media and automatically insert the defined content in your social media post, activate this feature. You will find more information about the function of shortcodes and which plugins are supported by Blog2Social in the following <a href="%s" target="_blank">shortcode guide</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('allow_shortcodes'))),
+                    array('a' => array('href' => array(), 'target' => array()))); ?>
             </div>
         </div>
     </div>
@@ -290,7 +304,10 @@ if ($optionUserTimeFormat == false) {
                 <br><br>
                 <?php esc_html_e('If you collaborate with multiple users, be sure every user is aware of how to avoid any issues with permalinks.', 'blog2social');?>
                 <br><br>
-                <?php echo sprintf(__('<a href="%s" target="_blank">Learn more about it here.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('custom_permalinks')));
+                <?php echo wp_kses(sprintf(
+                    // translators: %s is a link
+                    __('<a href="%s" target="_blank">Learn more about it here.</a>', 'blog2social'), esc_url(B2S_Tools::getSupportLink('custom_permalinks'))),
+                    array('a' => array('href' => array(), 'target' => array())));
                 ?>
             </div>
         </div>
@@ -317,7 +334,11 @@ if ($optionUserTimeFormat == false) {
                 <br><br>
                 <a target="_blank" href="<?php echo esc_url(B2S_Tools::getSupportLink('affiliate')); ?>" class="btn btn-success center-block"><?php esc_html_e('Upgrade to PRO and above', 'blog2social') ?></a>
                 <br>
-                <center> <?php echo sprintf(__('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')); ?> </center>
+                <center> <?php echo wp_kses(sprintf(
+                    // translators: %s is a link
+                    __('or <a target="_blank" href="%s">start with free 30-days-trial of Blog2Social Premium</a> (no payment information needed)', 'blog2social'), esc_url('https://service.blog2social.com/trial')),
+                    array('a' => array('href' => array(), 'target' => array())));
+                    ?> </center>
             </div>
         </div>
     </div>

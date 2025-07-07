@@ -32,6 +32,7 @@ class B2S_Hook_Filter {
             return $wp_images;
         } catch (Exception $ex) {
             if (function_exists('error_log')) {
+                // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
                 error_log('Blog2Social Wordpress Plugin Hook Filter FKT get_wp_post_image failed - Message: ' . $ex->getMessage());
             }
             return false;

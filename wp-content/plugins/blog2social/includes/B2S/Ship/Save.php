@@ -149,9 +149,9 @@ class B2S_Ship_Save {
                     }
 
                     $sendTime = strtotime($date . ' ' . $schedData['time'][$key]);
-                    $shipdays[] = array('sched_details_id' => $schedDetailsId, 'sched_date' => date('Y-m-d H:i:00', $sendTime), 'sched_date_utc' => date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($date . ' ' . $schedData['time'][$key], $data['user_timezone'] * (-1)))));
+                    $shipdays[] = array('sched_details_id' => $schedDetailsId, 'sched_date' =>  wp_date('Y-m-d H:i:00', $sendTime, new DateTimeZone(date_default_timezone_get())), 'sched_date_utc' =>  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($date . ' ' . $schedData['time'][$key], $data['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get())));
                     if (isset($schedData['saveSetting']) && $schedData['saveSetting'] !== false) {
-                        $this->saveUserTimeSettings(date('H:i', $sendTime), $data['network_auth_id']);
+                        $this->saveUserTimeSettings( wp_date('H:i', $sendTime, new DateTimeZone(date_default_timezone_get())), $data['network_auth_id']);
                     }
                 }
             }
@@ -331,8 +331,8 @@ class B2S_Ship_Save {
                         $printDelayDates = array();
                         if (empty($errorCode) && isset($v['relay_data']) && !empty($v['relay_data']) && is_array($v['relay_data']) && isset($v['relay_data']['auth']) && isset($v['relay_data']['delay'])) {
                             $userTimeZone = (isset($this->postData['user_timezone'])) ? $this->postData['user_timezone'] : 0;
-                            $sched_date = date('Y-m-d H:i:00', current_time('timestamp'));
-                            $sched_date_utc = date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date, $userTimeZone * (-1))));
+                            $sched_date =  wp_date('Y-m-d H:i:00', current_time('timestamp'), new DateTimeZone(date_default_timezone_get()));
+                            $sched_date_utc =  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date, $userTimeZone * (-1))),new DateTimeZone(date_default_timezone_get()) );
                             $schedData = array('user_timezone' => $userTimeZone, 'sched_date' => $sched_date, 'sched_date_utc' => $sched_date_utc, 'post_id' => $this->postData['post_id'], 'blog_user_id' => $this->postData['blog_user_id']);
                             $printDelayDates = $this->saveRelayDetails((int) $v['internal_post_id'], $v['relay_data'], $schedData);
                             if (!$quickShare) {
@@ -371,8 +371,8 @@ class B2S_Ship_Save {
                         $requestSuccess = true;
                     }
                     if ($insertInsights && isset($post->external_post_id) && !empty($post->external_post_id) && isset($post->insights) && !empty($post->insights)) {
-                        $sql = "SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE network_auth_id = %d";
-                        $postsNetworkDetailsId = $wpdb->get_results($wpdb->prepare($sql, $post->network_auth_id), ARRAY_A);
+
+                        $postsNetworkDetailsId = $wpdb->get_results($wpdb->prepare("SELECT id FROM {$wpdb->prefix}b2s_posts_network_details WHERE network_auth_id = %d", $post->network_auth_id), ARRAY_A);
                         if (isset($postsNetworkDetailsId[0]['id']) && (int) $postsNetworkDetailsId[0]['id'] > 0) {
                             $insightData = array(
                                 'network_post_id' => $post->external_post_id,
@@ -380,7 +380,7 @@ class B2S_Ship_Save {
                                 'blog_user_id' => B2S_PLUGIN_BLOG_USER_ID,
                                 'b2s_posts_id' => (int) $post->internal_post_id,
                                 'b2s_posts_network_details_id' => (int) $postsNetworkDetailsId[0]['id'],
-                                'last_update' => date('Y-m-d H:i:s'),
+                                'last_update' =>  wp_date('Y-m-d H:i:s', null, new DateTimeZone(date_default_timezone_get())),
                                 'active' => 1
                             );
                             $wpdb->insert($wpdb->prefix . 'b2s_posts_insights', $insightData, array('%s', '%s', '%d', '%d', '%d', '%s', '%d'));
@@ -402,11 +402,10 @@ class B2S_Ship_Save {
 
         if (!isset($post->error_code) || $post->error_code == "") {
             if (isset($this->postData['post_id']) && (int) $this->postData['post_id'] > 0 && isset($v['network_auth_id']) && (int) $v['network_auth_id'] > 0) {
-                $prepare = $wpdb->prepare(
+                $wpdb->query($wpdb->prepare(
                         "UPDATE {$wpdb->prefix}b2s_posts LEFT JOIN {$wpdb->prefix}b2s_posts_network_details ON {$wpdb->prefix}b2s_posts.network_details_id={$wpdb->prefix}b2s_posts_network_details.id SET {$wpdb->prefix}b2s_posts.hide = 1 WHERE {$wpdb->prefix}b2s_posts.post_id = %d AND {$wpdb->prefix}b2s_posts_network_details.network_auth_id = %d AND {$wpdb->prefix}b2s_posts.publish_error_code != ''",
                         array($this->postData['post_id'], $v['network_auth_id'])
-                );
-                $wpdb->query($prepare);
+                ));
             }
         }
 
@@ -430,8 +429,8 @@ class B2S_Ship_Save {
                 if (isset($relayData['delay'][$key]) && !empty($relayData['delay'][$key])) {
                     $networkDetailsId = $this->lookupNetworkDetailsId($auth);
                     if ($networkDetailsId > 0) {
-                        $sched_date = date('Y-m-d H:i:s', strtotime("+" . $relayData['delay'][$key] . " minutes", strtotime($schedData['sched_date'])));
-                        $sched_date_utc = date('Y-m-d H:i:s', strtotime("+" . $relayData['delay'][$key] . " minutes", strtotime($schedData['sched_date_utc'])));
+                        $sched_date =  wp_date('Y-m-d H:i:s', strtotime("+" . $relayData['delay'][$key] . " minutes", strtotime($schedData['sched_date'])), new DateTimeZone(date_default_timezone_get()));
+                        $sched_date_utc =  wp_date('Y-m-d H:i:s', strtotime("+" . $relayData['delay'][$key] . " minutes", strtotime($schedData['sched_date_utc'])), new DateTimeZone(date_default_timezone_get()));
 
                         $wpdb->insert($wpdb->prefix . 'b2s_posts', array(
                             'post_id' => $schedData['post_id'],
@@ -547,10 +546,10 @@ class B2S_Ship_Save {
                     }
 
                     $sendTime = strtotime($date . ' ' . $schedData['time'][$key]);
-                    $shipdays[] = array('sched_details_id' => $schedDetailsId, 'sched_date' => date('Y-m-d H:i:00', $sendTime), 'sched_date_utc' => date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($date . ' ' . $schedData['time'][$key], $schedData['user_timezone'] * (-1)))));
-                    $printSchedDate[] = array('date' => date('Y-m-d H:i:s', $sendTime));
+                    $shipdays[] = array('sched_details_id' => $schedDetailsId, 'sched_date' =>  wp_date('Y-m-d H:i:00', $sendTime, new DateTimeZone(date_default_timezone_get())), 'sched_date_utc' =>  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($date . ' ' . $schedData['time'][$key], $schedData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get())));
+                    $printSchedDate[] = array('date' =>  wp_date('Y-m-d H:i:s', $sendTime, new DateTimeZone(date_default_timezone_get())));
                     if ($schedData['saveSetting']) {
-                        $this->saveUserTimeSettings(date('H:i', $sendTime), $data['network_auth_id']);
+                        $this->saveUserTimeSettings( wp_date('H:i', $sendTime, new DateTimeZone(date_default_timezone_get())), $data['network_auth_id']);
                     }
                 }
             }
@@ -570,7 +569,7 @@ class B2S_Ship_Save {
                             if (isset($schedData[$dayName][$cycle]) && $schedData[$dayName][$cycle] == 1) {
                                 for ($weeks = 1; $weeks <= $schedData['weeks'][$cycle]; $weeks++) {
                                     $startTime = (isset($schedData['date'][$cycle]) && isset($schedData['time'][$cycle])) ? $schedData['date'][$cycle] : $data['publish_date'];
-                                    $startDay = date('N', strtotime($startTime));
+                                    $startDay =  wp_date('N', strtotime($startTime), new DateTimeZone(date_default_timezone_get()));
                                     $maxDaysSched = $schedData['weeks'][$cycle] * 7 + $startDay;
                                     if ($dayNumber < $startDay) {
                                         if ($schedData['weeks'][$cycle] == 1) {
@@ -584,9 +583,9 @@ class B2S_Ship_Save {
                                         $sendDay = $dayNumber - $startDay + (7 * ($weeks - 1));
                                     }
                                     if ($schedData['weeks'][$cycle] == 1 || $sendDay <= $maxDaysSched) {
-                                        $schedTime = date('Y-m-d', strtotime("+$sendDay days", strtotime($startTime)));
-                                        $tempSchedDateTime = date('Y-m-d H:i:00', strtotime($schedTime . ' ' . $schedData['time'][$cycle]));
-                                        $sched_date_utc = date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($tempSchedDateTime, $schedData['user_timezone'] * (-1))));
+                                        $schedTime =  wp_date('Y-m-d', strtotime("+$sendDay days", strtotime($startTime)), new DateTimeZone(date_default_timezone_get()));
+                                        $tempSchedDateTime =  wp_date('Y-m-d H:i:00', strtotime($schedTime . ' ' . $schedData['time'][$cycle]), new DateTimeZone(date_default_timezone_get()));
+                                        $sched_date_utc =  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($tempSchedDateTime, $schedData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                                         if ($tempSchedDateTime >= $data['publish_date']) {
                                             $shipdays[] = array('sched_date' => $tempSchedDateTime, 'sched_date_utc' => $sched_date_utc, 'sched_details_id' => $schedDetailsId);
                                             $printSchedDate[] = array('date' => $tempSchedDateTime);
@@ -602,8 +601,8 @@ class B2S_Ship_Save {
                             $result = $this->createMonthlyIntervalDates($schedData['duration_month'][$cycle], $schedData['select_day'][$cycle], $schedData['date'][$cycle], $schedData['time'][$cycle]);
                             if (is_array($result) && !empty($result)) {
                                 foreach ($result as $key => $date) { //Y-m-d none utc
-                                    $sched_date_time = date('Y-m-d H:i:00', strtotime($date . ' ' . $schedData['time'][$cycle]));
-                                    $sched_date_time_utc = date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date_time, $schedData['user_timezone'] * (-1))));
+                                    $sched_date_time =  wp_date('Y-m-d H:i:00', strtotime($date . ' ' . $schedData['time'][$cycle]), new DateTimeZone(date_default_timezone_get()));
+                                    $sched_date_time_utc =  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date_time, $schedData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                                     $shipdays[] = array('sched_date' => $sched_date_time, 'sched_date_utc' => $sched_date_time_utc, 'sched_details_id' => $schedDetailsId);
                                     $printSchedDate[] = array('date' => $sched_date_time);
                                 }
@@ -616,8 +615,8 @@ class B2S_Ship_Save {
                             $result = $this->createCustomIntervalDates($schedData['duration_time'][$cycle], $schedData['select_timespan'][$cycle], $schedData['date'][$cycle]);
                             if (is_array($result) && !empty($result)) {
                                 foreach ($result as $key => $date) { //Y-m-d none utc
-                                    $sched_date_time = date('Y-m-d H:i:00', strtotime($date . ' ' . $schedData['time'][$cycle]));
-                                    $sched_date_time_utc = date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date_time, $schedData['user_timezone'] * (-1))));
+                                    $sched_date_time =  wp_date('Y-m-d H:i:00', strtotime($date . ' ' . $schedData['time'][$cycle]), new DateTimeZone(date_default_timezone_get()));
+                                    $sched_date_time_utc =  wp_date('Y-m-d H:i:00', strtotime(B2S_Util::getUTCForDate($sched_date_time, $schedData['user_timezone'] * (-1))), new DateTimeZone(date_default_timezone_get()));
                                     $shipdays[] = array('sched_date' => $sched_date_time, 'sched_date_utc' => $sched_date_time_utc, 'sched_details_id' => $schedDetailsId);
                                     $printSchedDate[] = array('date' => $sched_date_time);
                                 }
@@ -699,7 +698,7 @@ class B2S_Ship_Save {
                 $html .= '</div>';
             }
         }
-        $approveLink = '<a href="#" class="btn btn-primary" onclick="wopApprove(\'' . esc_attr($data['network_auth_id']) . '\',\'' . esc_attr((($data['network_id'] == 10) ? $data['internal_post_id'] : 0)) . '\',\'' . B2S_PLUGIN_API_ENDPOINT . 'instant/share.php?data=' . B2S_Util::urlsafe_base64_encode(json_encode($data)) . '\', \'Blog2Social\'); return false;" target="_blank"><i class="glyphicon glyphicon-share"></i> ' . esc_html__('share', 'blog2social') . '</a>';
+        $approveLink = '<a href="#" class="btn btn-primary" onclick="wopApprove(\'' . esc_attr($data['network_auth_id']) . '\',\'' . esc_attr((($data['network_id'] == 10) ? $data['internal_post_id'] : 0)) . '\',\'' . B2S_PLUGIN_API_ENDPOINT_INSTANT_SHARE . '?data=' . B2S_Util::urlsafe_base64_encode(json_encode($data)) . '\', \'Blog2Social\'); return false;" target="_blank"><i class="glyphicon glyphicon-share"></i> ' . esc_html__('share', 'blog2social') . '</a>';
         $html .= '<span class="text-warning">' . $approveLink . ' (' . esc_html__('Please share your post now', 'blog2social') . ')</span><br>';
         return $html;
     }
@@ -719,11 +718,15 @@ class B2S_Ship_Save {
                         }
                     }
                 } else {
-                    if (!isset($schedDate) || empty($schedDate)) {
+                    if ($network_id == 36) { // mobile approvement
+                        $html .= '<br><div class="alert alert-warning"><b>' . esc_html__('Your image will be uploaded. If TikTok has successfully processed your image, you can unlock it in your TikTok app.', 'blog2social') . '</b> (<a href="' . esc_url(B2S_Tools::getSupportLink('video_sharing_tiktok')) . '" target="_blank">' . esc_html__('Learn how it works', 'blog2social') . '</a>)</div>';
+                    }
+                    else if (!isset($schedDate) || empty($schedDate)) {
                         $html .= '<br><span class="text-success"><i class="glyphicon glyphicon-ok-circle"></i> ' . esc_html__('published', 'blog2social');
                         $html .= !empty($link) ? ': <a href="' . esc_url($link) . '" target="_blank">' . esc_html__('view social media post', 'blog2social') . '</a>' : '';
+                        $html .= '</span>';
                     }
-                    $html .= '</span>';
+                   
                 }
             }
             if (is_array($schedDate) && !empty($schedDate)) {
@@ -752,7 +755,9 @@ class B2S_Ship_Save {
             }
 
             if ($network_id == 12 && $error == 'DEFAULT') {
-                $networkError12 = sprintf(__('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_error_business')));
+                $networkError12 = sprintf(
+                    // translators: %s is a link
+                    __('Your post could not be posted. More information in this <a href="%s" target="_blank">Instagram troubleshoot checklist</a>.', 'blog2social'), esc_url(B2S_Tools::getSupportLink('instagram_error_business')));
                 $html .= '<br><span class="text-danger"><i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $networkError12 . $add . '</span>';
             } else {
                 $html .= '<br><span class="text-danger"><i class="glyphicon glyphicon-remove-circle glyphicon-danger"></i> ' . $errorText[$error] . $add . '</span>';
@@ -795,18 +800,18 @@ class B2S_Ship_Save {
         $startDateTime = strtotime($date . ' ' . $time);
         $allowEndofMonth = ((int) $select_day == 0) ? true : false;
         $select_day = $allowEndofMonth ? 31 : sprintf("%02d", $select_day);
-        $selectDateTime = strtotime(date('Y-m', $startDateTime) . '-' . $select_day . ' ' . $time);
+        $selectDateTime = strtotime( wp_date('Y-m', $startDateTime, new DateTimeZone(date_default_timezone_get())) . '-' . $select_day . ' ' . $time);
 
         $addMonth = ($selectDateTime < $startDateTime) ? 1 : 0;
 
         for ($i = 1; $i <= $duration_month; $i++) {
-            $cDate = date('Y-m', strtotime(date('Y-m', $startDateTime) . " +" . $addMonth . " month"));
-            if (checkdate((int) date('m', strtotime($cDate)), (int) $select_day, (int) date('Y', strtotime($cDate)))) {
+            $cDate =  wp_date('Y-m', strtotime( wp_date('Y-m', $startDateTime, new DateTimeZone(date_default_timezone_get())) . " +" . $addMonth . " month"), new DateTimeZone(date_default_timezone_get()));
+            if (checkdate((int)  wp_date('m', strtotime($cDate), new DateTimeZone(date_default_timezone_get())), (int) $select_day, (int)  wp_date('Y', strtotime($cDate), new DateTimeZone(date_default_timezone_get())))) {
                 $dates[] = $cDate . "-" . $select_day;
             } else {
                 //set last day of month
                 if ($allowEndofMonth) {
-                    $dates[] = date("Y-m-t", strtotime($cDate . "-01"));
+                    $dates[] =  wp_date("Y-m-t", strtotime($cDate . "-01"), new DateTimeZone(date_default_timezone_get()));
                 }
             }
             $addMonth++;
@@ -817,10 +822,10 @@ class B2S_Ship_Save {
     //own period
     public function createCustomIntervalDates($duration_time = 0, $select_timespan = 0, $date = "") {
         $dates = array();
-        $dates[] = date('Y-m-d', strtotime($date));  //add start date
+        $dates[] =  wp_date('Y-m-d', strtotime($date), new DateTimeZone(date_default_timezone_get()));  //add start date
         $cTimespan = $select_timespan;
         for ($i = 1; $i < $duration_time; $i++) {
-            $dates[] = date('Y-m-d', strtotime($date . " +" . $cTimespan . " day"));
+            $dates[] =  wp_date('Y-m-d', strtotime($date . " +" . $cTimespan . " day"), new DateTimeZone(date_default_timezone_get()));
             $cTimespan += $select_timespan;
         }
         return $dates;
