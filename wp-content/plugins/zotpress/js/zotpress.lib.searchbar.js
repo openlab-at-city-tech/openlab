@@ -130,6 +130,7 @@ jQuery(document).ready(function()
 			.autocomplete({
 				source: zpSearchBarSource+zpSearchBarParams,
 				minLength: jQuery(".ZOTPRESS_AC_MINLENGTH").val(),
+				delay: 1000,
 				focus: function() {
 					// prevent value inserted on focus
 					return false;
@@ -145,49 +146,67 @@ jQuery(document).ready(function()
 				},
 				search: function( event, ui )
 				{
-					// Don't search if the term doesn't change
+					console.log('zp: autocomplete search starts');
+
 					var tempCurrentTerm = jQuery(this).val();
 
-					if ( event.hasOwnProperty('currentTarget') ) 
+					if ( event.hasOwnProperty('currentTarget') )
 						tempCurrentTerm = event.currentTarget.value;
 
-					console.log('zp: autocomplete search starts');
+					console.log('tempCurrentTerm', tempCurrentTerm, 'zpLastTerm', zpLastTerm);
 					//  for', tempCurrentTerm, zpSearchBarParams);
 					
-					// TODO: Is this BROKEN!??
-					// Check if update needed:
-					jQuery.ajax({
-						// url: zpShortcodeAJAX.ajaxurl,
-						url: zpSearchBarSource+zpSearchBarParams+"&term="+tempCurrentTerm,
-						ifModified: true,
-						xhrFields: {
-							withCredentials: true
-						},
-						success: function(data)
-						{
-							var zp_items = jQuery.parseJSON( data );
-			
-							if ( zp_items.updateneeded )
-								zpUpdateNeeded = zp_items.updateneeded;
-						
-							console.log('zp: calling zp_get_items with update check?', 'always');
-							console.log('zp: is an update needed?', zpUpdateNeeded);			
-						},
-						error: function(errorThrown)
-						{
-							console.log("zp: Zotpress via WP AJAX Error: ", errorThrown);
-						}
-					});
-
-
+					// Don't search if the term doesn't change
 					// Reset item numbering
 					zpItemNum = 1;
-					console.log(tempCurrentTerm, tempCurrentTerm, zpLastTerm);
 
 					if ( zpItemsFlag == true
 							|| ( tempCurrentTerm && tempCurrentTerm != zpLastTerm ) )
 					{
 						console.log('zp: show loading for new query');
+
+						// TODO: Is this BROKEN!??
+						// Check if update needed:
+						if ( zpItemsFlag == true ) {
+
+							jQuery.ajax({
+								// url: zpShortcodeAJAX.ajaxurl,
+								url: zpSearchBarSource+zpSearchBarParams+"&term="+tempCurrentTerm,
+								ifModified: true,
+								xhrFields: {
+									withCredentials: true
+								},
+								success: function(data)
+								{
+									var zp_items = jQuery.parseJSON( data );
+																		
+									// 7.4: Major change to passing and parsing bib HTML
+									jQuery.each( zp_items.data, function (i, ic) {
+										var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+										zp_items.data[i].bib = ic_decode.documentElement.textContent;
+									});
+
+									if ( zp_items.updateneeded )
+										zpUpdateNeeded = zp_items.updateneeded;
+								
+									console.log('zp: calling zp_get_items with update check?', 'always');
+									console.log('zp: is an update needed?', zpUpdateNeeded);			
+								},
+								error: function(errorThrown)
+								{
+									console.log("zp: Zotpress via WP AJAX Error: ", errorThrown);
+								}
+							});
+
+						} // Check for update
+
+					// // Reset item numbering
+					// zpItemNum = 1;
+
+					// if ( zpItemsFlag == true
+					// 		|| ( tempCurrentTerm && tempCurrentTerm != zpLastTerm ) )
+					// {
+					// 	console.log('zp: show loading for new query');
 
 						// 7.3.9: Reset this flag
 						zpItemsFlag = true;
@@ -247,6 +266,12 @@ jQuery(document).ready(function()
 						{
 							// NEW in 7.3.6: Why is it [4] instead of [3] now?
 							var zp_items = ui.content[4];
+
+							// 7.4: Major change to passing and parsing bib HTML
+							jQuery.each( zp_items, function (i, ic) {
+								var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+								zp_items[i].bib = ic_decode.documentElement.textContent;
+							});
 		
 							zp_totalItems += zp_items.length;
 							// if ( update ) console.log("zp: running update for items:",zp_totalItems,"->",zp_items.length);
@@ -372,6 +397,9 @@ jQuery(document).ready(function()
 
 	function zp_format_intext_results(zp_items, zpShowTags, zpItemNum)
 	{
+		// 7.3.15: Added
+		jQuery(".zpSearchResultsContainer").children(".zpSearchResultsItem").remove();
+
 		jQuery.each( zp_items, function( index, item )
 		{
 			var tempItem = "<div id='zp-Entry-"+item.key+"' class='zp-Entry zpSearchResultsItem hidden'>\n";

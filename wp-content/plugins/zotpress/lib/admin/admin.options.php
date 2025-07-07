@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 // Restrict to Editors
 if ( current_user_can('edit_others_posts') )
 {
@@ -12,7 +14,7 @@ if ( current_user_can('edit_others_posts') )
 
 			<div id="zp-Options-Wrapper">
 
-				<h3><?php _e('Options','zotpress'); ?></h3>
+				<h3><?php esc_html_e('Options','zotpress'); ?></h3>
 
 				<?php include(__DIR__ . '/admin.options.form.php'); ?>
 
@@ -24,9 +26,9 @@ if ( current_user_can('edit_others_posts') )
 				<div class="zp-Column-1">
 					<div class="zp-Column-Inner">
 
-						<h4><?php _e('Set Reference Widget','zotpress'); ?></h4>
+						<h4><?php esc_html_e('Set Reference Widget','zotpress'); ?></h4>
 
-						<p class="note"><?php _e('Enable or disable the Zotpress Reference widget for specific post types.','zotpress'); ?></p>
+						<p class="note"><?php esc_html_e('Enable or disable the Zotpress Reference widget for specific post types.','zotpress'); ?></p>
 
 						<div id="zp-Zotpress-Options-CPT" class="zp-Zotpress-Options">
 
@@ -43,20 +45,20 @@ if ( current_user_can('edit_others_posts') )
 							foreach ( $post_types as $post_type )
 							{
 								echo "<div class='zp-CPT-Checkbox'>";
-								echo "<input type=\"checkbox\" name=\"zp-CTP\" id=\"".$post_type."\" value=\"".$post_type."\" ";
+								echo "<input type=\"checkbox\" name=\"zp-CTP\" id=\"".esc_html($post_type)."\" value=\"".esc_html($post_type)."\" ";
 								if ( in_array( $post_type, $zp_default_cpt ) ) echo "checked ";
 								echo ">";
 								echo "<label ";
-								echo "for=\"".$post_type."\">".$post_type."</label>";
+								echo "for=\"".esc_html($post_type)."\">".esc_html($post_type)."</label>";
 								echo "</div>\n";
 							}
 
 							?></div><!-- .zp-CPT-Checkbox-Container -->
 
-							<input type="button" id="zp-Zotpress-Options-CPT-Button" class="button-secondary" value="<?php _e('Set Reference Widget','zotpress'); ?>">
+							<input type="button" id="zp-Zotpress-Options-CPT-Button" class="button-secondary" value="<?php esc_html_e('Set Reference Widget','zotpress'); ?>">
 							<div class="zp-Loading">loading</div>
-							<div class="zp-Success"><?php _e('Success','zotpress'); ?>!</div>
-							<div class="zp-Errors"><?php _e('Errors','zotpress'); ?>!</div>
+							<div class="zp-Success"><?php esc_html_e('Success','zotpress'); ?>!</div>
+							<div class="zp-Errors"><?php esc_html_e('Errors','zotpress'); ?>!</div>
 
 						</div>
 					</div>
@@ -68,16 +70,16 @@ if ( current_user_can('edit_others_posts') )
 				<div class="zp-Column-1">
 					<div class="zp-Column-Inner">
 
-						<h4><?php _e('Reset Zotpress','zotpress'); ?></h4>
+						<h4><?php esc_html_e('Reset Zotpress','zotpress'); ?></h4>
 
-						<p class="note"><?php _e('Note: This action will clear all database entries associated with Zotpress, including account information and citations&#8212;it <strong>cannot be undone</strong>. Proceed with caution.','zotpress'); ?></p>
+						<p class="note"><?php esc_html_e('Note: This action will clear all database entries associated with Zotpress, including account information and citations&#8212;it cannot be undone. Proceed with caution.', 'zotpress'); ?></p>
 
 						<div id="zp-Zotpress-Options-Reset" class="zp-Zotpress-Options">
 
-							<input type="button" id="zp-Zotpress-Options-Reset-Button" class="button-secondary" value="<?php _e('Reset Zotpress','zotpress'); ?>">
+							<input type="button" id="zp-Zotpress-Options-Reset-Button" class="button-secondary" value="<?php esc_html_e('Reset Zotpress','zotpress'); ?>">
 							<div class="zp-Loading">loading</div>
-							<div class="zp-Success"><?php _e('Success','zotpress'); ?>!</div>
-							<div class="zp-Errors"><?php _e('Errors','zotpress'); ?>!</div>
+							<div class="zp-Success"><?php esc_html_e('Success','zotpress'); ?>!</div>
+							<div class="zp-Errors"><?php esc_html_e('Errors','zotpress'); ?>!</div>
 
 						</div>
 					</div>
@@ -93,7 +95,7 @@ if ( current_user_can('edit_others_posts') )
 
 else
 {
-	echo "<p>"._e("Sorry, you don't have permission to access this page.","zotpress")."</p>";
+	echo "<p>".esc_html_e("Sorry, you don't have permission to access this page.","zotpress")."</p>";
 }
 
 ?>

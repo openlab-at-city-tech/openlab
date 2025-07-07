@@ -1,4 +1,4 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
 
 
 /**
@@ -6,19 +6,18 @@
  * We call it "Zotpress Reference."
  */
 
-
 function Zotpress_add_meta_box()
 {
     $zp_default_cpt = "post,page";
-    if (get_option("Zotpress_DefaultCPT"))
+    if ( get_option("Zotpress_DefaultCPT") )
         $zp_default_cpt = get_option("Zotpress_DefaultCPT");
     $zp_default_cpt = explode(",",$zp_default_cpt);
 
-    foreach ($zp_default_cpt as $post_type )
+    foreach ( $zp_default_cpt as $post_type )
     {
         add_meta_box(
             'ZotpressMetaBox',
-            __( 'Zotpress Reference', 'zotpress' ),
+            esc_html__( 'Zotpress Reference', 'zotpress' ),
             'ZotpressMetaBox_callback',
             $post_type,
             'side',
@@ -41,16 +40,18 @@ function Zotpress_widget_metabox_AJAX_search()
 	global $wpdb;
 
 	// Determine account based on passed account
-    if ( $_GET['api_user_id'] && is_numeric($_GET['api_user_id']))
+    if ( isset($_GET['api_user_id']) 
+			&& sanitize_text_field(wp_unslash($_GET['api_user_id'])) )
 	{
-        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$_GET['api_user_id']."'", OBJECT);
+		$api_user_id_san = sanitize_text_field(wp_unslash($_GET['api_user_id']));
+
 		$zp_account = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-				SELECT * FROM ".$wpdb->prefix."zotpress 
-				WHERE api_user_id='%s'
+				SELECT * FROM `".$wpdb->prefix."zotpress`
+				WHERE `api_user_id`=%s
 				",
-				array( $_GET['api_user_id'] )
+				array( $api_user_id_san )
 			), OBJECT
 		);
         $zp_api_user_id = $zp_account->api_user_id;
@@ -59,12 +60,12 @@ function Zotpress_widget_metabox_AJAX_search()
 	elseif ( get_option("Zotpress_DefaultAccount") )
 	{
         $zp_api_user_id = get_option("Zotpress_DefaultAccount");
-        // $zp_account = $wpdb->get_row("SELECT * FROM ".$wpdb->prefix."zotpress WHERE api_user_id='".$zp_api_user_id."'", OBJECT);
+
 		$zp_account = $wpdb->get_row(
 			$wpdb->prepare(
 				"
-				SELECT * FROM ".$wpdb->prefix."zotpress 
-				WHERE api_user_id='%s'
+				SELECT * FROM `".$wpdb->prefix."zotpress`
+				WHERE `api_user_id`=%s
 				",
 				array( $zp_api_user_id )
 			), OBJECT
@@ -89,14 +90,18 @@ function Zotpress_widget_metabox_AJAX_search()
 	$zp_import_contents = new ZotpressRequest();
 
 	// Get account
-	$zp_account = zp_get_account ($wpdb, $zp_api_user_id);
+	$zp_account = zotpress_get_account ($wpdb, $zp_api_user_id);
 
 	// Format Zotero request URL
 	// e.g., https://api.zotero.org/users/#####/items?key=###&format=json&q=###&limit=25
 	$zp_import_url = "https://api.zotero.org/".$zp_account[0]->account_type."/".$zp_account[0]->api_user_id."/items?";
-	if (!is_null($zp_account[0]->public_key) && trim($zp_account[0]->public_key) != "")
+	if ( ! is_null($zp_account[0]->public_key) 
+			&& trim($zp_account[0]->public_key) != "" )
 		$zp_import_url .= "key=".$zp_account[0]->public_key."&";
-	$zp_import_url .= "format=json&q=".urlencode($_GET['term'])."&limit=10&itemType=-attachment+||+note";
+	$zp_import_url .= "format=json";
+	if ( isset($_GET['term']) )
+		$zp_import_url .= "&q=" . urlencode(sanitize_text_field(wp_unslash($_GET['term'])));
+	$zp_import_url .= "&limit=10&itemType=-attachment+||+note";
 
 	// Read the external data
 	$zp_xml = $zp_import_contents->get_request_contents( $zp_import_url, true ); // Unsure about "true"
@@ -108,26 +113,35 @@ function Zotpress_widget_metabox_AJAX_search()
 		{
 			// Deal with author(s)
 			$author = "N/A";
-			if ( property_exists($zpResult->data, 'creators') && $zpResult->data->creators !== null )
+			if ( property_exists($zpResult->data, 'creators') 
+					&& $zpResult->data->creators !== null )
 			{
 				$author = "";
 				foreach ( $zpResult->data->creators as $i => $creator)
 				{
-					if ( property_exists($creator, 'name') && $creator->name !== null )
+					if ( property_exists($creator, 'name') 
+							&& $creator->name !== null )
 						$author .= $creator->name;
 					else
 						$author .= $creator->lastName;
 
-					if ( $i != count($zpResult->data->creators)-1 ) $author .= ', ';
+					if ( $i != count($zpResult->data->creators)-1 )
+						$author .= ', ';
 				}
 			}
 
 			// Deal with label
 			// e.g., (year). title
 			$label = " (";
-			if ( property_exists($zpResult->data, 'date') && $zpResult->data->date !== null && trim($zpResult->data->date) != "" ) $label .= $zpResult->data->date; else $label .= "n.d.";
+			if ( property_exists($zpResult->data, 'date') 
+					&& $zpResult->data->date !== null && trim($zpResult->data->date) != "" ) 
+				$label .= $zpResult->data->date; else $label .= "n.d.";
 			$label .= "). ";
-			$title = "Untitled."; if ( property_exists($zpResult->data, 'title') && $zpResult->data->title !== null && trim($zpResult->data->title) != "" ) $title = $zpResult->data->title . ".";
+			$title = "Untitled.";
+			if ( property_exists($zpResult->data, 'title') 
+					&& $zpResult->data->title !== null 
+					&& trim($zpResult->data->title) != "" )
+				$title = $zpResult->data->title . ".";
 
 			// If no author, use title
 			if ( trim($author) == "" )
@@ -145,9 +159,9 @@ function Zotpress_widget_metabox_AJAX_search()
 	unset($zp_import_url);
 	unset($zp_xml);
 
-
-	$response = json_encode($zpSearch);
-	echo $response;
+	// $response = json_encode($zpSearch);
+	$response = wp_json_encode($zpSearch);
+	echo wp_kses_post($response);
 
 	unset($zp_api_user_id);
 	unset($zp_account);
@@ -167,8 +181,8 @@ function Zotpress_zpWidgetMetabox_scripts_css($hook)
 
     if ( in_array( $hook, array('post.php', 'post-new.php') ) )
     {
-        wp_enqueue_script( 'jquery.livequery.min.js', ZOTPRESS_PLUGIN_URL . 'js/jquery.livequery.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-position', 'jquery-ui-tabs', 'jquery-ui-autocomplete' ) );
-        wp_enqueue_script( 'zotpress.widget.metabox'.$minify.'.js', ZOTPRESS_PLUGIN_URL . 'js/zotpress.widget.metabox'.$minify.'.js', array( 'jquery', 'jquery-form', 'json2' ) );
+        wp_enqueue_script( 'jquery.livequery.min.js', ZOTPRESS_PLUGIN_URL . 'js/jquery.livequery.min.js', array( 'jquery', 'jquery-ui-core', 'jquery-ui-widget', 'jquery-ui-position', 'jquery-ui-tabs', 'jquery-ui-autocomplete' ), '7.4', array('in_footer' => true ) );
+        wp_enqueue_script( 'zotpress.widget.metabox'.$minify.'.js', ZOTPRESS_PLUGIN_URL . 'js/zotpress.widget.metabox'.$minify.'.js', array( 'jquery', 'jquery-form', 'json2' ), '7.4', array('in_footer' => true ) );
 
 		wp_localize_script(
 			'zotpress.widget.metabox'.$minify.'.js',
@@ -177,10 +191,10 @@ function Zotpress_zpWidgetMetabox_scripts_css($hook)
 				'ajaxurl' => admin_url( 'admin-ajax.php' ),
 				'zpWidgetMetabox_nonce' => wp_create_nonce( 'zpWidgetMetabox_nonce_val' ),
 				'action' => 'zpWidgetMetabox-submit',
-                'txt_typetosearch' => __( 'Type to search', 'zotpress' ),
-                'txt_pages' => __( 'Page(s)', 'zotpress' ),
-                'txt_itemkey' => __( 'Item Key', 'zotpress' ),
-                'txt_account' => __( 'Account', 'zotpress' )
+                'txt_typetosearch' => esc_html__( 'Type to search', 'zotpress' ),
+                'txt_pages' => esc_html__( 'Page(s)', 'zotpress' ),
+                'txt_itemkey' => esc_html__( 'Item Key', 'zotpress' ),
+                'txt_account' => esc_html__( 'Account', 'zotpress' )
 			)
 		);
     }
@@ -197,10 +211,10 @@ function Zotpress_admin_post_styles()
     // Turn on/off minified versions if testing/live
     $minify = ''; if ( ZOTPRESS_LIVEMODE ) $minify = '.min';
 
-    wp_register_style('zotpress.metabox'.$minify.'.css', ZOTPRESS_PLUGIN_URL . 'css/zotpress.metabox'.$minify.'.css', array(), rand(111,9999), 'all');
+    wp_register_style('zotpress.metabox'.$minify.'.css', ZOTPRESS_PLUGIN_URL . 'css/zotpress.metabox'.$minify.'.css', array(), wp_rand(111, 9999), 'all');
     wp_enqueue_style('zotpress.metabox'.$minify.'.css');
 
-    wp_enqueue_style('jquery-ui-tabs', ZOTPRESS_PLUGIN_URL . 'css/smoothness/jquery-ui-1.8.11.custom'.$minify.'.css', array(), rand(111,9999), 'all');
+    wp_enqueue_style('jquery-ui-tabs', ZOTPRESS_PLUGIN_URL . 'css/smoothness/jquery-ui-1.8.11.custom'.$minify.'.css', array(), wp_rand(111, 9999), 'all');
 }
 add_action('admin_print_styles-post.php', 'Zotpress_admin_post_styles');
 add_action('admin_print_styles-post-new.php', 'Zotpress_admin_post_styles');

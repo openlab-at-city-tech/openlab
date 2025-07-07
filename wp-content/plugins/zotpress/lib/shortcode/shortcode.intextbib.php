@@ -1,4 +1,5 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
 
 /**
  * Handles the Zotpress in-text shortcode.
@@ -212,25 +213,25 @@ function Zotpress_zotpressInTextBib ($atts)
 	if ( $forcenumber ) $zp_output .= " forcenumber";
 	$zp_output .= " zp-Post-".$post->ID."'>";
 	$zp_output .= '
-		<span class="ZP_ITEM_KEY" style="display: none;">'.$item_key.'</span>
-		<span class="ZP_STYLE" style="display: none;">'.$style.'</span>
-		<span class="ZP_SORTBY" style="display: none;">'.$sortby.'</span>
-		<span class="ZP_ORDER" style="display: none;">'.$order.'</span>
-		<span class="ZP_TITLE" style="display: none;">'.$title.'</span>
-		<span class="ZP_SHOWIMAGE" style="display: none;">'.$showimage.'</span>
-		<span class="ZP_SHOWTAGS" style="display: none;">'.$showtags.'</span>
-		<span class="ZP_DOWNLOADABLE" style="display: none;">'.$downloadable.'</span>
-		<span class="ZP_NOTES" style="display: none;">'.$shownotes.'</span>
-		<span class="ZP_ABSTRACT" style="display: none;">'.$abstracts.'</span>
-		<span class="ZP_CITEABLE" style="display: none;">'.$citeable.'</span>
-		<span class="ZP_TARGET" style="display: none;">'.$target.'</span>
-		<span class="ZP_URLWRAP" style="display: none;">'.$urlwrap.'</span>
-		<span class="ZP_FORCENUM" style="display: none;">'.$forcenumber.'</span>
-		<span class="ZP_HIGHLIGHT" style="display: none;">'.$highlight.'</span>
-		<span class="ZP_POSTID" style="display: none;">'.$post->ID.'</span>';
+		<span class="ZP_ITEM_KEY ZP_ATTR">'.$item_key.'</span>
+		<span class="ZP_STYLE ZP_ATTR">'.$style.'</span>
+		<span class="ZP_SORTBY ZP_ATTR">'.$sortby.'</span>
+		<span class="ZP_ORDER ZP_ATTR">'.$order.'</span>
+		<span class="ZP_TITLE ZP_ATTR">'.$title.'</span>
+		<span class="ZP_SHOWIMAGE ZP_ATTR">'.$showimage.'</span>
+		<span class="ZP_SHOWTAGS ZP_ATTR">'.$showtags.'</span>
+		<span class="ZP_DOWNLOADABLE ZP_ATTR">'.$downloadable.'</span>
+		<span class="ZP_NOTES ZP_ATTR">'.$shownotes.'</span>
+		<span class="ZP_ABSTRACT ZP_ATTR">'.$abstracts.'</span>
+		<span class="ZP_CITEABLE ZP_ATTR">'.$citeable.'</span>
+		<span class="ZP_TARGET ZP_ATTR">'.$target.'</span>
+		<span class="ZP_URLWRAP ZP_ATTR">'.$urlwrap.'</span>
+		<span class="ZP_FORCENUM ZP_ATTR">'.$forcenumber.'</span>
+		<span class="ZP_HIGHLIGHT ZP_ATTR">'.$highlight.'</span>
+		<span class="ZP_POSTID ZP_ATTR">'.$post->ID.'</span>';
 
-        // <span class="ZP_API_USER_ID" style="display: none;">'.$api_user_id.'</span>
-		// <span class="ZOTPRESS_PLUGIN_URL" style="display:none;">'.ZOTPRESS_PLUGIN_URL.'</span>'
+        // <span class="ZP_API_USER_ID ZP_ATTR">'.$api_user_id.'</span>
+		// <span class="ZOTPRESS_PLUGIN_URL ZP_ATTR">'.ZOTPRESS_PLUGIN_URL.'</span>'
 
     // $zp_output .= "<div class='zp-List loading'></div><!-- .zp-List --></div><!--.zp-Zotpress-->\n\n";
     $zp_output .= "<div class='zp-List loading'>";

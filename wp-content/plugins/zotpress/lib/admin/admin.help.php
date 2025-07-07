@@ -1,19 +1,23 @@
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly ?>
+        
         <div id="zp-Zotpress" class="wrap">
 
             <?php include( dirname(__FILE__) . '/admin.menu.php' ); ?>
 
-            <h3><?php _e('What is Zotpress','zotpress'); ?>?</h3>
+            <h3><?php esc_html_e('What is Zotpress','zotpress'); ?>?</h3>
 
             <div class="zp-Message">
-                <h3><?php _e('About Zotpress','zotpress'); ?></h3>
+                <h3><?php esc_html_e('About Zotpress','zotpress'); ?></h3>
                 <p class="version">
-                    <strong><?php _e('Version','zotpress'); ?>:</strong> <?php _e('You\'re using','zotpress'); ?> Zotpress <?php echo ZOTPRESS_VERSION; ?><br />
-                    <strong><?php _e('Website','zotpress'); ?>:</strong> <a title="Zotpress on WordPress" rel="external" href="http://wordpress.org/plugins/zotpress/">Zotpress on WordPress.org</a><br />
-                    <strong><?php _e('Support','zotpress'); ?>:</strong> <a id="zp-Donate" title="<?php _e('Donations always appreciated! Accepted through PayPal','zotpress'); ?>" rel="external" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5HQ8FXAXS9MUQ"><?php _e('Donate through PayPal','zotpress'); ?></a>
+                    <strong><?php esc_html_e('Version','zotpress'); ?>:</strong> <?php esc_html_e('You\'re using','zotpress'); ?> Zotpress <?php echo esc_html(ZOTPRESS_VERSION); ?><br />
+                    <strong><?php esc_html_e('Website','zotpress'); ?>:</strong> <a title="Zotpress on WordPress" rel="external" href="http://wordpress.org/plugins/zotpress/">Zotpress on WordPress.org</a><br />
+                    <strong><?php esc_html_e('Support','zotpress'); ?>:</strong> <a id="zp-Donate" title="<?php esc_html_e('Donations always appreciated! Accepted through PayPal','zotpress'); ?>" rel="external" href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=5HQ8FXAXS9MUQ"><?php esc_html_e('Donate through PayPal','zotpress'); ?></a>
                 </p>
                 <p class="rate">
-                    <?php echo sprintf(
+                    <?php 
+                    echo sprintf(
                         wp_kses(
+                            /* translators: s: Zotpress URL */
                             __( 'If you like Zotpress, let the world know with a <a class="zp-FiveStar" title="Rate Zotpress" rel="external" href="%s">rating</a>!', 'zotpress' ),
                             array(
                                 'a' => array(
@@ -30,9 +34,11 @@
             </div>
 
             <p>
-                <?php echo sprintf(
+                <?php 
+                echo sprintf(
                     wp_kses(
-                        __( '<a title="More of my plugins" href="%s">Zotpress</a> bridges <a title="Zotero" href="%s">Zotero</a> and WordPress by allowing you to display items from your Zotero library through shortcodes and widgets. It also extends the basic meta functionality offered by Zotero by allowing you to add images to and provide downloadable files associated with your citations.', 'zotpress' ),
+                        /* translators: 1: Zotpress portfolio URL, 2: Zotero URL */
+                        __( '<a title="Zotpress" href="%1$s">Zotpress</a> bridges <a title="Zotero" href="%2$s">Zotero</a> and WordPress by allowing you to display items from your Zotero library through shortcodes and widgets. It also extends the basic meta functionality offered by Zotero by allowing you to add images to and provide downloadable files associated with your citations.', 'zotpress' ),
                         array(
                             'a' => array(
                                 'href' => array()
@@ -44,9 +50,11 @@
             </p>
 
             <p>
-                <?php echo sprintf(
+                <?php
+                echo sprintf(
                     wp_kses(
-                        __( 'You can use Zotpress by creating <a title="Stand-Alone Bibliography" href="%s" class="zp-Tab-Link">stand-alone bibliography</a>, applying <a title="In-Text Citations" class="zp-Tab-Link" href="%s">in-text citations</a>, displaying <a title="Library" class="zp-Tab-Link" href="%s">your library</a>, or adding <a title="Widget" href="%s">a sidebar widget</a> to your theme.', 'zotpress' ),
+                        /* translators: 1: Bibliography anchor, 2: In-text anchor, 3: Library anchor, 4: Widgets page */
+                        __( 'You can use Zotpress by creating <a title="Stand-Alone Bibliography" href="%1$s" class="zp-Tab-Link">stand-alone bibliography</a>, applying <a title="In-Text Citations" class="zp-Tab-Link" href="%2$s">in-text citations</a>, displaying <a title="Library" class="zp-Tab-Link" href="%3$s">your library</a>, or adding <a title="Widget" href="%4$s">a sidebar widget</a> to your theme.', 'zotpress' ),
                         array(
                             'a' => array(
                                 'href' => array()
@@ -58,13 +66,15 @@
             </p>
 
             <p>
-                <?php _e('You can build shortcodes and search for items in your library using the <strong>Zotpresss Reference</strong> widget on the post/page add/edit screens. Below, you can find attributes and options for each kind of Zotpress shortcode.','zotpress'); ?>
+                <?php esc_html_e('You can build shortcodes and search for items in your library using the <strong>Zotpresss Reference</strong> widget on the post/page add/edit screens. Below, you can find attributes and options for each kind of Zotpress shortcode.','zotpress'); ?>
             </p>
 
             <p>
-                <?php echo sprintf(
+                <?php 
+                echo sprintf(
                     wp_kses(
-                        __( 'Have questions? First, check the <a title="FAQ" class="zp-Tab-Link" href="%s">FAQ</a>. Then search the <a title="Zotpress Forums" href="%s">Zotpress Support Forums</a>. If you can\'t find an answer, feel free to post your question there.', 'zotpress' ),
+                        /* translators: 1: FAQ anchor, 2: Support URL */
+                        __( 'Have questions? First, check the <a title="FAQ" class="zp-Tab-Link" href="%1$s">FAQ</a>. Then search the <a title="Zotpress Forums" href="%2$s">Zotpress Support Forums</a>. If you can\'t find an answer, feel free to post your question there.', 'zotpress' ),
                         array(
                             'a' => array(
                                 'href' => array()
@@ -80,26 +90,26 @@
 			<div id="zp-Zotero-API">
 
 				<ul id="zp-Zotero-API-Menu">
-					<li><a href="#zp-Tab-Bib"><?php _e('Stand-Alone Bibliography','zotpress'); ?></a></li>
-					<li><a href="#zp-Tab-InText"><?php _e('In-Text Citations','zotpress'); ?></a></li>
-					<li><a href="#zp-Tab-Library"><?php _e('Library','zotpress'); ?></a></li>
-					<li><a href="#zp-Tab-FAQ"><?php _e('FAQ','zotpress'); ?></a></li>
+					<li><a href="#zp-Tab-Bib"><?php esc_html_e('Stand-Alone Bibliography','zotpress'); ?></a></li>
+					<li><a href="#zp-Tab-InText"><?php esc_html_e('In-Text Citations','zotpress'); ?></a></li>
+					<li><a href="#zp-Tab-Library"><?php esc_html_e('Library','zotpress'); ?></a></li>
+					<li><a href="#zp-Tab-FAQ"><?php esc_html_e('FAQ','zotpress'); ?></a></li>
 				</ul>
 
 
 				<div id="zp-Tab-Bib">
 
 					<div class="zp-Zotero-API-Explanation">
-                        <p><?php _e('Generate a bibliography wherever you can call shortcodes','zotpress'); ?>.</p>
-						<p><?php _e('The basic shortcode is','zotpress'); ?>:</p>
+                        <p><?php esc_html_e('Generate a bibliography wherever you can call shortcodes','zotpress'); ?>.</p>
+						<p><?php esc_html_e('The basic shortcode is','zotpress'); ?>:</p>
 						<p><code>[zotpress userid="000000"]</code></p>
-						<p><?php _e('Use any of the attributes below to customize your bibliography','zotpress'); ?>.</p>
+						<p><?php esc_html_e('Use any of the attributes below to customize your bibliography','zotpress'); ?>.</p>
 					</div><!-- .zp-Zotero-API-Explanation -->
 
                     <div class="zp-Zotero-API-Attributes">
 
                         <div class="zp-Zotero-API-Attributes-Search">
-                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php _e('Search for an attribute using a keyword','zotpress'); ?>">
+                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php esc_html_e('Search for an attribute using a keyword','zotpress'); ?>">
                             <div class="zp-Zotero-API-Attributes-Search-Status">
                                 <div class="zp-Loading"></div>
                                 <span class="dashicons dashicons-search"></span>
@@ -250,10 +260,10 @@
 
                         <div id="zp-InText-Example">
                             <div class="zp-InText-Example-Col alt">
-                                <h4><?php _e('Editor','zotpress'); ?></h4>
+                                <h4><?php esc_html_e('Editor','zotpress'); ?></h4>
                             </div>
                             <div class="zp-InText-Example-Col">
-                                <h4><?php _e('Front-End','zotpress'); ?></h4>
+                                <h4><?php esc_html_e('Front-End','zotpress'); ?></h4>
                             </div>
                             <div class="zp-InText-Example-Col alt">
                                 <p>This is an example of a Zotpress in-text citation [zotpressInText item="{NCXAA92F,36}"]. Place a bibliography shortcode somewhere below the citations. This will generate the in-text citations and a bibliography.</p>
@@ -269,24 +279,51 @@
                             </div>
                         </div>
 
-                        <p><?php _e('Create and place in-text citations and auto-populate a bibliography','zotpress'); ?>.</p>
+                        <p><?php esc_html_e('Create and place in-text citations and auto-populate a bibliography','zotpress'); ?>.</p>
 
 						<p>
-							<?php _e('Use one or more <code>[zotpressInText]</code> shortcodes in your post, page or what-have-you to create placeholders for in-text citations','zotpress'); ?>.
-							<?php _e('Then place the <strong>required</strong> <code>[zotpressInTextBib]</code> shortcode somewhere in your entry <strong>after</strong> the in-text citation shortcodes. It will then create the in-text shortcodes and auto-populate a bibliography where it\'s placed','zotpress'); ?>.
+							<?php echo 
+                                wp_kses(
+                                    /* translators: s: Zotpress URL */
+                                    __('Use one or more <code>[zotpressInText]</code> shortcodes in your post, page or what-have-you to create placeholders for in-text citations','zotpress'),
+                                    array(
+                                        'code' => array(),
+                                        'strong' => array(),
+                                    )
+                                );
+                            ?>.
+							<?php echo 
+                                wp_kses(
+                                    /* translators: s: Zotpress URL */
+                                    __('Then place the <strong>required</strong> <code>[zotpressInTextBib]</code> shortcode somewhere in your entry <strong>after</strong> the in-text citation shortcodes. It will then create the in-text shortcodes and auto-populate a bibliography where it\'s placed','zotpress'),
+                                    array(
+                                        'code' => array(),
+                                        'strong' => array(),
+                                    )
+                                );
+                            ?>.
 						</p>
 						<p>
-							<?php _e('The <code>[zotpressInTextBib]</code> shortcode takes the same attributes as the <code>[zotpress]</code> shortcode, minus the "userid," "nickname," and "limit" attributes','zotpress'); ?>.
+							<?php echo 
+                                wp_kses(
+                                    /* translators: s: Zotpress URL */
+                                    __('The <code>[zotpressInTextBib]</code> shortcode takes the same attributes as the <code>[zotpress]</code> shortcode, minus the "userid," "nickname," and "limit" attributes','zotpress'),
+                                    array(
+                                        'code' => array(),
+                                        'strong' => array(),
+                                    )
+                                );
+                            ?>.
 						</p>
 						<p>
-							<strong><?php _e('Important Note','zotpress'); ?>:</strong> <?php _e('In-text citations, unlike the bibliography, are not automatically styled. Use the "format" attribute to manually style in-text citations. Support for automatically styled in-text citations is in the works','zotpress'); ?>.
+							<strong><?php esc_html_e('Important Note','zotpress'); ?>:</strong> <?php esc_html_e('In-text citations, unlike the bibliography, are not automatically styled. Use the "format" attribute to manually style in-text citations. Support for automatically styled in-text citations is in the works','zotpress'); ?>.
 						</p>
 					</div><!-- .zp-Zotero-API-Explanation -->
 
                     <div class="zp-Zotero-API-Attributes">
 
                         <div class="zp-Zotero-API-Attributes-Search">
-                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php _e('Search for an attribute using a keyword','zotpress'); ?>">
+                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php esc_html_e('Search for an attribute using a keyword','zotpress'); ?>">
                             <div class="zp-Zotero-API-Attributes-Search-Status">
                                 <div class="zp-Loading"></div>
                                 <span class="dashicons dashicons-search"></span>
@@ -350,7 +387,7 @@
 
                     <div class="zp-Zotero-API-Explanation">
                         <p>
-                            <?php _e('To display your library on the front-end of your website so that visitors can browse it, use this shortcode on a post or page','zotpress'); ?>:
+                            <?php esc_html_e('To display your library on the front-end of your website so that visitors can browse it, use this shortcode on a post or page','zotpress'); ?>:
                         </p>
                         <p><code>[zotpressLib userid="00000"]</code></p>
                     </div><!-- .zp-Zotero-API-Explanation -->
@@ -358,7 +395,7 @@
                     <div class="zp-Zotero-API-Attributes">
 
                         <div class="zp-Zotero-API-Attributes-Search">
-                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php _e('Search for an attribute using a keyword','zotpress'); ?>">
+                            <input class="zp-Zotero-API-Attributes-Search-Input" type="text" placeholder="<?php esc_html_e('Search for an attribute using a keyword','zotpress'); ?>">
                             <div class="zp-Zotero-API-Attributes-Search-Status">
                                 <div class="zp-Loading"></div>
                                 <span class="dashicons dashicons-search"></span>
@@ -453,8 +490,8 @@
 
 					<div class="zp-Zotero-API-Explanation">
 						<p>
-							<?php _e('Check out the answered questions below. If you can\'t find what you\'re looking for, feel free to post your question at the','zotpress'); ?>
-							<a title="Zotpress Forums" href="http://wordpress.org/support/plugin/zotpress"><?php _e('Zotpress Support Forums','zotpress'); ?></a>.
+							<?php esc_html_e('Check out the answered questions below. If you can\'t find what you\'re looking for, feel free to post your question at the','zotpress'); ?>
+							<a title="Zotpress Forums" href="http://wordpress.org/support/plugin/zotpress"><?php esc_html_e('Zotpress Support Forums','zotpress'); ?></a>.
 						</p>
 
 						<h4>Does Zotpress auto-update or auto-sync my Zotero library?</h4>

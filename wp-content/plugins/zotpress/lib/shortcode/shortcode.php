@@ -1,7 +1,9 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
 require(__DIR__ . '/shortcode.functions.php');
 require(__DIR__ . '/shortcode.request.php');
+require(__DIR__ . '/../request/request.dl.php');
+require(__DIR__ . '/../request/request.cite.php');
 
 /**
  * Handles the Zotpress bibliography shortcode.
@@ -20,6 +22,7 @@ function Zotpress_func( $atts ) {
 
         'user_id' => false, // deprecated
         'userid' => false,
+        'user' => false, // 7.4: unofficial
         'nickname' => false,
         'nick' => false,
 
@@ -169,30 +172,30 @@ function Zotpress_func( $atts ) {
 
     // Filter by account
     // if ($user_id) {
-    //     $api_user_id = zp_clean_param( $user_id );
+    //     $api_user_id = zotpress_clean_param( $user_id );
     // } elseif ($userid) {
-    //     $api_user_id = zp_clean_param( $userid );
+    //     $api_user_id = zotpress_clean_param( $userid );
     // } else $api_user_id = false;
 
-    // if ($nickname) $nickname = zp_clean_param( $nickname );
-    // if ($nick) $nickname = zp_clean_param( $nick );
+    // if ($nickname) $nickname = zotpress_clean_param( $nickname );
+    // if ($nick) $nickname = zotpress_clean_param( $nick );
 
     // Filter by author
-    // $author = zp_clean_param( $author );
-    // if ($authors) $author = zp_clean_param( $authors );
+    // $author = zotpress_clean_param( $author );
+    // if ($authors) $author = zotpress_clean_param( $authors );
 
     // // Filter by year
     // if ($year) {
-    //     $year = zp_clean_param( $year );
+    //     $year = zotpress_clean_param( $year );
     // } elseif ($years) {
-    //     $year = zp_clean_param( $years );
+    //     $year = zotpress_clean_param( $years );
     // } elseif (strpos($year, ",") > 0) {
     //     $year = explode(",", $year);
     // } else $year = "";
 
     // // Filter by itemtype
     // // TODO: Allow for multiple itemtypes in one shortcode?
-    // $itemtype = zp_clean_param( $itemtype );
+    // $itemtype = zotpress_clean_param( $itemtype );
     // if ( $itemtype !== false )
     // {
     //     // Make sure it's one of the accepted types
@@ -247,19 +250,19 @@ function Zotpress_func( $atts ) {
 
     // // Format with datatype and content
     // if ($item_type) {
-    //     $item_type = zp_clean_param( $item_type );
+    //     $item_type = zotpress_clean_param( $item_type );
     // } elseif ($data_type) {
-    //     $item_type = zp_clean_param( $data_type );
-    // } else $item_type = zp_clean_param( $datatype );
+    //     $item_type = zotpress_clean_param( $data_type );
+    // } else $item_type = zotpress_clean_param( $datatype );
 
     // // Filter by collection
     // $collection_id = false;
     // if ($collection_id) {
-    //     $collection_id = zp_clean_param( $collection_id );
+    //     $collection_id = zotpress_clean_param( $collection_id );
     // } elseif ($collection) {
-    //     $collection_id = zp_clean_param( $collection );
+    //     $collection_id = zotpress_clean_param( $collection );
     // } elseif ($collections) {
-    //     $collection_id = zp_clean_param( $collections );
+    //     $collection_id = zotpress_clean_param( $collections );
     // }
 	// $collection_id = str_replace(" ", "", $collection_id );
 
@@ -269,19 +272,19 @@ function Zotpress_func( $atts ) {
     // // Filter by tag
     // $tag_id = false;
     // if ($tag_name) {
-    //     $tag_id = zp_clean_param( $tag_name );
+    //     $tag_id = zotpress_clean_param( $tag_name );
     // } elseif ($tags) {
-    //     $tag_id = zp_clean_param( $tags );
-    // } else $tag_id = zp_clean_param( $tag );
+    //     $tag_id = zotpress_clean_param( $tags );
+    // } else $tag_id = zotpress_clean_param( $tag );
 
     // $tag_id = str_replace("+", "", $tag_id);
     // if (strpos($tag_id, ",") > 0) $tag_id = explode(",", $tag_id);
     // if ($item_type == "tags" && isset($_GET['zptag']) ) $tag_id = htmlentities( urldecode( $_GET['zptag'] ) );
 
     // // Filter by itemkey
-    // if ($item_key) $item_key = zp_clean_param( $item_key );
-    // if ($items) $item_key = zp_clean_param( $items );
-    // if ($item) $item_key = zp_clean_param( $item );
+    // if ($item_key) $item_key = zotpress_clean_param( $item_key );
+    // if ($items) $item_key = zotpress_clean_param( $items );
+    // if ($item) $item_key = zotpress_clean_param( $item );
     // if (strpos($item_key, ", ") > 0) $item_key = str_replace(', ',',',html_entity_decode($item_key)); // remove spces after commas
     // // if (strpos($item_key, ",") > 0) $item_key = explode(",", $item_key); // ? break at commas?
 	// $item_key = str_replace(" ", "", $item_key ); // remove any spaces
@@ -290,24 +293,24 @@ function Zotpress_func( $atts ) {
     // $inclusive = $inclusive == "yes" || $inclusive == "true" || $inclusive === true;
 
     // Format style
-    // $style = zp_clean_param( $style );
+    // $style = zotpress_clean_param( $style );
 
     // Limit
-    // $limit = (int) zp_clean_param( $limit );
+    // $limit = (int) zotpress_clean_param( $limit );
 
     // // Order / sort
-    // $sortby = zp_clean_param( $sortby );
+    // $sortby = zotpress_clean_param( $sortby );
 
     // if ($order) {
-    //     $order = strtolower(zp_clean_param( $order ));
+    //     $order = strtolower(zotpress_clean_param( $order ));
     // } elseif ($sort) {
-    //     $order = strtolower(zp_clean_param( $sort ));
+    //     $order = strtolower(zotpress_clean_param( $sort ));
     // }
     // if ($order === false) $order = "asc";
 
     // // Show title
 	// // Sorting by secondary sort
-    // $title = zp_clean_param( $title );
+    // $title = zotpress_clean_param( $title );
     // if ($title == "yes" || $title == "true" || $title === true) {
     //     $title = "year";
     // } elseif ($title == "no" || $title == "false") {
@@ -315,9 +318,9 @@ function Zotpress_func( $atts ) {
     // }
 
     // // Show image
-    // if ($showimage) $showimage = zp_clean_param( $showimage );
-    // if ($image) $showimage = zp_clean_param( $image );
-    // if ($images) $showimage = zp_clean_param( $images );
+    // if ($showimage) $showimage = zotpress_clean_param( $showimage );
+    // if ($image) $showimage = zotpress_clean_param( $image );
+    // if ($images) $showimage = zotpress_clean_param( $images );
 
     // if ($showimage == "yes" || $showimage == "true" || $showimage === true) {
     //     $showimage = true;
@@ -335,24 +338,24 @@ function Zotpress_func( $atts ) {
 
     // // Show notes
     // if ($shownotes) {
-    //     $shownotes = zp_clean_param( $shownotes );
+    //     $shownotes = zotpress_clean_param( $shownotes );
     // } elseif ($notes) {
-    //     $shownotes = zp_clean_param( $notes );
+    //     $shownotes = zotpress_clean_param( $notes );
     // } elseif ($note) {
-    //     $shownotes = zp_clean_param( $note );
+    //     $shownotes = zotpress_clean_param( $note );
     // }
 
     // $shownotes = $notes == "yes" || $notes == "true" || $notes === true;
 
     // // Show abstracts
-    // if ($abstracts) $abstracts = zp_clean_param( $abstracts );
-    // if ($abstract) $abstracts = zp_clean_param( $abstract );
+    // if ($abstracts) $abstracts = zotpress_clean_param( $abstracts );
+    // if ($abstract) $abstracts = zotpress_clean_param( $abstract );
 
     // $abstracts = $abstracts == "yes" || $abstracts == "true" || $abstracts === true;
 
     // // Show cite link
-    // if ($cite) $citeable = zp_clean_param( $cite );
-    // if ($citeable) $citeable = zp_clean_param( $citeable );
+    // if ($cite) $citeable = zotpress_clean_param( $cite );
+    // if ($citeable) $citeable = zotpress_clean_param( $citeable );
 
     // $citeable = $citeable == "yes" || $citeable == "true" || $citeable === true;
 
@@ -363,9 +366,9 @@ function Zotpress_func( $atts ) {
     // if ($target == "yes" || $target == "_blank" || $target == "new" || $target == "true" || $target === true)
     // $target = true; else $target = false;
 
-    // $urlwrap = $urlwrap == "title" || $urlwrap == "image" ? zp_clean_param( $urlwrap ) : false;
+    // $urlwrap = $urlwrap == "title" || $urlwrap == "image" ? zotpress_clean_param( $urlwrap ) : false;
 
-    // $highlight = $highlight ? zp_clean_param( $highlight ) : false;
+    // $highlight = $highlight ? zotpress_clean_param( $highlight ) : false;
 
     // if ( $forcenumber == "yes" || $forcenumber == "true" || $forcenumber === true
     //         || $forcenumbers == "yes" || $forcenumbers == "true" || $forcenumbers === true )
@@ -389,8 +392,8 @@ function Zotpress_func( $atts ) {
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE nickname='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `nickname`=%s
                 ",
                 array( $zpr['nickname'] )
             ), OBJECT
@@ -405,8 +408,8 @@ function Zotpress_func( $atts ) {
         $zp_account = $wpdb->get_row(
             $wpdb->prepare(
                 "
-                SELECT * FROM ".$wpdb->prefix."zotpress 
-                WHERE api_user_id='%s'
+                SELECT * FROM `".$wpdb->prefix."zotpress` 
+                WHERE `api_user_id`=%s
                 ",
                 array( $zpr["api_user_id"] )
             ), OBJECT
@@ -426,8 +429,8 @@ function Zotpress_func( $atts ) {
             $zp_account = $wpdb->get_row(
                 $wpdb->prepare(
                     "
-                    SELECT * FROM ".$wpdb->prefix."zotpress 
-                    WHERE api_user_id='%s'
+                    SELECT * FROM `".$wpdb->prefix."zotpress` 
+                    WHERE `api_user_id`=%s
                     ",
                     array( $zpr["api_user_id"] )
                 ), OBJECT
@@ -439,7 +442,6 @@ function Zotpress_func( $atts ) {
             $zpr["api_user_id"] = $zp_account->api_user_id;
         }
     }
-    // var_dump($zpr["api_user_id"]);
     
     // Generate instance id for shortcode
 	$temp_item_key = is_array( $zpr['item_key'] ) ? implode( "-", $zpr['item_key']) : $zpr['item_key'];
@@ -495,34 +497,34 @@ function Zotpress_func( $atts ) {
     $zp_output .= ' class="zp-Zotpress zp-Zotpress-Bib wp-block-group';
 	if ( $zpr['forcenumber'] ) $zp_output .= " forcenumber";
     // 7.3.10: REVIEW: Removed the extra row:
-    // <span class="ZP_ITEM_TYPE" style="display: none;">'.$item_type.'</span>
+    // <span class="ZP_ITEM_TYPE ZP_ATTR">'.$item_type.'</span>
 	$zp_output .= '">
 
-		<span class="ZP_API_USER_ID" style="display: none;">'.$zpr["api_user_id"].'</span>
-		<span class="ZP_ITEM_KEY" style="display: none;">'.$zpr['item_key'].'</span>
-		<span class="ZP_COLLECTION_ID" style="display: none;">'.$zpr['collection_id'].'</span>
-		<span class="ZP_TAG_ID" style="display: none;">'.$zpr['tag_id'].'</span>
-		<span class="ZP_AUTHOR" style="display: none;">'.$zpr['author'].'</span>
-		<span class="ZP_YEAR" style="display: none;">'.$zpr['year'].'</span>
-        <span class="ZP_ITEMTYPE" style="display: none;">'.$zpr['itemtype'].'</span>
-		<span class="ZP_INCLUSIVE" style="display: none;">'.$zpr['inclusive'].'</span>
-		<span class="ZP_STYLE" style="display: none;">'.$zpr['style'].'</span>
-		<span class="ZP_LIMIT" style="display: none;">'.$zpr['limit'].'</span>
-		<span class="ZP_SORTBY" style="display: none;">'.$zpr['sortby'].'</span>
-		<span class="ZP_ORDER" style="display: none;">'.$zpr['order'].'</span>
-		<span class="ZP_TITLE" style="display: none;">'.$zpr['title'].'</span>
-		<span class="ZP_SHOWIMAGE" style="display: none;">'.$zpr['showimage'].'</span>
-		<span class="ZP_SHOWTAGS" style="display: none;">'.$zpr['showtags'].'</span>
-		<span class="ZP_DOWNLOADABLE" style="display: none;">'.$zpr['downloadable'].'</span>
-		<span class="ZP_NOTES" style="display: none;">'.$zpr['shownotes'].'</span>
-		<span class="ZP_ABSTRACT" style="display: none;">'.$zpr['showabstracts'].'</span>
-		<span class="ZP_CITEABLE" style="display: none;">'.$zpr['citeable'].'</span>
-		<span class="ZP_TARGET" style="display: none;">'.$zpr['target'].'</span>
-		<span class="ZP_URLWRAP" style="display: none;">'.$zpr['urlwrap'].'</span>
-		<span class="ZP_FORCENUM" style="display: none;">'.$zpr['forcenumber'].'</span>
-        <span class="ZP_HIGHLIGHT" style="display: none;">'.$zpr['highlight'].'</span>
-        <span class="ZP_POSTID" style="display: none;">'.$post->ID.'</span>
-		<span class="ZOTPRESS_PLUGIN_URL" style="display:none;">'.ZOTPRESS_PLUGIN_URL.'</span>
+		<span class="ZP_API_USER_ID ZP_ATTR">'.$zpr["api_user_id"].'</span>
+		<span class="ZP_ITEM_KEY ZP_ATTR">'.$zpr['item_key'].'</span>
+		<span class="ZP_COLLECTION_ID ZP_ATTR">'.$zpr['collection_id'].'</span>
+		<span class="ZP_TAG_ID ZP_ATTR">'.$zpr['tag_id'].'</span>
+		<span class="ZP_AUTHOR ZP_ATTR">'.$zpr['author'].'</span>
+		<span class="ZP_YEAR ZP_ATTR">'.$zpr['year'].'</span>
+        <span class="ZP_ITEMTYPE ZP_ATTR">'.$zpr['itemtype'].'</span>
+		<span class="ZP_INCLUSIVE ZP_ATTR">'.$zpr['inclusive'].'</span>
+		<span class="ZP_STYLE ZP_ATTR">'.$zpr['style'].'</span>
+		<span class="ZP_LIMIT ZP_ATTR">'.$zpr['limit'].'</span>
+		<span class="ZP_SORTBY ZP_ATTR">'.$zpr['sortby'].'</span>
+		<span class="ZP_ORDER ZP_ATTR">'.$zpr['order'].'</span>
+		<span class="ZP_TITLE ZP_ATTR">'.$zpr['title'].'</span>
+		<span class="ZP_SHOWIMAGE ZP_ATTR">'.$zpr['showimage'].'</span>
+		<span class="ZP_SHOWTAGS ZP_ATTR">'.$zpr['showtags'].'</span>
+		<span class="ZP_DOWNLOADABLE ZP_ATTR">'.$zpr['downloadable'].'</span>
+		<span class="ZP_NOTES ZP_ATTR">'.$zpr['shownotes'].'</span>
+		<span class="ZP_ABSTRACT ZP_ATTR">'.$zpr['showabstracts'].'</span>
+		<span class="ZP_CITEABLE ZP_ATTR">'.$zpr['citeable'].'</span>
+		<span class="ZP_TARGET ZP_ATTR">'.$zpr['target'].'</span>
+		<span class="ZP_URLWRAP ZP_ATTR">'.$zpr['urlwrap'].'</span>
+		<span class="ZP_FORCENUM ZP_ATTR">'.$zpr['forcenumber'].'</span>
+        <span class="ZP_HIGHLIGHT ZP_ATTR">'.$zpr['highlight'].'</span>
+        <span class="ZP_POSTID ZP_ATTR">'.$post->ID.'</span>
+		<span class="ZOTPRESS_PLUGIN_URL ZP_ATTR">'.ZOTPRESS_PLUGIN_URL.'</span>
 
 		<div class="zp-List loading">';
 
@@ -572,7 +574,6 @@ function Zotpress_func( $atts ) {
         $_GET['update'] = $update;
         $_GET['overwrite_last_request'] = $overwrite_last_request;
 
-        // var_dump("HERE",$zpr);
         $zp_output .= "\n\t\t\t<div class=\"zp-SEO-Content\">\n";
         $zp_output .= Zotpress_shortcode_request( $zpr, true ); // Check catche first
         $zp_output .= "\n\t\t\t</div><!-- .zp-zp-SEO-Content -->\n";

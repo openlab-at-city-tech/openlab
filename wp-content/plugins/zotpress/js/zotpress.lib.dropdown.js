@@ -137,7 +137,7 @@ jQuery(document).ready(function()
 					// else
 					// 	jQuery("select.zp-Browse-Collections-Select", zpThisLib)
 					// 		.append( "<option value='blank' class='blank'>Default Collection</option>\n" );
-
+// console.log('test', jQuery(".ZP_COLLECTION_NAME", zpThisLib).text());
 				if ( zp_collections != "0"
 						&& zp_collections.data.length > 0
 						&& zp_collections.data != "0" )
@@ -333,6 +333,12 @@ jQuery(document).ready(function()
 			success: function(data)
 			{
 				var zp_items = jQuery.parseJSON( data );
+								
+				// 7.4: Major change to passing and parsing bib HTML
+				jQuery.each( zp_items.data, function (i, ic) {
+					var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+					zp_items.data[i].bib = ic_decode.documentElement.textContent;
+				});
 
 				// Remove cached bib before adding updates
 				if ( update === false )

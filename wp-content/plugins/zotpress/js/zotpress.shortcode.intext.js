@@ -115,6 +115,12 @@ jQuery(document).ready(function()
 			success: function(data)
 			{
 				var zp_items = jQuery.parseJSON( data );
+				
+				// 7.4: Major change to passing and parsing bib HTML
+				jQuery.each( zp_items.data, function (i, ic) {
+					var ic_decode = new DOMParser().parseFromString(ic.bib, "text/html");
+					zp_items.data[i].bib = ic_decode.documentElement.textContent;
+				});
 
 				zp_totalItems += zp_items.data.length;
 				if ( update ) console.log("zp: running update for items:",zp_totalItems,"->",zp_items.data.length);

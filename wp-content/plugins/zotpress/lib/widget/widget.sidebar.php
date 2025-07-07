@@ -1,4 +1,5 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
 
 	// Require admin functions
 	require( dirname(__FILE__) . '/../admin/admin.functions.php' );
@@ -7,8 +8,8 @@
     {
         function __construct()
         {
-            $widget_ops = array('description' => __('Display your citations on your sidebar','zotpress'));
-			parent::__construct(false, __('Zotpress Widget','zotpress'), $widget_ops);
+            $widget_ops = array('description' => esc_html__('Display your citations on your sidebar','zotpress'));
+			parent::__construct(false, esc_html__('Zotpress Widget','zotpress'), $widget_ops);
         }
 
         function widget( $args, $instance )
@@ -45,10 +46,12 @@
 
 
             // Required for theme
-            echo $before_widget;
+            // echo $before_widget;
+			echo esc_html( $before_widget );
 
-            if ($widget_title) echo $before_title . $widget_title . $after_title;
-
+            if ( $widget_title )
+				echo esc_html( $before_title . $widget_title . $after_title );
+				// echo $before_title . $widget_title . $after_title;
 
 			echo "<div class=\"zp-ZotpressSidebarWidget\">\n\n";
 
@@ -56,20 +59,20 @@
 
 			if ($api_user_id)	{ $zp_sidebar_shortcode .= " userid='$api_user_id' "; }
 			if ($author)		{ $zp_sidebar_shortcode .= " author='$author' "; }
-			if ($year)		{ $zp_sidebar_shortcode .= " year='$year' "; }
-			if ($data_type)	{ $zp_sidebar_shortcode .= " datatype='$data_type' "; }
+			if ($year)			{ $zp_sidebar_shortcode .= " year='$year' "; }
+			if ($data_type)		{ $zp_sidebar_shortcode .= " datatype='$data_type' "; }
 			if ($collection_id)	{ $zp_sidebar_shortcode .= " collection='$collection_id' "; }
-			if ($item_key)	{ $zp_sidebar_shortcode .= " item='$item_key' "; }
-			if ($tag_name)	{ $zp_sidebar_shortcode .= " tag='$tag_name' "; }
-			if ($style)		{ $zp_sidebar_shortcode .= " style='$style' "; }
-			if ($limit)		{ $zp_sidebar_shortcode .= " limit='$limit' "; }
-			if ($sort)		{ $zp_sidebar_shortcode .= " order='$sort' "; }
+			if ($item_key)		{ $zp_sidebar_shortcode .= " item='$item_key' "; }
+			if ($tag_name)		{ $zp_sidebar_shortcode .= " tag='$tag_name' "; }
+			if ($style)			{ $zp_sidebar_shortcode .= " style='$style' "; }
+			if ($limit)			{ $zp_sidebar_shortcode .= " limit='$limit' "; }
+			if ($sort)			{ $zp_sidebar_shortcode .= " order='$sort' "; }
 			if ($sortby)		{ $zp_sidebar_shortcode .= " sortby='$sortby' "; }
-			if ($image)		{ $zp_sidebar_shortcode .= " showimage='$image' "; }
-			if ($download)	{ $zp_sidebar_shortcode .= " download='$download' "; }
-			if ($title)		{ $zp_sidebar_shortcode .= " title='$title' "; }
-			if ($cite)		{ $zp_sidebar_shortcode .= " cite='$cite' "; }
-			if ($notes)		{ $zp_sidebar_shortcode .= " note='$notes' "; }
+			if ($image)			{ $zp_sidebar_shortcode .= " showimage='$image' "; }
+			if ($download)		{ $zp_sidebar_shortcode .= " download='$download' "; }
+			if ($title)			{ $zp_sidebar_shortcode .= " title='$title' "; }
+			if ($cite)			{ $zp_sidebar_shortcode .= " cite='$cite' "; }
+			if ($notes)			{ $zp_sidebar_shortcode .= " note='$notes' "; }
 			if ($inclusive)		{ $zp_sidebar_shortcode .= " inclusive='$inclusive' "; }
 
 			$zp_sidebar_shortcode = trim($zp_sidebar_shortcode) . "]";
@@ -78,9 +81,9 @@
 
 			echo "</div><!-- .zp-ZotpressSidebarWidget -->\n\n";
 
-
             // Required for theme
-            echo $after_widget;
+            // echo $after_widget;
+			echo esc_html( $after_widget );
         }
 
 
@@ -89,30 +92,30 @@
         {
             $instance = $old_instance;
 
-            $instance['widget_title'] = strip_tags( $new_instance['widget_title'] );
+            $instance['widget_title'] = wp_strip_all_tags( $new_instance['widget_title'] );
 
-            $instance['api_user_id'] = strip_tags( $new_instance['api_user_id'] );
+            $instance['api_user_id'] = wp_strip_all_tags( $new_instance['api_user_id'] );
 
-            $instance['author'] = str_replace(" ", "+", strip_tags($new_instance['author']));
-            $instance['year'] = str_replace(" ", "+", strip_tags($new_instance['year']));
+            $instance['author'] = str_replace(" ", "+", wp_strip_all_tags($new_instance['author']));
+            $instance['year'] = str_replace(" ", "+", wp_strip_all_tags($new_instance['year']));
 
-            $instance['data_type'] = strip_tags( $new_instance['data_type'] );
-            $instance['collection_id'] = strip_tags($new_instance['collection_id']);
-            $instance['item_key'] = strip_tags($new_instance['item_key']);
-            $instance['tag_name'] = str_replace(" ", "+", strip_tags($new_instance['tag_name']));
+            $instance['data_type'] = wp_strip_all_tags( $new_instance['data_type'] );
+            $instance['collection_id'] = wp_strip_all_tags($new_instance['collection_id']);
+            $instance['item_key'] = wp_strip_all_tags($new_instance['item_key']);
+            $instance['tag_name'] = str_replace(" ", "+", wp_strip_all_tags($new_instance['tag_name']));
 
-            $instance['style'] = strip_tags($new_instance['style']);
-            $instance['inclusive'] = strip_tags($new_instance['inclusive']);
-            $instance['sort'] = strip_tags($new_instance['sort']);
-            $instance['sortby'] = strip_tags($new_instance['sortby']);
+            $instance['style'] = wp_strip_all_tags($new_instance['style']);
+            $instance['inclusive'] = wp_strip_all_tags($new_instance['inclusive']);
+            $instance['sort'] = wp_strip_all_tags($new_instance['sort']);
+            $instance['sortby'] = wp_strip_all_tags($new_instance['sortby']);
 
-            $instance['limit'] = strip_tags($new_instance['limit']);
+            $instance['limit'] = wp_strip_all_tags($new_instance['limit']);
 
-            $instance['image'] = strip_tags($new_instance['image']);
-            $instance['download'] = strip_tags($new_instance['download']);
-            $instance['zptitle'] = strip_tags($new_instance['zptitle']);
-            $instance['zpcite'] = strip_tags($new_instance['zpcite']);
-            $instance['zpnotes'] = strip_tags($new_instance['zpnotes']);
+            $instance['image'] = wp_strip_all_tags($new_instance['image']);
+            $instance['download'] = wp_strip_all_tags($new_instance['download']);
+            $instance['zptitle'] = wp_strip_all_tags($new_instance['zptitle']);
+            $instance['zpcite'] = wp_strip_all_tags($new_instance['zpcite']);
+            $instance['zpnotes'] = wp_strip_all_tags($new_instance['zpnotes']);
 
             return $instance;
         }
@@ -122,7 +125,8 @@
         function form( $instance )
         {
 			// Set form defaults
-			if ( ! isset($instance) || count($instance) == 0)
+			if ( ! isset($instance) 
+					|| count($instance) == 0 )
 			{
 				$instance['widget_title'] = "";
 
@@ -168,130 +172,168 @@
 				<div id="zp-Sidebar-Widget-Container">
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'widget_title' ); ?>"><?php _e('Widget Title','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'widget_title' ); ?>" name="<?php echo $this->get_field_name( 'widget_title' ); ?>" type="text" value="<?php echo $instance['widget_title']; ?>" class="widefat">
+						<label for="<?php echo esc_html($this->get_field_id( 'widget_title' )); ?>"><?php esc_html_e('Widget Title', 'zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'widget_title' )); ?>" name="<?php echo esc_html($this->get_field_name( 'widget_title' )); ?>" type="text" value="<?php echo esc_html($instance['widget_title']); ?>" class="widefat">
 					</p>
 
 					<div class="zp-ZotpressSidebarWidget-Required">
 
 					<?php
 
-					if ( zp_get_total_accounts() > 0 )
+					if ( zotpress_get_total_accounts() > 0 )
 						if ( isset( $instance['api_user_id'] ) )
-							echo zp_get_accounts( false, true, true, $this->get_field_id('api_user_id'), $this->get_field_name('api_user_id'), $instance['api_user_id'] );
+							echo wp_kses( 
+								zotpress_get_accounts( false, true, true, $this->get_field_id('api_user_id'), $this->get_field_name('api_user_id'), $instance['api_user_id'] ),
+								array(
+									'label' => array(
+										'for' => array()
+									),
+									'span' => array(
+										'class' => array()
+									),
+									'select' => array(
+										'id' => array(),
+										'name' => array()
+									),
+									'option' => array(
+										'rel' => array(),
+										'selected' => array(),
+										'value' => array()
+									)
+								)
+							);
 						else
-							echo zp_get_accounts( false, true, true, $this->get_field_id('api_user_id'), $this->get_field_name('api_user_id'), false );
+							echo wp_kses( 
+								zotpress_get_accounts( false, true, true, $this->get_field_id('api_user_id'), $this->get_field_name('api_user_id'), false ),
+								array(
+									'label' => array(
+										'for' => array()
+									),
+									'span' => array(
+										'class' => array()
+									),
+									'select' => array(
+										'id' => array(),
+										'name' => array()
+									),
+									'option' => array(
+										'rel' => array(),
+										'selected' => array(),
+										'value' => array()
+									)
+								)
+							);
 					?>
 
 					</div>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'data_type' ); ?>"><?php _e('Data Type','zotpress'); ?>:</label>
-						<select id="<?php echo $this->get_field_id( 'data_type' ); ?>" name="<?php echo $this->get_field_name( 'data_type' ); ?>" class="widefat">
-							<option value="items" <?php if ( isset( $instance['data_type'] ) && 'items' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php _e('Items','zotpress'); ?></option>
-							<option value="tags" <?php if ( isset( $instance['data_type'] ) && 'tags' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php _e('Tags','zotpress'); ?></option>
-							<option value="collections" <?php if ( isset( $instance['data_type'] ) && 'collections' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php _e('Collections','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'data_type' )); ?>"><?php esc_html_e('Data Type', 'zotpress'); ?>:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'data_type' )); ?>" name="<?php echo esc_html($this->get_field_name( 'data_type' )); ?>" class="widefat">
+							<option value="items" <?php if ( isset( $instance['data_type'] ) && 'items' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Items', 'zotpress'); ?></option>
+							<option value="tags" <?php if ( isset( $instance['data_type'] ) && 'tags' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Tags', 'zotpress'); ?></option>
+							<option value="collections" <?php if ( isset( $instance['data_type'] ) && 'collections' == $instance['data_type'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Collections','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'author' ); ?>"><?php _e('Limit to Author','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'author' ); ?>" name="<?php echo $this->get_field_name( 'author' ); ?>" type="text" value="<?php echo $instance['author']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'author' )); ?>"><?php esc_html_e('Limit to Author','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'author' )); ?>" name="<?php echo esc_html($this->get_field_name( 'author' )); ?>" type="text" value="<?php echo esc_html($instance['author']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'year' ); ?>"><?php _e('Limit by Year','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'year' ); ?>" name="<?php echo $this->get_field_name( 'year' ); ?>" type="text" value="<?php echo $instance['year']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'year' )); ?>"><?php esc_html_e('Limit by Year','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'year' )); ?>" name="<?php echo esc_html($this->get_field_name( 'year' )); ?>" type="text" value="<?php echo esc_html($instance['year']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'collection_id' ); ?>"><?php _e('Limit to Collection (ID)','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'collection_id' ); ?>" name="<?php echo $this->get_field_name( 'collection_id' ); ?>" type="text" value="<?php echo $instance['collection_id']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'collection_id' )); ?>"><?php esc_html_e('Limit to Collection (ID)','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'collection_id' )); ?>" name="<?php echo esc_html($this->get_field_name( 'collection_id' )); ?>" type="text" value="<?php echo esc_html($instance['collection_id']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'item_key' ); ?>"><?php _e('Limit to Item (Key)','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'item_key' ); ?>" name="<?php echo $this->get_field_name( 'item_key' ); ?>" type="text" value="<?php echo $instance['item_key']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'item_key' )); ?>"><?php esc_html_e('Limit to Item (Key)','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'item_key' )); ?>" name="<?php echo esc_html($this->get_field_name( 'item_key' )); ?>" type="text" value="<?php echo esc_html($instance['item_key']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'tag_name' ); ?>"><?php _e('Limit to Tag','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'tag_name' ); ?>" name="<?php echo $this->get_field_name( 'tag_name' ); ?>" type="text" value="<?php echo $instance['tag_name']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'tag_name' )); ?>"><?php esc_html_e('Limit to Tag','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'tag_name' )); ?>" name="<?php echo esc_html($this->get_field_name( 'tag_name' )); ?>" type="text" value="<?php echo esc_html($instance['tag_name']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'style' ); ?>"><?php _e('Style','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'style' ); ?>" name="<?php echo $this->get_field_name( 'style' ); ?>" type="text" value="<?php echo $instance['style']; ?>" class="widefat" />
+						<label for="<?php echo esc_html($this->get_field_id( 'style' )); ?>"><?php esc_html_e('Style','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'style' )); ?>" name="<?php echo esc_html($this->get_field_name( 'style' )); ?>" type="text" value="<?php echo esc_html($instance['style']); ?>" class="widefat" />
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'sortby' ); ?>"><?php _e('Sort By','zotpress'); ?>:</label>
-						<select id="<?php echo $this->get_field_id( 'sortby' ); ?>" name="<?php echo $this->get_field_name( 'sortby' ); ?>" class="widefat">
-							<option value="default"><?php _e('Default','zotpress'); ?></option>
-							<option value="author" <?php if ( isset( $instance['sortby'] ) && 'author' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php _e('Author','zotpress'); ?></option>
-							<option value="date" <?php if ( isset( $instance['sortby'] ) && 'date' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php _e('Date','zotpress'); ?></option>
-							<option value="title" <?php if ( isset( $instance['sortby'] ) && 'title' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php _e('Title','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'sortby' )); ?>"><?php esc_html_e('Sort By','zotpress'); ?>:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'sortby' )); ?>" name="<?php echo esc_html($this->get_field_name( 'sortby' )); ?>" class="widefat">
+							<option value="default"><?php esc_html_e('Default','zotpress'); ?></option>
+							<option value="author" <?php if ( isset( $instance['sortby'] ) && 'author' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Author','zotpress'); ?></option>
+							<option value="date" <?php if ( isset( $instance['sortby'] ) && 'date' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Date','zotpress'); ?></option>
+							<option value="title" <?php if ( isset( $instance['sortby'] ) && 'title' == $instance['sortby'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Title','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'sort' ); ?>"><?php _e('Sort Order','zotpress'); ?>:</label>
-						<select id="<?php echo $this->get_field_id( 'sort' ); ?>" name="<?php echo $this->get_field_name( 'sort' ); ?>" class="widefat">
-							<option value="desc" <?php if ( isset( $instance['sort'] ) && 'desc' == $instance['sort'] ) echo 'selected="selected"'; ?>><?php _e('Desc','zotpress'); ?></option>
-							<option value="asc" <?php if ( isset( $instance['sort'] ) && 'asc' == $instance['sort'] ) echo 'selected="selected"'; ?>><?php _e('Asc','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'sort' )); ?>"><?php esc_html_e('Sort Order','zotpress'); ?>:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'sort' )); ?>" name="<?php echo esc_html($this->get_field_name( 'sort' )); ?>" class="widefat">
+							<option value="desc" <?php if ( isset( $instance['sort'] ) && 'desc' == $instance['sort'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Desc','zotpress'); ?></option>
+							<option value="asc" <?php if ( isset( $instance['sort'] ) && 'asc' == $instance['sort'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Asc','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'limit' ); ?>"><?php _e('Limit','zotpress'); ?>:</label>
-						<input id="<?php echo $this->get_field_id( 'limit' ); ?>" name="<?php echo $this->get_field_name( 'limit' ); ?>" type="text" value="<?php echo $instance['limit']; ?>" class="widefat">
+						<label for="<?php echo esc_html($this->get_field_id( 'limit' )); ?>"><?php esc_html_e('Limit','zotpress'); ?>:</label>
+						<input id="<?php echo esc_html($this->get_field_id( 'limit' )); ?>" name="<?php echo esc_html($this->get_field_name( 'limit' )); ?>" type="text" value="<?php echo esc_html($instance['limit']); ?>" class="widefat">
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'inclusive' ); ?>"><?php _e('Inclusive Filtering','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'inclusive' ); ?>" name="<?php echo $this->get_field_name( 'inclusive' ); ?>" class="widefat">
-							<option value="yes" <?php if ( isset( $instance['inclusive'] ) && 'yes' == $instance['inclusive'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
-							<option value="no" <?php if ( isset( $instance['inclusive'] ) && 'no' == $instance['inclusive'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'inclusive' )); ?>"><?php esc_html_e('Inclusive Filtering','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'inclusive' )); ?>" name="<?php echo esc_html($this->get_field_name( 'inclusive' )); ?>" class="widefat">
+							<option value="yes" <?php if ( isset( $instance['inclusive'] ) && 'yes' == $instance['inclusive'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
+							<option value="no" <?php if ( isset( $instance['inclusive'] ) && 'no' == $instance['inclusive'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'image' ); ?>"><?php _e('Show Image','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'image' ); ?>" name="<?php echo $this->get_field_name( 'image' ); ?>" class="widefat">
-							<option value="no" <?php if ( isset( $instance['image'] ) && 'no' == $instance['image'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
-							<option value="yes" <?php if ( isset( $instance['image'] ) && 'yes' == $instance['image'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'image' )); ?>"><?php esc_html_e('Show Image','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'image' )); ?>" name="<?php echo esc_html($this->get_field_name( 'image' )); ?>" class="widefat">
+							<option value="no" <?php if ( isset( $instance['image'] ) && 'no' == $instance['image'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
+							<option value="yes" <?php if ( isset( $instance['image'] ) && 'yes' == $instance['image'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'download' ); ?>"><?php _e('Downloadable','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'download' ); ?>" name="<?php echo $this->get_field_name( 'download' ); ?>" class="widefat">
-							<option value="no" <?php if ( isset( $instance['download'] ) && 'no' == $instance['download'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
-							<option value="yes" <?php if ( isset( $instance['download'] ) && 'yes' == $instance['download'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'download' )); ?>"><?php esc_html_e('Downloadable','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'download' )); ?>" name="<?php echo esc_html($this->get_field_name( 'download' )); ?>" class="widefat">
+							<option value="no" <?php if ( isset( $instance['download'] ) && 'no' == $instance['download'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
+							<option value="yes" <?php if ( isset( $instance['download'] ) && 'yes' == $instance['download'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'zptitle' ); ?>"><?php _e('Show Title','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'zptitle' ); ?>" name="<?php echo $this->get_field_name( 'zptitle' ); ?>" class="widefat">
-							<option value="no" <?php if ( isset( $instance['zptitle'] ) && 'no' == $instance['zptitle'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
-							<option value="yes" <?php if ( isset( $instance['zptitle'] ) && 'yes' == $instance['zptitle'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'zptitle' )); ?>"><?php esc_html_e('Show Title','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'zptitle' )); ?>" name="<?php echo esc_html($this->get_field_name( 'zptitle' )); ?>" class="widefat">
+							<option value="no" <?php if ( isset( $instance['zptitle'] ) && 'no' == $instance['zptitle'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
+							<option value="yes" <?php if ( isset( $instance['zptitle'] ) && 'yes' == $instance['zptitle'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'zpnotes' ); ?>"><?php _e('Show Notes','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'zpnotes' ); ?>" name="<?php echo $this->get_field_name( 'zpnotes' ); ?>" class="widefat">
-							<option value="no" <?php if ( isset( $instance['zpnotes'] ) && 'no' == $instance['zpnotes'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
-							<option value="yes" <?php if ( isset( $instance['zpnotes'] ) && 'yes' == $instance['zpnotes'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'zpnotes' )); ?>"><?php esc_html_e('Show Notes','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'zpnotes' )); ?>" name="<?php echo esc_html($this->get_field_name( 'zpnotes' )); ?>" class="widefat">
+							<option value="no" <?php if ( isset( $instance['zpnotes'] ) && 'no' == $instance['zpnotes'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
+							<option value="yes" <?php if ( isset( $instance['zpnotes'] ) && 'yes' == $instance['zpnotes'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
 						</select>
 					</p>
 
 					<p>
-						<label for="<?php echo $this->get_field_id( 'zpcite' ); ?>"><?php _e('Cite with RIS','zotpress'); ?>?:</label>
-						<select id="<?php echo $this->get_field_id( 'zpcite' ); ?>" name="<?php echo $this->get_field_name( 'zpcite' ); ?>" class="widefat">
-							<option value="no" <?php if ( isset( $instance['zpcite'] ) && 'no' == $instance['zpcite'] ) echo 'selected="selected"'; ?>><?php _e('No','zotpress'); ?></option>
-							<option value="yes" <?php if ( isset( $instance['zpcite'] ) && 'yes' == $instance['zpcite'] ) echo 'selected="selected"'; ?>><?php _e('Yes','zotpress'); ?></option>
+						<label for="<?php echo esc_html($this->get_field_id( 'zpcite' )); ?>"><?php esc_html_e('Cite with RIS','zotpress'); ?>?:</label>
+						<select id="<?php echo esc_html($this->get_field_id( 'zpcite' )); ?>" name="<?php echo esc_html($this->get_field_name( 'zpcite' )); ?>" class="widefat">
+							<option value="no" <?php if ( isset( $instance['zpcite'] ) && 'no' == $instance['zpcite'] ) echo 'selected="selected"'; ?>><?php esc_html_e('No','zotpress'); ?></option>
+							<option value="yes" <?php if ( isset( $instance['zpcite'] ) && 'yes' == $instance['zpcite'] ) echo 'selected="selected"'; ?>><?php esc_html_e('Yes','zotpress'); ?></option>
 						</select>
 					</p>
 

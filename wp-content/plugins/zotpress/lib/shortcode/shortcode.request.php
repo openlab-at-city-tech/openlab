@@ -1,4 +1,5 @@
-<?php
+<?php if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly 
+
 
  /**
   * Processes the Zotero request. Accepts WP AJAX or PHP calls.
@@ -323,7 +324,10 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					}
 				}
 
-				if ( $zp_request["json"] == "Not found" )
+				// 7.4 Update: Might not exist?
+				if ( ! isset($zp_request["json"]) )
+					$zp_error = "JSON not found";
+				elseif ( isset($zp_request["json"]) && $zp_request["json"] == "Not found" )
 					$zp_error = $zp_request["json"];
 				
     			// } elseif ( empty($zp_request) ) {
@@ -452,7 +456,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						$zp_authors = explode( ",", $zpr["author"] );
 
 						foreach ( $zp_authors as $author )
-							if ( zp_check_author_continue( $item, $author ) === true )
+							if ( zotpress_check_author_continue( $item, $author ) === true )
 								$zp_authors_check = true;
 					}
 
@@ -468,7 +472,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 							if ( is_array($zpr["author"]) ) {
 
 								foreach ( $zpr["author"] as $author )
-									if ( zp_check_author_continue( $item, $author ) === true )
+									if ( zotpress_check_author_continue( $item, $author ) === true )
 										$author_exists_count++;
 								
 								// if ( $author_exists_count == count($zpr["author"]) +1 )
@@ -477,18 +481,18 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 							}
 							else { // Just a string/single author
 
-								if ( zp_check_author_continue( $item, $zpr["author"] ) === true )
+								if ( zotpress_check_author_continue( $item, $zpr["author"] ) === true )
 									$zp_authors_check = true;
 							}
 							
 						}
 						else // inclusive and single
 						{
-							if ( zp_check_author_continue( $item, $zpr["author"] ) === true )
+							if ( zotpress_check_author_continue( $item, $zpr["author"] ) === true )
 								$zp_authors_check = true;
 						}
 
-						// } elseif (zp_check_author_continue( $item, $zpr["author"] ) === true) {
+						// } elseif (zotpress_check_author_continue( $item, $zpr["author"] ) === true) {
 						// 	$zp_authors_check = true;
 						// }
 					}
@@ -508,7 +512,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 				        $zp_years = explode( ",", $zpr["year"] );
 
 				        foreach ( $zp_years as $year )
-						 	if ( zp_get_year( $item->meta->parsedDate ) == $year )
+						 	if ( zotpress_get_year( $item->meta->parsedDate ) == $year )
 								$zp_years_check = true;
 
 				        if ( ! $zp_years_check )
@@ -516,16 +520,16 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					}
 					else // single
 					{
-						if ( zp_get_year( $item->meta->parsedDate ) != $zpr["year"] )
+						if ( zotpress_get_year( $item->meta->parsedDate ) != $zpr["year"] )
 							continue;
 					}
-				     // } elseif (zp_get_year( $item->meta->parsedDate ) != $zpr["year"]) {
+				     // } elseif (zotpress_get_year( $item->meta->parsedDate ) != $zpr["year"]) {
 				     //     continue;
 				     // }
 				}
 
 				// Skip non-matching years for author-year pairs
-				// if ( $zpr["year"] && $zpr["author"] && (property_exists($item->meta, 'parsedDate') && $item->meta->parsedDate !== null) && zp_get_year( $item->meta->parsedDate ) != $zpr["year"] )
+				// if ( $zpr["year"] && $zpr["author"] && (property_exists($item->meta, 'parsedDate') && $item->meta->parsedDate !== null) && zotpress_get_year( $item->meta->parsedDate ) != $zpr["year"] )
 				if ( $zpr["year"]
 						&& $zpr["author"]
 						&& isset($item->meta->parsedDate) )
@@ -708,7 +712,8 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					else 
 						$tempUserId = $zpr["api_user_id"];
 					
-					$item->bib = preg_replace( '~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <a title='Cite in RIS Format' class='zp-CiteRIS' href='".ZOTPRESS_PLUGIN_URL."lib/request/request.cite.php?api_user_id=".$tempUserId."&amp;item_key=".$item->key."'>Cite</a> </div>" . '$2', $item->bib, 1 );
+					$item->bib = preg_replace( '~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <a title='Cite in RIS Format' class='zp-CiteRIS' data-zp-cite='api_user_id=".$tempUserId."&amp;item_key=".$item->key."' href='javascript:void(0);'>Cite</a> </div>" . '$2', $item->bib, 1 );
+					// $item->bib = preg_replace( '~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <a title='Cite in RIS Format' class='zp-CiteRIS' href='".ZOTPRESS_PLUGIN_URL."lib/request/request.cite.php?api_user_id=".$tempUserId."&amp;item_key=".$item->key."'>Cite</a> </div>" . '$2', $item->bib, 1 );
 					// $item->bib = preg_replace( '~(.*)' . preg_quote('</div>', '~') . '(.*?)~', '$1' . " <a title='Cite in RIS Format' class='zp-CiteRIS' href='".ZOTPRESS_PLUGIN_URL."lib/request/request.cite.php?api_user_id=".$zpr["api_user_id"]."&amp;item_key=".$item->key."'>Cite</a> </div>" . '$2', $item->bib, 1 );
 				}
 
@@ -731,7 +736,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 							$tempUserId = $zpr["api_user_id"];
 						
 						// Get the user's account
-						$zp_account = zp_get_account ($wpdb, $tempUserId);
+						$zp_account = zotpress_get_account ($wpdb, $tempUserId);
 
 						$zp_child_url = "https://api.zotero.org/".$zp_account[0]->account_type."/".$tempUserId."/items";
 						$zp_child_url .= "/".$item->key."/children?";
@@ -770,7 +775,8 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 
 							            // Display download link if file exists
 							            if ( $zp_download_meta !== [] ) {
-   											$item->bib = preg_replace('~(.*)' . preg_quote( '</div>', '~') . '(.*?)~', '$1' . " <a title='Download' class='zp-DownloadURL' href='".ZOTPRESS_PLUGIN_URL."lib/request/request.dl.php?api_user_id=".$tempUserId."&amp;dlkey=".$zp_download_meta["dlkey"]."&amp;content_type=".$zp_download_meta["contentType"]."'>Download</a></div>" . '$2', $item->bib, 1 );
+   											$item->bib = preg_replace('~(.*)' . preg_quote( '</div>', '~') . '(.*?)~', '$1' . " <a title='Download' class='zp-DownloadURL zp-getDownloadURL' data-zp-dl='api_user_id=".$tempUserId."&amp;dlkey=".$zp_download_meta["dlkey"]."&amp;content_type=".$zp_download_meta["contentType"]."' href='javascript:void(0);'>Download</a></div>" . '$2', $item->bib, 1 );
+   											// $item->bib = preg_replace('~(.*)' . preg_quote( '</div>', '~') . '(.*?)~', '$1' . " <a title='Download' class='zp-DownloadURL zp-getDownloadURL' href='".ZOTPRESS_PLUGIN_URL."lib/request/request.dl.php?api_user_id=".$tempUserId."&amp;dlkey=".$zp_download_meta["dlkey"]."&amp;content_type=".$zp_download_meta["contentType"]."'>Download</a></div>" . '$2', $item->bib, 1 );
 										}
      								}
 
@@ -852,23 +858,21 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 			if ( $zpr["showimage"] )
 			{
 				// Get images for all item keys from zpdb, if they exist
-				// $zp_images = $wpdb->get_results(
-				// 	"
-				// 	SELECT * FROM ".$wpdb->prefix."zotpress_zoteroItemImages
-				// 	WHERE ".$wpdb->prefix."zotpress_zoteroItemImages.item_key IN ('".str_replace( " ", "', '", trim($zp_showimage_keys) )."')
-				// 	"
-				// );
-				// $zp_temp_img_keys = str_replace( " ", "', '", trim($zp_showimage_keys) );
 				$zp_temp_img_keys = explode(" ", trim($zp_showimage_keys) );
 				$zp_temp_img_keys_count = count($zp_temp_img_keys);
-				$zp_temp_img_ph = array_fill(0, $zp_temp_img_keys_count, "'%s'");
+				$zp_temp_img_ph = array_fill(0, $zp_temp_img_keys_count, "s");
+				foreach ( $zp_temp_img_ph as $i => $ii )
+					$zp_temp_img_ph[$i] = '\'%'.($i+1).'$s\'';
 				$zp_temp_img_ph = implode(",", $zp_temp_img_ph);
+
+				// 7.4: PCP doesn't properly support IN(), so ...
+				$wpdb->zp_img_map_keys = $zp_temp_img_ph;
 
 				$zp_images = $wpdb->get_results(
 					$wpdb->prepare(
 						"
-						SELECT * FROM ".$wpdb->prefix."zotpress_zoteroItemImages
-						WHERE ".$wpdb->prefix."zotpress_zoteroItemImages.item_key IN (".$zp_temp_img_ph.")
+						SELECT * FROM `".$wpdb->prefix."zotpress_zoteroItemImages`
+						WHERE `item_key` IN ({$wpdb->zp_img_map_keys})
 						",
 						$zp_temp_img_keys
 					)
@@ -936,6 +940,23 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						}
 					}
 				}
+			} // showimage
+
+			// 7.4: Major change to passing and parsing bib HTML
+			// 7.4 Update: There's a 30 second timeout without the cache with downloads ...
+			// TODO: Perhaps cache the download requests and deal with them separately
+			foreach ( $zp_all_the_data as $id => $data )
+			{
+				// 7.4 Update: Trying to avoid errors ...
+				if ( isset($zp_all_the_data[$id]->bib) )
+					$zp_all_the_data[$id]->bib = esc_html($zp_all_the_data[$id]->bib);
+
+				// 7.4: Abstract breaking when unicode exists
+				// if ( isset($zp_all_the_data[$id]->data->abstractNote) )
+				// 	$zp_all_the_data[$id]->data->abstractNote = mb_convert_encoding($zp_all_the_data[$id]->data->abstractNote, 'UTF-8', 'UCS-2BE');
+				// 7.4.1: Now appears in another language sometimes ... fix by Jeremy Varnham (@jvarn13)
+				if ( isset($zp_all_the_data[$id]->data->abstractNote) )
+				    $zp_all_the_data[$id]->data->abstractNote = esc_html($zp_all_the_data[$id]->data->abstractNote);
 			}
 
 			// Re-sort with order of entry if bib and default sort
@@ -949,7 +970,8 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 				{
 					foreach ( $zp_all_the_data as $temp_data )
 					{
-						if ( $temp_data->key == $temp_key ) $temp_arr[] = $temp_data;
+						if ( $temp_data->key == $temp_key ) 
+							$temp_arr[] = $temp_data;
 					}
 				}
 
@@ -960,7 +982,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 			// Remove extra meta data:
 			foreach ( $zp_all_the_data as $id => $data )
 			{
-				unset($zp_all_the_data[$id]->meta->createdByUser);
+				unset( $zp_all_the_data[$id]->meta->createdByUser );
 			}
 
 		} // if there's data (more than 0)
@@ -1003,7 +1025,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 		if ( count($zp_all_the_data) > 0
 		 		&& $zp_all_the_data != "" )
 		{
-			$zp_json_encoded = json_encode(
+			$zp_json_encoded = wp_json_encode(
 				array (
 					"status" => "success",
 					"updateneeded" => $zp_updateneeded,
@@ -1015,7 +1037,20 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 
 			if ( $is_ajax ) // JS:
 			{
-				echo $zp_json_encoded;
+				// echo $zp_json_encoded;
+				echo wp_kses($zp_json_encoded,
+					array(
+						'p' => array(),
+						'i' => array(),
+						'b' => array(),
+						'em' => array(),
+						'strong' => array(),
+						'div' => array(
+							'class' => array(),
+							'style' => array()
+						),
+					)
+				);
 
 				exit(); // REVIEW: Causing to break if error
 			}
@@ -1025,10 +1060,10 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 				$zp_output = "\t\t\t\t";
 
 				if ( $zp_updateneeded )
-					$zp_output .= '<span class="ZP_UPDATENEEDED" style="display: none;">true</span>';
+					$zp_output .= '<span class="ZP_UPDATENEEDED ZP_ATTR">true</span>';
 
-				// $zp_output .= '<span class="ZP_USED_CACHE" style="display: none;">true</span>';
-				$zp_output .= '<span class="ZP_JSON" style="display: none;">'.rawurlencode($zp_json_encoded).'</span>';
+				// $zp_output .= '<span class="ZP_USED_CACHE ZP_ATTR">true</span>';
+				$zp_output .= '<span class="ZP_JSON ZP_ATTR">'.rawurlencode($zp_json_encoded).'</span>';
 				$zp_output .= "\n\n";
 
 				foreach ( $zp_all_the_data as $zp_citation )
@@ -1058,7 +1093,9 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 					$zp_output .= " data-zp-itemtype='".$tempItemType."'";
 					$zp_output .= ' class="zp-Entry zpSearchResultsItem">';
 					$zp_output .= "\n";
-					$zp_output .= $zp_citation->bib;
+					// 7.4: Major change to passing and parsing bib HTML
+					// $zp_output .= $zp_citation->bib;
+					$zp_output .= html_entity_decode($zp_citation->bib);
 					$zp_output .= "\n\t\t\t\t";
 					$zp_output .= '</div><!-- .zp-Entry .zpSearchResultsItem -->';
 				}
@@ -1075,7 +1112,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 
 			if ( $is_ajax )
 				if ( $zp_error )
-					$zp_output = json_encode(
+					$zp_output = wp_json_encode(
 						array (
 							"status" => "error",
 							"instance" => $zpr["instance_id"],
@@ -1084,7 +1121,7 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						)
 					);
 				else // catchall, likely just no items for request
-					$zp_output = json_encode(
+					$zp_output = wp_json_encode(
 						array (
 							"status" => "empty",
 							"instance" => $zpr["instance_id"],
@@ -1093,7 +1130,20 @@ function Zotpress_shortcode_request( $zpr=false, $checkcache=false )
 						)
 					);
 
-			echo $zp_output;
+			// echo $zp_output;
+			echo wp_kses($zp_output,
+				array(
+					'p' => array(),
+					'i' => array(),
+					'b' => array(),
+					'em' => array(),
+					'strong' => array(),
+					'div' => array(
+						'class' => array(),
+						'style' => array()
+					),
+				)
+			);
 
 			if ( $is_ajax )
 				exit(); // REVIEW: Causing to break if error

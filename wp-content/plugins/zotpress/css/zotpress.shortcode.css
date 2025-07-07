@@ -79,6 +79,10 @@ a.zp-DownloadURL:after {
 
 /* START OF BROWSE LIB */
 
+.ZP_ATTR {
+    display: none;
+}
+
 .zp-Browse-Bar {
     background-color: #fff;
     border: 2px solid #000;
@@ -213,46 +217,35 @@ a.zp-DownloadURL:after {
     justify-content: flex-start;
 }
 .zpSearchResultsPagingContainer span.title {
-    /* display: block; */
-    /* float: left; */
     font-size: 0.8em;
     font-weight: bold;
     line-height: 2.6;
     margin-right: 2rem;
-    /* margin: 2px; */
-    /* margin-left: 0; */
-    /* padding: 0 20px 0; */
     text-transform: uppercase;
 }
 
 .zpSearchResultsPagingCrop {
     position: relative;
-    /* float: left; */
     overflow: hidden;
     width: calc(3.5rem * 5);
-    /* width: 13em; */
     height: 3.5rem;
 }
 
 .zpSearchResultsPaging {
-    /* z-index: 0; */
     position: absolute;
     top: 0;
     left: 0;
-    /* height: inherit; */
     display: flex;
 }
 
 .zpSearchResultsPaging a,
 .zpSearchResultsPaging a:link {
     display: block;
-    /* float: left; */
     line-height: 0.9;
     margin: 0;
     text-align: center;
     text-decoration: none;
     flex-shrink: 0;
-    /* width: 50px; */
     width: 3.5rem;
 }
 .zpSearchResultsPaging a:focus {
@@ -269,19 +262,14 @@ a.zp-DownloadURL:after {
 }
 
 .zpSearchResultsPagingScroller {
-    /* float: left; */
-    /* background-color: #fff; */
     margin-left: 2rem;
     text-align: center;
-    /* width: 4.2em; */
-    /* height: 3rem; */
 }
 .zpSearchResultsPagingScroller span {
     cursor: pointer;
     display: inline-block;
     font-size: 3.5rem;
     line-height: 0.8;
-    /* padding: 5px 10px; */
     padding: 0 1rem;
 
     -webkit-user-select: none;  /* Chrome all / Safari all */
