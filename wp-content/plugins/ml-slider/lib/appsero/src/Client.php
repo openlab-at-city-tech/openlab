@@ -14,7 +14,7 @@ class Client {
      *
      * @var string
      */
-    public $version = '2.0.3.1'; // This is a modified version by us in MetaSlider 3.93
+    public $version = '2.0.4';
 
     /**
      * Hash identifier of the plugin

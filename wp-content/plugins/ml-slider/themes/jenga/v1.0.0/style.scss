@@ -64,6 +64,8 @@
 						-webkit-transition: background .2s ease-in-out;
 						transition: background .2s ease-in-out;
 						width: 16px;
+						border: 2px solid rgba(255,255,255,0);
+
 						&:hover {
 							background: rgba(183,180,180,0.2);
 							border: 2px solid rgba(255,255,255,.9);

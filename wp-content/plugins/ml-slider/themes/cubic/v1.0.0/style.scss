@@ -26,18 +26,9 @@
 			&:not(.flex-control-thumbs) {
 				background: transparent;
 				bottom: 15px;
-				-webkit-box-pack: center;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-ms-flex-pack: center;
-				-ms-flex-wrap: wrap;
-				flex-wrap: wrap;
-				justify-content: center;
-				justify-content: center;
 				line-height: 15px;
 				margin: 0;
-				padding: 0 !important;
+				padding: 0;
 				position: absolute;
 				-webkit-transition: top 0.2s;
 				transition: top 0.2s;
@@ -45,7 +36,7 @@
 				li {
 					a {
 						background: rgba(255, 255, 255, 0.8);
-						border: 0;
+						border: 2px solid transparent;
 						border-radius: 0;
 						-webkit-box-shadow: none !important;
 						box-shadow: none !important;
@@ -55,7 +46,8 @@
 						line-height: 15px;
 						margin: 0 5px;
 						padding: 5px 0 5px 10px;
-						text-indent: -9999px;
+						text-indent: 9999px;
+						overflow: hidden;
 						-webkit-transition: background 0.2s ease-in-out;
 						transition: background 0.2s ease-in-out;
 						width: 15px;
@@ -97,7 +89,8 @@
 					margin-top: -50px;
 					max-width: 50px;
 					overflow: hidden;
-					top: 50%;
+					top: calc(50% + 50px);
+					transform: translateY(-50%);
 					-webkit-transition: all 0.2s ease-in-out;
 					transition: all 0.2s ease-in-out;
 					width: 11%;
@@ -107,7 +100,7 @@
 						mask-image: url("images/arrow.svg");
                         mask-repeat: no-repeat;
 						mask-position: 50% 50%;
-						mask-size: 100%;
+						mask-size: 47px auto;
 						content: "" !important;
 						display: block;
 						height: 47px;
@@ -171,6 +164,7 @@
 			.caption-wrap {
 				background: rgba(0, 0, 0, 0.8);
 				bottom: 0;
+				transform: translateY(50%);
 				color: inherit;
 				margin: 0;
 				padding: 0;
@@ -183,6 +177,7 @@
 					font-size: 0.9rem;
 					padding: 20px 30px 55px 30px;
 					text-align: center;
+					line-height: 1.4em;
 				}
 			}
 			.flex-active-slide {

@@ -29,7 +29,8 @@ export default {
 	data() {
 		return {
 			allowedElements: ['metaslider-ui', 'updraft-ad-container', 'metaslider-admin-notice'],
-			titleChanged: ''
+			titleChanged: '',
+			isSettingsPage: true
 		}
 	},
 	computed: {
@@ -41,11 +42,19 @@ export default {
 		}),
 	},
 	created() {
+		const urlParams = new URLSearchParams(window.location.search);
+		const page = urlParams.get('page');
+
+		this.isSettingsPage = page !== null && page === 'metaslider-settings';
+
 		window.metaslider_slider_id = this.id // used in admin.js
 		this.$store.commit('slideshows/setCurrent', this.id)
 		this.$store.dispatch('slideshows/getSingleSlideshow', this.id)
-		this.$store.dispatch('slideshows/getRecentSlideshows')
 
+		// @since 3.97 - Is this the Settings page?
+		if (this.isSettingsPage) {
+			this.$store.dispatch('slideshows/getRecentSlideshows')
+		}
 	},
 	mounted() {
 		// Show only the allowed elements on our page (keeps rogue notices from showing)

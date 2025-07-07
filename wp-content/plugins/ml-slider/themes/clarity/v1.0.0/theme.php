@@ -25,6 +25,7 @@ class MetaSlider_Theme_Clarity extends MetaSlider_Theme_Base
     public function __construct()
     {
         parent::__construct( $this->id, $this->version );
+        add_filter( 'metaslider_flex_slider_responsive_arrows_enable', '__return_true' );
     }
 
     /**

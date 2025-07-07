@@ -16,7 +16,7 @@
 				name="default-slideshow-width" 
 				wrapper-class="w-24" 
 				@click="saveSlideshowDefaultSettings()">
-				<template slot="header">{{ __('Base Image Width', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Default Base Image Width', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Update the default width for the base image. This will be used for the slideshow dimensions and base image cropping.', 'ml-slider') }}</template>
 				<template slot="input-label">
 					{{ __('Change the default width', 'ml-slider') }}
@@ -27,7 +27,7 @@
 				name="default-slideshow-height" 
 				wrapper-class="w-24" 
 				@click="saveSlideshowDefaultSettings()">
-				<template slot="header">{{ __('Base Image Height', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Default Base Image Height', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Update the default height for the base image. This will be used for the base image cropping and slideshow dimensions. If set to 100% width, the height will scale accordingly.', 'ml-slider') }}</template>
 				<template slot="input-label">
 					{{ __('Change the default width', 'ml-slider') }}
@@ -41,12 +41,12 @@
 				v-model="slideshowDefaults.navigation" 
 				:options="navigationOptions" 
 				@click="saveSlideshowDefaultSettings()">
-				<template slot="header">{{ __('Navigation', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Change the default navigation when creating a new slideshow. Show options so that users can browse the slides.', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Default Navigation', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Change the default navigation when creating a new slideshow.', 'ml-slider') }}</template>
 			</select-field-input>
 			<switch-single-input v-model="slideshowDefaults.autoPlay" @change="saveSlideshowDefaultSettings()">
 				<template slot="header">{{ __('Auto Play', 'ml-slider') }}</template>
-				<template slot="description">{{ __('Change the default transition between slides automatically when creating a new slideshow.', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Change the default transition between slides.', 'ml-slider') }}</template>
 			</switch-single-input>
 		</template>
 	</split-layout>
@@ -69,13 +69,13 @@
                 </template>
 			</switch-single-input>
 			<switch-single-input v-model="globalSettings.mobileSettings" @change="saveGlobalSettings()">
-				<template slot="header">{{ __('Enable Mobile Settings', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Enable Device Settings', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Add option to hide slides and captions per screen size.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<template v-if="globalSettings.mobileSettings">
 				<div id="mobile-settings" class="bg-white shadow mb-4 relative px-4 py-5 md:p-6">
 					<h3 class="text-lg leading-6 m-0 font-medium text-gray-darkest">
-						{{ __('Mobile Settings', 'ml-slider') }}
+						{{ __('Device Settings', 'ml-slider') }}
 					</h3>
 					<div class="mt-2 max-w-xl text-sm leading-5 text-gray-dark">
 						<div class="m-0 pt-0">
@@ -84,22 +84,34 @@
 					</div>
 					<div class="row">
 						<div class="col">
-							<span class="dashicons dashicons-smartphone"></span>
+							<div class="mobile-icon-wrap text-gray-dark">
+								<span class="dashicons dashicons-smartphone"></span>
+								<span class="ms-icon-name">{{ __('Smartphone', 'ml-slider') }}</span>
+							</div>
 							<text-multiple-input v-model="slideshowDefaults.smartphone" name="default-slideshow-smartphone" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
 						<div class="col">
-							<span class="dashicons dashicons-tablet"></span>
+							<div class="mobile-icon-wrap text-gray-dark">
+								<span class="dashicons dashicons-tablet"></span>
+								<span class="ms-icon-name">{{ __('Tablet', 'ml-slider') }}</span>
+							</div>
 							<text-multiple-input v-model="slideshowDefaults.tablet" name="default-slideshow-tablet" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
 						<div class="col">
-							<span class="dashicons dashicons-laptop"></span>
+							<div class="mobile-icon-wrap text-gray-dark">
+								<span class="dashicons dashicons-laptop"></span>
+								<span class="ms-icon-name">{{ __('Laptop', 'ml-slider') }}</span>
+							</div>
 							<text-multiple-input v-model="slideshowDefaults.laptop" name="default-slideshow-laptop" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
 						<div class="col">
-							<span class="dashicons dashicons-desktop"></span>
+							<div class="mobile-icon-wrap text-gray-dark">
+								<span class="dashicons dashicons-desktop"></span>
+								<span class="ms-icon-name">{{ __('Desktop', 'ml-slider') }}</span>
+							</div>
 							<text-multiple-input v-model="slideshowDefaults.desktop" name="default-slideshow-desktop" @click="saveSlideshowDefaultSettings()">
 							</text-multiple-input>
 						</div>
@@ -147,6 +159,10 @@
 			<switch-single-input v-model="globalSettings.tinyMce" @change="saveGlobalSettings()">
 				<template slot="header">{{ __('Enable TinyMCE', 'ml-slider') }}</template>
 				<template slot="description">{{ __('TinyMCE is a WYSIWYG editor you can use in slide captions.', 'ml-slider') }}</template>
+			</switch-single-input>
+			<switch-single-input v-model="globalSettings.autoThemeConfig" @change="saveGlobalSettings()">
+				<template slot="header">{{ __('Recommended Theme Options', 'ml-slider') }}</template>
+				<template slot="description">{{ __('Automatically apply recommended slideshow options when selecting a theme. This will replace some of the previous options.', 'ml-slider') }}</template>
 			</switch-single-input>
 			<template>
 				<div id="dashboard-settings" class="bg-white shadow mb-4 relative px-4 py-5 md:p-6">
@@ -206,12 +222,16 @@
 				name="default-slideshow-width" 
 				wrapper-class="w-24" 
 				@click="saveProSettings()">
-				<template slot="header">{{ __('Maximum Number of Custom Field in Post Feed Sliders', 'ml-slider') }}</template>
+				<template slot="header">{{ __('Maximum Number of Custom Fields in Post Feed Slides', 'ml-slider') }}</template>
 				<template slot="description">{{ __('Select how many custom fields will display in the dropdown menu when you are inserting tags.', 'ml-slider') }}</template>
 				<template slot="input-label">
 					{{ __('Change the maximum custom fields for Post Feed', 'ml-slider') }}
 				</template>
 			</text-single-input>
+			<switch-single-input v-model="proSettings.legacyThemeEditor" @change="saveProSettings()">
+				<template slot="header">{{ __('Enable Legacy Theme Editor', 'ml-slider') }}</template>
+				<template slot="description">{{ __('This setting allows you to enable the legacy Theme Editor.', 'ml-slider') }}</template>
+			</switch-single-input>
 		</template>
 	</split-layout>
 </div>
@@ -262,6 +282,7 @@ export default {
 				mobileSettings: true,
 				legacyWidget: true,
 				tinyMce: true,
+				autoThemeConfig: true,
 				dashboardSort: 'ID',
 				dashboardOrder: 'asc',
 				dashboardItems: 10
@@ -269,6 +290,7 @@ export default {
 			},
 			proSettings: {
 				postFeedFields: 30,
+				legacyThemeEditor: false // false means legacy Theme editor is disabled
 			},
 			legacySlideshows: {}
 
@@ -401,6 +423,13 @@ export default {
 		isPro() {
 			return metaslider_api.proUser !== 'undefined' && Number(metaslider_api.proUser) === 1;
 		},
+	},
+	watch: {
+		legacySlideshows(newVal) {
+			if (newVal !== 0) {
+				this.globalSettings.legacy = false;
+			}
+		}
 	}
 }
 </script>

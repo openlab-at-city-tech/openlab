@@ -4,7 +4,7 @@
 		<template slot="header">{{ __('Help Center', 'ml-slider') }}</template>
 		<template slot="description">{{ __('Here you will find documentation, and two support tiers to choose from. Additionally, you may supply us with extra information specific to your website, server, etc.', 'ml-slider') }}</template>
 		<template slot="fields">
-            <textbox-with-link link="https://www.metaslider.com/documentation/" class="mb-4" :new-tab="true">
+            <textbox-with-link link="https://www.metaslider.com/docs/" class="mb-4" :new-tab="true">
                 <template slot="header">{{ __('Documentation 📚', 'ml-slider') }}</template>
                 <template slot="description">{{ __('Check out our documentation page for examples, and more information about what you can do with MetaSlider.', 'ml-slider') }}</template>
                 <template slot="link-text">{{ __('Visit documentation', 'ml-slider') }}</template>

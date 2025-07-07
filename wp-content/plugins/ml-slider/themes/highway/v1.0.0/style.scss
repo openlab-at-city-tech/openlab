@@ -93,7 +93,7 @@
 		}
 		&:not(.filmstrip) {
 			ul.flex-direction-nav {
-				bottom: 80px;
+				top: 0;
 				left: 50%;
 				position: absolute;
 				-webkit-transform: translateX(-50%);
@@ -101,7 +101,13 @@
 				-webkit-transition: top .2s;
 				transition: top .2s;
 				width: 100px;
+				height: 100%;
 				z-index: 1020;
+
+				li a {
+					bottom: 36px;
+					top: unset;
+				}
 			}
 		}
 		ul.flex-direction-nav {
@@ -195,11 +201,11 @@
 				left: 0;
 				margin: 0;
 				max-height: 170px;
+				height: 160px;
 				max-width: 450px;
 				padding: 0;
 				text-align: center;
 				top: 50%;
-				-webkit-transform: translateY(-50%);
 				transform: translateY(-50%);
 				-webkit-transition: .5s all;
 				transition: .5s all;

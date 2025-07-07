@@ -92,6 +92,7 @@ body .metaslider .flexslider .flex-direction-nav li {
 }
 
 .metaslider .flex-pauseplay a {
+    box-sizing: border-box;
 	height: 30px;
 	width: 30px;
 }
@@ -121,6 +122,14 @@ body .metaslider .flexslider .flex-direction-nav li {
     z-index: 2;
 }
 
+.metaslider.has-dots-onhover-navigation .flexslider .flex-control-paging {
+    opacity: 1;
+    transition: opacity .3s ease;
+}
+.metaslider.has-dots-onhover-navigation:hover .flexslider .flex-control-paging {
+    opacity: 1 !important;
+}
+
 .metaslider-flex.ms-theme-default .flex-next:focus {
     background: url('bg_direction_nav.png') scroll right 0 transparent!important;
     height: 27px!important;
@@ -138,6 +147,8 @@ body .metaslider .flexslider .flex-direction-nav li {
 .metaslider .flex-control-nav li a {
 	margin: 0 6px;
 	padding: 0;
+	text-indent: 9999px;
+	overflow: hidden;
 }
 
 .metaslider .flexslider .slides li {
@@ -223,7 +234,7 @@ body .metaslider .flexslider .flex-direction-nav li {
 .metaslider.has-onhover-arrows .flexslider .flex-direction-nav li a {
     opacity: 0;
 }
-.metaslider.has-onhover-arrows .flexslider .flex-direction-nav li a:hover {
+.metaslider.has-onhover-arrows:hover .flexslider .flex-direction-nav li a{
     opacity: 1;
 }
 
@@ -278,8 +289,11 @@ body .metaslider .flexslider .flex-direction-nav li {
     background: #000;
     color: #fff;
     text-align: center;
-    border-radius: 50%;
-    line-height: 27px;
+    padding: 0 8px;
+    border-radius: 50px;
+    text-decoration: none;
+    line-height: 30px;
+    font-size: 16px;
 }
 .metaslider .flexslider .flex-pauseplay a:before {
     font-size: 16px;
@@ -288,6 +302,7 @@ body .metaslider .flexslider .flex-direction-nav li {
 .metaslider .flexslider .flex-pauseplay .flex-pause:focus {
     background: #000;
     color: #fff;
+	outline: 2px solid #fff;
 }
 .metaslider .flexslider .flex-pauseplay .flex-play:before {
     margin-left: 4px;
@@ -423,6 +438,45 @@ div.metaslider .slider-wrapper .nivo-controlNav a {
 	height: auto !important;
 	padding: 10px !important;
 	margin: 0 !important;
+}
+
+/* Progress Bar */
+.flex-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 4px;
+    width: 0%;
+    background-color: #fff;
+    transition: width 2s linear;
+    z-index: 999;
+}
+/* Carousel */
+.ms-carousel-force-height .slides > li {
+    overflow: hidden;
+}
+.ms-carousel-force-height .slides > li.ms-image img {
+    height: 100%;
+    width: auto;
+}
+
+/* Custom button */
+.ms-custom-button {
+	display: inline-block;
+	background-color: #0073aa;
+	color: #fff;
+	cursor: pointer;
+	padding: 8px 14px;
+	border-radius: 4px;
+	text-decoration: none;
+	transition: background-color 0.2s ease;
+}
+.ms-custom-button:hover {
+	opacity: 0.8;
+}
+.slides li:focus-within {
+	outline: 2px solid #007cba;
+	outline-offset: -2px;
 }
 @media only screen and (max-width : 767px) {
     .metaslider.ms-theme-precognition .flex-control-nav li a {

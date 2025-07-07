@@ -147,7 +147,7 @@ return array(
         'supports' => array('flex', 'responsive', 'nivo', 'coin'),
         'tags' => array('light', 'special'),
         'description' => __('This theme has a special additional functionality that uses image titles as the slide navigation. ', 'ml-slider'),
-        'instructions' => __('If you would like to use the image titles as the navigation, you will need to use FlexSlider. Additionally, to change the slide navigation label, edit the image title in the media library or manually on the slide (SEO tab).', 'ml-slider'),
+        'instructions' => __('If you would like to use the image titles as the navigation, you can do so by editing the image title in the media library or manually on the slide (SEO tab).', 'ml-slider'),
         'images' => array(
             array(
                 'filename' => 'norbert-levajsics-203627-unsplash.jpg',
@@ -191,7 +191,7 @@ return array(
     ),
     'architekt' => array(
         'folder' => 'architekt',
-        'title' => 'The Architekt',
+        'title' => 'Architekt',
         'type' => 'free',
         'supports' => array('flex', 'responsive', 'nivo'),
         'tags' => array('light', 'minimalist'),

@@ -52,6 +52,10 @@ class MetaSlider_Theme_Radix extends MetaSlider_Theme_Base
      */
     public function update_flexslider_counter($options, $id)
     {
+        // Empty these to avoid double text in custom themes
+        $options['prevText'] =  "''";
+        $options['nextText'] =  "''";
+        
         $options['before'] = isset($options['before']) ? $options['before'] : array();
         $options['start'] = isset($options['start']) ? $options['start'] : array();
 

@@ -32,11 +32,15 @@ self::$instance = new self();
      * Method to import an image (or more than one). If nothing passed in it will load in a random one from 
      * the theme directory. A theme can also be defined.
      * 
+     * @since 3.98 - Added $extra param
+     * 
      * @param array  $images   - Images to upload, if any
      * @param string $theme_id - The folder name of a theme
+     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption' from admin.php?page=metaslider&id=<ID>&metaslider_add_sample_slides=withcaption
+     * 
      * @return WP_Error|array - The array of ids that were uploaded
      */
-    public function import($images, $theme_id = null)
+    public function import($images, $theme_id = null, $extra = array())
     {
         /*
         If we are provided images, they should be formatted already
@@ -50,7 +54,7 @@ self::$instance = new self();
         );
         */
         if (empty($images)) {
-$images = $this->get_theme_images($theme_id);
+            $images = $this->get_theme_images($theme_id, 4, $extra);
         }
 
         // Get an array or sucessful image ids
@@ -133,11 +137,15 @@ $images = $this->get_theme_images($theme_id);
     /**
      * Method to import images from a theme
      *
-     * @param array|null $theme_id - The name of a theme
-     * @param int        $count    - How many images? (4 for legacy reasons)
+     * @since 3.98 - Added $extra param
+     * 
+     * @param array|null $theme_id  The name of a theme
+     * @param int $count            How many images? (4 for legacy reasons)
+     * @param array $extra          Extra data such as slug from quickstart option if available. e.g. 'withcaption' from admin.php?page=metaslider&id=<ID>&metaslider_add_sample_slides=withcaption
+     * 
      * @return array - a formatted image array
      */
-    public function get_theme_images($theme_id, $count = 4)
+    public function get_theme_images($theme_id, $count = 4, $extra = array())
     {
 
         // To use local images, the folder must exist
@@ -182,7 +190,21 @@ $images = $this->get_theme_images($theme_id);
         // If images are specified, make sure they exist and use them. if not, use 4 at random
         $images = !empty($images) ? $this->pluck_images($images, $all_images) : array_rand(array_flip($all_images), $count);
 
-        $images_formatted = array();
+        $available_captions = array(
+            "Bold ideas. Brighter futures.",
+            "Crafted with purpose, built to inspire.",
+            "Where ambition finds its home.",
+            "Simplicity meets sophistication.",
+            "Dream big. Build bigger.",
+            "Design the moment. Define the future.",
+            "Passion fuels every detail.",
+            "Visionary minds, timeless creations.",
+            "The future starts with a spark.",
+            "Inspired by life. Driven by purpose."
+        );
+        $used_captions      = array();
+        $images_formatted   = array();
+
         foreach ((array) $images as $filedata) {
             $data = array();
 
@@ -206,6 +228,20 @@ continue;
 
             // Set the local images dir as the source
             $data['source'] = trailingslashit($theme_image_directory) . $filename;
+            
+            // @since 3.98 - Get a random caption that hasn't been used yet 
+            // for 'Carousel Slideshow with Captions' quickstart slides
+            if ( isset( $extra['slug'] ) && $extra['slug'] == 'withcaption' ) {
+                $available_captions = array_diff( $available_captions, $used_captions );
+                if ( empty( $available_captions ) ) {
+                    // When we run out of captions, set empty
+                    $data['caption'] = '';
+                } else {
+                    $random_caption = $available_captions[array_rand( $available_captions )];
+                    $used_captions[] = $random_caption;
+                    $data['caption'] = $random_caption;
+                }
+            }
             
             /*
             It should look like this, possibly without the meta data

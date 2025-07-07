@@ -24,30 +24,21 @@
 		margin-bottom: 0;
 		ol.flex-control-nav {
 			&:not(.flex-control-thumbs) {
+				text-align: left;
 				background: transparent;
 				bottom: 30px;
-				-webkit-box-pack: center;
-				display: -webkit-box;
-				display: -ms-flexbox;
-				display: flex;
-				-ms-flex-pack: center;
-				-ms-flex-wrap: wrap;
-				flex-wrap: wrap;
-				justify-content: center;
-				justify-content: center;
-				left: 30px;
 				line-height: 1.2;
+				padding: 0 0 0 30px;
 				margin: 0;
-				padding: 0 !important;
-				position: absolute;
 				-webkit-transition: top .2s;
 				transition: top .2s;
-				width: auto;
 				z-index: 8;
 				li {
 					a {
+						text-align: center;
 						background: transparent;
 						border: 0;
+						border-bottom: 2px solid transparent;
 						border-radius: 0;
 						-webkit-box-shadow: none !important;
 						box-shadow: none !important;
@@ -91,12 +82,25 @@
 		}
 		&:not(.filmstrip) {
 			ul.flex-direction-nav {
-				bottom: 60px;
-				position: absolute;
+				/*position: absolute;
 				right: 20px;
 				-webkit-transition: top .2s;
 				transition: top .2s;
-				width: 100px;
+				width: 100px;*/
+
+				a {
+					bottom: 25px;
+					top: unset;
+
+					&.flex-prev {
+						left: unset;
+						right: 64px;
+					}
+
+					&.flex-next {
+						right: 25px;
+					}
+				}
 			}
 		}
 		ul.flex-direction-nav {
@@ -197,6 +201,11 @@
 					transform: translateY(0);
 				}
 			}
+		}
+		.flex-pauseplay a {
+			top: 25px;
+  			bottom: unset;
+  			left: 30px;
 		}
 	}
 	ul.rslides_tabs {
@@ -669,25 +678,23 @@
 	.flexslider {
 		ol.flex-control-nav {
 			&:not(.flex-control-thumbs) {
-				bottom: 20px;
-				left: 0;
-				right: 0;
-				width: 100%;
+				text-align: center;
+				padding: 0 !important;
 			}
 		}
 		&:not(.filmstrip) {
 			ul.flex-direction-nav {
 				bottom: 50px;
-				right: 10px;
+				//right: 10px;
 			}
 		}
-		ul.flex-direction-nav {
+		/*ul.flex-direction-nav {
 			li {
 				a.flex-prev {
 					left: 27px;
 				}
 			}
-		}
+		}*/
 		ul.slides {
 			.caption-wrap {
 				.caption {

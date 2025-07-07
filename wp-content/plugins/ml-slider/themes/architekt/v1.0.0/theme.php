@@ -40,7 +40,7 @@ class MetaSlider_Theme_Architekt extends MetaSlider_Theme_Base
      */
     public function enqueue_assets()
     {
-        wp_enqueue_style('metaslider_architekt_theme_styles', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/style.min.css', array('metaslider-public'), '1.0.0');
+        wp_enqueue_style('metaslider_architekt_theme_styles', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/style.css', array('metaslider-public'), '1.0.0');
         wp_enqueue_script('metaslider_architekt_theme_script', METASLIDER_THEMES_URL . $this->id . '/v1.0.0/script.js', array('jquery'), '1.0.0', true);
     }
 }

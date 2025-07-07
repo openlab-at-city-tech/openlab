@@ -194,6 +194,8 @@ window.jQuery(function ($) {
         // Remove filters to don't allow to insert other media type different to images
         $('#media-attachment-filters').remove();
     })
+    create_slides.on('all', function (){ $('.media-button').text( APP.__('Add to slideshow', 'ml-slider') ); });
+
     APP && create_slides.on('open', function () {
         APP.notifyInfo('metaslider/add-slide-opening-ui', APP.__('Opening add slide UI...', 'ml-slider'))
     })
@@ -446,31 +448,65 @@ window.jQuery(function ($) {
         var infiniteLoop = $('.ms-settings-table input[name="settings[infiniteLoop]"]');
         var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
         var pausePlay = $('.ms-settings-table input[name="settings[pausePlay]"]');
+        var progressBar = $('.ms-settings-table input[name="settings[progressBar]"]');
 
         if (carouselMode.is(':checked') && infiniteLoop.is(':checked')) {
             // Hide "Auto play" and "Play / pause" if "Carousel mode" AND "Loop carousel continuously" are enabled
             autoPlay.parents('tr').hide();
             pausePlay.parents('tr').hide();
         } else {
-            // Show "Auto play" if "Carousel mode" OR "Loop carousel continuously" are disabled
+            // Show "Auto play" and "Play / pause" if "Carousel mode" OR "Loop carousel continuously" are disabled
             autoPlay.parents('tr').show();
-
-            if (autoPlay.is(':checked')) {
-                // Show "Play / pause" if "Auto play" is enabled
-                pausePlay.parents('tr').show();
-            } else {
-                pausePlay.parents('tr').hide();
-            }
+            pausePlay.parents('tr').show();
         }
+
+        var showProgressBar = autoPlay.is(':checked') && (!carouselMode.is(':checked') || !infiniteLoop.is(':checked')) ? true : false;
+
+        progressBar.parents('tr').toggle(showProgressBar);
+        $('tr.customizer-slideshow').eq(3).toggle(showProgressBar);
     }
     showHideAutoPlay();
+
+    /**
+     * Show/hide Pause/Play Button options
+     * 
+     * @since 3.96
+     * 
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[pausePlay]"], .ms-settings-table input[name="settings[autoPlay]"], .ms-settings-table input[name="settings[showPlayText]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
+        showHidePlayButtonOptions();
+    });
+
+    var showHidePlayButtonOptions = function () {
+        var table = $('.ms-settings-table');
+        var pausePlay = table.find('input[name="settings[pausePlay]"]');
+        var showPlayText = table.find('input[name="settings[showPlayText]"]');
+        var infiniteLoop = table.find('input[name="settings[infiniteLoop]"]');
+        var hoverPauseRow = table.find('input[name="settings[hoverPause]"]').closest('tr');
+        var playTextRow = table.find('input[name="settings[playText]"]').closest('tr');
+        var pauseTextRow = table.find('input[name="settings[pauseText]"]').closest('tr');
+        var pausePlayRow = pausePlay.closest('tr');
+        var showPlayTextRow = showPlayText.closest('tr');
+    
+        if (infiniteLoop.is(':checked')) {
+            pausePlayRow.add(showPlayTextRow).add(playTextRow).add(pauseTextRow).hide();
+        } else {
+            pausePlayRow.show();
+            showPlayTextRow.toggle(pausePlay.is(':checked'));
+            var showText = pausePlay.is(':checked') && showPlayText.is(':checked');
+            playTextRow.add(pauseTextRow).toggle(showText);
+            hoverPauseRow.toggle(!pausePlay.is(':checked'));
+        }
+    };
+    
+    showHidePlayButtonOptions();
 
     /**
      * When Pause/Play button changes
      * 
      * @since 3.92
      */
-    $('.metaslider').on('change', '.ms-settings-table input[name="settings[pausePlay]"], .ms-settings-table input[name="settings[autoPlay]"]', function () {
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[pausePlay]"]', function () {
         showHideCustomPlayColor();
     });
 
@@ -480,18 +516,13 @@ window.jQuery(function ($) {
      * @since 3.92
      */
     var showHideCustomPlayColor = function () {
-        var pausePlay = $('.ms-settings-table input[name="settings[pausePlay]"]');
-        var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
-        if (autoPlay.is(':checked')) {
-            if (pausePlay.is(':checked')) {
-                $('tr.customizer-pausePlay').show();
-            } else {
-                $('tr.customizer-pausePlay').hide();
-            }
-        } else {
-            $('tr.customizer-pausePlay').hide(); 
-        }   
-    }
+        var $table = $('.ms-settings-table');
+        var pausePlay = $table.find('input[name="settings[pausePlay]"]');
+        var customizerRow = $('tr.customizer-play_pause');
+    
+        var isChecked = pausePlay.is(':checked');
+        customizerRow.toggle(isChecked);
+    };
 
     setTimeout(function () {
         showHideCustomPlayColor();
@@ -514,9 +545,9 @@ window.jQuery(function ($) {
     var showHideCustomArrowColor = function () {
         var links = $('.ms-settings-table select[name="settings[links]"]').val();
         if (links === 'false') {
-            $('tr.customizer-links').hide();
+            $('tr.customizer-arrows').hide();
         } else {
-            $('tr.customizer-links').show();
+            $('tr.customizer-arrows').show();
         }
     }
 
@@ -606,6 +637,68 @@ window.jQuery(function ($) {
         }
     }
     adjustLoop();
+
+    /**
+     * When Progress Bar changes
+     * 
+     * @since 3.94
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[progressBar]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
+        showHideCustomProgressBarColor();
+    });
+
+    /**
+     * When Extra Effect changes
+     * 
+     * @since 3.99
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[carouselMode]"], .ms-settings-table select[name="settings[effect]"], .ms-settings-table select[name="settings[extra_effect]"]', function () {
+        showHideExtraEffect();
+    });
+
+    // Make sure to be in sync when selecting another theme
+    window.metaslider.app.EventManager.$on("metaslider/theme-updated", function () {
+        setTimeout(() => {
+            showHideCustomProgressBarColor();
+        }, 1000);
+    });
+
+    /**
+     * Show/hide custom color settings for progress bar
+     * 
+     * @since 3.92
+     */
+    var showHideCustomProgressBarColor = function () {
+        var carouselMode = $('.ms-settings-table input[name="settings[carouselMode]"]');
+        var progressBar = $('.ms-settings-table input[name="settings[progressBar]"]');
+        var infiniteLoop = $('.ms-settings-table input[name="settings[infiniteLoop]"]');
+        var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
+
+        var showProgressBar = autoPlay.is(':checked') && (!carouselMode.is(':checked') || !infiniteLoop.is(':checked')) ? true : false;
+
+        progressBar.parents('tr').toggle(showProgressBar);
+        $('tr.customizer-slideshow').eq(3).toggle(showProgressBar);
+    }
+    setTimeout(function () {
+        showHideCustomProgressBarColor();
+    }, 100);
+    
+/**
+     * Show/hide extra effect
+     * 
+     * @since 3.99
+     */
+    var showHideExtraEffect = function () {
+        var carouselMode = $('.ms-settings-table input[name="settings[carouselMode]"]');
+        var effect = $('.ms-settings-table select[name="settings[effect]"]');
+        var extraEffect = $('.ms-settings-table select[name="settings[extra_effect]"]');
+
+        var showExtraEffect = (!carouselMode.is(':checked') && ['fade', 'zooming', 'flip'].includes(effect.val()) ) ? true : false;
+        extraEffect.parents('tr').toggle(showExtraEffect);
+    }
+    setTimeout(function () {
+        showHideExtraEffect();
+    }, 100);
 
     /**
      * Add all the image APIs. Add events everytime the modal is open
@@ -1234,9 +1327,55 @@ window.jQuery(function ($) {
         }, 1000);
     }
 
+    /**
+     * Fallback after imporing slides
+     * 
+     * @since 3.98
+     * 
+     * @param {object} data The added slide data 
+     * 
+     * @return void
+     */
+    var after_importing_slides_success = window.metaslider.after_importing_slides_success = function ( data ) {
+        if (!data) {
+            console.error('No data found!');
+            return;
+        }
+
+        var table = $(".metaslider table#metaslider-slides-list");
+        
+        data.forEach(function(slide) {
+            // Mount the slide to the beginning or end of the list
+            // Here we may follow an inverted approach due import 
+            window.metaslider.newSlideOrder === 'last' 
+                ? table.prepend(slide['html'])
+                : table.append(slide['html']);
+        });
+
+        // Hide loading box
+        $('#loading-add-sample-slides-notice').hide();
+
+        var APP = window.metaslider.app.MetaSlider;
+
+        // Add timeouts to give some breating room to the notice animations
+        setTimeout(function () {
+            if (APP) {
+                const message = data.length == 1 ? APP.__('1 slide added successfully', 'ml-slider') : APP.__('%s slides added successfully')
+                APP.notifySuccess(
+                    'metaslider/slides-created',
+                    APP.sprintf(message, data.length),
+                    true
+                )
+            }
+            setTimeout(function () {
+                APP && APP.triggerEvent('metaslider/save')
+            }, 1000);
+        }, 1000);
+    }
+
     /* Add mobile icon for slides with existing mobile setting */
     var show_mobile_icon = function (slide_id) {
-        var mobile_label = APP && APP.__('Mobile options are enabled for this slide. Adjust using the Mobile tab.', 'ml-slider');
+        var mobile_label = APP && APP.__('Device options are enabled for this slide. Adjust using the Mobile tab.', 'ml-slider');
         var mobile_checkboxes = $('#metaslider-slides-list #'+ slide_id +' .mobile-checkbox:checked');
         var icon = '<span class="mobile_setting_enabled float-left tipsy-tooltip-top" title="'+ mobile_label +'"><span class="inline-block mr-1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-smartphone"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg></span></span>';
         var mobile_enabled = $('#metaslider-slides-list #'+ slide_id +' .slide-details .mobile_setting_enabled');
@@ -1259,7 +1398,7 @@ window.jQuery(function ($) {
         show_mobile_icon('slide-'+slider_id);
     });
 
-    /* Hide the Mobile Options section when all options are hidden */
+    /* Hide the Device Options section when all options are hidden */
     function mobileSectionChecker(){
         if ($('[name="settings[links]"]').val() == 'false' && $('[name="settings[navigation]"]').val() == 'false') {
             $('.highlight.mobileOptions, .empty-row-spacing.mobileOptions').hide();
@@ -1279,23 +1418,22 @@ window.jQuery(function ($) {
         setInterval(function() {
             count = container.find(":nth-child(" + count + ")").fadeOut().next().length ? count + 1 : 1;
             container.find(":nth-child(" + count + ")").fadeIn();
-            console.log(container.find(":nth-child(" + count + ")"));
         }, 2000);
     });
 
-    /**
-     * Trigger slideshow save after a quickstart has been created
-     * 
-     * @since 3.90
-     */
-    var sampleSlidesWereAdded = function () {
-        if (window.location.href.indexOf('metaslider_add_sample_slides_after') !== -1) {
-            setTimeout(function () {
-                APP && APP.triggerEvent('metaslider/save')
-            }, 1000);
-        }
-    }
-    sampleSlidesWereAdded();
+    /* Dashboard modal */
+    $(".open-modal").on("click", function () {
+        event.preventDefault(); 
+        let id = $(this).data("id");
+        $("#modal-" + id).fadeIn();
+        $("#overlay-" + id).fadeIn();
+    });
+
+    $(".close-modal, .modal-overlay").on("click", function () {
+        let id = $(this).data("id") || $(this).attr("id").replace("overlay-", "");
+        $("#modal-" + id).fadeOut();
+        $("#overlay-" + id).fadeOut();
+    });  
 });
 
 /**
