@@ -5,6 +5,66 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.25.0] - 2025-06-23
+### Changed
+- Tests: Modify environment check in tests to match new requirements. [#44059]
+
+## [0.24.4] - 2025-06-09
+### Fixed
+- Tests: Ensure method param count matches PHPUnit data providers. [#43815] [#43828]
+
+## [0.24.3] - 2025-04-28
+### Fixed
+- Linting: Fix more Stylelint violations. [#43213]
+
+## [0.24.2] - 2025-04-21
+### Fixed
+- Brute Force Protection: Handle unexpected parameter types from third-party plugins during login failure processing. [#43119]
+
+## [0.24.1] - 2025-04-01
+### Changed
+- Add a default value for the error param in the `wp_login_failed` action callback. [#42819]
+
+## [0.24.0] - 2025-03-31
+### Changed
+- Ensures Brute Force Protection does not log failed attempts on password validation failure. [#40925]
+
+## [0.23.8] - 2025-03-24
+### Changed
+- Internal updates.
+
+## [0.23.7] - 2025-03-17
+### Changed
+- Internal updates.
+
+## [0.23.6] - 2025-03-12
+### Changed
+- Internal updates.
+
+## [0.23.5] - 2025-03-10
+### Changed
+- Ensure check_valid_blocked_user handles error outcomes. [#42036]
+
+## [0.23.4] - 2025-02-24
+### Changed
+- Update dependencies. [#39263]
+
+## [0.23.3] - 2025-02-03
+### Fixed
+- Code: Remove extra params on function calls. [#41263]
+
+## [0.23.2] - 2025-01-20
+### Changed
+- Code: Use function-style exit() and die() with a default status code of 0. [#41167]
+
+## [0.23.1] - 2024-11-25
+### Changed
+- Updated dependencies. [#40286]
+
+## [0.23.0] - 2024-11-18
+### Removed
+- General: Update minimum PHP version to 7.2. [#40147]
+
 ## [0.22.3] - 2024-11-04
 ### Added
 - Enable test coverage. [#39961]
@@ -402,6 +462,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Core: do not ship .phpcs.dir.xml in production builds.
 
+[0.25.0]: https://github.com/Automattic/jetpack-waf/compare/v0.24.4...v0.25.0
+[0.24.4]: https://github.com/Automattic/jetpack-waf/compare/v0.24.3...v0.24.4
+[0.24.3]: https://github.com/Automattic/jetpack-waf/compare/v0.24.2...v0.24.3
+[0.24.2]: https://github.com/Automattic/jetpack-waf/compare/v0.24.1...v0.24.2
+[0.24.1]: https://github.com/Automattic/jetpack-waf/compare/v0.24.0...v0.24.1
+[0.24.0]: https://github.com/Automattic/jetpack-waf/compare/v0.23.8...v0.24.0
+[0.23.8]: https://github.com/Automattic/jetpack-waf/compare/v0.23.7...v0.23.8
+[0.23.7]: https://github.com/Automattic/jetpack-waf/compare/v0.23.6...v0.23.7
+[0.23.6]: https://github.com/Automattic/jetpack-waf/compare/v0.23.5...v0.23.6
+[0.23.5]: https://github.com/Automattic/jetpack-waf/compare/v0.23.4...v0.23.5
+[0.23.4]: https://github.com/Automattic/jetpack-waf/compare/v0.23.3...v0.23.4
+[0.23.3]: https://github.com/Automattic/jetpack-waf/compare/v0.23.2...v0.23.3
+[0.23.2]: https://github.com/Automattic/jetpack-waf/compare/v0.23.1...v0.23.2
+[0.23.1]: https://github.com/Automattic/jetpack-waf/compare/v0.23.0...v0.23.1
+[0.23.0]: https://github.com/Automattic/jetpack-waf/compare/v0.22.3...v0.23.0
 [0.22.3]: https://github.com/Automattic/jetpack-waf/compare/v0.22.2...v0.22.3
 [0.22.2]: https://github.com/Automattic/jetpack-waf/compare/v0.22.1...v0.22.2
 [0.22.1]: https://github.com/Automattic/jetpack-waf/compare/v0.22.0...v0.22.1

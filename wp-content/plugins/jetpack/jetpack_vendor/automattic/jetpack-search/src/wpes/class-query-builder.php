@@ -66,6 +66,13 @@ class Query_Builder {
 	protected $bucket_filters        = array();
 	protected $bucket_sub_aggs       = array();
 
+	/**
+	 * Language codes.
+	 *
+	 * @var array
+	 */
+	private $langs;
+
 	public function get_langs() {
 		if ( isset( $this->langs ) ) {
 			return $this->langs;
@@ -310,7 +317,7 @@ class Query_Builder {
 			);
 		}
 
-		if ( $this->query_bool_boost !== null && isset( $query['bool'] ) ) {
+		if ( $this->query_bool_boost !== null ) {
 			$query['bool']['boost'] = $this->query_bool_boost;
 		}
 

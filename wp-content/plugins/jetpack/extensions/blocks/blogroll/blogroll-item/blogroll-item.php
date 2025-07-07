@@ -10,6 +10,7 @@
 namespace Automattic\Jetpack\Extensions\Blogroll_Item;
 
 use Automattic\Jetpack\Blocks;
+use Automattic\Jetpack\Status\Request;
 use Jetpack_Gutenberg;
 
 const FEATURE_NAME = 'blogroll-item';
@@ -46,12 +47,12 @@ function load_assets( $attr, $content, $block ) {
 	 */
 	Jetpack_Gutenberg::load_assets_as_required( FEATURE_NAME );
 	$kses_defaults             = wp_kses_allowed_html( 'post' );
-	$name                      = wp_kses( $attr['name'], $kses_defaults );
-	$name_attr                 = esc_attr( $attr['name'] );
-	$id                        = esc_attr( $attr['id'] );
-	$url                       = esc_url( $attr['url'] );
-	$description               = wp_kses( $attr['description'], $kses_defaults );
-	$icon                      = esc_attr( isset( $attr['icon'] ) ? $attr['icon'] : null );
+	$name                      = wp_kses( $attr['name'] ?? '', $kses_defaults );
+	$name_attr                 = esc_attr( $attr['name'] ?? '' );
+	$id                        = esc_attr( $attr['id'] ?? '' );
+	$url                       = esc_url( $attr['url'] ?? '' );
+	$description               = wp_kses( $attr['description'] ?? '', $kses_defaults );
+	$icon                      = esc_attr( $attr['icon'] ?? null );
 	$target                    = esc_attr( $block->context['openLinksNewWindow'] ? '_blank' : '_self' );
 	$email                     = esc_attr( get_current_user_id() ? get_userdata( get_current_user_id() )->user_email : '' );
 	$wp_nonce                  = esc_attr( wp_create_nonce( 'blogsub_subscribe_' . $id ) );
@@ -83,7 +84,7 @@ HTML;
 		$placeholder_site_icon = 'empty-site-icon';
 	}
 
-	if ( ! jetpack_is_frontend() ) {
+	if ( ! Request::is_frontend() ) {
 		return <<<HTML
 			<div style="margin-bottom: 10px;">
 				<a href="$url">$name</a><div>$description</div>

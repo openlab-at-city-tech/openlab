@@ -33,9 +33,10 @@ class Module_Control {
 	/**
 	 * We use the same options as Jetpack the plugin to flag whether Search is active.
 	 */
-	const JETPACK_ACTIVE_MODULES_OPTION_KEY       = 'active_modules';
-	const JETPACK_SEARCH_MODULE_SLUG              = 'search';
-	const SEARCH_MODULE_INSTANT_SEARCH_OPTION_KEY = 'instant_search_enabled';
+	const JETPACK_ACTIVE_MODULES_OPTION_KEY               = 'active_modules';
+	const JETPACK_SEARCH_MODULE_SLUG                      = 'search';
+	const SEARCH_MODULE_INSTANT_SEARCH_OPTION_KEY         = 'instant_search_enabled';
+	const SEARCH_MODULE_SWAP_CLASSIC_TO_INLINE_OPTION_KEY = 'swap_classic_to_inline_search';
 
 	/**
 	 * Contructor
@@ -77,13 +78,23 @@ class Module_Control {
 	}
 
 	/**
+	 * Returns a boolean for whether new inline search is enabled.
+	 *
+	 * @return bool
+	 */
+	public function is_swap_classic_to_inline_search() {
+		return (bool) get_option( self::SEARCH_MODULE_SWAP_CLASSIC_TO_INLINE_OPTION_KEY, false );
+	}
+
+	/**
 	 * Activiate Search module
 	 */
 	public function activate() {
+		$is_wpcom = defined( 'IS_WPCOM' ) && IS_WPCOM;
 		if ( ( new Status() )->is_offline_mode() ) {
 			return new WP_Error( 'site_offline', __( 'Jetpack Search can not be used in offline mode.', 'jetpack-search-pkg' ) );
 		}
-		if ( ! $this->connection_manager->is_connected() ) {
+		if ( ! $is_wpcom && ! $this->connection_manager->is_connected() ) {
 			return new WP_Error( 'connection_required', __( 'Connect your site to use Jetpack Search.', 'jetpack-search-pkg' ) );
 		}
 		if ( ! $this->plan->supports_search() ) {
@@ -144,6 +155,15 @@ class Module_Control {
 	 */
 	public function update_instant_search_status( $enabled ) {
 		return $enabled ? $this->enable_instant_search() : $this->disable_instant_search();
+	}
+
+	/**
+	 * Update setting indicating whether inline search should use newer 1.3 API.
+	 *
+	 * @param bool $swap_classic_to_inline_search - true to use Inline Search, false to use Classic Search.
+	 */
+	public function update_swap_classic_to_inline_search( bool $swap_classic_to_inline_search ) {
+		return update_option( self::SEARCH_MODULE_SWAP_CLASSIC_TO_INLINE_OPTION_KEY, $swap_classic_to_inline_search );
 	}
 
 	/**

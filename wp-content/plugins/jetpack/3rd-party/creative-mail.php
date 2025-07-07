@@ -13,7 +13,7 @@ namespace Automattic\Jetpack\Creative_Mail;
 use Automattic\Jetpack\Plugins_Installer;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit( 0 );
 }
 
 const PLUGIN_SLUG = 'creative-mail-by-constant-contact';
@@ -41,7 +41,7 @@ function try_install() {
 	check_admin_referer( 'creative-mail-install' );
 
 	$result   = false;
-	$redirect = admin_url( 'edit.php?post_type=feedback' );
+	$redirect = admin_url( 'admin.php?page=jetpack-forms-admin' );
 
 	// Attempt to install and activate the plugin.
 	if ( current_user_can( 'activate_plugins' ) ) {
@@ -65,7 +65,7 @@ function try_install() {
 
 	wp_safe_redirect( $redirect );
 
-	exit;
+	exit( 0 );
 }
 
 /**

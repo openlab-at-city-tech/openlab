@@ -108,6 +108,11 @@
                     "selector": "img",
                     "source": "attribute"
                 },
+                "customLink": {
+                    "attribute": "href",
+                    "selector": "a",
+                    "source": "attribute"
+                },
                 "url": {
                     "attribute": "data-url",
                     "selector": "img",

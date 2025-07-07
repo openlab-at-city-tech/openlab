@@ -5,6 +5,89 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## 0.27.0 - 2025-06-23
+### Added
+- Add archives endpoint support. [#44028]
+
+## 0.26.3 - 2025-06-02
+### Added
+- Add query parameters to the stats URL from post list to reconstruct the back URL from stats view. [#43567]
+
+### Fixed
+- Fix wrapping on the stats column heading in non-English languages. [#43630]
+
+## 0.26.2 - 2025-05-12
+### Fixed
+- Stats column: Avoid PHP error when a locale is not available. [#43396]
+
+## 0.26.1 - 2025-05-05
+### Changed
+- Update dependencies. [#39303]
+
+## 0.26.0 - 2025-04-28
+### Removed
+- SAL_Site: Remove unused `view_hosting` field. [#43237]
+
+### Fixed
+- Stats: Avoid PHP warning when we have no views data about a specific post. [#43146]
+
+## 0.25.2 - 2025-04-21
+### Changed
+- Internal updates.
+
+## 0.25.1 - 2025-04-14
+### Changed
+- Internal updates.
+
+## 0.25.0 - 2025-03-31
+### Added
+- Add page view count in the post and page list. [#42218]
+- Update icon in stats column. [#42218]
+
+## 0.24.6 - 2025-03-24
+### Changed
+- Internal updates.
+
+## 0.24.5 - 2025-03-18
+### Changed
+- Update dependencies. [#39303]
+
+## 0.24.4 - 2025-03-12
+### Changed
+- Internal updates.
+
+## 0.24.3 - 2025-03-10
+### Changed
+- Internal updates.
+
+## 0.24.2 - 2025-02-24
+### Changed
+- Internal updates.
+
+## 0.24.1 - 2025-02-03
+### Changed
+- Phan: Update baselines. [#41263]
+
+## 0.24.0 - 2025-01-06
+### Added
+- Stats: Add API support for location stats. [#40852]
+
+## 0.23.1 - 2024-11-25
+### Changed
+- Updated dependencies. [#40286]
+
+### Fixed
+- Catch an issue when custom code removes `ver` param. [#40322]
+- Stats: Remove cache for purchases and usage endpoints. [#40266]
+
+## 0.23.0 - 2024-11-18
+### Removed
+- General: Update minimum PHP version to 7.2. [#40147]
+
+## 0.22.6 - 2024-11-11
+### Fixed
+- Fixed flaky tests [#40062]
+
 ## 0.22.5 - 2024-11-04
 ### Added
 - Enable test coverage. [#39961]

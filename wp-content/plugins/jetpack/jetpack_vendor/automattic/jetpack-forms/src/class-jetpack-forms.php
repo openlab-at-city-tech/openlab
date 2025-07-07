@@ -9,13 +9,12 @@ namespace Automattic\Jetpack\Forms;
 
 use Automattic\Jetpack\Forms\ContactForm\Util;
 use Automattic\Jetpack\Forms\Dashboard\Dashboard;
-use Automattic\Jetpack\Forms\Dashboard\Dashboard_View_Switch;
 /**
  * Understands the Jetpack Forms package.
  */
 class Jetpack_Forms {
 
-	const PACKAGE_VERSION = '0.33.7';
+	const PACKAGE_VERSION = '2.1.0';
 
 	/**
 	 * Load the contact form module.
@@ -23,10 +22,8 @@ class Jetpack_Forms {
 	public static function load_contact_form() {
 		Util::init();
 
-		if ( is_admin() && self::is_feedback_dashboard_enabled() ) {
-			$view_switch = new Dashboard_View_Switch();
-
-			$dashboard = new Dashboard( $view_switch );
+		if ( self::is_feedback_dashboard_enabled() ) {
+			$dashboard = new Dashboard();
 			$dashboard->init();
 		}
 
@@ -36,7 +33,11 @@ class Jetpack_Forms {
 
 		add_action( 'init', '\Automattic\Jetpack\Forms\ContactForm\Util::register_pattern' );
 
-		add_action( 'rest_api_init', array( new WPCOM_REST_API_V2_Endpoint_Forms(), 'register_rest_routes' ) );
+		// Add hook to delete file attachments when a feedback post is deleted
+		add_action( 'before_delete_post', array( '\Automattic\Jetpack\Forms\ContactForm\Contact_Form', 'delete_feedback_files' ) );
+
+		// Enforces the availability of block support controls in the UI for classic themes.
+		add_filter( 'wp_theme_json_data_default', array( '\Automattic\Jetpack\Forms\ContactForm\Contact_Form', 'add_theme_json_data_for_classic_themes' ) );
 	}
 
 	/**
@@ -68,5 +69,24 @@ class Jetpack_Forms {
 		 * @param bool false Should the new Jetpack Forms dashboard be enabled? Default to false.
 		 */
 		return apply_filters( 'jetpack_forms_dashboard_enable', true );
+	}
+
+	/**
+	 * Returns true if the legacy menu item is retired.
+	 *
+	 * @return boolean
+	 */
+	public static function is_legacy_menu_item_retired() {
+
+		$default                      = false; // Don't retire the legacy menu item by default.
+		$largest_legacy_connection_id = 245807300; // The connection ID after which the legacy menu item is retired.
+
+		$connection_id = defined( 'IS_WPCOM' ) && IS_WPCOM ? get_current_blog_id() : intval( \Jetpack_Options::get_option( 'id' ) );
+
+		if ( $connection_id > $largest_legacy_connection_id ) {
+			$default = true; // Retire the legacy menu item for connections after the specified ID.
+		}
+
+		return apply_filters( 'jetpack_forms_retire_legacy_menu_item', $default );
 	}
 }

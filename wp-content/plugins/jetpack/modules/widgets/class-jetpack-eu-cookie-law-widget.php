@@ -11,7 +11,7 @@ use Automattic\Jetpack\Assets;
  * Disable direct access/execution to/of the widget code.
  */
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit( 0 );
 }
 
 if ( ! class_exists( 'Jetpack_EU_Cookie_Law_Widget' ) ) {
@@ -93,10 +93,6 @@ if ( ! class_exists( 'Jetpack_EU_Cookie_Law_Widget' ) ) {
 				),
 				array()
 			);
-
-			if ( is_active_widget( false, false, $this->id_base ) || is_customize_preview() ) {
-				add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_frontend_scripts' ) );
-			}
 		}
 
 		/**
@@ -165,6 +161,9 @@ if ( ! class_exists( 'Jetpack_EU_Cookie_Law_Widget' ) ) {
 				return;
 			}
 
+			// Enqueue front end assets.
+			$this->enqueue_frontend_scripts();
+
 			$instance = wp_parse_args( $instance, $this->defaults() );
 
 			if ( class_exists( 'Jetpack_AMP_Support' ) && Jetpack_AMP_Support::is_amp_request() ) {
@@ -218,6 +217,7 @@ if ( ! class_exists( 'Jetpack_EU_Cookie_Law_Widget' ) ) {
 		 * @html-template-var array $instance
 		 *
 		 * @param array $instance Previously saved values from database.
+		 * @return string|void
 		 */
 		public function form( $instance ) {
 			$instance = wp_parse_args( $instance, $this->defaults() );

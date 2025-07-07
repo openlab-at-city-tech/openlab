@@ -146,7 +146,7 @@ class Functions {
 		$post_type_object->add_rewrite_rules();
 		$post_type_object->add_hooks();
 		$post_type_object->register_taxonomies();
-		return (object) $post_type_object;
+		return $post_type_object;
 	}
 
 	/**
@@ -534,7 +534,7 @@ class Functions {
 		$formatted_gmt_offset = str_replace(
 			array( '.25', '.5', '.75' ),
 			array( ':15', ':30', ':45' ),
-			(string) $formatted_gmt_offset
+			$formatted_gmt_offset
 		);
 
 		/* translators: %s is UTC offset, e.g. "+1" */
@@ -736,5 +736,45 @@ class Functions {
 		$modules = array_unique( $modules );
 		$modules = array_map( 'wp_normalize_path', $modules );
 		return $modules;
+	}
+
+	/**
+	 * Return the list of Jetpack package versions.
+	 *
+	 * @since 4.11.1
+	 *
+	 * @return array
+	 */
+	public static function get_jetpack_package_versions() {
+		return apply_filters( 'jetpack_package_versions', array() );
+	}
+
+	/**
+	 * Get the environment type with support for 'sandbox'.
+	 *
+	 * Extends WordPress core's wp_get_environment_type() to support additional
+	 * environment types like 'sandbox'.
+	 *
+	 * @return string Environment type (local, development, staging, production, or sandbox).
+	 */
+	public static function get_environment_type() {
+		$env_type = '';
+
+		if ( function_exists( 'getenv' ) ) {
+			$has_env = getenv( 'WP_ENVIRONMENT_TYPE' );
+			if ( false !== $has_env ) {
+				$env_type = $has_env;
+			}
+		}
+
+		if ( defined( 'WP_ENVIRONMENT_TYPE' ) && WP_ENVIRONMENT_TYPE ) {
+			$env_type = WP_ENVIRONMENT_TYPE;
+		}
+
+		if ( 'sandbox' === $env_type ) {
+			return 'sandbox';
+		}
+
+		return wp_get_environment_type();
 	}
 }

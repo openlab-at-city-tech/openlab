@@ -3,7 +3,6 @@
 // phpcs:disable Universal.Files.SeparateFunctionsFromOO.Mixed -- TODO: Move classes to appropriately-named class files.
 
 use Automattic\Jetpack\Assets;
-use Automattic\Jetpack\Redirect;
 
 /*
 Plugin Name: The Neverending Home Page.
@@ -432,34 +431,9 @@ class The_Neverending_Home_Page {
 			return;
 		}
 
-		if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
-			// This setting is no longer configurable in wp-admin on WordPress.com -- leave a pointer
-			add_settings_field(
-				self::$option_name_enabled,
-				'<span id="infinite-scroll-options">' . esc_html__( 'Infinite Scroll Behavior', 'jetpack' ) . '</span>',
-				array( $this, 'infinite_setting_html_calypso_placeholder' ),
-				'reading'
-			);
-			return;
-		}
-
 		// Add the setting field [infinite_scroll] and place it in Settings > Reading
 		add_settings_field( self::$option_name_enabled, '<span id="infinite-scroll-options">' . esc_html__( 'Infinite Scroll Behavior', 'jetpack' ) . '</span>', array( $this, 'infinite_setting_html' ), 'reading' );
 		register_setting( 'reading', self::$option_name_enabled, 'esc_attr' );
-	}
-
-	/**
-	 * Render the redirect link to the infinite scroll settings in Calypso.
-	 */
-	public function infinite_setting_html_calypso_placeholder() {
-		$details     = get_blog_details();
-		$writing_url = Redirect::get_url( 'calypso-settings-writing', array( 'site' => $details->domain ) );
-		echo '<span>' . sprintf(
-			/* translators: Variables are the enclosing link to the settings page */
-			esc_html__( 'This option has moved. You can now manage it %1$shere%2$s.', 'jetpack' ),
-			'<a href="' . esc_url( $writing_url ) . '">',
-			'</a>'
-		) . '</span>';
 	}
 
 	/**
@@ -1377,14 +1351,14 @@ class The_Neverending_Home_Page {
 	 */
 	public function query() {
 		if ( ! isset( $_REQUEST['page'] ) || ! current_theme_supports( 'infinite-scroll' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- no changes to the site.
-			die;
+			die( 0 );
 		}
 
 		// @todo see if we should validate this nonce since we use it to form a query.
 		$page = (int) $_REQUEST['page']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- we're casting this to an int and not making changes to the site.
 
 		// Sanitize and set $previousday. Expected format: dd.mm.yy
-		if ( isset( $_REQUEST['currentday'] ) && preg_match( '/^\d{2}\.\d{2}\.\d{2}$/', $_REQUEST['currentday'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Recommended -- manually validating, no changes to site
+		if ( isset( $_REQUEST['currentday'] ) && is_string( $_REQUEST['currentday'] ) && preg_match( '/^\d{2}\.\d{2}\.\d{2}$/', $_REQUEST['currentday'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput, WordPress.Security.NonceVerification.Recommended -- manually validating, no changes to site
 			global $previousday;
 			$previousday = $_REQUEST['currentday']; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput
 		}
@@ -1435,7 +1409,7 @@ class The_Neverending_Home_Page {
 
 		$infinite_scroll_query->query( $query_args );
 
-		remove_filter( 'posts_where', array( $this, 'query_time_filter' ), 10, 2 );
+		remove_filter( 'posts_where', array( $this, 'query_time_filter' ), 10 );
 
 		$results = array();
 
@@ -2088,7 +2062,7 @@ class The_Neverending_Home_Page {
 	protected static function amp_get_max_pages() {
 		global $wp_query;
 
-		return (int) $wp_query->max_num_pages - $wp_query->query_vars['paged'];
+		return (int) $wp_query->max_num_pages - (int) $wp_query->query_vars['paged'];
 	}
 
 	/**
