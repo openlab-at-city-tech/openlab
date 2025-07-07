@@ -106,15 +106,11 @@ function su_shortcode_video( $atts = null, $content = null ) {
 		return su_error_message( 'Video', __( 'please specify correct url', 'shortcodes-ultimate' ) );
 	}
 
-	$title = $atts['title']
-		? '<div class="jp-title">' . $atts['title'] . '</div>'
-		: '';
-
 	su_query_asset( 'css', 'su-shortcodes' );
 	su_query_asset( 'js', 'jquery' );
 	su_query_asset( 'js', 'jplayer' );
 	su_query_asset( 'js', 'su-shortcodes' );
 
-	return '<div style="width:' . esc_attr( $atts['width'] ) . 'px"><div id="' . $id . '" class="su-video jp-video su-video-controls-' . esc_attr( $atts['controls'] ) . su_get_css_class( $atts ) . '" data-id="' . $id . '" data-video="' . esc_attr( $atts['url'] ) . '" data-swf="' . plugins_url( 'vendor/jplayer/jplayer.swf', SU_PLUGIN_FILE ) . '" data-autoplay="' . esc_attr( $atts['autoplay'] ) . '" data-loop="' . esc_attr( $atts['loop'] ) . '" data-poster="' . esc_attr( $atts['poster'] ) . '"><div id="' . $id . '_player" class="jp-jplayer" style="width:' . esc_attr( $atts['width'] ) . 'px;height:' . esc_attr( $atts['height'] ) . 'px"></div>' . $title . '<div class="jp-start jp-play"></div><div class="jp-gui"><div class="jp-interface"><div class="jp-progress"><div class="jp-seek-bar"><div class="jp-play-bar"></div></div></div><div class="jp-current-time"></div><div class="jp-duration"></div><div class="jp-controls-holder"><span class="jp-play"></span><span class="jp-pause"></span><span class="jp-mute"></span><span class="jp-unmute"></span><span class="jp-full-screen"></span><span class="jp-restore-screen"></span><div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div></div></div></div></div></div>';
+	return '<div style="width:' . esc_attr( $atts['width'] ) . 'px"><div id="' . $id . '" class="su-video jp-video su-video-controls-' . esc_attr( $atts['controls'] ) . su_get_css_class( $atts ) . '" data-id="' . $id . '" data-video="' . esc_attr( $atts['url'] ) . '" data-swf="' . plugins_url( 'vendor/jplayer/jplayer.swf', SU_PLUGIN_FILE ) . '" data-autoplay="' . esc_attr( $atts['autoplay'] ) . '" data-loop="' . esc_attr( $atts['loop'] ) . '" data-poster="' . esc_attr( $atts['poster'] ) . '"><div id="' . $id . '_player" class="jp-jplayer" style="width:' . esc_attr( $atts['width'] ) . 'px;height:' . esc_attr( $atts['height'] ) . 'px"></div><div class="jp-title">' . su_do_attribute($atts['title'], true) . '</div><div class="jp-start jp-play"></div><div class="jp-gui"><div class="jp-interface"><div class="jp-progress"><div class="jp-seek-bar"><div class="jp-play-bar"></div></div></div><div class="jp-current-time"></div><div class="jp-duration"></div><div class="jp-controls-holder"><span class="jp-play"></span><span class="jp-pause"></span><span class="jp-mute"></span><span class="jp-unmute"></span><span class="jp-full-screen"></span><span class="jp-restore-screen"></span><div class="jp-volume-bar"><div class="jp-volume-bar-value"></div></div></div></div></div></div></div>';
 
 }

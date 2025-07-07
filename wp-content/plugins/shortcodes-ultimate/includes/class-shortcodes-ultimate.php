@@ -165,10 +165,6 @@ class Shortcodes_Ultimate {
         require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-notice-rate.php';
         require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-notice-unsafe-features.php';
         /**
-         * Register custom widget
-         */
-        require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-widget.php';
-        /**
          * Suggest Pro features
          */
         require_once $this->plugin_path . 'admin/class-shortcodes-ultimate-admin-pro-features.php';
@@ -263,11 +259,6 @@ class Shortcodes_Ultimate {
             10,
             2
         );
-        /**
-         * Register custom widget
-         */
-        $this->widget = new Shortcodes_Ultimate_Widget($this->plugin_prefix);
-        add_action( 'widgets_init', array($this->widget, 'register') );
         /**
          * Suggest PRO features
          */

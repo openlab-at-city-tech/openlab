@@ -1,7 +1,3 @@
-.slider {
-  width: 300px;
-}
-
 .slider > .dragger {
   background: #8DCA09;
   background: -webkit-linear-gradient(top, #8DCA09, #72A307);

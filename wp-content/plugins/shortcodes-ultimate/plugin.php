@@ -8,6 +8,11 @@ call_user_func( function () {
     if ( did_action( 'plugins_loaded' ) ) {
         return;
     }
-    $plugin = new Shortcodes_Ultimate(SU_PLUGIN_FILE, SU_PLUGIN_VERSION, 'shortcodes-ultimate-');
-    do_action( 'su/ready', $plugin );
+    add_action( 'init', function () {
+        $plugin = new Shortcodes_Ultimate(SU_PLUGIN_FILE, SU_PLUGIN_VERSION, 'shortcodes-ultimate-');
+        do_action( 'su/ready', $plugin );
+    }, 1 );
+    require_once dirname( __FILE__ ) . '/admin/class-shortcodes-ultimate-widget.php';
+    $custom_widget = new Shortcodes_Ultimate_Widget('shortcodes-ultimate-');
+    add_action( 'widgets_init', array($custom_widget, 'register') );
 } );
