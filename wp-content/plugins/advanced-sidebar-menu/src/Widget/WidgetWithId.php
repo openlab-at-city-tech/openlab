@@ -10,11 +10,8 @@ namespace Advanced_Sidebar_Menu\Widget;
  * @author OnPoint Plugins
  * @since  9.6.0
  *
- * @phpstan-template SETTINGS of array<string, mixed>
- * @phpstan-template DEFAULTS of array<key-of<SETTINGS>, mixed>
- *
- * @todo   Switch all PRO `Widget` classes to use this interface once minimum basic version is 9.6.0+.
- * @todo   Add a @todo to `__Temp_Id_Proxy` to remove it when minimum PRO version is whatever the new version is.
+ * @phpstan-template SETTINGS of array<string, string|int|bool|array<string, string>>
+ * @phpstan-template DEFAULTS of array<key-of<SETTINGS>, int|string|array<string, string>>
  *
  * @extends Widget<SETTINGS, DEFAULTS>
  * @extends WidgetId<SETTINGS>

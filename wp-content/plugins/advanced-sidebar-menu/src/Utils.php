@@ -26,7 +26,7 @@ class Utils implements Rules {
 	 */
 	public function is_checked( $name, array $settings ): bool {
 		// Handle array type names (e.g. open-links[all]).
-		preg_match( '/(?<field>\S*?)\[(?<key>\S*?)]/', $name, $array );
+		\preg_match( '/(?<field>\S*?)\[(?<key>\S*?)]/', $name, $array );
 		if ( isset( $array['field'], $array['key'] ) ) {
 			return isset( $settings[ $array['field'] ][ $array['key'] ] ) && 'checked' === $settings[ $array['field'] ][ $array['key'] ];
 		}
@@ -55,18 +55,19 @@ class Utils implements Rules {
 	 * Apply a callback to all elements of an array recursively.
 	 *
 	 * Like `array_walk_recursive` except returns the result as
-	 * a new array instead of requiring you pass the array element by reference
+	 * a new array instead of requiring you to pass the array element by reference
 	 * and alter it directly.
 	 *
 	 * @since 8.6.5
 	 *
+	 * @phpstan-template TKey
 	 * @phpstan-template T
 	 * @phpstan-template R
 	 *
-	 * @param callable( T ): R  $callback   - Callback to apply to each element.
-	 * @param array<array<T>|T> $to_recurse - Array to apply the callback to.
+	 * @param callable( T ): R   $callback   - Callback to apply to each element.
+	 * @param array<TKey, mixed> $to_recurse - Array to apply the callback to.
 	 *
-	 * @return array<mixed>
+	 * @return array<TKey, mixed>
 	 */
 	public function array_map_recursive( callable $callback, array $to_recurse ): array {
 		$output = [];
@@ -83,7 +84,7 @@ class Utils implements Rules {
 
 
 	/**
-	 * Get the label for used post type.
+	 * Get the label used for the post type.
 	 *
 	 * For adjusting widget option labels.
 	 *

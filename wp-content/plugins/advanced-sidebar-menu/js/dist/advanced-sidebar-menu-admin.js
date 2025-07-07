@@ -2,17 +2,7 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1669:
-/*!*************************!*\
-  !*** external "jQuery" ***!
-  \*************************/
-/***/ ((module) => {
-
-module.exports = jQuery;
-
-/***/ }),
-
-/***/ 9425:
+/***/ 1526:
 /*!********************************!*\
   !*** ./js/src/pcss/admin.pcss ***!
   \********************************/
@@ -24,6 +14,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 // extracted by mini-css-extract-plugin
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({});
+
+/***/ }),
+
+/***/ 1669:
+/*!*************************!*\
+  !*** external "jQuery" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = jQuery;
 
 /***/ })
 
@@ -90,7 +90,7 @@ var __webpack_exports__ = {};
   !*** ./js/src/widget-admin.ts ***!
   \********************************/
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 9425);
+/* harmony import */ var _pcss_admin_pcss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./pcss/admin.pcss */ 1526);
 /* provided dependency */ var $ = __webpack_require__(/*! jquery */ 1669);
 
 

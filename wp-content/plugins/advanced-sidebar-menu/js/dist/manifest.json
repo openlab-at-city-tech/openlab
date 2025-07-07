@@ -11,13 +11,13 @@
   },
   "advanced-sidebar-menu-block-editor.min.css": {
     "src": "advanced-sidebar-menu-block-editor.min.css",
-    "integrity": "sha384-xVifUtcWhS4pfDZNZ+ZI6vPxpul5GLMIE+W+0aP6fC3iRFKT1dvZedACxqj4/Zj/",
-    "hash": "93f2672e0ec0777555ae"
+    "integrity": "sha384-8EYdsAaZiVlic9TF3y6TVI7jpqN00cC+Srs3rxlGP/W1QSEXeIofYhIopbtjPVIH",
+    "hash": "0a66c4470812db0b919f"
   },
   "advanced-sidebar-menu-block-editor.min.js": {
     "src": "advanced-sidebar-menu-block-editor.min.js",
-    "integrity": "sha384-faiemdgkrubGudKCM9rz/5tmeRHdcAFpk1duudVzJ46V5XCCrmw7pcRSePuW42w9",
-    "hash": "9f7364e9d0b1594db021"
+    "integrity": "sha384-KkaF2VPBRrriYio0pvpzN+M91wWQY9ReSfYMgyMe37bW3aFoss5BZheFsoaHNTQu",
+    "hash": "c13e52d0013e9b49a3c2"
   },
   "advanced-sidebar-menu-block-editor.min.js.LICENSE.txt": {
     "src": "advanced-sidebar-menu-block-editor.min.js.LICENSE.txt",

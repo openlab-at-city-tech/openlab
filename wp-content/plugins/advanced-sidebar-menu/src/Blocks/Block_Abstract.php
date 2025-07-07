@@ -2,12 +2,16 @@
 
 namespace Advanced_Sidebar_Menu\Blocks;
 
+use Advanced_Sidebar_Menu\__Temp_Id_Proxy;
+use Advanced_Sidebar_Menu\Blocks\Register\Attribute;
+use Advanced_Sidebar_Menu\Blocks\Register\Register_Utils;
 use Advanced_Sidebar_Menu\Menus\Menu_Abstract;
 use Advanced_Sidebar_Menu\Scripts;
 use Advanced_Sidebar_Menu\Utils;
 use Advanced_Sidebar_Menu\Widget\Category;
 use Advanced_Sidebar_Menu\Widget\Page;
 use Advanced_Sidebar_Menu\Widget\Widget;
+use Advanced_Sidebar_Menu\Widget\WidgetWithId;
 use Advanced_Sidebar_Menu\Widget_Options\Shared\Style_Targeting;
 
 /**
@@ -20,9 +24,9 @@ use Advanced_Sidebar_Menu\Widget_Options\Shared\Style_Targeting;
  * @phpstan-import-type WIDGET_ARGS from Widget
  *
  * @phpstan-type ATTR_SHAPE array{
- *    type: string,
+ *    type: Attribute::TYPE_*|(list<Attribute::TYPE_*>),
  *    default?: mixed,
- *    enum?: array<string|int|bool>,
+ *    enum?: list<string|int|bool>,
  *    items?: array{
  *      type: string,
  *      required?: array<string>,
@@ -41,11 +45,15 @@ use Advanced_Sidebar_Menu\Widget_Options\Shared\Style_Targeting;
  * }
  *
  * @phpstan-template SETTINGS of array<string, string|int|bool|array<string, string>>
+ * @phpstan-template WIDGET_SETTINGS of array<string, string|int|array<string, string>>
+ * @phpstan-template DEFAULTS of array<key-of<SETTINGS>, int|string|array<string, string>>
  */
 abstract class Block_Abstract {
 	public const NAME = 'block-abstract';
 
 	public const RENDER_REQUEST = 'isServerSideRenderRequest';
+	public const BLOCK_ID       = 'clientId';
+	public const SIDEBAR_ID     = 'sidebarId';
 
 	/**
 	 * Widget arguments used in rendering.
@@ -57,7 +65,7 @@ abstract class Block_Abstract {
 	 * @phpstan-var WIDGET_ARGS
 	 * @var array<string, string>
 	 */
-	protected $widget_args = [
+	protected array $widget_args = [
 		'before_widget' => '',
 		'after_widget'  => '',
 		// Default used for FSE.
@@ -67,50 +75,27 @@ abstract class Block_Abstract {
 
 
 	/**
-	 * Get list of attributes and their types.
+	 * @todo  Remove once minimum required PRO Blocks\Navigation implements `Block` interface.
 	 *
-	 * Must be done PHP side because we're using ServerSideRender.
-	 *
-	 * @see  Pro_Block_Abstract::get_all_attributes()
-	 *
-	 * @link https://developer.wordpress.org/block-editor/reference-guides/block-api/block-attributes/
-	 *
-	 * @return array
+	 * @return array<string, ATTR_SHAPE|Attribute>
 	 */
 	abstract protected function get_attributes();
 
 
 	/**
-	 * Get featured this block supports.
+	 * @todo  Remove once minimum required PRO Blocks\Navigation implements `Block` interface.
 	 *
-	 * Done on the PHP side, so we can easily add additional features
-	 * via the PRO version.
-	 *
-	 * @return array
+	 * @return WidgetWithId<WIDGET_SETTINGS, DEFAULTS>
 	 */
-	abstract protected function get_block_support();
+	abstract protected function get_widget_class();
 
 
 	/**
-	 * Get list of words used to search for the block.
-	 *
-	 * @return string[]
-	 */
-	abstract protected function get_keywords();
-
-
-	/**
-	 * Get the description of this block.
+	 * @todo  Remove once \Advanced_Sidebar_Menu\Blocks\Navigation implements `Block` interface.
 	 *
 	 * @return string
 	 */
 	abstract protected function get_description();
-
-
-	/**
-	 * Get the widget class, which matches this block.
-	 */
-	abstract protected function get_widget_class();
 
 
 	/**
@@ -131,7 +116,7 @@ abstract class Block_Abstract {
 	 * Exclude this block from new Legacy Widgets.
 	 *
 	 * Leave existing intact while forcing users to use the block
-	 * instead for new widgets.
+	 * instead of new widgets.
 	 *
 	 * @param array|bool $blocks - Excluded blocks.
 	 *
@@ -153,7 +138,7 @@ abstract class Block_Abstract {
 		}
 
 		$widget = $this->get_widget_class();
-		$blocks[] = $widget::NAME;
+		$blocks[] = __Temp_Id_Proxy::factory( $widget )->get_id_base();
 		return $blocks;
 	}
 
@@ -170,7 +155,7 @@ abstract class Block_Abstract {
 	 * @phpstan-param WIDGET_ARGS                         $args
 	 *
 	 * @param false|array                                 $instance - Contents of the block, before parsing.
-	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget   - Object representing a block based widget.
+	 * @param \WP_Widget<PAGE_SETTINGS|CATEGORY_SETTINGS> $widget   - Object representing a block-based widget.
 	 * @param array                                       $args     - Widget area arguments.
 	 *
 	 * @return false|array
@@ -227,56 +212,39 @@ abstract class Block_Abstract {
 	 * @return void
 	 */
 	public function register(): void {
+		$attributes = \array_merge(
+			Common::instance()->get_common_attributes(),
+			Common::instance()->get_server_side_render_attributes(),
+			$this->get_attributes()
+		);
+
 		$args = apply_filters( 'advanced-sidebar-menu/block-register/' . static::NAME, [
 			'api_version'           => 3,
-			'attributes'            => $this->get_all_attributes(),
+			'attributes'            => Register_Utils::instance()->translate_attributes_to_php( $attributes ),
 			'description'           => $this->get_description(),
 			'editor_script_handles' => [ Scripts::GUTENBERG_HANDLE ],
 			'editor_style_handles'  => [ Scripts::GUTENBERG_CSS_HANDLE ],
-			'keywords'              => $this->get_keywords(),
 			'render_callback'       => [ $this, 'render' ],
-			'supports'              => $this->get_block_support(),
+			'supports'              => Common::instance()->get_block_supports(),
 		] );
-
-		// Translate deprecated keys until required PRO version is 9.5.0.
-		if ( isset( $args['editor_script'] ) ) {
-			$args['editor_script_handles'] = (array) $args['editor_script'];
-			unset( $args['editor_script'] );
-		}
-		if ( isset( $args['editor_style'] ) ) {
-			$args['editor_style_handles'] = (array) $args['editor_style'];
-			unset( $args['editor_style'] );
-		}
 
 		register_block_type( static::NAME, $args );
 	}
 
 
 	/**
-	 * Get attributes defined in this class as well
-	 * as common attributes shared by all blocks.
+	 * @deprecated 9.7.0
 	 *
 	 * @phpstan-return array<string, ATTR_SHAPE>
-	 * @return array
 	 */
 	protected function get_all_attributes() {
-		return \array_merge( [
-			'clientId'           => [
-				'type' => 'string',
-			],
-			self::RENDER_REQUEST => [
-				'type' => 'boolean',
-			],
-			'sidebarId'          => [
-				'type' => 'string',
-			],
-			'style'              => [
-				'type' => 'object',
-			],
-			Menu_Abstract::TITLE => [
-				'type' => 'string',
-			],
-		], $this->get_attributes() );
+		_deprecated_function( __METHOD__, '9.7.0' );
+		$all = \array_merge(
+			Common::instance()->get_common_attributes(),
+			Common::instance()->get_server_side_render_attributes(),
+			$this->get_attributes()
+		);
+		return Register_Utils::instance()->translate_attributes_to_php( $all );
 	}
 
 
@@ -290,10 +258,15 @@ abstract class Block_Abstract {
 	 * @return array
 	 */
 	public function js_config( array $config ) {
-		$config['blocks'][ \explode( '/', static::NAME )[1] ] = [
-			'id'         => static::NAME,
-			'attributes' => $this->get_all_attributes(),
-			'supports'   => $this->get_block_support(),
+		if ( $this instanceof Block ) {
+			$name = $this->get_name();
+		} else {
+			$name = static::NAME;
+		}
+
+		$config['blocks'][ \explode( '/', $name )[1] ] = [
+			'id'         => $name,
+			'attributes' => Register_Utils::instance()->translate_attributes_to_php( $this->get_attributes() ),
 		];
 
 		return $config;
@@ -304,12 +277,15 @@ abstract class Block_Abstract {
 	 * Checkboxes are saved as `true` on the Gutenberg side.
 	 * The widgets expect the values to be `checked`.
 	 *
-	 * @param array<string, mixed> $attr - Attribute values pre-converted.
+	 * @phpstan-param \Union<SETTINGS, SHARED>          $attr
 	 *
-	 * @return array<string, mixed>
+	 * @param array<string, mixed|array<string, mixed>> $attr - Attribute values pre-converted.
+	 *
+	 * @phpstan-return WIDGET_SETTINGS
+	 * @return array<string, string|int|array<string, string|int>>
 	 */
 	public function convert_checkbox_values( array $attr ): array {
-		// Map the boolean values to widget style 'checked'.
+		// Map the boolean values to the widget style 'checked'.
 		return Utils::instance()->array_map_recursive( function( $value ) {
 			if ( true === $value ) {
 				return 'checked';
@@ -376,7 +352,7 @@ abstract class Block_Abstract {
 	 * or the box shadow will double up.
 	 *
 	 * @link https://github.com/WordPress/gutenberg/issues/65882
-	 * @todo Remove when issue is resolved.
+	 * @todo Remove when the issue is resolved.
 	 *
 	 * @internal
 	 *
@@ -399,7 +375,7 @@ abstract class Block_Abstract {
 	 *
 	 * @return string
 	 */
-	public function render( $attr ) {
+	public function render( array $attr ): string {
 		if ( $this->is_server_side_render( $attr ) ) {
 			$this->spoof_wp_query();
 		}
@@ -407,8 +383,8 @@ abstract class Block_Abstract {
 		$widget_args = $this->widget_args;
 
 		// Use the sidebar arguments if available.
-		if ( isset( $attr['sidebarId'], $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ] ) && '' !== $attr['sidebarId'] ) {
-			$widget_args = wp_parse_args( (array) $GLOBALS['wp_registered_sidebars'][ $attr['sidebarId'] ], $widget_args );
+		if ( isset( $attr[ self::SIDEBAR_ID ], $GLOBALS['wp_registered_sidebars'][ $attr[ self::SIDEBAR_ID ] ] ) && '' !== $attr[ self::SIDEBAR_ID ] ) {
+			$widget_args = wp_parse_args( (array) $GLOBALS['wp_registered_sidebars'][ $attr[ self::SIDEBAR_ID ] ], $widget_args );
 		}
 
 		$classnames = '';
@@ -417,7 +393,7 @@ abstract class Block_Abstract {
 		}
 
 		if ( ! Utils::instance()->is_empty( $widget_args, 'before_widget' ) ) {
-			// Add main CSS class to widgets wrap.
+			// Add the main CSS class to widgets wrap.
 			if ( false !== \strpos( $this->widget_args['before_widget'], 'widget_block' ) ) {
 				$widget_args['before_widget'] = \str_replace( 'widget_block', 'widget_block advanced-sidebar-menu', $widget_args['before_widget'] );
 			} else {
@@ -450,14 +426,14 @@ abstract class Block_Abstract {
 		}
 		$widget_args['before_widget'] .= \sprintf( '<%s %s>', $wrap, $wrapper_attributes );
 		$widget_args['after_widget'] = \sprintf( '</%s>', $wrap ) . $widget_args['after_widget'];
-		// Passed via ServerSideRender, so we can enable accordions in Gutenberg editor.
-		if ( isset( $attr['clientId'] ) && '' !== \trim( $attr['clientId'] ) ) {
-			$widget_args['widget_id'] = $attr['clientId'];
+		// Passed via ServerSideRender, so we can enable accordions in the Gutenberg editor.
+		if ( isset( $attr[ self::BLOCK_ID ] ) && '' !== \trim( $attr[ self::BLOCK_ID ] ) ) {
+			$widget_args['widget_id'] = $attr[ self::BLOCK_ID ];
 		}
 
-		ob_start();
+		\ob_start();
 		$widget = $this->get_widget_class();
 		$widget->widget( $widget_args, $this->convert_checkbox_values( $attr ) );
-		return (string) ob_get_clean();
+		return (string) \ob_get_clean();
 	}
 }

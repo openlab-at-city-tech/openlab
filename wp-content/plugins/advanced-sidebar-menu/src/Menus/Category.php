@@ -35,8 +35,8 @@ class Category extends Menu_Abstract implements Menu {
 
 	public const WIDGET = 'category';
 
-	public const DISPLAY_ON_SINGLE     = 'single';
-	public const EACH_CATEGORY_DISPLAY = 'new_widget';
+	public const DISPLAY_ON_SINGLE    = 'single';
+	public const POST_CATEGORY_LAYOUT = 'new_widget';
 
 	public const EACH_LIST   = 'list';
 	public const EACH_WIDGET = 'widget';
@@ -46,18 +46,18 @@ class Category extends Menu_Abstract implements Menu {
 	 *
 	 * @var ?Category
 	 */
-	protected static $current_menu;
+	protected static ?Category $current_menu = null;
 
 	/**
 	 * Top_level_term.
 	 *
 	 * @var ?\WP_Term
 	 */
-	public $top_level_term;
+	public ?\WP_Term $top_level_term = null;
 
 
 	/**
-	 * If we are on a post we could potentially have more than one
+	 * If we are on a post, we could potentially have more than one
 	 * top-level term, so we end up calling this more than once.
 	 *
 	 * @param \WP_Term $term - The highest level term.
@@ -325,7 +325,7 @@ class Category extends Menu_Abstract implements Menu {
 				continue;
 			}
 
-			if ( ! $menu_open || self::EACH_WIDGET === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
+			if ( ! $menu_open || self::EACH_WIDGET === $this->instance[ self::POST_CATEGORY_LAYOUT ] ) {
 				if ( $i > 0 && isset( $this->args['widget_id'] ) ) {
 					$this->args['id_increment'] = '-' . ( $i + 1 );
 					echo \str_replace( "id=\"{$this->args['widget_id']}\"", "id=\"{$this->args['widget_id']}{$this->args['id_increment']}\"", $this->args['before_widget'] ); //phpcs:ignore WordPress.Security
@@ -341,7 +341,7 @@ class Category extends Menu_Abstract implements Menu {
 
 					$menu_open = true;
 					$close_menu = true;
-					if ( self::EACH_LIST === $this->instance[ self::EACH_CATEGORY_DISPLAY ] ) {
+					if ( self::EACH_LIST === $this->instance[ self::POST_CATEGORY_LAYOUT ] ) {
 						$close_menu = false;
 					}
 				}

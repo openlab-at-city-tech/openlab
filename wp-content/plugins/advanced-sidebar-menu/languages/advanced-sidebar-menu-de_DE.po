@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2025-03-19 10:41-0400\n"
-"PO-Revision-Date: 2025-03-19 10:41-0400\n"
+"POT-Creation-Date: 2025-05-26 17:48-0400\n"
+"PO-Revision-Date: 2025-05-26 17:49-0400\n"
 "Last-Translator: Mat Lipe <support@onpointplugins.com>\n"
 "Language-Team: Mat Lipe <support@onpointplugins.com>\n"
 "Language: de_DE\n"
@@ -33,7 +33,7 @@ msgstr "Dieses Widget kann in einen Block umgewandelt werden."
 
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:162
+#: js/src/gutenberg/blocks/Display.tsx:35 src/Widget/Page.php:162
 #, javascript-format, php-format
 msgid "Display highest level parent %s"
 msgstr "Anzeige der übergeordneten %s der höchsten Ebene"
@@ -41,7 +41,7 @@ msgstr "Anzeige der übergeordneten %s der höchsten Ebene"
 #. translators: Selected taxonomy single label
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:179
+#: js/src/gutenberg/blocks/Display.tsx:37 src/Widget/Category.php:179
 #: src/Widget/Page.php:172
 #, javascript-format, php-format
 msgid "Display menu when there is only the parent %s"
@@ -50,28 +50,26 @@ msgstr "Menü \"Anzeige\" wird nur die übergeordnete %s"
 #. translators: Selected taxonomy plural label
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:188
+#: js/src/gutenberg/blocks/Display.tsx:39 src/Widget/Category.php:188
 #: src/Widget/Page.php:182
 #, javascript-format, php-format
 msgid "Always display child %s"
 msgstr "Immer untergeordnete %s anzeigen"
 
-#: js/src/gutenberg/blocks/Display.tsx:71
+#: js/src/gutenberg/blocks/Display.tsx:45 src/Widget/Category.php:202
+#: src/Widget/Page.php:203
+msgid "- All -"
+msgstr "- Alle -"
+
+#: js/src/gutenberg/blocks/Display.tsx:83
 msgid "Display"
 msgstr "Anzeige"
 
 #. translators: {select HTML input}, {post type plural label}
-#. translators: {select html input}, {Selected post type plural label}
-#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:217
-#: src/Widget/Page.php:217
-#, javascript-format, php-format
-msgid "Display %1$s levels of child %2$s"
-msgstr "Anzeigen %1$s Ebenen der %2$s"
-
-#: js/src/gutenberg/blocks/Display.tsx:100 src/Widget/Category.php:202
-#: src/Widget/Page.php:203
-msgid "- All -"
-msgstr "- Alle -"
+#: js/src/gutenberg/blocks/Display.tsx:107
+#, javascript-format
+msgid "Levels of child %s to display"
+msgstr "Niveau der Kinder %s zu zeigen"
 
 #. translators: 1: Opening anchor tag, 2: Closing anchor tag
 #: js/src/gutenberg/blocks/ExcludeField.tsx:28
@@ -140,18 +138,18 @@ msgid "Title"
 msgstr "Titel"
 
 #. translators: Selected taxonomy plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:88 src/Widget/Category.php:249
+#: js/src/gutenberg/blocks/categories/Edit.tsx:91 src/Widget/Category.php:249
 #, javascript-format, php-format
 msgid "Display %s on single posts"
 msgstr "%s auf einzelne Beiträge anzeigen"
 
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:103 src/Widget/Category.php:259
+#: js/src/gutenberg/blocks/categories/Edit.tsx:108 src/Widget/Category.php:259
 #, javascript-format, php-format
 msgid "Display each single post's %s"
 msgstr "Anzeigen der %s jedes einzelnen Beitrags"
 
-#: js/src/gutenberg/blocks/pages/Edit.tsx:90 src/Widget/Page.php:245
+#: js/src/gutenberg/blocks/pages/Edit.tsx:93 src/Widget/Page.php:245
 msgid "Order by"
 msgstr "Sortieren nach"
 
@@ -265,6 +263,12 @@ msgstr "In einer anderen Liste im selben Widget"
 msgid "Display the highest level parent %s"
 msgstr "Anzeige der übergeordneten %s der höchsten Ebene"
 
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:217 src/Widget/Page.php:217
+#, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr "Anzeigen %1$s Ebenen der %2$s"
+
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label
 #: src/Widget/Category.php:307 src/Widget/Page.php:281
@@ -332,10 +336,6 @@ msgstr "https://onpointplugins.com"
 
 #~ msgid "Select and display custom taxonomies."
 #~ msgstr "Wählen Sie benutzerdefinierte Taxonomien aus und zeigen Sie sie an."
-
-#, php-format
-#~ msgid "Levels of child %s to display"
-#~ msgstr "Niveau der Kinder %s zu zeigen"
 
 #, php-format
 #~ msgid "Maximum level of child %s to display"

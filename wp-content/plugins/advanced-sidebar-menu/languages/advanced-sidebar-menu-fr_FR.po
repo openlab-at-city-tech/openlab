@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Advanced Sidebar Menu\n"
-"POT-Creation-Date: 2025-03-19 10:42-0400\n"
-"PO-Revision-Date: 2025-03-19 10:42-0400\n"
+"POT-Creation-Date: 2025-05-26 17:50-0400\n"
+"PO-Revision-Date: 2025-05-26 17:50-0400\n"
 "Last-Translator: Mat Lipe <support@onpointplugins.com>\n"
 "Language-Team: Mat Lipe <support@onpointplugins.com>\n"
 "Language: fr_FR\n"
@@ -33,7 +33,7 @@ msgstr "Ce widget peut être transformé en bloc."
 
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:36 src/Widget/Page.php:162
+#: js/src/gutenberg/blocks/Display.tsx:35 src/Widget/Page.php:162
 #, javascript-format, php-format
 msgid "Display highest level parent %s"
 msgstr "Afficher les parents de haut niveau %s"
@@ -41,7 +41,7 @@ msgstr "Afficher les parents de haut niveau %s"
 #. translators: Selected taxonomy single label
 #. translators: Selected taxonomy single label
 #. translators: Selected post type single label
-#: js/src/gutenberg/blocks/Display.tsx:38 src/Widget/Category.php:179
+#: js/src/gutenberg/blocks/Display.tsx:37 src/Widget/Category.php:179
 #: src/Widget/Page.php:172
 #, javascript-format, php-format
 msgid "Display menu when there is only the parent %s"
@@ -50,28 +50,26 @@ msgstr "Afficher le menu lorsqu’il n’y a que le parent %s"
 #. translators: Selected taxonomy plural label
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label
-#: js/src/gutenberg/blocks/Display.tsx:40 src/Widget/Category.php:188
+#: js/src/gutenberg/blocks/Display.tsx:39 src/Widget/Category.php:188
 #: src/Widget/Page.php:182
 #, javascript-format, php-format
 msgid "Always display child %s"
 msgstr "Affichez toujours les enfants %s"
 
-#: js/src/gutenberg/blocks/Display.tsx:71
+#: js/src/gutenberg/blocks/Display.tsx:45 src/Widget/Category.php:202
+#: src/Widget/Page.php:203
+msgid "- All -"
+msgstr "- Tout -"
+
+#: js/src/gutenberg/blocks/Display.tsx:83
 msgid "Display"
 msgstr "Afficher"
 
 #. translators: {select HTML input}, {post type plural label}
-#. translators: {select html input}, {Selected post type plural label}
-#: js/src/gutenberg/blocks/Display.tsx:91 src/Widget/Category.php:217
-#: src/Widget/Page.php:217
-#, javascript-format, php-format
-msgid "Display %1$s levels of child %2$s"
-msgstr "Afficher %1$s niveaux d'%2$s"
-
-#: js/src/gutenberg/blocks/Display.tsx:100 src/Widget/Category.php:202
-#: src/Widget/Page.php:203
-msgid "- All -"
-msgstr "- Tout -"
+#: js/src/gutenberg/blocks/Display.tsx:107
+#, javascript-format
+msgid "Levels of child %s to display"
+msgstr "Niveaux de %s enfants à afficher"
 
 #. translators: 1: Opening anchor tag, 2: Closing anchor tag
 #: js/src/gutenberg/blocks/ExcludeField.tsx:28
@@ -140,18 +138,18 @@ msgid "Title"
 msgstr "Titre"
 
 #. translators: Selected taxonomy plural label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:88 src/Widget/Category.php:249
+#: js/src/gutenberg/blocks/categories/Edit.tsx:91 src/Widget/Category.php:249
 #, javascript-format, php-format
 msgid "Display %s on single posts"
 msgstr "Afficher %s sur les messages simples"
 
 #. translators: Selected taxonomy single label
-#: js/src/gutenberg/blocks/categories/Edit.tsx:103 src/Widget/Category.php:259
+#: js/src/gutenberg/blocks/categories/Edit.tsx:108 src/Widget/Category.php:259
 #, javascript-format, php-format
 msgid "Display each single post's %s"
 msgstr "Affichez les %s"
 
-#: js/src/gutenberg/blocks/pages/Edit.tsx:90 src/Widget/Page.php:245
+#: js/src/gutenberg/blocks/pages/Edit.tsx:93 src/Widget/Page.php:245
 msgid "Order by"
 msgstr "Trier par"
 
@@ -261,6 +259,12 @@ msgstr "Dans une autre liste dans le même widget"
 #, php-format
 msgid "Display the highest level parent %s"
 msgstr "Affichez les compétences parentales de haut niveau %s"
+
+#. translators: {select html input}, {Selected post type plural label}
+#: src/Widget/Category.php:217 src/Widget/Page.php:217
+#, php-format
+msgid "Display %1$s levels of child %2$s"
+msgstr "Afficher %1$s niveaux d'%2$s"
 
 #. translators: Selected taxonomy plural label
 #. translators: Selected post type plural label

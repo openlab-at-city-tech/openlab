@@ -215,26 +215,4 @@ abstract class Menu_Abstract implements Menu {
 
 		echo $this->args['before_title'] . esc_html( $title ) . $this->args['after_title']; //phpcs:ignore -- Args are HTML.
 	}
-
-
-	//phpcs:disable
-
-
-	/**
-	 * @deprecated In favor of using factory on the specific class.
-	 */
-	public static function get_current() {
-		return static::$current;
-	}
-
-
-	/**
-	 * @deprecated In favor of using factory on the specific class.
-	 */
-	public static function factory( array $widget_instance, array $widget_args ) {
-		$menu = new static( $widget_instance, $widget_args );
-		static::$current = $menu;
-		return $menu;
-	}
-	//phpcs:enable
 }

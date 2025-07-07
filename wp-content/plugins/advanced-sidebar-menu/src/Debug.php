@@ -28,7 +28,7 @@ use Advanced_Sidebar_Menu\Widget\Page;
  *      excluded_pages?: int[],
  *      menus: array<string, array<string, mixed>>,
  *      php: string,
- *      pro: string|false,
+ *      pro: ?string,
  *      scriptDebug: bool,
  *      WordPress: string,
  *  }
@@ -110,7 +110,7 @@ class Debug {
 	 * 3. WP version.
 	 * 4. PRO version.
 	 * 5. Script debug active.
-	 * 6. Classic widgets enabled.
+	 * 6. Classic widgets are enabled.
 	 *
 	 * @since 9.0.2
 	 *
@@ -127,7 +127,7 @@ class Debug {
 			'classicWidgets' => is_plugin_active( 'classic-widgets/classic-widgets.php' ),
 			'menus'          => [],
 			'php'            => PHP_VERSION,
-			'pro'            => false,
+			'pro'            => Notice::instance()->get_pro_version(),
 			'scriptDebug'    => Scripts::instance()->is_script_debug_enabled(),
 			'WordPress'      => get_bloginfo( 'version' ),
 		];
@@ -135,10 +135,6 @@ class Debug {
 		$current_post = get_queried_object();
 		if ( $current_post instanceof \WP_Post ) {
 			$data['classicEditor'] = ! use_block_editor_for_post( $current_post );
-		}
-
-		if ( \defined( 'ADVANCED_SIDEBAR_MENU_PRO_VERSION' ) ) {
-			$data['pro'] = ADVANCED_SIDEBAR_MENU_PRO_VERSION;
 		}
 
 		return $data;
