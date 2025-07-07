@@ -12,16 +12,15 @@ class Ajax {
 
 	public function __construct() {
 		add_action( 'wp_ajax_ekit_admin_action', array( $this, 'elementskit_admin_action' ) );
+		add_action( 'wp_ajax_ekit_onboard_plugins', array( $this, 'elementskit_onboard_plugins' ) );
 		$this->utils = Utils::instance();
 	}
 
 	public function elementskit_admin_action() {
 		// Check for nonce security
-
 		if (!isset($_POST['nonce']) || ! wp_verify_nonce( sanitize_key(wp_unslash($_POST['nonce'])), 'ajax-nonce' ) ) {
 			return;
 		}
-		
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			return;
@@ -73,7 +72,68 @@ class Ajax {
 
 		do_action( 'elementskit/admin/after_save' );
 
+		$response = array(
+			'message' => self::plugin_activate_message( 'setup_configurations' )
+		);
+
+		$plugins = !empty($_POST['our_plugins']) && is_array($_POST['our_plugins']) ? $_POST['our_plugins'] : [];
+		if($plugins) {
+			$total_plugins = count($plugins);
+			$total_steps   = 1 + $total_plugins;
+			$percentage = ($total_steps > 0) ? (1 / $total_steps) * 100 : 100;
+			$percentage = round($percentage);
+
+			$response['progress'] = $percentage;
+			$response['plugins'] = $plugins;
+		}
+
+		wp_send_json($response);
+
 		wp_die(); // this is required to terminate immediately and return a proper response
+	}
+
+	public function elementskit_onboard_plugins() {
+		// Check for nonce security
+		if (!isset($_POST['nonce']) || ! wp_verify_nonce( sanitize_key(wp_unslash($_POST['nonce'])), 'ajax-nonce' ) ) {
+			return;
+		}
+
+		$plugin_slug = isset( $_POST['plugin_slug'] ) ? sanitize_text_field( wp_unslash( $_POST['plugin_slug'] ) ) : '';
+		if ( isset( $plugin_slug ) && current_user_can('install_plugins') ) {
+			$status = \ElementsKit_Lite\Libs\Framework\Classes\Plugin_Installer::single_install_and_activate( $plugin_slug );
+			if ( is_wp_error( $status ) ) {
+				wp_send_json_error( array( 'status' => false ) );
+			} else {
+				wp_send_json_success(
+					array(
+						'message' => self::plugin_activate_message( $plugin_slug )
+					)
+				);
+			}
+		}
+	}
+
+	public static function plugin_activate_message($plugin_slug) {
+		$plugins_message = [
+			'setup_configurations' => esc_html__('Setup Configurations', 'elementskit-lite'),
+			'elementskit-lite/elementskit-lite.php' => esc_html__('Page Builder Elements Installed', 'elementskit-lite'),
+			'getgenie/getgenie.php' => esc_html__('AI Content & SEO Tool Installed', 'elementskit-lite'),
+			'shopengine/shopengine.php' => esc_html__('WooCommerce Builder Installed', 'elementskit-lite'),
+			'metform/metform.php' => esc_html__('Form Builder Installed', 'elementskit-lite'),
+			'emailkit/EmailKit.php' => esc_html__('Email Customizer Installed', 'elementskit-lite'),
+			'wp-social/wp-social.php' => esc_html__('Social Integration Installed', 'elementskit-lite'),
+			'wp-ultimate-review/wp-ultimate-review.php' => esc_html__('Review Management Installed', 'elementskit-lite'),
+			'wp-fundraising-donation/wp-fundraising.php' => esc_html__('Fundraising & Donations', 'elementskit-lite'),
+			'gutenkit-blocks-addon/gutenkit-blocks-addon.php' => esc_html__('Page Builder Blocks Installed', 'elementskit-lite'),
+			'popup-builder-block/popup-builder-block.php' => esc_html__('Popup Builder Installed', 'elementskit-lite'),
+			'table-builder-block/table-builder-block.php' => esc_html__('Table Builder Installed', 'elementskit-lite'),
+		];
+
+		if ( array_key_exists( $plugin_slug, $plugins_message ) ) {
+			return esc_html( $plugins_message[$plugin_slug] );
+		} else {
+			return esc_html__( 'Plugin Installed', 'elementskit-lite' );
+		}
 	}
 
 	public function return_json( $data ) {
@@ -83,5 +143,4 @@ class Ajax {
 			return $data;
 		}
 	}
-
 }

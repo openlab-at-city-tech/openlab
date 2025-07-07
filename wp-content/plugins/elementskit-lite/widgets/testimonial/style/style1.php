@@ -64,8 +64,12 @@
 		<?php endif; ?>
 
 		<?php if(!empty($settings['ekit_testimonial_show_arrow'])) : ?>
-			<div class="swiper-navigation-button swiper-button-prev"><i class="<?php echo esc_attr($prevArrowIcon); ?>"></i></div>
-			<div class="swiper-navigation-button swiper-button-next"><i class="<?php echo esc_attr($nextArrowIcon); ?>"></i></div>
+			<div class="swiper-navigation-button swiper-button-prev">
+				<?php \Elementor\Icons_Manager::render_icon($ekit_testimonial_left_arrows, [ 'aria-hidden' => 'true' ]); ?>
+			</div>
+			<div class="swiper-navigation-button swiper-button-next">
+				<?php \Elementor\Icons_Manager::render_icon($ekit_testimonial_right_arrows, [ 'aria-hidden' => 'true' ]); ?>
+			</div>
 		<?php endif; ?>
 	</div>
 </div>

@@ -42,7 +42,14 @@ class Control_Type_Date_Time extends CT_Base {
 
 				$exp = explode( ':', $v_option );
 
-				$ret .= "\t\t\t\t\t" . '\'' . esc_html( $exp[0] ) . '\' => \'' . esc_html( $exp[1] ) . '\',' . PHP_EOL;
+				// Check if $exp[1] is a boolean
+				if (filter_var($exp[1], FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) !== null) {
+					// If it's boolean, return the actual boolean value (true/false)
+					$ret .= "\t\t\t\t\t" . '\'' . esc_html($exp[0]) . '\' => ' . (filter_var($exp[1], FILTER_VALIDATE_BOOLEAN) ? 'true' : 'false') . ',' . PHP_EOL;
+				} else {
+					// Otherwise, return it as a string
+					$ret .= "\t\t\t\t\t" . '\'' . esc_html($exp[0]) . '\' => \'' . esc_html($exp[1]) . '\',' . PHP_EOL;
+				}
 			}
 		}
 

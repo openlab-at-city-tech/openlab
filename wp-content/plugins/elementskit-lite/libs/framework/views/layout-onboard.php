@@ -4,7 +4,11 @@
 use ElementsKit_Lite\Libs\Framework\Classes\Onboard_Status;
 
 // redirect to plugin home page if onboard already has completed
-Onboard_Status::instance()->exit_from_onboard();
+// Onboard_Status::instance()->exit_from_onboard(); // this showing error in admin page, so we are not using this function
+if ( get_option( 'elements_kit_onboard_status' ) ) {
+	echo '<script>window.location.href = "' . esc_url( admin_url( 'admin.php?page=elementskit' ) ) . '";</script>';
+	exit;
+}
 
 echo '<ul class="ekit-onboard-nav"><div class="ekit-onboard-progressbar"></div>';
 $count = 1;

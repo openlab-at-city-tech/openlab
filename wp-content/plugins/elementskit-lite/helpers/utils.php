@@ -367,10 +367,16 @@ class Utils {
 		$size = $image_size_key;
 
 		$html = '';
-		if ( ! empty( $image['id'] ) && $image['id'] != '-1' ) {
+		if ( ! empty( $image['id'] ) && $image['id'] != '-1' && get_post($image['id'])) {
 			$html .= wp_get_attachment_image( $image['id'], $size, false, $image_attr );
 		} else {
-			$html .= sprintf( '<img src="%s" title="%s" alt="%s" />', esc_attr( $image['url'] ), \Elementor\Control_Media::get_image_title( $image ), \Elementor\Control_Media::get_image_alt( $image ) );
+			$html .= sprintf(
+				'<img src="%s" title="%s" alt="%s" class="%s" />',
+				esc_attr($image['url']),
+				\Elementor\Control_Media::get_image_title($image),
+				\Elementor\Control_Media::get_image_alt($image),
+				(isset($image_attr['class']) ? esc_attr($image_attr['class']) : '')
+			);
 		}
 
 		$html = preg_replace( array( '/max-width:[^"]*;/', '/width:[^"]*;/', '/height:[^"]*;/' ), '', $html );
@@ -379,8 +385,7 @@ class Utils {
 	}
 
 	public static function swiper_class() {
-		$swiper_class = \Elementor\Plugin::$instance->experiments->is_feature_active( 'e_swiper_latest' ) ? 'swiper' : 'swiper-container';
-		return 'ekit-main-swiper ' . $swiper_class;
+		return 'ekit-main-swiper swiper';
 	}
 
 	public static function get_page_by_title( $page_title, $post_type = 'page' ) {

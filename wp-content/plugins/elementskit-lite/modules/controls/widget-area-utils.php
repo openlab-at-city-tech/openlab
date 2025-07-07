@@ -79,10 +79,10 @@ class Widget_Area_Utils {
 
 			if ( $isAjax === 'yes' ) {
 				$post_id = isset( $builder_post->ID ) ? $builder_post->ID : '';
-				echo '<div class="elementor-widget-container" data-ajax-post-id="' . esc_attr($post_id). '"></div>';
+				echo '<div class="ekit-widget-area-container" data-ajax-post-id="' . esc_attr($post_id). '"></div>';
 			} else {
 				?>
-					<div class="elementor-widget-container">
+					<div class="ekit-widget-area-container">
 					<?php
 					if ( isset( $builder_post->ID ) ) {
 						$builder_post_id = $builder_post->ID;

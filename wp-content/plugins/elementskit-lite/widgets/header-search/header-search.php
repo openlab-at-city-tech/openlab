@@ -40,9 +40,14 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
     public function get_help_url() {
         return 'https://wpmet.com/doc/search-2/';
     }
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
 
     protected function register_controls()
     {
@@ -349,7 +354,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 				'name' => 'ekit_search_backdrop_background',
 				'label' => __( 'Background', 'elementskit-lite' ),
 				'types' => [ 'classic', 'gradient' ],
-				'selector' => '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
+				'selector' => '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
 			]
         );
 
@@ -359,8 +364,8 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 				'label' => __( 'Color', 'elementskit-lite' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type=submit]), {{WRAPPER}} button.mfp-close' => 'border-color: {{VALUE}}',
-					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button, {{WRAPPER}} .ekit-promo-popup .mfp-close, {{WRAPPER}} .ekit_search-field' => 'color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group input:not([type=submit]), .ekit-popup-{{ID}} button.mfp-close' => 'border-color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button, .ekit-popup-{{ID}} .ekit-promo-popup .mfp-close, .ekit-popup-{{ID}} .ekit_search-field' => 'color: {{VALUE}}',
 				],
 			]
         );
@@ -370,15 +375,24 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 			[
 				'label' => __( 'Placeholder Color', 'elementskit-lite' ),
 				'type' => Controls_Manager::COLOR,
-				'selectors' => [
-					'{{WRAPPER}} .ekit_search-field::-webkit-input-placeholder' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .ekit_search-field::-moz-placeholder' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .ekit_search-field:-ms-input-placeholder' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .ekit_search-field:-moz-placeholder' => 'color: {{VALUE}}',
-				],
+                'selectors' => [
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-field::-webkit-input-placeholder' => 'color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-field::-moz-placeholder' => 'color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-field:-ms-input-placeholder' => 'color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-field:-moz-placeholder' => 'color: {{VALUE}}',
+                ],
 			]
         );
 
+        $this->add_group_control(
+            Group_Control_Typography::get_type(),
+            [
+                'name' => 'ekit_search_input_typography',
+                'label' => esc_html__( 'Typography', 'elementskit-lite' ),
+                'exclude' => [ 'line_height', 'text_decoration', 'text_transform', 'font_style' ],
+                'selector' => '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit_search-field',
+            ]
+        );
         $this->add_control(
 			'ekit_search_border_heading',
 			[
@@ -394,7 +408,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 				'name' => 'ekit_search_border',
 				'label' => esc_html__( 'Border Type', 'elementskit-lite' ),
                 'default' =>'',
-				'selector' => '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
+				'selector' => '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])',
 			]
 		);
 
@@ -405,7 +419,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
                 'separator' => 'after',
             ]
@@ -425,7 +439,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'height: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group input:not([type="submit"])' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -443,10 +457,30 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-panel' => 'max-width: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-panel' => 'max-width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
+
+        $this->add_control(
+            'ekit_search_input_icon_size',
+            [
+                'label' => esc_html__('Icon Size (px)', 'elementskit-lite'),
+                'type' => Controls_Manager::SLIDER,
+                'size_units' => ['px'],
+                'range' => [
+                    'px' => [
+                        'min' => 10,
+                        'max' => 150,
+                        'step' => 1,
+                    ],
+                ],
+                'selectors' => [
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button i' => 'font-size: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}};', 
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button svg' => 'font-size: {{SIZE}}{{UNIT}}; max-width: {{SIZE}}{{UNIT}};',
+                ],
+            ]
+        );
 
         $this->add_control(
 			'ekit_search_input_left',
@@ -462,7 +496,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 					],
 				],
 				'selectors' => [
-					'{{WRAPPER}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button' => 'right: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}} .ekit_modal-searchPanel .ekit-search-group .ekit_search-button' => 'right: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -473,7 +507,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 				'label' => esc_html__( 'Background Overlay Color', 'elementskit-lite' ),
 				'type' => \Elementor\Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .mfp-bg.ekit-promo-popup' => 'background-color: {{VALUE}}',
+                    '.ekit-popup-{{ID}} ' => 'background-color: {{VALUE}}',
 				],
                 'separator' => 'before',
 			]
@@ -500,7 +534,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 ],
                 'toggle' => true,
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-wid-con .ekit-promo-popup > .mfp-container > .mfp-content' => 'vertical-align: {{VALUE}};',
+                    '.ekit-popup-{{ID}} > .mfp-container > .mfp-content' => 'vertical-align: {{VALUE}};',
                 ],
             ]
         );
@@ -512,7 +546,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'type' => Controls_Manager::DIMENSIONS,
                 'size_units' => [ 'px', '%', 'em' ],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-wid-con .ekit-promo-popup > .mfp-container > .mfp-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
+                    '.ekit-popup-{{ID}} > .mfp-container > .mfp-content' => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
                 ],
             ]
         );
@@ -541,7 +575,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 					'max' => 100,
 				],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'border-radius: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close' => 'border-radius: {{SIZE}}{{UNIT}};',
                 ],
 
             ]
@@ -560,8 +594,8 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
 					],
 				],
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'width: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close' => 'height: {{SIZE}}{{UNIT}}; width: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close:hover' => 'width: {{SIZE}}{{UNIT}};',
                 ],
 
             ]
@@ -582,7 +616,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'label' =>esc_html__( 'Color', 'elementskit-lite' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'color: {{VALUE}}; border-color: {{VALUE}}',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close' => 'color: {{VALUE}}; border-color: {{VALUE}}',
                 ],
             ]
         );
@@ -593,7 +627,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'label' =>esc_html__( 'Background Color', 'elementskit-lite' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close' => 'background-color: {{VALUE}};',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close' => 'background-color: {{VALUE}};',
                 ],
             ]
         );
@@ -612,7 +646,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'label' =>esc_html__( 'Color', 'elementskit-lite' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'color: {{VALUE}}; border-color: {{VALUE}}',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close:hover' => 'color: {{VALUE}}; border-color: {{VALUE}}',
                 ],
             ]
         );
@@ -623,7 +657,7 @@ class ElementsKit_Widget_Header_Search extends Widget_Base
                 'label' =>esc_html__( 'Background Color', 'elementskit-lite' ),
                 'type' => Controls_Manager::COLOR,
                 'selectors' => [
-                    '{{WRAPPER}} .ekit-promo-popup .mfp-close:hover' => 'background-color: {{VALUE}};',
+                    '.ekit-popup-{{ID}}.ekit-promo-popup .mfp-close:hover' => 'background-color: {{VALUE}};',
                 ],
             ]
         );

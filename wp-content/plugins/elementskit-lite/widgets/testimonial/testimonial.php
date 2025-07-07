@@ -38,9 +38,15 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
     public function get_help_url() {
         return 'https://wpmet.com/doc/how-to-create-testimonials-in-wordpress/';
     }
+
+	public function get_style_depends() {
+		return ['swiper'];
+	}
+
     protected function is_dynamic_content(): bool {
         return false;
     }
+
     protected function register_controls() {
 
         $this->start_controls_section(
@@ -1038,7 +1044,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 				'type'		 => Controls_Manager::COLOR,
 				'default'	 => '#fec42d',
 			    'selectors'	 => [
-				    '{{WRAPPER}} .elementskit-stars > li > a, {{WRAPPER}} .elementskit-stars > li > span' => 'color: {{VALUE}};'
+				    '{{WRAPPER}} .elementskit-stars > li > a, {{WRAPPER}} .elementskit-stars > li > span' => 'color: {{VALUE}}; fill: {{VALUE}};',
 			    ],
 		    ]
 	    );
@@ -1048,9 +1054,11 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 			[
 				'label'		=> esc_html__( 'Hover & Active Color', 'elementskit-lite' ),
 				'type'		=> Controls_Manager::COLOR,
-				'selectors'	=> [
-					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > a, {{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > span' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > a, {{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > span' => 'color: {{VALUE}};',
+				'selectors' => [
+					'{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > a, 
+					{{WRAPPER}} .elementskit-single-testimonial-slider:hover .elementskit-stars > li > span, 
+					{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > a, 
+					{{WRAPPER}} .elementskit-single-testimonial-slider.testimonial-active .elementskit-stars > li > span' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
@@ -1830,6 +1838,7 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
 						'unit' => 'px',
 						'size' => -98,
 					],
+					'render_type' => 'template',
 					'selectors' => [
 						'{{WRAPPER}} .elementskit-commentor-bio' => 'bottom: {{SIZE}}{{UNIT}};',
 					],
@@ -2381,25 +2390,18 @@ class ElementsKit_Widget_Testimonial extends Widget_Base {
         echo '</div>';
     }
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
     protected function render_raw( ) {
 
 		$testimonials = [];
 		$settings = $this->get_settings_for_display();
 		extract($settings);
 
-		// Left Arrow Icon
-		$migrated = isset( $settings['__fa4_migrated']['ekit_testimonial_left_arrows'] );
-		// - Check if its a new widget without previously selected icon using the old Icon control
-		$is_new = empty( $settings['ekit_testimonial_left_arrow'] );
-
-		$prevArrowIcon = ($is_new || $migrated) ? (!empty($ekit_testimonial_left_arrows) && $settings['ekit_testimonial_left_arrows']['library'] != 'svg' ? $settings['ekit_testimonial_left_arrows']['value'] : '') : $settings['ekit_testimonial_left_arrow'];
-
-		// Right Arrow Icon
-		$migrated = isset( $settings['__fa4_migrated']['ekit_testimonial_right_arrows'] );
-		// - Check if its a new widget without previously selected icon using the old Icon control
-		$is_new = empty( $settings['ekit_testimonial_right_arrow'] );
-
-		$nextArrowIcon = ($is_new || $migrated) ? !empty($ekit_testimonial_right_arrows) && $settings['ekit_testimonial_right_arrows']['library'] != 'svg' ? $settings['ekit_testimonial_right_arrows']['value'] : '' : $settings['ekit_testimonial_right_arrow'];
+		// Set default client image size
+		$ekit_testimonial_client_image_size = isset($ekit_testimonial_client_image_size) ? $ekit_testimonial_client_image_size : ['size' => 70];
 
 		$slides_to_show_count = $ekit_testimonial_slidetoshow ? $ekit_testimonial_slidetoshow : 1;
 		$slides_to_scroll_count = $ekit_testimonial_slidesToScroll ? $ekit_testimonial_slidesToScroll : 1;

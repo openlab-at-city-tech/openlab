@@ -4,6 +4,7 @@
 	?>
 	<h1 class="ekit-onboard-main-header--title"><?php echo wp_kses( $step5_title, \ElementsKit_Lite\Utils::get_kses_array() ); ?></h1>
 </div>
+
 <div class="ekit-onboard-pro-features">
 	<h2><?php echo esc_html__( 'ElementsKit', 'elementskit-lite' ); ?> <span><?php echo esc_html__( 'PRO', 'elementskit-lite' ); ?></span></h2>
 
@@ -26,7 +27,7 @@
 
 <div class="ekit-onboard-pagination">
 	<a class="ekit-onboard-btn ekit-onboard-pagi-btn prev" href="#"><i class="icon icon-arrow-left"></i><?php echo esc_html__( 'Back', 'elementskit-lite' ); ?></a>
-	<a class="ekit-onboard-btn ekit-onboard-pagi-btn next" href="#"><?php echo esc_html__( 'Next Step', 'elementskit-lite' ); ?></a>
+	<a class="ekit-onboard-btn ekit-onboard-pagi-btn next" href="#"><?php echo esc_html__( 'Complete Setup', 'elementskit-lite' ); ?></a>
 </div>
 
 <div class="ekit-onboard-shapes">
