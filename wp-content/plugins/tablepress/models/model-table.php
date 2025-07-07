@@ -289,6 +289,15 @@ class TablePress_Table_Model extends TablePress_Model {
 			return new WP_Error( 'table_save_empty_table_id' );
 		}
 
+		/**
+		 * Fires before a table is saved.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param string $table_id ID of the table to be saved.
+		 */
+		do_action( 'tablepress_event_pre_save_table', $table['id'] );
+
 		$post_id = $this->_get_post_id( $table['id'] );
 		if ( false === $post_id ) {
 			return new WP_Error( 'table_save_no_post_id_for_table_id', '', $table['id'] );
@@ -327,7 +336,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		 *
 		 * @since 1.5.0
 		 *
-		 * @param string $table_id ID of the added table.
+		 * @param string $table_id ID of the saved table.
 		 */
 		do_action( 'tablepress_event_saved_table', $table['id'] );
 
@@ -444,6 +453,15 @@ class TablePress_Table_Model extends TablePress_Model {
 		if ( ! $this->table_exists( $table_id ) ) {
 			return new WP_Error( 'table_delete_table_does_not_exist', '', $table_id );
 		}
+
+		/**
+		 * Fires before a table is deleted.
+		 *
+		 * @since 3.1.0
+		 *
+		 * @param string $table_id ID of the table to be deleted.
+		 */
+		do_action( 'tablepress_event_pre_delete_table', $table_id );
 
 		$post_id = $this->_get_post_id( $table_id ); // No ! false check necessary, as this is covered by table_exists() check above.
 
@@ -1240,7 +1258,12 @@ class TablePress_Table_Model extends TablePress_Model {
 
 		// Pretend that there is a `_tablepress_export_table_id` post meta field with the list of table IDs.
 		$key = '_tablepress_export_table_id';
-		$value = wxr_cdata( implode( ',', $table_ids ) ); // @phpstan-ignore function.notFound
+
+		/**
+		 * Load WP export functions.
+		 */
+		require_once ABSPATH . 'wp-admin/includes/export.php'; // @phpstan-ignore requireOnce.fileNotFound (This is a WordPress core file that always exists.)
+		$value = wxr_cdata( implode( ',', $table_ids ) );
 
 		// Hijack the filter and print extra XML code for our faked post meta field.
 		// phpcs:disable WordPress.Security.EscapeOutput.HeredocOutputNotEscaped

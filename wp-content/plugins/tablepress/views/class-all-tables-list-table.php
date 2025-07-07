@@ -236,7 +236,7 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 			$row_actions['export'] = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', $export_url, esc_attr( sprintf( __( 'Export &#8220;%s&#8221;', 'tablepress' ), $item['name'] ) ), _x( 'Export', 'row action', 'tablepress' ) );
 		}
 		if ( $user_can_delete_table ) {
-			$row_actions['delete'] = sprintf( '<a href="%1$s" title="%2$s" class="delete-link">%3$s</a>', $delete_url, esc_attr( sprintf( __( 'Delete &#8220;%s&#8221;', 'tablepress' ), $item['name'] ) ), __( 'Delete', 'tablepress' ) );
+			$row_actions['delete'] = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', $delete_url, esc_attr( sprintf( __( 'Delete “%1$s” (ID %2$s)', 'tablepress' ), $item['name'], $item['id'] ) ), __( 'Delete', 'tablepress' ) );
 		}
 		if ( $user_can_preview_table ) {
 			$row_actions['table-preview'] = sprintf( '<a href="%1$s" title="%2$s">%3$s</a>', $preview_url, esc_attr( sprintf( __( 'Preview of table “%1$s” (ID %2$s)', 'tablepress' ), $item['name'], $item['id'] ) ), __( 'Preview', 'tablepress' ) );
@@ -530,14 +530,16 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 			return false;
 		}
 
+		$fn_stripos = function_exists( 'mb_stripos' ) ? 'mb_stripos' : 'stripos';
+
 		// Search from easy to hard, so that "expensive" code maybe doesn't have to run.
-		if ( false !== stripos( $item['id'], (string) $term )
-		|| false !== stripos( $item['name'], (string) $term )
-		|| false !== stripos( $item['description'], (string) $term )
-		|| false !== stripos( TablePress::get_user_display_name( $item['author'] ), (string) $term )
-		|| false !== stripos( TablePress::get_user_display_name( $item['options']['last_editor'] ), (string) $term )
-		|| false !== stripos( TablePress::format_datetime( $item['last_modified'] ), (string) $term )
-		|| false !== stripos( wp_json_encode( $item['data'], TABLEPRESS_JSON_OPTIONS ), (string) $json_encoded_term ) ) { // @phpstan-ignore argument.type
+		if ( false !== $fn_stripos( $item['id'], (string) $term )
+		|| false !== $fn_stripos( $item['name'], (string) $term )
+		|| false !== $fn_stripos( $item['description'], (string) $term )
+		|| false !== $fn_stripos( TablePress::get_user_display_name( $item['author'] ), (string) $term )
+		|| false !== $fn_stripos( TablePress::get_user_display_name( $item['options']['last_editor'] ), (string) $term )
+		|| false !== $fn_stripos( TablePress::format_datetime( $item['last_modified'] ), (string) $term )
+		|| false !== $fn_stripos( wp_json_encode( $item['data'], TABLEPRESS_JSON_OPTIONS ), (string) $json_encoded_term ) ) { // @phpstan-ignore argument.type
 			return true;
 		}
 

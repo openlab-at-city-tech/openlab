@@ -305,7 +305,7 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 		}
 
 		// Only load the toolbar integration if the Block Editor is not used.
-		if ( TablePress::site_uses_block_editor() ) {
+		if ( 'block' === TablePress::site_used_editor() ) {
 			return;
 		}
 
@@ -377,7 +377,7 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 		$wp_admin_bar->add_menu( array(
 			'parent' => 'new-content',
 			'id'     => 'new-tablepress-table',
-			'title'  => __( 'TablePress Table', 'tablepress' ),
+			'title'  => __( 'TablePress table', 'tablepress' ),
 			'href'   => TablePress::url( array( 'action' => 'add' ) ),
 		) );
 	}
@@ -396,6 +396,7 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 			'tablepress-datatables-column-filter-widgets/tablepress-datatables-column-filter-widgets.php',
 			'tablepress-datatables-columnfilter/tablepress-datatables-columnfilter.php',
 			'tablepress-datatables-fixedcolumns/tablepress-datatables-fixedcolumns.php',
+			'tablepress-datatables-inverted-filter/tablepress-datatables-inverted-filter.php',
 			'tablepress-datatables-row-details/tablepress-datatables-row-details.php',
 			'tablepress-datatables-rowgroup/tablepress-datatables-rowgroup.php',
 			'tablepress-responsive-tables/tablepress-responsive-tables.php',
@@ -526,10 +527,10 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 
 		// Pre-define some view data.
 		$data = array(
-			'view_actions'           => $this->view_actions,
-			'message'                => ( ! empty( $_GET['message'] ) ) ? $_GET['message'] : false,
-			'error_details'          => ( ! empty( $_GET['error_details'] ) ) ? $_GET['error_details'] : '',
-			'site_uses_block_editor' => TablePress::site_uses_block_editor(),
+			'view_actions'     => $this->view_actions,
+			'message'          => ( ! empty( $_GET['message'] ) ) ? $_GET['message'] : false,
+			'error_details'    => ( ! empty( $_GET['error_details'] ) ) ? $_GET['error_details'] : '',
+			'site_used_editor' => TablePress::site_used_editor(),
 		);
 
 		// Depending on the action, load more necessary data for the corresponding view.
@@ -1392,10 +1393,10 @@ class TablePress_Admin_Controller extends TablePress_Controller {
 		$render_options['block_preview'] = true;
 		$_render->set_input( $table, $render_options );
 		$view_data = array(
-			'table_id'               => $table_id,
-			'head_html'              => $_render->get_preview_css(),
-			'body_html'              => $_render->get_output( 'html' ),
-			'site_uses_block_editor' => TablePress::site_uses_block_editor(),
+			'table_id'         => $table_id,
+			'head_html'        => $_render->get_preview_css(),
+			'body_html'        => $_render->get_output( 'html' ),
+			'site_used_editor' => TablePress::site_used_editor(),
 		);
 
 		$custom_css = TablePress::$model_options->get( 'custom_css' );

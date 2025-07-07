@@ -56,7 +56,9 @@ class TablePress_Import_View extends TablePress_View {
 		$this->add_meta_box( 'import-form', __( 'Import Tables', 'tablepress' ), array( $this, 'postbox_import_form' ), 'normal' );
 		$screen = get_current_screen();
 		add_filter( "postbox_classes_{$screen->id}_tablepress_{$this->action}-import-form", array( $this, 'postbox_classes' ) ); // @phpstan-ignore property.nonObject
-		$this->add_meta_box( 'tables-auto-import', __( 'Automatic Periodic Table Import', 'tablepress' ), array( $this, 'postbox_auto_import' ), 'additional' );
+		if ( ! TABLEPRESS_IS_PLAYGROUND_PREVIEW ) {
+			$this->add_meta_box( 'tables-auto-import', __( 'Automatic Periodic Table Import', 'tablepress' ), array( $this, 'postbox_auto_import' ), 'additional' );
+		}
 	}
 
 	/**
@@ -88,26 +90,21 @@ class TablePress_Import_View extends TablePress_View {
 	 * @param array<string, mixed> $box  Information about the meta box.
 	 */
 	public function postbox_import_form( array $data, array $box ): void {
-		$script_data = array(
-			'tables'                 => $this->admin_page->convert_to_json_parse_output( $data['tables'] ),
-			'importSource'           => $this->admin_page->convert_to_json_parse_output( $data['import_source'] ),
-			'importType'             => $this->admin_page->convert_to_json_parse_output( $data['import_type'] ),
-			'importUrl'              => $this->admin_page->convert_to_json_parse_output( esc_url( $data['import_url'] ) ),
-			'importServer'           => $this->admin_page->convert_to_json_parse_output( $data['import_server'] ),
-			'importFormField'        => $this->admin_page->convert_to_json_parse_output( $data['import_form-field'] ),
-			'importExistingTable'    => $this->admin_page->convert_to_json_parse_output( $data['import_existing_table'] ),
-			'showImportSourceServer' => ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ) ? 'true' : 'false',
-			'showImportSourceUrl'    => current_user_can( 'tablepress_import_tables_url' ) ? 'true' : 'false',
-			'legacyImport'           => $this->admin_page->convert_to_json_parse_output( $data['legacy_import'] ),
+		$this->print_script_data_json(
+			'import',
+			array(
+				'tables'                 => $data['tables'],
+				'importSource'           => $data['import_source'],
+				'importType'             => $data['import_type'],
+				'importUrl'              => esc_url( $data['import_url'] ),
+				'importServer'           => $data['import_server'],
+				'importFormField'        => $data['import_form-field'],
+				'importExistingTable'    => $data['import_existing_table'],
+				'showImportSourceServer' => ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ),
+				'showImportSourceUrl'    => current_user_can( 'tablepress_import_tables_url' ),
+				'legacyImport'           => $data['legacy_import'],
+			),
 		);
-
-		echo "<script>\n";
-		echo "window.tp = window.tp || {};\n";
-		echo "tp.import = {};\n";
-		foreach ( $script_data as $variable => $value ) {
-			echo "tp.import.{$variable} = {$value};\n";
-		}
-		echo "</script>\n";
 
 		echo '<div id="tablepress-import-screen"></div>';
 	}

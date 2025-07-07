@@ -1,20 +1,25 @@
 /**
  * TablePress Default CSS - DataTables-related code.
  *
- * Attention: Do not modify this file directly, but use the "Custom CSS" textarea
- * on the "Plugin Options" screen of TablePress.
- *
  * @package TablePress
  * @subpackage Frontend CSS
  * @author Tobias Bäthge, Allan Jardine
  * @since 1.0.0
  */
 
+// Load the Sass string module, for use in the `unicode` function.
+@use "sass:string";
+
 /* Default toggle variable for LTR and RTL CSS. */
 $direction: "ltr" !default;
 
 /* Import DataTables pagination code. */
 @use "default-datatables-pagination" with ($direction: $direction);
+
+// Ensure that Unicode characters are embedded in ASCII-encoded form.
+@function unicode($str) {
+	@return string.unquote("\"") + string.unquote(string.insert($str, "\\", 1)) + string.unquote("\"");
+}
 
 /* Default variables for the LTR CSS. */
 $align-side: left;
@@ -42,7 +47,8 @@ div.dt-scroll-body {
 		tr {
 			height: 0;
 
-			th {
+			th,
+			td {
 				height: 0 !important;
 				padding-top: 0 !important;
 				padding-bottom: 0 !important;
@@ -56,15 +62,18 @@ div.dt-scroll-body {
 			}
 		}
 	}
-}
 
-div.dt-scroll-body > table.dataTable > thead > tr > th {
-	overflow: hidden;
+	> table.dataTable > thead > tr {
+		> th,
+		> td {
+			overflow: hidden;
+		}
+	}
 }
 
 /* Sorting. */
 .tablepress {
-	/* Custom properties */
+	/* Custom properties. */
 	--head-active-bg-color: #049cdb;
 	--head-active-text-color: var(--head-text-color);
 	--head-sort-arrow-color: var(--head-active-text-color);
@@ -80,7 +89,7 @@ div.dt-scroll-body > table.dataTable > thead > tr > th {
 				position: absolute;
 				display: block;
 				bottom: 50%;
-				content: "\25b2" / "";
+				content: unicode("25b2") / "";
 			}
 		}
 
@@ -90,7 +99,7 @@ div.dt-scroll-body > table.dataTable > thead > tr > th {
 				position: absolute;
 				display: block;
 				top: 50%;
-				content: "\25bc" / "";
+				content: unicode("25bc") / "";
 			}
 		}
 
@@ -161,6 +170,11 @@ div.dt-scroll-body > table.dataTable > thead > tr > th {
 
 	.tablepress {
 		margin-bottom: 0;
+
+		/* Empty footers should be hidden for improved accessibility. */
+		tfoot:empty {
+			display: none;
+		}
 	}
 
 	.dt-layout-row {
@@ -213,6 +227,7 @@ div.dt-scroll-body > table.dataTable > thead > tr > th {
 
 	label {
 		display: inline;
+		width: auto;
 	}
 
 	/* Input and select fields. */
@@ -223,8 +238,9 @@ div.dt-scroll-body > table.dataTable > thead > tr > th {
 		font-size: inherit;
 	}
 
-	/* Search field. */
-	.dt-search {
+	/* Search and Length Change fields. */
+	.dt-search,
+	.dt-length {
 		display: flex;
 		flex-wrap: wrap;
 		justify-content: center;
