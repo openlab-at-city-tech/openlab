@@ -1,3 +1,35 @@
+##### [Version 3.3.46](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.45...v3.3.46) (2025-05-16)
+
+- Add masteriyo recommandation
+- Add bf helpers
+- update formbricks
+
+##### [Version 3.3.45](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.44...v3.3.45) (2025-04-28)
+
+- feat: add review_link param to about_us filter
+
+##### [Version 3.3.44](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.43...v3.3.44) (2025-02-18)
+
+- Fix variable mismatch in the install category function.
+
+##### [Version 3.3.43](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.42...v3.3.43) (2025-02-18)
+
+- Compute survey install category as common data.
+- Add auto-trigger cancel event
+
+##### [Version 3.3.42](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.41...v3.3.42) (2025-02-17)
+
+- Updated Formbricks package version
+- Added support for Formbrick script loading via Internal Pages hooks
+
+##### [Version 3.3.41](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.40...v3.3.41) (2025-02-05)
+
+- fixed a minor issue that prevented the translation checking for Hestia PRO
+
+##### [Version 3.3.40](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.39...v3.3.40) (2024-12-29)
+
+Adds feadzy features.
+
 ##### [Version 3.3.39](https://github.com/Codeinwp/themeisle-sdk-main/compare/v3.3.38...v3.3.39) (2024-11-19)
 
 - Adds WPFS promo to About Page
