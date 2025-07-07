@@ -792,6 +792,7 @@ OpenLab.utility = (function ($) {
 					});
 
 					if ( isOpen ) {
+						document.body.classList.remove( 'drawer-open' );
 						drawer.setAttribute('aria-hidden', 'true');
 						drawer.classList.remove('is-open');
 
@@ -808,6 +809,7 @@ OpenLab.utility = (function ($) {
 							defaultPanel.setAttribute('aria-hidden', 'false');
 						}
 
+						document.body.classList.add( 'drawer-open' );
 						drawer.setAttribute('aria-hidden', 'false');
 						drawer.classList.add('is-open');
 
@@ -880,6 +882,10 @@ OpenLab.utility = (function ($) {
 						el.setAttribute('aria-expanded', 'false')
 					);
 				}
+			});
+
+			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
+				e.stopPropagation();
 			});
 		},
 		switchToNavPanel: function( panelId, switchFocus ) {
