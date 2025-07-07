@@ -1,10 +1,10 @@
 === Translate Wordpress with GTranslate ===
 Contributors: edo888
 Author: Translate AI Multilingual Solutions
-Tags: translate, translator, multilingual, translation, multilanguage
+Tags: translate, translator, multilingual, translation, language
 Requires at least: 2.8.1
-Tested up to: 6.6
-Stable tag: 3.0.7
+Tested up to: 6.8
+Stable tag: 3.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://gtranslate.io/?xyz=998#pricing
@@ -247,6 +247,11 @@ If you want us to translate your website professionally or provide you a proofre
 8. User Dashboard (paid)
 
 == Changelog ==
+= 3.0.8 =
+* Fixed current URL for hreflang tags when WordPress is installed in a sub-folder
+* Changed sessionStorage to localStorage for more persistence when auto switching language
+* Added a check for gtranslateSettings variable which can be undefined due to some cache plugins
+
 = 3.0.7 =
 * Added "gtranslate" into LiteSpeed cache delayed exclude list
 

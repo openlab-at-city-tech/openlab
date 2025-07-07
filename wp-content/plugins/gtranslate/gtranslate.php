@@ -3,7 +3,7 @@
 Plugin Name: GTranslate
 Plugin URI: https://gtranslate.io/?xyz=998
 Description: Translate your website and make it multilingual. For support visit <a href="https://wordpress.org/support/plugin/gtranslate">GTranslate Support Forum</a>.
-Version: 3.0.7
+Version: 3.0.8
 Author: Translate AI Multilingual Solutions
 Author URI: https://gtranslate.io
 Text Domain: gtranslate
@@ -1126,8 +1126,8 @@ EOT;
                             <select id="float_switcher_open_direction" name="float_switcher_open_direction" onchange="RefreshDoWidgetCode()">
                                 <option value="left"><?php _e('Left', 'gtranslate'); ?></option>
                                 <option value="right"><?php _e('Right', 'gtranslate'); ?></option>
-                                <option value="top"><?php _e('Top', 'gtranslate'); ?></option>
-                                <option value="bottom"><?php _e('Bottom', 'gtranslate'); ?></option>
+                                <option value="top"><?php _e('Up', 'gtranslate'); ?></option>
+                                <option value="bottom"><?php _e('Down', 'gtranslate'); ?></option>
                             </select>
                         </td>
                     </tr>
@@ -1135,8 +1135,8 @@ EOT;
                         <td class="option_name"><?php _e('Open direction', 'gtranslate'); ?>:</td>
                         <td>
                             <select id="switcher_open_direction" name="switcher_open_direction" onchange="RefreshDoWidgetCode()">
-                                <option value="top"><?php _e('Top', 'gtranslate'); ?></option>
-                                <option value="bottom"><?php _e('Bottom', 'gtranslate'); ?></option>
+                                <option value="top"><?php _e('Up', 'gtranslate'); ?></option>
+                                <option value="bottom"><?php _e('Down', 'gtranslate'); ?></option>
                             </select>
                         </td>
                     </tr>
@@ -1435,7 +1435,7 @@ EOT;
                                         <li><a href="https://gtranslate.io/?xyz=998#pricing" target="_blank" rel="noreferrer"><?php _e('Compare plans', 'gtranslate'); ?></a></li>
                                         <li><a href="https://gtranslate.io/website-translation-quote" target="_blank" rel="noreferrer"><?php _e('Website Translation Quote', 'gtranslate'); ?></a></li>
                                         <li><a href="https://gtranslate.io/detect-browser-language" target="_blank" rel="noreferrer"><?php _e('Detect browser language', 'gtranslate'); ?></a></li>
-                                        <li><a href="https://wordpress.org/support/plugin/gtranslate/reviews/" target="_blank" rel="noreferrer"><?php _e('Reviews', 'gtranslate'); ?></a></li>
+                                        <li><a href="https://translatex.com" target="_blank" rel="noreferrer"><?php _e('TranslateX - Translation API', 'gtranslate'); ?></a></li>
                                     </ul>
                                 </td>
                             </tr>
@@ -2214,6 +2214,10 @@ if($data['url_translation'] and ($data['pro_version'] or $data['enterprise_versi
 
 if($data['add_hreflang_tags'] and ($data['pro_version'] or $data['enterprise_version'])) {
     function gtranslate_add_hreflang_tags() {
+        $url_fragments = parse_url(home_url());
+        if(!isset($url_fragments['scheme']) or !isset($url_fragments['host']))
+            return;
+
         $data = get_option('GTranslate');
         GTranslate::load_defaults($data);
 
@@ -2225,43 +2229,41 @@ if($data['add_hreflang_tags'] and ($data['pro_version'] or $data['enterprise_ver
         else
             $enabled_languages = $data['incl_langs'];
 
-        //$current_url = wp_get_canonical_url();
-        $current_url = network_home_url(add_query_arg(null, null));
+        //$current_url = network_home_url(add_query_arg(null, null));
+        $current_url = $url_fragments['scheme'] . '://' . $url_fragments['host'] . '/' . ltrim(add_query_arg(null, null), '/');
 
-        if($current_url !== false) {
-            // adding default language
-            if($data['default_language'] === 'iw')
-                echo '<link rel="alternate" hreflang="he" href="'.esc_url($current_url).'" />'."\n";
-            elseif($data['default_language'] === 'jw')
-                echo '<link rel="alternate" hreflang="jv" href="'.esc_url($current_url).'" />'."\n";
-            else
-                echo '<link rel="alternate" hreflang="'.$data['default_language'].'" href="'.esc_url($current_url).'" />'."\n";
+        // adding default language
+        if($data['default_language'] === 'iw')
+            echo '<link rel="alternate" hreflang="he" href="'.esc_url($current_url).'" />'."\n";
+        elseif($data['default_language'] === 'jw')
+            echo '<link rel="alternate" hreflang="jv" href="'.esc_url($current_url).'" />'."\n";
+        else
+            echo '<link rel="alternate" hreflang="'.$data['default_language'].'" href="'.esc_url($current_url).'" />'."\n";
 
-            // adding enabled languages
-            foreach($enabled_languages as $lang) {
-                $href = '';
-                $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
+        // adding enabled languages
+        foreach($enabled_languages as $lang) {
+            $href = '';
+            $domain = str_replace('www.', '', $_SERVER['HTTP_HOST']);
 
-                if($data['enterprise_version']) {
-                    if($data['custom_domains'] and !empty($data['custom_domains_data'])) {
-                        $custom_domains_data = json_decode(stripslashes($data['custom_domains_data']), true);
-                        if(isset($custom_domains_data[$lang]))
-                            $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $custom_domains_data[$lang], $current_url);
-                        else
-                            $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $lang . '.' . $domain, $current_url);
-                    } else
-                        $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $lang . '.' . $domain, $current_url);
-                } elseif($data['pro_version'])
-                    $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $_SERVER['HTTP_HOST'] . '/' . $lang, $current_url);
-
-                if(!empty($href) and $lang != $data['default_language']) {
-                    if($lang === 'iw')
-                        echo '<link rel="alternate" hreflang="he" href="'.esc_url($href).'" />'."\n";
-                    elseif($lang === 'jw')
-                        echo '<link rel="alternate" hreflang="jv" href="'.esc_url($href).'" />'."\n";
+            if($data['enterprise_version']) {
+                if($data['custom_domains'] and !empty($data['custom_domains_data'])) {
+                    $custom_domains_data = json_decode(stripslashes($data['custom_domains_data']), true);
+                    if(isset($custom_domains_data[$lang]))
+                        $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $custom_domains_data[$lang], $current_url);
                     else
-                        echo '<link rel="alternate" hreflang="'.$lang.'" href="'.esc_url($href).'" />'."\n";
-                }
+                        $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $lang . '.' . $domain, $current_url);
+                } else
+                    $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $lang . '.' . $domain, $current_url);
+            } elseif($data['pro_version'])
+                $href = str_ireplace('://' . $_SERVER['HTTP_HOST'], '://' . $_SERVER['HTTP_HOST'] . '/' . $lang, $current_url);
+
+            if(!empty($href) and $lang != $data['default_language']) {
+                if($lang === 'iw')
+                    echo '<link rel="alternate" hreflang="he" href="'.esc_url($href).'" />'."\n";
+                elseif($lang === 'jw')
+                    echo '<link rel="alternate" hreflang="jv" href="'.esc_url($href).'" />'."\n";
+                else
+                    echo '<link rel="alternate" hreflang="'.$lang.'" href="'.esc_url($href).'" />'."\n";
             }
         }
     }
