@@ -1,34 +1,38 @@
-# Copyright (C) 2024 The Hypothesis Project and contributors
+# Copyright (C) 2025 The Hypothesis Project and contributors
 # This file is distributed under the BSD-3-Clause.
 msgid ""
 msgstr ""
-"Project-Id-Version: Hypothesis 0.7.3\n"
+"Project-Id-Version: Hypothesis 0.7.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-hypothesis\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-05T15:32:05+00:00\n"
+"POT-Creation-Date: 2025-04-10T09:54:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"X-Generator: WP-CLI 2.9.0\n"
+"X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: hypothesis\n"
 
 #. Plugin Name of the plugin
+#: hypothesis.php
 #: class-hypothesissettingspage.php:37
 msgid "Hypothesis"
 msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
+#: hypothesis.php
 msgid "https://hypothes.is/"
 msgstr ""
 
 #. Description of the plugin
+#: hypothesis.php
 msgid "Hypothesis is an open platform for the collaborative evaluation of knowledge. This plugin embeds the necessary scripts in your WordPress site to enable any user to use Hypothesis without installing any extensions."
 msgstr ""
 
 #. Author of the plugin
+#: hypothesis.php
 msgid "The Hypothesis Project and contributors"
 msgstr ""
 
