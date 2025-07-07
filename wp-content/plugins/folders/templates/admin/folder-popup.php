@@ -51,8 +51,8 @@ if (!defined('ABSPATH')) {
             });
             if(jQuery("#import-third-party-plugin-data").length) {
                 jQuery("#import-third-party-plugin-data").show();
-            } else if($("#wordpress-popup").length) {
-                $("#wordpress-popup").show();
+            } else if(jQuery("#wordpress-popup").length) {
+                jQuery("#wordpress-popup").show();
             }
         });
 

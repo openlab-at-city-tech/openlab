@@ -32,7 +32,7 @@ class  WCP_Forms
      * @access public
      * @return $isWPMLActive
      */
-    public static function get_form_html($option_data="")
+    public static function get_form_html($option_data="", $post_type = "")
     {
         ob_start();
         $customizeFolders = get_option('customize_folders');
@@ -49,6 +49,13 @@ class  WCP_Forms
         $oldStatus = get_option("wcp_folder_version_267");
         if ($oldStatus === false) {
             // $isOld = true;
+        }
+        $customSort = isset($customizeFolders['force_sorting'])?$customizeFolders['force_sorting']:"off";
+        $currentSort = "";
+        if($customSort != "on") {
+            $customSort = "off";
+        } else {
+            $currentSort = get_option("wcp_custom_sort_".$post_type, "");
         }
         ?>
         <div class="wcp-custom-form">
@@ -107,14 +114,14 @@ class  WCP_Forms
                                     </a>
                                     <div class="folder-sort-menu <?php echo ($isOld) ? "" : "is-pro" ?>">
                                         <ul>
-                                            <li><a data-sort="a-z" href="#"><?php esc_html_e("A → Z", 'folders'); ?></a></li>
-                                            <li><a data-sort="z-a" href="#"><?php esc_html_e("Z → A", 'folders'); ?></a></li>
+                                            <li><a class="<?php echo esc_attr($currentSort == 'a-z'?'active':'') ?>" data-sort="a-z" href="#"><?php esc_html_e("A → Z", 'folders'); ?></a></li>
+                                            <li><a class="<?php echo esc_attr($currentSort == 'z-a'?'active':'') ?>" data-sort="z-a" href="#"><?php esc_html_e("Z → A", 'folders'); ?></a></li>
                                             <?php if ($isOld) { ?>
-                                                <li><a data-sort="n-o" href="#"><?php esc_html_e("Sort by newest", 'folders'); ?></a></li>
-                                                <li><a data-sort="o-n" href="#"><?php esc_html_e("Sort by oldest", 'folders'); ?></a></li>
+                                                <li><a class="<?php echo esc_attr($currentSort == 'n-o'?'active':'') ?>" data-sort="n-o" href="#"><?php esc_html_e("Sort by newest", 'folders'); ?></a></li>
+                                                <li><a class="<?php echo esc_attr($currentSort == 'o-n'?'active':'') ?>" data-sort="o-n" href="#"><?php esc_html_e("Sort by oldest", 'folders'); ?></a></li>
                                             <?php } else { ?>
-                                                <li><a data-sort="n-o" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by newest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
-                                                <li><a data-sort="o-n" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by oldest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
+                                                <li><a class="<?php echo esc_attr($currentSort == 'n-o'?'active':'') ?>" data-sort="n-o" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by newest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
+                                                <li><a class="<?php echo esc_attr($currentSort == 'o-n'?'active':'') ?>" data-sort="o-n" target="_blank" class="pro-feature" href="<?php echo esc_url($upgradeURL) ?>"><?php esc_html_e("Sort by oldest", 'folders'); ?> <span><?php esc_html_e("(Pro)", 'folders'); ?></span></a></li>
                                             <?php } ?>
                                         </ul>
                                     </div>

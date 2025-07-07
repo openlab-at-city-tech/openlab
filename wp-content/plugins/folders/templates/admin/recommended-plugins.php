@@ -349,7 +349,7 @@ if ($data && ! is_wp_error($data)) {
                     if (! $compatible_php || ! $compatible_wp) {
                         echo '<div class="notice inline notice-error notice-alt"><p>';
                         if (! $compatible_php && ! $compatible_wp) {
-                            esc_html_e('This plugin doesn&#8217;t work with your versions of WordPress and PHP.');
+                            esc_html_e('This plugin doesn&#8217;t work with your versions of WordPress and PHP.', 'folders');
                             if (current_user_can('update_core') && current_user_can('update_php')) {
                                 printf(
                                 // translators: 1: URL to WordPress Updates screen, 2: URL to Update PHP page.
@@ -382,7 +382,7 @@ if ($data && ! is_wp_error($data)) {
                                 );
                             }
                         } else if (! $compatible_php) {
-                            esc_html_e('This plugin doesn&#8217;t work with your version of PHP.');
+                            esc_html_e('This plugin doesn&#8217;t work with your version of PHP.', 'folders');
                             if (current_user_can('update_php')) {
                                 printf(
                                 // translators: %s: URL to Update PHP page.
@@ -443,7 +443,7 @@ if ($data && ! is_wp_error($data)) {
                                 $active_installs_millions = floor(($plugin['active_installs'] / 1000000));
                                 $active_installs_text     = sprintf(
                                 // translators: %s: Number of millions.
-                                    _nx('%s+ Million', '%s+ Million', $active_installs_millions, 'Active plugin installations'),
+                                    _nx('%s+ Million', '%s+ Million', $active_installs_millions, 'Active plugin installations', 'folders'),
                                     number_format_i18n($active_installs_millions)
                                 );
                             } else if (0 == $plugin['active_installs']) {
@@ -461,9 +461,9 @@ if ($data && ! is_wp_error($data)) {
                             if (! $tested_wp) {
                                 echo '<span class="compatibility-untested">'.esc_html__( 'Untested with your version of WordPress', "folders").'</span>';
                             } else if (! $compatible_wp) {
-                                echo '<span class="compatibility-incompatible">'.esc_html__( '<strong>Incompatible</strong> with your version of WordPress', "folders").'</span>';
+                                echo '<span class="compatibility-incompatible">'.wp_kses( '<strong>Incompatible</strong> with your version of WordPress', "folders").'</span>';
                             } else {
-                                echo '<span class="compatibility-compatible">'.esc_html__( '<strong>Compatible</strong> with your version of WordPress', "folders").'</span>';
+                                echo '<span class="compatibility-compatible">'.wp_kses( '<strong>Compatible</strong> with your version of WordPress', "folders").'</span>';
                             }
                             ?>
                         </div>
@@ -499,7 +499,7 @@ if ($data && ! is_wp_error($data)) {
                     buttons: {
                         "Hide it": {
                             click: function () {
-                                window.location = "<?php echo esc_url(admin_url('admin.php?page=wcp_folders_settings&hide_folder_recommended_plugin=1&nonce='.wp_create_nonce("folder_recommended_plugin")));?>";
+                                window.location = "<?php echo admin_url('admin.php?page=wcp_folders_settings&hide_folder_recommended_plugin=1&nonce='.wp_create_nonce("folder_recommended_plugin"));?>";
                             },
                             text: 'Hide it',
                             class: 'btn red-btn'

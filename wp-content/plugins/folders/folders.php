@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Folders
  * Description: Organize your Media library, Pages, and Posts into folders. You can easily drag and drop items into directories and change the folders tree view.
- * Version: 3.0.6
+ * Version: 3.1.2
  * Author: Premio
  * Author URI: https://premio.io/downloads/folders/
  * Text Domain: folders
@@ -28,9 +28,11 @@ if(!defined("WCP_FOLDER_URL")) {
     define('WCP_FOLDER_URL', plugin_dir_url(__FILE__));
 }
 if(!defined("WCP_FOLDER_VERSION")) {
-    define('WCP_FOLDER_VERSION', "3.0.6");
+    define('WCP_FOLDER_VERSION', "3.1.2");
 }
-
+if(!defined("IS_FOLDERS_DEVELOPER_MODE")) {
+    define('IS_FOLDERS_DEVELOPER_MODE', false);
+}
 
 if(!function_exists("folders_clear_all_caches")) {
     function folders_clear_all_caches()
@@ -104,6 +106,7 @@ if(!function_exists("folders_clear_all_caches")) {
 
 include_once plugin_dir_path(__FILE__) . "includes/plugins.class.php";
 include_once plugin_dir_path(__FILE__) . "includes/media.replace.php";
+include_once plugin_dir_path(__FILE__) . "includes/form.fields.php";
 include_once plugin_dir_path(__FILE__) . "includes/folders.class.php";
 include_once plugin_dir_path(__FILE__) . "includes/svg.class.php";
 register_activation_hook( __FILE__, array( 'WCP_Folders', 'activate' ) );
@@ -116,6 +119,8 @@ WCP_Folders::get_instance();
 if(is_admin()) {
     include_once plugin_dir_path(__FILE__)."includes/class-affiliate.php";
     include_once plugin_dir_path(__FILE__) . "includes/class-review-box.php";
+    include_once plugin_dir_path(__FILE__) . "includes/class-email-signup.php";
+    include_once plugin_dir_path(__FILE__) . "includes/class-help.php";
 }
 
 if(!function_exists('premio_folders_plugin_check_for_setting')) {

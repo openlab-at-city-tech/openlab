@@ -98,7 +98,7 @@ class Folders_Free_Review_Box
 
     public function enqueue_scripts() {
         if (current_user_can('manage_options')) {
-            wp_enqueue_style($this->pluginSlug."-star-rating-svg", plugins_url('../assets/css/star-rating-svg.css', __FILE__), [], WCP_FOLDER_VERSION);
+            wp_enqueue_style($this->pluginSlug."-star-rating-svg", plugins_url('../assets/css/star-rating-svg.min.css', __FILE__), [], WCP_FOLDER_VERSION);
             wp_enqueue_script($this->pluginSlug."-star-rating-svg", plugins_url('../assets/js/jquery.star-rating-svg.min.js', __FILE__), ['jquery'], WCP_FOLDER_VERSION, true);
             wp_localize_script(
                 $this->pluginSlug."-star-rating-svg",
@@ -487,7 +487,7 @@ class Folders_Free_Review_Box
                 </div>
 
                 <div class="please-rate-us">
-                    <div class="rate-us-title"><?php esc_html_e("Please rate us:"); ?></div>
+                    <div class="rate-us-title"><?php esc_html_e("Please rate us:", 'folders'); ?></div>
                     <div class="<?php echo esc_attr($this->pluginSlug) ?>-premio-review-box__default__rating"></div>
                 </div>
             </div> <!--end .premio-review-box__default-->

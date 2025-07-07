@@ -261,7 +261,7 @@ $redirectURL = admin_url("admin.php?page=wcp_folders_settings&setting_page=folde
 </div>
 <div class="folder-popup-form import-folder-pop-up" id="import-folder-pop-up">
     <div class="popup-form-content">
-        <div class="popup-content">
+        <div class="folder-modal-content">
             <div class="close-popup-button close-remove-folders">
                 <a class="" href="javascript:;"><span></span></a>
             </div>
@@ -296,7 +296,7 @@ $redirectURL = admin_url("admin.php?page=wcp_folders_settings&setting_page=folde
 </div>
 <div class="folder-popup-form" id="confirm-for-sub-folder-data">
     <div class="popup-form-content">
-        <div class="popup-content">
+        <div class="folder-modal-content">
             <div class="close-popup-button close-remove-folders">
                 <a class="" href="javascript:;"><span></span></a>
             </div>
