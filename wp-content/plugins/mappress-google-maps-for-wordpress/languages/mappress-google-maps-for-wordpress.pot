@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the MapPress Google Maps and Leaflet Maps plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.94.11\n"
+"Project-Id-Version: MapPress Google Maps and Leaflet Maps 2.94.15\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/mappress-google-maps-for-wordpress\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-13T19:12:34+00:00\n"
+"POT-Creation-Date: 2025-05-15T06:33:17+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 
@@ -31,7 +31,7 @@ msgid "Chris Richardson"
 msgstr ""
 
 #: mappress.php:195
-#: mappress.php:810
+#: mappress.php:811
 #: build/index_mappress_admin.js:1
 msgid "Settings"
 msgstr ""
@@ -122,54 +122,54 @@ msgstr ""
 msgid "Are you sure you want to delete?"
 msgstr ""
 
-#: mappress.php:736
-#: mappress.php:745
+#: mappress.php:737
+#: mappress.php:746
 msgid "Streets"
 msgstr ""
 
-#: mappress.php:737
+#: mappress.php:738
 msgid "Outdoors"
 msgstr ""
 
-#: mappress.php:738
+#: mappress.php:739
 msgid "Light"
 msgstr ""
 
-#: mappress.php:739
+#: mappress.php:740
 msgid "Dark"
 msgstr ""
 
-#: mappress.php:740
-#: mappress.php:753
+#: mappress.php:741
+#: mappress.php:754
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Satellite"
 msgstr ""
 
-#: mappress.php:741
+#: mappress.php:742
 msgid "Satellite Streets"
 msgstr ""
 
-#: mappress.php:751
+#: mappress.php:752
 msgid "Roadmap"
 msgstr ""
 
-#: mappress.php:752
+#: mappress.php:753
 #: build/index_mappress.js:1
 #: build/index_mappress_admin.js:1
 msgid "Terrain"
 msgstr ""
 
-#: mappress.php:754
+#: mappress.php:755
 msgid "Hybrid"
 msgstr ""
 
-#: mappress.php:811
+#: mappress.php:812
 #: build/index_mappress_admin.js:1
 msgid "What's new"
 msgstr ""
 
-#: mappress.php:1201
+#: mappress.php:1202
 #: build/index_mappress_admin.js:1
 msgid "Version"
 msgstr ""
@@ -243,69 +243,69 @@ msgstr ""
 msgid "Invalid lat/lng coordinate: %s,%s"
 msgstr ""
 
-#: mappress_settings.php:149
+#: mappress_settings.php:150
 msgid "Select at least one post type"
 msgstr ""
 
-#: mappress_settings.php:433
+#: mappress_settings.php:434
 #: build/index_mappress_admin.js:1
 msgid "Default"
 msgstr ""
 
-#: mappress_settings.php:453
+#: mappress_settings.php:454
 msgid "Address line "
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 #: build/index_mappress_admin.js:1
 msgid "Latitude"
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 #: build/index_mappress_admin.js:1
 msgid "Longitude"
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 #: mappress_template.php:41
 #: build/index_mappress_admin.js:1
 msgid "Title"
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 #: mappress_template.php:38
 #: build/index_mappress_admin.js:1
 msgid "Body"
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 #: mappress_template.php:40
 #: mappress_template.php:51
 #: build/index_mappress_admin.js:1
 msgid "Icon"
 msgstr ""
 
-#: mappress_settings.php:454
+#: mappress_settings.php:455
 msgid "Zoom"
 msgstr ""
 
-#: mappress_settings.php:563
+#: mappress_settings.php:564
 msgid "OK, you deserve it!"
 msgstr ""
 
-#: mappress_settings.php:564
+#: mappress_settings.php:565
 msgid "Nope, maybe later"
 msgstr ""
 
-#: mappress_settings.php:565
+#: mappress_settings.php:566
 msgid "I need help using the plugin"
 msgstr ""
 
-#: mappress_settings.php:567
+#: mappress_settings.php:568
 msgid "Help Spread the Word"
 msgstr ""
 
-#: mappress_settings.php:568
+#: mappress_settings.php:569
 msgid "Hi, I hope you're enjoying MapPress.  Would you mind taking a moment to write a brief review?  It would mean a lot to me!"
 msgstr ""
 
@@ -831,70 +831,6 @@ msgid "Basic Settings"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Mapping API"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Leaflet is free and requires no API key.  Google requires an API key."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Get an Access Token"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Mapbox access token"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Enter token to use Mapbox"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Mapbox makes Leaflet maps look great and provides an excellent geocoder."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Nominatim is free but inaccurate.  Consider using Mapbox or Google instead."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "The Mapbox geocoder requires a Mapbox access token"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "The Google geocoder requires a Google API key"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Geocoder"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "LocationIQ access token"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Enter token to use LocationIQ"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Enter an access token to use the LocationIQ geocoder."
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Google API key"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Enter API key to use Google maps"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
-msgid "Enter API key to use Google geocoder"
-msgstr ""
-
-#: build/index_mappress_admin.js:1
 msgid "MapPress license key"
 msgstr ""
 
@@ -928,6 +864,74 @@ msgstr ""
 
 #: build/index_mappress_admin.js:1
 msgid "Enable updates for beta versions"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Mapping API"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Leaflet is free and requires no API key.  Google requires an API key."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Get an Access Token"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Mapbox access token"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter token to use Mapbox"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Mapbox makes Leaflet maps look great and provides an excellent geocoder."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Nominatim is free but inaccurate.  Consider using Mapbox or Google instead."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter a Mapbox access token"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter a Google API key"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Geocoder"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Tile Service"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "LocationIQ access token"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter token to use LocationIQ"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter an access token to use the LocationIQ geocoder."
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Google API key"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter API key to use Google maps"
+msgstr ""
+
+#: build/index_mappress_admin.js:1
+msgid "Enter API key to use Google geocoder"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
@@ -1827,7 +1831,7 @@ msgid "Please upgrade to MapPress Pro to use custom styles"
 msgstr ""
 
 #: build/index_mappress_admin.js:1
-msgid "Please enter a Mapbox access token in the MapPress settings screen to use styled maps."
+msgid "Enter a Mapbox access token and select the Mapbox tile service to user styled maps."
 msgstr ""
 
 #: build/index_mappress_admin.js:1

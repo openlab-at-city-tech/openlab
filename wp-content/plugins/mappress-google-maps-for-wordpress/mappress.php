@@ -5,7 +5,7 @@ Plugin URI: https://www.mappresspro.com
 Author URI: https://www.mappresspro.com
 Pro Update URI: https://www.mappresspro.com
 Description: MapPress makes it easy to add Google Maps and Leaflet Maps to WordPress
-Version: 2.94.11
+Version: 2.94.15
 Author: Chris Richardson
 Text Domain: mappress-google-maps-for-wordpress
 Thanks to all the translators and to Scott DeJonge for his wonderful icons
@@ -41,7 +41,7 @@ if (is_dir(dirname( __FILE__ ) . '/pro')) {
 }
 
 class Mappress {
-	const VERSION = '2.94.11';
+	const VERSION = '2.94.15';
 
 	static
 		$api,
@@ -710,6 +710,7 @@ class Mappress {
 			'ssl' => self::is_ssl(),                // SSL is needed for 'your location' in directions
 			'standardIcons' => (self::$pro) ? Mappress_Icons::$standard_icons : null,
 			'standardIconsUrl' => (self::$pro) ? Mappress_Icons::$standard_icons_url : null,
+			'tileService' => self::$options->tileService,
 			'userStyles' => (self::$options->engine == 'leaflet') ? self::$options->stylesMapbox : self::$options->stylesGoogle,
 			'userIcons' => (self::$pro) ? Mappress_Icons::get_user_icons() : null,
 			'version' => self::$version
@@ -731,7 +732,7 @@ class Mappress {
 		
 		// Default styles
 		if (Mappress::$options->engine == 'leaflet') {
-			if (Mappress::get_api_keys()->mapbox) {
+			if (Mappress::get_api_keys()->mapbox && self::$options->tileService == 'mapbox') {
 				$styles = array(
 					array('id' => 'streets', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'streets-v11', 'name' => __('Streets', 'mappress-google-maps-for-wordpress')),
 					array('id' => 'outdoors', 'type' => 'standard', 'provider' => 'mapbox', 'user' => 'mapbox', 'mapboxid' => 'outdoors-v11', 'name' => __('Outdoors', 'mappress-google-maps-for-wordpress')),

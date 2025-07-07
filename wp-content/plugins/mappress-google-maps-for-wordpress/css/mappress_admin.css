@@ -1188,14 +1188,6 @@ button.mapp-options-save {
 .mapp-option .components-combobox-control__suggestions-container {
 	position: relative;
 }
-.mapp-option .components-form-token-field__suggestions-list {
-	background-color: white;
-	border: 1px solid lightgray;
-	max-height: 15em;
-	position: absolute;
-	top: 100%;
-	z-index: 1;
-}
 
 .mapp-option-mapbox, .mapp-option-liq {
 	align-items: center;
@@ -1260,24 +1252,22 @@ button.mapp-options-save {
 	margin-right: 10px;
 }
 
-.mapp-option-filter .components-form-token-field__input-container {
-	margin-bottom: 0;
+/* Token field control for filter include/exclude */
+#mapp-options-page .components-form-token-field {
+	flex: 1;
 }
 
-.mapp-option-filter .components-form-token-field__help {
-	margin-top: 5px;
+#mapp-options-page .components-form-token-field__suggestions-list {
+	background-color: white;
+	border: 1px solid lightgray;
+	max-height: 15em;
+	position: absolute;
+	top: 100%;
+	z-index: 1;
 }
 
-.mapp-option-filter .components-form-token-field__label {
-	margin-bottom: 0;
-}
-
-.mapp-option-filter .components-form-token-field__token-text {
+#mapp-options-page .components-form-token-field__token .components-form-token-field__remove-token {
 	margin: 0;
-}
-
-.mapp-option-filter .components-form-token-field__token {
-	margin-right: 2px;
 }
 
 button.mapp-option-geocode {
