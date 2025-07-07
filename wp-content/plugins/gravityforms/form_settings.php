@@ -97,6 +97,7 @@ class GFFormSettings {
 	 * Prepare form settings fields.
 	 *
 	 * @since 2.5
+	 * @since 2.9.8 Updated honeypotAction default to spam.
 	 *
 	 * @param array $form Form being edited.
 	 *
@@ -518,7 +519,7 @@ class GFFormSettings {
 					array(
 						'name'          => 'honeypotAction',
 						'type'          => 'radio',
-						'default_value' => 'abort',
+						'default_value' => 'spam',
 						'horizontal'    => true,
 						'label'         => esc_html__( 'If the honeypot flags a submission as spam:', 'gravityforms' ),
 						'dependency'    => array(
@@ -680,10 +681,12 @@ class GFFormSettings {
 		            class="gform-alert__cta gform-button gform-button--white gform-button--size-xs"
 			        href="https://docs.gravityforms.com/about-legacy-markup"
 			        target="_blank"
-			        aria-label="' . esc_html__( 'Learn more about form legacy markup', 'gravityforms' ) . '"
 			    >'
 			        . esc_html__( 'Learn More', 'gravityforms' ) .
-			    '</a>
+			   		'<span class="screen-reader-text">' . esc_html__('about form legacy markup', 'gravityforms') . '</span>
+					<span class="screen-reader-text">' . esc_html__('(opens in a new tab)', 'gravityforms') . '</span>&nbsp;
+					<span class="gform-icon gform-icon--external-link"></span>
+				</a>
 		    </div>
 		</div>';
 	}
@@ -696,6 +699,7 @@ class GFFormSettings {
 	 * Initialize Plugin Settings fields renderer.
 	 *
 	 * @since 2.5
+	 * @since 2.9.8 Updated honeypotAction default to spam.
 	 */
 	public static function initialize_settings_renderer() {
 
@@ -761,7 +765,7 @@ class GFFormSettings {
 
 					// Form Options
 					$form['enableHoneypot']  = (bool) rgar( $values, 'enableHoneypot' );
-					$form['honeypotAction']  = GFCommon::whitelist( rgar( $values, 'honeypotAction' ), array( 'abort', 'spam' ) );
+					$form['honeypotAction']  = GFCommon::whitelist( rgar( $values, 'honeypotAction' ), array( 'spam', 'abort' ) );
 					$form['enableAnimation'] = (bool) rgar( $values, 'enableAnimation' );
 					$form['markupVersion']   = rgar( $values, 'markupVersion' ) ? 1 : 2;
 

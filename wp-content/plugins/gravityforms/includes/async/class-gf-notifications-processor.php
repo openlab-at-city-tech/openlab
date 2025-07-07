@@ -2,7 +2,6 @@
 
 namespace Gravity_Forms\Gravity_Forms\Async;
 
-use GF_Background_Process;
 use GFCommon;
 use GFAPI;
 
@@ -10,8 +9,8 @@ if ( ! class_exists( 'GFForms' ) ) {
 	die();
 }
 
-if ( ! class_exists( 'GF_Background_Process' ) ) {
-	require_once GF_PLUGIN_DIR_PATH . 'includes/libraries/gf-background-process.php';
+if ( ! class_exists( 'Gravity_Forms\Gravity_Forms\Async\GF_Background_Process' ) ) {
+	require_once GF_PLUGIN_DIR_PATH . 'includes/async/class-gf-background-process.php';
 }
 
 /**
@@ -29,6 +28,15 @@ class GF_Notifications_Processor extends GF_Background_Process {
 	 * @var string
 	 */
 	protected $action = 'gf_notifications_processor';
+
+	/**
+	 * Indicates if the task uses an array that supports the attempts key.
+	 *
+	 * @since 2.9.9
+	 *
+	 * @var bool
+	 */
+	protected $supports_attempts = true;
 
 	/**
 	 * Processes the task.

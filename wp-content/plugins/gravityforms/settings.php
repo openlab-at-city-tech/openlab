@@ -211,6 +211,7 @@ class GFSettings {
 			delete_option( 'gform_api_count' );
 			delete_option( 'gform_email_count' );
 			delete_option( 'gform_enable_toolbar_menu' );
+			delete_option( 'gform_enable_dashboard_widget' );
 			delete_option( 'gform_enable_logging' );
 			delete_option( 'gform_pending_installation' );
 			delete_option( 'gform_enable_noconflict' );
@@ -579,7 +580,13 @@ class GFSettings {
 							'default' => self::is_orbital_default(),
 						),
 					),
-					'description'   => esc_html__( 'This theme will be used by default everywhere forms are embedded on your site.', 'gravityforms' ) . '&nbsp;<a href="https://docs.gravityforms.com/block-themes-and-style-settings/" target="_blank" aria-label="' . esc_html__( 'Learn more about form theme and style settings', 'gravityforms' ) . '">' . esc_html__( 'Learn more about form theme and style settings.', 'gravityforms' ) . '</a>',
+					'description'   => sprintf(
+						'%s&nbsp;<a href="%s" target="_blank">%s<span class="screen-reader-text">%s</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>',
+						esc_html__( 'This theme will be used by default everywhere forms are embedded on your site', 'gravityforms' ),
+						'https://docs.gravityforms.com/block-themes-and-style-settings/',
+						esc_html__( 'Learn more about form theme and style settings.', 'gravityforms' ),
+						esc_html__( '(opens in a new tab)', 'gravityforms' )
+					),
 					'save_callback' => function( $field, $value ) {
 						update_option( 'rg_gforms_default_theme', $value );
 
@@ -608,6 +615,26 @@ class GFSettings {
 					),
 				),
         );
+
+		$fields['dashboard_widget'] = array(
+				'id'          => 'section_enable_dashboard_widget',
+				'title'       => esc_html__( 'Dashboard Widget', 'gravityforms' ),
+				'description' => esc_html__( 'Turn on to enable the Gravity Forms dashboard widget. The dashboard widget displays a list of forms and the number of entries each form has.', 'gravityforms' ),
+				'class'       => 'gform-settings-panel--half',
+				'fields'      => array(
+					array(
+						'name'          => 'enable_dashboard_widget',
+						'type'          => 'toggle',
+						'toggle_label'  => esc_html__( 'Enable Dashboard Widget', 'gravityforms' ),
+						'save_callback' => function( $field, $value ) {
+							update_option( 'gform_enable_dashboard_widget', $value );
+
+							return $value;
+						},
+						'default_value' => self::get_dashboard_widget_default_value(),
+					),
+				),
+		);
 
         $fields['background_updates'] = array(
 				'id'          => 'section_enable_background_updates',
@@ -671,7 +698,11 @@ class GFSettings {
         $fields['telemetry'] = array(
 				'id'            => 'section_enable_telemetry_collection',
 				'title'         => esc_html__( 'Data Collection', 'gravityforms' ),
-				'description'   => sprintf( __( 'We love improving the form building experience for everyone in our community. By enabling data collection, you can help us learn more about how our customers use Gravity Forms. %1$sLearn more...%2$s', 'gravityforms' ), '<a target="_blank" href="https://docs.gravityforms.com/about-additional-data-collection/">', '</a>' ),
+				'description' => sprintf(
+					esc_html__( 'We love improving the form building experience for everyone in our community. By enabling data collection, you can help us learn more about how our customers use Gravity Forms. %1$sLearn more...%2$s','gravityforms'),
+					'<a target="_blank" href="https://docs.gravityforms.com/about-additional-data-collection/">',
+					'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
+				),
 				'class'         => 'gform-settings-panel--half',
 				'fields'        => array(
 					array(
@@ -704,7 +735,7 @@ class GFSettings {
 				'description' => sprintf(
 						esc_html__( 'Enable this option to output the default form CSS. Disable it if you plan to create your own CSS in a child theme. Note: after Gravity Forms 2.8, this setting will no longer appear on the settings page. If you previously had it enabled, you will need to use the %sgform_disable_css%s filter to disable it.', 'gravityforms' ),
 						'<a href="https://docs.gravityforms.com/gform_disable_css/" target="_blank">',
-						'</a>'
+						'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
 						),
 
 				'class'       => 'gform-settings-panel--half',
@@ -838,6 +869,8 @@ class GFSettings {
 								>
 									<i class="gform-button__icon gform-icon gform-icon--<?php echo esc_attr( $cta['class'] ); ?>"></i>
 									<?php echo esc_html( $cta['label'] ); ?>
+									<span class="screen-reader-text"><?php echo esc_html__( '(opens in a new tab)', 'gravityforms' ); ?></span>&nbsp;
+									<span class="gform-icon gform-icon--external-link"></span>
 								</a>
 							<?php elseif ( $cta['type'] === 'text' ) : ?>
 								<?php echo esc_html( $cta['content'] ); ?>
@@ -918,6 +951,27 @@ class GFSettings {
 		}
 
 		$field->do_validation( $value );
+	}
+
+	/**
+	 * Returns the default value for the dashboard widget setting.
+	 *
+	 * Sometimes we get a false positive as the default value, so we need to explicitly check if it is set to '1'.
+	 *
+	 * @since 2.9.8
+	 *
+	 * @return bool
+	 */
+	private static function get_dashboard_widget_default_value() {
+		$saved_value = get_option( 'gform_enable_dashboard_widget' );
+
+		// get_option() returns false if there is no value set
+		if ( false === $saved_value ) {
+			return true;
+		}
+
+		// the saved value will be either '1' or ''
+		return $saved_value;
 	}
 
 	/**
@@ -1015,11 +1069,12 @@ class GFSettings {
 						'id'          => 'recpatcha',
 						'title'       => esc_html__( 'reCAPTCHA Settings', 'gravityforms' ),
 						'description' => sprintf(
-							'%s <strong>%s</strong> %s <a href="https://www.google.com/recaptcha/admin/create" target="_blank">%s</a>',
+							'%s <strong>%s</strong> %s <a href="https://www.google.com/recaptcha/admin/create" target="_blank">%s<span class="screen-reader-text">%s</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>',
 							esc_html__( 'Gravity Forms integrates with reCAPTCHA, a free CAPTCHA service that uses an advanced risk analysis engine and adaptive challenges to keep automated software from engaging in abusive activities on your site. ', 'gravityforms' ),
 							esc_html__( 'Please note, only v2 keys are supported and checkbox keys are not compatible with invisible reCAPTCHA.', 'gravityforms' ),
 							esc_html__( 'These settings are required only if you decide to use the reCAPTCHA field.', 'gravityforms' ),
-							esc_html__( 'Get your reCAPTCHA Keys.', 'gravityforms' )
+							esc_html__( 'Get your reCAPTCHA Keys.', 'gravityforms' ),
+							esc_html__( '(opens in a new tab)', 'gravityforms' )
 						),
 						'class'       => 'gform-settings-panel--full',
 						'fields'      => array(

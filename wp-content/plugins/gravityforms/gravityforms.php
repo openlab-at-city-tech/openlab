@@ -3,7 +3,7 @@
 Plugin Name: Gravity Forms
 Plugin URI: https://gravityforms.com
 Description: Easily create web forms and manage form entries within the WordPress admin.
-Version: 2.9.6.1
+Version: 2.9.11.1
 Requires at least: 6.5
 Requires PHP: 7.4
 Author: Gravity Forms
@@ -123,7 +123,7 @@ define( 'GF_SUPPORTED_WP_VERSION', version_compare( get_bloginfo( 'version' ), G
  *
  * @var string GF_MIN_WP_VERSION_SUPPORT_TERMS The version number
  */
-define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '6.6' );
+define( 'GF_MIN_WP_VERSION_SUPPORT_TERMS', '6.7' );
 
 /**
  * Defines the minimum version of PHP that is supported.
@@ -257,7 +257,7 @@ class GFForms {
 	 *
 	 * @var string $version The version number.
 	 */
-	public static $version = '2.9.6.1';
+	public static $version = '2.9.11.1';
 
 	/**
 	 * Handles background upgrade tasks.
@@ -538,6 +538,7 @@ class GFForms {
 						add_action( 'wp_ajax_rg_duplicate_field', array( 'GFForms', 'duplicate_field' ) );
 						add_action( 'wp_ajax_rg_delete_field', array( 'GFForms', 'delete_field' ) );
 						add_action( 'wp_ajax_rg_delete_file', array( 'GFForms', 'delete_file' ) );
+						add_action( 'wp_ajax_rg_ajax_get_form', array( 'GFForms', 'ajax_get_form' ) );
 						add_action( 'wp_ajax_rg_select_export_form', array( 'GFForms', 'select_export_form' ) );
 						add_action( 'wp_ajax_rg_start_export', array( 'GFForms', 'start_export' ) );
 						add_action( 'wp_ajax_gf_upgrade_license', array( 'GFForms', 'upgrade_license' ) );
@@ -2698,7 +2699,7 @@ class GFForms {
 							__( 'The %1$s is not available with the configured license; please visit the %2$sGravity Forms website%3$s to verify your license. ', 'gravityforms' ),
 								esc_html( rgar( $plugin_data, 'Name' ) ),
 								'<a href="https://www.gravityforms.com/my-account/licenses/?utm_source=gf-admin&utm_medium=purchase-link&utm_campaign=license-enforcement" target="_blank">',
-								'</a>'
+								'<span class="screen-reader-text">' . esc_html__( '(opens in a new tab)', 'gravityforms' ) . '</span>&nbsp;<span class="gform-icon gform-icon--external-link"></span></a>'
 							);
 			}
 		}
@@ -2849,6 +2850,10 @@ class GFForms {
 	 * @access public
 	 */
 	public static function dashboard_setup() {
+		if ( '' === get_option( 'gform_enable_dashboard_widget' ) ) {
+			return;
+		}
+
 		/**
 		 * Changes the dashboard widget title
 		 *
@@ -4730,6 +4735,21 @@ class GFForms {
 	}
 
 	/**
+	 * Retrieves the form with complete meta in the form editor.
+	 *
+	 * Called via AJAX.
+	 *
+	 * @since  2.9.9
+	 * @access public
+	 *
+	 * @uses   \GFFormDetail::ajax_get_form()
+	 */
+	public static function ajax_get_form() {
+		require_once( GFCommon::get_base_path() . '/form_detail.php' );
+		GFFormDetail::ajax_get_form();
+	}
+
+	/**
 	 * Changes the input type in the form editor.
 	 *
 	 * Called via AJAX.
@@ -5423,7 +5443,9 @@ class GFForms {
 							$dynamic_menu_items[ $key ] = $item;
 						}
 					}
-					echo self::format_toolbar_menu_items( $fixed_menu_items );
+					if ( ! empty( $fixed_menu_items ) ) {
+						echo self::format_toolbar_menu_items( $fixed_menu_items );
+					}
 					if ( ! empty( $dynamic_menu_items ) ) {
 						echo '<span class="gform-form-toolbar__divider"></span>';
 						echo GFForms::format_toolbar_menu_items( $dynamic_menu_items );

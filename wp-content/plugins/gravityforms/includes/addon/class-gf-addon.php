@@ -358,7 +358,7 @@ abstract class GFAddOn {
 	/**
 	 * Finds a registered add-on by its slug and return its instance.
 	 *
-	 * @since 2.7.17
+	 * @since 2.9.1
 	 *
 	 * @param string $slug The add-on slug.
 	 *
@@ -788,18 +788,43 @@ abstract class GFAddOn {
 				case 'plugins':
 
 					// Loop through plugins.
-					foreach ( $requirement as $plugin_path => $plugin_name ) {
+					foreach ( $requirement as $plugin_path => $plugin_config ) {
 
-						// If plugin name is not defined, set plugin path to name.
+						// Handle legacy format where plugin_path is numeric index and plugin_name is the value
 						if ( is_int( $plugin_path ) ) {
-							$plugin_path = $plugin_name;
+							$plugin_path    = $plugin_config;
+							$plugin_name    = $plugin_config;
+							$plugin_version = null;
+						} else {
+							$plugin_name    = is_array( $plugin_config ) ? $plugin_config['name'] : $plugin_config;
+							$plugin_version = is_array( $plugin_config ) ? rgar( $plugin_config, 'version' ) : null;
 						}
 
 						// If plugin is not active, set error.
 						if ( ! is_plugin_active( $plugin_path ) ) {
 							$meets_requirements['meets_requirements'] = false;
-							$meets_requirements['errors'][]           = sprintf( esc_html__( 'Required WordPress plugin is missing: %s.', 'gravityforms' ), $plugin_name );
+							if( ! empty( $plugin_version ) ) {
+								$meets_requirements['errors'][] = sprintf( esc_html__( 'Required WordPress plugin is missing: %1$s %2$s or newer.', 'gravityforms' ), $plugin_name, $plugin_version );
+							} else {
+								$meets_requirements['errors'][] = sprintf( esc_html__( 'Required WordPress plugin is missing: %s.', 'gravityforms' ), $plugin_name );
+							}
 							continue;
+						}
+
+						// If version requirement exists, verify it
+						if ( ! empty( $plugin_version ) ) {
+							if ( ! function_exists( 'get_plugin_data' ) ) {
+								require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+							}
+
+							$plugin_data = get_plugin_data( WP_PLUGIN_DIR . '/' . $plugin_path );
+							$installed_version = rgar( $plugin_data, 'Version' );
+
+							if ( ! version_compare( $installed_version, $plugin_version, '>=' ) ) {
+								$meets_requirements['meets_requirements'] = false;
+								$meets_requirements['errors'][]           = sprintf( esc_html__( 'Required WordPress plugin "%1$s" is installed but does not meet minimum version requirement: %2$s.', 'gravityforms' ), $plugin_name, $plugin_version );
+								continue;
+							}
 						}
 					}
 
@@ -1893,27 +1918,25 @@ abstract class GFAddOn {
 	 */
 	public function prepare_settings_sections( $sections = array(), $type = 'plugin_settings' ) {
 
-		// If interface is tabbed, ignore.
-		foreach ( $sections as $section ) {
-			if ( array_key_exists( 'sections', $section ) ) {
-				return $sections;
-			}
-		}
-
 		// Get first section key.
 		$first_section = array_keys( $sections );
 		$first_section = array_shift( $first_section );
 
-		// Loop through sections, add full class.
 		foreach ( $sections as $s => &$section ) {
+			if ( array_key_exists( 'sections', $section ) ) {
+				foreach ( $section['sections'] as &$sub_section ) {
+					if ( isset( $sub_section['fields'] ) ) {
+						$sub_section['fields'] = $this->prepare_settings_fields( $sub_section['fields'] );
+					}
+				}
+			} else {
+				// If this is the first section, set title.
+				if ( $s === $first_section && in_array( $type, array( 'plugin_settings' ) ) && ! rgar( $section, 'title', false ) ) {
+					$section['title'] = sprintf( esc_html__( '%s Settings', 'gravityforms' ), $this->get_short_title() );
+				}
 
-			// If this is the first section, set title.
-			if ( $s === $first_section && in_array( $type, array( 'plugin_settings' ) ) && ! rgar( $section, 'title', false ) ) {
-				$section['title'] = sprintf( esc_html__( '%s Settings', 'gravityforms' ), $this->get_short_title() );
+				$this->prepare_settings_fields( $section['fields'] );
 			}
-
-			$this->prepare_settings_fields( $section['fields'] );
-
 		}
 
 		return $sections;

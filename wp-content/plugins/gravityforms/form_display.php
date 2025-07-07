@@ -24,6 +24,12 @@ class GFFormDisplay {
 	const SUBMISSION_METHOD_AJAX     = 'ajax';
 	const SUBMISSION_METHOD_IFRAME   = 'iframe';
 
+	const SUBMISSION_TYPE_SAVE_AND_CONTINUE = 'save-continue';
+	const SUBMISSION_TYPE_SEND_LINK         = 'send-link';
+	const SUBMISSION_TYPE_SUBMIT            = 'submit';
+	const SUBMISSION_TYPE_NEXT              = 'next';
+	const SUBMISSION_TYPE_PREVIOUS          = 'previous';
+
 	/**
 	 * Starting point for the form submission process. Handles the following tasks: Form validation, save for later logic, entry creation, notification and confirmation.
 	 *
@@ -163,6 +169,7 @@ class GFFormDisplay {
 				// Display confirmation but doesn't process the form. Useful for spam filters.
 				$confirmation = self::handle_confirmation( $form, $lead, $ajax );
 				$is_valid     = false;
+				self::set_submission_if_null( $form_id, 'abort_with_confirmation', true );
 			} elseif ( ! $saving_for_later ) {
 
 				GFCommon::log_debug( 'GFFormDisplay::process_form(): Submission is valid. Moving forward.' );
@@ -908,9 +915,9 @@ class GFFormDisplay {
 	public static function post_render_script( $form_id, $current_page = 'current_page' ) {
 		$post_render_script = '
 			jQuery(document).trigger("gform_pre_post_render", [{ formId: "' . $form_id . '", currentPage: "' . $current_page . '", abort: function() { this.preventDefault(); } }]);
-	        
+
 	        if (event && event.defaultPrevented) {
-            	    return; 
+            	    return;
         	}
 	        const gformWrapperDiv = document.getElementById( "gform_wrapper_' . $form_id . '" );
 	        if ( gformWrapperDiv ) {
@@ -920,7 +927,7 @@ class GFFormDisplay {
 	        }
 	        const visibilityTestDiv = document.getElementById( "gform_visibility_test_' . $form_id . '" );
 	        let postRenderFired = false;
-	        
+
 	        function triggerPostRender() {
 	            if ( postRenderFired ) {
 	                return;
@@ -931,7 +938,7 @@ class GFFormDisplay {
 	                visibilityTestDiv.parentNode.removeChild( visibilityTestDiv );
 	            }
 	        }
-	
+
 	        function debounce( func, wait, immediate ) {
 	            var timeout;
 	            return function() {
@@ -946,11 +953,11 @@ class GFFormDisplay {
 	                if ( callNow ) func.apply( context, args );
 	            };
 	        }
-	
+
 	        const debouncedTriggerPostRender = debounce( function() {
 	            triggerPostRender();
 	        }, 200 );
-	
+
 	        if ( visibilityTestDiv && visibilityTestDiv.offsetParent === null ) {
 	            const observer = new MutationObserver( ( mutations ) => {
 	                mutations.forEach( ( mutation ) => {
@@ -1049,7 +1056,7 @@ class GFFormDisplay {
 		// Setting form style and theme
 		$form = self::set_form_styles( $form, $style_settings, $form_theme );
 
-		$action = remove_query_arg( 'gf_token' );
+		$action = wp_doing_ajax() ? remove_query_arg( 'gf_token', wp_get_referer() ) : remove_query_arg( 'gf_token' );
 
 		if ( rgpost( 'gform_send_resume_link' ) == $form_id ) {
 			$save_email_confirmation = self::handle_save_email_confirmation( $form, $ajax );
