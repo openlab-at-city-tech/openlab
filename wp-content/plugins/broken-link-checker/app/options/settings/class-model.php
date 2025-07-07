@@ -109,7 +109,7 @@ class Model extends Option {
 		return $active_recipients;
 	}
 
-	public function get( string $settings_key = null, string $option_name = null, $default = null, bool $force = false ) {
+	public function get( ?string $settings_key = null, ?string $option_name = null, $default = null, bool $force = false ) {
 		if ( Utilities::is_subsite() && 'use_legacy_blc_version' === $settings_key ) {
 			return false;
 		}

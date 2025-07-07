@@ -106,6 +106,16 @@ class Controller extends Admin_Notice {
 	}
 
 	public function dismiss_multisite_notification() {
+		if ( ! current_user_can( 'edit_others_posts' ) ) {
+			die(
+			json_encode(
+				array(
+					'error' => __( "You're not allowed to do that!", 'broken-link-checker' ),
+				)
+			)
+			);
+		}
+		
 		check_ajax_referer( 'wpmudev-blc-multisite-notification-dismiss-nonce', 'security' );
 
 		Settings::instance()->init();

@@ -237,7 +237,7 @@ class Option extends Base {
 	 * @return array|string|null Returns an array with options.
 	 * @since 2.0.0
 	 */
-	public function get( string $settings_key = null, string $option_name = null, $default = null, bool $force = false ) {
+	public function get( ?string $settings_key = null, ?string $option_name = null, $default = null, bool $force = false ) {
 		if ( ! empty( $this->value ) && ! $force ) {
 			$options = $this->value;
 		} else {
@@ -369,7 +369,7 @@ class Option extends Base {
 	 * @since 2.0.0
 	 *
 	 */
-	public function reset_option( string $option_name = null, bool $network_wide = false) {
+	public function reset_option( ?string $option_name = null, bool $network_wide = false) {
 		$option_name = ! is_null( $option_name ) ? $option_name : $this->name;
 
 		if ( ! is_string( $option_name ) ) {

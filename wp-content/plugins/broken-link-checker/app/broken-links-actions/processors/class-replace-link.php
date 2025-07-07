@@ -61,7 +61,7 @@ class Replace_Link extends Link_Processor {
 		return $content;
 	}
 
-	public function get_block_att_value_replacement( string $search_term = null, string $new_term = null ) {
+	public function get_block_att_value_replacement( ?string $search_term = null, ?string $new_term = null ) {
 		return $new_term;
 	}
 

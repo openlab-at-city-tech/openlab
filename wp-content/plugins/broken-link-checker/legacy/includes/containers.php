@@ -551,14 +551,18 @@ class blcContainer {
 	 * @return bool|WP_Error True on success, or an error object if something went wrong.
 	 */
 	function unlink( $field_name, $parser, $url, $raw_url = '' ) {
-		//Ensure we're operating on a consistent copy of the wrapped object.
-		$this->get_wrapped_object( true );
+		// Ensure we're operating on a consistent copy of the wrapped object.
+ 		$this->get_wrapped_object( true );
 
 		$old_value = $this->get_field( $field_name );
-
 		$new_value = $parser->unlink( $old_value, $url, $raw_url );
-		if ( is_wp_error( $new_value ) ) {
+		
+		if ( is_wp_error( $new_value ) ) {	
 			return $new_value;
+		}
+
+		if ( property_exists( $parser, 'modified_links' ) && is_array( $parser->modified_links ) ) {
+			$this->updating_urls = $parser->modified_links;
 		}
 
 		return $this->update_field( $field_name, $new_value, $old_value );

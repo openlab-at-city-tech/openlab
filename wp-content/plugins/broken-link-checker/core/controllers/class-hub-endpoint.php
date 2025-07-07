@@ -60,7 +60,7 @@ abstract class Hub_Endpoint extends Base {
 	 *
 	 * @return array
 	 */
-	public function register_endpoints( array $actions = null ) {
+	public function register_endpoints( ?array $actions = null ) {
 		if ( ! is_array( $actions ) ) {
 			$actions = array();
 		}

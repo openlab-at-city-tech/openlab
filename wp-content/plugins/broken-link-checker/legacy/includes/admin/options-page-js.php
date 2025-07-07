@@ -9,7 +9,8 @@ jQuery(function($){
 			"<?php echo admin_url( 'admin-ajax.php' ); ?>",
 			{
 				'action' : 'blc_full_status',
-				'random' : Math.random()
+				'random' : Math.random(),
+				'nonce' : '<?php echo wp_create_nonce( 'blc_full_status' ); ?>'
 			},
 			function (data, textStatus){
 				if ( data && ( typeof(data['text']) != 'undefined' ) ){
@@ -29,7 +30,8 @@ jQuery(function($){
 		$.get(
 			"<?php echo admin_url( 'admin-ajax.php' ); ?>",
 			{
-				'action' : 'blc_current_load'
+				'action' : 'blc_current_load',
+				'nonce' : '<?php echo esc_js( wp_create_nonce( 'blc_current_load' ) ); ?>'
 			},
 			function (data, textStatus){
 				$('#wsblc_current_load').html(data);

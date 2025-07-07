@@ -64,8 +64,8 @@ class Controller extends Base {
 	 */
 	private $request_body = array();
 
-	public function send_report( Link $link = null ) {
-		$link_url           = $link->get_link();
+	public function send_report( ?Link $link = null ) {
+		$link_url           = $link->get_link( true );
 		$types_map          = $link->types_map();
 		$link_type          = $types_map[ $link->get_type() ] ?? 'edited';
 		$this->request_body = array(

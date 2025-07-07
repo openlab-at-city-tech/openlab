@@ -156,7 +156,7 @@ class Model extends Option {
 	 *
 	 * @return array
 	 */
-	protected function get_defaults( string $key = null ) {
+	protected function get_defaults( ?string $key = null ) {
 		if ( ! empty( $key ) ) {
 			return $this->default[ $key ] ?? array();
 		}
@@ -383,7 +383,7 @@ class Model extends Option {
 	 *
 	 * @return bool
 	 */
-	public function has_table_been_prosseced( string $table = null ) {
+	public function has_table_been_prosseced( ?string $table = null ) {
 		$current_task        = $this->get_current_task();
 		$current_task_tables = $current_task['target_tables'] ?? null;
 

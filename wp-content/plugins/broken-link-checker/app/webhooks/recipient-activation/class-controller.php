@@ -152,7 +152,7 @@ class Controller extends Webhook {
 	 *
 	 * @return false|void
 	 */
-	protected function unset_registered_recipient( int $user_id = null ) {
+	protected function unset_registered_recipient( ?int $user_id = null ) {
 		if ( empty( $user_id ) ) {
 			return false;
 		}

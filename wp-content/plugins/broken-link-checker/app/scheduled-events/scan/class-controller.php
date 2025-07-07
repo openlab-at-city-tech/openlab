@@ -54,6 +54,8 @@ class Controller extends Base {
 	 * @return void
 	 */
 	public function init() {
+		add_action( $this->get_hook_name(), array( $this, 'process_scheduled_event' ) );
+		
 		//if ( wp_doing_ajax() || ! $this->get_schedule( 'active' ) ) {
 		if ( wp_doing_ajax() ) {
 			return;
@@ -131,23 +133,15 @@ class Controller extends Base {
 		$last_scan_date     = new \DateTimeImmutable( date( 'Y-m-d H:i:s', $last_timestamp ) );
 		$interval_from_last = $cur_date->diff( $last_scan_date );
 
-		if ( 'in_progress' === Settings::instance()->get( 'scan_status' ) || ( ! empty( $last_timestamp ) && abs( $interval_from_last->format( '%h' ) ) <= 5 ) ) {
+		if ( 'in_progress' === Settings::instance()->get( 'scan_status' ) || ( ! empty( $last_timestamp ) && abs( $interval_from_last->format( '%h' ) ) < 1 ) ) {
 			// Since we return `false` at this point, `$this->set_scan_schedule()` will be called from `process_scheduled_event()`. No need to run it here too.
-			//$this->set_scan_schedule();
 			return false;
 		}
-
-		$next_timestamp = wp_next_scheduled( $this->get_hook_name() );
-
-		if ( empty( $next_timestamp ) ) {
-			$next_timestamp = $this->get_timestamp();
-		}
-
-		$next_scan_date = new \DateTimeImmutable( date( 'Y-m-d H:i:s', $next_timestamp ) );
-		$interval       = $next_scan_date->diff( $cur_date );
-		// If for some reason the schedule gets triggered long before its time, let's make sure it doesn't run the callback.
-		// We do allow some time span, by default 5 hours.
-		return 5 >= abs( $interval->format( '%h' ) );
+		/**
+		 * Removed scan condition that checks upcoming scan schedule which blocked scan if that time frame is more than 5 hours to reach.
+		 * @since 2.4.3
+		 */
+		return true;
 	}
 
 	/**

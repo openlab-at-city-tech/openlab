@@ -477,6 +477,10 @@ class blcAnyPostContainer extends blcContainer {
 
 		$post_type_object = get_post_type_object( $post->post_type );
 
+		if ( ! $post_type_object ) {
+			return $actions;
+		}
+
 		//Each post type can have its own cap requirements
 		if ( current_user_can( $post_type_object->cap->edit_post, $this->container_id ) ) {
 			$actions['edit'] = sprintf(
@@ -576,7 +580,18 @@ class blcAnyPostContainer extends blcContainer {
 			return '';
 		}
 
-		return apply_filters( 'get_edit_post_link', admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) ), $post->ID, $context );
+		if ( 'wp_template' === $post->post_type || 'wp_template_part' === $post->post_type ) {
+			$slug = urlencode( get_stylesheet() . '//' . $post->post_name );
+			$link = admin_url( sprintf( $post_type_object->_edit_link, $post->post_type, $slug ) );
+		} elseif ( 'wp_navigation' === $post->post_type ) {
+			$link = admin_url( sprintf( $post_type_object->_edit_link, (string) $post->ID ) );
+		} elseif ( $post_type_object->_edit_link ) {
+			$link = admin_url( sprintf( $post_type_object->_edit_link . $action, $post->ID ) );
+		}
+
+		$post_type_object->_edit_link = str_replace( 'postType=%s&', '', $post_type_object->_edit_link );
+
+		return apply_filters( 'get_edit_post_link', $link, $post->ID, $context );
 	}
 
 	/**
@@ -633,22 +648,57 @@ class blcAnyPostContainer extends blcContainer {
 	 * @param int $post_id  Post ID of whose content to update.
 	 */
 	function update_pagebuilders( $post_id ) {
-
 		if ( ! $post_id ) {
 			return;
 		}
 
-		global $wpdb;
-		//support for elementor page builder.
+		// support for elementor page builder.
 		if ( class_exists( '\Elementor\Plugin' ) && \Elementor\Plugin::$instance->db->is_built_with_elementor( $post_id ) ) {
-			// @codingStandardsIgnoreStart cannot use `$wpdb->prepare` because it remove's the backslashes
-			$rows_affected = $wpdb->query(
-				"UPDATE {$wpdb->postmeta} " .
-				"SET `meta_value` = REPLACE(`meta_value`, '" . str_replace( '/', '\\\/', $this->updating_urls['old_url'] ) . "', '" . str_replace( '/', '\\\/', $this->updating_urls['new_url'] ) . "') " .
-				"WHERE `meta_key` = '_elementor_data' AND `post_id` = '" . $post_id . "' AND `meta_value` LIKE '[%' ;" ); // meta_value LIKE '[%' are json formatted
-			// @codingStandardsIgnoreEnd
+			if ( is_array( $this->updating_urls ) ) {
+				if ( isset( $this->updating_urls['old_url'] ) && isset( $this->updating_urls['new_url'] ) ) {
+					// Editing case.
+					$old_url = $this->updating_urls['old_url'];
+					$new_url = $this->updating_urls['new_url'];
+					blcElementor::instance()->update_blc_links( $old_url, $new_url, $post_id );
+				} else { // Unlinking case.
+					foreach ( $this->updating_urls as $key => $link_info ) {
+						$old_url = $link_info['#raw'];
+						$new_url = $link_info['#new_raw'];
+
+						if ( $old_url === $new_url ) {
+							continue;
+						}
+
+						blcElementor::instance()->update_blc_links( $old_url, $new_url, $post_id );
+					}
+				}
+			}
+		}
+
+		// Support for Page Builder by SiteOrigin.
+		if ( class_exists( '\SiteOrigin_Panels' ) && get_post_meta( $post_id, 'panels_data', true ) ) {
+			if ( is_array( $this->updating_urls ) ) {
+				if ( isset( $this->updating_urls['old_url'] ) && isset( $this->updating_urls['new_url'] ) ) {
+					// Editing case.
+					$old_url = $this->updating_urls['old_url'];
+					$new_url = $this->updating_urls['new_url'];
+					blcSiteOrigin::instance()->update_blc_links( $old_url, $new_url, $post_id );
+				} else { // Unlinking case.
+					foreach ( $this->updating_urls as $key => $link_info ) {
+						$old_url = $link_info['#raw'];
+						$new_url = $link_info['#new_raw'];
+
+						if ( $old_url === $new_url ) {
+							continue;
+						}
+
+						blcSiteOrigin::instance()->update_blc_links( $old_url, $new_url, $post_id );
+					}
+				}
+			}
 		}
 	}
+
 
 	/**
 	 * Get the base URL of the container. For posts, the post permalink is used

@@ -82,7 +82,6 @@ trait Dashboard_API {
 
 		if ( ! is_bool( $site_connected ) ) {
 			$site_connected = class_exists( 'WPMUDEV_Dashboard' ) ? ! empty( self::get_membership_type() ) : self::hub_connector_logged_in();
-			//$site_connected = apply_filters( 'wpmudev_blc_dashboard_site_connected', ! empty( self::get_membership_type() ) );
 		}
 
 		/**
@@ -91,22 +90,6 @@ trait Dashboard_API {
 		 * @since 2.0.0
 		 */
 		return apply_filters( 'wpmudev_blc_dashboard_site_connected', boolval( $site_connected ) );
-
-		// phpcs:disable
-		/*
-		 * Until we get BLC project ID we will keep using Dashboard's get_membership_status().
-		 */
-
-		/*
-		$has_access = false;
-
-		if ( class_exists( 'WPMUDEV_Dashboard' ) && method_exists( WPMUDEV_Dashboard::$upgrader, 'user_can_install' ) ) {
-			$has_access = WPMUDEV_Dashboard::$upgrader->user_can_install( XXXX, true );
-		}
-
-		return apply_filters( 'wpmudev_blc_dashboard_site_connected', $has_access );
-		*/
-		// phpcs:enable
 	}
 
 	/**

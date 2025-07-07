@@ -161,8 +161,7 @@ final class Loader extends Base {
 		/**
 		 * Start app functions.
 		 */
-		//$this->init_app();
-		add_action( 'init', array( $this, 'init_app' ) );
+		add_action( 'init', array( $this, 'init_app' ), 9 );
 
 		/*
 		 * Setup plugin scripts
@@ -211,7 +210,7 @@ final class Loader extends Base {
 					'Scheduled_Events',
 					'Hub_Endpoints',
 					'Options',
-					// 'Hooks',
+					'Submodules',
 				)
 			)
 		);
@@ -234,6 +233,7 @@ final class Loader extends Base {
 			'extra_args' => array(
 				'register' => array(
 					'connect_ref'  => 'blc',
+					'utm_source'   => 'blc',
 					'utm_medium'   => 'plugin',
 					'utm_campaign' => 'blc_connector_main',
 				),
