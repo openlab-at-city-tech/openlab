@@ -65,6 +65,11 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 	 */
 	private static $unexpected_error = null;
 
+	/**
+	 * @var int
+	 */
+	private const NON_SILENT_ERROR_TYPES = E_ERROR | E_CORE_ERROR | E_COMPILE_ERROR | E_USER_ERROR | E_RECOVERABLE_ERROR | E_PARSE;
+
 	public function get_storage(): QM_Data {
 		return new QM_Data_PHP_Errors();
 	}
@@ -203,15 +208,16 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 				$type = 'notice';
 				break;
 
-			case E_STRICT:
-				$type = 'strict';
-				break;
-
 			case E_DEPRECATED:
 			case E_USER_DEPRECATED:
 				$type = 'deprecated';
 				break;
 
+		}
+
+		// E_STRICT is deprecated in PHP 8.4 so it needs to be behind a version check.
+		if ( null === $type && version_compare( PHP_VERSION, '8.4', '<' ) && E_STRICT === $errno ) {
+			$type = 'strict';
 		}
 
 		if ( null === $type ) {
@@ -224,7 +230,7 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 
 		$error_group = 'errors';
 
-		if ( 0 === error_reporting() && 0 !== $this->error_reporting ) {
+		if ( $this->is_error_suppressed() && 0 !== $this->error_reporting ) {
 			// This is most likely an @-suppressed error
 			$error_group = 'suppressed';
 		}
@@ -285,7 +291,17 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 		 * @param bool $return_value Error handler return value. Default false.
 		 */
 		return apply_filters( 'qm/collect/php_errors_return_value', false );
+	}
 
+	private function is_error_suppressed(): bool {
+		$current_level = error_reporting();
+
+		if ( PHP_MAJOR_VERSION > 7 ) {
+			// https://www.php.net/manual/en/language.operators.errorcontrol.php
+			return $current_level === self::NON_SILENT_ERROR_TYPES;
+		}
+
+		return 0 === $current_level;
 	}
 
 	/**
@@ -301,7 +317,16 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 	 * @return void
 	 */
 	protected function output_fatal( $error, array $e ) {
-		$dispatcher = QM_Dispatchers::get( 'html' );
+		$is_rest_request = ( defined( 'REST_REQUEST' ) && REST_REQUEST );
+		$is_ajax_request = ( defined( 'DOING_AJAX' ) && DOING_AJAX );
+
+		if ( $is_rest_request ) {
+			$dispatcher = QM_Dispatchers::get( 'rest' );
+		} elseif ( $is_ajax_request ) {
+			$dispatcher = QM_Dispatchers::get( 'ajax' );
+		} else {
+			$dispatcher = QM_Dispatchers::get( 'html' );
+		}
 
 		if ( empty( $dispatcher ) ) {
 			return;
@@ -311,68 +336,19 @@ class QM_Collector_PHP_Errors extends QM_DataCollector {
 			return;
 		}
 
-		// This hides the subsequent message from the fatal error handler in core. It cannot be
-		// disabled by a plugin so we'll just hide its output.
-		echo '<style type="text/css"> .wp-die-message { display: none; } </style>';
-
-		printf(
-			// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedStylesheet
-			'<link rel="stylesheet" href="%1$s?ver=%2$s" media="all" />',
-			esc_url( QueryMonitor::init()->plugin_url( 'assets/query-monitor.css' ) ),
-			esc_attr( QM_VERSION )
-		);
-
-		// This unused wrapper with an attribute serves to help the #qm-fatal div break out of an
-		// attribute if a fatal has occurred within one.
-		echo '<div data-qm="qm">';
-
-		printf(
-			'<div id="qm-fatal" data-qm-message="%1$s" data-qm-file="%2$s" data-qm-line="%3$d">',
-			esc_attr( $e['message'] ),
-			esc_attr( QM_Util::standard_dir( $e['file'], '' ) ),
-			intval( $e['line'] )
-		);
-
-		echo '<div class="qm-fatal-wrap">';
-
-		if ( QM_Output_Html::has_clickable_links() ) {
-			$file = QM_Output_Html::output_filename( $e['file'], $e['file'], $e['line'], true );
-		} else {
-			$file = esc_html( $e['file'] );
+		if ( ! headers_sent() ) {
+			status_header( 500 );
 		}
 
-		printf(
-			'<p><b>%1$s</b>: %2$s<br>in <b>%3$s</b> on line <b>%4$d</b></p>',
-			esc_html( $error ),
-			nl2br( esc_html( $e['message'] ), false ),
-			$file,
-			intval( $e['line'] )
-		); // WPCS: XSS ok.
+		$message = sprintf(
+			'%s in %s on line %d',
+			$e['message'],
+			$e['file'],
+			$e['line']
+		);
 
-		if ( ! empty( $e['trace'] ) ) {
-			echo '<p>Call stack:</p>';
-			echo '<ol>';
-			foreach ( $e['trace'] as $frame ) {
-				$callback = QM_Util::populate_callback( $frame );
-
-				if ( ! isset( $callback['name'] ) ) {
-					continue;
-				}
-
-				printf(
-					'<li>%s</li>',
-					QM_Output_Html::output_filename( $callback['name'], $frame['file'], $frame['line'] )
-				); // WPCS: XSS ok.
-			}
-			echo '</ol>';
-		}
-
-		echo '</div>';
-
-		echo '<h2>Query Monitor</h2>';
-
-		echo '</div>';
-		echo '</div>';
+		$dispatcher->output_fatal( $message, $e );
+		exit;
 	}
 
 	/**
