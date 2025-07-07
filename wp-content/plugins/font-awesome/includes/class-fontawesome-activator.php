@@ -1,9 +1,11 @@
 <?php
 namespace FortAwesome;
 
-require_once trailingslashit( dirname( __FILE__ ) ) . '../defines.php';
-require_once trailingslashit( dirname( __FILE__ ) ) . 'class-fontawesome.php';
-require_once trailingslashit( dirname( __FILE__ ) ) . 'class-fontawesome-release-provider.php';
+require_once trailingslashit( __DIR__ ) . '../defines.php';
+require_once trailingslashit( __DIR__ ) . 'class-fontawesome.php';
+require_once trailingslashit( __DIR__ ) . 'class-fontawesome-release-provider.php';
+require_once trailingslashit( __DIR__ ) . 'class-fontawesome-svg-styles-manager.php';
+require_once trailingslashit( FONTAWESOME_DIR_PATH ) . 'includes/error-util.php';
 
 /**
  * Plugin activation logic.
@@ -23,7 +25,21 @@ class FontAwesome_Activator {
 	 * @throws ReleaseProviderStorageException
 	 */
 	public static function activate() {
-		self::initialize();
+		try {
+			self::initialize();
+		} catch ( \Exception $e ) {
+			wp_die(
+				esc_html( $e->getMessage() ),
+				esc_html( __( 'Font Awesome Activation Error', 'font-awesome' ) ),
+				array( 'back_link' => true )
+			);
+		} catch ( \Error $e ) {
+			wp_die(
+				esc_html( $e->getMessage() ),
+				esc_html( __( 'Font Awesome Activation Error', 'font-awesome' ) ),
+				array( 'back_link' => true )
+			);
+		}
 	}
 
 	/**
@@ -59,7 +75,7 @@ class FontAwesome_Activator {
 
 		if ( is_multisite() && is_network_admin() ) {
 			for_each_blog(
-				function( $blog_id ) use ( $force ) {
+				function () use ( $force ) {
 					self::initialize_current_site( $force );
 				}
 			);
@@ -81,6 +97,10 @@ class FontAwesome_Activator {
 
 		if ( $force || ! get_option( FontAwesome::CONFLICT_DETECTION_OPTIONS_KEY ) ) {
 			self::initialize_conflict_detection_options();
+		}
+
+		if ( fa()->is_block_editor_support_enabled() ) {
+			self::initialize_svg_styles();
 		}
 	}
 
@@ -123,5 +143,20 @@ class FontAwesome_Activator {
 	private static function initialize_conflict_detection_options() {
 		update_option( FontAwesome::CONFLICT_DETECTION_OPTIONS_KEY, FontAwesome::DEFAULT_CONFLICT_DETECTION_OPTIONS );
 	}
-}
 
+	/**
+	 * Internal use only.
+	 *
+	 * @ignore
+	 * @internal
+	 * @throws ReleaseMetadataMissingException
+	 * @throws ApiRequestException
+	 * @throws ApiResponseException
+	 * @throws ReleaseProviderStorageException
+	 * @throws SelfhostSetupException
+	 * @throws ConfigCorruptionException
+	 */
+	private static function initialize_svg_styles() {
+		FontAwesome_SVG_Styles_Manager::ensure_svg_styles_with_admin_notice_warning( fa(), fa_release_provider() );
+	}
+}
