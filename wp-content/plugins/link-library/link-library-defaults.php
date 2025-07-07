@@ -579,6 +579,7 @@ function ll_reset_gen_settings( $setoptions = 'return' ) {
 	$genoptions['importlinksurl']				  = '';
 	$genoptions['autothumbgen']					  = false;
 	$genoptions['autothumbgenschedule']			  = 'hourly';
+	$genoptions['bookmarklet_default_cat']		  = 0;
 
 	if ( 'return_and_set' == $setoptions ) {
 		$stylesheetlocation           = plugins_url( 'stylesheettemplate.css', __FILE__ );

@@ -3,13 +3,13 @@
 Plugin Name: Link Library
 Plugin URI: http://wordpress.org/extend/plugins/link-library/
 Description: Display links on pages with a variety of options
-Version: 7.7.2
+Version: 7.8.3
 Author: Yannick Lefebvre
 Author URI: http://ylefebvre.github.io/
 Text Domain: link-library
 
 A plugin for the blogging MySQL/PHP-based WordPress.
-Copyright 2024 Yannick Lefebvre
+Copyright 2025 Yannick Lefebvre
 
 Translations:
 French Translation courtesy of Michel G. et Luc Capronnier
@@ -737,7 +737,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			require_once plugin_dir_path( __FILE__ ) . 'render-link-library-sc.php';
 		
-			return RenderLinkLibrary( $this, $genoptions, $options, $settings, false, 0, 0, true, false, $linkcount );	  
+			return RenderLinkLibrary( $linkcount, $this, $genoptions, $options, $settings, false, 0, 0, true, false );	  
 		}
 
 		function link_library_cats_block_callback( $attributes ) {
@@ -1922,7 +1922,7 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 
 			require_once plugin_dir_path( __FILE__ ) . 'render-link-library-sc.php';
 			$linkcount = 1;
-			$linklibraryoutput .= RenderLinkLibrary( $this, $genoptions, $options, intval( $settings ), false, 0, 0, true, false, $linkcount );
+			$linklibraryoutput .= RenderLinkLibrary( $linkcount, $this, $genoptions, $options, intval( $settings ), false, 0, 0, true, false );
 
 			if ( isset( $_POST['ajaxupdate'] ) ) {
 				echo $linklibraryoutput;
@@ -2586,4 +2586,18 @@ if ( !function_exists( 'is_login' ) || ( function_exists( 'is_login' ) && !is_lo
 	}
 }
 
+add_filter('wp_get_object_terms', function($terms, $object_ids, $taxonomies, $args)
+{
+    if ( !$terms && basename( $_SERVER['PHP_SELF'] ) == 'post-new.php' ) {
 
+        // Category - note: only 1 category is supported currently
+        if ( $taxonomies == "'link_library_category'" && isset( $_REQUEST['link_library_cat'] ) ) {			
+            $id = intval( $_REQUEST['link_library_cat'] );
+
+            if ( $id ) {
+                return array( $id );
+            }
+        }
+    }
+    return $terms;
+}, 10, 4);

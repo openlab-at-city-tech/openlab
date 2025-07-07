@@ -36,7 +36,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 	if ( ( is_bool( $show_tag_filters ) && $show_tag_filters ) || ( !is_bool( $show_tag_filters ) && $show_tag_filters != 'false' ) ) {
 
 		$output .= '<div class="tag-filters">';
-		$output .= '<div class="tag-filters-title">' . $tag_label . '</div>';
+		$output .= '<div class="tag-filters-title">' . esc_html( $tag_label ) . '</div>';
 		$link_terms = get_terms( array( 'taxonomy' => $generaloptions['tagtaxonomy'], 'include' => $include_tags, 'exclude' => $exclude_tags ) );
 
 		if ( isset( $_GET['link_tags'] ) && !empty( $_GET['link_tags'] ) ) {
@@ -55,7 +55,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 		$output .= '</div>';
 
-		$output .= '<input type="hidden" name="link_tags" class="link_tags" value="' . $prev_link_tags . '">';
+		$output .= '<input type="hidden" name="link_tags" class="link_tags" value="' . esc_html( $prev_link_tags ) . '">';
 
 		if ( !$showapplybutton ) {
 			$output .= '<script type="text/javascript">';
@@ -115,7 +115,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 	if ( ( is_bool( $show_price_filters ) && $show_price_filters ) || ( !is_bool( $show_price_filters ) && $show_price_filters != 'false' ) ) {
 		$output .= '<div class="tag-filters">';
-		$output .= '<div class="tag-filters-title">' . $price_label . '</div>';
+		$output .= '<div class="tag-filters-title">' . esc_html( $price_label ) . '</div>';
 
 		$output .= '<div class="price-filters-choices">';
 		$output .= '<input type="checkbox" name="link_price" class="link_price" ' . checked( $prev_link_price, 'free', false ) . ' value="free"/> ' . __( 'Free', 'link-library' ) . '<br/>';
@@ -173,7 +173,7 @@ function RenderLinkLibraryFilterBox( $LLPluginClass, $generaloptions, $libraryop
 
 	if ( ( is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters ) || ( !is_bool( $show_alphabetic_filters ) && $show_alphabetic_filters != 'false' ) ) {
 		$output .= '<div class="tag-filters">';
-		$output .= '<div class="tag-filters-title">' . $alphabetic_label . '</div>';
+		$output .= '<div class="tag-filters-title">' . esc_html( $alphabetic_label ) . '</div>';
 
 		$output .= '<div class="alphabetic-filters-choices">';
 		$output .= '<select name="link_letter" class="link_letter">';
