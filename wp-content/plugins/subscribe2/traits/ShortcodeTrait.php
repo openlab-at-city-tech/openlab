@@ -4,6 +4,24 @@
  * Shortcode handler class.
  */
 trait Shortcode {
+	public $please_log_in;
+	public $confirmation_sent;
+	public $already_subscribed;
+	public $not_subscribed;
+	public $not_an_email;
+	public $barred_domain;
+	public $error;
+	public $no_such_email;
+	public $added;
+	public $deleted;
+	public $subscribe;
+	public $unsubscribe;
+	public $input_form_action;
+	public $form;
+	public $s2form;
+	public $email;
+	public $ip;
+	public $action;
 
 	/**
 	 * @var ?string
@@ -198,7 +216,7 @@ trait Shortcode {
 			} elseif ( $this->is_barred( $this->email ) ) {
 				$this->s2form = $this->s2form . $this->barred_domain;
 			} else {
-				$this->ip = $_POST['ip'];
+				$this->ip = rest_is_ip_address( $_POST['ip'] ) ? $_POST['ip'] : $this->get_remote_ip();
 				if ( is_int( $this->lockout ) && $this->lockout > 0 ) {
 					$date = current_datetime( $this->lockout )->format( 'H:i:s.u' );
 					$ips  = $wpdb->get_col(

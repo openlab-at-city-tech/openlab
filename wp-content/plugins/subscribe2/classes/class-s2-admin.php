@@ -1,5 +1,8 @@
 <?php
 class S2_Admin extends S2_Core {
+	public $signup_dates;
+	public $signup_times;
+	public $signup_ips;
 
 	/**
 	 * Register wp menu & handle scripts.

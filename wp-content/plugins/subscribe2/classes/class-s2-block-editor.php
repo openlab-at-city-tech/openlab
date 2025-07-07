@@ -4,6 +4,7 @@
  * Block editor handler class.
  */
 class S2_Block_Editor {
+	public $script_debug;
 
 	/**
 	 * Constructor
