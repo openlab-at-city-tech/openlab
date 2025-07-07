@@ -10,7 +10,7 @@
       "dropCap": true,
       "fontFamilies": [
         {
-          "fontFamily": "\"Poppins\", sans-serif",
+          "fontFamily": "\"Poppins\", serif",
           "name": "Poppins",
           "slug": "poppins",
           "fontFace": [
@@ -41,13 +41,27 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": ["file:./assets/fonts/Poppins/Poppins-Bold.ttf"]
+            },
+            {
+              "fontFamily": "Poppins",
+              "fontWeight": "800",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Poppins/Poppins-ExtraBold.ttf"]
+            },
+            {
+              "fontFamily": "Poppins",
+              "fontWeight": "900",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Poppins/Poppins-Black.ttf"]
             }
           ]
         },
         {
           "fontFamily": "\"Noto_Sans\", serif",
           "name": "Noto Sans",
-          "slug": "noto_sans",
+          "slug": "noto-sans",
           "fontFace": [
             {
               "fontFamily": "Noto_Sans",
@@ -101,34 +115,6 @@
           ]
         },
         {
-          "fontFamily": "\"Grape_Nuts\", serif",
-          "name": "Grape Nuts",
-          "slug": "grape_nuts",
-          "fontFace": [
-            {
-              "fontFamily": "Grape_Nuts",
-              "fontWeight": "400",
-              "fontStyle": "normal",
-              "fontStretch": "normal",
-              "src": [ "file:./assets/fonts/Grape_Nuts/GrapeNuts-Regular.ttf"]
-            }
-          ]
-        },
-        {
-          "fontFamily": "\"Lemon\", serif",
-          "name": "Lemon",
-          "slug": "lemon",
-          "fontFace": [
-            {
-              "fontFamily": "Lemon",
-              "fontWeight": "400",
-              "fontStyle": "normal",
-              "fontStretch": "normal",
-              "src": [ "file:./assets/fonts/Lemon/Lemon-Regular.ttf"]
-            }
-          ]
-        },
-        {
           "fontFamily": "\"Montserrat\", serif",
           "name": "Montserrat",
           "slug": "montserrat",
@@ -174,6 +160,41 @@
               "fontStyle": "normal",
               "fontStretch": "normal",
               "src": [ "file:./assets/fonts/Montserrat/static/Montserrat-Black.ttf"]
+            }
+          ]
+        },
+        {
+          "fontFamily": "\"Lora\", serif",
+          "name": "Lora",
+          "slug": "lora",
+          "fontFace": [
+            {
+              "fontFamily": "Lora",
+              "fontWeight": "400",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Lora/static/Lora-Regular.ttf"]
+            },
+            {
+              "fontFamily": "Lora",
+              "fontWeight": "500",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Lora/static/Lora-Medium.ttf"]
+            },
+            {
+              "fontFamily": "Lora",
+              "fontWeight": "600",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Lora/static/Lora-SemiBold.ttf"]
+            },
+            {
+              "fontFamily": "Lora",
+              "fontWeight": "700",
+              "fontStyle": "normal",
+              "fontStretch": "normal",
+              "src": ["file:./assets/fonts/Lora/static/Lora-Bold.ttf"]
             }
           ]
         }
@@ -289,9 +310,19 @@
       ],
       "palette": [
         {
+          "slug": "background",
+          "color": "#ffffff",
+          "name": "Background"
+        },
+        {
           "slug": "primary",
           "color": "#c848f5",
           "name": "Primary"
+        },
+        {
+          "slug": "border-color",
+          "color": "#dadada",
+          "name": "Border Color"
         },
         {
           "slug": "heading",
@@ -312,16 +343,6 @@
           "slug": "tertiary-bg-color",
           "color": "#f6f7fa",
           "name": "Tertiary Bg Color"
-        },
-        {
-          "slug": "border-color",
-          "color": "#dadada",
-          "name": "Border Color"
-        },
-        {
-          "slug": "background",
-          "color": "#ffffff",
-          "name": "Background"
         },
         {
           "slug": "foreground",
@@ -571,7 +592,6 @@
           "text": "var(--wp--preset--color--heading)"
         },
         "typography": {
-          "fontFamily": "var(--wp--preset--font-family--poppins)",
           "fontWeight": "var(--wp--custom--typography--font-weight--normal)"
         }
       },
@@ -676,6 +696,11 @@
       "fontSize": "var(--wp--preset--font-size--normal)"
     },
     "elements": {
+      "heading": {
+        "typography": {
+          "fontFamily": "var(--wp--preset--font-family--poppins)"
+        }
+      },
       "h1": {
         "typography": {
           "lineHeight": "var(--wp--custom--typography--line-height--heading-one)",
@@ -763,11 +788,6 @@
       "postTypes": ["page", "post"]
     },
     {
-      "name": "single-post-sidebar-on-right",
-      "title": "Single Post (Sidebar on Right)",
-      "postTypes": ["post"]
-    },
-    {
       "name": "single-post-sidebar-on-left",
       "title": "Single Post (Sidebar on Left)",
       "postTypes": ["post"]
@@ -778,18 +798,23 @@
       "postTypes": ["post"]
     },
     {
-      "name": "single-page-sidebar-on-right",
+      "name": "post-no-header-image",
+      "title": "Post (No Header Image)",
+      "postTypes": ["post"]
+    },
+    {
+      "name": "page-sidebar-on-right",
       "title": "Single Page (Sidebar on Right)",
       "postTypes": ["page"]
     },
     {
-      "name": "single-page-sidebar-on-left",
+      "name": "page-sidebar-on-left",
       "title": "Single Page (Sidebar on Left)",
       "postTypes": ["page"]
     },
     {
-      "name": "page-no-title",
-      "title": "Page (No Title / Feature Image)",
+      "name": "page-no-header-image",
+      "title": "Page (No Header Image)",
       "postTypes": ["page"]
     },
     {

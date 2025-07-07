@@ -1,7 +1,7 @@
 === FSE Freelancer Portfolio ===
 Contributors: cretathemes
 Requires at least: 5.9
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -174,6 +174,36 @@ FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress them
 * Added rtl language support tag.
 * Added no result query in search page.
 
+= 2.0.7 (Released: December 13, 2024) =
+* Added woocommerce support.
+* Updated cart and checkout templates.
+* Removed translation file. 
+* Added buttons css in json file.
+
+= 2.0.8 (Released: January 28, 2025) =
+* Updated single page and post templates.
+* Added Post no header image template.
+* Reolved bugs.
+* Updated dashboard notice.
+
+= 2.0.9 (Released: February 26, 2025) =
+* Did prefixing.
+* Updated pot file.
+* Removed unused files.
+* Added heading default font family.
+* Added typography in style variation.
+
+= 3.0.0 (Released: March 19, 2025) =
+* Updated get start.
+* Added fontawesome.
+
+= 3.0.1 (Released: April 28, 2025) =
+* Updated getstart css.
+* Resolved bugs.
+
+= 3.0.2 (Released: May 30, 2025) =
+* Added style variations.
+
 == Copyright ==
 
 FSE Freelancer Portfolio WordPress Theme, 2012-2023
@@ -198,6 +228,11 @@ Google Web Fonts ( Lemon ) By Google - https://google.com
 
 Google Web Fonts ( Montserrat ) By Google - https://google.com
 * Montserrat, This is the normal family, Licensed under Open Font License, https://fonts.google.com/specimen/Montserrat?query=Montserrat
+
+* Font Awesome Free 6.7.0
+Copyright, fontawesome 
+CC BY 4.0 License (https://creativecommons.org/licenses/by/4.0/)
+https://fontawesome.com/
 
 * Images
 

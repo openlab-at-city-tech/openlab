@@ -12,17 +12,17 @@
 
 <!-- wp:columns {"verticalAlignment":"center"} -->
 <div class="wp-block-columns are-vertically-aligned-center"><!-- wp:column {"verticalAlignment":"center","style":{"spacing":{"padding":{"top":"0","right":"0","bottom":"0","left":"0"}}}} -->
-<div class="wp-block-column is-vertically-aligned-center" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:heading {"className":"section-main-heading","style":{"typography":{"fontStyle":"normal","fontWeight":"700","fontSize":"50px"}},"textColor":"heading","fontFamily":"poppins"} -->
-<h2 class="wp-block-heading section-main-heading has-heading-color has-text-color has-poppins-font-family" style="font-size:50px;font-style:normal;font-weight:700"><?php esc_html_e('Work','fse-freelancer-portfolio'); ?><br><?php esc_html_e('History','fse-freelancer-portfolio'); ?></h2>
+<div class="wp-block-column is-vertically-aligned-center" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0"><!-- wp:heading {"className":"section-main-heading","style":{"typography":{"fontStyle":"normal","fontWeight":"700","fontSize":"50px"}},"textColor":"heading"} -->
+<h2 class="wp-block-heading section-main-heading has-heading-color has-text-color" style="font-size:50px;font-style:normal;font-weight:700"><?php esc_html_e('Work','fse-freelancer-portfolio'); ?><br><?php esc_html_e('History','fse-freelancer-portfolio'); ?></h2>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"fontSize":"medium"} -->
+<p class="has-medium-font-size"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
-<div class="wp-block-buttons"><!-- wp:button {"backgroundColor":"primary","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|50","right":"var:preset|spacing|50","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}},"className":"is-style-fill"} -->
-<div class="wp-block-button is-style-fill"><a class="wp-block-button__link has-primary-background-color has-background wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--50)"><?php esc_html_e('Read More','fse-freelancer-portfolio'); ?></a></div>
+<div class="wp-block-buttons"><!-- wp:button {"className":"is-style-fill","style":{"border":{"radius":"8px"},"spacing":{"padding":{"left":"var:preset|spacing|50","right":"var:preset|spacing|50","top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}}} -->
+<div class="wp-block-button is-style-fill"><a class="wp-block-button__link wp-element-button" style="border-radius:8px;padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--50)"><?php esc_html_e('Read More','fse-freelancer-portfolio'); ?></a></div>
 <!-- /wp:button --></div>
 <!-- /wp:buttons --></div>
 <!-- /wp:column -->
@@ -34,16 +34,16 @@
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
+<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal"} -->
+<h4 class="wp-block-heading has-primary-color has-text-color has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-poppins-font-family has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
+<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading"} -->
+<h3 class="wp-block-heading has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium"} -->
+<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -60,16 +60,16 @@
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
+<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal"} -->
+<h4 class="wp-block-heading has-primary-color has-text-color has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-poppins-font-family has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
+<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading"} -->
+<h3 class="wp-block-heading has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium"} -->
+<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -88,16 +88,16 @@
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
+<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal"} -->
+<h4 class="wp-block-heading has-primary-color has-text-color has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-poppins-font-family has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
+<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading"} -->
+<h3 class="wp-block-heading has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium"} -->
+<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -114,16 +114,16 @@
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
+<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal"} -->
+<h4 class="wp-block-heading has-primary-color has-text-color has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-poppins-font-family has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
+<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading"} -->
+<h3 class="wp-block-heading has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium"} -->
+<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->
@@ -140,16 +140,16 @@
 <!-- /wp:button --></div>
 <!-- /wp:buttons -->
 
-<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal","fontFamily":"poppins"} -->
-<h4 class="wp-block-heading has-primary-color has-text-color has-poppins-font-family has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
+<!-- wp:heading {"level":4,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"},"spacing":{"margin":{"top":"var:preset|spacing|40","bottom":"var:preset|spacing|30"}}},"textColor":"primary","fontSize":"normal"} -->
+<h4 class="wp-block-heading has-primary-color has-text-color has-normal-font-size" style="margin-top:var(--wp--preset--spacing--40);margin-bottom:var(--wp--preset--spacing--30);font-style:normal;font-weight:600"><?php esc_html_e('UI/UX Designer','fse-freelancer-portfolio'); ?></h4>
 <!-- /wp:heading -->
 
-<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading","fontFamily":"poppins"} -->
-<h3 class="wp-block-heading has-poppins-font-family has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
+<!-- wp:heading {"level":3,"style":{"typography":{"fontStyle":"normal","fontWeight":"600"}},"fontSize":"content-heading"} -->
+<h3 class="wp-block-heading has-content-heading-font-size" style="font-style:normal;font-weight:600"><?php esc_html_e('Company Name','fse-freelancer-portfolio'); ?></h3>
 <!-- /wp:heading -->
 
-<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium","fontFamily":"poppins"} -->
-<p class="has-poppins-font-family has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
+<!-- wp:paragraph {"style":{"spacing":{"margin":{"top":"0","bottom":"0"}}},"fontSize":"medium"} -->
+<p class="has-medium-font-size" style="margin-top:0;margin-bottom:0"><?php esc_html_e('Lorem Ipsum has been the industrys standard dummy text ever since the 1500s.','fse-freelancer-portfolio'); ?></p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->

@@ -99,9 +99,9 @@ final class Fse_Freelancer_Portfolio_Customize {
 	 */
 	public function enqueue_control_scripts() {
 
-		wp_enqueue_script( 'fse-freelancer-portfolio-customize-controls', trailingslashit( esc_url( get_template_directory_uri() ) ) . '/assets/customize-controls.js', array( 'customize-controls' ) );
+		wp_enqueue_script( 'fse-freelancer-portfolio-customize-controls', trailingslashit( esc_url( get_template_directory_uri() ) ) . '/assets/js/customize-controls.js', array( 'customize-controls' ) );
 
-		wp_enqueue_style( 'fse-freelancer-portfolio-customize-controls', trailingslashit( esc_url( get_template_directory_uri() ) ) . '/assets/customize-controls.css' );
+		wp_enqueue_style( 'fse-freelancer-portfolio-customize-controls', trailingslashit( esc_url( get_template_directory_uri() ) ) . '/assets/css/customize-controls.css' );
 	}
 }
 

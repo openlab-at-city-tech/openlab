@@ -6,9 +6,19 @@
     "color": {
         "palette": [
             {
+              "slug": "background",
+              "color": "#000000",
+              "name": "Background"
+            },
+            {
               "slug": "primary",
               "color": "#c848f5",
               "name": "Primary"
+            },
+            {
+              "slug": "border-color",
+              "color": "#5b5858",
+              "name": "Border Color"
             },
             {
               "slug": "heading",
@@ -29,16 +39,6 @@
               "slug": "tertiary-bg-color",
               "color": "#141414",
               "name": "Tertiary Bg Color"
-            },
-            {
-              "slug": "border-color",
-              "color": "#5b5858",
-              "name": "Border Color"
-            },
-            {
-              "slug": "background",
-              "color": "#000000",
-              "name": "Background"
             },
             {
               "slug": "foreground",

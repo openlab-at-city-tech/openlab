@@ -5,9 +5,9 @@ Author: Creta Themes
 Author URI: https://cretathemes.com/
 Description: FSE Freelancer Portfolio is a visually appealing and feature-rich WordPress theme designed specifically for freelancers, creative professionals, freelance services, creative freelancers, resume writing, graphic designers, web developers, freelance designers, digital creators, resume design, web development services, freelance opportunities, creative professionals, portfolio development, freelance projects, UX/UI designers, freelance web developers, design portfolios, resume consulting, web design experts, digital marketing freelancers, freelance graphic design, resumes, designers, web developers, and individuals looking to showcase their work and services online. With a modern and elegant design, FSE Freelancer Portfolio offers a user-friendly experience, enabling users to effortlessly create a captivating online portfolio. The theme provides a range of customizable blocks and layouts that are tailored to present various types of content, such as project galleries, testimonials, blog posts, and service offerings. It offers an intuitive drag-and-drop interface for building and editing content. Key features of the FSE Freelancer Portfolio theme include responsive design, ensuring that websites look and function well across different devices and screen sizes. The theme also supports high-quality media presentation, enabling users to display their visual work, such as images and videos, in a polished and impactful manner. FSE Freelancer Portfolio emphasises user engagement by offering easy navigation, clear calls-to-action, and integration with social media platforms. This helps freelancers and creative professionals connect with potential clients and audiences effectively. The theme’s focus on elegant design, customization options, and content showcase capabilities make it a valuable tool for freelancers to effectively display their skills, attract clients, and leave a lasting impression on their website visitors.
 Requires at least: 5.9
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 5.6
-Version: 2.0.6
+Version: 3.0.2
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: fse-freelancer-portfolio
@@ -2897,7 +2897,7 @@ a:hover, a:focus{
   color: var(--wp--preset--color--primary);
 }
 .wp-block-button a:hover,.wp-block-button a:focus{
-  color: var(--wp--preset--color--white);
+  color: var(--wp--preset--color--background);
 }
 /* Tertiary Background Color */
 .newsletter-section
