@@ -225,13 +225,10 @@ function logo_icon() {
  * Desktop Navigation
  */
 function primary_navigation() {
-    $openType = get_theme_mod('primary_navigation_open_type');
-
+    	$openType = get_theme_mod('primary_navigation_open_type');
     ?>
     <nav id="site-navigation" class="main-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'primary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Primary Navigation', 'kadence' ); ?>">
-    <?php
-    kadence()->customizer_quick_link();
-    ?>
+    <?php kadence()->customizer_quick_link(); ?>
         <div class="primary-menu-container header-menu-container">
     <?php
     if ( kadence()->is_primary_nav_menu_active() ) {
@@ -250,18 +247,19 @@ function primary_navigation() {
  * Desktop Navigation
  */
 function secondary_navigation() {
+		$openType = get_theme_mod('secondary_navigation_open_type');
 	?>
-	<nav id="secondary-navigation" class="secondary-navigation header-navigation nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'secondary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Secondary Navigation', 'kadence' ); ?>">
+	<nav id="secondary-navigation" class="secondary-navigation header-navigation <?php echo $openType == 'click' ? 'click-to-open' : 'hover-to-open'; ?> nav--toggle-sub header-navigation-style-<?php echo esc_attr( kadence()->option( 'secondary_navigation_style' ) ); ?> header-navigation-dropdown-animation-<?php echo esc_attr( kadence()->option( 'dropdown_navigation_reveal' ) ); ?>" role="navigation" aria-label="<?php esc_attr_e( 'Secondary Navigation', 'kadence' ); ?>">
 		<?php kadence()->customizer_quick_link(); ?>
-		<div class="secondary-menu-container header-menu-container">
-			<?php
-			if ( kadence()->is_secondary_nav_menu_active() ) {
-				kadence()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) );
-			} else {
-				kadence()->display_fallback_menu();
-			}
-			?>
-		</div>
+			<div class="secondary-menu-container header-menu-container">
+		<?php
+		if ( kadence()->is_secondary_nav_menu_active() ) {
+			kadence()->display_secondary_nav_menu( array( 'menu_id' => 'secondary-menu' ) );
+		} else {
+			kadence()->display_fallback_menu();
+		}
+		?>
+			</div>
 	</nav><!-- #secondary-navigation -->
 	<?php
 }

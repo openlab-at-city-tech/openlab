@@ -96,6 +96,35 @@ $settings = array(
 			'responsive' => false,
 		),
 	),
+	'secondary_navigation_open_type' => array(
+		'control_type' => 'kadence_radio_icon_control',
+		'section'      => 'secondary_navigation',
+		'priority'     => 10,
+		'default'      => kadence()->default( 'secondary_navigation_open_type' ),
+		'label'        => esc_html__( 'Open on: ', 'kadence' ),
+		'context'      => array(
+			array(
+				'setting' => '__current_tab',
+				'value'   => 'general',
+			),
+		),
+		'input_attrs'  => array(
+			'layout' => array(
+				'hover' => array(
+					'tooltip' => __( 'Hover', 'kadence' ),
+					'name'    => __( 'Hover', 'kadence' ),
+					'icon'    => '',
+				),
+				'click' => array(
+					'tooltip' => __( 'Click', 'kadence' ),
+					'name'    => __( 'Click', 'kadence' ),
+					'icon'    => '',
+				),
+			),
+			'responsive' => false,
+			'class'      => 'radio-btn-width-50',
+		),
+	),
 	'secondary_navigation_stretch' => array(
 		'control_type' => 'kadence_switch_control',
 		'sanitize'     => 'kadence_sanitize_toggle',

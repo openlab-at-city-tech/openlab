@@ -565,3 +565,31 @@ body:not( .elementor-page ) .llms-loop-item-content {
 .llms-favorite-wrapper button {
 	color: var(--global-palette4);
 }
+
+// fixes for LifterLMS 7.8 user dashboard column layout
+@media (min-width: 600px) {
+    .logged-in .llms-sd-layout-columns {
+		display: block;
+	}
+
+	.logged-in .kadence-llms-dash-nav-above .llms-sd-layout-columns .llms-sd-nav .llms-sd-items .llms-sd-item .llms-sep {
+        display: block;
+    }
+
+	.logged-in .kadence-llms-dash-nav-above .llms-sd-layout-columns .llms-sd-nav .llms-sd-items .llms-sd-item {
+        display: flex;
+        align-items: center;
+    }
+	.logged-in .kadence-llms-dash-nav-above .llms-sd-layout-columns .llms-sd-nav .llms-sd-items .llms-sd-item a {
+        padding: .4em .5em .2em .5em;
+    }
+
+	.logged-in .kadence-llms-dash-nav-above .llms-student-dashboard.llms-sd-layout-columns .llms-sd-item:last-child .llms-sep {
+		display: none;
+	}
+
+	.logged-in .kadence-llms-dash-nav-right .llms-sd-layout-columns .llms-sd-nav .llms-sd-items .llms-sd-item a {
+		padding: .4em .5em .2em .5em;
+	}
+}
+

@@ -170,9 +170,9 @@ $post_type_obj = get_post_type_object( get_post_type() );
 				}
 				break;
 			case 'date':
-				$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+				$time_string = '<time class="entry-date published updated" datetime="%1$s" itemprop="dateModified">%2$s</time>';
 				if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-					$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
+					$time_string = '<time class="entry-date published" datetime="%1$s" itemprop="datePublished">%2$s</time><time class="updated" datetime="%3$s" itemprop="dateModified">%4$s</time>';
 				}
 
 				$time_string = sprintf(
@@ -199,9 +199,9 @@ $post_type_obj = get_post_type_object( get_post_type() );
 				}
 				break;
 			case 'dateTime':
-				$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s %3$s</time>';
+				$time_string = '<time class="entry-date published updated" datetime="%1$s" itemprop="dateModified">%2$s %3$s</time>';
 				if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-					$time_string = '<time class="entry-date published" datetime="%1$s">%2$s %3$s</time><time class="updated" datetime="%4$s">%5$s %6$s</time>';
+					$time_string = '<time class="entry-date published" datetime="%1$s" itemprop="datePublished">%2$s %3$s</time><time class="updated" datetime="%4$s" itemprop="dateModified">%5$s %6$s</time>';
 				}
 
 				$time_string = sprintf(
@@ -234,7 +234,7 @@ $post_type_obj = get_post_type_object( get_post_type() );
 					$time_string = '';
 				} else {
 					$time_string = sprintf(
-						'<time class="entry-date published updated" datetime="%1$s">%2$s</time>',
+						'<time class="entry-date published updated" datetime="%1$s" itemprop="dateModified">%2$s</time>',
 						esc_attr( get_the_modified_date( 'c' ) ),
 						esc_html( get_the_modified_date() )
 					);
@@ -261,7 +261,7 @@ $post_type_obj = get_post_type_object( get_post_type() );
 					$time_string = '';
 				} else {
 					$time_string = sprintf(
-						'<time class="entry-date published updated" datetime="%1$s">%2$s %3$s</time>',
+						'<time class="entry-date published updated" datetime="%1$s" itemprop="dateModified">%2$s %3$s</time>',
 						esc_attr( get_the_modified_date( 'c' ) ),
 						esc_html( get_the_modified_date() ),
 						esc_html( get_the_modified_time() )

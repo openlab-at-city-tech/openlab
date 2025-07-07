@@ -2,9 +2,9 @@
 Contributors: britner
 Tags: translation-ready, two-columns, right-sidebar, left-sidebar, footer-widgets, blog, custom-logo, custom-background, custom-menu, rtl-language-support, editor-style, threaded-comments, custom-colors, featured-images, wide-blocks, full-width-template, theme-options, e-commerce.
 Requires at least: 6.3
-Tested up to: 6.7.2
+Tested up to: 6.8.1
 Requires PHP: 7.4
-Stable tag: 1.2.21
+Stable tag: 1.2.27
 License: GNU General Public License v3.0 (or later)
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -25,6 +25,31 @@ Please report security bugs found in the source code of the Kadence Theme throug
 Please report security bugs found in the Kadence theme's source code through the Patchstack Vulnerability Disclosure Program https://patchstack.com/database/vdp/kadence. The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this theme.
 
 = Changelog =
+= 1.2.27 | 3rd July 2025 =
+* Fix: Sale button position in pro gallery for Woo Templates.
+
+= 1.2.26 | 19th June 2025 =
+* Add: Description for some settings in customizer.
+* Add: Additional Social Icons
+* Fix: Responsive theme font settings in the editor.
+* Fix: Improve layout of LifterLMS 7.8.
+* Fix: Improve visibility of mobile off canvas menu in some situations.
+* Fix: Issue with hover navigation links in some situations.
+* Fix: Improve look of Firefox focus borders.
+
+= 1.2.25 | 5th June 2025 =
+* Update: Adding Mega Menu open on click/hover settings to Secondary+ navigations.
+
+= 1.2.24 | 15th May 2025 =
+* Fix: Active color setting for parent menu does not work if submenu is opened in Sticky Header
+
+= 1.2.23 | 1st May 2025 =
+* Update: Connect post category colors with relevant blocks (Posts, Post Grid)
+
+= 1.2.22 | 17th April 2025 =
+* Update: Adding datePublished meta information for seo.
+* Fix: Link to starter templates page in Kadence -> Starter tempaltes.
+* Fix: Updated logic for custom category colors in loop.
 
 = 1.2.21 | 4th April 2025 =
 * Fix: Issue with loading google fonts in footer.

@@ -1,26 +1,31 @@
-
 /*--------------------------------------------------------------
 ## Dropdown navigation for header Menus
 --------------------------------------------------------------*/
-.header-navigation ul ul.sub-menu, .header-navigation ul ul.submenu {
+.header-navigation ul ul.sub-menu,
+.header-navigation ul ul.submenu {
 	display: none;
 	position: absolute;
 	top: 100%;
 	flex-direction: column;
 	background: #fff;
 	margin-left: 0;
-	box-shadow: 0 2px 13px rgba(0,0,0,.1);
+	box-shadow: 0 2px 13px rgba(0, 0, 0, 0.1);
 	z-index: 1000;
 }
 .header-navigation ul ul.quadmenu-row {
 	flex-direction: row;
 }
-body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focus .dropdown-nav-toggle {
+body:not(.hide-focus-outline)
+	.header-navigation
+	li.menu-item--has-toggle
+	> a:focus
+	.dropdown-nav-toggle {
 	opacity: 0.2;
 }
 // Hide divider for last item.
-.header-navigation ul ul.sub-menu > li:last-child, .header-navigation ul ul.submenu > li:last-child {
-	border-bottom:0;
+.header-navigation ul ul.sub-menu > li:last-child,
+.header-navigation ul ul.submenu > li:last-child {
+	border-bottom: 0;
 }
 .header-navigation ul ul.sub-menu.sub-menu-edge {
 	left: auto;
@@ -32,7 +37,8 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 }
 // Handle Reveal Animation
 .header-navigation[class*="header-navigation-dropdown-animation-fade"] {
-	ul ul.sub-menu, ul ul.submenu {
+	ul ul.sub-menu,
+	ul ul.submenu {
 		opacity: 0;
 		visibility: hidden;
 		transform: translate3d(0, 0, 0);
@@ -44,7 +50,9 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	}
 }
 .header-navigation[class*="header-navigation-dropdown-animation-fade"]:not(.click-to-open) {
-	ul li:hover>ul, ul li.menu-item--toggled-on>ul, ul li:not(.menu-item--has-toggle):focus>ul {
+	ul li:hover > ul,
+	ul li.menu-item--toggled-on > ul,
+	ul li:not(.menu-item--has-toggle):focus > ul {
 		opacity: 1;
 		visibility: visible;
 		transform: translate3d(0, 0, 0);
@@ -55,7 +63,9 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 }
 // Handle Reveal Animation on click to open
 .header-navigation[class*="header-navigation-dropdown-animation-fade"].click-to-open {
-	ul li>ul.opened, ul li.menu-item--toggled-on>ul, ul li:not(.menu-item--has-toggle):focus>ul {
+	ul li > ul.opened,
+	ul li.menu-item--toggled-on > ul,
+	ul li:not(.menu-item--has-toggle):focus > ul {
 		opacity: 1;
 		visibility: visible;
 		transform: translate3d(0, 0, 0);
@@ -65,12 +75,14 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	}
 }
 .header-navigation.header-navigation-dropdown-animation-fade-up {
-	ul ul.sub-menu, ul ul.submenu {
+	ul ul.sub-menu,
+	ul ul.submenu {
 		transform: translate3d(0, 10px, 0);
 	}
 }
 .header-navigation.header-navigation-dropdown-animation-fade-down {
-	ul ul.sub-menu, ul ul.submenu {
+	ul ul.sub-menu,
+	ul ul.submenu {
 		transform: translate3d(0, -10px, 0);
 	}
 }
@@ -78,31 +90,31 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 ## Submenu Toggles for Header Menus
 --------------------------------------------------------------*/
 .wp-site-blocks .nav--toggle-sub .dropdown-nav-special-toggle {
-    position: absolute !important;
-    overflow: hidden;
-    padding: 0 !important;
-    margin: 0 !important;
+	position: absolute !important;
+	overflow: hidden;
+	padding: 0 !important;
+	margin: 0 !important;
 	margin-right: -0.1em !important;
-    border: 0 !important;
+	border: 0 !important;
 	width: 0.9em;
-	top:0;
+	top: 0;
 	bottom: 0;
-    height: auto;
+	height: auto;
 	border-radius: 0;
 	box-shadow: none !important;
-    background: transparent !important;
+	background: transparent !important;
 	display: block;
 	left: auto;
-	right:calc( 1.4em / 2 );
+	right: calc(1.4em / 2);
 	pointer-events: none;
 }
 .wp-site-blocks .nav--toggle-sub .sub-menu .dropdown-nav-special-toggle {
 	width: 2.6em;
 	margin: 0 !important;
-	right:0;
+	right: 0;
 }
 .nav--toggle-sub .dropdown-nav-special-toggle:focus {
-    z-index: 10;
+	z-index: 10;
 }
 .nav--toggle-sub .dropdown-nav-toggle {
 	display: block;
@@ -148,7 +160,7 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 .nav--toggle-sub:not(.click-to-open) li:hover > ul,
 .nav--toggle-sub li.menu-item--toggled-on > ul,
 .nav--toggle-sub li:not(.menu-item--has-toggle):focus > ul,
-.nav--toggle-sub.click-to-open li.menu-item--has-toggle > ul.opened{
+.nav--toggle-sub.click-to-open li.menu-item--has-toggle > ul.opened {
 	display: block;
 }
 
@@ -164,51 +176,62 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	display: block;
 }
 // This makes the dropdowns work a little better on a touch device.
-@media ( hover: none ) {
-	.wp-site-blocks .nav--toggle-sub .menu-item--has-toggle:not(.menu-item--toggled-on) .dropdown-nav-special-toggle {
+@media (hover: none) {
+	.wp-site-blocks
+		.nav--toggle-sub
+		.menu-item--has-toggle:not(.menu-item--toggled-on)
+		.dropdown-nav-special-toggle {
 		left: 0;
-		right:0 !important;
+		right: 0 !important;
 		margin-right: 0 !important;
 		width: 100%;
 		pointer-events: all;
 	}
-	.wp-site-blocks .nav--toggle-sub .menu-item--has-toggle:not(.menu-item--toggled-on) > a {
+	.wp-site-blocks
+		.nav--toggle-sub
+		.menu-item--has-toggle:not(.menu-item--toggled-on)
+		> a {
 		pointer-events: none;
 	}
 }
 .rtl .nav--toggle-sub .dropdown-nav-toggle {
-    right: auto;
-    left: 0;
+	right: auto;
+	left: 0;
 }
 .rtl .primary-menu-container > ul > li.menu-item .dropdown-nav-special-toggle {
-    right: auto;
-    left: calc(1.4em / 2);
+	right: auto;
+	left: calc(1.4em / 2);
 }
 .rtl .wp-site-blocks .nav--toggle-sub .sub-menu .dropdown-nav-special-toggle {
-    left: 0;
-    right: auto;
+	left: 0;
+	right: auto;
 }
 .rtl .nav--toggle-sub ul ul .dropdown-nav-toggle .kadence-svg-iconset {
-    transform: rotate(
--270deg);
+	transform: rotate(-270deg);
 }
-.rtl .header-navigation ul ul ul.sub-menu, .rtl .header-navigation ul ul ul.submenu {
-    right: 100%;
-    left: auto;
+.rtl .header-navigation ul ul ul.sub-menu,
+.rtl .header-navigation ul ul ul.submenu {
+	right: 100%;
+	left: auto;
 }
-.rtl  .nav-drop-title-wrap {
-    padding-left: 1em;
-    padding-right: 0;
+.rtl .nav-drop-title-wrap {
+	padding-left: 1em;
+	padding-right: 0;
 }
-.wp-site-blocks .nav--toggle-sub .kadence-menu-mega-enabled .sub-menu .dropdown-nav-special-toggle {
-    display: none;
+.wp-site-blocks
+	.nav--toggle-sub
+	.kadence-menu-mega-enabled
+	.sub-menu
+	.dropdown-nav-special-toggle {
+	display: none;
 }
 /*--------------------------------------------------------------
 ## Header navigation top item styling
 --------------------------------------------------------------*/
-.header-navigation-style-underline-fullheight, .header-navigation-style-fullheight {
+.header-navigation-style-underline-fullheight,
+.header-navigation-style-fullheight {
 	height: 100%;
-    align-items: center;
+	align-items: center;
 	.header-menu-container {
 		height: 100%;
 		align-items: center;
@@ -229,12 +252,12 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	}
 }
 .header-navigation[class*="header-navigation-style-underline"] {
-	.header-menu-container{ 
+	.header-menu-container {
 		> ul > li {
 			> a {
-				position:relative;
+				position: relative;
 				&:after {
-					content: '';
+					content: "";
 					width: 100%;
 					position: absolute;
 					bottom: 0px;
@@ -242,13 +265,14 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 					right: 50%;
 					background: currentColor;
 					transform: scale(0, 0) translate(-50%, 0);
-					transition: transform .2s ease-in-out, color .0s ease-in-out;
+					transition: transform 0.2s ease-in-out, color 0s ease-in-out;
 				}
 				&:hover:after {
 					transform: scale(1, 1) translate(50%, 0);
 				}
 			}
-			&.current-menu-item, &.current-page-item {
+			&.current-menu-item,
+			&.current-page-item {
 				> a:after {
 					transform: scale(1, 1) translate(50%, 0);
 				}
@@ -260,7 +284,8 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 /*--------------------------------------------------------------
 ## Header navigation menus
 --------------------------------------------------------------*/
-.header-navigation, .header-menu-container {
+.header-navigation,
+.header-menu-container {
 	display: flex;
 }
 .header-navigation li.menu-item > a {
@@ -268,14 +293,15 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	width: 100%;
 	text-decoration: none;
 	color: var(--global-palette4);
-	transition: all .2s ease-in-out;
-	transform: translate3d(0,0,0);
+	transition: all 0.2s ease-in-out;
+	transform: translate3d(0, 0, 0);
 }
 .header-navigation li.menu-item > a:hover,
 .header-navigation li.menu-item > a:focus {
 	color: var(--global-palette-highlight);
 }
-.header-navigation ul.sub-menu, .header-navigation ul.submenu {
+.header-navigation ul.sub-menu,
+.header-navigation ul.submenu {
 	display: block;
 	list-style: none;
 	margin: 0;
@@ -290,10 +316,11 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 .header-navigation ul ul li.menu-item > a {
 	width: 200px;
 }
-.header-navigation ul ul ul.sub-menu, .header-navigation ul ul ul.submenu {
+.header-navigation ul ul ul.sub-menu,
+.header-navigation ul ul ul.submenu {
 	top: 0;
 	left: 100%;
-	right:auto;
+	right: auto;
 	min-height: 100%;
 }
 .header-navigation .menu {
@@ -310,7 +337,7 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 --------------------------------------------------------------*/
 .menu-toggle-open {
 	display: flex;
-	background:transparent;
+	background: transparent;
 	align-items: center;
 	box-shadow: none;
 	.menu-toggle-label {
@@ -322,13 +349,14 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	.menu-toggle-label:empty {
 		padding-right: 0px;
 	}
-	&:hover, &:focus {
+	&:hover,
+	&:focus {
 		border-color: currentColor;
 		background: transparent;
 		box-shadow: none;
 	}
 	&.menu-toggle-style-default {
-		border:0;
+		border: 0;
 	}
 }
 .wp-site-blocks .menu-toggle-open {
@@ -356,7 +384,7 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	display: flex;
 	position: relative;
 	a {
-		color:inherit;
+		color: inherit;
 	}
 	.drawer-sub-toggle {
 		background: transparent;
@@ -372,14 +400,16 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 		transform: rotate(180deg);
 	}
 }
-.mobile-navigation.drawer-navigation-parent-toggle-true .drawer-nav-drop-wrap .drawer-sub-toggle {
-    position: absolute;
-    left: 0;
-    z-index: 10;
-    top: 0;
-    bottom: 0;
-    justify-content: flex-end;
-    width: 100%;
+.mobile-navigation.drawer-navigation-parent-toggle-true
+	.drawer-nav-drop-wrap
+	.drawer-sub-toggle {
+	position: absolute;
+	left: 0;
+	z-index: 10;
+	top: 0;
+	bottom: 0;
+	justify-content: flex-end;
+	width: 100%;
 }
 // .mobile-navigation ul li .drawer-nav-drop-wrap a[href="#"] + button {
 // 	position: absolute;
@@ -396,13 +426,13 @@ body:not(.hide-focus-outline) .header-navigation li.menu-item--has-toggle>a:focu
 	transition: all 0.2s ease-in-out;
 }
 .mobile-navigation ul.has-collapse-sub-nav ul.sub-menu {
-    display: none;
+	display: none;
 }
-body[class*='amp-mode-'] .mobile-navigation ul ul {
-    display: block;
+body[class*="amp-mode-"] .mobile-navigation ul ul {
+	display: block;
 }
 .mobile-navigation ul ul ul ul ul ul {
-    padding-left: 0;
+	padding-left: 0;
 }
 .mobile-navigation ul.has-collapse-sub-nav .sub-menu.show-drawer {
 	display: block;
@@ -414,13 +444,13 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 	position: fixed;
 	display: none;
 	top: 0;
-    bottom: 0;
+	bottom: 0;
 	left: -99999rem;
-    right: 99999rem;
+	right: 99999rem;
 	transition: opacity 0.25s ease-in, left 0s 0.25s, right 0s 0.25s;
 	z-index: 100000;
 	.drawer-overlay {
-		background-color: rgba(0,0,0,.4);
+		background-color: rgba(0, 0, 0, 0.4);
 		position: fixed;
 		top: 0;
 		right: 0;
@@ -432,26 +462,27 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 	.drawer-inner {
 		width: 100%;
 		transform: translateX(100%);
-		max-width:90%;
-		right:0;
+		max-width: 90%;
+		right: 0;
 		top: 0;
 		overflow: auto;
 		background: #090c10;
-		color:#fff;
+		color: #fff;
 		bottom: 0;
 		opacity: 0;
 		position: fixed;
 		box-shadow: 0 0 2rem 0 rgba(0, 0, 0, 0.1);
 		display: flex;
 		flex-direction: column;
-		transition: transform 0.3s cubic-bezier(0.77,0.2,0.05,1.0), opacity 0.25s cubic-bezier(0.77,0.2,0.05,1.0);
+		transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
+			opacity 0.25s cubic-bezier(0.77, 0.2, 0.05, 1);
 	}
 	.drawer-header {
 		padding: 0 1.5em;
 		display: flex;
 		justify-content: flex-end;
 		// Fixes safair bug.
-		min-height: calc( 1.2em + 24px );
+		min-height: calc(1.2em + 24px);
 		.drawer-toggle {
 			background: transparent;
 			border: 0;
@@ -474,58 +505,71 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 .popup-drawer-layout-sidepanel.popup-drawer-side-left {
 	.drawer-inner {
 		transform: translateX(-100%);
-		right:auto;
-		left:0;
+		right: auto;
+		left: 0;
 	}
 }
-@media screen and ( max-width: $tablet-minus-query) {
-.showing-popup-drawer-from-right.animate-body-popup #inner-wrap, .showing-popup-drawer-from-right.animate-body-popup #colophon, .showing-popup-drawer-from-right.animate-body-popup .site-header-row {
-	transform: translateX(-200px);
-}
-.showing-popup-drawer-from-left.animate-body-popup #inner-wrap, .showing-popup-drawer-from-left.animate-body-popup #colophon, .showing-popup-drawer-from-left.animate-body-popup .site-header-row {
-    transform: translateX(200px);
-}
-.animate-body-popup #inner-wrap, .animate-body-popup .site-header-row, .animate-body-popup #colophon {
-	transform: none;
-  	transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
-}
+@media screen and (max-width: $tablet-minus-query) {
+	.showing-popup-drawer-from-right.animate-body-popup #inner-wrap,
+	.showing-popup-drawer-from-right.animate-body-popup #colophon,
+	.showing-popup-drawer-from-right.animate-body-popup .site-header-row {
+		transform: translateX(-200px);
+	}
+	.showing-popup-drawer-from-left.animate-body-popup #inner-wrap,
+	.showing-popup-drawer-from-left.animate-body-popup #colophon,
+	.showing-popup-drawer-from-left.animate-body-popup .site-header-row {
+		transform: translateX(200px);
+	}
+	.animate-body-popup #inner-wrap,
+	.animate-body-popup .site-header-row,
+	.animate-body-popup #colophon {
+		transform: none;
+		transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
+	}
 }
 .popup-drawer-animation-scale.popup-drawer-layout-fullwidth .drawer-inner {
 	transform: scale(0);
 	transform-origin: top right;
-    transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.3s cubic-bezier(0.77,0.2,0.05,1.0);
+	transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
+		opacity 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
 }
-.popup-drawer-animation-scale.popup-drawer-layout-fullwidth.popup-drawer-side-left .drawer-inner {
+.popup-drawer-animation-scale.popup-drawer-layout-fullwidth.popup-drawer-side-left
+	.drawer-inner {
 	transform-origin: top left;
 }
-.popup-drawer-animation-scale.popup-drawer-layout-fullwidth.active .drawer-inner {
-    transform: scale(1);
+.popup-drawer-animation-scale.popup-drawer-layout-fullwidth.active
+	.drawer-inner {
+	transform: scale(1);
 }
-#mobile-drawer.popup-drawer-animation-slice.popup-drawer-layout-fullwidth .drawer-overlay, #mobile-drawer.popup-drawer-animation-slice.popup-drawer-layout-fullwidth .drawer-inner {
-    background: transparent;
+#mobile-drawer.popup-drawer-animation-slice.popup-drawer-layout-fullwidth
+	.drawer-overlay,
+#mobile-drawer.popup-drawer-animation-slice.popup-drawer-layout-fullwidth
+	.drawer-inner {
+	background: transparent;
 }
 
 .popup-drawer .drawer-header .drawer-toggle {
-    width: 1em;
-    position: relative;
-    height: 1em;
-    box-sizing: content-box;
+	width: 1em;
+	position: relative;
+	height: 1em;
+	box-sizing: content-box;
 	font-size: 24px;
 }
 .drawer-toggle .toggle-close-bar {
-    width: 0.75em;
-    height: 0.08em;
-    background: currentColor;
-    transform-origin: center center;
-    position: absolute;
-    margin-top: -0.04em;
+	width: 0.75em;
+	height: 0.08em;
+	background: currentColor;
+	transform-origin: center center;
+	position: absolute;
+	margin-top: -0.04em;
 	opacity: 0;
-	border-radius:0.08em;
-    left: 50%;
-    margin-left: -0.375em;
-    top: 50%;
+	border-radius: 0.08em;
+	left: 50%;
+	margin-left: -0.375em;
+	top: 50%;
 	transform: rotate(45deg) translateX(-50%);
-	transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1), opacity 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
+	transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1),
+		opacity 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
 	transition-delay: 0.2s;
 }
 .drawer-toggle .toggle-close-bar:last-child {
@@ -542,39 +586,39 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 	}
 }
 .popup-drawer .drawer-content.content-valign-middle {
-    min-height: calc( 100% - ( 1.2em + 24px ) );
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding-bottom: calc( 1.2em + 24px );
-	max-height: calc( 100% - ( 1.2em + 24px ));
-    overflow: auto;
+	min-height: calc(100% - (1.2em + 24px));
+	display: flex;
+	justify-content: safe center;
+	flex-direction: column;
+	padding-bottom: calc(1.2em + 24px);
+	//max-height: calc(100% - (1.2em + 24px));
+	overflow: auto;
 }
 .popup-drawer .drawer-content.content-valign-bottom {
-    min-height: calc( 100% - ( 1.2em + 24px ) );
-    display: flex;
+	min-height: calc(100% - (1.2em + 24px));
+	display: flex;
 	justify-content: flex-end;
-    flex-direction: column;
-    padding-bottom: calc( 1.2em + 24px );
-	max-height: calc( 100% - ( 1.2em + 24px ));
-    overflow: auto;
+	flex-direction: column;
+	padding-bottom: calc(1.2em + 24px);
+	max-height: calc(100% - (1.2em + 24px));
+	overflow: auto;
 	.site-header-item-mobile-navigation {
 		display: block;
 		overflow: auto;
-		max-height: calc( 100% - ( 1.2em + 24px ));
+		max-height: calc(100% - (1.2em + 24px));
 	}
 }
 .popup-drawer .drawer-content.content-align-center {
-    text-align: center;
+	text-align: center;
 }
 .popup-drawer .drawer-content.content-align-center .site-header-item {
-    justify-content: center;
+	justify-content: center;
 }
 .popup-drawer .drawer-content.content-align-right {
-    text-align: right;
+	text-align: right;
 }
 .popup-drawer .drawer-content.content-align-right .site-header-item {
-    justify-content: flex-end;
+	justify-content: flex-end;
 }
 .popup-drawer-layout-fullwidth.popup-drawer-animation-slice {
 	.drawer-inner {
@@ -595,7 +639,7 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 	}
 	.pop-portion-bg {
 		flex: 1 1 100%;
-		background: rgba(9,12,16,0.97);
+		background: rgba(9, 12, 16, 0.97);
 		transform: translateX(-100%);
 		transition: transform 0.3s cubic-bezier(0.77, 0.2, 0.05, 1);
 	}
@@ -620,49 +664,53 @@ body[class*='amp-mode-'] .mobile-navigation ul ul {
 	}
 }
 
-@media screen and ( max-width: $tablet-minus-query) {
+@media screen and (max-width: $tablet-minus-query) {
 	.popup-drawer-layout-sidepanel.popup-mobile-drawer-side-right {
 		.drawer-inner {
 			transform: translateX(100%);
-			right:0;
-			left:auto;
+			right: 0;
+			left: auto;
 		}
 	}
 	.popup-drawer-layout-sidepanel.popup-mobile-drawer-side-left {
 		.drawer-inner {
 			transform: translateX(-100%);
-			right:auto;
-			left:0;
+			right: auto;
+			left: 0;
 		}
 	}
 }
 body.admin-bar .popup-drawer {
 	top: 46px;
-	.drawer-inner { top: 46px; }
+	.drawer-inner {
+		top: 46px;
+	}
 }
-@media screen and ( min-width: 783px) {
+@media screen and (min-width: 783px) {
 	body.admin-bar .popup-drawer {
 		top: 32px;
-		.drawer-inner { top: 32px; }
+		.drawer-inner {
+			top: 32px;
+		}
 	}
 }
 .popup-drawer.show-drawer {
-    display: block;
+	display: block;
 }
 .popup-drawer.active {
 	left: 0;
-    opacity: 1;
+	opacity: 1;
 	right: 0;
 	transition: opacity 0.25s ease-out;
 	.drawer-inner {
-		opacity:1;
+		opacity: 1;
 		transform: translateX(0%);
 	}
 	.drawer-overlay {
-		opacity:1;
+		opacity: 1;
 		cursor: pointer;
 	}
 }
 body[class*="showing-popup-drawer-"] {
-    overflow: hidden;
+	overflow: hidden;
 }

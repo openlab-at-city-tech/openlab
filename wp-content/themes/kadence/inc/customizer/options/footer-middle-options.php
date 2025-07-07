@@ -21,6 +21,14 @@ ob_start(); ?>
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
+
+ob_start(); ?>
+<div class="kadence-compontent-description">
+	<p style="margin:0"><?php echo esc_html__( 'Title and Content settings affect legacy widgets. For block editor widgets use settings in the editor.', 'kadence' ); ?></p>
+</div>
+<?php
+$component_description = ob_get_clean();
+
 $settings = array(
 	'footer_middle_tabs' => array(
 		'control_type' => 'kadence_blank_control',
@@ -432,6 +440,19 @@ $settings = array(
 				'vh'  => 1,
 			),
 			'units'   => array( 'px', 'em', 'rem', 'vh' ),
+		),
+	),
+	'footer_middle_widget_settings' => array(
+		'control_type' => 'kadence_blank_control',
+		'section'      => 'footer_middle',
+		'settings'     => false,
+		'priority'     => 1,
+		'description'  => $component_description,
+		'context'      => array(
+			array(
+				'setting' => '__current_tab',
+				'value'   => 'design',
+			),
 		),
 	),
 	'footer_middle_widget_title' => array(

@@ -21,6 +21,14 @@ ob_start(); ?>
 </div>
 <?php
 $compontent_tabs = ob_get_clean();
+
+ob_start(); ?>
+<div class="kadence-compontent-description">
+	<p style="margin:0"><?php echo esc_html__( 'Title and Content settings affect legacy widgets. For block editor widgets use settings in the editor.', 'kadence' ); ?></p>
+</div>
+<?php
+$component_description = ob_get_clean();
+
 Theme_Customizer::add_settings(
 	array(
 		'footer_bottom_tabs' => array(
@@ -427,6 +435,13 @@ Theme_Customizer::add_settings(
 				),
 				'units'   => array( 'px', 'em', 'rem', 'vh' ),
 			),
+		),
+		'footer_bottom_widget_settings' => array(
+			'control_type' => 'kadence_blank_control',
+			'section'      => 'footer_bottom_design',
+			'settings'     => false,
+			'priority'     => 1,
+			'description'  => $component_description,
 		),
 		'footer_bottom_widget_title' => array(
 			'control_type' => 'kadence_typography_control',

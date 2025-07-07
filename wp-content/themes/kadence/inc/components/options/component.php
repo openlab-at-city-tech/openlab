@@ -1011,6 +1011,7 @@ class Component implements Component_Interface, Templating_Component_Interface {
 						'unit' => 'em',
 					),
 					'secondary_navigation_stretch' => false,
+					'secondary_navigation_open_type' => 'hover',
 					'secondary_navigation_fill_stretch' => false,
 					'secondary_navigation_style'   => 'standard',
 					'secondary_navigation_color'   => array(
