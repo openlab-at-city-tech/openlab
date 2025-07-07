@@ -217,7 +217,7 @@ if ( ! isset( $type ) ) {
 	<p><?php esc_html_e( 'The key you entered is invalid. Please double-check it.', 'akismet' ); ?></p>
 </div>
 
-<?php elseif ( $type === 'existing-key-invalid' ) : ?>
+<?php elseif ( $type === Akismet_Admin::NOTICE_EXISTING_KEY_INVALID ) : ?>
 <div class="akismet-alert is-bad">
 	<h3 class="akismet-alert__heading"><?php echo esc_html( __( 'Your API key is no longer valid.', 'akismet' ) ); ?></h3>
 	<p>

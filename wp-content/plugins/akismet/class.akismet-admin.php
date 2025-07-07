@@ -8,7 +8,10 @@
 // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped
 
 class Akismet_Admin {
+
 	const NONCE = 'akismet-update-key';
+
+	const NOTICE_EXISTING_KEY_INVALID = 'existing-key-invalid';
 
 	private static $initiated = false;
 	private static $notices   = array();
@@ -97,7 +100,6 @@ class Akismet_Admin {
 			}
 		}
 
-		load_plugin_textdomain( 'akismet' );
 		add_meta_box( 'akismet-status', __( 'Comment History', 'akismet' ), array( 'Akismet_Admin', 'comment_status_meta_box' ), 'comment', 'normal' );
 
 		if ( function_exists( 'wp_add_privacy_policy_content' ) ) {
@@ -170,18 +172,7 @@ class Akismet_Admin {
 			wp_register_style( 'akismet-admin', plugin_dir_url( __FILE__ ) . $akismet_admin_css_path, array(), self::get_asset_file_version( $akismet_admin_css_path ) );
 			wp_enqueue_style( 'akismet-admin' );
 
-			// Enqueue the Akismet activation banner background separately so we can
-			// include the right path to the image. Shown on edit-comments.php and plugins.php.
-			if ( in_array( $hook_suffix, self::$activation_banner_pages, true ) ) {
-				$activation_banner_url = esc_url(
-					plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
-				);
-				$inline_css            = '.akismet-activate {' . PHP_EOL .
-				'background-image: url(' . $activation_banner_url . ');' . PHP_EOL .
-				'}';
-
-				wp_add_inline_style( 'akismet-admin', $inline_css );
-			}
+			wp_add_inline_style( 'akismet-admin', self::get_inline_css() );
 
 			wp_register_script( 'akismet.js', plugin_dir_url( __FILE__ ) . '_inc/akismet.js', array( 'jquery' ), self::get_asset_file_version( '_inc/akismet.js' ) );
 			wp_enqueue_script( 'akismet.js' );
@@ -255,8 +246,8 @@ class Akismet_Admin {
 							'<p><strong>' . esc_html__( 'Akismet Setup', 'akismet' ) . '</strong></p>' .
 							'<p>' . esc_html__( 'If you already have an API key', 'akismet' ) . '</p>' .
 							'<ol>' .
-								'<li>' . esc_html__( 'Copy and paste the API key into the text field.', 'akismet' ) . '</li>' .
-								'<li>' . esc_html__( 'Click the Use this Key button.', 'akismet' ) . '</li>' .
+							'<li>' . esc_html__( 'Copy and paste the API key into the text field.', 'akismet' ) . '</li>' .
+							'<li>' . esc_html__( 'Click the Use this Key button.', 'akismet' ) . '</li>' .
 							'</ol>',
 					)
 				);
@@ -415,7 +406,7 @@ class Akismet_Admin {
 	public static function rightnow_stats() {
 		if ( $count = get_option( 'akismet_spam_count' ) ) {
 			$intro = sprintf(
-				/* translators: 1: Akismet website URL, 2: Number of spam comments. */
+			/* translators: 1: Akismet website URL, 2: Number of spam comments. */
 				_n(
 					'<a href="%1$s">Akismet</a> has protected your site from %2$s spam comment already. ',
 					'<a href="%1$s">Akismet</a> has protected your site from %2$s spam comments already. ',
@@ -434,7 +425,7 @@ class Akismet_Admin {
 
 		if ( $queue_count = self::get_spam_count() ) {
 			$queue_text = sprintf(
-				/* translators: 1: Number of comments, 2: Comments page URL. */
+			/* translators: 1: Number of comments, 2: Comments page URL. */
 				_n(
 					'There&#8217;s <a href="%2$s">%1$s comment</a> in your spam queue right now.',
 					'There are <a href="%2$s">%1$s comments</a> in your spam queue right now.',
@@ -485,21 +476,21 @@ class Akismet_Admin {
 
 		echo '<a
 				class="' . esc_attr( implode( ' ', $classes ) ) . '"' .
-				( ! empty( $link ) ? ' href="' . esc_url( $link ) . '"' : '' ) .
-				/* translators: The placeholder is for showing how much of the process has completed, as a percent. e.g., "Checking for Spam (40%)" */
-				' data-progress-label="' . esc_attr( __( 'Checking for Spam (%1$s%)', 'akismet' ) ) . '"
+			( ! empty( $link ) ? ' href="' . esc_url( $link ) . '"' : '' ) .
+			/* translators: The placeholder is for showing how much of the process has completed, as a percent. e.g., "Checking for Spam (40%)" */
+			' data-progress-label="' . esc_attr( __( 'Checking for Spam (%1$s%)', 'akismet' ) ) . '"
 				data-success-url="' . esc_attr(
-					remove_query_arg(
-						array( 'akismet_recheck', 'akismet_recheck_error' ),
-						add_query_arg(
-							array(
-								'akismet_recheck_complete' => 1,
-								'recheck_count'            => urlencode( '__recheck_count__' ),
-								'spam_count'               => urlencode( '__spam_count__' ),
-							)
+				remove_query_arg(
+					array( 'akismet_recheck', 'akismet_recheck_error' ),
+					add_query_arg(
+						array(
+							'akismet_recheck_complete' => 1,
+							'recheck_count'            => urlencode( '__recheck_count__' ),
+							'spam_count'               => urlencode( '__spam_count__' ),
 						)
 					)
-				) . '"
+				)
+			) . '"
 				data-failure-url="' . esc_attr( remove_query_arg( array( 'akismet_recheck', 'akismet_recheck_complete' ), add_query_arg( array( 'akismet_recheck_error' => 1 ) ) ) ) . '"
 				data-pending-comment-count="' . esc_attr( $comments_count->moderated ) . '"
 				data-nonce="' . esc_attr( wp_create_nonce( 'akismet_check_for_spam' ) ) . '"
@@ -708,7 +699,7 @@ class Akismet_Admin {
 						case 'wp-blacklisted':
 						case 'wp-disallowed':
 							$message = sprintf(
-								/* translators: The placeholder is a WordPress PHP function name. */
+							/* translators: The placeholder is a WordPress PHP function name. */
 								esc_html( __( 'Comment was caught by %s.', 'akismet' ) ),
 								function_exists( 'wp_check_comment_disallowed_list' ) ? '<code>wp_check_comment_disallowed_list</code>' : '<code>wp_blacklist_check</code>'
 							);
@@ -798,15 +789,15 @@ class Akismet_Admin {
 						$time_html = '<span style="color: #999;" alt="' . esc_attr( $time ) . '" title="' . esc_attr( $time ) . '">' . sprintf( esc_html__( '%s ago', 'akismet' ), human_time_diff( $row['time'] ) ) . '</span>';
 
 						printf(
-							/* translators: %1$s is a human-readable time difference, like "3 hours ago", and %2$s is an already-translated phrase describing how a comment's status changed, like "This comment was reported as spam." */
+						/* translators: %1$s is a human-readable time difference, like "3 hours ago", and %2$s is an already-translated phrase describing how a comment's status changed, like "This comment was reported as spam." */
 							esc_html( __( '%1$s - %2$s', 'akismet' ) ),
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							$time_html,
-							// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                            // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							$message
 						); // esc_html() is done above so that we can use HTML in $message.
 					} else {
-						// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+                        // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						echo $message; // esc_html() is done above so that we can use HTML in $message.
 					}
 
@@ -1129,7 +1120,12 @@ class Akismet_Admin {
 			}
 		}
 
-		if ( $api_key = Akismet::get_api_key() && ( empty( self::$notices['status'] ) || 'existing-key-invalid' != self::$notices['status'] ) ) {
+		$api_key               = Akismet::get_api_key();
+		$existing_key_is_valid = ! (
+			self::get_notice_by_key( 'status' ) === self::NOTICE_EXISTING_KEY_INVALID
+		);
+
+		if ( $api_key && $existing_key_is_valid ) {
 			self::display_configuration_page();
 			return;
 		}
@@ -1142,8 +1138,14 @@ class Akismet_Admin {
 
 		if ( isset( $_GET['token'] ) && preg_match( '/^(\d+)-[0-9a-f]{20}$/', $_GET['token'] ) ) {
 			$akismet_user = self::verify_wpcom_key( '', '', array( 'token' => $_GET['token'] ) );
-		} elseif ( $jetpack_user = self::get_jetpack_user() ) {
-			$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
+		}
+
+		if ( false === $akismet_user ) {
+			$jetpack_user = self::get_jetpack_user();
+
+			if ( is_array( $jetpack_user ) ) {
+				$akismet_user = self::verify_wpcom_key( $jetpack_user['api_key'], $jetpack_user['user_id'] );
+			}
 		}
 
 		if ( isset( $_GET['action'] ) ) {
@@ -1182,7 +1184,7 @@ class Akismet_Admin {
 
 		if ( ! $akismet_user ) {
 			// This could happen if the user's key became invalid after it was previously valid and successfully set up.
-			self::$notices['status'] = 'existing-key-invalid';
+			self::$notices['status'] = self::NOTICE_EXISTING_KEY_INVALID;
 			self::display_start_page();
 			return;
 		}
@@ -1362,6 +1364,21 @@ class Akismet_Admin {
 		}
 	}
 
+	/**
+	 * Gets a specific notice by key.
+	 *
+	 * @param $key
+	 * @return mixed
+	 */
+	private static function get_notice_by_key( $key ) {
+		return self::$notices[ $key ] ?? null;
+	}
+
+	/**
+	 * Gets a Jetpack user.
+	 *
+	 * @return array|false
+	 */
 	private static function get_jetpack_user() {
 		if ( ! class_exists( 'Jetpack' ) ) {
 			return false;
@@ -1526,5 +1543,38 @@ class Akismet_Admin {
 
 		// Otherwise, use the AKISMET_VERSION.
 		return AKISMET_VERSION;
+	}
+
+	/**
+	 * Return inline CSS for Akismet admin.
+	 *
+	 * @return string
+	 */
+	protected static function get_inline_css(): string {
+		global $hook_suffix;
+
+		// Hide excess compatible plugins when there are lots.
+		$inline_css = '
+			.akismet-compatible-plugins__card:nth-child(n+' . esc_attr( Akismet_Compatible_Plugins::DEFAULT_VISIBLE_PLUGIN_COUNT + 1 ) . ') {
+				display: none;
+			}
+
+			.akismet-compatible-plugins__list.is-expanded .akismet-compatible-plugins__card:nth-child(n+' . esc_attr( Akismet_Compatible_Plugins::DEFAULT_VISIBLE_PLUGIN_COUNT + 1 ) . ') {
+				display: flex;
+			}
+		';
+
+		// Enqueue the Akismet activation banner background separately so we can
+		// include the right path to the image. Shown on edit-comments.php and plugins.php.
+		if ( in_array( $hook_suffix, self::$activation_banner_pages, true ) ) {
+			$activation_banner_url = esc_url(
+				plugin_dir_url( __FILE__ ) . '_inc/img/akismet-activation-banner-elements.png'
+			);
+			$inline_css           .= '.akismet-activate {' . PHP_EOL .
+				'background-image: url(' . $activation_banner_url . ');' . PHP_EOL .
+				'}';
+		}
+
+		return $inline_css;
 	}
 }

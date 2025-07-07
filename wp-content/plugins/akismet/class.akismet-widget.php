@@ -9,8 +9,6 @@
 class Akismet_Widget extends WP_Widget {
 
 	function __construct() {
-		load_plugin_textdomain( 'akismet' );
-
 		add_action( 'wp_enqueue_scripts', array( $this, 'akismet_widget_enqueue_styles' ) );
 
 		parent::__construct(
