@@ -24,7 +24,6 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 	 * @since 1.5.4
 	 */
 	class Astra_Walker_Page extends Walker_Page {
-
 		/**
 		 * Outputs the beginning of the current level in the tree before elements are output.
 		 *
@@ -48,7 +47,6 @@ if ( ! class_exists( 'Astra_Walker_Page' ) ) {
 			$indent  = str_repeat( $t, $depth );
 			$output .= "{$n}{$indent}<ul class='children sub-menu'>{$n}";
 			$output  = apply_filters( 'astra_caret_wrap_filter', $output, $args['sort_column'] );
-
 		}
 
 		/**

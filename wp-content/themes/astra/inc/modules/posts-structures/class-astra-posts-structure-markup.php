@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Astra_Posts_Structure_Markup {
-
 	/**
 	 *  Constructor
 	 */
@@ -48,8 +47,7 @@ class Astra_Posts_Structure_Markup {
 	public function astra_archive_custom_title( $title ) {
 		$post_type    = astra_get_post_type();
 		$custom_title = astra_get_option( 'ast-dynamic-archive-' . $post_type . '-custom-title', '' );
-		$title        = ! empty( $custom_title ) ? $custom_title : $title;
-		return $title;
+		return ! empty( $custom_title ) ? $custom_title : $title;
 	}
 
 	/**
@@ -90,11 +88,11 @@ class Astra_Posts_Structure_Markup {
 			return;
 		}
 
-		$layout_type = ( 'single' === $type ) ? astra_get_option( 'ast-dynamic-single-' . $post_type . '-layout', 'layout-1' ) : astra_get_option( 'ast-dynamic-archive-' . $post_type . '-layout', 'layout-1' );
+		$layout_type = 'single' === $type ? astra_get_option( 'ast-dynamic-single-' . $post_type . '-layout', 'layout-1' ) : astra_get_option( 'ast-dynamic-archive-' . $post_type . '-layout', 'layout-1' );
 
 		// If banner title section is disabled then halt further processing.
 		if ( 'single' === $type ) {
-			if ( false === astra_get_option( 'ast-single-' . $post_type . '-title', ( class_exists( 'WooCommerce' ) && 'product' === $post_type ) ? false : true ) ) {
+			if ( false === astra_get_option( 'ast-single-' . $post_type . '-title', class_exists( 'WooCommerce' ) && 'product' === $post_type ? false : true ) ) {
 				add_filter( 'astra_single_layout_one_banner_visibility', '__return_false' );
 				return;
 			}
@@ -107,7 +105,7 @@ class Astra_Posts_Structure_Markup {
 			}
 		} else {
 			// If layout-1 is set then no need to process further.
-			if ( false === astra_get_option( 'ast-archive-' . $post_type . '-title', ( class_exists( 'WooCommerce' ) && 'product' === $post_type ) ? false : true ) ) {
+			if ( false === astra_get_option( 'ast-archive-' . $post_type . '-title', class_exists( 'WooCommerce' ) && 'product' === $post_type ? false : true ) ) {
 				add_filter( 'astra_the_title_enabled', '__return_false' );
 				return;
 			}

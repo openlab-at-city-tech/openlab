@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.1.3
  */
 class Astra_CreativeWork_Schema extends Astra_Schema {
-
 	/**
 	 * Setup schema
 	 *
@@ -197,12 +196,11 @@ class Astra_CreativeWork_Schema extends Astra_Schema {
 	 *
 	 * @param  array $attr An array of attributes.
 	 *
-	 * @return array       Updated embed markup.
+	 * @return string|array Updated embed markup.
 	 */
 	public function article_image_schema_prop( $attr ) {
-		$attr = 'itemprop=image';
-
-		return $attr;
+		/** @psalm-suppress InvalidReturnStatement */
+		return 'itemprop=image';
 	}
 
 	/**

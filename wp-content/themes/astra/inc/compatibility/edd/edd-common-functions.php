@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Current Page is EDD page
  */
-if ( ! function_exists( 'astra_is_edd_page' ) ) :
+if ( ! function_exists( 'astra_is_edd_page' ) ) {
 
 	/**
 	 * Check current page is an EDD page
@@ -37,13 +37,12 @@ if ( ! function_exists( 'astra_is_edd_page' ) ) :
 		}
 		return false;
 	}
-
-endif;
+}
 
 /**
  * Current Page is EDD single page
  */
-if ( ! function_exists( 'astra_is_edd_single_page' ) ) :
+if ( ! function_exists( 'astra_is_edd_single_page' ) ) {
 
 	/**
 	 * Check current page is an EDD single page
@@ -63,13 +62,12 @@ if ( ! function_exists( 'astra_is_edd_single_page' ) ) :
 		}
 		return false;
 	}
-
-endif;
+}
 
 /**
  * Current Page is EDD archive page
  */
-if ( ! function_exists( 'astra_is_edd_archive_page' ) ) :
+if ( ! function_exists( 'astra_is_edd_archive_page' ) ) {
 
 	/**
 	 * Check current page is an EDD archive page
@@ -87,14 +85,12 @@ if ( ! function_exists( 'astra_is_edd_archive_page' ) ) :
 		}
 		return false;
 	}
-
-endif;
-
+}
 
 /**
  * Current Page is EDD single Product page
  */
-if ( ! function_exists( 'astra_is_edd_single_product_page' ) ) :
+if ( ! function_exists( 'astra_is_edd_single_product_page' ) ) {
 
 	/**
 	 * Check current page is an EDD single product page
@@ -108,8 +104,7 @@ if ( ! function_exists( 'astra_is_edd_single_product_page' ) ) :
 		}
 		return false;
 	}
-
-endif;
+}
 
 if ( ! function_exists( 'astra_edd_archive_product_structure' ) ) {
 
@@ -202,22 +197,22 @@ if ( ! function_exists( 'astra_edd_terms_list' ) ) {
 	 * @return void
 	 */
 	function astra_edd_terms_list( $taxonomy_name ) {
-		
+
 		$product_id = get_the_ID();
-		
+
 		if ( ! $product_id ) {
 			return;
 		}
 
 		// Getting the terms related to the current products.
 		$terms = get_the_terms( $product_id, $taxonomy_name );
-		
+
 		if ( ! $terms || is_wp_error( $terms ) ) {
 			return;
 		}
 		?>
 	<div class="ast-edd-download-categories">
-		<?php foreach ( $terms as $term ) : ?>
+		<?php foreach ( $terms as $term ) { ?>
 			<?php
 				$term_link = get_term_link( $term, $taxonomy_name );
 
@@ -233,7 +228,7 @@ if ( ! function_exists( 'astra_edd_terms_list' ) ) {
 			?>
 			" title="<?php echo esc_attr( $term->name ); ?>"> <?php echo esc_html( $term->name ); ?> </a>
 			<?php
-		endforeach;
+		}
 		?>
 	</div>
 		<?php
@@ -305,7 +300,6 @@ if ( ! function_exists( 'astra_edd_archive_product_add_to_cart' ) ) {
 	add_action( 'astra_edd_archive_add_to_cart', 'astra_edd_archive_product_add_to_cart' );
 }
 
-
 if ( ! function_exists( 'astra_edd_archive_product_category' ) ) {
 	/**
 	 * Show EDD archive product category
@@ -319,7 +313,6 @@ if ( ! function_exists( 'astra_edd_archive_product_category' ) ) {
 	add_action( 'astra_edd_archive_category', 'astra_edd_archive_product_category' );
 }
 
-
 /**
  * EDD archive page Cart button markup
  *
@@ -330,7 +323,7 @@ function astra_edd_cart_button_markup() {
 	$add_to_cart_text     = astra_get_i18n_option( 'edd-archive-add-to-cart-button-text', _x( '%astra%', 'EDD Product Archive: Cart Button Text', 'astra' ) );
 	$variable_button_text = astra_get_i18n_option( 'edd-archive-variable-button-text', _x( '%astra%', 'EDD Product Archive: Variable Product Button Text', 'astra' ) );
 	$output               = edd_get_purchase_link();
-	if ( edd_has_variable_prices( get_the_ID() ) && 'button' == $variable_button ) {
+	if ( edd_has_variable_prices( get_the_ID() ) && 'button' === $variable_button ) {
 		$output  = '<div class="ast-edd-variable-details-button-wrap">';
 		$output .= '<a class="button ast-edd-variable-btn" href="' . esc_url( get_permalink() ) . '">' . esc_html( $variable_button_text ) . '</a>';
 		$output .= '</div>';

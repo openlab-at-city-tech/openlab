@@ -68,7 +68,7 @@ function astra_below_footer_configuration() {
 				'render_callback'     => array( Astra_Builder_Footer::get_instance(), 'below_footer' ),
 			),
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		/**
@@ -191,7 +191,7 @@ function astra_below_footer_configuration() {
 				'max'  => 600,
 			),
 			'context'     => Astra_Builder_Helper::$design_tab,
-			'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'     => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		// Section: Below Footer Border Color.
@@ -265,5 +265,5 @@ function astra_below_footer_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_below_footer_configuration();
+	add_action( 'init', 'astra_below_footer_configuration' );
 }

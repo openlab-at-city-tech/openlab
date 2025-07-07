@@ -45,7 +45,7 @@ if ( is_customize_preview() && is_callable( 'Astra_Builder_UI_Controller::render
 	if ( 'above' === $comment_form_position ) {
 		comment_form();
 	}
-	if ( have_comments() ) :
+	if ( have_comments() ) {
 		astra_markup_open( 'comment-count-wrapper' );
 		$title_tag = apply_filters( 'astra_comment_title_tag', 'h3' );
 		?>
@@ -66,7 +66,7 @@ if ( is_customize_preview() && is_callable( 'Astra_Builder_UI_Controller::render
 			</<?php echo esc_attr( $title_tag ); ?>>
 		<?php
 		astra_markup_close( 'comment-count-wrapper' );
-		if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) :
+		if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) {
 			?>
 		<nav id="comment-nav-above" class="navigation comment-navigation" aria-label="<?php esc_attr_e( 'Comments Navigation', 'astra' ); ?>">
 			<h3 class="screen-reader-text"><?php echo esc_html( astra_default_strings( 'string-comment-navigation-next', false ) ); ?></h3>
@@ -77,7 +77,7 @@ if ( is_customize_preview() && is_callable( 'Astra_Builder_UI_Controller::render
 
 			</div><!-- .nav-links -->
 		</nav><!-- #comment-nav-above -->
-		<?php endif; ?>
+		<?php } ?>
 
 		<ol class="ast-comment-list">
 			<?php
@@ -90,7 +90,7 @@ if ( is_customize_preview() && is_callable( 'Astra_Builder_UI_Controller::render
 			?>
 		</ol><!-- .ast-comment-list -->
 
-		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) : ?>
+		<?php if ( get_comment_pages_count() > 1 && get_option( 'page_comments' ) ) { ?>
 		<nav id="comment-nav-below" class="navigation comment-navigation" aria-label="<?php esc_attr_e( 'Comments Navigation', 'astra' ); ?>">
 			<h3 class="screen-reader-text"><?php echo esc_html( astra_default_strings( 'string-comment-navigation-next', false ) ); ?></h3>
 			<div class="nav-links">
@@ -100,16 +100,16 @@ if ( is_customize_preview() && is_callable( 'Astra_Builder_UI_Controller::render
 
 			</div><!-- .nav-links -->
 		</nav><!-- #comment-nav-below -->
-		<?php endif; ?>
+		<?php } ?>
 
-	<?php endif; ?>
+	<?php } ?>
 
 	<?php
 		// If comments are closed and there are comments, let's leave a little note, shall we?
-	if ( ! comments_open() && get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) :
+	if ( ! comments_open() && get_comments_number() && post_type_supports( get_post_type(), 'comments' ) ) {
 		?>
 		<p class="no-comments"><?php echo esc_html( astra_default_strings( 'string-comment-closed', false ) ); ?></p>
-	<?php endif; ?>
+	<?php } ?>
 
 	<?php
 	if ( 'below' === $comment_form_position ) {

@@ -16,7 +16,6 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 	 * Class Astra_Builder_Header.
 	 */
 	final class Astra_Builder_Header {
-
 		/**
 		 * Member Variable
 		 *
@@ -24,14 +23,12 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 		 */
 		private static $instance = null;
 
-
 		/**
 		 * Dynamic Methods.
 		 *
 		 * @var array dynamic methods
 		 */
 		private static $methods = array();
-
 
 		/**
 		 *  Initiator
@@ -91,7 +88,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 					self::$methods[] = 'menu_' . $index;
 				}
 
-				add_action( 'astra_mobile_site_identity', __CLASS__ . '::site_identity' );
+				add_action( 'astra_mobile_site_identity', self::class . '::site_identity' );
 				add_action( 'astra_header_search', array( $this, 'header_search' ), 10, 1 );
 				add_action( 'astra_header_woo_cart', array( $this, 'header_woo_cart' ), 10, 1 );
 				add_action( 'astra_header_edd_cart', array( $this, 'header_edd_cart' ) );
@@ -103,7 +100,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 				add_action( 'astra_header_menu_mobile', array( $this, 'header_mobile_menu_markup' ) );
 			}
 
-			add_action( 'astra_site_identity', __CLASS__ . '::site_identity' );
+			add_action( 'astra_site_identity', self::class . '::site_identity' );
 		}
 
 		/**
@@ -437,7 +434,7 @@ if ( ! class_exists( 'Astra_Builder_Header' ) ) {
 			// Get the responsive cart click action setting.
 			$responsive_cart_action = astra_get_option( 'responsive-cart-click-action' );
 			$desktop_cart_action    = astra_get_option( 'woo-header-cart-click-action' );
-		
+
 			// Hide cart flyout only if current page is checkout/cart or if redirect option is selected.
 			if (
 				(

@@ -10,12 +10,12 @@
  * Class Astre_Starter_Content
  */
 class Astra_Starter_Content {
-	const HOME_SLUG     = 'home';
-	const ABOUT_SLUG    = '#about';
-	const SERVICES_SLUG = '#services';
-	const REVIEWS_SLUG  = '#reviews';
-	const WHY_US_SLUG   = '#whyus';
-	const CONTACT_SLUG  = '#contact';
+	public const HOME_SLUG     = 'home';
+	public const ABOUT_SLUG    = '#about';
+	public const SERVICES_SLUG = '#services';
+	public const REVIEWS_SLUG  = '#reviews';
+	public const WHY_US_SLUG   = '#whyus';
+	public const CONTACT_SLUG  = '#contact';
 
 	/**
 	 * Constructor
@@ -59,7 +59,6 @@ class Astra_Starter_Content {
 		add_filter( 'astra_theme_defaults', array( $this, 'theme_defaults' ) );
 
 		add_filter( 'astra_global_color_palette', array( $this, 'theme_color_palettes_defaults' ) );
-
 	}
 
 	/**
@@ -204,7 +203,6 @@ class Astra_Starter_Content {
 
 		return $json ? $json : $defaults;
 	}
-
 
 	/**
 	 * Return starter content definition.

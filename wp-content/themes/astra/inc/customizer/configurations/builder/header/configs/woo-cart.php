@@ -19,9 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array Astra Customizer Configurations with updated configurations.
  */
 function astra_header_woo_cart_configuration( $configurations = array() ) {
-	$_section                   = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? 'section-header-woo-cart' : 'section-woo-shop-cart';
-	$astra_hfb_enabled          = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? true : false;
-	$cart_outline_width_context = ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config;
+	$_section                   = true === Astra_Builder_Helper::$is_header_footer_builder_active ? 'section-header-woo-cart' : 'section-woo-shop-cart';
+	$astra_hfb_enabled          = true === Astra_Builder_Helper::$is_header_footer_builder_active ? true : false;
+	$cart_outline_width_context = true === Astra_Builder_Helper::$is_header_footer_builder_active ? Astra_Builder_Helper::$design_tab_config : Astra_Builder_Helper::$general_tab_config;
 
 	$cart_icon_choices = array();
 
@@ -85,7 +85,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'transport'  => 'postMessage',
 			'context'    => Astra_Builder_Helper::$general_tab,
 			'responsive' => false,
-			'divider'    => ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) ? array( 'ast_class' => 'ast-top-spacing ast-bottom-section-divider' ) : array( 'ast_class' => 'ast-section-spacing' ),
+			'divider'    => true === Astra_Builder_Helper::$is_header_footer_builder_active ? array( 'ast_class' => 'ast-top-spacing ast-bottom-section-divider' ) : array(),
 		),
 
 		/**
@@ -172,14 +172,14 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'title'    => __( 'Cart Click', 'astra' ),
 			'priority' => 60,
 			'settings' => array(),
-			'context'  => array( 
+			'context'  => array(
 				Astra_Builder_Helper::$desktop_general_tab,
 				array(
 					'setting' => 'ast_selected_tab',
 					'value'   => 'general',
 				),
 			),
-			'divider'  => array( 'ast_class' => 'ast-section-spacing ast-bottom-spacing' ),
+			'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
 		),
 
 		/**
@@ -231,7 +231,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 				),
 			),
 			'transport'   => 'refresh',
-		), 
+		),
 		/**
 		 * Option: Woo sidebar Off-Canvas Slide-Out.
 		 */
@@ -257,7 +257,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			),
 			'renderAs'   => 'text',
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-top-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-top-divider' ),
 		),
 
 		/**
@@ -287,7 +287,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 					'max'  => 100,
 				),
 			),
-			'divider'           => array( 'ast_class' => 'ast-top-dotted-divider' ),
+			'divider'           => array( 'ast_class' => 'ast-top-divider' ),
 		),
 
 		/**
@@ -323,7 +323,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'responsive' => false,
 			'renderAs'   => 'text',
 			'context'    => Astra_Builder_Helper::$design_tab,
-			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
 		),
 
 		/**
@@ -402,7 +402,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 				),
 			),
 			'responsive' => false,
-			'divider'    => array( 'ast_class' => 'ast-bottom-dotted-divider' ),
+			'divider'    => array( 'ast_class' => 'ast-bottom-divider' ),
 		),
 
 		array(
@@ -557,7 +557,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			),
 			'section'           => 'section-transparent-header',
 			'priority'          => 85,
-			'divider'           => array( 'ast_class' => 'ast-top-divider ast-top-dotted-divider' ),
+			'divider'           => array( 'ast_class' => 'ast-top-divider ast-top-divider' ),
 		),
 	);
 
@@ -592,8 +592,8 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 	if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 		$_configs = array(
 			/**
-			* Woo Cart section
-			*/
+			 * Woo Cart section
+			 */
 			array(
 				'name'     => $_section,
 				'type'     => 'section',
@@ -603,8 +603,8 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			),
 
 			/**
-			* Option: Cart Icon Size
-			*/
+			 * Option: Cart Icon Size
+			 */
 			array(
 				'name'              => ASTRA_THEME_SETTINGS . '[header-woo-cart-icon-size]',
 				'section'           => $_section,
@@ -786,7 +786,8 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 				'priority' => 70,
 				'settings' => array(),
 				'context'  => Astra_Builder_Helper::$design_tab,
-				'divider'  => array( 'ast_class' => 'ast-section-spacing' ),
+				'divider'  => array( 'ast_class' => 'ast-section-spacing ast-top-divider' ),
+
 			),
 
 			array(
@@ -1004,7 +1005,7 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 			'section'  => $_section,
 			'priority' => 999,
 			'title'    => __( 'View Astra Pro Features', 'astra' ),
-			'url'      => astra_get_pro_url( 'https://wpastra.com/pricing/', 'customizer', 'free-theme', 'header-builder' ),
+			'url'      => astra_get_pro_url( '/pricing/', 'free-theme', 'customizer', 'header-builder' ),
 			'settings' => array(),
 			'divider'  => array( 'ast_class' => 'ast-top-section-divider' ),
 			'context'  => array(),
@@ -1021,5 +1022,5 @@ function astra_header_woo_cart_configuration( $configurations = array() ) {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_woo_cart_configuration();
+	add_action( 'init', 'astra_header_woo_cart_configuration', 10, 0 );
 }

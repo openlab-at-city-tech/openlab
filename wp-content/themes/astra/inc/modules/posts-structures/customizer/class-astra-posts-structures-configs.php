@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * @since 4.0.0
  */
 class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Excluding some post types with avoiding narrow-width container layout.
 	 *
@@ -31,8 +30,7 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 	 * @since 4.0.0
 	 */
 	public static function get_narrow_width_exculde_cpts() {
-		$exclude_cpts = array();
-		if ( ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ) ) {
+		if ( ! Astra_Dynamic_CSS::astra_fullwidth_sidebar_support() ) {
 			return apply_filters( 'astra_exculde_narrow_width_support_posttypes', array( 'product', 'download', 'course', 'lesson', 'tutor_quiz', 'tutor_assignments', 'sfwd-assignment', 'sfwd-essays', 'sfwd-transactions', 'sfwd-certificates', 'sfwd-quiz' ) );
 		}
 
@@ -70,6 +68,7 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 				array(
 					'name'     => 'section-posts-structure',
 					'type'     => 'section',
+					'section'  => 'section-blog-group',
 					'priority' => 69,
 					'title'    => __( 'Custom Post Types', 'astra' ),
 				),
@@ -81,7 +80,7 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 			/**
 			 * Individual post types main section.
 			 */
-			foreach ( $post_types as $index => $label ) {
+			foreach ( $post_types as $label ) {
 				$post_type_object = get_post_type_object( $label );
 				$parent_section   = 'section-posts-structure';
 
@@ -106,7 +105,7 @@ class Astra_Posts_Structures_Configs extends Astra_Customizer_Config_Base {
 					'title'    => $section_title,
 					'priority' => 69,
 				);
-				
+
 				if ( ! in_array( $label, $ignore_archive_for_posttypes ) ) {
 					$_configs[] = array(
 						'name'     => 'archive-posttype-' . $label,

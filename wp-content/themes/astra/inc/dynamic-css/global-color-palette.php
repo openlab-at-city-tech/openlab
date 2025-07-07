@@ -26,6 +26,16 @@ function astra_generate_global_palette_style( $dynamic_css ) {
 	$variable_prefix  = Astra_Global_Palette::get_css_variable_prefix();
 	$palette_css_vars = array();
 
+	/**
+	 * Filter the current global color palette.
+	 *
+	 * @param array $global_palette The current global color palette.
+	 *
+	 * @return array The filtered global color palette.
+	 * @since 4.10.0
+	 */
+	$global_palette = apply_filters( 'astra_global_current_palette', $global_palette );
+
 	if ( isset( $global_palette['palette'] ) ) {
 		foreach ( $global_palette['palette'] as $key => $color ) {
 			$palette_key = str_replace( '--', '-', $variable_prefix ) . $key;

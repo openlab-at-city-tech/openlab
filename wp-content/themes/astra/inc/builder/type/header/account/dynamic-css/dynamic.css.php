@@ -35,19 +35,19 @@ function astra_hb_account_dynamic_css( $dynamic_css, $dynamic_css_filtered = '' 
 
 	$icon_size = astra_get_option( 'header-account-icon-size' );
 
-	$icon_size_desktop = ( isset( $icon_size ) && isset( $icon_size['desktop'] ) && ! empty( $icon_size['desktop'] ) ) ? $icon_size['desktop'] : 20;
+	$icon_size_desktop = isset( $icon_size ) && isset( $icon_size['desktop'] ) && ! empty( $icon_size['desktop'] ) ? $icon_size['desktop'] : 20;
 
-	$icon_size_tablet = ( isset( $icon_size ) && isset( $icon_size['tablet'] ) && ! empty( $icon_size['tablet'] ) ) ? $icon_size['tablet'] : 20;
+	$icon_size_tablet = isset( $icon_size ) && isset( $icon_size['tablet'] ) && ! empty( $icon_size['tablet'] ) ? $icon_size['tablet'] : 20;
 
-	$icon_size_mobile = ( isset( $icon_size ) && isset( $icon_size['mobile'] ) && ! empty( $icon_size['mobile'] ) ) ? $icon_size['mobile'] : 20;
+	$icon_size_mobile = isset( $icon_size ) && isset( $icon_size['mobile'] ) && ! empty( $icon_size['mobile'] ) ? $icon_size['mobile'] : 20;
 
 	$image_width = astra_get_option( 'header-account-image-width' );
 
-	$image_width_desktop = ( isset( $image_width ) && isset( $image_width['desktop'] ) && ! empty( $image_width['desktop'] ) ) ? $image_width['desktop'] : 20;
+	$image_width_desktop = isset( $image_width ) && isset( $image_width['desktop'] ) && ! empty( $image_width['desktop'] ) ? $image_width['desktop'] : 20;
 
-	$image_width_tablet = ( isset( $image_width ) && isset( $image_width['tablet'] ) && ! empty( $image_width['tablet'] ) ) ? $image_width['tablet'] : 20;
+	$image_width_tablet = isset( $image_width ) && isset( $image_width['tablet'] ) && ! empty( $image_width['tablet'] ) ? $image_width['tablet'] : 20;
 
-	$image_width_mobile = ( isset( $image_width ) && isset( $image_width['mobile'] ) && ! empty( $image_width['mobile'] ) ) ? $image_width['mobile'] : 20;
+	$image_width_mobile = isset( $image_width ) && isset( $image_width['mobile'] ) && ! empty( $image_width['mobile'] ) ? $image_width['mobile'] : 20;
 
 	$margin          = astra_get_option( 'header-account-margin' );
 	$margin_selector = '.ast-header-account-wrap';

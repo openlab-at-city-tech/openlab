@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.1.3
  */
 class Astra_Breadcrumb_Schema extends Astra_Schema {
-
 	/**
 	 * Setup schema
 	 *

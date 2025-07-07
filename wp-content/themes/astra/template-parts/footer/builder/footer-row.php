@@ -13,18 +13,18 @@ if ( astra_wp_version_compare( '5.4.99', '>=' ) ) {
 
 if ( Astra_Builder_Helper::is_footer_row_empty( $astra_footer_row ) ) {
 
-	$astra_footer_row_option = ( 'above' === $astra_footer_row ) ? 'hba' : ( ( 'below' === $astra_footer_row ) ? 'hbb' : 'hb' );
+	$astra_footer_row_option = 'above' === $astra_footer_row ? 'hba' : ( 'below' === $astra_footer_row ? 'hbb' : 'hb' );
 	$astra_footer_columns    = astra_get_option( $astra_footer_row_option . '-footer-column' );
 	$astra_footer_layout     = astra_get_option( $astra_footer_row_option . '-footer-layout' );
 	$astra_row_stack_layout  = astra_get_option( $astra_footer_row_option . '-stack' );
 
-	$astra_row_desk_layout = ( isset( $astra_footer_layout['desktop'] ) ) ? $astra_footer_layout['desktop'] : 'full';
-	$astra_tab_layout      = ( isset( $astra_footer_layout['tablet'] ) ) ? $astra_footer_layout['tablet'] : 'full';
-	$astra_mob_layout      = ( isset( $astra_footer_layout['mobile'] ) ) ? $astra_footer_layout['mobile'] : 'full';
+	$astra_row_desk_layout = isset( $astra_footer_layout['desktop'] ) ? $astra_footer_layout['desktop'] : 'full';
+	$astra_tab_layout      = isset( $astra_footer_layout['tablet'] ) ? $astra_footer_layout['tablet'] : 'full';
+	$astra_mob_layout      = isset( $astra_footer_layout['mobile'] ) ? $astra_footer_layout['mobile'] : 'full';
 
-	$astra_desk_stack_layout = ( isset( $astra_row_stack_layout['desktop'] ) ) ? $astra_row_stack_layout['desktop'] : 'stack';
-	$astra_tab_stack_layout  = ( isset( $astra_row_stack_layout['tablet'] ) ) ? $astra_row_stack_layout['tablet'] : 'stack';
-	$astra_mob_stack_layout  = ( isset( $astra_row_stack_layout['mobile'] ) ) ? $astra_row_stack_layout['mobile'] : 'stack';
+	$astra_desk_stack_layout = isset( $astra_row_stack_layout['desktop'] ) ? $astra_row_stack_layout['desktop'] : 'stack';
+	$astra_tab_stack_layout  = isset( $astra_row_stack_layout['tablet'] ) ? $astra_row_stack_layout['tablet'] : 'stack';
+	$astra_mob_stack_layout  = isset( $astra_row_stack_layout['mobile'] ) ? $astra_row_stack_layout['mobile'] : 'stack';
 
 	$astra_footer_row_classes = array(
 		'site-' . esc_attr( $astra_footer_row ) . '-footer-wrap',

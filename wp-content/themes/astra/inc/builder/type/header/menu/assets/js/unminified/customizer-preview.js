@@ -252,7 +252,7 @@
 
 								var dynamicStyle = '';
 
-								dynamicStyle += '.ast-desktop .ast-builder-menu-'+ index +' .main-header-menu .menu-item .sub-menu .menu-link';
+								dynamicStyle += '.ast-desktop .ast-builder-menu-'+ index +' .main-header-menu .menu-item .sub-menu .menu-link, .ast-header-break-point .main-navigation ul .menu-item .menu-link';
 								dynamicStyle += '{';
 								dynamicStyle += 'border-bottom-width:' + ( ( borderSize ) ? borderSize + 'px;' : '0px;' );
 								dynamicStyle += 'border-color:' + color + ';';
@@ -273,7 +273,7 @@
 					value.bind( function( borderSize ) {
 						var selector = '.ast-desktop .ast-builder-menu-'+ index + ' .main-header-menu';
 						var dynamicStyle = '';
-						dynamicStyle += selector + ' .menu-item .sub-menu .menu-link {';
+						dynamicStyle += selector + ' .menu-item .sub-menu:last-child > .menu-item > .menu-link, .ast-header-break-point .main-navigation ul .menu-item .menu-link {';
 						dynamicStyle += 'border-bottom-width: ' + borderSize + 'px;';
 						dynamicStyle += '} ';
 						dynamicStyle += selector + ' .menu-item .sub-menu .menu-item:last-child .menu-link {';
@@ -359,31 +359,39 @@
 					} );
 				} );
 
-	// Sub Menu - Border Radius Fields.
-wp.customize( 'astra-settings[header-menu'+ index +'-submenu-border-radius-fields]', function( value ) {
-    value.bind( function( border ) {
+				
+				wp.customize( 'astra-settings[header-menu'+ index +'-submenu-border-radius-fields]', function( value ) {
+					value.bind( function( border ) {
 
-        let tabletBreakPoint    = astraBuilderPreview.tablet_break_point || 768,
-            mobileBreakPoint    = astraBuilderPreview.mobile_break_point || 544;
+						const tabletBreakPoint = astraBuilderPreview.tablet_break_point || 768;
+						const mobileBreakPoint = astraBuilderPreview.mobile_break_point || 544;
+						const submenuBorderWidth = wp.customize.get()?.[ 'astra-settings[header-menu' + index + '-submenu-border]' ];
 
-        let globalSelector = '.ast-builder-menu-' + index + ' li.menu-item .sub-menu, .ast-builder-menu-' + index + ' ul.inline-on-mobile li.menu-item .sub-menu';
+						const deviceSpecific = ( device ) => {
+							return '.ast-builder-menu-' + index + ' li.menu-item .sub-menu, .ast-builder-menu-' + index + ' ul.inline-on-mobile li.menu-item .sub-menu {\
+									border-top-left-radius: ' + border[ device ]['top'] + border[ device + '-unit' ] + ';\
+									border-bottom-right-radius: ' + border[ device ]['bottom'] + border[ device + '-unit' ] + ';\
+									border-bottom-left-radius: ' + border[ device ]['left'] + border[ device + '-unit' ] + ';\
+									border-top-right-radius:' + border[ device ]['right'] + border[ device + '-unit' ] + ';\
+								}\
+								.ast-builder-menu-' + index + ' li.menu-item .sub-menu .menu-item:first-of-type > .menu-link, .ast-builder-menu-' + index + ' ul.inline-on-mobile li.menu-item .sub-menu .menu-item:first-of-type > .menu-link {\
+									border-top-left-radius: calc(' + border[ device ]['top'] + border[ device + '-unit' ] + ' - ' + submenuBorderWidth?.top + 'px);\
+									border-top-right-radius: calc(' + border[ device ]['right'] + border[ device + '-unit' ] + ' - ' + submenuBorderWidth?.top + 'px);\
+								}\
+								.ast-builder-menu-' + index + ' li.menu-item .sub-menu .menu-item:last-of-type > .menu-link, .ast-builder-menu-' + index + ' ul.inline-on-mobile li.menu-item .sub-menu .menu-item:last-of-type > .menu-link {\
+									border-bottom-left-radius: calc(' + border[ device ]['left'] + border[ device + '-unit' ] + ' - ' + submenuBorderWidth?.top + 'px);\
+									border-bottom-right-radius: calc(' + border[ device ]['bottom'] + border[ device + '-unit' ] + ' - ' + submenuBorderWidth?.top + 'px);\
+								}';
+						};
 
-        let dynamicStyle = globalSelector + '{ border-top-left-radius :' + border['desktop']['top'] + border['desktop-unit']
-            + '; border-bottom-right-radius :' + border['desktop']['bottom'] + border['desktop-unit'] + '; border-bottom-left-radius :'
-            + border['desktop']['left'] + border['desktop-unit'] + '; border-top-right-radius :' + border['desktop']['right'] + border['desktop-unit'] + '; } ';
+						dynamicStyle = deviceSpecific( 'desktop' ) +
+							'@media ( max-width: ' + tabletBreakPoint + 'px ) { ' + deviceSpecific( 'tablet' ) + ' }\n' +
+							'@media ( max-width: ' + mobileBreakPoint + 'px ) { ' + deviceSpecific( 'mobile' ) + ' }\n';
 
-        dynamicStyle += '@media (max-width: ' + tabletBreakPoint + 'px) { ' + globalSelector + '{ border-top-left-radius :' + border['tablet']['top'] + border['tablet-unit']
-        + '; border-bottom-right-radius :' + border['tablet']['bottom'] + border['tablet-unit'] + '; border-bottom-left-radius :'
-        + border['tablet']['left'] + border['tablet-unit'] + '; border-top-right-radius :' + border['tablet']['right'] + border['tablet-unit'] + '; } } ';
+						astra_add_dynamic_css( 'header-menu'+ index +'-submenu-border-radius-fields', dynamicStyle );
 
-        dynamicStyle += '@media (max-width: ' + mobileBreakPoint + 'px) { ' + globalSelector + '{ border-top-left-radius :' + border['mobile']['top'] + border['mobile-unit']
-                + '; border-bottom-right-radius :' + border['mobile']['bottom'] + border['mobile-unit'] + '; border-bottom-left-radius :'
-                + border['mobile']['left'] + border['mobile-unit'] + '; border-top-right-radius :' + border['mobile']['right'] + border['mobile-unit'] + '; } } ';
-
-        astra_add_dynamic_css( 'header-menu'+ index +'-submenu-border-radius-fields', dynamicStyle );
-
-    } );
-} );
+					} );
+				} );
 
 				// Sub Menu - Top Offset.
 				wp.customize( 'astra-settings[header-menu'+ index +'-submenu-top-offset]', function( value ) {

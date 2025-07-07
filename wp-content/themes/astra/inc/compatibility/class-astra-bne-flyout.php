@@ -13,7 +13,7 @@ if ( ! defined( 'BNE_FLYOUT_VERSION' ) ) {
 /**
  * Astra BNE Flyout Compatibility
  */
-if ( ! class_exists( 'Astra_BNE_Flyout' ) ) :
+if ( ! class_exists( 'Astra_BNE_Flyout' ) ) {
 
 	/**
 	 * Astra BNE Flyout Compatibility
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_BNE_Flyout' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_BNE_Flyout {
-
 		/**
 		 * Member Variable
 		 *
@@ -60,7 +59,7 @@ if ( ! class_exists( 'Astra_BNE_Flyout' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

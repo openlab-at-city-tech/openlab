@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * A text control with validation for CSS units.
  */
 class Astra_Control_Description extends WP_Customize_Control {
-
 	/**
 	 * The control type.
 	 *
@@ -49,5 +48,6 @@ class Astra_Control_Description extends WP_Customize_Control {
 	 *
 	 * @see WP_Customize_Control::render_content()
 	 */
-	protected function render_content() {}
+	protected function render_content() {
+	}
 }

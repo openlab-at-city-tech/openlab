@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.5.0
  */
 class Astra_Related_Posts_Markup {
-
 	/**
 	 *  Constructor
 	 */
@@ -307,10 +306,10 @@ class Astra_Related_Posts_Markup {
 	/**
 	 * Render Featured Image HTML.
 	 *
-	 * @param int     $current_post_id current post ID.
-	 * @param string  $before Markup before thumbnail image.
-	 * @param string  $after  Markup after thumbnail image.
-	 * @param boolean $echo   Output print or return.
+	 * @param int    $current_post_id current post ID.
+	 * @param string $before Markup before thumbnail image.
+	 * @param string $after  Markup after thumbnail image.
+	 * @param bool   $echo   Output print or return.
 	 * @return string|null
 	 *
 	 * @since 3.5.0

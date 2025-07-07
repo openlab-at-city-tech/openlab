@@ -13,7 +13,7 @@ if ( ! class_exists( 'WPCF7' ) ) {
 /**
  * Astra Contact Form 7 Compatibility
  */
-if ( ! class_exists( 'Astra_Contact_Form_7' ) ) :
+if ( ! class_exists( 'Astra_Contact_Form_7' ) ) {
 
 	/**
 	 * Astra Contact Form 7 Compatibility
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_Contact_Form_7' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_Contact_Form_7 {
-
 		/**
 		 * Member Variable
 		 *
@@ -66,7 +65,7 @@ if ( ! class_exists( 'Astra_Contact_Form_7' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

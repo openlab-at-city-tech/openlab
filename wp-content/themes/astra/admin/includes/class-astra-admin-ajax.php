@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 4.0.0
  */
 class Astra_Admin_Ajax {
-
 	/**
 	 * Ajax action prefix.
 	 *
@@ -62,17 +61,23 @@ class Astra_Admin_Ajax {
 	 * @since 4.0.0
 	 */
 	public function __construct() {
-		$this->errors = array(
-			'permission' => esc_html__( 'Sorry, you are not allowed to do this operation.', 'astra' ),
-			'nonce'      => esc_html__( 'Nonce validation failed', 'astra' ),
-			'default'    => esc_html__( 'Sorry, something went wrong.', 'astra' ),
-			'invalid'    => esc_html__( 'No post data found!', 'astra' ),
+		add_action(
+			'init',
+			function() {
+				$this->errors = array(
+					'permission' => esc_html__( 'Sorry, you are not allowed to do this operation.', 'astra' ),
+					'nonce'      => esc_html__( 'Nonce validation failed', 'astra' ),
+					'default'    => esc_html__( 'Sorry, something went wrong.', 'astra' ),
+					'invalid'    => esc_html__( 'No post data found!', 'astra' ),
+				);
+			}
 		);
 
 		add_action( 'wp_ajax_ast_disable_pro_notices', array( $this, 'disable_astra_pro_notices' ) );
-		add_action( 'wp_ajax_astra_recommended_plugin_install', 'wp_ajax_install_plugin' );
+		add_action( 'wp_ajax_astra_recommended_plugin_install', array( $this, 'required_plugin_install' ) );
 		add_action( 'wp_ajax_ast_migrate_to_builder', array( $this, 'migrate_to_builder' ) );
 		add_action( 'wp_ajax_astra_update_admin_setting', array( $this, 'astra_update_admin_setting' ) );
+		add_action( 'wp_ajax_astra_analytics_optin_status', array( $this, 'astra_analytics_optin_status' ) );
 		add_action( 'wp_ajax_astra_recommended_plugin_activate', array( $this, 'required_plugin_activate' ) );
 		add_action( 'wp_ajax_astra_recommended_plugin_deactivate', array( $this, 'required_plugin_deactivate' ) );
 	}
@@ -128,7 +133,7 @@ class Astra_Admin_Ajax {
 		$migrate = isset( $_POST['status'] ) ? sanitize_key( $_POST['status'] ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
-		$migrate = ( 'true' === $migrate ) ? true : false;
+		$migrate = 'true' === $migrate ? true : false;
 		astra_update_option( 'ast-disable-upgrade-notices', $migrate );
 
 		wp_send_json_success();
@@ -163,7 +168,7 @@ class Astra_Admin_Ajax {
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migrate = isset( $_POST['status'] ) ? sanitize_key( $_POST['status'] ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$migrate = ( 'true' === $migrate ) ? true : false;
+		$migrate = 'true' === $migrate ? true : false;
 		/** @psalm-suppress InvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 		$migration_flag = astra_get_option( 'v3-option-migration', false );
 		astra_update_option( 'is-header-footer-builder', $migrate );
@@ -235,6 +240,40 @@ class Astra_Admin_Ajax {
 	}
 
 	/**
+	 * Astra Analytics Opt-in.
+	 *
+	 * @return void
+	 * @since 4.10.0
+	 */
+	public function astra_analytics_optin_status() {
+		$response_data = array( 'message' => $this->get_error_msg( 'permission' ) );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( $response_data );
+		}
+
+		if ( empty( $_POST ) ) {
+			$response_data = array( 'message' => $this->get_error_msg( 'invalid' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		/* Nonce verification */
+		if ( ! check_ajax_referer( 'astra_update_admin_setting', 'security', false ) ) {
+			$response_data = array( 'message' => $this->get_error_msg( 'nonce' ) );
+			wp_send_json_error( $response_data );
+		}
+
+		$opt_in = filter_input( INPUT_POST, 'value', FILTER_VALIDATE_BOOLEAN ) ? 'yes' : 'no';
+		update_site_option( 'astra_analytics_optin', $opt_in );
+
+		$response_data = array(
+			'message' => esc_html__( 'Successfully saved data!', 'astra' ),
+		);
+
+		wp_send_json_success( $response_data );
+	}
+
+	/**
 	 * Get ajax error message.
 	 *
 	 * @param string $type Message type.
@@ -248,6 +287,51 @@ class Astra_Admin_Ajax {
 		}
 
 		return $this->errors[ $type ];
+	}
+
+	/**
+	 * Handles the installation and saving of required plugins.
+	 *
+	 * This function is responsible for installing and saving required plugins for the Astra theme.
+	 * It checks for the plugin slug in the AJAX request, verifies the nonce, and initiates the plugin installation process.
+	 * If the plugin is successfully installed, it schedules a database update to map the plugin slug to a custom key for analytics tracking.
+	 *
+	 * @since 4.8.12
+	 */
+	public function required_plugin_install() {
+
+		check_ajax_referer( 'updates', '_ajax_nonce' );
+
+		// Fetching the plugin slug from the AJAX request.
+		// @psalm-suppress PossiblyInvalidArgument
+		$plugin_slug = isset( $_POST['slug'] ) && is_string( $_POST['slug'] ) ? sanitize_text_field( wp_unslash( $_POST['slug'] ) ) : '';
+
+		if ( empty( $plugin_slug ) ) {
+			wp_send_json_error( array( 'message' => __( 'Plugin slug is missing.', 'astra' ) ) );
+		}
+
+		// Schedule the database update if the plugin is installed successfully.
+		add_action(
+			'shutdown',
+			static function () use ( $plugin_slug ) {
+				// Iterate through all plugins to check if the installed plugin matches the current plugin slug.
+				$all_plugins = get_plugins();
+				foreach ( $all_plugins as $plugin_file => $_ ) {
+					if ( is_callable( 'BSF_UTM_Analytics::update_referer' ) && strpos( $plugin_file, $plugin_slug . '/' ) === 0 ) {
+						// If the plugin is found and the update_referer function is callable, update the referer with the corresponding product slug.
+						BSF_UTM_Analytics::update_referer( 'astra', $plugin_slug );
+						return;
+					}
+				}
+			}
+		);
+
+		if ( function_exists( 'wp_ajax_install_plugin' ) ) {
+			// @psalm-suppress NoValue
+			wp_ajax_install_plugin();
+		} else {
+			wp_send_json_error( array( 'message' => __( 'Plugin installation function not found.', 'astra' ) ) );
+		}
 	}
 
 	/**
@@ -288,7 +372,7 @@ class Astra_Admin_Ajax {
 		}
 
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$plugin_init = ( isset( $_POST['init'] ) ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
+		$plugin_init = isset( $_POST['init'] ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 		$activate = activate_plugin( $plugin_init );
@@ -359,7 +443,7 @@ class Astra_Admin_Ajax {
 		}
 
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
-		$plugin_init = ( isset( $_POST['init'] ) ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
+		$plugin_init = isset( $_POST['init'] ) ? sanitize_text_field( wp_unslash( $_POST['init'] ) ) : '';
 		/** @psalm-suppress PossiblyInvalidArgument */ // phpcs:ignore Generic.Commenting.DocComment.MissingShort
 
 		$deactivate = deactivate_plugins( $plugin_init );

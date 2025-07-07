@@ -13,7 +13,7 @@ if ( ! class_exists( 'SiteOrigin_Panels_Settings' ) ) {
 /**
  * Astra Site Origin Compatibility
  */
-if ( ! class_exists( 'Astra_Site_Origin' ) ) :
+if ( ! class_exists( 'Astra_Site_Origin' ) ) {
 
 	/**
 	 * Astra Site Origin Compatibility
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_Site_Origin' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_Site_Origin {
-
 		/**
 		 * Member Variable
 		 *
@@ -60,7 +59,7 @@ if ( ! class_exists( 'Astra_Site_Origin' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

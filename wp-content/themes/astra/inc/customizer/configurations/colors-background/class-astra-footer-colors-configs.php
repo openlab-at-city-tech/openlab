@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_Footer_Colors_Configs' ) ) {
 	 * Register Footer Color Configurations.
 	 */
 	class Astra_Footer_Colors_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Footer Color Configurations.
 		 *
@@ -88,13 +87,9 @@ if ( ! class_exists( 'Astra_Footer_Colors_Configs' ) ) {
 				),
 			);
 
-			$configurations = array_merge( $configurations, $_configs );
-
-			return $configurations;
+			return array_merge( $configurations, $_configs );
 		}
 	}
 }
 
 new Astra_Footer_Colors_Configs();
-
-

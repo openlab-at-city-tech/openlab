@@ -113,12 +113,12 @@
 
 		if ( 'color-typo' == astraCustomizer.elementor_default_color_font_setting || 'typo' == astraCustomizer.elementor_default_color_font_setting ) {
 			// Button Typo
-			ele_btn_font_family = ',.elementor-button-wrapper .elementor-button, .elementor-button-wrapper .elementor-button:visited';
-			ele_btn_font_weight = ',.elementor-button-wrapper .elementor-button, .elementor-button-wrapper .elementor-button:visited';
-			ele_btn_font_size = ',.elementor-button-wrapper .elementor-button.elementor-size-sm, .elementor-button-wrapper .elementor-button.elementor-size-xs, .elementor-button-wrapper .elementor-button.elementor-size-md, .elementor-button-wrapper .elementor-button.elementor-size-lg, .elementor-button-wrapper .elementor-button.elementor-size-xl, .elementor-button-wrapper .elementor-button';
-			ele_btn_transform = ',.elementor-button-wrapper .elementor-button, .elementor-button-wrapper .elementor-button:visited';
-			ele_btn_line_height = ',.elementor-button-wrapper .elementor-button, .elementor-button-wrapper .elementor-button:visited';
-			ele_btn_letter_spacing = ',.elementor-button-wrapper .elementor-button, .elementor-button-wrapper .elementor-button:visited', 'px';
+			ele_btn_font_family = ',.elementor-widget-button .elementor-button, .elementor-widget-button .elementor-button:visited';
+			ele_btn_font_weight = ',.elementor-widget-button .elementor-button, .elementor-widget-button .elementor-button:visited';
+			ele_btn_font_size = ',.elementor-widget-button .elementor-button.elementor-size-sm, .elementor-widget-button .elementor-button.elementor-size-xs, .elementor-widget-button .elementor-button.elementor-size-md, .elementor-widget-button .elementor-button.elementor-size-lg, .elementor-widget-button .elementor-button.elementor-size-xl, .elementor-widget-button .elementor-button';
+			ele_btn_transform = ',.elementor-widget-button .elementor-button, .elementor-widget-button .elementor-button:visited';
+			ele_btn_line_height = ',.elementor-widget-button .elementor-button, .elementor-widget-button .elementor-button:visited';
+			ele_btn_letter_spacing = ',.elementor-widget-button .elementor-button, .elementor-widget-button .elementor-button:visited', 'px';
 		}
 		// Button Typo
 		astra_generate_outside_font_family_css( 'astra-settings[font-family-button]', 'button, .ast-button, .ast-custom-button, input#submit, input[type="button"], input[type="submit"], input[type="reset"], .wp-block-button .wp-block-button__link, form[CLASS*="wp-block-search__"].wp-block-search .wp-block-search__inside-wrapper .wp-block-search__button' + astraCustomizer.v4_2_2_core_form_btns_styling + ele_btn_font_family + woo_button_attr );

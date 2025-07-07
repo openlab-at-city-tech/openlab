@@ -19,8 +19,7 @@ add_filter( 'astra_dynamic_theme_css', 'astra_live_search_css', 12 );
  * @since 4.4.0
  */
 function astra_live_search_css( $dynamic_css ) {
-	$ltr_left  = is_rtl() ? 'right' : 'left';
-	$ltr_right = is_rtl() ? 'left' : 'right';
+	$ltr_left = is_rtl() ? 'right' : 'left';
 
 	$heading_base_color = astra_get_option( 'heading-base-color' );
 

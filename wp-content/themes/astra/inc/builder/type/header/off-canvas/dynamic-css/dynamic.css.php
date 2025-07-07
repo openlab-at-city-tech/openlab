@@ -38,9 +38,10 @@ function astra_off_canvas_row_setting( $dynamic_css, $dynamic_css_filtered = '' 
 	$menu_content_alignment      = 'center';
 	$inner_spacing               = astra_get_option( 'off-canvas-inner-spacing' );
 	$mobile_header_type          = astra_get_option( 'mobile-header-type' );
+	$move_body                   = astra_get_option( 'off-canvas-move-body' );
 	$is_site_rtl                 = is_rtl();
 
-	$inner_spacing = ( isset( $inner_spacing ) ) ? (int) $inner_spacing : '';
+	$inner_spacing = isset( $inner_spacing ) ? (int) $inner_spacing : '';
 
 	if ( 'flex-start' === $offcanvas_content_alignment ) {
 		$menu_content_alignment = $is_site_rtl ? 'right' : 'left';
@@ -81,6 +82,14 @@ function astra_off_canvas_row_setting( $dynamic_css, $dynamic_css_filtered = '' 
 			'text-align' => esc_attr( $menu_content_alignment ),
 		),
 	);
+
+	// Styling to apply when the move body option is disabled.
+	if ( $mobile_header_type === 'dropdown' && ! $move_body ) {
+		$css_output['.ast-desktop-header-content, .ast-mobile-header-content'] = array(
+			'position' => 'absolute',
+			'width'    => '100%',
+		);
+	}
 
 	if ( is_rtl() ) {
 

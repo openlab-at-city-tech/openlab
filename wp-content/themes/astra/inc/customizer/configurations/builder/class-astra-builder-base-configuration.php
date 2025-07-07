@@ -14,14 +14,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Class Astra_Builder_Base_Configuration.
  */
 final class Astra_Builder_Base_Configuration {
-
 	/**
 	 * Member Variable
 	 *
 	 * @var mixed instance
 	 */
 	private static $instance = null;
-
 
 	/**
 	 *  Initiator
@@ -38,7 +36,8 @@ final class Astra_Builder_Base_Configuration {
 	/**
 	 * Constructor
 	 */
-	public function __construct() { }
+	public function __construct() {
+	}
 
 	/**
 	 * Prepare Advance Typography configuration.
@@ -62,6 +61,7 @@ final class Astra_Builder_Base_Configuration {
 					'type'      => 'control',
 					'control'   => 'ast-settings-group',
 					'title'     => __( 'Text Font', 'astra' ),
+					'is_font'   => true,
 					'section'   => $section_id,
 					'divider'   => $divider_setup,
 					'transport' => 'postMessage',
@@ -218,7 +218,7 @@ final class Astra_Builder_Base_Configuration {
 		$astra_has_widgets_block_editor = astra_has_widgets_block_editor();
 		for ( $index = 1; $index <= $component_limit; $index++ ) {
 
-			$_section = ( ! $astra_has_widgets_block_editor ) ? 'sidebar-widgets-' . $type . '-widget-' . $index : 'astra-sidebar-widgets-' . $type . '-widget-' . $index;
+			$_section = ! $astra_has_widgets_block_editor ? 'sidebar-widgets-' . $type . '-widget-' . $index : 'astra-sidebar-widgets-' . $type . '-widget-' . $index;
 
 			$html_config[] = array(
 
@@ -274,7 +274,7 @@ final class Astra_Builder_Base_Configuration {
 							'center' => 'align-center',
 							'right'  => 'align-right',
 						),
-						'divider'   => ( ! $astra_has_widgets_block_editor ) ? array( 'ast_class' => 'ast-top-divider' ) : array( 'ast_class' => 'ast-bottom-section-divider ast-section-spacing' ),
+						'divider'   => ! $astra_has_widgets_block_editor ? array( 'ast_class' => 'ast-top-divider' ) : array( 'ast_class' => 'ast-bottom-section-divider ast-section-spacing' ),
 					),
 				);
 			}
@@ -294,7 +294,7 @@ final class Astra_Builder_Base_Configuration {
 						'transport'  => 'postMessage',
 						'control'    => 'ast-responsive-color',
 						'responsive' => true,
-						'divider'    => ( ! $astra_has_widgets_block_editor ) ? array( 'ast_class' => 'ast-top-divider' ) : array( 'ast_class' => 'ast-section-spacing' ),
+						'divider'    => ! $astra_has_widgets_block_editor ? array( 'ast_class' => 'ast-top-divider' ) : array( 'ast_class' => 'ast-section-spacing' ),
 						'rgba'       => true,
 					),
 
@@ -372,13 +372,13 @@ final class Astra_Builder_Base_Configuration {
 							'default'   => astra_get_option( $type . '-widget-' . $index . '-text-typography' ),
 							'type'      => 'control',
 							'control'   => 'ast-settings-group',
+							'is_font'   => true,
 							'title'     => __( 'Heading Font', 'astra' ),
 							'section'   => $_section,
 							'transport' => 'postMessage',
 							'priority'  => 90,
 							'divider'   => array( 'ast_class' => 'ast-bottom-divider' ),
 						),
-
 
 						/**
 						 * Option: Widget Title Font Size
@@ -426,6 +426,7 @@ final class Astra_Builder_Base_Configuration {
 							'default'   => astra_get_option( $type . '-widget-' . $index . '-content-typography' ),
 							'type'      => 'control',
 							'control'   => 'ast-settings-group',
+							'is_font'   => true,
 							'title'     => __( 'Content Font', 'astra' ),
 							'section'   => $_section,
 							'transport' => 'postMessage',
@@ -554,7 +555,6 @@ final class Astra_Builder_Base_Configuration {
 		}
 
 		return call_user_func_array( 'array_merge', $html_config + array( array() ) );
-
 	}
 
 }

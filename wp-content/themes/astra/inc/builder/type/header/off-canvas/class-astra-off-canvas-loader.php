@@ -19,7 +19,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.0.0
  */
 class Astra_Off_Canvas_Loader {
-
 	/**
 	 * Constructor
 	 *
@@ -39,13 +38,13 @@ class Astra_Off_Canvas_Loader {
 		 * Load unminified if SCRIPT_DEBUG is true.
 		 */
 		/* Directory and Extension */
-		$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
-		$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+		$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
+		$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 		wp_enqueue_script( 'astra-off-canvas-customizer-preview-js', ASTRA_OFF_CANVAS_URI . '/assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 	}
 }
 
 /**
-*  Kicking this off by creating the object of the class.
-*/
+ *  Kicking this off by creating the object of the class.
+ */
 new Astra_Off_Canvas_Loader();

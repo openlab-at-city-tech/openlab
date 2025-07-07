@@ -1711,7 +1711,7 @@ a.ast-pro-upgrade-link {
 
 #customize-control-astra-color-palettes .astra-color-picker-wrap {
 	position: absolute;
-	z-index: 1;
+	z-index: 999;
 	left: 0;
 	width: 100%;
 	display: none;
@@ -1830,6 +1830,7 @@ a.ast-pro-upgrade-link {
     box-shadow: 0 0 0 1px #334155;
 }
 .ast-palette-label-wrap{
+  display: inline-block;
     text-align: center;
 	color: #9CA3AF;
 	overflow: hidden;
@@ -1890,8 +1891,6 @@ a.ast-pro-upgrade-link {
 
 .ast-color-picker-custom-tooltip[data-title]::after {
 	content: attr(data-title);
-    min-width: 3em;
-    max-width: 10em;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1914,6 +1913,10 @@ a.ast-pro-upgrade-link {
     opacity: 0;
     right: 50%;
     transform: translate(50%,-0.5em);
+}
+
+.ast-single-palette-wrap > :last-child .ast-color-picker-custom-tooltip[data-title]::after {
+    right: -16px;
 }
 
 .ast-color-picker-custom-tooltip-wrapper {

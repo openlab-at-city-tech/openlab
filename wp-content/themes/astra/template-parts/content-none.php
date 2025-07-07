@@ -13,7 +13,7 @@
 <section class="no-results not-found">
 	<div class="page-content">
 
-		<?php if ( is_home() && current_user_can( 'publish_posts' ) ) : ?>
+		<?php if ( is_home() && current_user_can( 'publish_posts' ) ) { ?>
 
 			<p>
 			<?php
@@ -32,7 +32,7 @@
 			?>
 			</p>
 
-		<?php elseif ( is_search() ) : ?>
+		<?php } elseif ( is_search() ) { ?>
 
 			<p><?php echo esc_html( astra_default_strings( 'string-search-nothing-found-message', false ) ); ?></p>
 			<?php
@@ -43,12 +43,12 @@
 			}
 			?>
 
-		<?php else : ?>
+		<?php } else { ?>
 
 			<p><?php echo esc_html( astra_default_strings( 'string-content-nothing-found-message', false ) ); ?></p>
 			<?php get_search_form(); ?>
 
-		<?php endif; ?>
+		<?php } ?>
 
 	</div><!-- .page-content -->
 </section><!-- .no-results -->

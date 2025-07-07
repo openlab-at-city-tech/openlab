@@ -50,7 +50,7 @@ function astra_content_background_css( $dynamic_css ) {
 	$narrow_dynamic_selector      = 'narrow-width-container' === $current_layout && $is_boxed ? ', .ast-narrow-container .site-content' : '';
 	$comments_wrapper_bg_selector = Astra_Dynamic_CSS::astra_4_6_0_compatibility() ? ', .ast-separate-container .comments-area' : ', .ast-separate-container .comments-area .comment-respond, .ast-separate-container .comments-area .ast-comment-list li, .ast-separate-container .comments-area .comments-title';
 
-	$author_box_extra_selector = ( true === astra_check_is_structural_setup() ) ? '.site-main' : '';
+	$author_box_extra_selector = true === astra_check_is_structural_setup() ? '.site-main' : '';
 
 	// Apply unboxed container with sidebar boxed look by changing background color to site background color.
 	$content_bg_obj = astra_apply_unboxed_container( $content_bg_obj, $is_boxed, $is_sidebar_boxed, $current_layout );

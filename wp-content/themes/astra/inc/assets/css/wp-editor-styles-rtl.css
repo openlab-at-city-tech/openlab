@@ -430,9 +430,9 @@ body .editor-styles-wrapper .edit-post-visual-editor__post-title-wrapper > * + *
   margin-bottom: 1.5em;
 }
 
-.wp-block-cover:not([class*='background-color']) .wp-block-cover__inner-container, .wp-block-cover:not([class*='background-color']) .wp-block-cover-image-text, .wp-block-cover:not([class*='background-color']) .wp-block-cover-text, .wp-block-cover:not([class*='background-color']) .block-editor-block-list__block, .wp-block-cover-image:not([class*='background-color']) .wp-block-cover__inner-container, .wp-block-cover-image:not([class*='background-color']) .wp-block-cover-image-text,
+.wp-block-cover:not([class*='background-color']):not(.has-text-color.has-link-color) .wp-block-cover__inner-container, .wp-block-cover:not([class*='background-color']) .wp-block-cover-image-text, .wp-block-cover:not([class*='background-color']) .wp-block-cover-text, .wp-block-cover:not([class*='background-color']):not(.has-text-color.has-link-color):not(.wp-block-cover__inner-container .wp-block-cover) > .block-editor-block-list__block, .wp-block-cover-image:not([class*='background-color']) .wp-block-cover__inner-container, .wp-block-cover-image:not([class*='background-color']) .wp-block-cover-image-text,
 .wp-block-cover-image:not([class*='background-color']) .wp-block-cover-text, .wp-block-cover-image:not([class*='background-color']) .block-editor-block-list__block {
-  color: var(--ast-global-color-5);
+  color: var(--ast-global-color-primary, var(--ast-global-color-5));
 }
 
 .wp-block-file__content-wrapper {

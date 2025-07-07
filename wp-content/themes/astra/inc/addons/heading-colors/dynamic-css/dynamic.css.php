@@ -55,7 +55,6 @@ function astra_heading_colors_section_dynamic_css( $dynamic_css, $dynamic_css_fi
 		);
 	}
 
-
 	/* Parse CSS from array() */
 	$css_output = astra_parse_css( $css_output );
 

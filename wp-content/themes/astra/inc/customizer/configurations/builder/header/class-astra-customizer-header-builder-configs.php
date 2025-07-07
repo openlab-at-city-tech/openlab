@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Customizer_Config_Base' ) ) {
  * @since 3.0.0
  */
 class Astra_Customizer_Header_Builder_Configs extends Astra_Customizer_Config_Base {
-
 	/**
 	 * Register Builder Customizer Configurations.
 	 *
@@ -33,8 +32,7 @@ class Astra_Customizer_Header_Builder_Configs extends Astra_Customizer_Config_Ba
 	 * @return Array Astra Customizer Configurations with updated configurations.
 	 */
 	public function register_configuration( $configurations, $wp_customize ) {
-		$configurations = astra_header_header_builder_configuration( $configurations );
-		return $configurations;
+		return astra_header_header_builder_configuration( $configurations );
 	}
 }
 

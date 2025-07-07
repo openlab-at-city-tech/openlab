@@ -1,5 +1,131 @@
 *** Astra Changelog ***
 
+2025-07-01 - version 4.11.5
+* This version includes an updated package to ensure compatibility with Astra UTM links on wp.org.
+
+2025-07-01 - version 4.11.4
+* Improvement: Improved anchor link behavior across pages to prevent content from being hidden behind the sticky header.
+* Improvement: Made Cart flyout navigation and WooCommerce product gallery image slider keyboard accessible with proper focus indicators.
+* Improvement: Ensured feature image, category, tag, and post filter buttons are focusable with visible input highlight for better navigation.
+* Fix: Resolved warning in breadcrumb trail by adding proper checks for post type rewrite rules and slug access.
+* Fix: Corrected tooltip icon positioning in WooCommerce Customizer settings.
+* Fix: Footer row layout change button is not updating properly.
+
+2025-06-17 - version 4.11.3
+* New: Enabled access to Astra Meta Settings inside the Elementor Editor under the Page Settings panel.
+* Fix: Social Sharing icons aligned uniformly with transparent backgrounds.
+* Fix: Off-Canvas menu dropdown not closing when using Sticky Header animation or on scroll-down behavior.
+* Fix: Resolved an issue with saving the Footer Builder layout in Customizer draft mode.
+* Fix: Resolved an issue where the new multiselect control was not saving the subsection value properly.
+* Fix: Resolved an issue where extra bottom margin CSS was being applied to Stack and Group blocks inside the editor.
+
+2025-06-05 - version 4.11.2
+* New: We've completely redesigned the Astra Dashboard with our new Force UI components, delivering a modern interface & enhanced user experience.
+* Improvement: Improvised Accessibility of the Off-canvas menu section by ensuring consistent toggle behavior during keyboard navigation and interaction.
+* Fix: Submenu item divider color and size options not applying correctly on responsive devices when the primary menu is placed inside the Off-Canvas section.
+* Fix: Resolved RTL alignment issue in Footer Builder where inner text did not respect right-to-left direction.
+* Fix: Prevented Spectra Tabs from triggering the off-canvas close event when switching tabs inside the Mega Menu.
+
+2025-05-20 - version 4.11.1
+* Improvement: Ensured consistent cart icon display across the preview and Customizer selector control.
+* Improvement: Enhanced text visibility during webfont loading for a better reading experience.
+* Improvement: Optimized Customizer performance by deferring non-critical data loading via AJAX, resulting in reduced memory usage.
+* Fix: Resolved Customizer loading conflict with Astra Pro and Gravity Forms by optimizing performance.
+* Fix: Inconsistent font size rendering for semantic inline text-level elements to ensure visual consistency with surrounding text.
+* Fix: Resolved an issue where switching between Customizer tabs failed in edge cases.
+
+2025-05-07 - version 4.11.0
+* New: Introducing a new polished UI for the Astra Customizer, offering an improved user experience and refreshed design. (https://wpastra.com/docs/astra-customizer-refined-ui/)
+* Improvement: Enhanced accessibility in post grid and search input markup.
+* Improvement: Added a filter to control the loading of Dark Mode compatibility CSS.
+* Fix: Resolved an issue where the submenu border radius was not applying correctly for inner menu links on hover.
+* Fix: Resolved a UI issue with the shipping country dropdown when WooCommerce notices were displayed.
+
+2025-04-24 - version 4.10.1
+* Fix: Resolved a dark mode styling behavior where <legend> elements were affected globally, even when dark mode was disabled.
+* Fix: Resolved an issue where toggle button styles were not being applied on the frontend.
+* Fix: Resolved an issue where focusing on Gravity Forms dropdown fields showed multiple arrows.
+
+2025-04-15 - version 4.10.0
+* Improvement: Optimized Dark Color Palette implementation for seamless integration with the new Color Switcher widget in Astra Pro.
+* Improvement: Removed unnecessary screen reader text from post navigation template for improved markup clarity.
+* Improvement: Compatibility with WordPress 6.8.
+
+2025-04-08 - version 4.9.2
+* Improved: Added aria-label with post title to linked featured images for better accessibility.
+* Fix: Prevented the old Header widget area from displaying after enabling the new Header Builder.
+* Fix: Resolved a conflict between Astra column setting and Elementor Loop Builder, which caused shop archive breakage.
+
+2025-04-02 - version 4.9.1
+* Improvement: Enhanced accessibility by adding aria-hidden attributes to decorative navigation arrows.
+* Improvement: Replaced a deprecated Elementor class with the updated class for improved compatibility.
+* Fix: Corrected the placement of the eye icon on the WooCommerce My Account page.
+* Fix: Resolved an issue where the customizer's heading color options were not applied inside the block editor.
+* Fix: Resolved an issue where the page did not scroll to the cart after adding a cross-sell product.
+* Fix: Resolved an issue where LearnDash quizzes label text was not visible.
+* Fix: Resolved an issue where clicking on the arrow navigation for submenus was redirecting to the page instead of opening the submenu on certain tablet devices.
+* Fix: Resolved an issue where the desktop menu did not display correctly when changing orientation on certain tablet devices.
+
+2025-03-06 - version 4.9.0
+* New: Added a new color palette in Astra's Global Color Palettes section which Act as a Dark palette - (Beta Feature). (https://wpastra.com/docs/dark-colour-palette/)
+* Improvement: Enhanced Smooth Scroll to ID functionality with dynamic sticky offset support for sticky headers with including slide and fade animations.
+* Fix: Resolved an issue with font size changes in Submenu links.
+* Fix: Resolved an issue where color setting not reflecting in Off-Canvas menu in Desktop.
+
+2025-02-26 - version 4.8.13
+* New: Search Widget - Added an option for visible search result counts with live search.
+* Fix: Resolved "Undefined array key" warning by checking if the color key exists before using it.
+* Fix: Deprecated warning "Deprecated: preg_replace()" on search result page with PHP 8.1 or higher.
+* Fix: Resolved an issue where brand color on hover not working for Social Icons in Footer Builder in specific cases.
+* Fix: Resolved an issue where the Account icon is not clickable when Astra Pro is deactivated.
+
+2025-02-11 - version 4.8.12
+* Improvement: Improved synchronization of toggled class across menu toggle buttons to ensure consistent add/remove behavior.
+* Improvement: Added filter to use more attributes to blog post title links for improved SEO control.
+* Fix: The heart button color is missing for students on the LifterLMS lessons page to mark as favorites.
+* Fix: Resolved an issue where the cart widget CSS is not loading properly on the Cartflows checkout page.
+* Fix: Resolved an issue where the theme preview was not visible on the wp.org themes page.
+* Fix: Resolved an issue where extra white space appearing on the sides of the layout on certain screen sizes after the recent update.
+
+2025-01-28 - version 4.8.11
+* Improvement: WooCommerce - Enhanced styling for the variation clear button and block-based cart and checkout fields to improve user experience.
+* Improvement: Adjusted container width calculations to consider scrollbar width and align with the header container.
+* Fix: Addressed a styling issue affecting custom fields added to the Address section in WooCommerce through the `woocommerce_register_additional_checkout_fields` function.
+* Fix: Resolved an issue where the outline-style was incorrectly set to `disable` when Input Highlight was disabled under Accessibility, replacing it with unset to comply with W3C standards.
+* Fix: Resolved conflict with Side Cart Woocommerce, WPC Fly Cart for WooCommerce and FooEvents plugins.
+* Fix: Account icon click showing dropdown and incorrectly redirecting to the account page.
+* Fix: Resolved issues with the `Disable Header` & `Disable Footer` page meta settings not working on the WooCommerce Shop page.
+* Fix: Resolved an issue where Single Page customizer control did not apply correctly in the preview when the Elementor plugin was active.
+
+2025-01-07 - version 4.8.10
+* Improvement: Enhanced the design of WooCommerce product rating stars for a more polished appearance.
+* Improvement: Added compatibility with the Dokan plugin.
+* Improvement: Social Icons - Introduced a new filter `astra_social_icon_attribute_rel` to modify the rel attribute for social links.
+* Improvement: Added filter to modify WooCommerce cart URL.
+* Fix: Resolved an issue where global colors were not displaying correctly in the editor and was affecting the frontend layout.
+* Fix: Ensure that the text and link colors in the Cover Block editor are applied correctly without being overridden by the theme's global text colors.
+* Fix: Resolved customizer conflict with Kadence WooCommerce Email Designer plugin.
+* Fix: Resolved color inheritance issues between off-canvas, and transparent header on responsive devices.
+
+2024-12-31 - version 4.8.9
+* New: Added an option to move/shift body content when the Off Canvas menu opens.
+* Improvement: Updated color picker labels to use meaningful names like "Brand" and "Primary Color" instead of generic names like "Color 1" and "Color 2," improving usability and clarity.
+* Improvement: Enhanced performance for Astra Customizer options for faster execution.
+* Improvement: Accessibility improvements for menu navigation by addressing cross-browser compatibility fixes.
+* Fix: Resolved an issue where the quantity updater input in the mini cart failed to display correctly when the Variation Swatches plugin was active, ensuring it now appears as expected after adding products.
+* Fix: Resolved global headings font extra options not reflecting in the Customizer.
+* Fix: Resolved issue where Astra fullwidth container width overriding Spectra container width.
+
+2024-12-16 - version 4.8.8
+* New: Pro header and footer elements are now visible in the Header / Footer builder, showcasing premium Astra Pro elements.
+* New: Social Icons - Added Bluesky to the list of social profile icons available in the header builder.
+* New: Introduce filter `astra_nps_survey_disable` to disable NPS.
+* Improvement: Made the default footer copyright text translatable for better localization support.
+* Fix: Resolved font size rendering issue caused by the body font size customizer setting when units other than pixels were used.
+* Fix: Resolved issue with product category names displaying encoded characters by decoding them properly.
+* Fix: Resolved translation issues with Site Builder strings.
+* Fix: Resolved an issue where `_load_textdomain_just_in_time` function was incorrectly triggered for the `astra` text domain.
+
 2024-11-26 - version 4.8.7
 * New: Integrated NPS Survey library in Astra to gather user feedback.
 * Fix: Resolved submenu toggle button issue in the mobile header with Omnisend plugin active.

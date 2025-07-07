@@ -669,27 +669,43 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 			return offsetTop;
 		}
 
-		const scrollToIDHandler = (e) => {
+		const scrollToIDHandler = ( e, hash = null ) => {
 
 			let offset = 0;
 			const siteHeader = document.querySelector('.site-header');
 
 			if (siteHeader) {
 
-				//Check and add offset to scroll top if header is sticky.
-				const headerHeight = siteHeader.querySelectorAll('div[data-stick-support]');
+				// Check and add offset to scroll top if header is sticky.
+				const stickyHeaders = siteHeader.querySelectorAll(
+					'div[data-stick-support]'
+				);
 
-				if (headerHeight) {
-					headerHeight.forEach(single => {
-						offset += single.clientHeight;
-					});
+				if ( stickyHeaders.length > 0 ) {
+					stickyHeaders.forEach( ( header ) => ( offset += header.clientHeight ) );
+				} else if ( typeof astraAddon !== 'undefined' && ! ( Number( astraAddon.sticky_hide_on_scroll ) && ! document?.querySelector( '.ast-header-sticked' ) ) ) {
+					const fixedHeader = document.querySelector( '#ast-fixed-header' );
+					if ( fixedHeader ) {
+						offset = fixedHeader?.clientHeight;
+						if ( Number( astraAddon?.header_main_shrink ) ) {
+							const headers = fixedHeader?.querySelectorAll(
+								'.ast-above-header-wrap, .ast-below-header-wrap'
+							);
+							headers?.forEach( () => ( offset -= 10 ) );
+						}
+					}
 				}
 
-				const href = e.target.closest('a').hash;
+				const href = hash ? hash : e.target?.closest( 'a' ).hash;
 				if (href) {
 					const scrollId = document.querySelector(href);
 					if (scrollId) {
-						const scrollOffsetTop = getOffsetTop(scrollId) - offset;
+						const elementOffsetTop = getOffsetTop( scrollId );
+						if ( typeof astraAddon !== 'undefined' && Number( astraAddon.sticky_hide_on_scroll ) && window?.scrollY  < elementOffsetTop ) {
+							offset = 0;
+						}
+
+						const scrollOffsetTop = elementOffsetTop - offset;
 						if( scrollOffsetTop ) {
 							astraSmoothScroll( e, scrollOffsetTop );
 						}
@@ -729,7 +745,7 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 							offset += single.clientHeight;
 						});
 					}
-					
+
 					const scrollId = document.querySelector(link.hash);
 					if (scrollId) {
 						const scrollOffsetTop = getOffsetTop(scrollId) - offset;
@@ -738,6 +754,11 @@ astScrollToTopHandler = function ( masthead, astScrollTop ) {
 						}
 					}
 				}
+			}
+
+			// If there is a hash in the URL when the page loads, scroll to that element after a short delay.
+			if ( location.hash ) {
+				setTimeout( () => scrollToIDHandler( new Event( 'click' ), location.hash ), 750 );
 			}
 		});
 	}

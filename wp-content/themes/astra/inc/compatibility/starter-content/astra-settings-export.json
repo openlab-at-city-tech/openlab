@@ -1,7 +1,7 @@
 {
   "customizer-settings": {
     "astra-settings": {
-      "theme-auto-version": "4.8.7",
+      "theme-auto-version": "4.11.5",
       "blog-single-post-structure": [
         "single-image",
         "single-title-meta"
@@ -237,13 +237,13 @@
       "narrow-container-max-width": 750,
       "site-layout-outside-bg-obj-responsive": {
         "desktop": {
-          "background-color": "",
+          "background-color": "var(--ast-global-color-4)",
           "background-image": "",
           "background-repeat": "repeat",
           "background-position": "center center",
           "background-size": "auto",
           "background-attachment": "scroll",
-          "background-type": "",
+          "background-type": "color",
           "background-media": ""
         },
         "tablet": {
@@ -931,7 +931,7 @@
       "hba-header-bottom-border-color": "#eaeaea",
       "hba-header-bg-obj-responsive": {
         "desktop": {
-          "background-color": "#ffffff",
+          "background-color": "var(--ast-global-color-4)",
           "background-image": "",
           "background-repeat": "repeat",
           "background-position": "center center",
@@ -10241,7 +10241,7 @@
       },
       "hbb-footer-bg-obj-responsive": {
         "desktop": {
-          "background-color": "#eeeeee",
+          "background-color": "var(--ast-global-color-5)",
           "background-image": "",
           "background-repeat": "repeat",
           "background-position": "center center",
@@ -10809,26 +10809,37 @@
           "#000000"
         ],
         "palette_2": [
-          "#0170B9",
-          "#3a3a3a",
-          "#3a3a3a",
-          "#4B4F58",
-          "#F5F5F5",
+          "#0067FF",
+          "#005EE9",
+          "#0F172A",
+          "#364151",
           "#FFFFFF",
-          "#F2F5F7",
-          "#424242",
-          "#000000"
+          "#E7F6FF",
+          "#070614",
+          "#D1DAE5",
+          "#222222"
         ],
         "palette_3": [
-          "#0170B9",
-          "#3a3a3a",
-          "#3a3a3a",
-          "#4B4F58",
-          "#F5F5F5",
+          "#6528F7",
+          "#5511F8",
+          "#0F172A",
+          "#454F5E",
           "#FFFFFF",
-          "#F2F5F7",
-          "#424242",
-          "#000000"
+          "#F2F0FE",
+          "#0D0614",
+          "#D8D8F5",
+          "#222222"
+        ],
+        "palette_4": [
+          "#0085FF",
+          "#0177E3",
+          "#FFFFFF",
+          "#E7F6FF",
+          "#212A37",
+          "#0F172A",
+          "#4F5B62",
+          "#070614",
+          "#222222"
         ]
       },
       "presets": {
@@ -10940,6 +10951,17 @@
           "#FFFFFF",
           "#F1F0F0",
           "#232529",
+          "#222222"
+        ],
+        "preset_11": [
+          "#0085FF",
+          "#0177E3",
+          "#FFFFFF",
+          "#E7F6FF",
+          "#212A37",
+          "#0F172A",
+          "#4F5B62",
+          "#070614",
           "#222222"
         ]
       },

@@ -11,13 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! class_exists( 'Astra_Attr' ) ) :
+if ( ! class_exists( 'Astra_Attr' ) ) {
 
 	/**
 	 * Class Astra_Attr
 	 */
 	class Astra_Attr {
-
 		/**
 		 * Store Instance on Current Class.
 		 *
@@ -40,7 +39,8 @@ if ( ! class_exists( 'Astra_Attr' ) ) :
 		 *
 		 * @since 1.6.2
 		 */
-		private function __construct() {}
+		private function __construct() {
+		}
 
 		/**
 		 * Build list of attributes into a string and apply contextual filter on string.
@@ -105,7 +105,7 @@ if ( ! class_exists( 'Astra_Attr' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

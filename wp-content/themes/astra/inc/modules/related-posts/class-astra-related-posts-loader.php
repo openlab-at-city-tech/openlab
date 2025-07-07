@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.5.0
  */
 class Astra_Related_Posts_Loader {
-
 	/**
 	 *  Constructor
 	 *
@@ -288,6 +287,6 @@ class Astra_Related_Posts_Loader {
 }
 
 /**
-*  Kicking this off by creating NEW instace.
-*/
+ *  Kicking this off by creating NEW instace.
+ */
 new Astra_Related_Posts_Loader();

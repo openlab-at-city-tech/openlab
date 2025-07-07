@@ -1,7 +1,7 @@
 <?php
 /**
  * Home starter content.
- * 
+ *
  * @since 4.0.0
  * @package Astra\Compatibility\Starter_Content
  */
@@ -15,7 +15,7 @@ $astra_default_home_content = '<!-- wp:cover {"minHeight":720,"minHeightUnit":"p
 <!-- /wp:heading -->
 
 <!-- wp:paragraph -->
-<p>Pulvinar enim ac tortor nulla facilisi tristique facilisi <br>elementum sollicitudin eget lorem.</p>
+<p class="has-white-color has-text-color">Pulvinar enim ac tortor nulla facilisi tristique facilisi <br>elementum sollicitudin eget lorem.</p>
 <!-- /wp:paragraph -->
 
 <!-- wp:buttons -->

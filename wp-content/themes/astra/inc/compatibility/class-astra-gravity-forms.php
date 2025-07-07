@@ -13,7 +13,7 @@ if ( ! class_exists( 'GFForms' ) ) {
 /**
  * Astra Gravity Forms
  */
-if ( ! class_exists( 'Astra_Gravity_Forms' ) ) :
+if ( ! class_exists( 'Astra_Gravity_Forms' ) ) {
 
 	/**
 	 * Astra Gravity Forms
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_Gravity_Forms' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_Gravity_Forms {
-
 		/**
 		 * Member Variable
 		 *
@@ -69,7 +68,7 @@ if ( ! class_exists( 'Astra_Gravity_Forms' ) ) :
 
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method

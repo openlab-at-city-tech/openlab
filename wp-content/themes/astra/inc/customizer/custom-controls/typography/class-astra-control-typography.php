@@ -16,7 +16,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Typography control.
  */
 final class Astra_Control_Typography extends WP_Customize_Control {
-
 	/**
 	 * Used to connect controls to each other.
 	 *

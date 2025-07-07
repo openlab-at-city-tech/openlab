@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.1.3
  */
 class Astra_Person_Schema extends Astra_Schema {
-
 	/**
 	 * Setup schema
 	 *
@@ -62,7 +61,7 @@ class Astra_Person_Schema extends Astra_Schema {
 	 * @param  array $attr An array of attributes.
 	 *
 	 * @return array Updated embed markup class attribute.
-	 * 
+	 *
 	 * @since 4.8.2
 	 */
 	public function author_schema_class( $attr ) {

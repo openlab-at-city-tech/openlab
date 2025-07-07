@@ -23,7 +23,6 @@ if ( ! class_exists( 'Astra_Pro_Customizer' ) ) {
 	 * Astra_Pro_Customizer Initial setup
 	 */
 	class Astra_Pro_Customizer extends WP_Customize_Section {
-
 		/**
 		 * The type of customize section being rendered.
 		 *

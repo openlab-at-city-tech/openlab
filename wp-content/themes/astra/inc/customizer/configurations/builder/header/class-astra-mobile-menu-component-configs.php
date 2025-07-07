@@ -20,7 +20,6 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Mobile_Menu_Component_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Builder Customizer Configurations.
 		 *
@@ -30,9 +29,8 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 		 * @return Array Astra Customizer Configurations with updated configurations.
 		 */
 		public function register_configuration( $configurations, $wp_customize ) {
-			$_configs       = astra_header_mobile_menu_configuration();
-			$configurations = array_merge( $configurations, $_configs );
-			return $configurations;
+			$_configs = astra_header_mobile_menu_configuration();
+			return array_merge( $configurations, $_configs );
 		}
 	}
 

@@ -104,6 +104,8 @@
 	astra_apply_responsive_background_css( 'astra-settings[hb-header-bg-obj-responsive]', '.ast-primary-header.main-header-bar', 'tablet' );
 	astra_apply_responsive_background_css( 'astra-settings[hb-header-bg-obj-responsive]', '.ast-primary-header.main-header-bar', 'mobile' );
 
+	const iframe = document.querySelector('#customize-preview iframe');
+
 	// Style guide logo background colour preview.
 	var desktopHeader = document.getElementById("ast-desktop-header");
 

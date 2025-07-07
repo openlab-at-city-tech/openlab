@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.2.0
  */
 class Astra_Heading_Colors_Loader {
-
 	/**
 	 * Constructor
 	 *
@@ -99,8 +98,8 @@ class Astra_Heading_Colors_Loader {
 		$apply_new_default_color_typo_values = Astra_Dynamic_CSS::astra_check_default_color_typo();
 
 		/**
-		* Heading Tags <h1> to <h6>
-		*/
+		 * Heading Tags <h1> to <h6>
+		 */
 		$defaults['h1-color'] = '';
 		$defaults['h2-color'] = '';
 		$defaults['h3-color'] = '';
@@ -250,8 +249,8 @@ class Astra_Heading_Colors_Loader {
 		 * Load unminified if SCRIPT_DEBUG is true.
 		 */
 		/* Directory and Extension */
-		$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
-		$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+		$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
+		$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 		wp_enqueue_script( 'astra-heading-colors-customizer-preview-js', ASTRA_THEME_HEADING_COLORS_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 		wp_localize_script(
@@ -261,11 +260,10 @@ class Astra_Heading_Colors_Loader {
 				'maybeApplyHeadingColorForTitle' => astra_has_global_color_format_support(),
 			)
 		);
-
 	}
 }
 
 /**
-*  Kicking this off by creating the object of the class.
-*/
+ *  Kicking this off by creating the object of the class.
+ */
 new Astra_Heading_Colors_Loader();

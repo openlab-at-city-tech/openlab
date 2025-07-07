@@ -18,7 +18,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 	 * @since 1.0.0
 	 */
 	class Astra_Ext_Transparent_Header_Loader {
-
 		/**
 		 * Member Variable
 		 *
@@ -44,7 +43,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			add_filter( 'astra_theme_defaults', array( $this, 'theme_defaults' ) );
 			add_action( 'customize_preview_init', array( $this, 'preview_scripts' ) );
 			add_action( 'customize_register', array( $this, 'customize_register' ), 2 );
-
 		}
 
 		/**
@@ -78,8 +76,8 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			$defaults['transparent-header-main-sep-color']             = '';
 
 			/**
-			* Transparent Header
-			*/
+			 * Transparent Header
+			 */
 			$defaults['transparent-header-bg-color']           = '';
 			$defaults['transparent-header-color-site-title']   = '';
 			$defaults['transparent-header-color-h-site-title'] = '';
@@ -92,8 +90,8 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			$defaults['transparent-header-logo-color']         = '';
 
 			/**
-			* Transparent Header Responsive Colors
-			*/
+			 * Transparent Header Responsive Colors
+			 */
 			$defaults['transparent-header-bg-color-responsive'] = array(
 				'desktop' => '',
 				'tablet'  => '',
@@ -209,8 +207,8 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 			 * Load unminified if SCRIPT_DEBUG is true.
 			 */
 			/* Directory and Extension */
-			$dir_name    = ( SCRIPT_DEBUG ) ? 'unminified' : 'minified';
-			$file_prefix = ( SCRIPT_DEBUG ) ? '' : '.min';
+			$dir_name    = SCRIPT_DEBUG ? 'unminified' : 'minified';
+			$file_prefix = SCRIPT_DEBUG ? '' : '.min';
 			wp_enqueue_script( 'astra-transparent-header-customizer-preview-js', ASTRA_THEME_TRANSPARENT_HEADER_URI . 'assets/js/' . $dir_name . '/customizer-preview' . $file_prefix . '.js', array( 'customize-preview', 'astra-customizer-preview-js' ), ASTRA_THEME_VERSION, true );
 
 			// Localize variables for further JS.
@@ -228,6 +226,6 @@ if ( ! class_exists( 'Astra_Ext_Transparent_Header_Loader' ) ) {
 }
 
 /**
-*  Kicking this off by calling 'get_instance()' method
-*/
+ *  Kicking this off by calling 'get_instance()' method
+ */
 Astra_Ext_Transparent_Header_Loader::get_instance();

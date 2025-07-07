@@ -20,7 +20,7 @@ if ( Astra_Builder_Helper::is_row_empty( $astra_row, 'header', 'mobile' ) ) {
 		$astra_customizer_editor_row = 'section-transparent-header';
 	}
 
-	$astra_row_label = ( 'primary' === $astra_row ) ? 'main' : $astra_row;
+	$astra_row_label = 'primary' === $astra_row ? 'main' : $astra_row;
 	?>
 	<div class="ast-<?php echo esc_attr( $astra_row_label ); ?>-header-wrap <?php echo 'primary' === $astra_row ? 'main-header-bar-wrap' : ''; ?>" >
 		<div class="<?php echo esc_attr( 'ast-' . $astra_row . '-header-bar ast-' . $astra_row . '-header ' ); ?><?php echo 'primary' === $astra_row ? 'main-header-bar ' : ''; ?>site-<?php echo esc_attr( $astra_row ); ?>-header-wrap site-header-focus-item ast-builder-grid-row-layout-default ast-builder-grid-row-tablet-layout-default ast-builder-grid-row-mobile-layout-default" data-section="<?php echo esc_attr( $astra_customizer_editor_row ); ?>">

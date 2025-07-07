@@ -28,5 +28,5 @@ function astra_header_widget_configuration() {
 }
 
 if ( Astra_Builder_Customizer::astra_collect_customizer_builder_data() ) {
-	astra_header_widget_configuration();
+	add_action( 'init', 'astra_header_widget_configuration' );
 }

@@ -20,7 +20,6 @@ if ( class_exists( 'Astra_Customizer_Config_Base' ) ) {
 	 * @since 3.0.0
 	 */
 	class Astra_Customizer_Site_Identity_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Builder Site Identity Customizer Configurations.
 		 *

@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 	 * @since 1.0.0
 	 */
 	class Astra_Ext_Transparent_Header_Markup {
-
 		/**
 		 * Member Variable
 		 *
@@ -88,7 +87,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 		/**
 		 * Astra check if transparent header is enabled.
 		 *
-		 * @return boolean true/false.
+		 * @return bool true/false.
 		 */
 		public static function is_transparent_header() {
 
@@ -117,7 +116,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 					$enable_trans_header = false;
 				}
 
-				if ( is_front_page() && 'posts' == get_option( 'show_on_front' ) && '1' == astra_get_option( 'transparent-header-disable-latest-posts-index' ) ) {
+				if ( is_front_page() && 'posts' === get_option( 'show_on_front' ) && '1' == astra_get_option( 'transparent-header-disable-latest-posts-index' ) ) {
 					$enable_trans_header = false;
 				}
 
@@ -162,7 +161,6 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 				add_filter( 'get_custom_logo', array( $this, 'transparent_custom_logo' ), 10, 2 );
 			}
 		}
-
 
 		/**
 		 * Replace transparent header logo.
@@ -242,8 +240,6 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 			return $html;
 		}
 
-
-
 		/**
 		 * Replace transparent header logo.
 		 *
@@ -271,7 +267,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 				$file_type      = wp_check_filetype( $attr['src'] );
 				$file_extension = $file_type['ext'];
 
-				if ( 'svg' == $file_extension ) {
+				if ( 'svg' === $file_extension ) {
 					$attr['class'] = 'astra-logo-svg';
 				}
 
@@ -329,7 +325,7 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 			/**
 			 * Get options
 			 */
-			$trans_header_meta = ( isset( $meta['theme-transparent-header-meta']['default'] ) ) ? $meta['theme-transparent-header-meta']['default'] : 'default';
+			$trans_header_meta = isset( $meta['theme-transparent-header-meta']['default'] ) ? $meta['theme-transparent-header-meta']['default'] : 'default';
 			$show_meta_field   = ! astra_check_is_bb_themer_layout();
 			?>
 
@@ -393,6 +389,6 @@ if ( ! class_exists( 'Astra_ExtTransparenty_Header_Markup' ) ) {
 }
 
 /**
-*  Kicking this off by calling 'get_instance()' method
-*/
+ *  Kicking this off by calling 'get_instance()' method
+ */
 Astra_Ext_Transparent_Header_Markup::get_instance();

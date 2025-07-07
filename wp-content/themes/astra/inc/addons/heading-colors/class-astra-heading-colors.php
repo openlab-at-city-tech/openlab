@@ -22,7 +22,6 @@ if ( ! class_exists( 'Astra_Heading_Colors' ) ) {
 	 * @since 2.1.4
 	 */
 	class Astra_Heading_Colors {
-
 		/**
 		 * Constructor function that initializes required actions and hooks
 		 */

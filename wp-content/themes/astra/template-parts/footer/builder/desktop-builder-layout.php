@@ -21,7 +21,7 @@ echo wp_kses_post(
 				astra_get_footer_classes()
 			),
 		)
-	) 
+	)
 );
 ?>
 >

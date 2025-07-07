@@ -29,14 +29,14 @@ function astra_related_posts_css( $dynamic_css ) {
 
 		// Added RTL language support for title alignment.
 		if ( is_rtl() && 'center' !== $related_posts_title_alignment ) {
-			$related_posts_title_alignment = ( 'left' === $related_posts_title_alignment ) ? 'right' : 'left';
+			$related_posts_title_alignment = 'left' === $related_posts_title_alignment ? 'right' : 'left';
 		}
 
 		// Related Posts Grid layout params.
 		$related_posts_grid = astra_get_option( 'related-posts-grid-responsive' );
-		$desktop_grid       = ( isset( $related_posts_grid['desktop'] ) ) ? $related_posts_grid['desktop'] : '2-equal';
-		$tablet_grid        = ( isset( $related_posts_grid['tablet'] ) ) ? $related_posts_grid['tablet'] : '2-equal';
-		$mobile_grid        = ( isset( $related_posts_grid['mobile'] ) ) ? $related_posts_grid['mobile'] : 'full';
+		$desktop_grid       = isset( $related_posts_grid['desktop'] ) ? $related_posts_grid['desktop'] : '2-equal';
+		$tablet_grid        = isset( $related_posts_grid['tablet'] ) ? $related_posts_grid['tablet'] : '2-equal';
+		$mobile_grid        = isset( $related_posts_grid['mobile'] ) ? $related_posts_grid['mobile'] : 'full';
 
 		// Related Posts -> Post Title typography dynamic stylings.
 		$related_post_title_font_size = astra_get_option( 'related-posts-title-font-size' );
@@ -175,10 +175,10 @@ function astra_related_posts_css( $dynamic_css ) {
 		}
 		$css_desktop_output['.ast-related-cat-style--badge .cat-links > a, .ast-related-tag-style--badge .tags-links > a']             = array(
 			'border-style'        => 'solid',
-			'border-top-width'    => ( isset( $global_custom_button_border_size['top'] ) && '' !== $global_custom_button_border_size['top'] ) ? astra_get_css_value( $global_custom_button_border_size['top'], 'px' ) : '0',
-			'border-right-width'  => ( isset( $global_custom_button_border_size['right'] ) && '' !== $global_custom_button_border_size['right'] ) ? astra_get_css_value( $global_custom_button_border_size['right'], 'px' ) : '0',
-			'border-left-width'   => ( isset( $global_custom_button_border_size['left'] ) && '' !== $global_custom_button_border_size['left'] ) ? astra_get_css_value( $global_custom_button_border_size['left'], 'px' ) : '0',
-			'border-bottom-width' => ( isset( $global_custom_button_border_size['bottom'] ) && '' !== $global_custom_button_border_size['bottom'] ) ? astra_get_css_value( $global_custom_button_border_size['bottom'], 'px' ) : '0',
+			'border-top-width'    => isset( $global_custom_button_border_size['top'] ) && '' !== $global_custom_button_border_size['top'] ? astra_get_css_value( $global_custom_button_border_size['top'], 'px' ) : '0',
+			'border-right-width'  => isset( $global_custom_button_border_size['right'] ) && '' !== $global_custom_button_border_size['right'] ? astra_get_css_value( $global_custom_button_border_size['right'], 'px' ) : '0',
+			'border-left-width'   => isset( $global_custom_button_border_size['left'] ) && '' !== $global_custom_button_border_size['left'] ? astra_get_css_value( $global_custom_button_border_size['left'], 'px' ) : '0',
+			'border-bottom-width' => isset( $global_custom_button_border_size['bottom'] ) && '' !== $global_custom_button_border_size['bottom'] ? astra_get_css_value( $global_custom_button_border_size['bottom'], 'px' ) : '0',
 			'padding'             => '4px 8px',
 			'border-radius'       => '3px',
 			'font-size'           => 'inherit',

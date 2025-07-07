@@ -38,9 +38,9 @@ function astra_fb_copyright_dynamic_css( $dynamic_css, $dynamic_css_filtered = '
 
 	$alignment = astra_get_option( 'footer-copyright-alignment' );
 
-	$desktop_alignment = ( isset( $alignment['desktop'] ) ) ? $alignment['desktop'] : '';
-	$tablet_alignment  = ( isset( $alignment['tablet'] ) ) ? $alignment['tablet'] : '';
-	$mobile_alignment  = ( isset( $alignment['mobile'] ) ) ? $alignment['mobile'] : '';
+	$desktop_alignment = isset( $alignment['desktop'] ) ? $alignment['desktop'] : '';
+	$tablet_alignment  = isset( $alignment['tablet'] ) ? $alignment['tablet'] : '';
+	$mobile_alignment  = isset( $alignment['mobile'] ) ? $alignment['mobile'] : '';
 
 	$margin = astra_get_option( $_section . '-margin' );
 

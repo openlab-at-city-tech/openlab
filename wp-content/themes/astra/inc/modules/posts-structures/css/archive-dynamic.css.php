@@ -32,18 +32,18 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 	if ( is_search() || ! in_array( $current_post_type, $supported_post_types ) ) {
 		return $dynamic_css;
 	}
-	if ( false === astra_get_option( 'ast-archive-' . $current_post_type . '-title', ( class_exists( 'WooCommerce' ) && 'product' === $current_post_type ) ? false : true ) ) {
+	if ( false === astra_get_option( 'ast-archive-' . $current_post_type . '-title', class_exists( 'WooCommerce' ) && 'product' === $current_post_type ? false : true ) ) {
 		return $dynamic_css;
 	}
 
 	// SureCart Shop Page Banner Support.
-	$surecart_shop_support = ( defined( 'SURECART_PLUGIN_FILE' ) && is_page() && get_the_ID() === absint( get_option( 'surecart_shop_page_id' ) ) ) ? true : false;
+	$surecart_shop_support = defined( 'SURECART_PLUGIN_FILE' ) && is_page() && get_the_ID() === absint( get_option( 'surecart_shop_page_id' ) ) ? true : false;
 	if ( $surecart_shop_support ) {
 		$current_post_type = 'sc_product';
 	}
 
 	$layout_type     = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-layout', 'layout-1' );
-	$layout_2_active = ( 'layout-2' === $layout_type ) ? true : false;
+	$layout_2_active = 'layout-2' === $layout_type ? true : false;
 
 	if ( $layout_2_active ) {
 		$selector = '.ast-archive-entry-banner[data-post-type="' . $current_post_type . '"]';
@@ -56,31 +56,31 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 	}
 
 	$horz_alignment   = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-horizontal-alignment' );
-	$desk_h_alignment = ( isset( $horz_alignment['desktop'] ) ) ? $horz_alignment['desktop'] : '';
-	$tab_h_alignment  = ( isset( $horz_alignment['tablet'] ) ) ? $horz_alignment['tablet'] : '';
-	$mob_h_alignment  = ( isset( $horz_alignment['mobile'] ) ) ? $horz_alignment['mobile'] : '';
+	$desk_h_alignment = isset( $horz_alignment['desktop'] ) ? $horz_alignment['desktop'] : '';
+	$tab_h_alignment  = isset( $horz_alignment['tablet'] ) ? $horz_alignment['tablet'] : '';
+	$mob_h_alignment  = isset( $horz_alignment['mobile'] ) ? $horz_alignment['mobile'] : '';
 
 	if ( 'layout-1' === $layout_type ) {
-		$desk_h_alignment = ( '' !== $desk_h_alignment ) ? $desk_h_alignment : 'left';
-		$tab_h_alignment  = ( '' !== $tab_h_alignment ) ? $tab_h_alignment : 'left';
-		$mob_h_alignment  = ( '' !== $mob_h_alignment ) ? $mob_h_alignment : 'left';
+		$desk_h_alignment = '' !== $desk_h_alignment ? $desk_h_alignment : 'left';
+		$tab_h_alignment  = '' !== $tab_h_alignment ? $tab_h_alignment : 'left';
+		$mob_h_alignment  = '' !== $mob_h_alignment ? $mob_h_alignment : 'left';
 	}
 
 	$elements_gap   = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-elements-gap', 10 );
-	$banner_padding = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-padding', ( class_exists( 'WooCommerce' ) && 'product' === $current_post_type ) ? Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-spacing' ) : Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
+	$banner_padding = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-padding', class_exists( 'WooCommerce' ) && 'product' === $current_post_type ? Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-spacing' ) : Astra_Posts_Structure_Loader::get_customizer_default( 'responsive-padding' ) );
 	$banner_margin  = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-margin' );
 
 	$banner_height      = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-height' );
-	$desk_banner_height = ( $layout_2_active && isset( $banner_height['desktop'] ) ) ? astra_get_css_value( $banner_height['desktop'], 'px' ) : '';
-	$tab_banner_height  = ( $layout_2_active && isset( $banner_height['tablet'] ) ) ? astra_get_css_value( $banner_height['tablet'], 'px' ) : '';
-	$mob_banner_height  = ( $layout_2_active && isset( $banner_height['mobile'] ) ) ? astra_get_css_value( $banner_height['mobile'], 'px' ) : '';
+	$desk_banner_height = $layout_2_active && isset( $banner_height['desktop'] ) ? astra_get_css_value( $banner_height['desktop'], 'px' ) : '';
+	$tab_banner_height  = $layout_2_active && isset( $banner_height['tablet'] ) ? astra_get_css_value( $banner_height['tablet'], 'px' ) : '';
+	$mob_banner_height  = $layout_2_active && isset( $banner_height['mobile'] ) ? astra_get_css_value( $banner_height['mobile'], 'px' ) : '';
 
 	$text_color       = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-text-color' );
 	$title_color      = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-title-color' );
 	$link_color       = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-link-color' );
 	$link_hover_color = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-link-hover-color' );
 
-	$vert_alignment  = ( $layout_2_active ) ? astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-vertical-alignment', 'center' ) : 'center';
+	$vert_alignment  = $layout_2_active ? astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-vertical-alignment', 'center' ) : 'center';
 	$width_type      = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-width-type', 'fullwidth' );
 	$custom_width    = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-custom-width', 1200 );
 	$background_type = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-image-type', 'none' );
@@ -360,7 +360,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 					$overlay_color  = astra_get_option( 'ast-dynamic-archive-' . $current_post_type . '-banner-featured-overlay', '' );
 					$taxonomy       = $wp_query->get_queried_object();
 					$feat_image_src = '';
-				
+
 					// Checking if the is_shop function and wc_get_page_id are callable.
 					if ( is_callable( 'is_shop' ) && is_shop() && is_callable( 'wc_get_page_id' ) ) {
 						$shop_page_id = wc_get_page_id( 'shop' );
@@ -368,7 +368,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 						// Retrieving the featured image URL of the shop page.
 						$feat_image_src = get_the_post_thumbnail_url( $shop_page_id );
 					}
-				
+
 					// Checking if we are in a taxonomy (category/archive) page.
 					if ( ! empty( $taxonomy->term_id ) ) {
 						$thumbnail_id   = get_term_meta( $taxonomy->term_id, 'thumbnail_id', true );
@@ -407,7 +407,7 @@ function astra_post_archive_structure_dynamic_css( $dynamic_css, $dynamic_css_fi
 			justify-content: center;
 			text-align: center;
 			position: relative;
-			background: #eeeeee;
+			background: var(--ast-title-layout-bg);
 		}
 		.ast-archive-entry-banner[data-banner-width-type="custom"] {
 			margin: 0 auto;

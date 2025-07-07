@@ -16,7 +16,6 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 	 * Class Astra_Builder_Loader.
 	 */
 	final class Astra_Builder_Loader {
-
 		/**
 		 * Member Variable
 		 *
@@ -72,7 +71,7 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 			 */
 			require_once ASTRA_THEME_DIR . 'inc/customizer/class-astra-builder-customizer.php';
 
-			/**DONE */
+			/*DONE */
 
 			if ( true === Astra_Builder_Helper::$is_header_footer_builder_active ) {
 				add_filter( 'astra_existing_header_footer_configs', '__return_false' );
@@ -143,19 +142,19 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 
 					$layout = get_post_meta( $post_id, 'ast-advanced-hook-layout', false );
 
-					if ( isset( $layout[0] ) && '404-page' == $layout[0] && 0 == $layout_404_counter ) {
+					if ( isset( $layout[0] ) && '404-page' === $layout[0] && 0 === $layout_404_counter ) {
 
 						$layout_404_settings = get_post_meta( $post_id, 'ast-404-page', true );
-						if ( isset( $layout_404_settings['disable_header'] ) && 'enabled' == $layout_404_settings['disable_header'] ) {
+						if ( isset( $layout_404_settings['disable_header'] ) && 'enabled' === $layout_404_settings['disable_header'] ) {
 							remove_action( 'astra_header', array( Astra_Builder_Header::get_instance(), 'header_builder_markup' ) );
 						}
 
-						if ( isset( $layout_404_settings['disable_footer'] ) && 'enabled' == $layout_404_settings['disable_footer'] ) {
+						if ( isset( $layout_404_settings['disable_footer'] ) && 'enabled' === $layout_404_settings['disable_footer'] ) {
 							remove_action( 'astra_footer', array( Astra_Builder_Footer::get_instance(), 'footer_markup' ) );
 						}
 
-						$layout_404_counter ++;
-					} elseif ( isset( $layout[0] ) && 'header' == $layout[0] && 0 == $header_counter ) {
+						$layout_404_counter++;
+					} elseif ( isset( $layout[0] ) && 'header' === $layout[0] && 0 === $header_counter ) {
 						// Remove default site's header.
 						remove_action( 'astra_header', array( Astra_Builder_Header::get_instance(), 'header_builder_markup' ) );
 						// Check if the post has 'ast-advanced-hook-enabled' meta key is not set to 'no'.
@@ -168,7 +167,7 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 							add_filter( 'astra_disable_mobile_popup_markup', '__return_true' );
 						}
 						$header_counter++;
-					} elseif ( isset( $layout[0] ) && 'footer' == $layout[0] && 0 == $footer_counter ) {
+					} elseif ( isset( $layout[0] ) && 'footer' === $layout[0] && 0 === $footer_counter ) {
 						// Remove default site's footer.
 						remove_action( 'astra_footer', array( Astra_Builder_Footer::get_instance(), 'footer_markup' ) );
 						$footer_counter++;
@@ -208,7 +207,6 @@ if ( ! class_exists( 'Astra_Builder_Loader' ) ) {
 	 */
 	Astra_Builder_Loader::get_instance();
 }
-
 
 if ( ! function_exists( 'astra_builder' ) ) {
 	/**

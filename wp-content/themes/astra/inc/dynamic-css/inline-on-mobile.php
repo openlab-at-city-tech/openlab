@@ -160,5 +160,5 @@ function astra_inline_on_mobile_css( $dynamic_css ) {
         }';
 	}
 
-	return $dynamic_css .= Astra_Enqueue_Scripts::trim_css( $inline_on_mobile_css );
+	return $dynamic_css . Astra_Enqueue_Scripts::trim_css( $inline_on_mobile_css );
 }

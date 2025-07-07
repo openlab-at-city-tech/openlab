@@ -17,7 +17,6 @@ if ( ! class_exists( 'Astra_Site_Layout_Configs' ) ) {
 	 * Register Site Layout Customizer Configurations.
 	 */
 	class Astra_Site_Layout_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register Site Layout Customizer Configurations.
 		 *
@@ -39,7 +38,7 @@ if ( ! class_exists( 'Astra_Site_Layout_Configs' ) ) {
 					'priority'    => 10,
 					'title'       => __( 'Container Width', 'astra' ),
 					'divider'     => array( 'ast_class' => 'ast-top-section-divider' ),
-					'context'     => ( defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'site-layouts' ) ) ? array(
+					'context'     => defined( 'ASTRA_EXT_VER' ) && Astra_Ext_Extension::is_active( 'site-layouts' ) ? array(
 						Astra_Builder_Helper::$general_tab_config,
 						array(
 							'setting'  => ASTRA_THEME_SETTINGS . '[site-layout]',

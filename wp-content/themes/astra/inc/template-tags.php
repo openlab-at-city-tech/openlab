@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-if ( ! function_exists( 'astra_entry_footer' ) ) :
+if ( ! function_exists( 'astra_entry_footer' ) ) {
 	/**
 	 * Prints HTML with meta information for the categories, tags and comments.
 	 */
@@ -39,4 +39,4 @@ if ( ! function_exists( 'astra_entry_footer' ) ) :
 			'</span>'
 		);
 	}
-endif;
+}

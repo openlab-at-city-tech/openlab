@@ -30,7 +30,6 @@ switch ( $astra_footer_sections ) {
 			$astra_footer_section_class = 'ast-small-footer-section-equally ' . astra_attr( 'ast-grid-common-col' );
 		break;
 }
-
 ?>
 
 <div class="ast-small-footer footer-sml-layout-2">
@@ -39,21 +38,21 @@ switch ( $astra_footer_sections ) {
 			<div class="ast-small-footer-wrap" >
 					<div class="ast-row ast-flex">
 
-					<?php if ( $astra_footer_section_1 ) : ?>
+					<?php if ( $astra_footer_section_1 ) { ?>
 						<div class="ast-small-footer-section ast-small-footer-section-1 <?php echo esc_attr( $astra_footer_section_class ); ?>" >
 							<?php
 								echo $astra_footer_section_1; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</div>
-				<?php endif; ?>
+					<?php } ?>
 
-					<?php if ( $astra_footer_section_2 ) : ?>
+					<?php if ( $astra_footer_section_2 ) { ?>
 						<div class="ast-small-footer-section ast-small-footer-section-2 <?php echo esc_attr( $astra_footer_section_class ); ?>" >
 							<?php
 								echo $astra_footer_section_2; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</div>
-				<?php endif; ?>
+					<?php } ?>
 
 					</div> <!-- .ast-row.ast-flex -->
 			</div><!-- .ast-small-footer-wrap -->

@@ -19,7 +19,6 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 	 * @since 1.4.3
 	 */
 	class Astra_Lifter_Container_Configs extends Astra_Customizer_Config_Base {
-
 		/**
 		 * Register LifterLMS Container Settings.
 		 *
@@ -53,15 +52,15 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 					'choices'           => array(
 						'default'                => array(
 							'label' => __( 'Default', 'astra' ),
-							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'layout-default', false ) : '',
+							'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'layout-default', false ) : '',
 						),
 						'normal-width-container' => array(
 							'label' => __( 'Normal', 'astra' ),
-							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'normal-width-container', false ) : '',
+							'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'normal-width-container', false ) : '',
 						),
 						'full-width-container'   => array(
 							'label' => __( 'Full Width', 'astra' ),
-							'path'  => ( class_exists( 'Astra_Builder_UI_Controller' ) ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'full-width-container', false ) : '',
+							'path'  => class_exists( 'Astra_Builder_UI_Controller' ) ? Astra_Builder_UI_Controller::fetch_svg_icon( 'full-width-container', false ) : '',
 						),
 					),
 					'divider'           => array( 'ast_class' => 'ast-section-spacing ast-bottom-divider' ),
@@ -90,7 +89,6 @@ if ( ! class_exists( 'Astra_Lifter_Container_Configs' ) ) {
 			);
 
 			return array_merge( $configurations, $_configs );
-
 		}
 	}
 }

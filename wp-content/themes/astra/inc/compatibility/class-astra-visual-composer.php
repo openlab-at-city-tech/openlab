@@ -13,7 +13,7 @@ if ( ! class_exists( 'Vc_Manager' ) ) {
 /**
  * Astra Visual Composer Compatibility
  */
-if ( ! class_exists( 'Astra_Visual_Composer' ) ) :
+if ( ! class_exists( 'Astra_Visual_Composer' ) ) {
 
 	/**
 	 * Astra Visual Composer Compatibility
@@ -21,7 +21,6 @@ if ( ! class_exists( 'Astra_Visual_Composer' ) ) :
 	 * @since 1.0.0
 	 */
 	class Astra_Visual_Composer {
-
 		/**
 		 * Member Variable
 		 *
@@ -58,7 +57,7 @@ if ( ! class_exists( 'Astra_Visual_Composer' ) ) :
 		 */
 		public function vc_update_meta_setting( $id ) {
 
-			if ( false === astra_enable_page_builder_compatibility() || 'post' == get_post_type() ) {
+			if ( false === astra_enable_page_builder_compatibility() || 'post' === get_post_type() ) {
 				return;
 			}
 
@@ -68,12 +67,12 @@ if ( ! class_exists( 'Astra_Visual_Composer' ) ) :
 			update_post_meta( $id, 'ast-featured-img', 'disabled' );
 
 			$content_layout = get_post_meta( $id, 'site-content-layout', true );
-			if ( empty( $content_layout ) || 'default' == $content_layout ) {
+			if ( empty( $content_layout ) || 'default' === $content_layout ) {
 				update_post_meta( $id, 'site-content-layout', 'plain-container' );
 			}
 
 			$sidebar_layout = get_post_meta( $id, 'site-sidebar-layout', true );
-			if ( empty( $sidebar_layout ) || 'default' == $sidebar_layout ) {
+			if ( empty( $sidebar_layout ) || 'default' === $sidebar_layout ) {
 				update_post_meta( $id, 'site-sidebar-layout', 'no-sidebar' );
 			}
 		}
@@ -133,7 +132,7 @@ if ( ! class_exists( 'Astra_Visual_Composer' ) ) :
 		}
 	}
 
-endif;
+}
 
 /**
  * Kicking this off by calling 'get_instance()' method
