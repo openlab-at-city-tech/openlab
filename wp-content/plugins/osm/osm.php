@@ -3,13 +3,13 @@
 Plugin Name: OSM
 Plugin URI: https://wp-osm-plugin.hyumika.com
 Description: Embeds maps in your blog and adds geo data to your posts.  Find samples and a forum on the <a href="https://wp-osm-plugin.hyumika.com">OSM plugin page</a>.
-Version: 6.1.6
+Version: 6.1.9
 Author: MiKa
 Author URI: http://www.hyumika.com
 Minimum WordPress Version Required: 3.0
 */
 
-/*  (c) Copyright 2024  MiKa (www.hyumika.com)
+/*  (c) Copyright 2025  MiKa (www.hyumika.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,9 +25,8 @@ Minimum WordPress Version Required: 3.0
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-load_plugin_textdomain('OSM', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/');
 
-define ("PLUGIN_VER", "V6.1.6");
+define ("PLUGIN_VER", "V6.1.9");
 
 // modify anything about the marker for tagged posts here
 // instead of the coding.
@@ -263,7 +262,9 @@ function savePostMarker() {
     wp_die();
 }
 
-
+function osm_load_plugin_textdomain() {
+    load_plugin_textdomain('OSM', false, dirname(plugin_basename(__FILE__)) . '/languages/'  );
+}
 
 // If the function exists this file is called as post-upload-ui.
 // We don't do anything then.
@@ -350,6 +351,7 @@ class Osm
     add_action('widgets_init', 'register_osm_widget' );
     add_action('wp_ajax_act_saveGeotag', 'saveGeotagAndPic');
     add_action('wp_ajax_act_saveMarker', 'savePostMarker');
+    add_action('plugins_loaded', 'osm_load_plugin_textdomain');
 
     // add the WP shortcode
     add_shortcode('osm_map',array(&$this, 'sc_showMap'));

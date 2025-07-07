@@ -415,4 +415,67 @@ function CombineNearMarker(PixelDiff, a_tileLayer)
     return PopUpArray;
 }
 
+document.addEventListener('DOMContentLoaded', function () {
+  // EventListener für Marker speichern und Shortcode generieren
+  const markerBtn = document.getElementById('osm-save-marker-btn');
+  if (markerBtn) {
+    markerBtn.addEventListener('click', function () {
+      osm_savePostMarker();
+      osm_generateAddMarkerSC();
+    });
+  }
+
+  // EventListener für Geotag speichern
+  const geotagBtn = document.getElementById('osm-save-geotag-btn');
+  if (geotagBtn) {
+    geotagBtn.addEventListener('click', function () {
+      osm_saveGeotag();
+    });
+  }
+  
+  // EventListener für generate File ShortCode
+  const FileSCBtn = document.getElementById('osm-gen-file-sc-btn');
+  if (FileSCBtn) {
+    FileSCBtn.addEventListener('click', function () {
+      osm_generateFileSC();
+    });
+  }
+  
+  // EventListener für generate tagged post ShortCode
+  const GenTPSCBtn = document.getElementById('osm-gen-tagged-post-sc-btn');
+  if (GenTPSCBtn) {
+    GenTPSCBtn.addEventListener('click', function () {
+      osm_generateTaggedPostsSC();
+    });
+  }
+  
+  const clusterRadio = document.getElementById('tagged_marker_cluster');
+  if (clusterRadio) {
+    clusterRadio.addEventListener('change', function () {
+      if (this.checked) {
+        osm_showTaggedSCmap();
+      }
+    });
+  }
+  
+  
+  const radios = document.querySelectorAll('input[name="tagged_marker_style"]');
+  radios.forEach(function (radio) {
+    radio.addEventListener('change', function () {
+      console.log("Marker Style gewählt:", this.value);
+      osm_showTaggedSCmap(); 
+    });
+  });
+  
+  const selectionBox = document.getElementById('show_selection_box');
+  if (selectionBox) {
+    selectionBox.addEventListener('change', function () {
+      osm_showFileSCmap();
+    });
+  }
+  
+});
+
+
+
 
