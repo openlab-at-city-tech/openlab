@@ -84,52 +84,6 @@ function openlab_custom_the_content($content) {
 
 add_filter('the_content', 'openlab_custom_the_content', 11);
 
-/**
- * OpenLab main menu markup.
- *
- * @param string $location
- */
-function openlab_main_menu( $location = 'header' ) {
-    ?>
-    <nav class="navbar navbar-default oplb-bs navbar-location-<?php echo $location ?>" role="navigation">
-        <?php openlab_sitewide_header($location); ?>
-        <div class="main-nav-wrapper">
-            <div class="container-fluid">
-                <div class="navbar-header hidden-xs">
-                    <header class="menu-title"><a href="<?php echo home_url(); ?>" title="<?php _ex('Home', 'Home page banner link title', 'buddypress'); ?>"><?php bp_site_name(); ?></a></header>
-                </div>
-                <div class="navbar-collapse collapse" id="main-nav-<?php echo $location ?>">
-                    <?php
-                    //this adds the main menu, controlled through the WP menu interface
-                    $args = array(
-                        'theme_location' => 'main',
-                        'container' => false,
-                        'menu_class' => 'nav navbar-nav',
-                        'menu_id' => 'menu-main-menu-' . $location,
-                    );
-
-                    wp_nav_menu($args);
-                    ?>
-                    <div class="navbar-right search hidden-xs">
-                        <?php openlab_mu_site_wide_bp_search('desktop', $location); ?>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nav>
-    <?php
-}
-
-/*
- * Main menu in footer
- */
-
-function openlab_footer_bar() {
-    openlab_main_menu('footer');
-}
-
-add_action('bp_before_footer', 'openlab_footer_bar', 6);
-
 function openlab_custom_menu_items( $items, $menu ) {
     if ( 'aboutmenu' === $menu->theme_location ) {
         $items = str_replace( 'Privacy Policy', '<i class="fa fa-external-link no-margin no-margin-left"></i>Privacy Policy', $items );
