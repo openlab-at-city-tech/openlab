@@ -4,8 +4,8 @@ Contributors: CreativeMindsSolutions
 Donate link: https://www.cminds.com/wordpress-plugins-library/tooltipglossary/
 Tags: glossary, vocabulary, dictionary, tooltip, lexicon
 Requires at least: 5.4.0
-Tested up to: 6.7
-Stable tag: 4.4.5
+Tested up to: 6.8
+Stable tag: 4.4.9
 Requires PHP: 5.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -18,32 +18,32 @@ Create a WordPress glossary, encyclopedia, or dictionary of terms and display re
 
 ## CM Tooltip Glossary - The #1 WordPress Glossary Plugin 
 
-The CM Glossary Tooltip is a robust WordPress plugin. It empowers you to **establish an extensive knowledge-base of terms and their definitions** on your website. 
+The plugin empowers you to **establish an extensive knowledge-base of terms and their definitions** on your website. 
 
-Utilizing the Glossary plugin, you can easily establish an **extensive glossary featuring terms with corresponding definitions**. And we've been developing this since 2012!
+Utilizing this WordPress plugin, you can easily establish an **extensive glossary featuring terms with corresponding definitions**. And we've been developing this since 2012!
 
 
-### Glossary Terms Pages, Links and Glossary Index
+### Glossary Terms Pages, Links and Index
 
 This plugin operates by intelligently identifying glossary terms embedded within your posts or pages, incorporating links to a dedicated glossary page that offers detailed definitions for each term.
 
-Furthermore, the plugin generates an adaptable glossary index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
+Furthermore, the plugin generates an adaptable index, cataloging all the terms scattered across your website, and granting users convenient access to their respective definitions.
 
-### Glossary Tooltips
+### Tooltips
 
 This powerful tool also includes the tooltip plugin feature, allowing you to effortlessly **present dynamic a tooltip instantly emerges when users hover over the linked term**. 
 
 This delivers a seamless and user-friendly method for users to swiftly access definitions. 
 
-### Glossary Premium Editions
+### Premium Editions
 
 The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-library/tooltipglossary/) includes even more powerful features, such as: audio and video tooltips, Wikipedia support, Google Translate and Merriam-Webster integrations, ChatGPT integration, support for  abbreviations and variations, synonyms, multiple glossaries support, multiple index templates and much more.
 
-### Glossary Plugin Introduction Video
+### Plugin Introduction Video
 
 [youtube http://www.youtube.com/watch?v=WN3HLZ6ZuBM]
 
-==  Glossary Plugin Use-Cases ==
+==  Use-Cases ==
 (Some of these use cases might include pro plugin features)
 
 *  **Dictionary** - Creates a dictionary of specifically used terms on your site. Support multiple languages.
@@ -60,11 +60,11 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 * **Amazon** - Enhance your site with Tooltips including Amazon product recommendation
 * **ChatGPT** - Automatically add content for each term using ChatGPT
 
-== Free Glossary Plugin Features ==
+==  Features ==
 
 *  Automatically generates a Glossary index of terms. 
-*  Ability to show the A-Z Glossary index as a list or as tiles.
-*  The Glossary index is limited by 500 terms.
+*  Ability to show the A-Z index as a list or as tiles.
+*  The index is limited by 500 terms.
 *  Each glossary term has its own unique post. 
 *  The tooltip window can optionally appear when the term is hovered over by the cursor. 
 *  Term pages can  be linked directly from posts or pages.
@@ -79,7 +79,7 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 == Additional Features Available With the Glossary Pro Edition Version ==
 
 > * Includes all features of the Free Version.
-> * The Glossary index can show unlimited number of glossary terms.
+> * The index can show unlimited number of glossary terms.
 > * Optimized for fast work with large glossaries.
 > * Ability to show glossary terms in all custom post types.
 > * Allows to define how many terms to show in the Index page and where to place the pagination navigation.
@@ -90,14 +90,14 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 > * Multisite support.
 > * Supports using synonyms and variations to each term.
 > * Mobile friendly.
-> * Supports changing permalink structure for glossary terms.
+> * Supports changing permalink structure for terms.
 > * Fully compatible with the WPML plugin.
 > * Allows to parse the ACF fields with of various(selectable) types.
 > * Allows to disable creation of the glossary term pages
-> * (NEW) Allows to display glossary terms as footnotes instead of tooltips
+> * (NEW) Allows to display terms as footnotes instead of tooltips
 > * Over 130 configuration options in total!
 
-== List of Glossary Pro+ Edition Features ==
+== List of Pro+ Edition Features ==
 
 > * Includes all features of the Free and Pro Versions.
 > * Allows to choose one from over 18 templates for the Glossary Index page
@@ -118,7 +118,7 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 > * Includes a frontend turn tooltip on/off button.
 > * Over 240 configuration options in total!
 
-== List of the Glossary Ecommerce Edition Features ==
+== List of the Ecommerce Edition Features ==
 
 > * Includes all features of the Free, Pro and Pro+ Versions.
 > * (NEW) Supports ChatGPT integration
@@ -150,9 +150,9 @@ The [Glossary Plugin Premium editions](https://www.cminds.com/wordpress-plugins-
 
 == Code and Style Issues ==
 
-The Glossary plugin creates tooltips with JavaScript. They are based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
+The plugin creates tooltips with JavaScript. They are based on the article written by Michael Leigeber [here](http://sixrevisions.com/tutorials/javascript_tutorial/create_lightweight_javascript_tooltip/) 
 The Tooltip can be customized and styled through the tooltip.css and tooltip.js files.
-The alphabetical index for the Glossary index is based on [jQuery ListNav Plugin](http://www.ihwy.com/labs/jquery-listnav-plugin.aspx)
+The alphabetical index for the Glossary is based on [jQuery ListNav Plugin](http://www.ihwy.com/labs/jquery-listnav-plugin.aspx)
 
 
 == Follow Us ==
@@ -230,6 +230,22 @@ You can use glossaryLink. You can also define glossaryLinkMain if you wish to ha
 13. Import / Export
 
 == Changelog ==
+
+= 4.4.9 =
+Release Date: 25 Jun 2025
+* Small bugfix
+
+= 4.4.8 =
+Release Date: 24 Jun 2025
+* Updated plugin readme
+
+= 4.4.7 =
+Release Date: 12 Jun 2025
+* Added restrictions for deactivating a plugin and send reason should be admin user
+
+= 4.4.6 =
+Release Date: 16 Apr 2025
+* Improvements
 
 = 4.4.5 =
 Release Date: 16 Mar 2025

@@ -287,7 +287,8 @@ class CMTT_SetupWizard{
             $options = call_user_func($option['options']);
         }
         foreach($options as $item) {
-            $checked = in_array($item['value'],\CM\CMTT_Settings::get( $option['name'] )) ? 'checked' : '';
+            $selected = is_array(\CM\CMTT_Settings::get( $option['name'] )) ? \CM\CMTT_Settings::get( $option['name'] ) : [];
+            $checked = in_array($item['value'], $selected) ? 'checked' : '';
             $output .= "<input type='checkbox' id='{$option['name']}' name='{$option['name']}[]' value='{$item['value']}' {$checked}/>
                 <label for='{$option['name']}'>{$item['title']}</label><br>";
         }

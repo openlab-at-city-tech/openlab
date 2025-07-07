@@ -2375,7 +2375,9 @@ class CMTT_Free {
 				$isNotSubPage         = $isExternalPage || strpos( $item[2], '.php' ) !== false;
 				$url                  = $isNotSubPage ? $slug : get_admin_url( null, 'admin.php?page=' . $slug );
 				$target               = $isExternalPage ? '_blank' : '';
-				$submenus[ $item[0] ] = '<a href="' . $url . '" target="' . $target . '" class="' . ( $isCurrent ? 'current' : '' ) . '">' . $item[0] . '</a>';
+				if($item[3] != '') {
+					$submenus[ $item[0] ] = '<a href="' . $url . '" target="' . $target . '" class="' . ( $isCurrent ? 'current' : '' ) . '">' . $item[0] . '</a>';
+				}
 			}
 		}
 
@@ -3580,7 +3582,12 @@ class CMTT_Free {
 		ob_start();
 		?>
 		<div class="block onlyinpro">
-			<h3>Tooltip - Styling</h3>
+			<h3 class="section-title">
+				<span>Tooltip - Styling</span>
+				<svg class="tab-arrow" xmlns="http://www.w3.org/2000/svg" width="30" height="30" viewBox="0 0 24 24" fill="#6BC07F">
+					<path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z"></path>
+				</svg>
+			</h3>
 			<table class="floated-form-table form-table">
 				<tr class="onlyinpro">
 					<th scope="row">Is clickable?</th>
@@ -3740,6 +3747,13 @@ class CMTT_Free {
 					<td colspan="2" class="cm_field_help_container">Set color of link to the term page in the tooltip.
 						(Added only when the mobile support is enabled and on mobile device)
 					</td>
+				</tr>
+			</table>
+		</div>
+		<div class="block" style="padding-top:0px;">
+			<table class="floated-form-table form-table" style="margin-top:0px;">
+				<tr style="width:100%;">
+					<td style="width:100%; padding-left:0px; padding-right:0px; margin-top:0px;"><div class="onlyinpro_empty" style="display:none;"><p>Pro options are hidden. Click the button <span style="font-weight:bold;color:#00cd00;">"Show/hide Pro options"</span> to see them.</p></div></td>
 				</tr>
 			</table>
 		</div>
