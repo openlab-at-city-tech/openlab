@@ -8,7 +8,7 @@
  */
 
 if ( ! is_singular( ) ) : ?>
-<div class="col-md-6">
+<div class="col-lg-6">
 <?php endif; ?>
 	<article id="post-<?php the_ID(); ?>" <?php post_class(); ?>>
 		<?php koyel_post_thumbnail(); ?>

@@ -32,7 +32,7 @@ if (!class_exists('KOYEL_WELCOME')) :
 
         /** Trigger Welcome Message Notification */
         public function admin_notice() {
-            $hide_notice = get_option('koyel_hide_notice2');
+            $hide_notice = get_option('koyel_hide_notice4');
             if (!$hide_notice) {
                 add_action('admin_notices', array($this, 'admin_notice_content'));
             }
@@ -61,7 +61,7 @@ if (!class_exists('KOYEL_WELCOME')) :
                         </div>
                     </div>
 
-                    <a href="<?php echo wp_nonce_url(add_query_arg('koyel_hide_notice2', 1), 'koyel_hide_notice2_nonce', 'koyel_notice_panel'); ?>" class="notice-close"><?php esc_html_e('Dismiss', 'koyel'); ?></a>
+                    <a href="<?php echo wp_nonce_url(add_query_arg('koyel_hide_notice4', 1), 'koyel_hide_notice4_nonce', 'koyel_notice_panel'); ?>" class="notice-close"><?php esc_html_e('Dismiss', 'koyel'); ?></a>
                 </div>
 
             </div>
@@ -70,12 +70,12 @@ if (!class_exists('KOYEL_WELCOME')) :
 
         /** Hide Admin Notice */
         public function hide_admin_notice() {
-            if (isset($_GET['koyel_hide_notice2']) && isset($_GET['koyel_notice_panel']) && current_user_can('manage_options')) {
-                if (!wp_verify_nonce(wp_unslash($_GET['koyel_notice_panel']), 'koyel_hide_notice2_nonce')) {
+            if (isset($_GET['koyel_hide_notice4']) && isset($_GET['koyel_notice_panel']) && current_user_can('manage_options')) {
+                if (!wp_verify_nonce(wp_unslash($_GET['koyel_notice_panel']), 'koyel_hide_notice4_nonce')) {
                     wp_die(esc_html__('Action Failed. Something is Wrong.', 'koyel'));
                 }
 
-                update_option('koyel_hide_notice2', true);
+                update_option('koyel_hide_notice4', true);
             }
         }
         /** Enqueue Necessary Styles and Scripts for the Welcome Page */
@@ -86,7 +86,7 @@ if (!class_exists('KOYEL_WELCOME')) :
         }
 
         public function erase_hide_notice() {
-            delete_option('koyel_hide_notice2');
+            delete_option('koyel_hide_notice4');
         }
     }
 

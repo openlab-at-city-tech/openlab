@@ -931,7 +931,7 @@ p.comment-notes {
 .comment-form input[type="url"]:focus,
 .comment-form textarea:hover,
 .comment-form textarea:focus{
-  border: 1px solid #FFB81F;
+  border: 1px solid #000;
 }
 .comment-form input[type="submit"]{
   height: 44px;
@@ -1029,7 +1029,7 @@ p.comment-notes {
 /* Footer CSS */
 .footer-area {
   background-color: #F8F8F8;
-  margin: 20px 0px 0px 0px;
+  margin: 30px 0px 0px 0px;
   padding: 20px 0;
   text-align: center;
   border-top: 1px solid #ddd;
@@ -1100,6 +1100,12 @@ p.comment-notes {
   .comment-form{
     margin-bottom: 30px;
   }
+  .nav-links {
+    margin-bottom: 30px;
+  }
+  .widget {
+    padding: 0px 0px 0px 0px;
+  }
 }
 /* Wide Mobile Layout */
 @media (min-width: 481px) and (max-width: 767px) {
@@ -1149,6 +1155,12 @@ p.comment-notes {
   .comment-form{
     margin-bottom: 30px;
   }
+  .nav-links {
+    margin-bottom: 30px;
+  }
+  .widget {
+    padding: 0px 0px 0px 0px;
+  }
 }
 /* Mobile Layout*/
 @media (min-width: 320px) and (max-width: 480px) {
@@ -1175,5 +1187,11 @@ p.comment-notes {
   }
   .search-form input[type="search"] {
     width: 105%;
+  }
+  .nav-links {
+    margin-bottom: 30px;
+  }
+  .widget {
+    padding: 0px 0px 0px 0px;
   }
 }

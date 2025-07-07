@@ -3,9 +3,9 @@
 Contributors: ashathemes
 Tags: custom-background, custom-logo, custom-menu, blog, featured-image-header, featured-images, full-width-template, one-column, two-columns, right-sidebar, sticky-post, theme-options, threaded-comments, translation-ready,
 Requires at least: 5.7
-Tested up to: 6.6
+Tested up to: 6.8
 Requires PHP: 5.6
-Stable tag: 1.0.9
+Stable tag: 1.1.1
 License: GNU General Public License v2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,13 @@ Koyel Theme is wordpress blog theme for personal use. Fully responsive design di
 * Tested up to 6.6.1
 * Fixed sub menu
 
+= 1.1.0 =
+* Tested up to 6.7
+* Fixed Blog css
+
+= 1.1.1 =
+* Tested up to 6.8
+* Fixed Blog css
 
 == Copyright ==
 
