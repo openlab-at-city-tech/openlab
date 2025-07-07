@@ -208,8 +208,7 @@ class WPCF7_ContactForm {
 	private function __construct( $post = null ) {
 		$post = get_post( $post );
 
-		if ( $post
-		and self::post_type === get_post_type( $post ) ) {
+		if ( $post and self::post_type === get_post_type( $post ) ) {
 			$this->id = $post->ID;
 			$this->name = $post->post_name;
 			$this->title = $post->post_title;
@@ -431,8 +430,8 @@ class WPCF7_ContactForm {
 	 * @param string $title Title.
 	 */
 	public function set_title( $title ) {
-		$title = strip_tags( $title );
-		$title = trim( $title );
+		$title = wp_strip_all_tags( $title, true );
+		$title = wpcf7_strip_whitespaces( $title );
 
 		if ( '' === $title ) {
 			$title = __( 'Untitled', 'contact-form-7' );
@@ -504,11 +503,13 @@ class WPCF7_ContactForm {
 			return false;
 		}
 
-		if ( empty( $_POST['_wpcf7_unit_tag'] ) ) {
+		$unit_tag = wpcf7_superglobal_post( '_wpcf7_unit_tag' );
+
+		if ( empty( $unit_tag ) ) {
 			return false;
 		}
 
-		return $this->unit_tag() === $_POST['_wpcf7_unit_tag'];
+		return $this->unit_tag() === $unit_tag;
 	}
 
 
@@ -536,16 +537,13 @@ class WPCF7_ContactForm {
 			);
 		}
 
-		if ( $this->is_true( 'subscribers_only' )
-		and ! current_user_can( 'wpcf7_submit', $this->id() ) ) {
-			$notice = __(
-				"This contact form is available only for logged in users.",
-				'contact-form-7'
-			);
-
+		if (
+			$this->is_true( 'subscribers_only' ) and
+			! current_user_can( 'wpcf7_submit', $this->id() )
+		) {
 			$notice = sprintf(
 				'<p class="wpcf7-subscribers-only">%s</p>',
-				esc_html( $notice )
+				wp_kses_data( __( 'This contact form is available only for logged in users.', 'contact-form-7' ) )
 			);
 
 			return apply_filters( 'wpcf7_subscribers_only_notice', $notice, $this );
@@ -571,7 +569,7 @@ class WPCF7_ContactForm {
 			return sprintf(
 				'<p class="wpcf7-invalid-action-url"><strong>%1$s</strong> %2$s</p>',
 				esc_html( __( 'Error:', 'contact-form-7' ) ),
-				esc_html( __( "Invalid action URL is detected.", 'contact-form-7' ) )
+				esc_html( __( 'Invalid action URL is detected.', 'contact-form-7' ) )
 			);
 		}
 
@@ -730,17 +728,21 @@ class WPCF7_ContactForm {
 			'wpcf7_form_hidden_fields', array()
 		);
 
-		$content = '';
+		$formatter = new WPCF7_HTMLFormatter();
+
+		$formatter->append_start_tag( 'fieldset', array(
+			'class' => 'hidden-fields-container',
+		) );
 
 		foreach ( $hidden_fields as $name => $value ) {
-			$content .= sprintf(
-				'<input type="hidden" name="%1$s" value="%2$s" />',
-				esc_attr( $name ),
-				esc_attr( $value )
-			) . "\n";
+			$formatter->append_start_tag( 'input', array(
+				'type' => 'hidden',
+				'name' => $name,
+				'value' => $value,
+			) );
 		}
 
-		return '<div style="display: none;">' . "\n" . $content . '</div>' . "\n";
+		return $formatter->output() . "\n";
 	}
 
 
@@ -1050,21 +1052,21 @@ class WPCF7_ContactForm {
 	 */
 	public function submit( $options = '' ) {
 		$options = wp_parse_args( $options, array(
-			'skip_mail' =>
-				( $this->in_demo_mode()
-				|| $this->is_true( 'skip_mail' )
-				|| ! empty( $this->skip_mail ) ),
+			'skip_mail' => (
+				$this->in_demo_mode() ||
+				$this->is_true( 'skip_mail' ) ||
+				! empty( $this->skip_mail )
+			),
 		) );
 
-		if ( $this->is_true( 'subscribers_only' )
-		and ! current_user_can( 'wpcf7_submit', $this->id() ) ) {
+		if (
+			$this->is_true( 'subscribers_only' ) and
+			! current_user_can( 'wpcf7_submit', $this->id() )
+		) {
 			$result = array(
 				'contact_form_id' => $this->id(),
 				'status' => 'error',
-				'message' => __(
-					"This contact form is available only for logged in users.",
-					'contact-form-7'
-				),
+				'message' => __( 'This contact form is available only for logged in users.', 'contact-form-7' ),
 			);
 
 			return $result;
@@ -1229,8 +1231,7 @@ class WPCF7_ContactForm {
 	private function upgrade() {
 		$mail = $this->prop( 'mail' );
 
-		if ( is_array( $mail )
-		and ! isset( $mail['recipient'] ) ) {
+		if ( is_array( $mail ) and ! isset( $mail['recipient'] ) ) {
 			$mail['recipient'] = get_option( 'admin_email' );
 		}
 

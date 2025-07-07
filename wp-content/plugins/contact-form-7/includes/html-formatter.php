@@ -33,6 +33,13 @@ class WPCF7_HTMLFormatter {
 	);
 
 	/**
+	 * HTML elements that can be a direct child of the same element.
+	 */
+	const nestable_elements = array(
+		'article', 'aside', 'blockquote', 'div', 'fieldset', 'section', 'span',
+	);
+
+	/**
 	 * HTML elements that can contain flow content.
 	 */
 	const p_parent_elements = array(
@@ -99,6 +106,7 @@ class WPCF7_HTMLFormatter {
 		$this->options = wp_parse_args( $options, array(
 			'auto_br' => true,
 			'auto_indent' => true,
+			'allowed_html' => wpcf7_kses_allowed_html(),
 		) );
 	}
 
@@ -280,10 +288,23 @@ class WPCF7_HTMLFormatter {
 			}
 		}
 
-		// Close all remaining tags.
-		$this->close_all_tags();
+		return $this->output();
+	}
 
-		return $this->output;
+
+	/**
+	 * Appends preformatted text to the output property.
+	 */
+	public function append_preformatted( $content ) {
+		$this->output .= $content;
+	}
+
+
+	/**
+	 * Appends whitespace to the output property.
+	 */
+	public function append_whitespace() {
+		$this->append_preformatted( ' ' );
 	}
 
 
@@ -294,7 +315,7 @@ class WPCF7_HTMLFormatter {
 	 */
 	public function append_text( $content ) {
 		if ( $this->is_inside( array( 'pre', 'template' ) ) ) {
-			$this->output .= $content;
+			$this->append_preformatted( $content );
 			return;
 		}
 
@@ -312,7 +333,7 @@ class WPCF7_HTMLFormatter {
 			$paragraphs = preg_split( '/\s*\n\s*\n\s*/', $content );
 
 			$paragraphs = array_filter( $paragraphs, static function ( $paragraph ) {
-				return '' !== trim( $paragraph );
+				return '' !== wpcf7_strip_whitespaces( $paragraph );
 			} );
 
 			$paragraphs = array_values( $paragraphs );
@@ -326,20 +347,20 @@ class WPCF7_HTMLFormatter {
 						$this->options['auto_br']
 					);
 
-					$this->output .= $paragraph;
+					$this->append_preformatted( $paragraph );
 				}
 
 				foreach ( $paragraphs as $paragraph ) {
 					$this->start_tag( 'p' );
 
-					$paragraph = ltrim( $paragraph );
+					$paragraph = wpcf7_strip_whitespaces( $paragraph, 'start' );
 
 					$paragraph = self::normalize_paragraph(
 						$paragraph,
 						$this->options['auto_br']
 					);
 
-					$this->output .= $paragraph;
+					$this->append_preformatted( $paragraph );
 				}
 			}
 
@@ -354,7 +375,7 @@ class WPCF7_HTMLFormatter {
 
 				$content = self::normalize_paragraph( $content, $auto_br );
 
-				$this->output .= $content;
+				$this->append_preformatted( $content );
 			}
 		} else {
 			$auto_br = $this->options['auto_br'] &&
@@ -362,7 +383,7 @@ class WPCF7_HTMLFormatter {
 
 			$content = self::normalize_paragraph( $content, $auto_br );
 
-			$this->output .= $content;
+			$this->append_preformatted( $content );
 		}
 	}
 
@@ -375,16 +396,86 @@ class WPCF7_HTMLFormatter {
 	public function start_tag( $tag ) {
 		list( $tag, $tag_name ) = self::normalize_start_tag( $tag );
 
-		if ( in_array( $tag_name, self::p_child_elements, true ) ) {
-			if (
-				! $this->is_inside( 'p' ) and
-				! $this->is_inside( self::p_child_elements ) and
-				! $this->has_parent( self::p_nonparent_elements )
-			) {
-				// Open <p> if it does not exist.
-				$this->start_tag( 'p' );
+		if (
+			in_array( $tag_name, self::p_child_elements, true ) and
+			! $this->is_inside( 'p' ) and
+			! $this->is_inside( self::p_child_elements ) and
+			! $this->has_parent( self::p_nonparent_elements )
+		) {
+			// Open <p> if it does not exist.
+			$this->start_tag( 'p' );
+		}
+
+		$this->append_start_tag( $tag_name, array(), $tag );
+	}
+
+
+	/**
+	 * Appends a start tag to the output property.
+	 *
+	 * @param string $tag_name Tag name.
+	 * @param array $atts Associative array of attribute name and value pairs.
+	 * @param string $tag A start tag.
+	 */
+	public function append_start_tag( $tag_name, $atts = array(), $tag = '' ) {
+		if ( ! self::validate_tag_name( $tag_name ) ) {
+			wp_trigger_error(
+				__METHOD__,
+				sprintf(
+					/* translators: %s: Invalid HTML tag name */
+					__( 'Invalid tag name (%s) is specified.', 'contact-form-7' ),
+					$tag_name
+				),
+				E_USER_WARNING
+			);
+
+			return false;
+		}
+
+		if ( WP_DEBUG and ! empty( $this->options['allowed_html'] ) ) {
+			$html_disallowance = array();
+
+			if ( ! isset( $this->options['allowed_html'][$tag_name] ) ) {
+				$html_disallowance = array(
+					'element' => $tag_name,
+				);
+			} else {
+				$atts_allowed = $this->options['allowed_html'][$tag_name];
+
+				$atts_disallowed = array_diff_ukey( $atts, $atts_allowed,
+					static function ( $key_1, $key_2 ) use ( $atts_allowed ) {
+						if (
+							str_starts_with( $key_1, 'data-' ) and
+							! empty( $atts_allowed['data-*'] ) and
+							preg_match( '/^data-[a-z0-9_-]+$/', $key_1 )
+						) {
+							return 0;
+						} else {
+							return $key_1 === $key_2 ? 0 : 1;
+						}
+					}
+				);
+
+				if ( ! empty( $atts_disallowed ) ) {
+					$html_disallowance = array(
+						'element' => $tag_name,
+						'attributes' => array_keys( $atts_disallowed ),
+					);
+				}
 			}
-		} elseif (
+
+			if ( $html_disallowance ) {
+				$notice = sprintf(
+					/* translators: %s: JSON-formatted array of disallowed HTML */
+					__( 'HTML Disallowance: %s', 'contact-form-7' ),
+					wp_json_encode( $html_disallowance, JSON_PRETTY_PRINT )
+				);
+
+				wp_trigger_error( __METHOD__, $notice, E_USER_NOTICE );
+			}
+		}
+
+		if (
 			'p' === $tag_name or
 			in_array( $tag_name, self::p_parent_elements, true ) or
 			in_array( $tag_name, self::p_nonparent_elements, true )
@@ -442,21 +533,66 @@ class WPCF7_HTMLFormatter {
 			$this->end_tag( 'tbody' );
 		}
 
+		if (
+			$this->has_parent( $tag_name ) and
+			! in_array( $tag_name, self::nestable_elements, true )
+		) {
+			$this->end_tag( $tag_name );
+		}
+
 		if ( ! in_array( $tag_name, self::void_elements, true ) ) {
 			array_unshift( $this->stacked_elements, $tag_name );
 		}
 
 		if ( ! in_array( $tag_name, self::p_child_elements, true ) ) {
 			if ( '' !== $this->output ) {
-				$this->output = rtrim( $this->output ) . "\n";
+				$this->output = wpcf7_strip_whitespaces( $this->output, 'end' ) . "\n";
 			}
 
 			if ( $this->options['auto_indent'] ) {
-				$this->output .= self::indent( count( $this->stacked_elements ) - 1 );
+				$this->append_preformatted(
+					self::indent( count( $this->stacked_elements ) - 1 )
+				);
 			}
 		}
 
-		$this->output .= $tag;
+		if ( $tag ) {
+			$this->append_preformatted( $tag );
+		} elseif ( $atts ) {
+			if ( in_array( $tag_name, self::void_elements, true ) ) {
+				$this->append_preformatted(
+					sprintf(
+						'<%1$s %2$s />',
+						$tag_name,
+						wpcf7_format_atts( $atts )
+					)
+				);
+			} else {
+				$this->append_preformatted(
+					sprintf(
+						'<%1$s %2$s>',
+						$tag_name,
+						wpcf7_format_atts( $atts )
+					)
+				);
+			}
+		} else {
+			if ( in_array( $tag_name, self::void_elements, true ) ) {
+				$this->append_preformatted(
+					sprintf(
+						'<%s />',
+						$tag_name
+					)
+				);
+			} else {
+				$this->append_preformatted(
+					sprintf(
+						'<%s>',
+						$tag_name
+					)
+				);
+			}
+		}
 	}
 
 
@@ -524,6 +660,34 @@ class WPCF7_HTMLFormatter {
 
 
 	/**
+	 * Appends an end tag to the output property.
+	 *
+	 * @param string $tag_name Tag name.
+	 */
+	public function append_end_tag( $tag_name ) {
+		if ( ! in_array( $tag_name, self::p_child_elements, true ) ) {
+			// Remove unnecessary <br />.
+			$this->output = preg_replace( '/\s*<br \/>\s*$/', '', $this->output );
+
+			$this->output = wpcf7_strip_whitespaces( $this->output, 'end' ) . "\n";
+
+			if ( $this->options['auto_indent'] ) {
+				$this->append_preformatted(
+					self::indent( count( $this->stacked_elements ) )
+				);
+			}
+		}
+
+		$this->append_preformatted(
+			sprintf( '</%s>', $tag_name )
+		);
+
+		// Remove trailing <p></p>.
+		$this->output = preg_replace( '/<p>\s*<\/p>$/', '', $this->output );
+	}
+
+
+	/**
 	 * Closes all open tags.
 	 */
 	public function close_all_tags() {
@@ -534,36 +698,12 @@ class WPCF7_HTMLFormatter {
 
 
 	/**
-	 * Appends an end tag to the output property.
-	 *
-	 * @param string $tag_name Tag name.
-	 */
-	public function append_end_tag( $tag_name ) {
-		if ( ! in_array( $tag_name, self::p_child_elements, true ) ) {
-			// Remove unnecessary <br />.
-			$this->output = preg_replace( '/\s*<br \/>\s*$/', '', $this->output );
-
-			$this->output = rtrim( $this->output ) . "\n";
-
-			if ( $this->options['auto_indent'] ) {
-				$this->output .= self::indent( count( $this->stacked_elements ) );
-			}
-		}
-
-		$this->output .= sprintf( '</%s>', $tag_name );
-
-		// Remove trailing <p></p>.
-		$this->output = preg_replace( '/<p>\s*<\/p>$/', '', $this->output );
-	}
-
-
-	/**
 	 * Appends an HTML comment to the output property.
 	 *
 	 * @param string $tag An HTML comment.
 	 */
 	public function append_comment( $tag ) {
-		$this->output .= $tag;
+		$this->append_preformatted( $tag );
 	}
 
 
@@ -602,6 +742,48 @@ class WPCF7_HTMLFormatter {
 		}
 
 		return in_array( $parent, $tag_names, true );
+	}
+
+
+	/**
+	 * Calls the callback given by the first parameter. The buffered output
+	 * will be appended to the output property.
+	 */
+	public function call_user_func( $callback, ...$args ) {
+		ob_start();
+		$result = call_user_func( $callback, ...$args );
+		$output = ob_get_clean();
+
+		if ( false !== $output ) {
+			$this->append_preformatted( "\n" . $output . "\n" );
+		}
+
+		return $result;
+	}
+
+
+	/**
+	 * Closes all remaining tags, returns and resets the output.
+	 */
+	public function output() {
+		$this->close_all_tags();
+
+		$output = $this->output;
+		$this->output = '';
+
+		return $output;
+	}
+
+
+	/**
+	 * Prints the output. Returns false if the allowed_html option is empty.
+	 */
+	public function print() {
+		if ( empty( $this->options['allowed_html'] ) ) {
+			return false;
+		}
+
+		echo wp_kses( $this->output(), $this->options['allowed_html'] );
 	}
 
 
@@ -673,6 +855,14 @@ class WPCF7_HTMLFormatter {
 		$paragraph = preg_replace( '/[ ]+/', " ", $paragraph );
 
 		return $paragraph;
+	}
+
+
+	/**
+	 * Returns true if the specified tag name is valid.
+	 */
+	public static function validate_tag_name( $tag_name ) {
+		return preg_match( '/^[a-z][0-9a-z]*(?:[:][a-z][0-9a-z]*)?$/', $tag_name );
 	}
 
 }

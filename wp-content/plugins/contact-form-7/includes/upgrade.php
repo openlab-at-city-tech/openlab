@@ -48,12 +48,20 @@ function wpcf7_convert_to_cpt( $new_ver, $old_ver ) {
 
 	$old_rows = array();
 
-	$table_name = $wpdb->prefix . "contact_form_7";
+	$table_exists = $wpdb->get_var( $wpdb->prepare(
+		"SHOW TABLES LIKE %s",
+		$wpdb->prefix . 'contact_form_7'
+	) );
 
-	if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) ) {
-		$old_rows = $wpdb->get_results( "SELECT * FROM $table_name" );
-	} elseif ( $opt = get_option( 'wpcf7' )
-	and ! empty( $opt['contact_forms'] ) ) {
+	if ( $table_exists ) {
+		$old_rows = $wpdb->get_results( $wpdb->prepare(
+			"SELECT * FROM %i",
+			$wpdb->prefix . 'contact_form_7'
+		) );
+	} elseif (
+		$opt = get_option( 'wpcf7' ) and
+		! empty( $opt['contact_forms'] )
+	) {
 		foreach ( (array) $opt['contact_forms'] as $key => $value ) {
 			$old_rows[] = (object) array_merge(
 				$value,
@@ -63,10 +71,14 @@ function wpcf7_convert_to_cpt( $new_ver, $old_ver ) {
 	}
 
 	foreach ( (array) $old_rows as $row ) {
-		$q = "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = '_old_cf7_unit_id'"
-			. $wpdb->prepare( " AND meta_value = %d", $row->cf7_unit_id );
+		$var = $wpdb->get_var( $wpdb->prepare(
+			"SELECT post_id FROM %i WHERE meta_key = %s AND meta_value = %d",
+			$wpdb->postmeta,
+			'_old_cf7_unit_id',
+			$row->cf7_unit_id
+		) );
 
-		if ( $wpdb->get_var( $q ) ) {
+		if ( $var ) {
 			continue;
 		}
 

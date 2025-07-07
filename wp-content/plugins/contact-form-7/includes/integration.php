@@ -50,8 +50,7 @@ class WPCF7_Integration {
 	public function add_service( $name, WPCF7_Service $service ) {
 		$name = sanitize_key( $name );
 
-		if ( empty( $name )
-		or isset( $this->services[$name] ) ) {
+		if ( empty( $name ) or isset( $this->services[$name] ) ) {
 			return false;
 		}
 
@@ -65,8 +64,7 @@ class WPCF7_Integration {
 	public function add_category( $name, $title ) {
 		$name = sanitize_key( $name );
 
-		if ( empty( $name )
-		or isset( $this->categories[$name] ) ) {
+		if ( empty( $name ) or isset( $this->categories[$name] ) ) {
 			return false;
 		}
 
@@ -250,7 +248,7 @@ class WPCF7_Service_OAuth2 extends WPCF7_Service {
 
 	public function load( $action = '' ) {
 		if ( 'auth_redirect' === $action ) {
-			$code = $_GET['code'] ?? '';
+			$code = wpcf7_superglobal_get( 'code' );
 
 			if ( $code ) {
 				$this->request_token( $code );

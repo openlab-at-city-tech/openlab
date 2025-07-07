@@ -22,8 +22,10 @@ class WPCF7_Stripe extends WPCF7_Service {
 	private function __construct() {
 		$option = WPCF7::get_option( 'stripe' );
 
-		if ( isset( $option['api_keys']['publishable'] )
-		and isset( $option['api_keys']['secret'] ) ) {
+		if (
+			isset( $option['api_keys']['publishable'] ) and
+			isset( $option['api_keys']['secret'] )
+		) {
 			$this->api_keys = array(
 				'publishable' => $option['api_keys']['publishable'],
 				'secret' => $option['api_keys']['secret'],
@@ -65,10 +67,10 @@ class WPCF7_Stripe extends WPCF7_Service {
 
 
 	public function link() {
-		echo wpcf7_link(
+		echo wp_kses_data( wpcf7_link(
 			'https://stripe.com/',
 			'stripe.com'
-		);
+		) );
 	}
 
 
@@ -100,21 +102,25 @@ class WPCF7_Stripe extends WPCF7_Service {
 
 
 	public function load( $action = '' ) {
-		if ( 'setup' === $action and 'POST' === $_SERVER['REQUEST_METHOD'] ) {
+		if (
+			'setup' === $action and
+			'POST' === wpcf7_superglobal_server( 'REQUEST_METHOD' )
+		) {
 			check_admin_referer( 'wpcf7-stripe-setup' );
 
 			if ( ! empty( $_POST['reset'] ) ) {
 				$this->reset_data();
 				$redirect_to = $this->menu_page_url( 'action=setup' );
 			} else {
-				$publishable = trim( $_POST['publishable'] ?? '' );
-				$secret = trim( $_POST['secret'] ?? '' );
+				$publishable = wpcf7_superglobal_post( 'publishable' );
+				$secret = wpcf7_superglobal_post( 'secret' );
 
 				if ( $publishable and $secret ) {
 					$this->api_keys = array(
 						'publishable' => $publishable,
 						'secret' => $secret,
 					);
+
 					$this->save_data();
 
 					$redirect_to = $this->menu_page_url( array(
@@ -137,18 +143,18 @@ class WPCF7_Stripe extends WPCF7_Service {
 	public function admin_notice( $message = '' ) {
 		if ( 'invalid' === $message ) {
 			wp_admin_notice(
-				sprintf(
+				wp_kses_data( sprintf(
 					'<strong>%1$s</strong>: %2$s',
-					esc_html( __( "Error", 'contact-form-7' ) ),
-					esc_html( __( "Invalid key values.", 'contact-form-7' ) )
-				),
+					__( 'Error', 'contact-form-7' ),
+					__( 'Invalid key values.', 'contact-form-7' )
+				) ),
 				array( 'type' => 'error' )
 			);
 		}
 
 		if ( 'success' === $message ) {
 			wp_admin_notice(
-				esc_html( __( "Settings saved.", 'contact-form-7' ) ),
+				wp_kses_data( __( 'Settings saved.', 'contact-form-7' ) ),
 				array( 'type' => 'success' )
 			);
 		}
@@ -156,41 +162,77 @@ class WPCF7_Stripe extends WPCF7_Service {
 
 
 	public function display( $action = '' ) {
-		echo sprintf(
-			'<p>%s</p>',
-			// https://stripe.com/docs/partners/support#intro
-			esc_html( __( "Stripe is a simple and powerful way to accept payments online. Stripe has no setup fees, no monthly fees, and no hidden costs. Millions of businesses rely on Stripe’s software tools to accept payments securely and expand globally.", 'contact-form-7' ) )
+		$formatter = new WPCF7_HTMLFormatter( array(
+			'allowed_html' => array_merge( wpcf7_kses_allowed_html(), array(
+				'form' => array(
+					'action' => true,
+					'method' => true,
+				),
+			) ),
+		) );
+
+		$formatter->append_start_tag( 'p' );
+
+		$formatter->append_preformatted(
+			esc_html( __( 'Stripe is a simple and powerful way to accept payments online. Stripe has no setup fees, no monthly fees, and no hidden costs. Millions of businesses rely on Stripe&#8217;s software tools to accept payments securely and expand globally.', 'contact-form-7' ) )
 		);
 
-		echo sprintf(
-			'<p><strong>%s</strong></p>',
+		$formatter->end_tag( 'p' );
+
+		$formatter->append_start_tag( 'p' );
+		$formatter->append_start_tag( 'strong' );
+
+		$formatter->append_preformatted(
 			wpcf7_link(
 				__( 'https://contactform7.com/stripe-integration/', 'contact-form-7' ),
 				__( 'Stripe integration', 'contact-form-7' )
 			)
 		);
 
+		$formatter->end_tag( 'p' );
+
 		if ( $this->is_active() ) {
-			echo sprintf(
-				'<p class="dashicons-before dashicons-yes">%s</p>',
-				esc_html( __( "Stripe is active on this site.", 'contact-form-7' ) )
+			$formatter->append_start_tag( 'p', array(
+				'class' => 'dashicons-before dashicons-yes',
+			) );
+
+			$formatter->append_preformatted(
+				esc_html( __( 'Stripe is active on this site.', 'contact-form-7' ) )
 			);
+
+			$formatter->end_tag( 'p' );
 		}
 
 		if ( 'setup' === $action ) {
-			$this->display_setup();
+			$formatter->call_user_func( function () {
+				$this->display_setup();
+			} );
 		} elseif ( is_ssl() or WP_DEBUG ) {
-			echo sprintf(
-				'<p><a href="%1$s" class="button">%2$s</a></p>',
-				esc_url( $this->menu_page_url( 'action=setup' ) ),
+			$formatter->append_start_tag( 'p' );
+
+			$formatter->append_start_tag( 'a', array(
+				'href' => esc_url( $this->menu_page_url( 'action=setup' ) ),
+				'class' => 'button',
+			) );
+
+			$formatter->append_preformatted(
 				esc_html( __( 'Setup Integration', 'contact-form-7' ) )
 			);
+
+			$formatter->end_tag( 'p' );
 		} else {
-			echo sprintf(
-				'<p class="dashicons-before dashicons-warning">%s</p>',
-				esc_html( __( "Stripe is not available on this site. It requires an HTTPS-enabled site.", 'contact-form-7' ) )
+			$formatter->append_start_tag( 'p', array(
+				'class' => 'dashicons-before dashicons-warning',
+			) );
+
+			$formatter->append_preformatted(
+				esc_html( __( 'Stripe is not available on this site. It requires an HTTPS-enabled site.', 'contact-form-7' ) )
 			);
+
+			$formatter->end_tag( 'p' );
 		}
+
+		$formatter->print();
 	}
 
 
