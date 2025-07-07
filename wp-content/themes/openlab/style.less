@@ -360,15 +360,6 @@ blockquote {
 		color: @black;
 		padding: 0;
 
-		&.has-unread::after {
-		}
-
-		&[aria-expanded="true"] {
-			&.has-unread::after {
-				content: none;
-			}
-		}
-
 		&.navbar-flyout-toggle-login {
 			align-items: center;
 			background: @lightTeal;
@@ -409,6 +400,7 @@ blockquote {
 	padding-bottom: 48px; /* Space for the footer */
 }
 
+.has-unread-upper-dot .icon-default,
 button.has-unread-upper-dot .icon-default {
 	position: relative;
 

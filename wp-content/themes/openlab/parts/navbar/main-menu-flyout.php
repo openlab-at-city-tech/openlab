@@ -3,7 +3,7 @@
  * Main Menu flyout for main site nav.
  */
 
-$my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread' : '';
+$my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-upper-dot' : '';
 
 $all_nav_links = [];
 
@@ -42,7 +42,7 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 				<li class="<?php echo esc_attr( $li_class ); ?>">
 					<a href="<?php echo esc_url( $link['url'] ); ?>" class="flyout-menu-link">
 						<?php if ( 'my-openlab' === $link_key ) : ?>
-							<span class="flyout-menu-icon">
+							<span class="flyout-menu-icon icon-default">
 								<?php get_template_part( 'parts/navbar/my-openlab-icon' ); ?>
 							</span>
 						<?php endif; ?>
