@@ -12,18 +12,16 @@
             */
             function __construct() 
                 {
-                    add_action('admin_print_scripts',   array ( $this,  'admin_print_scripts' ) );
-                    add_action('admin_print_styles',    array ( $this,  'admin_print_styles' ) );
-                    add_action('admin_menu',            array ( $this,  'admin_menu' ), 99);
-                    add_filter('terms_clauses',         array ( $this,  'apply_order_filter' ), 10, 3);
-                    add_filter('get_terms_orderby',     array ( $this,  'get_terms_orderby' ), 1, 2);
+                    add_action('admin_print_scripts',               array ( $this,  'admin_print_scripts' ) );
+                    add_action('admin_print_styles',                array ( $this,  'admin_print_styles' ) );
+                    add_action('admin_menu',                        array ( $this,  'admin_menu' ), 99);
+                    add_filter('terms_clauses',                     array ( $this,  'apply_order_filter' ), 10, 3);
+                    add_filter('get_terms_orderby',                 array ( $this,  'get_terms_orderby' ), 1, 2);
                     
                     add_action( 'wp_ajax_update-taxonomy-order',    array ( $this, 'saveAjaxOrder' ) );
                     
                     if ( is_admin() )
-                        TTO_functions::check_table_column();
-                        
-                    
+                        TTO_functions::check_table_column();                    
                 }
                 
             
@@ -33,14 +31,10 @@
             */
             function admin_print_scripts()
                 {
-                    wp_enqueue_script('jquery');
-                    
+                    wp_enqueue_script('jquery');                    
                     wp_enqueue_script('jquery-ui-sortable');
-                    
-                    $myJsFile = TOURL . '/js/to-javascript.js';
-                    wp_register_script('to-javascript', $myJsFile);
+                    wp_register_script('to-javascript', TOURL . '/js/to-javascript.js', array(), TTO_VERSION );
                     wp_enqueue_script( 'to-javascript');
-                          
                 }
                 
             
@@ -50,8 +44,7 @@
             */
             function admin_print_styles()
                 {
-                    $myCssFile = TOURL . '/css/to.css';
-                    wp_register_style('to.css', $myCssFile);
+                    wp_register_style('to.css', TOURL . '/css/to.css', array(), TTO_VERSION );
                     wp_enqueue_style( 'to.css');
                 }
                 

@@ -143,6 +143,25 @@
                                     ?>
 
                         <div id="order-terms">
+                        
+                            <div id="nav-menu-header">
+                                <div class="major-publishing-actions">
+
+                                        
+                                        <div class="alignright actions">
+                                            <p class="actions">
+              
+                                                <span class="img_spacer">&nbsp;
+                                                    <img alt="" src="<?php echo TOURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
+                                                </span>
+                                                <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                            </p>
+                                        </div>
+                                        
+                                        <div class="clear"></div>
+
+                                </div><!-- END .major-publishing-actions -->
+                            </div><!-- END #nav-menu-header -->
 
                             <div id="post-body">                    
                                 
@@ -155,11 +174,17 @@
                                     <div class="clear"></div>
                             </div>
                             
-                            <div class="alignleft actions">
-                                <p class="submit">
-                                    <a href="javascript:;" class="save-order button-primary"><?php _e( "Update", 'taxonomy-terms-order' ) ?></a>
-                                </p>
-                            </div>
+                            <div id="nav-menu-footer">
+                                <div class="major-publishing-actions">
+                                        <div class="alignright actions">
+                                            <img alt="" src="<?php echo TOURL ?>/images/wpspin_light.gif" class="waiting pto_ajax_loading" style="display: none;">
+                                            <a href="javascript:;" class="save-order button-primary"><?php _e('Update', 'atto') ?></a>
+                                        </div>
+                                        
+                                        <div class="clear"></div>
+
+                                </div><!-- END .major-publishing-actions -->
+                            </div><!-- END #nav-menu-header -->
                             
                         </div> 
 
@@ -178,6 +203,9 @@
                                     });
                                   
                                 jQuery(".save-order").bind( "click", function() {
+                                        
+                                        jQuery(this).parent().find('img').show();
+                                    
                                         var mySortable = new Array();
                                         jQuery(".sortable").each(  function(){
                                             
@@ -204,6 +232,7 @@
                                         jQuery.post( ajaxurl, { action:'update-taxonomy-order', order: serialize_data, nonce : '<?php echo wp_create_nonce( 'update-taxonomy-order' ); ?>' }, function() {
                                             jQuery("#ajax-response").html('<div class="message updated fade"><p><?php esc_html_e ( "Items Order Updated", 'taxonomy-terms-order' ) ?></p></div>');
                                             jQuery("#ajax-response div").delay(3000).hide("slow");
+                                            jQuery('img.pto_ajax_loading').hide();
                                         });
                                     });
                                 
