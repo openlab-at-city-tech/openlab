@@ -49,6 +49,7 @@ SQL;
 		if ( empty( $limit ) ) {
 			$this->core->reset_issues();
 			$this->core->reset_references();
+			$this->core->reset_cached_references();
 		}
 
 		$method = $this->core->current_method;
@@ -94,6 +95,8 @@ SQL;
 				do_action( 'wpmc_scan_widgets' );
 			//}
 			do_action( 'wpmc_scan_once' );
+
+			
 		}
 
 		$this->core->timeout_check_start( count( $posts ) );
@@ -109,7 +112,7 @@ SQL;
 			}
 
 			// Extra scanning methods
-			do_action( 'wpmc_scan_extra', $post );
+			// do_action( 'wpmc_scan_extra', $post );
 
 			$this->core->timeout_check_additem();
 		}

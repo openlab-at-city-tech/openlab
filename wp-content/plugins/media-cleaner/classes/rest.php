@@ -78,6 +78,11 @@ class Meow_WPMC_Rest
 				'permission_callback' => array( $this->core, 'can_access_features' ),
 				'callback' => array( $this, 'rest_delete' )
 			) );
+			register_rest_route( $this->namespace, '/force_trash_all', array(
+				'methods' => 'POST',
+				'permission_callback' => array( $this->core, 'can_access_features' ),
+				'callback' => array( $this, 'rest_force_trash_all' )
+			) );
 			register_rest_route( $this->namespace, '/recover', array(
 				'methods' => 'POST',
 				'permission_callback' => array( $this->core, 'can_access_features' ),
@@ -240,9 +245,10 @@ class Meow_WPMC_Rest
 		$finished = false;
 		$message = ""; // will be filled by extractRefsFrom...
 
-		// Randomly throw an exception
-		// if ( rand( 0, 2 ) !== 1 ) {
-		// 	throw new Exception( 'Random Exception' );
+		// Randomly throw an exception timeout
+		// if ( rand( 0, 1 ) !== 1 ) {
+		// 	//throw a 408 error
+		// 	$this->core->deepsleep(10); header("HTTP/1.0 408 Request Timeout"); exit;
 		// }
 
 		if ( $post_id !== null && ( !is_numeric( $post_id ) || !is_int( (int) $post_id ) ) ) {
@@ -796,6 +802,12 @@ class Meow_WPMC_Rest
 			$data = $this->core->delete( $entryId );
 		}
 		return new WP_REST_Response( [ 'success' => true, 'data' => $data ], 200 );
+	}
+
+	function rest_force_trash_all( $request ) {
+
+		$res = $this->core->force_trash( );
+		return new WP_REST_Response( [ 'success' => $res['success'], 'message' => $res['message'] ], 200 );
 	}
 
 	function rest_recover( $request ) {

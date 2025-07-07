@@ -3,9 +3,9 @@ Contributors: TigrouMeow
 Tags: clean, media, files, images, library
 Donate link: https://www.patreon.com/meowapps
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 6.8.7
+Stable tag: 6.9.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -48,6 +48,41 @@ This plugin is compatible with all media types, including retina and WebP versio
 1. Media -> Media Cleaner
 
 == Changelog ==
+
+= 6.9.2 (2025/07/01) =
+* Add: Added support for Fluent Forms.
+* Fix: Fixed NekoTable display issues.
+* Update: Streamlined Divi parser for better image URL extraction and improved filesystem handling.
+* Update: Enhanced thumbnail URL extraction and added new function to retrieve attachment sizes.
+
+= 6.9.1 (2025/06/29) =
+* Add: Support for Kadence Blocks.
+* Add: Support for Salient Theme Elements.
+* Add: Support for Houzez Theme.
+* Add: Support for WooCommerce variation galleries.
+* Update: Improved Enfold parser with better handling of nested shortcodes and enhanced ID/URL extraction.
+
+= 6.9.0 (2025/05/11) =
+* Update: Removed unused code for live content checks in CLI commands to improve plugin performance and maintainability.
+
+= 6.8.9 (2025/05/04) =
+* Fix: Ensure the "Disable Shortcode Analysis" setting is now respected in all content parsers.
+* Add: Support for ACF 'file' fields now includes returning the file URL when using ID references.
+
+= 6.8.8 (2025/05/01) =
+* Add: Introduced SAFE support for URLs from srcset in WooCommerce galleries.
+* Add: Added a function to extract thumbnail URLs from srcset for better detection.
+* Fix: Prevented warning messages when URLs are empty.
+* Fix: Corrected countdown end event behavior.
+* Update: Enhanced the W3 parser with array_to_ids_or_urls and added recursive support.
+* Add: Added a parser for W3 Total Cache to handle media attachments.
+* Add: Introduced a force trash option for cases when trash isn’t emptied automatically.
+* Update: Temporarily disabled live content scanning to prevent issues.
+* Fix: Corrected a typo in iframe handling comments.
+* Update: Improved shortcode scanning by retrieving all common attributes for IDs and URLs.
+* Fix: Prevented recursion in ACF field scanning with flexible content.
+* Update: Reworked the ACF Parser to fully support flexible content structures.
+* Update: Added an index on mediaId in the references table to optimize step 4 performance.
 
 = 6.8.7 (2025/03/12) =
 * Update: Improved type handling and updated the Divi parser for better compatibility.
