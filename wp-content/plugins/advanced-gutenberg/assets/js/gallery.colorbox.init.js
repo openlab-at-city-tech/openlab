@@ -13,7 +13,8 @@ jQuery(document).ready(function ($) {
     $('.wp-block-gallery').each(function () {
         var item = $(this).find('.blocks-gallery-item, .wp-block-image');
         // Add lightbox for images with Link to: Media file
-        if(item.find('a[href$=".jpg"], a[href$=".png"], a[href$=".gif"]').length) {
+        if(item.find('a[href$=".jpg"], a[href$=".png"], a[href$=".gif"], a[href$=".webp"]').length) {
+
             item.colorbox({
                 title: function () {
                     if (parseInt(advgb.imageCaption)) {

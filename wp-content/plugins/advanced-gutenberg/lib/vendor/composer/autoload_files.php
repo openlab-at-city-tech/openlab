@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     '3b1e1688e889525de91ac2456aba9efd' => $vendorDir . '/publishpress/psr-container/lib/include.php',
+    '04c6c5c2f7095ccf6c481d3e53e1776f' => $vendorDir . '/mustangostang/spyc/Spyc.php',
     '24b27b1b9a32bf58eda571c3e5ae3480' => $vendorDir . '/publishpress/pimple-pimple/lib/include.php',
     '0078757fbd019a5f202f2be6585c3626' => $vendorDir . '/publishpress/wordpress-banners/BannersMain.php',
     '41c664bd04a95c2d6a2f2a3e00f06593' => $vendorDir . '/publishpress/wordpress-reviews/ReviewsController.php',

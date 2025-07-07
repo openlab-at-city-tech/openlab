@@ -1,21 +1,21 @@
 <?php
-defined( 'ABSPATH' ) || die;
+defined('ABSPATH') || die;
 
 // Check current tab parameter from URL. e.g. 'admin.php?page=lorem&tab=something'
-$current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
-                ? sanitize_text_field( $_GET['tab'] )
+$current_tab = isset($_GET['tab']) && ! empty($_GET['tab'])
+                ? sanitize_text_field($_GET['tab'])
                 : 'controls';
 ?>
 
 <div class="publishpress-admin wrap">
 
-    <?php if ( isset( $_GET['save'] ) && $_GET['save'] === 'success' ) : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action
-        if( $current_tab === 'controls' ) {
-            $message = esc_html__( 'Controls saved successfully!', 'advanced-gutenberg' );
-        } elseif( $current_tab === 'blocks' ) {
-            $message = esc_html__( 'Blocks saved successfully!', 'advanced-gutenberg' );
+    <?php if (isset($_GET['save']) && $_GET['save'] === 'success') : // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- display message, no action
+        if ($current_tab === 'controls') {
+            $message = esc_html__('Controls saved successfully!', 'advanced-gutenberg');
+        } elseif ($current_tab === 'blocks') {
+            $message = esc_html__('Blocks saved successfully!', 'advanced-gutenberg');
         } else {
-            $message = esc_html__( 'Settings saved successfully!', 'advanced-gutenberg' );
+            $message = esc_html__('Settings saved successfully!', 'advanced-gutenberg');
         }
         ?>
         <div id="message" class="updated fade">
@@ -27,18 +27,18 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
 
     <header>
         <h1 class="wp-heading-inline">
-            <?php esc_html_e( 'Block Controls', 'advanced-gutenberg' ) ?>
+            <?php esc_html_e('Block Controls', 'advanced-gutenberg') ?>
         </h1>
     </header>
 
     <?php
     $tabs = [
         [
-            'title' => esc_html__( 'Controls', 'advanced-gutenberg' ),
+            'title' => esc_html__('Controls', 'advanced-gutenberg'),
             'slug' => 'controls'
         ],
         [
-            'title' => esc_html__( 'Blocks', 'advanced-gutenberg' ),
+            'title' => esc_html__('Blocks', 'advanced-gutenberg'),
             'slug' => 'blocks'
         ]
     ];
@@ -54,7 +54,7 @@ $current_tab = isset( $_GET['tab'] ) && ! empty( $_GET['tab'] )
     <div class="wrap">
         <?php
         // Load active settings tab
-        $this->loadPageTab( 'block-controls', $current_tab );
+        $this->loadPageTab('block-controls', $current_tab);
         ?>
     </div>
 </div>

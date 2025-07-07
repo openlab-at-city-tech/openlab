@@ -1,4 +1,5 @@
 <?php
+
 defined('ABSPATH') || die;
 
 if (!class_exists('WC_REST_Products_Controller')) {
@@ -39,13 +40,13 @@ class AdvgbProductsController extends WC_REST_Products_Controller
             $args['meta_key'] = $ordering_args['meta_key'];
         }
 
-		// don't show hidden products
-		$args['tax_query'][] = array(
-			'taxonomy' => 'product_visibility',
-			'field'    => 'name',
-			'terms'    => array('exclude-from-catalog', 'exclude-from-search'),
-			'operator' => 'NOT IN'
-		);
+        // don't show hidden products
+        $args['tax_query'][] = array(
+            'taxonomy' => 'product_visibility',
+            'field'    => 'name',
+            'terms'    => array('exclude-from-catalog', 'exclude-from-search'),
+            'operator' => 'NOT IN'
+        );
 
         return $args;
     }

@@ -11,6 +11,7 @@
         }
     ],
     "config": {
+        "process-timeout": 600,
         "preferred-install": {
             "*": "dist"
         },
@@ -25,6 +26,7 @@
     },
     "require-dev": {
         "automattic/vipwpcs": "^2.3",
+        "publishpress/publishpress-phpcs-standards": "dev-main",
         "dealerdirect/phpcodesniffer-composer-installer": "^0.7.1",
         "squizlabs/php_codesniffer": "^3.6",
         "wp-cli/i18n-command": "^2.4"
@@ -43,7 +45,14 @@
         "minify:js-settings": "uglifyjs assets/js/settings.js --output assets/js/settings.min.js",
         "get-version": "ppbuild version",
         "check:longpath": "longpath .",
-        "check:phpcs": "vendor/bin/phpcs --standard=WordPress-VIP-Go ./ --severity=6 --ignore=vendor,dist,node_modules || true",
+        "check:lint": "phplint --no-cache",
+        "check:cs": "phpcs",
+        "fix:cs": "phpcbf --standard=.phpcs.xml",
+        "fix:php": [
+            "php-cs-fixer fix .",
+            "@fix:cs"
+        ],
+        "config:phpcs": "phpcs --config-set installed_paths \"../../phpcsstandards/phpcsutils,../../phpcsstandards/phpcsextra,../../automattic/vipwpcs,../../phpcompatibility/php-compatibility,../../sirbrillig/phpcs-variable-analysis,../../publishpress/publishpress-phpcs-standards/standards,../../wp-coding-standards/wpcs\"",
         "pre-autoload-dump": "composer dumpautoload --working-dir=./lib",
         "pre-update-cmd": "composer update --working-dir=./lib",
         "pre-install-cmd": "composer install --working-dir=./lib"

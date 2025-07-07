@@ -19,6 +19,8 @@ jQuery(document).ready(function ($) {
         redirectInput.val(advgbLoresForm.home_url);
     } else if (redirectType === 'dashboard') {
         redirectInput.val(advgbLoresForm.admin_url);
+    } else if (redirectType === 'currentpage') {
+        redirectInput.val(window.location.href);
     }
 
     // Show notice on failed login
