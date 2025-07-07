@@ -132,6 +132,10 @@
   !*** ./node_modules/redux-thunk/es/index.js ***!
   \**********************************************/
 
+/*!***********************************************!*\
+  !*** ./node_modules/immer/dist/immer.esm.mjs ***!
+  \***********************************************/
+
 /*!****************************************************!*\
   !*** ./node_modules/reselect/es/defaultMemoize.js ***!
   \****************************************************/
@@ -187,10 +191,6 @@
 /*!****************************************************************************!*\
   !*** ./node_modules/@elementor/store/node_modules/react-redux/es/types.js ***!
   \****************************************************************************/
-
-/*!*****************************************************************************!*\
-  !*** ./node_modules/@reduxjs/toolkit/node_modules/immer/dist/immer.esm.mjs ***!
-  \*****************************************************************************/
 
 /*!*****************************************************************************!*\
   !*** ./node_modules/hoist-non-react-statics/node_modules/react-is/index.js ***!
@@ -315,3 +315,23 @@
 /*!************************************************************************************************************!*\
   !*** ./node_modules/use-sync-external-store/cjs/use-sync-external-store-shim/with-selector.development.js ***!
   \************************************************************************************************************/
+
+/**
+ * @license React
+ * use-sync-external-store-shim.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
+/**
+ * @license React
+ * use-sync-external-store-shim/with-selector.development.js
+ *
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */

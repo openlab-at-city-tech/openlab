@@ -85,6 +85,7 @@ class Modules_Manager {
 			'page-templates',
 			'gutenberg',
 			'wp-cli',
+			'wp-rest',
 			'safe-mode',
 			'ai',
 			'notifications',
@@ -94,6 +95,7 @@ class Modules_Manager {
 			'compatibility-tag',
 			'generator-tag',
 			'elements-color-picker',
+			'elementor-counter',
 			'shapes',
 			'favorites',
 			'admin-top-bar',
@@ -122,8 +124,13 @@ class Modules_Manager {
 			'content-sanitizer',
 			'editor-events',
 			'atomic-widgets',
+			'global-classes',
+			'variables',
 			'wc-product-editor',
 			'checklist',
+			'cloud-library',
+			'cloud-kit-library',
+			'atomic-opt-in',
 		];
 	}
 

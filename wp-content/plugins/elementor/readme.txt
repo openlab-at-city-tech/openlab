@@ -1,11 +1,11 @@
-=== Elementor Website Builder - More than Just a Page Builder ===
+=== Elementor Website Builder - More Than Just a Page Builder ===
 Contributors: elemntor
 Tags: page builder, editor, landing page, drag-and-drop, elementor,
-Requires at least: 6.3
-Tested up to: 6.7
+Requires at least: 6.6
+Tested up to: 6.8
 Requires PHP: 7.4
-Stable tag: 3.25.10
-Beta tag: 3.25.0-beta3
+Stable tag: 3.30.1
+Beta tag: 3.30.0-beta3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -15,11 +15,13 @@ The Elementor Website Builder has it all: drag and drop page builder, pixel perf
 
 https://www.youtube.com/watch?v=le72grP_Q6k
 
-= THE #1 NO CODE DRAG & DROP WORDPRESS WEBSITE BUILDER POWERING OVER 17M WEBSITES WORLDWIDE, NOW WITH AI. =
+= THE #1 NO CODE DRAG & DROP WORDPRESS WEBSITE BUILDER POWERING OVER 18M WEBSITES WORLDWIDE, NOW WITH AI. =
 
 Elementor, the leading WordPress website creation platform, empowers you to build professional, pixel-perfect websites seamlessly.
 
 Unlock all features with [Elementor Pro](https://go.elementor.com/wp-repo-description-tab-elementor-pro-pro-features/).
+
+Need fast and secure cloud hosting for your Elementor site? Try out **[Elementor Hosting](https://elemn.to/repo-hosting)** Powered by Google Cloud & Cloudflare. 4.9/5 TrustPilot score.
 
 ### 🌟 Create Professional Stunning Websites
 
@@ -255,7 +257,7 @@ Join a global community that helps each other achieve their goals.
 
 = Minimum Requirements =
 
-* WordPress 6.3 or greater
+* WordPress 6.5 or greater
 * PHP version 7.4 or greater
 * MySQL version 5.0 or greater
 
@@ -305,11 +307,11 @@ It works with almost all the plugins. If you experience an incompatibility issue
 
 No! Elementor provides you with all the widgets and features that you need to build a professional website without using code.
 
-**Do i need to know how to design?**
+**Do I need to know how to design?**
 
 No, you can choose between professionally designed kits and templates that fit toevery industry and have all you need to create your own professional website.
 
-**Will elementor slow down my website?**
+**Will Elementor slow down my website?**
 
 As Elementor prioritizes speed and performance, you enjoy better and faster performance with each new version of Elementor. When testing the same page layout on older versions you can see a significant performance improvement, from a score of 82 in Google PageSpeed Insight in version 3.1, to a score of 95 i in version 3.5.
 
@@ -347,80 +349,47 @@ You can also add a new language via [translate.wordpress.org](https://go.element
 
 == Changelog ==
 
-= 3.25.10 - 2024-11-24 =
+= 3.30.1 - 2025-07-07 =
 
-* Security Fix: Improved code security enforcement in Typography control
-* Fix: Link URL actions not functioning as expected inside the editor
+* Fix: Focus not applied correctly to chosen property in popovers - Editor V4
+* Fix: Font Family popover not loading as expected - Editor V4
+* Fix: Empty list displayed when opening the Class Manager - Editor V4
 
-= 3.25.9 - 2024-11-20 =
+= 3.30.0 - 2025-07-01 =
 
-* Fix: 3D Rotate transform is not functioning as expected when the Optimized Control Loading feature is activated
-
-= 3.25.8 - 2024-11-19 =
-
-* Security Fix: Improved code security enforcement in Icon widget
-
-= 3.25.7 - 2024-11-18 =
-
-* Security Fix: Improved code security enforcement in Post functionality
-
-= 3.25.6 - 2024-11-13 =
-
-* Tweak: Updated `eicons` library to v5.32.0
-* Tweak: Adjusted Kit import flow to allow extendability
-* Tweak: Added extendability functionality to the common Advanced Tab controls
-* Fix: PHP error appears when an undefined color or typography value is used in Site Settings
-* Fix: Permanently deleting a global widget causes a fatal error on pages where it is used
-* Fix: Nested Elements are activated even when the Container experiment is inactive
-
-= 3.25.5 - 2024-11-12 =
-
-* Security Fix: Improved code security enforcement in Post functionality
-* Security Fix: Improved code security enforcement in Floating Elements
-* Security Fix: Improved code security enforcement in Import and Export functionality
-
-= 3.25.4 - 2024-11-03 =
-
-* Fix: Console warning errors related to popups ([#29137](https://github.com/elementor/elementor/issues/29137), [#29141](https://github.com/elementor/elementor/issues/29141))
-
-= 3.25.3 - 2024-10-30 =
-
-* Fix: Global Widgets are not displaying correctly in both the editor and frontend ([#29112](https://github.com/elementor/elementor/issues/29112))
-
-= 3.25.2 - 2024-10-29 =
-
-* Fix: Global Widgets are not displaying correctly in the editor ([#29092](https://github.com/elementor/elementor/issues/29092))
-* Fix: Image captions are not displaying for non-logged-in users in Image Carousel widget
-
-= 3.25.1 - 2024-10-28 =
-
-* Fix: Custom template fails to insert into the page and displays a permission error ([#29076](https://github.com/elementor/elementor/issues/29076))
-* Fix: Global Widgets not displaying correctly on the frontend ([#29076](https://github.com/elementor/elementor/issues/29076))
-
-= 3.25.0 - 2024-10-28 =
-
-* New: Introducing Optimized Markup as an Alpha experiment - Reduce DOM size by eliminating unnecessary HTML wrappers in various elements and widgets
-* Tweak: Reduced the use of JavaScript for smooth scrolling by implementing a modern CSS-based solution ([#13773](https://github.com/elementor/elementor/issues/13773))
-* Tweak: Updated smooth scroll behavior to respect the user's reduced motion preference setting
-* Tweak: Removed `elementor-button-wrapper` div from Button widget as part of the Optimized Markup experiment
-* Tweak: Load styles for Floating Elements separately to enhance performance
-* Tweak: Load styles for Link in Bio widgets separately to enhance performance
-* Tweak: Optimized `global.css` to exclude style generation for unused widgets
-* Tweak: Removed the Floating Elements modules from `module.js`
-* Tweak: Added "Edit with Elementor" button to WooCommerce's new product editor
-* Tweak: Merged "Build with AI" feature to version
-* Tweak: Merged "Grid Container" to "Flexbox Container" feature
-* Tweak: Activated "Editor Top Bar" feature for existing sites
-* Tweak: Activated "Optimized Control Loading" for existing sites and promoted the feature to stable
-* Tweak: Activated "Nested Elements" feature for existing sites
-* Tweak: Removed compatibility CSS support for the Twenty Fifteen theme
-* Tweak: Renamed the "Flexbox Container" feature to "Container" feature
-* Fix: Expand Icon in the Accordion widget would not display when nested inside another Accordion widget ([#24086](https://github.com/elementor/elementor/issues/24086))
-* Fix: Swiper incorrectly applied the `inert` attribute to a slide in the Nested Carousel ([#23039](https://github.com/elementor/elementor/issues/23039))
-* Fix: Footer would overlap the Archive Posts, Portfolio, and Gallery widgets in mobile view when using the Archive template
-* Fix: "Edit with Elementor AI" button is visible for unsupported file types
-* Fix: Structure panel indicator color is not visible in dark mode
-* Fix: Indentation issue with empty elements in the Structure panel
-* Fix: "Reference a website" feature in Elementor AI failed to work in Safari 17
+* New: Added support for setting custom units in size controls - Editor V4 ([#31287](https://github.com/elementor/elementor/issues/31287))
+* New: Added reset control visibility via the floating action bar - Editor V4 ([#31356](https://github.com/elementor/elementor/issues/31356))
+* New: Added JS handler infrastructure for the new elements system - Editor V4
+* New: Introduced modular YouTube element built with new structure and JS handlers – Editor V4
+* New: Added support for context-aware editing memory - Editor V4
+* New: Enabled Smart Unit Typing - allows typing values with units directly - Editor V4
+* New: Added ID control to Settings section under General tab - Editor V4
+* New: Added Anchor Offset control to Position section under Style tab - Editor V4
+* New: Added Display None control to Layout section under Style tab - Editor V4
+* New: Added Object Fit control to Size section under Style tab - Editor V4
+* New: Added Columns control to Typography section under Style tab - Editor V4
+* New: Added Aspect Ratio control to Size section under Style tab - Editor V4
+* New: Added group-level style indicators to show where class-based styles are applied – Editor V4
+* New: Added Indications Popover for visualizing class-based style origins – Editor V4
+* New: Introduced class permissions for non-admin users - Editor V4
+* Tweak: Added title hover and focus color options to Icon Box and Image Box widgets ([#29948](https://github.com/elementor/elementor/issues/29948))
+* Tweak: Added support for registering custom mask shapes ([#19396](https://github.com/elementor/elementor/issues/19396))
+* Tweak: User-defined class names now appear as-is in the final code output in Class Management - Editor V4 ([#31055](https://github.com/elementor/elementor/issues/31055))
+* Tweak: Renamed "Kits" to "Website Template" across the interface
+* Tweak: Added Settings section inside the General tab - Editor V4
+* Tweak: Merged "Editor Top Bar" feature into the core version
+* Tweak: Merged "Load Google Fonts locally" feature into the core version
+* Tweak: Activated "Optimized Markup" feature for new sites
+* Tweak: Promoted "Element Caching" feature to Stable status
+* Tweak: Added new mask shapes
+* Tweak: Replaced select control with a visual choice control in Mask shapes
+* Tweak: Add image `height`, `object-fit`, `object-position`, `box-shadow` in Image Box widget
+* Tweak: Standardized naming convention for items in the editor `app-bar`
+* Tweak: Consolidated control visibility and layout into a single Style tab in Progress Bar widget
+* Tweak: Updated minimum required WordPress version to 6.6
+* Fix: Global CSS transition with higher specificity prevents Container transitions from being applied ([#30460](https://github.com/elementor/elementor/issues/30460))
+* Fix: Global CSS classes are lost when publishing from multiple tabs - Editor V4
+* Fix: Redundant spacing appears below the image in the Image Box widget
+* Fix: Scrolling to anchors no longer works inside the Editor
 
 [See changelog for all versions.](https://go.elementor.com/full-changelog/)

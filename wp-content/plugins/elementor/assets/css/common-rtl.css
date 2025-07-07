@@ -1,4 +1,4 @@
-/*! elementor - v3.25.0 - 24-11-2024 */
+/*! elementor - v3.30.0 - 07-07-2025 */
 :root {
   --e-a-color-white:	#ffffff;
   --e-a-color-black:	#000000;
@@ -26,6 +26,7 @@
   --e-a-bg-info:	#F0F7FF;
   --e-a-bg-danger:	#FEF1F4;
   --e-a-bg-warning:	#FFFBEB;
+  --e-a-bg-chip:	#F1F2F3;
   --e-a-color-txt:	#515962;
   --e-a-color-txt-muted:	#818A96;
   --e-a-color-txt-disabled:	#BABFC5;
@@ -44,8 +45,8 @@
   --e-a-btn-color-invert:	var(--e-a-color-txt-invert);
   --e-a-btn-color-disabled:	var(--e-a-color-txt-disabled);
   --e-a-btn-bg:	#515962;
-  --e-a-btn-bg-hover:	#3a4046;
-  --e-a-btn-bg-active:	#23262a;
+  --e-a-btn-bg-hover:	rgb(57.9217877095, 63.6424581006, 70.0782122905);
+  --e-a-btn-bg-active:	rgb(34.843575419, 38.2849162011, 42.156424581);
   --e-a-btn-bg-disabled:	#D5D8DC;
   --e-a-btn-bg-primary:	#F3BAFD;
   --e-a-btn-bg-primary-hover: #F5D0FE;
@@ -54,17 +55,17 @@
   --e-a-btn-bg-accent-hover:	#8F1A4C;
   --e-a-btn-bg-accent-active:	#A93365;
   --e-a-btn-bg-info:	#2563EB;
-  --e-a-btn-bg-info-hover:	#134cca;
-  --e-a-btn-bg-info-active:	#0e3b9c;
+  --e-a-btn-bg-info-hover:	rgb(18.5714285714, 76.1428571429, 202.4285714286);
+  --e-a-btn-bg-info-active:	rgb(14.2857142857, 58.5714285714, 155.7142857143);
   --e-a-btn-bg-success:	#0A875A;
-  --e-a-btn-bg-success-hover:	#06583a;
-  --e-a-btn-bg-success-active:#03281b;
+  --e-a-btn-bg-success-hover:	rgb(6.4827586207, 87.5172413793, 58.3448275862);
+  --e-a-btn-bg-success-active:rgb(2.9655172414, 40.0344827586, 26.6896551724);
   --e-a-btn-bg-warning:	#F59E0B;
-  --e-a-btn-bg-warning-hover:	#c57f08;
-  --e-a-btn-bg-warning-active:#945f06;
+  --e-a-btn-bg-warning-hover:	rgb(196.9291338583, 126.7125984252, 8.0708661417);
+  --e-a-btn-bg-warning-active:rgb(147.937007874, 95.188976378, 6.062992126);
   --e-a-btn-bg-danger:	#DC2626;
-  --e-a-btn-bg-danger-hover:	#b21d1d;
-  --e-a-btn-bg-danger-active:	#861616;
+  --e-a-btn-bg-danger-hover:	rgb(178.25, 28.75, 28.75);
+  --e-a-btn-bg-danger-active:	rgb(134.3333333333, 21.6666666667, 21.6666666667);
   --e-a-dark-bg:	#0C0D0E;
   --e-a-dark-color-txt:	#9DA5AE;
   --e-a-dark-color-txt-hover:	#D5D8DC;
@@ -362,6 +363,11 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-danger {
   background-color: var(--e-a-btn-bg-danger);
 }
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger.color-white, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger.color-white,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger.color-white,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button.e-danger.color-white {
+  color: var(--e-a-color-white);
+}
 .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.elementor-button-danger:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button.e-danger:focus,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger:hover,
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button.elementor-button-danger:focus,
@@ -379,6 +385,18 @@
 .dialog-type-alert .dialog-buttons-wrapper .dialog-button:visited {
   color: initial;
 }
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled],
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled] {
+  background-color: var(--e-a-btn-bg-disabled);
+  cursor: not-allowed;
+}
+.dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:hover, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:focus, .dialog-type-confirm .dialog-buttons-wrapper .dialog-button[disabled]:visited,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:hover,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:focus,
+.dialog-type-alert .dialog-buttons-wrapper .dialog-button[disabled]:visited {
+  background-color: var(--e-a-btn-bg-disabled);
+}
+
 #elementor-change-exit-preference-dialog .dialog-message a {
   cursor: pointer;
 }

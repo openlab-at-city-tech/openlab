@@ -111,6 +111,10 @@ class Widget_Image_Gallery extends Widget_Base {
 		];
 	}
 
+	public function has_widget_inner_wrapper(): bool {
+		return ! Plugin::$instance->experiments->is_feature_active( 'e_optimized_markup' );
+	}
+
 	/**
 	 * Register image gallery widget controls.
 	 *
@@ -210,6 +214,46 @@ class Widget_Image_Gallery extends Widget_Base {
 				'condition' => [
 					'gallery_link' => 'file',
 				],
+				'assets' => [
+					'styles' => [
+						[
+							'name' => 'e-swiper',
+							'conditions' => [
+								'terms' => [
+									[
+										'name' => 'gallery_link',
+										'operator' => '===',
+										'value' => 'file',
+									],
+									[
+										'name' => 'open_lightbox',
+										'operator' => '!==',
+										'value' => 'no',
+									],
+								],
+							],
+						],
+					],
+					'scripts' => [
+						[
+							'name' => 'swiper',
+							'conditions' => [
+								'terms' => [
+									[
+										'name' => 'gallery_link',
+										'operator' => '===',
+										'value' => 'file',
+									],
+									[
+										'name' => 'open_lightbox',
+										'operator' => '!==',
+										'value' => 'no',
+									],
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
@@ -239,7 +283,7 @@ class Widget_Image_Gallery extends Widget_Base {
 		$this->add_control(
 			'image_spacing',
 			[
-				'label' => esc_html__( 'Spacing', 'elementor' ),
+				'label' => esc_html__( 'Gap', 'elementor' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'' => esc_html__( 'Default', 'elementor' ),
@@ -256,7 +300,7 @@ class Widget_Image_Gallery extends Widget_Base {
 		$this->add_control(
 			'image_spacing_custom',
 			[
-				'label' => esc_html__( 'Custom Spacing', 'elementor' ),
+				'label' => esc_html__( 'Custom Gap', 'elementor' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'custom' ],
 				'range' => [

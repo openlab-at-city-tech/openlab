@@ -2,44 +2,49 @@
 
 namespace Elementor\Modules\AtomicWidgets\Styles;
 
-use Elementor\Modules\AtomicWidgets\Base\Style_Transformer_Base;
+use Elementor\Core\Utils\Collection;
+use Elementor\Modules\AtomicWidgets\PropsResolver\Render_Props_Resolver;
 
 class Styles_Renderer {
+	const DEFAULT_SELECTOR_PREFIX = '.elementor';
 
 	/**
-	 * @var array<string, Style_Transformer_Base> $transformers
-	 */
-	private array $transformers;
-
-	/**
-	 * @var array<string, array{direction: 'min' | 'max', value: int, is_enabled: boolean}> $breakpoints
+	 * @var array<string, array{direction: 'min' | 'max', value: int, is_enabled: boolean}>
 	 */
 	private array $breakpoints;
 
+	private $on_prop_transform;
+
+	private string $selector_prefix;
+
 	/**
-	 * Styles_Renderer constructor.
-	 *
-	 * @param array{
-	 *     transformers: array<string, Style_Transformer_Base>,
-	 *     breakpoints: array<string, array{direction: 'min' | 'max', value: int, is_enabled: boolean}>
-	 * } $config
+	 * @param array<string, array{direction: 'min' | 'max', value: int, is_enabled: boolean}> $breakpoints
+	 * @param string $selector_prefix
 	 */
-	public function __construct( array $config ) {
-		$this->transformers = $config['transformers'];
-		$this->breakpoints = $config['breakpoints'];
+	private function __construct( array $breakpoints, string $selector_prefix = self::DEFAULT_SELECTOR_PREFIX ) {
+		$this->breakpoints = $breakpoints;
+		$this->selector_prefix = $selector_prefix;
+	}
+
+	public static function make( array $breakpoints, string $selector_prefix = self::DEFAULT_SELECTOR_PREFIX ): self {
+		return new self( $breakpoints, $selector_prefix );
 	}
 
 	/**
 	 * Render the styles to a CSS string.
 	 *
-	 * @param array<int, array{
+	 * Styles format:
+	 *   array<int, array{
 	 *     id: string,
 	 *     type: string,
+	 *     cssName: string | null,
 	 *     variants: array<int, array{
 	 *         props: array<string, mixed>,
 	 *         meta: array<string, mixed>
 	 *     }>
-	 * }> $styles Array of style definitions.
+	 *   }>
+	 *
+	 * @param array $styles Array of style definitions.
 	 *
 	 * @return string Rendered CSS string.
 	 */
@@ -52,6 +57,12 @@ class Styles_Renderer {
 		}
 
 		return implode( '', $css_style );
+	}
+
+	public function on_prop_transform( callable $callback ): self {
+		$this->on_prop_transform = $callback;
+
+		return $this;
 	}
 
 	private function style_definition_to_css_string( array $style ): string {
@@ -85,7 +96,15 @@ class Styles_Renderer {
 			isset( $map[ $style_def['type'] ] ) &&
 			$style_def['id']
 		) {
-			return $map[ $style_def['type'] ] . $style_def['id'];
+			$type = $map[ $style_def['type'] ];
+			$name = $style_def['cssName'] ?? $style_def['id'];
+
+			$selector_parts = array_filter( [
+				$this->selector_prefix,
+				"{$type}{$name}",
+			] );
+
+			return implode( ' ', $selector_parts );
 		}
 
 		return null;
@@ -111,22 +130,18 @@ class Styles_Renderer {
 	}
 
 	private function props_to_css_string( array $props ): string {
-		$css = [];
+		$schema = Style_Schema::get();
 
-		foreach ( $props as $prop => $raw_value ) {
-			$prop = $this->camel_case_to_dash( $prop );
-			$value = $this->transform_value( $raw_value );
+		return Collection::make( Render_Props_Resolver::for_styles()->resolve( $schema, $props ) )
+			->filter()
+			->map( function ( $value, $prop ) {
+				if ( $this->on_prop_transform ) {
+					call_user_func( $this->on_prop_transform, $prop, $value );
+				}
 
-			if ( $prop && $value ) {
-				$css[] = $prop . ':' . $value;
-			}
-		}
-
-		return implode( ';', $css );
-	}
-
-	private function camel_case_to_dash( string $str ): string {
-		return strtolower( preg_replace( '/([a-zA-Z])(?=[A-Z])/', '$1-', $str ) );
+				return $prop . ':' . $value . ';';
+			} )
+			->implode( '' );
 	}
 
 	private function wrap_with_media_query( string $breakpoint_id, string $css ): string {
@@ -149,54 +164,5 @@ class Styles_Renderer {
 		$width = $breakpoint['value'] . 'px';
 
 		return "{$bound}:{$width}";
-	}
-
-	private function transform_value( $value ): ?string {
-		if ( is_string( $value ) ) {
-			return $value;
-		}
-
-		if ( ! $this->is_transformable( $value ) ) {
-			return 'unset';
-		}
-
-		$transformer = $this->get_transformer( $value['$$type'] );
-
-		if ( ! $transformer ) {
-			return 'unset';
-		}
-
-		try {
-			$transformed = $transformer->transform(
-				$value['value'],
-				fn( $value ) => $this->transform_value( $value )
-			);
-
-			return $this->transform_value( $transformed );
-
-		} catch ( \Exception $e ) {
-			return 'unset';
-		}
-	}
-
-	private function is_transformable( $value ): bool {
-		return (
-			isset( $value['$$type'], $value['value'] ) &&
-			is_string( $value['$$type'] )
-		);
-	}
-
-	private function get_transformer( $type ): ?Style_Transformer_Base {
-		if ( ! isset( $this->transformers[ $type ] ) ) {
-			return null;
-		}
-
-		$transformer = $this->transformers[ $type ];
-
-		if ( ! $transformer instanceof Style_Transformer_Base ) {
-			return null;
-		}
-
-		return $transformer;
 	}
 }

@@ -8,7 +8,7 @@ use Elementor\Control_Exit_Animation;
 use Elementor\Control_Hover_Animation;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -36,12 +36,6 @@ class Loader extends Module {
 
 	private function init_styles(): array {
 		$styles = [
-			// TODO: Remove the 'e-animations' registration in v3.26.0 [ED-15471].
-			'e-animations' => [
-				'src' => $this->get_css_assets_url( 'animations', 'assets/lib/animations/', true ),
-				'version' => ELEMENTOR_VERSION,
-				'dependencies' => [],
-			],
 			'e-shapes' => [
 				'src' => $this->get_css_assets_url( 'shapes', 'assets/css/conditionals/' ),
 				'version' => ELEMENTOR_VERSION,
@@ -53,21 +47,13 @@ class Loader extends Module {
 				'dependencies' => [ 'swiper' ],
 			],
 			'swiper' => [
-				'src' => $this->get_css_assets_url( 'swiper', $this->getSwiperPath() ),
-				'version' => $this->getSwiperVersion(),
+				'src' => $this->get_css_assets_url( 'swiper', 'assets/lib/swiper/v8/css/' ),
+				'version' => '8.4.5',
 				'dependencies' => [],
 			],
 		];
 
 		return array_merge( $styles, $this->get_animation_styles() );
-	}
-
-	private function getSwiperPath(): string {
-		return Plugin::$instance->experiments->is_feature_active( 'e_swiper_latest' ) ? 'assets/lib/swiper/v8/css/' : 'assets/lib/swiper/css/';
-	}
-
-	private function getSwiperVersion(): string {
-		return Plugin::$instance->experiments->is_feature_active( 'e_swiper_latest' ) ? '8.4.5' : '5.3.6';
 	}
 
 	private function get_animations(): array {
@@ -114,7 +100,7 @@ class Loader extends Module {
 	}
 
 	/**
-	 * @param array $assets {
+	 * @param array $assets_data {
 	 *     @type array 'styles'
 	 *     @type array 'scripts'
 	 * }
@@ -168,23 +154,11 @@ class Loader extends Module {
 					if ( 'scripts' === $assets_type ) {
 						wp_enqueue_script( $asset_name, $asset_data['src'], $asset_data['dependencies'], $asset_data['version'], true );
 					} else {
-						// TODO: Remove the 'e-animations' registration in v3.26.0 [ED-15471].
-						if ( $this->skip_animations_style( $asset_name ) ) {
-							continue;
-						}
-
 						wp_enqueue_style( $asset_name, $asset_data['src'], $asset_data['dependencies'], $asset_data['version'] );
 					}
 				}
 			}
 		}
-	}
-
-	// TODO: Remove the 'e-animations' registration in v3.26.0 [ED-15471].
-	private function skip_animations_style( $asset_name ): bool {
-		$is_preview = Plugin::$instance->preview->is_preview_mode();
-
-		return $is_preview && 'e-animations' === $asset_name;
 	}
 
 	private function register_assets(): void {

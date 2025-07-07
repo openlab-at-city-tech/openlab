@@ -1,4 +1,4 @@
-/*! elementor - v3.25.0 - 24-11-2024 */
+/*! elementor - v3.30.0 - 07-07-2025 */
 @import "//fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap";
 @import "//fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&display=swap";
 @import "//fonts.googleapis.com/css2?family=Source%20Serif%20Pro&display=swap";
@@ -122,28 +122,28 @@ Auto-import is designed for CSS that not dependent on the loading order.
   --button-primary-active-background-color: #F3BAFD;
   --button-primary-color: #0C0D0E;
   --button-secondary-background-color: #69727D;
-  --button-secondary-hover-background-color: #525961;
-  --button-secondary-active-background-color: #3a3f46;
+  --button-secondary-hover-background-color: rgb(81.7173913043, 88.7217391304, 97.2826086957);
+  --button-secondary-active-background-color: rgb(58.4347826087, 63.4434782609, 69.5652173913);
   --button-secondary-color: #ffffff;
   --button-danger-background-color: #DC2626;
-  --button-danger-hover-background-color: #b21d1d;
-  --button-danger-active-background-color: #861616;
+  --button-danger-hover-background-color: rgb(178.25, 28.75, 28.75);
+  --button-danger-active-background-color: rgb(134.3333333333, 21.6666666667, 21.6666666667);
   --button-danger-color: #ffffff;
   --button-cta-background-color: #93003f;
-  --button-cta-hover-background-color: #600029;
-  --button-cta-active-background-color: #2d0013;
+  --button-cta-hover-background-color: rgb(96, 0, 41.1428571429);
+  --button-cta-active-background-color: rgb(45, 0, 19.2857142857);
   --button-cta-color: #ffffff;
   --button-brand-background-color: #93003f;
-  --button-brand-hover-background-color: #600029;
-  --button-brand-active-background-color: #2d0013;
+  --button-brand-hover-background-color: rgb(96, 0, 41.1428571429);
+  --button-brand-active-background-color: rgb(45, 0, 19.2857142857);
   --button-brand-color: #ffffff;
   --button-link-background-color: #515962;
-  --button-link-hover-background-color: #3a4046;
-  --button-link-active-background-color: #23262a;
+  --button-link-hover-background-color: rgb(57.9217877095, 63.6424581006, 70.0782122905);
+  --button-link-active-background-color: rgb(34.843575419, 38.2849162011, 42.156424581);
   --button-link-color: #ffffff;
   --button-disabled-background-color: #D5D8DC;
-  --button-disabled-hover-background-color: #b9bec5;
-  --button-disabled-active-background-color: #9da4ae;
+  --button-disabled-hover-background-color: rgb(185.1818181818, 190.1688311688, 196.8181818182);
+  --button-disabled-active-background-color: rgb(157.3636363636, 164.3376623377, 173.6363636364);
   --button-disabled-color: #ffffff;
   color: var(--button-background-color, currentColor);
   font-size: var(--button-font-size, inherit);
@@ -165,23 +165,23 @@ Auto-import is designed for CSS that not dependent on the loading order.
   --button-primary-active-background-color: #F3BAFD;
   --button-secondary-background-color: #BABFC5;
   --button-secondary-color: #fff;
-  --button-secondary-hover-background-color: #9ea5ae;
-  --button-secondary-active-background-color: #838c96;
+  --button-secondary-hover-background-color: rgb(158.2913385827, 165.2992125984, 173.7086614173);
+  --button-secondary-active-background-color: rgb(130.5826771654, 139.5984251969, 150.4173228346);
   --button-cta-background-color: #93003f;
-  --button-cta-hover-background-color: #600029;
-  --button-cta-active-background-color: #2d0013;
+  --button-cta-hover-background-color: rgb(96, 0, 41.1428571429);
+  --button-cta-active-background-color: rgb(45, 0, 19.2857142857);
   --button-cta-color: #fff;
-  --button-brand-hover-background-color: #600029;
-  --button-brand-active-background-color: #2d0013;
+  --button-brand-hover-background-color: rgb(96, 0, 41.1428571429);
+  --button-brand-active-background-color: rgb(45, 0, 19.2857142857);
   --button-brand-color: #fff;
   --button-brand-background-color: #93003f;
   --button-link-background-color: #515962;
-  --button-link-hover-background-color: #3a4046;
-  --button-link-active-background-color: #23262a;
+  --button-link-hover-background-color: rgb(57.9217877095, 63.6424581006, 70.0782122905);
+  --button-link-active-background-color: rgb(34.843575419, 38.2849162011, 42.156424581);
   --button-link-color: #ffffff;
   --button-disabled-background-color: #69727D;
-  --button-disabled-hover-background-color: #525961;
-  --button-disabled-active-background-color: #3a3f46;
+  --button-disabled-hover-background-color: rgb(81.7173913043, 88.7217391304, 97.2826086957);
+  --button-disabled-active-background-color: rgb(58.4347826087, 63.4434782609, 69.5652173913);
   --button-disabled-color: #fff;
 }
 .eps-button--contained {
@@ -304,7 +304,7 @@ Auto-import is designed for CSS that not dependent on the loading order.
   --body-color: #515962;
   --body-bg: #ffffff;
   --link-color: #515962;
-  --link-hover-color: #2e3338;
+  --link-hover-color: rgb(46.3826815642, 50.9636871508, 56.1173184358);
   --hr-color: #E6E8EA;
   --box-shadow-color: theme-colors(dark);
   --display-1-color: #515962;
@@ -358,7 +358,7 @@ Auto-import is designed for CSS that not dependent on the loading order.
   --body-color: #BABFC5;
   --body-bg: #1f2124;
   --link-color: #0077CC;
-  --link-hover-color: #2e3338;
+  --link-hover-color: rgb(46.3826815642, 50.9636871508, 56.1173184358);
   --hr-color: #333438;
   --box-shadow-color: rgba(0, 0, 0, 0.15);
   --display-1-color: #BABFC5;
@@ -1073,7 +1073,7 @@ h6,
   margin-block-end: 2.75rem;
 }
 .e-app-import-export-page-header__content-wrapper {
-  max-width: 645px;
+  max-width: 655px;
 }
 .e-app-import-export-page-header__heading {
   color: var(--e-app-import-export-page-header-heading-color);
@@ -1868,10 +1868,7 @@ h6,
   background: rgba(0, 0, 0, 0.5);
   position: fixed;
   display: flex;
-  top: 0;
-  right: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   align-items: center;
   justify-content: center;
   z-index: 1030;
@@ -2145,10 +2142,7 @@ h6,
 }
 .eps-popover__background {
   position: fixed;
-  top: 0;
-  bottom: 0;
-  right: 0;
-  left: 0;
+  inset: 0;
   z-index: 1030;
 }
 .eps-popover__container {
@@ -2168,6 +2162,18 @@ h6,
   border-style: solid;
   border-width: 0 calc(16px / 2) 9px calc(16px / 2);
   border-block-end-color: var(--popover-arrow-color);
+}
+.eps-popover--arrow-start::before {
+  right: 0.1875rem;
+  transform: none;
+}
+.eps-popover--arrow-end::before {
+  left: 0.1875rem;
+  right: auto;
+  transform: none;
+}
+.eps-popover--arrow-none::before {
+  display: none;
 }
 .eps-popover__item {
   padding: 0.3125rem 1rem;
@@ -2222,12 +2228,12 @@ h6,
 
 :root {
   --checkbox-border-color: #9DA5AE;
-  --checkbox-hover-border-color: #8f98a2;
-  --checkbox-active-border-color: #abb2ba;
+  --checkbox-hover-border-color: rgb(143.0391061453, 152.1787709497, 162.4608938547);
+  --checkbox-active-border-color: rgb(170.9608938547, 177.8212290503, 185.5391061453);
   --checkbox-background-color: #ffffff;
   --checkbox-checked-background-color: #515962;
-  --checkbox-checked-hover-background-color: #454c54;
-  --checkbox-checked-active-background-color: #5d6670;
+  --checkbox-checked-hover-background-color: rgb(69.4608938547, 76.3212290503, 84.0391061453);
+  --checkbox-checked-active-background-color: rgb(92.5391061453, 101.6787709497, 111.9608938547);
   --checkbox-checked-disabled-background-color: #D5D8DC;
   --checkbox-indicator-color: #ffffff;
   --checkbox-error-background-color: #DC2626;
@@ -2439,6 +2445,9 @@ h6,
   --eps-text-field-placeholder-color: #69727D;
   --eps-text-field-outlined-border-color: #9DA5AE;
   --eps-text-field-outlined-focus-border-color: #515962;
+  --eps-text-field-standard-border-color: #9DA5AE;
+  --eps-text-field-standard-focus-border-color: #515962;
+  --border: 1px solid var(--eps-text-field-outlined-border-color);
   width: 100%;
   color: var(--eps-text-field-color);
   background-color: var(--eps-text-field-background-color);
@@ -2452,11 +2461,19 @@ h6,
 }
 .eps-text-field--outlined {
   border-radius: 0.1875rem;
-  border: 1px solid var(--eps-text-field-outlined-border-color);
+  border: var(--border);
   padding: 0.625rem;
 }
 .eps-text-field--outlined:focus {
   border-color: var(--eps-text-field-outlined-focus-border-color);
+}
+.eps-text-field--standard {
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  border-bottom: var(--border);
+}
+.eps-text-field--standard:focus {
+  border-color: var(--eps-text-field-standard-focus-border-color);
 }
 .eps-text-field::-moz-placeholder {
   color: var(--eps-text-field-placeholder-color);
@@ -2485,6 +2502,12 @@ h6,
 }
 .eps-theme-dark--outlined:focus {
   border-color: var(--eps-text-field-outlined-focus-border-color);
+}
+.eps-theme-dark--standard {
+  border-color: var(--eps-text-field-standard-border-color);
+}
+.eps-theme-dark--standard:focus {
+  border-color: var(--eps-text-field-standard-focus-border-color);
 }
 
 .e-app-import-export-content-layout {
@@ -2622,9 +2645,6 @@ h6,
 .e-app-export-kit {
   padding-block-end: 1.25rem;
 }
-.e-app-export-kit-information {
-  margin-block-start: 1.25rem;
-}
 .e-app-export-kit-information__field-header {
   margin-block-end: 0.625rem;
 }
@@ -2634,11 +2654,23 @@ h6,
 .e-app-export-kit-information__info-icon {
   margin-inline-start: 0.625rem;
 }
-.e-app-export-kit-info-modal__icon {
-  padding-inline-start: 0.625rem;
+.e-app-export-kit-information__content {
+  gap: 16px;
 }
-.e-app-export-kit-info-modal__heading {
-  margin-block-end: 1.25rem;
+.e-app-export-kit-information__field--error {
+  border-color: var(--e-a-color-danger);
+}
+.e-app-export-kit-information__error-container {
+  height: 20px;
+  display: flex;
+  align-items: flex-start;
+  margin-top: 4px;
+}
+.e-app-export-kit-information__validation-error {
+  color: var(--e-a-color-danger);
+}
+.e-app-export-kit__content {
+  gap: 20px;
 }
 
 .e-app-import-export-info-modal__section:not(:first-child) {
@@ -2794,9 +2826,6 @@ h6,
 .e-kit-library__kit-item-overlay {
   height: 100%;
 }
-.e-kit-library__kit-item-overlay > *:first-child {
-  flex: 1;
-}
 .e-kit-library__kit-item-overlay-overview-button {
   display: flex;
   flex-direction: column;
@@ -2828,6 +2857,7 @@ h6,
   margin: 0 3px;
 }
 .e-kit-library__kit-item-subscription-plan-badge {
+  --e-a-color-brand: #467FF7;
   position: absolute;
   top: 0;
   left: 0;
@@ -2835,6 +2865,71 @@ h6,
   background-color: var(--e-a-color-brand);
   color: #ffffff;
   text-transform: uppercase;
+}
+.e-kit-library__kit-item-subscription-plan-badge.promoted {
+  --e-a-color-brand: #92003B;
+}
+.e-kit-library__kit-item-header {
+  position: relative;
+}
+.e-kit-library__kit-item-actions-menu i {
+  font-size: 16px;
+}
+.e-kit-library__kit-item-actions-popover {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+  min-width: 0;
+  padding: 12px 0;
+  position: absolute;
+  top: 25px;
+  left: 100%;
+  transform: translateX(-100%);
+}
+.e-kit-library__kit-item-actions-popover-item {
+  display: flex;
+  height: 30px;
+  width: 100%;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  cursor: pointer;
+}
+.e-kit-library__kit-item-actions-popover-item i {
+  font-size: 16px;
+}
+.e-kit-library__kit-item-actions-popover-item:hover {
+  background-color: var(--e-a-bg-hover);
+}
+.e-kit-library__kit-item-actions-popover-item--danger {
+  color: var(--e-a-color-danger);
+}
+.e-kit-library__kit-item-actions-popover-item--danger:hover {
+  background-color: var(--e-a-bg-danger);
+}
+.e-kit-library__kit-item-actions-popover-item--danger i {
+  color: var(--e-a-color-danger);
+}
+.e-kit-library__kit-item-cloud-overlay {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.e-kit-library__kit-item-cloud-overlay-import-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 22px;
+  gap: 8px;
+}
+.e-kit-library__kit-item-cloud-overlay-import-button > i {
+  font-size: 20px;
+  font-weight: 600;
+}
+.e-kit-library__kit-item-cloud-overlay-import-button > span {
+  font-size: 15px;
 }
 
 :root {
@@ -3097,6 +3192,43 @@ h6,
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.e-kit-library__index-layout-main.e-kit-library__connect-container {
+  justify-content: center;
+  align-items: center;
+}
+.e-kit-library__connect-button {
+  background-color: var(--e-a-btn-bg-primary);
+  color: var(--e-a-btn-color);
+  border-radius: 4px;
+  padding: 8px;
+}
+.e-kit-library__connect-button:hover {
+  opacity: 0.8;
+}
+.e-kit-library__upgrade-button {
+  background-color: var(--e-a-color-accent);
+  color: var(--e-a-color-txt-invert);
+  border-radius: 4px;
+  padding: 8px;
+}
+.e-kit-library__upgrade-button:hover {
+  opacity: 0.8;
+}
+.e-kit-library .eicon-library-cloud-connect,
+.e-kit-library .eicon-library-subscription-upgrade {
+  font-size: 65px;
+}
+.e-kit-library .connect-badge {
+  color: #C00BB9;
+  margin-inline-start: 10px;
+}
+.e-kit-library .upgrade-badge {
+  color: #93003f;
+  border: 1px solid #93003f;
+  border-radius: 10px;
+  padding: 2px 6px;
+  margin-inline-start: 10px;
 }
 
 .e-kit-library__tags-filter {
@@ -3396,6 +3528,13 @@ h6,
   margin-block-end: 1.25rem;
 }
 
+.e-app-export-actions-container {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  justify-content: flex-end;
+}
+
 .e-onboarding {
   font-family: "DM Sans", "Roboto", sans-serif;
   color-scheme: light;
@@ -3529,7 +3668,7 @@ h6,
   transition: 0.5s;
 }
 .e-onboarding__header .eps-button__go-pro-btn:hover {
-  background: #c60055;
+  background: rgb(198, 0, 84.8571428571);
 }
 
 .e-onboarding__go-pro {
@@ -3628,6 +3767,11 @@ h6,
 }
 .e-onboarding__button-skip:hover {
   background-color: #F9FAFA;
+}
+.e-onboarding__button-skip--disabled {
+  pointer-events: none;
+  cursor: none;
+  color: #D5D8DC;
 }
 .e-onboarding__button--disabled {
   pointer-events: none;
@@ -3778,10 +3922,6 @@ h6,
   visibility: hidden;
 }
 
-.e-onboarding__page-goodToGo .e-onboarding__page-content-section-title,
-.e-onboarding__page-goodToGo .e-onboarding__page-content-section-text {
-  text-align: center;
-}
 .e-onboarding__cards-grid.e-onboarding__page-content {
   margin-block-start: 48px;
   margin-block-end: 48px;
@@ -3791,6 +3931,17 @@ h6,
 }
 .e-onboarding__cards-grid .e-onboarding__card:not(:last-child) {
   margin-inline-end: 20px;
+}
+.e-onboarding__page-goodToGo .e-onboarding__page-content-section-title,
+.e-onboarding__page-goodToGo .e-onboarding__page-content-section-text {
+  text-align: center;
+}
+.e-onboarding__page-goodToGo .e-onboarding__cards-grid {
+  justify-content: center;
+  flex-wrap: nowrap;
+}
+.e-onboarding__page-goodToGo .e-onboarding__card {
+  max-width: 388px;
 }
 .e-onboarding__good-to-go-footer {
   justify-content: end;

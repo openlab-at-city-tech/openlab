@@ -19,9 +19,10 @@ use Elementor\Widget_Base;
 use Elementor\Core\Settings\Page\Manager as PageManager;
 use ElementorPro\Modules\Library\Widgets\Template;
 use Elementor\Core\Utils\Promotions\Filtered_Promotions_Manager;
+use Elementor\Modules\AtomicWidgets\Module as Atomic_Widgets_Module;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 /**
@@ -40,6 +41,7 @@ abstract class Document extends Controls_Stack {
 	 */
 	const TYPE_META_KEY = '_elementor_template_type';
 	const PAGE_META_KEY = '_elementor_page_settings';
+	const ELEMENTOR_DATA_META_KEY = '_elementor_data';
 
 	const BUILT_WITH_ELEMENTOR_META_KEY = '_elementor_edit_mode';
 
@@ -549,10 +551,8 @@ abstract class Document extends Controls_Stack {
 	 * @since 2.0.0
 	 * @access public
 	 *
-	 *
 	 * @return bool|Document
 	 */
-
 	public function get_newer_autosave() {
 		$autosave = $this->get_autosave();
 
@@ -729,9 +729,17 @@ abstract class Document extends Controls_Stack {
 			$container_config = [];
 
 			if ( Plugin::$instance->experiments->is_feature_active( 'container' ) ) {
-				$container_config = [
-					'container' => Plugin::$instance->elements_manager->get_element_types( 'container' )->get_config(),
-				];
+				$container_config['container'] =
+					Plugin::$instance->elements_manager->get_element_types( 'container' )->get_config();
+			}
+
+			if ( Plugin::$instance->experiments->is_feature_active( Atomic_Widgets_Module::EXPERIMENT_NAME ) ) {
+				// Order reflects the order in the editor.
+				$atomic_elements = [ 'e-flexbox', 'e-div-block' ];
+
+				foreach ( $atomic_elements as $element ) {
+					$container_config[ $element ] = Plugin::$instance->elements_manager->get_element_types( $element )->get_config();
+				}
 			}
 
 			$config['elements'] = $this->get_elements_raw_data( null, true );
@@ -835,7 +843,9 @@ abstract class Document extends Controls_Stack {
 		do_action( 'elementor/document/before_save', $this, $data );
 
 		if ( ! current_user_can( 'unfiltered_html' ) ) {
-			$data = wp_kses_post_deep( $data );
+			$data = map_deep( $data, function ( $value ) {
+				return is_bool( $value ) || is_null( $value ) ? $value : wp_kses_post( $value );
+			} );
 		}
 
 		if ( ! empty( $data['settings'] ) ) {
@@ -922,7 +932,7 @@ abstract class Document extends Controls_Stack {
 	 * @return bool Whether the post was built with Elementor.
 	 */
 	public function is_built_with_elementor() {
-		return ! ! $this->get_meta( self::BUILT_WITH_ELEMENTOR_META_KEY );
+		return (bool) $this->get_meta( self::BUILT_WITH_ELEMENTOR_META_KEY );
 	}
 
 	/**
@@ -1034,7 +1044,7 @@ abstract class Document extends Controls_Stack {
 	}
 
 	public function update_json_meta( $key, $value ) {
-		$this->update_meta(
+		return $this->update_meta(
 			$key,
 			// `wp_slash` in order to avoid the unslashing during the `update_post_meta`
 			wp_slash( wp_json_encode( $value ) )
@@ -1085,7 +1095,7 @@ abstract class Document extends Controls_Stack {
 			}
 
 			$editor_data[] = $element_data;
-		} // End foreach().
+		}
 
 		Plugin::$instance->documents->restore_document();
 
@@ -1101,7 +1111,7 @@ abstract class Document extends Controls_Stack {
 	 * @return array
 	 */
 	public function get_elements_data( $status = self::STATUS_PUBLISH ) {
-		$elements = $this->get_json_meta( '_elementor_data' );
+		$elements = $this->get_json_meta( self::ELEMENTOR_DATA_META_KEY );
 
 		if ( self::STATUS_DRAFT === $status ) {
 			$autosave = $this->get_newer_autosave();
@@ -1109,7 +1119,7 @@ abstract class Document extends Controls_Stack {
 			if ( is_object( $autosave ) ) {
 				$autosave_elements = Plugin::$instance->documents
 					->get( $autosave->get_post()->ID )
-					->get_json_meta( '_elementor_data' );
+					->get_json_meta( self::ELEMENTOR_DATA_META_KEY );
 			}
 		}
 
@@ -1279,7 +1289,7 @@ abstract class Document extends Controls_Stack {
 	 *
 	 * @return array Element data.
 	 */
-	public static function on_import_update_dynamic_content( array $config, array $data, $controls = null ) : array {
+	public static function on_import_update_dynamic_content( array $config, array $data, $controls = null ): array {
 		foreach ( $config as &$element_config ) {
 			$element_instance = Plugin::$instance->elements_manager->create_element_instance( $element_config );
 
@@ -1348,7 +1358,7 @@ abstract class Document extends Controls_Stack {
 		$json_value = wp_slash( wp_json_encode( $editor_data ) );
 
 		// Don't use `update_post_meta` that can't handle `revision` post type
-		$is_meta_updated = update_metadata( 'post', $this->post->ID, '_elementor_data', $json_value );
+		$is_meta_updated = update_metadata( 'post', $this->post->ID, self::ELEMENTOR_DATA_META_KEY, $json_value );
 
 		/**
 		 * Before saving data.
@@ -1418,7 +1428,6 @@ abstract class Document extends Controls_Stack {
 			 * @since 2.5.12
 			 *
 			 * @param \Elementor\Core\Base\Document $this The current document.
-			 *
 			 */
 			do_action( 'elementor/document/save_version', $this );
 		}
@@ -1587,7 +1596,7 @@ abstract class Document extends Controls_Stack {
 				$this->post = get_post( $data['post_id'] );
 
 				if ( ! $this->post ) {
-					throw new \Exception( sprintf( 'Post ID #%s does not exist.', $data['post_id'] ), Exceptions::NOT_FOUND );
+					throw new \Exception( sprintf( 'Post ID #%s does not exist.', esc_html( $data['post_id'] ) ), Exceptions::NOT_FOUND ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
 				}
 			}
 
@@ -1607,7 +1616,7 @@ abstract class Document extends Controls_Stack {
 		parent::__construct( $data );
 	}
 
-	/*
+	/**
 	 * Get Export Data
 	 *
 	 * Filters a document's data on export
@@ -1620,6 +1629,8 @@ abstract class Document extends Controls_Stack {
 	public function get_export_data() {
 		$content = Plugin::$instance->db->iterate_data( $this->get_elements_data(), function( $element_data ) {
 			$element_data['id'] = Utils::generate_random_string();
+
+			$element_data = apply_filters( 'elementor/document/element/replace_id', $element_data );
 
 			$element = Plugin::$instance->elements_manager->create_element_instance( $element_data );
 
@@ -1646,7 +1657,7 @@ abstract class Document extends Controls_Stack {
 		];
 	}
 
-	/*
+	/**
 	 * Get Import Data
 	 *
 	 * Filters a document's data on import
@@ -1795,8 +1806,19 @@ abstract class Document extends Controls_Stack {
 	 * @access protected
 	 */
 	protected function print_elements( $elements_data ) {
-		if ( ! Plugin::$instance->experiments->is_feature_active( 'e_element_cache' ) ) {
+		$is_element_cache_active = Plugin::$instance->experiments->is_feature_active( 'e_element_cache' ) && 'disable' !== get_option( 'elementor_element_cache_ttl', '' );
+		if ( ! $is_element_cache_active ) {
+			ob_start();
+
 			$this->do_print_elements( $elements_data );
+
+			$content = ob_get_clean();
+
+			if ( has_blocks( $content ) ) {
+				$content = do_blocks( $content );
+			}
+
+			echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 			return;
 		}
@@ -1852,17 +1874,18 @@ abstract class Document extends Controls_Stack {
 		}
 
 		if ( ! empty( $cached_data['content'] ) ) {
-			echo do_shortcode( $cached_data['content'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$content = do_shortcode( $cached_data['content'] );
+
+			if ( has_blocks( $content ) ) {
+				$content = do_blocks( $content );
+			}
+
+			echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 
 	protected function do_print_elements( $elements_data ) {
-		// Collect all data updaters that should be updated on runtime.
-		$runtime_elements_iteration_actions = $this->get_runtime_elements_iteration_actions();
-
-		if ( $runtime_elements_iteration_actions ) {
-			$this->iterate_elements( $elements_data, $runtime_elements_iteration_actions, 'render' );
-		}
+		$this->update_runtime_elements( $elements_data );
 
 		foreach ( $elements_data as $element_data ) {
 			$element = Plugin::$instance->elements_manager->create_element_instance( $element_data );
@@ -1872,6 +1895,19 @@ abstract class Document extends Controls_Stack {
 			}
 
 			$element->print_element();
+		}
+	}
+
+	public function update_runtime_elements( $elements_data = null ) {
+		if ( null === $elements_data ) {
+			$elements_data = $this->get_elements_data();
+		}
+
+		// Collect all data updaters that should be updated on runtime.
+		$runtime_elements_iteration_actions = $this->get_runtime_elements_iteration_actions();
+
+		if ( $runtime_elements_iteration_actions ) {
+			$this->iterate_elements( $elements_data, $runtime_elements_iteration_actions, 'render' );
 		}
 	}
 
