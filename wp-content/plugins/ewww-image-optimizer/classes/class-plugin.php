@@ -165,6 +165,13 @@ final class Plugin extends Base {
 	public $webp_only = false;
 
 	/**
+	 * A list of errors reported when saving the EWWW IO settings.
+	 *
+	 * @var array $settings_errors
+	 */
+	protected $settings_errors = array();
+
+	/**
 	 * Did we already run tool_init()?
 	 *
 	 * @var bool $tools_initialized
@@ -196,12 +203,23 @@ final class Plugin extends Base {
 			// For classes we need everywhere, front-end and back-end. Others are only included on admin_init (below).
 			self::$instance->requires();
 			self::$instance->load_children();
+			// Load async classes early, even though cron schedules use translations, and should not normally be loaded any earlier than init.
+			// The async classes have been modified to not use translations any earlier than init.
+			self::$instance->load_async_children();
+
 			// Load plugin compatibility functions for S3 Uploads, NextGEN, FlaGallery, and Nextcellent.
 			\add_action( 'plugins_loaded', array( self::$instance, 'plugins_compat' ) );
 			// Initializes the plugin for admin interactions, like saving network settings and scheduling cron jobs.
 			\add_action( 'admin_init', array( self::$instance, 'admin_init' ) );
 			// We run this early, and then double-check after admin_init, once network settings have been saved/updated.
 			self::$instance->cloud_init();
+			// Runs other checks that need to run on 'init'.
+			\add_action( 'init', array( self::$instance, 'init' ), 9 );
+
+			// Registers various hooks for automatic optimization with core and other plugins.
+			// NOTE: this may make sense to move elsewhere someday, but it is here for now!
+			// TODO: the functions registered could (should?) become class members, which is why it may make more sense as a separate class.
+			self::$instance->register_integration_hooks();
 
 			// AJAX action hook to dismiss the UTF-8 notice.
 			\add_action( 'wp_ajax_ewww_dismiss_utf8_notice', array( self::$instance, 'dismiss_utf8_notice' ) );
@@ -308,8 +326,15 @@ final class Plugin extends Base {
 	/**
 	 * Setup mandatory child classes.
 	 */
-	public function load_children() {
-		// Setup async/background classes first.
+	private function load_children() {
+		self::$instance->local    = new Local();
+		self::$instance->tracking = new Tracking();
+	}
+
+	/**
+	 * Setup mandatory async/background child classes (should not be done before 'init').
+	 */
+	private function load_async_children() {
 		self::$instance->async_key_verify             = new Async_Key_Verify();
 		self::$instance->async_scan                   = new Async_Scan();
 		self::$instance->async_test_optimize          = new Async_Test_Optimize();
@@ -317,10 +342,6 @@ final class Plugin extends Base {
 		self::$instance->background_attachment_update = new Background_Process_Attachment_Update();
 		self::$instance->background_image             = new Background_Process_Image();
 		self::$instance->background_media             = new Background_Process_Media();
-
-		// Then, setup the rest of the classes we need.
-		self::$instance->local    = new Local();
-		self::$instance->tracking = new Tracking();
 	}
 
 	/**
@@ -397,20 +418,22 @@ final class Plugin extends Base {
 	public function exec_init() {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		global $exactdn;
+
+		// Initialize this, for if/when we setup JPG-only mode. If an API key is active, we'll toggle to false.
+		$default_jpg_only_mode = true;
+
 		// If cloud is fully enabled, we're going to skip all the checks related to the bundled tools.
 		if ( $this->cloud_mode ) {
 			$this->debug_message( 'cloud options enabled, shutting off binaries' );
 			$this->local->skip_tools();
+			$this->toggle_jpg_only_mode( false );
 			return;
+		} elseif ( $this->get_option( 'ewww_image_optimizer_cloud_key' ) ) {
+			$default_jpg_only_mode = false;
+			$this->toggle_jpg_only_mode( $default_jpg_only_mode );
 		}
-		if (
-			\defined( 'WPCOMSH_VERSION' ) ||
-			! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) ||
-			\defined( 'WPE_PLUGIN_VERSION' ) ||
-			\defined( 'FLYWHEEL_CONFIG_DIR' ) ||
-			\defined( 'KINSTAMU_VERSION' ) ||
-			\defined( 'WPNET_INIT_PLUGIN_VERSION' )
-		) {
+		if ( $this->local->hosting_requires_api() ) {
+			$this->toggle_jpg_only_mode( $default_jpg_only_mode );
 			if (
 				! $this->get_option( 'ewww_image_optimizer_cloud_key' ) &&
 				! \ewww_image_optimizer_easy_active() &&
@@ -422,25 +445,31 @@ final class Plugin extends Base {
 			$this->debug_message( 'WPE/wp.com/pantheon/flywheel site, disabling tools' );
 			return;
 		}
-		// If they haven't completed the wizard yet, only display stuff on the bulk page, and short-circuit the rest of the checks elsewhere.
-		if ( ! ewww_image_optimizer_get_option( 'ewww_image_optimizer_wizard_complete' ) ) {
-			// Check if this is a supported OS (Linux, Mac OS, FreeBSD, or Windows).
-			if (
-				! $this->get_option( 'ewww_image_optimizer_cloud_key' ) &&
-				! \ewww_image_optimizer_easy_active() &&
-				$this->local->os_supported()
-			) {
-				\add_action( 'load-media_page_ewww-image-optimizer-bulk', array( $this, 'tool_init' ) );
-			}
-			return;
-		}
 		if ( ! $this->local->os_supported() ) {
-			// Register the function to display a notice.
-			\add_action( 'network_admin_notices', array( $this, 'notice_os' ) );
-			\add_action( 'admin_notices', array( $this, 'notice_os' ) );
+			$this->toggle_jpg_only_mode( $default_jpg_only_mode );
+			if ( $this->get_option( 'ewww_image_optimizer_wizard_complete' ) ) {
+				// Register the function to display a notice.
+				\add_action( 'network_admin_notices', array( $this, 'notice_os' ) );
+				\add_action( 'admin_notices', array( $this, 'notice_os' ) );
+			}
 			// Turn off all the tools.
 			$this->debug_message( 'unsupported OS, disabling tools: ' . PHP_OS );
 			$this->local->skip_tools();
+			return;
+		}
+		// Last check for JPG-only mode until we know whether jpegtran or optipng are functional.
+		if ( ! $this->local->exec_check() ) {
+			$this->toggle_jpg_only_mode( $default_jpg_only_mode );
+		}
+		// If they haven't completed the wizard yet, only display stuff on the bulk page, and short-circuit the rest of the checks elsewhere.
+		if ( ! $this->get_option( 'ewww_image_optimizer_wizard_complete' ) ) {
+			// Check if this is a supported OS (Linux, Mac OS, FreeBSD, or Windows).
+			if (
+				! $this->get_option( 'ewww_image_optimizer_cloud_key' ) &&
+				! \ewww_image_optimizer_easy_active()
+			) {
+				\add_action( 'load-media_page_ewww-image-optimizer-bulk', array( $this, 'tool_init' ) );
+			}
 			return;
 		}
 		\add_action( 'load-upload.php', array( $this, 'tool_init' ), 9 );
@@ -457,7 +486,7 @@ final class Plugin extends Base {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		$this->tools_initialized = true;
 		// Make sure the bundled tools are installed.
-		if ( ! $this->get_option( 'ewww_image_optimizer_skip_bundle' ) ) {
+		if ( ! $this->get_option( 'ewww_image_optimizer_skip_bundle' ) && $this->local->exec_check() ) {
 			$this->local->install_tools();
 		}
 		if ( $this->cloud_mode ) {
@@ -479,6 +508,8 @@ final class Plugin extends Base {
 		 * Require the files that migrate WebP images from extension replacement to extension appending.
 		 */
 		require_once EWWW_IMAGE_OPTIMIZER_PLUGIN_PATH . 'mwebp.php';
+
+		// Check if the plugin has been updated and any upgrade routines need to be run.
 		\ewww_image_optimizer_upgrade();
 
 		// Do settings validation for multi-site.
@@ -487,6 +518,8 @@ final class Plugin extends Base {
 		$this->register_settings();
 		$this->cloud_init();
 		$this->exec_init();
+
+		// Setup the cron job for scheduled optimization.
 		\ewww_image_optimizer_cron_setup( 'ewww_image_optimizer_auto' );
 
 		// Adds scripts to ajaxify the one-click actions on the media library, and register tooltips for conversion links.
@@ -506,6 +539,8 @@ final class Plugin extends Base {
 		if ( ! $this->get_option( 'ewww_image_optimizer_dismiss_utf8' ) && false === strpos( $wpdb->charset, 'utf8' ) ) {
 			\add_action( 'network_admin_notices', array( $this, 'utf8_db_notice' ) );
 			\add_action( 'admin_notices', array( $this, 'utf8_db_notice' ) );
+		} elseif ( ! $this->get_option( 'ewww_image_optimizer_dismiss_utf8' ) ) {
+			$this->set_option( 'ewww_image_optimizer_dismiss_utf8', true );
 		}
 		if ( \defined( 'EWWW_IMAGE_OPTIMIZER_CLOUD_KEY' ) && \get_option( 'ewww_image_optimizer_cloud_key_invalid' ) ) {
 			\add_action( 'network_admin_notices', 'ewww_image_optimizer_notice_invalid_key' );
@@ -546,7 +581,7 @@ final class Plugin extends Base {
 			! $this->get_option( 'ewww_image_optimizer_cloud_key' ) &&
 			\ewww_image_optimizer_easy_active()
 		) {
-			// Suppress the custom column in the media library if local mode is disabled and easy mode is active.
+			// Suppress the custom column in the media library if Easy IO CDN is enabled without an API key and Easy Mode is active.
 			\remove_filter( 'manage_media_columns', 'ewww_image_optimizer_columns' );
 		} else {
 			\add_action( 'admin_notices', 'ewww_image_optimizer_notice_media_listmode' );
@@ -622,6 +657,85 @@ final class Plugin extends Base {
 	}
 
 	/**
+	 * Runs early for checks that need to happen on init before anything else.
+	 */
+	public function init() {
+		$this->debug_message( '<b>' . __FUNCTION__ . '()</b>' );
+
+		// For the settings page, check for the enable-local param and take appropriate action.
+		if ( ! empty( $_GET['enable-local'] ) && ! empty( $_REQUEST['_wpnonce'] ) && \wp_verify_nonce( \sanitize_key( $_REQUEST['_wpnonce'] ), 'ewww_image_optimizer_options-options' ) ) {
+			\update_option( 'ewww_image_optimizer_ludicrous_mode', true );
+			\update_site_option( 'ewww_image_optimizer_ludicrous_mode', true );
+		} elseif ( isset( $_GET['enable-local'] ) && ! (bool) $_GET['enable-local'] && ! empty( $_REQUEST['_wpnonce'] ) && \wp_verify_nonce( \sanitize_key( $_REQUEST['_wpnonce'] ), 'ewww_image_optimizer_options-options' ) ) {
+			\update_option( 'ewww_image_optimizer_ludicrous_mode', false );
+			\update_site_option( 'ewww_image_optimizer_ludicrous_mode', false );
+		}
+		if ( ! empty( $_GET['complete_wizard'] ) && ! empty( $_REQUEST['_wpnonce'] ) && \wp_verify_nonce( \sanitize_key( $_REQUEST['_wpnonce'] ), 'ewww_image_optimizer_options-options' ) ) {
+			\update_option( 'ewww_image_optimizer_wizard_complete', true, false );
+		}
+		if ( ! empty( $_GET['uncomplete_wizard'] ) && ! empty( $_REQUEST['_wpnonce'] ) && \wp_verify_nonce( \sanitize_key( $_REQUEST['_wpnonce'] ), 'ewww_image_optimizer_options-options' ) ) {
+			\update_option( 'ewww_image_optimizer_wizard_complete', false, false );
+		}
+
+		if ( \defined( 'CROP_THUMBNAILS_VERSION' ) ) {
+			\add_filter( 'ewwwio_use_original_for_webp_thumbs', '__return_false', 9 ); // Early, so folks can turn it back on if they want for some reason.
+		}
+
+		if ( \defined( 'DOING_WPLR_REQUEST' ) && DOING_WPLR_REQUEST ) {
+			// Unhook all automatic processing, and save an option that (does not autoload) tells the user LR Sync regenerated their images and they should run the bulk optimizer.
+			\remove_filter( 'wp_image_editors', 'ewww_image_optimizer_load_editor', 60 );
+			\remove_filter( 'wp_generate_attachment_metadata', 'ewww_image_optimizer_resize_from_meta_data', 15 );
+			\add_action( 'wplr_add_media', 'ewww_image_optimizer_lr_sync_update' );
+			\add_action( 'wplr_update_media', 'ewww_image_optimizer_lr_sync_update' );
+			\add_filter( 'ewww_image_optimizer_allowed_reopt', '__return_true' );
+		}
+	}
+
+	/**
+	 * If automatic optimization is enabled, register hooks to integrate with various core functions and plugins.
+	 */
+	public function register_integration_hooks() {
+		// If automatic optimization is NOT disabled.
+		if ( ! $this->get_option( 'ewww_image_optimizer_noauto' ) ) {
+			if ( ! \defined( 'EWWW_IMAGE_OPTIMIZER_DISABLE_EDITOR' ) || ! EWWW_IMAGE_OPTIMIZER_DISABLE_EDITOR ) {
+				// Turns off the ewwwio_image_editor during uploads.
+				\add_action( 'add_attachment', 'ewww_image_optimizer_add_attachment' );
+				// Turn off the editor when scaling down the original (core WP 5.3+).
+				\add_filter( 'big_image_size_threshold', 'ewww_image_optimizer_image_sizes' );
+				// Turns off ewwwio_image_editor during Enable Media Replace.
+				\add_filter( 'emr_unfiltered_get_attached_file', 'ewww_image_optimizer_image_sizes' );
+				// Checks to see if thumb regen or other similar operation is running via REST API.
+				\add_action( 'rest_api_init', 'ewww_image_optimizer_restapi_compat_check' );
+				// Detect WP/LR Sync when it starts.
+				\add_action( 'wplr_presync_media', 'ewww_image_optimizer_image_sizes' );
+				// Enables direct integration to the editor's save function.
+				\add_filter( 'wp_image_editors', 'ewww_image_optimizer_load_editor', 60 );
+			}
+			// Resizes and auto-rotates images.
+			\add_filter( 'wp_handle_upload', 'ewww_image_optimizer_handle_upload' );
+			// Processes an image via the metadata after upload.
+			\add_filter( 'wp_generate_attachment_metadata', 'ewww_image_optimizer_resize_from_meta_data', 15, 2 );
+			// Checks attachment for scaled version and updates metadata.
+			\add_filter( 'wp_generate_attachment_metadata', 'ewww_image_optimizer_update_scaled_metadata', 8, 2 );
+			\add_filter( 'wp_update_attachment_metadata', 'ewww_image_optimizer_update_scaled_metadata', 8, 2 );
+			// Add hook for PTE confirmation to make sure new resizes are optimized.
+			\add_filter( 'wp_get_attachment_metadata', 'ewww_image_optimizer_pte_check' );
+			// Resizes and auto-rotates MediaPress images.
+			\add_filter( 'mpp_handle_upload', 'ewww_image_optimizer_handle_mpp_upload' );
+			// Processes a MediaPress image via the metadata after upload.
+			\add_filter( 'mpp_generate_metadata', 'ewww_image_optimizer_resize_from_meta_data', 15, 2 );
+			// Processes an attachment after IRSC has done a thumb regen.
+			\add_filter( 'sirsc_attachment_images_ready', 'ewww_image_optimizer_resize_from_meta_data', 15, 2 );
+			// Processes an attachment after Crop Thumbnails plugin has modified the images.
+			\add_filter( 'crop_thumbnails_before_update_metadata', 'ewww_image_optimizer_resize_from_meta_data', 15, 2 );
+			// Process BuddyPress uploads from Vikinger theme.
+			\add_action( 'vikinger_file_uploaded', 'ewww_image_optimizer' );
+			// Process image after resize by Imsanity.
+			\add_action( 'imsanity_post_process_attachment', 'ewww_image_optimizer_optimize_by_id', 10, 2 );
+		}
+	}
+
+	/**
 	 * Register all our options and santiation functions.
 	 */
 	public function register_settings() {
@@ -634,6 +748,8 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_gif_level', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_pdf_level', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_svg_level', 'intval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_webp_level', 'intval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_webp_conversion_method', 'sanitize_text_field' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_backup_files', 'sanitize_text_field' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_sharpen', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_jpg_quality', 'ewww_image_optimizer_jpg_quality' );
@@ -648,10 +764,12 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_enable_help', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'exactdn_all_the_things', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'exactdn_lossy', 'boolval' );
+		register_setting( 'ewww_image_optimizer_options', 'exactdn_hidpi', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'exactdn_exclude', array( $this, 'exclude_paths_sanitize' ) );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_add_missing_dims', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_lazy_load', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_ll_autoscale', 'boolval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_ll_abovethefold', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_use_lqip', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_use_dcip', 'boolval' );
 		// Using sanitize_text_field instead of textarea on purpose.
@@ -662,6 +780,7 @@ final class Plugin extends Base {
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_maxmediaheight', 'intval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_resize_existing', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_resize_other_existing', 'boolval' );
+		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_preserve_originals', 'boolval' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_disable_resizes', 'ewww_image_optimizer_disable_resizes_sanitize' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_disable_resizes_opt', 'ewww_image_optimizer_disable_resizes_sanitize' );
 		register_setting( 'ewww_image_optimizer_options', 'ewww_image_optimizer_disable_convert_links', 'boolval' );
@@ -686,15 +805,24 @@ final class Plugin extends Base {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
 		// Set defaults for all options that need to be autoloaded.
 		\add_option( 'ewww_image_optimizer_background_optimization', false );
-		\add_option( 'ewww_image_optimizer_noauto', false );
+		\add_option( 'ewww_image_optimizer_noauto', false ); // Disables auto-opt.
+		\add_option( 'ewww_image_optimizer_auto', false ); // Scheduled opt (I know, poor naming).
+		\add_option( 'ewww_image_optimizer_ludicrous_mode', false );
+		\add_option( 'ewww_image_optimizer_jpg_only_mode', false );
 		\add_option( 'ewww_image_optimizer_disable_editor', false );
 		\add_option( 'ewww_image_optimizer_debug', false );
 		\add_option( 'ewww_image_optimizer_metadata_remove', true );
+		\add_option( 'ewww_image_optimizer_maxmediawidth', 2560 );
+		\add_option( 'ewww_image_optimizer_maxmediaheight', 2560 );
+		\add_option( 'ewww_image_optimizer_cloud_key', false );
 		\add_option( 'ewww_image_optimizer_jpg_level', '10' );
 		\add_option( 'ewww_image_optimizer_png_level', '10' );
 		\add_option( 'ewww_image_optimizer_gif_level', '10' );
 		\add_option( 'ewww_image_optimizer_pdf_level', '0' );
 		\add_option( 'ewww_image_optimizer_svg_level', '0' );
+		\add_option( 'ewww_image_optimizer_webp_level', '0' );
+		\add_option( 'ewww_image_optimizer_webp_conversion_method', 'local' );
+		\add_option( 'ewww_image_optimizer_webp', false );
 		\add_option( 'ewww_image_optimizer_jpg_quality', '' );
 		\add_option( 'ewww_image_optimizer_webp_quality', '' );
 		\add_option( 'ewww_image_optimizer_backup_files', '' );
@@ -703,6 +831,7 @@ final class Plugin extends Base {
 		\add_option( 'ewww_image_optimizer_exactdn_plan_id', 0 );
 		\add_option( 'exactdn_all_the_things', true );
 		\add_option( 'exactdn_lossy', true );
+		\add_option( 'exactdn_hidpi', false );
 		\add_option( 'exactdn_exclude', '' );
 		\add_option( 'exactdn_sub_folder', false );
 		\add_option( 'exactdn_prevent_db_queries', true );
@@ -726,11 +855,15 @@ final class Plugin extends Base {
 		// Set network defaults.
 		\add_site_option( 'ewww_image_optimizer_background_optimization', false );
 		\add_site_option( 'ewww_image_optimizer_metadata_remove', true );
+		\add_site_option( 'ewww_image_optimizer_maxmediawidth', 2560 );
+		\add_site_option( 'ewww_image_optimizer_maxmediaheight', 2560 );
 		\add_site_option( 'ewww_image_optimizer_jpg_level', '10' );
 		\add_site_option( 'ewww_image_optimizer_png_level', '10' );
 		\add_site_option( 'ewww_image_optimizer_gif_level', '10' );
 		\add_site_option( 'ewww_image_optimizer_pdf_level', '0' );
 		\add_site_option( 'ewww_image_optimizer_svg_level', '0' );
+		\add_site_option( 'ewww_image_optimizer_webp_level', '0' );
+		\add_site_option( 'ewww_image_optimizer_webp_conversion_method', 'local' );
 		\add_site_option( 'ewww_image_optimizer_jpg_quality', '' );
 		\add_site_option( 'ewww_image_optimizer_webp_quality', '' );
 		\add_site_option( 'ewww_image_optimizer_backup_files', '' );
@@ -741,9 +874,66 @@ final class Plugin extends Base {
 		\add_site_option( 'ewww_image_optimizer_pngout_level', 2 );
 		\add_site_option( 'exactdn_all_the_things', true );
 		\add_site_option( 'exactdn_lossy', true );
+		\add_site_option( 'exactdn_hidpi', true );
 		\add_site_option( 'exactdn_sub_folder', false );
 		\add_site_option( 'exactdn_prevent_db_queries', true );
 		\add_site_option( 'ewww_image_optimizer_ll_autoscale', true );
+	}
+
+	/**
+	 * Check for settings errors and store them for future display.
+	 *
+	 * Removes EWWW IO settings errors from the global $wp_settings_errors to suppress standard error handling.
+	 */
+	public function get_settings_errors() {
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		global $wp_settings_errors;
+		if ( empty( $wp_settings_errors ) || ! is_array( $wp_settings_errors ) ) {
+			$stored_errors = get_settings_errors();
+			if ( ! empty( $stored_errors ) && is_array( $stored_errors ) ) {
+				$this->settings_errors = $stored_errors;
+			}
+			return;
+		}
+		foreach ( $wp_settings_errors as $key => $error_details ) {
+			if ( ! empty( $error_details['setting'] ) && 0 === strpos( $error_details['setting'], 'ewww' ) ) {
+				$this->debug_message( "stashing {$error_details['setting']} error" );
+				$this->settings_errors[] = $error_details;
+				unset( $wp_settings_errors[ $key ] );
+			}
+		}
+	}
+
+	/**
+	 * Display any settings errors inside a div similar to the core settings_errors() function.
+	 */
+	public function settings_errors() {
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		if ( empty( $this->settings_errors ) || ! is_array( $this->settings_errors ) ) {
+			$this->debug_message( 'no errors!' );
+			return;
+		}
+		$error_total = count( $this->settings_errors );
+		$this->debug_message( "found $error_total errors to display, here we go!" );
+
+		foreach ( $this->settings_errors as $key => $details ) {
+			if ( empty( $details['type'] ) || empty( $details['code'] ) || empty( $details['message'] ) ) {
+				continue;
+			}
+			if ( 'updated' === $details['type'] ) {
+				$details['type'] = 'success';
+			}
+
+			if ( in_array( $details['type'], array( 'error', 'success', 'warning', 'info' ), true ) ) {
+				$details['type'] = 'notice-' . $details['type'];
+			}
+
+			?>
+			<div id='setting-error-<?php echo esc_attr( $details['code'] ); ?>' class='notice <?php echo \esc_attr( $details['type'] ); ?> is-dismissible inline'>
+				<p><strong><?php echo esc_html( $details['message'] ); ?></strong></p>
+			</div>
+			<?php
+		}
 	}
 
 	/**
@@ -811,7 +1001,7 @@ final class Plugin extends Base {
 	/**
 	 * Outputs the script to dismiss the 'exec' notice.
 	 */
-	protected function display_exec_dismiss_script() {
+	public function display_exec_dismiss_script() {
 		?>
 		<script>
 			jQuery(document).on('click', '#ewww-image-optimizer-warning-exec .notice-dismiss', function() {
@@ -878,7 +1068,8 @@ final class Plugin extends Base {
 				if ( 'cwebp' === $tool && ( $this->imagick_supports_webp() || $this->gd_supports_webp() ) ) {
 					continue;
 				}
-				$missing[] = $tool;
+				$this->local->tools_missing = true;
+				$missing[]                  = $tool;
 			}
 		}
 		// If there is a message, display the warning.
@@ -965,15 +1156,6 @@ final class Plugin extends Base {
 	 * Let the user know the plugin requires API/ExactDN to operate at their webhost.
 	 */
 	public function notice_hosting_requires_api() {
-		if ( ! \function_exists( '\is_plugin_active_for_network' ) && \is_multisite() ) {
-			// Need to include the plugin library for the is_plugin_active function.
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		if ( \is_multisite() && \is_plugin_active_for_network( EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE_REL ) ) {
-			$settings_url = \network_admin_url( 'settings.php?page=ewww-image-optimizer-options' );
-		} else {
-			$settings_url = \admin_url( 'options-general.php?page=ewww-image-optimizer-options' );
-		}
 		if ( \defined( 'WPCOMSH_VERSION' ) ) {
 			$webhost = 'WordPress.com';
 		} elseif ( ! empty( $_ENV['PANTHEON_ENVIRONMENT'] ) ) {
@@ -1074,7 +1256,7 @@ final class Plugin extends Base {
 			\wp_die( \esc_html__( 'Access denied.', 'ewww-image-optimizer' ) );
 		}
 		$this->enable_free_exec();
-		die();
+		exit;
 	}
 
 	/**
@@ -1097,7 +1279,24 @@ final class Plugin extends Base {
 		\update_option( 'ewww_image_optimizer_gif_level', 0 );
 		\update_option( 'ewww_image_optimizer_pdf_level', 0 );
 		\update_option( 'ewww_image_optimizer_svg_level', 0 );
+		\update_option( 'ewww_image_optimizer_webp_level', 0 );
 		\update_option( 'ewww_image_optimizer_dismiss_exec_notice', 1 );
 		\update_site_option( 'ewww_image_optimizer_dismiss_exec_notice', 1 );
+	}
+
+	/**
+	 * Flip the ewww_image_optimizer_jpg_only_mode option, if it isn't already set to the desired config.
+	 *
+	 * @param bool $new_value The value that should be set for JPG-only mode.
+	 */
+	public function toggle_jpg_only_mode( $new_value ) {
+		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
+		$current_value = (bool) $this->get_option( 'ewww_image_optimizer_jpg_only_mode' );
+		if ( $new_value && ! $current_value ) {
+			$this->set_option( 'ewww_image_optimizer_jpg_only_mode', 1 );
+		} elseif ( ! $new_value && $current_value ) {
+			$this->set_option( 'ewww_image_optimizer_jpg_only_mode', '' );
+		}
+		// Otherwise, JPG mode is already set to what it ought to be.
 	}
 }

@@ -194,6 +194,7 @@ class ExactDN extends Page_Parser {
 			return;
 		}
 
+		$this->validate_user_exclusions();
 		$this->request_uri = \add_query_arg( '', '' );
 		if ( false === \strpos( $this->request_uri, 'page=ewww-image-optimizer-options' ) ) {
 			$this->debug_message( "request uri is {$this->request_uri}" );
@@ -291,10 +292,7 @@ class ExactDN extends Page_Parser {
 		// Check REST API requests to see if ExactDN should be running.
 		\add_filter( 'rest_request_before_callbacks', array( $this, 'parse_restapi_maybe' ), 10, 3 );
 
-		// Check to see if the OMGF plugin is active, and suppress our font rewriting if it is.
-		if ( ( \defined( 'OMGF_PLUGIN_FILE' ) || \defined( 'OMGF_DB_VERSION' ) ) && ! \defined( 'EASYIO_REPLACE_GOOGLE_FONTS' ) ) {
-			\define( 'EASYIO_REPLACE_GOOGLE_FONTS', false );
-		}
+		\add_filter( 'exactdn_srcset_multipliers', array( $this, 'add_hidpi_srcset_multipliers' ) );
 
 		// Overrides for admin-ajax images.
 		\add_filter( 'exactdn_admin_allow_image_downsize', array( $this, 'allow_admin_image_downsize' ), 10, 2 );
@@ -313,6 +311,11 @@ class ExactDN extends Page_Parser {
 		// Filter for generic use by other plugins/themes.
 		\add_filter( 'exactdn_local_to_cdn_url', array( $this, 'plugin_get_image_url' ) );
 
+		// Check to see if the OMGF plugin is active, and suppress our font rewriting if it is.
+		if ( ( \defined( 'OMGF_PLUGIN_FILE' ) || \defined( 'OMGF_DB_VERSION' ) ) && ! \defined( 'EASYIO_REPLACE_GOOGLE_FONTS' ) ) {
+			\define( 'EASYIO_REPLACE_GOOGLE_FONTS', false );
+		}
+
 		// Filter for Divi Pixel plugin SVG images.
 		\add_filter( 'dipi_image_mask_image_url', array( $this, 'plugin_get_image_url' ) );
 
@@ -326,19 +329,21 @@ class ExactDN extends Page_Parser {
 		\add_filter( 'envira_gallery_output_item_data', array( $this, 'envira_gallery_output_item_data' ) );
 		\add_filter( 'envira_gallery_image_src', array( $this, 'plugin_get_image_url' ) );
 
-		// Filters for BuddyBoss image URLs.
-		\add_filter( 'bp_media_get_preview_image_url', array( $this, 'bp_media_get_preview_image_url' ), PHP_INT_MAX, 5 );
-		\add_filter( 'bb_video_get_thumb_url', array( $this, 'bb_video_get_thumb_url' ), PHP_INT_MAX, 5 );
-		\add_filter( 'bp_document_get_preview_url', array( $this, 'bp_document_get_preview_url' ), PHP_INT_MAX, 6 );
-		\add_filter( 'bb_video_get_symlink', array( $this, 'bb_video_get_symlink' ), PHP_INT_MAX, 4 );
-		// Filters for BuddyBoss URL symlinks.
-		\add_filter( 'bb_media_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
-		\add_filter( 'bb_document_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
-		\add_filter( 'bb_video_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
-		\add_filter( 'bb_video_create_thumb_symlinks', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
-		// Filters for BuddyBoss media access checks.
-		\add_filter( 'bb_media_check_default_access', '__return_true', PHP_INT_MAX );
-		\add_filter( 'bb_media_settings_callback_symlink_direct_access', array( $this, 'buddyboss_media_directory_allow_access' ), PHP_INT_MAX, 2 );
+		if ( ! $this->skip_page( false, 'buddyboss' ) && ! $this->exactdn_skip_user_exclusions( false, 'buddyboss' ) ) {
+			// Filters for BuddyBoss image URLs.
+			\add_filter( 'bp_media_get_preview_image_url', array( $this, 'bp_media_get_preview_image_url' ), PHP_INT_MAX, 5 );
+			\add_filter( 'bb_video_get_thumb_url', array( $this, 'bb_video_get_thumb_url' ), PHP_INT_MAX, 5 );
+			\add_filter( 'bp_document_get_preview_url', array( $this, 'bp_document_get_preview_url' ), PHP_INT_MAX, 6 );
+			\add_filter( 'bb_video_get_symlink', array( $this, 'bb_video_get_symlink' ), PHP_INT_MAX, 4 );
+			// Filters for BuddyBoss URL symlinks.
+			\add_filter( 'bb_media_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
+			\add_filter( 'bb_document_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
+			\add_filter( 'bb_video_do_symlink', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
+			\add_filter( 'bb_video_create_thumb_symlinks', array( $this, 'buddyboss_do_symlink' ), PHP_INT_MAX );
+			// Filters for BuddyBoss media access checks.
+			\add_filter( 'bb_media_check_default_access', '__return_true', PHP_INT_MAX );
+			\add_filter( 'bb_media_settings_callback_symlink_direct_access', array( $this, 'buddyboss_media_directory_allow_access' ), PHP_INT_MAX, 2 );
+		}
 
 		// Filter for NextGEN image URLs within JS.
 		\add_filter( 'ngg_pro_lightbox_images_queue', array( $this, 'ngg_pro_lightbox_images_queue' ) );
@@ -359,6 +364,8 @@ class ExactDN extends Page_Parser {
 
 		// Filter for legacy WooCommerce API endpoints.
 		\add_filter( 'woocommerce_api_product_response', array( $this, 'woocommerce_api_product_response' ) );
+		// Filter to fix WooCommerce srcset madness.
+		\add_action( 'template_redirect', array( $this, 'check_conditionals' ) );
 
 		// DNS prefetching.
 		\add_filter( 'wp_resource_hints', array( $this, 'resource_hints' ), 100, 2 );
@@ -427,7 +434,6 @@ class ExactDN extends Page_Parser {
 		$this->debug_message( 'allowed domains: ' . \implode( ',', $this->allowed_domains ) );
 		$this->debug_message( 'asset domains: ' . $this->asset_domains );
 		$this->get_allowed_paths();
-		$this->validate_user_exclusions();
 	}
 
 	/**
@@ -2858,7 +2864,7 @@ class ExactDN extends Page_Parser {
 		 *
 		 * @param array|bool $multipliers Array of multipliers to use or false to bypass.
 		 */
-		$multipliers = \apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1, 2, 3, 1920 ) );
+		$multipliers = \apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1 ) );
 
 		if ( empty( $url ) || empty( $multipliers ) ) {
 			// No URL, or no multipliers, bail!
@@ -2929,7 +2935,9 @@ class ExactDN extends Page_Parser {
 			if ( \abs( $constrained_size[0] - $expected_size[0] ) <= 1 && \abs( $constrained_size[1] - $expected_size[1] ) <= 1 ) {
 				$this->debug_message( 'soft cropping' );
 				$crop = 'soft';
-				$base = $this->get_content_width(); // Provide a default width if none set by the theme.
+				// If the full width is larger than the requested width, we have a usable full width.
+				// Otherwise use the requested width for soft-crop calculations.
+				$base = $fullwidth > $reqwidth ? $fullwidth : $reqwidth;
 			} else {
 				$this->debug_message( 'hard cropping' );
 				$crop = 'hard';
@@ -2946,19 +2954,23 @@ class ExactDN extends Page_Parser {
 				if ( 1920 === (int) $multiplier ) {
 					$newwidth = 1920;
 					if ( ! $w_descriptor || 1920 >= $reqwidth || 'soft' !== $crop ) {
+						$this->debug_message( "skipping $multiplier due to no w descriptor, larger than $reqwidth, or $crop !== soft" );
 						continue;
 					}
 				}
 				if ( $newwidth < 50 ) {
+					$this->debug_message( "skipping $multiplier, as $newwidth is smaller than 50" );
 					continue;
 				}
 				foreach ( $currentwidths as $currentwidth ) {
 					// If a new width would be within 50 pixels of an existing one or larger than the full size image, skip.
 					if ( \abs( $currentwidth - $newwidth ) < 50 || ( $newwidth > $fullwidth ) ) {
+						$this->debug_message( "skipping $multiplier (width $newwidth) too close to $currentwidth, or larger than $fullwidth" );
 						continue 2; // Back to the foreach ( $multipliers as $multiplier ).
 					}
-				} // foreach ( $currentwidths as $currentwidth ){
+				}
 
+				$this->debug_message( "using $multiplier multiplier: $newwidth px" );
 				if ( 1 === $multiplier && \abs( $newwidth - $fullwidth ) < 5 ) {
 					$args = array();
 				} elseif ( 'soft' === $crop ) {
@@ -3050,7 +3062,7 @@ class ExactDN extends Page_Parser {
 		 *
 		 * @param array|bool $multipliers Array of multipliers to use or false to bypass.
 		 */
-		$multipliers = \apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1, 2, 3, 1920 ) );
+		$multipliers = \apply_filters( 'exactdn_srcset_multipliers', array( .2, .4, .6, .8, 1 ) );
 		/**
 		 * Filter the width ExactDN will use to create srcset attribute.
 		 * Return a falsy value to short-circuit and bypass srcset fill.
@@ -3449,6 +3461,32 @@ class ExactDN extends Page_Parser {
 	}
 
 	/**
+	 * Runs on template_redirect to run checks via "conditional tags", that must be done after the WP_Query object is setup.
+	 */
+	public function check_conditionals() {
+		// Woo gallery thumbnails on product pages, as of 9.4, get srcset with no sizes. If we add more images to the srcset, this blows things up even worse.
+		// Suppress hi-dpi srcset multipliers if this is a singular product page.
+		if ( \function_exists( '\is_product' ) && \is_product() ) {
+			$this->debug_message( 'disabling hidpi multipliers (filter)' );
+			\remove_filter( 'exactdn_srcset_multipliers', array( $this, 'add_hidpi_srcset_multipliers' ) );
+		}
+	}
+
+	/**
+	 * Add multipliers for high-DPI devices.
+	 *
+	 * @param array $multipliers An array of multipliers.
+	 * @return array The modified list of multipliers.
+	 */
+	public function add_hidpi_srcset_multipliers( $multipliers ) {
+		if ( $this->get_option( 'exactdn_hidpi' ) ) {
+			$this->debug_message( 'adding hidpi multipliers' );
+			return array( .2, .4, .6, .8, 1, 2, 3, 1920 );
+		}
+		return $multipliers;
+	}
+
+	/**
 	 * Handle image urls within the NextGEN pro lightbox displays.
 	 *
 	 * @param array $images An array of NextGEN images and associated attributes.
@@ -3703,7 +3741,7 @@ class ExactDN extends Page_Parser {
 	 * @param array $directories List of directories.
 	 * @param array $media_ids Uploaded media IDs.
 	 *
-	 * @return array Modified list of diretories.
+	 * @return array Modified list of directories.
 	 */
 	public function buddyboss_media_directory_allow_access( $directories, $media_ids ) {
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );
@@ -4018,6 +4056,9 @@ class ExactDN extends Page_Parser {
 			return $url;
 		}
 		if ( \did_action( 'cs_element_rendering' ) || \did_action( 'cornerstone_before_boot_app' ) || \apply_filters( 'cs_is_preview_render', false ) ) {
+			return $url;
+		}
+		if ( empty( $url ) ) {
 			return $url;
 		}
 		$this->debug_message( '<b>' . __METHOD__ . '()</b>' );

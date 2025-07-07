@@ -197,6 +197,7 @@ class EWWW_Image {
 		if ( ! is_string( $gallery ) ) {
 			$gallery = '';
 		}
+		ewwwio_debug_message( '<b>' . __METHOD__ . '()</b>' );
 		$id = (int) $id;
 		global $wpdb;
 		$wpdb->flush();
@@ -1460,6 +1461,12 @@ class EWWW_Image {
 				}
 				if ( $image_size > 1000000 ) { // greater than 1MB.
 					$time += 5;
+				}
+				break;
+			case 'image/webp':
+				$time += 5;
+				if ( $image_size > 1000000 ) { // greater than 1MB.
+					$time += 5; // Add another 5 seconds.
 				}
 				break;
 			case 'application/pdf':
