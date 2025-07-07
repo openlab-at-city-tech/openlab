@@ -71,7 +71,7 @@ class EMCS_Promotions
                 </li>
             </ul>
             <h4><i><?php esc_html_e('- With 14 days money back guarantee. No questions asked.', 'embed-calendly-scheduling'); ?></i></h4>
-            <a href="https://simpma.com/emc" class="button-primary" target="_blank"><?php esc_html_e('Get EMC Pro', 'embed-calendly-scheduling'); ?></a>
+            <a href="https://simpma.com/emc/pricing/" class="button-primary" target="_blank"><?php esc_html_e('Get EMC Pro', 'embed-calendly-scheduling'); ?></a>
         </div>
         <?php
     }
@@ -152,7 +152,6 @@ class EMCS_Promotions
     private static function get_promotions()
     {
         add_action('admin_notices', 'EMCS_Promotions::get_current_promotion', 11);
-        add_action('admin_notices', 'EMCS_Promotions::ui_rebrand_notice', 10);
     }
 
     /**
@@ -165,11 +164,11 @@ class EMCS_Promotions
         if ($current_promotion_id == 2) {
             return self::email_list_promotion();
         } else {
-            return self::email_list_promotion();
+            return self::pro_version_promotion();
         }
     }
 
-    public static function optimization_promotion()
+    public static function pro_version_promotion()
     {
 
         global $pagenow;
@@ -178,11 +177,11 @@ class EMCS_Promotions
             ?>
             <div class="notice notice-info is-dismissible emcs-promotion-notice">
                 <div class="emcs-row">
-                    <div class="emcs-col">
-                        <h2><?php printf(esc_html__('Turn Your Website Into %1$sA Lead Generation Tool%2$s', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?></h2>
-                        <h3><?php printf(esc_html__('Optimize your website to %1$sbook more calls%2$s and %1$sland more clients%2$s', 'embed-calendly-scheduling'), '<strong><u>', '</strong></u>'); ?></h3>
+                    <div class="emcs-col" style="line-height: 30px;">
+                        <h2><?php printf(esc_html__('Turn Your Website into %1$sa 24/7 Booking Machine%2$s', 'embed-calendly-scheduling'), '<strong>', '</strong>'); ?></h2>
+                        <h3><?php printf(esc_html__('Unlock access to %1$suseful booking insights,%2$s view Calendly appointments %3$s from WordPress dashboard, and automated reminders done for you!', 'embed-calendly-scheduling'), '<strong><u>', '</strong></u>', '<br>'); ?></h3>
                         <div>
-                            <a href="https://simpma.com/promotion" class="button-primary" target="_blank"><?php esc_html_e('See how >>', 'embed-calendly-scheduling'); ?></a>
+                            <a href="https://simpma.com/emc/pricing/" class="button-primary" target="_blank"><?php esc_html_e('See how >>', 'embed-calendly-scheduling'); ?></a>
                             <a href="?<?php echo self::STOP_PROMOTIONS_OPTION; ?>=1" class=""><?php esc_html_e("Don't show again.", 'embed-calendly-scheduling'); ?></a>
                         </div>
                     </div>
