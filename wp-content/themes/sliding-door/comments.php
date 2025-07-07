@@ -50,7 +50,7 @@
 					 * define slidingdoor_comment() and that will be used instead.
 					 * See slidingdoor_comment() in slidingdoor/functions.php for more.
 					 */
-					wp_list_comments( array( 'callback' => 'slidingdoor_comment' ) );
+				wp_list_comments();
 				?>
 			</ol>
 
