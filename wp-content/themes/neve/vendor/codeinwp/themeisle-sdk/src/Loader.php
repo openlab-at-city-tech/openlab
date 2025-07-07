@@ -72,10 +72,10 @@ final class Loader {
 	 */
 	public static $labels = [
 		'announcements'    => [
-			'hurry_up'    => 'Hurry up! Only %s left.',
-			'sale_live'   => 'Themeisle Black Friday Sale is Live!',
-			'learn_more'  => 'Learn more',
-			'max_savings' => 'Enjoy Maximum Savings on %s',
+			'notice_link_label' => 'See the Offer',
+			'max_savings'       => 'Our biggest sale of the year: <strong>%s OFF everything!</strong>  Don\'t miss this limited-time offer.',
+			'black_friday'      => 'Black Friday Sale',
+			'time_left'         => '%s left',
 		],
 		'compatibilities'  => [
 			'notice'        => '%s requires a newer version of %s. Please %supdate%s %s %s to the latest version.',
@@ -138,6 +138,13 @@ final class Loader {
 				'spark_desc2'  => 'Add a top notification bar on your website to highlight the latest products, offers, or upcoming events.',
 				'spark_desc3'  => 'Enable an advanced review section, enlarging the basic review options with lots of capabilities.',
 			],
+
+			'feedzy'          => [
+				'import_desc'       => 'Schedule automatic content imports from any RSS feed directly to your site. %sBuilt by %s%s',
+				'install_now'       => 'Install Now',
+				'by'                => 'by %s',
+				'editor_recommends' => '%s recommends %sFeedzy%s to display entries from any RSS feed with more advanced styling and filtering options.',
+			],
 			'optimole'        => [
 				'installOptimole' => 'Install Optimole',
 				'gotodash'        => 'Go to Optimole dashboard',
@@ -164,6 +171,12 @@ final class Loader {
 				'install'    => 'Install WP Full Pay',
 				'dismisscta' => 'Dismiss this notice.',
 				'message'    => 'Enhance your donation page with WP Full Pay—create custom Stripe forms for one-time and recurring donations, manage transactions easily, and boost support with a seamless setup.',
+			],
+			'masteriyo'       => [
+				'gotodash'   => 'Go to Masteriyo Dashboard',
+				'install'    => 'Install Masteriyo',
+				'dismisscta' => 'Dismiss this notice.',
+				'message'    => 'Transform your site into a learning hub with Masteriyo LMS. Build engaging courses with intuitive tools, track student progress effortlessly, and grow your education business with powerful marketing features and seamless payment integration.',
 			],
 		],
 		'welcome'          => [

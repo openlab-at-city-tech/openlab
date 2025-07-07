@@ -9,8 +9,8 @@
 namespace Neve\Customizer;
 
 use HFG\Core\Components\Utility\SearchIconButton;
+use Neve\Admin\Dashboard\Main;
 use Neve\Core\Factory;
-use Neve\Core\Limited_Offers;
 use Neve\Core\Settings\Config;
 use Neve\Customizer\Options\Colors_Background;
 
@@ -35,6 +35,7 @@ class Loader {
 		add_action( 'customize_preview_init', array( $this, 'enqueue_customizer_preview' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'set_featured_image' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'enqueue_customizer_controls' ) );
+		add_action( 'wp_ajax_neve_dismiss_starter_content', array( $this, 'dismiss_starter_content' ) );
 	}
 
 	/**
@@ -112,8 +113,7 @@ class Loader {
 			NEVE_VERSION,
 			true
 		);
-
-		$offer        = new Limited_Offers();
+		 
 		$bundle_path  = get_template_directory_uri() . '/assets/apps/customizer-controls/build/';
 		$dependencies = ( include get_template_directory() . '/assets/apps/customizer-controls/build/controls.asset.php' );
 		wp_register_script( 'react-controls', $bundle_path . 'controls.js', $dependencies['dependencies'], $dependencies['version'], true );
@@ -152,7 +152,20 @@ class Loader {
 							'customIconKey'  => SearchIconButton::CUSTOM_ICON,
 						],
 					],
-					'deal'                          => ! defined( 'NEVE_PRO_VERSION' ) ? $offer->get_localized_data() : array(),
+					'starterContent'                => array(
+						'active'          => (bool) get_option( 'fresh_site' ),
+						'nonce'           => wp_create_nonce( 'neve_dismiss_starter_content' ),
+						'dismissEndpoint' => admin_url( 'admin-ajax.php' ),
+						'labels'          => array(
+							'title'       => __( 'Welcome to your new site!', 'neve' ),
+							'description' => __( "We've added some starter pages to help you get going quickly.", 'neve' ),
+							'save'        => __( 'Keep these helpful pages', 'neve' ),
+							'dismiss'     => __( 'Start with a clean slate', 'neve' ),
+							'info'        => __( "Don't worry - you can always add or remove pages later", 'neve' ),
+							'error'       => __( 'An error occurred. Please reload the page and try again.', 'neve' ),
+						),
+					),
+					'blackFriday'                   => $this->get_black_friday_data(),
 				)
 			)
 		);
@@ -277,6 +290,66 @@ class Loader {
 				'sanitize_callback' => 'rest_sanitize_boolean',
 				'default'           => false,
 			]
+		);
+	}
+
+	/**
+	 * Handle the starter content dismissal.
+	 *
+	 * @return void
+	 */
+	public function dismiss_starter_content() {
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_POST['nonce'] ), 'neve_dismiss_starter_content' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'Invalid security token.', 'neve' ),
+				)
+			);
+		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error(
+				array(
+					'message' => __( 'You do not have permission to perform this action.', 'neve' ),
+				)
+			);
+		}
+
+		$result = update_option( 'fresh_site', '0' );
+		if ( $result ) {
+			wp_send_json_success();
+		}
+
+		wp_send_json_error(
+			array(
+				'message' => __( 'An error occurred. Please reload the page and try again.', 'neve' ),
+			)
+		);
+	}
+
+	/**
+	 * Get the data for Black Friday sale.
+	 * 
+	 * @return array The data.
+	 */
+	public function get_black_friday_data() {
+		$is_white_label_active = apply_filters( 'neve_is_theme_whitelabeled', false ) || apply_filters( 'neve_is_plugin_whitelabeled', false );
+
+		if ( $is_white_label_active ) {
+			return array();
+		}
+
+		$is_black_friday = apply_filters( 'themeisle_sdk_is_black_friday_sale', false );
+		if ( ! $is_black_friday ) {
+			return array();
+		}
+
+		$data = Main::get_black_friday_data();
+		
+		return array(
+			'saleUrl'   => $data['sale_url'],
+			'message'   => $data['message'],
+			'bannerSrc' => get_template_directory_uri() . '/assets/img/dashboard/black-friday-customizer-banner.png',
 		);
 	}
 }

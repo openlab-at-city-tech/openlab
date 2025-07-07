@@ -8,24 +8,20 @@
   max-height: none;
   width: 100%;
 }
-
 .neve-mega-menu .neve-mm-col {
   cursor: default;
   flex: 1;
 }
-
 .neve-mega-menu .neve-mm-col .sub-menu .sub-menu {
   left: 0;
   top: 100%;
 }
-
 .neve-mega-menu li.neve-mm-divider {
   height: 1px;
   margin: 10px auto;
   width: 100%;
   background-color: currentColor;
 }
-
 .neve-mega-menu .neve-mm-heading > span {
   cursor: default;
 }

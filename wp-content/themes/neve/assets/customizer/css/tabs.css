@@ -59,3 +59,11 @@
 .neve-tabs-control input[type="radio"] {
 	display: none !important;
 }
+
+.tab-hidden {
+	visibility: hidden !important;
+	overflow: hidden !important;
+	height: 0 !important;
+	margin: 0 !important;
+	padding: 0 !important;
+}

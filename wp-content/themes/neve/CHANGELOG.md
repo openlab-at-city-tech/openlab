@@ -1,3 +1,70 @@
+##### [Version 4.1.2](https://github.com/Codeinwp/neve/compare/v4.1.1...v4.1.2) (2025-05-30)
+
+- Fixed styling options of the Menu Icon
+- Updated dependencies
+
+##### [Version 4.1.1](https://github.com/Codeinwp/neve/compare/v4.1.0...v4.1.1) (2025-05-22)
+
+- [Fix] Tested up to notice appearing when used with Pro version above 4.1
+- [Fix] Clicking the dots in the top right of the editor throws an error
+
+#### [Version 4.1.0](https://github.com/Codeinwp/neve/compare/v4.0.1...v4.1.0) (2025-05-22)
+
+- [Feat] Style WordPress core login block
+- [Feat] Improved WooCommerce My Account page styling
+- [Feat] Adds color setting for headings
+- [Feat] Adds image size options to single post thumbnail
+- [Feat] Improve footer builder UX
+- [Feat] Mobile footer inherits desktop components by default if layout is empty
+- [Feat] Sparks integration improvements
+- [Feat] Rework Menu Icon component options
+- [Feat] Improve styling and UX for onboarding notice
+- [Fix] Mobile navigation sidebar not working when no Navigation menu is added in header
+- [Fix] Starter sites broken link redirection
+- [Fix] Blog pagination page number input styling
+- [Fix] Quote block styling inconsistency between editor & frontend
+- [Fix] Navigation dropdown caret icon size control not working on mobile/tablet
+- [Fix] License card UI
+- [Fix] Gallery for WooCommerce plugin conflict
+- [Fix] Center Footer Copyright position on mobile
+- [Fix] Edge-case in WooCommerce checkout when session is not set and throwing a fatal error
+- [Fix] Elementor Pro Header & Footer builder breaking theme markup
+- [Fix] Deprecated notice when using PHP 8.4
+- [Fix] Edge-case where modal is going off-screen in the dashboard
+- [Fix] Starter content issue causing footer builder problems and missing components on mobile
+- Improve WooCommerce single product layout styling
+- Adds shortcut to clarify header background controls
+- Adds description to the Neve editor options panel to clarify that settings override customizer options
+- Small customizer UX improvements
+- Update dependencies
+
+##### [Version 4.0.1](https://github.com/Codeinwp/neve/compare/v4.0.0...v4.0.1) (2025-02-03)
+
+- [Feat] Reorganised main customizer panels for better UX
+- [Fix] hide Super Page Cache plugin from dashboard if its pro version is installed
+- Improved UI/UX for the Get Started section in the dashboard page
+- Improved style of customizer sections
+- Updated starter content to use theme defaults for H2 typography
+- Updated Google Fonts and dependencies
+
+#### [Version 4.0.0](https://github.com/Codeinwp/neve/compare/v3.8.16...v4.0.0) (2025-01-30)
+
+- [Feat] Redesigned theme dashboard with a modern interface and intuitive organization for easier site customization
+- [Feat] Enhanced blog design and customization with new features and better-organized settings
+- [Feat] Reviewed and improved all starter sites in our library for better quality and performance
+- [Feat] New streamlined onboarding experience to help you build your site faster
+- [Feat] Restructured theme options for better clarity and ease of use
+- [Feat] Added informative notices to help identify starter content vs your content
+- Improved customizer ordering controls UX
+- Improved customizer performance
+- Update theme description to reflect current capabilities better
+
+##### [Version 3.8.16](https://github.com/Codeinwp/neve/compare/v3.8.15...v3.8.16) (2024-12-06)
+
+- Added a NEW Online Course starter site [PRO]
+- Fixed issue with background color and text color
+- Fixed the customizer broken layout introduced by the LearnPress plugin
+
 ##### [Version 3.8.15](https://github.com/Codeinwp/neve/compare/v3.8.14...v3.8.15) (2024-11-22)
 
  - Fixed issues from the latest release

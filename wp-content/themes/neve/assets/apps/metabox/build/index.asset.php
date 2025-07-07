@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('neve-components', 'react', 'wp-components', 'wp-compose', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-keyboard-shortcuts', 'wp-plugins'), 'version' => '57a35475c86d91c740bb9e838aadca95');
+<?php return array('dependencies' => array('neve-components', 'react', 'wp-components', 'wp-compose', 'wp-data', 'wp-edit-post', 'wp-element', 'wp-i18n', 'wp-keyboard-shortcuts', 'wp-plugins'), 'version' => '2bb9b062386e0ac6a65c310ea9b3581c');
