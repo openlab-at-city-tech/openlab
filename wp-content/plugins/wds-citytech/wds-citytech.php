@@ -3874,3 +3874,29 @@ function openlab_delete_user_files_on_account_deletion( $user_id ) {
 	}
 }
 add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_files_on_account_deletion' );
+
+/**
+ * Delete a user's portfolio group and site on account deletion.
+ *
+ * @param int $user_id The ID of the user being deleted.
+ * @return void
+ */
+function openlab_delete_user_portfolio_on_account_deletion( $user_id ) {
+	$portfolio_group_id = openlab_get_user_portfolio_id( $user_id );
+	if ( ! $portfolio_group_id ) {
+		return;
+	}
+
+	$portfolio_site_id = openlab_get_site_id_by_group_id( $portfolio_group_id );
+	if ( $portfolio_site_id ) {
+		if ( ! function_exists( 'wpmu_delete_blog' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/ms.php';
+		}
+
+		wpmu_delete_blog( $portfolio_site_id, false );
+	}
+
+	// Delete the portfolio group.
+	groups_delete_group( $portfolio_group_id );
+}
+add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_portfolio_on_account_deletion', 5 );
