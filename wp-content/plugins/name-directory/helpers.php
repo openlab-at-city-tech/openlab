@@ -559,3 +559,33 @@ function name_directory_get_csrf_error_message($property)
 
     return $message;
 }
+
+/**
+ * Render the pagination for the admin overview
+ * @param $num_of_pages
+ * @param $pagenum
+ * @param $total_names
+ * @return string
+ */
+function name_directory_admin_pagination($num_of_pages, $pagenum, $total_names)
+{
+    $page_links = paginate_links( array(
+        'base' => add_query_arg( 'pagenum', '%#%' ),
+        'format' => '',
+        'total' => $num_of_pages,
+        'current' => $pagenum,
+        'prev_text' => '&laquo;',
+        'next_text' => '&raquo;',
+    ) );
+
+    if ( $page_links ) {
+        return '<div class="tablenav">
+                        <div class="tablenav-pages" style="margin: 1em 0">
+                            <span class="displaying-num">' . $total_names . ' ' . __('items') . '</span>
+                            <span class="pagination-links">' . str_replace('page-numbers', 'page-numbers button', $page_links) . '</span>
+                        </div>
+                      </div>';
+    }
+
+    return '';
+}

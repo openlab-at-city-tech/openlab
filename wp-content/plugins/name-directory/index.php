@@ -3,14 +3,14 @@
  * Plugin Name: Name Directory
  * Plugin URI: https://jeroenpeters.dev/wordpress-plugin-name-directory/
  * Description: A Name Directory, i.e. for animal names or to create a glossary. Visitors can add, search or just browse all names.
- * Version: 1.29.2
+ * Version: 1.30.1
  * Author: Jeroen Peters
  * Author URI: https://jeroenpeters.dev
  * Text Domain: name-directory
  * Domain Path: /translation
  * License: GPL2
  */
-/*  Copyright 2013-2024  Jeroen Peters (email: jeroenpeters1986@gmail.com)
+/*  Copyright 2013-2025  Jeroen Peters (email: jeroenpeters1986@gmail.com)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 2, as
@@ -105,15 +105,3 @@ if ( is_admin() )
     /* This hook is for updates */
     add_action( 'plugins_loaded', 'name_directory_post_update' );
 }
-
-
-/**
- * Initialize the plugin
- * Ready.. set.. go!
- */
-function name_directory_init()
-{
-    $plugin_dir = dirname(plugin_basename(__FILE__));
-    load_plugin_textdomain('name-directory', false, $plugin_dir . '/translation/');
-}
-add_action('plugins_loaded', 'name_directory_init');

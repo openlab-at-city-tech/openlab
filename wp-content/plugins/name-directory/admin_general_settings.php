@@ -85,6 +85,14 @@ class NameDirectoryGeneralSettingsPage
             'name_directory_editing_section_settings'
         );
 
+        add_settings_field(
+            'use_namedirectory_admin_pagination',
+            __('Use admin pagination', 'name-directory'),
+            array($this, 'use_namedirectory_admin_pagination_callback'),
+            'name-directory-general-settings',
+            'name_directory_editing_section_settings'
+        );
+
 
 		add_settings_section(
 			'name_directory_general_section_settings',
@@ -223,6 +231,11 @@ class NameDirectoryGeneralSettingsPage
     {
         echo $this->radio_button_option('simple_wysiwyg_editor');
         echo sprintf("<p><em>%s</em></p>", __('Enable the simple visual editor for editing the description of names in a directory.', 'name-directory'));
+    }
+    public function use_namedirectory_admin_pagination_callback()
+    {
+        echo $this->radio_button_option('use_namedirectory_admin_pagination');
+        echo sprintf("<p><em>%s</em></p>", __('When enabled, names in the WP-admin are paged at 50 per page.', 'name-directory'));
     }
 	public function search_on_callback()
 	{
