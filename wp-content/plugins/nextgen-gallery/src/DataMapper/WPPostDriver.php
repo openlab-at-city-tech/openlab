@@ -415,7 +415,7 @@ class WPPostDriver extends DriverBase {
 
 		// Execute the query.
 		if ( ! $results ) {
-			$query = new \WP_Query( [ 'datamapper' => true ] );
+			$query = new \WP_Query( [ 'datamapper' => true, 'fields' => '*' ] );
 			if ( isset( $this->debug ) ) {
 				$this->query_args['debug'] = true;
 			}
