@@ -823,7 +823,9 @@ OpenLab.utility = (function ($) {
 			submenuToggles.forEach( toggle => {
 				toggle.addEventListener('pointerdown', function (e) {
 					e.preventDefault();
-					OpenLab.utility.switchToNavPanel( this.getAttribute('data-target'), false );
+					const currentPanel = this.closest('.drawer-panel'); // ← currently visible panel
+					const targetId = this.getAttribute('data-target');
+					OpenLab.utility.switchToNavPanel(targetId, false, 'forward', currentPanel);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
@@ -838,13 +840,15 @@ OpenLab.utility = (function ($) {
 			backToggles.forEach( toggle => {
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
-					OpenLab.utility.switchToNavPanel( 'panel-root', false );
+					const currentPanel = this.closest('.drawer-panel');
+					const targetId = this.getAttribute('data-back');
+					OpenLab.utility.switchToNavPanel(targetId, true, 'backward', currentPanel);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
 					if (e.key === 'Enter' || e.key === ' ') {
 						e.preventDefault();
-						OpenLab.utility.switchToNavPanel( 'panel-root', true );
+						OpenLab.utility.switchToNavPanel( 'panel-root', true, 'backward' );
 					}
 				});
 			});
@@ -888,28 +892,65 @@ OpenLab.utility = (function ($) {
 				e.stopPropagation();
 			});
 		},
-		switchToNavPanel: function( panelId, switchFocus ) {
-				const targetPanel = document.getElementById(panelId);
+		runAfterTransition: function(el, callback, fallbackDuration = 50) {
+			const style = window.getComputedStyle(el);
+			const duration = parseFloat(style.transitionDuration || '0') || 0;
+			const delay = parseFloat(style.transitionDelay || '0') || 0;
+			const total = (duration + delay) * 1000;
 
-				document.querySelectorAll('.drawer-panel').forEach(panel => {
-				const isTarget = panel === targetPanel;
-					panel.setAttribute('aria-hidden', String(!isTarget));
-					panel.classList.toggle('active', isTarget);
-				});
+			let fired = false;
 
-				if ( switchFocus ) {
-					// Switch focus to the first button or link in the targetPanel.
-					const firstFocusable = targetPanel.querySelector('.drawer-list').querySelector('button, a');
-					if (firstFocusable) {
-						firstFocusable.focus();
-					}
+			const handler = () => {
+				if (fired) return;
+				fired = true;
+				el.removeEventListener('transitionend', handler);
+				callback();
+			};
+
+			if (total > 0) {
+				el.addEventListener('transitionend', handler);
+			} else {
+				setTimeout(handler, fallbackDuration);
+			}
+		},
+		switchToNavPanel: function(panelId, switchFocus, direction = 'forward', previousPanel = null) {
+			const targetPanel = document.getElementById(panelId);
+			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
+
+			if (previousPanel === targetPanel) {
+				console.log('same panel');
+				return;
+			}
+
+			// Animate out
+			if (previousPanel) {
+				if (direction === 'forward') {
+					previousPanel.classList.add('covered');
 				} else {
-					// Simply blur, to avoid focus on a hidden element.
-					const focusedElement = document.activeElement;
-					if ( focusedElement && focusedElement.blur ) {
-						focusedElement.blur();
-					}
+					previousPanel.classList.add('is-leaving');
 				}
+			}
+
+			// Animate in
+			targetPanel.classList.add('active');
+			targetPanel.setAttribute('aria-hidden', 'false');
+
+			// Cleanup
+			if (previousPanel) {
+				OpenLab.utility.runAfterTransition(previousPanel, () => {
+					previousPanel.classList.remove('active', 'is-leaving', 'covered');
+					previousPanel.setAttribute('aria-hidden', 'true');
+				});
+			}
+
+			// Focus management
+			if (switchFocus) {
+				const firstFocusable = targetPanel.querySelector('.drawer-list button, .drawer-list a');
+				if (firstFocusable) firstFocusable.focus();
+			} else {
+				const focusedElement = document.activeElement;
+				if (focusedElement && focusedElement.blur) focusedElement.blur();
+			}
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings
