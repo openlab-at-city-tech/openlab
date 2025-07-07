@@ -462,7 +462,7 @@ function bbp_new_reply_handler( $action = '' ) {
 
 		/** Update counts, etc... *********************************************/
 
-		do_action( 'bbp_new_reply', $reply_id, $topic_id, $forum_id, $anonymous_data, $reply_author, false, $reply_to );
+		do_action( 'bbp_new_reply', $reply_id, $topic_id, $forum_id, $anonymous_data, $reply_data['post_author'], false, $reply_to );
 
 		/** Additional Actions (After Save) ***********************************/
 
@@ -743,7 +743,7 @@ function bbp_edit_reply_handler( $action = '' ) {
 	if ( ! empty( $reply_id ) && ! is_wp_error( $reply_id ) ) {
 
 		// Update counts, etc...
-		do_action( 'bbp_edit_reply', $reply_id, $topic_id, $forum_id, $anonymous_data, $reply_author , true, $reply_to );
+		do_action( 'bbp_edit_reply', $reply_id, $topic_id, $forum_id, $anonymous_data, $reply_data['post_author'], true, $reply_to );
 
 		/** Revisions *********************************************************/
 
@@ -2083,18 +2083,25 @@ function _bbp_has_replies_where( $where = '', $query = false ) {
 		return $where;
 	}
 
-	// Bail if no post_parent to replace
-	if ( ! is_numeric( $query->get( 'post_parent' ) ) ) {
-		return $where;
-	}
-
-	// Bail if not a topic and reply query
-	if ( array( bbp_get_topic_post_type(), bbp_get_reply_post_type() ) !== $query->get( 'post_type' ) ) {
-		return $where;
-	}
-
 	// Bail if including specific post ID's
 	if ( $query->get( 'post__in' ) ) {
+		return $where;
+	}
+
+	// Get post_parent from query (used to get the topic ID below)
+	$post_parent = $query->get( 'post_parent' );
+
+	// Bail if post_parent is default '' (uses is_numeric() because WordPress does internally)
+	if ( ! is_numeric( $post_parent ) ) {
+		return $where;
+	}
+
+	// Get post_type from query, define array to diff against
+	$queried_types = (array) $query->get( 'post_type' );
+	$post_types    = array( bbp_get_topic_post_type(), bbp_get_reply_post_type() );
+
+	// Bail if query is not already for both topic and reply post types
+	if ( array_diff( $post_types, $queried_types ) ) {
 		return $where;
 	}
 
@@ -2104,7 +2111,7 @@ function _bbp_has_replies_where( $where = '', $query = false ) {
 	$table_name = bbp_db()->prefix . 'posts';
 
 	// Get the topic ID from the post_parent, set in bbp_has_replies()
-	$topic_id   = bbp_get_topic_id( $query->get( 'post_parent' ) );
+	$topic_id   = bbp_get_topic_id( $post_parent );
 
 	// The texts to search for
 	$search     = array(
@@ -2191,7 +2198,7 @@ function bbp_display_replies_feed_rss2( $replies_query = array() ) {
 						<title><![CDATA[<?php bbp_topic_title(); ?>]]></title>
 						<link><?php bbp_topic_permalink(); ?></link>
 						<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
-						<dc:creator><?php the_author(); ?></dc:creator>
+						<dc:creator><?php bbp_topic_author_display_name(); ?></dc:creator>
 
 						<description>
 							<![CDATA[
@@ -2218,7 +2225,7 @@ function bbp_display_replies_feed_rss2( $replies_query = array() ) {
 					<title><![CDATA[<?php bbp_reply_title(); ?>]]></title>
 					<link><?php bbp_reply_url(); ?></link>
 					<pubDate><?php echo mysql2date( 'D, d M Y H:i:s +0000', get_post_time( 'Y-m-d H:i:s', true ), false ); ?></pubDate>
-					<dc:creator><?php the_author() ?></dc:creator>
+					<dc:creator><?php bbp_reply_author_display_name(); ?></dc:creator>
 
 					<description>
 						<![CDATA[
