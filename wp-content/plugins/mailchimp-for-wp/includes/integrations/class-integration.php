@@ -31,7 +31,7 @@ abstract class MC4WP_Integration
     /**
      * @var array Array of settings
      */
-    public $options = array();
+    public $options = [];
 
     /**
      * @var string Name attribute for the checkbox element. Will be created from slug if empty.
@@ -41,12 +41,12 @@ abstract class MC4WP_Integration
     /**
      * @var string[]
      */
-    public $checkbox_classes = array();
+    public $checkbox_classes = [];
 
     /**
      * @var string[]
      */
-    public $wrapper_classes = array();
+    public $wrapper_classes = [];
 
     /**
      * Constructor
@@ -72,18 +72,18 @@ abstract class MC4WP_Integration
      */
     protected function get_default_options()
     {
-        return array(
+        return [
             'css'               => 0,
             'double_optin'      => 1,
             'enabled'           => 0,
             'implicit'          => 0,
             'label'             => __('Sign me up for the newsletter!', 'mailchimp-for-wp'),
-            'lists'             => array(),
+            'lists'             => [],
             'precheck'          => 0,
             'replace_interests' => 0,
             'update_existing'   => 0,
             'wrap_p'            => 1,
-        );
+        ];
     }
 
     /**
@@ -123,7 +123,7 @@ abstract class MC4WP_Integration
     protected function add_required_hooks()
     {
         if ($this->options['css'] && ! $this->options['implicit']) {
-            add_action('wp_head', array( $this, 'print_css_reset' ));
+            add_action('wp_head', [ $this, 'print_css_reset' ]);
         }
     }
 
@@ -175,6 +175,11 @@ abstract class MC4WP_Integration
             $label           = $default_options['label'];
         }
 
+        // run saved value through gettext filter
+        // this allows people to use a plugin like Loco Translate to translate this message
+        // without updating the setting itself
+        $label = __($label, 'mailchimp-for-wp');
+
         /**
          * Filters the checkbox label
          *
@@ -206,9 +211,10 @@ abstract class MC4WP_Integration
      */
     protected function get_wrapper_attributes()
     {
-        $html_attrs = array(
-            'class' => sprintf('mc4wp-checkbox mc4wp-checkbox-%s %s', $this->slug, join(' ', $this->wrapper_classes)),
-        );
+        $classes = join(' ', $this->wrapper_classes);
+        $html_attrs = [
+            'class' => "mc4wp-checkbox mc4wp-checkbox-{$this->slug} $classes",
+        ];
         return $this->array_to_attr_string($html_attrs);
     }
 
@@ -222,7 +228,7 @@ abstract class MC4WP_Integration
         $integration = $this;
         $slug        = $this->slug;
 
-        $attributes = array();
+        $attributes = [];
 
         if ($this->options['precheck']) {
             $attributes['checked'] = 'checked';
@@ -286,7 +292,7 @@ abstract class MC4WP_Integration
 
         ob_start();
 
-        echo sprintf('<!-- Mailchimp for WordPress v%s - https://www.mc4wp.com/ -->', MC4WP_VERSION);
+        echo '<!-- Mailchimp for WordPress v', MC4WP_VERSION,' - https://www.mc4wp.com/ -->';
 
         /** @ignore */
         do_action('mc4wp_integration_before_checkbox_wrapper', $this);
@@ -298,13 +304,13 @@ abstract class MC4WP_Integration
         $wrapper_attrs = $this->get_wrapper_attributes();
 
         // Hidden field to make sure "0" is sent to server
-        echo sprintf('<input type="hidden" name="%s" value="0" />', esc_attr($this->checkbox_name));
-        echo sprintf('<%s %s>', $wrapper_tag, $wrapper_attrs);
+        echo '<input type="hidden" name="', esc_attr($this->checkbox_name), '" value="0" />';
+        echo "<$wrapper_tag $wrapper_attrs>";
         echo '<label>';
-        echo sprintf('<input type="checkbox" name="%s" value="1" %s />', esc_attr($this->checkbox_name), $this->get_checkbox_attributes());
-        echo sprintf('<span>%s</span>', $this->get_label_text());
+        echo '<input type="checkbox" name="', esc_attr($this->checkbox_name), '" value="1" ', $this->get_checkbox_attributes(), '>';
+        echo '<span>', $this->get_label_text(), '</span>';
         echo '</label>';
-        echo sprintf('</%s>', $wrapper_tag);
+        echo "</$wrapper_tag>";
 
         /** @ignore */
         do_action('mc4wp_integration_after_checkbox_wrapper', $this);
@@ -567,7 +573,10 @@ abstract class MC4WP_Integration
     {
         $str = '';
         foreach ($attrs as $key => $value) {
-            $str .= sprintf('%s="%s" ', $key, esc_attr($value));
+            $str .= $key;
+            $str .= '="';
+            $str .= esc_attr($value);
+            $str .= '"';
         }
         return $str;
     }

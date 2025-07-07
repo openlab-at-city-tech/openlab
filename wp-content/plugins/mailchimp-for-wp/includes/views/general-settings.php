@@ -8,10 +8,7 @@ defined('ABSPATH') or exit;
         <span class="current-crumb"><strong>Mailchimp for WordPress</strong></span>
     </p>
 
-
     <div class="mc4wp-row">
-
-        <!-- Main Content -->
         <div class="main-content mc4wp-col">
 
             <h1 class="mc4wp-page-title">
@@ -24,7 +21,7 @@ defined('ABSPATH') or exit;
             $this->messages->show();
             ?>
 
-            <form action="<?php echo admin_url('options.php'); ?>" method="post">
+            <form action="<?php echo esc_attr(admin_url('options.php')); ?>" method="post">
                 <?php settings_fields('mc4wp_settings'); ?>
 
                 <table class="form-table">
@@ -52,7 +49,7 @@ defined('ABSPATH') or exit;
                     <tr valign="top">
                         <th scope="row"><label for="mailchimp_api_key"><?php echo esc_html__('API Key', 'mailchimp-for-wp'); ?></label></th>
                         <td>
-                            <input type="text" class="widefat" placeholder="<?php echo esc_html__('Your Mailchimp API key', 'mailchimp-for-wp'); ?>" id="mailchimp_api_key" name="mc4wp[api_key]" value="<?php echo esc_attr($obfuscated_api_key); ?>" <?php echo defined('MC4WP_API_KEY') ? 'readonly="readonly"' : ''; ?> />
+                            <input type="text" class="widefat" placeholder="<?php echo esc_attr__('Your Mailchimp API key', 'mailchimp-for-wp'); ?>" id="mailchimp_api_key" name="mc4wp[api_key]" value="<?php echo esc_attr($obfuscated_api_key); ?>" <?php echo defined('MC4WP_API_KEY') ? 'readonly="readonly"' : ''; ?> />
                             <p class="description">
                                 <?php echo esc_html__('The API key for connecting with your Mailchimp account.', 'mailchimp-for-wp'); ?>
                                 <a target="_blank" href="https://admin.mailchimp.com/account/api"><?php echo esc_html__('Get your API key here.', 'mailchimp-for-wp'); ?></a>
@@ -60,28 +57,17 @@ defined('ABSPATH') or exit;
 
                             <?php
                             if (defined('MC4WP_API_KEY')) {
-                                echo '<p class="description">', wp_kses(__('You defined your Mailchimp API key using the <code>MC4WP_API_KEY</code> constant.', 'mailchimp-for-wp'), array( 'code' => array() )), '</p>';
+                                echo '<p class="description">', wp_kses(__('You defined your Mailchimp API key using the <code>MC4WP_API_KEY</code> constant.', 'mailchimp-for-wp'), [ 'code' => [] ]), '</p>';
                             }
                             ?>
                         </td>
-
-					</tr>
-
+                    </tr>
                 </table>
 
                 <?php submit_button(); ?>
-
             </form>
 
             <?php
-
-            /**
-             * Runs right after general settings are outputted in admin.
-             *
-             * @since 3.0
-             * @ignore
-             */
-
             do_action('mc4wp_admin_after_general_settings');
 
             if (! empty($opts['api_key'])) {
@@ -94,13 +80,9 @@ defined('ABSPATH') or exit;
             ?>
         </div>
 
-        <!-- Sidebar -->
         <div class="mc4wp-sidebar mc4wp-col">
             <?php require __DIR__ . '/parts/admin-sidebar.php'; ?>
         </div>
-
-
     </div>
-
 </div>
 
