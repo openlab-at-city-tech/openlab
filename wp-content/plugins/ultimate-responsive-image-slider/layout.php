@@ -12,7 +12,7 @@ $post_id = get_the_ID();
 
 //Get All Slides Details Post Meta
 $URIS_All_Slide_Ids = get_post_meta( get_the_ID(), 'ris_all_photos_details', true);
-$TotalSlideIds = count(get_post_meta( get_the_ID(), 'ris_all_photos_details', true ));
+$TotalSlideIds = is_array($URIS_All_Slide_Ids) ? count($URIS_All_Slide_Ids) : 0;
 
 if($WRIS_L3_Slide_Order == "DESC" ) {
 	$URIS_All_Slide_Ids = array_reverse($URIS_All_Slide_Ids, true);
@@ -93,7 +93,104 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 });
 </script>
-<style>
+
+<?php  
+$post_title = "";
+if($WRIS_L3_Slide_Title) { ?>
+<div id="uris-slider-title">
+	<h3 class="uris-slider-post-title"><?php echo esc_html( $post_title = get_the_title( $post_id ) ); ?></h3>
+</div>
+<?php } if($TotalSlideIds>0){ ?>
+		<div id="slider-pro-3-<?php echo esc_attr($post_id); ?>" class="slider-pro">
+			<!---- slides div start ---->
+			<div class="sp-slides">
+				<?php
+					$slide_alt = "";
+					if(is_array($URIS_All_Slide_Ids)){
+						foreach($URIS_All_Slide_Ids as $URIS_Slide_Id) {
+							$slide_id = $URIS_Slide_Id['rpgp_image_id'];
+							$attachment = get_post( $slide_id ); // get all slide details
+							$slide_alt = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
+							$slide_caption = $attachment->post_excerpt;
+							$slide_description = $attachment->post_content;
+							$slide_src = wp_get_attachment_image_src($slide_id, 'full', true); // return is array full image URL
+							$slide_title = $attachment->post_title; // attachment title
+							$i++;
+							
+							// alt is blank than set attachment title as alt tag
+							if($slide_alt == "" && $slide_title != "") {
+								$slide_alt = $slide_title;
+							}
+							// slide title is blank than set post title as alt tag
+							if($slide_alt == "" && $slide_title == "") {
+								$slide_alt = $post_title;
+							}
+						?>
+						<div class="sp-slide">
+							<img class="sp-image" loading="lazy" alt="<?php echo esc_attr($slide_alt); ?>" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/css/images/blank.gif"); ?>" data-src="<?php echo esc_url($slide_src[0]); ?>" />
+
+							<?php if($slide_title != "" && $WRIS_L3_Show_Slide_Title) { ?>
+							<p class="sp-layer sp-white sp-padding title-in title-in-bg hide-small-screen" 
+								data-position="bottomCenter"
+								data-vertical="12%"
+								data-show-transition="left" data-show-delay="500">
+								<?php echo esc_html( $slide_title ); ?>
+							</p>
+							<?php } ?>
+
+							<?php if($slide_description != "" && $WRIS_L3_Show_Slide_Desc) { ?>
+							<p class="sp-layer sp-black sp-padding desc-in desc-in-bg hide-medium-screen" 
+								data-position="bottomCenter"
+								data-vertical="0%"
+								data-show-transition="right" data-show-delay="500">
+								<?php 
+								if ( strlen( $slide_description ) > 300 ) {
+								    echo esc_html( substr( wp_kses_post( $slide_description ), 0, 300 ) ) . "...";
+								} else {
+								    echo esc_html( wp_kses_post( $slide_description ) );
+								}
+								?>
+							</p>
+							<?php } ?>
+						</div>
+						<?php } //end for each 
+					} //end of is_array 
+				?>
+			</div>
+			
+			<!---- slides div end ---->
+			<?php if($WRIS_L3_Slider_Navigation == 1) { ?>
+			<!-- slides thumbnails div start -->
+			<div class="sp-thumbnails">
+				<?php
+				$slide_alt = "";
+				if(is_array($URIS_All_Slide_Ids)){
+					foreach($URIS_All_Slide_Ids as $URIS_Slide_Id) {
+						$slide_id = $URIS_Slide_Id['rpgp_image_id'];
+						$attachment = get_post( $slide_id ); // get all slide details
+						$slide_alt = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
+						$slide_caption = $attachment->post_excerpt;
+						$slide_description = $attachment->post_content;
+						$slide_src = $attachment->guid; //  full image URL
+						$slide_title = $attachment->post_title; // attachment title
+						$slide_medium = wp_get_attachment_image_src($slide_id, 'medium', true); // return is array medium image URL
+						// alt is blank than set attachment title as alt tag
+						if($slide_alt == "" && $slide_title != "") {
+							$slide_alt = $slide_title;
+						}
+						// slide title is blank than set post title as alt tag
+						if($slide_alt == "" && $slide_title == "") {
+							$slide_alt = $post_title;
+						}
+						$j++; ?>
+						<img class="sp-thumbnail" loading="lazy" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo esc_attr( $slide_alt ); ?>"/>
+					<?php } // end of for each
+				}// end of is_array ?>
+			</div>
+			<?php } ?>
+			<!-- slides thumbnails div end -->
+		</div>
+		<style>
 /* Layout 3 */
 /* border */
 <?php if($WRIS_L3_Thumbnail_Style == "border") { ?>
@@ -210,100 +307,4 @@ document.addEventListener("DOMContentLoaded", function(event) {
 /* Custom CSS */
 <?php echo esc_html($WRIS_L3_Custom_CSS); ?>
 </style>
-<?php  
-$post_title = "";
-if($WRIS_L3_Slide_Title) { ?>
-<div id="uris-slider-title">
-	<h3 class="uris-slider-post-title"><?php echo esc_html( $post_title = get_the_title( $post_id ) ); ?></h3>
-</div>
-<?php } if($TotalSlideIds>0){ ?>
-		<div id="slider-pro-3-<?php echo esc_attr($post_id); ?>" class="slider-pro">
-			<!---- slides div start ---->
-			<div class="sp-slides">
-				<?php
-					$slide_alt = "";
-					if(is_array($URIS_All_Slide_Ids)){
-						foreach($URIS_All_Slide_Ids as $URIS_Slide_Id) {
-							$slide_id = $URIS_Slide_Id['rpgp_image_id'];
-							$attachment = get_post( $slide_id ); // get all slide details
-							$slide_alt = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
-							$slide_caption = $attachment->post_excerpt;
-							$slide_description = $attachment->post_content;
-							$slide_src = wp_get_attachment_image_src($slide_id, 'full', true); // return is array full image URL
-							$slide_title = $attachment->post_title; // attachment title
-							$i++;
-							
-							// alt is blank than set attachment title as alt tag
-							if($slide_alt == "" && $slide_title != "") {
-								$slide_alt = $slide_title;
-							}
-							// slide title is blank than set post title as alt tag
-							if($slide_alt == "" && $slide_title == "") {
-								$slide_alt = $post_title;
-							}
-						?>
-						<div class="sp-slide">
-							<img class="sp-image" loading="lazy" alt="<?php echo esc_attr($slide_alt); ?>" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/css/images/blank.gif"); ?>" data-src="<?php echo esc_url($slide_src[0]); ?>" />
-
-							<?php if($slide_title != "" && $WRIS_L3_Show_Slide_Title) { ?>
-							<p class="sp-layer sp-white sp-padding title-in title-in-bg hide-small-screen" 
-								data-position="bottomCenter"
-								data-vertical="12%"
-								data-show-transition="left" data-show-delay="500">
-								<?php echo esc_html( $slide_title ); ?>
-							</p>
-							<?php } ?>
-
-							<?php if($slide_description != "" && $WRIS_L3_Show_Slide_Desc) { ?>
-							<p class="sp-layer sp-black sp-padding desc-in desc-in-bg hide-medium-screen" 
-								data-position="bottomCenter"
-								data-vertical="0%"
-								data-show-transition="right" data-show-delay="500">
-								<?php 
-								if ( strlen( $slide_description ) > 300 ) {
-								    echo esc_html( substr( wp_kses_post( $slide_description ), 0, 300 ) ) . "...";
-								} else {
-								    echo esc_html( wp_kses_post( $slide_description ) );
-								}
-								?>
-							</p>
-							<?php } ?>
-						</div>
-						<?php } //end for each 
-					} //end of is_array 
-				?>
-			</div>
-			
-			<!---- slides div end ---->
-			<?php if($WRIS_L3_Slider_Navigation == 1) { ?>
-			<!-- slides thumbnails div start -->
-			<div class="sp-thumbnails">
-				<?php
-				$slide_alt = "";
-				if(is_array($URIS_All_Slide_Ids)){
-					foreach($URIS_All_Slide_Ids as $URIS_Slide_Id) {
-						$slide_id = $URIS_Slide_Id['rpgp_image_id'];
-						$attachment = get_post( $slide_id ); // get all slide details
-						$slide_alt = get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true );
-						$slide_caption = $attachment->post_excerpt;
-						$slide_description = $attachment->post_content;
-						$slide_src = $attachment->guid; //  full image URL
-						$slide_title = $attachment->post_title; // attachment title
-						$slide_medium = wp_get_attachment_image_src($slide_id, 'medium', true); // return is array medium image URL
-						// alt is blank than set attachment title as alt tag
-						if($slide_alt == "" && $slide_title != "") {
-							$slide_alt = $slide_title;
-						}
-						// slide title is blank than set post title as alt tag
-						if($slide_alt == "" && $slide_title == "") {
-							$slide_alt = $post_title;
-						}
-						$j++; ?>
-						<img class="sp-thumbnail" loading="lazy" src="<?php echo esc_url(URIS_PLUGIN_URL."assets/img/loading.gif"); ?>" data-src="<?php echo esc_url($slide_medium[0]); ?>" alt="<?php echo esc_attr( $slide_alt ); ?>"/>
-					<?php } // end of for each
-				}// end of is_array ?>
-			</div>
-			<?php } ?>
-			<!-- slides thumbnails div end -->
-		</div>
 <?php } else { ?> <div class="slides-not-found"><i class="fa fa-times-circle"></i> No Slide Found In Slider.</div> <?php } endwhile; ?>

@@ -174,7 +174,7 @@ function Wpfrank_URIS_Shortcode( $Id ) {
 	}
 	//Load Slider Layout Output
 	require("layout.php");
-	wp_reset_query();
+	wp_reset_postdata();
 	return ob_get_clean();
 }
 ?>
