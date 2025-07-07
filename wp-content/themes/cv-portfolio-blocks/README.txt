@@ -2,8 +2,8 @@
 Contributors: wpradiant
 Tags: grid-layout, one-column, two-columns, right-sidebar, wide-blocks, block-patterns, block-styles, custom-menu, custom-background, custom-header, custom-logo, editor-style, full-site-editing, full-width-template, template-editing, translation-ready, rtl-language-support, news, portfolio, education
 Requires at least: 6.0
-Tested up to: 6.7
-Stable tag: 1.2.4
+Tested up to: 6.8
+Stable tag: 1.2.6
 Requires PHP: 7.2
 License: GPLv3 or later
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -15,6 +15,19 @@ CV Portfolio Blocks is like a stylish digital resume for people who want to show
 CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you.
 
 == Changelog ==
+
+= Version 1.2.6 =
+- Added WordClever – AI Content Writer plugin activation process on get started button.
+- Resolved skip to content link issue for 404 error page,single page and archive page.
+- Updated pot file.
+
+= Version 1.2.5 =
+- Added related post block in single post no sidebar template.
+- Added related post block in single post right sidebar template.
+- Added related post block in single post left sidebar template.
+- Added css for single post comment box.
+- Resolved init function issue.
+- Tested upto WP v6.8.
 
 = Version 1.2.4 =
 - Added single product template.
@@ -186,6 +199,11 @@ Google Web Fonts ( Poppins, Lato, Roboto, Marhey, jost ) By Google - https://goo
 * Marhey, This is the normal family, Licensed under Open Font License, https://fonts.google.com/specimen/Marhey?query=Marhey
 
 * Jost, This is the normal family, Licensed under Open Font License, https://fonts.google.com/specimen/Jost?query=Jost
+
+TGM PLugin
+
+* [GNU General Public License v2.0]
+* https://github.com/TGMPA/TGM-Plugin-Activation
 
 License for images: https://pxhere.com/
 

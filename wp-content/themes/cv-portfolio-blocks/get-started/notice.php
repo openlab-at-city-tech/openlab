@@ -36,10 +36,14 @@ add_action('admin_enqueue_scripts', 'cv_portfolio_blocks_admin_notice_style');
  */
 function cv_portfolio_blocks_admin_notice() {
     // Check if the notice is dismissed
-    $dismissed = get_user_meta(get_current_user_id(), 'cv_portfolio_blocks_dismissed_notice', true);
+    $cv_portfolio_blocks_dismissed = get_user_meta(get_current_user_id(), 'cv_portfolio_blocks_dismissed_notice', true);
+    $cv_portfolio_blocks_current_page = '';
+    if(isset($_GET['page'])) {
+    	$cv_portfolio_blocks_current_page = admin_url( "admin.php?page=".sanitize_text_field($_GET["page"]));
+    }
 
     // Display the notice only if not dismissed
-    if (!$dismissed) {
+    if (!$cv_portfolio_blocks_dismissed && $cv_portfolio_blocks_current_page != admin_url( "admin.php?page=wordclever-templates")) {
         ?>
         <div class="updated notice notice-success is-dismissible notice-get-started-class" data-notice="get-start" style="display: flex;padding: 10px;">
         		<div class="notice-content">
@@ -50,7 +54,39 @@ function cv_portfolio_blocks_admin_notice() {
 	                        <div class="notice-text">
 	                            <p class="blocks-text"><?php echo __('Effortlessly craft websites for any niche with Radiant Blocks! Experience seamless functionality and stunning responsiveness as you enhance your digital presence with Block WordPress Themes. Start building your ideal website today!', 'cv-portfolio-blocks') ?></p>
 	                        </div>
-	                        <a href="<?php echo esc_url(admin_url('themes.php?page=cv-portfolio-blocks')); ?>" id="install-activate-button" class="button admin-button info-button"><?php echo __('Getting started', 'cv-portfolio-blocks'); ?></a>
+	                        
+	                        <a href="javascript:void(0);" id="install-activate-button" class="button admin-button info-button">
+							   <?php echo __('Getting started', 'cv-portfolio-blocks'); ?>
+							</a>
+
+							<script type="text/javascript">
+							document.getElementById('install-activate-button').addEventListener('click', function () {
+							    const cv_portfolio_blocks_button = this;
+							    const cv_portfolio_blocks_redirectUrl = '<?php echo esc_url(admin_url("themes.php?page=cv-portfolio-blocks")); ?>';
+							    // First, check if plugin is already active
+							    jQuery.post(ajaxurl, { action: 'check_wordclever_activation' }, function (response) {
+							        if (response.success && response.data.active) {
+							            // Plugin already active — just redirect
+							            window.location.href = cv_portfolio_blocks_redirectUrl;
+							        } else {
+							            // Show Installing & Activating only if not already active
+							            cv_portfolio_blocks_button.textContent = 'Installing & Activating...';
+
+							            jQuery.post(ajaxurl, {
+							                action: 'install_and_activate_wordclever_plugin',
+							                nonce: '<?php echo wp_create_nonce("install_activate_nonce"); ?>'
+							            }, function (response) {
+							                if (response.success) {
+							                    window.location.href = cv_portfolio_blocks_redirectUrl;
+							                } else {
+							                    alert('Failed to activate the plugin.');
+							                    cv_portfolio_blocks_button.textContent = 'Try Again';
+							                }
+							            });
+							        }
+							    });
+							});
+							</script>
 
 	                        <a href="<?php echo esc_url( CV_PORTFOLIO_BLOCKS_NOTICE_BUY_NOW ); ?>" target="_blank" id="go-pro-button" class="button admin-button buy-now-button"><?php echo __('Buy Now ', 'cv-portfolio-blocks'); ?></a>
 

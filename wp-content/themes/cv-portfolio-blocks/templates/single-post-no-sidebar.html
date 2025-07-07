@@ -50,7 +50,25 @@
 <!-- /wp:group -->
 
 <!-- wp:group {"align":"wide","style":{"spacing":{"blockGap":"80px","padding":{"top":"40px","right":"40px","bottom":"40px","left":"40px"}}},"backgroundColor":"background-secondary","className":"has-no-hover-shadow-dark animated animated-fadeInUp fadeInUp","layout":{"inherit":true,"type":"constrained"}} -->
-<div class="wp-block-group alignwide has-no-hover-shadow-dark animated animated-fadeInUp fadeInUp has-background-secondary-background-color has-background" style="padding-top:40px;padding-right:40px;padding-bottom:40px;padding-left:40px"><!-- wp:comments {"legacy":true,"align":"wide","style":{"typography":{"lineHeight":"2","fontSize":"18px"}},"className":"no-margin no-padding","fontFamily":"poppins"} /--></div>
+<div class="wp-block-group alignwide has-no-hover-shadow-dark animated animated-fadeInUp fadeInUp has-background-secondary-background-color has-background" style="padding-top:40px;padding-right:40px;padding-bottom:40px;padding-left:40px"><!-- wp:comments {"legacy":true,"align":"wide","style":{"typography":{"lineHeight":"2","fontSize":"18px"}},"className":"no-margin no-padding","fontFamily":"poppins"} /-->
+	
+<!-- wp:group {"align":"wide","className":"related-post","layout":{"type":"constrained"}} -->
+<div class="wp-block-group alignwide related-post"><!-- wp:heading {"level":3,"align":"wide"} -->
+<h3 class="wp-block-heading alignwide">Related Post</h3>
+<!-- /wp:heading -->
+
+<!-- wp:query {"queryId":40,"query":{"perPage":3,"pages":0,"offset":0,"postType":"post","order":"desc","orderBy":"date","author":"","search":"","exclude":[],"sticky":"","inherit":false,"taxQuery":null,"parents":[],"format":[]},"align":"wide"} -->
+<div class="wp-block-query alignwide"><!-- wp:post-template {"layout":{"type":"grid","columnCount":3}} -->
+<!-- wp:group {"style":{"spacing":{"padding":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30","left":"var:preset|spacing|30","right":"var:preset|spacing|30"}}},"layout":{"type":"constrained"}} -->
+<div class="wp-block-group" style="padding-top:var(--wp--preset--spacing--30);padding-right:var(--wp--preset--spacing--30);padding-bottom:var(--wp--preset--spacing--30);padding-left:var(--wp--preset--spacing--30)"><!-- wp:post-featured-image /-->
+
+<!-- wp:post-title {"isLink":true} /-->
+
+<!-- wp:post-excerpt {"moreText":"Read More","excerptLength":20} /--></div>
+<!-- /wp:group -->
+<!-- /wp:post-template --></div>
+<!-- /wp:query --></div>
+<!-- /wp:group --></div>
 <!-- /wp:group --></main>
 <!-- /wp:group --></div>
 <!-- /wp:column --></div>

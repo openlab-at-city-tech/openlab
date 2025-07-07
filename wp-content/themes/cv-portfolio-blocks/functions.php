@@ -94,20 +94,48 @@ function cv_portfolio_blocks_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'cv_portfolio_blocks_scripts' );
 
-// Add block patterns
-require get_template_directory() . '/inc/block-pattern.php';
+/* Enqueue admin-notice-script js */
+add_action('admin_enqueue_scripts', function ($hook) {
+    if ($hook !== 'appearance_page_cv-portfolio-blocks') return;
 
-// Add block Style
-require get_template_directory() . '/inc/block-style.php';
+    wp_enqueue_script('admin-notice-script', get_template_directory_uri() . '/get-started/js/admin-notice-script.js', ['jquery'], null, true);
+    wp_localize_script('admin-notice-script', 'pluginInstallerData', [
+        'ajaxurl'     => admin_url('admin-ajax.php'),
+        'nonce'       => wp_create_nonce('install_wordclever_nonce'), // Match this with PHP nonce check
+        'redirectUrl' => admin_url('themes.php?page=cv-portfolio-blocks'),
+    ]);
+});
 
-// TGM
-require get_template_directory() . '/inc/tgm/plugin-activation.php';
+add_action('wp_ajax_check_wordclever_activation', function () {
+    include_once ABSPATH . 'wp-admin/includes/plugin.php';
+    $cv_portfolio_blocks_plugin_file = 'wordclever-ai-content-writer/wordclever.php';
 
-// Get Started
-require get_template_directory() . '/get-started/getstart.php';
+    if (is_plugin_active($cv_portfolio_blocks_plugin_file)) {
+        wp_send_json_success(['active' => true]);
+    } else {
+        wp_send_json_success(['active' => false]);
+    }
+});
+add_filter( 'woocommerce_enable_setup_wizard', '__return_false' );
 
-// Get Notice
-require get_template_directory() . '/get-started/notice.php';
+function cv_portfolio_blocks_theme_setting() {
 
-// Add Customizer
-require get_template_directory() . '/inc/customizer.php';
+	// Add block patterns
+	require get_template_directory() . '/inc/block-pattern.php';
+
+	// Add block Style
+	require get_template_directory() . '/inc/block-style.php';
+
+	// TGM
+	require get_template_directory() . '/inc/tgm/plugin-activation.php';
+
+	// Get Started
+	require get_template_directory() . '/get-started/getstart.php';
+
+	// Get Notice
+	require get_template_directory() . '/get-started/notice.php';
+
+	// Add Customizer
+	require get_template_directory() . '/inc/customizer.php';
+}	
+add_action('after_setup_theme', 'cv_portfolio_blocks_theme_setting');	

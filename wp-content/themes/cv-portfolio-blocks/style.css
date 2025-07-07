@@ -4,9 +4,9 @@ Theme URI: https://www.wpradiant.net/products/free-portfolio-wordpress-theme
 Author: WP Radiant
 Author URI: https://www.wpradiant.net/
 Description: CV Portfolio Blocks is like a stylish digital resume for people who want to showcase their skills and experiences on the internet. It’s perfect for job seekers, freelancers, or anyone who wants to share their professional background with the world. Imagine having a website that’s all about you and your qualifications. CV Portfolio Blocks makes it super easy to create a website that looks great and is all about you. You don’t need to be a tech expert because it’s designed to be user-friendly. You can add your photo, write about your Professional, Resume, Career, Portfolio, CV, Business, Job Search, Freelance, Personal Branding, Networking, Consultancy, Skills, Expertise, Employment, Talent, education, work history, and skills, and even include some examples of your work. The design of CV Portfolio Blocks is modern and clean, making your information easy to read and visually appealing. Plus, it works on both computers and mobile devices, so people can check out your resume from anywhere. One of the great things about CV Portfolio Blocks is that it’s flexible. You can customize it to fit your style and preferences. Change colors, fonts, and layouts to make it truly yours. As a WordPress theme, CV Portfolio Blocks has some handy features. You can create different sections for your resume, like an “About Me” section, a “Work Experience” section, and a “Contact” section. You can also add buttons for visitors to download your full resume or get in touch with you. Demo: https://preview.wpradiant.net/cv-portfolio-blocks/
-Version: 1.2.4
+Version: 1.2.6
 Requires at least: 6.0
-Tested up to: 6.7
+Tested up to: 6.8
 Requires PHP: 7.2
 License: GNU General Public License v3 or later
 License URI: https://www.gnu.org/licenses/gpl-3.0.en.html
@@ -1092,6 +1092,9 @@ cursor: pointer;
   .sidebar-box .type-post .wp-block-columns .wp-block-column{
     flex-basis: 100% !important;
   }
+  .single-post .wp-block-columns-is-layout-flex{
+    gap: 25px !important;
+  }
 }
 .wp-block-button .wp-block-button__link.is-style-outline, .wp-block-button.is-style-outline>.wp-block-button__link {
   padding: calc(0.667em + 2px) calc(1.333em + 2px);
@@ -1303,17 +1306,17 @@ li.wc-block-product,li.wc-block-grid__product{
   }
 }
 @media screen and (min-width: 721px) and (max-width: 1299px){
-  .archive .style-post-box{
+  .archive .style-post-box,.related-post .wp-block-post-template{
     grid-template-columns: repeat(2, minmax(max(150px, calc(50% - 0.83333em)), 1fr));
     gap: 0.83333em;
   }
 }
 @media screen and (max-width: 720px){
-  .wc-block-product-template__responsive,ul.wc-block-grid__products,.blog .post-grid-layout,.archive .style-post-box{
+  .wc-block-product-template__responsive,ul.wc-block-grid__products,.blog .post-grid-layout,.archive .style-post-box,.related-post .wp-block-post-template{
     display: block;
     grid-template-columns: auto !important;
   }
-  li.wc-block-product,li.wc-block-grid__product,.blog .post-grid-layout li,.archive .style-post-box li{
+  li.wc-block-product,li.wc-block-grid__product,.blog .post-grid-layout li,.archive .style-post-box li,.related-post .wp-block-post-template li{
     margin-bottom: 20px !important;
   }
   .wp-block-woocommerce-related-products .wp-block-post{
@@ -1344,7 +1347,7 @@ li.wc-block-product,li.wc-block-grid__product{
 a.wp-block-query-pagination-previous,a.wp-block-query-pagination-next,.wp-block-post-template h2 a{
   text-decoration: none;
 }
-.wp-block-post{
+.wp-block-post,.single-post .wp-block-post-comments{
   border: 1px solid #e1e1e1;
 }
 .wp-block-post-excerpt__more-link,a.wp-block-read-more.has-upper-heading-font-size{
@@ -1378,6 +1381,23 @@ a.page-numbers:hover{
 }
 .wp-block-query-pagination>.wp-block-query-pagination-numbers{
   margin-bottom: 0 !important;
+}
+/*single post css*/
+.single-post .wp-block-post-comments{
+  padding: 20px;
+}
+.single-post .wp-block-post-comments textarea{
+    background: #f8f8f8;
+    border: 1px solid #e1e1e1;
+}
+.comment-respond input#submit{
+  padding: 6px 12px;
+}
+.single-post .wp-block-post-content{
+  font-size: 16px !important;
+}
+.single-post input#submit{
+  width: auto !important;
 }
 /*cart css*/
 header.woocommerce-Address-title.title{
