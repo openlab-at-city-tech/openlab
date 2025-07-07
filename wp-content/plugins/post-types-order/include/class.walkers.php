@@ -36,16 +36,14 @@
                     $item_title     =   apply_filters( 'the_title', $object->post_title, $object->ID );
                     
                     $item_details   =   apply_filters('pto/interface_item_data', '', $object );
-                                    
-                                        
-                    $output        .=   $indent . '<tr id="item_' . $object->ID . '">
-                                                    <td>
-                                                        <strong><a class="row-title" href="'. get_edit_post_link( $object ) .'">' . $item_title .'</a> ' . $item_details .'</strong>';
+                     
+                    $output .= $indent . '<li id="item_' . $object->ID . '">
+                                                <span>' . $item_title . ' ' . $item_details .'</span>';
                     
                     if ( $options['edit_view_links']    ===  1 )
-                        $output .=  '<div class="row-actions"><span class="edit"><a href="' . get_edit_post_link( $object ) .'">Edit</a> | </span><span class="view"><a target="_blank" href="'. get_permalink( $object ) .'">View</a></span></div>';
+                        $output .=  '<span class="options ui-sortable-handle"><a href="' . get_edit_post_link( $object ) .'"><span class="dashicons dashicons-edit"></span></a></span>';                
                     
-                    $output .=  '</td>';
+                    $output .=  '</li>';
                     
                     $output .=  apply_filters( 'pto/interface/table/tbody', '', $object );
                

@@ -3,8 +3,8 @@ Contributors: nsp-code, tdgu
 Donate link: http://www.nsp-code.com/donate.php
 Tags: post order, posts order, post sort, posts sort, post types order
 Requires at least: 2.8
-Tested up to: 6.7.2
-Stable tag: 2.3.4
+Tested up to: 6.8.2
+Stable tag: 2.3.7
 Requires PHP: 5.6
 License: GPLv2 or later
 
@@ -116,6 +116,15 @@ Consider upgrading to our advanced version of this plugin, which offers these fe
 
 
 == Changelog ==
+
+= 2.3.7 = 
+ - Code improvements.
+ - Reduce the outputted HTML for the ReOrder interface to avoid memory limitation on very long lists. 
+ - Re-Order interface style updates.
+ - WordPress 6.82 compatibility check and tag update.
+
+= 2.3.5 = 
+ - WordPress 6.8 compatibility check and tag update.
 
 = 2.3.4 = 
  - PHP 8.3.4 tag and compatibility check.

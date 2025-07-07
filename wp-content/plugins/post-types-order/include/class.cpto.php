@@ -19,15 +19,15 @@
                    
                     $is_configured = get_option('CPT_configured');
                     if ($is_configured == '')
-                        add_action( 'admin_notices', array($this, 'admin_configure_notices'));
+                        add_action( 'admin_notices', array ( $this, 'admin_configure_notices'));
                         
                     
-                    add_filter('init',          array($this, 'on_init'));
-                    add_filter('init',          array($this, 'compatibility'));
+                    add_filter('init',          array ( $this, 'on_init'));
+                    add_filter('init',          array ( $this, 'compatibility'));
                     
                     
-                    add_filter('pre_get_posts', array($this, 'pre_get_posts'));
-                    add_filter('posts_orderby', array($this, 'posts_orderby'), 99, 2);                        
+                    add_filter('pre_get_posts', array ( $this, 'pre_get_posts'));
+                    add_filter('posts_orderby', array ( $this, 'posts_orderby'), 99, 2);                        
                 }
                 
             
@@ -38,20 +38,16 @@
             function init()
                 {
                     
-                    include_once(CPTPATH . '/include/class.walkers.php');
+                    add_action( 'admin_init',                               array ( $this, 'admin_init'), 10 );
+                    add_action( 'admin_menu',                               array ( $this, 'add_menu') );
                     
-                    //add_action( 'admin_init',                               array(&$this, 'registerFiles'), 11 );
-                    add_action( 'admin_init',                               array(&$this, 'admin_init'), 10 );
-                    add_action( 'admin_menu',                               array(&$this, 'add_menu') );
-                    
-                    add_action('admin_menu',                                array(&$this, 'plugin_options_menu'));
+                    add_action( 'admin_menu',                               array ( $this, 'plugin_options_menu'));
                     
                     //load archive drag&drop sorting dependencies
-                    add_action( 'admin_enqueue_scripts',                    array(&$this, 'archiveDragDrop'), 10 );
+                    add_action( 'admin_enqueue_scripts',                    array ( $this, 'archiveDragDrop'), 10 );
                     
-                    add_action( 'wp_ajax_update-custom-type-order',         array(&$this, 'saveAjaxOrder') );
-                    add_action( 'wp_ajax_update-custom-type-order-archive', array(&$this, 'saveArchiveAjaxOrder') );
-                
+                    add_action( 'wp_ajax_update-custom-type-order',         array ( $this, 'saveAjaxOrder') );
+                    add_action( 'wp_ajax_update-custom-type-order-archive', array ( $this, 'saveArchiveAjaxOrder') );
                 
                 }
 
@@ -80,10 +76,10 @@
                     if( !   $navigation_sort_apply)
                         return;
                     
-                    add_filter('get_previous_post_where',   array($this->functions, 'cpto_get_previous_post_where'),    99, 3);
-                    add_filter('get_previous_post_sort',    array($this->functions, 'cpto_get_previous_post_sort')          );
-                    add_filter('get_next_post_where',       array($this->functions, 'cpto_get_next_post_where'),        99, 3);
-                    add_filter('get_next_post_sort',        array($this->functions, 'cpto_get_next_post_sort')              );
+                    add_filter('get_previous_post_where',   array ( $this->functions, 'cpto_get_previous_post_where'),    99, 3);
+                    add_filter('get_previous_post_sort',    array ( $this->functions, 'cpto_get_previous_post_sort')          );
+                    add_filter('get_next_post_where',       array ( $this->functions, 'cpto_get_next_post_where'),        99, 3);
+                    add_filter('get_next_post_sort',        array ( $this->functions, 'cpto_get_next_post_sort')              );
                 
                 }    
             
@@ -515,6 +511,10 @@
             */
             function add_menu() 
                 {
+                    
+                    include_once ( CPTPATH . '/include/class.interface.php' );
+                    include_once ( CPTPATH . '/include/class.walkers.php' );
+                    
                     global $userdata;
                     //put a menu for all custom_type
                     $post_types = get_post_types();
@@ -534,6 +534,8 @@
                             {
                                 $capability = 'manage_options';  
                             }
+                    
+                    $PTO_Interface =    new PTO_Interface();
                     
                     foreach( $post_types as $post_type_name ) 
                         {
@@ -557,12 +559,12 @@
                             $required_capability = apply_filters('pto/edit_capability', $capability, $post_type_name);
                             
                             if ( $post_type_name == 'post' )
-                                $hookID   = add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'sort_page') );
+                                $hookID   = add_submenu_page('edit.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array( $PTO_Interface, 'sort_page') );
                             elseif ($post_type_name == 'attachment') 
-                                $hookID   = add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'sort_page') ); 
+                                $hookID   = add_submenu_page('upload.php', __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array( $PTO_Interface, 'sort_page') ); 
                             else
                                 {
-                                    $hookID   = add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array(&$this, 'sort_page') );    
+                                    $hookID   = add_submenu_page('edit.php?post_type='.$post_type_name, __('Re-Order', 'post-types-order'), __('Re-Order', 'post-types-order'), $required_capability, 'order-post-types-'.$post_type_name, array( $PTO_Interface, 'sort_page') );    
                                 }
                             
                             add_action('admin_print_styles-' . $hookID ,    array($this, 'admin_reorder_styles'));
@@ -587,158 +589,5 @@
                     wp_enqueue_style( 'CPTStyleSheets');
                 }
             
-
-            /**
-            * Sort interfaces
-            * 
-            */
-            function sort_page() 
-                {
-                    
-                    $options          =     $this->functions->get_options();
-                    
-                    ?>
-                    <div id="cpto" class="wrap">
-                        <div class="icon32" id="icon-edit"><br></div>
-                        <h2><?php echo esc_html( $this->current_post_type->labels->singular_name . ' -  '. esc_html__('Re-Order', 'post-types-order') ); ?></h2>
-
-                        <?php $this->functions->cpt_info_box(); ?>  
-                        
-                        <div id="ajax-response"></div>
-                        
-                        <noscript>
-                            <div class="error message">
-                                <p><?php esc_html_e('This plugin can\'t work without javascript, because it\'s use drag and drop and AJAX.', 'post-types-order'); ?></p>
-                            </div>
-                        </noscript>
-                        
-                        <p>&nbsp;</p>
-                        
-                        
-                        <table id="order-post-type" class="wp-list-table widefat fixed striped table-view-list<?php if ( $options['edit_view_links']    ===  1 ) { echo ' extended-view'; } ?>">
-                            <thead>
-                                <tr>
-                                    <th scope="col" id="title" class="manage-column column-title column-primary sortable" abbr="Title"><a><span>Title</span></a></th>
-                                    
-                                </tr>
-                                <?php do_action('pto/interface/table/thead', $this->current_post_type->name ) ?>
-                            </thead>
-
-                            <tbody id="sortable" class="ui-sortable">
-                            
-                                <?php $this->list_pages('hide_empty=0&title_li=&post_type=' . $this->current_post_type->name ); ?>
-                               
-                          
-                            </tbody>
-
-                            <tfoot>
-                                <tr>
-                                    <th scope="col" class="manage-column column-title column-primary sortable desc" abbr="Title"><a><span>Title</span></a></th>    
-                                </tr>
-                                <?php do_action('pto/interface/table/tfoot', $this->current_post_type->name ) ?>
-                            </tfoot>
-
-                        </table>
-                        
-                        
-                        <p class="submit">
-                            <a href="javascript: void(0)" id="save-order" class="button-primary"><?php esc_html_e('Update', 'post-types-order' ); ?></a>
-                        </p>
-                        
-                        <?php wp_nonce_field( 'interface_sort_nonce', 'interface_sort_nonce' ); ?>
-                        
-                        <script type="text/javascript">
-                            jQuery(document).ready(function() {
-                                jQuery("#sortable").sortable({
-                                    'tolerance':'intersect',
-                                    'cursor':'pointer',
-                                    'items':'tr',
-                                    'placeholder':'placeholder',
-                                    'nested': 'ul'
-                                });
-                                
-                                jQuery("#sortable").disableSelection();
-                                jQuery("#save-order").bind( "click", function() {
-                                    
-                                    jQuery("html, body").animate({ scrollTop: 0 }, "fast");
-                                    
-                                    jQuery.post( ajaxurl, { action:'update-custom-type-order', order:jQuery("#sortable").sortable("serialize"), 'interface_sort_nonce' : jQuery('#interface_sort_nonce').val() }, function() {
-                                        jQuery("#ajax-response").html('<div class="message updated fade"><p><?php esc_html_e('Items Order Updated', 'post-types-order') ?></p></div>');
-                                        jQuery("#ajax-response div").delay(3000).hide("slow");
-                                    });
-                                });
-                            });
-                        </script>
-                        
-                        
-                        
-                        
-                    </div>
-                    <?php
-                }
-
-                
-            /**
-            * List pages
-            * 
-            * @param mixed $args
-            */
-            function list_pages($args = '') 
-                {
-                    $defaults = array(
-                        'depth'             => -1, 
-                        'date_format'       => get_option('date_format'),
-                        'child_of'          => 0, 
-                        'sort_column'       => 'menu_order',
-                        'post_status'       =>  'any' 
-                    );
-
-                    $r = wp_parse_args( $args, $defaults );
-                    extract( $r, EXTR_SKIP );
-
-                    $output = '';
-
-                    $r['exclude'] = implode( ',', apply_filters('wp_list_pages_excludes', array()) );
-                    
-                    // Query pages.
-                    $r['hierarchical'] = 0;
-                    $args = array(
-                                'sort_column'       =>  'menu_order',
-                                'post_type'         =>  $post_type,
-                                'posts_per_page'    => -1,
-                                'post_status'       =>  'any',
-                                'orderby'            => array(
-                                                            'menu_order'    => 'ASC',
-                                                            'post_date'     =>  'DESC'
-                                                            )
-                    );
-                    
-                    //allow customisation of the query if necesarelly
-                    $args   =   apply_filters('pto/interface/query/args', $args ); 
-                    
-                    $the_query  = new WP_Query( $args );
-                    $pages      = $the_query->posts;
-
-                    if ( !empty($pages) ) 
-                        {
-                            $output .= $this->walk_tree($pages, $r['depth'], $r);
-                        }
-
-                    echo    wp_kses_post    (   $output );
-                }
             
-            /**
-            * Tree walker
-            * 
-            * @param mixed $pages
-            * @param mixed $depth
-            * @param mixed $r
-            */
-            function walk_tree($pages, $depth, $r) 
-                {
-                    $walker = new Post_Types_Order_Walker;
-
-                    $args = array($pages, $depth, $r);
-                    return call_user_func_array(array(&$walker, 'walk'), $args);
-                }
         }
