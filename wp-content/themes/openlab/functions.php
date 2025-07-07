@@ -35,7 +35,6 @@ require_once( $stylesheet_path . '/lib/post-types.php' );
 require_once( $stylesheet_path . '/lib/menus.php' );
 require_once( $stylesheet_path . '/lib/content-processing.php' );
 require_once( $stylesheet_path . '/lib/nav.php' );
-require_once( $stylesheet_path . '/lib/breadcrumbs.php' );
 require_once( $stylesheet_path . '/lib/shortcodes.php' );
 require_once( $stylesheet_path . '/lib/media-funcs.php' );
 require_once( $stylesheet_path . '/lib/group-funcs.php' );
