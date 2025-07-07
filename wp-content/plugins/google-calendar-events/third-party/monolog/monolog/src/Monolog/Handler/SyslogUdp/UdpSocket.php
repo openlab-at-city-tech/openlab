@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler\SyslogUdp;
 
 use SimpleCalendar\plugin_deps\Monolog\Utils;
 use Socket;
-/** @internal */
 class UdpSocket
 {
     protected const DATAGRAM_MAX_LENGTH = 65023;
@@ -37,10 +36,10 @@ class UdpSocket
     {
         $this->send($this->assembleMessage($line, $header));
     }
-    public function close() : void
+    public function close(): void
     {
-        if (\is_resource($this->socket) || $this->socket instanceof Socket) {
-            \socket_close($this->socket);
+        if (is_resource($this->socket) || $this->socket instanceof Socket) {
+            socket_close($this->socket);
             $this->socket = null;
         }
     }
@@ -59,19 +58,19 @@ class UdpSocket
             $domain = \AF_UNIX;
             $protocol = \IPPROTO_IP;
         }
-        $this->socket = \socket_create($domain, \SOCK_DGRAM, $protocol) ?: null;
+        $this->socket = socket_create($domain, \SOCK_DGRAM, $protocol) ?: null;
         if (null === $this->socket) {
             throw new \RuntimeException('The UdpSocket to ' . $this->ip . ':' . $this->port . ' could not be opened via socket_create');
         }
         return $this->socket;
     }
-    protected function send(string $chunk) : void
+    protected function send(string $chunk): void
     {
-        \socket_sendto($this->getSocket(), $chunk, \strlen($chunk), $flags = 0, $this->ip, $this->port);
+        socket_sendto($this->getSocket(), $chunk, strlen($chunk), $flags = 0, $this->ip, $this->port);
     }
-    protected function assembleMessage(string $line, string $header) : string
+    protected function assembleMessage(string $line, string $header): string
     {
-        $chunkSize = static::DATAGRAM_MAX_LENGTH - \strlen($header);
+        $chunkSize = static::DATAGRAM_MAX_LENGTH - strlen($header);
         return $header . Utils::substr($line, 0, $chunkSize);
     }
 }

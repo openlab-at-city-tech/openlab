@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  *
  * @phpstan-import-type LevelName from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
- * @internal
  */
 class MercurialProcessor implements ProcessorInterface
 {
@@ -40,7 +39,7 @@ class MercurialProcessor implements ProcessorInterface
     /**
      * {@inheritDoc}
      */
-    public function __invoke(array $record) : array
+    public function __invoke(array $record): array
     {
         // return if the level is not high enough
         if ($record['level'] < $this->level) {
@@ -52,13 +51,13 @@ class MercurialProcessor implements ProcessorInterface
     /**
      * @return array{branch: string, revision: string}|array<never>
      */
-    private static function getMercurialInfo() : array
+    private static function getMercurialInfo(): array
     {
         if (self::$cache) {
             return self::$cache;
         }
-        $result = \explode(' ', \trim(`hg id -nb`));
-        if (\count($result) >= 3) {
+        $result = explode(' ', trim(`hg id -nb`));
+        if (count($result) >= 3) {
             return self::$cache = ['branch' => $result[1], 'revision' => $result[2]];
         }
         return self::$cache = [];

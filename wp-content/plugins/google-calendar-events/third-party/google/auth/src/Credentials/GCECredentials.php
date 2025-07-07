@@ -54,7 +54,6 @@ use InvalidArgumentException;
  *   ]);
  *
  *   $res = $client->get('myproject/taskqueues/myqueue');
- * @internal
  */
 class GCECredentials extends CredentialsLoader implements SignBlobInterface, ProjectIdProviderInterface, GetQuotaProjectInterface
 {
@@ -161,10 +160,10 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
         }
         $tokenUri = self::getTokenUri($serviceAccountIdentity);
         if ($scope) {
-            if (\is_string($scope)) {
-                $scope = \explode(' ', $scope);
+            if (is_string($scope)) {
+                $scope = explode(' ', $scope);
             }
-            $scope = \implode(',', $scope);
+            $scope = implode(',', $scope);
             $tokenUri = $tokenUri . '?scopes=' . $scope;
         } elseif ($targetAudience) {
             $tokenUri = self::getIdTokenUri($serviceAccountIdentity);
@@ -187,7 +186,7 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::TOKEN_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -203,7 +202,7 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::CLIENT_ID_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -219,7 +218,7 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
         $base = 'http://' . self::METADATA_IP . '/computeMetadata/';
         $base .= self::ID_TOKEN_URI_PATH;
         if ($serviceAccountIdentity) {
-            return \str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
+            return str_replace('/default/', '/' . $serviceAccountIdentity . '/', $base);
         }
         return $base;
     }
@@ -241,7 +240,7 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
      */
     public static function onAppEngineFlexible()
     {
-        return \substr((string) \getenv('GAE_INSTANCE'), 0, 4) === 'aef-';
+        return substr((string) getenv('GAE_INSTANCE'), 0, 4) === 'aef-';
     }
     /**
      * Determines if this a GCE instance, by accessing the expected metadata
@@ -308,10 +307,10 @@ class GCECredentials extends CredentialsLoader implements SignBlobInterface, Pro
         if ($this->targetAudience) {
             return ['id_token' => $response];
         }
-        if (null === ($json = \json_decode($response, \true))) {
+        if (null === $json = json_decode($response, \true)) {
             throw new \Exception('Invalid JSON response');
         }
-        $json['expires_at'] = \time() + $json['expires_in'];
+        $json['expires_at'] = time() + $json['expires_in'];
         // store this so we can retrieve it later
         $this->lastReceivedToken = $json;
         return $json;

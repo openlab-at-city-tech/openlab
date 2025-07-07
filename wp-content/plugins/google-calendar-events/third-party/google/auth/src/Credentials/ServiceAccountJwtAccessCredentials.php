@@ -31,7 +31,6 @@ use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
  * from credentials from a json key file downloaded from the developer
  * console (via 'Generate new Json Key').  It is not part of any OAuth2
  * flow, rather it creates a JWT and sends that as a credential.
- * @internal
  */
 class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {
@@ -62,22 +61,22 @@ class ServiceAccountJwtAccessCredentials extends CredentialsLoader implements Ge
      */
     public function __construct($jsonKey, $scope = null)
     {
-        if (\is_string($jsonKey)) {
-            if (!\file_exists($jsonKey)) {
+        if (is_string($jsonKey)) {
+            if (!file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $jsonKeyStream = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode((string) $jsonKeyStream, \true))) {
+            $jsonKeyStream = file_get_contents($jsonKey);
+            if (!$jsonKey = json_decode((string) $jsonKeyStream, \true)) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!\array_key_exists('client_email', $jsonKey)) {
+        if (!array_key_exists('client_email', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_email field');
         }
-        if (!\array_key_exists('private_key', $jsonKey)) {
+        if (!array_key_exists('private_key', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        if (\array_key_exists('quota_project_id', $jsonKey)) {
+        if (array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         $this->auth = new OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key'], 'scope' => $scope]);

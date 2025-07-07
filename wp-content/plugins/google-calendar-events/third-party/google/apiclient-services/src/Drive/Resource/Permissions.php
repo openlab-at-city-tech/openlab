@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\PermissionList;
  *   $driveService = new Google\Service\Drive(...);
  *   $permissions = $driveService->permissions;
  *  </code>
- * @internal
  */
 class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -71,7 +70,7 @@ class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create($fileId, Permission $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], Permission::class);
     }
     /**
@@ -92,7 +91,7 @@ class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($fileId, $permissionId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'permissionId' => $permissionId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -114,7 +113,7 @@ class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($fileId, $permissionId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'permissionId' => $permissionId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Permission::class);
     }
     /**
@@ -144,7 +143,7 @@ class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listPermissions($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], PermissionList::class);
     }
     /**
@@ -176,9 +175,9 @@ class Permissions extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($fileId, $permissionId, Permission $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'permissionId' => $permissionId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Permission::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Permissions::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Permissions');
+class_alias(Permissions::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Permissions');

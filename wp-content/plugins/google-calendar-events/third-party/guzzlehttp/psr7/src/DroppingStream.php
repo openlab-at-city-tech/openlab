@@ -7,7 +7,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator that begins dropping data once the size of the underlying
  * stream becomes too full.
- * @internal
  */
 final class DroppingStream implements StreamInterface
 {
@@ -25,7 +24,7 @@ final class DroppingStream implements StreamInterface
         $this->stream = $stream;
         $this->maxLength = $maxLength;
     }
-    public function write($string) : int
+    public function write($string): int
     {
         $diff = $this->maxLength - $this->stream->getSize();
         // Begin returning 0 when the underlying stream is too large.
@@ -33,9 +32,9 @@ final class DroppingStream implements StreamInterface
             return 0;
         }
         // Write the stream or a subset of the stream if needed.
-        if (\strlen($string) < $diff) {
+        if (strlen($string) < $diff) {
             return $this->stream->write($string);
         }
-        return $this->stream->write(\substr($string, 0, $diff));
+        return $this->stream->write(substr($string, 0, $diff));
     }
 }

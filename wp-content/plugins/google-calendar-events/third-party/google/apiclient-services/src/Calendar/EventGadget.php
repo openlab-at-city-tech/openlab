@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -166,4 +165,4 @@ class EventGadget extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(EventGadget::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_EventGadget');
+class_alias(EventGadget::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventGadget');

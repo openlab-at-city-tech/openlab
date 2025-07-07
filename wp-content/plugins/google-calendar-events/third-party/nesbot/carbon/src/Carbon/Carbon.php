@@ -504,7 +504,6 @@ use DateTimeZone;
  * @method        static static       __set_state(array $array)                                                                       https://php.net/manual/en/datetime.set-state.php
  *
  * </autodoc>
- * @internal
  */
 class Carbon extends DateTime implements CarbonInterface
 {

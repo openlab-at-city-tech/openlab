@@ -23,12 +23,11 @@ use ArrayAccess;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @template-extends \ArrayAccess<'message'|'level'|'context'|'level_name'|'channel'|'datetime'|'extra'|'formatted', mixed>
  * @phpstan-import-type Record from Logger
- * @internal
  */
 interface LogRecord extends \ArrayAccess
 {
     /**
      * @phpstan-return Record
      */
-    public function toArray() : array;
+    public function toArray(): array;
 }

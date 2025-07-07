@@ -22,7 +22,6 @@ use SimpleCalendar\plugin_deps\Monolog\Handler\Slack\SlackRecord;
  * @see    https://api.slack.com/
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
- * @internal
  */
 class SlackHandler extends SocketHandler
 {
@@ -49,25 +48,25 @@ class SlackHandler extends SocketHandler
      */
     public function __construct(string $token, string $channel, ?string $username = null, bool $useAttachment = \true, ?string $iconEmoji = null, $level = Logger::CRITICAL, bool $bubble = \true, bool $useShortAttachment = \false, bool $includeContextAndExtra = \false, array $excludeFields = array(), bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
-        if (!\extension_loaded('openssl')) {
+        if (!extension_loaded('openssl')) {
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use the SlackHandler');
         }
         parent::__construct('ssl://slack.com:443', $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->slackRecord = new SlackRecord($channel, $username, $useAttachment, $iconEmoji, $useShortAttachment, $includeContextAndExtra, $excludeFields);
         $this->token = $token;
     }
-    public function getSlackRecord() : SlackRecord
+    public function getSlackRecord(): SlackRecord
     {
         return $this->slackRecord;
     }
-    public function getToken() : string
+    public function getToken(): string
     {
         return $this->token;
     }
     /**
      * {@inheritDoc}
      */
-    protected function generateDataStream(array $record) : string
+    protected function generateDataStream(array $record): string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -77,16 +76,16 @@ class SlackHandler extends SocketHandler
      *
      * @phpstan-param FormattedRecord $record
      */
-    private function buildContent(array $record) : string
+    private function buildContent(array $record): string
     {
         $dataArray = $this->prepareContentData($record);
-        return \http_build_query($dataArray);
+        return http_build_query($dataArray);
     }
     /**
      * @phpstan-param FormattedRecord $record
      * @return string[]
      */
-    protected function prepareContentData(array $record) : array
+    protected function prepareContentData(array $record): array
     {
         $dataArray = $this->slackRecord->getSlackData($record);
         $dataArray['token'] = $this->token;
@@ -98,19 +97,19 @@ class SlackHandler extends SocketHandler
     /**
      * Builds the header of the API Call
      */
-    private function buildHeader(string $content) : string
+    private function buildHeader(string $content): string
     {
         $header = "POST /api/chat.postMessage HTTP/1.1\r\n";
         $header .= "Host: slack.com\r\n";
         $header .= "Content-Type: application/x-www-form-urlencoded\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         parent::write($record);
         $this->finalizeWrite();
@@ -121,21 +120,21 @@ class SlackHandler extends SocketHandler
      * If we do not read some but close the socket too early, slack sometimes
      * drops the request entirely.
      */
-    protected function finalizeWrite() : void
+    protected function finalizeWrite(): void
     {
         $res = $this->getResource();
-        if (\is_resource($res)) {
-            @\fread($res, 2048);
+        if (is_resource($res)) {
+            @fread($res, 2048);
         }
         $this->closeSocket();
     }
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         parent::setFormatter($formatter);
         $this->slackRecord->setFormatter($formatter);
         return $this;
     }
-    public function getFormatter() : FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         $formatter = parent::getFormatter();
         $this->slackRecord->setFormatter($formatter);
@@ -144,7 +143,7 @@ class SlackHandler extends SocketHandler
     /**
      * Channel used by the bot when posting
      */
-    public function setChannel(string $channel) : self
+    public function setChannel(string $channel): self
     {
         $this->slackRecord->setChannel($channel);
         return $this;
@@ -152,27 +151,27 @@ class SlackHandler extends SocketHandler
     /**
      * Username used by the bot when posting
      */
-    public function setUsername(string $username) : self
+    public function setUsername(string $username): self
     {
         $this->slackRecord->setUsername($username);
         return $this;
     }
-    public function useAttachment(bool $useAttachment) : self
+    public function useAttachment(bool $useAttachment): self
     {
         $this->slackRecord->useAttachment($useAttachment);
         return $this;
     }
-    public function setIconEmoji(string $iconEmoji) : self
+    public function setIconEmoji(string $iconEmoji): self
     {
         $this->slackRecord->setUserIcon($iconEmoji);
         return $this;
     }
-    public function useShortAttachment(bool $useShortAttachment) : self
+    public function useShortAttachment(bool $useShortAttachment): self
     {
         $this->slackRecord->useShortAttachment($useShortAttachment);
         return $this;
     }
-    public function includeContextAndExtra(bool $includeContextAndExtra) : self
+    public function includeContextAndExtra(bool $includeContextAndExtra): self
     {
         $this->slackRecord->includeContextAndExtra($includeContextAndExtra);
         return $this;
@@ -180,7 +179,7 @@ class SlackHandler extends SocketHandler
     /**
      * @param string[] $excludeFields
      */
-    public function excludeFields(array $excludeFields) : self
+    public function excludeFields(array $excludeFields): self
     {
         $this->slackRecord->excludeFields($excludeFields);
         return $this;

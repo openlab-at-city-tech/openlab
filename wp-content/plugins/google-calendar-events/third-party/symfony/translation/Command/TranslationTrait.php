@@ -18,7 +18,7 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatorBag;
  */
 trait TranslationTrait
 {
-    private function readLocalTranslations(array $locales, array $domains, array $transPaths) : TranslatorBag
+    private function readLocalTranslations(array $locales, array $domains, array $transPaths): TranslatorBag
     {
         $bag = new TranslatorBag();
         foreach ($locales as $locale) {
@@ -36,7 +36,7 @@ trait TranslationTrait
         }
         return $bag;
     }
-    private function filterCatalogue(MessageCatalogue $catalogue, string $domain) : MessageCatalogue
+    private function filterCatalogue(MessageCatalogue $catalogue, string $domain): MessageCatalogue
     {
         $filteredCatalogue = new MessageCatalogue($catalogue->getLocale());
         // extract intl-icu messages only
@@ -45,7 +45,7 @@ trait TranslationTrait
             $filteredCatalogue->add($intlMessages, $intlDomain);
         }
         // extract all messages and subtract intl-icu messages
-        if ($messages = \array_diff($catalogue->all($domain), $intlMessages)) {
+        if ($messages = array_diff($catalogue->all($domain), $intlMessages)) {
             $filteredCatalogue->add($messages, $domain);
         }
         foreach ($catalogue->getResources() as $resource) {

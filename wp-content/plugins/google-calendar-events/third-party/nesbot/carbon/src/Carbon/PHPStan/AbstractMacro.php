@@ -27,7 +27,6 @@ use ReflectionParameter;
 use ReflectionType;
 use stdClass;
 use Throwable;
-/** @internal */
 abstract class AbstractMacro implements BuiltinMethodReflection
 {
     /**
@@ -74,7 +73,7 @@ abstract class AbstractMacro implements BuiltinMethodReflection
         $rawReflectionFunction = \is_array($macro) ? new ReflectionMethod($macro[0], $macro[1]) : new ReflectionFunction($macro);
         $this->reflectionFunction = self::hasModernParser() ? $this->getReflectionFunction($macro) : $rawReflectionFunction;
         // @codeCoverageIgnore
-        $this->parameters = \array_map(function ($parameter) {
+        $this->parameters = array_map(function ($parameter) {
             if ($parameter instanceof BetterReflectionParameter) {
                 return new AdapterReflectionParameter($parameter);
             }
@@ -112,77 +111,77 @@ abstract class AbstractMacro implements BuiltinMethodReflection
     /**
      * {@inheritdoc}
      */
-    public function getDeclaringClass() : ReflectionClass
+    public function getDeclaringClass(): ReflectionClass
     {
         return new ReflectionClass($this->className);
     }
     /**
      * {@inheritdoc}
      */
-    public function isPrivate() : bool
+    public function isPrivate(): bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isPublic() : bool
+    public function isPublic(): bool
     {
         return \true;
     }
     /**
      * {@inheritdoc}
      */
-    public function isFinal() : bool
+    public function isFinal(): bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isInternal() : bool
+    public function isInternal(): bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isAbstract() : bool
+    public function isAbstract(): bool
     {
         return \false;
     }
     /**
      * {@inheritdoc}
      */
-    public function isStatic() : bool
+    public function isStatic(): bool
     {
         return $this->static;
     }
     /**
      * {@inheritdoc}
      */
-    public function getDocComment() : ?string
+    public function getDocComment(): ?string
     {
         return $this->reflectionFunction->getDocComment() ?: null;
     }
     /**
      * {@inheritdoc}
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->methodName;
     }
     /**
      * {@inheritdoc}
      */
-    public function getParameters() : array
+    public function getParameters(): array
     {
         return $this->parameters;
     }
     /**
      * {@inheritdoc}
      */
-    public function getReturnType() : ?ReflectionType
+    public function getReturnType(): ?ReflectionType
     {
         $type = $this->reflectionFunction->getReturnType();
         if ($type instanceof ReflectionType) {
@@ -194,45 +193,45 @@ abstract class AbstractMacro implements BuiltinMethodReflection
     /**
      * {@inheritdoc}
      */
-    public function isDeprecated() : TrinaryLogic
+    public function isDeprecated(): TrinaryLogic
     {
-        return TrinaryLogic::createFromBoolean($this->reflectionFunction->isDeprecated() || \preg_match('/@deprecated/i', $this->getDocComment() ?: ''));
+        return TrinaryLogic::createFromBoolean($this->reflectionFunction->isDeprecated() || preg_match('/@deprecated/i', $this->getDocComment() ?: ''));
     }
     /**
      * {@inheritdoc}
      */
-    public function isVariadic() : bool
+    public function isVariadic(): bool
     {
         return $this->reflectionFunction->isVariadic();
     }
     /**
      * {@inheritdoc}
      */
-    public function getPrototype() : BuiltinMethodReflection
+    public function getPrototype(): BuiltinMethodReflection
     {
         return $this;
     }
-    public function getTentativeReturnType() : ?ReflectionType
+    public function getTentativeReturnType(): ?ReflectionType
     {
         return null;
     }
-    public function returnsByReference() : TrinaryLogic
+    public function returnsByReference(): TrinaryLogic
     {
         return TrinaryLogic::createNo();
     }
     private static function adaptType($type)
     {
-        $method = \method_exists(AdapterReflectionType::class, 'fromTypeOrNull') ? 'fromTypeOrNull' : 'fromReturnTypeOrNull';
+        $method = method_exists(AdapterReflectionType::class, 'fromTypeOrNull') ? 'fromTypeOrNull' : 'fromReturnTypeOrNull';
         // @codeCoverageIgnore
         return AdapterReflectionType::$method($type);
     }
-    private static function hasModernParser() : bool
+    private static function hasModernParser(): bool
     {
         static $modernParser = null;
         if ($modernParser !== null) {
             return $modernParser;
         }
-        $modernParser = \method_exists(AdapterReflectionType::class, 'fromTypeOrNull');
+        $modernParser = method_exists(AdapterReflectionType::class, 'fromTypeOrNull');
         return $modernParser;
     }
 }

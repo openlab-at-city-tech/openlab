@@ -6,7 +6,6 @@ namespace SimpleCalendar\plugin_deps\Google;
  * Extension to the regular Google\Model that automatically
  * exposes the items array for iteration, so you can just
  * iterate over the object rather than a reference inside.
- * @internal
  */
 class Collection extends Model implements \Iterator, \Countable
 {
@@ -15,8 +14,8 @@ class Collection extends Model implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function rewind()
     {
-        if (isset($this->{$this->collection_key}) && \is_array($this->{$this->collection_key})) {
-            \reset($this->{$this->collection_key});
+        if (isset($this->{$this->collection_key}) && is_array($this->{$this->collection_key})) {
+            reset($this->{$this->collection_key});
         }
     }
     /** @return mixed */
@@ -24,23 +23,23 @@ class Collection extends Model implements \Iterator, \Countable
     public function current()
     {
         $this->coerceType($this->key());
-        if (\is_array($this->{$this->collection_key})) {
-            return \current($this->{$this->collection_key});
+        if (is_array($this->{$this->collection_key})) {
+            return current($this->{$this->collection_key});
         }
     }
     /** @return mixed */
     #[\ReturnTypeWillChange]
     public function key()
     {
-        if (isset($this->{$this->collection_key}) && \is_array($this->{$this->collection_key})) {
-            return \key($this->{$this->collection_key});
+        if (isset($this->{$this->collection_key}) && is_array($this->{$this->collection_key})) {
+            return key($this->{$this->collection_key});
         }
     }
     /** @return mixed */
     #[\ReturnTypeWillChange]
     public function next()
     {
-        return \next($this->{$this->collection_key});
+        return next($this->{$this->collection_key});
     }
     /** @return bool */
     #[\ReturnTypeWillChange]
@@ -56,13 +55,13 @@ class Collection extends Model implements \Iterator, \Countable
         if (!isset($this->{$this->collection_key})) {
             return 0;
         }
-        return \count($this->{$this->collection_key});
+        return count($this->{$this->collection_key});
     }
     /** @return bool */
     #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
-        if (!\is_numeric($offset)) {
+        if (!is_numeric($offset)) {
             return parent::offsetExists($offset);
         }
         return isset($this->{$this->collection_key}[$offset]);
@@ -70,7 +69,7 @@ class Collection extends Model implements \Iterator, \Countable
     /** @return mixed */
     public function offsetGet($offset)
     {
-        if (!\is_numeric($offset)) {
+        if (!is_numeric($offset)) {
             return parent::offsetGet($offset);
         }
         $this->coerceType($offset);
@@ -80,7 +79,7 @@ class Collection extends Model implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
-        if (!\is_numeric($offset)) {
+        if (!is_numeric($offset)) {
             parent::offsetSet($offset, $value);
         }
         $this->{$this->collection_key}[$offset] = $value;
@@ -89,7 +88,7 @@ class Collection extends Model implements \Iterator, \Countable
     #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
-        if (!\is_numeric($offset)) {
+        if (!is_numeric($offset)) {
             parent::offsetUnset($offset);
         }
         unset($this->{$this->collection_key}[$offset]);
@@ -97,7 +96,7 @@ class Collection extends Model implements \Iterator, \Countable
     private function coerceType($offset)
     {
         $keyType = $this->keyType($this->collection_key);
-        if ($keyType && !\is_object($this->{$this->collection_key}[$offset])) {
+        if ($keyType && !is_object($this->{$this->collection_key}[$offset])) {
             $this->{$this->collection_key}[$offset] = new $keyType($this->{$this->collection_key}[$offset]);
         }
     }

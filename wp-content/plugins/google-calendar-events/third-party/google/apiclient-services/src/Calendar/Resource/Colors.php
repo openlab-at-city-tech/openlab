@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Colors as ColorsModel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $colors = $calendarService->colors;
  *  </code>
- * @internal
  */
 class Colors extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -38,9 +37,9 @@ class Colors extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], ColorsModel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Colors::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_Colors');
+class_alias(Colors::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_Colors');

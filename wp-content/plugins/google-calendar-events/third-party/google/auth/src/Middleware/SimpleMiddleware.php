@@ -24,7 +24,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * access.
  *
  * Requests are accessed using the Simple API access developer key.
- * @internal
  */
 class SimpleMiddleware
 {
@@ -45,7 +44,7 @@ class SimpleMiddleware
         if (!isset($config['key'])) {
             throw new \InvalidArgumentException('requires a key to have been set');
         }
-        $this->config = \array_merge(['key' => null], $config);
+        $this->config = array_merge(['key' => null], $config);
     }
     /**
      * Updates the request query with the developer key if auth is set to simple.
@@ -72,13 +71,13 @@ class SimpleMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
             // Requests using "auth"="scoped" will be authorized.
             if (!isset($options['auth']) || $options['auth'] !== 'simple') {
                 return $handler($request, $options);
             }
             $query = Query::parse($request->getUri()->getQuery());
-            $params = \array_merge($query, $this->config);
+            $params = array_merge($query, $this->config);
             $uri = $request->getUri()->withQuery(Query::build($params));
             $request = $request->withUri($uri);
             return $handler($request, $options);

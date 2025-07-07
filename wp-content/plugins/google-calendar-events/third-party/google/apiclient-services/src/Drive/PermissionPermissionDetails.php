@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class PermissionPermissionDetails extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -94,4 +93,4 @@ class PermissionPermissionDetails extends \SimpleCalendar\plugin_deps\Google\Mod
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(PermissionPermissionDetails::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_PermissionPermissionDetails');
+class_alias(PermissionPermissionDetails::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_PermissionPermissionDetails');

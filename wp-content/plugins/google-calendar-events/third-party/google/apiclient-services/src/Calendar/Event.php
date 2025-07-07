@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class Event extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'recurrence';
@@ -717,4 +716,4 @@ class Event extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Event::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Event');
+class_alias(Event::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Event');

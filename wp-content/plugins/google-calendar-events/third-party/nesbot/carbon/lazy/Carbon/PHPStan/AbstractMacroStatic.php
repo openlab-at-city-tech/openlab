@@ -13,14 +13,13 @@ namespace SimpleCalendar\plugin_deps\Carbon\PHPStan;
 
 use SimpleCalendar\plugin_deps\PHPStan\BetterReflection\Reflection;
 use ReflectionMethod;
-if (!\class_exists(AbstractReflectionMacro::class, \false)) {
-    /** @internal */
+if (!class_exists(AbstractReflectionMacro::class, \false)) {
     abstract class AbstractReflectionMacro extends AbstractMacro
     {
         /**
          * {@inheritdoc}
          */
-        public function getReflection() : ?Reflection\Adapter\ReflectionMethod
+        public function getReflection(): ?Reflection\Adapter\ReflectionMethod
         {
             if ($this->reflectionFunction instanceof Reflection\Adapter\ReflectionMethod) {
                 return $this->reflectionFunction;

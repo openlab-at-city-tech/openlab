@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class CommentQuotedFileContent extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -58,4 +57,4 @@ class CommentQuotedFileContent extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CommentQuotedFileContent::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_CommentQuotedFileContent');
+class_alias(CommentQuotedFileContent::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_CommentQuotedFileContent');

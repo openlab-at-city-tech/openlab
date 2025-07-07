@@ -29,7 +29,6 @@ use Throwable;
  *
  * @method string|static locale(string $locale = null, string ...$fallbackLocales)
  * @method string        toJSON()
- * @internal
  */
 trait Serialization
 {
@@ -66,7 +65,7 @@ trait Serialization
      */
     public function serialize()
     {
-        return \serialize($this);
+        return serialize($this);
     }
     /**
      * Create an instance from a serialized string.
@@ -79,7 +78,7 @@ trait Serialization
      */
     public static function fromSerialized($value)
     {
-        $instance = @\unserialize((string) $value);
+        $instance = @unserialize((string) $value);
         if (!$instance instanceof static) {
             throw new InvalidFormatException("Invalid serialized value: {$value}");
         }
@@ -99,7 +98,7 @@ trait Serialization
             return static::parse($dump);
         }
         /** @var \DateTimeInterface $date */
-        $date = \get_parent_class(static::class) && \method_exists(parent::class, '__set_state') ? parent::__set_state((array) $dump) : (object) $dump;
+        $date = get_parent_class(static::class) && method_exists(parent::class, '__set_state') ? parent::__set_state((array) $dump) : (object) $dump;
         return static::instance($date);
     }
     /**
@@ -125,7 +124,7 @@ trait Serialization
      *
      * @return array
      */
-    public function __serialize() : array
+    public function __serialize(): array
     {
         // @codeCoverageIgnoreStart
         if (isset($this->timezone_type, $this->timezone, $this->date)) {
@@ -136,7 +135,7 @@ trait Serialization
         $export = ['date' => $this->format('Y-m-d H:i:s.u'), 'timezone_type' => $timezone->getType(), 'timezone' => $timezone->getName()];
         // @codeCoverageIgnoreStart
         if (\extension_loaded('msgpack') && isset($this->constructedObjectId)) {
-            $export['dumpDateProperties'] = ['date' => $this->format('Y-m-d H:i:s.u'), 'timezone' => \serialize($this->timezone ?? null)];
+            $export['dumpDateProperties'] = ['date' => $this->format('Y-m-d H:i:s.u'), 'timezone' => serialize($this->timezone ?? null)];
         }
         // @codeCoverageIgnoreEnd
         if ($this->localTranslator ?? null) {
@@ -154,7 +153,7 @@ trait Serialization
     #[ReturnTypeWillChange]
     public function __wakeup()
     {
-        if (parent::class && \method_exists(parent::class, '__wakeup')) {
+        if (parent::class && method_exists(parent::class, '__wakeup')) {
             // @codeCoverageIgnoreStart
             try {
                 parent::__wakeup();
@@ -162,14 +161,14 @@ trait Serialization
                 try {
                     // FatalError occurs when calling msgpack_unpack() in PHP 7.4 or later.
                     ['date' => $date, 'timezone' => $timezone] = $this->dumpDateProperties;
-                    parent::__construct($date, \unserialize($timezone));
+                    parent::__construct($date, unserialize($timezone));
                 } catch (Throwable $ignoredException) {
                     throw $exception;
                 }
             }
             // @codeCoverageIgnoreEnd
         }
-        $this->constructedObjectId = \spl_object_hash($this);
+        $this->constructedObjectId = spl_object_hash($this);
         if (isset($this->dumpLocale)) {
             $this->locale($this->dumpLocale);
             $this->dumpLocale = null;
@@ -183,7 +182,7 @@ trait Serialization
      *
      * @return void
      */
-    public function __unserialize(array $data) : void
+    public function __unserialize(array $data): void
     {
         // @codeCoverageIgnoreStart
         try {
@@ -195,7 +194,7 @@ trait Serialization
             try {
                 // FatalError occurs when calling msgpack_unpack() in PHP 7.4 or later.
                 ['date' => $date, 'timezone' => $timezone] = $data['dumpDateProperties'];
-                $this->__construct($date, \unserialize($timezone));
+                $this->__construct($date, unserialize($timezone));
             } catch (Throwable $ignoredException) {
                 throw $exception;
             }
@@ -253,7 +252,7 @@ trait Serialization
         // @codeCoverageIgnoreEnd
         return $this;
     }
-    private function getSleepProperties() : array
+    private function getSleepProperties(): array
     {
         $properties = $this->dumpProperties;
         // @codeCoverageIgnoreStart
@@ -261,7 +260,7 @@ trait Serialization
             return $properties;
         }
         if (isset($this->constructedObjectId)) {
-            $this->dumpDateProperties = ['date' => $this->format('Y-m-d H:i:s.u'), 'timezone' => \serialize($this->timezone ?? null)];
+            $this->dumpDateProperties = ['date' => $this->format('Y-m-d H:i:s.u'), 'timezone' => serialize($this->timezone ?? null)];
             $properties[] = 'dumpDateProperties';
         }
         return $properties;

@@ -18,7 +18,6 @@ use SimpleCalendar\plugin_deps\Swift_Message;
  * MandrillHandler uses cURL to send the emails to the Mandrill API
  *
  * @author Adam Nicholson <adamnicholson10@gmail.com>
- * @internal
  */
 class MandrillHandler extends MailHandler
 {
@@ -35,7 +34,7 @@ class MandrillHandler extends MailHandler
     public function __construct(string $apiKey, $message, $level = Logger::ERROR, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
-        if (!$message instanceof Swift_Message && \is_callable($message)) {
+        if (!$message instanceof Swift_Message && is_callable($message)) {
             $message = $message();
         }
         if (!$message instanceof Swift_Message) {
@@ -47,7 +46,7 @@ class MandrillHandler extends MailHandler
     /**
      * {@inheritDoc}
      */
-    protected function send(string $content, array $records) : void
+    protected function send(string $content, array $records): void
     {
         $mime = 'text/plain';
         if ($this->isHtmlBody($content)) {
@@ -56,17 +55,17 @@ class MandrillHandler extends MailHandler
         $message = clone $this->message;
         $message->setBody($content, $mime);
         /** @phpstan-ignore-next-line */
-        if (\version_compare(Swift::VERSION, '6.0.0', '>=')) {
+        if (version_compare(Swift::VERSION, '6.0.0', '>=')) {
             $message->setDate(new \DateTimeImmutable());
         } else {
             /** @phpstan-ignore-next-line */
-            $message->setDate(\time());
+            $message->setDate(time());
         }
-        $ch = \curl_init();
-        \curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
-        \curl_setopt($ch, \CURLOPT_POST, 1);
-        \curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
-        \curl_setopt($ch, \CURLOPT_POSTFIELDS, \http_build_query(['key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false]));
+        $ch = curl_init();
+        curl_setopt($ch, \CURLOPT_URL, 'https://mandrillapp.com/api/1.0/messages/send-raw.json');
+        curl_setopt($ch, \CURLOPT_POST, 1);
+        curl_setopt($ch, \CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, \CURLOPT_POSTFIELDS, http_build_query(['key' => $this->apiKey, 'raw_message' => (string) $message, 'async' => \false]));
         Curl\Util::execute($ch);
     }
 }

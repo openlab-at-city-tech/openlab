@@ -18,7 +18,6 @@
 namespace SimpleCalendar\plugin_deps\Google\Service;
 
 use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
-/** @internal */
 class Exception extends GoogleException
 {
     /**
@@ -37,7 +36,7 @@ class Exception extends GoogleException
      */
     public function __construct($message, $code = 0, Exception $previous = null, $errors = [])
     {
-        if (\version_compare(\PHP_VERSION, '5.3.0') >= 0) {
+        if (version_compare(\PHP_VERSION, '5.3.0') >= 0) {
             parent::__construct($message, $code, $previous);
         } else {
             parent::__construct($message, $code);

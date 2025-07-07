@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class Label extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $fieldsType = LabelField::class;
@@ -92,4 +91,4 @@ class Label extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Label::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Label');
+class_alias(Label::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Label');

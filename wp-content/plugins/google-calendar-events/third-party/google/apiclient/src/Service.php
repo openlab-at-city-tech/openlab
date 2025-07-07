@@ -19,7 +19,6 @@ namespace SimpleCalendar\plugin_deps\Google;
 
 use SimpleCalendar\plugin_deps\Google\Http\Batch;
 use TypeError;
-/** @internal */
 class Service
 {
     public $batchPath;
@@ -34,14 +33,14 @@ class Service
     {
         if ($clientOrConfig instanceof Client) {
             $this->client = $clientOrConfig;
-        } elseif (\is_array($clientOrConfig)) {
+        } elseif (is_array($clientOrConfig)) {
             $this->client = new Client($clientOrConfig ?: []);
         } else {
-            $errorMessage = 'constructor must be array or instance of Google\\Client';
-            if (\class_exists('TypeError')) {
+            $errorMessage = 'constructor must be array or instance of Google\Client';
+            if (class_exists('TypeError')) {
                 throw new TypeError($errorMessage);
             }
-            \trigger_error($errorMessage, \E_USER_ERROR);
+            trigger_error($errorMessage, \E_USER_ERROR);
         }
     }
     /**

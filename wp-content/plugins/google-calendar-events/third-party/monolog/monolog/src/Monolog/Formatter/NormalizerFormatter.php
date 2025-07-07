@@ -18,7 +18,6 @@ use Throwable;
  * Normalizes incoming records to remove objects/resources so it's easier to dump to various targets
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
- * @internal
  */
 class NormalizerFormatter implements FormatterInterface
 {
@@ -37,7 +36,7 @@ class NormalizerFormatter implements FormatterInterface
     public function __construct(?string $dateFormat = null)
     {
         $this->dateFormat = null === $dateFormat ? static::SIMPLE_DATE : $dateFormat;
-        if (!\function_exists('json_encode')) {
+        if (!function_exists('json_encode')) {
             throw new \RuntimeException('PHP\'s json extension is required to use Monolog\'s NormalizerFormatter');
         }
     }
@@ -60,11 +59,11 @@ class NormalizerFormatter implements FormatterInterface
         }
         return $records;
     }
-    public function getDateFormat() : string
+    public function getDateFormat(): string
     {
         return $this->dateFormat;
     }
-    public function setDateFormat(string $dateFormat) : self
+    public function setDateFormat(string $dateFormat): self
     {
         $this->dateFormat = $dateFormat;
         return $this;
@@ -72,11 +71,11 @@ class NormalizerFormatter implements FormatterInterface
     /**
      * The maximum number of normalization levels to go through
      */
-    public function getMaxNormalizeDepth() : int
+    public function getMaxNormalizeDepth(): int
     {
         return $this->maxNormalizeDepth;
     }
-    public function setMaxNormalizeDepth(int $maxNormalizeDepth) : self
+    public function setMaxNormalizeDepth(int $maxNormalizeDepth): self
     {
         $this->maxNormalizeDepth = $maxNormalizeDepth;
         return $this;
@@ -84,11 +83,11 @@ class NormalizerFormatter implements FormatterInterface
     /**
      * The maximum number of items to normalize per level
      */
-    public function getMaxNormalizeItemCount() : int
+    public function getMaxNormalizeItemCount(): int
     {
         return $this->maxNormalizeItemCount;
     }
-    public function setMaxNormalizeItemCount(int $maxNormalizeItemCount) : self
+    public function setMaxNormalizeItemCount(int $maxNormalizeItemCount): self
     {
         $this->maxNormalizeItemCount = $maxNormalizeItemCount;
         return $this;
@@ -96,7 +95,7 @@ class NormalizerFormatter implements FormatterInterface
     /**
      * Enables `json_encode` pretty print.
      */
-    public function setJsonPrettyPrint(bool $enable) : self
+    public function setJsonPrettyPrint(bool $enable): self
     {
         if ($enable) {
             $this->jsonEncodeOptions |= \JSON_PRETTY_PRINT;
@@ -114,23 +113,23 @@ class NormalizerFormatter implements FormatterInterface
         if ($depth > $this->maxNormalizeDepth) {
             return 'Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization';
         }
-        if (null === $data || \is_scalar($data)) {
-            if (\is_float($data)) {
-                if (\is_infinite($data)) {
+        if (null === $data || is_scalar($data)) {
+            if (is_float($data)) {
+                if (is_infinite($data)) {
                     return ($data > 0 ? '' : '-') . 'INF';
                 }
-                if (\is_nan($data)) {
+                if (is_nan($data)) {
                     return 'NaN';
                 }
             }
             return $data;
         }
-        if (\is_array($data)) {
+        if (is_array($data)) {
             $normalized = [];
             $count = 1;
             foreach ($data as $key => $value) {
                 if ($count++ > $this->maxNormalizeItemCount) {
-                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . \count($data) . ' total), aborting normalization';
+                    $normalized['...'] = 'Over ' . $this->maxNormalizeItemCount . ' items (' . count($data) . ' total), aborting normalization';
                     break;
                 }
                 $normalized[$key] = $this->normalize($value, $depth + 1);
@@ -140,27 +139,27 @@ class NormalizerFormatter implements FormatterInterface
         if ($data instanceof \DateTimeInterface) {
             return $this->formatDate($data);
         }
-        if (\is_object($data)) {
+        if (is_object($data)) {
             if ($data instanceof Throwable) {
                 return $this->normalizeException($data, $depth);
             }
             if ($data instanceof \JsonSerializable) {
                 /** @var null|scalar|array<array|scalar|null> $value */
                 $value = $data->jsonSerialize();
-            } elseif (\method_exists($data, '__toString')) {
+            } elseif (method_exists($data, '__toString')) {
                 /** @var string $value */
                 $value = $data->__toString();
             } else {
                 // the rest is normalized by json encoding and decoding it
                 /** @var null|scalar|array<array|scalar|null> $value */
-                $value = \json_decode($this->toJson($data, \true), \true);
+                $value = json_decode($this->toJson($data, \true), \true);
             }
             return [Utils::getClass($data) => $value];
         }
-        if (\is_resource($data)) {
-            return \sprintf('[resource(%s)]', \get_resource_type($data));
+        if (is_resource($data)) {
+            return sprintf('[resource(%s)]', get_resource_type($data));
         }
-        return '[unknown(' . \gettype($data) . ')]';
+        return '[unknown(' . gettype($data) . ')]';
     }
     /**
      * @return mixed[]
@@ -182,9 +181,9 @@ class NormalizerFormatter implements FormatterInterface
                 $data['faultactor'] = $e->faultactor;
             }
             if (isset($e->detail)) {
-                if (\is_string($e->detail)) {
+                if (is_string($e->detail)) {
                     $data['detail'] = $e->detail;
-                } elseif (\is_object($e->detail) || \is_array($e->detail)) {
+                } elseif (is_object($e->detail) || is_array($e->detail)) {
                     $data['detail'] = $this->toJson($e->detail, \true);
                 }
             }
@@ -207,7 +206,7 @@ class NormalizerFormatter implements FormatterInterface
      * @throws \RuntimeException if encoding fails and errors are not ignored
      * @return string            if encoding fails and ignoreErrors is true 'null' is returned
      */
-    protected function toJson($data, bool $ignoreErrors = \false) : string
+    protected function toJson($data, bool $ignoreErrors = \false): string
     {
         return Utils::jsonEncode($data, $this->jsonEncodeOptions, $ignoreErrors);
     }
@@ -223,12 +222,12 @@ class NormalizerFormatter implements FormatterInterface
         }
         return $date->format($this->dateFormat);
     }
-    public function addJsonEncodeOption(int $option) : self
+    public function addJsonEncodeOption(int $option): self
     {
         $this->jsonEncodeOptions |= $option;
         return $this;
     }
-    public function removeJsonEncodeOption(int $option) : self
+    public function removeJsonEncodeOption(int $option): self
     {
         $this->jsonEncodeOptions &= ~$option;
         return $this;

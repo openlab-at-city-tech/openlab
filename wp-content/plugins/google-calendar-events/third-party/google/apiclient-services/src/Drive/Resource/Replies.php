@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ReplyList;
  *   $driveService = new Google\Service\Drive(...);
  *   $replies = $driveService->replies;
  *  </code>
- * @internal
  */
 class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -42,7 +41,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create($fileId, $commentId, Reply $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], Reply::class);
     }
     /**
@@ -56,7 +55,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($fileId, $commentId, $replyId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId, 'replyId' => $replyId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -74,7 +73,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($fileId, $commentId, $replyId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId, 'replyId' => $replyId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Reply::class);
     }
     /**
@@ -95,7 +94,7 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listReplies($fileId, $commentId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], ReplyList::class);
     }
     /**
@@ -111,9 +110,9 @@ class Replies extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($fileId, $commentId, $replyId, Reply $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId, 'replyId' => $replyId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Reply::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Replies::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Replies');
+class_alias(Replies::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Replies');

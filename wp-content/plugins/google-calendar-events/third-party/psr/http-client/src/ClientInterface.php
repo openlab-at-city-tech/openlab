@@ -4,7 +4,6 @@ namespace SimpleCalendar\plugin_deps\Psr\Http\Client;
 
 use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 use SimpleCalendar\plugin_deps\Psr\Http\Message\ResponseInterface;
-/** @internal */
 interface ClientInterface
 {
     /**
@@ -16,5 +15,5 @@ interface ClientInterface
      *
      * @throws \Psr\Http\Client\ClientExceptionInterface If an error happens while processing the request.
      */
-    public function sendRequest(RequestInterface $request) : ResponseInterface;
+    public function sendRequest(RequestInterface $request): ResponseInterface;
 }

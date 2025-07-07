@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class FreeBusyCalendar extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'errors';
@@ -55,4 +54,4 @@ class FreeBusyCalendar extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(FreeBusyCalendar::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_FreeBusyCalendar');
+class_alias(FreeBusyCalendar::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_FreeBusyCalendar');

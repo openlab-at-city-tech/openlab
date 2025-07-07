@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * XliffFileDumper generates xliff files from a message catalogue.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
- * @internal
  */
 class XliffFileDumper extends FileDumper
 {
@@ -40,7 +39,7 @@ class XliffFileDumper extends FileDumper
         if ('2.0' === $xliffVersion) {
             return $this->dumpXliff2($defaultLocale, $messages, $domain);
         }
-        throw new InvalidArgumentException(\sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion));
+        throw new InvalidArgumentException(sprintf('No support implemented for dumping XLIFF version "%s".', $xliffVersion));
     }
     /**
      * {@inheritdoc}
@@ -53,7 +52,7 @@ class XliffFileDumper extends FileDumper
     {
         $toolInfo = ['tool-id' => 'symfony', 'tool-name' => 'Symfony'];
         if (\array_key_exists('tool_info', $options)) {
-            $toolInfo = \array_merge($toolInfo, $options['tool_info']);
+            $toolInfo = array_merge($toolInfo, $options['tool_info']);
         }
         $dom = new \DOMDocument('1.0', 'utf-8');
         $dom->formatOutput = \true;
@@ -61,8 +60,8 @@ class XliffFileDumper extends FileDumper
         $xliff->setAttribute('version', '1.2');
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:1.2');
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
-        $xliffFile->setAttribute('source-language', \str_replace('_', '-', $defaultLocale));
-        $xliffFile->setAttribute('target-language', \str_replace('_', '-', $messages->getLocale()));
+        $xliffFile->setAttribute('source-language', str_replace('_', '-', $defaultLocale));
+        $xliffFile->setAttribute('target-language', str_replace('_', '-', $messages->getLocale()));
         $xliffFile->setAttribute('datatype', 'plaintext');
         $xliffFile->setAttribute('original', 'file.ext');
         $xliffHead = $xliffFile->appendChild($dom->createElement('header'));
@@ -73,12 +72,12 @@ class XliffFileDumper extends FileDumper
         $xliffBody = $xliffFile->appendChild($dom->createElement('body'));
         foreach ($messages->all($domain) as $source => $target) {
             $translation = $dom->createElement('trans-unit');
-            $translation->setAttribute('id', \strtr(\substr(\base64_encode(\hash('sha256', $source, \true)), 0, 7), '/+', '._'));
+            $translation->setAttribute('id', strtr(substr(base64_encode(hash('sha256', $source, \true)), 0, 7), '/+', '._'));
             $translation->setAttribute('resname', $source);
             $s = $translation->appendChild($dom->createElement('source'));
             $s->appendChild($dom->createTextNode($source));
             // Does the target contain characters requiring a CDATA section?
-            $text = 1 === \preg_match('/[&<>]/', $target) ? $dom->createCDATASection($target) : $dom->createTextNode($target);
+            $text = 1 === preg_match('/[&<>]/', $target) ? $dom->createCDATASection($target) : $dom->createTextNode($target);
             $targetElement = $dom->createElement('target');
             $metadata = $messages->getMetadata($source, $domain);
             if ($this->hasMetadataArrayInfo('target-attributes', $metadata)) {
@@ -114,17 +113,17 @@ class XliffFileDumper extends FileDumper
         $xliff = $dom->appendChild($dom->createElement('xliff'));
         $xliff->setAttribute('xmlns', 'urn:oasis:names:tc:xliff:document:2.0');
         $xliff->setAttribute('version', '2.0');
-        $xliff->setAttribute('srcLang', \str_replace('_', '-', $defaultLocale));
-        $xliff->setAttribute('trgLang', \str_replace('_', '-', $messages->getLocale()));
+        $xliff->setAttribute('srcLang', str_replace('_', '-', $defaultLocale));
+        $xliff->setAttribute('trgLang', str_replace('_', '-', $messages->getLocale()));
         $xliffFile = $xliff->appendChild($dom->createElement('file'));
-        if (\str_ends_with($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
-            $xliffFile->setAttribute('id', \substr($domain, 0, -\strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX)) . '.' . $messages->getLocale());
+        if (str_ends_with($domain, MessageCatalogue::INTL_DOMAIN_SUFFIX)) {
+            $xliffFile->setAttribute('id', substr($domain, 0, -\strlen(MessageCatalogue::INTL_DOMAIN_SUFFIX)) . '.' . $messages->getLocale());
         } else {
             $xliffFile->setAttribute('id', $domain . '.' . $messages->getLocale());
         }
         foreach ($messages->all($domain) as $source => $target) {
             $translation = $dom->createElement('unit');
-            $translation->setAttribute('id', \strtr(\substr(\base64_encode(\hash('sha256', $source, \true)), 0, 7), '/+', '._'));
+            $translation->setAttribute('id', strtr(substr(base64_encode(hash('sha256', $source, \true)), 0, 7), '/+', '._'));
             if (\strlen($source) <= 80) {
                 $translation->setAttribute('name', $source);
             }
@@ -147,7 +146,7 @@ class XliffFileDumper extends FileDumper
             $s = $segment->appendChild($dom->createElement('source'));
             $s->appendChild($dom->createTextNode($source));
             // Does the target contain characters requiring a CDATA section?
-            $text = 1 === \preg_match('/[&<>]/', $target) ? $dom->createCDATASection($target) : $dom->createTextNode($target);
+            $text = 1 === preg_match('/[&<>]/', $target) ? $dom->createCDATASection($target) : $dom->createTextNode($target);
             $targetElement = $dom->createElement('target');
             if ($this->hasMetadataArrayInfo('target-attributes', $metadata)) {
                 foreach ($metadata['target-attributes'] as $name => $value) {
@@ -160,8 +159,8 @@ class XliffFileDumper extends FileDumper
         }
         return $dom->saveXML();
     }
-    private function hasMetadataArrayInfo(string $key, ?array $metadata = null) : bool
+    private function hasMetadataArrayInfo(string $key, ?array $metadata = null): bool
     {
-        return \is_iterable($metadata[$key] ?? null);
+        return is_iterable($metadata[$key] ?? null);
     }
 }

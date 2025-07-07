@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\VarDumper\Cloner\Data;
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
  *
  * @final
- * @internal
  */
 class TranslationDataCollector extends DataCollector implements LateDataCollectorInterface
 {
@@ -61,15 +60,15 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     {
         return $this->data['messages'] ?? [];
     }
-    public function getCountMissings() : int
+    public function getCountMissings(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_MISSING] ?? 0;
     }
-    public function getCountFallbacks() : int
+    public function getCountFallbacks(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_EQUALS_FALLBACK] ?? 0;
     }
-    public function getCountDefines() : int
+    public function getCountDefines(): int
     {
         return $this->data[DataCollectorTranslator::MESSAGE_DEFINED] ?? 0;
     }
@@ -87,7 +86,7 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     /**
      * {@inheritdoc}
      */
-    public function getName() : string
+    public function getName(): string
     {
         return 'translation';
     }
@@ -121,13 +120,13 @@ class TranslationDataCollector extends DataCollector implements LateDataCollecto
     }
     private function sanitizeString(string $string, int $length = 80)
     {
-        $string = \trim(\preg_replace('/\\s+/', ' ', $string));
-        if (\false !== ($encoding = \mb_detect_encoding($string, null, \true))) {
-            if (\mb_strlen($string, $encoding) > $length) {
-                return \mb_substr($string, 0, $length - 3, $encoding) . '...';
+        $string = trim(preg_replace('/\s+/', ' ', $string));
+        if (\false !== $encoding = mb_detect_encoding($string, null, \true)) {
+            if (mb_strlen($string, $encoding) > $length) {
+                return mb_substr($string, 0, $length - 3, $encoding) . '...';
             }
         } elseif (\strlen($string) > $length) {
-            return \substr($string, 0, $length - 3) . '...';
+            return substr($string, 0, $length - 3) . '...';
         }
         return $string;
     }

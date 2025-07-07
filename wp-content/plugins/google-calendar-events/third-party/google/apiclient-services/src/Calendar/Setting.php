@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class Setting extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -94,4 +93,4 @@ class Setting extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Setting::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Setting');
+class_alias(Setting::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Setting');

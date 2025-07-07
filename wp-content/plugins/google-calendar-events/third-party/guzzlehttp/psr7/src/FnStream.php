@@ -9,7 +9,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
  *
  * Allows for easy testing and extension of a provided stream without needing
  * to create a concrete class for a simple extension point.
- * @internal
  */
 #[\AllowDynamicProperties]
 final class FnStream implements StreamInterface
@@ -33,9 +32,9 @@ final class FnStream implements StreamInterface
      *
      * @throws \BadMethodCallException
      */
-    public function __get(string $name) : void
+    public function __get(string $name): void
     {
-        throw new \BadMethodCallException(\str_replace('_fn_', '', $name) . '() is not implemented in the FnStream');
+        throw new \BadMethodCallException(str_replace('_fn_', '', $name) . '() is not implemented in the FnStream');
     }
     /**
      * The close method is called on the underlying stream only if possible.
@@ -51,7 +50,7 @@ final class FnStream implements StreamInterface
      *
      * @throws \LogicException
      */
-    public function __wakeup() : void
+    public function __wakeup(): void
     {
         throw new \LogicException('FnStream should never be unserialized');
     }
@@ -68,14 +67,14 @@ final class FnStream implements StreamInterface
     {
         // If any of the required methods were not provided, then simply
         // proxy to the decorated stream.
-        foreach (\array_diff(self::SLOTS, \array_keys($methods)) as $diff) {
+        foreach (array_diff(self::SLOTS, array_keys($methods)) as $diff) {
             /** @var callable $callable */
             $callable = [$stream, $diff];
             $methods[$diff] = $callable;
         }
         return new self($methods);
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         try {
             /** @var string */
@@ -84,11 +83,11 @@ final class FnStream implements StreamInterface
             if (\PHP_VERSION_ID >= 70400) {
                 throw $e;
             }
-            \trigger_error(\sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
+            trigger_error(sprintf('%s::__toString exception: %s', self::class, (string) $e), \E_USER_ERROR);
             return '';
         }
     }
-    public function close() : void
+    public function close(): void
     {
         ($this->_fn_close)();
     }
@@ -96,47 +95,47 @@ final class FnStream implements StreamInterface
     {
         return ($this->_fn_detach)();
     }
-    public function getSize() : ?int
+    public function getSize(): ?int
     {
         return ($this->_fn_getSize)();
     }
-    public function tell() : int
+    public function tell(): int
     {
         return ($this->_fn_tell)();
     }
-    public function eof() : bool
+    public function eof(): bool
     {
         return ($this->_fn_eof)();
     }
-    public function isSeekable() : bool
+    public function isSeekable(): bool
     {
         return ($this->_fn_isSeekable)();
     }
-    public function rewind() : void
+    public function rewind(): void
     {
         ($this->_fn_rewind)();
     }
-    public function seek($offset, $whence = \SEEK_SET) : void
+    public function seek($offset, $whence = \SEEK_SET): void
     {
         ($this->_fn_seek)($offset, $whence);
     }
-    public function isWritable() : bool
+    public function isWritable(): bool
     {
         return ($this->_fn_isWritable)();
     }
-    public function write($string) : int
+    public function write($string): int
     {
         return ($this->_fn_write)($string);
     }
-    public function isReadable() : bool
+    public function isReadable(): bool
     {
         return ($this->_fn_isReadable)();
     }
-    public function read($length) : string
+    public function read($length): string
     {
         return ($this->_fn_read)($length);
     }
-    public function getContents() : string
+    public function getContents(): string
     {
         return ($this->_fn_getContents)();
     }

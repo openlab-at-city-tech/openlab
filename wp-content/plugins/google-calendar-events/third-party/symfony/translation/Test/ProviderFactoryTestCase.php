@@ -34,26 +34,26 @@ abstract class ProviderFactoryTestCase extends TestCase
     protected $defaultLocale;
     protected $loader;
     protected $xliffFileDumper;
-    public abstract function createFactory() : ProviderFactoryInterface;
+    abstract public function createFactory(): ProviderFactoryInterface;
     /**
      * @return iterable<array{0: bool, 1: string}>
      */
-    public static abstract function supportsProvider() : iterable;
+    abstract public static function supportsProvider(): iterable;
     /**
      * @return iterable<array{0: string, 1: string}>
      */
-    public static abstract function createProvider() : iterable;
+    abstract public static function createProvider(): iterable;
     /**
      * @return iterable<array{0: string, 1: string|null}>
      */
-    public static function unsupportedSchemeProvider() : iterable
+    public static function unsupportedSchemeProvider(): iterable
     {
         return [];
     }
     /**
      * @return iterable<array{0: string, 1: string|null}>
      */
-    public static function incompleteDsnProvider() : iterable
+    public static function incompleteDsnProvider(): iterable
     {
         return [];
     }
@@ -100,24 +100,24 @@ abstract class ProviderFactoryTestCase extends TestCase
         }
         $factory->create($dsn);
     }
-    protected function getClient() : HttpClientInterface
+    protected function getClient(): HttpClientInterface
     {
-        return $this->client ?? ($this->client = new MockHttpClient());
+        return $this->client ?? $this->client = new MockHttpClient();
     }
-    protected function getLogger() : LoggerInterface
+    protected function getLogger(): LoggerInterface
     {
-        return $this->logger ?? ($this->logger = $this->createMock(LoggerInterface::class));
+        return $this->logger ?? $this->logger = $this->createMock(LoggerInterface::class);
     }
-    protected function getDefaultLocale() : string
+    protected function getDefaultLocale(): string
     {
-        return $this->defaultLocale ?? ($this->defaultLocale = 'en');
+        return $this->defaultLocale ?? $this->defaultLocale = 'en';
     }
-    protected function getLoader() : LoaderInterface
+    protected function getLoader(): LoaderInterface
     {
-        return $this->loader ?? ($this->loader = $this->createMock(LoaderInterface::class));
+        return $this->loader ?? $this->loader = $this->createMock(LoaderInterface::class);
     }
-    protected function getXliffFileDumper() : XliffFileDumper
+    protected function getXliffFileDumper(): XliffFileDumper
     {
-        return $this->xliffFileDumper ?? ($this->xliffFileDumper = $this->createMock(XliffFileDumper::class));
+        return $this->xliffFileDumper ?? $this->xliffFileDumper = $this->createMock(XliffFileDumper::class);
     }
 }

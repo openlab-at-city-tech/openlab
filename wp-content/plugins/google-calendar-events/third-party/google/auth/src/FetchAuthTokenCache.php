@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\Psr\Cache\CacheItemPoolInterface;
 /**
  * A class to implement caching for any object implementing
  * FetchAuthTokenInterface
- * @internal
  */
 class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface, UpdateMetadataInterface
 {
@@ -43,7 +42,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
     {
         $this->fetcher = $fetcher;
         $this->cache = $cache;
-        $this->cacheConfig = \array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
+        $this->cacheConfig = array_merge(['lifetime' => 1500, 'prefix' => ''], (array) $cacheConfig);
     }
     /**
      * @return FetchAuthTokenInterface
@@ -94,7 +93,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
     public function getClientName(callable $httpHandler = null)
     {
         if (!$this->fetcher instanceof SignBlobInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\SignBlobInterface');
         }
         return $this->fetcher->getClientName($httpHandler);
     }
@@ -112,7 +111,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
     public function signBlob($stringToSign, $forceOpenSsl = \false)
     {
         if (!$this->fetcher instanceof SignBlobInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\SignBlobInterface');
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\SignBlobInterface');
         }
         // Pass the access token from cache to GCECredentials for signing a blob.
         // This saves a call to the metadata server when a cached token exists.
@@ -147,7 +146,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
     public function getProjectId(callable $httpHandler = null)
     {
         if (!$this->fetcher instanceof ProjectIdProviderInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\ProvidesProjectIdInterface');
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\ProvidesProjectIdInterface');
         }
         return $this->fetcher->getProjectId($httpHandler);
     }
@@ -164,7 +163,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
     public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
     {
         if (!$this->fetcher instanceof UpdateMetadataInterface) {
-            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\\Auth\\UpdateMetadataInterface');
+            throw new \RuntimeException('Credentials fetcher does not implement ' . 'Google\Auth\UpdateMetadataInterface');
         }
         $cached = $this->fetchAuthTokenFromCache($authUri);
         if ($cached) {
@@ -176,7 +175,7 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
             }
         }
         $newMetadata = $this->fetcher->updateMetadata($metadata, $authUri, $httpHandler);
-        if (!$cached && ($token = $this->fetcher->getLastReceivedToken())) {
+        if (!$cached && $token = $this->fetcher->getLastReceivedToken()) {
             $this->saveAuthTokenInCache($token, $authUri);
         }
         return $newMetadata;
@@ -196,13 +195,13 @@ class FetchAuthTokenCache implements FetchAuthTokenInterface, GetQuotaProjectInt
         // if $authUri is set, use it as the cache key
         $cacheKey = $authUri ? $this->getFullCacheKey($authUri) : $this->fetcher->getCacheKey();
         $cached = $this->getCachedValue($cacheKey);
-        if (\is_array($cached)) {
+        if (is_array($cached)) {
             if (empty($cached['expires_at'])) {
                 // If there is no expiration data, assume token is not expired.
                 // (for JwtAccess and ID tokens)
                 return $cached;
             }
-            if (\time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
+            if (time() + $this->eagerRefreshThresholdSeconds < $cached['expires_at']) {
                 // access token is not expired
                 return $cached;
             }

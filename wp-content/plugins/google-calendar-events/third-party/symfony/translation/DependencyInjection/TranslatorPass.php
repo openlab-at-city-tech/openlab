@@ -14,7 +14,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Compiler\Co
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Compiler\ServiceLocatorTagPass;
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\ContainerBuilder;
 use SimpleCalendar\plugin_deps\Symfony\Component\DependencyInjection\Reference;
-/** @internal */
 class TranslatorPass implements CompilerPassInterface
 {
     private $translatorServiceId;
@@ -59,7 +58,7 @@ class TranslatorPass implements CompilerPassInterface
         if (!$container->hasParameter('twig.default_path')) {
             return;
         }
-        $paths = \array_keys($container->getDefinition('twig.template_iterator')->getArgument(1));
+        $paths = array_keys($container->getDefinition('twig.template_iterator')->getArgument(1));
         if ($container->hasDefinition($this->debugCommandServiceId)) {
             $definition = $container->getDefinition($this->debugCommandServiceId);
             $definition->replaceArgument(4, $container->getParameter('twig.default_path'));

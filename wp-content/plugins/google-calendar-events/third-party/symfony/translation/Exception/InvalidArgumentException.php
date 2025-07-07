@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception;
  * Base InvalidArgumentException for the Translation component.
  *
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- * @internal
  */
 class InvalidArgumentException extends \InvalidArgumentException implements ExceptionInterface
 {

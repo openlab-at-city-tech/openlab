@@ -54,7 +54,6 @@ use SimpleCalendar\plugin_deps\Google\Auth\SignBlobInterface;
  *
  * $res = $client->get('volumes?q=Henry+David+Thoreau&country=US');
  * ```
- * @internal
  */
 class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterface, ProjectIdProviderInterface
 {
@@ -79,7 +78,7 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      */
     public function __construct($scope = [])
     {
-        $this->scope = \is_array($scope) ? $scope : \explode(' ', (string) $scope);
+        $this->scope = is_array($scope) ? $scope : explode(' ', (string) $scope);
     }
     /**
      * Determines if this an App Engine instance, by accessing the
@@ -90,7 +89,7 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      */
     public static function onAppEngine()
     {
-        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) && 0 === \strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
+        $appEngineProduction = isset($_SERVER['SERVER_SOFTWARE']) && 0 === strpos($_SERVER['SERVER_SOFTWARE'], 'Google App Engine');
         if ($appEngineProduction) {
             return \true;
         }
@@ -140,7 +139,7 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
     {
         $this->checkAppEngineContext();
         /** @phpstan-ignore-next-line */
-        return \base64_encode(AppIdentityService::signForApp($stringToSign)['signature']);
+        return base64_encode(AppIdentityService::signForApp($stringToSign)['signature']);
     }
     /**
      * Get the project ID from AppIdentityService.
@@ -203,7 +202,7 @@ class AppIdentityCredentials extends CredentialsLoader implements SignBlobInterf
      */
     private function checkAppEngineContext()
     {
-        if (!self::onAppEngine() || !\class_exists('SimpleCalendar\\plugin_deps\\google\\appengine\\api\\app_identity\\AppIdentityService')) {
+        if (!self::onAppEngine() || !class_exists('SimpleCalendar\plugin_deps\google\appengine\api\app_identity\AppIdentityService')) {
             throw new \Exception('This class must be run in App Engine, or you must include the AppIdentityService ' . 'mock class defined in tests/mocks/AppIdentityService.php');
         }
     }

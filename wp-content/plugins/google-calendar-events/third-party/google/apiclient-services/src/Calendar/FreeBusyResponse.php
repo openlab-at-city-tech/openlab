@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $calendarsType = FreeBusyCalendar::class;
@@ -108,4 +107,4 @@ class FreeBusyResponse extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(FreeBusyResponse::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_FreeBusyResponse');
+class_alias(FreeBusyResponse::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_FreeBusyResponse');

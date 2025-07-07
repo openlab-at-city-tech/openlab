@@ -12,9 +12,8 @@ namespace SimpleCalendar\plugin_deps\Symfony\Contracts\Translation;
 
 /**
  * @author Nicolas Grekas <p@tchwork.com>
- * @internal
  */
 interface TranslatableInterface
 {
-    public function trans(TranslatorInterface $translator, ?string $locale = null) : string;
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string;
 }

@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class CommentList extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'comments';
@@ -75,4 +74,4 @@ class CommentList extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CommentList::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_CommentList');
+class_alias(CommentList::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_CommentList');

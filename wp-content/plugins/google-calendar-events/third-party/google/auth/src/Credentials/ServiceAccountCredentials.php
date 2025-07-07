@@ -56,7 +56,6 @@ use InvalidArgumentException;
  *   ]);
  *
  *   $res = $client->get('myproject/taskqueues/myqueue');
- * @internal
  */
 class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaProjectInterface, SignBlobInterface, ProjectIdProviderInterface
 {
@@ -102,22 +101,22 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
      */
     public function __construct($scope, $jsonKey, $sub = null, $targetAudience = null)
     {
-        if (\is_string($jsonKey)) {
-            if (!\file_exists($jsonKey)) {
+        if (is_string($jsonKey)) {
+            if (!file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $jsonKeyStream = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode((string) $jsonKeyStream, \true))) {
+            $jsonKeyStream = file_get_contents($jsonKey);
+            if (!$jsonKey = json_decode((string) $jsonKeyStream, \true)) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!\array_key_exists('client_email', $jsonKey)) {
+        if (!array_key_exists('client_email', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_email field');
         }
-        if (!\array_key_exists('private_key', $jsonKey)) {
+        if (!array_key_exists('private_key', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        if (\array_key_exists('quota_project_id', $jsonKey)) {
+        if (array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         if ($scope && $targetAudience) {
@@ -281,6 +280,6 @@ class ServiceAccountCredentials extends CredentialsLoader implements GetQuotaPro
         if ($this->useJwtAccessWithScope) {
             return \true;
         }
-        return \is_null($this->auth->getScope());
+        return is_null($this->auth->getScope());
     }
 }

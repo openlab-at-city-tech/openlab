@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class CalendarNotification extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -58,4 +57,4 @@ class CalendarNotification extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CalendarNotification::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_CalendarNotification');
+class_alias(CalendarNotification::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarNotification');

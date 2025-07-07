@@ -14,7 +14,6 @@ use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
 // This will extends OutOfRangeException instead of InvalidArgumentException since 3.0.0
 // use OutOfRangeException as BaseOutOfRangeException;
-/** @internal */
 class OutOfRangeException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**

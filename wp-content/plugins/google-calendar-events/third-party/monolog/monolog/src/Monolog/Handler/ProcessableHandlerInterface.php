@@ -18,7 +18,6 @@ use SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 interface ProcessableHandlerInterface
 {
@@ -30,7 +29,7 @@ interface ProcessableHandlerInterface
      * @param  ProcessorInterface|callable $callback
      * @return HandlerInterface            self
      */
-    public function pushProcessor(callable $callback) : HandlerInterface;
+    public function pushProcessor(callable $callback): HandlerInterface;
     /**
      * Removes the processor on top of the stack and returns it.
      *
@@ -39,5 +38,5 @@ interface ProcessableHandlerInterface
      * @throws \LogicException             In case the processor stack is empty
      * @return callable|ProcessorInterface
      */
-    public function popProcessor() : callable;
+    public function popProcessor(): callable;
 }

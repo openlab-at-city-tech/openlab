@@ -23,7 +23,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * @phpstan-import-type Level from \Monolog\Logger
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-type FormattedRecord array{message: string, context: mixed[], level: Level, level_name: LevelName, channel: string, datetime: \DateTimeImmutable, extra: mixed[], formatted: mixed}
- * @internal
  */
 abstract class AbstractProcessingHandler extends AbstractHandler implements ProcessableHandlerInterface, FormattableHandlerInterface
 {
@@ -32,7 +31,7 @@ abstract class AbstractProcessingHandler extends AbstractHandler implements Proc
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         if (!$this->isHandling($record)) {
             return \false;
@@ -50,7 +49,7 @@ abstract class AbstractProcessingHandler extends AbstractHandler implements Proc
      *
      * @phpstan-param FormattedRecord $record
      */
-    protected abstract function write(array $record) : void;
+    abstract protected function write(array $record): void;
     /**
      * @return void
      */

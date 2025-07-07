@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class DriveFileLinkShareMetadata extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -58,4 +57,4 @@ class DriveFileLinkShareMetadata extends \SimpleCalendar\plugin_deps\Google\Mode
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(DriveFileLinkShareMetadata::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_DriveFileLinkShareMetadata');
+class_alias(DriveFileLinkShareMetadata::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_DriveFileLinkShareMetadata');

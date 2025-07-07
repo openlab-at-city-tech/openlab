@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\CommentList;
  *   $driveService = new Google\Service\Drive(...);
  *   $comments = $driveService->comments;
  *  </code>
- * @internal
  */
 class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -41,7 +40,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create($fileId, Comment $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], Comment::class);
     }
     /**
@@ -54,7 +53,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($fileId, $commentId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -71,7 +70,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($fileId, $commentId, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Comment::class);
     }
     /**
@@ -93,7 +92,7 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listComments($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], CommentList::class);
     }
     /**
@@ -108,9 +107,9 @@ class Comments extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($fileId, $commentId, Comment $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'commentId' => $commentId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Comment::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Comments::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Comments');
+class_alias(Comments::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Comments');

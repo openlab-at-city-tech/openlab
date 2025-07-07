@@ -14,7 +14,6 @@ use SimpleCalendar\plugin_deps\Carbon\CarbonInterface;
 use SimpleCalendar\plugin_deps\PHPStan\Reflection\ReflectionProvider;
 use ReflectionClass;
 use ReflectionException;
-/** @internal */
 final class MacroScanner
 {
     /**
@@ -38,7 +37,7 @@ final class MacroScanner
      *
      * @return bool
      */
-    public function hasMethod(string $className, string $methodName) : bool
+    public function hasMethod(string $className, string $methodName): bool
     {
         $classReflection = $this->reflectionProvider->getClass($className);
         if ($classReflection->getName() !== CarbonInterface::class && !$classReflection->isSubclassOf(CarbonInterface::class)) {
@@ -56,7 +55,7 @@ final class MacroScanner
      *
      * @return Macro
      */
-    public function getMethod(string $className, string $methodName) : Macro
+    public function getMethod(string $className, string $methodName): Macro
     {
         $reflectionClass = new ReflectionClass($className);
         $property = $reflectionClass->getProperty('globalMacros');

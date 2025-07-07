@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\LocaleAwareInterfac
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- * @internal
  */
 class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, LocaleAwareInterface
 {
@@ -28,7 +27,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
     public function __construct(TranslatorInterface $translator, LoggerInterface $logger)
     {
         if (!$translator instanceof TranslatorBagInterface || !$translator instanceof LocaleAwareInterface) {
-            throw new InvalidArgumentException(\sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', \get_debug_type($translator)));
+            throw new InvalidArgumentException(sprintf('The Translator "%s" must implement TranslatorInterface, TranslatorBagInterface and LocaleAwareInterface.', get_debug_type($translator)));
         }
         $this->translator = $translator;
         $this->logger = $logger;
@@ -52,7 +51,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
         if ($prev === $locale) {
             return;
         }
-        $this->logger->debug(\sprintf('The locale of the translator has changed from "%s" to "%s".', $prev, $locale));
+        $this->logger->debug(sprintf('The locale of the translator has changed from "%s" to "%s".', $prev, $locale));
     }
     /**
      * {@inheritdoc}
@@ -71,7 +70,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
     /**
      * {@inheritdoc}
      */
-    public function getCatalogues() : array
+    public function getCatalogues(): array
     {
         return $this->translator->getCatalogues();
     }
@@ -82,7 +81,7 @@ class LoggingTranslator implements TranslatorInterface, TranslatorBagInterface, 
      */
     public function getFallbackLocales()
     {
-        if ($this->translator instanceof Translator || \method_exists($this->translator, 'getFallbackLocales')) {
+        if ($this->translator instanceof Translator || method_exists($this->translator, 'getFallbackLocales')) {
             return $this->translator->getFallbackLocales();
         }
         return [];

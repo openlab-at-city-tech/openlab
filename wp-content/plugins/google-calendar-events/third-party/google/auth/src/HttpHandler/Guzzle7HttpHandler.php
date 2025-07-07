@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Auth\HttpHandler;
 
-/** @internal */
 class Guzzle7HttpHandler extends Guzzle6HttpHandler
 {
 }

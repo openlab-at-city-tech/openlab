@@ -12,8 +12,7 @@ namespace SimpleCalendar\plugin_deps;
  */
 use SimpleCalendar\plugin_deps\Carbon\CarbonImmutable;
 require_once __DIR__ . '/vendor/autoload.php';
-/** @internal */
-function getMaxHistoryMonthsByAmount($amount) : int
+function getMaxHistoryMonthsByAmount($amount): int
 {
     if ($amount >= 50) {
         return 6;
@@ -23,20 +22,18 @@ function getMaxHistoryMonthsByAmount($amount) : int
     }
     return 2;
 }
-/** @internal */
-function getHtmlAttribute($rawValue) : string
+function getHtmlAttribute($rawValue): string
 {
     return \str_replace(['​', "\r"], '', \trim(\htmlspecialchars((string) $rawValue), "  \n\r\t\v\x00"));
 }
-/** @internal */
-function getOpenCollectiveSponsors() : string
+function getOpenCollectiveSponsors(): string
 {
     $customSponsorImages = [];
     $members = \json_decode(\file_get_contents('https://opencollective.com/carbon/members/all.json'), \true);
-    $list = \array_filter($members, static function ($member) : bool {
+    $list = \array_filter($members, static function ($member): bool {
         return ($member['lastTransactionAmount'] > 3 || $member['isActive']) && $member['role'] === 'BACKER' && $member['type'] !== 'USER' && ($member['totalAmountDonated'] > 100 || $member['lastTransactionAt'] > CarbonImmutable::now()->subMonthsNoOverflow(getMaxHistoryMonthsByAmount($member['lastTransactionAmount']))->format('Y-m-d h:i') || $member['isActive'] && $member['lastTransactionAmount'] >= 30);
     });
-    $list = \array_map(static function (array $member) : array {
+    $list = \array_map(static function (array $member): array {
         $createdAt = CarbonImmutable::parse($member['createdAt']);
         $lastTransactionAt = CarbonImmutable::parse($member['lastTransactionAt']);
         if ($createdAt->format('d H:i:s.u') > $lastTransactionAt->format('d H:i:s.u')) {
@@ -57,10 +54,10 @@ function getOpenCollectiveSponsors() : string
         }
         return \array_merge($member, ['star' => $monthlyContribution > 98 || $yearlyContribution > 500, 'status' => $status, 'monthlyContribution' => $monthlyContribution, 'yearlyContribution' => $yearlyContribution]);
     }, $list);
-    \usort($list, static function (array $a, array $b) : int {
+    \usort($list, static function (array $a, array $b): int {
         return $b['monthlyContribution'] <=> $a['monthlyContribution'] ?: $b['totalAmountDonated'] <=> $a['totalAmountDonated'];
     });
-    return \implode('', \array_map(static function (array $member) use($customSponsorImages) : string {
+    return \implode('', \array_map(static function (array $member) use ($customSponsorImages): string {
         $href = \htmlspecialchars($member['website'] ?? $member['profile']);
         $src = $customSponsorImages[$member['MemberId'] ?? ''] ?? $member['image'] ?? \strtr($member['profile'], ['https://opencollective.com/' => 'https://images.opencollective.com/']) . '/avatar/256.png';
         [$x, $y] = @\getimagesize($src) ?: [0, 0];
@@ -74,6 +71,6 @@ function getOpenCollectiveSponsors() : string
         return "\n" . '<a title="' . $title . '" href="' . $href . '" target="_blank">' . '<img alt="' . $alt . '" src="' . $src . '" width="' . $width . '" height="' . $height . '">' . '</a>';
     }, $list)) . "\n";
 }
-\file_put_contents('readme.md', \preg_replace_callback('/(<!-- <open-collective-sponsors> -->)[\\s\\S]+(<!-- <\\/open-collective-sponsors> -->)/', static function (array $match) : string {
+\file_put_contents('readme.md', \preg_replace_callback('/(<!-- <open-collective-sponsors> -->)[\s\S]+(<!-- <\/open-collective-sponsors> -->)/', static function (array $match): string {
     return $match[1] . getOpenCollectiveSponsors() . $match[2];
 }, \file_get_contents('readme.md')));

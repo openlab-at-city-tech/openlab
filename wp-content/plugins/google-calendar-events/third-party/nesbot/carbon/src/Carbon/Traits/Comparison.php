@@ -27,7 +27,6 @@ use InvalidArgumentException;
  * @method static        nowWithSameTz()
  * @method static static yesterday($timezone = null)
  * @method static static tomorrow($timezone = null)
- * @internal
  */
 trait Comparison
 {
@@ -51,7 +50,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function eq($date) : bool
+    public function eq($date): bool
     {
         return $this->equalTo($date);
     }
@@ -69,7 +68,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function equalTo($date) : bool
+    public function equalTo($date): bool
     {
         $this->discourageNull($date);
         $this->discourageBoolean($date);
@@ -91,7 +90,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function ne($date) : bool
+    public function ne($date): bool
     {
         return $this->notEqualTo($date);
     }
@@ -109,7 +108,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function notEqualTo($date) : bool
+    public function notEqualTo($date): bool
     {
         return !$this->equalTo($date);
     }
@@ -129,7 +128,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function gt($date) : bool
+    public function gt($date): bool
     {
         return $this->greaterThan($date);
     }
@@ -147,7 +146,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function greaterThan($date) : bool
+    public function greaterThan($date): bool
     {
         $this->discourageNull($date);
         $this->discourageBoolean($date);
@@ -169,7 +168,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function isAfter($date) : bool
+    public function isAfter($date): bool
     {
         return $this->greaterThan($date);
     }
@@ -189,7 +188,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function gte($date) : bool
+    public function gte($date): bool
     {
         return $this->greaterThanOrEqualTo($date);
     }
@@ -207,7 +206,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function greaterThanOrEqualTo($date) : bool
+    public function greaterThanOrEqualTo($date): bool
     {
         $this->discourageNull($date);
         $this->discourageBoolean($date);
@@ -229,7 +228,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function lt($date) : bool
+    public function lt($date): bool
     {
         return $this->lessThan($date);
     }
@@ -247,7 +246,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function lessThan($date) : bool
+    public function lessThan($date): bool
     {
         $this->discourageNull($date);
         $this->discourageBoolean($date);
@@ -269,7 +268,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function isBefore($date) : bool
+    public function isBefore($date): bool
     {
         return $this->lessThan($date);
     }
@@ -289,7 +288,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function lte($date) : bool
+    public function lte($date): bool
     {
         return $this->lessThanOrEqualTo($date);
     }
@@ -307,7 +306,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function lessThanOrEqualTo($date) : bool
+    public function lessThanOrEqualTo($date): bool
     {
         $this->discourageNull($date);
         $this->discourageBoolean($date);
@@ -334,7 +333,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function between($date1, $date2, $equal = \true) : bool
+    public function between($date1, $date2, $equal = \true): bool
     {
         $date1 = $this->resolveCarbon($date1);
         $date2 = $this->resolveCarbon($date2);
@@ -361,7 +360,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function betweenIncluded($date1, $date2) : bool
+    public function betweenIncluded($date1, $date2): bool
     {
         return $this->between($date1, $date2, \true);
     }
@@ -380,7 +379,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function betweenExcluded($date1, $date2) : bool
+    public function betweenExcluded($date1, $date2): bool
     {
         return $this->between($date1, $date2, \false);
     }
@@ -401,7 +400,7 @@ trait Comparison
      *
      * @return bool
      */
-    public function isBetween($date1, $date2, $equal = \true) : bool
+    public function isBetween($date1, $date2, $equal = \true): bool
     {
         return $this->between($date1, $date2, $equal);
     }
@@ -649,7 +648,7 @@ trait Comparison
      */
     public function isCurrentUnit($unit)
     {
-        return $this->{'isSame' . \ucfirst($unit)}();
+        return $this->{'isSame' . ucfirst($unit)}();
     }
     /**
      * Checks if the passed in date is in the same quarter as the instance quarter (and year if needed).
@@ -709,7 +708,7 @@ trait Comparison
      */
     public function isDayOfWeek($dayOfWeek)
     {
-        if (\is_string($dayOfWeek) && \defined($constant = static::class . '::' . \strtoupper($dayOfWeek))) {
+        if (\is_string($dayOfWeek) && \defined($constant = static::class . '::' . strtoupper($dayOfWeek))) {
             $dayOfWeek = \constant($constant);
         }
         return $this->dayOfWeek === $dayOfWeek;
@@ -848,7 +847,7 @@ trait Comparison
         // createFromFormat() is known to handle edge cases silently.
         // E.g. "1975-5-1" (Y-n-j) will still be parsed correctly when "Y-m-d" is supplied as the format.
         // To ensure we're really testing against our desired format, perform an additional regex validation.
-        return self::matchFormatPattern((string) $date, \preg_quote((string) $format, '/'), static::$regexFormats);
+        return self::matchFormatPattern((string) $date, preg_quote((string) $format, '/'), static::$regexFormats);
     }
     /**
      * Checks if the (date)time string is in a given format.
@@ -864,9 +863,9 @@ trait Comparison
      *
      * @return bool
      */
-    public static function hasFormatWithModifiers($date, $format) : bool
+    public static function hasFormatWithModifiers($date, $format): bool
     {
-        return self::matchFormatPattern((string) $date, (string) $format, \array_merge(static::$regexFormats, static::$regexFormatModifiers));
+        return self::matchFormatPattern((string) $date, (string) $format, array_merge(static::$regexFormats, static::$regexFormatModifiers));
     }
     /**
      * Checks if the (date)time string is in a given format and valid to create a
@@ -922,20 +921,20 @@ trait Comparison
      */
     public function is(string $tester)
     {
-        $tester = \trim($tester);
-        if (\preg_match('/^\\d+$/', $tester)) {
+        $tester = trim($tester);
+        if (preg_match('/^\d+$/', $tester)) {
             return $this->year === (int) $tester;
         }
-        if (\preg_match('/^(?:Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i', $tester)) {
+        if (preg_match('/^(?:Jan|January|Feb|February|Mar|March|Apr|April|May|Jun|June|Jul|July|Aug|August|Sep|September|Oct|October|Nov|November|Dec|December)$/i', $tester)) {
             return $this->isSameMonth(static::parse($tester), \false);
         }
-        if (\preg_match('/^\\d{3,}-\\d{1,2}$/', $tester)) {
+        if (preg_match('/^\d{3,}-\d{1,2}$/', $tester)) {
             return $this->isSameMonth(static::parse($tester));
         }
-        if (\preg_match('/^\\d{1,2}-\\d{1,2}$/', $tester)) {
+        if (preg_match('/^\d{1,2}-\d{1,2}$/', $tester)) {
             return $this->isSameDay(static::parse($this->year . '-' . $tester));
         }
-        $modifier = \preg_replace('/(\\d)h$/i', '$1:00', $tester);
+        $modifier = preg_replace('/(\d)h$/i', '$1:00', $tester);
         /* @var CarbonInterface $max */
         $median = static::parse('5555-06-15 12:30:30.555555')->modify($modifier);
         $current = $this->avoidMutation();
@@ -944,16 +943,16 @@ trait Comparison
         if ($current->eq($other)) {
             return \true;
         }
-        if (\preg_match('/\\d:\\d{1,2}:\\d{1,2}$/', $tester)) {
+        if (preg_match('/\d:\d{1,2}:\d{1,2}$/', $tester)) {
             return $current->startOfSecond()->eq($other);
         }
-        if (\preg_match('/\\d:\\d{1,2}$/', $tester)) {
+        if (preg_match('/\d:\d{1,2}$/', $tester)) {
             return $current->startOfMinute()->eq($other);
         }
-        if (\preg_match('/\\d(?:h|am|pm)$/', $tester)) {
+        if (preg_match('/\d(?:h|am|pm)$/', $tester)) {
             return $current->startOfHour()->eq($other);
         }
-        if (\preg_match('/^(?:january|february|march|april|may|june|july|august|september|october|november|december)(?:\\s+\\d+)?$/i', $tester)) {
+        if (preg_match('/^(?:january|february|march|april|may|june|july|august|september|october|november|december)(?:\s+\d+)?$/i', $tester)) {
             return $current->startOfMonth()->eq($other->startOfMonth());
         }
         $units = ['month' => [1, 'year'], 'day' => [1, 'month'], 'hour' => [0, 'day'], 'minute' => [0, 'hour'], 'second' => [0, 'minute'], 'microsecond' => [0, 'second']];
@@ -981,26 +980,26 @@ trait Comparison
      *
      * @return bool
      */
-    private static function matchFormatPattern(string $date, string $format, array $replacements) : bool
+    private static function matchFormatPattern(string $date, string $format, array $replacements): bool
     {
         // Preg quote, but remove escaped backslashes since we'll deal with escaped characters in the format string.
-        $regex = \str_replace('\\\\', '\\', $format);
+        $regex = str_replace('\\\\', '\\', $format);
         // Replace not-escaped letters
-        $regex = \preg_replace_callback('/(?<!\\\\)((?:\\\\{2})*)([' . \implode('', \array_keys($replacements)) . '])/', function ($match) use($replacements) {
-            return $match[1] . \strtr($match[2], $replacements);
+        $regex = preg_replace_callback('/(?<!\\\\)((?:\\\\{2})*)([' . implode('', array_keys($replacements)) . '])/', function ($match) use ($replacements) {
+            return $match[1] . strtr($match[2], $replacements);
         }, $regex);
         // Replace escaped letters by the letter itself
-        $regex = \preg_replace('/(?<!\\\\)((?:\\\\{2})*)\\\\(\\w)/', '$1$2', $regex);
+        $regex = preg_replace('/(?<!\\\\)((?:\\\\{2})*)\\\\(\w)/', '$1$2', $regex);
         // Escape not escaped slashes
-        $regex = \preg_replace('#(?<!\\\\)((?:\\\\{2})*)/#', '$1\\/', $regex);
-        return (bool) @\preg_match('/^' . $regex . '$/', $date);
+        $regex = preg_replace('#(?<!\\\\)((?:\\\\{2})*)/#', '$1\/', $regex);
+        return (bool) @preg_match('/^' . $regex . '$/', $date);
     }
     /**
      * Returns true if the date was created using CarbonImmutable::startOfTime()
      *
      * @return bool
      */
-    public function isStartOfTime() : bool
+    public function isStartOfTime(): bool
     {
         return $this->startOfTime ?? \false;
     }
@@ -1009,20 +1008,20 @@ trait Comparison
      *
      * @return bool
      */
-    public function isEndOfTime() : bool
+    public function isEndOfTime(): bool
     {
         return $this->endOfTime ?? \false;
     }
-    private function discourageNull($value) : void
+    private function discourageNull($value): void
     {
         if ($value === null) {
-            @\trigger_error("Since 2.61.0, it's deprecated to compare a date to null, meaning of such comparison is ambiguous and will no longer be possible in 3.0.0, you should explicitly pass 'now' or make an other check to eliminate null values.", \E_USER_DEPRECATED);
+            @trigger_error("Since 2.61.0, it's deprecated to compare a date to null, meaning of such comparison is ambiguous and will no longer be possible in 3.0.0, you should explicitly pass 'now' or make an other check to eliminate null values.", \E_USER_DEPRECATED);
         }
     }
-    private function discourageBoolean($value) : void
+    private function discourageBoolean($value): void
     {
         if (\is_bool($value)) {
-            @\trigger_error("Since 2.61.0, it's deprecated to compare a date to true or false, meaning of such comparison is ambiguous and will no longer be possible in 3.0.0, you should explicitly pass 'now' or make an other check to eliminate boolean values.", \E_USER_DEPRECATED);
+            @trigger_error("Since 2.61.0, it's deprecated to compare a date to true or false, meaning of such comparison is ambiguous and will no longer be possible in 3.0.0, you should explicitly pass 'now' or make an other check to eliminate boolean values.", \E_USER_DEPRECATED);
         }
     }
 }

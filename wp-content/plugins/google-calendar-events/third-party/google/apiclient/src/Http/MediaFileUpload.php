@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
 /**
  * Manage large file uploads, which may be media but can be any type
  * of sizable data.
- * @internal
  */
 class MediaFileUpload
 {
@@ -104,10 +103,10 @@ class MediaFileUpload
     {
         $resumeUri = $this->getResumeUri();
         if (\false == $chunk) {
-            $chunk = \substr($this->data, $this->progress, $this->chunkSize);
+            $chunk = substr($this->data, $this->progress, $this->chunkSize);
         }
-        $lastBytePos = $this->progress + \strlen($chunk) - 1;
-        $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) \strlen($chunk), 'expect' => ''];
+        $lastBytePos = $this->progress + strlen($chunk) - 1;
+        $headers = ['content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => (string) strlen($chunk), 'expect' => ''];
         $request = new Request('PUT', $resumeUri, $headers, Psr7\Utils::streamFor($chunk));
         return $this->makePutRequest($request);
     }
@@ -136,7 +135,7 @@ class MediaFileUpload
             // Track the amount uploaded.
             $range = $response->getHeaderLine('range');
             if ($range) {
-                $range_array = \explode('-', $range);
+                $range_array = explode('-', $range);
                 $this->progress = (int) $range_array[1] + 1;
             }
             // Allow for changing upload URLs.
@@ -170,28 +169,28 @@ class MediaFileUpload
         $request = $this->request;
         $postBody = '';
         $contentType = \false;
-        $meta = \json_decode((string) $request->getBody(), \true);
+        $meta = json_decode((string) $request->getBody(), \true);
         $uploadType = $this->getUploadType($meta);
         $request = $request->withUri(Uri::withQueryValue($request->getUri(), 'uploadType', $uploadType));
         $mimeType = $this->mimeType ?: $request->getHeaderLine('content-type');
         if (self::UPLOAD_RESUMABLE_TYPE == $uploadType) {
             $contentType = $mimeType;
-            $postBody = \is_string($meta) ? $meta : \json_encode($meta);
+            $postBody = is_string($meta) ? $meta : json_encode($meta);
         } elseif (self::UPLOAD_MEDIA_TYPE == $uploadType) {
             $contentType = $mimeType;
             $postBody = $this->data;
         } elseif (self::UPLOAD_MULTIPART_TYPE == $uploadType) {
             // This is a multipart/related upload.
-            $boundary = $this->boundary ?: \mt_rand();
-            $boundary = \str_replace('"', '', $boundary);
+            $boundary = $this->boundary ?: mt_rand();
+            $boundary = str_replace('"', '', $boundary);
             $contentType = 'multipart/related; boundary=' . $boundary;
             $related = "--{$boundary}\r\n";
             $related .= "Content-Type: application/json; charset=UTF-8\r\n";
-            $related .= "\r\n" . \json_encode($meta) . "\r\n";
+            $related .= "\r\n" . json_encode($meta) . "\r\n";
             $related .= "--{$boundary}\r\n";
             $related .= "Content-Type: {$mimeType}\r\n";
             $related .= "Content-Transfer-Encoding: base64\r\n";
-            $related .= "\r\n" . \base64_encode($this->data) . "\r\n";
+            $related .= "\r\n" . base64_encode($this->data) . "\r\n";
             $related .= "--{$boundary}--";
             $postBody = $related;
         }
@@ -241,13 +240,13 @@ class MediaFileUpload
             return $location;
         }
         $message = $code;
-        $body = \json_decode((string) $this->request->getBody(), \true);
+        $body = json_decode((string) $this->request->getBody(), \true);
         if (isset($body['error']['errors'])) {
             $message .= ': ';
             foreach ($body['error']['errors'] as $error) {
                 $message .= "{$error['domain']}, {$error['message']};";
             }
-            $message = \rtrim($message, ';');
+            $message = rtrim($message, ';');
         }
         $error = "Failed to start the resumable upload (HTTP {$message})";
         $this->client->getLogger()->error($error);
@@ -255,7 +254,7 @@ class MediaFileUpload
     }
     private function transformToUploadUrl()
     {
-        $parts = \parse_url((string) $this->request->getUri());
+        $parts = parse_url((string) $this->request->getUri());
         if (!isset($parts['path'])) {
             $parts['path'] = '';
         }

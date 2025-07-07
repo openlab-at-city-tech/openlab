@@ -28,7 +28,6 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\UnknownUnitException;
  * @method $this setTime(int $hour, int $minute, int $second = 0, int $microseconds = 0)
  * @method $this setDate(int $year, int $month, int $day)
  * @method $this addMonths(int $value = 1)
- * @internal
  */
 trait Boundaries
 {
@@ -376,9 +375,9 @@ trait Boundaries
      */
     public function startOf($unit, ...$params)
     {
-        $ucfUnit = \ucfirst(static::singularUnit($unit));
+        $ucfUnit = ucfirst(static::singularUnit($unit));
         $method = "startOf{$ucfUnit}";
-        if (!\method_exists($this, $method)) {
+        if (!method_exists($this, $method)) {
             throw new UnknownUnitException($unit);
         }
         return $this->{$method}(...$params);
@@ -400,9 +399,9 @@ trait Boundaries
      */
     public function endOf($unit, ...$params)
     {
-        $ucfUnit = \ucfirst(static::singularUnit($unit));
+        $ucfUnit = ucfirst(static::singularUnit($unit));
         $method = "endOf{$ucfUnit}";
-        if (!\method_exists($this, $method)) {
+        if (!method_exists($this, $method)) {
             throw new UnknownUnitException($unit);
         }
         return $this->{$method}(...$params);

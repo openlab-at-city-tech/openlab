@@ -2,7 +2,6 @@
 
 namespace SimpleCalendar\plugin_deps\Psr\Http\Message;
 
-/** @internal */
 interface RequestFactoryInterface
 {
     /**
@@ -15,5 +14,5 @@ interface RequestFactoryInterface
      *
      * @return RequestInterface
      */
-    public function createRequest(string $method, $uri) : RequestInterface;
+    public function createRequest(string $method, $uri): RequestInterface;
 }

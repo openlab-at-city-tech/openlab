@@ -24,7 +24,6 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *   $log->pushHandler($redis);
  *
  * @author Gaëtan Faugère <gaetan@fauge.re>
- * @internal
  */
 class RedisPubSubHandler extends AbstractProcessingHandler
 {
@@ -39,7 +38,7 @@ class RedisPubSubHandler extends AbstractProcessingHandler
     public function __construct($redis, string $key, $level = Logger::DEBUG, bool $bubble = \true)
     {
         if (!($redis instanceof \SimpleCalendar\plugin_deps\Predis\Client || $redis instanceof \Redis)) {
-            throw new \InvalidArgumentException('Predis\\Client or Redis instance required');
+            throw new \InvalidArgumentException('Predis\Client or Redis instance required');
         }
         $this->redisClient = $redis;
         $this->channelKey = $key;
@@ -48,14 +47,14 @@ class RedisPubSubHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->redisClient->publish($this->channelKey, $record["formatted"]);
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new LineFormatter();
     }

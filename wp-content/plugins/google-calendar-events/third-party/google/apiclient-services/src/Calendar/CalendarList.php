@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class CalendarList extends \SimpleCalendar\plugin_deps\Google\Collection
 {
     protected $collection_key = 'items';
@@ -111,4 +110,4 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Collection
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CalendarList::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_CalendarList');
+class_alias(CalendarList::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CalendarList');

@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
- * @internal
  */
 class StreamHandler extends AbstractProcessingHandler
 {
@@ -53,10 +52,10 @@ class StreamHandler extends AbstractProcessingHandler
     public function __construct($stream, $level = Logger::DEBUG, bool $bubble = \true, ?int $filePermission = null, bool $useLocking = \false)
     {
         parent::__construct($level, $bubble);
-        if (($phpMemoryLimit = Utils::expandIniShorthandBytes(\ini_get('memory_limit'))) !== \false) {
+        if (($phpMemoryLimit = Utils::expandIniShorthandBytes(ini_get('memory_limit'))) !== \false) {
             if ($phpMemoryLimit > 0) {
                 // use max 10% of allowed memory for the chunk size, and at least 100KB
-                $this->streamChunkSize = \min(static::MAX_CHUNK_SIZE, \max((int) ($phpMemoryLimit / 10), 100 * 1024));
+                $this->streamChunkSize = min(static::MAX_CHUNK_SIZE, max((int) ($phpMemoryLimit / 10), 100 * 1024));
             } else {
                 // memory is unlimited, set to the default 10MB
                 $this->streamChunkSize = static::DEFAULT_CHUNK_SIZE;
@@ -65,10 +64,10 @@ class StreamHandler extends AbstractProcessingHandler
             // no memory limit information, set to the default 10MB
             $this->streamChunkSize = static::DEFAULT_CHUNK_SIZE;
         }
-        if (\is_resource($stream)) {
+        if (is_resource($stream)) {
             $this->stream = $stream;
-            \stream_set_chunk_size($this->stream, $this->streamChunkSize);
-        } elseif (\is_string($stream)) {
+            stream_set_chunk_size($this->stream, $this->streamChunkSize);
+        } elseif (is_string($stream)) {
             $this->url = Utils::canonicalizePath($stream);
         } else {
             throw new \InvalidArgumentException('A stream must either be a resource or a string.');
@@ -79,10 +78,10 @@ class StreamHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
-        if ($this->url && \is_resource($this->stream)) {
-            \fclose($this->stream);
+        if ($this->url && is_resource($this->stream)) {
+            fclose($this->stream);
         }
         $this->stream = null;
         $this->dirCreated = null;
@@ -101,53 +100,53 @@ class StreamHandler extends AbstractProcessingHandler
      *
      * @return string|null
      */
-    public function getUrl() : ?string
+    public function getUrl(): ?string
     {
         return $this->url;
     }
     /**
      * @return int
      */
-    public function getStreamChunkSize() : int
+    public function getStreamChunkSize(): int
     {
         return $this->streamChunkSize;
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
-        if (!\is_resource($this->stream)) {
+        if (!is_resource($this->stream)) {
             $url = $this->url;
             if (null === $url || '' === $url) {
                 throw new \LogicException('Missing stream url, the stream can not be opened. This may be caused by a premature call to close().' . Utils::getRecordMessageForException($record));
             }
             $this->createDir($url);
             $this->errorMessage = null;
-            \set_error_handler([$this, 'customErrorHandler']);
-            $stream = \fopen($url, 'a');
+            set_error_handler([$this, 'customErrorHandler']);
+            $stream = fopen($url, 'a');
             if ($this->filePermission !== null) {
-                @\chmod($url, $this->filePermission);
+                @chmod($url, $this->filePermission);
             }
-            \restore_error_handler();
-            if (!\is_resource($stream)) {
+            restore_error_handler();
+            if (!is_resource($stream)) {
                 $this->stream = null;
-                throw new \UnexpectedValueException(\sprintf('The stream or file "%s" could not be opened in append mode: ' . $this->errorMessage, $url) . Utils::getRecordMessageForException($record));
+                throw new \UnexpectedValueException(sprintf('The stream or file "%s" could not be opened in append mode: ' . $this->errorMessage, $url) . Utils::getRecordMessageForException($record));
             }
-            \stream_set_chunk_size($stream, $this->streamChunkSize);
+            stream_set_chunk_size($stream, $this->streamChunkSize);
             $this->stream = $stream;
         }
         $stream = $this->stream;
-        if (!\is_resource($stream)) {
+        if (!is_resource($stream)) {
             throw new \LogicException('No stream was opened yet' . Utils::getRecordMessageForException($record));
         }
         if ($this->useLocking) {
             // ignoring errors here, there's not much we can do about them
-            \flock($stream, \LOCK_EX);
+            flock($stream, \LOCK_EX);
         }
         $this->streamWrite($stream, $record);
         if ($this->useLocking) {
-            \flock($stream, \LOCK_UN);
+            flock($stream, \LOCK_UN);
         }
     }
     /**
@@ -157,40 +156,40 @@ class StreamHandler extends AbstractProcessingHandler
      *
      * @phpstan-param FormattedRecord $record
      */
-    protected function streamWrite($stream, array $record) : void
+    protected function streamWrite($stream, array $record): void
     {
-        \fwrite($stream, (string) $record['formatted']);
+        fwrite($stream, (string) $record['formatted']);
     }
-    private function customErrorHandler(int $code, string $msg) : bool
+    private function customErrorHandler(int $code, string $msg): bool
     {
-        $this->errorMessage = \preg_replace('{^(fopen|mkdir)\\(.*?\\): }', '', $msg);
+        $this->errorMessage = preg_replace('{^(fopen|mkdir)\(.*?\): }', '', $msg);
         return \true;
     }
-    private function getDirFromStream(string $stream) : ?string
+    private function getDirFromStream(string $stream): ?string
     {
-        $pos = \strpos($stream, '://');
+        $pos = strpos($stream, '://');
         if ($pos === \false) {
-            return \dirname($stream);
+            return dirname($stream);
         }
-        if ('file://' === \substr($stream, 0, 7)) {
-            return \dirname(\substr($stream, 7));
+        if ('file://' === substr($stream, 0, 7)) {
+            return dirname(substr($stream, 7));
         }
         return null;
     }
-    private function createDir(string $url) : void
+    private function createDir(string $url): void
     {
         // Do not try to create dir if it has already been tried.
         if ($this->dirCreated) {
             return;
         }
         $dir = $this->getDirFromStream($url);
-        if (null !== $dir && !\is_dir($dir)) {
+        if (null !== $dir && !is_dir($dir)) {
             $this->errorMessage = null;
-            \set_error_handler([$this, 'customErrorHandler']);
-            $status = \mkdir($dir, 0777, \true);
-            \restore_error_handler();
-            if (\false === $status && !\is_dir($dir) && \strpos((string) $this->errorMessage, 'File exists') === \false) {
-                throw new \UnexpectedValueException(\sprintf('There is no existing directory at "%s" and it could not be created: ' . $this->errorMessage, $dir));
+            set_error_handler([$this, 'customErrorHandler']);
+            $status = mkdir($dir, 0777, \true);
+            restore_error_handler();
+            if (\false === $status && !is_dir($dir) && strpos((string) $this->errorMessage, 'File exists') === \false) {
+                throw new \UnexpectedValueException(sprintf('There is no existing directory at "%s" and it could not be created: ' . $this->errorMessage, $dir));
             }
         }
         $this->dirCreated = \true;

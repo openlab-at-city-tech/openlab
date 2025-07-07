@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Carbon\Traits;
  * Trait MagicParameter.
  *
  * Allows to retrieve parameter in magic calls by index or name.
- * @internal
  */
 trait MagicParameter
 {

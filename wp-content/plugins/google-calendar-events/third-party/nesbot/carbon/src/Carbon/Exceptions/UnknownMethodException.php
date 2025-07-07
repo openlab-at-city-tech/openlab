@@ -12,7 +12,6 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use BadMethodCallException as BaseBadMethodCallException;
 use Throwable;
-/** @internal */
 class UnknownMethodException extends BaseBadMethodCallException implements BadMethodCallException
 {
     /**
@@ -38,7 +37,7 @@ class UnknownMethodException extends BaseBadMethodCallException implements BadMe
      *
      * @return string
      */
-    public function getMethod() : string
+    public function getMethod(): string
     {
         return $this->method;
     }

@@ -33,7 +33,6 @@ use InvalidArgumentException;
  * </code>
  *
  * @author Tomas Tatarko <tomas@tatarko.sk>
- * @internal
  */
 class Registry
 {
@@ -65,10 +64,10 @@ class Registry
      *
      * @param string|Logger $logger Name or logger instance
      */
-    public static function hasLogger($logger) : bool
+    public static function hasLogger($logger): bool
     {
         if ($logger instanceof Logger) {
-            $index = \array_search($logger, self::$loggers, \true);
+            $index = array_search($logger, self::$loggers, \true);
             return \false !== $index;
         }
         return isset(self::$loggers[$logger]);
@@ -78,10 +77,10 @@ class Registry
      *
      * @param string|Logger $logger Name or logger instance
      */
-    public static function removeLogger($logger) : void
+    public static function removeLogger($logger): void
     {
         if ($logger instanceof Logger) {
-            if (\false !== ($idx = \array_search($logger, self::$loggers, \true))) {
+            if (\false !== $idx = array_search($logger, self::$loggers, \true)) {
                 unset(self::$loggers[$idx]);
             }
         } else {
@@ -91,7 +90,7 @@ class Registry
     /**
      * Clears the registry
      */
-    public static function clear() : void
+    public static function clear(): void
     {
         self::$loggers = [];
     }
@@ -101,10 +100,10 @@ class Registry
      * @param  string                    $name Name of the requested Logger instance
      * @throws \InvalidArgumentException If named Logger instance is not in the registry
      */
-    public static function getInstance($name) : Logger
+    public static function getInstance($name): Logger
     {
         if (!isset(self::$loggers[$name])) {
-            throw new InvalidArgumentException(\sprintf('Requested "%s" logger instance is not in the registry', $name));
+            throw new InvalidArgumentException(sprintf('Requested "%s" logger instance is not in the registry', $name));
         }
         return self::$loggers[$name];
     }

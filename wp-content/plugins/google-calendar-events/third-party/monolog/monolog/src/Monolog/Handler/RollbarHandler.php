@@ -29,7 +29,6 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  *  - datetime (unix timestamp)
  *
  * @author Paul Statezny <paulstatezny@gmail.com>
- * @internal
  */
 class RollbarHandler extends AbstractProcessingHandler
 {
@@ -58,15 +57,15 @@ class RollbarHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
-            \register_shutdown_function(array($this, 'close'));
+            register_shutdown_function(array($this, 'close'));
             $this->initialized = \true;
         }
         $context = $record['context'];
-        $context = \array_merge($context, $record['extra'], ['level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')]);
+        $context = array_merge($context, $record['extra'], ['level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')]);
         if (isset($context['exception']) && $context['exception'] instanceof Throwable) {
             $exception = $context['exception'];
             unset($context['exception']);
@@ -78,7 +77,7 @@ class RollbarHandler extends AbstractProcessingHandler
         $this->rollbarLogger->log($context['level'], $toLog, $context);
         $this->hasRecords = \true;
     }
-    public function flush() : void
+    public function flush(): void
     {
         if ($this->hasRecords) {
             $this->rollbarLogger->flush();
@@ -88,7 +87,7 @@ class RollbarHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         $this->flush();
     }

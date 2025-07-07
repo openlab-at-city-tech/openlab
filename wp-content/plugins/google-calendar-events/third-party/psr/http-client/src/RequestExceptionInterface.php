@@ -9,7 +9,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Examples:
  *      - Request is invalid (e.g. method is missing)
  *      - Runtime request errors (e.g. the body stream is not seekable)
- * @internal
  */
 interface RequestExceptionInterface extends ClientExceptionInterface
 {
@@ -20,5 +19,5 @@ interface RequestExceptionInterface extends ClientExceptionInterface
      *
      * @return RequestInterface
      */
-    public function getRequest() : RequestInterface;
+    public function getRequest(): RequestInterface;
 }

@@ -29,7 +29,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *   }
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
- * @internal
  */
 class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, FormattableHandlerInterface, ResettableInterface
 {
@@ -44,35 +43,35 @@ class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, F
     /**
      * {@inheritDoc}
      */
-    public function isHandling(array $record) : bool
+    public function isHandling(array $record): bool
     {
         return $this->handler->isHandling($record);
     }
     /**
      * {@inheritDoc}
      */
-    public function handle(array $record) : bool
+    public function handle(array $record): bool
     {
         return $this->handler->handle($record);
     }
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         $this->handler->handleBatch($records);
     }
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
         $this->handler->close();
     }
     /**
      * {@inheritDoc}
      */
-    public function pushProcessor(callable $callback) : HandlerInterface
+    public function pushProcessor(callable $callback): HandlerInterface
     {
         if ($this->handler instanceof ProcessableHandlerInterface) {
             $this->handler->pushProcessor($callback);
@@ -83,7 +82,7 @@ class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, F
     /**
      * {@inheritDoc}
      */
-    public function popProcessor() : callable
+    public function popProcessor(): callable
     {
         if ($this->handler instanceof ProcessableHandlerInterface) {
             return $this->handler->popProcessor();
@@ -93,7 +92,7 @@ class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, F
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {
             $this->handler->setFormatter($formatter);
@@ -104,7 +103,7 @@ class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, F
     /**
      * {@inheritDoc}
      */
-    public function getFormatter() : FormatterInterface
+    public function getFormatter(): FormatterInterface
     {
         if ($this->handler instanceof FormattableHandlerInterface) {
             return $this->handler->getFormatter();

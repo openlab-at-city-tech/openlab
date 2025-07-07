@@ -13,7 +13,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation\Formatter;
 /**
  * @author Guilherme Blanco <guilhermeblanco@hotmail.com>
  * @author Abdellatif Ait boudad <a.aitboudad@gmail.com>
- * @internal
  */
 interface MessageFormatterInterface
 {

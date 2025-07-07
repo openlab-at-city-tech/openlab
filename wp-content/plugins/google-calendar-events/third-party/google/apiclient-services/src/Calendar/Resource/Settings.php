@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Settings as SettingsModel
  *   $calendarService = new Google\Service\Calendar(...);
  *   $settings = $calendarService->settings;
  *  </code>
- * @internal
  */
 class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -41,7 +40,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($setting, $optParams = [])
     {
         $params = ['setting' => $setting];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Setting::class);
     }
     /**
@@ -66,7 +65,7 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listSettings($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], SettingsModel::class);
     }
     /**
@@ -92,9 +91,9 @@ class Settings extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch(Channel $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Settings::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_Settings');
+class_alias(Settings::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_Settings');

@@ -83,7 +83,6 @@ foreach ($config['original_files'] as $originalFilePath) {
     printTranslationStatus($originalFilePath, $translationStatus, $config['verbose_output'], $config['include_completed_languages']);
 }
 exit($totalTranslationMismatches > 0 ? 1 : 0);
-/** @internal */
 function findTranslationFiles($originalFilePath, $localeToAnalyze)
 {
     $translations = [];
@@ -101,7 +100,6 @@ function findTranslationFiles($originalFilePath, $localeToAnalyze)
     }
     return $translations;
 }
-/** @internal */
 function calculateTranslationStatus($originalFilePath, $translationFilePaths)
 {
     $translationStatus = [];
@@ -115,25 +113,21 @@ function calculateTranslationStatus($originalFilePath, $translationFilePaths)
     }
     return $translationStatus;
 }
-/** @internal */
-function isTranslationCompleted(array $translationStatus) : bool
+function isTranslationCompleted(array $translationStatus): bool
 {
     return $translationStatus['total'] === $translationStatus['translated'] && 0 === \count($translationStatus['mismatches']);
 }
-/** @internal */
 function printTranslationStatus($originalFilePath, $translationStatus, $verboseOutput, $includeCompletedLanguages)
 {
     printTitle($originalFilePath);
     printTable($translationStatus, $verboseOutput, $includeCompletedLanguages);
     echo \PHP_EOL . \PHP_EOL;
 }
-/** @internal */
 function extractLocaleFromFilePath($filePath)
 {
     $parts = \explode('.', $filePath);
     return $parts[\count($parts) - 2];
 }
-/** @internal */
 function extractTranslationKeys($filePath)
 {
     $translationKeys = [];
@@ -147,9 +141,8 @@ function extractTranslationKeys($filePath)
 }
 /**
  * Check whether the trans-unit id and source match with the base translation.
- * @internal
  */
-function findTransUnitMismatches(array $baseTranslationKeys, array $translatedKeys) : array
+function findTransUnitMismatches(array $baseTranslationKeys, array $translatedKeys): array
 {
     $mismatches = [];
     foreach ($baseTranslationKeys as $translationId => $translationKey) {
@@ -162,13 +155,11 @@ function findTransUnitMismatches(array $baseTranslationKeys, array $translatedKe
     }
     return $mismatches;
 }
-/** @internal */
 function printTitle($title)
 {
     echo $title . \PHP_EOL;
     echo \str_repeat('=', \strlen($title)) . \PHP_EOL . \PHP_EOL;
 }
-/** @internal */
 function printTable($translations, $verboseOutput, bool $includeCompletedLanguages)
 {
     if (0 === \count($translations)) {
@@ -210,17 +201,14 @@ function printTable($translations, $verboseOutput, bool $includeCompletedLanguag
         }
     }
 }
-/** @internal */
 function textColorGreen()
 {
     echo "\x1b[32m";
 }
-/** @internal */
 function textColorRed()
 {
     echo "\x1b[31m";
 }
-/** @internal */
 function textColorNormal()
 {
     echo "\x1b[0m";

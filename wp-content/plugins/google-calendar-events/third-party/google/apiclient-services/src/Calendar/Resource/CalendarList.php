@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Channel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $calendarList = $calendarService->calendarList;
  *  </code>
- * @internal
  */
 class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -42,7 +41,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($calendarId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -57,7 +56,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($calendarId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], CalendarListEntry::class);
     }
     /**
@@ -76,7 +75,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function insert(CalendarListEntry $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('insert', [$params], CalendarListEntry::class);
     }
     /**
@@ -113,7 +112,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listCalendarList($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], CalendarListModel::class);
     }
     /**
@@ -135,7 +134,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function patch($calendarId, CalendarListEntry $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('patch', [$params], CalendarListEntry::class);
     }
     /**
@@ -157,7 +156,7 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($calendarId, CalendarListEntry $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], CalendarListEntry::class);
     }
     /**
@@ -194,9 +193,9 @@ class CalendarList extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch(Channel $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CalendarList::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_CalendarList');
+class_alias(CalendarList::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_CalendarList');

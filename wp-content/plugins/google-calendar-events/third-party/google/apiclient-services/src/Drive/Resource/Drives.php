@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\DriveList;
  *   $driveService = new Google\Service\Drive(...);
  *   $drives = $driveService->drives;
  *  </code>
- * @internal
  */
 class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -45,7 +44,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create($requestId, Drive $postBody, $optParams = [])
     {
         $params = ['requestId' => $requestId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], Drive::class);
     }
     /**
@@ -65,7 +64,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($driveId, $optParams = [])
     {
         $params = ['driveId' => $driveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -82,7 +81,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($driveId, $optParams = [])
     {
         $params = ['driveId' => $driveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], Drive::class);
     }
     /**
@@ -95,7 +94,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function hide($driveId, $optParams = [])
     {
         $params = ['driveId' => $driveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('hide', [$params], Drive::class);
     }
     /**
@@ -114,7 +113,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listDrives($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], DriveList::class);
     }
     /**
@@ -127,7 +126,7 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function unhide($driveId, $optParams = [])
     {
         $params = ['driveId' => $driveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('unhide', [$params], Drive::class);
     }
     /**
@@ -145,9 +144,9 @@ class Drives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($driveId, Drive $postBody, $optParams = [])
     {
         $params = ['driveId' => $driveId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], Drive::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Drives::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Drives');
+class_alias(Drives::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Drives');

@@ -14,7 +14,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\StreamInterface;
  * @see https://datatracker.ietf.org/doc/html/rfc1950
  * @see https://datatracker.ietf.org/doc/html/rfc1952
  * @see https://www.php.net/manual/en/filters.compression.php
- * @internal
  */
 final class InflateStream implements StreamInterface
 {
@@ -28,7 +27,7 @@ final class InflateStream implements StreamInterface
         // See https://www.zlib.net/manual.html#Advanced definition of inflateInit2
         // "Add 32 to windowBits to enable zlib and gzip decoding with automatic header detection"
         // Default window size is 15.
-        \stream_filter_append($resource, 'zlib.inflate', \STREAM_FILTER_READ, ['window' => 15 + 32]);
+        stream_filter_append($resource, 'zlib.inflate', \STREAM_FILTER_READ, ['window' => 15 + 32]);
         $this->stream = $stream->isSeekable() ? new Stream($resource) : new NoSeekStream(new Stream($resource));
     }
 }

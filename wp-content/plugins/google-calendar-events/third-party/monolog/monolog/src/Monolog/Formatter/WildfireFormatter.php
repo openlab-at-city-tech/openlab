@@ -20,7 +20,6 @@ use SimpleCalendar\plugin_deps\Monolog\Logger;
  * @author Kirill chEbba Chebunin <iam@chebba.org>
  *
  * @phpstan-import-type Level from \Monolog\Logger
- * @internal
  */
 class WildfireFormatter extends NormalizerFormatter
 {
@@ -44,7 +43,7 @@ class WildfireFormatter extends NormalizerFormatter
      *
      * @return string
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         // Retrieve the line and file if set and remove them from the formatted extra
         $file = $line = '';
@@ -68,8 +67,8 @@ class WildfireFormatter extends NormalizerFormatter
             $message['extra'] = $record['extra'];
             $handleError = \true;
         }
-        if (\count($message) === 1) {
-            $message = \reset($message);
+        if (count($message) === 1) {
+            $message = reset($message);
         }
         if (isset($record['context']['table'])) {
             $type = 'TABLE';
@@ -82,7 +81,7 @@ class WildfireFormatter extends NormalizerFormatter
         // Create JSON object describing the appearance of the message in the console
         $json = $this->toJson([['Type' => $type, 'File' => $file, 'Line' => $line, 'Label' => $label], $message], $handleError);
         // The message itself is a serialization of the above JSON object + it's length
-        return \sprintf('%d|%s|', \strlen($json), $json);
+        return sprintf('%d|%s|', strlen($json), $json);
     }
     /**
      * {@inheritDoc}
@@ -100,7 +99,7 @@ class WildfireFormatter extends NormalizerFormatter
      */
     protected function normalize($data, int $depth = 0)
     {
-        if (\is_object($data) && !$data instanceof \DateTimeInterface) {
+        if (is_object($data) && !$data instanceof \DateTimeInterface) {
             return $data;
         }
         return parent::normalize($data, $depth);

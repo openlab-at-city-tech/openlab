@@ -25,7 +25,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\Channel;
  *   $driveService = new Google\Service\Drive(...);
  *   $channels = $driveService->channels;
  *  </code>
- * @internal
  */
 class Channels extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -38,9 +37,9 @@ class Channels extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function stop(Channel $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('stop', [$params]);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Channels::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Channels');
+class_alias(Channels::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Channels');

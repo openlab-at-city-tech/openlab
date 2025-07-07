@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class TeamDrive extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $backgroundImageFileType = TeamDriveBackgroundImageFile::class;
@@ -214,4 +213,4 @@ class TeamDrive extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(TeamDrive::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_TeamDrive');
+class_alias(TeamDrive::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_TeamDrive');

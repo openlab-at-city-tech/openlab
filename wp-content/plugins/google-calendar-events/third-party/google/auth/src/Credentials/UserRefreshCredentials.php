@@ -30,7 +30,6 @@ use SimpleCalendar\plugin_deps\Google\Auth\OAuth2;
  * location
  *
  * @see [Application Default Credentials](http://goo.gl/mkAHpZ)
- * @internal
  */
 class UserRefreshCredentials extends CredentialsLoader implements GetQuotaProjectInterface
 {
@@ -56,26 +55,26 @@ class UserRefreshCredentials extends CredentialsLoader implements GetQuotaProjec
      */
     public function __construct($scope, $jsonKey)
     {
-        if (\is_string($jsonKey)) {
-            if (!\file_exists($jsonKey)) {
+        if (is_string($jsonKey)) {
+            if (!file_exists($jsonKey)) {
                 throw new \InvalidArgumentException('file does not exist');
             }
-            $json = \file_get_contents($jsonKey);
-            if (!($jsonKey = \json_decode((string) $json, \true))) {
+            $json = file_get_contents($jsonKey);
+            if (!$jsonKey = json_decode((string) $json, \true)) {
                 throw new \LogicException('invalid json for auth config');
             }
         }
-        if (!\array_key_exists('client_id', $jsonKey)) {
+        if (!array_key_exists('client_id', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_id field');
         }
-        if (!\array_key_exists('client_secret', $jsonKey)) {
+        if (!array_key_exists('client_secret', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the client_secret field');
         }
-        if (!\array_key_exists('refresh_token', $jsonKey)) {
+        if (!array_key_exists('refresh_token', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the refresh_token field');
         }
         $this->auth = new OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
-        if (\array_key_exists('quota_project_id', $jsonKey)) {
+        if (array_key_exists('quota_project_id', $jsonKey)) {
             $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
     }

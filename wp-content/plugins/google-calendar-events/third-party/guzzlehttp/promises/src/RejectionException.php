@@ -7,7 +7,6 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
  * A special exception that is thrown when waiting on a rejected promise.
  *
  * The reason value is available via the getReason() method.
- * @internal
  */
 class RejectionException extends \RuntimeException
 {
@@ -23,10 +22,10 @@ class RejectionException extends \RuntimeException
         $message = 'The promise was rejected';
         if ($description) {
             $message .= ' with reason: ' . $description;
-        } elseif (\is_string($reason) || \is_object($reason) && \method_exists($reason, '__toString')) {
+        } elseif (is_string($reason) || is_object($reason) && method_exists($reason, '__toString')) {
             $message .= ' with reason: ' . $this->reason;
         } elseif ($reason instanceof \JsonSerializable) {
-            $message .= ' with reason: ' . \json_encode($this->reason, \JSON_PRETTY_PRINT);
+            $message .= ' with reason: ' . json_encode($this->reason, \JSON_PRETTY_PRINT);
         }
         parent::__construct($message);
     }

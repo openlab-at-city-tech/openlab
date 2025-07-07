@@ -30,7 +30,6 @@ use SimpleCalendar\plugin_deps\Psr\Http\Message\RequestInterface;
  * Requests will be accessed with the authorization header:
  *
  * 'proxy-authorization' 'Bearer <value of auth_token>'
- * @internal
  */
 class ProxyAuthTokenMiddleware
 {
@@ -86,7 +85,7 @@ class ProxyAuthTokenMiddleware
      */
     public function __invoke(callable $handler)
     {
-        return function (RequestInterface $request, array $options) use($handler) {
+        return function (RequestInterface $request, array $options) use ($handler) {
             // Requests using "proxy_auth"="google_auth" will be authorized.
             if (!isset($options['proxy_auth']) || $options['proxy_auth'] !== 'google_auth') {
                 return $handler($request, $options);
@@ -106,14 +105,14 @@ class ProxyAuthTokenMiddleware
     private function fetchToken()
     {
         $auth_tokens = $this->fetcher->fetchAuthToken($this->httpHandler);
-        if (\array_key_exists('access_token', $auth_tokens)) {
+        if (array_key_exists('access_token', $auth_tokens)) {
             // notify the callback if applicable
             if ($this->tokenCallback) {
-                \call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
+                call_user_func($this->tokenCallback, $this->fetcher->getCacheKey(), $auth_tokens['access_token']);
             }
             return $auth_tokens['access_token'];
         }
-        if (\array_key_exists('id_token', $auth_tokens)) {
+        if (array_key_exists('id_token', $auth_tokens)) {
             return $auth_tokens['id_token'];
         }
         return null;

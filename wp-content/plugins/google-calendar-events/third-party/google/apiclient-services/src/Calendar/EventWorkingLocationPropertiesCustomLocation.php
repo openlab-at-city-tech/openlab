@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class EventWorkingLocationPropertiesCustomLocation extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -40,4 +39,4 @@ class EventWorkingLocationPropertiesCustomLocation extends \SimpleCalendar\plugi
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(EventWorkingLocationPropertiesCustomLocation::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_EventWorkingLocationPropertiesCustomLocation');
+class_alias(EventWorkingLocationPropertiesCustomLocation::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_EventWorkingLocationPropertiesCustomLocation');

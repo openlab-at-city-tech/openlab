@@ -3,8 +3,8 @@ Contributors: simplecalendar, rosinghal, pderksen, nickyoung87, nekojira, rossha
 Tags: google calendar, calendar, calendars, google, event calendar, custom calendar, custom calendars, event, events
 Requires at least: 4.2
 Requires PHP: 7.3
-Tested up to: 6.5.5
-Stable tag: 3.4.7
+Tested up to: 6.8.1
+Stable tag: 3.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -96,6 +96,33 @@ We'd love your help! Here's a few things you can do:
 8. Attach a calendar to a post or page
 
 == Changelog ==
+
+= 3.5.4 =
+* Fix: Fixed multi-day events incorrectly displaying on all days when the "No, display only on first day of event" option is enabled.
+* Fix: Resolved issue where event details (qTip) were not showing in mobile portrait view.
+* Fix: Fixed layout issues on the admin settings page for fresh installations.
+
+= 3.5.3 =
+* Fix: Even after upgrading to PHP 8.x, an admin notice still appears to upgrade to PHP8.
+
+= 3.5.2 =
+* Dev: Make compatible with WordPress v6.8.1.
+* Dev: Added notice to update PHP version if version is less then 8.1.
+
+= 3.5.1 =
+* Fix: Event were not showing on page with shortcode when using OAuth via Xtendify.
+
+= 3.5.0 =
+* Dev: To make the first attachment appear as the cover, add a new shortcode [cover-image] for GCal-Pro Addon.
+
+= 3.4.9 =
+
+* Fix: Resolved the issue where multi-day events were not rendered correctly on the last day.  
+**Thanks to [MartinixH](https://github.com/MartinixH) for the contribution!**
+
+= 3.4.8 =
+* Dev: Added print calendar option on list view.
+* Fix: Translation month name on first load.
 
 = 3.4.7 =
 * Fix: Compatibility warnings with PHP 8.

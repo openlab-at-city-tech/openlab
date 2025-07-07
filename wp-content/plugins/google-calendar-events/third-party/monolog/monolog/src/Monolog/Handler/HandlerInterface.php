@@ -18,7 +18,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  *
  * @phpstan-import-type Record from \Monolog\Logger
  * @phpstan-import-type Level from \Monolog\Logger
- * @internal
  */
 interface HandlerInterface
 {
@@ -37,7 +36,7 @@ interface HandlerInterface
      *
      * @phpstan-param array{level: Level} $record
      */
-    public function isHandling(array $record) : bool;
+    public function isHandling(array $record): bool;
     /**
      * Handles a record.
      *
@@ -54,7 +53,7 @@ interface HandlerInterface
      *
      * @phpstan-param Record $record
      */
-    public function handle(array $record) : bool;
+    public function handle(array $record): bool;
     /**
      * Handles a set of records at once.
      *
@@ -62,7 +61,7 @@ interface HandlerInterface
      *
      * @phpstan-param Record[] $records
      */
-    public function handleBatch(array $records) : void;
+    public function handleBatch(array $records): void;
     /**
      * Closes the handler.
      *
@@ -79,5 +78,5 @@ interface HandlerInterface
      * If you are thinking of calling this method yourself, most likely you should be
      * calling ResettableInterface::reset instead. Have a look.
      */
-    public function close() : void;
+    public function close(): void;
 }

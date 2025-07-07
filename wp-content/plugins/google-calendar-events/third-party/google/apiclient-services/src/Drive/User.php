@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Drive;
 
-/** @internal */
 class User extends \SimpleCalendar\plugin_deps\Google\Model
 {
     /**
@@ -130,4 +129,4 @@ class User extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(User::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_User');
+class_alias(User::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_User');

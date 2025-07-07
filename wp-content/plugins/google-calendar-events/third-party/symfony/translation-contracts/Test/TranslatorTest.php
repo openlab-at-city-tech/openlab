@@ -25,17 +25,16 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorTrait;
  * The goal to cover all languages is to far fetched so this test case is smaller.
  *
  * @author Clemens Tolboom clemens@build2be.nl
- * @internal
  */
 class TranslatorTest extends TestCase
 {
     private $defaultLocale;
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->defaultLocale = \Locale::getDefault();
         \Locale::setDefault('en');
     }
-    protected function tearDown() : void
+    protected function tearDown(): void
     {
         \Locale::setDefault($this->defaultLocale);
     }
@@ -127,7 +126,7 @@ class TranslatorTest extends TestCase
     }
     public static function getInterval()
     {
-        return [['foo', 3, '{1,2, 3 ,4}'], ['bar', 10, '{1,2, 3 ,4}'], ['bar', 3, '[1,2]'], ['foo', 1, '[1,2]'], ['foo', 2, '[1,2]'], ['bar', 1, ']1,2['], ['bar', 2, ']1,2['], ['foo', \log(0), '[-Inf,2['], ['foo', -\log(0), '[-2,+Inf]']];
+        return [['foo', 3, '{1,2, 3 ,4}'], ['bar', 10, '{1,2, 3 ,4}'], ['bar', 3, '[1,2]'], ['foo', 1, '[1,2]'], ['foo', 2, '[1,2]'], ['bar', 1, ']1,2['], ['bar', 2, ']1,2['], ['foo', log(0), '[-Inf,2['], ['foo', -log(0), '[-2,+Inf]']];
     }
     /**
      * @dataProvider getChooseTests
@@ -215,7 +214,7 @@ class TranslatorTest extends TestCase
             new-line in it. Selector = 1.|[1,Inf]This is a text with a
             new-line in it. Selector > 1.', 5],
             // with single-quotes and \n in text
-            ['This is a text with a\\nnew-line in it. Selector = 0.', '{0}This is a text with a\\nnew-line in it. Selector = 0.|{1}This is a text with a\\nnew-line in it. Selector = 1.|[1,Inf]This is a text with a\\nnew-line in it. Selector > 1.', 0],
+            ['This is a text with a\nnew-line in it. Selector = 0.', '{0}This is a text with a\nnew-line in it. Selector = 0.|{1}This is a text with a\nnew-line in it. Selector = 1.|[1,Inf]This is a text with a\nnew-line in it. Selector > 1.', 0],
             // with double-quotes and id split across lines
             ["This is a text with a\nnew-line in it. Selector = 1.", "{0}This is a text with a\nnew-line in it. Selector = 0.|{1}This is a text with a\nnew-line in it. Selector = 1.|[1,Inf]This is a text with a\nnew-line in it. Selector > 1.", 1],
             // escape pipe
@@ -285,7 +284,7 @@ class TranslatorTest extends TestCase
     protected function validateMatrix($nplural, $matrix, $expectSuccess = \true)
     {
         foreach ($matrix as $langCode => $data) {
-            $indexes = \array_flip($data);
+            $indexes = array_flip($data);
             if ($expectSuccess) {
                 $this->assertCount($nplural, $indexes, "Langcode '{$langCode}' has '{$nplural}' plural forms.");
             } else {

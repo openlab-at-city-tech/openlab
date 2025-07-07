@@ -31,7 +31,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\ModifyLabelsResponse;
  *   $driveService = new Google\Service\Drive(...);
  *   $files = $driveService->files;
  *  </code>
- * @internal
  */
 class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -68,7 +67,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function copy($fileId, DriveFile $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('copy', [$params], DriveFile::class);
     }
     /**
@@ -104,7 +103,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create(DriveFile $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], DriveFile::class);
     }
     /**
@@ -126,7 +125,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -144,7 +143,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function emptyTrash($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('emptyTrash', [$params]);
     }
     /**
@@ -160,7 +159,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function export($fileId, $mimeType, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'mimeType' => $mimeType];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('export', [$params]);
     }
     /**
@@ -180,7 +179,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function generateIds($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('generateIds', [$params], GeneratedIds::class);
     }
     /**
@@ -204,7 +203,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], DriveFile::class);
     }
     /**
@@ -257,7 +256,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listFiles($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], FileList::class);
     }
     /**
@@ -276,7 +275,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listLabels($fileId, $optParams = [])
     {
         $params = ['fileId' => $fileId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('listLabels', [$params], LabelList::class);
     }
     /**
@@ -290,7 +289,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function modifyLabels($fileId, ModifyLabelsRequest $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('modifyLabels', [$params], ModifyLabelsResponse::class);
     }
     /**
@@ -328,7 +327,7 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($fileId, DriveFile $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], DriveFile::class);
     }
     /**
@@ -353,9 +352,9 @@ class Files extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch($fileId, Channel $postBody, $optParams = [])
     {
         $params = ['fileId' => $fileId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Files::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Files');
+class_alias(Files::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Files');

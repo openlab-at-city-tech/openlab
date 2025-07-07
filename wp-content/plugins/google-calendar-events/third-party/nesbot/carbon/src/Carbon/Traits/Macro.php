@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Carbon\Traits;
  * Trait Macros.
  *
  * Allows users to register macros within the Carbon class.
- * @internal
  */
 trait Macro
 {
@@ -75,7 +74,7 @@ trait Macro
     {
         if (!isset(static::$globalGenericMacros[$priority])) {
             static::$globalGenericMacros[$priority] = [];
-            \krsort(static::$globalGenericMacros, \SORT_NUMERIC);
+            krsort(static::$globalGenericMacros, \SORT_NUMERIC);
         }
         static::$globalGenericMacros[$priority][] = $macro;
     }

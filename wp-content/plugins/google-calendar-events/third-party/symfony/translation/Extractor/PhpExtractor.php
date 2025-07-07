@@ -16,7 +16,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * PhpExtractor extracts translation messages from a PHP template.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
- * @internal
  */
 class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
 {
@@ -30,7 +29,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     /**
      * The sequence that captures translation messages.
      */
-    protected $sequences = [['->', 'trans', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['->', 'trans', '(', self::MESSAGE_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', 'SimpleCalendar\\plugin_deps\\Symfony\\Component\\Translation\\TranslatableMessage', '(', self::MESSAGE_TOKEN], ['t', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['t', '(', self::MESSAGE_TOKEN]];
+    protected $sequences = [['->', 'trans', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['->', 'trans', '(', self::MESSAGE_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', 'SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatableMessage', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['new', '\\', 'Symfony', '\\', 'Component', '\\', 'Translation', '\\', 'TranslatableMessage', '(', self::MESSAGE_TOKEN], ['new', 'SimpleCalendar\plugin_deps\Symfony\Component\Translation\TranslatableMessage', '(', self::MESSAGE_TOKEN], ['t', '(', self::MESSAGE_TOKEN, ',', self::METHOD_ARGUMENTS_TOKEN, ',', self::DOMAIN_TOKEN], ['t', '(', self::MESSAGE_TOKEN]];
     /**
      * {@inheritdoc}
      */
@@ -38,8 +37,8 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
     {
         $files = $this->extractFiles($resource);
         foreach ($files as $file) {
-            $this->parseTokens(\token_get_all(\file_get_contents($file)), $catalog, $file);
-            \gc_mem_caches();
+            $this->parseTokens(token_get_all(file_get_contents($file)), $catalog, $file);
+            gc_mem_caches();
         }
     }
     /**
@@ -122,14 +121,14 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
                     }
                     break;
                 case \T_END_HEREDOC:
-                    if ($indentation = \strspn($t[1], ' ')) {
+                    if ($indentation = strspn($t[1], ' ')) {
                         $docPartWithLineBreaks = $docPart;
                         $docPart = '';
-                        foreach (\preg_split('~(\\r\\n|\\n|\\r)~', $docPartWithLineBreaks, -1, \PREG_SPLIT_DELIM_CAPTURE) as $str) {
+                        foreach (preg_split('~(\r\n|\n|\r)~', $docPartWithLineBreaks, -1, \PREG_SPLIT_DELIM_CAPTURE) as $str) {
                             if (\in_array($str, ["\r\n", "\n", "\r"], \true)) {
                                 $docPart .= $str;
                             } else {
-                                $docPart .= \substr($str, $indentation);
+                                $docPart .= substr($str, $indentation);
                             }
                         }
                     }
@@ -181,7 +180,7 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
                 if ($message) {
                     $catalog->set($message, $this->prefix . $message, $domain);
                     $metadata = $catalog->getMetadata($message, $domain) ?? [];
-                    $normalizedFilename = \preg_replace('{[\\\\/]+}', '/', $filename);
+                    $normalizedFilename = preg_replace('{[\\\\/]+}', '/', $filename);
                     $metadata['sources'][] = $normalizedFilename . ':' . $tokens[$key][2];
                     $catalog->setMetadata($message, $metadata, $domain);
                     break;
@@ -196,15 +195,15 @@ class PhpExtractor extends AbstractFileExtractor implements ExtractorInterface
      */
     protected function canBeExtracted(string $file)
     {
-        return $this->isFile($file) && 'php' === \pathinfo($file, \PATHINFO_EXTENSION);
+        return $this->isFile($file) && 'php' === pathinfo($file, \PATHINFO_EXTENSION);
     }
     /**
      * {@inheritdoc}
      */
     protected function extractFromDirectory($directory)
     {
-        if (!\class_exists(Finder::class)) {
-            throw new \LogicException(\sprintf('You cannot use "%s" as the "symfony/finder" package is not installed. Try running "composer require symfony/finder".', static::class));
+        if (!class_exists(Finder::class)) {
+            throw new \LogicException(sprintf('You cannot use "%s" as the "symfony/finder" package is not installed. Try running "composer require symfony/finder".', static::class));
         }
         $finder = new Finder();
         return $finder->files()->name('*.php')->in($directory);

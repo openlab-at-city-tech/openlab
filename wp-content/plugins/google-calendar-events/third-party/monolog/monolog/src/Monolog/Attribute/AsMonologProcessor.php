@@ -18,7 +18,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Attribute;
  * 
  * Using it with the Monolog library only has no effect at all: processors should still be turned into a callable if
  * needed and manually pushed to the loggers and to the processable handlers.
- * @internal
  */
 #[\Attribute(\Attribute::TARGET_CLASS | \Attribute::TARGET_METHOD | \Attribute::IS_REPEATABLE)]
 class AsMonologProcessor

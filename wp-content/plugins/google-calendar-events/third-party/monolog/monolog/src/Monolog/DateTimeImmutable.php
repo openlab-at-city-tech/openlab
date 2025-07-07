@@ -17,7 +17,6 @@ use DateTimeZone;
  *
  * @author Menno Holtkamp
  * @author Jordi Boggiano <j.boggiano@seld.be>
- * @internal
  */
 class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
 {
@@ -30,14 +29,14 @@ class DateTimeImmutable extends \DateTimeImmutable implements \JsonSerializable
         $this->useMicroseconds = $useMicroseconds;
         parent::__construct('now', $timezone);
     }
-    public function jsonSerialize() : string
+    public function jsonSerialize(): string
     {
         if ($this->useMicroseconds) {
-            return $this->format('Y-m-d\\TH:i:s.uP');
+            return $this->format('Y-m-d\TH:i:s.uP');
         }
-        return $this->format('Y-m-d\\TH:i:sP');
+        return $this->format('Y-m-d\TH:i:sP');
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->jsonSerialize();
     }

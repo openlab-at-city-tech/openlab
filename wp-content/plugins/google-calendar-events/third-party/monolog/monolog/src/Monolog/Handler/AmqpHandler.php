@@ -19,7 +19,6 @@ use SimpleCalendar\plugin_deps\PhpAmqpLib\Channel\AMQPChannel;
 use AMQPExchange;
 /**
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 class AmqpHandler extends AbstractProcessingHandler
 {
@@ -32,7 +31,7 @@ class AmqpHandler extends AbstractProcessingHandler
     /**
      * @return array<string, mixed>
      */
-    public function getExtraAttributes() : array
+    public function getExtraAttributes(): array
     {
         return $this->extraAttributes;
     }
@@ -45,7 +44,7 @@ class AmqpHandler extends AbstractProcessingHandler
      *                                               or reply_to, headers.
      * @return AmqpHandler
      */
-    public function setExtraAttributes(array $extraAttributes) : self
+    public function setExtraAttributes(array $extraAttributes): self
     {
         $this->extraAttributes = $extraAttributes;
         return $this;
@@ -63,9 +62,9 @@ class AmqpHandler extends AbstractProcessingHandler
         if ($exchange instanceof AMQPChannel) {
             $this->exchangeName = (string) $exchangeName;
         } elseif (!$exchange instanceof AMQPExchange) {
-            throw new \InvalidArgumentException('PhpAmqpLib\\Channel\\AMQPChannel or AMQPExchange instance required');
+            throw new \InvalidArgumentException('PhpAmqpLib\Channel\AMQPChannel or AMQPExchange instance required');
         } elseif ($exchangeName) {
-            @\trigger_error('The $exchangeName parameter can only be passed when using PhpAmqpLib, if using an AMQPExchange instance configure it beforehand', \E_USER_DEPRECATED);
+            @trigger_error('The $exchangeName parameter can only be passed when using PhpAmqpLib, if using an AMQPExchange instance configure it beforehand', \E_USER_DEPRECATED);
         }
         $this->exchange = $exchange;
         parent::__construct($level, $bubble);
@@ -73,14 +72,14 @@ class AmqpHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $data = $record["formatted"];
         $routingKey = $this->getRoutingKey($record);
         if ($this->exchange instanceof AMQPExchange) {
             $attributes = ['delivery_mode' => 2, 'content_type' => 'application/json'];
             if ($this->extraAttributes) {
-                $attributes = \array_merge($attributes, $this->extraAttributes);
+                $attributes = array_merge($attributes, $this->extraAttributes);
             }
             $this->exchange->publish($data, $routingKey, 0, $attributes);
         } else {
@@ -90,7 +89,7 @@ class AmqpHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         if ($this->exchange instanceof AMQPExchange) {
             parent::handleBatch($records);
@@ -112,23 +111,23 @@ class AmqpHandler extends AbstractProcessingHandler
      *
      * @phpstan-param Record $record
      */
-    protected function getRoutingKey(array $record) : string
+    protected function getRoutingKey(array $record): string
     {
-        $routingKey = \sprintf('%s.%s', $record['level_name'], $record['channel']);
-        return \strtolower($routingKey);
+        $routingKey = sprintf('%s.%s', $record['level_name'], $record['channel']);
+        return strtolower($routingKey);
     }
-    private function createAmqpMessage(string $data) : AMQPMessage
+    private function createAmqpMessage(string $data): AMQPMessage
     {
         $attributes = ['delivery_mode' => 2, 'content_type' => 'application/json'];
         if ($this->extraAttributes) {
-            $attributes = \array_merge($attributes, $this->extraAttributes);
+            $attributes = array_merge($attributes, $this->extraAttributes);
         }
         return new AMQPMessage($data, $attributes);
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, \false);
     }

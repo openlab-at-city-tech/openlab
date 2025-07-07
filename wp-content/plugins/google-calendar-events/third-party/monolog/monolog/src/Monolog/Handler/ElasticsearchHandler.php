@@ -42,7 +42,6 @@ use SimpleCalendar\plugin_deps\Elastic\Elasticsearch\Client as Client8;
  *    $log->pushHandler($handler);
  *
  * @author Avtandil Kikabidze <akalongman@gmail.com>
- * @internal
  */
 class ElasticsearchHandler extends AbstractProcessingHandler
 {
@@ -65,11 +64,11 @@ class ElasticsearchHandler extends AbstractProcessingHandler
     public function __construct($client, array $options = [], $level = Logger::DEBUG, bool $bubble = \true)
     {
         if (!$client instanceof Client && !$client instanceof Client8) {
-            throw new \TypeError('Elasticsearch\\Client or Elastic\\Elasticsearch\\Client instance required');
+            throw new \TypeError('Elasticsearch\Client or Elastic\Elasticsearch\Client instance required');
         }
         parent::__construct($level, $bubble);
         $this->client = $client;
-        $this->options = \array_merge([
+        $this->options = array_merge([
             'index' => 'monolog',
             // Elastic index name
             'type' => '_doc',
@@ -87,14 +86,14 @@ class ElasticsearchHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         $this->bulkSend([$record['formatted']]);
     }
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if ($formatter instanceof ElasticsearchFormatter) {
             return parent::setFormatter($formatter);
@@ -106,21 +105,21 @@ class ElasticsearchHandler extends AbstractProcessingHandler
      *
      * @return mixed[]
      */
-    public function getOptions() : array
+    public function getOptions(): array
     {
         return $this->options;
     }
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new ElasticsearchFormatter($this->options['index'], $this->options['type']);
     }
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         $documents = $this->getFormatter()->formatBatch($records);
         $this->bulkSend($documents);
@@ -131,7 +130,7 @@ class ElasticsearchHandler extends AbstractProcessingHandler
      * @param  array[]           $records Records + _index/_type keys
      * @throws \RuntimeException
      */
-    protected function bulkSend(array $records) : void
+    protected function bulkSend(array $records): void
     {
         try {
             $params = ['body' => []];
@@ -158,14 +157,14 @@ class ElasticsearchHandler extends AbstractProcessingHandler
      *
      * @param mixed[]|Elasticsearch $responses returned by $this->client->bulk()
      */
-    protected function createExceptionFromResponses($responses) : Throwable
+    protected function createExceptionFromResponses($responses): Throwable
     {
         foreach ($responses['items'] ?? [] as $item) {
             if (isset($item['index']['error'])) {
                 return $this->createExceptionFromError($item['index']['error']);
             }
         }
-        if (\class_exists(ElasticInvalidArgumentException::class)) {
+        if (class_exists(ElasticInvalidArgumentException::class)) {
             return new ElasticInvalidArgumentException('Elasticsearch failed to index one or more records.');
         }
         return new ElasticsearchRuntimeException('Elasticsearch failed to index one or more records.');
@@ -175,10 +174,10 @@ class ElasticsearchHandler extends AbstractProcessingHandler
      *
      * @param mixed[] $error
      */
-    protected function createExceptionFromError(array $error) : Throwable
+    protected function createExceptionFromError(array $error): Throwable
     {
         $previous = isset($error['caused_by']) ? $this->createExceptionFromError($error['caused_by']) : null;
-        if (\class_exists(ElasticInvalidArgumentException::class)) {
+        if (class_exists(ElasticInvalidArgumentException::class)) {
             return new ElasticInvalidArgumentException($error['type'] . ': ' . $error['reason'], 0, $previous);
         }
         return new ElasticsearchRuntimeException($error['type'] . ': ' . $error['reason'], 0, $previous);

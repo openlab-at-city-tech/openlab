@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\Exception\InvalidRe
  * JsonFileLoader loads translations from an json file.
  *
  * @author singles
- * @internal
  */
 class JsonFileLoader extends FileLoader
 {
@@ -25,9 +24,9 @@ class JsonFileLoader extends FileLoader
     protected function loadResource(string $resource)
     {
         $messages = [];
-        if ($data = \file_get_contents($resource)) {
-            $messages = \json_decode($data, \true);
-            if (0 < ($errorCode = \json_last_error())) {
+        if ($data = file_get_contents($resource)) {
+            $messages = json_decode($data, \true);
+            if (0 < $errorCode = json_last_error()) {
                 throw new InvalidResourceException('Error parsing JSON: ' . $this->getJSONErrorMessage($errorCode));
             }
         }
@@ -36,7 +35,7 @@ class JsonFileLoader extends FileLoader
     /**
      * Translates JSON_ERROR_* constant into meaningful message.
      */
-    private function getJSONErrorMessage(int $errorCode) : string
+    private function getJSONErrorMessage(int $errorCode): string
     {
         switch ($errorCode) {
             case \JSON_ERROR_DEPTH:

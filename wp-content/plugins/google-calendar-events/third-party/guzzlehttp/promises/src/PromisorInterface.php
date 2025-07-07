@@ -5,12 +5,11 @@ namespace SimpleCalendar\plugin_deps\GuzzleHttp\Promise;
 
 /**
  * Interface used with classes that return a promise.
- * @internal
  */
 interface PromisorInterface
 {
     /**
      * Returns a promise.
      */
-    public function promise() : PromiseInterface;
+    public function promise(): PromiseInterface;
 }

@@ -15,14 +15,13 @@ namespace SimpleCalendar\plugin_deps\Monolog\Handler;
  * Base Handler class providing basic close() support as well as handleBatch
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
- * @internal
  */
 abstract class Handler implements HandlerInterface
 {
     /**
      * {@inheritDoc}
      */
-    public function handleBatch(array $records) : void
+    public function handleBatch(array $records): void
     {
         foreach ($records as $record) {
             $this->handle($record);
@@ -31,7 +30,7 @@ abstract class Handler implements HandlerInterface
     /**
      * {@inheritDoc}
      */
-    public function close() : void
+    public function close(): void
     {
     }
     public function __destruct()

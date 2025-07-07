@@ -18,7 +18,6 @@
 namespace SimpleCalendar\plugin_deps\Google\Auth\Cache;
 
 use SimpleCalendar\plugin_deps\Psr\Cache\InvalidArgumentException as PsrInvalidArgumentException;
-/** @internal */
 class InvalidArgumentException extends \InvalidArgumentException implements PsrInvalidArgumentException
 {
 }

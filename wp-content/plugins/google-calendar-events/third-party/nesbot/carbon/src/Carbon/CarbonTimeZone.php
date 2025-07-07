@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidTimeZoneException;
 use DateTimeInterface;
 use DateTimeZone;
 use Throwable;
-/** @internal */
 class CarbonTimeZone extends DateTimeZone
 {
     public function __construct($timezone = null)
@@ -27,24 +26,24 @@ class CarbonTimeZone extends DateTimeZone
         if ($timezone <= -100 || $timezone >= 100) {
             throw new InvalidTimeZoneException('Absolute timezone offset cannot be greater than 100.');
         }
-        return ($timezone >= 0 ? '+' : '') . \ltrim($timezone, '+') . ':00';
+        return ($timezone >= 0 ? '+' : '') . ltrim($timezone, '+') . ':00';
     }
     protected static function getDateTimeZoneNameFromMixed($timezone)
     {
         if ($timezone === null) {
-            return \date_default_timezone_get();
+            return date_default_timezone_get();
         }
         if (\is_string($timezone)) {
-            $timezone = \preg_replace('/^\\s*([+-]\\d+)(\\d{2})\\s*$/', '$1:$2', $timezone);
+            $timezone = preg_replace('/^\s*([+-]\d+)(\d{2})\s*$/', '$1:$2', $timezone);
         }
-        if (\is_numeric($timezone)) {
+        if (is_numeric($timezone)) {
             return static::parseNumericTimezone($timezone);
         }
         return $timezone;
     }
     protected static function getDateTimeZoneFromName(&$name)
     {
-        return @\timezone_open($name = (string) static::getDateTimeZoneNameFromMixed($name));
+        return @timezone_open($name = (string) static::getDateTimeZoneNameFromMixed($name));
     }
     /**
      * Cast the current instance into the given class.
@@ -55,8 +54,8 @@ class CarbonTimeZone extends DateTimeZone
      */
     public function cast(string $className)
     {
-        if (!\method_exists($className, 'instance')) {
-            if (\is_a($className, DateTimeZone::class, \true)) {
+        if (!method_exists($className, 'instance')) {
+            if (is_a($className, DateTimeZone::class, \true)) {
                 return new $className($this->getName());
             }
             throw new InvalidCastException("{$className} has not the instance() method needed to cast the date.");
@@ -161,7 +160,7 @@ class CarbonTimeZone extends DateTimeZone
     public function toRegionName(DateTimeInterface $date = null, $isDst = 1)
     {
         $name = $this->getName();
-        $firstChar = \substr($name, 0, 1);
+        $firstChar = substr($name, 0, 1);
         if ($firstChar !== '+' && $firstChar !== '-') {
             return $name;
         }
@@ -174,11 +173,11 @@ class CarbonTimeZone extends DateTimeZone
             $offset = 0;
         }
         // @codeCoverageIgnoreEnd
-        $name = @\timezone_name_from_abbr('', $offset, $isDst);
+        $name = @timezone_name_from_abbr('', $offset, $isDst);
         if ($name) {
             return $name;
         }
-        foreach (\timezone_identifiers_list() as $timezone) {
+        foreach (timezone_identifiers_list() as $timezone) {
             if (Carbon::instance($date)->tz($timezone)->getOffset() === $offset) {
                 return $timezone;
             }
@@ -219,9 +218,9 @@ class CarbonTimeZone extends DateTimeZone
      * Type 2; A timezone abbreviation, such as GMT
      * Type 3: A timezone identifier, such as Europe/London
      */
-    public function getType() : int
+    public function getType(): int
     {
-        return \preg_match('/"timezone_type";i:(\\d)/', \serialize($this), $match) ? (int) $match[1] : 3;
+        return preg_match('/"timezone_type";i:(\d)/', serialize($this), $match) ? (int) $match[1] : 3;
     }
     /**
      * Create a CarbonTimeZone from mixed input.
@@ -263,10 +262,10 @@ class CarbonTimeZone extends DateTimeZone
      *
      * @return string
      */
-    public static function getOffsetNameFromMinuteOffset(float $minutes) : string
+    public static function getOffsetNameFromMinuteOffset(float $minutes): string
     {
-        $minutes = \round($minutes);
-        $unsignedMinutes = \abs($minutes);
-        return ($minutes < 0 ? '-' : '+') . \str_pad((string) \floor($unsignedMinutes / 60), 2, '0', \STR_PAD_LEFT) . ':' . \str_pad((string) ($unsignedMinutes % 60), 2, '0', \STR_PAD_LEFT);
+        $minutes = round($minutes);
+        $unsignedMinutes = abs($minutes);
+        return ($minutes < 0 ? '-' : '+') . str_pad((string) floor($unsignedMinutes / 60), 2, '0', \STR_PAD_LEFT) . ':' . str_pad((string) ($unsignedMinutes % 60), 2, '0', \STR_PAD_LEFT);
     }
 }

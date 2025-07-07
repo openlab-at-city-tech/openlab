@@ -14,7 +14,6 @@ use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatableInterfa
 use SimpleCalendar\plugin_deps\Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * @author Nate Wiebe <nate@northern.co>
- * @internal
  */
 class TranslatableMessage implements TranslatableInterface
 {
@@ -27,25 +26,25 @@ class TranslatableMessage implements TranslatableInterface
         $this->parameters = $parameters;
         $this->domain = $domain;
     }
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->getMessage();
     }
-    public function getMessage() : string
+    public function getMessage(): string
     {
         return $this->message;
     }
-    public function getParameters() : array
+    public function getParameters(): array
     {
         return $this->parameters;
     }
-    public function getDomain() : ?string
+    public function getDomain(): ?string
     {
         return $this->domain;
     }
-    public function trans(TranslatorInterface $translator, ?string $locale = null) : string
+    public function trans(TranslatorInterface $translator, ?string $locale = null): string
     {
-        return $translator->trans($this->getMessage(), \array_map(static function ($parameter) use($translator, $locale) {
+        return $translator->trans($this->getMessage(), array_map(static function ($parameter) use ($translator, $locale) {
             return $parameter instanceof TranslatableInterface ? $parameter->trans($translator, $locale) : $parameter;
         }, $this->getParameters()), $this->getDomain(), $locale);
     }

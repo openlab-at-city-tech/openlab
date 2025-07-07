@@ -12,7 +12,6 @@ namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
 use InvalidArgumentException as BaseInvalidArgumentException;
 use Throwable;
-/** @internal */
 class ParseErrorException extends BaseInvalidArgumentException implements InvalidArgumentException
 {
     /**
@@ -47,14 +46,14 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
         $this->actual = $actual;
         $this->help = $help;
         $actual = $actual === '' ? 'data is missing' : "get '{$actual}'";
-        parent::__construct(\trim("Format expected {$expected} but {$actual}\n{$help}"), $code, $previous);
+        parent::__construct(trim("Format expected {$expected} but {$actual}\n{$help}"), $code, $previous);
     }
     /**
      * Get the expected.
      *
      * @return string
      */
-    public function getExpected() : string
+    public function getExpected(): string
     {
         return $this->expected;
     }
@@ -63,7 +62,7 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
      *
      * @return string
      */
-    public function getActual() : string
+    public function getActual(): string
     {
         return $this->actual;
     }
@@ -72,7 +71,7 @@ class ParseErrorException extends BaseInvalidArgumentException implements Invali
      *
      * @return string
      */
-    public function getHelp() : string
+    public function getHelp(): string
     {
         return $this->help;
     }

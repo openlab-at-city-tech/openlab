@@ -17,7 +17,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Google\Service\Calendar;
 
-/** @internal */
 class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
 {
     protected $conferenceSolutionKeyType = ConferenceSolutionKey::class;
@@ -72,4 +71,4 @@ class CreateConferenceRequest extends \SimpleCalendar\plugin_deps\Google\Model
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(CreateConferenceRequest::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_CreateConferenceRequest');
+class_alias(CreateConferenceRequest::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_CreateConferenceRequest');

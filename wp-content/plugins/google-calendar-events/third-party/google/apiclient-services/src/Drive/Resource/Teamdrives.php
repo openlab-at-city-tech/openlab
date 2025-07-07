@@ -26,7 +26,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Drive\TeamDriveList;
  *   $driveService = new Google\Service\Drive(...);
  *   $teamdrives = $driveService->teamdrives;
  *  </code>
- * @internal
  */
 class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -45,7 +44,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function create($requestId, TeamDrive $postBody, $optParams = [])
     {
         $params = ['requestId' => $requestId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('create', [$params], TeamDrive::class);
     }
     /**
@@ -57,7 +56,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($teamDriveId, $optParams = [])
     {
         $params = ['teamDriveId' => $teamDriveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -74,7 +73,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($teamDriveId, $optParams = [])
     {
         $params = ['teamDriveId' => $teamDriveId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], TeamDrive::class);
     }
     /**
@@ -93,7 +92,7 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listTeamdrives($optParams = [])
     {
         $params = [];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], TeamDriveList::class);
     }
     /**
@@ -111,9 +110,9 @@ class Teamdrives extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($teamDriveId, TeamDrive $postBody, $optParams = [])
     {
         $params = ['teamDriveId' => $teamDriveId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], TeamDrive::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Teamdrives::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Drive_Resource_Teamdrives');
+class_alias(Teamdrives::class, 'SimpleCalendar\plugin_deps\Google_Service_Drive_Resource_Teamdrives');

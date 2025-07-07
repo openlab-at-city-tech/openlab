@@ -19,7 +19,6 @@ use SimpleCalendar\plugin_deps\Monolog\Utils;
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  * @author Christophe Coevoet <stof@notk.org>
- * @internal
  */
 class LineFormatter extends NormalizerFormatter
 {
@@ -48,7 +47,7 @@ class LineFormatter extends NormalizerFormatter
         $this->includeStacktraces($includeStacktraces);
         parent::__construct($dateFormat);
     }
-    public function includeStacktraces(bool $include = \true, ?callable $parser = null) : self
+    public function includeStacktraces(bool $include = \true, ?callable $parser = null): self
     {
         $this->includeStacktraces = $include;
         if ($this->includeStacktraces) {
@@ -57,12 +56,12 @@ class LineFormatter extends NormalizerFormatter
         }
         return $this;
     }
-    public function allowInlineLineBreaks(bool $allow = \true) : self
+    public function allowInlineLineBreaks(bool $allow = \true): self
     {
         $this->allowInlineLineBreaks = $allow;
         return $this;
     }
-    public function ignoreEmptyContextAndExtra(bool $ignore = \true) : self
+    public function ignoreEmptyContextAndExtra(bool $ignore = \true): self
     {
         $this->ignoreEmptyContextAndExtra = $ignore;
         return $this;
@@ -70,48 +69,48 @@ class LineFormatter extends NormalizerFormatter
     /**
      * {@inheritDoc}
      */
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         $vars = parent::format($record);
         $output = $this->format;
         foreach ($vars['extra'] as $var => $val) {
-            if (\false !== \strpos($output, '%extra.' . $var . '%')) {
-                $output = \str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%extra.' . $var . '%')) {
+                $output = str_replace('%extra.' . $var . '%', $this->stringify($val), $output);
                 unset($vars['extra'][$var]);
             }
         }
         foreach ($vars['context'] as $var => $val) {
-            if (\false !== \strpos($output, '%context.' . $var . '%')) {
-                $output = \str_replace('%context.' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%context.' . $var . '%')) {
+                $output = str_replace('%context.' . $var . '%', $this->stringify($val), $output);
                 unset($vars['context'][$var]);
             }
         }
         if ($this->ignoreEmptyContextAndExtra) {
             if (empty($vars['context'])) {
                 unset($vars['context']);
-                $output = \str_replace('%context%', '', $output);
+                $output = str_replace('%context%', '', $output);
             }
             if (empty($vars['extra'])) {
                 unset($vars['extra']);
-                $output = \str_replace('%extra%', '', $output);
+                $output = str_replace('%extra%', '', $output);
             }
         }
         foreach ($vars as $var => $val) {
-            if (\false !== \strpos($output, '%' . $var . '%')) {
-                $output = \str_replace('%' . $var . '%', $this->stringify($val), $output);
+            if (\false !== strpos($output, '%' . $var . '%')) {
+                $output = str_replace('%' . $var . '%', $this->stringify($val), $output);
             }
         }
         // remove leftover %extra.xxx% and %context.xxx% if any
-        if (\false !== \strpos($output, '%')) {
-            $output = \preg_replace('/%(?:extra|context)\\..+?%/', '', $output);
+        if (\false !== strpos($output, '%')) {
+            $output = preg_replace('/%(?:extra|context)\..+?%/', '', $output);
             if (null === $output) {
-                $pcreErrorCode = \preg_last_error();
+                $pcreErrorCode = preg_last_error();
                 throw new \RuntimeException('Failed to run preg_replace: ' . $pcreErrorCode . ' / ' . Utils::pcreLastErrorMessage($pcreErrorCode));
             }
         }
         return $output;
     }
-    public function formatBatch(array $records) : string
+    public function formatBatch(array $records): string
     {
         $message = '';
         foreach ($records as $record) {
@@ -122,18 +121,18 @@ class LineFormatter extends NormalizerFormatter
     /**
      * @param mixed $value
      */
-    public function stringify($value) : string
+    public function stringify($value): string
     {
         return $this->replaceNewlines($this->convertToString($value));
     }
-    protected function normalizeException(\Throwable $e, int $depth = 0) : string
+    protected function normalizeException(\Throwable $e, int $depth = 0): string
     {
         $str = $this->formatException($e);
         if ($previous = $e->getPrevious()) {
             do {
                 $depth++;
                 if ($depth > $this->maxNormalizeDepth) {
-                    $str .= '\\n[previous exception] Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization';
+                    $str .= '\n[previous exception] Over ' . $this->maxNormalizeDepth . ' levels deep, aborting normalization';
                     break;
                 }
                 $str .= "\n[previous exception] " . $this->formatException($previous);
@@ -144,31 +143,31 @@ class LineFormatter extends NormalizerFormatter
     /**
      * @param mixed $data
      */
-    protected function convertToString($data) : string
+    protected function convertToString($data): string
     {
-        if (null === $data || \is_bool($data)) {
-            return \var_export($data, \true);
+        if (null === $data || is_bool($data)) {
+            return var_export($data, \true);
         }
-        if (\is_scalar($data)) {
+        if (is_scalar($data)) {
             return (string) $data;
         }
         return $this->toJson($data, \true);
     }
-    protected function replaceNewlines(string $str) : string
+    protected function replaceNewlines(string $str): string
     {
         if ($this->allowInlineLineBreaks) {
-            if (0 === \strpos($str, '{')) {
-                $str = \preg_replace('/(?<!\\\\)\\\\[rn]/', "\n", $str);
+            if (0 === strpos($str, '{')) {
+                $str = preg_replace('/(?<!\\\\)\\\\[rn]/', "\n", $str);
                 if (null === $str) {
-                    $pcreErrorCode = \preg_last_error();
+                    $pcreErrorCode = preg_last_error();
                     throw new \RuntimeException('Failed to run preg_replace: ' . $pcreErrorCode . ' / ' . Utils::pcreLastErrorMessage($pcreErrorCode));
                 }
             }
             return $str;
         }
-        return \str_replace(["\r\n", "\r", "\n"], ' ', $str);
+        return str_replace(["\r\n", "\r", "\n"], ' ', $str);
     }
-    private function formatException(\Throwable $e) : string
+    private function formatException(\Throwable $e): string
     {
         $str = '[object] (' . Utils::getClass($e) . '(code: ' . $e->getCode();
         if ($e instanceof \SoapFault) {
@@ -179,9 +178,9 @@ class LineFormatter extends NormalizerFormatter
                 $str .= ' faultactor: ' . $e->faultactor;
             }
             if (isset($e->detail)) {
-                if (\is_string($e->detail)) {
+                if (is_string($e->detail)) {
                     $str .= ' detail: ' . $e->detail;
-                } elseif (\is_object($e->detail) || \is_array($e->detail)) {
+                } elseif (is_object($e->detail) || is_array($e->detail)) {
                     $str .= ' detail: ' . $this->toJson($e->detail, \true);
                 }
             }
@@ -192,7 +191,7 @@ class LineFormatter extends NormalizerFormatter
         }
         return $str;
     }
-    private function stacktracesParser(\Throwable $e) : string
+    private function stacktracesParser(\Throwable $e): string
     {
         $trace = $e->getTraceAsString();
         if ($this->stacktracesParser) {
@@ -200,8 +199,8 @@ class LineFormatter extends NormalizerFormatter
         }
         return "\n[stacktrace]\n" . $trace . "\n";
     }
-    private function stacktracesParserCustom(string $trace) : string
+    private function stacktracesParserCustom(string $trace): string
     {
-        return \implode("\n", \array_filter(\array_map($this->stacktracesParser, \explode("\n", $trace))));
+        return implode("\n", array_filter(array_map($this->stacktracesParser, explode("\n", $trace))));
     }
 }

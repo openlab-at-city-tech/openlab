@@ -19,7 +19,6 @@ use SimpleCalendar\plugin_deps\Monolog\Processor\ProcessorInterface;
  * @author Jordi Boggiano <j.boggiano@seld.be>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 trait ProcessableHandlerTrait
 {
@@ -31,20 +30,20 @@ trait ProcessableHandlerTrait
     /**
      * {@inheritDoc}
      */
-    public function pushProcessor(callable $callback) : HandlerInterface
+    public function pushProcessor(callable $callback): HandlerInterface
     {
-        \array_unshift($this->processors, $callback);
+        array_unshift($this->processors, $callback);
         return $this;
     }
     /**
      * {@inheritDoc}
      */
-    public function popProcessor() : callable
+    public function popProcessor(): callable
     {
         if (!$this->processors) {
             throw new \LogicException('You tried to pop from an empty processor stack.');
         }
-        return \array_shift($this->processors);
+        return array_shift($this->processors);
     }
     /**
      * Processes a record.
@@ -52,14 +51,14 @@ trait ProcessableHandlerTrait
      * @phpstan-param  Record $record
      * @phpstan-return Record
      */
-    protected function processRecord(array $record) : array
+    protected function processRecord(array $record): array
     {
         foreach ($this->processors as $processor) {
             $record = $processor($record);
         }
         return $record;
     }
-    protected function resetProcessors() : void
+    protected function resetProcessors(): void
     {
         foreach ($this->processors as $processor) {
             if ($processor instanceof ResettableInterface) {

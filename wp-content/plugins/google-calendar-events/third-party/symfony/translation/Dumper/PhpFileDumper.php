@@ -15,7 +15,6 @@ use SimpleCalendar\plugin_deps\Symfony\Component\Translation\MessageCatalogue;
  * PhpFileDumper generates PHP files from a message catalogue.
  *
  * @author Michel Salib <michelsalib@hotmail.com>
- * @internal
  */
 class PhpFileDumper extends FileDumper
 {
@@ -24,7 +23,7 @@ class PhpFileDumper extends FileDumper
      */
     public function formatCatalogue(MessageCatalogue $messages, string $domain, array $options = [])
     {
-        return "<?php\n\nreturn " . \var_export($messages->all($domain), \true) . ";\n";
+        return "<?php\n\nreturn " . var_export($messages->all($domain), \true) . ";\n";
     }
     /**
      * {@inheritdoc}

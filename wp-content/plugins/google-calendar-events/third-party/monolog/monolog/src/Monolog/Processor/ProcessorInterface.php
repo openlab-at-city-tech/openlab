@@ -17,7 +17,6 @@ namespace SimpleCalendar\plugin_deps\Monolog\Processor;
  * @author Nicolas Grekas <p@tchwork.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 interface ProcessorInterface
 {

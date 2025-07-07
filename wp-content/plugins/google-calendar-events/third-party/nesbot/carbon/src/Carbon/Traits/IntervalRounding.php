@@ -15,18 +15,17 @@ use SimpleCalendar\plugin_deps\Carbon\Exceptions\InvalidIntervalException;
 use DateInterval;
 /**
  * Trait to call rounding methods to interval or the interval of a period.
- * @internal
  */
 trait IntervalRounding
 {
     protected function callRoundMethod(string $method, array $parameters)
     {
-        $action = \substr($method, 0, 4);
+        $action = substr($method, 0, 4);
         if ($action !== 'ceil') {
-            $action = \substr($method, 0, 5);
+            $action = substr($method, 0, 5);
         }
         if (\in_array($action, ['round', 'floor', 'ceil'])) {
-            return $this->{$action . 'Unit'}(\substr($method, \strlen($action)), ...$parameters);
+            return $this->{$action . 'Unit'}(substr($method, \strlen($action)), ...$parameters);
         }
         return null;
     }
@@ -36,8 +35,8 @@ trait IntervalRounding
         if ($precision instanceof DateInterval) {
             $precision = (string) CarbonInterval::instance($precision, [], \true);
         }
-        if (\is_string($precision) && \preg_match('/^\\s*(?<precision>\\d+)?\\s*(?<unit>\\w+)(?<other>\\W.*)?$/', $precision, $match)) {
-            if (\trim($match['other'] ?? '') !== '') {
+        if (\is_string($precision) && preg_match('/^\s*(?<precision>\d+)?\s*(?<unit>\w+)(?<other>\W.*)?$/', $precision, $match)) {
+            if (trim($match['other'] ?? '') !== '') {
                 throw new InvalidIntervalException('Rounding is only possible with single unit intervals.');
             }
             $precision = (int) ($match['precision'] ?: 1);

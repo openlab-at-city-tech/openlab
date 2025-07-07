@@ -10,7 +10,6 @@
  */
 namespace SimpleCalendar\plugin_deps\Carbon\Exceptions;
 
-/** @internal */
 interface BadMethodCallException extends Exception
 {
     //

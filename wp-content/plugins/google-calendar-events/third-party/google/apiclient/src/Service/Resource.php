@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\GuzzleHttp\Psr7\Request;
  * calling overloading (__call()), which on call will see if the method name (plus.activities.list)
  * is available in this service, and if so construct an apiHttpRequest representing it.
  *
- * @internal
  */
 class Resource
 {
@@ -52,7 +51,7 @@ class Resource
         $this->servicePath = $service->servicePath;
         $this->serviceName = $serviceName;
         $this->resourceName = $resourceName;
-        $this->methods = \is_array($resource) && isset($resource['methods']) ? $resource['methods'] : [$resourceName => $resource];
+        $this->methods = is_array($resource) && isset($resource['methods']) ? $resource['methods'] : [$resourceName => $resource];
     }
     /**
      * TODO: This function needs simplifying.
@@ -81,7 +80,7 @@ class Resource
                 // to use the smart method to create a simple object for
                 // for JSONification.
                 $parameters['postBody'] = $parameters['postBody']->toSimpleObject();
-            } elseif (\is_object($parameters['postBody'])) {
+            } elseif (is_object($parameters['postBody'])) {
                 // If the post body is another kind of object, we will try and
                 // wrangle it into a sensible format.
                 $parameters['postBody'] = $this->convertToArrayAndStripNulls($parameters['postBody']);
@@ -94,12 +93,12 @@ class Resource
         if (isset($parameters['optParams'])) {
             $optParams = $parameters['optParams'];
             unset($parameters['optParams']);
-            $parameters = \array_merge($parameters, $optParams);
+            $parameters = array_merge($parameters, $optParams);
         }
         if (!isset($method['parameters'])) {
             $method['parameters'] = [];
         }
-        $method['parameters'] = \array_merge($this->stackParameters, $method['parameters']);
+        $method['parameters'] = array_merge($this->stackParameters, $method['parameters']);
         foreach ($parameters as $key => $val) {
             if ($key != 'postBody' && !isset($method['parameters'][$key])) {
                 $this->client->getLogger()->error('Service parameter unknown', ['service' => $this->serviceName, 'resource' => $this->resourceName, 'method' => $name, 'parameter' => $key]);
@@ -127,7 +126,7 @@ class Resource
         // NOTE: because we're creating the request by hand,
         // and because the service has a rootUrl property
         // the "base_uri" of the Http Client is not accounted for
-        $request = new Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? \json_encode($postBody) : '');
+        $request = new Request($method['httpMethod'], $url, $postBody ? ['content-type' => 'application/json'] : [], $postBody ? json_encode($postBody) : '');
         // support uploads
         if (isset($parameters['data'])) {
             $mimeType = isset($parameters['mimeType']) ? $parameters['mimeType']['value'] : 'application/octet-stream';
@@ -156,7 +155,7 @@ class Resource
         foreach ($o as $k => $v) {
             if ($v === null) {
                 unset($o[$k]);
-            } elseif (\is_object($v) || \is_array($v)) {
+            } elseif (is_object($v) || is_array($v)) {
                 $o[$k] = $this->convertToArrayAndStripNulls($o[$k]);
             }
         }
@@ -173,14 +172,14 @@ class Resource
     public function createRequestUri($restPath, $params)
     {
         // Override the default servicePath address if the $restPath use a /
-        if ('/' == \substr($restPath, 0, 1)) {
-            $requestUrl = \substr($restPath, 1);
+        if ('/' == substr($restPath, 0, 1)) {
+            $requestUrl = substr($restPath, 1);
         } else {
             $requestUrl = $this->servicePath . $restPath;
         }
         // code for leading slash
         if ($this->rootUrl) {
-            if ('/' !== \substr($this->rootUrl, -1) && '/' !== \substr($requestUrl, 0, 1)) {
+            if ('/' !== substr($this->rootUrl, -1) && '/' !== substr($requestUrl, 0, 1)) {
                 $requestUrl = '/' . $requestUrl;
             }
             $requestUrl = $this->rootUrl . $requestUrl;
@@ -194,21 +193,21 @@ class Resource
             if ($paramSpec['location'] == 'path') {
                 $uriTemplateVars[$paramName] = $paramSpec['value'];
             } elseif ($paramSpec['location'] == 'query') {
-                if (\is_array($paramSpec['value'])) {
+                if (is_array($paramSpec['value'])) {
                     foreach ($paramSpec['value'] as $value) {
-                        $queryVars[] = $paramName . '=' . \rawurlencode(\rawurldecode($value));
+                        $queryVars[] = $paramName . '=' . rawurlencode(rawurldecode($value));
                     }
                 } else {
-                    $queryVars[] = $paramName . '=' . \rawurlencode(\rawurldecode($paramSpec['value']));
+                    $queryVars[] = $paramName . '=' . rawurlencode(rawurldecode($paramSpec['value']));
                 }
             }
         }
-        if (\count($uriTemplateVars)) {
+        if (count($uriTemplateVars)) {
             $uriTemplateParser = new UriTemplate();
             $requestUrl = $uriTemplateParser->parse($requestUrl, $uriTemplateVars);
         }
-        if (\count($queryVars)) {
-            $requestUrl .= '?' . \implode('&', $queryVars);
+        if (count($queryVars)) {
+            $requestUrl .= '?' . implode('&', $queryVars);
         }
         return $requestUrl;
     }

@@ -18,7 +18,6 @@
 namespace SimpleCalendar\plugin_deps\Google\Task;
 
 use SimpleCalendar\plugin_deps\Google\Exception as GoogleException;
-/** @internal */
 class Exception extends GoogleException
 {
 }

@@ -20,12 +20,11 @@ use SimpleCalendar\plugin_deps\Monolog\LogRecord;
  * @see https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry
  *
  * @author Luís Cobucci <lcobucci@gmail.com>
- * @internal
  */
 final class GoogleCloudLoggingFormatter extends JsonFormatter
 {
     /** {@inheritdoc} **/
-    public function format(array $record) : string
+    public function format(array $record): string
     {
         // Re-key level for GCP logging
         $record['severity'] = $record['level_name'];

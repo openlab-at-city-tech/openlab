@@ -27,7 +27,6 @@ use SimpleCalendar\plugin_deps\Google\Service\Calendar\Channel;
  *   $calendarService = new Google\Service\Calendar(...);
  *   $acl = $calendarService->acl;
  *  </code>
- * @internal
  */
 class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
 {
@@ -43,7 +42,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function delete($calendarId, $ruleId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'ruleId' => $ruleId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('delete', [$params]);
     }
     /**
@@ -59,7 +58,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function get($calendarId, $ruleId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'ruleId' => $ruleId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('get', [$params], AclRule::class);
     }
     /**
@@ -78,7 +77,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function insert($calendarId, AclRule $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('insert', [$params], AclRule::class);
     }
     /**
@@ -111,7 +110,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function listAcl($calendarId, $optParams = [])
     {
         $params = ['calendarId' => $calendarId];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('list', [$params], AclModel::class);
     }
     /**
@@ -133,7 +132,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function patch($calendarId, $ruleId, AclRule $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'ruleId' => $ruleId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('patch', [$params], AclRule::class);
     }
     /**
@@ -154,7 +153,7 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function update($calendarId, $ruleId, AclRule $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'ruleId' => $ruleId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('update', [$params], AclRule::class);
     }
     /**
@@ -188,9 +187,9 @@ class Acl extends \SimpleCalendar\plugin_deps\Google\Service\Resource
     public function watch($calendarId, Channel $postBody, $optParams = [])
     {
         $params = ['calendarId' => $calendarId, 'postBody' => $postBody];
-        $params = \array_merge($params, $optParams);
+        $params = array_merge($params, $optParams);
         return $this->call('watch', [$params], Channel::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Acl::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar_Resource_Acl');
+class_alias(Acl::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar_Resource_Acl');

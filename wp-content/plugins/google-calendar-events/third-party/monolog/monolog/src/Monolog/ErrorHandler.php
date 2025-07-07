@@ -21,7 +21,6 @@ use SimpleCalendar\plugin_deps\Psr\Log\LogLevel;
  * Quick setup: <code>ErrorHandler::register($logger);</code>
  *
  * @author Jordi Boggiano <j.boggiano@seld.be>
- * @internal
  */
 class ErrorHandler
 {
@@ -62,7 +61,7 @@ class ErrorHandler
      * @param  LogLevel::*|null|false                 $fatalLevel        a LogLevel::* constant, null to use the default LogLevel::ALERT or false to disable fatal error handling
      * @return ErrorHandler
      */
-    public static function register(LoggerInterface $logger, $errorLevelMap = [], $exceptionLevelMap = [], $fatalLevel = null) : self
+    public static function register(LoggerInterface $logger, $errorLevelMap = [], $exceptionLevelMap = [], $fatalLevel = null): self
     {
         /** @phpstan-ignore-next-line */
         $handler = new static($logger);
@@ -81,9 +80,9 @@ class ErrorHandler
      * @param  array<class-string, LogLevel::*> $levelMap an array of class name to LogLevel::* constant mapping
      * @return $this
      */
-    public function registerExceptionHandler(array $levelMap = [], bool $callPrevious = \true) : self
+    public function registerExceptionHandler(array $levelMap = [], bool $callPrevious = \true): self
     {
-        $prev = \set_exception_handler(function (\Throwable $e) : void {
+        $prev = set_exception_handler(function (\Throwable $e): void {
             $this->handleException($e);
         });
         $this->uncaughtExceptionLevelMap = $levelMap;
@@ -101,10 +100,10 @@ class ErrorHandler
      * @param  array<int, LogLevel::*> $levelMap an array of E_* constant to LogLevel::* constant mapping
      * @return $this
      */
-    public function registerErrorHandler(array $levelMap = [], bool $callPrevious = \true, int $errorTypes = -1, bool $handleOnlyReportedErrors = \true) : self
+    public function registerErrorHandler(array $levelMap = [], bool $callPrevious = \true, int $errorTypes = -1, bool $handleOnlyReportedErrors = \true): self
     {
-        $prev = \set_error_handler([$this, 'handleError'], $errorTypes);
-        $this->errorLevelMap = \array_replace($this->defaultErrorLevelMap(), $levelMap);
+        $prev = set_error_handler([$this, 'handleError'], $errorTypes);
+        $this->errorLevelMap = array_replace($this->defaultErrorLevelMap(), $levelMap);
         if ($callPrevious) {
             $this->previousErrorHandler = $prev ?: \true;
         } else {
@@ -117,10 +116,10 @@ class ErrorHandler
      * @param LogLevel::*|null $level              a LogLevel::* constant, null to use the default LogLevel::ALERT
      * @param int              $reservedMemorySize Amount of KBs to reserve in memory so that it can be freed when handling fatal errors giving Monolog some room in memory to get its job done
      */
-    public function registerFatalHandler($level = null, int $reservedMemorySize = 20) : self
+    public function registerFatalHandler($level = null, int $reservedMemorySize = 20): self
     {
-        \register_shutdown_function([$this, 'handleFatalError']);
-        $this->reservedMemory = \str_repeat(' ', 1024 * $reservedMemorySize);
+        register_shutdown_function([$this, 'handleFatalError']);
+        $this->reservedMemory = str_repeat(' ', 1024 * $reservedMemorySize);
         $this->fatalLevel = null === $level ? LogLevel::ALERT : $level;
         $this->hasFatalErrorHandler = \true;
         return $this;
@@ -128,21 +127,21 @@ class ErrorHandler
     /**
      * @return array<class-string, LogLevel::*>
      */
-    protected function defaultExceptionLevelMap() : array
+    protected function defaultExceptionLevelMap(): array
     {
         return ['ParseError' => LogLevel::CRITICAL, 'Throwable' => LogLevel::ERROR];
     }
     /**
      * @return array<int, LogLevel::*>
      */
-    protected function defaultErrorLevelMap() : array
+    protected function defaultErrorLevelMap(): array
     {
         return [\E_ERROR => LogLevel::CRITICAL, \E_WARNING => LogLevel::WARNING, \E_PARSE => LogLevel::ALERT, \E_NOTICE => LogLevel::NOTICE, \E_CORE_ERROR => LogLevel::CRITICAL, \E_CORE_WARNING => LogLevel::WARNING, \E_COMPILE_ERROR => LogLevel::ALERT, \E_COMPILE_WARNING => LogLevel::WARNING, \E_USER_ERROR => LogLevel::ERROR, \E_USER_WARNING => LogLevel::WARNING, \E_USER_NOTICE => LogLevel::NOTICE, \E_STRICT => LogLevel::NOTICE, \E_RECOVERABLE_ERROR => LogLevel::ERROR, \E_DEPRECATED => LogLevel::NOTICE, \E_USER_DEPRECATED => LogLevel::NOTICE];
     }
     /**
      * @phpstan-return never
      */
-    private function handleException(\Throwable $e) : void
+    private function handleException(\Throwable $e): void
     {
         $level = LogLevel::ERROR;
         foreach ($this->uncaughtExceptionLevelMap as $class => $candidate) {
@@ -151,12 +150,12 @@ class ErrorHandler
                 break;
             }
         }
-        $this->logger->log($level, \sprintf('Uncaught Exception %s: "%s" at %s line %s', Utils::getClass($e), $e->getMessage(), $e->getFile(), $e->getLine()), ['exception' => $e]);
+        $this->logger->log($level, sprintf('Uncaught Exception %s: "%s" at %s line %s', Utils::getClass($e), $e->getMessage(), $e->getFile(), $e->getLine()), ['exception' => $e]);
         if ($this->previousExceptionHandler) {
             ($this->previousExceptionHandler)($e);
         }
-        if (!\headers_sent() && !\ini_get('display_errors')) {
-            \http_response_code(500);
+        if (!headers_sent() && !ini_get('display_errors')) {
+            http_response_code(500);
         }
         exit(255);
     }
@@ -165,18 +164,18 @@ class ErrorHandler
      *
      * @param mixed[] $context
      */
-    public function handleError(int $code, string $message, string $file = '', int $line = 0, ?array $context = []) : bool
+    public function handleError(int $code, string $message, string $file = '', int $line = 0, ?array $context = []): bool
     {
-        if ($this->handleOnlyReportedErrors && !(\error_reporting() & $code)) {
+        if ($this->handleOnlyReportedErrors && !(error_reporting() & $code)) {
             return \false;
         }
         // fatal error codes are ignored if a fatal error handler is present as well to avoid duplicate log entries
-        if (!$this->hasFatalErrorHandler || !\in_array($code, self::$fatalErrors, \true)) {
+        if (!$this->hasFatalErrorHandler || !in_array($code, self::$fatalErrors, \true)) {
             $level = $this->errorLevelMap[$code] ?? LogLevel::CRITICAL;
             $this->logger->log($level, self::codeToString($code) . ': ' . $message, ['code' => $code, 'message' => $message, 'file' => $file, 'line' => $line]);
         } else {
-            $trace = \debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
-            \array_shift($trace);
+            $trace = debug_backtrace(\DEBUG_BACKTRACE_IGNORE_ARGS);
+            array_shift($trace);
             // Exclude handleError from trace
             $this->lastFatalData = ['type' => $code, 'message' => $message, 'file' => $file, 'line' => $line, 'trace' => $trace];
         }
@@ -190,15 +189,15 @@ class ErrorHandler
     /**
      * @private
      */
-    public function handleFatalError() : void
+    public function handleFatalError(): void
     {
         $this->reservedMemory = '';
-        if (\is_array($this->lastFatalData)) {
+        if (is_array($this->lastFatalData)) {
             $lastError = $this->lastFatalData;
         } else {
-            $lastError = \error_get_last();
+            $lastError = error_get_last();
         }
-        if ($lastError && \in_array($lastError['type'], self::$fatalErrors, \true)) {
+        if ($lastError && in_array($lastError['type'], self::$fatalErrors, \true)) {
             $trace = $lastError['trace'] ?? null;
             $this->logger->log($this->fatalLevel, 'Fatal Error (' . self::codeToString($lastError['type']) . '): ' . $lastError['message'], ['code' => $lastError['type'], 'message' => $lastError['message'], 'file' => $lastError['file'], 'line' => $lastError['line'], 'trace' => $trace]);
             if ($this->logger instanceof Logger) {
@@ -211,7 +210,7 @@ class ErrorHandler
     /**
      * @param int $code
      */
-    private static function codeToString($code) : string
+    private static function codeToString($code): string
     {
         switch ($code) {
             case \E_ERROR:

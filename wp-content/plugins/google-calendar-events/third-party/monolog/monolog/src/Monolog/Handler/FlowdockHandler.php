@@ -28,7 +28,6 @@ use SimpleCalendar\plugin_deps\Monolog\Formatter\FormatterInterface;
  *
  * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
  * @deprecated Since 2.9.0 and 3.3.0, Flowdock was shutdown we will thus drop this handler in Monolog 4
- * @internal
  */
 class FlowdockHandler extends SocketHandler
 {
@@ -41,7 +40,7 @@ class FlowdockHandler extends SocketHandler
      */
     public function __construct(string $apiToken, $level = Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
-        if (!\extension_loaded('openssl')) {
+        if (!extension_loaded('openssl')) {
             throw new MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
         }
         parent::__construct('ssl://api.flowdock.com:443', $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
@@ -50,24 +49,24 @@ class FlowdockHandler extends SocketHandler
     /**
      * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter) : HandlerInterface
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
         if (!$formatter instanceof FlowdockFormatter) {
-            throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
+            throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
         }
         return parent::setFormatter($formatter);
     }
     /**
      * Gets the default formatter.
      */
-    protected function getDefaultFormatter() : FormatterInterface
+    protected function getDefaultFormatter(): FormatterInterface
     {
-        throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
+        throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\Formatter\FlowdockFormatter to function correctly');
     }
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record) : void
+    protected function write(array $record): void
     {
         parent::write($record);
         $this->closeSocket();
@@ -75,7 +74,7 @@ class FlowdockHandler extends SocketHandler
     /**
      * {@inheritDoc}
      */
-    protected function generateDataStream(array $record) : string
+    protected function generateDataStream(array $record): string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -85,19 +84,19 @@ class FlowdockHandler extends SocketHandler
      *
      * @phpstan-param FormattedRecord $record
      */
-    private function buildContent(array $record) : string
+    private function buildContent(array $record): string
     {
         return Utils::jsonEncode($record['formatted']['flowdock']);
     }
     /**
      * Builds the header of the API Call
      */
-    private function buildHeader(string $content) : string
+    private function buildHeader(string $content): string
     {
         $header = "POST /v1/messages/team_inbox/" . $this->apiToken . " HTTP/1.1\r\n";
         $header .= "Host: api.flowdock.com\r\n";
         $header .= "Content-Type: application/json\r\n";
-        $header .= "Content-Length: " . \strlen($content) . "\r\n";
+        $header .= "Content-Length: " . strlen($content) . "\r\n";
         $header .= "\r\n";
         return $header;
     }

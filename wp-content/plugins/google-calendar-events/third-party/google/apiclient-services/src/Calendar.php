@@ -30,7 +30,6 @@ use SimpleCalendar\plugin_deps\Google\Client;
  * </p>
  *
  * @author Google, Inc.
- * @internal
  */
 class Calendar extends \SimpleCalendar\plugin_deps\Google\Service
 {
@@ -78,4 +77,4 @@ class Calendar extends \SimpleCalendar\plugin_deps\Google\Service
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
-\class_alias(Calendar::class, 'SimpleCalendar\\plugin_deps\\Google_Service_Calendar');
+class_alias(Calendar::class, 'SimpleCalendar\plugin_deps\Google_Service_Calendar');

@@ -14,7 +14,6 @@ namespace SimpleCalendar\plugin_deps\Symfony\Component\Translation;
  * MetadataAwareInterface.
  *
  * @author Fabien Potencier <fabien@symfony.com>
- * @internal
  */
 interface MetadataAwareInterface
 {

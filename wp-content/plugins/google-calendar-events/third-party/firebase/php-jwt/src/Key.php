@@ -6,7 +6,6 @@ use InvalidArgumentException;
 use OpenSSLAsymmetricKey;
 use OpenSSLCertificate;
 use TypeError;
-/** @internal */
 class Key
 {
     /** @var string|resource|OpenSSLAsymmetricKey|OpenSSLCertificate */
@@ -37,7 +36,7 @@ class Key
      *
      * @return string
      */
-    public function getAlgorithm() : string
+    public function getAlgorithm(): string
     {
         return $this->algorithm;
     }

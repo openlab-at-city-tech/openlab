@@ -18,7 +18,6 @@ use SimpleCalendar\plugin_deps\Elastica\Document;
  * @author Jelle Vink <jelle.vink@gmail.com>
  *
  * @phpstan-import-type Record from \Monolog\Logger
- * @internal
  */
 class ElasticaFormatter extends NormalizerFormatter
 {
@@ -37,7 +36,7 @@ class ElasticaFormatter extends NormalizerFormatter
     public function __construct(string $index, ?string $type)
     {
         // elasticsearch requires a ISO 8601 format date with optional millisecond precision.
-        parent::__construct('Y-m-d\\TH:i:s.uP');
+        parent::__construct('Y-m-d\TH:i:s.uP');
         $this->index = $index;
         $this->type = $type;
     }
@@ -49,14 +48,14 @@ class ElasticaFormatter extends NormalizerFormatter
         $record = parent::format($record);
         return $this->getDocument($record);
     }
-    public function getIndex() : string
+    public function getIndex(): string
     {
         return $this->index;
     }
     /**
      * @deprecated since Elastica 7 type has no effect
      */
-    public function getType() : string
+    public function getType(): string
     {
         /** @phpstan-ignore-next-line */
         return $this->type;
@@ -66,11 +65,11 @@ class ElasticaFormatter extends NormalizerFormatter
      *
      * @phpstan-param Record $record
      */
-    protected function getDocument(array $record) : Document
+    protected function getDocument(array $record): Document
     {
         $document = new Document();
         $document->setData($record);
-        if (\method_exists($document, 'setType')) {
+        if (method_exists($document, 'setType')) {
             /** @phpstan-ignore-next-line */
             $document->setType($this->type);
         }
