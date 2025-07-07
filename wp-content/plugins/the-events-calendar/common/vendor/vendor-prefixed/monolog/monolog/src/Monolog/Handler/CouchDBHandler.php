@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,12 +7,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Handler;
 
+use TEC\Common\Monolog\Formatter\FormatterInterface;
 use TEC\Common\Monolog\Formatter\JsonFormatter;
 use TEC\Common\Monolog\Logger;
 
@@ -23,17 +22,21 @@ use TEC\Common\Monolog\Logger;
  */
 class CouchDBHandler extends AbstractProcessingHandler
 {
+    /** @var mixed[] */
     private $options;
 
-    public function __construct(array $options = array(), $level = Logger::DEBUG, $bubble = true)
+    /**
+     * @param mixed[] $options
+     */
+    public function __construct(array $options = [], $level = Logger::DEBUG, bool $bubble = true)
     {
-        $this->options = array_merge(array(
+        $this->options = array_merge([
             'host'     => 'localhost',
             'port'     => 5984,
             'dbname'   => 'logger',
             'username' => null,
             'password' => null,
-        ), $options);
+        ], $options);
 
         parent::__construct($level, $bubble);
     }
@@ -41,7 +44,7 @@ class CouchDBHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record): void
     {
         $basicAuth = null;
         if ($this->options['username']) {
@@ -49,17 +52,17 @@ class CouchDBHandler extends AbstractProcessingHandler
         }
 
         $url = 'http://'.$basicAuth.$this->options['host'].':'.$this->options['port'].'/'.$this->options['dbname'];
-        $context = stream_context_create(array(
-            'http' => array(
+        $context = stream_context_create([
+            'http' => [
                 'method'        => 'POST',
                 'content'       => $record['formatted'],
                 'ignore_errors' => true,
                 'max_redirects' => 0,
                 'header'        => 'Content-type: application/json',
-            ),
-        ));
+            ],
+        ]);
 
-        if (false === @file_get_contents($url, null, $context)) {
+        if (false === @file_get_contents($url, false, $context)) {
             throw new \RuntimeException(sprintf('Could not connect to %s', $url));
         }
     }
@@ -67,7 +70,7 @@ class CouchDBHandler extends AbstractProcessingHandler
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter(): FormatterInterface
     {
         return new JsonFormatter(JsonFormatter::BATCH_MODE_JSON, false);
     }

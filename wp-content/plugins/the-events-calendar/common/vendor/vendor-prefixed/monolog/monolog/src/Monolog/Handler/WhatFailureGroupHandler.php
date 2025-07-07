@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Handler;
@@ -18,25 +16,24 @@ namespace TEC\Common\Monolog\Handler;
  * and continuing through to give every handler a chance to succeed.
  *
  * @author Craig D'Amelio <craig@damelio.ca>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 class WhatFailureGroupHandler extends GroupHandler
 {
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = call_user_func($processor, $record);
-            }
+            /** @var Record $record */
+            $record = $this->processRecord($record);
         }
 
         foreach ($this->handlers as $handler) {
             try {
                 $handler->handle($record);
-            } catch (\Exception $e) {
-                // What failure?
             } catch (\Throwable $e) {
                 // What failure?
             }
@@ -46,25 +43,36 @@ class WhatFailureGroupHandler extends GroupHandler
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records): void
     {
         if ($this->processors) {
             $processed = array();
             foreach ($records as $record) {
-                foreach ($this->processors as $processor) {
-                    $processed[] = call_user_func($processor, $record);
-                }
+                $processed[] = $this->processRecord($record);
             }
+            /** @var Record[] $records */
             $records = $processed;
         }
 
         foreach ($this->handlers as $handler) {
             try {
                 $handler->handleBatch($records);
-            } catch (\Exception $e) {
+            } catch (\Throwable $e) {
                 // What failure?
+            }
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function close(): void
+    {
+        foreach ($this->handlers as $handler) {
+            try {
+                $handler->close();
             } catch (\Throwable $e) {
                 // What failure?
             }

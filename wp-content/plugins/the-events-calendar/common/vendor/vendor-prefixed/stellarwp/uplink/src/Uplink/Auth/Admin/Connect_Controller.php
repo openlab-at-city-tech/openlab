@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\Auth\Admin;
 
@@ -92,7 +87,7 @@ final class Connect_Controller {
 
 		if ( ! $this->authorizer->can_auth() ) {
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Sorry, you do not have permission to connect this site.', '%TEXTDOMAIN%' ),
+				__( 'Sorry, you do not have permission to connect this site.', 'tribe-common' ),
 				true
 			) );
 
@@ -110,7 +105,7 @@ final class Connect_Controller {
 			if ( Config::get_storage_driver() === Transient_Storage::class && is_plugin_active( 'litespeed-cache/litespeed-cache.php' ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
 					sprintf(
-						__( 'The Litespeed plugin was detected, ensure "Store Transients" is set to ON and try again. See the <a href="%s" target="_blank">Litespeed documentation</a> for more information.', '%TEXTDOMAIN%' ),
+						__( 'The Litespeed plugin was detected, ensure "Store Transients" is set to ON and try again. See the <a href="%s" target="_blank">Litespeed documentation</a> for more information.', 'tribe-common' ),
 						esc_url( 'https://docs.litespeedtech.com/lscache/lscwp/cache/#store-transients' )
 					),
 					true
@@ -118,7 +113,7 @@ final class Connect_Controller {
 			}
 
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Unable to save token data: nonce verification failed.', '%TEXTDOMAIN%' ),
+				__( 'Unable to save token data: nonce verification failed.', 'tribe-common' ),
 				true
 			) );
 
@@ -130,7 +125,7 @@ final class Connect_Controller {
 
 		if ( ! $plugin ) {
 			$this->notice->add( new Notice( Notice::ERROR,
-				__( 'Plugin or Service slug not found.', '%TEXTDOMAIN%' ),
+				__( 'Plugin or Service slug not found.', 'tribe-common' ),
 				true
 			) );
 
@@ -140,7 +135,7 @@ final class Connect_Controller {
 		try {
 			if ( ! $this->connector->connect( $args[ self::TOKEN ] ?? '', $plugin ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
-					__( 'Error storing token.', '%TEXTDOMAIN%' ),
+					__( 'Error storing token.', 'tribe-common' ),
 					true
 				) );
 
@@ -161,7 +156,7 @@ final class Connect_Controller {
 		if ( $license ) {
 			if ( ! $plugin->set_license_key( $license, 'network' ) ) {
 				$this->notice->add( new Notice( Notice::ERROR,
-					__( 'Error storing license key.', '%TEXTDOMAIN%' ),
+					__( 'Error storing license key.', 'tribe-common' ),
 				true
 				) );
 
@@ -171,7 +166,7 @@ final class Connect_Controller {
 
 		$this->notice->add(
 			new Notice( Notice::SUCCESS,
-				__( 'Connected successfully.', '%TEXTDOMAIN%' ),
+				__( 'Connected successfully.', 'tribe-common' ),
 				true
 			)
 		);
@@ -184,5 +179,14 @@ final class Connect_Controller {
 		 * @param \TEC\Common\StellarWP\Uplink\Resources\Resource $plugin The plugin that was connected.
 		 */
 		do_action( 'stellarwp/uplink/' . Config::get_hook_prefix() . '/' . $slug . '/connected', $plugin );
+
+		/**
+		 * Fires after a plugin has been connected.
+		 *
+		 * @since 2.2.2
+		 *
+		 * @param \TEC\Common\StellarWP\Uplink\Resources\Resource $plugin The plugin that was connected.
+		 */
+		do_action( 'stellarwp/uplink/' . Config::get_hook_prefix() . '/connected', $plugin );
 	}
 }

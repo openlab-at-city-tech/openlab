@@ -5,6 +5,7 @@
  * Abstract for EA records.
  */
 
+use TEC\Events\Traits\Can_Edit_Events;
 use Tribe\Events\Aggregator\Record\Batch_Queue;
 
 // Don't load directly.
@@ -19,6 +20,8 @@ use Tribe__Languages__Locations as Locations;
  * Abstract for EA records.
  */
 abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.Classes.ValidClassName.NotSnakeCase, PEAR.NamingConventions.ValidClassName.Invalid, Generic.Classes.OpeningBraceSameLine.ContentAfterBrace
+
+	use Can_Edit_Events;
 
 	/**
 	 * Meta key prefix for ea-record data
@@ -42,7 +45,7 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 	public $post;
 
 	/**
-	 * Holds the post meta data for the current post.
+	 * Holds the post metadata for the current post.
 	 *
 	 * @var array
 	 */
@@ -735,19 +738,11 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 	 *                               limit.
 	 */
 	public function queue_import( $args = [] ) {
-		$aggregator = tribe( 'events-aggregator.main' );
-
-		$is_previewing = (
-			! empty( $_GET['action'] )
-			&& (
-				'tribe_aggregator_create_import' === $_GET['action']
-				|| 'tribe_aggregator_preview_import' === $_GET['action']
-			)
-		);
-
-		$error = null;
-
-		$defaults = [
+		/** @var Tribe__Events__Aggregator $aggregator */
+		$aggregator    = tribe( 'events-aggregator.main' );
+		$is_previewing = $this->is_previewing();
+		$error         = null;
+		$defaults      = [
 			'type'                => $this->meta['type'],
 			'origin'              => $this->meta['origin'],
 			'source'              => $this->meta['source'] ?? '',
@@ -1541,9 +1536,6 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 		 */
 		do_action( 'tribe_aggregator_before_insert_posts', $items, $this->meta );
 
-		// sets the default user ID to that of the first user that can edit events.
-		$default_user_id = $this->get_default_user_id();
-
 		// Creates an Activity to log what Happened.
 		$activity                = new Tribe__Events__Aggregator__Record__Activity();
 		$initial_created_events  = $activity->count( Tribe__Events__Main::POSTTYPE );
@@ -1630,7 +1622,7 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 			/**
 			 * Should events that have previously been imported be overwritten?
 			 *
-			 * By default this is turned off (since it would reset the post status, description
+			 * By default, this is turned off (since it would reset the post status, description
 			 * and any other fields that have subsequently been edited) but it can be enabled
 			 * by returning true on this filter.
 			 *
@@ -1697,6 +1689,9 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 				$event['EventVenueID'] = $existing_venue_id;
 				unset( $event['Venue'] );
 			}
+
+			// Use Geocoding for imported venues.
+			add_filter( 'tec_events_pro_use_geocode_results', '__return_true' );
 
 			// if we should create a venue or use existing.
 			if ( ! empty( $event['Venue']['Venue'] ) ) {
@@ -1807,7 +1802,22 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 							}
 
 							if ( empty( $venue_unique_field ) || ( $lookup_venues_by_title && empty( $venue ) ) ) {
-								$venue = get_page_by_title( $event['Venue']['Venue'], 'OBJECT', Tribe__Events__Venue::POSTTYPE );
+								$venue_query = new WP_Query(
+									[
+										'post_type'      => Tribe__Events__Venue::POSTTYPE,
+										'title'          => $event['Venue']['Venue'],
+										'post_status'    => 'any',
+										'posts_per_page' => 1,
+										'no_found_rows'  => true,
+										'ignore_sticky_posts' => true,
+										'update_post_term_cache' => false,
+										'update_post_meta_cache' => false,
+										'orderby'        => 'post_date ID',
+										'order'          => 'ASC',
+
+									]
+								);
+								$venue = ! empty( $venue_query->post ) ? $venue_query->post : null;
 							}
 
 							if ( $venue ) {
@@ -1977,7 +1987,22 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 										$value     = $organizer_data[ $target ];
 										$organizer = Tribe__Events__Aggregator__Event::get_post_by_meta( "_Organizer{$target}", $value );
 									} else {
-										$organizer = get_page_by_title( $organizer_data['Organizer'], 'OBJECT', Tribe__Events__Organizer::POSTTYPE );
+										$organizer_query = new WP_Query(
+											[
+												'post_type' => Tribe__Events__Organizer::POSTTYPE,
+												'title'   => $organizer_data['Organizer'],
+												'post_status' => 'any',
+												'posts_per_page' => 1,
+												'no_found_rows' => true,
+												'ignore_sticky_posts' => true,
+												'update_post_term_cache' => false,
+												'update_post_meta_cache' => false,
+												'orderby' => 'post_date ID',
+												'order'   => 'ASC',
+
+											]
+										);
+										$organizer = ! empty( $organizer_query->post ) ? $organizer_query->post : null;
 									}
 								}
 
@@ -2098,7 +2123,7 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 
 				// during cron runs the user will be set to 0; we assign the event to the first user that can edit events.
 				if ( ! isset( $event['post_author'] ) ) {
-					$event['post_author'] = $default_user_id;
+					$event['post_author'] = $this->get_default_user_id();
 				}
 
 				/**
@@ -2566,7 +2591,7 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 	 *
 	 * @since 4.5.11
 	 *
-	 * @return int The user ID or `0` (not logged in user) if not possible.
+	 * @return int The user ID or `0` (not logged-in user) if not possible.
 	 */
 	protected function get_default_user_id() {
 		$post_type_object = get_post_type_object( Tribe__Events__Main::POSTTYPE );
@@ -2579,16 +2604,20 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 		// try the current user.
 		$current_user_id = get_current_user_id();
 
-		if ( ! empty( $current_user_id ) && current_user_can( $post_type_object->cap->edit_posts ) ) {
+		if ( $this->user_can_edit_events( $current_user_id ) ) {
 			return $current_user_id;
 		}
 
 		// let's try and find a legit author among the available event authors.
-		$authors = get_users( [ 'who' => 'authors' ] );
-		foreach ( $authors as $author ) {
-			if ( user_can( $author, $post_type_object->cap->edit_posts ) ) {
-				return $author->ID;
-			}
+		$authors = get_users(
+			[
+				'capability' => $post_type_object->cap->edit_posts,
+				'fields'     => 'ID',
+			]
+		);
+
+		if ( ! empty( $authors ) ) {
+			return reset( $authors );
 		}
 
 		return 0;
@@ -2825,7 +2854,7 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 	 *
 	 * @since 4.6.15
 	 *
-	 * @param bool $force Whether to use the the last child cached value or refetch it.
+	 * @param bool $force Whether to use the last child cached value or refetch it.
 	 *
 	 * @return WP_Post|false Either the last child post object or `false` on failure.
 	 */
@@ -2989,5 +3018,18 @@ abstract class Tribe__Events__Aggregator__Record__Abstract { //phpcs:ignore TEC.
 	 */
 	public function generate_next_batch_hash() {
 		return md5( uniqid( '', true ) );
+	}
+
+	/**
+	 * Whether the record is being previewed or not.
+	 *
+	 * @since 6.12.0
+	 *
+	 * @return bool Whether the record is being previewed or not.
+	 */
+	protected function is_previewing(): bool {
+		$action = tec_get_request_var( 'action' );
+
+		return 'tribe_aggregator_create_import' === $action || 'tribe_aggregator_preview_import' === $action;
 	}
 }

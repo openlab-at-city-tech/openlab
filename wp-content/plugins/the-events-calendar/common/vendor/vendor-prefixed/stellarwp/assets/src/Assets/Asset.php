@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Assets;
 
@@ -191,6 +186,12 @@ class Asset {
 	 * 2. If a path group is set, that will be used.
 	 * 3. Otherwise, the root path will be used.
 	 *
+	 * In the case where the `$group_path_over_root_path` property is true, the order of priority will change to this:
+	 *
+	 * 1. If a path group is set, that will be used.
+	 * 2. If a specific root path is set, that will be used.
+	 * 3. Otherwise, the root path will be used.
+	 *
 	 * @var string
 	 */
 	protected string $group_path_name = '';
@@ -268,6 +269,8 @@ class Asset {
 	/**
 	 * Whether or not to attempt to load an .asset.php file.
 	 *
+	 * By default is true for scripts and false for styles.
+	 *
 	 * @since 1.3.1
 	 *
 	 * @var bool
@@ -280,6 +283,17 @@ class Asset {
 	 * @var ?string
 	 */
 	protected ?string $version = null;
+
+	/**
+	 * Whether to use the group path over the root path.
+	 * This flag will be raised when the asset is added to a group path
+	 * and lowered when it's removed from it.
+	 *
+	 * @since 1.4.3
+	 *
+	 * @var bool
+	 */
+	private $group_path_over_root_path = false;
 
 	/**
 	 * Constructor.
@@ -317,6 +331,8 @@ class Asset {
 		$this->group_path_name = $group_path_name;
 
 		$this->prefix_asset_directory( Config::is_group_path_using_asset_directory_prefix( $this->group_path_name ) );
+
+		$this->group_path_over_root_path = true;
 
 		return $this;
 	}
@@ -486,6 +502,20 @@ class Asset {
 	}
 
 	/**
+	 * Removes the asset from a group.
+	 *
+	 * This method is the inverse of the `add_to_group_path` method.
+	 *
+	 * @param string $group_path_name The name of the group path to remove the asset from.
+	 *
+	 * @return void The asset is removed from the specified group path.
+	 */
+	public function remove_from_group_path( string $group_path_name ): void {
+		$this->group_path_over_root_path = false;
+		$this->group_path_name           = '';
+	}
+
+	/**
 	 * Builds the base asset URL.
 	 *
 	 * @since 1.0.0
@@ -594,13 +624,13 @@ class Asset {
 
 		$script_debug = defined( 'SCRIPT_DEBUG' ) && Utils::is_truthy( SCRIPT_DEBUG );
 
-		if ( $script_debug && file_exists( wp_normalize_path( $root_path . $resource_path . $resource ) ) ) {
+		if ( $script_debug && is_file( wp_normalize_path( $root_path . $resource_path . $resource ) ) ) {
 			return $original_url;
 		}
 
 		$minified_abs_file_path = wp_normalize_path( $root_path . $minified_file_path );
 
-		if ( ! file_exists( $minified_abs_file_path ) ) {
+		if ( ! is_file( $minified_abs_file_path ) ) {
 			return $original_url;
 		}
 
@@ -848,7 +878,7 @@ class Asset {
 			);
 		}
 
-		return $dependencies;
+		return (array) $dependencies;
 	}
 
 	/**
@@ -963,13 +993,19 @@ class Asset {
 			return $this->root_path;
 		}
 
+		if ( $this->group_path_over_root_path ) {
+			$group_path = Config::get_path_of_group_path( $this->group_path_name );
+
+			return $group_path ?: $this->root_path;
+		}
+
 		if ( $this->root_path !== Config::get_path() ) {
 			return $this->root_path;
 		}
 
 		$group_path = Config::get_path_of_group_path( $this->group_path_name );
 
-		return $group_path ? $group_path : $this->root_path;
+		return $group_path ?: $this->root_path;
 	}
 
 	/**
@@ -1076,6 +1112,51 @@ class Asset {
 	}
 
 	/**
+	 * Get the asset's full path - considering if minified exists.
+	 *
+	 * @since 1.4.6
+	 * @since 1.4.7 When the path is a URL, return the URL.
+	 *
+	 * @param bool $use_min_if_available
+	 *
+	 * @return string
+	 */
+	public function get_full_resource_path( bool $use_min_if_available = true ): string {
+		$resource_path_data = $this->build_resource_path_data();
+		if ( empty( $resource_path_data['resource'] ) ) {
+			return '';
+		}
+
+		if (
+			str_starts_with( $resource_path_data['resource'], 'http://' ) ||
+			str_starts_with( $resource_path_data['resource'], 'https://' ) ||
+			str_starts_with( $resource_path_data['resource'], '//' )
+		) {
+			return $resource_path_data['resource'];
+		}
+		$resource           = $resource_path_data['resource'];
+		$resource_path      = $resource_path_data['resource_path'];
+
+		$root_path       = $this->get_root_path();
+
+		$path = wp_normalize_path( $root_path . $resource_path . $resource );
+
+		if ( ! $use_min_if_available ) {
+			return $path;
+		}
+
+		if ( strstr( $path, '.min.' . $this->get_type() ) ) {
+			return $path;
+		}
+
+		$min_relative_path = $this->get_min_path();
+		$min_path = $min_relative_path === $this->get_path() ? preg_replace( '#(.*).(js|css)#', '$1.min.$2', $path ) : $root_path . $min_relative_path . $resource;
+		$min_path = wp_normalize_path( $min_path );
+
+		return file_exists( $min_path ) ? $min_path : $path;
+	}
+
+	/**
 	 * Get the asset version.
 	 *
 	 * @return string
@@ -1087,7 +1168,16 @@ class Asset {
 			return (string) $asset_file_contents['version'];
 		}
 
-		return $this->version;
+		$hook_prefix = Config::get_hook_prefix();
+
+		/**
+		 * Filters the asset version when it doesn't come from an asset file.
+		 *
+		 * @param string $version The asset version.
+		 * @param string $slug    The asset slug.
+		 * @param Asset  $asset   The Asset object.
+		 */
+		return (string) apply_filters( "stellarwp/assets/{$hook_prefix}/version", $this->version, $this->slug, $this );
 	}
 
 	/**
@@ -1106,7 +1196,7 @@ class Asset {
 			return false;
 		}
 
-		return file_exists( $asset_file_path );
+		return is_file( $asset_file_path );
 	}
 
 	/**
@@ -1139,12 +1229,14 @@ class Asset {
 	 * Set the asset type.
 	 *
 	 * @since 1.0.0
+	 * @since 1.4.4 - For css files, we dont want to use asset file for dependencies by default.
 	 */
 	protected function infer_type() {
 		if ( substr( $this->file, -3, 3 ) === '.js' ) {
 			$this->type = 'js';
 		} elseif ( substr( $this->file, -4, 4 ) === '.css' ) {
 			$this->type = 'css';
+			$this->use_asset_file( false );
 		}
 	}
 
@@ -1347,7 +1439,7 @@ class Asset {
 			$file_path = wp_normalize_path( "{$base_dir}/{$partial_path}" );
 			$file_url  = "{$base_url}/{$partial_path}";
 
-			if ( file_exists( $file_path ) ) {
+			if ( is_file( $file_path ) ) {
 				return $file_url;
 			}
 		}
@@ -1496,7 +1588,7 @@ class Asset {
 	/**
 	 * Set the asset file path for the asset.
 	 *
-	 * @since TBD
+	 * @since 1.3.0
 	 *
 	 * @param string $path The partial path to the asset.
 	 *
@@ -1711,7 +1803,7 @@ class Asset {
 		if ( $dependencies[0] && is_callable( $dependencies[0] ) ) {
 			$this->dependencies = $dependencies[0];
 		} else {
-			$this->dependencies = $dependencies;
+			$this->dependencies = (array) $dependencies;
 		}
 
 		return $this;

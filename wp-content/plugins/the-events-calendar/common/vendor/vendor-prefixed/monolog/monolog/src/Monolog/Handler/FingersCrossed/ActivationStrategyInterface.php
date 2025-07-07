@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Handler\FingersCrossed;
@@ -17,14 +15,15 @@ namespace TEC\Common\Monolog\Handler\FingersCrossed;
  * Interface for activation strategies for the FingersCrossedHandler.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 interface ActivationStrategyInterface
 {
     /**
      * Returns whether the given record activates the handler.
      *
-     * @param  array   $record
-     * @return bool
+     * @phpstan-param Record $record
      */
-    public function isHandlerActivated(array $record);
+    public function isHandlerActivated(array $record): bool;
 }

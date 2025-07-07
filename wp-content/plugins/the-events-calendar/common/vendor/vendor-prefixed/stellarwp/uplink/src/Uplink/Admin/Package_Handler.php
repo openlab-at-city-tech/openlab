@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Uplink\Admin;
 
@@ -41,7 +36,7 @@ class Package_Handler {
 		if ( empty( $package ) || 'invalid_license' === $package ) {
 			return new WP_Error(
 				'download_failed',
-				__( 'Failed to update plugin. Check your license details first.', '%TEXTDOMAIN%' ),
+				__( 'Failed to update plugin. Check your license details first.', 'tribe-common' ),
 				''
 			);
 		}

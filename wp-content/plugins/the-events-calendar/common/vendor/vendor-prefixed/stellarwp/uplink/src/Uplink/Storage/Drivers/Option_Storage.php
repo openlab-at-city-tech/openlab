@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\Storage\Drivers;
 
@@ -33,7 +28,7 @@ class Option_Storage implements Storage {
 		if ( ! $option_name ) {
 			throw new InvalidArgumentException(
 				__( 'You must set a token prefix with StellarWP\Uplink\Config::set_hook_prefix() before using Option Storage.',
-					'%TEXTDOMAIN%' )
+					'tribe-common' )
 			);
 		}
 

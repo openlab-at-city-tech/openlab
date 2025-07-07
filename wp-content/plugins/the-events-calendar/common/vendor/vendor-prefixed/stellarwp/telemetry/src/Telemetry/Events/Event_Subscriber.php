@@ -5,9 +5,6 @@
  * @since 2.1.0
  *
  * @package StellarWP\Telemetry
- *
- * @license GPL-2.0-or-later
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Telemetry\Events;

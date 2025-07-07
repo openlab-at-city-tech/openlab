@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Uplink\Messages;
 
@@ -38,7 +33,7 @@ class Update_Now extends Message_Abstract {
 	public function get(): string {
 		// A plugin update is available
 		$update_now = sprintf(
-			esc_html__( 'Update now to version %s.', '%TEXTDOMAIN%' ),
+			esc_html__( 'Update now to version %s.', 'tribe-common' ),
 			$this->resource->get_update_status()->update->version
 		);
 
@@ -49,7 +44,7 @@ class Update_Now extends Message_Abstract {
 		);
 
 		$update_message = sprintf(
-			esc_html__( 'There is a new version of %1$s available. %2$s', '%TEXTDOMAIN%' ),
+			esc_html__( 'There is a new version of %1$s available. %2$s', 'tribe-common' ),
 			$this->resource->get_name(),
 			$update_now_link
 		);

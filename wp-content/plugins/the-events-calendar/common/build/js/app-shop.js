@@ -1,0 +1,1 @@
+jQuery((function(){let o=0;jQuery("div.tribe-addon .caption").each((function(){const n=jQuery(this).height();o=n>o?n:o})),jQuery("div.tribe-addon:not(.first) .caption").css("height",o)})),window.tec=window.tec||{},window.tec.common=window.tec.common||{},window.tec.common.appShop={};

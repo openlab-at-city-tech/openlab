@@ -1,9 +1,4 @@
 <?php
-/**
- * @license MIT
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\AdminNotices\ValueObjects;
 

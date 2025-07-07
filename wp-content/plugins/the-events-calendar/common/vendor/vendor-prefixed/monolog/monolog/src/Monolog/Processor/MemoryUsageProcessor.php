@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Processor;
@@ -22,15 +20,17 @@ namespace TEC\Common\Monolog\Processor;
 class MemoryUsageProcessor extends MemoryProcessor
 {
     /**
-     * @param  array $record
-     * @return array
+     * {@inheritDoc}
      */
-    public function __invoke(array $record)
+    public function __invoke(array $record): array
     {
-        $bytes = memory_get_usage($this->realUsage);
-        $formatted = $this->formatBytes($bytes);
+        $usage = memory_get_usage($this->realUsage);
 
-        $record['extra']['memory_usage'] = $formatted;
+        if ($this->useFormatting) {
+            $usage = $this->formatBytes($usage);
+        }
+
+        $record['extra']['memory_usage'] = $usage;
 
         return $record;
     }

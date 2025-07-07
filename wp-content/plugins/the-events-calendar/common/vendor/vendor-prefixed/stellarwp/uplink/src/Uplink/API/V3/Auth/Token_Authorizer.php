@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\API\V3\Auth;
 
@@ -56,7 +51,7 @@ class Token_Authorizer implements Contracts\Token_Authorizer {
 		if ( $response instanceof WP_Error ) {
 			if ( $this->is_wp_debug() ) {
 				error_log( sprintf(
-					__( 'Authorization error occurred: License: "%s", Token: "%s", Domain: "%s". Errors: %s', '%TEXTDOMAIN%' ),
+					__( 'Authorization error occurred: License: "%s", Token: "%s", Domain: "%s". Errors: %s', 'tribe-common' ),
 					$license,
 					$token,
 					$domain,

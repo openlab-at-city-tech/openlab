@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 /**
  * @var Resource $resource The Resource object.
@@ -45,7 +40,7 @@ $action_postfix = Config::get_hook_prefix_underscored();
 			<?php endif; ?>
 			<?php do_action( 'stellarwp/uplink/' . Config::get_hook_prefix(). '/license_field_after_field', $plugin->get_slug() ) ?>
 			<?php if ( $show_button ) : ?>
-				<?php submit_button( esc_html__( 'Save Changes', '%TEXTDOMAIN%' ) );?>
+				<?php submit_button( esc_html__( 'Save Changes', 'tribe-common' ) );?>
 			<?php endif; ?>
 		</form>
 		<?php do_action( 'stellarwp/uplink/' . Config::get_hook_prefix(). '/license_field_after_form', $plugin->get_slug() ) ?>

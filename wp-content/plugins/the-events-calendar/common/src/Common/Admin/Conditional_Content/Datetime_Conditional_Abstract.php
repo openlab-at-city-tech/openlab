@@ -31,7 +31,7 @@ abstract class Datetime_Conditional_Abstract {
 	 *
 	 * @since 6.3.0
 	 */
-	protected string $start_time;
+	protected int $start_time;
 
 	/**
 	 * End date.
@@ -45,7 +45,7 @@ abstract class Datetime_Conditional_Abstract {
 	 *
 	 * @since 6.3.0
 	 */
-	protected string $end_time;
+	protected int $end_time;
 
 	/**
 	 * Stores the instance of the template engine that we will use for rendering the page.
@@ -86,8 +86,8 @@ abstract class Datetime_Conditional_Abstract {
 		 *
 		 * @since 6.3.0
 		 *
-		  * @param Date_i18n $date - Date object for the end date.
-		 * @param static $this
+		 * @param Date_i18n $date     Date object for the end date.
+		 * @param static    $instance The conditional content object.
 		 */
 		$date = apply_filters( "tec_admin_conditional_content_{$this->slug}_start_date", $date, $this );
 
@@ -119,8 +119,8 @@ abstract class Datetime_Conditional_Abstract {
 		 *
 		 * @since 6.3.0
 		 *
-		 * @param Date_i18n $date - Date object for the end date.
-		 * @param object    $this
+		 * @param Date_i18n $date     Date object for the end date.
+		 * @param object    $instance The conditional content object.
 		 */
 		$date = apply_filters( "tec_admin_conditional_content_{$this->slug}_end_date", $date, $this );
 
@@ -155,8 +155,8 @@ abstract class Datetime_Conditional_Abstract {
 		 *
 		 * @since 6.3.0
 		 *
-		 * @param bool   $should_display - whether the content should display
-		 * @param object $this           - the conditional content object
+		 * @param bool   $should_display Whether the content should display.
+		 * @param object $instance       The conditional content object.
 		 */
 		return (bool) apply_filters( "tec_admin_conditional_content_{$this->slug}_should_display", $display, $this );
 	}

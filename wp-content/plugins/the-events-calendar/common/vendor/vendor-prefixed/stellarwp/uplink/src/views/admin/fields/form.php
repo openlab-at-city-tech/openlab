@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 /**
  * @var Form $form The Form object.
  */

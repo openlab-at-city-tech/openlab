@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Handler;
@@ -33,86 +31,106 @@ use TEC\Common\Monolog\Formatter\FormatterInterface;
  *
  * @author Alexey Karapetov <alexey@karapetov.com>
  */
-class HandlerWrapper implements HandlerInterface, ResettableInterface
+class HandlerWrapper implements HandlerInterface, ProcessableHandlerInterface, FormattableHandlerInterface, ResettableInterface
 {
     /**
      * @var HandlerInterface
      */
     protected $handler;
 
-    /**
-     * HandlerWrapper constructor.
-     * @param HandlerInterface $handler
-     */
     public function __construct(HandlerInterface $handler)
     {
         $this->handler = $handler;
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record): bool
     {
         return $this->handler->isHandling($record);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record): bool
     {
         return $this->handler->handle($record);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records): void
     {
-        return $this->handler->handleBatch($records);
+        $this->handler->handleBatch($records);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function pushProcessor($callback)
+    public function close(): void
     {
-        $this->handler->pushProcessor($callback);
-
-        return $this;
+        $this->handler->close();
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function popProcessor()
+    public function pushProcessor(callable $callback): HandlerInterface
     {
-        return $this->handler->popProcessor();
+        if ($this->handler instanceof ProcessableHandlerInterface) {
+            $this->handler->pushProcessor($callback);
+
+            return $this;
+        }
+
+        throw new \LogicException('The wrapped handler does not implement ' . ProcessableHandlerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(FormatterInterface $formatter)
+    public function popProcessor(): callable
     {
-        $this->handler->setFormatter($formatter);
+        if ($this->handler instanceof ProcessableHandlerInterface) {
+            return $this->handler->popProcessor();
+        }
 
-        return $this;
+        throw new \LogicException('The wrapped handler does not implement ' . ProcessableHandlerInterface::class);
     }
 
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function getFormatter()
+    public function setFormatter(FormatterInterface $formatter): HandlerInterface
     {
-        return $this->handler->getFormatter();
+        if ($this->handler instanceof FormattableHandlerInterface) {
+            $this->handler->setFormatter($formatter);
+
+            return $this;
+        }
+
+        throw new \LogicException('The wrapped handler does not implement ' . FormattableHandlerInterface::class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getFormatter(): FormatterInterface
+    {
+        if ($this->handler instanceof FormattableHandlerInterface) {
+            return $this->handler->getFormatter();
+        }
+
+        throw new \LogicException('The wrapped handler does not implement ' . FormattableHandlerInterface::class);
     }
 
     public function reset()
     {
         if ($this->handler instanceof ResettableInterface) {
-            return $this->handler->reset();
+            $this->handler->reset();
         }
     }
 }

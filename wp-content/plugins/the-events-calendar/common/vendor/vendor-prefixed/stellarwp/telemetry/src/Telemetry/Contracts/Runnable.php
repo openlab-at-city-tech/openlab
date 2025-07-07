@@ -5,9 +5,6 @@
  * @since 1.0.0
  *
  * @package TEC\Common\StellarWP\Telemetry\Contracts
- *
- * @license GPL-2.0-or-later
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Telemetry\Contracts;

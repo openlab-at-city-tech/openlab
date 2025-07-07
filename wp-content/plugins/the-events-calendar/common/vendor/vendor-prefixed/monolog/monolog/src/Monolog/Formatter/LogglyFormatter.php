@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 
 /*
  * This file is part of the Monolog package.
@@ -7,8 +7,6 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\Monolog\Formatter;
@@ -23,10 +21,8 @@ class LogglyFormatter extends JsonFormatter
     /**
      * Overrides the default batch mode to new lines for compatibility with the
      * Loggly bulk API.
-     *
-     * @param int $batchMode
      */
-    public function __construct($batchMode = self::BATCH_MODE_NEWLINES, $appendNewline = false)
+    public function __construct(int $batchMode = self::BATCH_MODE_NEWLINES, bool $appendNewline = false)
     {
         parent::__construct($batchMode, $appendNewline);
     }
@@ -37,11 +33,11 @@ class LogglyFormatter extends JsonFormatter
      * @see https://www.loggly.com/docs/automated-parsing/#json
      * @see \TEC\Common\Monolog\Formatter\JsonFormatter::format()
      */
-    public function format(array $record)
+    public function format(array $record): string
     {
-        if (isset($record["datetime"]) && ($record["datetime"] instanceof \DateTime)) {
+        if (isset($record["datetime"]) && ($record["datetime"] instanceof \DateTimeInterface)) {
             $record["timestamp"] = $record["datetime"]->format("Y-m-d\TH:i:s.uO");
-            // TODO 2.0 unset the 'datetime' parameter, retained for BC
+            unset($record["datetime"]);
         }
 
         return parent::format($record);

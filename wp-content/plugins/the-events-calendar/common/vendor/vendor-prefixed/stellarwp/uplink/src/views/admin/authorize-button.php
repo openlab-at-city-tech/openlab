@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 /**
  * The authorize button view, allowing the user to authorize their install with
  * the license server via the origin site.

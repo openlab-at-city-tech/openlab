@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\Components\Admin;
 
@@ -89,7 +84,7 @@ final class Authorize_Button_Controller extends Controller {
 		$license = $args['license'] ?? '';
 
 		if ( empty ( $slug ) ) {
-			throw new InvalidArgumentException( __( 'The Product slug cannot be empty', '%TEXTDOMAIN%' ) );
+			throw new InvalidArgumentException( __( 'The Product slug cannot be empty', 'tribe-common' ) );
 		}
 
 		$url = $this->url_builder->set_license( $license )->build( $slug, $domain );
@@ -106,7 +101,7 @@ final class Authorize_Button_Controller extends Controller {
 
 		$authenticated = false;
 		$target        = '_blank';
-		$link_text     = __( 'Connect', '%TEXTDOMAIN%' );
+		$link_text     = __( 'Connect', 'tribe-common' );
 		$classes       = [
 			'button',
 			'uplink-authorize',
@@ -115,12 +110,12 @@ final class Authorize_Button_Controller extends Controller {
 
 		if ( ! $this->authorizer->can_auth() ) {
 			$target    = '_self';
-			$link_text = __( 'Contact your network administrator to connect', '%TEXTDOMAIN%' );
+			$link_text = __( 'Contact your network administrator to connect', 'tribe-common' );
 			$url       = get_admin_url( get_current_blog_id(), 'network/' );
 		} elseif ( $this->token_manager->get( $plugin ) ) {
 			$authenticated = true;
 			$target        = '_self';
-			$link_text     = __( 'Disconnect', '%TEXTDOMAIN%' );
+			$link_text     = __( 'Disconnect', 'tribe-common' );
 			$url           = $this->disconnect_controller->get_url( $plugin );
 			$classes[2]    = 'authorized';
 		}

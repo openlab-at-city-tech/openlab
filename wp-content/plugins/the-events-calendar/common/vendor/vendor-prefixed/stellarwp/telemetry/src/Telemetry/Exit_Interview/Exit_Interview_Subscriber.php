@@ -5,9 +5,6 @@
  * @since 1.0.0
  *
  * @package StellarWP\Telemetry
- *
- * @license GPL-2.0-or-later
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
  */
 
 namespace TEC\Common\StellarWP\Telemetry\Exit_Interview;
@@ -78,10 +75,13 @@ class Exit_Interview_Subscriber extends Abstract_Subscriber {
 	 * Handles the ajax request for submitting "Exit Interivew" form data.
 	 *
 	 * @since 1.0.0
+	 * @since 2.3.4 - Added user capability check.
 	 *
 	 * @return void
 	 */
 	public function ajax_exit_interview() {
+
+		// Check sent data before we do any database checks for faster failures.
 		$uninstall_reason_id = filter_input( INPUT_POST, 'uninstall_reason_id', FILTER_SANITIZE_SPECIAL_CHARS );
 		$uninstall_reason_id = ! empty( $uninstall_reason_id ) ? $uninstall_reason_id : false;
 		if ( ! $uninstall_reason_id ) {
@@ -99,11 +99,17 @@ class Exit_Interview_Subscriber extends Abstract_Subscriber {
 		$comment = filter_input( INPUT_POST, 'comment', FILTER_SANITIZE_SPECIAL_CHARS );
 		$comment = ! empty( $comment ) ? $comment : '';
 
+		// Validate nonce.
 		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_SPECIAL_CHARS );
 		$nonce = ! empty( $nonce ) ? $nonce : '';
 
 		if ( ! wp_verify_nonce( $nonce, self::AJAX_ACTION ) ) {
 			wp_send_json_error( 'Invalid nonce' );
+		}
+
+		// Sent data validated, check if the user has the necessary permissions.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( 'User does not have proper permissions to modify plugins' );
 		}
 
 		$telemetry = $this->container->get( Telemetry::class );

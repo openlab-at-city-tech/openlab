@@ -1,9 +1,4 @@
-<?php
-/**
- * @license GPL-2.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */ declare( strict_types=1 );
+<?php declare( strict_types=1 );
 
 namespace TEC\Common\StellarWP\Uplink\Notice;
 
@@ -79,13 +74,13 @@ final class Notice {
 	) {
 		if ( ! in_array( $type, self::ALLOWED_TYPES, true ) ) {
 			throw new InvalidArgumentException( sprintf(
-					__( 'Notice $type must be one of: %s', '%TEXTDOMAIN%' ),
+					__( 'Notice $type must be one of: %s', 'tribe-common' ),
 					implode( ', ', self::ALLOWED_TYPES ) )
 			);
 		}
 
 		if ( empty( $message ) ) {
-			throw new InvalidArgumentException( __( 'The $message cannot be empty', '%TEXTDOMAIN%' ) );
+			throw new InvalidArgumentException( __( 'The $message cannot be empty', 'tribe-common' ) );
 		}
 
 		$this->type        = $type;

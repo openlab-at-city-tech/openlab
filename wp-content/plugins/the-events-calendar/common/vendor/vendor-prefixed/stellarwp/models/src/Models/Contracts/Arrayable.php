@@ -1,9 +1,4 @@
 <?php
-/**
- * @license GPL-3.0-or-later
- *
- * Modified using {@see https://github.com/BrianHenryIE/strauss}.
- */
 
 namespace TEC\Common\StellarWP\Models\Contracts;
 
