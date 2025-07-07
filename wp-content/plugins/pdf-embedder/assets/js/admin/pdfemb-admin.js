@@ -1,89 +1,25 @@
 ( function( $ ) {
 	$( function() {
-		function pdfembSetFormActionToTab( id ) {
-			let form = $( '#pdfemb_form' );
-
-			form.attr(
-				'action',
-				form.attr( 'action' ).replace( /(#.+)?$/, '#' + id ),
-			);
-		}
-
-		function decodeHtml(html) {
-			var txt = document.createElement("textarea");
-			txt.innerHTML = html;
-			return txt.value;
-		}
-
-		$( '#pdfemb-tabs a' )
-			.on( 'click', function() {
-
-				// Tab nav item.
-				$( '#pdfemb-tabs' ).find( 'a' ).removeClass( 'nav-tab-active' );
-
-				// Tab content.
-				$( '.pdfembtab' ).removeClass( 'active' );
-
-				let id = $( this ).attr( 'id' ).replace( '-tab', '' );
-				$( '#' + id + '-section' ).addClass( 'active' );
-				$( this ).addClass( 'nav-tab-active' );
-
-				if ( 'about' === id ) {
-					$( '.submit' ).hide();
-				} else {
-					$( '.submit' ).show();
-				}
-
-				// Set submit URL to this tab
-				pdfembSetFormActionToTab( id );
-
-				// Update upgrade URL dynamically based on URL hash.
-				let url = getPdfembUpdateURL( id );
-
-				$( '#pdfemb-settings-bottom-cta a.pdfemb-upgrade-url' ).attr( 'href', decodeHtml( url ) );
-			} );
-
-		// Process the "free plugins" link in the footer.
-		$('#pdfemb-footer .free-plugins')
-			.on( 'click', function( e ) {
-				e.preventDefault();
-
-				// As we prevented the default behavior above - the hash hasn't changed.
-				// So let's do that manually.
-				window.location.hash = '#about';
-
-				$( '#pdfemb-tabs a#about-tab' ).trigger( 'click' );
-			} );
-
 		// Move the default "settings update" notice under tabs.
 		$( '#wpbody-content > .notice' )
-			.prependTo( '#pdfemb-tabswrapper' )
+			.prependTo( '#pdfemb-section-wrapper' )
 			.css( 'display', 'block' );
 
-		// Did page load with a tab active?
-		var active_tab = window.location.hash.replace( '#', '' );
-		if ( active_tab !== '' ) {
-			var activeSection = $( '#' + active_tab + '-section' );
-			var activeTab = $( '#' + active_tab + '-tab' );
+		$( '.trigger-getstarted' ).on( 'click', function( e ) {
+			e.preventDefault();
 
-			if ( 'about' === active_tab ) {
-				$( '.submit' ).hide();
-			} else {
-				$( '.submit' ).show();
+			if ( ! $( '#pdfemb-getstarted' ).hasClass( 'hidden' ) ) {
+				return;
 			}
-			if ( activeSection && activeTab ) {
-				$( '#pdfemb-tabs' ).find( 'a' ).removeClass( 'nav-tab-active' );
-				$( '.pdfembtab' ).removeClass( 'active' );
 
-				activeSection.addClass( 'active' );
-				activeTab.addClass( 'nav-tab-active' );
-				pdfembSetFormActionToTab( active_tab );
+			$.post( ajaxurl, {
+				 action: 'pdfemb_admin_settings_getstarted_open',
+			 } );
 
-				let url = getPdfembUpdateURL( active_tab );
-
-				$( '#pdfemb-settings-bottom-cta a.pdfemb-upgrade-url' ).attr( 'href', decodeHtml( url ) );
-			}
-		}
+			 $( '#pdfemb-getstarted' ).slideDown( 'fast', function() {
+				 $( this ).removeClass( 'hidden' );
+			 });
+		} );
 
 		/**
 		 * Partner plugin installation.

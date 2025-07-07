@@ -92,7 +92,7 @@ class PdfEmbedder {
 		// without keys that are present in the options but not in attributes.
 		foreach ( $prefixed_atts as $key => $value ) {
 			if ( array_key_exists( $key, $bloated_validated_with_users ) ) {
-				$prefixed_validated[ $key ] = $bloated_validated_with_users[ $key ];
+				$prefixed_validated[ $key ] = $value;
 			}
 		}
 

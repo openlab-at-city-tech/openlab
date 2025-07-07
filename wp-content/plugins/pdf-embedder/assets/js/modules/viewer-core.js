@@ -906,7 +906,7 @@ jQuery( document ).ready( function( $ ) {
 		var divContainer = this.divContainer;
 		var self = this;
 
-		var toolbar = $( '<div></div>', { 'class': 'pdfemb-toolbar pdfemb-toolbar' + (fixed ? '-fixed' : '-hover') + ' ' + (atTop ? ' pdfemb-toolbar-top' : 'pdfemb-toolbar-bottom') } );
+		var toolbar = $( '<div></div>', { 'class': 'pdfemb-toolbar pdfemb-toolbar' + (fixed ? '-fixed' : '-hover') + ' ' + (atTop ? 'pdfemb-toolbar-top' : 'pdfemb-toolbar-bottom') } );
 		var prevbtn = $( '<button class="pdfemb-prev" title="' + pdfemb_trans.objectL10n.prev + '" type="button"></button>' );
 		toolbar.append( prevbtn );
 		var nextbtn = $( '<button class="pdfemb-next" title="' + pdfemb_trans.objectL10n.next + '" type="button"></button>' );

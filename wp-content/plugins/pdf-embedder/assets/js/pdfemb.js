@@ -17,9 +17,9 @@ jQuery.fn.pdfEmbedder = jQueryPDFEmbedder;
  */
 jQuery( document ).ready( function( $ ) {
 
-	var pdfembPagesViewer = window.PDFEMB_NS.pdfembPagesViewer;
+	let pdfembPagesViewer = window.PDFEMB_NS.pdfembPagesViewer;
 
-	var pdfembPagesViewerBasic = function() {
+	let pdfembPagesViewerBasic = function() {
 		pdfembPagesViewer.apply( this, arguments );
 	};
 

@@ -33,8 +33,8 @@ class SettingsTopBar {
 			return;
 		}
 
-		add_action( 'pdfemb_admin_settings_before', [ $this, 'show' ] );
-		add_action( 'wp_ajax_pdfemb_admin_settings_topbar_upgrade', [ $this, 'dismiss_cta' ] );
+		add_action( 'pdfemb_admin_settings_before', [ $this, 'render' ] );
+		add_action( 'wp_ajax_pdfemb_admin_settings_topbar_upgrade', [ $this, 'dismiss' ] );
 	}
 
 	/**
@@ -52,7 +52,7 @@ class SettingsTopBar {
 	 *
 	 * @since 4.7.0
 	 */
-	public function dismiss_cta() {
+	public function dismiss() {
 
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_send_json_error();
@@ -68,7 +68,7 @@ class SettingsTopBar {
 	 *
 	 * @since 4.7.0
 	 */
-	public function show() {
+	public function render() {
 
 		?>
 

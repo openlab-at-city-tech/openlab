@@ -97,13 +97,20 @@ class Assets {
 	 */
 	public static function svg( string $file ): string {
 
-		$file = sanitize_file_name( $file );
-
-		if ( substr( $file, -4, 4 ) !== '.svg' ) {
+		if ( ! str_ends_with( $file, '.svg' ) ) {
 			return '';
 		}
 
-		$path = static::$base_dir . 'assets/' . ltrim( $file, '/\\' );
+		$file = wp_normalize_path( trim( $file ) );
+
+		$match_count = 1;
+
+		// Replace the ../ usage as many times as it may need to be replaced.
+		while ( $match_count ) {
+			$file = str_replace( '../', '', $file, $match_count );
+		}
+
+		$path = plugin_dir_path( static::$base_file ) . 'assets/' . ltrim( $file, '/\\' );
 
 		if ( is_readable( $path ) ) {
 			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents

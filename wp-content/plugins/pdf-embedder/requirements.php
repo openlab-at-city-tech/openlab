@@ -1,7 +1,7 @@
 <?php
 
 /**
- * We require PHP version 7.0+ for the whole plugin to work.
+ * We require PHP version 7.2+ for the whole plugin to work.
  *
  * @since 4.7.0
  */

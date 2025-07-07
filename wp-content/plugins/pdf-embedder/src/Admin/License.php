@@ -17,7 +17,7 @@ class License {
 	 *
 	 * @since 4.7.0
 	 */
-	const OPTION_STATUS = 'pdfemb_premium_license_status';
+	public const OPTION_STATUS = 'pdfemb_premium_license_status';
 
 	/**
 	 * Get the current installation license key.
@@ -27,7 +27,7 @@ class License {
 	 */
 	public static function get_key(): string {
 
-		// Allow wp-config constant to pass key.
+		// Allow wp-config.php constant to pass key.
 		if ( defined( 'PDFEMB_LICENSE_KEY' ) && PDFEMB_LICENSE_KEY ) {
 			return PDFEMB_LICENSE_KEY;
 		}
@@ -80,7 +80,7 @@ class License {
 	public static function get_error_text( string $error ): string {
 
 		$error_strings = [
-			'too_short'     => esc_html__( 'License key is too short.', 'pdf-embedder' ),
+			'too_short'     => esc_html__( 'License key is incorrect.', 'pdf-embedder' ),
 			'invalid'       => esc_html__( 'License key failed to activate.', 'pdf-embedder' ),
 			'missing'       => esc_html__( 'License key does not exist in our system.', 'pdf-embedder' ),
 			'expired'       => esc_html__( 'License key has expired.', 'pdf-embedder' ),

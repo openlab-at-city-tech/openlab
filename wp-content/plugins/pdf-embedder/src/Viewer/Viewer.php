@@ -4,6 +4,7 @@ namespace PDFEmbedder\Viewer;
 
 use PDFEmbedder\Options;
 use PDFEmbedder\Helpers\Links;
+use PDFEmbedder\Helpers\Check;
 use PDFEmbedder\Helpers\Assets;
 
 /**
@@ -57,6 +58,8 @@ class Viewer implements ViewerInterface {
 
 		if ( is_numeric( $this->atts['height'] ) ) {
 			$extra_style .= 'height:' . (int) $this->atts['height'] . 'px;';
+		} elseif ( $this->atts['height'] === 'auto' ) {
+			$this->atts['height'] = 'max';
 		} elseif ( $this->atts['height'] !== 'max' && $this->atts['height'] !== 'auto' ) {
 			$this->atts['height'] = 'max';
 		}
@@ -117,22 +120,6 @@ class Viewer implements ViewerInterface {
 		$is_enqueued = true;
 
 		wp_enqueue_script( 'pdfemb_embed_pdf' );
-
-		add_filter(
-			'script_loader_tag',
-			static function ( $tag, $handle, $src ) {
-				if ( $handle === 'pdfemb_embed_pdf' ) {
-					// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-					$tag = '<script type="module" src="' . esc_url( $src ) . '"></script>';
-				}
-
-				return $tag;
-			},
-			10,
-			3
-		);
-
-		wp_enqueue_script( 'pdfemb_pdfjs' );
 
 		wp_enqueue_style(
 			'pdfemb_embed_pdf_css',
