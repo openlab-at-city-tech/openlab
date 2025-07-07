@@ -60,7 +60,7 @@ class Editoria11y_Api_Results extends WP_REST_Controller {
 	}
 
 	/**
-	 * Associate old records with post ID
+	 * Associate old records with post ID. Todo: remove.
 	 */
 	private function add_post_id() {
 		set_site_transient( 'ed11y_got_ids', true );
