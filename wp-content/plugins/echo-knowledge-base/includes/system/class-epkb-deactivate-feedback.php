@@ -39,7 +39,7 @@ class EPKB_Deactivate_Feedback {
                     </div>
                     <div class="epkb-deactivate-modal-body">
                         <div class="epkb-deactivate-modal-reason-input-wrap">
-	                        <h4><?php esc_html_e( 'Please tell us what happened. Thank you!', 'echo-knowledge-base' ); ?></h4>
+	                        <h4><?php esc_html_e( 'Having trouble? Tell us what happened. Our team replies in under 2 hours and usually fixes issues the same day.', 'echo-knowledge-base' ); ?></h4>
                             <textarea class="epkb-deactivate-feedback-text" name="epkb_deactivate_feedback"></textarea>
                         </div>
                     </div>

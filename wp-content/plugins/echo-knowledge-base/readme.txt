@@ -1,100 +1,157 @@
-=== Knowledge Base - Excellent Documentation and FAQs Plugin with AI Assistance ===
+=== Advanced Knowledge Base Documentation, Articles and FAQ Tool with AI Chat Integration, Security, Support, and Import/Export ===
 Author URI: https://www.echoknowledgebase.com/about-us/
 Plugin URI: https://www.echoknowledgebase.com/
 Contributors: echoplugins
 Donate link: https://www.echoknowledgebase.com
-Tags: knowledge base, knowledgebase, documentation, documents, faqs
+Tags: knowledge base, knowledgebase, documentation, docs, faq
 Requires at least: 5.2
+Tested up to: 6.8
 Requires PHP: 5.6
-Tested up to: 6.7
-Stable tag: 12.43.0
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Stable tag: 14.1.0
+License: GPLv3 or later
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Easily organize your knowledge base documentation, FAQs, and wiki with rich features and AI Writing Support.
-
+A fully featured, easy-to-use documentation plugin with AI chat integration. Build beautiful knowledge bases, FAQs, docs, and wikis of any size.
 
 == Description ==
 
-Our Knowledge Base plugin is a powerful documentation tool that helps you create and organize your documentation, FAQs, and articles. It's easy to use and includes many features to help you build a visually appealing Knowledge Base.
+Echo Knowledge Base is a powerful documentation tool that helps you create and organize your documentation, FAQs, and articles. It's intuitive and includes comprehensive features to help you build a visually appealing knowledge base.
 
-Designed with a modern and professional appearance by default, it offers extensive customization options to align with your brand identity. Key features include pre-made designs, popular articles, a Table of Contents (TOC), FAQs, a navigation sidebar, analytics, and customizable archive pages.
+Designed with a modern and professional appearance by default, the plugin offers extensive customization options to align perfectly with your brand identity.
+
+## KEY FEATURES
+
+* **AI Chatbots Integration**: Easily create interactive chatbots and teach them about your Knowledge Base, FAQs, internal documentation, notes, and any other source of information.
+
+* **Frontend Visual Editor**: Customize your Knowledge Base pages live on the front-end with our intuitive visual editor or drag-and-drop Gutenberg blocks.
+
+* **Pre-made Layout Designs**: Choose from many beautiful designs and layouts to make your knowledge base both stunning and functional. With dozens of combinations available, you'll find the perfect look for your site.
+
+* **Table of Contents (TOC)**: Enhance navigation with a customizable table of contents on article pages for better user experience.
+
+* **Deep Content Organization**: Organize articles into categories and subcategories up to five levels deep. Display articles and categories across tabs or in an intuitive drill-down format.
+
+* **Article Views Counter**: Track views with the built-in counter and analyze your most and least popular content to optimize your knowledge base.
+
+* **Most Popular and Recent Articles**: List articles by popularity and which articles were published recently.
+
+* **FAQs Layout and Shortcode**: Deploy FAQs anywhere on your site with various eye-catching designs. Group questions logically and control their behavior for optimal user engagement.
+
+* **Fast Search Bar**: Users find articles quickly.
+
+* **Advanced Search**: Highlight search keywords on the article page, filter search by category, change search box background, and add text with links below search bar. Use advanced search analytics to determine the most popular and unproductive searches.
+
+* **Customizable Category Archive Page**: Customize the category archive page with a custom header, description, and image.
+
+* **Article Enhancement Tools**: Improve user experience with breadcrumbs, navigation controls, print options, and more.
+
+* **Granular Content Protection**: Control access based on user groups, WordPress roles, and custom permissions. Seamlessly manage public and private content.
+
+* **Unlimited Knowledge Bases**: Create unlimited separate knowledge bases, each with their own articles, categories, and tags.
+
+* **Articles Import and Export**: Import and export articles and categories using CSV and XML formats.
+
+* **User Feedback System**: Gather valuable insights with article voting and feedback forms.
+
+* **Article Links**: Replace articles with links to PDFs, external documentation, video links, and more.
+
+Please note that some features require a Pro license (Content Protection, Unlimited Knowledge Bases, Vote and Feedback form, Links and Advanced Search, Content Import and Export). For more information, check the [official website](https://www.echoknowledgebase.com/bundle-pricing/).
+
+
+## 🚀 AI Chat Integration - Turn Your Knowledge Base into a 24/7 Support Pro
+
+Transform your knowledge base into an intelligent assistant that provides instant, accurate answers to user questions. Our AI integration is powered by the leading WordPress AI plugin, AI Engine.
+
+AI Chat can answer questions based on content from your Knowledge Base, FAQs, internal documentation, notes, pages, or any other information source.
+
+**73 % fewer repeat tickets (our own numbers)**
+After enabling AI Chat, we saw a 73 percent drop in repetitive questions response times shrank, customers got answers faster, and the team could finally tackle higher-value projects without hiring extra staff.
+
+**Why Customers Love It**
+
+- **Answers in Seconds, Day or Night**
+The bot reads your KB articles, FAQs, pages, and internal notes, then delivers clear replies before a ticket ever lands in your inbox.
+- **Set-Up in a Coffee Break**
+A guided wizard walks you from install to “live” in under 30 minutes. No coding, no APIs, no fuss.
+- **Visible ROI, Fast**
+Most teams cut repeat questions by the first week freeing staff for revenue-generating work instead of copy-and-paste responses.
+
+**Built-In Extras**
+
+- **Content Gap Alerts** – Flags missing or outdated KB articles so you fix an issue once and never hear about it again.
+- **Pain-point analytics** – Real-time dashboards surface the topics that frustrate users the most, turning support data into a product roadmap.
+- **Smart learning** – As you update or add content, the model re-indexes automatically, keeping answers accurate without manual re-training.
+- **Seamless human hand-off** – Edge-case questions route to a live agent in the same chat window, with full context preserved.
+- **Powered by AI Engine**, the leading WordPress AI plugin that also drives site-wide content and image generation.
+
+Our AI integration is powered by AI Engine, the leading WordPress AI plugin, which supports not only your chat but also site editing and image generation needs.
+
+**Result: fewer tickets, happier users, and support staff who finally have time for the work that moves your business forward.** 
+
+For detailed setup instructions, visit our [AI Chat Integration Guide](https://www.echoknowledgebase.com/documentation/ai-chat/)
+
+
+## ⭐ WALK THROUGH OF ECHO KNOWLEDGE BASE
 
 https://www.youtube.com/watch?v=sLwj8FpfBWc
 
-Our knowledge base is optimized for search engines to enhance your online visibility. It supports multilingual and RTL languages, ensuring accessibility for an international audience. All articles are responsive and retina-ready, guaranteeing your knowledge base looks great on all devices.
 
-<strong>Examples of Included Professional Layouts</strong>
-* Basic Layout [here](https://www.echoknowledgebase.com/demo-1-knowledge-base-basic-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo1 "Basic Layout")
-* Tabs Layout [here](https://www.echoknowledgebase.com/demo-3-knowledge-base-tabs-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo3 "Tabs Layout")
-* Drill Down Layout [here](https://www.echoknowledgebase.com/demo-4-knowledge-base-tabs-layout/ "Drill Down Layout")
-* Classic Layout [here](https://www.echoknowledgebase.com/demo-12-knowledge-base-image-layout/ "Classic Layout")
-* Category Focused Layout [here](https://www.echoknowledgebase.com/demo-14-category-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo5 "Category Focused Layout")
+## ⭐ PROFESSIONAL LAYOUTS INCLUDED
 
-See our knowledgebase documentation [here](https://www.echoknowledgebase.com/documentation/ "KB documentation")
+* [Basic Layout](https://www.echoknowledgebase.com/demo-1-knowledge-base-basic-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo1 "Basic Layout") - Clean and simple design
+* [Tabs Layout](https://www.echoknowledgebase.com/demo-3-knowledge-base-tabs-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo3 "Tabs Layout") - Organized content in tabbed interface
+* [Drill Down Layout](https://www.echoknowledgebase.com/demo-4-knowledge-base-tabs-layout/ "Drill Down Layout") - Intuitive navigation through categories
+* [Classic Layout](https://www.echoknowledgebase.com/demo-12-knowledge-base-image-layout/ "Classic Layout") - Traditional documentation style
+* [Category Focused Layout](https://www.echoknowledgebase.com/demo-14-category-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo5 "Category Focused Layout") - Highlight your main categories
 
-## KEY FEATURES
-✅ Fast Search Bar enabling users to find articles quickly.
-✅ Organize content into categories and subcategories up to five levels deep.
-✅ Article Views Counter with Popular and Recent Articles.
-✅ FAQs Layouts and Shortcode to easily display FAQs on your site.
-✅ Categories & Articles Layouts including Basic, Tabs, Category Focused, Classic, and Drill Down layouts.
-✅ Customizable Category Archive Page
-✅ Article enhancements including breadcrumbs, back buttons, navigation, print options, table of contents, and more.
-✅ Article Pages with a sidebar to show categories and articles for easy navigation.
-✅ AI Content Writing Support to assist with content creation and editing.
+See our comprehensive documentation [here](https://www.echoknowledgebase.com/documentation/ "KB documentation")
 
-## ⭐ MORE FEATURES ##
-* Set up quickly in minutes.
-* Organize documentation by team, product, or service using the Tabs Layout.
-* Order articles and categories alphabetically, chronologically, or with drag-and-drop.
-* Optimized for SEO to enhance online visibility.
-* Track article views and display popular and recent articles.
-* Analytics to monitor your knowledge base usage.
-* Supports RTL languages, complies with WCAG accessibility standards, and works with WPML and Polylang.
-* Responsive design compatible with any theme and mobile devices.
-* Includes a Frequently Asked Questions (FAQ) module and shortcode.
-* Offers Articles Index Directory shortcodes. Learn More
-* Customize typography for article and category names, TOC, breadcrumbs, and more.
-* Articles Index Directory shortcodes. [Learn More](https://www.echoknowledgebase.com/documentation/shortcode-articles-index-directory/)
+## ⭐ ADDITIONAL FEATURES
 
-## 💡 GET WRITING HELP WITH AI ##
-* Check your spelling and grammar with AI.
-* Verify spelling and grammar, and generate article outlines.
+* **Gutenberg Blocks**: Seamlessly integrate with the WordPress block editor.
+* **Flexible Ordering**: Order articles and categories alphabetically, chronologically, or with drag-and-drop.
+* **SEO Optimization**: Enhanced for search engines to improve online visibility.
+* **Usage Analytics**: Monitor your knowledge base usage with detailed statistics.
+* **Multilingual Support**: Supports RTL languages, complies with WCAG accessibility standards, and works with WPML, Polylang, and GTranslate.
+* **Responsive Design**: Documentation layout compatible with any theme and mobile devices.
+* **Directory Shortcode**: Offers an Articles Index Directory shortcode for your documentation. Learn More
+* **Multi-site Compatible**: Manage your documentation efficiently across multiple sites within a WordPress multisite network.
+* **Custom URL Structure**: Customize category and tag slugs for a more personalized and SEO-friendly URL structure.
+* **Mobile Optimization**: Provide a seamless reading experience on mobile devices with responsive article pages.
+* **Content Migration**: Effortlessly transform custom post types and posts into articles to enrich your documentation library.
 
-## 💡 EASY TO STYLE WITH PRE-MADE DESIGNS ##
-* Choose from 26 professional pre-made designs – no coding required.
-* Enjoy a variety of colors, styles, and layouts.
-* Switch between designs with a single click.
-* Choose from Basic, Tabs, Category-Focused, Classic, Drill Down, Sidebar, or Grid layouts.
+## ⭐ SEO & ACCESSIBILITY OPTIMIZED
 
-## 💡 WORKS WITH BUILDERS ##
-* Compatible with Elementor and Gutenberg Blocks
-* Works with Beaver Builder, Divi, Visual Composer, and others.
+Our Knowledge Base is optimized for search engines to enhance your online visibility. It supports multiple languages and RTL (right-to-left) languages, ensuring accessibility for an international audience. All documentation is responsive and retina-ready, guaranteeing your Knowledge Base looks great on all devices.
 
-## 💡 HELP DIALOG CHAT INTEGRATION ##
-The free Help Dialog Chat plugin offers a chatbot-like dialog for better customer support and increased leads and sales. The Help Dialog Chat shows FAQs, search, and a contact form. [Learn More](https://wordpress.org/plugins/help-dialog/)
+## ⭐ AI-POWERED WRITING ASSISTANCE
 
-## ✅ Why Choose Echo Knowledge Base? ##
-* User-Friendly: Designed for ease of use, with no coding required.
-* Professional Designs: Access to 26 ready-to-use designs.
-* Customizable: Easily match your brand with extensive customization options.
-* Organized Content: Five levels of hierarchy for structured documentation.
-* Comprehensive Features: All essential features are free, with advanced options available.
-* Reliable Support: Friendly and timely assistance from our support team.
+* Ensure flawless documentation with AI grammar and spelling checks
+* Generate well-structured article outlines to streamline content creation
+* Receive intelligent content organization suggestions
 
-## 🚀 PRO Features ##
-* Control access and permissions based on groups, WordPress users and roles, and custom roles.
-* Control public and private articles and who can read, write, and edit articles.
-* Create unlimited Knowledge Bases with separate articles, categories, tags, and more.
-* Import and export articles and categories using CSV and XML.
-* Create Sidebar and Grid layouts.
-* Vote on articles, add a feedback form, and learn from analytics.
-* More widgets and shortcodes for categories, popular articles, and the search bar.
-* Replace articles with links to PDFs, external docs, video links, and more.
-* Filter search by category.
-* Use Advanced search analytics to determine the most popular and empty searches.
-* Migrate, create and copy articles and images from your Knowledge Base.
+## ⭐ EASY TO STYLE WITH PRE-MADE DESIGNS ##
+
+* Choose from 26 professional pre-made designs – no coding required
+* Select from a variety of colors, styles, and layouts
+* Switch between designs with a single click
+* Available layouts include Basic, Tabs, Category-Focused, Classic, Drill Down, Sidebar, and Grid
+
+## ⭐ BUILDER COMPATIBILITY
+
+* Works with Elementor and Gutenberg Blocks
+* Compatible with popular page builders including Beaver Builder, Divi, and Visual Composer
+
+## ✅ WHY CHOOSE ECHO KNOWLEDGE BASE?
+
+* **User-Friendly**: Designed for ease of use with no coding required
+* **Professional Design**: Access 26 ready-to-use, beautiful layouts
+* **Customization**: Easily match your brand identity with extensive options
+* **Reliable Support**: Receive friendly and timely assistance from our dedicated team
+* **Regular Updates**: Enjoy continuous improvements and new features
+* **Global Reach**: Translate your documentation into multiple languages for worldwide accessibility
+
+**About Us** - We are a Canadian company with over a decade of experience with WordPress and related technologies. Our roadmap has many more exciting new features which we will be introducing in coming months.
 
 ##_____
 
@@ -106,7 +163,7 @@ The free Help Dialog Chat plugin offers a chatbot-like dialog for better custome
 > See our [PRO Bundle](https://www.echoknowledgebase.com/bundle-pricing/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=pro-bundle).
 >
 >
-> <strong>Access Manager</strong><br>
+> <strong>Content Protection with Access Manager</strong><br>
 > [Access Manager](https://www.echoknowledgebase.com/wordpress-plugin/access-manager/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=access-mgr) allows administrators, companies, and organizations to control and restrict access to their private Knowledge Base based on WordPress user accounts. Grant permission using roles and groups.
 >
 >
@@ -127,7 +184,7 @@ The free Help Dialog Chat plugin offers a chatbot-like dialog for better custome
 >
 >
 > <strong>Widgets</strong><br>
-> Add Knowledgebase Search, Most Recent Articles and other Widgets and Shortcodes to your articles, sidebars and pages. [Learn More](https://www.echoknowledgebase.com/wordpress-plugin/widgets/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=widgets).
+> Add Knowledgebase Search, Most Recent Articles and other Widgets and Shortcodes to your documentation, sidebars and pages. [Learn More](https://www.echoknowledgebase.com/wordpress-plugin/widgets/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=widgets).
 >
 >
 > <strong>Custom Links for PDFs and More</strong><br>
@@ -142,8 +199,48 @@ The free Help Dialog Chat plugin offers a chatbot-like dialog for better custome
 * (PRO) Sidebar Layout [here](https://www.echoknowledgebase.com/demo-8-knowledge-base-sidebar-layout/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo8 "KB Demo 8")
 * (PRO) Links [here](https://www.echoknowledgebase.com/demo-9-knowledge-base-add-ons/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=demo9 "KB Demos 9")
 
+##_____
+
+>⭐ <strong>BLOCKS</strong> ⭐
+
+KNOWLEDGE BASE SEARCH
+The Knowledge Base Search block allows users to search for articles within your documentation. Customize the search bar's appearance and functionality.
+
+KNOWLEDGE BASE BASIC LAYOUT
+The Basic Layout offers a user-friendly grid format for viewing categories, subcategories, and articles. Expand and collapse article lists for easy navigation.
+
+KNOWLEDGE BASE TABS LAYOUT
+The Tabs Layout clearly organizes top categories for subject-specific browsing. Within each tab, you can find related articles and subcategories.
+
+KNOWLEDGE BASE DRILL DOWN LAYOUT
+The Drill Down Layout helps you navigate extensive documentation with ease. Click on top categories to progressively reveal articles and subcategories.
+
+KNOWLEDGE BASE CATEGORY FOCUSED LAYOUT
+The Category Focused Layout resembles the Basic Layout but also displays the number of articles beside each category name.
+
+KNOWLEDGE BASE CLASSIC LAYOUT
+The Classic Layout offers a simple, compact view of top-level categories. Click to expand each category and view its associated articles and subcategories.
+
+KNOWLEDGE BASE FAQS
+The FAQs block allows you to add frequently asked questions to your documentation. Use the shortcode to display FAQs on any page.
+
+KNOWLEDGE BASE FEATURED ARTICLES
+The Featured Articles block displays popular articles on the Knowledge Base Main Page. Customize the number of articles and their appearance within your documentation.
+
+KNOWLEDGE BASE SIDEBAR LAYOUT (PRO)
+The Sidebar Layout features a navigation sidebar alongside articles on both the Knowledge Base (KB) Main Page and KB Article Pages.
+
+KNOWLEDGE BASE GRID LAYOUT (PRO)
+The Grid Layout presents top categories along with the count of articles in each. Clicking on a category navigates the user to either an article page or a category archive page.
+
+KNOWLEDGE BASE RESOURCE LINKS (PRO)
+The Resource Links block allows you to add links to external resources—such as PDFs, videos, and websites within your documentation.
+
+KNOWLEDGE BASE ADVANCED SEARCH (PRO)
+Enhance the user search experience while tracking analytics, including insights into popular queries and searches that yield no results.
 
 ##_____
+
 
 >⭐ <strong>OUR FREE COMPLEMENTARY PLUGINS</strong> ⭐
 >
@@ -157,56 +254,127 @@ The free Help Dialog Chat plugin offers a chatbot-like dialog for better custome
 > ✅ **[Show IDs](https://wordpress.org/plugins/echo-show-ids/)** reveals IDs on admin screens, including posts, pages, custom post types and taxonomies, and others. [Learn More](https://wordpress.org/plugins/echo-show-ids/)
 >
 >
-> ✅ The **[Content Down Arrow](https://wordpress.org/plugins/scroll-down-arrow/)** Scroll Down Arrow is an easy-to-use WordPress plugin that displays a downward-pointing arrow. It provides users with a visual cue that there is more content further down the page.
+> ✅ The **[Scroll Down Arrow](https://wordpress.org/plugins/scroll-down-arrow/)** Scroll Down Arrow is an easy-to-use WordPress plugin that displays a downward-pointing arrow. It provides users with a visual cue that there is more content further down the page.
 >
 >
 
 
 == Installation ==
 
-You can install the Knowledge Base for Documents and FAQs from your WordPress Dashboard or manually upload it through FTP.
+Getting started with Echo Knowledge Base is quick and easy. Choose the installation method that works best for you:
 
-= OPTION 1: Install Knowledgebase Plugin from WordPress Dashboard =
+### Option 1: Install from WordPress Dashboard (Recommended)
 
-1. Navigate to Plugins -> Add New.
-2. Search for 'Knowledge Base for Documents and FAQs' and install the plugin.
-3. Activate the plugin in the Plugins menu.
-4. Optional step: configure the plugin in the Admin menu, in Knowledge Base -> KB Configuration page.
+1. Log in to your WordPress admin panel
+2. Navigate to Plugins → Add New
+3. Search for "Echo Knowledge Base"
+4. Click "Install Now" next to the plugin
+5. After installation completes, click "Activate"
+6. Optional: Configure your knowledge base settings in Knowledge Base → KB Configuration
 
-= OPTION 2: Manually Upload Plugin Files =
+### Option 2: Manual Installation via FTP
 
-1. Download the plugin file from the plugin page: echo-knowledge-base.zip.
-2. Unzip the file echo-knowledge-base.zip.
-3. Upload the 'echo-knowledge-base' folder to your '/wp-content/plugins' directory (do not rename the folder).
-4. Optional step: configure the plugin in the Admin menu, in Knowledge Base -> KB Configuration page.
+1. Download the plugin zip file (echo-knowledge-base.zip)
+2. Extract the zip file to your computer
+3. Connect to your web server using an FTP client
+4. Navigate to your WordPress plugins directory (/wp-content/plugins/)
+5. Upload the 'echo-knowledge-base' folder
+6. Log in to your WordPress admin panel
+7. Go to Plugins → Installed Plugins
+8. Find "Echo Knowledge Base" and click "Activate"
+9. Optional: Configure your knowledge base settings in Knowledge Base → KB Configuration
+
+### Quick Start Guide
+
+After installation, we recommend:
+
+1. **Create Your First Article**
+   * Go to Knowledge Base → Add New Article
+   * Write your content using the WordPress editor
+   * Add categories to organize your content
+   * Publish your article
+
+2. **Set Up Your Knowledge Base Layout**
+   * Visit Knowledge Base → KB Configuration
+   * Choose your preferred layout design
+   * Customize colors and styling
+   * Configure navigation options
+
+3. **Add AI Features (Optional)**
+   * Install the AI Engine plugin
+   * Configure your OpenAI API key
+   * Start using AI-powered features
+
+For detailed setup instructions, visit our [Documentation](https://www.echoknowledgebase.com/documentation/)
 
 
 == Frequently Asked Questions ==
 
-= Where can I find complete documentation on your knowledge base? =
-Full searchable docs can be found at [Knowledge Base](http://www.echoknowledgebase.com/documentation/?utm_source=plugin&utm_medium=readme&utm_content=home&utm_campaign=docs "plugin documentation")
+### General Questions
 
+= Is Echo Knowledge Base compatible with my WordPress theme? =
+Yes! Echo Knowledge Base is designed to work seamlessly with any WordPress theme. Our plugin uses standard WordPress hooks and filters, ensuring compatibility across different themes and page builders.
 
-= Is Echo Knowledge Base compatible with my theme? =
-
-Yes, Echo Knowledge Base is designed to work seamlessly with any WordPress theme.
-
-= Can I customize the appearance of my knowledge base? =
-
-Absolutely! Choose from 26 pre-made designs and customize colors, fonts, and layouts without any coding.
+= How can I customize the appearance of my knowledge base? =
+You have multiple options to customize your knowledge base:
+* Choose from 26 pre-made professional designs
+* Customize colors, fonts, and layouts without coding
+* Use our intuitive visual editor for real-time changes
+* Add custom CSS for advanced styling
 
 = Does the plugin support multilingual sites? =
+Yes! Echo Knowledge Base fully supports:
+* RTL languages
+* WPML integration
+* Polylang compatibility
+* GTranslate support
+* Custom language files
 
-Yes, it supports RTL languages and works with WPML and Polylang for multilingual support.
+### AI Features
 
-= Is there an option for AI content writing assistance? =
+= What AI features are included? =
+Our AI integration provides:
+* Instant answer generation from your documentation
+* Content writing assistance
+* Grammar and spelling checks
+* Article outline generation
+* Smart content organization suggestions
 
-Yes, Echo Knowledge Base includes AI writing support for checking spelling and grammar, and generating article outlines.
+= How do I set up the AI features? =
+Setting up AI features is quick and easy:
+1. Install the AI Engine plugin
+2. Add your OpenAI API key
+3. Start using AI features immediately
 
-= How can I get support if I need help? =
+### Support & Updates
 
-Please contact us at [Learn More](https://www.echoknowledgebase.com/contact-us/)
+= How can I get help if I need support? =
+We offer multiple support channels:
+* [Documentation](https://www.echoknowledgebase.com/documentation/)
+* [Email Support](https://www.echoknowledgebase.com/contact-us/)
+* [Video Tutorials](https://www.youtube.com/@echoknowledgebase/)
 
+= How often is the plugin updated? =
+We release regular updates to:
+* Add new features
+* Improve performance
+* Fix bugs
+* Enhance security
+* Ensure WordPress compatibility
+
+### Pro Features
+
+= What features are included in the Pro version? =
+Pro features include:
+* Content Protection with Access Manager
+* Unlimited Knowledge Bases
+* Advanced Search Analytics
+* Article Rating and Feedback
+* Custom Links for PDFs and More
+* Import/Export Tools
+* Grid and Sidebar Layouts
+
+For more information about Pro features, visit our [Pricing Page](https://www.echoknowledgebase.com/bundle-pricing/)
 
 
 == Screenshots ==
@@ -254,6 +422,90 @@ Please contact us at [Learn More](https://www.echoknowledgebase.com/contact-us/)
 
 
 == Changelog ==
+
+= 14.1.0 =
+Release Date: June 28, 2025
+* Update: FAQs toggle for public/private visibility
+* Update: Archive Page toggle to use KB Main Page or Article Page search settings
+* Update: various minor improvements
+* Fix: Cleanup and minor fixes
+
+= 14.0.3 =
+Release Date: June 16, 2025
+* Update: Frontend Editor can be now turns on and off
+* Update: various minor improvements
+* Fix: Cleanup and minor fixes
+
+= 14.0.1 =
+Release Date: June 8, 2025
+* Fix: Cleanup and minor fixes
+
+= 14.0.0 =
+Release Date: June 8, 2025
+* New: Frontend Editor for KB Main Page, Article Page and Category Archive Page
+* New: Sticky sidebar
+* Fix: Cleanup and minor fixes
+
+= 13.60.0 =
+Release Date: May 12, 2025
+* Update: FAQ admin pages improvements
+* Fix: Cleanup and minor fixes
+
+= 13.52.1 =
+Release Date: Apr 24, 2025
+* Fix: Legacy search box fix
+
+= 13.52.0 =
+Release Date: Apr 21, 2025
+* New: Sub category designs for Classic Layout
+* Update: FAQ Shortcode generation
+* Fix: Cleanup and minor fixes
+
+= 13.51.0 =
+Release Date: Mar 23, 2025
+* New: AI Chat integration initial release
+* Update: Add label for Advanced Search highlight for Articles
+* Fix: Cleanup and minor fixes
+
+= 13.41.0 =
+Release Date: Mar 15, 2025
+* Fix: Cleanup and minor fixes
+
+= 13.40.0 =
+Release Date: Feb 23, 2025
+* Fix: Cleanup and minor fixes
+
+= 13.30.0 =
+Release Date: Feb 14, 2025
+* NEW: Grid Layout block (PRO)
+* NEW: Sidebar Layout block (PRO)
+* Fix: Cleanup and minor fixes
+
+= 13.20.0 =
+Release Date: Jan 24, 2025
+* NEW: Category slug setting
+* NEW: Tag slug setting
+* NEW: Advanced Search block (PRO)
+* Fix: Cleanup and minor fixes
+
+= 13.11.0 =
+Release Date: Jan 4, 2025
+* NEW: Tabs layout row setting
+* Fix: Cleanup and minor fixes
+
+= 13.10.0 =
+Release Date: Dec 7, 2024
+* NEW: Search block
+* NEW: Basic Layout block
+* NEW: Tabs Layout block
+* NEW: Drill Down Layout block
+* NEW: Category Focused Layout block
+* NEW: Classic Layout block
+* NEW: FAQs block
+* NEW: Articles List block
+* NEW: KB Block Template
+* Mobile article view improvements
+* Fix: Cleanup and minor fixes
 
 = 12.43.0 =
 Release Date: Nov 10, 2024
@@ -375,246 +627,5 @@ Release Date: Jan 6, 2024
 * Fix: Article View Counter unserialize fix
 * Fix: Cleanup and minor fixes
 
-= 11.30.2 =
-Release Date: Dec 17, 2023
-* Fix: Settings UI error
+See [changelog.txt](https://plugins.svn.wordpress.org/echo-knowledge-base/tags/13.10.0/readme.txt) for older changelog
 
-= 11.30.1 =
-Release Date: Dec 17, 2023
-* Fix: Cleanup and minor fixes
-
-= 11.30.0 =
-Release Date: Dec 12, 2023
-* New: Popular Articles List
-* New: Resource Links Module if Elegant Layout enabled
-* Update: Rename Modular Layout and Reorganize UI
-* Update: Rename Product Layout to Drill Down Layout
-* Fix: Cleanup and minor fixes
-
-= 11.20.0 =
-Release Date: Dec 3, 2023
-* Fix: Cleanup and minor fixes
-
-= 11.1.0 =
-Release Date: Nov 10, 2023
-
-* New: FAQ Schema for FAQs
-
-= 11.0.1 =
-Release Date: Aug 14, 2023
-
-* Fix: Cleanup and minor fixes
-
-= 11.0.0 =
-Release Date: Aug 7, 2023
-
-* New: Modular Main Page
-* Update: WordPress 6.3 compatibility
-* Fix: Cleanup and minor fixes
-
-= 10.2.0 =
-Release Date: June 27, 2023
-
-* New: Article View Counter
-* Fix: Cleanup and minor fixes
-
-= 10.1.0 =
-Release Date: Apr 6, 2023
-
-* New: AI helper for article outline
-* New: AI helper for text improvements
-* Fix: Cleanup and minor fixes
-
-= 10.0.0 =
-Release Date: Feb 27, 2023
-
-* New: AI content writing assistant
-* New: Advanced search param definition
-* Fix: Cleanup and minor fixes
-
-= 9.21.0 =
-Release Date: Feb 2, 2023
-
-* New: FAQs shortcode
-* New: Draft like Categories
-* Fix: Cleanup and minor fixes
-
-= 9.20.0 =
-Release Date: Nov 12, 2022
-
-* Update: Improve CSS loading speed
-* Update: Improve Google CLS
-* Fix: Cleanup and minor fixes
-
-= 9.12.0 =
-Release Date: Aug 23, 2022
-
-* Update: New UI for simple KB configuration
-* Update: Improve debugging
-* Update: Contributor can see a list of KBs
-* Update: full width when printing article
-* Fix: Cleanup and minor fixes
-
-= 9.11.0 =
-Release Date: June 25, 2022
-
-* Update: Option to show article title with Current Template
-* Fix: Cleanup and minor fixes
-
-= 9.10.0 =
-Release Date: May 23, 2022
-
-* New: Convert Posts and CPTs to KB Articles
-* New: KB Block Theme template
-* New: Article list indentation
-* Update: WordPress 6.0
-* Update: list available shortcodes and widgets
-* Fix: Cleanup and minor fixes
-
-= 9.3.0 =
-Release Date: Apr 2, 2022
-
-* New: Convert Posts and CPTs to KB Articles
-* New: Add backend mode to the Editor
-* Fix: Article content output for Current Template
-* Fix: Cleanup and minor fixes
-
-= 9.2.1 =
-Release Date: Mar 5, 2022
-
-* Fix: Article content output for KB Template
-* Fix: Cleanup and minor fixes
-
-= 9.2.0 =
-Release Date: Feb 25, 2022
-
-* Update: Article content output for KB Template
-* Fix: Cleanup and minor fixes
-
-= 9.1.0 =
-Release Date: Feb 18, 2022
-
-* New: Articles Index Directory shortcode
-* Fix: Cleanup and minor fixes
-
-= 9.0.2 =
-Release Date: Feb 2, 2022
-
-* Fix: Category private articles query.
-
-= 9.0.1 =
-Release Date: Jan 31, 2022
-
-* Fix: Revert change to article content output.
-
-= 9.0.0 =
-Release Date: Jan 30, 2022
-
-* New: navigation sidebar with categories and articles
-* Update: Various fixes and improvements.
-
-= 8.4.0 =
-Release Date: Nov 26, 2021
-
-* New: control speed of TOC scrolling
-* Update: Add import/export add-on links
-* Update: Allow private articles
-* Update: Various fixes and improvements.
-
-= 8.3.0 =
-Release Date: Nov 11, 2021
-
-* Update: Setup Wizard improvements.
-* Update: Various fixes and improvements.
-
-= 8.2.2 =
-Release Date: Oct 12, 2021
-
-* Fix: search finds only publish posts
-* Fix: Cleanup and minor fixes
-
-= 8.2.1 =
-Release Date: Sep 30, 2021
-
-* Update: resolve rare update issue
-
-= 8.2.0 =
-Release Date: Sep 30, 2021
-
-* Update: Add more access control settings
-* Fix: Cleanup and minor fixes
-
-= 8.1.1 =
-Release Date: Sep 17, 2021
-
-* Fix: Issue with post being array
-* Fix: Cleanup and minor fixes
-
-= 8.1.0 =
-Release Date: Sep 16, 2021
-
-Changes:
-* New: Access control - choose what Authors and Editors can change and if they can view analytics
-* New: On the Category Archive Page, the author, date and category can be turned on or off
-* New: Option to include or exclude articles in child categories on Category Archive Page
-* Fix: Cleanup and minor fixes
-
-= 8.0.1 =
-Release Date: Aug 19, 2021
-
-Changes:
-* Update: do not include articles in child categories on Category Archive Page
-* Fix: Cleanup and minor fixes
-
-= 7.7.0 =
-Release Date: May 20, 2021
-
-Changes:
-* New: Typography font options for text
-* New: Custom icons for sub-categories in Categories Layout
-* Update: RTL compability
-* Fix: Cleanup and minor fixes
-
-= 7.6.0 =
-Release Date: May 2, 2021
-
-Changes:
-* Update: Accessibility
-* Update: RTL compability
-* Fix: Cleanup and minor fixes
-
-= 7.5.0 =
-Release Date: Apr 9, 2021
-
-Changes:
-* Update: RTL compability
-* Fix: Cleanup and minor fixes
-
-= 7.4.0 =
-Release Date: Mar 27, 2021
-
-Changes:
-* New: Search hit and miss counter
-* Update: RTL compability
-* Fix: Cleanup and minor fixes
-
-= 7.3.1 =
-Release Date: Feb 28, 2021
-
-Changes:
-* Fix: Issue with Multi-network and editor
-
-= 7.3.0 =
-Release Date: Feb 28, 2021
-
-Changes:
-* Update: preparation for WordPress 5.7
-* Update: theme presets
-* Fix: Cleanup and minor fixes
-
-= 7.2.1 =
-Release Date: Feb 5, 2021
-
-Changes:
-* Fix: Frontend Editor loading
-* Fix: Cleanup and minor fixes

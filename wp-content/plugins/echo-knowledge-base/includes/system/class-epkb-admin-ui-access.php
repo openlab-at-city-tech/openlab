@@ -292,7 +292,7 @@ class EPKB_Admin_UI_Access {
 						: self::get_admin_capability(),
 					'options'       => self::get_access_control_options( true ) ) ) ) : '';
 
-		// Box: Add-ons / News
+		// Box: Add-ons
 		$boxes_config[] =
 			array(
 				'title' => $kb_config_specs['admin_eckb_access_addons_news_read']['label'],
@@ -377,19 +377,19 @@ class EPKB_Admin_UI_Access {
 	}
 
 	private static function get_admins_distinct_box() {
-		return sprintf( esc_html__( '%sAdmins%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--high">', '</span>' );
+		return '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--high">' . esc_html__( 'Admins', 'echo-knowledge-base' ) . '</span>';
 	}
 
 	private static function get_editors_distinct_box() {
-		return sprintf( esc_html__( '%sEditors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">', '</span>' );
+		return '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--middle">' . esc_html__( 'Editors', 'echo-knowledge-base' ) . '</span>';
 	}
 
 	private static function get_authors_distinct_box() {
-		return sprintf( esc_html__( '%sAuthors%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">', '</span>' );
+		return '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--low">' . esc_html__( 'Authors', 'echo-knowledge-base' ) . '</span>';
 	}
 
 	private static function get_users_with_capability_distinct_box( $capability ) {
-		return sprintf( esc_html__( '%susers with "%s" capability%s', 'echo-knowledge-base' ), '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--lowest">', $capability, '</span>' );
+		return '<span class="epkb-admin__distinct-box epkb-admin__distinct-box--lowest">' . esc_html__( 'users with', 'echo-knowledge-base' ) . '"' . $capability . '"' . esc_html__( 'capability', 'echo-knowledge-base' ) . '</span>';
 	}
 
 	/**

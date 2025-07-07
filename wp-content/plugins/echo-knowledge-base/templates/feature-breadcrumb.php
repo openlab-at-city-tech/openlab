@@ -111,7 +111,7 @@ $breadcrumb_style3_escaped = EPKB_Utilities::get_inline_style( 'typography::brea
 
 					$ix++;
 					$text = empty( $text ) && $ix == 1 ? esc_html__( 'KB Home', 'echo-knowledge-base' ) : $text;
-					$text = empty( $text ) && $ix > 1 ? esc_html__( 'Link ', 'echo-knowledge-base' ) . ( $ix - 1 ) : $text;
+					$text = empty( $text ) && $ix > 1 ? esc_html__( 'Link', 'echo-knowledge-base' ) . ( $ix - 1 ) : $text;
 
 					// output URL if not the last crumb
 					if ( $ix < sizeof( $breadcrumb ) ) {

@@ -259,8 +259,8 @@ jQuery(document).ready(function($) {
 		$( this ).closest( '.epkb-setup-wizard-features-choice' ).addClass( 'epkb-setup-wizard-features-choice--active' );
 	});
 
-	// For wizard step layout: click on image will popup
-	$('.eckb-wizard-step-layout .epkb-setup-option__featured-img').on( 'click', function(){
+	// Click on image will popup (zoom functionality)
+	$('.eckb-wizard-step-layout .epkb-setup-option__featured-img, .epkb-setup-wizard-features-choice img').on( 'click', function(){
 		let imageUrl = $( this ).attr( 'src' );
 
 		let popupHtml = `
@@ -296,12 +296,14 @@ jQuery(document).ready(function($) {
 			document.addEventListener( 'click', outsideClickListener );
 		}, 10);
 	});
+
 	/**
 	 * Live change of KB Main Page slug
 	 */
 	$( '.epkb-wizard-slug input[type="text"]' ).on( 'input', function () {
 		$( '#epkb-wizard-slug-target' ).text( $( this ).val() );
 	});
+
 	/**
 	 * If Elegant Layouts is disabled, the Resource Links row will be left in Inactive Rows
 	 */
@@ -313,6 +315,7 @@ jQuery(document).ready(function($) {
 			rows_list_container.append( resource_module_row );
 		}
 	})();
+
 	/**
 	 * Switch visibility of Module Row in Modules step
 	 */

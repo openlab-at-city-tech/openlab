@@ -17,7 +17,7 @@ class EPKB_KB_Handler {
 
 	/**
 	 * Create a new Knowledge Base using default configuration when:
-	 *  a) plugin is installed and activated
+	 *  a) plugin is installed and activated and Setup Wizard runs
 	 *  b) user clicks on 'Add Knowledge Base' button (requires Unlimited KBs add-on)
 	 * First default knowledge base has name 'Knowledge Base' with ID 1
 	 * Add New KB will create KB with pre-set name 'Knowledge Base 2' with ID 2 and so on.
@@ -25,22 +25,25 @@ class EPKB_KB_Handler {
 	 * @param int $new_kb_id - ID of the new KB
 	 * @param string $new_kb_main_page_title
 	 * @param string $new_kb_main_page_slug
-	 * @param $kb_main_page_layout
+	 * @param string $kb_main_page_layout
+	 * @param bool $use_kb_blocks
+	 * @param null $kb_config - used for block Setup Wizard to apply the Wizard changes for KB block Main Page
 	 * @return array|WP_Error - the new KB configuration or WP_Error
 	 */
-	public static function add_new_knowledge_base( $new_kb_id, $new_kb_main_page_title='', $new_kb_main_page_slug='', $kb_main_page_layout='' ) {
+	public static function add_new_knowledge_base( $new_kb_id, $new_kb_main_page_title='', $new_kb_main_page_slug='', $kb_main_page_layout='', $use_kb_blocks=false, $kb_config=null ) {
 
 		// use default KB configuration for a new KB
 		EPKB_Logging::disable_logging();
 
 		// use default KB configuration ONLY if none exists
-		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $new_kb_id );
+		$kb_config = empty( $kb_config ) ? epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $new_kb_id ) : $kb_config;
+		$kb_config['id'] = $new_kb_id;
 
 		// 1. Add first KB Main page if none exists; first KB is just called Knowledge Base
 		$kb_main_pages = $kb_config['kb_main_pages'];
-		if ( empty( $kb_main_pages ) ) {
+		if ( empty( $kb_main_pages ) && $new_kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ) {
 
-			$post = self::create_kb_main_page( $new_kb_id, $new_kb_main_page_title, $new_kb_main_page_slug );
+			$post = self::create_kb_main_page( $new_kb_id, $new_kb_main_page_title, $new_kb_main_page_slug, $kb_config, $use_kb_blocks );
 			if ( is_wp_error( $post ) ) {
 				return $post;
 			}
@@ -68,12 +71,14 @@ class EPKB_KB_Handler {
 		if ( $new_kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID && empty( $all_kb_terms ) ) {
 			EPKB_KB_Demo_Data::create_sample_categories_and_articles( $new_kb_id, $kb_main_page_layout );
 		}
-
-		if ( $new_kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID ) {
+		
+		// 4. Add a sample FAQ if no FAQ exists (only default KB)
+		$all_kb_faqs = EPKB_Utilities::get_kb_option( $new_kb_id, EPKB_ML_FAQs::FAQS_CATEGORY_IDS, array() );
+		if ( $new_kb_id == EPKB_KB_Config_DB::DEFAULT_KB_ID && empty( $all_kb_faqs ) ) {
 			EPKB_KB_Demo_Data::create_sample_faqs( $new_kb_id );
 		}
 
-		// 4. save new/updated KB configuration
+		// 5. save new/updated KB configuration
 		$result = epkb_get_instance()->kb_config_obj->update_kb_configuration( $new_kb_id, $kb_config );
 		if ( is_wp_error( $result ) ) {
 			return $result;
@@ -96,62 +101,44 @@ class EPKB_KB_Handler {
 	 * @param $kb_id
 	 * @param string $kb_main_page_title
 	 * @param string $kb_main_page_slug
-	 * @param bool $use_kb_blocks - determines whether to use blocks or shortcode TODO: set to default true on blocks release
-	 * @param array $kb_blocks - list of block configs in desired sequence
+	 * @param $kb_config
+	 * @param $use_kb_blocks
 	 * @return WP_Error|WP_Post
 	 */
-	public static function create_kb_main_page( $kb_id, $kb_main_page_title, $kb_main_page_slug, $use_kb_blocks = false, $kb_blocks = array() ) {
+	public static function create_kb_main_page( $kb_id, $kb_main_page_title, $kb_main_page_slug, $kb_config, $use_kb_blocks ) {
 
 		// we add new KB Page here so remove hook
-		remove_filter('save_post', 'epkb_add_main_page_if_required', 10 );
+		remove_filter( 'save_post', 'epkb_add_main_page_if_required' );
 
 		// do not process KB shortcode during KB creation
 		remove_shortcode( EPKB_KB_Handler::KB_MAIN_PAGE_SHORTCODE_NAME );
 
 		$shortcode = '[' . self::KB_MAIN_PAGE_SHORTCODE_NAME . ' id=' . $kb_id . ']';
 
-		// case: block Theme
-		if ( EPKB_Utilities::is_block_theme() ) {
+		// case: Block Theme or Classic Theme with block support: KB Shortcode or KB Blocks
+		if ( EPKB_Block_Utilities::is_blocks_available() ) {
+
+			$kb_blocks = $use_kb_blocks ? EPKB_Block_Utilities::convert_blocks_config_from_kb_config( $kb_id, $kb_config ) : array();
+
+			// case: WordPress Shortcode block with KB shortcode
+			if ( empty( $kb_blocks ) ) {
+				$post_content = '<!-- wp:shortcode -->' . $shortcode . '<!-- /wp:shortcode -->';
 
 			// case: KB blocks
-			if ( $use_kb_blocks ) {
-
-				// if required to create the page via KB blocks but no blocks were specified, then create the default set of blocks
-				$default_block_attributes = json_encode( array(
-					'kb_id' => $kb_id,
-				) );
-
-				if ( empty( $kb_blocks ) ) {
-					$kb_blocks = array(
-						array(
-							'name' => EPKB_Search_Block::EPKB_BLOCK_NAME,
-							'attributes' => $default_block_attributes,
-						),
-						array(
-							'name' => EPKB_Basic_Layout_Block::EPKB_BLOCK_NAME,
-							'attributes' => $default_block_attributes,
-						),
-					);
-				}
-
+			} else {
 				$post_content = '';
 				foreach ( $kb_blocks as $one_block_config ) {
-					$block_attributes = empty( $one_block_config['attributes'] ) ? $default_block_attributes : $one_block_config['attributes'];
-					$post_content .= '<!-- wp:' . EPKB_Abstract_Block::EPKB_BLOCK_NAMESPACE . '/' . $one_block_config['name'] . ' ' . $block_attributes . ' /-->';
+					$post_content .= '<!-- wp:' . EPKB_Abstract_Block::EPKB_BLOCK_NAMESPACE . '/' . $one_block_config['name'] . ' ' . $one_block_config['attributes'] . ' /-->';
 				}
-
-			// case: WordPress block with KB shortcode
-			} else {
-				$post_content = '<!-- wp:shortcode -->' . $shortcode . '<!-- /wp:shortcode -->';
 			}
 
-		// case: non-block Theme
+		// case: non-block Classic Theme: KB Shortcode
 		} else {
 			$post_content = $shortcode;
 		}
 
 		$kb_main_page_title = empty( $kb_main_page_title ) ? esc_html__( 'Knowledge Base', 'echo-knowledge-base' ) : $kb_main_page_title;
-		$my_post = array(
+		$page_args = array(
 			'post_title'    => $kb_main_page_title,
 			'post_name'     => $kb_main_page_slug,
 			'post_type'     => 'page',
@@ -160,7 +147,15 @@ class EPKB_KB_Handler {
 			'comment_status' => 'closed'
 			// current user or 'post_author'   => 1,
 		);
-		$post_id = wp_insert_post( $my_post );
+
+		// for Block Theme always use KB block page template if available
+		if ( EPKB_Block_Utilities::is_kb_block_page_template_available() ) {
+			$page_args['meta_input'] = array(
+				'_wp_page_template' => EPKB_Abstract_Block::EPKB_KB_BLOCK_PAGE_TEMPLATE,
+			);
+		}
+
+		$post_id = wp_insert_post( $page_args );
 		if ( empty( $post_id ) || is_wp_error( $post_id ) ) {
 			return is_wp_error( $post_id ) ? $post_id : new WP_Error( 'E01', 'Could not insert KB Main Page with slug ' . $kb_main_page_slug );
 		}
@@ -276,13 +271,6 @@ class EPKB_KB_Handler {
 		$epkb_wizard_kb_id = empty( $_REQUEST['epkb_wizard_kb_id'] ) ? '' : preg_replace( '/\D/', '', EPKB_Utilities::request_key( 'epkb_wizard_kb_id' ) );
 		if ( ! empty( $epkb_wizard_kb_id ) && EPKB_Utilities::is_positive_int( $epkb_wizard_kb_id ) ) {
 			return $epkb_wizard_kb_id;
-		}
-
-		// try to find KB ID from the Editor AJAX call (on apply changes)
-		//phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$epkb_editor_kb_id = empty( $_REQUEST['epkb_editor_kb_id'] ) ? '' : preg_replace( '/\D/', '', EPKB_Utilities::request_key( 'epkb_editor_kb_id' ) );
-		if ( ! empty( $epkb_editor_kb_id ) && EPKB_Utilities::is_positive_int( $epkb_editor_kb_id ) ) {
-			return $epkb_editor_kb_id;
 		}
 
 		// try to find KB ID from post - when editing article
@@ -404,7 +392,7 @@ class EPKB_KB_Handler {
 	 * @return string
 	 */
 	public static function get_post_type( $kb_id ) {
-		$kb_id = EPKB_Utilities::sanitize_int($kb_id, EPKB_KB_Config_DB::DEFAULT_KB_ID );
+		$kb_id = EPKB_Utilities::sanitize_int( $kb_id, EPKB_KB_Config_DB::DEFAULT_KB_ID );
 		return self::KB_POST_TYPE_PREFIX . $kb_id;
 	}
 
@@ -611,9 +599,12 @@ class EPKB_KB_Handler {
 		add_shortcode( self::KB_MAIN_PAGE_SHORTCODE_NAME, array( 'EPKB_Layouts_Setup', 'output_kb_page_shortcode' ) );
 
 		// find shortcode in post content or meta data
+		/** @disregard P1006 */
 		if ( has_shortcode( $found_post->post_content, self::KB_MAIN_PAGE_SHORTCODE_NAME ) ) {
+			/** @disregard P1006 */
 			$content = $found_post->post_content;
 		} else {
+			/** @disregard P1006 */
 			$content = $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM $wpdb->postmeta " .
 			                           "WHERE post_id = %d AND meta_value LIKE %s", $found_post->ID, '%' . $wpdb->esc_like( self::KB_MAIN_PAGE_SHORTCODE_NAME ) . '%' ) );
 		}
@@ -658,7 +649,7 @@ class EPKB_KB_Handler {
 		return null;
 	}
 
-	private static function get_shortcode_custom( $content ) {
+	public static function get_shortcode_custom( $content ) {
 
 		$start = strpos( $content, self::KB_MAIN_PAGE_SHORTCODE_NAME );
 		if ( empty( $start ) || $start < 0 ) {
@@ -870,15 +861,15 @@ class EPKB_KB_Handler {
 	public static function get_kb_category_with_most_articles_url( $kb_config ) {
 
 		$articles_seq_data = EPKB_Utilities::get_kb_option( $kb_config['id'], EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, array(), true );
-		if ( empty($articles_seq_data) ) {
+		if ( empty( $articles_seq_data ) ) {
 			return '';
 		}
 
 		$articles_seq_data_length = array_map('sizeof', $articles_seq_data);
-		arsort($articles_seq_data_length);
+		arsort( $articles_seq_data_length );
 		$category_id = key($articles_seq_data_length); // the top is the category with most articles
 
-		if ( empty($category_id) ) {
+		if ( empty( $category_id ) ) {
 			return '';
 		}
 

@@ -13,7 +13,7 @@
  *
  * @return {WPElement} Element to render.
  */
-import showInspectorControls from '../components';
+import EpkbInspectorControls from "../components";
 
 export default function ClassicLayoutBlockEdit({ attributes, setAttributes, name }) {
 
@@ -27,5 +27,12 @@ export default function ClassicLayoutBlockEdit({ attributes, setAttributes, name
 		);
 	}
 
-	return showInspectorControls(epkb_classic_layout_block_ui_config, attributes, setAttributes, name);
+	return (
+		<EpkbInspectorControls
+			block_ui_config={epkb_classic_layout_block_ui_config}
+			attributes={attributes}
+			setAttributes={setAttributes}
+			blockName={name}
+		/>
+	);
 }

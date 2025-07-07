@@ -348,9 +348,7 @@ class EPKB_Layout_Article_Sidebar extends EPKB_Layout {
 		$catBodyContainer_paddingBottom = $kb_config['sidebar_section_body_padding_bottom'];
 		$catBodyContainer_paddingLeft = $kb_config['sidebar_section_body_padding_left'];
 		$catBodyContainer_paddingRight = $kb_config['sidebar_section_body_padding_right'];
-
-		$catBodyContainer_BodyHeight = $kb_config['sidebar_section_body_height'];
-
+		
 		// Article
 		$article_Font_color = $kb_config['sidebar_article_font_color'];
 		$article_Font_Active_color = $kb_config['sidebar_article_active_font_color'];
@@ -370,7 +368,7 @@ class EPKB_Layout_Article_Sidebar extends EPKB_Layout {
 			$output .= '
 			#epkb-sidebar-container-v2 {
 				overflow: auto;
-				max-height: ' . $sidebar_side_bar_height . 'px;
+				max-height: ' . $sidebar_side_bar_height . 'px !important;
 			}';
 		}
 		$output .= '
@@ -443,19 +441,6 @@ class EPKB_Layout_Article_Sidebar extends EPKB_Layout {
 				padding-right: ' . $catBodyContainer_paddingRight . 'px;
 			}
 			';
-
-		if ( $kb_config['sidebar_section_box_height_mode'] == 'section_min_height' ) {
-			$output .= '
-			#epkb-sidebar-container-v2 {
-				min-height: ' . $catBodyContainer_BodyHeight . 'px;
-			}';
-		} else if ( $kb_config['sidebar_section_box_height_mode'] == 'section_fixed_height' ) {
-			$output .= '
-			#epkb-sidebar-container-v2 {
-				overflow: auto;
-				height: ' . $catBodyContainer_BodyHeight . 'px;
-			}';
-		}
 
 		$output .= '
 			#epkb-sidebar-container-v2 .epkb-sidebar__cat__top-cat__body-container .epkb-sidebar__body__sub-cat {

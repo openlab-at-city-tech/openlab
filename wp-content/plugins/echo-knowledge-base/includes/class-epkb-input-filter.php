@@ -22,7 +22,8 @@ class EPKB_Input_Filter {
 
 	// custom fields
 	const COLOR_HEX = 'color_hex';
-	const NUMBER = 'number';   // use Text input
+	const NUMBER = 'number';   // int number
+	const FLOAT_NUMBER = 'real_number';   // float number`
 	const TRUE_FALSE = 'true_false';
 
 	// special fields
@@ -80,7 +81,7 @@ class EPKB_Input_Filter {
 							$arr_key = $tmp[0];
 							$arr_value = $tmp[1];
 						}
-						$input_adj[$arr_key] = sanitize_text_field($arr_value);
+						$input_adj[$arr_key] = sanitize_text_field( $arr_value );
 					}
 					$input_value = $input_adj;
 					break;
@@ -124,8 +125,8 @@ class EPKB_Input_Filter {
 				EPKB_Logging::add_log( 'Please change the value of ' . $field_spec['label'] . ' field. Current value: "' . $input_value . '" - ' . $result->get_error_message() . ', code: ' . $result->get_error_message(), $result );
 
 				// log error only if a) NOT internal fields and more than 1 error encountered OR b) debug on
-				if ( ( empty($field_spec['internal']) && count($errors) > 0 ) || ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ||
-					! in_array( $field_spec['type'], array(self::CHECKBOX, self::SELECTION, self::CHECKBOXES_MULTI_SELECT, self::CHECKBOXES_MULTI_SELECT_NOT, self::TRUE_FALSE, self::ENUMERATION) )) {
+				if ( ( empty( $field_spec['internal'] ) && count( $errors ) > 0 ) || ( defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ) ||
+					! in_array( $field_spec['type'], array( self::CHECKBOX, self::SELECTION, self::CHECKBOXES_MULTI_SELECT, self::CHECKBOXES_MULTI_SELECT_NOT, self::TRUE_FALSE, self::ENUMERATION ) ) ) {
 
 					$lang = '<strong style="color:#d5ff8b">' . esc_html( $field_spec['label'] ) . '</strong>';
 					/* translators: %s: value entered by user. */
@@ -146,7 +147,7 @@ class EPKB_Input_Filter {
 			return $sanitized_input;
 		}
 
-		return new WP_Error('invalid_input', ' ' . implode(" ", $errors) );
+		return new WP_Error( 'invalid_input', ' ' . implode( " ", $errors ) );
 	}
 
 	private function filter_input_field( $value, $field_spec ) {
@@ -176,6 +177,9 @@ class EPKB_Input_Filter {
 			case self::NUMBER:
 				return $this->filter_number( $value, $field_spec );
 
+			case self::FLOAT_NUMBER:
+				return $this->filter_float_number( $value, $field_spec );
+
 			case self::COLOR_HEX:
 				return $this->filter_color_hex( $value, $field_spec );
 
@@ -199,7 +203,7 @@ class EPKB_Input_Filter {
 				return $this->filter_wp_editor( $value, $field_spec );
 
 			default:
-				return new WP_Error('eckb-invalid-input-type', esc_html__( 'Error Occurred', 'echo-knowledge-base' ) . ' - ' . $field_spec['type']);
+				return new WP_Error( 'eckb-invalid-input-type', esc_html__( 'Error Occurred', 'echo-knowledge-base' ) . ' - ' . $field_spec['type'] );
 		}
 	}
 
@@ -221,15 +225,15 @@ class EPKB_Input_Filter {
 			$nof_chars_to_remove = strlen( $text ) - $field_spec['max'];
 
 			/* translators: %d: number of characters to remove by user when entering too long string. */
-			$msg = sprintf( _n( 'The value is too long. Remove %d character.', 'The value is too long. Remove %d characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
-			return new WP_Error('filter_text_big', $msg );
+			$msg = sprintf( _n( 'The value is too long. Remove %s character.', 'The value is too long. Remove %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			return new WP_Error( 'filter_text_big', $msg );
 		}
 
 		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( strlen( $text ) > 0 && strlen( $text ) < $field_spec['min'] ) ) {
-			$nof_chars_to_remove = $field_spec['min'] - strlen($text);
+			$nof_chars_to_remove = $field_spec['min'] - strlen( $text );
 
 			/* translators: %d: number of characters to add by user when entering too short string. */
-			$msg = sprintf( _n( 'The value is too short. Add at least %d character.', 'The value is too short. Add at least %d characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			$msg = sprintf( _n( 'The value is too short. Add at least %s character.', 'The value is too short. Add at least %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error('filter_text_small', $msg );
 		}
 
@@ -267,10 +271,10 @@ class EPKB_Input_Filter {
 		}
 		
 		if ( ! in_array( $value, array_keys($field_spec['options']) )  && ! empty($field_spec['mandatory']) ) {
-			$value_text = ( empty($value) ? esc_html__( 'empty', 'echo-knowledge-base' ) : '"' . $value . '"' );
+			$value_text = ( empty( $value ) ? esc_html__( 'empty', 'echo-knowledge-base' ) : '"' . $value . '"' );
 			/* translators: 1: value entered by user, 2: HTML tag, 3: valid values user should enter. */
-			$msg = '<br>' . sprintf( esc_html__( 'The value cannot be %1$s. %2$sValid values are: %3$s', 'echo-knowledge-base' ), $value_text, '<br>', implode(", ", $field_spec['options']) );
-			return new WP_Error('filter_selection_invalid', $msg );
+			$msg = '<br>' . sprintf( esc_html__( 'The value cannot be %1$s. %2$sValid values are: %3$s', 'echo-knowledge-base' ), $value_text, '<br>', implode( ", ", $field_spec['options'] ) );
+			return new WP_Error( 'filter_selection_invalid', $msg );
 		}
 
 		return $value;
@@ -285,7 +289,7 @@ class EPKB_Input_Filter {
 	 */
 	private function filter_checkbox( $value ) {
 
-		if ( empty($value) || $value == 'off' ) {
+		if ( empty( $value ) || $value == 'off' ) {
 			return "off";
 		} else if ( $value == "on" ) {
 			return $value;
@@ -303,11 +307,40 @@ class EPKB_Input_Filter {
 	 */
 	private function filter_number( $number, $field_spec=array() ) {
 
-		$number = empty($number) ? 0 : trim($number);
+		$number = empty( $number ) ? 0 : trim( $number );
 		$number_int = EPKB_Utilities::sanitize_int( $number, null );
 		if ( $number != $number_int ) {
 			/* translators: %s: value entered by user. */
-			return new WP_Error('filter_not_number',sprintf( esc_html__( 'The value "%s" is not a number', 'echo-knowledge-base' ), $number ) );
+			return new WP_Error( 'filter_not_number', sprintf( esc_html__( 'The value "%s" is not a number', 'echo-knowledge-base' ), $number ) );
+		}
+
+		if ( $number > $field_spec['max'] ) {
+			/* translators: 1: value entered by user, 2: maximum length user should enter. */
+			$msg = sprintf( esc_html__( 'The value %1$s is larger than maximum of %2$s', 'echo-knowledge-base' ), $number, $field_spec['max'] );
+			return new WP_Error( 'filter_not_number', $msg );
+		} else if ( $number < $field_spec['min'] ) {
+			/* translators: 1: value entered by user, 2: minimum length user should enter. */
+			$msg = sprintf( esc_html__( 'The value %1$s is smaller than minimum of %2$s', 'echo-knowledge-base' ), $number, $field_spec['min'] );
+			return new WP_Error( 'filter_not_number', $msg );
+		}
+
+		return $number;
+	}
+
+	/**
+	 * Sanitize and validate a float number
+	 *
+	 * @param $number
+	 * @param array $field_spec
+	 * @return string|WP_Error returns sanitized and validated float number
+	 */
+	private function filter_float_number( $number, $field_spec=array() ) {
+
+		$number = empty( $number ) ? 0 : trim( $number );
+		$number_int = floatval( $number );
+		if ( $number != $number_int ) {
+			/* translators: %s: value entered by user. */
+			return new WP_Error('filter_not_number', sprintf( esc_html__( 'The value "%s" is not a number', 'echo-knowledge-base' ), $number ) );
 		}
 
 		if ( $number > $field_spec['max'] ) {
@@ -328,7 +361,7 @@ class EPKB_Input_Filter {
 	 *
 	 * @param $boolean
 	 *
-	 * @return string|WP_Error returns sanitized and validated text
+	 * @return bool|WP_Error returns sanitized and validated text
 	 */
 	private function filter_true_false( $boolean ) {
 		if ( $boolean === true )  {
@@ -376,7 +409,7 @@ class EPKB_Input_Filter {
 	 */
 	private function filter_id( $id ) {
 		$id = EPKB_Utilities::sanitize_get_id( $id );
-		if ( is_wp_error($id) ) {
+		if ( is_wp_error( $id ) ) {
 			return new WP_Error('filter_not_id', esc_html__( 'Error Occurred', 'echo-knowledge-base' ) . ' - ' . $id . ' - ' . $id->get_error_code() );
 		}
 		return $id;
@@ -412,17 +445,17 @@ class EPKB_Input_Filter {
 			$text = '';
 		}
 
-		if ( strlen($text) > $field_spec['max'] ) {
+		if ( strlen( $text ) > $field_spec['max'] ) {
 			$nof_chars_to_remove = strlen($text) - $field_spec['max'];
 			/* translators: %d: number of characters to remove by user when entering too long string. */
-			$msg = sprintf( _n( 'The value is too long. Remove %d character.', 'The value is too long. Remove %d characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			$msg = sprintf( _n( 'The value is too long. Remove %s character.', 'The value is too long. Remove %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error('filter_text_big', $msg );
 		}
 
-		if ( ( empty($text) && ! empty($field_spec['mandatory']) ) || ( strlen($text) > 0 && strlen($text) < $field_spec['min'] ) ) {
+		if ( ( empty( $text ) && ! empty( $field_spec['mandatory'] ) ) || ( strlen( $text ) > 0 && strlen( $text ) < $field_spec['min'] ) ) {
 			$nof_chars_to_remove = $field_spec['min'] - strlen($text);
 			/* translators: %d: number of characters to add by user when entering too short string. */
-			$msg = sprintf( _n( 'The value is too short. Add at least %d character.', 'The value is too short. Add at least %d characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
+			$msg = sprintf( _n( 'The value is too short. Add at least %s character.', 'The value is too short. Add at least %s characters.', $nof_chars_to_remove, 'echo-knowledge-base' ), $nof_chars_to_remove );
 			return new WP_Error('filter_text_small', $msg );
 		}
 
@@ -465,7 +498,7 @@ class EPKB_Input_Filter {
 
 	public static function sanitize_typography( $typography ) {
 
-		$typography = is_array($typography) ? $typography : array();
+		$typography = is_array( $typography ) ? $typography : array();
 		$typography = array_merge( EPKB_Typography::$typography_defaults, $typography );
 
 		$typography_filtered = [];
@@ -494,12 +527,12 @@ class EPKB_Input_Filter {
 	public function retrieve_and_sanitize_form_fields( $submitted_fields, $all_fields_specs, $orig_settings ) {
 
 		$name_values = array();
-		foreach ($all_fields_specs as $key => $spec ) {
+		foreach ( $all_fields_specs as $key => $spec ) {
 
 			// copy over fields that are internal
-			if ( ! empty($spec['internal']) || $spec['type'] == self::ID ) {
-				$default_value = isset($spec['default']) ? $spec['default'] : '';
-				$orig_value = isset($orig_settings[$key]) ? $orig_settings[$key] :$default_value;
+			if ( ! empty( $spec['internal'] ) || $spec['type'] == self::ID ) {
+				$default_value = isset( $spec['default'] ) ? $spec['default'] : '';
+				$orig_value = isset( $orig_settings[$key] ) ? $orig_settings[$key] :$default_value;
 				$name_values += array( $key => $orig_value);
 				continue;
 			}
@@ -509,21 +542,21 @@ class EPKB_Input_Filter {
 			if ( $is_multiselect || $spec['type'] == self::CHECKBOXES_MULTI_SELECT_NOT) {
 
 				$multi_selects = array();
-				foreach ($submitted_fields as $submitted_key => $submitted_value) {
+				foreach ( $submitted_fields as $submitted_key => $submitted_value ) {
 
 					$submitted_value = stripslashes( $submitted_value );
 					$submitted_value = sanitize_text_field( $submitted_value );
 
-					if ( ! empty($submitted_key) && strpos($submitted_key, $key) === 0) {
+					if ( ! empty( $submitted_key ) && strpos( $submitted_key, $key ) === 0) {
 
 						$chunks = $is_multiselect ?  explode('[[-,-]]', $submitted_value) : explode('[[-HIDDEN-]]', $submitted_value);
-						if ( empty($chunks[0]) || empty($chunks[1]) || ! empty($chunks[2]) ) {
+						if ( empty( $chunks[0] ) || empty( $chunks[1] ) || ! empty( $chunks[2] ) ) {
 							continue;
 						}
 
 						if ( $is_multiselect ) {
 							$multi_selects[$chunks[0]] = $chunks[1];
-						} else if ( ! empty($submitted_value) && strpos($submitted_value, '[[-HIDDEN-]]') !== false ) {
+						} else if ( ! empty( $submitted_value ) && strpos( $submitted_value, '[[-HIDDEN-]]' ) !== false ) {
 							$multi_selects[$chunks[0]] = $chunks[1];
 						}
 					}
@@ -534,32 +567,33 @@ class EPKB_Input_Filter {
 			}
 
 			// checkbox or radio button without value is considered to be 'off'
-			if ( empty($submitted_fields[$key]) && ( $spec['type'] == self::CHECKBOX || $spec['type'] == self::RADIO ) ) {
+			if ( empty( $submitted_fields[$key] ) && ( $spec['type'] == self::CHECKBOX || $spec['type'] == self::RADIO ) ) {
 				$submitted_fields[$key] = 'off';
 			}
 
 			// for regular input if it exists then retrieve it
 			if ( $spec['type'] == self::TYPOGRAPHY ) {
-				$input_value = is_array($submitted_fields[$key]) ? $submitted_fields[$key] : array();
+				$input_value = is_array( $submitted_fields[$key] ) ? $submitted_fields[$key] : array();
 
-			} elseif ( isset($submitted_fields[$key]) ) {
+			} elseif ( isset( $submitted_fields[$key] ) ) {
 				$input_value = trim( $submitted_fields[ $key ] );
 
 			// if the input is missing then use the original config value
 			} else {
-				$default_value = isset($spec['default']) ? $spec['default'] : '';
-				$input_value = isset($orig_settings[$key]) ? $orig_settings[$key] :$default_value;
+				$default_value = isset( $spec['default'] ) ? $spec['default'] : '';
+				$input_value = isset( $orig_settings[$key] ) ? $orig_settings[$key] :$default_value;
 			}
 
-			if ( gettype($input_value) !== 'array' ) $input_value = stripslashes( $input_value );
+			if ( gettype( $input_value ) !== 'array' ) {
+				$input_value = stripslashes( $input_value );
+			}
 
 			if ( $spec['type'] == self::WP_EDITOR ) {
 				$name_values += array( $key => wp_kses( $input_value, EPKB_Utilities::get_extended_html_tags() ) );
 			} elseif ( $spec['type'] == self::TYPOGRAPHY ) {
 				$name_values += array( $key => self::sanitize_typography( $input_value ) );
-
 			} elseif ( ( $spec['type'] == self::TEXT ) && ! ( empty( $spec['allowed_tags'] ) ) ) {
-				$name_values += array($key => wp_kses($input_value, $spec['allowed_tags']));
+				$name_values += array( $key => wp_kses( $input_value, $spec['allowed_tags'] ) );
 			} else if ( ( $spec['type'] == self::EMAIL ) ) {
 				$name_values += array( $key => sanitize_email( $input_value ) );
 			} else {

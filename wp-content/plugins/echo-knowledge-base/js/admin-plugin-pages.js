@@ -83,10 +83,8 @@ jQuery(document).ready(function($) {
 			function( response ) {
 				$( '.eckb-top-notice-message' ).remove();
 				if ( typeof response.message !== 'undefined' ) {
-					clear_bottom_notifications();
 					$( 'body' ).append( response.message );
 				}
-				clear_message_after_set_time();
 			}
 		);
 	});
@@ -189,36 +187,6 @@ jQuery(document).ready(function($) {
 		// Update anchor
 		window.location.hash = '#' + list_key;
 	});
-
-	// Open iframe with editor
-	$( document ).on('click', '.epkb-main-page-editor-link a, .epkb-article-page-editor-link a, .epkb-archive-page-editor-link a, .epkb-search-page-editor-link a', function( e ){
-		if ( $('[name=editor_backend_mode]:checked').length == 0 || $('[name=editor_backend_mode]:checked').val() == 0 ) {
-			return true;
-		}
-
-		let link_href = $( this ).prop( 'href' );
-		$( 'body' ).append(`
-			<div class="epkb-editor-popup" id="epkb-editor-popup">
-				<iframe src="${link_href}" ></iframe>
-			</div>
-		`);
-
-		e.stopPropagation();
-		return false;
-	} );
-
-	// Do not close Editor backend mode when click inside it
-	$( 'body' ).on('click', '.epkb-editor-popup', function(e){
-		e.stopPropagation();
-	} );
-
-	// Let tabs open via triggering their click events before initialize close event for Editor backend mode
-	setTimeout( function () {
-		// Close Editor backend mode when click outside it
-		$( 'body' ).on( 'click', function() {
-			$( '.epkb-editor-popup' ).remove();
-		} );
-	}, 3000 );
 
 	// Set correct active tab after the page reloading
 	(function(){
@@ -500,10 +468,8 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function( response ) {
 				$( '.eckb-top-notice-message' ).remove();
 				if ( typeof response.message !== 'undefined' ) {
-					clear_bottom_notifications();
 					$( 'body' ).append( response.message );
 				}
-				clear_message_after_set_time();
 			} );
 		} );
 
@@ -523,9 +489,7 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function( response ) {
 				$( '.eckb-top-notice-message' ).remove();
 				if ( typeof response.message !== 'undefined' ) {
-					clear_bottom_notifications();
 					$( 'body' ).append( response.message );
-					clear_message_after_set_time();
 				}
 
 				if ( typeof response.html !== 'undefined' ) {
@@ -568,6 +532,31 @@ jQuery(document).ready(function($) {
 					$('html, body').off('click.epkb');
 				});
 			});
+			
+			// Add popup functionality for AI Chat help dialog images
+			$( document ).on( 'click', '.epkb-help-dialog-img-inactive, .epkb-help-dialog-img', function( e ){
+				e.preventDefault();
+				e.stopPropagation();
+
+				// Remove any existing image_zoom elements
+				$( '.image_zoom' ).remove();
+
+				// Get image source
+				var img_src = $( this ).attr( 'src' );
+
+				// Add the image zoom popup
+				$( this ).after('' +
+					'<div id="epkb_image_zoom" class="image_zoom">' +
+					'<img src="' + img_src + '" class="image_zoom epkb-help-dialog-img">' +
+					'<span class="close icon_close"></span>'+
+					'</div>' + '');
+
+				// Close popup when clicking anywhere
+				$('html, body').on('click.epkb', function(){
+					$( '#epkb_image_zoom' ).remove();
+					$('html, body').off('click.epkb');
+				});
+			});
 		})();
 
 		// Info Icon for Licenses
@@ -596,37 +585,102 @@ jQuery(document).ready(function($) {
 			epkb_send_ajax( postData, function( response ) {
 				$( '.eckb-top-notice-message' ).remove();
 				if ( typeof response.message !== 'undefined' ) {
-					clear_bottom_notifications();
 					$( 'body' ).append( response.message );
 				}
-				clear_message_after_set_time();
 			} );
 
 			return false;
 		});
+
+		// KB Category Slug Parameter
+		$( '#category_slug_param' ).on( 'keyup', function( e ) {
+			let val = $( this ).val();
+			// allow only letters, numbers, dash, underscore
+			if ( ! val.match( /^[a-zA-Z0-9-_]*$/ ) ) {
+				$( this ).val( val.replace( /[^a-zA-Z0-9-_]/g, '' ) );
+			}
+		});
+
+		$( '#epkb-category-slug-parameter__form' ).on( 'submit', function( e ) {
+			let form = $( this );
+			let postData = {
+				action: 'eckb_update_category_slug_parameter',
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+				category_slug_param: form.find( 'input[name="category_slug_param"]' ).val(),
+				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
+			};
+
+			epkb_send_ajax( postData, function( response ) {
+				$( '.eckb-top-notice-message' ).remove();
+				if ( typeof response.message !== 'undefined' ) {
+					$( 'body' ).append( response.message );
+				}
+			} );
+
+			return false;
+		});
+
+		// KB Tag Slug Parameter
+		$( '#tag_slug_param' ).on( 'keyup', function( e ) {
+			let val = $( this ).val();
+			// allow only letters, numbers, dash, underscore
+			if ( ! val.match( /^[a-zA-Z0-9-_]*$/ ) ) {
+				$( this ).val( val.replace( /[^a-zA-Z0-9-_]/g, '' ) );
+			}
+		});
+
+		$( '#epkb-tag-slug-parameter__form' ).on( 'submit', function( e ) {
+			let form = $( this );
+			let postData = {
+				action: 'eckb_update_tag_slug_parameter',
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+				tag_slug_param: form.find( 'input[name="tag_slug_param"]' ).val(),
+				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
+			};
+
+			epkb_send_ajax( postData, function( response ) {
+				$( '.eckb-top-notice-message' ).remove();
+				if ( typeof response.message !== 'undefined' ) {
+					$( 'body' ).append( response.message );
+				}
+			} );
+
+			return false;
+		});
+
+		// Tools Settings Form handler
+		$( '#epkb-tools-settings-form' ).on( 'submit', function( e ) {
+			e.preventDefault();
+			
+			let form = $( this );
+			let postData = {
+				action: 'epkb_save_tools_settings',
+				_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+				epkb_kb_id: $( '#epkb-list-of-kbs' ).val(),
+				template_main_page_display_title: form.find( 'input[name="template_main_page_display_title"]' ).is(':checked') ? 'on' : 'off',
+				
+				'general_typography[font-family]': form.find( '.epkb-input-custom-dropdown__option--selected' ).attr( 'data-value' ),
+				kb_name: form.find( 'input[name="kb_name"]' ).val(),
+				frontend_editor_switch_visibility_toggle: form.find( 'input[name="frontend_editor_switch_visibility_toggle"]' ).is(':checked') ? 'on' : 'off',
+				epkb_ml_custom_css: form.find( 'textarea[name="epkb_ml_custom_css"]' ).val()
+			};
+
+			epkb_send_ajax( postData, function( response ) {
+				$( '.eckb-top-notice-message' ).remove();
+				if ( typeof response.message !== 'undefined' ) {
+					$( 'body' ).append( response.message );
+				}
+			} );
+
+			return false;
+		});
+		
+		// Update typography font family hidden input when font is selected
+		$( document ).on( 'epkb-font-selected', function( e, fontFamily ) {
+			$( '#general_typography_font_family' ).val( fontFamily );
+			$( '.epkb-general_typography-current' ).text( fontFamily );
+		});
 	})();
-
-	// Copy to clipboard button
-	$( '.epkb-copy-to-clipboard-box-container .epkb-ctc__copy-button' ).on( 'click', function( e ){
-		e.preventDefault();
-		let textarea = document.createElement( 'textarea' );
-		let $container = $( this ).closest( '.epkb-copy-to-clipboard-box-container' );
-		textarea.value = $container.find( '.epkb-ctc__embed-code' ).text();
-		textarea.style.position = 'fixed';
-		document.body.appendChild( textarea );
-		textarea.focus();
-		textarea.select();
-		document.execCommand( 'copy' );
-		textarea.remove();
-
-		$container.find( '.epkb-ctc__embed-code' ).css( { 'opacity': 0 } );
-		$container.find( '.epkb-ctc__embed-notification' ).fadeIn( 200 );
-
-		setTimeout( function() {
-			$container.find( '.epkb-ctc__embed-code' ).css( { 'opacity': 1 } );
-			$container.find( '.epkb-ctc__embed-notification' ).hide();
-		}, 1500 );
-	});
 
 	/*************************************************************************************************
 	 *
@@ -671,6 +725,446 @@ jQuery(document).ready(function($) {
 		title: '',
 		content: '',
 	};
+
+	const FAQ_DESIGN_PRESETS_KEY = 'epkb_faq_design_presets';
+
+	// Global flag to temporarily silence color‑picker change events when we programmatically
+	// update colour values (e.g. while applying a preset on first load).
+	let suppressFAQsColorEvent = false;
+
+	// -----------------------------------------------------------------------------
+	//  Debounce helper for updateFAQsShortcode()
+	// -----------------------------------------------------------------------------
+	// We register a single timer variable in the outer scope so all invocations of
+	// updateFAQsShortcode() share it.  Each call will clear the previous timer and
+	// schedule a new execution, ensuring that only the final invocation within the
+	// debounce window performs the AJAX request.  This reduces duplicate requests
+	// that were previously triggered by multiple change/click events firing almost
+	// simultaneously when the user selects a FAQ shortcode preset.
+	let updateFAQsShortcodeTimer;
+
+	// Stores the parameters of the last successful shortcode request. Used to
+	// short‑circuit updateFAQsShortcode() when a subsequent invocation would send
+	// identical data to the server, eliminating redundant AJAX traffic.
+	let lastFAQsShortcodeParamsJSON = '';
+
+	// Update preview when switching between secondary tabs
+	$(document).on('click', '#epkb-kb-faqs-page-container .admin_secondary_menu_item_link', function() {
+		// Small delay to ensure DOM is updated
+		setTimeout(function() {
+			updateFAQsShortcode();
+		}, 200);
+	});
+
+	// Function to handle the shortcode generator
+	function initFAQsShortcodeGenerator() {
+		// Get all selected groups
+		const selectedGroups = [];
+		$('.epkb-group-select:checked').each(function() {
+			selectedGroups.push($(this).val());
+		});
+
+		// Set initial values
+		$('#epkb-faq-groups-select').val(selectedGroups);
+
+		// Update shortcode when groups selection changes
+		$(document).on('change', '#epkb-faq-groups-select', function() {
+			updateFAQsShortcode();
+		});
+	}
+
+	function getFAQsCachedDesignPresets() {
+		try {
+			const presetsJson = localStorage.getItem(FAQ_DESIGN_PRESETS_KEY);
+			return presetsJson ? JSON.parse(presetsJson) : null;
+		} catch (e) {
+			console.error('Error reading presets from cache:', e);
+			return null;
+		}
+	}
+
+	function clearFAQsCachedPresets() {
+		localStorage.removeItem(FAQ_DESIGN_PRESETS_KEY);
+	}
+
+	function cacheFAQsDesignPreset(presets) {
+		try {
+			localStorage.setItem(FAQ_DESIGN_PRESETS_KEY, JSON.stringify(presets));
+		} catch (e) {
+			console.error('Error caching design preset:', e);
+		}
+	}
+
+	// Fill settings fields with preset values
+	function applyFAQsDesignPreset(preset, init = false) {
+		if ( ! preset ) {
+			return;
+		}
+
+		Object.keys(preset).forEach(key => {
+			const value = preset[key];
+			const $field = $(`[name="${key}"]`);
+
+			// Radio button or checkbox field
+			if ($field.is(':radio, :checkbox')) {
+				const $target = $field.filter(`[value="${value}"]`);
+				$target.prop('checked', true);
+				return;
+			}
+
+			// Color picker field
+			if ($field.is('input.wp-color-picker')) {
+				$field.wpColorPicker('color', value);
+				return;
+			}
+
+			// Other field types
+			if ($field.length) {
+				$field.val(value);
+				if (init) {
+					$field.off('change');
+				}
+			}
+		});
+	}
+
+	// Function to update the shortcode based on selected groups
+	function updateFAQsShortcode( skipDebounce = false ) {
+		// Debounce multiple rapid calls – run the heavy part only once within
+		// 120 ms.  Subsequent calls reset the timer.
+		if ( ! skipDebounce ) {
+			clearTimeout( updateFAQsShortcodeTimer );
+			updateFAQsShortcodeTimer = setTimeout( function() {
+				updateFAQsShortcode( true );
+			}, 120 );
+			return;
+		}
+
+		//  Gather parameters first so we can compare with the last request
+		let params = {
+			group_ids: [],
+			design: $('.epkb-design-radio-buttons input:checked').val() || '1',
+			title_alignment: $('input[name="ml_faqs_title_location"]:checked').val() || 'top',
+			number_of_columns: $('input[name="faq_nof_columns"]:checked').val() || '2',
+			icon_type: $('input[name="faq_icon_type"]:checked').val() || 'icon_plus',
+			icon_location: $('input[name="faq_icon_location"]:checked').val() || 'left',
+			border_mode: $('input[name="faq_border_mode"]:checked').val() || 'on',
+			compact_mode: $('input[name="faq_compact_mode"]:checked').val() || 'on',
+			open_mode: $('input[name="faq_open_mode"]:checked').val() || 'on',
+			question_background_color: $('input[name="faq_question_background_color"]').val() || '#FFFFFF',
+			answer_background_color: $('input[name="faq_answer_background_color"]').val() || '#FFFFFF',
+			question_text_color: $('input[name="faq_question_text_color"]').val() || '#000000',
+			answer_text_color: $('input[name="faq_answer_text_color"]').val() || '#000000',
+			icon_color: $('input[name="faq_icon_color"]').val() || '#000000',
+			border_color: $('input[name="faq_border_color"]').val() || '#CCCCCC',
+			title: $('input[name="ml_faqs_title_text"]').val() || '',
+		};
+
+		// Get selected groups
+		$('.epkb-group-select:checked').each(function() {
+			params.group_ids.push($(this).val());
+		});
+
+		//  Skip processing if parameters haven't changed since the last AJAX request – this prevents the extra call
+		const paramsJSON = JSON.stringify( params );
+		if ( paramsJSON === lastFAQsShortcodeParamsJSON ) {
+			return;
+		}
+
+		suppressFAQsColorEvent = true;
+
+		// Cache parameters for next comparison
+		lastFAQsShortcodeParamsJSON = paramsJSON;
+		// Form shortcode string
+		let shortcodeText = '[epkb-faqs';
+		for (let key in params) {
+
+			// Skip fields which are not present in the shortcode attributes and only used for AJAX request
+			if ( key === 'design' ) {
+				continue;
+			}
+
+			if (params[key]) {
+				if (Array.isArray(params[key]) && params[key].length > 0) {
+					shortcodeText += ' ' + key + '="' + params[key].join(',') + '"';
+				} else if (!Array.isArray(params[key]) && params[key] !== '') {
+					shortcodeText += ' ' + key + '="' + params[key] + '"';
+				}
+			}
+		}
+		shortcodeText += ']';
+
+		// Update shortcode display in both locations
+		$('.epkb-shortcode-display .epkb-ctc__embed-content').text(shortcodeText);
+		// Also update the shortcode in the above-tabs section if it exists
+		if ($('#epkb-faq-shortcode-above-tabs .epkb-clipboard-value').length) {
+			$('#epkb-faq-shortcode-above-tabs .epkb-clipboard-value').val(shortcodeText);
+		}
+
+		// Add loading indicators to both preview containers
+		$('#epkb-faq-shortcode-preview-container').addClass('loading');
+
+		const cachedPresets = getFAQsCachedDesignPresets();
+		
+		// Check if this is the first load
+		let isInitialLoad = false;
+		if (!window.epkbFAQsFirstLoadDone) {
+			isInitialLoad = true;
+			window.epkbFAQsFirstLoadDone = true;
+		}
+		
+		let postData = {
+			action: 'epkb_faq_get_shortcode',
+			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
+			shortcode_params: params,
+			is_cached: cachedPresets ? true : false,
+			is_initial_load: isInitialLoad
+		};
+
+		epkb_send_ajax( postData, function( response ){
+			// Update preview in both locations
+			$( '.epkb-faq-preview-content' ).html( response.data );
+			if ( ! cachedPresets && response.all_design_presets ) {
+				cacheFAQsDesignPreset(response.all_design_presets);
+				applyFAQsDesignPreset(response.all_design_presets[params.design], true);
+			}
+
+			if ( typeof response.message != 'undefined' && response.message.length > 0 ) {
+				epkb_show_success_notification( response.message );
+			}
+
+			// Remove loading indicators
+			$('#epkb-faq-shortcode-preview-container').removeClass('loading');
+
+			suppressFAQsColorEvent = false;
+		}, undefined, false, false, $( '.epkb-faq-preview-content' ) )
+	}
+
+	// Initialize design selection
+	$(document).on('click', '#epkb-admin__boxes-list__faq-shortcodes .epkb-design-option', function() {
+		const designId = $(this).data('design-id');
+
+		// Update radio button value
+		$('input[name="faq_shortcode_preset"][value="' + designId + '"]').prop('checked', true);
+
+		// Update visual selection
+		$('.epkb-design-option').removeClass('epkb-design-selected');
+		$(this).addClass('epkb-design-selected');
+
+		const cachedPresets = getFAQsCachedDesignPresets();
+
+		// Update shortcode
+		if( cachedPresets && cachedPresets[designId] ) {
+			applyFAQsDesignPreset(cachedPresets[designId]);
+		} else {
+			updateFAQsShortcode();
+		}
+	});
+
+	// Function to initialize group table functionality
+	function initFAQsGroupTable() {
+		// All groups are checked by default
+
+		// Update the count of selected groups
+		function updateSelectedGroupsCount() {
+			const checkedCount = $('.epkb-group-select:checked').length;
+			const totalCount = $('.epkb-group-select').length;
+
+			// Update the count text with translatable string
+			const countText = checkedCount === 1
+				? epkb_vars.group_selected_singular.replace('%d', checkedCount)
+				: epkb_vars.group_selected_plural.replace('%d', checkedCount);
+			$('.epkb-all-groups-count').text(countText);
+
+			// Update "Select All" checkbox state
+			$('#epkb-select-all-groups').prop('checked', checkedCount === totalCount);
+
+			// Add a visual cue if no groups are selected
+			if (checkedCount === 0) {
+				$('.epkb-all-groups-count').addClass('epkb-warning-text');
+			} else {
+				$('.epkb-all-groups-count').removeClass('epkb-warning-text');
+			}
+		}
+
+		// Initialize the count on page load
+		updateSelectedGroupsCount();
+
+		// Handle "Select All" checkbox
+		$(document).on('change', '#epkb-select-all-groups', function() {
+			const isChecked = $(this).prop('checked');
+
+			// Check/uncheck all checkboxes
+			$('.epkb-group-select').prop('checked', isChecked);
+
+			// Update row classes
+			$('.epkb-groups-table-row').toggleClass('selected', isChecked);
+
+			// Update the count
+			updateSelectedGroupsCount();
+
+			// Update shortcode
+			updateFAQsShortcode();
+		});
+
+		// Handle checkbox clicks in the table
+		$(document).on('change', '.epkb-group-select', function() {
+			const groupId = $(this).val();
+			const isChecked = $(this).prop('checked');
+
+			// Update the row selected state
+			$(this).closest('.epkb-groups-table-row').toggleClass('selected', isChecked);
+
+			// Update the count
+			updateSelectedGroupsCount();
+
+			// Get current selections from dropdown
+			let selectedGroups = $('#epkb-faq-groups-select').val() || [];
+
+			if (isChecked && !selectedGroups.includes(groupId)) {
+				// Add to selected groups
+				selectedGroups.push(groupId);
+			} else if (!isChecked && selectedGroups.includes(groupId)) {
+				// Remove from selected groups
+				selectedGroups = selectedGroups.filter(function(id) {
+					return id !== groupId;
+				});
+			}
+
+			// Update dropdown and shortcode
+			$('#epkb-faq-groups-select').val(selectedGroups);
+			updateFAQsShortcode();
+		});
+
+		// Make the row clickable (not just the checkbox)
+		$(document).on('click', '.epkb-groups-table-row', function(e) {
+			// If the click was on the checkbox or a link, don't toggle
+			if ($(e.target).is('input, a')) {
+				return;
+			}
+
+			// Toggle the checkbox
+			const $checkbox = $(this).find('.epkb-group-select');
+			$checkbox.prop('checked', !$checkbox.prop('checked')).trigger('change');
+		});
+	}
+
+	// Event handlers for all controls
+	$(document).on('change', '#epkb-admin__boxes-list__faq-shortcodes .epkb-design-radio-buttons input, #epkb-admin__boxes-list__faq-shortcodes input[name^="faq_"], #epkb-admin__boxes-list__faq-shortcodes input[name^="ml_faqs_"], #epkb-admin__boxes-list__faq-shortcodes .epkb-group-select', function() {
+		updateFAQsShortcode();
+	});
+
+	let timeoutFAQsColorPicker;
+	function changeFAQsColorPickerEvent( event, ui ) {
+		// Abort if we are currently suppressing programmatic colour changes
+		if ( suppressFAQsColorEvent ) {
+			return;
+		}
+
+		// Clear previous timer
+		if ( timeoutFAQsColorPicker ) {
+			clearTimeout( timeoutFAQsColorPicker );
+		}
+		
+		// Update the visual color indicator directly
+		if (ui && ui.color) {
+			$(event.target).closest('.wp-picker-container').find('.wp-color-result').css('background-color', ui.color.toString());
+		}
+		
+		timeoutFAQsColorPicker = setTimeout( function() {
+			updateFAQsShortcode();
+		}, 500 ); // Delay in milliseconds
+	}
+
+	// Initialize color-picker fields for FAQs shortcode
+	$('#epkb-admin__boxes-list__faq-shortcodes .wp-color-picker').wpColorPicker();
+
+	// Bind change event for color-picker fields (use timeout to let the WordPress color-picker to initialize first)
+	setTimeout( function() {
+		$('#epkb-admin__boxes-list__faq-shortcodes input.wp-color-picker').iris('option', 'change', changeFAQsColorPickerEvent);
+	}, 100);
+
+	// Handler for selecting all groups
+	$(document).on('change', '#epkb-admin__boxes-list__faq-shortcodes #epkb-select-all-groups', function() {
+		$('.epkb-group-select').prop( 'checked', $(this).prop('checked') );
+		updateFAQsShortcode();
+	});
+
+	// Initialize the shortcode on page load
+	if ($('#epkb-faq-shortcode-above-tabs').length) {
+		updateFAQsShortcodeAboveTabs();
+	}
+
+	// When checkboxes in the groups table are changed, update the shortcode
+	$(document).on('change', '#epkb-admin__boxes-list__faq-shortcodes .epkb-group-select, #epkb-admin__boxes-list__faq-shortcodes #epkb-select-all-groups', function() {
+		updateFAQsShortcodeAboveTabs();
+	});
+
+	// When the copy button is clicked in the above-tabs section
+	const originalFAQsShortcodeCopyText = $('#epkb-kb-faqs-page-container #epkb-copy-shortcode span:last').text();
+	$(document).on('click', '#epkb-kb-faqs-page-container #epkb-copy-shortcode', function(e) {
+		const shortcodeText = $('#epkb-kb-faqs-page-container .epkb-shortcode-display .epkb-ctc__embed-content').eq(0).text();
+		copyToClipboard(shortcodeText);
+
+		// Show success message
+		const $btn = $(this);
+		$btn.find('span:last-child').text(epkb_vars.copied_text);
+
+		setTimeout(function() {
+			$btn.find('span:last').text(originalFAQsShortcodeCopyText);
+		}, 2000);
+	});
+
+	// Select all groups
+	$(document).on('change', '#epkb-admin__boxes-list__faq-shortcodes #epkb-select-all-groups', function() {
+		const isChecked = $(this).prop('checked');
+		$('.epkb-group-select:visible').prop('checked', isChecked);
+		updateFAQsShortcodeAboveTabs();
+	});
+
+	// Function to update the shortcode text in the above-tabs section
+	function updateFAQsShortcodeAboveTabs() {
+		const selectedGroups = [];
+		$('.epkb-group-select:checked').each(function() {
+			selectedGroups.push($(this).val());
+		});
+
+		let shortcodeText = '[epkb-faqs';
+		if (selectedGroups.length > 0) {
+			shortcodeText += ' group_ids="' + selectedGroups.join(',') + '"';
+		}
+		shortcodeText += ']';
+
+		$('#epkb-faq-shortcode-above-tabs .epkb-clipboard-value').val(shortcodeText);
+	}
+
+	// Only run this code on the FAQs admin page
+	if ($('#epkb-faq-shortcode-container').length > 0) {
+		const defaultFAQsDesign = $('input[name="faq_shortcode_preset"]:checked').val();
+
+		// Load saved presets on initialization
+		clearFAQsCachedPresets();
+		const savedFAQsPresets = getFAQsCachedDesignPresets();
+		if (savedFAQsPresets && savedFAQsPresets[defaultFAQsDesign]) {
+			applyFAQsDesignPreset(savedFAQsPresets[defaultFAQsDesign]);
+		}
+
+		initFAQsShortcodeGenerator();
+		initFAQsGroupTable();
+		updateFAQsShortcode();
+
+		// Preview
+		$( document ).on( 'click', '#epkb-kb-faqs-page-container .epkb-admin__top-panel__item', function() {
+			if ( $( this ).hasClass( 'epkb-admin__top-panel__item--faq-shortcodes' ) ) {
+				$( '#epkb-kb-faqs-page-container .epkb-faq-shortcode-preview-wrap' ).show();
+			} else {
+				$( '#epkb-kb-faqs-page-container .epkb-faq-shortcode-preview-wrap' ).hide();
+			}
+		} );
+		setTimeout( function() {
+			$( '#epkb-kb-faqs-page-container .epkb-admin__top-panel__item--active' ).trigger( 'click' );
+		}, 200);
+	}
 
 	// Create new FAQ Group
 	$( document ).on( 'click', '#epkb-faq-create-group', function() {
@@ -1203,9 +1697,31 @@ jQuery(document).ready(function($) {
 	$( document ).on( 'change', '#faq_shortcode_preset input', function( e ) {
 		let preset_name = $( this ).val();
 		let shortcode_content = $( '#epkb-faq-shortcode-container .epkb-ctc__embed-code' ).text();
+		let $inputGroup = $( this ).closest( '.epkb-input-group' );
+		
+		// Get design settings from hidden container
+		let designSettings = null;
+		let $designData = $('#epkb-design-settings-' + preset_name);
+		
+		if ($designData.length) {
+			designSettings = $designData.data('design-settings');
+		}
+
+		// Apply design settings to form fields
+		if (designSettings) {
+			// Cache in local storage for future use
+			const cachedPresets = getFAQsCachedDesignPresets() || {};
+			if (!cachedPresets[preset_name]) {
+				cachedPresets[preset_name] = designSettings;
+				cacheFAQsDesignPreset(cachedPresets);
+			}
+			
+			// Apply the design preset
+			applyFAQsDesignPreset(designSettings);
+		}
 
 		// Remove 'design' parameter from shortcode if selected default value
-		if ( parseInt( preset_name ) === parseInt( $( this ).closest( '.epkb-input-group' ).data( 'default-value' ) ) ) {
+		if ( parseInt( preset_name ) === parseInt( $inputGroup.data( 'default-value' ) ) ) {
 			$( '#epkb-faq-shortcode-container .epkb-ctc__embed-code' ).text( shortcode_content.replaceAll( /\sdesign="(.*?)"/g, '' ) );
 			return;
 		}
@@ -1216,6 +1732,9 @@ jQuery(document).ready(function($) {
 		} else {
 			$( '#epkb-faq-shortcode-container .epkb-ctc__embed-code' ).text( shortcode_content.replaceAll( ']', ' ' + 'design="' + preset_name + '"]' ) );
 		}
+		
+		// Update the preview
+		updateFAQsShortcode();
 	} );
 
 	/*************************************************************************************************
@@ -1495,7 +2014,7 @@ jQuery(document).ready(function($) {
 		bottom_message.addClass( 'fadeOutDown' );
 		setTimeout( function() {
 			bottom_message.html( '' );
-		}, 1000);
+		}, 10000);
 	} );
 
 	$( document.body ).on( 'click', '.eckb-bottom-notice-message__header__close', function() {
@@ -1503,7 +2022,7 @@ jQuery(document).ready(function($) {
 		bottom_message.addClass( 'fadeOutDown' );
 		setTimeout( function() {
 			bottom_message.html( '' );
-		}, 1000);
+		}, 10000);
 	} );
 	
 	// AJAX DIALOG USED BY KB CONFIGURATION AND SETTINGS PAGES
@@ -1514,38 +2033,6 @@ jQuery(document).ready(function($) {
 		modal: false,
 		autoOpen: false
 	}).hide();
-
-
-	// New ToolTip
-	epkb.on( 'click', '.epkb__option-tooltip__button', function(){
-		const tooltip_contents = $( this ).parent().find( '.epkb__option-tooltip__contents' );
-		let tooltip_on = tooltip_contents.css('display') == 'block';
-
-		tooltip_contents.fadeOut();
-
-		if ( ! tooltip_on ) {
-			clearTimeout(timeoutOptionTooltip);
-			tooltip_contents.fadeIn();
-		}
-	});
-	let timeoutOptionTooltip;
-	epkb.on( 'mouseenter', '.epkb__option-tooltip__button, .epkb__option-tooltip__contents', function(){
-		const tooltip_contents = $( this ).parent().find( '.epkb__option-tooltip__contents' );
-		clearTimeout(timeoutOptionTooltip);
-		tooltip_contents.fadeIn();
-	});
-
-	epkb.on( 'mouseleave', '.epkb__option-tooltip__button, .epkb__option-tooltip__contents', function(){
-		const tooltip_contents = $( this ).parent().find( '.epkb__option-tooltip__contents' );
-		timeoutOptionTooltip = setTimeout( function() {
-			tooltip_contents.fadeOut();
-		}, 1000);
-	});
-
-	// ToolTip
-	epkb.on( 'click', '.eckb-tooltip-button', function(){
-		$( this ).parent().find( '.eckb-tooltip-contents' ).fadeToggle();
-	});
 
 	// SHOW INFO MESSAGES
 	function epkb_admin_notification( $title, $message , $type ) {
@@ -1560,22 +2047,16 @@ jQuery(document).ready(function($) {
 			'</div>';
 	}
 
+	let epkb_notification_timeout;
+
 	function epkb_show_error_notification( $message, $title = '' ) {
 		$('.eckb-bottom-notice-message').remove();
 		$('body').append( epkb_admin_notification( $title, $message, 'error' ) );
-
-		setTimeout( function() {
-			$('.eckb-bottom-notice-message').addClass( 'fadeOutDown' );
-		}, 10000 );
 	}
 
 	function epkb_show_success_notification( $message, $title = '' ) {
 		$('.eckb-bottom-notice-message').remove();
 		$('body').append( epkb_admin_notification( $title, $message, 'success' ) );
-
-		setTimeout( function() {
-			$('.eckb-bottom-notice-message').addClass( 'fadeOutDown' );
-		}, 10000 );
 	}
 
 	/**
@@ -1687,29 +2168,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	function clear_bottom_notifications() {
-		var bottom_message = $('body').find('.eckb-bottom-notice-message');
-		if ( bottom_message.length ) {
-			bottom_message.addClass( 'fadeOutDown' );
-			setTimeout( function() {
-				bottom_message.html( '' );
-			}, 1000);
-		}
-	}
-
-	function clear_message_after_set_time(){
-
-		if( $('.eckb-bottom-notice-message' ).length > 0 ) {
-			clearTimeout( remove_message_timeout );
-
-			//Add fadeout class to notice after set amount of time has passed.
-			remove_message_timeout = setTimeout(function () {
-				clear_bottom_notifications();
-			} , 10000);
-		}
-	}
-	clear_message_after_set_time();
-
 	$( document ).on( 'click', '#eckb-kb-create-demo-data', function( e ) {
 		e.preventDefault();
 
@@ -1795,6 +2253,13 @@ jQuery(document).ready(function($) {
 		window.location.hash = '#settings__' + current_tab_key + ( current_sub_tab_key.length ? '__' + current_sub_tab_key : '' );
 	}
 
+
+	/*************************************************************************************************
+	 *
+	 *          ADMIN SETTINGS UI
+	 *
+	 ************************************************************************************************/
+
 	// Link to open Full Editor Tab
 	$( document ).on( 'click', '.epkb-admin__form .epkb-admin__form-tab-content--about-kb .epkb-admin__form-tab-content-desc__link' +
 		', .epkb-admin__form .epkb-admin__form-tab-content--main-page-about-kb .epkb-admin__form-tab-content-desc__link', function( e ) {
@@ -1849,7 +2314,7 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	// Link to open Labels -> Articles List Feature -> Title
+	// Link to open Labels -> Featured Articles Feature -> Title
 	$( document ).on( 'click', '#ml_articles_list_title_location_group .epkb-admin__form-tab-content-desc__link', function( e ) {
 		e.preventDefault();
 		$( '.epkb-admin__form .epkb-admin__form-tab[data-target="labels"]' ).click();
@@ -1869,41 +2334,41 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	// Link to Settings tab inside admin notices when the same page is currently open
-	$( document ).on( 'click', '.epkb-notification-box-top__body__desc a', function( e ) {
+	// Link to open Article Page -> Sidebar -> Categories and Articles Navigation
+	$( document ).on( 'click', '.epkb-admin__form .epkb-admin__form-tab-content--categories_articles-box .epkb-admin__form-tab-content-desc__link--list-of-articles', function( e ) {
+		e.preventDefault();
+		$( '.epkb-admin__form .epkb-admin__form-sub-tab[data-target="article-page-sidebar"]' ).click();
+		$( [document.documentElement, document.body] ).animate( {
+			scrollTop: $( '[data-target="article_sidebar_categories_and_articles_navigation"]' ).offset().top
+		}, 300 );
+		return false;
+	});
+
+	// Link to Settings tab (either inside admin notices when the same page is currently open or link inside settings to open target settings tab and sub-tab)
+	$( document ).on( 'click', '.epkb-notification-box-top__body__desc a, .epkb-admin__boxes-list__box--link-box a.epkb-admin__form-tab-settings-link', function( e ) {
 		let location_parts = $( this ).attr( 'href' ).split( '#' );
 		if ( location_parts.length > 1 ) {
-			let target_top_tab = $( '.epkb-admin__top-panel__item--' + location_parts[1] );
+			const tabs_path = location_parts[1].split( '__' );
+
+			// Top tab
+			let target_top_tab = $( '.epkb-admin__top-panel__item--' + tabs_path[0] );
 			if ( target_top_tab.length ) {
 				e.preventDefault();
+
+				// Prepare secondary tab first if defined in the link path (to prevent conflict with usual sub-tabs switch)
+				if ( tabs_path.length > 1 ) {
+					$( '#epkb-admin__secondary-panel__' + tabs_path[0] + ' .epkb-admin__secondary-panel__item' ).removeClass( 'epkb-admin__secondary-panel__item--active' );
+					$( '#epkb-admin__secondary-panel__' + tabs_path[0] + ' .epkb-admin__secondary-panel__item[data-target="' + tabs_path[0] + '__' + tabs_path[1] + '"]' ).addClass( 'epkb-admin__secondary-panel__item--active' );
+					$( '#epkb-admin__boxes-list__' + tabs_path[0] + ' .epkb-setting-box__list' ).removeClass( 'epkb-setting-box__list--active' );
+					$( '#epkb-setting-box__list-tools__' + tabs_path[0] + '__' + tabs_path[1] ).addClass( 'epkb-setting-box__list--active' );
+					$( '#epkb-setting-box__list-tools__settings' ).addClass( 'epkb-setting-box__list--active' );
+				}
+
 				target_top_tab.trigger( 'click' );
+
 				return false;
 			}
 		}
-	});
-
-	let isColorInputSync = false;
-	$('.epkb-admin__color-field input').wpColorPicker({
-		change: function( colorEvent, ui) {
-
-			// Do nothing for programmatically changed value (for sync purpose)
-			if ( isColorInputSync ) {
-				return;
-			}
-
-			isColorInputSync = true;
-
-			// Get current color value
-			let color_value = $( colorEvent.target ).wpColorPicker( 'color' );
-			let setting_name = $( colorEvent.target ).attr( 'name' );
-
-			// Sync other color pickers that have the same name
-			$( '.epkb-admin__color-field input[name="' + setting_name + '"]' ).not( colorEvent.target ).each( function () {
-				$( this ).wpColorPicker( 'color', color_value );
-			} );
-
-			isColorInputSync = false;
-		},
 	});
 
 	/**
@@ -1994,20 +2459,12 @@ jQuery(document).ready(function($) {
 					$( '#epkb-list-of-kbs option[value="' + kb_config.epkb_kb_id + '"]' ).html( kb_config.kb_name );
 				}
 
-				if ( $("#editor_backend_mode1").length && $("#editor_backend_mode1").prop('checked') ) {
-					$('[data-open-editor-link]').data('open-editor-link', 'back');
-				} else {
-					$('[data-open-editor-link]').data('open-editor-link', 'front');
-				}
-
 				if ( reload_page ) {
 					location.reload();
 				} else {
 					if ( typeof response.message !== 'undefined' ) {
-						clear_bottom_notifications();
 						$( 'body' ).append( response.message );
 					}
-					clear_message_after_set_time();
 				}
 			},
 			undefined,
@@ -2017,163 +2474,6 @@ jQuery(document).ready(function($) {
 		return false;
 	}
 	$( document ).on( 'click', '.epkb-admin__kb__form-save__button', save_config_tab_settings );
-
-	// Conditional setting input
-	$( document ).on( 'click', '.eckb-conditional-setting-input', function() {
-
-		// Find current input
-		let current_input = $( this ).find( 'input' );
-		if ( $( current_input[0] ).attr( 'type' ) === 'radio' ) {
-			current_input = $( this ).find( 'input:checked' );
-		}
-		if ( ! current_input.length ) {
-			current_input = $( this ).find( 'select' );
-		}
-
-		// OR LOGIC: Find content that is dependent to the current input
-		let or_dependent_targets = $( '.eckb-condition-depend__' + current_input.attr( 'name' ) );
-
-		// AND LOGIC: Find content that is dependent to the current input
-		let and_dependent_targets = $( '.eckb-condition-depend-and__' + current_input.attr( 'name' ) );
-
-		// Hide all dependent fields if the current input is not visible - only for AND logic, because OR logic can be satisfied with any of dependency
-		if ( $( this ).css( 'display' ) === 'none' ) {
-			$( and_dependent_targets ).hide();
-			return;
-		}
-
-		// OR LOGIC: Show fields if condition matched
-		or_dependent_targets.each( function() {
-
-			// Find all dependencies
-			let all_dependency_fields = $( this ).data( 'dependency-ids' );
-			if ( typeof all_dependency_fields === 'undefined' ) {
-				return;
-			}
-			all_dependency_fields = all_dependency_fields.split( ' ' );
-
-			// Find all values for which show the dependent content
-			let all_dependency_values = $( this ).data( 'enable-on-values' );
-			if ( typeof all_dependency_values === 'undefined' ) {
-				return;
-			}
-			all_dependency_values = all_dependency_values.split( ' ' );
-
-			// First hide the dependent content, and then show it if any of its currently visible dependencies has corresponding value
-			$( this ).hide();
-			$( this ).closest( '.epkb-input-group-combined-units').find( '.epkb-input-desc' ).hide();
-
-			for ( let i = 0; i < all_dependency_fields.length; i++ ) {
-
-				// Find dependency field
-				let dependency_field = $( '#' + all_dependency_fields[i] );
-				if ( typeof dependency_field === 'undefined' || ! dependency_field.length ) {
-					continue;
-				}
-
-				// Ignore currently hidden fields
-				if ( $( dependency_field ).closest( '.epkb-admin__input-field' ).css( 'display' ) === 'none' ) {
-					continue;
-				}
-
-				// Find dependency input
-				let dependency_input = $( dependency_field ).is( 'select' ) ? ( dependency_field ) : dependency_field.find( 'input' );
-				if ( dependency_input.attr( 'type' ) === 'radio' || dependency_input.attr( 'type' ) === 'checkbox' ) {
-					dependency_input = $( dependency_field ).find( 'input:checked' );
-				}
-				if ( typeof dependency_input === 'undefined' || ! dependency_input.length ) {
-					continue;
-				}
-
-				let current_field_id = $( this ).attr( 'id' );
-
-				// Show dependent content if value of the dependency input in dependency values list
-				if ( all_dependency_values.indexOf( dependency_input.val() ) >= 0 ) {
-					$( this ).show();
-					$( this ).closest( '.epkb-input-group-combined-units').find( '.epkb-input-desc' ).show();
-					trigger_conditional_field_click( current_field_id );
-					return;
-				}
-
-				trigger_conditional_field_click( current_field_id );
-			}
-		} );
-
-		// AND LOGIC: Show fields if condition matched
-		and_dependent_targets.each( function() {
-
-			let current_dependent_target = this;
-
-			// Find all dependencies
-			let all_dependency_fields = $( current_dependent_target ).data( 'dependency-and' );
-			if ( typeof all_dependency_fields === 'undefined' ) {
-				return;
-			}
-			all_dependency_fields = all_dependency_fields.trim().split( ' ' );
-
-			// First show the dependent content, and then hide it if any of its dependencies does not have corresponding value or is currently hidden
-			$( current_dependent_target ).show();
-			for ( let i = 0; i < all_dependency_fields.length; i++ ) {
-
-				let current_field_id = $( this ).attr( 'id' );
-				let dependency_id = all_dependency_fields[i].split( '--' )[0];
-				let dependency_value = all_dependency_fields[i].split( '--' )[1];
-
-				// Find dependency field - hide if is not found
-				let dependency_field = $( '#' + dependency_id );
-				if ( typeof dependency_field === 'undefined' || ! dependency_field.length ) {
-					$( current_dependent_target ).hide();
-					trigger_conditional_field_click( current_field_id );
-					return;
-				}
-
-				// Hide for currently hidden fields
-				if ( $( dependency_field ).closest( '.epkb-admin__input-field' ).css( 'display' ) === 'none' ) {
-					$( current_dependent_target ).hide();
-					trigger_conditional_field_click( current_field_id );
-					return;
-				}
-
-				// Find dependency input
-				let dependency_input = $( dependency_field ).is( 'select' ) ? ( dependency_field ) : dependency_field.find( 'input' );
-				if ( dependency_input.attr( 'type' ) === 'radio' || dependency_input.attr( 'type' ) === 'checkbox' ) {
-					dependency_input = $( dependency_field ).find( 'input:checked' );
-				}
-				if ( typeof dependency_input === 'undefined' || ! dependency_input.length ) {
-					$( current_dependent_target ).hide();
-					trigger_conditional_field_click( current_field_id );
-					return;
-				}
-
-				// Hide dependent content if value of the dependency input does not match dependency value
-				if ( dependency_input.val() !== dependency_value ) {
-					$( current_dependent_target ).hide();
-					trigger_conditional_field_click( current_field_id );
-					return;
-				}
-
-				trigger_conditional_field_click( current_field_id );
-			}
-		} );
-	} );
-
-	// Trigger click event of the current dependent field to check its own dependent fields
-	function trigger_conditional_field_click( field_id ) {
-
-		let current_field = $( '#' + field_id );
-		if ( ! current_field.length ) {
-			return;
-		}
-
-		if ( current_field.hasClass( 'eckb-conditional-setting-input' ) ) {
-			setTimeout( function() {
-				current_field.trigger( 'click' );
-			}, 1 );
-		}
-	}
-
-	// Initialize conditional fields
-	$( '.eckb-conditional-setting-input' ).trigger( 'click' );
 
 	// Allow only one active sidebar
 	$( '.epkb-input[name="article_nav_sidebar_type_left"]' ).change( function() {
@@ -2195,6 +2495,42 @@ jQuery(document).ready(function($) {
 		}
 	});
 
+	// On right sidebar 'Categories and Articles Navigation' dropdown change
+	$( document ).on( 'change', '#nav_sidebar_right', function () {
+
+		// When unselected, then set current sidebar navigation type to none
+		const current_value = $( this ).val();
+		if ( current_value === '0' || current_value === 0 ) {
+			$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			return;
+		}
+
+		// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
+		const current_left_sidebar_type = $( '[name="article_nav_sidebar_type_left"]:checked' ).val();
+		if ( current_left_sidebar_type !== 'eckb-nav-sidebar-none' ) {
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			$( '[name="article_nav_sidebar_type_right"][value="' + current_left_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+		}
+	} );
+
+	// On left sidebar 'Categories and Articles Navigation' dropdown change
+	$( document ).on( 'change', '#nav_sidebar_left', function () {
+
+		// When unselected, then set current sidebar navigation type to none
+		const current_value = $( this ).val();
+		if ( current_value === '0' || current_value === 0 ) {
+			$( '[name="article_nav_sidebar_type_left"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			return;
+		}
+
+		// When sidebar switched by 'Categories and Articles Navigation' dropdown, then keep its type in the selected sidebar (e.g. copy navigation type value from opposite sidebar to the current sidebar)
+		const current_right_sidebar_type = $( '[name="article_nav_sidebar_type_right"]:checked' ).val();
+		if ( current_right_sidebar_type !== 'eckb-nav-sidebar-none' ) {
+			$( '[name="article_nav_sidebar_type_right"][value="eckb-nav-sidebar-none"]' ).parent().find( '.epkb-label' ).click();
+			$( '[name="article_nav_sidebar_type_left"][value="' + current_right_sidebar_type + '"]' ).parent().find( '.epkb-label' ).click();
+		}
+	} );
+
 	/** Save config WPML settings */
 	$( 'body' ).on( 'change', '#epkb-setting-box__list-tools__other [name=wpml_is_enabled]', function(){
 
@@ -2211,9 +2547,7 @@ jQuery(document).ready(function($) {
 		epkb_send_ajax( postData, function( response ) {
 			$( '.eckb-top-notice-message' ).remove();
 			if ( typeof response.message !== 'undefined' ) {
-				clear_bottom_notifications();
 				$( 'body' ).append( response.message );
-				clear_message_after_set_time();
 			}
 
 			if ( typeof response.html !== 'undefined' ) {
@@ -2237,9 +2571,7 @@ jQuery(document).ready(function($) {
 		epkb_send_ajax( postData, function( response ) {
 			$( '.eckb-top-notice-message' ).remove();
 			if ( typeof response.message !== 'undefined' ) {
-				clear_bottom_notifications();
 				$( 'body' ).append( response.message );
-				clear_message_after_set_time();
 			}
 
 			if ( typeof response.html !== 'undefined' ) {
@@ -2249,30 +2581,28 @@ jQuery(document).ready(function($) {
 	} );
 
 	// Enable or Disable OpenAI setting
-	$( document ).on( 'change', 'input[name="disable_openai"]', function() {
+	$( document ).on( 'change', 'input[name="enable_legacy_open_ai"]', function() {
 
 		// Remove old messages
 		$('.eckb-top-notice-message').remove();
 
 		let postData = {
-			action: 'epkb_disable_openai',
+			action: 'epkb_enable_legacy_open_ai',
 			_wpnonce_epkb_ajax_action: epkb_vars.nonce,
-			disable_openai: $(this).prop('checked') ? 'on' : 'off'
+			enable_legacy_open_ai: $(this).prop('checked') ? 'on' : 'off'
 		};
 
 		epkb_send_ajax( postData, function( response ) {
 			$( '.eckb-top-notice-message' ).remove();
 			if ( typeof response.message !== 'undefined' ) {
-				clear_bottom_notifications();
 				$( 'body' ).append( response.message );
-				clear_message_after_set_time();
 			}
 
 			if ( typeof response.html !== 'undefined' ) {
 				$('.epkb-show-sequence-wrap').html( response.html );
 			}
 		} );
-	} );
+	});
 
 	// Open editor tab when user want to change theme compatibility mode
 	$('[data-open-editor-link]').on('click', function(){
@@ -2280,11 +2610,6 @@ jQuery(document).ready(function($) {
 			$('.epkb-admin__form-tab[data-target="editor"]').trigger('click');
 			return false;
 		}
-	});
-
-	// save editor type after change option
-	$('#editor_backend_mode input').on('change', function(){
-		$('.epkb-admin__kb__form-save__button').trigger('click');
 	});
 
 	// Toggle to switch TOC visibility
@@ -2507,24 +2832,6 @@ jQuery(document).ready(function($) {
 		}
 	});
 
-	$('.epkb-admin__form-tab-content-lm__toggler').on('click', function(e){
-
-		e.stopPropagation();
-
-		if ( $(this).closest('.epkb-admin__form-tab-content-learn-more').hasClass('epkb-admin__form-tab-content-learn-more--active') ) {
-			$('.epkb-admin__form-tab-content-learn-more').removeClass('epkb-admin__form-tab-content-learn-more--active');
-		} else {
-
-			$('.epkb-admin__form-tab-content-learn-more').removeClass('epkb-admin__form-tab-content-learn-more--active');
-
-			$(this).closest('.epkb-admin__form-tab-content-learn-more').addClass('epkb-admin__form-tab-content-learn-more--active');
-		}
-	});
-
-	$('body').on('click', function(){
-		$('.epkb-admin__form-tab-content-learn-more').removeClass('epkb-admin__form-tab-content-learn-more--active');
-	});
-
 	/*************************************************************************************************
 	 *
 	 *          Change Modular Main Page
@@ -2599,20 +2906,21 @@ jQuery(document).ready(function($) {
 
 	/*************************************************************************************************
 	 *
-	 *          Change Theme Compatibility Mode
+	 *         Change Theme Compatibility Mode
 	 *
 	 ************************************************************************************************/
 	// Activate dialog
-	let $templates_for_kb;
-	$( document ).on( 'click', 'input[name="templates_for_kb"]', function() {
+	let $kb_template_setting_checkbox;
+	$( document ).on( 'click', 'input[name="templates_for_kb"], input[name="template_for_article_page"], input[name="template_for_archive_page"]', function() {
 
 		// Do nothing if user clicked on currently active option
 		if ( $( this ).attr( 'checked' ) ) {
 			return false;
 		}
 
-		$templates_for_kb = $(this);
-		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-template-for-kb--active' );
+		$kb_template_setting_checkbox = $(this);
+		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-kb-template-confirmation--active' );
+
 		if ( $( this ).val() === 'kb_templates' ){
 			$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_kb_templates );
 		} else {
@@ -2622,18 +2930,15 @@ jQuery(document).ready(function($) {
 		return false;
 	});
 
-	// Save settings
+	// Save settings on confirmation for Theme Compatibility Mode change
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation .epkb-dbf__footer__accept__btn', function() {
 
-		// Do nothing if the confirmation dialog is called not for Theme Compatibility Mode
-		if ( ! $confirmation_dialog.hasClass( 'epkb-template-for-kb--active' ) ) {
+		if ( ! $kb_template_setting_checkbox || ! $confirmation_dialog.hasClass( 'epkb-kb-template-confirmation--active' ) ) {
 			return;
 		}
 
-		// Apply changes for Theme Compatibility Mode
-		if ( $templates_for_kb ) {
-			$templates_for_kb.prop( 'checked', true );
-		}
+		// Apply Theme Compatibility Mode setting
+		$kb_template_setting_checkbox.prop( 'checked', true );
 
 		// Hide confirmation dialog and save settings with page reload
 		$( '#epkb-admin-page-reload-confirmation' ).removeClass( 'epkb-dialog-box-form--active' );
@@ -2642,55 +2947,7 @@ jQuery(document).ready(function($) {
 
 	// Deactivate dialog
 	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation .epkb-dbf__footer__cancel__btn', function() {
-		$( '#epkb-admin-page-reload-confirmation' ).removeClass( 'epkb-template-for-kb--active' );
-	} );
-
-	/*************************************************************************************************
-	 *
-	 *          Change Category Archive Page Theme Compatibility Mode
-	 *
-	 ************************************************************************************************/
-	// Activate dialog
-	let $template_for_archive_page;
-	$( document ).on( 'click', 'input[name="template_for_archive_page"]', function() {
-
-		// Do nothing if user clicked on currently active option
-		if ( $( this ).attr( 'checked' ) ) {
-			return false;
-		}
-
-		$template_for_archive_page = $(this);
-		$confirmation_dialog.addClass( 'epkb-dialog-box-form--active epkb-template-for-archive-page--active' );
-		if ( $( this ).val() === 'kb_templates' ){
-			$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_kb_templates );
-		} else {
-			$( '#epkb-admin-page-reload-confirmation .epkb-dbf__body' ).html( epkb_vars.on_current_theme_templates );
-		}
-
-		return false;
-	});
-
-	// Save settings
-	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation .epkb-dbf__footer__accept__btn', function() {
-
-		// Do nothing if the confirmation dialog is called not for Theme Compatibility Mode
-		if ( ! $confirmation_dialog.hasClass( 'epkb-template-for-archive-page--active' ) ) {
-			return;
-		}
-
-		// Apply changes for Theme Compatibility Mode
-		if ( $template_for_archive_page ) {
-			$template_for_archive_page.prop( 'checked', true );
-		}
-
-		// Hide confirmation dialog and save settings with page reload
-		$( '#epkb-admin-page-reload-confirmation' ).removeClass( 'epkb-dialog-box-form--active' );
-		save_config_tab_settings( false, true );
-	} );
-
-	// Deactivate dialog
-	$( document ).on( 'click', '#epkb-admin-page-reload-confirmation .epkb-dbf__footer__cancel__btn', function() {
-		$( '#epkb-admin-page-reload-confirmation' ).removeClass( 'epkb-template-for-archive-page--active' );
+		$( '#epkb-admin-page-reload-confirmation' ).removeClass( 'epkb-kb-template-confirmation--active' );
 	} );
 
 	/*************************************************************************************************
@@ -2824,11 +3081,15 @@ jQuery(document).ready(function($) {
 		$confirmation_dialog.removeClass( 'epkb-faqs-module-presets-selection--active' );
 	} );
 
+
+
+
 	/*************************************************************************************************
 	 *
 	 *          Miscellaneous
 	 *
 	 ************************************************************************************************/
+
 	// Allow duplicate text fields
 	$('#epkb-admin__boxes-list__settings input[type=text], #epkb-admin__boxes-list__settings textarea').on('keyup', function(){
 		let name = $(this).prop('name');
@@ -2842,155 +3103,6 @@ jQuery(document).ready(function($) {
 			$(this).val(val);
 		});
 	});
-
-	function update_custom_selection_green_mark() {
-
-		// Through each custom selection group
-		let custom_selection_groups = [];
-		$( '[data-custom-selection-group]' ).each( function() {
-
-			// Execute once for each unique group
-			let current_selection_group = $( this ).data( 'custom-selection-group' );
-			if ( custom_selection_groups.includes( current_selection_group ) ) {
-				return;
-			}
-			custom_selection_groups.push( current_selection_group );
-
-			// Reset all green marks in the current selection group
-			$( '[data-custom-selection-group="' + current_selection_group + '"] .epkb-input-custom-dropdown__option-mark' ).html( '' );
-
-			// Through each element of the current selection group
-			$( '[data-custom-selection-group="' + current_selection_group + '"]' ).each( function() {
-
-				// The 'none' value does not need green mark
-				let selected_value = $( this ).find( 'select' ).val();
-				if ( selected_value === 'none' ) {
-					return;
-				}
-
-				// Set green mark for the current selected value inside other dropdowns of the current selection group
-				let selection_label = $( this ).data( 'custom-selection-label' );
-				if ( selection_label ) {
-					$( '[data-custom-selection-group="' + current_selection_group + '"] [data-value="' + selected_value + '"]:not(.epkb-input-custom-dropdown__option--selected)' ).find( '.epkb-input-custom-dropdown__option-mark' ).html( '(' + selection_label + ')' );
-				}
-			} );
-		} );
-	}
-
-	// Custom Dropdown
-	$( document ).on( 'click', '.epkb-input-custom-dropdown__input', function( e ) {
-
-		// Avoid trigger of 'click' event for any parent element when clicked on the input
-		e.stopPropagation();
-
-		let current_list = $( this ).closest( '.input_container' ).find( '.epkb-input-custom-dropdown__options-list' );
-
-		// Close all option lists
-		$( '.epkb-input-custom-dropdown__options-list' ).not( current_list ).hide();
-
-		// Show current option list
-		$( current_list ).toggle();
-	} );
-
-	// Handle selection for Custom Dropdown
-	$( document ).on( 'click', '.epkb-input-custom-dropdown__option', function() {
-
-		// Handle change of value
-		let new_value = $( this ).data( 'value' );
-		let input_container = $( this ).closest( '.input_container' );
-		input_container.find( '.epkb-input-custom-dropdown__option' ).removeClass( 'epkb-input-custom-dropdown__option--selected' );
-		$( this ).addClass( 'epkb-input-custom-dropdown__option--selected' );
-		let prev_value = input_container.find( 'select' ).val();
-
-		// Hide list of options
-		input_container.find( '.epkb-input-custom-dropdown__options-list' ).hide();
-
-		// Change value for the hidden select (to have it filled on form submission)
-		input_container.find( 'select' ).val( new_value ).trigger( 'change' );
-
-		// Update label text of the custom dropdown
-		let value_label = input_container.find( 'select option[value="' + new_value + '"]' ).html();
-		input_container.find( '.epkb-input-custom-dropdown__input span' ).html( value_label );
-
-		let current_input_name = input_container.find( 'select' ).attr( 'name' );
-
-		// Unset current value in other dropdowns of the current unselection group
-		let current_unselection_group = $( this ).closest( '[data-custom-unselection-group]' ).data( 'custom-unselection-group' );
-		$( '[data-custom-unselection-group="' + current_unselection_group + '"] select' ).each( function() {
-			if ( current_input_name !== $( this ).attr( 'name' ) && $( this ).val() === new_value ) {
-				$( this ).val( 'none' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
-				$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
-			}
-		} );
-
-		// Unset other dropdowns of the current unselection group if any of them has non-zero value
-		let current_nonzero_unselection_group = $( this ).closest( '[data-custom-nonzero-unselection-group]' ).data( 'custom-nonzero-unselection-group' );
-		$( '[data-custom-nonzero-unselection-group="' + current_nonzero_unselection_group + '"] select' ).each( function() {
-			if ( parseInt( new_value ) > 0 && current_input_name !== $( this ).attr( 'name' ) && parseInt( $( this ).val() ) > 0 ) {
-				$( this ).val( '0' ).trigger( 'change', true ); // trigger 'change' to have the updated appearance of select element in browser
-				$( this ).closest( '.eckb-conditional-setting-input' ).trigger( 'click' ); // trigger dependent fields
-			}
-		} );
-
-		// When user adds a new row with a Module, use the width from the row above if any
-		if ( current_unselection_group === 'ml-row' && prev_value === 'none' && new_value !== 'none' ) {
-
-			// If row above has no module, then use prev ++, until either row above with module found or all rows above checked
-			let current_row = $( this ).closest( '.epkb-admin__form-sub-tab-wrap' );
-			let rows_above = current_row.prevAll( '.epkb-admin__form-sub-tab-wrap' );
-			rows_above.each( function() {
-
-				// Continue only if row above has module
-				let source_row_module_selector = $( this ).find( '[data-custom-selection-group="ml-row"] select' );
-				if ( source_row_module_selector.length && source_row_module_selector.val() !== 'none' ) {
-
-					let source_row_module_selector_name = source_row_module_selector.attr( 'name' );
-					let source_row_width_name = source_row_module_selector_name.replace( '_module', '_desktop_width' );
-					let source_row_width_units_name = source_row_module_selector_name.replace( '_module', '_desktop_width_units' );
-
-					let current_row_width_name = current_input_name.replace( '_module', '_desktop_width' );
-					let current_row_width_units_name = current_input_name.replace( '_module', '_desktop_width_units' );
-
-					// Set width value from row above
-					let row_width_value = $( '[name="' + source_row_width_name + '"]' ).val();
-					let row_width_units = $( '[name="' + source_row_width_units_name + '"]:checked' ).val();
-					$( '[name="' + current_row_width_name + '"]' ).val( row_width_value ).trigger( 'change' );
-					$( '[name="' + current_row_width_units_name + '"][value="' + row_width_units + '"]' ).trigger( 'click' );
-
-					// Row above with module found, then stop loop
-					return false;
-				}
-			} );
-		}
-	} );
-
-	// Update Custom Dropdown when value of its select element was programmatically changed
-	$( document ).on( 'change', '.epkb-input-custom-dropdown select', function( e ) {
-
-		let new_value = $( this ).val();
-		let input_container = $( this ).closest( '.input_container' );
-		$( input_container ).find( '.epkb-input-custom-dropdown__option' ).removeClass( 'epkb-input-custom-dropdown__option--selected' );
-		$( input_container ).find( '.epkb-input-custom-dropdown__option[data-value="' + new_value + '"]' ).addClass( 'epkb-input-custom-dropdown__option--selected' );
-
-		// Update label text of the custom dropdown
-		let value_label = $( input_container ).find( 'select option[value="' + new_value + '"]' ).html();
-		$( input_container ).find( '.epkb-input-custom-dropdown__input span' ).html( value_label );
-
-		// Update green marks
-		update_custom_selection_green_mark();
-
-		// Update icons
-		$( this ).closest( '.epkb-input-custom-dropdown' ).find( '.epkb-input-custom-dropdown__option-icon' ).removeClass( 'epkb-input-custom-dropdown__option-icon--active' );
-		$( this ).closest( '.epkb-input-custom-dropdown' ).find( '.epkb-input-custom-dropdown__option-icon[data-option-value="' + new_value + '"]' ).addClass( 'epkb-input-custom-dropdown__option-icon--active' );
-	} );
-
-	// Hide options list of the Custom Dropdown when clicked outside and the list is opened
-	$( document ).on( 'click', function() {
-		$( '.epkb-input-custom-dropdown__options-list' ).hide();
-	} );
-
-	// Initialize Custom Dropdowns
-	$( '.epkb-input-custom-dropdown select' ).trigger( 'change' );
 
 	// Switch categories list for selected KB
 	$( document ).on( 'change', '#ml_faqs_kb_id', function() {
@@ -3133,7 +3245,7 @@ jQuery(document).ready(function($) {
 
 	// Disallow 'enter' key inside specified textareas (to disable new lines)
 	$( document ).on( 'keypress', '.epkb-admin__input-field--disallow-new-lines textarea', function( event ) {
-		if ( ( event.keyCode || event.which ) === 13 ) {
+		if ( ( event.keyCode || event.which ) === 13 || event.key === 'Enter' ) {
 			return false;
 		}
 	} );
@@ -3141,22 +3253,6 @@ jQuery(document).ready(function($) {
 	// Disable PRO inputs for Settings Page
 	$( '#epkb-admin__boxes-list__settings .epkb-admin__input-disabled' ).each( function(){
 		$( this ).find( 'input, select, textarea, button' ).prop( 'disabled', true );
-	});
-
-	// Toggle the PRO Setting Tooltip
-	$( document ).on( 'click', '.epkb-admin__input-disabled, .epkb__option-pro-tag', function (){
-		let $tooltip = $( this ).closest( '.epkb-input-group' ).find( '.epkb__option-pro-tooltip' );
-		let is_visible = $tooltip.is(':visible');
-
-		// hide all pro tooltip
-		$( '.epkb__option-pro-tooltip' ).hide();
-
-		// toggle current pro tooltip
-		if ( is_visible ) {
-			$tooltip.hide();
-		} else {
-			$tooltip.show();
-		}
 	});
 
 	// Toggle the PRO Setting Pro Feature Ad Popup
@@ -3201,15 +3297,7 @@ jQuery(document).ready(function($) {
 		showFeature( currentIndex );
 	});
 
-	// Hide PRO Setting Tooltip if click outside the tooltip
-	$( document ).on( 'click', function (e){
-		let target = $( e.target );
-		if ( ! target.closest( '.epkb__option-pro-tooltip' ).length && ! target.closest( '.epkb-admin__input-disabled' ).length && ! target.closest( '.epkb__option-pro-tag' ).length  ) {
-			$( '.epkb__option-pro-tooltip' ).hide();
-		}
-	});
-
-	// Set better default width of Modular Sidebar when user toggle it 'on'
+	// Set better default width of Featured Articles Sidebar when user toggle it 'on'
 	$( document ).on( 'change', '[name="ml_categories_articles_sidebar_toggle"]', function() {
 		if ( ! $( this ).prop( 'checked' ) ) {
 			return;
@@ -3282,5 +3370,18 @@ jQuery(document).ready(function($) {
 		return false;
 	} );
 
+	// Helper function to copy text to clipboard
+	function copyToClipboard(text) {
+		const $temp = $('<textarea>');
+		$('body').append($temp);
+		$temp.val(text).select();
+		document.execCommand('copy');
+		$temp.remove();
+	}
 
+	// Open FAQs shortcode tab by link
+	$( document ).on( 'click', '#epkb-faqs-shortcode-link', function( e ) {
+		e.preventDefault();
+		$( '[data-target="faq-shortcodes"]' ).trigger( 'click' );
+	} );
 });

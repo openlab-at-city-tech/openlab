@@ -321,6 +321,23 @@ class EPKB_HTML_Admin {
 			return;
 		}
 
+		// CASE: Horizontal boxes
+		if ( ! empty( $page_view['horizontal_boxes'] ) && is_array( $page_view['horizontal_boxes'] ) ) {	?>
+			<!-- Admin Form -->
+			<div class="epkb-setting-box-container epkb-setting-box-container--horizontal"><?php
+				foreach ( $page_view['horizontal_boxes']['boxes'] as $box_config ) {
+					self::display_settings_horizontal_box( $box_config );
+				}	?>
+			</div>	<?php
+			if ( ! empty( $page_view['horizontal_boxes']['bottom_html'] ) ) {	?>
+				<div class="epkb-setting-box-container epkb-setting-box-container--bottom">
+					<div class="epkb-admin__boxes-list__box epkb-admin__boxes-list__box--bottom">	<?php
+						echo wp_kses_post( $page_view['horizontal_boxes']['bottom_html'] );	?>
+					</div>
+				</div>	<?php
+			}
+		}
+
 		// CASE: Boxes List for view without secondary tabs - make sure we can handle empty boxes list correctly
 		if ( ! empty( $page_view['boxes_list'] ) && is_array( $page_view['boxes_list'] ) ) {    ?>
 
@@ -412,6 +429,11 @@ class EPKB_HTML_Admin {
 
 				<div class="epkb-admin__form-tab-wrap epkb-admin__form-tab-wrap--<?php echo esc_attr( $tab['key'] ); echo $tab['active'] ? ' epkb-admin__form-tab-wrap--active' : ''; ?>">  <?php
 
+					// HTML above all other content inside the current tab
+					if ( ! empty( $tab['top_html'] ) ) {
+						echo wp_kses( $tab['top_html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );
+					}
+
 					foreach ( $tab['contents'] as $content ) {
 
 						$data_escaped = '';
@@ -468,8 +490,8 @@ class EPKB_HTML_Admin {
 											<span class="<?php echo esc_html( $content['icon'] ); ?> epkb-admin__form-tab-content-icon"><?php echo esc_html( $content['icon_text'] ); ?></span>   <?php
 										}
 										echo esc_html( $content['title'] );
-										if ( ! empty( $content['tooltip_external_links'] ) ) {
-											EPKB_HTML_Elements::display_tooltip( '', '', array(), $content['tooltip_external_links'] );
+										if ( ! empty( $content['setting_help_text'] ) ) {
+											EPKB_HTML_Elements::display_tooltip( '', '', array(), $content['setting_help_text'] );
 										}
 										if ( ! empty( $content['help_links_html'] ) ) {
 											echo wp_kses( $content['help_links_html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );
@@ -489,18 +511,8 @@ class EPKB_HTML_Admin {
 										echo wp_kses( $content['body_html'], EPKB_Utilities::get_admin_ui_extended_html_tags() );   ?>
 									</div>
 								</div>  <?php
-							}
-
-							// Optional link to Labels tab
-							if ( $sub_tab['bottom_labels_link'] ) {
-								self::display_bottom_labels_link();
-							}   ?>
+							}    ?>
 						</div>  <?php
-					}
-
-					// Optional link to Labels tab
-					if ( $tab['bottom_labels_link'] ) {
-						self::display_bottom_labels_link();
 					}	?>
 				</div>  <?php
 			}   ?>
@@ -596,7 +608,6 @@ class EPKB_HTML_Admin {
 			'active'    		=> false,
 			'contents'  		=> [],
 			'sub_tabs'  		=> [],
-			'bottom_labels_link' => false,
 		);
 
 		// Default content for admin form tab
@@ -619,7 +630,6 @@ class EPKB_HTML_Admin {
 			'active'        => false,
 			'contents'      => [],
 			'class'         => '',
-			'bottom_labels_link' => false,
 		);
 
 		// Set default view
@@ -766,24 +776,6 @@ class EPKB_HTML_Admin {
 	}
 
 	/**
-	 * Display content box with link to Labels tab
-	 * @return void
-	 */
-	private static function display_bottom_labels_link() {	?>
-		<div class="epkb-admin__form-tab-content epkb-admin__form-tab-content--bottom-labels-link">
-			<div class="epkb-admin__form-tab-content-title">    <?php
-				esc_html_e( 'Labels', 'echo-knowledge-base' );	?>
-			</div>
-			<div class="epkb-admin__form-tab-content-desc">
-				<span><?php esc_html_e( 'Labels are the text elements displayed on your website\'s front end, such as button names and custom headings. ' .
-											'Customize these labels to match your website\'s language and tone.', 'echo-knowledge-base' ); ?></span>
-				<a class="epkb-admin__form-tab-content-desc__link" href="#" target="_blank"><?php esc_html_e( 'click here to customize the labels', 'echo-knowledge-base' ); ?></a>
-			</div>
-			<div class="epkb-admin__form-tab-content-body"></div>
-		</div>	<?php
-	}
-
-	/**
 	 * Display warning about missing main page
 	 *
 	 * @param $kb_config
@@ -795,13 +787,13 @@ class EPKB_HTML_Admin {
 
 		$notification_escaped = EPKB_HTML_Forms::notification_box_middle( array(
 			'type'  => 'error',
-			'title' => esc_html__( 'We did not detect any Main Page for your knowledge base', 'echo-knowledge-base' ) . ': ' . esc_html( $kb_config['kb_name'] ) . ' . ' . esc_html__( 'You can do the following:', 'echo-knowledge-base' ),
+			'title' => esc_html__( 'We did not detect any Main Page for your knowledge base', 'echo-knowledge-base' ) . ': ' . esc_html( $kb_config['kb_name'] ) . '. ' . esc_html__( 'You can do the following:', 'echo-knowledge-base' ),
 			'desc'  => '<ul>
 							<li>' . esc_html__( 'If you have a KB Main Page, please re-save it and then come back', 'echo-knowledge-base' ) . '</li>
-                            <li>' . __( 'Run Setup Wizard to create a new KB Main Page', 'echo-knowledge-base' )
-				. ' ' . '<a href="'.esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) . '&page=epkb-kb-configuration&setup-wizard-on' ) ) . '" target="_blank">' . __( 'Run Setup Wizard', 'echo-knowledge-base' ) . '</a></li>
-							<li>' . __( 'Create one manually as described here:', 'echo-knowledge-base' )
-				. ' ' . '<a href="https://www.echoknowledgebase.com/documentation/knowledge-base-shortcode/" target="_blank">' . esc_html__( 'Learn More', 'echo-knowledge-base' ) . '</a></li>
+                            <li>' . esc_html__( 'Run Setup Wizard to create a new KB Main Page', 'echo-knowledge-base' )
+				. ' ' . '<a href="'.esc_url( admin_url( '/edit.php?post_type=' . EPKB_KB_Handler::get_post_type( $kb_config['id'] ) . '&page=epkb-kb-configuration&setup-wizard-on' ) ) . '" target="_blank">' . esc_html__( 'Run Setup Wizard', 'echo-knowledge-base' ) . '</a></li>
+							<li>' . esc_html__( 'Create one manually as described here:', 'echo-knowledge-base' )
+				. ' ' . '<a href="https://www.echoknowledgebase.com/documentation/main-page-faqs/" target="_blank">' . esc_html__( 'Learn More', 'echo-knowledge-base' ) . '</a></li>
                         </ul>'
 		), $return_html  );
 
@@ -811,5 +803,206 @@ class EPKB_HTML_Admin {
 			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $notification_escaped;
 		}
+	}
+
+	/**
+	 * Display warning about Block Main page + WPML On
+	 *
+	 * @param $kb_config
+	 * @param bool $return_html
+	 *
+	 * @return string|void
+	 */
+	public static function display_block_wpml_warning( $kb_config, $return_html=false ) {
+
+		$notification_escaped = EPKB_HTML_Forms::notification_box_middle( array(
+			'type'  => 'error',
+			'title' => esc_html__( 'We have Detected You are Using Blocks for your KB Main Page and WPML', 'echo-knowledge-base' ),
+			'desc'  => '<p>' . esc_html__( 'To edit text strings, you will need to update each main page individually for each language. For more details, please refer to our article.', 'echo-knowledge-base' ) . '</p>
+						<a href="https://www.echoknowledgebase.com/documentation/setup-wpml-for-knowledge-base/#Main-Page-String-Translation---Blocks" target="_blank">' . esc_html__( 'Learn More', 'echo-knowledge-base' ) . '</a>'
+		), $return_html  );
+
+		if ( $return_html ) {
+			return $notification_escaped;
+		} else {
+			//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo $notification_escaped;
+		}
+	}
+
+	public static function display_block_main_page( $kb_config, $include_help_links = true ) {
+
+		$output_html =
+			'<div class="epkb-admin__settings-sub">' .
+				// Main Content
+				'<div class="epkb-admin__settings-sub-header">' .
+					'<p>' . esc_html__( 'Your Knowledge Base Main Page is now using WordPress KB blocks.', 'echo-knowledge-base' ) . '</p>' .
+					'<a href="' . esc_url( get_edit_post_link( EPKB_KB_Handler::get_first_kb_main_page_id( $kb_config ) ) ) . '" class="epkb-primary-btn" style="display: inline-block; text-decoration: none; margin-top: 10px;">' .
+						esc_html__( 'Edit Main Page', 'echo-knowledge-base' ) .
+					'</a>' .
+				'</div>';
+
+		if ( $include_help_links ) {
+			// Resources & Support Section with Two Columns
+			$output_html .=
+				'<div class="epkb-admin__settings-sub-content">' .
+					'<div class="epkb-admin__resources-support">' .
+						'<div class="epkb-admin__resources-support-col">' .
+							'<h4>' . esc_html__( 'Documentation', 'echo-knowledge-base' ) . '</h4>' .
+							'<p>' .
+								esc_html__( 'Access comprehensive guides and tutorials for KB blocks and features.', 'echo-knowledge-base' ) .
+							'</p>' .
+							'<a href="https://www.echoknowledgebase.com/documentation/kb-blocks/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">' .
+								esc_html__( 'View Documentation', 'echo-knowledge-base' ) .
+							'</a>' .
+						'</div>' .
+						'<div class="epkb-admin__resources-support-col">' .
+							'<h4>' . esc_html__( 'Technical Support', 'echo-knowledge-base' ) . '</h4>' .
+							'<p>' .
+								esc_html__( 'Get help from our support team for any KB related issues.', 'echo-knowledge-base' ) .
+							'</p>' .
+							'<a href="https://www.echoknowledgebase.com/technical-support/" target="_blank" class="epkb-primary-btn" style="display: inline-block; text-decoration: none;">' .
+								esc_html__( 'Contact Support', 'echo-knowledge-base' ) .
+							'</a>' .
+						'</div>' .
+					'</div>' .
+				'</div>';
+		}
+
+		$output_html .= '</div>';
+
+		return $output_html;
+	}
+
+	/**
+	 * Show FE offer with link to FE editor and link to disable the offer
+	 * @param $kb_config
+	 * @return false|string
+	 */
+	public static function display_fe_button_above_main_page_settings( $kb_config ) {
+		ob_start();	?>
+		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
+			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Main Page settings.', 'echo-knowledge-base' ); ?></p>
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ) . '?action=epkb_load_editor'; ?>"
+				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
+		</div>	<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Show FE offer with link to FE editor for Article Page
+	 * @param $kb_config
+	 * @return false|string
+	 */
+	public static function display_fe_button_above_article_page_settings( $kb_config ) {
+		$first_kb_article_url = EPKB_KB_Handler::get_first_kb_article_url( $kb_config );
+		if ( empty( $first_kb_article_url ) ) {
+			return '';
+		}
+		
+		ob_start();	?>
+		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
+			<p><?php esc_html_e( 'Use our Frontend Editor to change KB Article Page settings.', 'echo-knowledge-base' ); ?></p>
+			<a href="<?php echo esc_url( EPKB_KB_Handler::get_first_kb_article_url( $kb_config ) ) . '?epkb_fe_reopen_feature=none'; ?>"
+				target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
+		</div>	<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Show FE offer with link to FE editor for Archive Page
+	 * @param $kb_config
+	 * @return false|string
+	 */
+	public static function display_fe_button_above_archive_page_settings( $kb_config ) {
+
+		$is_theme_archive_page_template = $kb_config['template_for_archive_page'] == 'current_theme_templates';
+		if ( $is_theme_archive_page_template ) {
+			return '';
+		}	
+
+		$first_kb_archive_url = EPKB_KB_Handler::get_kb_category_with_most_articles_url( $kb_config );
+		if ( empty( $first_kb_archive_url ) ) {
+			return '';	
+		}
+		
+		ob_start();	?>
+		<div class="epkb-admin__fe-offer-box epkb-admin__fe-offer-box--top">
+			<p><?php esc_html_e( 'Use our Frontend Editor to change Category Archive Page settings.', 'echo-knowledge-base' ); ?></p>
+			<a href="<?php echo esc_url( $first_kb_archive_url ) . '?epkb_fe_reopen_feature=archive-page-settings'; ?>"
+					 target="_blank" class="epkb-primary-btn" style="text-decoration: none;margin-top: 10px"><?php esc_html_e( 'Open Frontend Editor', 'echo-knowledge-base' ); ?></a>.
+		</div>	<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Display HTML for Resource Links ad
+	 * @return void
+	 */
+	public static function show_resource_links_ad() {
+		EPKB_HTML_Forms::pro_feature_ad_box( array(
+			'title'             => sprintf( esc_html__( "Get %sResource Links%s Feature", 'echo-knowledge-base' ), '<strong>', '</strong>' ),
+			'list'              => array(
+				esc_html__( 'Add call-to-action boxes with links to the Main Page', 'echo-knowledge-base' ),
+				esc_html__( 'Customize the call-to-action appearance', 'echo-knowledge-base' ),
+			),
+			'btn_text'          => esc_html__( 'Upgrade Now', 'echo-knowledge-base' ),
+			'btn_url'           => 'https://www.echoknowledgebase.com/wordpress-plugin/elegant-layouts/',
+		) );
+	}
+
+	/**
+	 * Display message for users with legacy KB Main Page to switch to modular KB Main Page TODO FUTURE: remove
+	 * @param $kb_config
+	 * @param $kb_config_specs
+	 * @return false|string
+	 */
+	public static function display_modular_main_page_toggle( $kb_config, $kb_config_specs ) {
+		ob_start();	?>
+		<p>	<?php
+			esc_html_e( 'You are using the legacy main page. Please upgrade to the Modular Main Page before accessing Settings.', 'echo-knowledge-base' );	?>
+			<a href="https://www.echoknowledgebase.com/documentation/modular-layout/" target="_blank"><?php esc_html_e( 'Learn More', 'echo-knowledge-base' ); ?></a>
+		</p>
+		<div class="epkb-admin__kb__form">	<?php
+			EPKB_HTML_Elements::checkbox_toggle( array(
+				'id'        => 'modular_main_page_toggle',
+				'text'      => $kb_config_specs['modular_main_page_toggle']['label'],
+				'checked'   => $kb_config['modular_main_page_toggle'] == 'on',
+				'name'      => 'modular_main_page_toggle',
+			) );	?>
+		</div>	<?php
+		return ob_get_clean();
+	}
+
+	/**
+	 * Display boxes in single row
+	 * @param $box_config
+	 * @return void
+	 */
+	private static function display_settings_horizontal_box( $box_config ) {	?>
+		<div class="epkb-admin__boxes-list__box epkb-admin__boxes-list__box--link-box">			<?php
+			if ( isset( $box_config['icon'] ) ) { ?>
+				<div class="epkb-admin__boxes-list__box__icon-container">
+					<img src="<?php echo esc_url( $box_config['icon'] ); ?>" class="epkb-admin__boxes-list__box__icon">
+				</div>			<?php
+			} ?>
+			<h4 class="epkb-admin__boxes-list__box__header"><?php echo esc_html( $box_config['title'] ); ?></h4>
+			<div class="epkb-admin__boxes-list__box__body">
+				<div class="epkb-admin__boxes-list__box__content">	<?php
+					if ( !empty( $box_config['button_text'] ) && isset( $box_config['button_url'] ) ) {	?>
+						<a class="epkb-primary-btn" href="<?php echo esc_url( $box_config['button_url'] ); ?>" target="_blank"><?php echo esc_html( $box_config['button_text'] ); ?></a>	<?php
+					}
+					if ( !empty( $box_config['is_open_settings_link'] ) ) {	?>
+						<a class="epkb-primary-btn epkb-admin__form-tab-settings-link" href="#tools__settings"><?php esc_html_e( 'View Settings', 'echo-knowledge-base' ); ?></a>	<?php
+					}
+					if ( !empty( $box_config['message'] ) ) {	?>
+						<p class="epkb-admin__boxes-list__box__message"><?php echo esc_html( $box_config['message'] ); ?></p> 	<?php
+						if ( !empty( $box_config['message_link_text'] ) && !empty( $box_config['message_link'] ) ) {	?>
+							<a href="<?php echo esc_url( $box_config['message_link'] ); ?>" target="_blank"><?php echo esc_html( $box_config['message_link_text'] ); ?></a>	<?php
+						}
+					}	?>
+				</div>
+			</div>
+		</div>	<?php
 	}
 }

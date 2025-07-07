@@ -1,23 +1,5 @@
 jQuery(document).ready(function($) {
 
-	/* Variables -----------------------------------------------------------------*/
-
-	let knowledgebase;
-	// If Module Layout is active
-	if ( $( '#epkb-modular-main-page-container' ).length ) {
-		knowledgebase = $( '#epkb-modular-main-page-container' );
-	} else if ( $( '.epkb-block-main-page-container' ).length ) {
-		knowledgebase = $( '.epkb-block-main-page-container' );
-	} else {
-		// Use Legacy Layouts as a fallback if the modular Main Page doesn't exist
-		knowledgebase = $( '#epkb-main-page-container' );
-	}
-	let tabContainer = $('#epkb-content-container');
-	let navTabsLi    = $('.epkb-nav-tabs li');
-	let tabPanel     = $('.epkb-tab-panel');
-	let articleContent = $('#eckb-article-content-body');
-	let articleToc     = $('.eckb-article-toc');
-
 	/********************************************************************
 	 *                      Search
 	 ********************************************************************/
@@ -83,7 +65,7 @@ jQuery(document).ready(function($) {
 		});
 	});
 
-	$("#epkb_search_terms").on( 'keyup', function() {
+	$( document ).on( 'keyup', "#epkb_search_terms", function() {
 		if (!this.value) {
 			$('#epkb_search_results').css( 'display','none' );
 		}
@@ -177,7 +159,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// Hide search results if user is entering new input
-	$( ".epkb-ml-search-box__input" ).on( 'keyup', function() {
+	$( document ).on( 'keyup', ".epkb-ml-search-box__input", function() {
 		if ( !this.value ) {
 			$( '#epkb-ml-search-results' ).css( 'display','none' );
 		}
@@ -188,19 +170,23 @@ jQuery(document).ready(function($) {
 	 ********************************************************************/
 
 	//Get the highest height of Tab and make all other tabs the same height
-	if ( tabContainer.length && navTabsLi.length ){
-		let tallestHeight = 0;
-		tabContainer.find( navTabsLi ).each( function(){
-			let this_element = $(this).outerHeight( true );
-			if( this_element > tallestHeight ) {
-				tallestHeight = this_element;
-			}
-		});
-		tabContainer.find( navTabsLi ).css( 'min-height', tallestHeight );
-	}
+	$( window ).on( 'resize', function () {
+		let navTabsLiLocal = $( '.epkb-nav-tabs li' );
+		let tabContainerLocal = $( '#epkb-content-container' );
+		if ( tabContainerLocal.length && navTabsLiLocal.length ){
+			let tallestHeight = 0;
+			tabContainerLocal.find( navTabsLiLocal ).each( function(){
+				let this_element = $(this).outerHeight( true );
+				if( this_element > tallestHeight ) {
+					tallestHeight = this_element;
+				}
+			});
+			tabContainerLocal.find( navTabsLiLocal ).css( 'min-height', tallestHeight );
+		}
+	} );
 
 	function changePanels( Index ){
-		$('.epkb-panel-container .epkb-tab-panel:nth-child(' + (Index + 1) + ')').addClass('active');
+		$('.epkb-panel-container .' + Index + '').addClass('active');
 	}
 
 	function updateTabURL( tab_id, tab_name ) {
@@ -212,54 +198,53 @@ jQuery(document).ready(function($) {
 
 	window.onpopstate = function(e){
 
+		let tabContainerLocal = $( '#epkb-content-container' );
+
 		if ( e.state && e.state.tab.indexOf('epkb_tab_') !== -1) {
 			//document.title = e.state.pageTitle;
 
 			// hide old section
-			tabContainer.find('.epkb_top_panel').removeClass('active');
+			tabContainerLocal.find('.epkb_top_panel').removeClass('active');
 
 			// re-set tab; true if mobile drop-down
 			if ( $( "#main-category-selection" ).length > 0 )
 			{
-				$("#main-category-selection").val(tabContainer.find('#' + e.state.tab).val());
+				$("#main-category-selection").val(tabContainerLocal.find('#' + e.state.tab).val());
 			} else {
-				tabContainer.find('.epkb_top_categories').removeClass('active');
-				tabContainer.find('#' + e.state.tab).addClass('active');
+				tabContainerLocal.find('.epkb_top_categories').removeClass('active');
+				tabContainerLocal.find('#' + e.state.tab).addClass('active');
 			}
 
-			tabContainer.find('.' + e.state.tab).addClass('active');
+			tabContainerLocal.find('.' + e.state.tab).addClass('active');
 
 		// if user tabs back to the initial state, select the first tab if not selected already
-		} else if ( $('#epkb_tab_1').length > 0 && ! tabContainer.find('#epkb_tab_1').hasClass('active') ) {
+		} else if ( $('#epkb_tab_1').length > 0 && ! tabContainerLocal.find('#epkb_tab_1').hasClass('active') ) {
 
 			// hide old section
-			tabContainer.find('.epkb_top_panel').removeClass('active');
+			tabContainerLocal.find('.epkb_top_panel').removeClass('active');
 
 			// re-set tab; true if mobile drop-down
 			if ( $( "#main-category-selection" ).length > 0 )
 			{
-				$("#main-category-selection").val(tabContainer.find('#epkb_tab_1').val());
+				$("#main-category-selection").val(tabContainerLocal.find('#epkb_tab_1').val());
 			} else {
-				tabContainer.find('.epkb_top_categories').removeClass('active');
-				tabContainer.find('#epkb_tab_1').addClass('active');
+				tabContainerLocal.find('.epkb_top_categories').removeClass('active');
+				tabContainerLocal.find('#epkb_tab_1').addClass('active');
 			}
 
-			tabContainer.find('.epkb_tab_1').addClass('active');
+			tabContainerLocal.find('.epkb_tab_1').addClass('active');
 		}
 	};
 
-	// Tabs Layout: switch to the top category user clicked on
-	tabContainer.find( navTabsLi ).each(function(){
+	$( document ).on( 'click', '#epkb-content-container .epkb-nav-tabs li', function (){
+		let tabContainerLocal = $( '#epkb-content-container' );
+		tabContainerLocal.find( '.epkb-nav-tabs li' ).removeClass('active');
 
-		$(this).on('click', function (){
-			tabContainer.find( navTabsLi ).removeClass('active');
+		$(this).addClass('active');
 
-			$(this).addClass('active');
-
-			tabContainer.find(tabPanel).removeClass('active');
-			changePanels ( $(this).index() );
-			updateTabURL( $(this).attr('id'), $(this).data('cat-name') );
-		});
+		tabContainerLocal.find( '.epkb-tab-panel' ).removeClass('active');
+		changePanels ( $(this).attr('id') );
+		updateTabURL( $(this).attr('id'), $(this).data('cat-name') );
 	});
 
 	// Tabs Layout: MOBILE: switch to the top category user selected
@@ -267,8 +252,8 @@ jQuery(document).ready(function($) {
 		$('#epkb-content-container').find('.epkb-tab-panel').removeClass('active');
 		// drop down
 		$( "#main-category-selection option:selected" ).each(function() {
-			let selected_index = $( this ).index();
-			changePanels ( selected_index );
+
+			changePanels ( $(this).attr('id') );
 			if ( ! $( this ).closest( '.eckb-block-editor-preview' ).length ) {
 				updateTabURL( $(this).attr('id'), $(this).data('cat-name') );
 			}
@@ -276,7 +261,7 @@ jQuery(document).ready(function($) {
 	});
 
 	// Tabs Layout: Level 1 Show more if articles are assigned to top categories
-	$( '#epkb-ml-tabs-layout .epkb-ml-articles-show-more' ).on( 'click',function( e ) {
+	$( document ).on( 'click', '#epkb-ml-tabs-layout .epkb-ml-articles-show-more',function( e ) {
 		e.preventDefault();
 		$( this ).hide();
 		$( this ).parent().find( '.epkb-list-column li' ).removeClass( 'epkb-ml-article-hide' );
@@ -299,33 +284,34 @@ jQuery(document).ready(function($) {
 	 ********************************************************************/
 
 	//Detect if a div is inside a list item then it's a sub category
-	$('.epkb-section-body .epkb-category-level-2-3').each(function(){
+	$( document ).on( 'click keydown', '.epkb-section-body .epkb-category-level-2-3', function( e ){
+		
+		// Only proceed if it's a click or Enter key
+		if ( e.type !== 'click' && e.keyCode !== 13 ) {
+			return;
+		}
 
-		$( this ).on('click', function(){
+		$( this ).parent().children( 'ul' ).toggleClass( 'active' );
+		let categoryId = $( this ).parent().children( 'ul' ).data( 'list-id' );
+		// Accessibility: aria-expand
 
-			$( this ).parent().children( 'ul' ).toggleClass( 'active' );
-			let categoryId = $( this ).parent().children( 'ul' ).data( 'list-id' );
-			// Accessibility: aria-expand
+		// Get current data attribute value
+		let ariaExpandedVal = $( this ).attr( 'aria-expanded' );
 
-			// Get current data attribute value
-			let ariaExpandedVal = $( this ).attr( 'aria-expanded' );
-
-			// Switch the value of the data Attribute on click.
-			switch( ariaExpandedVal ) {
-				case 'true':
-					// It is being closed so Set to False
-					$( this ).attr( 'aria-expanded', 'false' );
-					$( this ).parent().find('.epkb-show-all-articles[data-btn-id="' + categoryId + '"]').removeClass( 'epkb-show-all-btn--active' );
-					break;
-				case 'false':
-					// It is being opened so Set to True
-					$( this ).attr( 'aria-expanded', 'true' );
-					$( this ).parent().find('.epkb-show-all-articles[data-btn-id="' + categoryId + '"]').addClass( 'epkb-show-all-btn--active' );
-					break;
-				default:
-			}
-
-		});
+		// Switch the value of the data Attribute on click.
+		switch( ariaExpandedVal ) {
+			case 'true':
+				// It is being closed so Set to False
+				$( this ).attr( 'aria-expanded', 'false' );
+				$( this ).parent().find('.epkb-show-all-articles[data-btn-id="' + categoryId + '"]').removeClass( 'epkb-show-all-btn--active' );
+				break;
+			case 'false':
+				// It is being opened so Set to True
+				$( this ).attr( 'aria-expanded', 'true' );
+				$( this ).parent().find('.epkb-show-all-articles[data-btn-id="' + categoryId + '"]').addClass( 'epkb-show-all-btn--active' );
+				break;
+			default:
+		}
 	});
 
 	/**
@@ -334,45 +320,43 @@ jQuery(document).ready(function($) {
 	 * Toggle between open icon and close icon
 	 * Accessibility: Set aria-expand values
 	 */
-	tabContainer.find('.epkb-section-body .epkb-category-level-2-3').each(function(){
-
-		if( $(this).hasClass( 'epkb-category-focused' ) ) {
+	$( document ).on('click keydown', '#epkb-content-container .epkb-section-body .epkb-category-level-2-3:not(.epkb-category-focused)', function ( e ){
+		
+		// Only proceed if it's a click or Enter key
+		if ( e.type !== 'click' && e.keyCode !== 13 ) {
 			return;
 		}
 
 		let $icon = $(this).find('.epkb-category-level-2-3__cat-icon');
 
-		$(this).on('click', function (){
+		let plus_icons = [ 'ep_font_icon_plus' ,'ep_font_icon_minus' ];
+		let plus_icons_box = [ 'ep_font_icon_plus_box' ,'ep_font_icon_minus_box' ];
+		let arrow_icons1 = [ 'ep_font_icon_right_arrow' ,'ep_font_icon_down_arrow' ];
+		let arrow_icons2 = [ 'ep_font_icon_arrow_carrot_right' ,'ep_font_icon_arrow_carrot_down' ];
+		let arrow_icons3 = [ 'ep_font_icon_arrow_carrot_right_circle' ,'ep_font_icon_arrow_carrot_down_circle' ];
+		let folder_icon = [ 'ep_font_icon_folder_add' ,'ep_font_icon_folder_open' ];
 
-			let plus_icons = [ 'ep_font_icon_plus' ,'ep_font_icon_minus' ];
-			let plus_icons_box = [ 'ep_font_icon_plus_box' ,'ep_font_icon_minus_box' ];
-			let arrow_icons1 = [ 'ep_font_icon_right_arrow' ,'ep_font_icon_down_arrow' ];
-			let arrow_icons2 = [ 'ep_font_icon_arrow_carrot_right' ,'ep_font_icon_arrow_carrot_down' ];
-			let arrow_icons3 = [ 'ep_font_icon_arrow_carrot_right_circle' ,'ep_font_icon_arrow_carrot_down_circle' ];
-			let folder_icon = [ 'ep_font_icon_folder_add' ,'ep_font_icon_folder_open' ];
+		function toggle_category_icons( $array ){
 
-			function toggle_category_icons( $array ){
+			//If Parameter Icon exists
+			if( $icon.hasClass( $array[0] ) ){
 
-				//If Parameter Icon exists
-				if( $icon.hasClass( $array[0] ) ){
+				$icon.removeClass( $array[0] );
+				$icon.addClass( $array[1] );
 
-					$icon.removeClass( $array[0] );
-					$icon.addClass( $array[1] );
+			}else if ( $icon.hasClass( $array[1] )){
 
-				}else if ( $icon.hasClass( $array[1] )){
-
-					$icon.removeClass( $array[1] );
-					$icon.addClass($array[0]);
-				}
+				$icon.removeClass( $array[1] );
+				$icon.addClass($array[0]);
 			}
+		}
 
-			toggle_category_icons( plus_icons );
-			toggle_category_icons( plus_icons_box );
-			toggle_category_icons( arrow_icons1 );
-			toggle_category_icons( arrow_icons2 );
-			toggle_category_icons( arrow_icons3 );
-			toggle_category_icons( folder_icon );
-		});
+		toggle_category_icons( plus_icons );
+		toggle_category_icons( plus_icons_box );
+		toggle_category_icons( arrow_icons1 );
+		toggle_category_icons( arrow_icons2 );
+		toggle_category_icons( arrow_icons3 );
+		toggle_category_icons( folder_icon );
 	});
 
 	/**
@@ -380,7 +364,7 @@ jQuery(document).ready(function($) {
 	 *
 	 * When user clicks on the "Show all articles" it will toggle the "hide" class on all hidden articles
 	 */
-	knowledgebase.find('.epkb-show-all-articles').on( 'click', function () {
+	$( document ).on( 'click', '#epkb-modular-main-page-container .epkb-show-all-articles, .epkb-block-main-page-container .epkb-show-all-articles, #epkb-main-page-container .epkb-show-all-articles', function () {
 
 		$( this ).toggleClass( 'epkb-show-articles' );
 		let categoryId = $( this ).data('btn-id');
@@ -451,11 +435,11 @@ jQuery(document).ready(function($) {
 			this.getOptions();
 			
 			let articleHeaders = this.getArticleHeaders();
+			let $articleTocLocal = $( '.eckb-article-toc' );
 			
 			// show TOC only if headers are present
 			if ( articleHeaders.length > 0 ) {
-				
-				articleToc.html( this.getToCHTML( articleHeaders ) );
+				$articleTocLocal.html( this.getToCHTML( articleHeaders ) );
 
 				// Add h2 title for Article content section
 				if( $('#eckb-article-content .eckb-article-toc').length > 0 ) {
@@ -464,12 +448,12 @@ jQuery(document).ready(function($) {
 				}
 
 			} else {
-				articleToc.hide();
+				$articleTocLocal.hide();
 
 				//FOR FE Editor ONLY
 				if ($('body').hasClass('epkb-editor-preview')) {
-					articleToc.show();
-					let title = articleToc.find('.eckb-article-toc__title').html();
+					$articleTocLocal.show();
+					let title = $articleTocLocal.find('.eckb-article-toc__title').html();
 					let html = `
 						<div class="eckb-article-toc__inner">
 							<h4 class="eckb-article-toc__title">${title}</h4>
@@ -481,7 +465,7 @@ jQuery(document).ready(function($) {
 							</div>
 						</div>	
 						`;
-					articleToc.html( html );
+					$articleTocLocal.html( html );
 				}
 				
 			}
@@ -510,8 +494,6 @@ jQuery(document).ready(function($) {
 				return false;
 			});
 			
-			$(window).on( 'scroll', this.scrollSpy );
-			
 			this.scrollSpy();
 			
 			// scroll to element if it is in the hash 
@@ -526,26 +508,28 @@ jQuery(document).ready(function($) {
 		},
 		
 		getOptions: function() {
+			let $articleTocLocal = $( '.eckb-article-toc' );
 			
-			if ( articleToc.data( 'min' ) ) {
-				this.firstLevel = articleToc.data( 'min' );
+			if ( $articleTocLocal.data( 'min' ) ) {
+				this.firstLevel = $articleTocLocal.data( 'min' );
 			}
 			
-			if ( articleToc.data( 'max' ) ) {
-				this.lastLevel = articleToc.data( 'max' );
+			if ( $articleTocLocal.data( 'max' ) ) {
+				this.lastLevel = $articleTocLocal.data( 'max' );
 			}
 			
-			if ( articleToc.data( 'offset' ) ) {
-				this.offset = articleToc.data( 'offset' );
+			if ( $articleTocLocal.data( 'offset' ) ) {
+				this.offset = $articleTocLocal.data( 'offset' );
 			} else {
-				articleToc.data( 'offset', this.offset )
+				$articleTocLocal.data( 'offset', this.offset )
 			}
 
 			
-			if ( typeof articleToc.data('exclude_class') !== 'undefined' ) {
-				this.excludeClass = articleToc.data('exclude_class');
+			if ( typeof $articleTocLocal.data('exclude_class') !== 'undefined' ) {
+				this.excludeClass = $articleTocLocal.data('exclude_class');
 			}
-			
+
+			this.searchStr = '';
 			while ( this.firstLevel <= this.lastLevel ) {
 				this.searchStr += 'h' + this.firstLevel + ( this.firstLevel < this.lastLevel ? ',' : '' );
 				this.firstLevel++;
@@ -557,7 +541,7 @@ jQuery(document).ready(function($) {
 			let headers = [];
 			let that = this;
 			
-			articleContent.find( that.searchStr ).each( function(){
+			$( '#eckb-article-content-body' ).find( that.searchStr ).each( function(){
 					
 				if ( $(this).text().length === 0 ) {
 					return;
@@ -656,10 +640,11 @@ jQuery(document).ready(function($) {
 		// return html from headers object 
 		getToCHTML: function ( headers, titleTag='h4' ) {
 			let html;
+			let $articleTocLocal = $( '.eckb-article-toc' );
 				
-			if ( articleToc.find('.eckb-article-toc__title').length ) {
+			if ( $articleTocLocal.find('.eckb-article-toc__title').length ) {
 					
-				let title = articleToc.find('.eckb-article-toc__title').html();
+				let title = $articleTocLocal.find('.eckb-article-toc__title').html();
 				html = `
 					<div class="eckb-article-toc__inner">
 						<${titleTag} class="eckb-article-toc__title">${title}</${titleTag}>
@@ -694,11 +679,18 @@ jQuery(document).ready(function($) {
 		// highlight needed element
 		scrollSpy: function () {
 
+			// No selection if page does not have scroll
+			if ( $( document ).height() <= $( window ).height() ) {
+				$( '.eckb-article-toc__level a' ).removeClass( 'active' );
+				return;
+			}
+
+			let $articleTocLocal = $( '.eckb-article-toc' );
 			let currentTop = $(window).scrollTop();
 			let currentBottom = $(window).scrollTop() + $(window).height();
 			let highlighted = false;
 			let $highlightedEl = false;
-			let offset = articleToc.data( 'offset' );
+			let offset = $articleTocLocal.data( 'offset' );
 
 			// scrolled to the end, activate last el
 			if ( currentBottom == $(document).height() ) {
@@ -774,12 +766,12 @@ jQuery(document).ready(function($) {
 				$highlightedEl.closest('.eckb-article-toc__inner').scrollTop( highlightPosition - $highlightedEl.closest('.eckb-article-toc__inner').find( '.eckb-article-toc__title' ).position().top );
 			}
 		},
-		
 	};
 
-	setTimeout ( function() {
+	function initialize_toc() {
+		let $articleTocLocal = $( '.eckb-article-toc' );
 
-		if ( articleToc.length ) {
+		if ( $articleTocLocal.length ) {
 			TOC.init();
 		}
 
@@ -798,9 +790,15 @@ jQuery(document).ready(function($) {
 			$('#eckb-article-page-container-v2').find( '#eckb-article-right-sidebar ').css( "margin-top" , articleContentBodyPosition.top+'px' );
 		}
 
-		if ( articleToc.length ) {
+		if ( $articleTocLocal.length ) {
 			mobile_TOC();
 		}
+	}
+
+	setTimeout( function () {
+		initialize_toc();
+		$( window ).on( 'scroll', TOC.scrollSpy );
+		$( window ).on( 'resize', TOC.scrollSpy );
 	}, 500 );
 
 	function mobile_TOC() {
@@ -905,207 +903,222 @@ jQuery(document).ready(function($) {
 	/********************************************************************
 	 *                      Sidebar v2
 	 ********************************************************************/
-	if( $( '#elay-sidebar-container-v2' ).length === 0 && $( '#epkb-sidebar-container-v2' ).length > 0 ){
+	function init_elay_sidebar_v2() {
+		if( $( '#elay-sidebar-container-v2' ).length === 0 && $( '#epkb-sidebar-container-v2' ).length > 0 ){
 
-		function epkb_toggle_category_icons( icon, icon_name ) {
+			function epkb_toggle_category_icons( icon, icon_name ) {
 
-			let icons_closed = [ 'ep_font_icon_plus', 'ep_font_icon_plus_box', 'ep_font_icon_right_arrow', 'ep_font_icon_arrow_carrot_right', 'ep_font_icon_arrow_carrot_right_circle', 'ep_font_icon_folder_add' ];
-			let icons_opened = [ 'ep_font_icon_minus', 'ep_font_icon_minus_box', 'ep_font_icon_down_arrow', 'ep_font_icon_arrow_carrot_down', 'ep_font_icon_arrow_carrot_down_circle', 'ep_font_icon_folder_open' ];
+				let icons_closed = [ 'ep_font_icon_plus', 'ep_font_icon_plus_box', 'ep_font_icon_right_arrow', 'ep_font_icon_arrow_carrot_right', 'ep_font_icon_arrow_carrot_right_circle', 'ep_font_icon_folder_add' ];
+				let icons_opened = [ 'ep_font_icon_minus', 'ep_font_icon_minus_box', 'ep_font_icon_down_arrow', 'ep_font_icon_arrow_carrot_down', 'ep_font_icon_arrow_carrot_down_circle', 'ep_font_icon_folder_open' ];
 
-			let index_closed = icons_closed.indexOf( icon_name );
-			let index_opened = icons_opened.indexOf( icon_name );
+				let index_closed = icons_closed.indexOf( icon_name );
+				let index_opened = icons_opened.indexOf( icon_name );
 
-			if ( index_closed >= 0 ) {
-				icon.removeClass( icons_closed[index_closed] );
-				icon.addClass( icons_opened[index_closed] );
-			} else if ( index_opened >= 0 ) {
-				icon.removeClass( icons_opened[index_opened] );
-				icon.addClass( icons_closed[index_opened] );
-			}
-		}
-
-		function epkb_open_and_highlight_selected_article_v2() {
-
-			let $el = $( '#eckb-article-content' );
-
-			if ( typeof $el.data( 'article-id' ) === 'undefined' ) {
-				return;
+				if ( index_closed >= 0 ) {
+					icon.removeClass( icons_closed[index_closed] );
+					icon.addClass( icons_opened[index_closed] );
+				} else if ( index_opened >= 0 ) {
+					icon.removeClass( icons_opened[index_opened] );
+					icon.addClass( icons_closed[index_opened] );
+				}
 			}
 
-			// active article id
-			let id = $el.data( 'article-id' );
+			function epkb_open_and_highlight_selected_article_v2() {
 
-			// true if we have article with multiple categories (locations) in the SBL; ignore old links
-			if ( typeof $el.data('kb_article_seq_no') !== 'undefined' && $el.data('kb_article_seq_no') > 0 ) {
-				let new_id = id + '_' + $el.data('kb_article_seq_no');
-				id = $('#sidebar_link_' + new_id).length > 0 ? new_id : id;
-			}
+				let $el = $( '#eckb-article-content' );
 
-			// after refresh highlight the Article link that is now active
-			$('.epkb-sidebar__cat__top-cat li').removeClass( 'active' );
-			$('.epkb-category-level-1').removeClass( 'active' );
-			$('.epkb-category-level-2-3').removeClass( 'active' );
-			$('.epkb-sidebar__cat__top-cat__heading-container').removeClass( 'active' );
-			let $sidebar_link = $('#sidebar_link_' + id);
-			$sidebar_link.addClass('active');
-
-			// open all subcategories 
-			$sidebar_link.parents('.epkb-sub-sub-category, .epkb-articles').each(function(){
-
-				let $button = $(this).parent().children('.epkb-category-level-2-3');
-				if ( ! $button.length ) {
-					return true;
+				if ( typeof $el.data( 'article-id' ) === 'undefined' ) {
+					return;
 				}
 
-				if ( ! $button.hasClass('epkb-category-level-2-3') ) {
-					return true;
+				// active article id
+				let id = $el.data( 'article-id' );
+
+				// true if we have article with multiple categories (locations) in the SBL; ignore old links
+				if ( typeof $el.data('kb_article_seq_no') !== 'undefined' && $el.data('kb_article_seq_no') > 0 ) {
+					let new_id = id + '_' + $el.data('kb_article_seq_no');
+					id = $('#sidebar_link_' + new_id).length > 0 ? new_id : id;
 				}
 
-				$button.next().show();
-				$button.next().next().show();
+				// after refresh highlight the Article link that is now active
+				$('.epkb-sidebar__cat__top-cat li').removeClass( 'active' );
+				$('.epkb-category-level-1').removeClass( 'active' );
+				$('.epkb-category-level-2-3').removeClass( 'active' );
+				$('.epkb-sidebar__cat__top-cat__heading-container').removeClass( 'active' );
+				let $sidebar_link = $('#sidebar_link_' + id);
+				$sidebar_link.addClass('active');
 
-				let icon = $button.find('.epkb_sidebar_expand_category_icon');
+				// open all subcategories
+				$sidebar_link.parents('.epkb-sub-sub-category, .epkb-articles').each(function(){
+
+					let $button = $(this).parent().children('.epkb-category-level-2-3');
+					if ( ! $button.length ) {
+						return true;
+					}
+
+					if ( ! $button.hasClass('epkb-category-level-2-3') ) {
+						return true;
+					}
+
+					$button.next().show();
+					$button.next().next().show();
+
+					let icon = $button.find('.epkb_sidebar_expand_category_icon');
+					if ( icon.length > 0 ) {
+						epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
+					}
+				});
+
+				// open main accordion
+				$sidebar_link.closest('.epkb-sidebar__cat__top-cat').parent().toggleClass( 'epkb-active-top-category' );
+				$sidebar_link.closest('.epkb-sidebar__cat__top-cat').find( $( '.epkb-sidebar__cat__top-cat__body-container') ).show();
+
+				let icon = $sidebar_link.closest('.epkb-sidebar__cat__top-cat').find('.epkb-sidebar__cat__top-cat__heading-container .epkb-sidebar__heading__inner span');
 				if ( icon.length > 0 ) {
 					epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
 				}
-			});
-
-			// open main accordion
-			$sidebar_link.closest('.epkb-sidebar__cat__top-cat').parent().toggleClass( 'epkb-active-top-category' );
-			$sidebar_link.closest('.epkb-sidebar__cat__top-cat').find( $( '.epkb-sidebar__cat__top-cat__body-container') ).show();
-
-			let icon = $sidebar_link.closest('.epkb-sidebar__cat__top-cat').find('.epkb-sidebar__cat__top-cat__heading-container .epkb-sidebar__heading__inner span');
-			if ( icon.length > 0 ) {
-				epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
-			}
-		}
-
-		function epkb_open_current_archive_category() {
-			let $current_cat = $( '.epkb-sidebar__cat__current-cat' );
-			if ( ! $current_cat.length ) {
-				return;
 			}
 
-			// expand parent if chosen category is hidden
-			let list = $current_cat.closest( 'li' );
-			for ( let i = 0; i < 5; i ++ ) {
-				if ( ! list.length ) {
-					continue;
+			function epkb_open_current_archive_category() {
+				let $current_cat = $( '.epkb-sidebar__cat__current-cat' );
+				if ( ! $current_cat.length ) {
+					return;
 				}
-				// open the top category here
-				if ( list.hasClass( 'epkb-sidebar__cat__top-cat' ) ) {
-					list.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
-					list.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
-				}
-				list.children( 'ul' ).show();
-				list = list.closest( 'li' ).closest( 'ul' ).parent();
-			}
 
-			// highlight categories
-			let level = $current_cat.closest( 'li' );
-			let level_icon;
-			for ( let i = 0; i < 5; i ++ ) {
-				level_icon = level.find( 'span' ).first();
-				level = level_icon.closest( 'ul' ).closest( 'ul' ).closest( 'li' );
-				if ( level_icon.length ) {
-					let match_icon = level_icon.attr('class').match(/\ep_font_icon_\S+/g);
-					if ( match_icon ) {
-						epkb_toggle_category_icons( level_icon, match_icon[0] );
+				// expand parent if chosen category is hidden
+				let list = $current_cat.closest( 'li' );
+				for ( let i = 0; i < 5; i ++ ) {
+					if ( ! list.length ) {
+						continue;
+					}
+					// open the top category here
+					if ( list.hasClass( 'epkb-sidebar__cat__top-cat' ) ) {
+						list.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+						list.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+					}
+					list.children( 'ul' ).show();
+					list = list.closest( 'li' ).closest( 'ul' ).parent();
+				}
+
+				// highlight categories
+				let level = $current_cat.closest( 'li' );
+				let level_icon;
+				for ( let i = 0; i < 5; i ++ ) {
+					level_icon = level.find( 'span' ).first();
+					level = level_icon.closest( 'ul' ).closest( 'ul' ).closest( 'li' );
+					if ( level_icon.length ) {
+						let match_icon = level_icon.attr('class').match(/\ep_font_icon_\S+/g);
+						if ( match_icon ) {
+							epkb_toggle_category_icons( level_icon, match_icon[0] );
+						}
+					}
+					level.find( 'div[class^=elay-category]' ).first().addClass( 'active' );
+
+					// open the top category here
+					if ( i === 0 ) {
+						level.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+						level.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
 					}
 				}
-				level.find( 'div[class^=elay-category]' ).first().addClass( 'active' );
+			}
 
-				// open the top category here
-				if ( i === 0 ) {
-					level.find( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
-					level.closest( '.epkb-sidebar__cat__top-cat__body-container' ).css( 'display', 'block' );
+			let sidebarV2 = $('#epkb-sidebar-container-v2');
+
+			// TOP-CATEGORIES -----------------------------------/
+			// Show or hide article in sliding motion
+			sidebarV2
+			.off('click.epkbTopCat')   // remove any previous bindings
+			.on('click.epkbTopCat',
+				'.epkb-top-class-collapse-on, .epkb-sidebar__cat__top-cat__heading-container',
+				function (e) {
+
+				/* 1. Ignore clicks coming from the block-editor tabs */
+				if ($(e.target).closest('.epkb-editor-zone__tab--active, .epkb-editor-zone__tab--parent').length) {
+					return;
 				}
-			}
-		}
 
-		let sidebarV2 = $('#epkb-sidebar-container-v2');
+				/* 2. Toggle body + active class */
+				const $heading = $(this);
+				const $topCat  = $heading.parent();                       // <li> (or wrapper)
+				const $body    = $topCat.children('.epkb-sidebar__cat__top-cat__body-container');
 
-		// TOP-CATEGORIES -----------------------------------/
-		// Show or hide article in sliding motion
-		sidebarV2.on('click', '.epkb-top-class-collapse-on', function (e) {
+				$topCat.toggleClass('epkb-active-top-category');
+				$body.stop(true, true).slideToggle();                     // kill queued anims
 
-			// prevent open categories when click on editor tabs 
-			if ( typeof e.originalEvent !== 'undefined' && ( $(e.originalEvent.target).hasClass('epkb-editor-zone__tab--active') || $(e.originalEvent.target).hasClass('epkb-editor-zone__tab--parent') ) ) {
-				return;
-			}
-
-			$( this ).parent().toggleClass( 'epkb-active-top-category' );
-			$( this).parent().find( $( '.epkb-sidebar__cat__top-cat__body-container') ).slideToggle();
-		});
-
-		// Icon toggle - toggle between open icon and close icon
-		sidebarV2.on('click', '.epkb-sidebar__cat__top-cat__heading-container', function (e) {
-
-			// prevent open categories when click on editor tabs 
-			if ( typeof e.originalEvent !== 'undefined' && ( $(e.originalEvent.target).hasClass('epkb-editor-zone__tab--active') || $(e.originalEvent.target).hasClass('epkb-editor-zone__tab--parent') ) ) {
-				return;
-			}
-
-			let icon = $(this).find('.epkb-sidebar__heading__inner span');
-			if ( icon.length > 0 ) {
-				epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
-			}
-		});
-
-		// SUB-CATEGORIES -----------------------------------/
-		// Show or hide article in sliding motion
-		sidebarV2.on('click', '.epkb-category-level-2-3', function () {
-
-			// show lower level of categories and show articles in this category
-			$( this ).next().slideToggle();
-			$( this ).next().next().slideToggle();
-
-		});
-		// Icon toggle - toggle between open icon and close icon
-		sidebarV2.on('click', '.epkb-category-level-2-3', function () {
-			let icon = $(this).find('span');
-			if ( icon.length > 0 ) {
-				epkb_toggle_category_icons(icon, icon.attr('class').match(/\ep_font_icon_\S+/g)[0]);
-			}
-		});
-
-		// SHOW ALL articles functionality
-		sidebarV2.on('click', '.epkb-show-all-articles', function () {
-
-			$( this ).toggleClass( 'active' );
-			let parent = $( this ).parent( 'ul' );
-			let article = parent.find( 'li');
-
-			//If this has class "active" then change the text to Hide extra articles
-			if ( $(this).hasClass( 'active') ) {
-
-				//If Active
-				$(this).find('.epkb-show-text').addClass('epkb-hide-elem');
-				$(this).find('.epkb-hide-text').removeClass('epkb-hide-elem');
-				$(this).attr( 'aria-expanded','true' );
-
-			} else {
-				//If not Active
-				$(this).find('.epkb-show-text').removeClass('epkb-hide-elem');
-				$(this).find('.epkb-hide-text').addClass('epkb-hide-elem');
-				$(this).attr( 'aria-expanded','false' );
-			}
-
-			$( article ).each(function() {
-				//If has class "hide" remove it and replace it with class "Visible"
-				if ( $(this).hasClass( 'epkb-hide-elem') ) {
-					$(this).removeClass('epkb-hide-elem');
-					$(this).addClass('visible');
-				} else if ( $(this).hasClass( 'visible')) {
-					$(this).removeClass('visible');
-					$(this).addClass('epkb-hide-elem');
+				/* 3. Flip caret / plus-minus icon */
+				const $icon = $heading.find('span[class*="ep_font_icon_"]');
+				if ($icon.length) {
+					const cls = ($icon.attr('class').match(/ep_font_icon_\S+/) || [''])[0];
+					epkb_toggle_category_icons($icon, cls);
 				}
+
+				e.preventDefault();                                       // no unwanted nav
 			});
-		});
 
-		epkb_open_and_highlight_selected_article_v2();
-		epkb_open_current_archive_category();
+
+			// SUB-CATEGORIES -----------------------------------/
+			// Show or hide article in sliding motion
+			sidebarV2
+			.off('click.epkbToggleCat')                 // ← remove any earlier copy
+			.on('click.epkbToggleCat', '.epkb-category-level-2-3', function (e) {
+		  
+			  /* ─── 1. toggle the sibling <ul>s ───────────────────────────── */
+			  $(this)
+				.nextUntil(':not(ul)', 'ul')            // every UL that follows the header
+				.stop(true, true)                       // kill queued animations
+				.slideToggle();
+		  
+			  /* ─── 2. flip the arrow / plus-minus icon ──────────────────── */
+			  const $icon = $(this).children('.epkb_sidebar_expand_category_icon');
+			  if ($icon.length) {
+				const iconClass = ($icon.attr('class').match(/ep_font_icon_\S+/) || [''])[0];
+				epkb_toggle_category_icons($icon, iconClass);
+			  }
+		  
+			  e.preventDefault();                       // no unwanted navigation
+			});
+
+			// SHOW ALL articles functionality
+			sidebarV2
+			.off('click.epkbShowAll')   // remove any previous bindings
+			.on('click.epkbShowAll', '.epkb-show-all-articles', function () {
+
+				$( this ).toggleClass( 'active' );
+				let parent = $( this ).parent( 'ul' );
+				let article = parent.find( 'li');
+
+				//If this has class "active" then change the text to Hide extra articles
+				if ( $(this).hasClass( 'active') ) {
+
+					//If Active
+					$(this).find('.epkb-show-text').addClass('epkb-hide-elem');
+					$(this).find('.epkb-hide-text').removeClass('epkb-hide-elem');
+					$(this).attr( 'aria-expanded','true' );
+
+				} else {
+					//If not Active
+					$(this).find('.epkb-show-text').removeClass('epkb-hide-elem');
+					$(this).find('.epkb-hide-text').addClass('epkb-hide-elem');
+					$(this).attr( 'aria-expanded','false' );
+				}
+
+				$( article ).each(function() {
+					//If has class "hide" remove it and replace it with class "Visible"
+					if ( $(this).hasClass( 'epkb-hide-elem') ) {
+						$(this).removeClass('epkb-hide-elem');
+						$(this).addClass('visible');
+					} else if ( $(this).hasClass( 'visible')) {
+						$(this).removeClass('visible');
+						$(this).addClass('epkb-hide-elem');
+					}
+				});
+			});
+
+			epkb_open_and_highlight_selected_article_v2();
+			epkb_open_current_archive_category();
+		}
 	}
+	init_elay_sidebar_v2();
 
 
 	/********************************************************************
@@ -1173,17 +1186,16 @@ jQuery(document).ready(function($) {
 
 	// Drill Down Layout --------------------------------------------------------------/
 
-	// Define frequently used selectors
-	const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
-	const $topCatButton_ActiveClass 			= 'epkb-ml-top__cat-container--active';
-	const $catButton_ActiveClass    			= 'epkb-ml__cat-container--active';
-	const $catButtonContainers_ActiveClass  	= 'epkb-ml-categories-button-container--active';
-	const $catButtonContainers_ShowClass    	= 'epkb-ml-categories-button-container--show';
-
-	const $backButton_ActiveClass = 'epkb-back-button--active';
-
 	// Top Category Button Trigger
 	$( document ).on('click', '.epkb-ml-top__cat-container', function() {
+
+		// Define frequently used selectors
+		const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
+		const $topCatButton_ActiveClass 			= 'epkb-ml-top__cat-container--active';
+		const $catButton_ActiveClass    			= 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass  	= 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass    	= 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass 			= 'epkb-back-button--active';
 
 		const $allCatContent            = $( '.epkb-ml-all-categories-content-container' );
 
@@ -1227,7 +1239,15 @@ jQuery(document).ready(function($) {
 	});
 
 	// Insure categories content box is right under the current Top Category button when window resized
-	$( window ).resize( function() {
+	$( window ).on( 'resize', function() {
+
+		// Define frequently used selectors
+		const $topCatButton_ActiveClass 			= 'epkb-ml-top__cat-container--active';
+
+		initialize_toc();
+		init_elay_sidebar_v2();
+		epkb_send_article_view();
+
 		let resizeTimeout = setTimeout( function() {
 
 			if ( resizeTimeout ) {
@@ -1274,6 +1294,13 @@ jQuery(document).ready(function($) {
 	// Category Button Trigger
 	$( document ).on('click', '.epkb-ml__cat-container', function() {
 
+		// Define frequently used selectors
+		const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
+		const $catButton_ActiveClass    			= 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass  	= 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass    	= 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass 			= 'epkb-back-button--active';
+
 		// Check if the button already has the active class
 		if ( $( this) .hasClass( $catButton_ActiveClass ) ) {
 			return; // Don't run the rest of the code if the button is already active
@@ -1309,6 +1336,14 @@ jQuery(document).ready(function($) {
 
 	// Back Button of Category Content
 	$( document ).on('click', '.epkb-back-button', function() {
+
+		// Define frequently used selectors
+		const $catContent_ShowClass     			= 'epkb-ml__cat-content--show';
+		const $topCatButton_ActiveClass 			= 'epkb-ml-top__cat-container--active';
+		const $catButton_ActiveClass    			= 'epkb-ml__cat-container--active';
+		const $catButtonContainers_ActiveClass  	= 'epkb-ml-categories-button-container--active';
+		const $catButtonContainers_ShowClass    	= 'epkb-ml-categories-button-container--show';
+		const $backButton_ActiveClass 			= 'epkb-back-button--active';
 
 		// Get Level of current Category
 		let currentCatContent = $( '.epkb-ml__cat-content' + '.' + $catContent_ShowClass );
@@ -1348,7 +1383,7 @@ jQuery(document).ready(function($) {
 
 	// FAQs Module -----------------------------------------------------------------/
 	// Accordion mode
-	$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').filter(function() {
+	/*$('.epkb-faqs-accordion-mode .epkb-faqs__item__question').filter(function() {
 		return $(this).data('faq-type') === 'module';
 	}).on('click', function(){
 
@@ -1360,11 +1395,39 @@ jQuery(document).ready(function($) {
 			container.find('.epkb-faqs__item__answer').stop().slideDown(400);
 		}
 		container.toggleClass('epkb-faqs__item-container--active');
+	});*/
+	$( document ).on( 'click', '.epkb-faqs-accordion-mode .epkb-faqs__item__question[data-faq-type="module"]', function(){
+
+		let container = $(this).closest('.epkb-faqs__item-container').eq(0);
+
+		if (container.hasClass('epkb-faqs__item-container--active')) {
+			container.find('.epkb-faqs__item__answer').stop().slideUp(400);
+		} else {
+			container.find('.epkb-faqs__item__answer').stop().slideDown(400);
+		}
+		container.toggleClass('epkb-faqs__item-container--active');
 	});
+
 	// Toggle Mode
-	$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').filter(function() {
+	/*$('.epkb-faqs-toggle-mode .epkb-faqs__item__question').filter(function() {
 		return $(this).data('faq-type') === 'module';
 	}).on('click', function(){
+
+		let container = $(this).closest('.epkb-faqs__item-container').eq(0);
+
+		// Close other opened items
+		$('.epkb-faqs__item-container--active').not(container).removeClass('epkb-faqs__item-container--active')
+			.find('.epkb-faqs__item__answer').stop().slideUp(400);
+
+		// Toggle the clicked item
+		if (container.hasClass('epkb-faqs__item-container--active')) {
+			container.find('.epkb-faqs__item__answer').stop().slideUp(400);
+		} else {
+			container.find('.epkb-faqs__item__answer').stop().slideDown(400);
+		}
+		container.toggleClass('epkb-faqs__item-container--active');
+	});*/
+	$( document ).on( 'click', '.epkb-faqs-toggle-mode .epkb-faqs__item__question[data-faq-type="module"]', function(){
 
 		let container = $(this).closest('.epkb-faqs__item-container').eq(0);
 
@@ -1386,13 +1449,13 @@ jQuery(document).ready(function($) {
 	/********************************************************************
 	 *                      Articles Views Counter
 	 ********************************************************************/
-
-	// check if we on article page
-	if ( $('#eckb-article-content').length > 0 ) {
-		epkb_send_article_view();
-	}
-
 	function epkb_send_article_view() {
+
+		// check if we on article page
+		if ( $('#eckb-article-content').length === 0 ) {
+			return;
+		}
+
 		let article_id = $('#eckb-article-content').data('article-id');
 
 		if ( typeof article_id == undefined || article_id == '' || typeof epkb_vars
@@ -1416,6 +1479,7 @@ jQuery(document).ready(function($) {
 			});
 		}
 	}
+	epkb_send_article_view();
 
 	function epkb_send_article_view_ajax( article_id ) {
 		// prevent double sent ajax request
@@ -1445,13 +1509,55 @@ jQuery(document).ready(function($) {
 	/********************************************************************
 	 *                      Category Archive Page
 	 ********************************************************************/
-	if ( $( '#eckb-archive-page-container' ).length ) {
+	$( document ).on( 'click', '.eckb-article-list-show-more-container', function() {
 
-		$( document ).on( 'click', '.eckb-article-list-show-more-container', function() {
-			$( this ).parent().find( '.eckb-article-container' ).removeClass( 'epkb-hide-elem' );
-			$( '.eckb-article-list-show-more-container' ).hide();
+		if ( $( '#eckb-archive-page-container' ).length === 0 ) {
+			return;
+		}
+
+		$( this ).parent().find( '.eckb-article-container' ).removeClass( 'epkb-hide-elem' );
+		$( '.eckb-article-list-show-more-container' ).hide();
+	});
+
+	$( window ).trigger( 'resize' );
+
+	
+	function enableFocusDebug() {
+
+		// Track last key was shift+tab
+		window._lastKeyWasShiftTab = false;
+	
+		window.handleKeydown = function (e) {
+			if ( e.key === 'Tab' ) {
+				window._lastKeyWasShiftTab = e.shiftKey;
+			}
+		};
+	
+		window.handleFocusin = function (e) {
+			console.log( 'Focused element:', e.target );
+	
+			// Clear previous outlines
+			document.querySelectorAll('[style*="outline"]').forEach(function (el) {
+				el.style.outline = '';
+			});
+	
+			// Apply red for Tab, blue for Shift+Tab
+			e.target.style.outline = window._lastKeyWasShiftTab ? '3px solid blue' : '3px solid red';
+		};
+	
+		// Now it's safe to remove
+		document.removeEventListener( 'keydown', window.handleKeydown );
+		document.removeEventListener( 'focusin', window.handleFocusin );
+	
+		document.querySelectorAll('[style*="outline"]').forEach(function (el) {
+			el.style.outline = '';
 		});
+	
+		document.addEventListener( 'keydown', window.handleKeydown );
+		document.addEventListener( 'focusin', window.handleFocusin );
 	}
 
+	//enableFocusDebug();
 
 });
+

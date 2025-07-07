@@ -84,8 +84,8 @@ class EPKB_KB_Wizard_Cntrl {
 		}
 
 		// get current Add-ons configuration
-		$orig_config = apply_filters( 'epkb_all_wizards_get_current_config', $orig_config, $wizard_kb_id );
-		if ( empty( $orig_config ) || count( $orig_config ) < 3 ) {
+		$orig_config = EPKB_Core_Utilities::get_add_ons_config( $wizard_kb_id, $orig_config );
+		if ( $orig_config === false ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 169, $orig_config ) );
 		}
 
@@ -221,7 +221,7 @@ class EPKB_KB_Wizard_Cntrl {
 		// ARTICLES: change to custom sequence if necessary
 		if ( $articles_sequence_new_value == 'user-sequenced' ) {
 			$article_seq_data = EPKB_Utilities::get_kb_option( $kb_id, EPKB_Articles_Admin::KB_ARTICLES_SEQ_META, null, true );
-			if ( ! empty($article_seq_data) ) {
+			if ( ! empty( $article_seq_data ) ) {
 				$article_seq = $article_seq_data;
 			}
 		}
@@ -294,21 +294,30 @@ class EPKB_KB_Wizard_Cntrl {
 		// get Layout Name
 		$layout_name = EPKB_Utilities::post( 'layout_name' );
 
-		// create demo KB only for the first time and save it; ignore errors
-		if ( $is_setup_run_first_time ) {
+		// use KB blocks or shortcode for KB Main Page
+		$use_kb_blocks = EPKB_Utilities::post( 'kb_main_page_type' ) === 'kb-blocks';
+
+		// create shortcode KB Main Page: create demo KB only for the first time and save it; ignore errors
+		if ( $is_setup_run_first_time && ! $use_kb_blocks ) {
 			EPKB_KB_Handler::add_new_knowledge_base( EPKB_KB_Config_DB::DEFAULT_KB_ID, '', '', $layout_name );
 			EPKB_Core_Utilities::remove_kb_flag( 'epkb_run_setup' );
 		}
 
-		// get current KB configuration (or new one if first time setup)
-		$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+		// for new KB the Wizard is running first time:
+		//		- KB block Main Page - retrieve default configuration for origin configuration (populate the new config with Wizard data before create the new KB, because KB blocks store data via attributes and require actual values on creation)
+		//		- KB shortcode Main Page - retrieve existing origin configuration (KB is already created at this point, because shortcode Main Page is using stored KB configuration and can be created before applying Wizard data)
+		$orig_config = $is_setup_run_first_time && $use_kb_blocks
+			? epkb_get_instance()->kb_config_obj->get_kb_config_or_default( EPKB_KB_Config_DB::DEFAULT_KB_ID )
+			: epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+
+		// error can be only on existing configuration retrieval
 		if ( is_wp_error( $orig_config ) ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 8, $orig_config, false ) );
 		}
 
 		// get current Add-ons configuration
-		$orig_config = apply_filters( 'epkb_all_wizards_get_current_config', $orig_config, $kb_id );
-		if ( empty( $orig_config ) || ! is_array( $orig_config ) || count( $orig_config ) < 3 ) {
+		$orig_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $orig_config );
+		if ( $orig_config === false ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 500, EPKB_Utilities::get_variable_string( $orig_config ), false ) );
 		}
 
@@ -322,13 +331,13 @@ class EPKB_KB_Wizard_Cntrl {
 		// apply Categories & Articles module theme preset; set to 'current' if user did not select a new theme i.e. keep current settings
 		$is_theme_selected = false;
 		$categories_articles_preset_name = EPKB_Utilities::post( 'categories_articles_preset_name' );
-		if ( $categories_articles_preset_name != 'current' ) {
+		if ( ! empty( $categories_articles_preset_name ) && $categories_articles_preset_name != 'current' ) {
 			$is_theme_selected = true;
 			$new_config = EPKB_KB_Wizard_Themes::get_theme( $categories_articles_preset_name, $orig_config );
 		}
 
 		// apply Layout Name
-		$new_config['kb_main_page_layout'] = empty( $layout_name ) ? $new_config['kb_main_page_layout'] : $layout_name;
+		$new_config['kb_main_page_layout'] = empty( $layout_name ) ? $orig_config['kb_main_page_layout'] : $layout_name;
 
 		// apply selected Modules
 		$row_1_module = EPKB_Utilities::post( 'row_1_module' );
@@ -342,7 +351,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$row_5_module = EPKB_Utilities::post( 'row_5_module' );
 		$new_config['ml_row_5_module'] = empty( $row_5_module ) ? $new_config['ml_row_5_module'] : $row_5_module;
 
-		// apply Modular Sidebar location for Categories & Articles module
+		// apply Featured Articles Sidebar location for Categories & Articles module
 		$categories_articles_sidebar_location = EPKB_Utilities::post( 'categories_articles_sidebar_location' );
 		$new_config['ml_categories_articles_sidebar_toggle'] = empty( $categories_articles_sidebar_location )
 			? $new_config['ml_categories_articles_sidebar_toggle']
@@ -351,13 +360,29 @@ class EPKB_KB_Wizard_Cntrl {
 			? $new_config['ml_categories_articles_sidebar_location']
 			: $categories_articles_sidebar_location;
 
-		// set better Modular Sidebar width when user switched it 'on' (KB Main Page)
+		// set better Featured Articles Sidebar width when user switched it 'on' (KB Main Page)
 		if ( $new_config['ml_categories_articles_sidebar_toggle'] == 'on' && $orig_config['ml_categories_articles_sidebar_toggle'] == 'off' && EPKB_Core_Utilities::is_module_present( $new_config, 'categories_articles' ) ) {
 			$new_config['ml_categories_articles_sidebar_desktop_width'] = 28;
 		}
 
 		// always enable Sidebar Article Active Bold
 		$new_config['sidebar_article_active_bold'] = 'on';
+
+		// create KB blocks Main Page: create demo KB only for the first time and save it; ignore errors
+		if ( $is_setup_run_first_time && $use_kb_blocks ) {
+			EPKB_KB_Handler::add_new_knowledge_base( EPKB_KB_Config_DB::DEFAULT_KB_ID, '', '', $layout_name, true, $new_config );
+			EPKB_Core_Utilities::remove_kb_flag( 'epkb_run_setup' );
+
+			// get updated configuration after the new KB was added
+			$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+			if ( is_wp_error( $orig_config ) ) {
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 9, $orig_config, false ) );
+			}
+
+			// apply changes in the updated origin configuration into the new configuration (after the new KB was added)
+			$new_config['kb_main_pages'] = $orig_config['kb_main_pages'];
+			$new_config['kb_articles_common_path'] = $orig_config['kb_articles_common_path'];
+		}
 
 		// add menu link
 		$this->add_kb_link_to_top_menu( $new_config['kb_main_pages'] );
@@ -369,7 +394,7 @@ class EPKB_KB_Wizard_Cntrl {
 		}
 		$new_config['kb_name'] = $kb_nickname;
 
-		$this->create_main_page_if_missing( $new_config );
+		$this->create_main_page_if_missing( $new_config, $use_kb_blocks );
 
 		$main_page_id = EPKB_KB_Handler::get_first_kb_main_page_id( $new_config );
 
@@ -427,11 +452,6 @@ class EPKB_KB_Wizard_Cntrl {
 			}
 		}
 
-		// Don't change sidebar intro text on the second setup
-		if ( ! $is_setup_run_first_time && isset( $new_config['sidebar_main_page_intro_text'] ) && isset( $orig_config['sidebar_main_page_intro_text'] ) ) {
-			$new_config['sidebar_main_page_intro_text'] = $orig_config['sidebar_main_page_intro_text'];
-		}
-
 		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config, $is_theme_selected );
 
 		// update icons if user chose another theme design
@@ -469,8 +489,9 @@ class EPKB_KB_Wizard_Cntrl {
 	 * if no KB Main Page found, e.g. user deleted it after running Setup Wizard the first time, then try to create a new one
 	 *
 	 * @param $new_config
+	 * @param $use_kb_blocks
 	 */
-	private function create_main_page_if_missing( &$new_config ) {
+	private function create_main_page_if_missing( &$new_config, $use_kb_blocks ) {
 
 		$kb_id = $new_config['id'];
 		$kb_nickname = $new_config['kb_name'];
@@ -485,15 +506,7 @@ class EPKB_KB_Wizard_Cntrl {
 		$kb_slug = empty( $kb_slug ) ? EPKB_KB_Handler::get_default_slug( $kb_id ) : sanitize_title_with_dashes( $kb_slug );
 
 		// create new KB Main Page using blocks if user selected blocks
-		$use_kb_blocks = EPKB_Utilities::post( 'kb_main_page_type' ) === 'kb-blocks';
-		$kb_blocks = array();
-		if ( $use_kb_blocks ) {
-			for ( $i = 1; $i <= 5; $i++ ) {
-				// TODO: define blocks config depending on selected modules
-			}
-		}
-
-		$new_kb_main_page = EPKB_KB_Handler::create_kb_main_page( $kb_id, $kb_nickname, $kb_slug, $use_kb_blocks, $kb_blocks );
+		$new_kb_main_page = EPKB_KB_Handler::create_kb_main_page( $kb_id, $kb_nickname, $kb_slug, $new_config, $use_kb_blocks );
 		if ( is_wp_error( $new_kb_main_page ) ) {
 			EPKB_Logging::add_log( 'Could not create KB main page', $kb_id, $new_kb_main_page );
 		} else {

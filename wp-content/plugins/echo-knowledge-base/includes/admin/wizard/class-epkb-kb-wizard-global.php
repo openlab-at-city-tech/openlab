@@ -192,13 +192,13 @@ class EPKB_KB_Wizard_Global {
 				<!-- Category slug -->
 				<span class="epkb-wso-with-category__category<?php echo $this->kb_config['categories_in_url_enabled'] == 'on' ? '' : ' epkb-wso-with-category__category--off'; ?>">
 					<span class="epkb-wso-with-category__divider"> / </span>
-					<span class="epkb-wso-with-category__slug"><?php esc_html_e( 'kb-category', 'echo-knowledge-base' ); ?></span>
+					<span class="epkb-wso-with-category__slug"><?php echo EPKB_Utilities::mb_strtolower( esc_html_x( 'Category', 'taxonomy singular name', 'echo-knowledge-base' ) ); ?></span>
 				</span>
 
 				<!-- Article slug -->
 				<span class="epkb-wso-with-category__article">
 					<span class="epkb-wso-with-category__divider"> / </span>
-					<span class="epkb-wso-with-category__slug"><?php esc_html_e( 'kb-article', 'echo-knowledge-base' ); ?></span>
+					<span class="epkb-wso-with-category__slug"><?php echo EPKB_Utilities::mb_strtolower( esc_html_x( 'Article', 'post type singular name', 'echo-knowledge-base' ) ); ?></span>
 				</span>     <?php
 
 				if ( $is_new_url ) {   ?>

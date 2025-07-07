@@ -14,12 +14,12 @@ class EPKB_Layouts_Setup {
 	 * ARTICLE PAGE: Current Theme / KB template  ==>  the_content()  ==> get article (this method)
 	 *
 	 * @param $content
-	 * @param bool $the_content_filter_call
+	 * @param bool $the_content_filter_call - set to false when called from our single article template
 	 *
 	 * @return string
 	 */
 	public static function get_kb_page_output_hook( $content, $the_content_filter_call = true ) {
-		global $eckb_our_block_template;
+		global $eckb_deprecated_kb_block_template;
 
 		// for KB article, ignore if not post, is archive or current theme with any layout
 		$post = empty( $GLOBALS['post'] ) ? '' : $GLOBALS['post'];
@@ -45,12 +45,12 @@ class EPKB_Layouts_Setup {
 
 		// ignore the_content hook for our KB template as we call this directly
 		// non-block Theme (KB or Current Theme) or block theme (KB template or custom template and single or custom block template)
-		if ( $is_kb_template && $the_content_filter_call && ( ! EPKB_Utilities::is_block_theme() || isset( $eckb_our_block_template ) ) ) {
+		if ( $is_kb_template && $the_content_filter_call && ( ! EPKB_Block_Utilities::is_block_theme() || isset( $eckb_deprecated_kb_block_template ) ) ) {
 			return $content;
 		}
 
-		// only direct call from theme will output the KB article
-		if ( ! self::is_right_content() ) {
+		// allow only a single invocation from our template or theme
+		if ( self::is_article_content_output_done_already() ) {
 			return $content;
 		}
 
@@ -80,18 +80,35 @@ class EPKB_Layouts_Setup {
 		global $eckb_kb_id, $post;
 
         // add page with KB shortcode to KB Main Pages if missing
-        if ( empty( $eckb_kb_id ) ) {
+		$kb_main_pages = $kb_config['kb_main_pages'];
+        if ( empty( $eckb_kb_id ) || empty( $kb_main_pages ) ) {
 
-            $kb_main_pages = $kb_config['kb_main_pages'];
 	        $query_post = empty( $GLOBALS['wp_the_query'] ) ? null : $GLOBALS['wp_the_query']->get_queried_object();
 			$post = empty( $query_post ) && ! empty( $post ) && $post instanceof WP_Post ? $post : $query_post;
 
 	        // add missing post to main pages
 	        if ( ! empty( $post->post_type ) && $post->post_type == 'page' && ! empty( $post->ID ) &&
 		        is_array( $kb_main_pages ) && ! in_array( $post->ID, array_keys( $kb_main_pages ) ) && ! in_array( $post->post_status, array( 'inherit', 'trash', 'auto-draft' ) ) ) {
+
+				$eckb_kb_id = $kb_config['id'];
 		        $post_id = $post->ID;
-		        $kb_main_pages[$post_id] = empty( $post->post_title ) ? '[KB Main Page]' : $post->post_title;
-		        epkb_get_instance()->kb_config_obj->set_value( $kb_config['id'], 'kb_main_pages', $kb_main_pages );
+		        $kb_main_pages[ $post_id ] = empty( $post->post_title ) ? '[KB Main Page]' : $post->post_title;
+		        epkb_get_instance()->kb_config_obj->set_value( $eckb_kb_id, 'kb_main_pages', $kb_main_pages );
+
+				// remove the page from other KBs
+		        $kb_ids = epkb_get_instance()->kb_config_obj->get_kb_ids();
+				if ( count( $kb_ids ) > 1 ) {
+					foreach ( $kb_ids as $kb_id ) {
+						if ( $kb_id != $eckb_kb_id ) {
+							$kb_config_tmp = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
+							$kb_main_pages = $kb_config_tmp['kb_main_pages'];
+							if ( in_array( $post_id, array_keys( $kb_main_pages ) ) ) {
+								unset( $kb_main_pages[ $post_id ] );
+								epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'kb_main_pages', $kb_main_pages );
+							}
+						}
+					}
+				}
 	        }
         }
 
@@ -159,10 +176,11 @@ class EPKB_Layouts_Setup {
 				// Use 'post' for the filter as it is the same content as in the usual page/post
 				$temp_article->post_content = wp_kses( $intro_text, EPKB_Utilities::get_extended_html_tags( true ) );
 				$temp_article = new WP_Post( $temp_article );
+
 				$kb_config['sidebar_welcome'] = 'on';
 				$kb_config['article_content_enable_back_navigation'] = 'off';
-                $kb_config['prev_next_navigation_enable'] = 'off';
-                $kb_config['article_content_enable_rows'] = 'off';
+				$kb_config['prev_next_navigation_enable'] = 'off';
+				$kb_config['article_content_enable_rows'] = 'off';
 				$layout_output = EPKB_Articles_Setup::get_article_content_and_features( $temp_article, $temp_article->post_content, $kb_config );
 
 				if ( $handler instanceof EPKB_Modular_Main_Page ) {
@@ -214,17 +232,21 @@ class EPKB_Layouts_Setup {
 		//retrieve KB config
 		$kb_config = epkb_get_instance()->kb_config_obj->get_kb_config_or_default( $kb_id );
 
+		// let FE apply layout changes for preview without saving the changes (could be moved to KB DB class)
+		$kb_config = EPKB_Frontend_Editor::fe_preview_config( $kb_config );
+
 		return $kb_config;
 	}
 
 	/**
-	 * Is this content hook invocation from the theme to output the article?
+	 * Is this content hook invocation from the theme to output the article? Some themes header/footer code calls the_content for some reason.
 	 * @return bool
 	 */
-	private static function is_right_content() {
+	private static function is_article_content_output_done_already() {
 
+		// if JS detected duplicated Article content then we need to ignore the_content hook
 		if ( ! EPKB_Core_Utilities::is_kb_flag_set( 'epkb_the_content_fix' ) ) {
-			return true;
+			return false;
 		}
 
 		// check backtrace
@@ -248,11 +270,11 @@ class EPKB_Layouts_Setup {
 				$file = ( false === strpos( $v, '\\' ) ) ? $v : str_replace( '/', '\\', $v );
 
 				if ( ( isset( $trace['file'] ) && false !== strpos( $trace['file'], $file ) ) ) {
-					return false;
+					return true;
 				}
 			}
 		}
 
-		return true;
+		return false;
 	}
 }

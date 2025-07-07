@@ -32,30 +32,43 @@ class EPKB_ML_FAQs {
 		}
 	}
 
-	public function display_faqs_module() {
+	public function display_faqs_module( $is_faq_module=true, $is_frontend_editor=false ) {
 
 		// do we display old FAQ Categories?
-		$faqs_category_ids = EPKB_Utilities::get_kb_option( $this->kb_config['id'], self::FAQS_CATEGORY_IDS, array() );
-		if ( ! empty( $faqs_category_ids ) ) {
-			$this->get_faqs_as_categories_legacy( $faqs_category_ids );
+		if ( $is_faq_module ) {
+			$faqs_category_ids = EPKB_Utilities::get_kb_option( $this->kb_config['id'], self::FAQS_CATEGORY_IDS, array() );
+			if ( !empty( $faqs_category_ids ) ) {
+				$this->get_faqs_as_categories_legacy( $faqs_category_ids );
+				return;
+			}
+		}
+
+		// retrieve FAQs for this KB; the FAQs are shared for all KBs, but each KB stores selected groups ids
+		$selected_faq_group_ids = $is_faq_module && ! $is_frontend_editor ?
+			EPKB_Utilities::get_kb_option( $this->kb_config['id'], EPKB_ML_FAQs::FAQ_GROUP_IDS, [] ) :        // KB shortcode module stores group ids in wp options
+			( is_array( $this->kb_config['faq_group_ids'] ) ? $this->kb_config['faq_group_ids'] : [] );        // faqs block and FE stores group ids in attributes
+
+		// get selected FAQ groups
+		$faq_groups = [];
+		if ( ! empty( $selected_faq_group_ids ) ) {
+			$faq_groups = EPKB_FAQs_Utilities::get_faq_groups( $selected_faq_group_ids, 'include' );
+			if ( is_wp_error( $faq_groups ) ) {
+				echo EPKB_FAQs_Utilities::display_error( $faq_groups->get_error_message() );//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				return;
+			}
+		}
+
+		// handle case where either no FAQ groups are selected or all selected groups were deleted
+		if ( empty( $faq_groups )  ) {
+			EPKB_FAQs_Utilities::display_faqs_missing_message( $this->kb_config, $is_faq_module );
 			return;
 		}
 
-		// do we have FAQ Groups to display?
-		$selected_faq_group_ids = EPKB_Utilities::get_kb_option( $this->kb_config['id'], EPKB_ML_FAQs::FAQ_GROUP_IDS, array() );
-		if ( empty( $selected_faq_group_ids ) ) {
-			return;
-		}
-
-		$faq_groups = EPKB_FAQs_Utilities::get_faq_groups( $selected_faq_group_ids, 'include' );
-		if ( is_wp_error( $faq_groups ) ) {
-			echo EPKB_FAQs_Utilities::display_error( $faq_groups->get_error_message() );//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		}
-
+		// generate FAQs based on selected FAQ groups for this KB
 		$faq_groups_questions = EPKB_FAQs_Utilities::get_faq_groups_questions( $faq_groups );
 
 		//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		$faqs_html_escaped = EPKB_FAQs_Utilities::display_faqs( $this->kb_config, $faq_groups_questions, $this->kb_config['ml_faqs_title_text'] );
+		$faqs_html_escaped = EPKB_FAQs_Utilities::display_faqs( $this->kb_config, $faq_groups_questions, $this->kb_config['ml_faqs_title_text'], false, false, $is_faq_module );
 
 		echo $faqs_html_escaped;//phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
@@ -234,9 +247,9 @@ class EPKB_ML_FAQs {
 					break;
 			}
 			$output .= '
-			#epkb-modular-main-page-container .epkb-faqs-cat-container {
-				' . esc_attr( $container_shadow ) . '
-			}';
+				#epkb-modular-main-page-container .epkb-faqs-cat-container {
+					' . esc_attr( $container_shadow ) . '
+				}';
 		}
 
 		// Headings Typography -----------------------------------------/

@@ -10,11 +10,17 @@ class EPKB_KB_Config_Controller {
 		add_action( 'wp_ajax_epkb_wpml_enable', array( $this, 'wpml_enable' ) );
 		add_action( 'wp_ajax_nopriv_epkb_wpml_enable', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 
+		add_action( 'wp_ajax_eckb_update_category_slug_parameter', array( $this, 'update_category_slug_param' ) );
+		add_action( 'wp_ajax_nopriv_eckb_update_query_parameter', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
+
+		add_action( 'wp_ajax_eckb_update_tag_slug_parameter', array( $this, 'update_tag_slug_param' ) );
+		add_action( 'wp_ajax_nopriv_eckb_update_query_parameter', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
+
 		add_action( 'wp_ajax_epkb_preload_fonts', array( $this, 'preload_fonts' ) );
 		add_action( 'wp_ajax_nopriv_epkb_preload_fonts', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 
-		add_action( 'wp_ajax_epkb_disable_openai', array( $this, 'disable_openai' ) );
-		add_action( 'wp_ajax_nopriv_epkb_disable_openai', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
+		add_action( 'wp_ajax_epkb_enable_legacy_open_ai', array( $this, 'enable_legacy_open_ai' ) );
+		add_action( 'wp_ajax_nopriv_epkb_enable_legacy_open_ai', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 
 		add_action( 'wp_ajax_epkb_load_resource_links_icons', array( $this, 'load_resource_links_icons' ) );
 		add_action( 'wp_ajax_nopriv_epkb_load_resource_links_icons', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
@@ -27,6 +33,9 @@ class EPKB_KB_Config_Controller {
 
 		add_action( 'wp_ajax_epkb_apply_settings_changes', array( $this, 'apply_settings_changes' ) );
 		add_action( 'wp_ajax_nopriv_epkb_apply_settings_changes', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
+
+		add_action( 'wp_ajax_epkb_save_tools_settings', array( $this, 'save_tools_settings' ) );
+		add_action( 'wp_ajax_nopriv_epkb_save_tools_settings', array( 'EPKB_Utilities', 'user_not_logged_in' ) );
 	}
 
 	/**
@@ -52,6 +61,65 @@ class EPKB_KB_Config_Controller {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 412, $result ) );
 		}
 
+		// flush rules in case category and/or tag slug has value
+		update_option( 'epkb_flush_rewrite_rules', true );
+
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );
+	}
+
+	/**
+	 * Triggered when user sets category slug.
+	 */
+	public function update_category_slug_param() {
+
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+
+		// get KB ID
+		$kb_id = (int)EPKB_Utilities::post( 'epkb_kb_id', 0 );
+		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 410 ) );
+		}
+
+		$category_slug_param = EPKB_Utilities::post( 'category_slug_param' );
+
+		// allow only letters, numbers, dash, underscore
+		$category_slug_param = preg_replace( '/[^a-zA-Z0-9-_]/', '', $category_slug_param );
+
+		$result = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'category_slug', $category_slug_param );
+		if ( is_wp_error( $result ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 412, $result ) );
+		}
+
+		update_option( 'epkb_flush_rewrite_rules', true );
+
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );
+	}
+
+	/**
+	 * Triggered when user sets tag slug.
+	 */
+	public function update_tag_slug_param() {
+
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+
+		// get KB ID
+		$kb_id = (int)EPKB_Utilities::post( 'epkb_kb_id', 0 );
+		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 410 ) );
+		}
+
+		$tag_slug_param = EPKB_Utilities::post( 'tag_slug_param' );
+
+		// allow only letters, numbers, dash, underscore
+		$tag_slug_param = preg_replace( '/[^a-zA-Z0-9-_]/', '', $tag_slug_param );
+
+		$result = epkb_get_instance()->kb_config_obj->set_value( $kb_id, 'tag_slug', $tag_slug_param );
+		if ( is_wp_error( $result ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 412, $result ) );
+		}
+
+		update_option( 'epkb_flush_rewrite_rules', true );
+
 		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );
 	}
 
@@ -75,13 +143,13 @@ class EPKB_KB_Config_Controller {
 	/**
 	 * Triggered when user clicks to toggle OpenAI setting.
 	 */
-	public function disable_openai() {
+	public function enable_legacy_open_ai() {
 
 		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
 
-		$disable_openai = EPKB_Utilities::post( 'disable_openai', 'on' ) == 'on';
+		$enable_legacy_open_ai = EPKB_Utilities::post( 'enable_legacy_open_ai', 'off' ) == 'on';
 
-		$result = EPKB_Core_Utilities::update_kb_flag( 'disable_openai', $disable_openai );
+		$result = EPKB_Core_Utilities::update_kb_flag( 'enable_legacy_open_ai', $enable_legacy_open_ai );
 		if ( is_wp_error( $result ) ) {
 			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 418, $result ) );
 		}
@@ -113,6 +181,9 @@ class EPKB_KB_Config_Controller {
 		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
 
 		$active_font_family = EPKB_Utilities::post( 'active_font_family' );
+		if ( empty( $active_font_family ) ) {
+			$active_font_family = 'inherit';
+		}
 
 		ob_start();
 
@@ -122,7 +193,7 @@ class EPKB_KB_Config_Controller {
 			'specs' => '',
 			'value' => $active_font_family,
 			'input_group_class' => '',
-			'options' => array_merge( array( 'Inherit' => 'Inherit' ) , array_combine( EPKB_Typography::get_google_fonts_family_list(), EPKB_Typography::get_google_fonts_family_list() ) ),
+			'options' => array_merge( array( 'inherit' => 'inherit' ) , array_combine( EPKB_Typography::get_google_fonts_family_list(), EPKB_Typography::get_google_fonts_family_list() ) ),
 		] );
 
 		$font_families = ob_get_clean();
@@ -140,22 +211,12 @@ class EPKB_KB_Config_Controller {
 	public static function handle_form_actions() {
 
 		$action = EPKB_Utilities::post( 'action' );
-		if ( empty( $action ) || ! in_array( $action, ['enable_editor_backend_mode', 'epkb_export_knowledge_base', 'epkb_import_knowledge_base', 'emkb_archive_knowledge_base_v2',
+		if ( empty( $action ) || ! in_array( $action, ['epkb_export_knowledge_base', 'epkb_import_knowledge_base', 'emkb_archive_knowledge_base_v2',
 														'emkb_activate_knowledge_base_v2', 'emkb_delete_knowledge_base_v2'] ) ) {
 			return [];
 		}
 
 		EPKB_Utilities::ajax_verify_nonce_and_capability_or_error_die( EPKB_Utilities::ADMIN_CAPABILITY );
-
-		if ( $action == 'enable_editor_backend_mode' ) {
-
-			$result = EPKB_Core_Utilities::add_kb_flag( 'editor_backend_mode' );
-			if ( is_wp_error( $result ) ) {
-				return [ 'error' => EPKB_Utilities::report_generic_error( 1 ) ];
-			}
-
-			return [ 'success' => esc_html__( 'Backend visual Editor enabled', 'echo-knowledge-base' ) ];
-		}
 
 		// retrieve KB ID we are saving
 		$kb_id = EPKB_Utilities::post( 'emkb_kb_id' );
@@ -221,7 +282,42 @@ class EPKB_KB_Config_Controller {
 			EPKB_Utilities::ajax_show_error_die( esc_html__( 'Invalid parameters. Please refresh your page.', 'echo-knowledge-base' ) );
 		}
 
-		// prepare article sidebar component priority
+		// if we are not showing all settings in UI because user is using FE Editor, we need to add some default values
+		if ( count( $new_config ) < 100 ) {
+
+			// get current KB configuration
+			$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+			if ( is_wp_error( $orig_config ) ) {
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 8, $orig_config ) );
+			}
+			// get current KB configuration from add-ons
+			$orig_config = EPKB_Core_Utilities::get_add_ons_config( $kb_id, $orig_config );
+			if ( $orig_config === false ) {
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 149 ) );
+			}
+			$new_config = array_merge( $orig_config, $new_config );
+
+			// update KB and add-ons configuration
+			EPKB_Core_Utilities::prepare_update_to_kb_configuration( $kb_id, $orig_config, $new_config, true );
+
+		// save all settings from backend
+		} else {
+
+			// prepare article sidebar component priority
+			$new_config['article_sidebar_component_priority'] = self::convert_ui_data_to_article_sidebar_component_priority( $new_config );
+
+			EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config );
+		}
+
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );
+	}
+
+	/**
+	 * In settings UI we display controls which represent individual component priority settings; while storing them as single combined setting (see 'article_sidebar_component_priority' in EPKB_KB_Config_Specs class)
+	 * @param $new_config
+	 * @return array
+	 */
+	public static function convert_ui_data_to_article_sidebar_component_priority( $new_config ) {
 		$article_sidebar_component_priority = array();
 		foreach( EPKB_KB_Config_Specs::get_sidebar_component_priority_names() as $component ) {
 			$article_sidebar_component_priority[ $component ] = '0';
@@ -244,17 +340,77 @@ class EPKB_KB_Config_Controller {
 			}
 		}
 		$article_sidebar_component_priority['toc_content'] = sanitize_text_field( $new_config['toc_content'] );
-		$new_config['article_sidebar_component_priority'] = $article_sidebar_component_priority;
 
-		EPKB_Core_Utilities::start_update_kb_configuration( $kb_id, $new_config );
+		return $article_sidebar_component_priority;
+	}
 
-		// save Visual Editor backend mode
-		$editor_backend_mode = $new_config['editor_backend_mode'] == '1';
-		$result = EPKB_Core_Utilities::update_kb_flag( 'editor_backend_mode', $editor_backend_mode );
-		if ( is_wp_error( $result ) ) {
-			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 417, $result ) );
+	/**
+	 * Save tools settings
+	 */
+	public function save_tools_settings() {
+
+		EPKB_Utilities::ajax_verify_nonce_and_admin_permission_or_error_die();
+
+		// get KB ID
+		$kb_id = (int)EPKB_Utilities::post( 'epkb_kb_id', 0 );
+		if ( ! EPKB_Utilities::is_positive_int( $kb_id ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 410 ) );
 		}
 
-		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );	
+		// get current KB configuration
+		$orig_config = epkb_get_instance()->kb_config_obj->get_kb_config( $kb_id, true );
+		if ( is_wp_error( $orig_config ) ) {
+			EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 8, $orig_config ) );
+		}
+
+		$new_config = array();
+
+		// Handle KB Main Page Title setting
+		if ( EPKB_Utilities::post( 'template_main_page_display_title' ) !== null ) {
+			$new_config['template_main_page_display_title'] = EPKB_Utilities::post( 'template_main_page_display_title' ) === 'on' ? 'on' : 'off';
+		}
+
+		// Handle Typography settings
+		$font_family = EPKB_Utilities::post( 'general_typography' );
+		if ( ! empty( $font_family ) && is_array( $font_family ) && isset( $font_family['font-family'] ) ) {
+			$new_config['general_typography'] = $orig_config['general_typography'];
+			$new_config['general_typography']['font-family'] = sanitize_text_field( $font_family['font-family'] );
+		}
+
+		// Handle KB Nickname
+		$kb_name = EPKB_Utilities::post( 'kb_name' );
+		if ( ! empty( $kb_name ) ) {
+			$new_config['kb_name'] = sanitize_text_field( $kb_name );
+		}
+
+		// Handle Frontend Editor Toggle
+		if ( EPKB_Utilities::post( 'frontend_editor_switch_visibility_toggle' ) !== null ) {
+			$new_config['frontend_editor_switch_visibility_toggle'] = EPKB_Utilities::post( 'frontend_editor_switch_visibility_toggle' ) === 'on' ? 'on' : 'off';
+		}
+
+		// save Modular Main Page custom CSS if defined
+		$custom_css = EPKB_Utilities::post( 'epkb_ml_custom_css' );
+		$new_config['modular_main_page_custom_css_toggle'] = 'off';
+		if ( ! empty( $custom_css ) ) {
+			$ml_custom_css = trim( wp_kses( $custom_css, [] ) );
+			$new_config['modular_main_page_custom_css_toggle'] = empty( $ml_custom_css ) ? 'off' : 'on';
+			if ( $new_config['modular_main_page_custom_css_toggle'] == 'on' ) {
+				$result = EPKB_Utilities::save_kb_option( $kb_id, 'epkb_ml_custom_css', $ml_custom_css );
+				if ( is_wp_error( $result ) ) {
+					EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 35, $result ) );
+				}
+			}
+		}
+
+		// If we have config changes to save
+		if ( ! empty( $new_config ) ) {
+			$new_config = array_merge( $orig_config, $new_config );
+			$result = epkb_get_instance()->kb_config_obj->update_kb_configuration( $kb_id, $new_config );
+			if ( is_wp_error( $result ) ) {
+				EPKB_Utilities::ajax_show_error_die( EPKB_Utilities::report_generic_error( 412, $result ) );
+			}
+		}
+
+		EPKB_Utilities::ajax_show_info_die( esc_html__( 'Configuration saved', 'echo-knowledge-base' ) );
 	}
 }

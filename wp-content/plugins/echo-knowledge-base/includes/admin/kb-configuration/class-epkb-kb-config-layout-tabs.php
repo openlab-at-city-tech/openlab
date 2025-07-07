@@ -47,7 +47,24 @@ class EPKB_KB_Config_Layout_Tabs {
 				'type'        => EPKB_Input_Filter::CHECKBOX,
 				'default'     => 'on'
 			),
-
+			'tab_nav_overflow_mode' => array(
+				'label'       => esc_html__( 'Overflow Mode', 'echo-knowledge-base' ),
+				'name'        => 'tab_nav_overflow_mode',
+				'type'        => EPKB_Input_Filter::SELECTION,
+				'options'     => array(
+					'rows' => esc_html__( 'Multiple Rows', 'echo-knowledge-base' ),
+					'drop_down' => esc_html__( 'Drop Down', 'echo-knowledge-base' )
+				),
+				'default'     => 'rows'
+			),
+			'tab_nav_max_tabs_per_row' => array( // Rows mode only
+				'label'       => esc_html__( 'Tabs Per Row', 'echo-knowledge-base' ),
+				'name'        => 'tab_nav_max_tabs_per_row',
+				'max'         => 10,
+				'min'         => 1,
+				'type'        => EPKB_Input_Filter::NUMBER,
+				'default'     => 6
+			),
 
 			/***  KB Main Page COLORS -> Category Tabs  ***/
 

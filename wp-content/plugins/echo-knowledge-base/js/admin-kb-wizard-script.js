@@ -91,6 +91,8 @@ jQuery(document).ready(function($) {
 		// Get currently active wizard
 		let current_wizard = $( this ).closest( '#epkb-config-wizard-content, .epkb-config-wizard-content' );
 
+		current_wizard.find( '.epkb-ordering-wizard-button-apply' ).show();
+
 		// Get the Step values
 		let nextStep = Number( current_wizard.find( '#epkb-wizard-button-next' ).val() );
 		let prevStep = Number( current_wizard.find( '#epkb-wizard-button-prev' ).val() );
@@ -126,6 +128,8 @@ jQuery(document).ready(function($) {
 
 		// Get currently active wizard
 		let current_wizard = $( this ).closest( '#epkb-config-wizard-content, .epkb-config-wizard-content' );
+
+		current_wizard.find( '.epkb-ordering-wizard-button-apply' ).hide();
 
 		// Get the Step values
 		let nextStep = Number( current_wizard.find( '#epkb-wizard-button-next' ).val() );
@@ -281,6 +285,7 @@ jQuery(document).ready(function($) {
 
 	/** Initial Settings */
 
+	/* do not change second step page on every change to the ordering
 	let wizard_ordering_preview = $( '.epkb-wizard-ordering-ordering-preview' );
 	if ( wizard_ordering_preview.length ) {
 		$( '#eckb-wizard-ordering__page' ).on( 'change', 'input', epkb_wizard_update_ordering_view );
@@ -292,7 +297,7 @@ jQuery(document).ready(function($) {
 		}
 		wizard_ordering_preview.addClass( 'epkb-wizard-ordering-ordering-preview--init' );
 		epkb_wizard_update_ordering_view();
-	});
+	}); */
 
 	$('#eckb-wizard-ordering__page #epkb-wizard-button-next').on('click', function(){
 		epkb_wizard_update_ordering_view( false );

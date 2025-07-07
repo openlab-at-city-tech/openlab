@@ -93,7 +93,14 @@ class EPKB_Tag_Archive_Setup {
 			return;
 		}
 
-		EPKB_Modular_Main_Page::search_module( $args['config'] );
+		// Use Article Page search if the main page has KB blocks or if the search source is set to article page
+		if ( EPKB_Block_Utilities::kb_main_page_has_kb_blocks( $args['config'] ) || $args['config']['archive_search_source'] == 'article_page' ) {
+			// Use article page search settings
+			EPKB_Articles_Setup::search_box( $args );
+		} else {
+			// Default behavior - use main page search settings
+			EPKB_Modular_Main_Page::search_module( $args['config'] );
+		}
 	}
 
 

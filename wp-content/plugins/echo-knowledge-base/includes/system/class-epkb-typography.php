@@ -1189,7 +1189,7 @@ class EPKB_Typography {
 
 	public static function get_google_fonts_family_list() {
 
-		if ( ! empty(self::$font_families) ) {
+		if ( ! empty( self::$font_families ) ) {
 			return self::$font_families;
 		}
 
@@ -1208,7 +1208,7 @@ class EPKB_Typography {
 	 * @return String
 	 */
 	public static function get_google_font_link( $font_name ) {
-		return empty(self::$font_data[$font_name]) ? '' : self::$font_data[$font_name];
+		return empty( self::$font_data[$font_name] ) ? '' : self::$font_data[$font_name];
 	}
 
 	/***

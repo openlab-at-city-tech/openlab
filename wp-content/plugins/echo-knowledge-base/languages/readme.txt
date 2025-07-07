@@ -1,10 +1,13 @@
 
-  I18n for Echo Knowledge Base
-  ============================
-  
-  Do not put custom translations here. They will be deleted when this plugin is updated !!!
-  
-  Instead please join our WP-Translations Community at
-  https://translate.wordpress.org/locale/en-ca/default/wp-plugins/echo-knowledge-base
+I18n for Echo Knowledge Base
+============================
 
-  More info at http://wp-translations.org/
+Important: Do not place custom translations here, as they will be deleted when the plugin is updated.
+
+You have the following options:
+
+a) Join our WP-Translations Community: https://translate.wordpress.org/projects/wp-plugins/echo-knowledge-base/
+   Learn more at http://wp-translations.org/
+
+b) Add your own translation file in your WordPress content directory:
+   \wp-content\languages\plugins\echo-knowledge-base-<your-language>.l10n.php or .mo

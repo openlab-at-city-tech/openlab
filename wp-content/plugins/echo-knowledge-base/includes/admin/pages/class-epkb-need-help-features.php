@@ -188,6 +188,18 @@ class EPKB_Need_Help_Features {
 		return [
 			[
 				'plugin'    => 'core',
+				'category'  => 'design',
+				'icon'      => 'epkbfa epkbfa-list-alt',
+				'name'      => esc_html__( 'AI Chat for Instant, Accurate Support', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Transform your knowledge base into an intelligent assistant that provides instant, accurate answers to user questions. ' .
+										'Our AI integration is powered by the leading WordPress AI plugin, AI Engine.', 'echo-knowledge-base' ),
+				'config'    => self::get_settings_link( $kb_id, 'ai-chat' ),
+				'docs'      => 'https://www.echoknowledgebase.com/documentation/ai-chat/',
+				'video'     => '',
+				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
+			],
+			[
+				'plugin'    => 'core',
 				'category'  => 'article-features',
 				'icon'      => '',
 				'name'      => esc_html__( 'Ordering of Articles and Categories', 'echo-knowledge-base' ),
@@ -320,7 +332,7 @@ class EPKB_Need_Help_Features {
 				'category'  => 'compatibility',
 				'icon'      => '',
 				'name'      => esc_html__( 'Multi-language Support', 'echo-knowledge-base' ),
-				'desc'      => esc_html__( 'Change or translate any text label on the front-end using any of 12 translated languages.', 'echo-knowledge-base' ),
+				'desc'      => esc_html__( 'Change or translate any text label on the front-end.', 'echo-knowledge-base' ),
 				'config'    => '',
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/set-multilingual-bilingual-site/',
 				'video'     => '',
@@ -351,7 +363,6 @@ class EPKB_Need_Help_Features {
 				'icon'      => '',
 				'name'      => esc_html__( 'Table of Contents (TOC)', 'echo-knowledge-base' ),
 				'desc'      => esc_html__( 'Generate a TOC based on article headings and let it float, or stick, beside the article.', 'echo-knowledge-base' ),
-				'switch'    => 'article_toc_enable',
 				'config'    => self::get_settings_link( $kb_id, 'settings', 'article-page', 'article-page-toc' ),
 				'docs'      => 'https://www.echoknowledgebase.com/documentation/table-of-content/',
 				'video'     => '',
@@ -550,17 +561,6 @@ class EPKB_Need_Help_Features {
 				'plugin'      => 'asea',
 				'category'    => 'search',
 				'box-heading' => esc_html__( 'Advanced Search Add-on', 'echo-knowledge-base' ),
-			],
-			[
-				'plugin'    => 'asea',
-				'category'  => 'search',
-				'icon'      => '',
-				'name'      => esc_html__( 'Pre-Made Search Box Designs', 'echo-knowledge-base' ),
-				'desc'      => esc_html__( 'Choose from five pre-made designs to show different looks and styles for the search box.', 'echo-knowledge-base' ),
-				'config'    => add_query_arg( array( 'action' => 'epkb_load_editor', 'preopen_zone' => 'search_box_zone' ), EPKB_KB_Handler::get_first_kb_main_page_url( $kb_config ) ),
-				'docs'      => '',
-				'video'     => '',
-				'min_capability'   => EPKB_Admin_UI_Access::get_context_required_capability( 'admin_eckb_access_frontend_editor_write' ),
 			],
 			[
 				'plugin'    => 'asea',
@@ -951,7 +951,7 @@ class EPKB_Need_Help_Features {
 			[
 				'plugin'      => 'crel',
 				'category'    => 'advanced',
-				'box-heading' => esc_html__( 'Creative Add-ons Plugin ', 'echo-knowledge-base' ),
+				'box-heading' => esc_html__( 'Creative Add-ons Plugin', 'echo-knowledge-base' ),
 			],
 			[
 				'plugin'    => 'core',
@@ -1085,7 +1085,7 @@ class EPKB_Need_Help_Features {
 			], */
 			[
 				'name'  => 'design',
-				'title' => esc_html__( 'KB Design', 'echo-knowledge-base' ),
+				'title' => esc_html__( 'KB General', 'echo-knowledge-base' ),
 				'icon'  => 'epkbfa epkbfa-paint-brush',
 			],
 			[

@@ -17,7 +17,7 @@ class EPKB_Articles_Index_Shortcode {
 		wp_enqueue_style( 'epkb-shortcodes' );
 
 		// allows to adjust the widget title
-		$title = empty($attributes['title']) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title'] ) ) );
+		$title = empty( $attributes['title'] ) ? '' : esc_html( wp_strip_all_tags( trim( $attributes['title'] ) ) );
 		$title = ( empty( $title ) ? esc_html__( 'Indexed Articles', 'echo-knowledge-base' ) : esc_html( $title ) );
 
 		// get add-on configuration
@@ -72,6 +72,11 @@ class EPKB_Articles_Index_Shortcode {
                         <div class="epkb-aid-section__body">
                             <ul class="epkb-aid-section__body__list-container">  <?php
                                 foreach ( $indexed_result['articles'] as $article_id => $article_title ) {
+
+									if ( ! EPKB_Utilities::is_article_allowed_for_current_user( $article_id ) ) {
+										continue;
+									}
+
                                     $article_url = get_permalink( $article_id );
                                     if ( empty( $article_url ) || is_wp_error( $article_url ) ) {
                                         continue;

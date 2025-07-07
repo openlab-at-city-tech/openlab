@@ -40,7 +40,7 @@ class EPKB_AI_Help_Sidebar {
 			return;
 		}
 
-		if ( EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' ) ) {
+		if ( ! EPKB_Core_Utilities::is_kb_flag_set( 'enable_legacy_open_ai' ) ) {
 			return;
 		}
 
@@ -58,7 +58,7 @@ class EPKB_AI_Help_Sidebar {
 			return;
 		}
 
-		if ( EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' ) ) {
+		if ( ! EPKB_Core_Utilities::is_kb_flag_set( 'enable_legacy_open_ai' ) ) {
 			return;
 		}
 
@@ -293,11 +293,11 @@ class EPKB_AI_Help_Sidebar {
                 <!-- Access to AI Help -->
                 <div class="epkb-ai-help-sidebar__settings-group"> <?php
 					EPKB_HTML_Elements::checkbox_toggle( [
-						'id'            => 'disable_openai',
-						'name'          => 'disable_openai',
-						'text'          => esc_html__( 'Disable AI Help', 'echo-knowledge-base' ),
+						'id'            => 'enable_legacy_open_ai',
+						'name'          => 'enable_legacy_open_ai',
+						'text'          => esc_html__( 'Enable AI Help', 'echo-knowledge-base' ),
 						'textLoc'       => 'left',
-						'checked'       => EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' ),
+						'checked'       => EPKB_Core_Utilities::is_kb_flag_set( 'enable_legacy_open_ai' ),
 					] ) ?>
                 </div>
 
@@ -339,7 +339,7 @@ class EPKB_AI_Help_Sidebar {
 			<div class="epkb-ai-help-sidebar__resources-container">
 
                 <div class="epkb-ai-help-sidebar__resources-left-col">
-                    <h3><?php esc_html_e( 'Knowledge Base Documentation', 'echo-knowledge-base' ); ?></h3>
+                    <h3><?php esc_html_e( 'Echo Knowledge Base Documentation', 'echo-knowledge-base' ); ?></h3>
                     <ul>
                         <li><a href="<?php echo esc_url('https://www.echoknowledgebase.com/documentation/ai-help-sidebar/'); ?>" target="_blank" rel="nofollow"><?php esc_html_e( 'Overview', 'echo-knowledge-base' ); ?></a></li>
                         <li><a href="<?php echo esc_url('https://www.echoknowledgebase.com/documentation/how-to-get-an-open-ai-key/'); ?>" target="_blank" rel="nofollow"><?php esc_html_e( 'How to get an OpenAI Key?', 'echo-knowledge-base' ); ?></a></li>
@@ -407,9 +407,9 @@ class EPKB_AI_Help_Sidebar {
 			</div>
 			<div class="epkb-ai-help-sidebar__feedback-input-wrap">
 				<div class="epkb-ai-help-sidebar__feedback-input-title">
-					<div class="epkb-ai-help-sidebar__feedback-input-title-text">
-                        <?php esc_html_e( 'Email', 'echo-knowledge-base' ); ?>
-                        <i><?php esc_html_e( '( Share your email to discuss your feedback. )', 'echo-knowledge-base' ); ?></i>
+					<div class="epkb-ai-help-sidebar__feedback-input-title-text">                        <?php
+						esc_html_e( 'Email', 'echo-knowledge-base' ); ?>
+                        <i><?php echo '( ' . esc_html__( 'Share your email to discuss your feedback.', 'echo-knowledge-base' ) . ' )'; ?></i>
                     </div>
 				</div>
 				<div class="epkb-ai-help-sidebar__feedback-input-container">
@@ -441,7 +441,7 @@ class EPKB_AI_Help_Sidebar {
 			return;
 		}
 
-		if ( EPKB_Core_Utilities::is_kb_flag_set( 'disable_openai' ) ) {
+		if ( ! EPKB_Core_Utilities::is_kb_flag_set( 'enable_legacy_open_ai' ) ) {
 			return;
 		}
 
@@ -478,16 +478,9 @@ class EPKB_AI_Help_Sidebar {
 				'type' => 'warning',
 		        'title' => esc_html__( 'AI Disclaimer and Warnings', 'echo-knowledge-base' ),
 		        'desc' => sprintf(
-		            wp_kses(
-		                __( 'Please read the <a href="%s" target="_blank">AI Disclaimer and Warnings</a> before using the AI features.', 'echo-knowledge-base' ),
-		                array(
-		                    'a' => array(
-		                        'href' => array(),
-		                        'target' => array(),
-		                    ),
-		                )
-		            ),
-		            esc_url( 'https://www.echoknowledgebase.com/ai-disclaimer-and-warnings/' )
+			                esc_html__( 'Please read the %s AI Disclaimer and Warnings %s before using the AI features.', 'echo-knowledge-base' ),
+							'<a href="https://www.echoknowledgebase.com/ai-disclaimer-and-warnings/" target="_blank">',
+							'</a>'
 		        ),
 		    )
 		);		?>

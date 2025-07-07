@@ -320,7 +320,7 @@ jQuery(document).ready(function($) {
 	$( document ).on( 'keypress', '.epkb-ai-help-sidebar__ai-input', function( e ) {
 
 		// Send request only for 'Enter' key
-		if ( e.which !== 13 ) {
+		if ( e.keyCode !== 13 && e.which !== 13 && e.key !== 'Enter' ) {
 			return;
 		}
 
@@ -446,7 +446,7 @@ jQuery(document).ready(function($) {
 			_wpnonce_epkb_ajax_action: epkb_ai_vars.nonce,
 			ai_action: 'epkb_ai_save_settings',
 			openai_api_key: openai_api_key,
-			disable_openai: $('input[name="disable_openai"]').prop('checked') ? 'on' : 'off'
+			enable_legacy_open_ai: $('input[name="enable_legacy_open_ai"]').prop('checked') ? 'on' : 'off'
 		}
 
 		epkb_send_ajax( postData, function( response ) {

@@ -326,7 +326,7 @@ jQuery(document).ready(function($) {
 		// Start progress bar
 		$bar.epkb('progress/clear_log');
 		$bar.epkb('progress/set', 0);
-		$bar.epkb('progress/add_log', { message: epkb_vars.msg_reading_posts });
+		//$bar.epkb('progress/add_log', { message: epkb_vars.msg_reading_posts });
 
 		let postData = {
 			_wpnonce_epkb_ajax_action: epkb_vars.nonce,

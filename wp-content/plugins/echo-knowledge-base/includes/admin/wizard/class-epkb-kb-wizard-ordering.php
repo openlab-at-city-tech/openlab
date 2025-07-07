@@ -110,7 +110,7 @@ class EPKB_KB_Wizard_Ordering {
 					<span class="epkb-wizard-button-next__text"><?php esc_html_e( 'Next', 'echo-knowledge-base' ); ?></span>
 					<span class="epkb-wizard-button-next__icon epkbfa epkbfa-caret-right"></span>
 				</button>
-				<button value="apply" id="epkb-wizard-button-apply" class="epkb-wizard-button epkb-wizard-button-apply"  data-wizard-type="ordering"><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
+				<button value='apply' id='epkb-wizard-button-apply' class='epkb-wizard-button epkb-wizard-button-apply epkb-ordering-wizard-button-apply' data-wizard-type='ordering' style='display: none;'><?php esc_html_e( 'Apply', 'echo-knowledge-base' ); ?></button>
 
 				<input type="hidden" id="_wpnonce_epkb_ajax_action" name="_wpnonce_epkb_ajax_action" value="<?php echo wp_create_nonce( "_wpnonce_epkb_ajax_action" ); //phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>">
 			</div>
@@ -178,7 +178,7 @@ class EPKB_KB_Wizard_Ordering {
 		$args = array_merge( $defaults, $args );
 
 		// there might be multiple classes
-		$classes = explode(' ', $args['class']);
+		$classes = explode( ' ', $args['class'] );
 		$class_string = '';
 		foreach( $classes as $class ) {
 			$class_string .= $class . '-content ';
@@ -186,7 +186,7 @@ class EPKB_KB_Wizard_Ordering {
 
 		$depends_escaped = '';
 
-		if ( isset($args['depends']) ) {
+		if ( isset( $args['depends'] ) ) {
 			$depends_escaped = "data-depends='" . htmlspecialchars( wp_json_encode( $args['depends'] ), ENT_QUOTES, 'UTF-8' ) . "'";
 		}		?>
 
@@ -194,9 +194,7 @@ class EPKB_KB_Wizard_Ordering {
 
 			if ( $args['option-heading'] ) {    ?>
 				<div class="eckb-wizard-option-heading">
-					<h4><?php esc_html_e( $args['option-heading'], 'echo-knowledge-base' ); ?>
-						<span class="epkbfa epkbfa-caret-right"></span>
-						<span class="epkbfa epkbfa-caret-down"></span>
+					<h4><?php echo esc_html( $args['option-heading'] ); ?>
 					</h4>
 					<span class="ep_font_icon_info option-info-icon"></span>
 				</div>            <?php
@@ -231,7 +229,7 @@ class EPKB_KB_Wizard_Ordering {
 			}
 
 			// Add content after Settings
-			if ( ! empty($args['addition_info']) ) {
+			if ( ! empty( $args['addition_info'] ) ) {
 				echo '<div class="eckb-wizard-default-note">' . esc_html( $args['addition_info'] ) . '</div>';
 			}		?>
 
@@ -243,7 +241,7 @@ class EPKB_KB_Wizard_Ordering {
 		 <div class="epkb-admin-dialog-box-loading">
 			 <div class="epkb-admin-dbl__header">
 				 <div class="epkb-admin-dbl-icon epkbfa epkbfa-hourglass-half"></div>
-				 <div class="epkb-admin-text"><?php esc_html_e( 'Loading...', 'echo-knowledge-base' ); ?></div>
+				 <div class="epkb-admin-text"><?php echo esc_html__( 'Loading', 'echo-knowledge-base' ) . '...'; ?></div>
 			 </div>
 		 </div>
 		 <div class="epkb-admin-dialog-box-overlay"></div> <?php
