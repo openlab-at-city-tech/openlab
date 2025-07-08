@@ -15,12 +15,6 @@ global $bp;
         <h1 class="entry-title mol-title">
             <span class="profile-name"><?php echo $bp->loggedin_user->fullname . '&rsquo;s'; ?> Profile</span>
             <span class="profile-type pull-right hidden-xs"><?php echo esc_html( $account_type ); ?></span>
-            <button data-target="#sidebar-mobile" class="mobile-toggle direct-toggle pull-right visible-xs" type="button">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
         </h1>
         <div class="clearfix visible-xs">
             <span class="profile-type pull-left"><?php echo esc_html( $account_type ); ?></span>
