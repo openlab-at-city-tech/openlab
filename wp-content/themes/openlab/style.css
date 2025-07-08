@@ -7828,7 +7828,7 @@ body.drawer-open {
   background: #dddddd;
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle .right-chevron svg {
-  height: 16px;
+  height: 14px;
 }
 @media (max-width: 767px) {
   .openlab-navbar-drawer button.flyout-submenu-toggle {
