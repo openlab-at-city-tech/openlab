@@ -2463,3 +2463,123 @@ function openlab_my_settings_submenu_items() {
 		],
 	];
 }
+
+/**
+ * Gets the submenu items for 'My Activity'.
+ *
+ * @return array
+ */
+function openlab_my_activity_submenu_items() {
+	$my_activity_url = bp_loggedin_user_url( bp_members_get_path_chunks( [ 'my-activity' ] ) );
+
+	$is_my_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
+
+	$current_type = isset( $_GET['type'] ) ? sanitize_text_field( wp_unslash( $_GET['type'] ) ) : '';
+
+	return [
+		'all'                         => [
+			'text'       => 'All',
+			'href'       => $my_activity_url,
+			'is_current' => $is_my_activity && ! $current_type,
+		],
+		'mine'                        => [
+			'text'       => 'Mine',
+			'href'       => add_query_arg( 'type', 'mine', $my_activity_url ),
+			'is_current' => $is_my_activity && 'mine' === $current_type,
+		],
+		'favorites'                   => [
+			'text'       => 'Favorites',
+			'href'       => add_query_arg( 'type', 'favorites', $my_activity_url ),
+			'is_current' => $is_my_activity && 'favorites' === $current_type,
+		],
+		'mentions'                    => [
+			'text'       => '@Mentions',
+			'href'       => add_query_arg( 'type', 'mentions', $my_activity_url ),
+			'is_current' => $is_my_activity && 'mentions' === $current_type,
+		],
+		'starred'                     => [
+			'text'       => 'Starred',
+			'href'       => add_query_arg( 'type', 'starred', $my_activity_url ),
+			'is_current' => $is_my_activity && 'starred' === $current_type,
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Friends'.
+ *
+ * @return array
+ */
+function openlab_my_friends_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	return [
+		'friend-list'                => [
+			'text'       => 'Friend List',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_friends() && ! bp_is_current_action( 'requests' ),
+		],
+		'friend-requests'            => [
+			'text'       => 'Requests Received',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
+			'class'      => $user_unread_counts['friend_requests'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_friends() && bp_is_current_action( 'requests' ),
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Messages'.
+ *
+ * @return array
+ */
+function openlab_my_messages_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	return [
+		'inbox'                       => [
+			'text'       => 'Inbox',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+			'class'      => $user_unread_counts['messages'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && ! bp_is_current_action( 'sentbox' ) && ! bp_is_current_action( 'compose' ),
+		],
+		'sent'                        => [
+			'text'       => 'Sent',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'sentbox' ),
+		],
+		'compose'                     => [
+			'text'       => 'Compose',
+			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'compose' ),
+		],
+	];
+}
+
+/**
+ * Gets the submenu items for 'My Invitations'.
+ *
+ * @return array
+ */
+function openlab_my_invitations_submenu_items() {
+	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
+
+	return [
+		'received-invitations'           => [
+			'text'  => 'Invitations Received',
+			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'groups', 'invites' ] ) ),
+			'class' => $user_unread_counts['group_invites'] ? 'has-unread' : '',
+			'is_current' => bp_is_my_profile() && bp_is_user_groups() && bp_is_current_action( 'invites' ) && ! bp_is_current_action( 'invite-anyone' ),
+		],
+		'send-invitations'               => [
+			'text' => 'Invite New Members',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invite-anyone' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_current_component( 'invite-anyone' ) && ! bp_is_current_action( 'sent-invites' ),
+		],
+		'sent-invitations'               => [
+			'text' => 'Sent Invitations',
+			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invite-anyone', 'sent-invites' ] ) ),
+			'is_current' => bp_is_my_profile() && bp_is_current_action( 'sent-invites' ),
+		],
+	];
+}

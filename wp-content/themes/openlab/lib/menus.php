@@ -288,26 +288,19 @@ function openlab_submenu_markup($type = '', $opt_var = NULL, $row_wrapper = true
 
     switch ($type) {
         case 'invitations':
-            $submenu_text = 'My Invitations<span aria-hidden="true">:</span> ';
-            $menu = openlab_my_invitations_submenu();
+			return openlab_profile_section_submenu( 'My Invitations', openlab_my_invitations_submenu_items() );
             break;
+
         case 'friends':
-            $friends_menu = openlab_my_friends_submenu(false);
-
-            $menu = $friends_menu['menu'] ?? '';
-            $submenu_text = $friends_menu['submenu_text'] ?? '';
-
-            $width = 'col-sm-24 has-menu-items is-mol-menu';
-
+			return openlab_profile_section_submenu( 'My Friends', openlab_my_friends_submenu_items() );
             break;
+
         case 'messages':
-            $submenu_text = 'My Messages<span aria-hidden="true">:</span> ';
-            $menu = openlab_my_messages_submenu();
+			return openlab_profile_section_submenu( 'My Messages', openlab_my_messages_submenu_items() );
             break;
 
         case 'my-activity':
-            $submenu_text = 'My Activity<span aria-hidden="true">:</span> ';
-            $menu = openlab_my_activity_submenu();
+			return openlab_profile_section_submenu( 'My Activity', openlab_my_activity_submenu_items() );
             break;
 
         case 'groups':
@@ -493,88 +486,39 @@ HTML;
     return $menu_mup;
 }
 
-//sub-menus for my-friends pages
-function openlab_my_friends_submenu($count = true) {
-    global $bp;
-    $menu_out = array();
-
-    if (!$dud = bp_displayed_user_domain()) {
-        $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
-    }
-    $request_ids = friends_get_friendship_request_user_ids(bp_loggedin_user_id());
-    $request_count = intval(count((array) $request_ids));
-
-    $my_friends = $dud . 'friends/';
-    $friend_requests = $dud . 'friends/requests/';
-
-    $action = $bp->current_action;
-    $item = $bp->current_item;
-    $component = $bp->current_component;
-
-    $count_span = '';
-    if ($count) {
-        $count_span = openlab_get_menu_count_mup($count);
-    }
-
-
-    if ($bp->is_item_admin) {
-        $menu_list = array(
-            $friend_requests => 'Requests Received ' . $count_span,
-                //'#' => $page_identify,
-        );
-    } else {
-        return '';
-    }
-
-    $submenu_class = 'no-deco';
-
-    if ($action !== 'my-friends') {
-        $submenu_class = 'display-as-menu-item';
-    }
-
-    $menu_out['menu'] = openlab_submenu_gen($menu_list);
-    $menu_out['submenu_text'] = '<a class="' . $submenu_class . '" href="' . $my_friends . '">My Friends</a>';
-
-    return $menu_out;
-}
-
-//sub-menus for my-messages pages
-function openlab_my_messages_submenu() {
-    global $bp;
-    if (!$dud = bp_displayed_user_domain()) {
-        $dud = bp_loggedin_user_domain(); // will always be the logged in user on my-*
-    }
-
-    $menu_list = array(
-        $dud . 'messages/inbox/'   => 'Inbox',
-        $dud . 'messages/sentbox/' => 'Sent',
-    );
-
-	if ( openlab_user_can_send_messages() ) {
-		$menu_list[ $dud . 'messages/compose/' ] = 'Compose';
+/**
+ * Submenu for My OpenLab profile subsections.
+ *
+ * @param string $title The title of the submenu section.
+ * @param array $items An array of submenu items, each with 'text' and 'is_current' keys.
+ * @return string HTML markup for the submenu.
+ */
+function openlab_profile_section_submenu( $title, $items ) {
+	$current_submenu_item_title = '';
+	foreach ( $items as $item ) {
+		if ( $item['is_current'] ) {
+			$current_submenu_item_title = $item['text'];
+			break;
+		}
 	}
 
-    return openlab_submenu_gen($menu_list);
-}
+	$menu  = '<ul class="nav nav-inline">';
+	$menu .= '<li class="submenu-item current-menu-item">' . esc_html( $current_submenu_item_title ) . '</li>';
+	$menu .= '</ul>';
 
-function openlab_my_activity_submenu() {
-	$base_url = bp_loggedin_user_domain() . 'my-activity';
+	return sprintf(
+		'<div class="profile-section-submenu">
+			<div class="submenu">
+				<div class="submenu-text pull-left">
+					<h2>%s<span aria-hidden="false">:</span></h2>
+				</div>
+				%s
+			</div>
+		</div>',
+		esc_html( $title ),
+		$menu
+	);
 
-	$current_item = $base_url;
-	if ( ! empty( $_GET['type'] ) && in_array( $_GET['type'], [ 'mine', 'favorites', 'mentions', 'starred' ], true ) ) {
-		$current_item .= '?type=' . $_GET['type'];
-
-	}
-
-	$menu_list = [
-		$base_url                     => 'All',
-		$base_url . '?type=mine'      => 'Mine',
-		$base_url . '?type=favorites' => 'Favorites',
-		$base_url . '?type=mentions'  => '@Mentions',
-		$base_url . '?type=starred'   => 'Starred',
-	];
-
-	return openlab_submenu_gen( $menu_list, false, $current_item  );
 }
 
 // Submenus for group discussion pages

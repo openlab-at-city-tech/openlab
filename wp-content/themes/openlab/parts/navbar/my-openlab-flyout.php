@@ -91,85 +91,42 @@ $settings_submenu = array_merge(
 $panels = [
 	'root'             => $root_panel,
 	'settings-submenu' => $settings_submenu,
-	'activity-submenu' => [
-		'my-activity-submenu-heading' => [
-			'text'  => 'My Activity',
-			'class' => 'flyout-subnav-heading',
+	'activity-submenu' => array_merge(
+		[
+			'my-activity-submenu-heading' => [
+				'text'  => 'My Activity',
+				'class' => 'flyout-subnav-heading',
+			],
 		],
-		'all'                         => [
-			'text' => 'All',
-			'href' => $my_activity_url,
+		openlab_my_activity_submenu_items(),
+	),
+	'friends-submenu'  => array_merge(
+		[
+			'my-friends-submenu-heading' => [
+				'text'  => 'My Friends',
+				'class' => 'flyout-subnav-heading',
+			],
 		],
-		'mine'                        => [
-			'text' => 'Mine',
-			'href' => add_query_arg( 'type', 'mine', $my_activity_url ),
+		openlab_my_friends_submenu_items()
+	),
+	'messages-submenu' => array_merge(
+		[
+			'my-messages-submenu-heading' => [
+				'text'  => 'My Messages',
+				'class' => 'flyout-subnav-heading',
+			],
 		],
-		'favorites'                   => [
-			'text' => 'Favorites',
-			'href' => add_query_arg( 'type', 'favorites', $my_activity_url ),
+		openlab_my_messages_submenu_items()
+	),
+	'invitations-submenu' => array_merge(
+		[
+			'my-invitations-submenu-heading' => [
+				'text'  => 'My Invitations',
+				'class' => 'flyout-subnav-heading',
+			],
 		],
-		'mentions'                    => [
-			'text' => '@Mentions',
-			'href' => add_query_arg( 'type', 'mentions', $my_activity_url ),
-		],
-		'starred'                     => [
-			'text' => 'Starred',
-			'href' => add_query_arg( 'type', 'starred', $my_activity_url ),
-		],
-	],
-	'friends-submenu'  => [
-		'my-friends-submenu-heading' => [
-			'text'  => 'My Friends',
-			'class' => 'flyout-subnav-heading',
-		],
-		'friend-list'                => [
-			'text' => 'Friend List',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
-		],
-		'friend-requests'            => [
-			'text'  => 'Requests Received',
-			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
-			'class' => $user_unread_counts['friend_requests'] ? 'has-unread' : '',
-		],
-	],
-	'messages-submenu' => [
-		'my-messages-submenu-heading' => [
-			'text'  => 'My Messages',
-			'class' => 'flyout-subnav-heading',
-		],
-		'inbox'                       => [
-			'text'  => 'Inbox',
-			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
-			'class' => $user_unread_counts['messages'] ? 'has-unread' : '',
-		],
-		'sent'                        => [
-			'text' => 'Sent',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
-		],
-		'compose'                     => [
-			'text' => 'Compose',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
-		],
-	],
-	'invitations-submenu' => [
-		'my-invitations-submenu-heading' => [
-			'text'  => 'My Invitations',
-			'class' => 'flyout-subnav-heading',
-		],
-		'received-invitations'           => [
-			'text'  => 'Invitations Received',
-			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
-			'class' => $user_unread_counts['group_invites'] ? 'has-unread' : '',
-		],
-		'send-invitations'               => [
-			'text' => 'Invite New Members',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone' ] ) ),
-		],
-		'sent-invitations'               => [
-			'text' => 'Sent Invitations',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites', 'invite-anyone', 'sent-invites' ] ) ),
-		],
-	],
+		openlab_my_invitations_submenu_items()
+	),
 ];
 
 

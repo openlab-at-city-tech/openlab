@@ -143,7 +143,11 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 		]
 	);
 
+	$is_activity = bp_is_my_profile() && bp_is_current_component( 'my-activity' );
 	$is_settings = bp_is_user_settings() || bp_is_user_change_avatar() || bp_is_user_profile_edit();
+	$is_friends  = bp_is_my_profile() && bp_is_friends_component();
+	$is_messages = bp_is_my_profile() && bp_is_messages_component();
+	$is_invites  = bp_is_my_profile() && ( bp_is_current_component( 'invite-anyone' ) || bp_is_groups_component() && ( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ) );
 
 	if ( is_user_logged_in() && openlab_is_my_profile() ) :
 		?>
@@ -152,9 +156,24 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 
 			<ul class="sidebar-nav clearfix">
 
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile my-profile"><a href="<?php echo $dud ?>">My Profile</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_activity() ); ?> mol-profile my-profile">
+					<a href="<?php echo $dud ?>">My Profile</a>
+				</li>
 
-				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_component( 'my-activity' ) ); ?> mol-profile my-activity"><a href="<?php echo $dud ?>my-activity">My Activity</a></li>
+				<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_component( 'my-activity' ) ); ?> mol-profile my-activity">
+					<a href="<?php echo $dud ?>my-activity">My Activity</a>
+
+					<?php if ( $is_activity ) : ?>
+						<ul class="sidebar-submenu">
+							<?php $activity_submenu_items = openlab_my_activity_submenu_items(); ?>
+							<?php foreach ( $activity_submenu_items as $item ) : ?>
+								<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+									<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
+				</li>
 
 				<li class="sq-bullet <?php openlab_selected_page_class( $is_settings ); ?> mol-settings my-settings">
 					<a href="<?php echo $dud . bp_get_settings_slug() ?>/">My Settings</a>
@@ -194,6 +213,17 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 					?>
 					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_friends() ); ?> mol-friends my-friends">
 						<a href="<?php echo $dud . bp_get_friends_slug() ?>/">My Friends <?php echo openlab_get_menu_count_mup( $request_count ); ?></a>
+
+						<?php if ( $is_friends ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $friends_submenu_items = openlab_my_friends_submenu_items(); ?>
+								<?php foreach ( $friends_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 					</li>
 				<?php endif; ?>
 
@@ -201,6 +231,17 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 					<?php $message_count = bp_get_total_unread_messages_count(); ?>
 					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_user_messages() ); ?> mol-messages my-messages">
 						<a href="<?php echo $dud . bp_get_messages_slug() ?>/inbox/">My Messages <?php echo openlab_get_menu_count_mup( $message_count ); ?></a>
+
+						<?php if ( $is_messages ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $messages_submenu_items = openlab_my_messages_submenu_items(); ?>
+								<?php foreach ( $messages_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 					</li>
 				<?php endif; ?>
 
@@ -211,6 +252,17 @@ function openlab_member_sidebar_menu( $mobile = false ) {
 					?>
 					<li class="sq-bullet <?php openlab_selected_page_class( bp_is_current_action( 'invites' ) || bp_is_current_action( 'sent-invites' ) || bp_is_current_action( 'invite-new-members' ) ); ?> mol-invites my-invites">
 						<a href="<?php echo $dud . bp_get_groups_slug() ?>/invites/">My Invitations <?php echo openlab_get_menu_count_mup( $invite_count ); ?></a>
+
+						<?php if ( $is_invites ) : ?>
+							<ul class="sidebar-submenu">
+								<?php $invitations_submenu_items = openlab_my_invitations_submenu_items(); ?>
+								<?php foreach ( $invitations_submenu_items as $item ) : ?>
+									<li class="<?php openlab_selected_page_class( $item['is_current'] ); ?>">
+										<a href="<?php echo esc_url( $item['href'] ); ?>"><?php echo esc_html( $item['text'] ); ?></a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 					</li>
 				<?php endif; ?>
 
