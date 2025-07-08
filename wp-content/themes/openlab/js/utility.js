@@ -783,20 +783,21 @@ OpenLab.utility = (function ($) {
 						button.setAttribute('aria-expanded', 'false');
 					} )
 
-					document.querySelectorAll('.flyout-menu').forEach(b => {
-						b.classList.remove('is-open');
-					});
-
-					document.querySelectorAll('.drawer-panel').forEach(panel => {
-						panel.classList.remove('active', 'previous');
-					});
-
 					if ( isOpen ) {
 						document.body.classList.remove( 'drawer-open' );
 						drawer.setAttribute('aria-hidden', 'true');
 						drawer.classList.remove('is-open');
 
+						setTimeout(() => {
+							document.querySelectorAll('.drawer-panel').forEach(panel => {
+								panel.classList.remove('active', 'previous', 'covered', 'is-leaving', 'is-open');
+							});
+						}, 1000);
 					} else {
+						document.querySelectorAll('.flyout-menu').forEach(menu => {
+							menu.classList.remove('is-open');
+						})
+
 						const menuId = toggle.getAttribute('aria-controls');
 						const menu = document.getElementById(menuId);
 						menu.classList.add('is-open');
@@ -867,9 +868,11 @@ OpenLab.utility = (function ($) {
 					document.querySelectorAll('.navbar-action-link-toggleable').forEach(el =>
 						el.classList.remove('is-open')
 					);
+
 					document.querySelectorAll('.flyout-menu').forEach(el =>
 						el.classList.remove('is-open')
 					);
+
 					document.querySelectorAll('.navbar-flyout-toggle').forEach(el =>
 						el.setAttribute('aria-expanded', 'false')
 					);

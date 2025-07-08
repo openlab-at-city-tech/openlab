@@ -21,8 +21,8 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 
 ?>
 
-<div class="flyout-menu" id="main-menu-flyout" role="menu">
-	<div class="drawer-panel-submenu">
+<div class="flyout-menu" id="main-menu-flyout" role="menu" data-default-panel="main-menu-root">
+	<div class="drawer-panel-submenu" id="main-menu-root">
 		<div class="flyout-heading">
 			<a href="<?php echo esc_url( home_url() ); ?>">
 				<span>OpenLab</span>
