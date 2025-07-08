@@ -888,6 +888,12 @@ OpenLab.utility = (function ($) {
 				}
 			});
 
+			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
+				link.addEventListener( 'click', function (e) {
+					link.classList.add( 'just-clicked' );
+				} )
+			} );
+
 			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
 				e.stopPropagation();
 			});
