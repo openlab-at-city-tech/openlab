@@ -27,17 +27,17 @@ $my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-up
 	</div>
 
 	<div class="navbar-action-links">
-		<div class="navbar-action-link navbar-action-link-search">
-			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'search' ) ); ?>">
-				<span class="screen-reader-text">Search</span>
-				<?php get_template_part( 'parts/navbar/search-icon' ); ?>
-			</a>
-		</div>
-
 		<div class="navbar-action-link navbar-action-link-help">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'blog/help/openlab-help' ) ); ?>">
 				<span class="screen-reader-text">Help</span>
 				<?php get_template_part( 'parts/navbar/help-icon' ); ?>
+			</a>
+		</div>
+
+		<div class="navbar-action-link navbar-action-link-search">
+			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'search' ) ); ?>">
+				<span class="screen-reader-text">Search</span>
+				<?php get_template_part( 'parts/navbar/search-icon' ); ?>
 			</a>
 		</div>
 
