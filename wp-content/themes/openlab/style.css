@@ -7408,11 +7408,6 @@ blockquote .h6 {
   color: #000000;
 }
 @media (max-width: 767px) {
-  .nav.nav-inline {
-    float: none;
-    clear: both;
-    width: 60%;
-  }
   .nav.nav-inline li {
     display: block;
     border-right: none;
