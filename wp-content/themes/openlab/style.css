@@ -7521,14 +7521,17 @@ blockquote .h6 {
 .openlab-navbar .navbar-action-link.navbar-action-link-toggleable {
   padding: 0 0;
 }
+.openlab-navbar .navbar-action-link .navbar-action-link-link {
+  display: flex;
+}
+.openlab-navbar .navbar-action-link .navbar-action-link-link.just-clicked .svg-stroke {
+  fill: #3ba49b;
+}
 .openlab-navbar button.navbar-flyout-toggle {
   background: none;
   border: none;
   color: #000000;
   padding: 0;
-}
-.openlab-navbar button.navbar-flyout-toggle[aria-expanded="true"].has-unread::after {
-  content: none;
 }
 .openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login {
   align-items: center;
@@ -7565,9 +7568,11 @@ blockquote .h6 {
   padding-bottom: 48px;
   /* Space for the footer */
 }
+.has-unread-upper-dot .icon-default,
 button.has-unread-upper-dot .icon-default {
   position: relative;
 }
+.has-unread-upper-dot .icon-default::after,
 button.has-unread-upper-dot .icon-default::after {
   background: #ec6348;
   content: '';
@@ -7616,20 +7621,23 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .navbar-action-link-toggleable button[aria-expanded="true"] .icon-default {
   display: none;
 }
+body.drawer-open {
+  overflow: hidden;
+}
 .openlab-navbar-drawer {
   --flyout-h-padding: 36px;
   --flyout-h-padding-mobile: 28px;
   --flyout-menu-item-height: 60px;
   background: #fff;
   border-left: 5px solid #3ba49b;
-  font-size: 18px;
+  font-size: 16px;
   position: fixed;
   right: 0;
   top: 80px;
   height: calc(100% - 80px);
   width: 356px;
   transform: translateX(100%);
-  transition: transform 0.3s ease-in-out;
+  transition: transform 0.6s ease-in-out;
   overflow-y: scroll;
   z-index: 500;
 }
@@ -7655,6 +7663,7 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   padding: 0;
   position: relative;
   visibility: hidden;
+  height: 100%;
 }
 .openlab-navbar-drawer .flyout-menu.is-open {
   display: block;
@@ -7839,15 +7848,32 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 }
 .openlab-navbar-drawer .drawer-panel {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  transition: transform 0.3s ease;
+  transition: none;
   transform: translateX(100%);
   pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  background-color: #fff;
+  isolation: isolate;
 }
 .openlab-navbar-drawer .drawer-panel.active {
   transform: translateX(0);
+  transition: transform 0.6s ease;
   pointer-events: auto;
+  z-index: 2;
+}
+.openlab-navbar-drawer .drawer-panel.active.drawer-panel-root {
+  transition: opacity 0.001s linear;
+}
+.openlab-navbar-drawer .drawer-panel.is-leaving {
+  transform: translateX(100%);
+  transition: transform 0.5s ease;
+  z-index: 2;
+  pointer-events: none;
 }
 .openlab-navbar-drawer .drawer-panel.previous {
   transform: translateX(-100%);
