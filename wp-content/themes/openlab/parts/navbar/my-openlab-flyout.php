@@ -127,8 +127,9 @@ $panels = [
 			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends' ] ) ),
 		],
 		'friend-requests'            => [
-			'text' => 'Requests Received',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
+			'text'  => 'Requests Received',
+			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'friends', 'requests' ] ) ),
+			'class' => $user_unread_counts['friend_requests'] ? 'has-unread' : '',
 		],
 	],
 	'messages-submenu' => [
@@ -137,8 +138,9 @@ $panels = [
 			'class' => 'flyout-subnav-heading',
 		],
 		'inbox'                       => [
-			'text' => 'Inbox',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+			'text'  => 'Inbox',
+			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
+			'class' => $user_unread_counts['messages'] ? 'has-unread' : '',
 		],
 		'sent'                        => [
 			'text' => 'Sent',
@@ -155,8 +157,9 @@ $panels = [
 			'class' => 'flyout-subnav-heading',
 		],
 		'received-invitations'           => [
-			'text' => 'Invitations Received',
-			'href' => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
+			'text'  => 'Invitations Received',
+			'href'  => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'invites' ] ) ),
+			'class' => $user_unread_counts['group_invites'] ? 'has-unread' : '',
 		],
 		'send-invitations'               => [
 			'text' => 'Invite New Members',
