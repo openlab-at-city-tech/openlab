@@ -19,7 +19,7 @@
 			</div>
 
 			<input class="btn btn-block link-btn semibold" type="submit" name="wp-submit" id="navbar-wp-submit" value="Sign In" tabindex="0" />
-			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( bp_get_root_domain() ); ?>" />
+			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( bp_get_requested_url() ); ?>" />
 		</form>
 	</div>
 
