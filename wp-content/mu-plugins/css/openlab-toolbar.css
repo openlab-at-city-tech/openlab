@@ -37,6 +37,7 @@
   background: white;
 }
 #wpadminbar li.admin-bar-menu-openlab-logo a {
+  display: flex;
   height: 32px;
 }
 #wpadminbar li.admin-bar-menu-openlab-logo svg {
