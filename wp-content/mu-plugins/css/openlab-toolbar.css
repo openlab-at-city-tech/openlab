@@ -10,7 +10,7 @@
 #wpadminbar {
   /* Prevent hover background on logo */
 }
-@media screen and (max-width: 782px) {
+@media screen and (max-width: 600px) {
   #wpadminbar {
     top: -46px;
   }

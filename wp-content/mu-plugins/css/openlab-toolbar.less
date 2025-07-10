@@ -1,6 +1,7 @@
 /* Toolbar / Top Nav */
 
 @block-editor-breakpoint-tablet: 782px;
+@block-editor-breakpoint-mobile: 600px;
 
 @adminbar-light-text-color: #f0f0f1;
 @adminbar-dark-text-color: #a7aaad;
@@ -18,7 +19,7 @@ body.wp-admin #wpadminbar {
 }
 
 #wpadminbar {
-	@media screen and (max-width: @block-editor-breakpoint-tablet) {
+	@media screen and (max-width: @block-editor-breakpoint-mobile) {
 		top: -46px;
 	}
 
