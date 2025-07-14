@@ -813,6 +813,7 @@ OpenLab.utility = (function ($) {
 						document.body.classList.add( 'drawer-open' );
 						drawer.setAttribute('aria-hidden', 'false');
 						drawer.classList.add('is-open');
+						drawer.scrollTop = 0;
 
 						toggle.setAttribute('aria-expanded', 'true');
 						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
@@ -958,6 +959,9 @@ OpenLab.utility = (function ($) {
 				const focusedElement = document.activeElement;
 				if (focusedElement && focusedElement.blur) focusedElement.blur();
 			}
+
+			const drawer = document.querySelector('.openlab-navbar-drawer');
+			drawer.scrollTop = 0;
 		},
 		setUpItemList: function() {
 			// + button on Related Links List Settings
