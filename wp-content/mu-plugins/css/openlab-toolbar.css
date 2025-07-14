@@ -101,6 +101,15 @@
     font-size: 18px;
   }
 }
+#wpadminbar #wp-admin-bar-user-info > a {
+  color: #f0f0f1;
+}
+#wpadminbar #wp-admin-bar-user-info > a:hover {
+  color: #72aee6;
+}
+#wpadminbar #wp-admin-bar-user-info > a:hover .username {
+  color: #72aee6;
+}
 #wpadminbar #wp-admin-bar-user-info .nicename {
   font-size: 11px;
 }
@@ -119,6 +128,9 @@
 }
 #wpadminbar #wp-admin-bar-my-openlab-link a {
   color: #f0f0f1;
+}
+#wpadminbar #wp-admin-bar-my-openlab-link a:hover {
+  color: #72aee6;
 }
 #wpadminbar #wp-admin-bar-user-actions.ab-submenu {
   margin-left: 72px;

@@ -124,6 +124,18 @@ body.wp-admin #wpadminbar {
 			}
 		}
 
+		& > a {
+			color: @adminbar-light-text-color;
+
+			&:hover {
+				color: #72aee6;
+
+				.username {
+					color: #72aee6;
+				}
+			}
+		}
+
 		.nicename {
 			font-size: 11px;
 		}
@@ -142,6 +154,10 @@ body.wp-admin #wpadminbar {
 
 		a {
 			color: @adminbar-light-text-color;
+
+			&:hover {
+				color: #72aee6;
+			}
 		}
 	}
 
