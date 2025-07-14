@@ -2272,7 +2272,7 @@ function openlab_get_user_unread_counts( $user_id ) {
 
 	$counts = [
 		'messages'           => $user_unread_messages_count,
-		'group_invites'      => $user_group_invites_count,
+		'group_invites'      => $user_group_invites_count['total'],
 		'friend_requests'    => $user_friend_request_count,
 		'connection_invites' => $user_connection_invites_count,
 	];
