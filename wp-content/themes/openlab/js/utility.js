@@ -878,6 +878,8 @@ OpenLab.utility = (function ($) {
 						el.setAttribute('aria-expanded', 'false')
 					);
 
+					document.body.classList.remove('drawer-open');
+
 					const drawer = document.querySelector('.openlab-navbar-drawer');
 					drawer.setAttribute('aria-hidden', 'true')
 					drawer.classList.remove('is-open');

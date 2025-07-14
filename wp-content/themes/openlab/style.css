@@ -7616,9 +7616,6 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 .navbar-action-link-toggleable button[aria-expanded="true"] .icon-default {
   display: none;
 }
-body.drawer-open {
-  overflow: hidden;
-}
 .openlab-navbar-drawer {
   --flyout-h-padding: 36px;
   --flyout-h-padding-mobile: 28px;
