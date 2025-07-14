@@ -787,11 +787,6 @@ OpenLab.utility = (function ($) {
 						document.body.classList.remove( 'drawer-open' );
 						drawer.setAttribute('aria-hidden', 'true');
 						drawer.classList.remove('is-open');
-
-						setTimeout(() => {
-							document.querySelectorAll('.drawer-panel').forEach(panel => {
-								panel.classList.remove('active', 'previous', 'covered', 'is-leaving', 'is-open');
-							});
 						}, 1000);
 					} else {
 						document.querySelectorAll('.flyout-menu').forEach(menu => {
