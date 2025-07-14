@@ -32,7 +32,7 @@ $root_panel = [
 if ( openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 	$root_panel['my-portfolio'] = [
 		'text' => 'My Portfolio',
-		'href' => openlab_get_user_portfolio_url( bp_loggedin_user_id() ),
+		'href' => openlab_get_user_portfolio_profile_url( bp_loggedin_user_id() ),
 	];
 }
 
