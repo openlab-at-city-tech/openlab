@@ -822,7 +822,7 @@ OpenLab.utility = (function ($) {
 
 			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
 			submenuToggles.forEach( toggle => {
-				toggle.addEventListener('pointerdown', function (e) {
+				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
 					const currentPanel = this.closest('.drawer-panel'); // ← currently visible panel
 					const targetId = this.getAttribute('data-target');
@@ -910,7 +910,10 @@ OpenLab.utility = (function ($) {
 			let fired = false;
 
 			const handler = () => {
-				if (fired) return;
+				if (fired) {
+					console.log('Handler already fired, exiting');
+					return;
+				}
 				fired = true;
 				el.removeEventListener('transitionend', handler);
 				callback();
@@ -925,11 +928,6 @@ OpenLab.utility = (function ($) {
 		switchToNavPanel: function(panelId, switchFocus, direction = 'forward', previousPanel = null) {
 			const targetPanel = document.getElementById(panelId);
 			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
-
-			if (previousPanel === targetPanel) {
-				console.log('same panel');
-				return;
-			}
 
 			// Animate out
 			if (previousPanel) {
@@ -949,7 +947,7 @@ OpenLab.utility = (function ($) {
 				OpenLab.utility.runAfterTransition(previousPanel, () => {
 					previousPanel.classList.remove('active', 'is-leaving', 'covered');
 					previousPanel.setAttribute('aria-hidden', 'true');
-				});
+				}, 600);
 			}
 
 			// Focus management

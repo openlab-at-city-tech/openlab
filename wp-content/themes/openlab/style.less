@@ -752,7 +752,8 @@ body.drawer-open {
 			z-index: 2;
 
 			&.drawer-panel-root {
-				transition: opacity 0.001s linear;
+				transform: none;
+				transition: none;
 			}
 		}
 
@@ -762,10 +763,6 @@ body.drawer-open {
 			transition: transform 0.5s ease;
 			z-index: 2;
 			pointer-events: none;
-		}
-
-		&.previous {
-			transform: translateX(-100%);
 		}
 	}
 
