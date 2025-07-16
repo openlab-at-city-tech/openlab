@@ -99,7 +99,7 @@ function openlab_clone_create_form_catcher() {
 				$clone_options = [
 					'draft_posts'        => isset( $_POST['clone-draft-posts'] ) && 'yes' === $_POST['clone-draft-posts'],
 					'publish_posts'      => isset( $_POST['clone-publish-posts'] ) && 'yes' === $_POST['clone-publish-posts'],
-					'set_dates_to_today' => isset( $_POST['clone-set-dates-to-today'] ) && 'yes' === $_POST['clone-set-dates-to-today'],
+					'set_dates_to_today' => 'no', // isset( $_POST['clone-set-dates-to-today'] ) && 'yes' === $_POST['clone-set-dates-to-today'],
 					'unused_media'       => isset( $_POST['clone-unused-media'] ) && 'yes' === $_POST['clone-unused-media'],
 				];
 

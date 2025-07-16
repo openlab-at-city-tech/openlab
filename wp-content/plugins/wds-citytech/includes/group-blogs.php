@@ -789,6 +789,7 @@ function wds_bp_group_meta() {
 													</label>
 												</fieldset>
 
+												<!--
 												<fieldset>
 													<legend>Set post and page publication dates to today (while maintaining the current publication order)?</legend>
 													<p class="advanced-cloning-options-gloss">
@@ -802,6 +803,7 @@ function wds_bp_group_meta() {
 														<input type="radio" name="clone-set-dates-to-today" value="no"> No: Keep the existing publication dates
 													</label>
 												</fieldset>
+												-->
 
 												<fieldset>
 													<legend>Clone unused media library items?</legend>
