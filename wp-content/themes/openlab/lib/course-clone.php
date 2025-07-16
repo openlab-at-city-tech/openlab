@@ -1150,6 +1150,9 @@ class Openlab_Clone_Course_Site {
 		}
 
 		// After handling 'publish_posts' option but before the deletion operations
+		// Record permalinks so that we can update after the date changes.
+		$new_permalinks = [];
+		$old_permalinks = [];
 		if ( $clone_options['set_dates_to_today'] && ! empty( $site_posts ) ) {
 			// Get current date
 			$today      = current_time( 'mysql' );
@@ -1176,6 +1179,8 @@ class Openlab_Clone_Course_Site {
 				);
 
 				foreach ( $posts_to_update as $index => $post ) {
+					$old_permalinks[ $post->ID ] = get_permalink( $post->ID );
+
 					// Calculate the new date, each post is separated by $seconds_per_post
 					$new_date = date( 'Y-m-d H:i:s', $start_time + ( $index * $seconds_per_post ) );
 
@@ -1199,6 +1204,8 @@ class Openlab_Clone_Course_Site {
 
 					// Clear post cache
 					clean_post_cache( $post->ID );
+
+					$new_permalinks[ $post->ID ] = get_permalink( $post->ID );
 				}
 			}
 		}
@@ -1233,6 +1240,27 @@ class Openlab_Clone_Course_Site {
 
 		// Replace the site URL in all post content.
 		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
+
+		// Update URLs in post content for each modified item.
+		foreach ( $old_permalinks as $post_id => $old_url ) {
+			if ( ! isset( $new_permalinks[ $post_id ] ) ) {
+				continue;
+			}
+
+			$new_url = $new_permalinks[ $post_id ];
+
+			$replace_query = $wpdb->prepare(
+				"UPDATE {$wpdb->posts}
+				SET post_content = REPLACE( post_content, %s, %s )
+				WHERE post_content LIKE %s",
+				$old_url,
+				$new_url,
+				'%' . $wpdb->esc_like( $old_url ) . '%'
+			);
+
+			// Replace in the content of all posts.
+			$replaced = $wpdb->query( $replace_query );
+		}
 
 		restore_current_blog();
 	}
