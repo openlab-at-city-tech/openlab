@@ -36,7 +36,7 @@ if ( openlab_user_has_portfolio( bp_loggedin_user_id() ) ) {
 	];
 } else {
 	$root_panel['my-portfolio'] = [
-		'text' => 'Create ' . openlab_get_portfolio_label( 'leading_a=1&case=upper' ),
+		'text' => 'Create a Portfolio',
 		'href' => openlab_get_portfolio_creation_url(),
 	];
 }
