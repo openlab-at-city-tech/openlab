@@ -7882,12 +7882,12 @@ html {
   font: normal normal normal 14px/1 FontAwesome;
 }
 /**for content placement on group sites and admin**/
-body.has-password-expiration-warning-notice .oplb-bs.navbar-default {
-  padding-bottom: 40px;
+body.has-password-expiration-warning-notice .page-table-row > .container-fluid {
+  margin-top: 40px;
 }
 @media (max-width: 600px) {
-  body.has-password-expiration-warning-notice .oplb-bs.navbar-default {
-    padding-bottom: 80px;
+  body.has-password-expiration-warning-notice .page-table-row > .container-fluid {
+    margin-top: 60px;
   }
 }
 body.adminbar-special {
