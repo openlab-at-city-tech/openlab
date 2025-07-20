@@ -2582,3 +2582,19 @@ function openlab_my_invitations_submenu_items() {
 		],
 	];
 }
+
+/**
+ * When a user cannot send messages, redirect away from Compose page.
+ */
+function openlab_redirect_from_compose() {
+	if ( ! bp_is_user_messages() || ! bp_is_current_action( 'compose' ) ) {
+		return;
+	}
+
+	if ( openlab_user_can_send_messages() ) {
+		return;
+	}
+
+	bp_core_redirect( bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ) );
+}
+add_action( 'bp_screens', 'openlab_redirect_from_compose', 5 );
