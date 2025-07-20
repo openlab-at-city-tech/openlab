@@ -38,6 +38,13 @@ do_action( 'bp_before_member_settings_template' ); ?>
 							<?php while ( bp_profile_fields() ) : ?>
 								<?php bp_the_profile_field(); ?>
 
+								<?php
+								if ( bp_xprofile_get_meta( bp_get_the_profile_field_id(), 'field', 'is_legacy_social_media_field' ) ) {
+									// Skip legacy social media fields.
+									continue;
+								}
+								?>
+
 								<?php $field_ids[] = bp_get_the_profile_field_id(); ?>
 
 								<div class="privacy-panel-option">
