@@ -756,6 +756,10 @@ OpenLab.utility = (function ($) {
 				const fileInput = avatarUploadForm.querySelector( 'input[type="file"]' );
 				const submitButton = avatarUploadForm.querySelector( 'input[type="submit"]' );
 
+				if ( ! submitButton ) {
+					return;
+				}
+
 				if ( fileInput.value ) {
 					submitButton.removeAttribute( 'disabled' );
 				} else {
