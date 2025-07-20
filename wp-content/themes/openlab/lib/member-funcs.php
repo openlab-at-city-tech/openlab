@@ -2530,7 +2530,7 @@ function openlab_my_friends_submenu_items() {
 function openlab_my_messages_submenu_items() {
 	$user_unread_counts = openlab_get_user_unread_counts( bp_loggedin_user_id() );
 
-	return [
+	$items = [
 		'inbox'                       => [
 			'text'       => 'Inbox',
 			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'inbox' ] ) ),
@@ -2542,12 +2542,17 @@ function openlab_my_messages_submenu_items() {
 			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'sentbox' ] ) ),
 			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'sentbox' ),
 		],
-		'compose'                     => [
+	];
+
+	if ( openlab_user_can_send_messages() ) {
+		$items['compose'] = [
 			'text'       => 'Compose',
 			'href'       => bp_loggedin_user_url( bp_members_get_path_chunks( [ 'messages', 'compose' ] ) ),
 			'is_current' => bp_is_my_profile() && bp_is_user_messages() && bp_is_current_action( 'compose' ),
-		],
-	];
+		];
+	}
+
+	return $items;
 }
 
 /**
