@@ -1238,11 +1238,27 @@ class Openlab_Clone_Course_Site {
 			$this->delete_orphaned_attachments();
 		}
 
+		$touched_post_ids = [];
+
+		$posts_containing_source_site_url = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT ID FROM {$wpdb->posts} WHERE post_content LIKE %s",
+				'%' . $wpdb->esc_like( $source_site_url ) . '%'
+			)
+		);
+
+		$touched_post_ids = array_merge( $touched_post_ids, $posts_containing_source_site_url );
+
 		// Replace the site URL in all post content.
-		$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )", $source_site_url, $dest_site_url ) );
+		$wpdb->query(
+			$wpdb->prepare(
+				"UPDATE {$wpdb->posts} SET post_content = REPLACE( post_content, %s, %s )",
+				$source_site_url,
+				$dest_site_url
+			)
+		);
 
 		// Update URLs in post content for each modified item.
-		$touched_post_ids = [];
 		foreach ( $old_permalinks as $post_id => $old_url ) {
 			if ( ! isset( $new_permalinks[ $post_id ] ) ) {
 				continue;
