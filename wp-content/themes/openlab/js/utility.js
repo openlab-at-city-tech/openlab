@@ -842,7 +842,7 @@ OpenLab.utility = (function ($) {
 					e.preventDefault();
 					const currentPanel = this.closest('.drawer-panel');
 					const targetId = this.getAttribute('data-back');
-					OpenLab.utility.switchToNavPanel(targetId, true, 'backward', currentPanel);
+					OpenLab.utility.switchToNavPanel(targetId, false, 'backward', currentPanel);
 				});
 
 				toggle.addEventListener('keydown', function (e) {
