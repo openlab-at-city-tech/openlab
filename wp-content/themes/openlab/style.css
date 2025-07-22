@@ -7673,7 +7673,7 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
   line-height: var(--flyout-menu-item-height);
 }
 .openlab-navbar-drawer .flyout-menu li.my-openlab-logout {
-  font-weight: 700;
+  font-weight: 700 !important;
 }
 .openlab-navbar-drawer .flyout-menu li.my-openlab-logout a {
   align-items: center;

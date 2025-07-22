@@ -19,6 +19,12 @@ if ( is_user_logged_in() ) {
 
 $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 
+$all_nav_links['my-openlab-logout'] = [
+	'text'  => 'Sign Out',
+	'url'   => wp_logout_url(),
+	'class' => 'my-openlab-logout',
+];
+
 ?>
 
 <div class="flyout-menu" id="main-menu-flyout" role="menu" data-default-panel="main-menu-root">
@@ -33,7 +39,8 @@ $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 				<?php
 				$li_classes = [ 'drawer-item' ];
 				if ( isset( $link['class'] ) ) {
-					$li_classes += explode( ' ', $link['class'] );
+					$custom_li_classes = explode( ' ', $link['class'] );
+					$li_classes = array_merge( $li_classes, $custom_li_classes );
 				}
 
 				$li_class = implode( ' ', array_map( 'sanitize_html_class', $li_classes ) );
