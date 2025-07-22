@@ -7818,7 +7818,7 @@ svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle:focus,
 .openlab-navbar-drawer button.flyout-submenu-toggle:hover {
-  background: #dddddd;
+  background-color: #f0f0f0;
 }
 .openlab-navbar-drawer button.flyout-submenu-toggle .right-chevron svg {
   height: 14px;
