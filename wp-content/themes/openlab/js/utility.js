@@ -283,8 +283,6 @@ OpenLab.utility = (function ($) {
 
 				var width = OpenLab.utility.getScrollBarWidth();
 
-				console.log( 'width', width );
-
 				$( '.eo-fullcalendar .fc-row.fc-widget-header' ).wrap( "<div class='fc-header-wrapper'></div>" );
 
 				$( '.eo-fullcalendar .fc-day-grid, .eo-fullcalendar .fc-header-wrapper' ).css(
@@ -371,7 +369,6 @@ OpenLab.utility = (function ($) {
 			$( '#home-new-member-wrap' ).css( 'visibility', 'visible' ).hide().fadeIn(
 				700,
 				function () {
-					console.log( 'openLab', OpenLab );
 					OpenLab.truncation.truncateOnTheFly( false, true );
 
 				}
@@ -628,8 +625,6 @@ OpenLab.utility = (function ($) {
 				'click',
 				function () {
 
-					console.log( 'click nav' );
-
 					dataLayer.push(
 						{
 							'event': 'openlab.click',
@@ -772,9 +767,13 @@ OpenLab.utility = (function ($) {
 		},
 		setUpNav: function() {
 			const drawer = document.querySelector('.openlab-navbar-drawer');
+
+			// Handling the drawer toggle button.
 			document.querySelectorAll('.navbar-flyout-toggle').forEach(toggle => {
 				toggle.addEventListener('click', (e) => {
 					e.preventDefault();
+
+					const isKeyboardEvent = e.detail === 0;
 
 					const isOpen = toggle.getAttribute('aria-expanded') === 'true';
 
@@ -801,9 +800,8 @@ OpenLab.utility = (function ($) {
 						menu.classList.add('is-open');
 
 						const defaultPanelId = menu.getAttribute('data-default-panel');
-						if ( defaultPanelId ) {
-							const defaultPanel = document.getElementById(defaultPanelId);
-
+						const defaultPanel = defaultPanelId ? document.getElementById( defaultPanelId ) : null;
+						if ( defaultPanel ) {
 							defaultPanel.classList.add('active');
 							defaultPanel.setAttribute('aria-hidden', 'false');
 						}
@@ -815,27 +813,31 @@ OpenLab.utility = (function ($) {
 
 						toggle.setAttribute('aria-expanded', 'true');
 						toggle.closest( '.navbar-action-link-toggleable' ).classList.add( 'is-open' );
+
+						// If this is a keyboard event, focus the first focusable element in the default panel.
+						if ( isKeyboardEvent ) {
+							const firstFocusable = defaultPanel.querySelector('.drawer-list button, .drawer-list a');
+							if (firstFocusable) {
+								firstFocusable.focus();
+							}
+						}
 					}
 				});
 			});
 
+			// Handling flyout submenus.
 			const submenuToggles = document.querySelectorAll('.flyout-submenu-toggle');
 			submenuToggles.forEach( toggle => {
+				const targetId = toggle.getAttribute('data-target');
+
 				toggle.addEventListener('click', function (e) {
 					e.preventDefault();
-					const currentPanel = this.closest('.drawer-panel'); // ← currently visible panel
-					const targetId = this.getAttribute('data-target');
-					OpenLab.utility.switchToNavPanel(targetId, false, 'forward', currentPanel);
-				});
-
-				toggle.addEventListener('keydown', function (e) {
-					if (e.key === 'Enter' || e.key === ' ') {
-						e.preventDefault();
-						OpenLab.utility.switchToNavPanel( this.getAttribute('data-target'), true );
-					}
+					const isKeyboardEvent = e.detail === 0;
+					OpenLab.utility.switchToNavPanel( targetId, isKeyboardEvent, 'forward', this.closest('.drawer-panel') );
 				});
 			});
 
+			// Handling back toggles in flyout submenus.
 			const backToggles = document.querySelectorAll('.flyout-subnav-back');
 			backToggles.forEach( toggle => {
 				toggle.addEventListener('click', function (e) {
@@ -857,6 +859,7 @@ OpenLab.utility = (function ($) {
 				menu.hidden = true;
 			});
 
+			// Close flyout menus when clicking outside.
 			document.addEventListener('click', function (e) {
 				const nav = document.querySelector('.openlab-navbar');
 				const flyoutContainer = document.querySelector('.openlab-navbar-drawer');
@@ -892,12 +895,14 @@ OpenLab.utility = (function ($) {
 				}
 			});
 
+			// Adding the just-clicked class to non-toggleable links.
 			document.querySelectorAll( 'a.navbar-action-link-link' ).forEach( link => {
 				link.addEventListener( 'click', function (e) {
 					link.classList.add( 'just-clicked' );
 				} )
 			} );
 
+			// Prevent touchmove on the drawer to avoid scrolling the page.
 			document.querySelector('.openlab-navbar-drawer').addEventListener('touchmove', function (e) {
 				e.stopPropagation();
 			});
@@ -927,6 +932,7 @@ OpenLab.utility = (function ($) {
 			}
 		},
 		switchToNavPanel: function(panelId, switchFocus, direction = 'forward', previousPanel = null) {
+
 			const targetPanel = document.getElementById(panelId);
 			previousPanel = previousPanel || document.querySelector('.drawer-panel.active');
 
@@ -954,7 +960,11 @@ OpenLab.utility = (function ($) {
 			// Focus management
 			if (switchFocus) {
 				const firstFocusable = targetPanel.querySelector('.drawer-list button, .drawer-list a');
-				if (firstFocusable) firstFocusable.focus();
+				if (firstFocusable) {
+						OpenLab.utility.runAfterTransition(targetPanel, () => {
+							firstFocusable.focus();
+						});
+					}
 			} else {
 				const focusedElement = document.activeElement;
 				if (focusedElement && focusedElement.blur) focusedElement.blur();
@@ -1267,9 +1277,6 @@ OpenLab.utility = (function ($) {
 							$( '.cameraContents .cameraContent.cameracurrent .camera_content a' ).on(
 								'click',
 								function () {
-
-									console.log( 'click link' );
-
 									dataLayer.push(
 										{
 											'event': 'openlab.click',
