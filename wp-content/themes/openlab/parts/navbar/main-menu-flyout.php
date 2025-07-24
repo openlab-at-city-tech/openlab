@@ -19,11 +19,13 @@ if ( is_user_logged_in() ) {
 
 $all_nav_links = array_merge( $all_nav_links, openlab_get_global_nav_links() );
 
-$all_nav_links['my-openlab-logout'] = [
-	'text'  => 'Sign Out',
-	'url'   => wp_logout_url(),
-	'class' => 'my-openlab-logout',
-];
+if ( is_user_logged_in() ) {
+	$all_nav_links['my-openlab-logout'] = [
+		'text'  => 'Sign Out',
+		'url'   => wp_logout_url(),
+		'class' => 'my-openlab-logout',
+	];
+}
 
 ?>
 
