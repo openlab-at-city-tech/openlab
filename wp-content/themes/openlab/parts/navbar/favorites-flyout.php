@@ -17,10 +17,6 @@ $user_favorites = OpenLab\Favorites\Favorite\Query::get_results(
 	]
 );
 
-if ( ! $user_favorites ) {
-	return;
-}
-
 ?>
 
 <div class="flyout-menu" id="favorites-flyout" role="menu">
@@ -30,13 +26,21 @@ if ( ! $user_favorites ) {
 			<span>My Favorites</span>
 		</div>
 		<ul class="drawer-list">
-			<?php foreach ( $user_favorites as $user_favorite ) : ?>
+			<?php if ( $user_favorites ) : ?>
+				<?php foreach ( $user_favorites as $user_favorite ) : ?>
+					<li class="drawer-item">
+						<a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
+							<?php echo esc_html( $user_favorite->get_group_name() ); ?>
+						</a>
+					</li>
+				<?php endforeach; ?>
+			<?php else : ?>
 				<li class="drawer-item">
-					<a href="<?php echo esc_attr( $user_favorite->get_group_url() ); ?>">
-						<?php echo esc_html( $user_favorite->get_group_name() ); ?>
+					<a href="https://openlab.citytech.cuny.edu/blog/help/adding-a-course-project-or-club-to-favorites/">
+						Learn how to add favorites!
 					</a>
 				</li>
-			<?php endforeach; ?>
+			<?php endif; ?>
 		</ul>
 	</div>
 </div>
