@@ -197,12 +197,15 @@ function openlab_help_categories_menu($items, $args) {
 
                 // see if this is the current menu item; if not, this could be a post,
                 // so we'll check against an array of cat ids for this post
+				$is_current = false;
                 if ($highlight_active_state) {
                     if ($parent_term !== false && $help_cat->term_id == $parent_term->term_id) {
                         $help_classes .= " current-menu-item";
+						$is_current    = true;
                     } else if ($post->post_type == 'help') {
                         if (in_array($help_cat->term_id, $post_cats_array)) {
                             $help_classes .= " current-menu-item";
+							$is_current    = true;
                         }
                     }
                 }
@@ -214,37 +217,40 @@ function openlab_help_categories_menu($items, $args) {
 
                 $help_cat_list .= '<li class="' . $help_classes . '"><a href="' . get_term_link($help_cat) . '">' . $help_cat->name . '</a>';
 
-                // check for child terms
-                $child_cat_check = get_term_children($help_cat->term_id, 'help_category');
+				// Child terms only show for the currently-selected top-level category.
+				if ( $is_current && $highlight_active_state ) {
+					// check for child terms
+					$child_cat_check = get_term_children($help_cat->term_id, 'help_category');
 
-                // list child terms, if any
-                if (count($child_cat_check) > 0) {
-                    $help_cat_list .= '<ul>';
+					// list child terms, if any
+					if (count($child_cat_check) > 0) {
+						$help_cat_list .= '<ul>';
 
-                    $child_args = array(
-                        'orderby'    => 'term_order',
-                        'hide_empty' => false,
-                        'parent'     => $help_cat->term_id
-                    );
-                    $child_cats = get_terms('help_category', $child_args);
-                    foreach ($child_cats as $child_cat) {
+						$child_args = array(
+							'orderby'    => 'term_order',
+							'hide_empty' => false,
+							'parent'     => $help_cat->term_id
+						);
+						$child_cats = get_terms('help_category', $child_args);
+						foreach ($child_cats as $child_cat) {
 
-                        $child_classes = "help-cat menu-item";
-                        if ($highlight_active_state) {
-                            if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
-                                $child_classes .= " current-menu-item";
-                            } else if ($post->post_type == 'help') {
-                                if (in_array($child_cat->term_id, $post_cats_array)) {
-                                    $child_classes .= " current-menu-item";
-                                }
-                            }
-                        }
+							$child_classes = "help-cat menu-item";
+							if ($highlight_active_state) {
+								if ($current_term !== false && $child_cat->term_id == $current_term->term_id) {
+									$child_classes .= " current-menu-item";
+								} else if ($post->post_type == 'help') {
+									if (in_array($child_cat->term_id, $post_cats_array)) {
+										$child_classes .= " current-menu-item";
+									}
+								}
+							}
 
-                        $help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
-                    }
+							$help_cat_list .= '<li class="' . $child_classes . '"><a href="' . get_term_link($child_cat) . '">' . $child_cat->name . '</a></li>';
+						}
 
-                    $help_cat_list .= '</ul>';
-                }
+						$help_cat_list .= '</ul>';
+					}
+				}
 
                 $help_cat_list .= '</li>';
             }
