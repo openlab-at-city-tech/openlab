@@ -2201,40 +2201,52 @@ function openlab_private_comments_fallback( WP_Comment_Query $query ) {
 	$meta_query     = [];
 	$active_plugins = (array) get_option( 'active_plugins', [] );
 
+	$post_id = $query->query_vars['post_id'] ?? 0;
+
 	if ( ! in_array( 'wp-grade-comments/wp-grade-comments.php', $active_plugins, true ) ) {
-		$meta_query[] = [
-			'relation' => 'OR',
-			[
-				'key'   => 'olgc_is_private',
-				'value' => '0',
+		remove_action( 'pre_get_comments', __FUNCTION__ );
+		$private_ids = get_comments( [
+			'meta_query' => [
+				[
+					'key'   => 'olgc_is_private',
+					'value' => '1',
+				],
 			],
-			[
-				'key' => 'olgc_is_private',
-				'compare' => 'NOT EXISTS',
-			],
-		];
+			'status' => 'any',
+			'fields' => 'ids',
+			'post_id' => $post_id,
+		] );
+		add_action( 'pre_get_comments', __FUNCTION__ );
+
+		if ( ! empty( $private_ids ) ) {
+			$query->query_vars['comment__not_in'] = array_merge(
+				(array) $query->query_vars['comment__not_in'],
+				array_unique( array_map( 'absint', $private_ids ) )
+			);
+		}
 	}
 
 	if ( ! in_array( 'openlab-private-comments/openlab-private-comments.php', $active_plugins, true ) ) {
-		$meta_query[] = [
-			'relation' => 'OR',
-			[
-				'key'   => 'ol_is_private',
-				'value' => '0',
+		remove_action( 'pre_get_comments', __FUNCTION__ );
+		$private_ids = get_comments( [
+			'meta_query' => [
+				[
+					'key'   => 'ol_is_private',
+					'value' => '1',
+				],
 			],
-			[
-				'key' => 'ol_is_private',
-				'compare' => 'NOT EXISTS',
-			],
-		];
-	}
+			'status' => 'any',
+			'fields' => 'ids',
+			'post_id' => $post_id,
+		] );
+		add_action( 'pre_get_comments', __FUNCTION__ );
 
-	if ( count( $meta_query ) > 1 ) {
-		$meta_query['relation'] = 'AND';
-	}
-
-	if ( ! empty( $meta_query ) ) {
-		$query->meta_query = new WP_Meta_Query( $meta_query );
+		if ( ! empty( $private_ids ) ) {
+			$query->query_vars['comment__not_in'] = array_merge(
+				(array) $query->query_vars['comment__not_in'],
+				array_unique( array_map( 'absint', $private_ids ) )
+			);
+		}
 	}
 }
 add_action( 'pre_get_comments', 'openlab_private_comments_fallback' );
