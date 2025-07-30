@@ -122,6 +122,8 @@ function openlab_group_privacy_settings($group_type) {
 				<p>You can choose to show a link to your Portfolio on your OpenLab Profile page by checking the box below. If your Display Name is different from your real name but you want to use your real name on your Portfolio, you may wish to leave this unchecked.</p>
 
 				<input name="portfolio-profile-link" id="portfolio-profile-link-toggle" type="checkbox" name="portfolio-profile-link-toggle" value="1" /> <label for="portfolio-profile-link-toggle">Show link to my <?php echo esc_html( $group_type_name_uc ); ?> on my public OpenLab Profile</label>
+
+				<?php wp_nonce_field( 'portfolio_profile_link', 'portfolio-profile-link-nonce', false ); ?>
 			</div>
 		</div>
 	<?php endif; ?>
