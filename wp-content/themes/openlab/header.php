@@ -4,6 +4,16 @@
         <meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="noodp,noydir" />
+
+		<?php
+		if ( bp_displayed_user_id() ) {
+			$displayed_user_type = openlab_get_user_member_type( bp_displayed_user_id() );
+			if ( ! in_array( $displayed_user_type, [ 'faculty', 'staff' ], true ) ) {
+				echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
+			}
+		}
+		?>
+
         <link rel="Shortcut Icon" href="<?php echo get_stylesheet_directory_uri() ?>/images/favicon.ico" type="image/x-icon" />
         <title><?php bloginfo('name'); ?></title>
 
