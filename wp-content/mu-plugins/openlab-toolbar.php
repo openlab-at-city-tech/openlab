@@ -116,7 +116,7 @@ class OpenLab_Admin_Bar {
 	 * Adds the Sign In menu.
 	 */
 	public function add_sign_in_menu( $wp_admin_bar ) {
-		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.png' );
+		$my_openlab_logo_url = home_url( 'wp-content/mu-plugins/img/my-openlab-icon.svg' );
 		$openlab_logo_url    = home_url( 'wp-content/mu-plugins/img/openlab-logo-notext.svg' );
 
 		$title = "<span>Sign In</span> <img class='my-openlab-logo visible-xs' src='$my_openlab_logo_url' alt='OpenLab at City Tech' />";
