@@ -7578,9 +7578,10 @@ button.has-unread-upper-dot .icon-default::after {
 svg.navbar-icon {
   height: 27px;
   fill: none;
-  stroke: #1e1e1e;
+  stroke-width: 0px;
 }
 svg.navbar-icon.navbar-icon-bookmark {
+  stroke: #1e1e1e;
   stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 2px;
