@@ -7581,6 +7581,7 @@ svg.navbar-icon {
   stroke-width: 0px;
 }
 svg.navbar-icon.navbar-icon-bookmark {
+  height: 25px;
   stroke: #1e1e1e;
   stroke-linecap: round;
   stroke-linejoin: round;
