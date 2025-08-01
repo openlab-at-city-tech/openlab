@@ -43,6 +43,8 @@ function openlab_group_privacy_settings($group_type) {
         ));
     }
 
+	$new_group_status = openlab_get_default_group_privacy_setting( $group_type );
+
     ?>
     <div class="panel panel-default">
         <div class="panel-heading semibold"><?php _e('Privacy Settings', 'buddypress'); ?><?php if ($bp->current_action == 'admin' || $bp->current_action == 'create' || openlab_is_portfolio()): ?>: <?php echo $group_type_name_uc ?> Profile<?php endif; ?></div>
@@ -55,12 +57,6 @@ function openlab_group_privacy_settings($group_type) {
                 <p class="privacy-settings-tag-c">These settings affect how others view your <?php echo esc_html( $group_type_name_uc ); ?> Profile.</p>
             <?php endif; ?>
 
-            <?php
-            $new_group_status = bp_get_new_group_status();
-            if ( ! $new_group_status ) {
-                $new_group_status = 'public';
-            }
-            ?>
             <div class="row">
                 <div class="col-sm-24">
                     <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
@@ -2715,4 +2711,64 @@ function openlab_filter_groups_query_for_resources( $sql, $sql_parts, $args ) {
 	}
 
 	return $sql;
+}
+
+/**
+ * Gets the default privacy setting for a group.
+ *
+ * @param string $group_type Group type slug.
+ * @param int    $user_id    Optional. User ID. Defaults to the current user ID.
+ * @return string
+ */
+function openlab_get_default_group_privacy_setting( $group_type, $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	$member_type = openlab_get_user_member_type( $user_id );
+
+	switch ( $group_type ) {
+		case 'course':
+			return 'private';
+
+		case 'project':
+		case 'club':
+		case 'portfolio':
+		default:
+			if ( 'faculty' === $member_type || 'staff' === $member_type ) {
+				return 'public';
+			}
+
+			return 'private';
+	}
+}
+
+/**
+ * Gets the default privacy setting for a group site.
+ *
+ * @param string $group_type Group type slug.
+ * @param int    $user_id    Optional. User ID. Defaults to the current user ID.
+ * @return int
+ */
+function openlab_get_default_group_site_privacy_setting( $group_type, $user_id = 0 ) {
+	if ( ! $user_id ) {
+		$user_id = get_current_user_id();
+	}
+
+	$member_type = openlab_get_user_member_type( $user_id );
+
+	switch ( $group_type ) {
+		case 'course':
+			return 0;
+
+		case 'project':
+		case 'club':
+		case 'portfolio':
+		default:
+			if ( 'faculty' === $member_type || 'staff' === $member_type ) {
+				return 1;
+			}
+
+			return 0;
+	}
 }

@@ -1480,6 +1480,10 @@ function ra_copy_blog_page( $group_id ) {
 				}
 				restore_current_blog();
 
+				// Set default blog_privacy based on group type.
+				$default_blog_privacy = openlab_get_default_group_site_privacy_setting( $group_id );
+				update_blog_option( $new_id, 'blog_public', $default_blog_privacy );
+
 			} else {
 				$msg = $id->get_error_message();
 			}
