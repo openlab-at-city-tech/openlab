@@ -3905,3 +3905,14 @@ function openlab_delete_user_portfolio_on_account_deletion( $user_id ) {
 	groups_delete_group( $portfolio_group_id );
 }
 add_action( 'bp_core_pre_delete_account', 'openlab_delete_user_portfolio_on_account_deletion', 5 );
+
+/**
+ * Remove the PHP outdated nag.
+ */
+add_action(
+	'wp_dashboard_setup',
+	function() {
+		remove_meta_box( 'dashboard_php_nag', 'dashboard', 'normal' );
+	},
+	100
+);
