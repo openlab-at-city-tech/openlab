@@ -7549,10 +7549,6 @@ blockquote .h6 {
 .openlab-navbar button.navbar-flyout-toggle.navbar-flyout-toggle-login .navbar-icon-my-openlab {
   height: 25px;
 }
-.openlab-navbar button.navbar-flyout-toggle:hover,
-.openlab-navbar .navbar-action-link-link:hover {
-  opacity: 0.7;
-}
 .openlab-navbar .navbar-action-link-toggleable {
   align-items: center;
   display: flex;
@@ -7574,31 +7570,72 @@ button.has-unread-upper-dot .icon-default::after {
   position: absolute;
   top: 0;
   right: 0;
-  width: 7px;
-  height: 7px;
+  width: 8px;
+  height: 8px;
   display: block;
   border-radius: 50%;
 }
 svg.navbar-icon {
   height: 27px;
-}
-svg.navbar-icon .svg-bg {
-  fill: transparent;
-}
-svg.navbar-icon .svg-stroke {
-  fill: #333;
+  fill: none;
+  stroke: #1e1e1e;
 }
 svg.navbar-icon.navbar-icon-bookmark {
-  height: 21px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2px;
 }
-svg.navbar-icon.navbar-icon-bookmark .svg-stroke {
-  stroke: #333;
-  fill: transparent;
+svg.navbar-icon.navbar-icon-close {
+  stroke: #0c9486;
 }
-@media (max-width: 767px) {
-  svg.navbar-icon {
-    height: 22px;
-  }
+svg.navbar-icon.navbar-icon-close .fill-1 {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3px;
+}
+svg.navbar-icon.navbar-icon-menu {
+  height: 22px;
+  fill: #1e1e1e;
+}
+svg.navbar-icon.navbar-icon-search .fill-2,
+svg.navbar-icon.navbar-icon-help .fill-2 {
+  fill: #1e1e1e;
+}
+svg.navbar-icon.navbar-icon-my-openlab {
+  fill-rule: evenodd;
+}
+svg.navbar-icon.navbar-icon-my-openlab .fill-2 {
+  fill: #1e1e1e;
+}
+button.navbar-flyout-toggle:hover svg.navbar-icon,
+.navbar-action-link-link:hover svg.navbar-icon {
+  fill: none;
+  stroke: #0c9486;
+}
+button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-menu,
+.navbar-action-link-link:hover svg.navbar-icon.navbar-icon-menu {
+  fill: #0c9486;
+}
+button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-my-openlab .fill-2,
+.navbar-action-link-link:hover svg.navbar-icon.navbar-icon-my-openlab .fill-2,
+button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-search .fill-2,
+.navbar-action-link-link:hover svg.navbar-icon.navbar-icon-search .fill-2,
+button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-help .fill-2,
+.navbar-action-link-link:hover svg.navbar-icon.navbar-icon-help .fill-2 {
+  fill: #0c9486;
+}
+button.navbar-flyout-toggle:hover svg.navbar-icon.navbar-icon-close,
+.navbar-action-link-link:hover svg.navbar-icon.navbar-icon-close {
+  opacity: 0.7;
+}
+.navbar-action-link-current svg.navbar-icon {
+  fill: #e0f5f1;
+  stroke: #0c9486;
+}
+.navbar-action-link-current svg.navbar-icon.navbar-icon-my-openlab .fill-2,
+.navbar-action-link-current svg.navbar-icon.navbar-icon-search .fill-2,
+.navbar-action-link-current svg.navbar-icon.navbar-icon-help .fill-2 {
+  fill: #0c9486;
 }
 .navbar-action-link-toggleable .icon-close,
 .navbar-action-link-toggleable .icon-default {

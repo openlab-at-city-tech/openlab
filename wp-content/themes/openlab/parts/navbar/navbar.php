@@ -3,6 +3,10 @@ $navbar_nav_menu_items = openlab_get_global_nav_links();
 
 $my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-upper-dot' : '';
 
+$help_is_current_class       = is_singular( 'help' ) || is_tax( 'help_category' ) ? 'navbar-action-link-current' : '';
+$search_is_current_class     = is_page( 'search' ) ? 'navbar-action-link-current' : '';
+$my_openlab_is_current_class = bp_is_my_profile() ? 'navbar-action-link-current' : '';
+
 ?>
 
 <nav class="openlab-navbar" role="navigation">
@@ -27,14 +31,14 @@ $my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-up
 	</div>
 
 	<div class="navbar-action-links">
-		<div class="navbar-action-link navbar-action-link-help">
+		<div class="navbar-action-link navbar-action-link-help <?php echo esc_attr( $help_is_current_class ); ?>">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'blog/help/openlab-help' ) ); ?>">
 				<span class="screen-reader-text">Help</span>
 				<?php get_template_part( 'parts/navbar/help-icon' ); ?>
 			</a>
 		</div>
 
-		<div class="navbar-action-link navbar-action-link-search">
+		<div class="navbar-action-link navbar-action-link-search <?php echo esc_attr( $search_is_current_class ); ?>">
 			<a class="navbar-action-link-link" href="<?php echo esc_url( home_url( 'search' ) ); ?>">
 				<span class="screen-reader-text">Search</span>
 				<?php get_template_part( 'parts/navbar/search-icon' ); ?>
@@ -50,7 +54,7 @@ $my_openlab_has_unread_class = openlab_user_has_unread_counts() ? 'has-unread-up
 				</button>
 			</div>
 
-			<div class="navbar-action-link navbar-action-link-my-openlab navbar-action-link-toggleable">
+			<div class="navbar-action-link navbar-action-link-my-openlab navbar-action-link-toggleable <?php echo esc_attr( $my_openlab_is_current_class ); ?>">
 				<span class="screen-reader-text">My OpenLab</span>
 				<button class="navbar-flyout-toggle <?php echo esc_attr( $my_openlab_has_unread_class ); ?>" aria-haspopup="true" aria-expanded="false" aria-controls="my-openlab-flyout">
 					<span class="screen-reader-text">My OpenLab</span>
