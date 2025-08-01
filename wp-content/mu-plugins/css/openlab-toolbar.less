@@ -201,10 +201,17 @@ body.wp-admin #wpadminbar {
 		position: static;
 	}
 
+	color: #fff;
+
 	a {
 		padding: 0;
 		display: inline-block;
 		font-weight: 700;
+		color: #fff;
+
+		&:hover {
+			color: #72aee6;
+		}
 	}
 
 	& > a {
@@ -238,13 +245,29 @@ body.wp-admin #wpadminbar {
 		gap: 12px;
 	}
 
+	@media screen and (min-width: @block-editor-breakpoint-tablet) {
+		.openlab-sign-in-info-signin,
+		.openlab-sign-in-info-signin > a {
+			line-height: 1.4em;
+			font-size: 12px;
+		}
 
-	.openlab-sign-in-info-signin,
-	.openlab-sign-in-info-signin > a,
-	.openlab-sign-in-info-sitename {
-		font-weight: normal;
-		line-height: 1.4em;
-		font-size: 14px;
+		.openlab-sign-in-info-sitename a {
+			font-size: 13px;
+		}
+	}
+
+	@media screen and (max-width: @block-editor-breakpoint-tablet) {
+		font-size: 12px;
+
+		.openlab-sign-in-info-signin,
+		.openlab-sign-in-info-signin > a {
+			font-size: 18px;
+		}
+
+		.openlab-sign-in-info-sitename a {
+			font-size: 18px;
+		}
 	}
 
 	.openlab-sign-in-info-signin {
@@ -280,7 +303,7 @@ body.wp-admin #wpadminbar {
 	}
 
 	.openlab-sign-in-info-tagline {
-		font-size: 12px;
+		font-size: 9px;
 		line-height: 1.4em;
 	}
 
@@ -300,7 +323,7 @@ body.wp-admin #wpadminbar {
 
 		.openlab-sign-in-info-tagline {
 			color: @adminbar-dark-text-color;
-			font-size: 11px !important;
+			font-size: 12px !important;
 		}
 
 		.openlab-sign-in-info {
@@ -309,11 +332,11 @@ body.wp-admin #wpadminbar {
 
 		.openlab-sign-up-info-sign-up {
 			color: @adminbar-dark-text-color;
-			font-size: 11px !important;
+			font-size: 13px !important;
 
 			a {
 				color: @adminbar-light-text-color;
-				font-size: 11px !important;
+				font-size: 13px !important;
 			}
 		}
 	}

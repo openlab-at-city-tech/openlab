@@ -143,7 +143,7 @@ class OpenLab_Admin_Bar {
 			'<div class="openlab-sign-in-info-container">
 				<div class="openlab-sign-in-info-logo"><span class="openlab-sign-in-info-logo-wrap"><img src="%s" alt="OpenLab at City Tech" /></span></div>
 				<div class="openlab-sign-in-info-text">
-					<div class="openlab-sign-in-info-sitename">OpenLab at City Tech</div>
+					<div class="openlab-sign-in-info-sitename"><a href="https://openlab.citytech.cuny.edu">OpenLab at City Tech</a></div>
 					<div class="openlab-sign-in-info-tagline">A place to learn, work, and share</div>
 
 					<div class="openlab-sign-in-info-signin">
