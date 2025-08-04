@@ -93,11 +93,11 @@ function openlab_group_privacy_settings($group_type) {
 	$selected_privacy = 1;
 	if ( $site_id ) {
 		$has_site         = true;
-		$selected_privacy = null; // Will be determined in openlab_site_privacy_settings_markup().
+		$selected_privacy = bp_is_group_create() ? openlab_get_default_group_site_privacy_setting( $group_type ) : null; // Will be determined in openlab_site_privacy_settings_markup().
 	} else {
 		$clone_steps      = groups_get_groupmeta( bp_get_new_group_id(), 'clone_steps', true );
 		$has_site         = is_array( $clone_steps ) && ! empty( $clone_steps ) && in_array( 'site', $clone_steps, true );
-		$selected_privacy = 1;
+		$selected_privacy = openlab_get_default_group_site_privacy_setting( $group_type );
 	}
 	?>
 
@@ -640,14 +640,22 @@ function openlab_get_active_semesters() {
 }
 
 /**
- * Markup for groupblog privacy settings
+ * Markup for groupblog privacy settings.
+ *
+ * @param int   $site_id          The ID of the site for which to display the privacy settings.
+ * @param mixed $selected_privacy The selected privacy setting, or null to use the current
+ *                                site's setting. Note that non-null values will take
+ *                                precedence over the current site's setting, behavior which
+ *                                is needed during group creation.
  */
 function openlab_site_privacy_settings_markup( $site_id = 0, $selected_privacy = null ) {
 	if ( ! $site_id ) {
 		$site_id     = get_current_blog_id();
 		$blog_public = $selected_privacy;
-	} else {
+	} elseif ( null === $selected_privacy ) {
 		$blog_public = get_blog_option( $site_id, 'blog_public' );
+	} else {
+		$blog_public = $selected_privacy;
 	}
 
 	$group_type = openlab_get_current_group_type( 'case=upper' );
@@ -2731,8 +2739,10 @@ function openlab_get_default_group_privacy_setting( $group_type, $user_id = 0 ) 
 		case 'course':
 			return 'private';
 
-		case 'project':
 		case 'club':
+			return 'public';
+
+		case 'project':
 		case 'portfolio':
 		default:
 			if ( 'faculty' === $member_type || 'staff' === $member_type ) {
