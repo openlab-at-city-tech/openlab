@@ -494,3 +494,25 @@ add_filter( 'show_admin_bar', 'openlab_remove_admin_bar' );
 function openlab_is_resources_directory() {
 	return is_page( 'resources' );
 }
+
+/**
+ * Whether to show a noindex meta tag for the current page.
+ *
+ * @return bool
+ */
+function openlab_show_noindex_meta_tag() {
+	$show = false;
+
+	if ( bp_displayed_user_id() ) {
+		$displayed_user_type = openlab_get_user_member_type( bp_displayed_user_id() );
+		if ( ! in_array( $displayed_user_type, [ 'faculty', 'staff' ], true ) ) {
+			$show = true;
+		}
+	}
+
+	if ( bp_is_group() ) {
+		$show = (bool) groups_get_groupmeta( bp_get_current_group_id(), 'show_noindex_meta_tag' );
+	}
+
+	return $show;
+}

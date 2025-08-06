@@ -6,11 +6,8 @@
         <meta name="robots" content="noodp,noydir" />
 
 		<?php
-		if ( bp_displayed_user_id() ) {
-			$displayed_user_type = openlab_get_user_member_type( bp_displayed_user_id() );
-			if ( ! in_array( $displayed_user_type, [ 'faculty', 'staff' ], true ) ) {
-				echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
-			}
+		if ( openlab_show_noindex_meta_tag() ) {
+			echo '<meta name="robots" content="noindex, nofollow" />' . "\n";
 		}
 		?>
 
