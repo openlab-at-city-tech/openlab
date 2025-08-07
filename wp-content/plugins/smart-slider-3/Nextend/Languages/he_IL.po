@@ -1,0 +1,6639 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2023-04-08 13:56+0300\n"
+"PO-Revision-Date: 2023-04-09 19:26+0300\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 1.8.13\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-KeywordsList: ;n2_;n2_e;n2_n:1,2;n2_en:1,2;n2_x:1,2c;n2_ex:1,2c\n"
+"X-Poedit-Flags-xgettext: --no-location\n"
+"Last-Translator: \n"
+"Language: he_IL\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: Framework/Asset/Builder/cache\n"
+
+msgid "CURL disabled in your php.ini configuration. Please enable it!"
+msgstr "CURL מושבת בתצורת php.ini שלך. אנא הפעל אותו!"
+
+msgid "Unable to contact with the licensing server, please try again later!"
+msgstr "לא ניתן ליצור קשר עם שרת הרישוי, נסה שוב מאוחר יותר!"
+
+msgid "You are not allowed to upload!"
+msgstr "אין לך הרשאה להעלות!"
+
+msgid "Folder is missing!"
+msgstr "התיקייה חסרה!"
+
+msgid "Menu item"
+msgstr "פריט תפריט"
+
+msgid "You are not authorised to view this resource."
+msgstr "אין לך הרשאה לצפות במשאב זה."
+
+#, php-format
+msgid "Missing parameter: %s"
+msgstr "פרמטר חסר: %s"
+
+msgid "Database error"
+msgstr "שם בסיס־ נתונים"
+
+msgid "Security token mismatch"
+msgstr "אי - התאמה של אסימון אבטחה"
+
+msgid "Unexpected error"
+msgstr "שגיאה לא צפויה"
+
+msgid "Set is not editable"
+msgstr "לא ניתן לערוך את ההגדרה"
+
+msgid "Visual do not exists"
+msgstr "התמונה לא קיימת"
+
+msgid "Not editable"
+msgstr "לא ניתן לעריכה"
+
+msgid "Security token mismatch. Please refresh the page!"
+msgstr "אי - התאמה של אסימון אבטחה. רענן את הדף!"
+
+#, php-format
+msgid ""
+"If you see this message after the repair database process, please "
+"%1$scontact us%2$s with the log:"
+msgstr ""
+"אם אתה רואה הודעה זו לאחר תהליך תיקון מסד הנתונים, אנא %1$sפנה אלינו%2$s עם "
+"היומן:"
+
+msgid "Contact your server host and ask them to fix this for you!"
+msgstr "צור קשר עם השרת המארח שלך ולבקש מהם לתקן את זה בשבילך!"
+
+msgid "Unexpected database error."
+msgstr "שגיאת מסד נתונים לא צפויה."
+
+msgid "Try to repair database"
+msgstr "נסה לתקן את מסד הנתונים"
+
+msgid "Font manager"
+msgstr "מנהל הגופנים"
+
+msgid "Text"
+msgstr "טקסט"
+
+msgid "Hover"
+msgstr "מעבר"
+
+msgid "Heading"
+msgstr "כותרת ראשית"
+
+msgid "Link"
+msgstr "קישור"
+
+msgid "Button"
+msgstr "כפתור"
+
+msgid "Paragraph"
+msgstr "פיסקה"
+
+msgid "Dot"
+msgstr "נקודה"
+
+msgid "Active"
+msgstr "פעיל"
+
+msgid "List"
+msgstr "הצגת רשימה של ביקורות אחרונות."
+
+msgid "Highlight"
+msgstr "הדגשה"
+
+msgctxt "Default font"
+msgid "Roboto,Arial"
+msgstr "רובוטו, אריאל"
+
+msgid "Font settings"
+msgstr "הגדרות גופן"
+
+msgid "Clear tab"
+msgstr "נקה כרטיסייה"
+
+msgid "Family"
+msgstr "משפחה"
+
+msgid "Color"
+msgstr "צבע"
+
+msgid "Size"
+msgstr "גודל"
+
+msgid "Font weight"
+msgstr "משקל פונט"
+
+msgid "Decoration"
+msgstr "קישוט"
+
+msgid "Line height"
+msgstr "גובה-שורה"
+
+msgid "Text align"
+msgstr "יישור טקסט"
+
+msgid "Letter spacing"
+msgstr "המרווח בין התווים"
+
+msgid "Word spacing"
+msgstr "ריווח מילים"
+
+msgid "Transform"
+msgstr "שינוי צורה (Transform)"
+
+msgid "None"
+msgstr "בחר"
+
+msgid "Capitalize"
+msgstr "אותיות גדולות"
+
+msgid "Uppercase"
+msgstr "אותיות רישיות"
+
+msgid "Lowercase"
+msgstr "אותיות קטנות"
+
+msgid "Text shadow"
+msgstr "צל טקסט"
+
+msgid "Preview"
+msgstr "צפייה מוקדמת"
+
+msgid "Frontend"
+msgstr "חזית"
+
+msgid "You can load Google Fonts on the frontend."
+msgstr "ניתן לטעון את Google Fonts בממשק הקצה."
+
+msgid "Save fonts locally"
+msgstr "שמירת גופנים מקומיים"
+
+msgid ""
+"You can store the used Google Fonts on your server. This way all Google "
+"Fonts will load from your own domain."
+msgstr ""
+"תוכל לאחסן את גופני Google המשמשים בשרת שלך. בדרך זו, כל הגופנים של Google "
+"ייטענו מהדומיין שלך."
+
+msgid "Backend"
+msgstr "קצה אחורי"
+
+msgid "You can load Google Fonts in the backend."
+msgstr "ניתן לטעון את Google Fonts בממשק הקצה."
+
+msgid "Style"
+msgstr "עיצוב"
+
+msgctxt "Font style"
+msgid "Italic"
+msgstr "נטוי"
+
+msgid "Normal"
+msgstr "רגיל"
+
+msgid "Choose"
+msgstr "בחירה"
+
+msgid "Orientation"
+msgstr "אוריינטציה"
+
+msgid "Portrait"
+msgstr "אופקי"
+
+msgid "Landscape"
+msgstr "אופקי ‪(Landscape)"
+
+msgid "Mobile"
+msgstr "מובייל"
+
+msgid "Large mobile"
+msgstr "מובייל גדול"
+
+msgid "Tablet"
+msgstr "טאבלט"
+
+msgid "Large tablet"
+msgstr "טאבלט גדול"
+
+msgid "Desktop"
+msgstr "דסקטופ"
+
+msgid "Large desktop"
+msgstr "שולחן עבודה גדול"
+
+msgid "More"
+msgstr "עוד"
+
+msgid "Less"
+msgstr "פחות"
+
+msgid "View records"
+msgstr "הצג רשומות"
+
+msgid "Font"
+msgstr "גופן:"
+
+msgid "Warning"
+msgstr "אזהרה"
+
+msgid "Dotted"
+msgstr "מנוקד"
+
+msgid "Dashed"
+msgstr "קו מפריד"
+
+msgid "Solid"
+msgstr "רציף"
+
+msgid "Double"
+msgstr "כפול"
+
+msgid "Groove"
+msgstr "חריץ (Groove)"
+
+msgid "Ridge"
+msgstr "רכס"
+
+msgid "Inset"
+msgstr "הבלעה"
+
+msgid "Outset"
+msgstr "חיצוני"
+
+msgid "Field"
+msgstr "שדה"
+
+msgid "Order"
+msgstr "מיין"
+
+msgid "Ascending"
+msgstr "עולה"
+
+msgid "Descending"
+msgstr "בסדר יורד"
+
+msgid "Off"
+msgstr "כבוי"
+
+msgid "On"
+msgstr "פועל"
+
+msgid ""
+"Hold down the ctrl (Windows) or command (MAC) button to select multiple "
+"options."
+msgstr "החזק את לחצן CTRL (Windows) או פקודה (MAC) כדי לבחור אפשרויות מרובות."
+
+msgid "Fill"
+msgstr "מילוי"
+
+msgid "Blur fit"
+msgstr "התאמה מטושטשת"
+
+msgid "Fit"
+msgstr "התאמה"
+
+msgid "Stretch"
+msgstr "פרוס"
+
+msgid "Center"
+msgstr "מרכז"
+
+msgid "Slider's default"
+msgstr "ברירת המחדל של הסליידר"
+
+msgid "All"
+msgstr "הכל"
+
+#, php-format
+msgid "Not %s"
+msgstr "לא %s"
+
+msgid "Bold"
+msgstr "מודגש"
+
+msgid "Extra light"
+msgstr "בהיר מאוד"
+
+msgid "Light"
+msgstr "בהיר"
+
+msgid "Semi bold"
+msgstr "חצי נועז"
+
+msgid "Extra bold"
+msgstr "מודגש מאוד"
+
+msgid "Self"
+msgstr "עצמי"
+
+msgid "New"
+msgstr " חדש"
+
+msgid "Parent"
+msgstr "הורה"
+
+msgid "Top"
+msgstr "עליון"
+
+msgid "Select images for devices"
+msgstr "בחר תמונות עבור התקנים"
+
+msgid "Select a page or a blog post from your WordPress site."
+msgstr "בחר עמוד או פוסט בבלוג מאתר WordPress שלך."
+
+msgid "Select article or menu item from your site."
+msgstr "בחר מאמר או פריט תפריט מהאתר שלך."
+
+msgid "Reset to normal state"
+msgstr "איפוס למצב רגיל"
+
+msgid "Default"
+msgstr "ברירת מחדל"
+
+msgid "The image is empty"
+msgstr "התמונה ריקה"
+
+msgid "Empty"
+msgstr "ריק"
+
+msgid "Image manager"
+msgstr "מנהל תמונות"
+
+msgid "Desktop retina"
+msgstr "רשתית שולחן העבודה"
+
+msgid "Image"
+msgstr "תמנונה"
+
+#, php-format
+msgid ""
+"The %1$s is not turned on in your server, which is necessary to read rss "
+"feeds. You should contact your server host, and ask them to enable it!"
+msgstr ""
+"ה-%1$s אינו מופעל בשרת שלך, הכרחי כדי לקרוא עדכוני rss. עליך ליצור קשר עם "
+"מארח השרת שלך ולבקש מהם להפעיל זאת!"
+
+#, php-format
+msgid "%s is not readable"
+msgstr "%s אינו קריא"
+
+msgid "Style manager"
+msgstr "מנהל העיצוב"
+
+msgid "Style settings"
+msgstr "הגדרות עיצוב"
+
+msgid "Background color"
+msgstr "צבע הרקע"
+
+msgid "Opacity"
+msgstr "שקיפות"
+
+msgid "Padding"
+msgstr "ריפוד (Padding)"
+
+msgid "Border"
+msgstr "גבול"
+
+msgid "Border radius"
+msgstr "הרדיוס של המסגרת"
+
+msgid "Box shadow"
+msgstr "הצללת תיבה"
+
+msgid "Single"
+msgstr "רווק/ה"
+
+msgid "Simple"
+msgstr "פשוט"
+
+msgid "Box"
+msgstr "קופסה"
+
+msgid "Heading active"
+msgstr "כותרת פעילה"
+
+msgid "Dashboard"
+msgstr "לוח ניהול"
+
+msgid "Drop files here"
+msgstr "גרור את הקבצים לכאן"
+
+msgid "Parent directory"
+msgstr "ספריית שורש"
+
+msgid "Current path"
+msgstr "נתיב נוכחי"
+
+msgid "Preset"
+msgstr "קבוע מראש"
+
+msgid ""
+"You can use presets to save style settings for later use. Clicking on any "
+"preset will load its styling to your current layer, and the previous style "
+"settings will be lost."
+msgstr ""
+"באפשרותך להשתמש בהגדרות קבועות מראש כדי לשמור הגדרות סגנון לשימוש מאוחר "
+"יותר. לחיצה על כל הגדרה מוגדרת מראש תטען את העיצוב שלה לשכבה הנוכחית שלך, "
+"והגדרות הסגנון הקודמות יאבדו."
+
+msgid ""
+"Layer design options affect every device. If you need to make responsive "
+"adjustments, look for the options with the device icon."
+msgstr ""
+"אפשרויות עיצוב שכבות משפיעות על כל מכשיר. אם אתה צריך לבצע התאמות "
+"רספונסיביות, חפש את האפשרויות עם סמל המכשיר."
+
+msgid "Reset style to default"
+msgstr "אפס סגנון לברירת המחדל"
+
+msgid "Save style as new preset"
+msgstr "שמור סגנון כמוגדר מראש חדש"
+
+msgid "Load style"
+msgstr "סגנון טעינה"
+
+msgid "You have not created any presets for this layer yet."
+msgstr "עדיין לא יצרת הגדרות מוגדרות מראש עבור שכבה זו."
+
+msgid "Save as"
+msgstr "שמירה בשם"
+
+msgid "Name"
+msgstr "שם"
+
+msgid "Please fill the name field!"
+msgstr "נא למלא את שדה השם!"
+
+msgid "Preset saved."
+msgstr "הגדרות מוגדרות מראש נשמרו."
+
+msgid "Overwrite preset"
+msgstr "החלף קביעה מוגדרת מראש"
+
+msgid "Preset deleted."
+msgstr "הגדרה מוגדרת מראש נמחקה."
+
+msgid "Choose folder"
+msgstr "בחר תיקייה"
+
+msgid "Select"
+msgstr "לבחור"
+
+msgid "Disabled"
+msgstr "כבוי"
+
+msgid "Image field can not be empty!"
+msgstr "שדה התמונה אינו יכול להיות ריק!"
+
+msgid "Done"
+msgstr "אישור"
+
+msgid "No file selected."
+msgstr "לא נבחר אף קובץ"
+
+msgid "Open docs"
+msgstr "פתיחת מסמכים"
+
+msgid "The changes you made will be lost if you navigate away from this page."
+msgstr "השינויים שביצעת יאבדו אם תצאי מדף זה."
+
+msgid "Icons"
+msgstr "סמלים"
+
+msgid "Search"
+msgstr "חיפוש"
+
+msgid "Are you sure?"
+msgstr "האם את בטוחה?"
+
+#, javascript-format
+msgid "You're about to %s. "
+msgstr "אתה עומד %s."
+
+#, javascript-format
+msgid "The deletion is irreversible, and it's not possible to recover %s."
+msgstr "המחיקה היא בלתי הפיכה, ולא ניתן לשחזר %s."
+
+msgid "Cancel"
+msgstr "ביטול"
+
+msgid "Delete"
+msgstr "מחיקה"
+
+msgid "Close"
+msgstr "סגור"
+
+msgid "Create group"
+msgstr "יצירת קבוצה"
+
+msgid "Group name"
+msgstr "שם הקבוצה"
+
+msgid "Group created"
+msgstr "הקבוצה נוצרה."
+
+msgid "Records"
+msgstr "תוצאות"
+
+msgid "Keyboard shortcuts"
+msgstr "מקשי קיצור"
+
+msgid "Got it"
+msgstr "הבנתי"
+
+msgid "General"
+msgstr "כללי:"
+
+msgid "Content tab"
+msgstr "תוכן כרטיסיה"
+
+msgid "Style tab"
+msgstr "עיצוב כרטיסיות"
+
+msgid "Animation tab"
+msgstr "כרטיסיית הנפשה"
+
+msgid "Add Layer"
+msgstr "הוסף שכבה"
+
+msgid "Layer List"
+msgstr "רשימת שכבות"
+
+msgid "Timeline"
+msgstr "ציר הזמן"
+
+msgid "View"
+msgstr "הצג"
+
+msgid "Adjust"
+msgstr "להתאים"
+
+msgid "Move (Absolute)"
+msgstr "העברה (מוחלט)"
+
+msgid "Arrows"
+msgstr "חצים"
+
+msgid "Align (Absolute)"
+msgstr "יישור (מוחלט)"
+
+msgid "Numeric keys"
+msgstr "מקשים מספריים"
+
+msgid "Action"
+msgstr "פעולה"
+
+msgid "Duplicate"
+msgstr "כפול"
+
+msgid "Copy"
+msgstr "העתק"
+
+msgid "Paste"
+msgstr "הדבקה"
+
+msgid "Undo"
+msgstr "ביטול"
+
+msgid "Redo"
+msgstr "שחזור"
+
+msgid "Save"
+msgstr "שמירה"
+
+msgid "Play animations"
+msgstr "הפעל הנפשות"
+
+msgid "Clear device specific settings"
+msgstr "נקה הגדרות ספציפיות למכשיר"
+
+msgid "Current layer, current device"
+msgstr "שכבה נוכחית, מכשיר נוכחי"
+
+msgid "Current layer, all devices"
+msgstr "שכבה נוכחית, כל המכשירים"
+
+msgid "All layers, current device"
+msgstr "כל השכבות, המכשיר הנוכחי"
+
+msgid "All layers, all devices"
+msgstr "כל השכבות, כל המכשירים"
+
+msgid "Unexpected response"
+msgstr "תגובה לא צפויה"
+
+msgid "Scroll to"
+msgstr "גלול אל"
+
+msgid "Scroll to alias"
+msgstr "גלול לכינוי"
+
+msgid "Go to slide"
+msgstr "ל שקופית"
+
+msgid "Go to slide ID"
+msgstr "עבור אל מזהה שקופית"
+
+msgid "Previous slide"
+msgstr "שקופית קודמת"
+
+msgid "Next slide"
+msgstr "השקף הבא"
+
+msgid "Slide event"
+msgstr "אירוע שקופית"
+
+msgid "Examples"
+msgstr "דוגמאות"
+
+msgid "Scrolls to the top of the page."
+msgstr "גולל לחלק העליון של הדף."
+
+msgid "Scrolls to the bottom of the page."
+msgstr "גולל לתחתית הדף."
+
+msgid ""
+"You can use any jQuery selector to scroll to a specific element on the page. "
+"Example: \"#pricing\" scrolls to the element with the id of \"pricing\"."
+msgstr ""
+"ניתן להשתמש בכל בורר jQuery כדי לגלול לאלמנט ספציפי בדף. לדוגמה: \"#pricing "
+"\"גולל לאלמנט עם המזהה של\" pricing \"."
+
+msgid "Slider alias"
+msgstr "שם סליידר"
+
+msgid "Slider alias set at Slider settings > General"
+msgstr "כינוי הסליידר מוגדר בהגדרות הסליידר > כללי"
+
+msgid "Slide index"
+msgstr "אינדקס שקופיות"
+
+msgid "Direction"
+msgstr "כיוון"
+
+msgid "Auto"
+msgstr "אוטומטי"
+
+msgid "Backward"
+msgstr "אחורה"
+
+msgid "Forward"
+msgstr "העבר"
+
+#, javascript-format
+msgid "slide index: 2 %s direction: backward"
+msgstr "אינדקס משטחים: 2 כיוון %s: אחורה"
+
+msgid "Switches to the second slide as if the previous arrow was pressed"
+msgstr "עובר לשקופית השנייה כאילו לחץ על החץ הקודם"
+
+#, javascript-format
+msgid "slide index: 5 %s direction: forward"
+msgstr "אינדקס משטחים: 5 %s כיוון: קדימה"
+
+msgid "Switches to the fifth slide as if the next arrow was pressed"
+msgstr "עובר למגלשה החמישית כאילו לחץ על החץ הבא"
+
+msgid "Slide ID"
+msgstr "מזהה שקופית"
+
+msgid ""
+"Switches to the slide with the #2 ID as if the previous arrow was pressed"
+msgstr "עובר לשקופית עם מזהה #2 כאילו החץ הקודם נלחץ"
+
+msgid "Switches to the slide with the #5 ID as if the next arrow was pressed"
+msgstr "עובר לשקופית עם המזהה מס '5 כאילו לחץ על החץ הבא"
+
+msgid "Event name"
+msgstr "שם הדוח"
+
+msgid "An event you use to trigger layer animation(s) with"
+msgstr "אירוע שבו אתה משתמש להפעלת הנפשת שכבות"
+
+msgid "Content List - One Per Line"
+msgstr "רשימת תוכן - אחת לשורה"
+
+msgid "Choose images"
+msgstr "בחר תמונה "
+
+msgid "Titles - One Per Line"
+msgstr "כותרות - אחת לשורה"
+
+msgid "Autoplay duration"
+msgstr "משך ההפעלה האוטומטית"
+
+msgid "URL"
+msgstr "כתובת אתר"
+
+msgid "Search keyword"
+msgstr "מילת מפתח לחיפוש"
+
+msgid "Posts"
+msgstr "פוסטים"
+
+msgid "Lightbox"
+msgstr "לייטבוקס"
+
+msgid "Insert"
+msgstr "הזנה"
+
+msgid "Oops, Something Went Wrong"
+msgstr "אופס, משהו השתבש"
+
+msgid "Success"
+msgstr "הצלחה"
+
+msgid "Notice"
+msgstr "התראות"
+
+msgid "Select image"
+msgstr "בחר תמונה"
+
+msgid "Use Joomla selector"
+msgstr "השתמש בבורר ג'ומלה"
+
+msgid "Use default selector"
+msgstr "השתמש בבורר ברירת המחדל"
+
+msgid "Deleted."
+msgstr "נמחק."
+
+msgid "Static"
+msgstr "סטטי"
+
+msgid "Save as New"
+msgstr "שמור כחדש"
+
+msgid "Saved."
+msgstr "נשמר."
+
+msgid "Enabled"
+msgstr "פעיל"
+
+msgid "Column"
+msgstr "עמודה "
+
+msgid "There is no layer available to be parent of the current layer!"
+msgstr "אין שכבה זמינה להיות הורה של השכבה הנוכחית!"
+
+msgid "Pick the parent layer!"
+msgstr "תבחרי את שכבת האב!"
+
+msgid "Pick the align point of the parent layer!"
+msgstr "בחר את נקודת היישור של שכבת האב!"
+
+msgid "Pick the align point of the child layer!"
+msgstr "בחר את נקודת היישור של שכבת הילד!"
+
+msgid "Advanced"
+msgstr "מתקדם"
+
+#, javascript-format
+msgid "Outer %s"
+msgstr "חיצוני %s"
+
+msgid "Left"
+msgstr "שמאלה"
+
+msgid "Right"
+msgstr "ימין"
+
+msgid "Middle"
+msgstr "אמצע"
+
+msgid "Bottom"
+msgstr "תחתון"
+
+msgid "Layer(s)"
+msgstr "שכבה(ות)"
+
+msgid "Hide on"
+msgstr "הסתר ב"
+
+msgid "Rename"
+msgstr "שינוי שם"
+
+msgid "Show/Hide in editor"
+msgstr "הצג/הסתר בעורך"
+
+msgid "Animation"
+msgstr "אנימציה"
+
+msgid "Add animation"
+msgstr "הוסף הנפשה"
+
+msgid "Remove animations"
+msgstr "הסר הנפשות"
+
+msgid "Layer Animation - Basic"
+msgstr "שכבה אנימציה - בסיסי"
+
+msgid "Add keyframe"
+msgstr "הוספת מסגרת מפתח"
+
+msgid "Loop"
+msgstr "לולאה"
+
+msgid "Special Zero"
+msgstr "ספיישל זירו"
+
+msgid "Keyframe"
+msgstr "מסגרת מפתח"
+
+msgid "Layer Animation - Reveal"
+msgstr "שכבה אנימציה - לחשוף"
+
+msgid "Open/Close"
+msgstr "פתיחה/סגירה"
+
+msgid "Content"
+msgstr "תוכן"
+
+msgid "Child layers"
+msgstr "שכבות ילדים"
+
+msgid "Animated heading"
+msgstr "כותרת מונפשת"
+
+msgid "Highlighted heading"
+msgstr "כותרת מודגשת"
+
+msgid "Text animation in"
+msgstr "הנפשה נכנסת"
+
+msgid "Text animation out"
+msgstr "אנימציית טקסט יצאה"
+
+msgid "Layer"
+msgstr "מטילה"
+
+msgid "Row"
+msgstr "שורה"
+
+msgid "Slide"
+msgstr "שקופית"
+
+msgid "Theme"
+msgstr "תבנית:"
+
+#, javascript-format
+msgid "%s or newer required for this feature."
+msgstr "נדרש %s או חדש יותר עבור תכונה זו."
+
+msgid "This section requires activated Pro version."
+msgstr "סעיף זה דורש גרסת Pro מופעלת."
+
+#, javascript-format
+msgid "This block is not available in the free version. %s"
+msgstr "בלוק זה אינו זמין בגרסה החינמית. %s"
+
+msgid "Go Pro"
+msgstr "עבור לפרו"
+
+msgid "Editor settings"
+msgstr "הגדרות העורך."
+
+msgid "Upgrade to Pro"
+msgstr "שדרוג לפרו"
+
+msgid "Guide settings"
+msgstr "הגדרות מדריך"
+
+msgid "Smart snap"
+msgstr "סנאפ חכם"
+
+msgid "Round to 5px"
+msgstr "עגול עד 5px"
+
+msgid "Ruler"
+msgstr "סרגל"
+
+msgid "Clear guides"
+msgstr "נקה מדריכים"
+
+msgid "Activate Smart Slider 3 Pro"
+msgstr "הפעל את Smart Slider 3 Pro"
+
+msgid "Activation is required to unlock all features!"
+msgstr "נדרשת הפעלה כדי לבטל את הנעילה של כל התכונות!"
+
+msgid ""
+"Register Smart Slider 3 Pro on this domain to enable auto update, slider "
+"templates and slide library."
+msgstr ""
+"רשום את Smart Slider 3 Pro בדומיין זה כדי לאפשר עדכון אוטומטי, תבניות סליידר "
+"וספריית שקופיות."
+
+msgid "Skip"
+msgstr "דלג"
+
+msgid "Activate"
+msgstr "הפעלה"
+
+msgid "Smart Slider 3 activated!"
+msgstr "Smart Slider 3 הופעל!"
+
+msgid "Laptop"
+msgstr "מחשב נייד"
+
+msgid "Width"
+msgstr "רוחב"
+
+msgid "Height"
+msgstr "גובה"
+
+#, javascript-format
+msgid "Below %s pixels."
+msgstr "מתחת ל-%s פיקסלים."
+
+#, javascript-format
+msgid "Above %s pixels."
+msgstr "מעל %s פיקסלים."
+
+#, javascript-format
+msgid "Between %s and %s pixels."
+msgstr "בין %s ל-%s פיקסלים."
+
+#, php-format
+msgid "This slide is hidden on the following devices: %s"
+msgstr "שקופית זו מוסתרת במכשירים הבאים: %s"
+
+msgid "Data"
+msgstr "נתונים"
+
+msgid "Filter"
+msgstr "מסנן"
+
+msgid "No"
+msgstr "לא"
+
+msgid "Clean HTML"
+msgstr "ניקוי HTML"
+
+msgid "Remove HTML"
+msgstr "הסרת HTML"
+
+msgid "Split by Chars"
+msgstr "פיצול לפי תווים"
+
+msgid "Strict"
+msgstr "קפדני"
+
+msgid "Respect words"
+msgstr "כבד מילים"
+
+msgid "Find image"
+msgstr "מצא תמונה"
+
+msgid "Find link"
+msgstr "מצא קישור"
+
+msgid "Remove links"
+msgstr "הסר קישורים"
+
+msgid "Remove line breaks"
+msgstr "הסר מעברי שורה"
+
+msgid "Result"
+msgstr "תוצאה"
+
+msgid "Change slider type"
+msgstr "שינוי סוג הסליידר"
+
+#, javascript-format
+msgid ""
+"Changing your slider type is irreversible. After changing your slider type, "
+"%syou will lose all slider type related settings%s."
+msgstr ""
+"שינוי סוג המחוון שלך הוא בלתי הפיך. לאחר שינוי סוג הסליידר שלך, %sתאבד את כל "
+"ההגדרות הקשורות לסוג הסליידר %s."
+
+msgid "Slider type"
+msgstr "סוג סליידר "
+
+msgid "Convert"
+msgstr "המירי"
+
+msgid "What do you want to create today?"
+msgstr "מה אתה רוצה ליצור היום?"
+
+msgid ""
+"Use our powerful visual editor, or simply import one of our existing "
+"template."
+msgstr ""
+"השתמש בעורך החזותי החזק שלנו, או פשוט ייבא את אחת התבניות הקיימות שלנו."
+
+msgid "Create a New Project"
+msgstr "יצירת פרויקט חדש"
+
+msgid ""
+"Start a new project from scratch and build exactly what you’ve imagined. You "
+"can easily customize every pixels and create anything with layers."
+msgstr ""
+"התחל פרויקט חדש מאפס ולבנות בדיוק מה שדמיינת. אתה יכול בקלות להתאים אישית כל "
+"פיקסלים וליצור כל דבר עם שכבות."
+
+msgid "Start with a Template"
+msgstr "התחילו בתבנית. "
+
+msgid ""
+"Start with a template and make it your own with the innovative drag and drop "
+"interface. You can choose from hundreds of premade templates."
+msgstr ""
+"התחל עם תבנית ולהפוך אותו משלך עם ממשק גרירה ושחרור חדשני. אתה יכול לבחור "
+"מתוך מאות תבניות מוכנות מראש."
+
+msgid "or import your own files"
+msgstr "או ייבא קבצים משלך"
+
+msgid "Create new project"
+msgstr "צור פרוייקט חדש"
+
+msgid "Project type"
+msgstr "סוג מיזם"
+
+msgid "Slider"
+msgstr "סליידר"
+
+msgid "Block"
+msgstr "לבנה"
+
+msgid "Full page"
+msgstr "מסך מלא"
+
+msgid "Carousel"
+msgstr "קרוסלה"
+
+msgid "Showcase"
+msgstr "חלון ראווה"
+
+msgid "Pro"
+msgstr "פרו"
+
+msgid "Settings"
+msgstr "הגדרות"
+
+msgid "My project"
+msgstr "היוזמה שלי"
+
+msgid "Boxed"
+msgstr "תחום"
+
+msgid "Full width"
+msgstr "רוחב מלא"
+
+msgid "Layout"
+msgstr "פריסה"
+
+msgid "Slide width"
+msgstr "רוחב שקופית"
+
+msgid "Slide height"
+msgstr "גובה השקופית"
+
+msgid "Create"
+msgstr "יצירה"
+
+msgid "Join The Smart Slider 3 Community"
+msgstr "הצטרף לקהילת Smart Slider 3"
+
+msgid ""
+"Join more than 120,000 subscribers and get access to the latest slider "
+"templates, tips, tutorials and other exclusive contents directly to your "
+"inbox."
+msgstr ""
+"הצטרף ליותר מ -120,000 מנויים וקבל גישה לתבניות הסליידר העדכניות ביותר, "
+"טיפים, הדרכות ותכנים בלעדיים אחרים ישירות לתיבת הדואר הנכנס שלך."
+
+msgid "Subscribe"
+msgstr "נרשמו"
+
+msgid "Change group"
+msgstr "משנה קבוצה..."
+
+msgid "Groups"
+msgstr "קבוצות:"
+
+msgid "Set"
+msgstr "הגדר"
+
+msgid "Edit"
+msgstr "עריכה"
+
+msgid "Group"
+msgstr "קבוצה"
+
+msgid "Edit Slider"
+msgstr "ערוך סליידר"
+
+msgid "Up"
+msgstr "למעלה"
+
+msgid "Insert group"
+msgstr "הכנס לקבוצה"
+
+msgid "Move to trash"
+msgstr "העברה לסל־המיחזור"
+
+msgid "empty the trash"
+msgstr "לרוקן את האשפה"
+
+msgid "Delete permanently"
+msgstr "מחקי לצמיתות"
+
+msgid "delete this slider"
+msgstr "מחק סליידר זה"
+
+msgid "Publish"
+msgstr "פרסם"
+
+msgid "Unpublish"
+msgstr "בטל את הפרסום"
+
+msgid "Edit generator"
+msgstr "ערוך גנרטור"
+
+msgid "Set as first"
+msgstr "הגדר כראשון"
+
+msgid "Convert to slide"
+msgstr "המר לשקופית"
+
+msgid "Copy slide to"
+msgstr "העתק שקופית"
+
+msgid "Add post"
+msgstr "הוספת פוסט"
+
+msgid "Please select a Post first!"
+msgstr "בחר רשימה:"
+
+msgid "delete these slides"
+msgstr "מחק שקופיות אלה"
+
+msgid "delete this slide"
+msgstr "מחק שקופית זו"
+
+msgid "Max width"
+msgstr "רוחב מרבי:"
+
+msgid "Margin"
+msgstr "שוליים"
+
+msgid "top"
+msgstr "למעלה"
+
+msgid "right"
+msgstr "ימינה"
+
+msgid "bottom"
+msgstr "תחתון"
+
+msgid "left"
+msgstr "שמאל"
+
+msgid "Animations"
+msgstr "הנפשות"
+
+msgid "Effects"
+msgstr "אפקטים"
+
+msgid "Shape divider"
+msgstr "מחיצה צורנית"
+
+msgid "Particle effect"
+msgstr "אפקט חלקיקים"
+
+msgid "Layer animations"
+msgstr "שכבה אנימציות"
+
+msgid "Play on load"
+msgstr "שחק בטעינה"
+
+msgid ""
+"Plays the layer animations on the first slide when it appears for the first "
+"time."
+msgstr "מפעיל את הנפשות השכבה בשקופית הראשונה כאשר היא מופיעה בפעם הראשונה."
+
+msgid "Play once"
+msgstr "נגני פעם אחת"
+
+msgid "Plays the layer animations only during the first loop."
+msgstr "מנגן את הנפשות השכבה רק במהלך הלולאה הראשונה."
+
+msgid "Play on"
+msgstr "הפעל הנפשות"
+
+msgid "Main animation start"
+msgstr "התחלת הנפשה ראשית"
+
+msgid "Main animation end"
+msgstr "סוף הנפשה ראשי"
+
+msgid "Mode"
+msgstr "מצב"
+
+msgid "Skippable"
+msgstr "ניתן לדלג"
+
+msgid "Forced"
+msgstr "מאולץ"
+
+msgid ""
+"You can make the outgoing layer animations, which don't have events, to play "
+"on slide switching."
+msgstr ""
+"באפשרותך ליצור את אנימציות השכבה היוצאת, שאין להן אירועים, כדי להפעיל בעת "
+"מעבר בין שקופיות."
+
+msgid "Layer parallax"
+msgstr "פרלקסיית שכבה"
+
+msgid "Enable"
+msgstr "הפעילי"
+
+msgid "Animate"
+msgstr "הנפש"
+
+msgid "Horizontal"
+msgstr "אופקי"
+
+msgid "Mouse"
+msgstr "עכבר"
+
+msgid "Invert"
+msgstr "הפכי"
+
+msgid "Vertical"
+msgstr "אנכי"
+
+msgid "Scroll"
+msgstr "גלילה"
+
+msgid "Mouse origin"
+msgstr "מקור העכבר"
+
+msgid "Slider center"
+msgstr "סליידר מרכז"
+
+msgid "Mouse enter position"
+msgstr "מיקום הזנת העכבר"
+
+msgid "Scroll move"
+msgstr "מהלך גלילה"
+
+msgid "Both"
+msgstr "שניהם"
+
+msgid "To bottom"
+msgstr "מלמטה:"
+
+msgid "To top"
+msgstr "לראש הדף"
+
+msgid "Autoplay"
+msgstr "הפעלה אוטומטית"
+
+msgid "Slide duration"
+msgstr "משך השקופית"
+
+msgid "Autostart"
+msgstr "אתחול אוטומטי"
+
+msgid "Allow restart"
+msgstr "אפשר הפעלה מחדש"
+
+msgid ""
+"Keeps the autoplay control visible after the autoplay has finished to allow "
+"starting it again."
+msgstr ""
+"שומר על פקד ההפעלה האוטומטית גלוי לאחר שההפעלה האוטומטית הסתיימה כדי לאפשר "
+"הפעלתו מחדש."
+
+msgid "Infinite loop"
+msgstr "לולאה אינסופית"
+
+msgid "Finish autoplay"
+msgstr "סיום הניגון האוטומטי"
+
+msgid ""
+"The Carousel option is disabled, so the Autoplay will stop after the last "
+"slide appeared."
+msgstr ""
+"אפשרות הקרוסלה מושבתת, כך שההפעלה האוטומטית תיפסק לאחר הופעת השקופית האחרונה."
+
+msgid "Stop on click"
+msgstr "פעולה בלחיצת עכבר"
+
+msgid "Stop on mouse"
+msgstr "עצור בעכבר"
+
+msgid "Enter"
+msgstr "הכנס"
+
+msgid "Leave"
+msgstr "עזב"
+
+msgid "Stop on media"
+msgstr "עצור במדיה"
+
+msgid "Resume on click"
+msgstr "המשך בלחיצה"
+
+msgid "Resume on mouse"
+msgstr "המשך בעכבר"
+
+msgid "Resume on media"
+msgstr "המשך במדיה"
+
+msgid "Controls"
+msgstr "פקדים"
+
+msgid "Drag"
+msgstr "גרור"
+
+msgid "Defines the drag (and touch) direction for your slider."
+msgstr "מגדיר את כיוון הגרירה (והמגע) עבור המחוון שלך."
+
+msgid "Mouse wheel"
+msgstr "גלגל עכבר"
+
+msgid "Allows switching slides with the mouse wheel."
+msgstr "מאפשר החלפת שקופיות עם גלגל העכבר."
+
+msgid "Keyboard"
+msgstr "מקלדת"
+
+msgid "Allows switching slides with the keyboard."
+msgstr "מאפשר החלפת שקופיות עם המקלדת."
+
+msgid "Developer"
+msgstr "פיתוח"
+
+msgid "Block right click"
+msgstr "חסימת קליק ימני"
+
+msgid "Block carousel"
+msgstr "קרוסלת בלוקים"
+
+msgid ""
+"Stops the carousel at the last slide when the source of interaction is "
+"vertical touch, vertical pointer, mouse wheel or vertical keyboard."
+msgstr ""
+"עוצר את הקרוסלה בשקופית האחרונה כאשר מקור האינטראקציה הוא מגע אנכי, מצביע "
+"אנכי, גלגל עכבר או מקלדת אנכית."
+
+msgid "Clear before"
+msgstr "נקה לפני"
+
+msgid "Closes the unclosed float CSS codes before the slider."
+msgstr "סוגר את קודי ה - CSS הלא סגורים לפני המחוון."
+
+msgid "Clear after"
+msgstr "נקה לאחר"
+
+msgid "Allows you to put your slider next to your text."
+msgstr "מאפשר לך לשים את המחוון שלך ליד הטקסט שלך."
+
+msgid "Hide scrollbar"
+msgstr "הסתר פס גלילה"
+
+msgid ""
+"Your website won't be scrollable anymore! All out of screen elements will be "
+"hidden."
+msgstr "האתר שלך כבר לא יהיה נגיש! כל הרכיבים מחוץ למסך יוסתרו."
+
+msgid "Scroll to slider"
+msgstr "גלול לסליידר"
+
+msgid "The page scrolls back to the slider when the user interacts with it."
+msgstr "הדף גולל חזרה לסליידר כאשר המשתמש מקיים אינטראקציה איתו."
+
+msgid "Edge"
+msgstr "קצה"
+
+msgid "Top - when needed"
+msgstr "TOP - כשצריך"
+
+msgid "Top - always"
+msgstr "- תמיד"
+
+msgid "Bottom - when needed"
+msgstr "תחתית - כשצריך"
+
+msgid "Bottom - always"
+msgstr "מלמטה - תמיד"
+
+msgid "Delayed (for lightbox/tabs)"
+msgstr "מושהה (עבור lightbox/כרטיסיות)"
+
+msgid ""
+"Delays the loading of the slider until its container gets visible. Useful "
+"when you display the slider in a lightbox or tab."
+msgstr ""
+"עיכוב הטעינה של המחוון עד שהמיכל שלו יהיה גלוי. שימושי כאשר אתה מציג את "
+"המחוון ב lightbox או כרטיסייה."
+
+msgid "Legacy font scale"
+msgstr "סולם גופן מדור קודם"
+
+msgid ""
+"This feature brings back the non-adaptive font size for absolute layers "
+"which were made before version 3.5. Turning on can affect website "
+"performance, so we suggest to keep it disabled.\n"
+msgstr ""
+"תכונה זו מחזירה את גודל הגופן הלא אדפטיבי עבור שכבות מוחלטות שנעשו לפני גרסה "
+"3.5. הפעלה יכולה להשפיע על ביצועי האתר, לכן אנו מציעים להשאיר אותה מושבתת.\n"
+
+msgid "Slider CSS classes"
+msgstr "מחלקות CSS של סליידר"
+
+msgid "You can put custom CSS classes to the slider's container."
+msgstr "אתה יכול לשים מחלקות CSS מותאמות אישית במכולה של הסליידר."
+
+msgid "JavaScript callbacks"
+msgstr "קריאות חוזרות ל - JavaScript"
+
+msgid "Loading animation waiting time"
+msgstr "טוען זמן המתנה להנפשה"
+
+msgid "Post IDs"
+msgstr "מזהי פוסט"
+
+msgid "one per line"
+msgstr "אחד בכל שורה. "
+
+msgid "The cache of the posts with the given ID will be cleared upon save."
+msgstr "המטמון של הפוסטים עם המזהה הנתון ינוקה עם השמירה."
+
+msgid "Fallback slider"
+msgstr "סליידר חלופי"
+
+msgid "ID or Alias"
+msgstr "מזהה או כינוי"
+
+msgid ""
+"Select another slider by its ID or Alias that displays if your current "
+"slider has no published slides."
+msgstr ""
+"בחר סליידר אחר לפי המזהה שלו או הכינוי המוצג אם לסליידר הנוכחי שלך אין "
+"שקופיות שפורסמו."
+
+msgid "Thumbnail"
+msgstr "תמונה ממוזערת"
+
+msgid "Slider thumbnail which appears in the slider list."
+msgstr "תמונה ממוזערת של סליידר שמופיעה ברשימת הסליידר."
+
+msgid "ARIA label"
+msgstr "תווית ARIA"
+
+msgid "It allows you to label your slider for screen readers."
+msgstr "זה מאפשר לך לתייג את הסליידר שלך עבור קוראי מסך."
+
+msgid "Alias"
+msgstr "כינוי"
+
+msgid "You can use this alias in the slider's shortcode."
+msgstr "באפשרותך להשתמש בכינוי זה בקוד המקוצר של הסליידר."
+
+msgid "Use as anchor"
+msgstr "השתמש כעוגן"
+
+msgid ""
+"Creates an empty div before the slider, using the alias as the ID of this "
+"div. As a result, you can use #your-alias in the URL to make the page jump "
+"to the slider."
+msgstr ""
+"יוצר div ריק לפני המחוון, באמצעות הכינוי כמזהה של div זה. כתוצאה מכך, "
+"באפשרותך להשתמש # your - alias בכתובת האתר כדי להפוך את הדף לקפוץ לסליידר."
+
+msgid "Smooth scroll"
+msgstr "גלילה חלקה"
+
+msgid ""
+"The #your-alias urls in links would be forced to smooth scroll to the slider."
+msgstr "כתובות האתרים # your - alias בקישורים ייאלצו לגלול בצורה חלקה לסליידר."
+
+msgid "Switch slide"
+msgstr "החלף שקופית"
+
+msgid ""
+"Use #your-alias-2 as an anchor to jump to the slider and switch to the 2nd "
+"slide immediately. Use #your-alias-3 for the 3rd slide and so on."
+msgstr ""
+"השתמש ב # your - alias -2 כעוגן כדי לקפוץ אל המחוון ולעבור לשקופית השנייה "
+"באופן מיידי. השתמש #your - alias -3 עבור השקופית השלישית וכן הלאה."
+
+msgid "Scroll to slide"
+msgstr "גלול לשקופית"
+
+msgid ""
+"The \"Switch slide\" option won't scroll you to the slider. Only the slides "
+"will switch."
+msgstr "האפשרות \"החלף שקופית\" לא תגלול אותך לסליידר. רק המשטחים יעברו."
+
+msgid "Slider design"
+msgstr "עיצוב הסליידר"
+
+msgid "Slider background image"
+msgstr "תמונת הרקע של הסליידר"
+
+msgid "Fixed"
+msgstr "קבוע"
+
+msgid "Background video"
+msgstr "רקע וידאו"
+
+msgctxt "Video/Audio play"
+msgid "Loop"
+msgstr "לולאה"
+
+msgid "Fill mode"
+msgstr "מצב מילוי"
+
+msgid "Align"
+msgstr "יישור"
+
+msgid "Puts a fix margin around your slider."
+msgstr "מכניס שולי תיקון סביב המחוון שלך."
+
+msgid "Perspective"
+msgstr "פרספקטיבה"
+
+msgid "Optimize"
+msgstr "מטב"
+
+msgid "Loading"
+msgstr "בטעינה"
+
+msgid "Loading type"
+msgstr "סוג טעינה"
+
+msgid "Instant"
+msgstr "מיידית"
+
+msgid "After page loaded"
+msgstr "דף אחרי להגיש"
+
+msgid "After delay"
+msgstr "לאחר איחור"
+
+msgid ""
+"If your slider is above the fold, you can load it immediately. Otherwise, "
+"you can load it only after the page has loaded."
+msgstr ""
+"אם המחוון שלך נמצא מעל לקפל, אתה יכול לטעון אותו מיד. אחרת, תוכל לטעון אותו "
+"רק לאחר שהעמוד נטען."
+
+msgid "Load delay"
+msgstr "עיכוב טעינה"
+
+msgid "Play when visible"
+msgstr "נגן כאשר ניתן לראות"
+
+msgid ""
+"Makes sure that the autoplay and layer animations only start when your "
+"slider is visible."
+msgstr "ודא שהנפשות ההפעלה האוטומטית והשכבה מתחילות רק כאשר הסליידר גלוי."
+
+msgid "At"
+msgstr "ב- "
+
+msgid "Slide background images"
+msgstr "שקופית תמונות רקע"
+
+msgid "Loading mode"
+msgstr "מצב טעינה"
+
+msgid "Delayed loading"
+msgstr "טעינה מושהית"
+
+msgid "Lazy loading"
+msgstr "טעינה איטית"
+
+msgid ""
+"You can speed up your site's loading by delaying the slide background images."
+msgstr "תוכל להאיץ את הטעינה של האתר שלך על ידי עיכוב תמונות הרקע של השקופיות."
+
+msgid "Load neighbor"
+msgstr "טען שכן"
+
+msgctxt "Unit"
+msgid "slides"
+msgstr "שקופיות"
+
+#, php-format
+msgid ""
+"Convert to WebP and image resizing require a lot of memory. Lift the memory "
+"limit%s if you get a blank page."
+msgstr ""
+"המרה ל - WebP ושינוי גודל התמונה דורשים הרבה זיכרון. הרם את מגבלת הזיכרון %s "
+"אם אתה מקבל עמוד ריק."
+
+msgid "Convert to WebP"
+msgstr "המרה ל - WebP"
+
+msgid "Resize"
+msgstr "שינוי גודל"
+
+msgid "Quality"
+msgstr "איכות המוצר"
+
+msgid "Default width"
+msgstr "רוחב ברירת מחדל:"
+
+msgid "Medium width"
+msgstr "רוחב בינוני"
+
+msgid "Medium height"
+msgstr "גובה בינוני"
+
+msgid "Small width"
+msgstr "רוחב קטן"
+
+msgid "Small height"
+msgstr "גובה קטן"
+
+msgid "Retina"
+msgstr "רשתית"
+
+msgid "Instruction"
+msgstr "הוראות"
+
+msgid ""
+"If your images look blurry on small screens, use the available height option "
+"to match the aspect ratio of the slider and image on that device."
+msgstr ""
+"אם התמונות שלך נראות מטושטשות במסכים קטנים, השתמש באפשרות הגובה הזמינה כדי "
+"להתאים את יחס הגובה של המחוון והתמונה במכשיר זה."
+
+msgid "Resize Thumbnail"
+msgstr "שנה גודל של תמונה ממוזערת"
+
+msgid "Thumbnail Quality"
+msgstr "איכות התמונות"
+
+msgid "Thumbnail width"
+msgstr "רוחב תמונה ממוזערת"
+
+msgid "Thumbnail height"
+msgstr "גובה תמונה ממוזערת"
+
+msgid "Layer images"
+msgstr "שכבה תמונות"
+
+msgid "Base64 embed"
+msgstr "‎ Base64 embed ‎"
+
+msgid "Embeds the layer images to the page source, reducing the requests."
+msgstr "מטביע את תמונות השכבה למקור הדף, מפחית את הבקשות."
+
+msgid "Max file size"
+msgstr "גודל קובץ מירבי"
+
+msgid "Other"
+msgstr "אחר"
+
+msgid "JetPack Photon image optimizer"
+msgstr "כלי מיטוב התמונות של JetPack Photon"
+
+msgid "Background video on mobile"
+msgstr "וידאו רקע בנייד"
+
+msgid "Slider size"
+msgstr "גודל המחוון"
+
+msgid "Limit slide width"
+msgstr "הגבל את רוחב השקופית"
+
+msgid ""
+"Limits the width of the slide and prevents the slider from getting too tall."
+msgstr "מגביל את רוחב השקופית ומונע מהמחוון להיות גבוה מדי."
+
+msgid "Max"
+msgstr "מקסימלי"
+
+msgid "Breakpoints"
+msgstr "נקודות פריצה"
+
+msgid ""
+"Breakpoints define the browser width in pixel when the slider switches to a "
+"different device."
+msgstr ""
+"נקודות עצירה מגדירות את רוחב הדפדפן בפיקסל כאשר המחוון עובר למכשיר אחר."
+
+msgid "Global breakpoints"
+msgstr "נקודות עצירה גלובליות"
+
+#, php-format
+msgid ""
+"You can use the global breakpoints, or adjust them locally here. You can "
+"configure the Global breakpoints at %1$sGlobal settings%2$s > General > "
+"Breakpoints"
+msgstr ""
+"אתה יכול להשתמש בנקודות שבירה גלובליות, או להתאים אותן באופן מקומי כאן. ניתן "
+"להגדיר את נקודות העצירה הגלובליות ב - %1$s הגדרות גלובליות %2$s > כללי > "
+"נקודות עצירה"
+
+msgid "Custom size"
+msgstr "גודל מותאם אישית"
+
+#, php-format
+msgid ""
+"Use this option to customize the aspect ratio for each device. %1$s Read "
+"more in the documentation%2$s. %3$sBeware:%4$s This option is rarely needed "
+"and might be hard to set properly!"
+msgstr ""
+"השתמש באפשרות זו כדי להתאים אישית את יחס הגובה - רוחב עבור כל מכשיר. %1$s "
+"קרא עוד בתיעוד%2$s. %3$sהיזהר:%4$s אפשרות זו נחוצה לעתים רחוקות ועשויה להיות "
+"קשה להגדרה כראוי!"
+
+msgid "Slides"
+msgstr "סליידים"
+
+msgid "Slides design"
+msgstr "עיצוב שקופיות"
+
+msgid "Slide background image fill"
+msgstr "מילוי תמונת הרקע של השקופית"
+
+msgid ""
+"If the size of your image is not the same as your slider's, you can improve "
+"the result with the filling modes."
+msgstr ""
+"אם גודל התמונה שלך אינו זהה לזה של הסליידר שלך, תוכל לשפר את התוצאה באמצעות "
+"מצבי המילוי."
+
+msgid "Background Blur"
+msgstr "טשטוש רקע"
+
+msgid "Randomize"
+msgstr "אקראי"
+
+msgid "Randomize slides"
+msgstr "סליידר רנדומלי"
+
+msgid "Randomize first"
+msgstr "קודם כל אקראיים"
+
+msgid "Cache support"
+msgstr "תמיכה במטמון"
+
+msgid "Cache variations"
+msgstr "וריאציות מטמון"
+
+msgid "Reverse"
+msgstr "הפוך"
+
+msgid "You can make your slides appear in the slider in a reversed order."
+msgstr ""
+
+msgid "Max count"
+msgstr "מקסימום מונחים"
+
+msgid ""
+"You can limit how many slides you want to show from your slider. It's best "
+"used with the Randomize feature, to improve the experience."
+msgstr ""
+"באפשרותך להגביל את מספר השקופיות שברצונך להציג מהסליידר שלך. עדיף להשתמש בו "
+"עם התכונה Randomize, כדי לשפר את החוויה."
+
+msgid "Maintain session"
+msgstr "שמור הפעלה"
+
+msgid ""
+"The slider continues from the last viewed slide when the visitor comes back "
+"to the page."
+msgstr "הסליידר ממשיך מהשקופית האחרונה שנצפתה כאשר המבקר חוזר לדף."
+
+msgid "Backgrounds in lightbox"
+msgstr "רקעים ב - lightbox"
+
+msgid ""
+"Creates a lightbox from your slide background images. This feature only "
+"works if all slides have background images."
+msgstr ""
+"יוצר lightbox מתמונות הרקע של השקופית. תכונה זו פועלת רק אם כל השקופיות "
+"כוללות תמונות רקע."
+
+msgid "Show label"
+msgstr "הצג תווית"
+
+msgid "Only slide name"
+msgstr "שם שקופית"
+
+msgid "Slide name and description"
+msgstr "שם שקופית ותיאור"
+
+msgid "Background parallax"
+msgstr "רקע פאראלקס ‪(‬Parallax‪)‬"
+
+msgid "Strength"
+msgstr " חוזק"
+
+msgid "Super soft"
+msgstr "סופר רך"
+
+msgid "Soft"
+msgstr "רך"
+
+msgid "Strong"
+msgstr "חזקה"
+
+msgid "Super strong"
+msgstr "סופר חזק"
+
+msgid "Generator created."
+msgstr "הגנרטור נוצר."
+
+msgid "Generator updated and cache cleared."
+msgstr "הגנרטור עודכן והמטמון נוקה."
+
+msgid "Generator group not found"
+msgstr "קבוצת הגנרטורים לא נמצאה"
+
+msgid "Generator source not found"
+msgstr "מקור הגנרטור לא נמצא"
+
+msgid "No records found for the filter"
+msgstr "לא נמצאו רשומות עבור המסנן"
+
+msgid "Authentication successful."
+msgstr "האימות בוצע בהצלחה."
+
+msgid "Not installed"
+msgstr "לא מותקן"
+
+msgid "Visit"
+msgstr "ביקור"
+
+msgid "Add dynamic slides"
+msgstr "הוסף משטחים דינמיים"
+
+msgid "Configure"
+msgstr "הגדרה"
+
+msgid "Add"
+msgstr "הוספה"
+
+msgid "Generator"
+msgstr "גנרטור"
+
+msgid "How to upgrade to Smart Slider 3 Pro?"
+msgstr "כיצד לשדרג ל - Smart Slider 3 Pro?"
+
+#, php-format
+msgid ""
+"After making your purchase, %1$slog in to your account%3$s and download the "
+"Pro installer. To get started with Smart Slider 3 Pro, simply %2$sinstall it "
+"on your website%3$s."
+msgstr ""
+"לאחר ביצוע הרכישה, %1$sהתחבר לחשבונך%3$s והורד את מתקין ה - Pro. כדי להתחיל "
+"לעבוד עם Smart Slider 3 Pro, פשוט %2$sהתקן אותו באתר שלך %3$s."
+
+msgid "Download Pro"
+msgstr "הורד Pro"
+
+msgid ""
+"Feel free to remove the Free version, as you no longer need it. Your sliders "
+"will stay!"
+msgstr ""
+"אל תהסס להסיר את הגרסה החינמית, כי אתה כבר לא צריך את זה. המחוונים שלך "
+"יישארו!"
+
+msgid "Ready to go Pro?"
+msgstr "מוכן לביצוע."
+
+msgid "Supercharge Smart Slider 3 with powerful functionality!"
+msgstr "מחוון חכם Supercharge 3 עם פונקציונליות חזקה!"
+
+msgid "Already purchased?"
+msgstr "כבר רכשת"
+
+msgid "Get started with the Pro version now!"
+msgstr "התחל עם גירסת Pro כעת!"
+
+#, php-format
+msgid ""
+"Unable to connect to the API (%1$s). %2$s See %3$sDebug Information%4$s for "
+"more details!"
+msgstr ""
+"אין אפשרות להתחבר לממשק ה - API (%1$s). %2$s ראה %3$s מידע על איתור באגים "
+"%4$s לקבלת פרטים נוספים!"
+
+msgid "Successful connection with the API."
+msgstr "חיבור מוצלח עם ה - API."
+
+msgid "Welcome to Help Center"
+msgstr "ברוכים הבאים למרכז העזרה"
+
+msgid ""
+"To help you get started, we've put together a super tutorial video that "
+"shows you the basic settings."
+msgstr ""
+"כדי לעזור לך להתחיל, הכנו סרטון הדרכה סופר שמראה לך את ההגדרות הבסיסיות."
+
+msgid "Possible conflicts"
+msgstr "התנגשויות אפשריות"
+
+msgid "Test connection"
+msgstr "תנאי &apos;או&apos;"
+
+msgid "No conflicts detected."
+msgstr "לא זוהו התנגשויות."
+
+msgid "Hello! How can we help you today?"
+msgstr "שלום, איך נוכל לעזור לך היום?"
+
+msgid "Search in the knowledge base"
+msgstr "חיפוש במאגר הידע"
+
+msgid "Documentation"
+msgstr "תיעוד"
+
+msgid ""
+"To get started with Smart Slider 3, please refer to this guide for "
+"downloading, installing, and using."
+msgstr ""
+"כדי להתחיל לעבוד עם סליידר חכם 3, עיין במדריך זה להורדה, להתקנה ולשימוש."
+
+msgid "Email support"
+msgstr "תמיכת דוא\"ל"
+
+msgid ""
+"Need one-to-one assistance? Get in touch with our Support team! We'd love "
+"the opportunity to help you."
+msgstr ""
+"זקוקים לסיוע אחד - על - אחד? צרו קשר עם צוות התמיכה שלנו! נשמח להזדמנות "
+"לעזור לך."
+
+msgid "Tutorial videos"
+msgstr "סרטוני הדרכה"
+
+msgid ""
+"Check our video tutorials which cover everything you need to know about "
+"Smart Slider 3."
+msgstr ""
+"בדוק את סרטוני ההדרכה שלנו המכסים את כל מה שאתה צריך לדעת על סליידר חכם 3."
+
+msgid "Selected articles"
+msgstr "מאמרים נבחרים"
+
+msgid "Debug information"
+msgstr "מידע איתור באגים"
+
+#, php-format
+msgid "%s or later"
+msgstr "%s או מאוחר יותר"
+
+msgid "You are using an unsupported browser!"
+msgstr "אתה משתמש כרגע בדפדפן שאינו נתמך"
+
+#, php-format
+msgid ""
+"Smart Slider 3 does not support your current browser for editing. Supported "
+"browsers are the following: %s."
+msgstr ""
+"סליידר חכם 3 אינו תומך בדפדפן הנוכחי שלך לעריכה. הדפדפנים הנתמכים הם כדלקמן: "
+"%s."
+
+msgid "Help center"
+msgstr "מרכז עזרה"
+
+msgid "Help"
+msgstr "עזרה"
+
+msgid "Read more"
+msgstr "לפרטים נוספים"
+
+msgid "Need more?"
+msgstr "צריכים עוד?"
+
+msgid "Unlock all the pro features by upgrading to Smart Slider 3 Pro."
+msgstr "פתח את כל התכונות של Pro על ידי שדרוג ל - Smart Slider 3 Pro."
+
+msgid "Changelog"
+msgstr "יומן רישום שינויים"
+
+msgid "Check for update"
+msgstr "בדוק אם יש עדכון"
+
+msgid "Check"
+msgstr "בדוק"
+
+msgid "Your license is active"
+msgstr "הרישיון שלך פעיל."
+
+msgid "Deactivate license"
+msgstr "כבי רישיון"
+
+msgid "Activate your license"
+msgstr "הפעל את מפתח הרישיון שלך"
+
+msgid "Don’t miss any update"
+msgstr "אל תפספסו אף עדכון"
+
+msgid "Let us know how we're doing"
+msgstr "נשמח לשמוע מה מצבנו"
+
+msgid ""
+"If you are happy with Smart Slider 3 and can take a minute please leave a "
+"review. This will help to spread its popularity and to make this plugin a "
+"better one."
+msgstr ""
+"אם אתם מרוצים מ - Smart Slider 3 ויכולים לקחת דקה, אנא כתבו ביקורת. זה יעזור "
+"להפיץ את הפופולריות שלה ולהפוך את התוסף הזה לטוב יותר."
+
+msgid "Rate your experience"
+msgstr "דירוג החוויה"
+
+msgid "Hated it"
+msgstr "שנאתי את זה."
+
+msgid "Disliked it"
+msgstr "לא אהבתי את זה"
+
+msgid "It was ok"
+msgstr "זה היה בסדר."
+
+msgid "Liked it"
+msgstr "אהבתי את זה"
+
+msgid "Loved it"
+msgstr "אהבתי"
+
+msgid "Why upgrade to Smart Slider 3 Pro?"
+msgstr "למה לשדרג ל - Smart Slider 3 Pro?"
+
+#, php-format
+msgid "%d+ slider templates"
+msgstr "%d+ תבניות מחוון"
+
+msgid "Full slide library access"
+msgstr "גישה מלאה לספריית השקופיות"
+
+#, php-format
+msgid "%d new layers"
+msgstr "%d שכבות חדשות"
+
+msgid "Extra advanced options"
+msgstr "אפשרויות מתקדמות במיוחד"
+
+msgid "New animations & effects"
+msgstr "אנימציות ואפקטים חדשים"
+
+msgid "Lifetime update & support"
+msgstr "עדכון ותמיכה לכל החיים"
+
+msgid "Apply"
+msgstr "אישור"
+
+msgid "Back"
+msgstr "חזרה"
+
+msgid "Import"
+msgstr "ייבוא"
+
+msgid "Layers"
+msgstr "שכבות"
+
+msgid "Library"
+msgstr "ספרייה"
+
+msgid "Absolute"
+msgstr "מוחלט"
+
+msgctxt "Layer group"
+msgid "Basic"
+msgstr "מסלול סטנדרטי"
+
+msgid "Inner align"
+msgstr "יישור פנימי"
+
+msgid "Positions the layers inside horizontally."
+msgstr "מקם את השכבות בתוך אופקית."
+
+msgid "Vertical align"
+msgstr "יישור אנכי"
+
+msgid "Positions the layers inside vertically."
+msgstr "מקם את השכבות בתוך אנכית."
+
+msgid "Target window"
+msgstr "חלון יעד"
+
+msgid "Background image"
+msgstr "תמונת רקע"
+
+msgid "Focus"
+msgstr ""
+
+msgid ""
+"You can set the starting position of a background image. This makes sure "
+"that the selected part will always remain visible, so you should pick the "
+"most important part."
+msgstr ""
+"באפשרותך להגדיר את מיקום ההתחלה של תמונת רקע. פעולה זו מוודאת שהחלק הנבחר "
+"תמיד יישאר גלוי, לכן עליך לבחור את החלק החשוב ביותר."
+
+msgid "Background"
+msgstr "צבע רקע"
+
+msgid "Gradient"
+msgstr "מעבר"
+
+msgid "Color end"
+msgstr "סיום צבע"
+
+msgid "Position"
+msgstr "תפקיד"
+
+msgid "The editing mode the layer is positioned in."
+msgstr "מצב העריכה שבו השכבה ממוקמת."
+
+msgid "Positions the layer horizontally within its parent."
+msgstr "מקם את השכבה אופקית בתוך ההורה שלה."
+
+msgid "You can set a fix height for your layer."
+msgstr "אתה יכול להגדיר גובה קבוע לשכבה שלך."
+
+msgid "With margins you can create distance between your layers."
+msgstr ""
+
+msgid "Responsive"
+msgstr "רספונסיבי"
+
+msgid "Linked to"
+msgstr "מקשר אל:"
+
+msgid ""
+"You can link your layer to another layer on the same level. This way your "
+"layer won't be positioned to the slide, but the other layer."
+msgstr ""
+"אתה יכול לקשר את השכבה שלך לשכבה אחרת באותה רמה. בדרך זו השכבה שלך לא תמוקם "
+"לשקופית, אלא לשכבה השנייה."
+
+msgid "Hide when variable empty"
+msgstr "הסתר כאשר המשתנה ריק"
+
+msgid "Text scale"
+msgstr "סולם טקסט"
+
+msgid "Device specific settings"
+msgstr "נקה הגדרות ספציפיות למכשיר"
+
+msgid "Clear"
+msgstr "ניקוי"
+
+msgid "Erases all device specific changes you made on the current device."
+msgstr "מוחק את כל השינויים הספציפיים שביצעת במכשיר הנוכחי."
+
+msgid "Effect"
+msgstr "אפקט"
+
+msgid "Parallax"
+msgstr "פראלקס"
+
+msgid "More parallax options in slider settings -> Layer animations tab."
+msgstr "אפשרויות פרלקסה נוספות בהגדרות הסליידר -> הכרטיסייה 'הנפשות שכבה '."
+
+msgid "Crop"
+msgstr "חיתוך"
+
+msgid "Mask"
+msgstr "מסכה"
+
+msgid "If your content is larger than the layer, you can crop it to fit."
+msgstr "אם התוכן שלך גדול מהשכבה, תוכל לחתוך אותו כדי שיתאים."
+
+msgid "Rotation"
+msgstr "סיבוב"
+
+msgid "CSS Class"
+msgstr "מחלקת CSS"
+
+msgid "You can add a custom CSS class on the layer container."
+msgstr "ניתן להוסיף מחלקת CSS מותאמת אישית במיכל השכבה."
+
+msgid "Content background"
+msgstr "צבע רקע תוכן"
+
+msgid "Spacing"
+msgstr "מרווח"
+
+msgid "Typography"
+msgstr "פונטים"
+
+msgid ""
+"You can select a font family from the preset, or type your custom family."
+msgstr ""
+"באפשרותך לבחור משפחת גופנים מתוך ההגדרה המוגדרת מראש, או להקליד את המשפחה "
+"המותאמת אישית שלך."
+
+msgid ""
+"Need to change the font size device specifically? Use the Text scale option."
+msgstr "האם צריך לשנות את גודל הגופן באופן ספציפי? השתמש באפשרות סולם טקסט."
+
+msgid "Columns"
+msgstr "עמודות"
+
+msgid "Gutter"
+msgstr "תחתית"
+
+msgid "Creates space between the columns"
+msgstr "יוצר רווח בין העמודות"
+
+msgid "Wrap after"
+msgstr "לעטוף אחרי"
+
+msgid "Breaks the columns to the given amount of rows."
+msgstr "שובר את העמודות לכמות השורות הנתונה."
+
+msgid "Makes the row fill the available vertical space"
+msgstr "גורם לשורה למלא את החלל האנכי הזמין"
+
+msgid "Slide title"
+msgstr "כותרת השקופית"
+
+msgid "Description"
+msgstr "תיאור"
+
+msgid "Thumbnail alt"
+msgstr "תמונה ממוזערת חלופית"
+
+msgid "Custom lightbox image"
+msgstr "תמונה מותאמת אישית של Lightbox"
+
+msgid "Published"
+msgstr "פורסם"
+
+msgid "Publish on"
+msgstr "פורסם"
+
+msgid "Unpublish on"
+msgstr "בטל את הפרסום"
+
+msgid "Thumbnail type"
+msgstr "סוג של תמונות ממוזערות"
+
+msgid "Video"
+msgstr "כתבה"
+
+msgid ""
+"If you have a video on your slide, you can put a play icon on the thumbnail "
+"image to indicate that."
+msgstr ""
+"אם יש לך סרטון בשקופית, תוכל לשים סמל הפעלה בתמונת התמונה הממוזערת כדי לציין "
+"זאת."
+
+#, php-format
+msgid ""
+"Video autoplaying has a lot of limitations made by browsers. %1$sLearn about "
+"them.%2$s"
+msgstr ""
+"לניגון אוטומטי של סרטונים יש מגבלות רבות שנעשו על ידי דפדפנים. %1$sלמידע "
+"נוסף עליהם.%2$s"
+
+msgid "Slide background video"
+msgstr "שקופית וידאו רקע"
+
+msgid "Restart on slide change"
+msgstr "התחל מחדש בעת שינוי השקופית"
+
+msgid "Starts the video from the beginning when the slide is viewed again."
+msgstr "הפעלת הסרטון מההתחלה כאשר השקופית מוצגת שוב."
+
+msgid "Slide background"
+msgstr "שקופית תמונות רקע"
+
+msgid ""
+"Select a background image for the slide. By clicking the small screen icon, "
+"you can pick different images for different devices."
+msgstr ""
+"בחר תמונת רקע לשקופית. על ידי לחיצה על סמל המסך הקטן, אתה יכול לבחור תמונות "
+"שונות עבור מכשירים שונים."
+
+#, php-format
+msgid ""
+"Please read %1$sour detailed guide%2$s about setting your own slide "
+"background correctly."
+msgstr ""
+"קרא את %1$s המדריך המפורט שלנו %2$s אודות הגדרת רקע השקופיות שלך כראוי."
+
+msgid "Background blur"
+msgstr "טשטוש רקע"
+
+msgid "Blur"
+msgstr "טשטשי"
+
+msgid "Overlay"
+msgstr "שכבה"
+
+msgid "Puts the color in front of the image."
+msgstr "לשים את הצבע מול התמונה."
+
+msgid "SEO"
+msgstr "SEO"
+
+msgid "Image alt"
+msgstr "אלט תמונה:"
+
+msgid "Image title"
+msgstr "תמונת כותרת"
+
+msgctxt "Layer animation"
+msgid "In"
+msgstr "בתוך"
+
+msgctxt "Layer animation"
+msgid "Out"
+msgstr "אנימציית טקסט יצאה"
+
+msgctxt "Layer animation"
+msgid "Events"
+msgstr "אירועים"
+
+msgid "Plays in when"
+msgstr "משחק מתי"
+
+msgid "Plays out when"
+msgstr "מנגן כאשר"
+
+msgid "Plays loop when"
+msgstr "מנגן לולאה כאשר"
+
+msgid "Pauses loop when"
+msgstr "השהיית לולאה כאשר"
+
+msgid "Stops loop when"
+msgstr "עוצר לולאה כאשר"
+
+msgid "Repeatable"
+msgstr "ניתן לחזור על זה."
+
+msgid "Allows the layer animations to play more than once."
+msgstr "מאפשר לאנימציות השכבה להתנגן יותר מפעם אחת."
+
+msgid "Start delay"
+msgstr "התחלת העיכוב"
+
+msgid "End delay"
+msgstr "סיום העיכוב"
+
+msgid "Repeat loop only"
+msgstr "חזור על לולאה בלבד"
+
+msgid "Allows the stopped loop to start again."
+msgstr "מאפשר ללולאה שנעצרה להתחיל שוב."
+
+msgid "Trigger custom event on"
+msgstr "הפעל אירוע מותאם אישית ב -"
+
+msgid "Click"
+msgstr "לחץ"
+
+msgid "Mouse enter"
+msgstr "הזנת עכבר"
+
+msgid "Mouse leave"
+msgstr "המשך בעכבר"
+
+msgid "Media started"
+msgstr "התקשורת התחילה"
+
+msgid "Media paused"
+msgstr "המדיה הושהתה"
+
+msgid "Media stopped"
+msgstr "המדיה הופסקה"
+
+msgid "Duration"
+msgstr "משך"
+
+msgid "Delay"
+msgstr "השהיה"
+
+msgid "Easing"
+msgstr "הקלה"
+
+msgid "Offset"
+msgstr "קיזוז"
+
+msgid "Rotate"
+msgstr "סובב"
+
+msgid "Scale"
+msgstr "סולם"
+
+msgid "Skew"
+msgstr "הטיה"
+
+msgid "Transform origin"
+msgstr "שנה צורה למקור"
+
+msgid ""
+"Makes the last keyframe to be the origin of the layer animation, instead of "
+"its canvas position."
+msgstr ""
+"הופך את מסגרת המפתח האחרונה להיות המקור של אנימצית השכבה, במקום מיקום הבד "
+"שלה."
+
+msgid "Repeat count"
+msgstr "ספירה חוזרת"
+
+msgid "loops"
+msgstr "לולאות"
+
+msgid ""
+"You can restrict the loop to play only a certain amount of loops, instead of "
+"infinite."
+msgstr ""
+"אתה יכול להגביל את הלולאה לשחק רק כמות מסוימת של לולאות, במקום אינסופי."
+
+msgctxt "Animation"
+msgid "Slide"
+msgstr "שקופית"
+
+msgid "Curtains"
+msgstr "וילונות"
+
+msgid "Diagonal"
+msgstr "אלכסון"
+
+msgid "Circle"
+msgstr "מעגל"
+
+msgid "From"
+msgstr "מאת"
+
+msgid "To"
+msgstr "אל:"
+
+msgid "Fade"
+msgstr "עמעום"
+
+msgid "Scale up"
+msgstr "גדול (scale) מעלה"
+
+msgid "Scale down"
+msgstr "גדול (scale) מטה"
+
+msgid "Static overlay"
+msgstr "כיסוי סטטי"
+
+msgid "First slide"
+msgstr "הדבק שקופית"
+
+msgid "Unpublished"
+msgstr "ביטול פרסום"
+
+msgid "Bulk actions"
+msgstr "פעולות גורפות"
+
+msgid "Select all"
+msgstr "בחירה בהכול"
+
+msgid "Select none"
+msgstr "בחרי כלום"
+
+msgid "Select published"
+msgstr "בחר פורסם"
+
+msgid "Select unpublished"
+msgstr "לא פורסם"
+
+msgid "Blank"
+msgstr "ריק"
+
+msgid "Post"
+msgstr "פוסט"
+
+msgid "Dynamic slides"
+msgstr "הוסף משטחים דינמיים"
+
+msgid "Add slide"
+msgstr "הוספת שקופית"
+
+msgid "Block must contain only one slide. Need more?"
+msgstr "הגוש חייב להכיל שקופית אחת בלבד. צריך עוד?"
+
+msgid "Convert to slider"
+msgstr "המרה לסליידר"
+
+msgid "Single slides are duplicated while autoplay is used."
+msgstr "שקופיות בודדות משוכפלות תוך כדי הפעלה אוטומטית."
+
+msgid "autoplay settings"
+msgstr "הגדרות הפעלה אוטומטית"
+
+msgid "Slide one"
+msgstr "שקופית אחת"
+
+msgid "Slide two"
+msgstr "שקופית שנייה"
+
+msgid "Drop images here"
+msgstr "לשחרר את התמונות פה"
+
+msgid "Search Project"
+msgstr "חיפוש פרוייקט"
+
+msgid "View trash"
+msgstr "הצג אשפה"
+
+msgid "Order by"
+msgstr "מיין לפי:"
+
+msgid "Manual order"
+msgstr "הזמנה ידנית"
+
+msgid "A-Z"
+msgstr "א-ת"
+
+msgid "Z-A"
+msgstr "ת-א"
+
+msgid "Newest first"
+msgstr "החדש ביותר ראשון"
+
+msgid "Oldest first"
+msgstr "הישן ביותר ראשון"
+
+msgid "Export"
+msgstr "ייצוא"
+
+msgid "Show"
+msgstr "הצג"
+
+#, php-format
+msgid "Showing %s to %s of %s projects"
+msgstr "מציג %s עד %s מתוך %s פרויקטים"
+
+msgid "No projects to show"
+msgstr "אין פרויקטים להצגה"
+
+msgid "New project"
+msgstr "פרויקט חדש"
+
+msgid "Sorry we couldn’t find any matches"
+msgstr "מצטערים, לא הצלחנו למצוא התאמות"
+
+msgid "Please try searching with another term."
+msgstr "יש לנסות לחפש עם מונח אחר."
+
+#, php-format
+msgid "Showing %s results for %s."
+msgstr "מציג %s תוצאות עבור %s."
+
+msgid "Module"
+msgstr "מודול"
+
+msgid "Displays the slider in a template module position."
+msgstr "מציג את המחוון במיקום מודול תבנית."
+
+msgid "Create module"
+msgstr "מודולים קשורים"
+
+msgid "Related modules"
+msgstr "מודולים קשורים"
+
+msgid "Articles"
+msgstr "הרצאות"
+
+msgid "Paste the code into article:"
+msgstr "הדבק את הקוד למאמר:"
+
+msgid "PHP code"
+msgstr "קוד PHP"
+
+msgid "Paste the PHP code into source code:"
+msgstr "הדבק את קוד ה - PHP בקוד המקור:"
+
+msgid "Shortcode"
+msgstr "קוד מקוצר"
+
+msgid "Copy and paste this shortcode into your posts or pages:"
+msgstr "העתק והדבק קוד מקוצר זה בפוסטים או בעמודים שלך:"
+
+msgid "Pages and Posts"
+msgstr "עמודים ופוסטים"
+
+#, php-format
+msgid "Smart Slider 3 has integration with %s."
+msgstr "לסליידר חכם 3 יש אינטגרציה עם %s."
+
+msgid "Paste the PHP code into your theme's file:"
+msgstr "הדבק את קוד ה - PHP בקובץ ערכת הנושא שלך:"
+
+msgid "Trash is empty."
+msgstr "האשפה ריקה"
+
+msgid "Restore"
+msgstr "שחזרי"
+
+msgid "Toggle orientation"
+msgstr "החלף כיוון"
+
+msgid "Reload preview"
+msgstr "טעינה מחדש של התצוגה המקדימה"
+
+msgid "Open preview in full"
+msgstr "פתח תצוגה מקדימה מלאה"
+
+msgid "State"
+msgstr "עיר"
+
+msgid "Reason"
+msgstr "סיבה"
+
+msgid "Framework"
+msgstr "פריימוורק"
+
+msgid "Fonts"
+msgstr "פונטים"
+
+msgid "Layer defaults"
+msgstr "ברירות מחדל של שכבות"
+
+msgid "Generators"
+msgstr "גנרטור חשמלי"
+
+msgid "Saved and slider cache invalidated."
+msgstr "המטמון נשמר והמחוון לא חוקי."
+
+msgid "Cache cleared."
+msgstr "הגנרטור עודכן והמטמון נוקה."
+
+msgid "Clear cache"
+msgstr "נקה זכרון מטמון"
+
+msgid "Clear cache options"
+msgstr "נקה אפשרויות מטמון"
+
+msgid "Delete resized image cache"
+msgstr "מחק מטמון תמונות בגודל שונה"
+
+#, php-format
+msgid ""
+"If enabled the following folder will be %1$spermanently deleted%2$s: %3$s"
+msgstr "אם אפשרות זו מופעלת, התיקיה הבאה תימחק %1$sלצמיתות %2$s: %3$s"
+
+msgid "Configuration"
+msgstr "הגדרה"
+
+#, php-format
+msgid ""
+"Here you can configure the default font your layers have, and the dropdown "
+"list of the fonts. Google Fonts are recognized automatically, but you can "
+"use your own custom fonts, too. %1$sLearn how to do that.%2$s"
+msgstr ""
+"כאן באפשרותך להגדיר את גופן ברירת המחדל שיש בשכבות שלך, ואת הרשימה הנפתחת של "
+"הגופנים. גופני Google מזוהים באופן אוטומטי, אך באפשרותך להשתמש גם בגופנים "
+"מותאמים אישית משלך. %1$sלמד כיצד לעשות זאת.%2$s"
+
+msgid "Default family"
+msgstr "משפחה כברירת מחדל"
+
+msgid "This font family is used for the newly added layers."
+msgstr "משפחת גופנים זו משמשת עבור השכבות החדשות שנוספו."
+
+msgid "Preset font families"
+msgstr "משפחות גופנים מוגדרות מראש"
+
+msgid "These font families appear in the dropdown list."
+msgstr "משפחות גופנים אלה מופיעות ברשימה הנפתחת."
+
+msgid "Use protocol-relative URL"
+msgstr "השתמש בכתובת URL הקשורה לפרוטוקול"
+
+msgid "Loads the URLs without a http or https protocol."
+msgstr "טוען את כתובות האתרים ללא פרוטוקול HTTP או HTTPS."
+
+msgid "Header preload"
+msgstr "טעינה מראש של הכותרת"
+
+msgid ""
+"If the slider is an important part of your site, tell the browser to preload "
+"its files."
+msgstr ""
+"אם המחוון הוא חלק חשוב מהאתר שלך, אמור לדפדפן לטעון מראש את הקבצים שלו."
+
+msgid "English UI"
+msgstr "אנגלית - UI"
+
+msgid ""
+"You can keep using Smart Slider 3 in English, even if your backend isn't in "
+"English."
+msgstr ""
+"אתה יכול להמשיך להשתמש בסליידר חכם 3 באנגלית, גם אם backend שלך הוא לא "
+"באנגלית."
+
+msgid "Improved frontend accessibility"
+msgstr "נגישות קדמית משופרת"
+
+msgid ""
+"Keeps the clicked element (like a button) in focus unless the focus is "
+"changed by clicking away."
+msgstr ""
+"שומר את הרכיב שנלחץ (כמו כפתור) בפוקוס, אלא אם המיקוד משתנה על ידי לחיצה משם."
+
+msgid "Script attributes"
+msgstr "מאפייני תסריט"
+
+msgid "Slider's inline JavaScript"
+msgstr "סליידר 's מוטבע JavaScript"
+
+msgid "Head"
+msgstr "ראש"
+
+msgid "Into the slider"
+msgstr "לתוך הסליידר"
+
+msgid "Async non-primary CSS"
+msgstr "CSS אסינכרוני לא ראשוני"
+
+msgid ""
+"Google Fonts, icon and lightbox CSS are loaded in a non-blocking way. "
+"Disable if you see missing icons, fonts or styles."
+msgstr ""
+"Google Fonts, סמל ו - Lightbox CSS נטענים באופן שאינו חוסם. בטל אם אתה רואה "
+"סמלים חסרים, גופנים או סגנונות."
+
+msgid "Load Font Awesome 4"
+msgstr "טעינת גופן מדהים 4"
+
+msgid "General settings"
+msgstr "הגדרות כלליות"
+
+msgid "Automatic update check"
+msgstr "בדיקת עדכון אוטומטית"
+
+msgid "Alternative save slide"
+msgstr "שמור שקופית חלופית"
+
+msgid ""
+"If you experience problems during the save this option might solve them."
+msgstr "אם אתה נתקל בבעיות במהלך שמירת אפשרות זו עשויה לפתור אותן."
+
+msgid "Preview in new window"
+msgstr "תצוגה מקדימה בחלון חדש"
+
+msgid "Lightbox videos in new tab on Mobile"
+msgstr "סרטוני Lightbox בכרטיסייה חדשה בנייד"
+
+msgid ""
+"Opens the lightbox videos in the YouTube app to avoid the mobile disabling "
+"the video."
+msgstr ""
+"פותח את סרטוני Lightbox באפליקציית YouTube כדי למנוע מהנייד להשבית את הסרטון."
+
+msgid "YouTube and Vimeo privacy enhanced mode"
+msgstr "מצב משופר של פרטיות YouTube ו - Vimeo"
+
+msgid "Smooth scroll speed"
+msgstr "מהירות גלילה חלקה"
+
+msgid "Editor - additional CSS files"
+msgstr "עורך - קבצי CSS נוספים"
+
+msgid ""
+"You can call your own CSS files to our backend, for example, to be able to "
+"use custom fonts. Write each URL to a new line."
+msgstr ""
+"אתה יכול לקרוא לקבצי CSS משלך ל - backend שלנו, למשל, כדי שתוכל להשתמש "
+"בגופנים מותאמים אישית. כתוב כל כתובת אתר לשורה חדשה."
+
+msgid "WordPress settings"
+msgstr "הגדרות וורדפרס"
+
+msgid "Show editor icon"
+msgstr "הצג את סמל העורך"
+
+msgid "Show in admin bar"
+msgstr "הצג בסרגל הניהול"
+
+msgid "YOAST SEO sitemap - add images"
+msgstr "YOAST SEO sitemap - להוסיף תמונות"
+
+msgid "Create widget area"
+msgstr "ליצור איזור ווידג'ט חדש"
+
+msgid "widget area(s)"
+msgstr "אזור(י) יישומון (ים)"
+
+msgid ""
+"Creates new widget areas which you can place to your theme for easy "
+"publishing."
+msgstr "יצירת אזורי וידג'טים חדשים שתוכל למקם בערכת העיצוב שלך לפרסום קל."
+
+msgid "Use iframe in AJAX calls"
+msgstr "השתמש IFRAME בשיחות AJAX"
+
+msgid ""
+"Loads the slider using an iframe when the page is loaded via AJAX to avoid "
+"problems."
+msgstr ""
+"טוען את המחוון באמצעות iframe כאשר הדף נטען באמצעות AJAX כדי למנוע בעיות."
+
+msgid "Joomla settings"
+msgstr "הגדרות ג'ומלה"
+
+msgid "Force RTL backend"
+msgstr "כפה מנגנון RTL אחורי"
+
+msgid "Run content plugins on sliders"
+msgstr "הפעלת תוספים של תוכן על סליידרים"
+
+msgid "Exclude plugins"
+msgstr "אל תכלול תוספים"
+
+msgid ""
+"At each slider you can override the global breakpoints with local values."
+msgstr "בכל סליידר תוכל לעקוף את נקודות העצירה הגלובליות עם ערכים מקומיים."
+
+msgid "Focus offset"
+msgstr "קיזוז פוקוס"
+
+msgid ""
+"This option is used at the full page layout to decrease the slider height. "
+"The \"Scroll to slider\" option also uses this option to determine where to "
+"scroll the slider."
+msgstr ""
+"אפשרות זו משמשת בפריסת העמוד המלאה כדי להקטין את גובה הסליידר. האפשרות "
+"\"גלול למחוון\" משתמשת גם באפשרות זו כדי לקבוע היכן לגלול במחוון."
+
+msgid "Translate url"
+msgstr "תרגום כתובת URL"
+
+msgid ""
+"You can change the frontend URL our assets are loading from. It can be "
+"useful after moving to a new domain."
+msgstr ""
+"אפשר לשנות את כתובת ה - URL של הממשק הקדמי שממנו נטענים הנכסים שלנו. זה יכול "
+"להיות שימושי לאחר המעבר לתחום חדש."
+
+msgid "The old URL you want to replace. E.g. https://oldsite.com/"
+msgstr "כתובת האתר הישנה שברצונך להחליף. לדוגמה: https://oldsite.com/"
+
+msgid "The new URL you want to use. E.g. https://newsite.com"
+msgstr "כתובת האתר החדשה שבה ברצונך להשתמש. לדוגמה, https://newsite.com"
+
+msgid "Slider restored."
+msgstr "הסליידר שוחזר."
+
+msgid "Slider permanently deleted."
+msgstr "הסליידר נמחק לצמיתות."
+
+msgid "Slider created."
+msgstr "סליידר נוצר."
+
+msgid "Slider renamed."
+msgstr "שם הסליידר שונה."
+
+msgid "Slider saved."
+msgstr "הסליידר עודכן"
+
+#, php-format
+msgid "Import url is not valid: %s"
+msgstr "כתובת אתר לייבוא אינה חוקית: %s"
+
+msgid "License key required for premium features!"
+msgstr "מפתח רישיון נדרש עבור תכונות פרימיום!"
+
+msgid "Slider imported."
+msgstr "המחוון יובא."
+
+msgid "Import error!"
+msgstr "רשימת ביטול..."
+
+msgid "Slide duplicated."
+msgstr "שקופית משוכפלת"
+
+#, php-format
+msgid "%s slider type is not available."
+msgstr "סוג המחוון %s אינו זמין."
+
+msgid "Groups are only available in the Pro version."
+msgstr "קבוצות זמינות רק בגרסת ה - Pro."
+
+msgid "Slider moved to the trash."
+msgstr "הועבר לאשפה."
+
+msgid "Slider removed from the group."
+msgstr "הסליידר הוסר מהקבוצה."
+
+msgid "Slider duplicated."
+msgstr "המחוון משוכפל."
+
+msgid "Slider settings"
+msgstr "הגדרות סליידר"
+
+msgid "Delete slider"
+msgstr "מחק סליידר"
+
+msgid "Edit slide"
+msgstr "ערוך שקופית"
+
+msgid "Delete slide"
+msgstr "מחק שקופית"
+
+msgid "Ordering"
+msgstr "סדר"
+
+msgid "Video url"
+msgstr "כתובת קישור"
+
+msgid "Actions"
+msgstr "פעולות"
+
+#, php-format
+msgid "Export %1$s as HTML"
+msgstr "ייצא %1$s כ-HTML"
+
+msgid "Duplicate slider"
+msgstr "שכפל סליידר"
+
+msgid "Simple edit"
+msgstr "עריכה פשוטה"
+
+msgid "Slider order saved."
+msgstr "סדר המחוון נשמר."
+
+msgid "Slider(s) moved to the trash."
+msgstr "המחוון(ים) הועבר לפח."
+
+msgid "Slider(s) removed from the group."
+msgstr "סליידר(ים) הוסר (ים) מהקבוצה."
+
+msgid "Slider(s) deleted permanently from the trash."
+msgstr "סליידר(ים) נמחק לצמיתות מהפח."
+
+#, php-format
+msgid ""
+"Your server has an upload file limit at %s, so if you have bigger export "
+"file, please use the local import file method."
+msgstr ""
+"לשרת שלך יש מגבלת קבצי העלאה ב-%s, אז אם יש לך קובץ ייצוא גדול יותר, אנא "
+"השתמש בשיטת קובץ הייבוא המקומי."
+
+#, php-format
+msgid "You have to unzip your %1$s file to find the importable *.ss3 files!"
+msgstr "עליך לפתוח את הקובץ %1$s כדי למצוא את קבצי ה *.ss3הניתנים לייבוא!"
+
+msgid "Only *.ss3 files can be uploaded!"
+msgstr "ניתן להעלות רק * קבצי .ss3!"
+
+msgid "The imported file is not readable!"
+msgstr "הקובץ המיובא אינו קריא!"
+
+msgid "Go to dashboard"
+msgstr "עבור ללוח בקרה"
+
+msgid "Welcome to Smart Slider 3"
+msgstr "ברוכים הבאים ל - Smart Slider 3"
+
+msgid "Don't show again"
+msgstr "אל תציגי שוב"
+
+msgid "Import project"
+msgstr "ייבוא פרוייקט"
+
+msgid "You can upload *.ss3 files which were exported by Smart Slider 3."
+msgstr "ניתן להעלות *קבצי .ss3 שיוצאו על ידי סליידר חכם 3."
+
+msgid "Local import"
+msgstr "ייבוא מקומי"
+
+msgid "Upload file"
+msgstr "העלאת קובץ"
+
+#, php-format
+msgid ""
+"Your server's upload filesize limitation is %s, so if your file is bigger, "
+"use the local import."
+msgstr ""
+"מגבלת גודל קובץ ההעלאה של השרת שלך היא %s, כך שאם הקובץ שלך גדול יותר, השתמש "
+"בייבוא המקומי."
+
+msgid "File"
+msgstr "קובץ"
+
+#, php-format
+msgid "Files with %1$s.ss3%2$s extension are listed from: %3$s"
+msgstr "קבצים עם סיומת %1$s.ss3%2$s מופיעים מ: %3$s"
+
+msgid "Delete file"
+msgstr "למחוק קובץ"
+
+msgid "Removes the selected .ss3 file from your sever after the import."
+msgstr "מסיר את קובץ ה -‎.ss3 שנבחר מהסגירה שלך לאחר הייבוא."
+
+msgid "Restore slider"
+msgstr "שחזר סליידר"
+
+msgid ""
+"The imported slider will have the same ID as the original export has. If you "
+"have a slider with the same ID, it will be overwritten."
+msgstr ""
+"לסליידר המיובא יהיה אותו מזהה כמו לייצוא המקורי. אם יש לך סליידר עם אותו "
+"מזהה, הוא יוחלף."
+
+msgid "Image mode"
+msgstr "מצב תמונה"
+
+msgid "Clone"
+msgstr "שכפול"
+
+msgid "Old site url"
+msgstr "URL אתר."
+
+msgid "Original"
+msgstr "מקורי"
+
+msgid "You can choose how the slide images are loaded."
+msgstr "באפשרותך לבחור כיצד יטענו תמונות השקופיות."
+
+msgid "Trash"
+msgstr "נמחק"
+
+msgid "Empty trash"
+msgstr "פינוי האשפה"
+
+msgid "Slide saved."
+msgstr "שקופית נשמרה."
+
+#, php-format
+msgid "%d static slides generated."
+msgstr "נוצרו %d שקופיות סטטיות."
+
+msgid "Slide renamed."
+msgstr "שם השקופית השתנה."
+
+msgid "First slide changed."
+msgstr "השקופית הראשונה השתנתה."
+
+msgid "Static overlay converted to slide."
+msgstr "כיסוי סטטי שהומר לשקופית."
+
+msgid "Slide published."
+msgstr "השקופית פורסמה."
+
+msgid "Slide unpublished."
+msgstr "השקופית לא פורסמה."
+
+msgid "Slide order saved."
+msgstr "סדר השקופיות נשמר."
+
+msgid "Slide(s) copied."
+msgstr "השקופית(ות) הועתקה."
+
+msgid "Slide deleted."
+msgstr "השקופית נמחקה."
+
+msgid "Slides created."
+msgstr "השקופיות נוצרו."
+
+msgid "Slide created."
+msgstr "השקופית נוצרה."
+
+msgid "Failed to create slides."
+msgstr "יצירת השקופיות נכשלה."
+
+msgid "Static save"
+msgstr "שמירה סטטית"
+
+msgid "Generator settings"
+msgstr "הגדרות גנרטור"
+
+msgid "Cache expiration"
+msgstr "תפוגת המטמון"
+
+msgid "Hours"
+msgstr "שעות"
+
+msgid "Start index"
+msgstr "אינדקס התחלה"
+
+msgid "Group result"
+msgstr "תוצאה קבוצתית"
+
+msgid "Smart Slider 3 deactivated on this site!"
+msgstr "סליידר חכם 3 מושבת באתר זה!"
+
+msgid "New slider"
+msgstr "סליידר חדש"
+
+msgid "Alias removed"
+msgstr "כינוי הוסר"
+
+msgid "Alias must contain one or more letters"
+msgstr "כינוי חייב להכיל אות אחת או יותר"
+
+#, php-format
+msgid "Alias updated to: %s"
+msgstr "כינוי עודכן ל: %s"
+
+msgid "Background animation"
+msgstr "הנפשת רקע"
+
+msgid "Animation type"
+msgstr "סוג הנפשה"
+
+msgid "The importing failed at the unzipping part."
+msgstr "הייבוא נכשל בחלק הפותח."
+
+msgid "You can't import sliders from Smart Slider 2."
+msgstr "לא ניתן לייבא סליידרים ממחוון חכם 2."
+
+msgid "Export file corrupted! Slider data is missing."
+msgstr "קובץ ייצוא פגום! נתוני הסליידר חסרים."
+
+#, php-format
+msgid ""
+"The importing failed as the slider export contained an invalid class name: "
+"%1$s"
+msgstr "הייבוא נכשל מכיוון שייצוא הסליידר הכיל שם מחלקה לא חוקי: %1$s"
+
+#, php-format
+msgid "The importing failed as we are not able to unserialize the type: \"%s\""
+msgstr "הייבוא נכשל מכיוון שלא הצלחנו לבטל את הסידרה של הסוג: \"%s\""
+
+msgid "Learn more"
+msgstr "טען עוד"
+
+#, php-format
+msgid "Increase %1$s in php.ini to 1000 or more. Current value: %2$s"
+msgstr "הגדל את %1$s ב - php.ini ל -1,000 או יותר. ערך נוכחי: %2$s"
+
+#, php-format
+msgid ""
+"Decrease %1$s below 15 in php.ini to prevent fatal errors on plugin updates. "
+"Current value: %2$s"
+msgstr ""
+"הפחת את %1$s מתחת ל -15 ב - php.ini כדי למנוע שגיאות קטלניות בעדכוני תוספים. "
+"ערך נוכחי: %2$s"
+
+msgid "Unable to connect to the API"
+msgstr "לא ניתן להתחבר ל - API"
+
+#, php-format
+msgid "See %1$sDebug Information%2$s for more details!"
+msgstr "עיין ב %1$s מידע על איתור באגים %2$s לקבלת פרטים נוספים!"
+
+msgid "MySQL table missing"
+msgstr "טבלת MySQL חסרה"
+
+msgid "Your theme uses an outdated MooTools library which is not compatible."
+msgstr "ערכת העיצוב שלך משתמשת בספריית MooTools מיושנת שאינה תואמת."
+
+msgid ""
+"JCH Optimize could have a conflict with Smart Slider's Global settings -> "
+"Framework settings -> Async Non-Primary CSS. If your Google fonts are not "
+"loading, turn this option off."
+msgstr ""
+"ל - JCH Optimize יכולה להיות התנגשות עם ההגדרות הגלובליות של סליידר חכם -> "
+"הגדרות מסגרת -> ASYNC Non - Primary CSS. אם גופני Google שלך אינם נטענים, "
+"כבה אפשרות זו."
+
+msgid ""
+"This plugin breaks JavaScript in the admin area, deactivate it and use "
+"alternative plugin."
+msgstr "תוסף זה שובר את JavaScript באזור הניהול, מבטל אותו ומשתמש בתוסף חלופי."
+
+msgid ""
+"This plugin breaks Smart Slider 3 ajax calls if custom admin url enabled."
+msgstr ""
+"תוסף זה שובר שיחות ajax חכם המחוון 3 אם כתובת URL מותאמת אישית admin מופעלת."
+
+msgid "This plugin adds a background image to every SVG and breaks SSL."
+msgstr "תוסף זה מוסיף תמונת רקע לכל SVG ושובר SSL."
+
+msgid "This plugin has a JavaScript error which might break Smart Slider."
+msgstr "תוסף זה מכיל שגיאת JavaScript שעשויה לשבור את הסליידר החכם."
+
+#, php-format
+msgid ""
+"This plugin breaks the filtering options of the dynamic slide generators "
+"when %1$s is set to %2$s. Also it has not received any updates since "
+"WordPress 3.9."
+msgstr ""
+"תוסף זה שובר את אפשרויות הסינון של מחוללי השקופיות הדינמיים כאשר %1$s מוגדר "
+"ל - %2$s. כמו כן, היא לא קיבלה עדכונים מאז וורדפרס 3.9."
+
+msgid ""
+"Optimization plugins often create issues, so if you see anything wrong, "
+"follow our documentation:"
+msgstr ""
+"תוספי אופטימיזציה לעתים קרובות ליצור בעיות, כך שאם אתה רואה משהו לא בסדר, "
+"בצע את התיעוד שלנו:"
+
+msgid "Add column"
+msgstr "הוספת עמודה"
+
+msgid "Year"
+msgstr "שנה"
+
+msgid "Month"
+msgstr "חודש"
+
+msgid "Day"
+msgstr "יום"
+
+msgid "Hour"
+msgstr "שעות"
+
+msgid "Minute"
+msgstr "דקה"
+
+msgid "Stack"
+msgstr "צבור"
+
+msgid "Deprecation"
+msgstr "פחת"
+
+msgid ""
+"This generator will get deprecated soon, so you shouldn't use it anymore!"
+msgstr "גנרטור זה יקבל מיושן בקרוב, אז אתה לא צריך להשתמש בו יותר!"
+
+msgid "No description."
+msgstr "בלי תיאור"
+
+msgid "Generator not found"
+msgstr "הגנרטור לא נמצא"
+
+msgid "Test generator."
+msgstr "גנרטור בדיקה."
+
+msgid "Generator type not found"
+msgstr "סוג הגנרטור לא נמצא"
+
+#, php-format
+msgid "%1$s generator missing the following source: %2$s"
+msgstr "%1$s גנרטור חסר המקור הבא: %2$s"
+
+msgid "Joomla articles"
+msgstr "מאמרים ג'ומלה"
+
+msgid "Creates slides from your Joomla articles or categories."
+msgstr "יוצר שקופיות מהמאמרים או הקטגוריות שלך בג'ומלה."
+
+msgid "Article"
+msgstr "מאמר"
+
+msgid "Category"
+msgstr "קטגוריה"
+
+msgid "Creates slides from your Joomla articles in the selected categories."
+msgstr "יוצר שקופיות ממאמרי ג'ומלה בקטגוריות שנבחרו."
+
+msgid "Tags"
+msgstr "תגים"
+
+msgid "Access level"
+msgstr "רמת גישה"
+
+msgid "Featured"
+msgstr "מומלץ"
+
+msgid "User ID"
+msgstr "מזהה משתמש"
+
+msgid "Included article IDs"
+msgstr "מזהי מאמרים כלולים"
+
+msgid "Excluded article IDs"
+msgstr "מזהי מאמרים שלא נכללו"
+
+msgid "Language"
+msgstr "שפה"
+
+msgid "Fields"
+msgstr "שדות"
+
+msgid "Extra variables"
+msgstr "משתנים נוספים"
+
+msgid "Turn on these options to generate more variables for the slides."
+msgstr "הפעל אפשרויות אלה כדי ליצור משתנים נוספים עבור השקופיות."
+
+msgid "Remove shortcodes"
+msgstr "הסר שורטקודים"
+
+msgid "Remove shortcodes from article description with the following patterns."
+msgstr "הסר שורטקודים מתיאור המאמר עם הדפוסים הבאים."
+
+msgid "Date format"
+msgstr "תבנית התאריך"
+
+msgid "Time format"
+msgstr "תבנית שעון"
+
+msgid "Translate date and time"
+msgstr "תרגום תאריך ושעה"
+
+msgid "Title"
+msgstr "כותרת"
+
+msgid "User name"
+msgstr "שם משתמש/ת"
+
+msgid "Hits"
+msgstr "כניסות"
+
+msgid "Creation time"
+msgstr "זמן יצירה"
+
+msgid "Modification time"
+msgstr "זמן שינוי"
+
+msgid "Publish time"
+msgstr "שעת פרסום"
+
+msgid "Featured article ordering"
+msgstr "סדר המאמרים המומלצים"
+
+msgid "View article"
+msgstr "צפה במאמר"
+
+msgid ""
+"Creates slides from your Joomla categories. (Not the articles inside them.)"
+msgstr "יוצר שקופיות מקטגוריות ג'ומלה שלך. (לא המאמרים שבתוכם)"
+
+msgid "Parent category"
+msgstr "קטגוריית אב"
+
+msgid "View category"
+msgstr "הצגת הקטגוריה"
+
+msgid "Nothing"
+msgstr "אין כלום..."
+
+#, php-format
+msgid "Creates slides from %1$s."
+msgstr "יוצר שקופיות מ - %1$s."
+
+msgid "Posts by filter"
+msgstr "פוסטים לפי פילטר"
+
+msgid "Posts by IDs"
+msgstr "פוסטים על ידי "
+
+msgid "Custom"
+msgstr "מותאם אישית"
+
+msgid "All custom posts"
+msgstr "פוסטים מותאמים אישית"
+
+msgid "Creates slides from the posts of all your post types."
+msgstr "יוצר שקופיות מהפוסטים של כל סוגי הפוסטים שלך."
+
+msgid "Post types"
+msgstr "סוג פוסט:"
+
+msgid "Taxonomies"
+msgstr "טקסונומיות:"
+
+msgid "Post IDs to display"
+msgstr "מזהי פוסטים להצגה"
+
+#, php-format
+msgid ""
+"You can make your generator display only the posts with the set ID. No other "
+"post will be fetched, even if they match the set filters. %1$s Write one ID "
+"per line."
+msgstr ""
+"אתה יכול להפוך את הגנרטור שלך להציג רק את ההודעות עם מזהה קבוצה. אף פוסט אחר "
+"לא יובא, גם אם הוא תואם למסננים שהוגדרו. %1$s כתוב מזהה אחד בכל שורה."
+
+msgid "Sticky"
+msgstr "נעוץ"
+
+msgid "Post status"
+msgstr "סטטוס של הפוסט"
+
+msgid "Post meta comparison"
+msgstr "השוואת מטא פוסטים"
+
+msgid "Field name"
+msgstr "שם שדה"
+
+msgid ""
+"Only show posts, where the given meta key is equal to the given meta value."
+msgstr "הצג רק פוסטים שבהם מפתח המטא הנתון שווה לערך המטא הנתון."
+
+msgid "Compare method"
+msgstr "שיטת השוואה"
+
+msgid "Field value"
+msgstr "ערך השדה"
+
+msgid "Field type"
+msgstr "סוג  שדה"
+
+msgid "Meta comparison"
+msgstr "השוואת מטא"
+
+#, php-format
+msgid ""
+"You can create other comparisons based on the previous \"Post Meta Comparison"
+"\" options. Use the following format: name||compare||value||type%1$s%1$s "
+"Example:%1$spublished||=||yes||CHAR%1$s%1$sWrite one comparison per line."
+msgstr ""
+"באפשרותך ליצור השוואות אחרות בהתבסס על האפשרויות הקודמות \"Post Meta "
+"Comparison \". השתמש בתבנית הבאה: name||compare||value||type%1$s%1$s דוגמה:"
+"%1$sפורסמה||= ||כן||CHAR%1$s%1$sכתוב השוואה אחת בכל שורה."
+
+msgid "Post date"
+msgstr "תאריך הפוסט"
+
+msgid "Modification date"
+msgstr "תאריך שינוי"
+
+msgid "Random"
+msgstr "אקראי"
+
+msgid "Given IDs"
+msgstr "תעודות זהות ניתנות"
+
+msgid "Menu order"
+msgstr "סדר תפריט"
+
+#, php-format
+msgid "Creates slides from the following post type: %1$s."
+msgstr "יוצר שקופיות מסוג הפוסט הבא: %1$s."
+
+msgid "Relation"
+msgstr "יחס"
+
+msgid "Exclude posts"
+msgstr "אל תכללי פוסטים"
+
+#, php-format
+msgid ""
+"The selected post IDs won't appear in the generator, even if they they match "
+"the set filters. %1$s Write one ID per line."
+msgstr ""
+"מזהי הפוסטים שנבחרו לא יופיעו בגנרטור, גם אם הם תואמים למסננים שהוגדרו. %1$s "
+"כתוב מזהה אחד בכל שורה."
+
+msgid "Post option"
+msgstr "אפשרות פוסט"
+
+msgid ""
+"Posts can have options, like a post can be \"sticky\" or not. You can choose "
+"to only display posts, which are selected to be IN or NOT IN this option."
+msgstr ""
+"לפוסטים יכולות להיות אפשרויות, כמו למשל פוסט שיכול להיות \"דביק\" או לא. "
+"באפשרותך לבחור להציג רק פוסטים, שנבחרו להיות או לא להיות באפשרות זו."
+
+msgid "Post relationship with selected option"
+msgstr "קשרי פוסט עם האפשרות שנבחרה"
+
+msgid "Date configuration"
+msgstr "תצורת תאריך"
+
+msgid "Identify datetime"
+msgstr "זיהוי תאריך ושעה"
+
+msgid "Our system tries to identify the date and time in your variables."
+msgstr "המערכת שלנו מנסה לזהות את התאריך והשעה במשתנים שלך."
+
+msgid "Datetime format"
+msgstr "זמן למטה"
+
+#, php-format
+msgid "You can use any %1$sPHP date format%2$s."
+msgstr "אפשר להשתמש בכל תבנית של %1$s תאריך PHP %2$s."
+
+msgid "Translate dates"
+msgstr "תרגום תאריכים"
+
+#, php-format
+msgid ""
+"Write one per line in the following format: from||to %1$s E.g.: Monday||"
+"Montag"
+msgstr "כתוב שורה אחת בכל שורה בפורמט הבא: מ||עד %1$s לדוגמה: יום שני||מונטאג"
+
+msgid "Replace variables"
+msgstr "החלף משתנים"
+
+msgid "Timestamp variables"
+msgstr "משתני חותמת זמן"
+
+msgid "Replace timestamp variables"
+msgstr "החלף משתני חותמת זמן"
+
+#, php-format
+msgid ""
+"The \"Datetime format\" will be used to create dates from the given "
+"timestamp containing variables. %1$s Separate them with comma."
+msgstr ""
+"תבנית \"Datetime\" תשמש ליצירת תאריכים מחותמת הזמן הנתונה המכילה משתנים. "
+"%1$s הפרד אותם באמצעות פסיק."
+
+msgid "File variables"
+msgstr "משתני קובץ"
+
+msgid "Replace file variables"
+msgstr "החלף משתני קובץ"
+
+#, php-format
+msgid ""
+"If you have IDs of files, you can replace those variables with the urls of "
+"the files instead. %1$s Separate them with comma."
+msgstr ""
+"אם יש לך מזהים של קבצים, באפשרותך להחליף משתנים אלה בכתובות האתרים של הקבצים "
+"במקום. %1$s הפרד אותם בפסיק."
+
+msgid "Remove duplicate results"
+msgstr "הסרת תוצאות כפולות"
+
+msgid ""
+"You can remove results based on one variable's uniqueness. For example if "
+"you want the images to be unique, you could write the \"image\" variable "
+"into this field (without quotemarks)."
+msgstr ""
+"ניתן להסיר תוצאות על סמך הייחודיות של משתנה אחד. לדוגמה, אם ברצונך שהתמונות "
+"יהיו ייחודיות, תוכל לכתוב את המשתנה \"image\" בשדה זה (ללא מרכאות)."
+
+msgid "Custom field name"
+msgstr "שם שדה מותאם אישי"
+
+msgid "If it's set, this will be used instead of the 'Field' value."
+msgstr "אם הוא מוגדר, ייעשה בו שימוש במקום הערך 'שדה '."
+
+msgid "Numeric"
+msgstr "מספריים"
+
+msgid "Alphabetic"
+msgstr "סדר לפי א'-ב"
+
+msgid "Creates slides from your posts in the selected categories."
+msgstr "יוצר שקופיות מהפוסטים שלך בקטגוריות שנבחרו."
+
+msgid "Categories"
+msgstr "קטגוריות"
+
+msgid ""
+"You can remove shortcodes from variables to avoid 3rd party content "
+"rendering in your slider."
+msgstr ""
+"באפשרותך להסיר קודי קיצור ממשתנים כדי למנוע עיבוד תוכן של צד שלישי בסליידר "
+"שלך."
+
+msgid "Remove from variables"
+msgstr "הסר ממשתנים"
+
+msgid ""
+"Write the name of the variables you want to remove the shortcodes from. "
+"Separate new variables with a comma and space. E.g. description, content"
+msgstr ""
+"כתוב את שם המשתנים שמהם ברצונך להסיר את קודי הקיצור. הפרד בין משתנים חדשים "
+"באמצעות פסיק ומרווח. לדוגמה: תיאור, תוכן"
+
+msgid "Custom date variables"
+msgstr "משתני תאריך מותאמים אישית"
+
+#, php-format
+msgid ""
+"You can create custom date variables from your existing date variables. "
+"Write each variable to a new line and use the following format: variable||"
+"format. %3$s The \"variable\" should be an existing variable. Based on this "
+"existing variable, we create a new one with the \"_datetime\" suffix. (E.g. "
+"date_datetime.) %3$s The \"format\" can be any %1$sPHP date format%2$s."
+msgstr ""
+"אתה יכול ליצור משתני תאריך מותאמים אישית ממשתני התאריך הקיימים שלך. כתוב כל "
+"משתנה לשורה חדשה והשתמש בפורמט הבא: משתנה||פורמט. %3$s ה\"משתנה\" צריך להיות "
+"משתנה קיים. בהתבסס על משתנה קיים זה, אנו יוצרים משתנה חדש עם הסיומת "
+"\"_datetime\". (למשל date_datetime.) %3$s ה\"פורמט\" יכול להיות כל %1$sPHP "
+"פורמט תאריך%2$s."
+
+msgid "Translate custom dates"
+msgstr "תרגום תאריכים מותאמים אישית"
+
+#, php-format
+msgid ""
+"You can translate the content of the newly created variables. %1$s Use the "
+"following format: from||to. Eg.: Monday||Montag"
+msgstr ""
+"באפשרותך לתרגם את התוכן של המשתנים החדשים שנוצרו. %1$s השתמש בתבנית הבאה: מ "
+"-||ל -. לדוגמה: יום שני||מונטאג"
+
+msgid "Date function"
+msgstr "פונקציית תאריך"
+
+msgid ""
+"This function will be used to format these custom date variables. Usually "
+"the date_i18n works, but if your date will be off a little bit, then try out "
+"the other one."
+msgstr ""
+"פונקציה זו תשמש לעיצוב משתני תאריך מותאמים אישית אלה. בדרך כלל התאריך "
+"DATE_i18n עובד, אבל אם התאריך שלך יהיה קצת כבוי, ואז לנסות את השני."
+
+msgid "Comment count"
+msgstr "ספירת תגובות"
+
+msgid "Creates slides from the posts with the set IDs."
+msgstr "יוצר שקופיות מהפוסטים עם מזהי הקבוצות."
+
+msgid "Post or Page IDs"
+msgstr "מזהי פוסטים או עמודים"
+
+#, php-format
+msgid ""
+"You can write the ID of the page you want to show in your generator. %1$s "
+"Write one ID per line."
+msgstr ""
+"ניתן לכתוב את המזהה של הדף שברצונך להציג בגנרטור. %1$s כתוב מזהה אחד בכל "
+"שורה."
+
+msgid "Whole group"
+msgstr "כל הקבוצה"
+
+msgid "Select Slider"
+msgstr "בחר סליידר"
+
+msgid "OR"
+msgstr "או"
+
+msgid "Insert a slider into your content"
+msgstr "הוסף סליידר לתוכן שלך"
+
+msgid "Select the slider you want to insert."
+msgstr "בחר את הסליידר שברצונך להוסיף."
+
+msgctxt "Button layer default text"
+msgid "MORE"
+msgstr "מידע נוסף"
+
+msgid "Label"
+msgstr "דירוג"
+
+msgid "No wrap"
+msgstr "ללא מעטפת"
+
+msgid "Prevents the text from breaking into more lines"
+msgstr "מונע את הטקסט מלפרוץ לשורות נוספות"
+
+msgid "Rel"
+msgstr "Rel"
+
+#, php-format
+msgid ""
+"Enter the %1$s rel attribute %2$s that represents the relationship between "
+"the current document and the linked document. Multiple rel attributes can be "
+"separated with space. E.g. nofollow noopener noreferrer"
+msgstr ""
+"הזן את %1$s תכונת REL %2$s המייצגת את הקשר בין המסמך הנוכחי והמסמך המקושר. "
+"ניתן להפריד מספר תכונות rel עם רווח. לדוגמה, nofollow noopener noreferrer"
+
+msgid "Icon"
+msgstr "אייקון"
+
+msgid "Placement"
+msgstr "שיבוץ"
+
+#, php-format
+msgid "Class on the %s element."
+msgstr "שיעור על הרכיב %s."
+
+msgid "Heading layer"
+msgstr "שכבת כותרת"
+
+msgid "Text animation"
+msgstr "הנפשה נכנסת"
+
+msgid "Incoming"
+msgstr "נכנסות"
+
+msgid "Outgoing"
+msgstr "יוצאות"
+
+msgid "Backface visibility"
+msgstr "נראות פנים אחוריות"
+
+#, php-format
+msgid "Fix width for the %1$s."
+msgstr "תקן רוחב עבור %1$s."
+
+#, php-format
+msgid "Fix height for the %1$s."
+msgstr "קבע גובה עבור %1$s."
+
+msgid "Alt tag"
+msgstr "תגית ALT"
+
+msgid "Optimize image"
+msgstr "מיטוב התמונה"
+
+msgid ""
+"You can turn off the Layer image optimization for this image, to resize it "
+"for tablet and mobile."
+msgstr ""
+"באפשרותך להשבית את אופטימיזציה של תמונות שכבה עבור תמונה זו, כדי לשנות את "
+"גודלה עבור טאבלט ונייד."
+
+msgctxt "Layer group"
+msgid "Special"
+msgstr "ייחודי"
+
+msgctxt "Layer group"
+msgid "Media"
+msgstr "מדיה"
+
+msgctxt "Layer group"
+msgid "Advanced"
+msgstr "מתקדם"
+
+msgctxt "Layer"
+msgid "Missing"
+msgstr "חסר"
+
+#, php-format
+msgid "Missing layer type: %s"
+msgstr "סוג שכבה חסר: %s"
+
+msgid "Custom text for tablet"
+msgstr "טקסט מותאם אישית לטאבלט"
+
+msgid "Tablet text"
+msgstr "טקסט טאבלט"
+
+msgid "Custom text for mobile"
+msgstr "טקסט מותאם אישית לנייד"
+
+msgid "Mobile text"
+msgstr "טקסט לנייד"
+
+msgid "Vimeo url or Video ID"
+msgstr "כתובת URL או מזהה וידאו של Vimeo"
+
+msgid "Cover image"
+msgstr "תמונת רקע:"
+
+msgid "Aspect ratio"
+msgstr "יחס-תמונה"
+
+msgid "Fill layer height"
+msgstr "גובה שכבה"
+
+msgid "Set on Style tab."
+msgstr "הגדר בלשונית סגנון."
+
+msgid "Video settings"
+msgstr "הגדרות וידאו"
+
+msgid "When ended"
+msgstr "כאשר ‎ ‎ הסתיים"
+
+msgid "Do nothing"
+msgstr "לא לעשות כלום"
+
+msgid "Go to next slide"
+msgstr "מעבר לשקופית הבאה"
+
+msgid "Start time"
+msgstr "מועד התחלה"
+
+msgid "Volume"
+msgstr "נפח"
+
+msgid "Mute"
+msgstr "השתקה"
+
+msgid "Pause on scroll"
+msgstr "השהה בעת גלילה"
+
+msgid "Never"
+msgstr "תמיד"
+
+msgid "When partly visible"
+msgstr "כאשר גלוי חלקית"
+
+msgid "When not visible"
+msgstr "כאשר גלוי חלקית"
+
+msgid "You can pause the video when the visitor scrolls away from the slider"
+msgstr "אתה יכול להשהות את הווידאו כאשר המבקר גולל מן הסליידר"
+
+msgid "Display"
+msgstr "הציגי"
+
+msgid "Only works on videos of Vimeo Pro users."
+msgstr "עובד רק על קטעי וידאו של משתמשי Vimeo Pro."
+
+msgid "Remove controls"
+msgstr "הסר פקדים"
+
+msgid ""
+"Removes the controls of the video, but it only works on videos of Vimeo Pro "
+"users."
+msgstr ""
+"מסיר את הפקדים של הווידאו, אבל זה עובד רק על קטעי וידאו של משתמשי Vimeo Pro."
+
+msgid "Hides the title of the video, but only if video owner allows it."
+msgstr "מסתיר את הכותרת של הסרטון, אך רק אם בעל הסרטון מאפשר זאת."
+
+msgid "Users byline"
+msgstr "כותרת משתמש"
+
+msgid ""
+"Hides the user's byline of the video, but only if video owner allows it."
+msgstr "מסתיר את כותרת המשנה של הסרטון, אך רק אם בעל הסרטון מאפשר זאת."
+
+msgid ""
+"Hides the profile image of the author, but only if video owner allows it. "
+msgstr "מסתיר את תמונת הפרופיל של המחבר, אך רק אם בעל הסרטון מאפשר זאת."
+
+msgid "Play button"
+msgstr "כפתור ‘הפעל’"
+
+msgid "Play"
+msgstr "מנגנים"
+
+msgid "YouTube URL or Video ID"
+msgstr "כתובת אתר או מזהה סרטון של YouTube"
+
+msgid "End time"
+msgstr "מועד סיום"
+
+msgid "Hide YouTube logo"
+msgstr "הסתר את הלוגו של YouTube"
+
+msgid "Centered"
+msgstr "ממורכז"
+
+msgid "Scales up and crops the video to cover the whole layer."
+msgstr "הגדל את קנה המידה וחתוך את הווידאו כדי לכסות את כל השכבה."
+
+msgid "Show related videos"
+msgstr "סרטונים מקושרים"
+
+msgid "Anywhere"
+msgstr "בכל מקום"
+
+msgid "Same channel"
+msgstr "אותו ערוץ"
+
+msgid ""
+"YouTube no longer allows hiding the related videos at the end of the video. "
+"This setting defines whether the videos should come from the same channel as "
+"the video that was just played or from any other channel."
+msgstr ""
+"YouTube אינו מתיר עוד להסתיר את הסרטונים הקשורים בסוף הסרטון. הגדרה זו "
+"מגדירה אם הסרטונים צריכים להגיע מאותו ערוץ שבו הושמע הסרטון או מכל ערוץ אחר."
+
+msgid "Slider error! Generator group not found: "
+msgstr "שגיאת סליידר! קבוצת המחולל לא נמצאה:"
+
+msgid "Slider error! Generator source not found: "
+msgstr "שגיאת סליידר! מקור הגנרטור לא נמצא:"
+
+msgid "Downscale"
+msgstr "בקנה מידה נמוך"
+
+msgid "Allows the slider to scale down for smaller screens."
+msgstr "מאפשר לסליידר להתרחב למסכים קטנים יותר."
+
+msgid "Upscale"
+msgstr "יוקרתי"
+
+msgid "Allows the slider to scale up for larger screens."
+msgstr "מאפשר לסליידר לגדול למסכים גדולים יותר."
+
+msgid "Min height"
+msgstr "המסה ימינה"
+
+msgid "Prevents the slider from getting smaller than the set value."
+msgstr "מונע מהמחוון להיות קטן יותר מהערך שנקבע."
+
+msgid "Force full width"
+msgstr "כפה רוחב מלא"
+
+msgid "The slider tries to fill the full width of the browser."
+msgstr "המחוון מנסה למלא את מלוא רוחב הדפדפן."
+
+msgid "Overflow-X"
+msgstr "גלישה - X"
+
+msgid ""
+"Prevents the vertical scrollbar from appear during certain slide background "
+"animations."
+msgstr "מונע את הופעת פס הגלילה האנכי במהלך הנפשות מסוימות ברקע השקופיות."
+
+msgid "Adjust slider width to"
+msgstr "התאם את רוחב הסליידר ל"
+
+msgid ""
+"You can make the slider fill up a selected parent element instead of the "
+"full browser width."
+msgstr "באפשרותך להפוך את המחוון למלא רכיב אב נבחר במקום רוחב הדפדפן המלא."
+
+msgid "Not found"
+msgstr "לא נמצא כלום"
+
+msgid "Slider size is too small!"
+msgstr "גודל המחוון קטן מדי!"
+
+msgid "Ken Burns effect"
+msgstr "אפקט קן ברנס"
+
+msgid "Speed"
+msgstr "מהירות"
+
+msgid "Super slow"
+msgstr "סופר איטי"
+
+msgid "Slow"
+msgstr "איטי"
+
+msgid "Fast"
+msgstr "מהיר"
+
+msgid "Super fast"
+msgstr "סופר מהיר"
+
+msgid "Border width"
+msgstr "רוחב הגבול"
+
+msgid "Border color"
+msgstr "צבע מסגרת"
+
+msgid "Super fast 4x"
+msgstr "סופר מהיר 4x"
+
+msgctxt "Slider type"
+msgid "Simple slider"
+msgstr "סליידר פשוט"
+
+msgid "Main animation"
+msgstr "סוף הנפשה ראשי"
+
+msgid "No animation"
+msgstr "ללא הנפשה"
+
+msgid "Crossfade"
+msgstr "מעבר"
+
+msgid "Horizontal - reversed"
+msgstr "קווים אופקיים"
+
+msgid "Vertical - reversed"
+msgstr "קווים אנכיים"
+
+msgctxt "Feature"
+msgid "Carousel"
+msgstr "קרוסלה"
+
+msgid ""
+"If you turn off this option, you can't switch to the first slide from the "
+"last one."
+msgstr "אם תכבה אפשרות זו, לא תוכל לעבור לשקופית הראשונה מהקודמת."
+
+msgid ""
+"Background animations only work on the slide background images, which have "
+"Fill selected at their Fill mode. They don't affect any images if the "
+"background parallax is enabled."
+msgstr ""
+"אנימציות רקע פועלות רק על תמונות הרקע של השקופיות, שנבחרו במצב המילוי שלהן. "
+"הם אינם משפיעים על תמונות אם הפרלקסה ברקע מופעלת."
+
+msgid "Shifted"
+msgstr "הועתק"
+
+msgid "The background and the main animation plays simultaneously or shifted."
+msgstr "הרקע והאנימציה הראשית מתנגנים בו זמנית או זזים."
+
+msgid "Slider CSS Preset"
+msgstr "סליידר CSS מוגדר מראש"
+
+msgid "Light shadow"
+msgstr "אור צל"
+
+msgid "Dark shadow"
+msgstr "צל כהה"
+
+msgid "Photo"
+msgstr "תמונה"
+
+msgid "Photo rounded"
+msgstr "תמונה מעוגלת"
+
+#, php-format
+msgid "Demo slider is not available with the following ID: %s"
+msgstr "מחוון ההדגמה אינו זמין עם המזהה הבא: %s"
+
+msgid "Blue"
+msgstr "כחול"
+
+msgid "White"
+msgstr "לבן"
+
+msgid "Green"
+msgstr "ירוק"
+
+msgid "Purple"
+msgstr "סגול"
+
+msgid "Grey"
+msgstr "אפור"
+
+msgid "Black"
+msgstr "שחור"
+
+msgid "Rounded Blue"
+msgstr "כחול מעוגל"
+
+msgid "Rounded Green"
+msgstr "ירוק מעוגל"
+
+msgid "Rounded Purple"
+msgstr "סגול מעוגל"
+
+msgid "Rounded Grey"
+msgstr "אפור מעוגל"
+
+msgid "Rounded White"
+msgstr "לבן מעוגל"
+
+msgid "Rounded Black"
+msgstr "שחור מעוגל"
+
+msgid "Border White"
+msgstr "גבול לבן"
+
+msgid "Border Dark"
+msgstr "גבול כהה"
+
+msgid "Rectangle Green"
+msgstr "מלבן ירוק"
+
+msgid "Rectangle Blue"
+msgstr "מלבן כחול"
+
+msgid "Rectangle Purple"
+msgstr "מלבן סגול"
+
+msgid "Rectangle Grey"
+msgstr "מלבן אפור"
+
+msgid "Rounded Rectangle Green"
+msgstr "מלבן מעוגל ירוק"
+
+msgid "Rounded Rectangle Blue"
+msgstr "מלבן מעוגל"
+
+msgid "Rounded Rectangle Purple"
+msgstr "מלבן מעוגל סגול"
+
+msgid "Border Light"
+msgstr "תאורת גבול"
+
+msgid "My styles"
+msgstr "הסגנונות שלי"
+
+msgid "X-small Light"
+msgstr "תאורת X - Small"
+
+msgid "X-small Dark"
+msgstr "X - קטן כהה"
+
+msgid "Small Light"
+msgstr "אור קטן"
+
+msgid "Small Dark"
+msgstr "קטן כהה"
+
+msgid "Medium Light"
+msgstr "בהיר למחצה"
+
+msgid "Medium Dark"
+msgstr "כהה למחצה"
+
+msgid "Large Light"
+msgstr "אור גדול"
+
+msgid "Large Dark"
+msgstr "גדול כהה"
+
+msgid "X-large Light"
+msgstr "תאורת X - Large"
+
+msgid "X-large Dark"
+msgstr "X - Large Dark"
+
+msgid "My fonts"
+msgstr "הגופנים שלי"
+
+msgid "Warp"
+msgstr "עיוות"
+
+msgid "Twirl"
+msgstr "סיבוב"
+
+msgid "Domino"
+msgstr "דומינו"
+
+msgid "Stand up"
+msgstr "עמוד!"
+
+msgid "Rotate down"
+msgstr "סובב כלפי מטה"
+
+msgid "Elastic"
+msgstr "אלסטי"
+
+msgid "Random elastic"
+msgstr "אלסטי אקראי"
+
+msgid "My text animations"
+msgstr "אנימציות הטקסט שלי"
+
+msgid "Morph - Wave"
+msgstr "מורף - גל"
+
+msgid "Morph - Brush"
+msgstr "מורף - גל"
+
+msgid "Morph - Flow"
+msgstr "מורף - גל"
+
+msgid "Morph - Noise"
+msgstr "מורפ - רעש"
+
+msgid "Distortion - Mosaic"
+msgstr "עיוות - פסיפס"
+
+msgid "Distortion - Triangle"
+msgstr "עיוות - משולש"
+
+msgid "Distortion - Flow"
+msgstr "עיוות - זרימה"
+
+msgid "Distortion - Warp"
+msgstr "עיוות - עיוות"
+
+msgid "Distortion - Storm"
+msgstr "עיוות - סערה"
+
+msgid "Distortion - Wave"
+msgstr "עיוות - גל"
+
+msgid "Distortion - Shard"
+msgstr "עיוות - Shard"
+
+msgid "Distortion - Noise"
+msgstr "עיוות - רעש"
+
+msgid "Slices - Single"
+msgstr "פרוסות - יחיד"
+
+msgid "Slices - Simple rows and scale"
+msgstr "פרוסות - שורות וקנה מידה פשוטים"
+
+msgid "Slices - Simple rows and rotate"
+msgstr "פרוסות - שורות פשוטות וסיבוב"
+
+msgid "Slices - Simple rows reversed"
+msgstr "פרוסות - שורות פשוטות הפוכות"
+
+msgid "Slices - Simple rows and blur"
+msgstr "פרוסות - שורות וטשטוש פשוטים"
+
+msgid "Slices - Triangle"
+msgstr "משולשים - Triangle"
+
+msgid "Slices - Reversed triangle"
+msgstr "משולש הפוך - Reverse Triangle"
+
+msgid "Scale to left"
+msgstr "שינוי קנה מידה"
+
+msgid "Rotate to left"
+msgstr "סובב לשמאל"
+
+msgid "Fixed to left"
+msgstr "תוקן משמאל"
+
+msgid "Parallax to left"
+msgstr "אפקט Parallax לשמאל"
+
+msgid "Flow"
+msgstr "זרימה"
+
+msgid "Flowing rows"
+msgstr "שורות"
+
+msgid "Flowing cols"
+msgstr "עמודות זורמות"
+
+msgid "Flowing tiles"
+msgstr "אריחים זורמים"
+
+msgid "Slide to left"
+msgstr "שקופית לשמאל"
+
+msgid "Stage"
+msgstr "במה"
+
+msgid "Zoom"
+msgstr "זום"
+
+msgid "Zoom out"
+msgstr "זום החוצה."
+
+msgid "Curtain to left"
+msgstr "וילון לשמאל"
+
+msgid "Blocks to left"
+msgstr "בלוקים שמאלה"
+
+msgid "Slices to left"
+msgstr "פרוסות לשמאל"
+
+msgid "Reversed slices to left"
+msgstr "פרוסות הפוכות לשמאל"
+
+msgid "Puzzle"
+msgstr "חידה"
+
+msgid "Switching to left"
+msgstr "מעבר לשמאל"
+
+msgid "Explode"
+msgstr "פיצוץ"
+
+msgid "Rebuild"
+msgstr "בנייה מחדש"
+
+msgid "Page turn to left"
+msgstr "סובב דף לשמאל"
+
+msgid "3D bricks to left"
+msgstr "3D לבנים לשמאל"
+
+msgid "Vertical spin to left"
+msgstr "סיבוב אנכי לשמאל"
+
+msgid "3D rows to left"
+msgstr "שורות תלת - ממדיות משמאל"
+
+msgid "3D columns to left"
+msgstr "עמודות תלת - ממדיות משמאל"
+
+msgid "Spinning cuboid to left"
+msgstr "ספינינג Cuboid לשמאל"
+
+msgid "Turning cuboid to left"
+msgstr "להפוך את הקובייה לשמאלית"
+
+msgid "Scale to top"
+msgstr "שינוי קנה מידה"
+
+msgid "Scale to bottom"
+msgstr "שנה קנה מידה לתחתית"
+
+msgid "Rotate to top"
+msgstr "סובב למעלה"
+
+msgid "Rotate to bottom"
+msgstr "סובב לתחתית"
+
+msgid "Fixed to top"
+msgstr "קבוע לראש העמוד"
+
+msgid "Fixed to bottom"
+msgstr "קבוע לתחתית"
+
+msgid "Parallax to top"
+msgstr "Parallax למעלה"
+
+msgid "Parallax to bottom"
+msgstr "Parallax לתחתית"
+
+msgid "Flowing tiles vertical"
+msgstr "אריחים זורמים אנכיים"
+
+msgid "Slide to bottom"
+msgstr "שקופית ללמטה"
+
+msgid "Slide to top"
+msgstr "שקופית ללמעלה"
+
+msgid "Curtain to bottom"
+msgstr "וילון לתחתית"
+
+msgid "Curtain to top"
+msgstr "וילון למעלה"
+
+msgid "Switching to bottom"
+msgstr "מעבר לתחתית הדף"
+
+msgid "Switching to top"
+msgstr "מעבר לחלק העליון"
+
+msgid "Horizontal spin to bottom"
+msgstr "סיבוב אופקי לתחתית"
+
+msgid "Horizontal spin to top"
+msgstr "סיבוב אופקי למעלה"
+
+msgid "3D bricks to bottom"
+msgstr "3D לבנים לתחתית"
+
+msgid "3D bricks to top"
+msgstr "3D לבנים למעלה"
+
+msgid "3D rows to bottom"
+msgstr "3D לבנים לתחתית"
+
+msgid "3D rows to top"
+msgstr "3D לבנים למעלה"
+
+msgid "3D columns to bottom"
+msgstr "3D לבנים לתחתית"
+
+msgid "3D columns to top"
+msgstr "3D לבנים למעלה"
+
+msgid "Spinning cuboid to bottom"
+msgstr "סובב את הקובייה לתחתית"
+
+msgid "Spinning cuboid to top"
+msgstr "ספינינג cuboid למעלה"
+
+msgid "Turning cuboid to bottom"
+msgstr "להפוך את הקובייה לתחתית"
+
+msgid "Turning cuboid to top"
+msgstr "להפוך את הקובייה לפסגה"
+
+msgid "Scale to right"
+msgstr "שנה קנה מידה לימין"
+
+msgid "Rotate to right"
+msgstr "סובב לימין"
+
+msgid "Fixed to right"
+msgstr "קבוע לימין"
+
+msgid "Parallax to right"
+msgstr "פאראלקס לימין"
+
+msgid "Flow - reversed"
+msgstr "זרימה - הפוכה"
+
+msgid "Slide to right"
+msgstr "שקופית לימין"
+
+msgid "Curtain to right"
+msgstr "וילון לתחתית"
+
+msgid "Blocks to right"
+msgstr "בלוקים לימין"
+
+msgid "Slices to right"
+msgstr "פרוסות לימין"
+
+msgid "Reversed slices to right"
+msgstr "פרוסות הפוכות לימין"
+
+msgid "Switching to right"
+msgstr "מעבר לימין"
+
+msgid "Page turn to right"
+msgstr "עמוד סובב לימין"
+
+msgid "Vertical spin to right"
+msgstr "סיבוב אנכי לימין"
+
+msgid "3D bricks to right"
+msgstr "3D לבנים לימין"
+
+msgid "3D rows to right"
+msgstr "שורות תלת - ממד מימין"
+
+msgid "3D columns to right"
+msgstr "עמודות תלת - ממדיות מימין"
+
+msgid "Spinning cuboid to right"
+msgstr "ספינינג cuboid לימין"
+
+msgid "Turning cuboid to right"
+msgstr "להפוך את הקובייה לימינה"
+
+msgid "Downscale left"
+msgstr "סולם שמאלי"
+
+msgid "Downscale right"
+msgstr "קנה מידה ימני"
+
+msgid "Downscale top"
+msgstr "בקנה מידה נמוך"
+
+msgid "Downscale bottom"
+msgstr "תחתון בקנה מידה נמוך"
+
+msgid "Upscale left"
+msgstr "שמאל יוקרתי"
+
+msgid "Upscale right"
+msgstr "עלייה בימין"
+
+msgid "Upscale top"
+msgstr "עליון יוקרתי"
+
+msgid "Upscale bottom"
+msgstr "תחתית משודרגת"
+
+msgid "To left"
+msgstr "כיסוי כלפי שמאל"
+
+msgid "To right"
+msgstr "כיסוי כלפי ימין"
+
+msgid "To top left"
+msgstr "למעלה משמאל"
+
+msgid "To top right"
+msgstr "עליון ימני"
+
+msgid "To bottom left"
+msgstr "שמאל תחתון"
+
+msgid "To bottom right"
+msgstr "תחתון ימני"
+
+msgid "My layouts"
+msgstr "הפריסות שלי"
+
+msgctxt "Arrow direction"
+msgid "Previous"
+msgstr "הפוסט הקודם"
+
+msgid "Previous image"
+msgstr "התמונה הקודמת"
+
+msgid "Hover color"
+msgstr "צבע בריחוף"
+
+msgid "Mirror"
+msgstr "מראה"
+
+msgctxt "Arrow direction"
+msgid "Next"
+msgstr "הבא"
+
+msgid "Next image"
+msgstr "התמונה הבאה"
+
+msgid "Arrow"
+msgstr "חץ"
+
+msgid "Previous position"
+msgstr "המיקום הקודם"
+
+msgid "Next position"
+msgstr "המיקום הבא"
+
+msgid "Previous alt tag"
+msgstr "התגית החלופית הקודמת"
+
+msgid "Next alt tag"
+msgstr "התגית החלופית הבאה"
+
+msgid "Base64"
+msgstr "Base64"
+
+msgid ""
+"Base64 encoded arrow images are loading faster and they are colorable. But "
+"optimization plugins often have errors in their codes related to them, so if "
+"your arrow won't load, turn this option off."
+msgstr ""
+"תמונות חץ מקודדות של Base64 נטענות מהר יותר והן צבעוניות. אבל לתוספים "
+"לאופטימיזציה יש לעתים קרובות שגיאות בקודים שלהם הקשורים אליהם, כך שאם החץ "
+"שלך לא נטען, כבה אפשרות זו."
+
+msgid "Image width - Desktop"
+msgstr "רוחב תמונה - שולחן עבודה"
+
+msgid "Image width - Tablet"
+msgstr "רוחב תמונה - טאבלט"
+
+msgid "Image width - Mobile"
+msgstr "רוחב תמונה - נייד"
+
+msgid "Pause"
+msgstr "השהיה"
+
+msgid "Play autoplay"
+msgstr "הפעל הפעלה אוטומטית"
+
+msgid "Pause autoplay"
+msgstr "השהיית הניגון האוטומטי"
+
+msgid "Bar"
+msgstr "עמוד"
+
+msgid "Slide count"
+msgstr "ספירת שקופיות"
+
+msgid ""
+"The \"Title\" will be the index of the slide and \"Description\" will be the "
+"total number of slides."
+msgstr ""
+"ה\"כותרת \"תהיה האינדקס של השקופית וה\"תיאור\" יהיה המספר הכולל של השקופיות."
+
+msgid "Separator"
+msgstr "מפריד"
+
+#, php-format
+msgid ""
+"You can set what separates the Tex bar Title and Description. This separator "
+"is used at the Slide count option, too, to separate the current and total "
+"slide number. %1$s To put the Description to a new line, use the &lt;br&gt; "
+"HTML tag."
+msgstr ""
+"באפשרותך להגדיר מה מפריד בין כותרת סרגל טקס ותיאור. מפריד זה משמש גם באפשרות "
+"ספירת שקופיות, כדי להפריד את מספר השקופיות הנוכחי ואת המספר הכולל. %1$s כדי "
+"לשים את התיאור בשורה חדשה, השתמש בתג <br> HTML."
+
+msgid "Bar full size"
+msgstr "בר בגודל מלא"
+
+msgid "Shows on hover"
+msgstr "הצג במעבר עכבר"
+
+msgid "Hide on slides"
+msgstr "הסתר בשקופיות"
+
+msgid ""
+"List the slides separated by commas on which you want the controls to be "
+"hidden."
+msgstr "פרט את השקופיות המופרדות בפסיקים שעליהם ברצונך להסתיר את הפקדים."
+
+msgid "Text bar"
+msgstr "סרגל טקסט"
+
+msgid "Bullets"
+msgstr "רשימת נקודותת"
+
+msgid "Side"
+msgstr "צד"
+
+msgid "Before"
+msgstr "לפני"
+
+msgid "After"
+msgstr "בסוף"
+
+msgid "Shadow"
+msgstr "הצללה"
+
+msgid "Thumbnails"
+msgstr "תמונות ממוזערות"
+
+msgid "Desktop width"
+msgstr "רוחב בתצוגת מחשב שולחני"
+
+msgid "Tablet width"
+msgstr "רוחב בתצוגת טבלט"
+
+msgid "Mobile width"
+msgstr "רוחב מובייל"
+
+msgid "Align thumbnails"
+msgstr "יישור תמונות ממוזערות"
+
+msgid "Start"
+msgstr "התחל"
+
+msgid "End"
+msgstr "סוף"
+
+msgid "Space between"
+msgstr "רווח בין"
+
+msgid "Space around"
+msgstr "רווח מסביב"
+
+msgid "Caption"
+msgstr "תאור"
+
+msgid ""
+"The height (horizontal orientation) or width (vertical orientation) of the "
+"caption container."
+msgstr "הגובה (הכיוון האופקי) או הרוחב (הכיוון האנכי) של מיכל הכיתוב."
+
+msgid "Next arrow image"
+msgstr "תמונת החץ הבאה"
+
+msgid "The previous arrow image will be mirrored."
+msgstr "תמונת החץ הקודמת תשתקף."
+
+msgid "Group by"
+msgstr "בקבוצה"
+
+msgctxt "Unit"
+msgid "thumbnails"
+msgstr "תמונות ממוזערות"
+
+msgid "You can break your thumbnails into rows or columns."
+msgstr "ניתן לפרק את התמונות הממוזערות לשורות או עמודות."
+
+msgid ""
+"The height (horizontal orientation) or width (vertical orientation) of the "
+"thumbnail container in px or %."
+msgstr ""
+"הגובה (הכיוון האופקי) או הרוחב (הכיוון האנכי) של מיכל התמונה הממוזערת ב - px "
+"או %."
+
+#, javascript-format
+msgid "Switches %s slide(s)."
+msgstr "מחליף %s שקופיות."
+
+#, javascript-format
+msgid "Loops %s and stops before starting slide."
+msgstr "לולאות %s ועצירות לפני תחילת השקופית."
+
+#, javascript-format
+msgid "Loops %s and returns to starting slide."
+msgstr "לולאות %s וחוזר לשקופית ההתחלה."
+
+#, javascript-format
+msgid "Switches to the %s. slide."
+msgstr "עובר לשקופית %s."
+
+msgid "Top and bottom"
+msgstr "העליון והתחתון"
+
+msgid "License key cannot be empty!"
+msgstr "מפתח הרישיון לא יכול להיות ריק!"
+
+msgid "License key is active!"
+msgstr "הרישיון שלך פעיל."
+
+msgid "Missing sliders!"
+msgstr "סליידרים חסרים!"
+
+msgid "Line color"
+msgstr "צבע קו"
+
+msgid "Number of particles"
+msgstr "מספר מעגלים"
+
+msgid "Grab"
+msgstr "תפוס"
+
+msgid "Bubble"
+msgstr "בּוּעָה"
+
+msgid "Repulse"
+msgstr "להדוף"
+
+msgid "Push"
+msgstr "דחיפה"
+
+msgid "Remove"
+msgstr "הסר"
+
+msgid "Hide on mobile"
+msgstr "הסתר בתצוגה בנייד"
+
+msgid "Type"
+msgstr "סוג"
+
+msgid "Secondary"
+msgstr "משני"
+
+msgid "Flip"
+msgstr "הפוך"
+
+msgid "Grow"
+msgstr "כחול"
+
+msgid "Shrink"
+msgstr "חדות:"
+
+msgid "Interval"
+msgstr "מרווח"
+
+msgid "Interval modifier"
+msgstr "משנה מרווח זמן"
+
+msgctxt "Autoplay modifier"
+msgid "loops"
+msgstr "לולאות"
+
+msgctxt "Autoplay modifier"
+msgid "slide count"
+msgstr "ספירת שקופיות"
+
+msgctxt "Autoplay modifier"
+msgid "slide index"
+msgstr "אינדקס שקופיות"
+
+msgid "Stops on"
+msgstr "עצירות מופעלות"
+
+msgctxt "Autoplay modifier"
+msgid "last slide"
+msgstr "הדבק שקופית"
+
+msgctxt "Autoplay modifier"
+msgid "next slide"
+msgstr "השקף הבא"
+
+msgid "Polygons"
+msgstr "מצולעים"
+
+msgid "Bloom"
+msgstr "בלום"
+
+msgid "Web"
+msgstr "אתר"
+
+msgid "Black widow"
+msgstr "אלמנה שחורה"
+
+msgid "Zodiac"
+msgstr "גלגל המזלות"
+
+msgid "Fading dots"
+msgstr "נקודות דהייה"
+
+msgid "Pirouette"
+msgstr "פירואט"
+
+msgid "Sparkling"
+msgstr "עיניים נוצצות"
+
+#, php-format
+msgid "Curve %d"
+msgstr "סגנון %d"
+
+msgid "Curves"
+msgstr "עקומות"
+
+#, php-format
+msgid "Fan %d"
+msgstr "מאוורר %d"
+
+msgid "Hills"
+msgstr "גבעה"
+
+#, php-format
+msgid "Incline %d"
+msgstr "שיפוע %d"
+
+msgid "Inverse arrow"
+msgstr "חץ הפוך"
+
+msgid "Rectangle"
+msgstr "מלבן"
+
+msgid "Slopes"
+msgstr "מדרונות"
+
+#, php-format
+msgid "Tilt %d"
+msgstr "המשתמש %d"
+
+#, php-format
+msgid "Triangle %d"
+msgstr "משולש %d"
+
+#, php-format
+msgid "Wave %d"
+msgstr "גל %d"
+
+msgid "Waves"
+msgstr "גלים"
+
+#, php-format
+msgid "Columns %d"
+msgstr "עמודות %d"
+
+#, php-format
+msgid "Paper %d"
+msgstr "מאוורר %d"
+
+msgid "2 Colors"
+msgstr "2 צבעים"
+
+msgid "Fan"
+msgstr "השטחה"
+
+msgid "Masked waves"
+msgstr "גלים רעולי פנים"
+
+msgid "Ribbon"
+msgstr "סרט"
+
+msgid "Creates slides by your custom settings."
+msgstr "יוצר שקופיות לפי ההגדרות המותאמות אישית שלך."
+
+#, php-format
+msgid ""
+"You don't have custom generators yet. %1$s Check the documentation %2$s to "
+"learn how to create your own generator."
+msgstr ""
+"עדיין אין לך גנרטורים מותאמים אישית. %1$s בדוק את התיעוד %2$s כדי ללמוד כיצד "
+"ליצור גנרטור משלך."
+
+msgid "No options given"
+msgstr "לא ניתנו אפשרויות"
+
+msgid "The secret is empty. Please insert that value too!"
+msgstr "הסוד ריק. נא להכניס גם את הערך הזה!"
+
+msgid "The App ID is empty. Please insert that value too!"
+msgstr "מזהה האפליקציה ריק. נא להכניס גם את הערך הזה!"
+
+msgid ""
+"The Facebook generator will get deprecated soon, so you shouldn't use it "
+"anymore!"
+msgstr "גנרטור פייסבוק יקבל מיושן בקרוב, אז אתה לא צריך להשתמש בו יותר!"
+
+#, php-format
+msgid ""
+"%1$s allows HTTPS Redirect URIs only! You must move your site to HTTPS in "
+"order to use this generator!"
+msgstr ""
+"%1$s מאפשר כתובות אתר להפניה מחדש של HTTPS בלבד! עליך להעביר את האתר שלך ל - "
+"HTTPS כדי להשתמש בגנרטור זה!"
+
+msgid "How to get SSL for my website?"
+msgstr "כיצד לקבל SSL עבור אתר האינטרנט שלי?"
+
+#, php-format
+msgid ""
+"%2$s Check the documentation %3$s to learn how to configure your %1$s app."
+msgstr "%2$s בדוק את התיעוד %3$s כדי ללמוד כיצד להגדיר את יישום %1$s שלך."
+
+msgctxt "Facebook app permission"
+msgid "pages read engagement"
+msgstr "דפים קוראים מעורבות"
+
+msgid "Pages read engagement permission"
+msgstr "הרשאה לקריאת דפים"
+
+msgid ""
+"You need \"pages_read_engagement\" permission if you want to access datas of "
+"Facebook pages, where you are an administrator. For other pages you still "
+"need to turn this option on, but request access to \"Page Public Content "
+"Access\" within your App."
+msgstr ""
+"אתה זקוק להרשאה \"דפים_קריאה_מעורבות\" אם ברצונך לגשת לנתונים של דפי "
+"פייסבוק, שבהם אתה מנהל מערכת. עבור דפים אחרים עדיין עליך להפעיל אפשרות זו, "
+"אך בקש גישה ל'גישה לתוכן ציבורי של דף 'בתוך האפליקציה."
+
+msgctxt "Facebook app permission"
+msgid "user photos"
+msgstr "תמונות משתמש"
+
+msgid "User photos permission"
+msgstr "הרשאה לתמונות משתמש"
+
+msgid ""
+"You need \"user_photos\" permission to access photos of users, except your "
+"own user."
+msgstr ""
+"דרושה לך הרשאת \"user_photos\" כדי לגשת לתמונות של משתמשים, מלבד המשתמש שלך."
+
+msgid "Token"
+msgstr "טוקן"
+
+msgid "Callback url"
+msgstr "כתובת ה-callback שלך"
+
+msgid "The token expired. Please request new token! "
+msgstr "תוקף האסימון פג. אנא בקש אסימון חדש!"
+
+msgid "Request token"
+msgstr "מפתח אסימון"
+
+msgid "Facebook photos or posts on your page"
+msgstr "תמונות או פוסטים בפייסבוק בדף שלך"
+
+msgid "Photos by album"
+msgstr "תמונות לפי אלבום"
+
+msgid "Posts by page"
+msgstr "פוסטים על ידי "
+
+msgid "User or page"
+msgstr "משתמש או דף"
+
+msgid "Album"
+msgstr "אלבום"
+
+msgctxt "Facebook generator type"
+msgid "Facebook posts"
+msgstr "פוסטים בפייסבוק"
+
+msgid "Page"
+msgstr "דף"
+
+msgid "Feed"
+msgstr "פיד"
+
+msgid "Remove special characters"
+msgstr "הסרת תווים מיוחדים"
+
+msgid "Exclude Types"
+msgstr "אי-כלילת סוגים:"
+
+msgid "Separate the types by a comma. E.g.: share,album"
+msgstr "הפרד את הסוגים בפסיק. לדוגמה: שיתוף,אלבום"
+
+msgid "The key and secret is not valid!"
+msgstr "המפתח והסוד אינם תקפים!"
+
+msgid "There are no photos in this album!"
+msgstr "אין תמונות באלבום הזה!"
+
+msgid "Please choose an album!"
+msgstr "אנא בחר אלבום!"
+
+msgid "There are no photos in this gallery!"
+msgstr "אין תמונות בגלריה זו!"
+
+msgid "Please chooose a gallery!"
+msgstr "אנא בחרו גלריה!"
+
+msgid "Privacy"
+msgstr "פרטיות"
+
+msgid "There are no photos with this privacy filter!"
+msgstr "אין תמונות עם מסנן פרטיות זה!"
+
+msgctxt "Flickr generator type"
+msgid "Flickr search"
+msgstr "חיפוש ב - Flickr"
+
+msgid "User name or ID"
+msgstr "שם משתמש או מזהה"
+
+msgid "Search in title, description or tags"
+msgstr "חיפוש בכותרת, תיאור או תגיות"
+
+msgid "Folder"
+msgstr "תיקייה"
+
+msgid "Images in folder"
+msgstr "תמונות בתיקייה"
+
+msgid "Images in folder and subfolders"
+msgstr "תמונות בתיקיות ובתיקיות משנה"
+
+msgid "Videos in folder"
+msgstr "סרטוני וידאו בתיקייה"
+
+msgid "Source folder"
+msgstr "צור תיקייה"
+
+msgid "Filename based exclusion"
+msgstr "אי הכללה המבוססת על שם קובץ"
+
+msgid "Remove resized images"
+msgstr "הסר תמונות בגודל שונה"
+
+msgid ""
+"This option removes files that match the \"-[number]x[number].[extension]\" "
+"pattern in the end of their file names. For example, \"myimage.jpg\" will "
+"stay in the generator result, but \"myimage-120x120.jpg\" will be removed, "
+"because it's the same image, just in a smaller size."
+msgstr ""
+"אפשרות זו מסירה קבצים התואמים את התבנית \"-[ number]x[number ].\" בסוף שמות "
+"הקבצים שלהם. לדוגמה, \"myimage.jpg\" יישאר בתוצאת הגנרטור, אך "
+"\"myimage-120x120.jpg\" יוסר, מכיוון שמדובר באותה תמונה, רק בגודל קטן יותר."
+
+msgid "Filename has to contain"
+msgstr "שם הקובץ חייב להכיל"
+
+msgid ""
+"Only those images will be asked down, which have the given texts within "
+"their filenames. You can write down multiple texts separated by comma."
+msgstr ""
+"רק תמונות אלה יתבקשו למטה, אשר יש את הטקסטים שניתנו בתוך שמות הקבצים שלהם. "
+"אתה יכול לכתוב טקסטים מרובים מופרדים באמצעות פסיק."
+
+msgid "Filename cannot contain"
+msgstr "שם הקובץ לא יכול להכיל"
+
+msgid ""
+"Only those images will be asked down, which don't have the given texts "
+"within their filenames. You can write down multiple texts separated by comma."
+msgstr ""
+"רק תמונות אלה יתבקשו למטה, אשר אין את הטקסטים שניתנו בתוך שמות הקבצים שלהם. "
+"אתה יכול לכתוב טקסטים מרובים מופרדים באמצעות פסיק."
+
+msgid "Filename"
+msgstr "שם קובץ"
+
+msgid "Creation date"
+msgstr "תאריך יצירה"
+
+msgid ""
+"Wrong path. This is the default image folder path, so try to navigate from "
+"here:"
+msgstr "נתיב שגוי. זהו נתיב ברירת המחדל לתיקיית תמונות, לכן נסה לנווט מכאן:"
+
+msgid "Folder not found."
+msgstr "התיקייה לא נמצאה."
+
+msgid ""
+"Wrong path. This is the default upload/media folder path, so try to navigate "
+"from here:"
+msgstr ""
+"נתיב שגוי. זהו נתיב ברירת המחדל להעלאה/תיקיית מדיה, לכן נסה לנווט מכאן:"
+
+msgid "The App ID and the Secret is empty!"
+msgstr "מזהה האפליקציה והסוד ריקים!"
+
+msgid "The token will expire at:"
+msgstr "תוקף האסימון יפוג ב:"
+
+msgid "Access token was not returned.Please check the credentials!"
+msgstr "אסימון הגישה לא הוחזר. אנא בדוק את האישורים!"
+
+msgid "The token expired. Please request new token!"
+msgstr "תוקף האסימון פג. אנא בקש אסימון חדש!"
+
+msgid "The token will expire in two days! Please refresh the token!"
+msgstr "תוקף האסימון יפוג בעוד יומיים! יש לרענן את האסימון!"
+
+msgid "Refresh Token"
+msgstr "רענן אסימון"
+
+msgid "Refresh"
+msgstr "_רענון"
+
+msgid "Album loading method"
+msgstr "שיטת טעינת אלבום"
+
+msgid "Load first images only"
+msgstr "טען תמונות ראשונות בלבד"
+
+msgid "Load album images separately"
+msgstr "טען תמונות אלבום בנפרד"
+
+msgid "Load Album images as record data"
+msgstr "טען תמונות אלבום כנתוני רשומה"
+
+msgid "JSON from url"
+msgstr "JSON מ - URL"
+
+msgid "JSON from input"
+msgstr "JSON מתוך קלט"
+
+msgid "Level separation"
+msgstr "הפרדת רמות"
+
+msgid ""
+"JSON codes can be customized to have many different levels. From a code it "
+"is impossible to know from which level do you want to use the given datas on "
+"the different slides, so you have to select that level from this list."
+msgstr ""
+"קודים JSON יכול להיות מותאם אישית יש רמות שונות רבות. מקוד לא ניתן לדעת "
+"מאיזו רמה ברצונך להשתמש בנתונים הנתונים בשקופיות השונות, לכן עליך לבחור רמה "
+"זו מתוך רשימה זו."
+
+#, php-format
+msgid ""
+"The given text is not valid XML! %1$sValidate your code%2$s to make sure it "
+"is correct."
+msgstr ""
+"הטקסט הנתון אינו חוקי XML! %1$sאמת את הקוד שלך %2$s כדי לוודא שהוא נכון."
+
+#, php-format
+msgid ""
+"The given text is not valid JSON! %1$sValidate your code%2$s to make sure it "
+"is correct."
+msgstr "הטקסט הנתון אינו JSON חוקי! %1$sאמת את הקוד%2$s כדי לוודא שהוא נכון."
+
+msgid ""
+"Try to change the \"Level separation\" or \"Remove levels from result\" "
+"setting."
+msgstr "נסה לשנות את ההגדרה \"הפרדת רמות\" או \"הסר רמות מהתוצאה \"."
+
+msgid "Images"
+msgstr "  תמונות"
+
+msgid "Offset hours"
+msgstr "שעות קיזוז"
+
+msgid "Timezone offset in hours. For example: +2 or -7."
+msgstr "קיזוז אזור זמן בשעות. לדוגמה: +2 או -7."
+
+msgid "The data in the given url is not valid XML."
+msgstr "הנתונים בכתובת ה - URL הנתונה אינם חוקיים XML."
+
+msgid "CSV from url"
+msgstr "קובץ CSV מכתובת האתר"
+
+msgid "CSV from input"
+msgstr "קובץ CSV מהקלט"
+
+msgid "View tweet"
+msgstr "צייץ עלינו"
+
+msgid "Comments"
+msgstr "תגובות "
+
+msgid "Date"
+msgstr "תאריך"
+
+msgid "Likes"
+msgstr "אהבתי"
+
+msgid "Manual"
+msgstr "ידני"
+
+msgid "Modified time"
+msgstr "מועד השינוי"
+
+msgid "Plays"
+msgstr "משחקים"
+
+msgid "Playlist"
+msgstr "רשימת הפעלה"
+
+msgid "optional"
+msgstr "אופציונלי"
+
+msgid "Privacy status"
+msgstr "סטטוס פרטיות"
+
+#, php-format
+msgid "Creates slides from %1$s content."
+msgstr "יוצר שקופיות מתוכן %1$s."
+
+msgid "Include subcategories"
+msgstr "כלול קטגוריות משנה"
+
+msgid "Frontpage"
+msgstr "דף ראשי"
+
+msgid "Exclude ID"
+msgstr "לא להכליל לפי מזהה"
+
+msgid "Category title"
+msgstr "כותרת הקטגוריה"
+
+msgid "Username"
+msgstr "שם משתמש"
+
+msgid "View post"
+msgstr "הצגת פוסט"
+
+msgid "Resolved"
+msgstr "נפתר"
+
+msgid "Only main discussions"
+msgstr "רק הדיונים העיקריים"
+
+msgid "View discussion"
+msgstr "הצג דיון"
+
+msgid "Events"
+msgstr "אירועים"
+
+msgid "Albums"
+msgstr "אלבומים"
+
+msgid "Videos"
+msgstr "וידיאו"
+
+msgid "Pages"
+msgstr "עמודים"
+
+msgid "Users"
+msgstr "משתמשים"
+
+msgid "Allowed user IDs"
+msgstr "מזהי משתמש מותרים"
+
+msgid "Separate them by comma."
+msgstr "הפרד אותם בפסיק."
+
+msgid "Banned user IDs"
+msgstr "מזהי משתמש אסורים"
+
+msgid "Started"
+msgstr "התחיל"
+
+msgid "Ended"
+msgstr "הסתיים"
+
+msgid "All day"
+msgstr "כל היום"
+
+msgid "Recurring events"
+msgstr "ארועים חוזרים"
+
+msgid "Open"
+msgstr "פתוחה"
+
+msgid "Closed"
+msgstr "נסגר"
+
+msgid "Invite only"
+msgstr "הזמנה בלבד"
+
+msgid "Location"
+msgstr "מיקום"
+
+msgid "Pull posts only from these users. Separate them by comma."
+msgstr "משוך הודעות רק ממשתמשים אלה. הפרד אותם בפסיק."
+
+msgid "Do not pull posts from these users. Separate them by comma."
+msgstr "אל תמשוך פוסטים ממשתמשים אלה. הפרד אותם בפסיק."
+
+msgid "Public"
+msgstr "ציבורי"
+
+msgid "Private"
+msgstr "פרטי"
+
+msgid "Notification"
+msgstr "התראה"
+
+msgid "Email only"
+msgstr "אימייל בלבד"
+
+msgid "Internal only"
+msgstr "לשימוש פנימי בלבד"
+
+msgid "Profiles"
+msgstr "פרופילים"
+
+msgid "Badges"
+msgstr "תוויות"
+
+msgid "Register date"
+msgstr "תאריך רישום"
+
+msgid "Last visit date"
+msgstr "ביקור אחרון"
+
+msgid "Points"
+msgstr "ניקוד"
+
+msgid "Products"
+msgstr "המוצרים"
+
+msgid "Manufacturer"
+msgstr "יצרן"
+
+msgid "On discount"
+msgstr "בהנחה"
+
+msgid "In stock"
+msgstr "במלאי "
+
+msgid "Currency"
+msgstr "מטבע"
+
+msgid "Product language"
+msgstr "שפת המוצר"
+
+msgid "Category language"
+msgstr "שפת הקטגוריה"
+
+msgid "Manufacturer language"
+msgstr "שפת היצרן"
+
+msgid "Price"
+msgstr "מחיר"
+
+msgid "Product name"
+msgstr "שם המוצר"
+
+msgid "Product ID"
+msgstr "מזהה (ID) מוצר"
+
+msgid "Locations"
+msgstr "מקומות"
+
+msgid "Recurring"
+msgstr ""
+
+msgid "All, but from recurring ones only parent events"
+msgstr "כל, אבל מן חוזרים ונשנים רק אירועי הורה"
+
+msgid "Only recurring events"
+msgstr "ארועים חוזרים"
+
+msgid "Only recurring event parents"
+msgstr "רק אירוע חוזר הורים"
+
+msgid "Only not recurring events"
+msgstr "רק לא אירועים חוזרים"
+
+msgid "Menu item (item ID)"
+msgstr "פריט תפריט (מזהה פריט)"
+
+msgid "Start date"
+msgstr "תאריך התחלה"
+
+msgid "End date"
+msgstr "תאריך סיום"
+
+msgid "ID"
+msgstr "מזהה"
+
+msgid "Discount"
+msgstr "מבצע"
+
+msgid "Registration start date"
+msgstr "תאריך ההתחלה של ההרשמה"
+
+msgid "Cut off date"
+msgstr "תאריך סגירה"
+
+msgid "Cancel before date"
+msgstr "ביטול לפני התאריך"
+
+msgid "Publish up date"
+msgstr "תאריך פרסום עדכני"
+
+msgid "Publish down date"
+msgstr "פרסם תאריך למטה"
+
+msgid "Early bird discount date"
+msgstr "תאריך הנחה להזמנה מוקדמת"
+
+msgid "Early bird discount amount"
+msgstr "סכום ההנחה להזמנה מוקדמת"
+
+msgid "Late fee date"
+msgstr "תאריך תשלום מאוחר"
+
+msgid "Recurring end date"
+msgstr "תאריך סיום חוזר"
+
+msgid "Max end date"
+msgstr "תאריך סיום מקסימלי"
+
+msgid "Only display items with these IDs"
+msgstr "הצג רק פריטים עם מזהים אלה"
+
+msgid ""
+"Timezone offset in hours. For example: +2 or -7. If you leave it empty, "
+"Joomla's System -> Global Configuration -> Server -> Server Time Zone "
+"setting will be used."
+msgstr ""
+"קיזוז אזור זמן בשעות. לדוגמה: +2 או -7. אם תשאיר אותו ריק, המערכת של ג'ומלה -"
+"> תצורה גלובלית -> שרת -> אזור זמן שרת ישמש."
+
+msgid "Brand"
+msgstr "יצרן"
+
+msgid "Tag"
+msgstr "תייג"
+
+msgid "Warehouse"
+msgstr "מחסן"
+
+msgid "Include all images"
+msgstr "כלול את כל התמונות"
+
+msgid "Sales"
+msgstr "מכירות"
+
+msgid "Average score"
+msgstr "ניקוד ממוצע"
+
+msgid "Total vote"
+msgstr "סה\"כ הצבעות"
+
+msgid "Product IDs"
+msgstr "מזהי (IDs) מוצר"
+
+msgid ""
+"Write the product IDs you want to display here, in the order you want them "
+"to appear in the generator. One product ID per line."
+msgstr ""
+"כתוב את מזהי המוצר שברצונך להציג כאן, לפי הסדר שבו ברצונך שיופיעו בגנרטור. "
+"מזהה מוצר אחד בכל שורה."
+
+msgid ""
+"Update your Ignite Gallery! Only Ignite Gallery 4.8+ versions are supported."
+msgstr "עדכן את גלריית Ignite שלך! תמיכה רק ב - Ignite Gallery 4.8+ גירסאות."
+
+msgid "One time events"
+msgstr "אירועים חד פעמיים"
+
+msgid "Repeating events"
+msgstr "אירועים חוזרים"
+
+msgid "Date language"
+msgstr "שפת התאריך"
+
+msgid "Date variable offset"
+msgstr "קיזוז משתנה תאריך"
+
+msgid "Date filter offset"
+msgstr "קיזוז מסנן תאריכים"
+
+msgid "Status"
+msgstr "מצב"
+
+msgid "Trashed"
+msgstr "נמחק"
+
+msgid "Ask down all product images"
+msgstr "שאל את כל תמונות המוצר"
+
+msgid "Items"
+msgstr "‎פריטים"
+
+msgid "View item"
+msgstr "הצג"
+
+msgid "Viewed"
+msgstr "נצפו"
+
+msgid "View image"
+msgstr "הצג תמונה"
+
+msgid "All day event"
+msgstr "אירוע של יום שלם"
+
+msgid "Fallback language"
+msgstr "שפת גיבוי:"
+
+msgid "Show parent products only"
+msgstr "הצג מוצרי אב בלבד"
+
+#, php-format
+msgid "Creates slides from %1$s galleries."
+msgstr "יוצר שקופיות מגלריות %1$s."
+
+msgid "Gallery"
+msgstr "גלרייה"
+
+msgid "View gallery"
+msgstr "הצג את כל תמונות הפרוייקט"
+
+#, php-format
+msgid "Creates slides from %1$s events."
+msgstr "יוצר שקופיות מתוך %1$s אירועים."
+
+msgid "Exclude event IDs (One ID per line)"
+msgstr "אל תכלול מזהי אירועים (מזהה אחד לכל שורה)"
+
+msgid "Location town"
+msgstr "עיר מיקום"
+
+msgid "Location state"
+msgstr "מיקום המדינה"
+
+msgid "Get all multisite events"
+msgstr "קבל את כל האירועים מרובי האתרים"
+
+msgid "Order result"
+msgstr "תוצאת הזמנה"
+
+msgid "Events per site"
+msgstr "אירועים לפי אתר"
+
+msgid "Format date variables"
+msgstr "פורמט משתני תאריך"
+
+msgid ""
+"With the WordPress Settings -> General -> Timezone and Date format, new "
+"variables will be generated from the given variables. Separate them with "
+"comma."
+msgstr ""
+"עם הגדרות וורדפרס -> כללי -> אזור זמן ו פורמט תאריך, משתנים חדשים ייווצרו "
+"מהמשתנים הנתונים. להפריד אותם עם פסיק."
+
+msgid "Start time text"
+msgstr "מועד התחלה"
+
+msgid "End date text"
+msgstr "טקסט של תאריך סיום"
+
+msgid "End time text"
+msgstr "טקסט של שעת סיום"
+
+msgid "Rsvp date"
+msgstr "תאריך Rsvp"
+
+msgid "Multisite Posts"
+msgstr "פוסטים מרובי אתרים"
+
+msgid "Source gallery"
+msgstr "גלריית מקור"
+
+msgid "Organizers"
+msgstr "מארגנים"
+
+msgid "Venues"
+msgstr "מיקומים"
+
+msgid "Hide From Event Listings"
+msgstr "להסתיר אירוע מרשימות האירועים"
+
+msgid "Event start date"
+msgstr "תאריך התחלת אירוע"
+
+msgid "Event end date"
+msgstr "תאריך סיום אירוע"
+
+msgid "Event cost"
+msgstr "עריכת עלות"
+
+msgid "Event creation date"
+msgstr "תאריך יצירת האירוע"
+
+msgid "Event modification date"
+msgstr "תאריך שינוי האירוע"
+
+msgid "Metakey name"
+msgstr "שם מטאקי"
+
+msgid "If its set, this will be used instead of the 'Field' value."
+msgstr "אם הוא מוגדר, ייעשה בו שימוש במקום הערך 'שדה '."
+
+msgid "Sorting method"
+msgstr "בחר בשיטת המיון הרצויה עבור הודעות"
+
+msgid "Galleries"
+msgstr "גלריות"
+
+msgid "Upload date"
+msgstr "תאריך העלאה"
+
+msgid "Average rating"
+msgstr "דירוג גבוה"
+
+msgid "Rate count"
+msgstr "ספירת תעריפים"
+
+msgid "Hit count"
+msgstr "לחץ על COUNT"
+
+msgid "Root"
+msgstr "‫Root"
+
+msgid "Products by filter"
+msgstr "מוצרים לפי פילטר"
+
+msgid "Products by IDs and/or SKUs"
+msgstr "מוצרים לפי מזהה ו/או מק\"ט"
+
+msgid ""
+"Creates slides from your WooCommece categories. (Not from the products "
+"inside them.)"
+msgstr "יוצר שקופיות מקטגוריות WooCommece שלך. (לא על המוצרים שבתוכם)"
+
+msgid "Submenu limit"
+msgstr "מגבלת תפריט משנה"
+
+msgid "No limit"
+msgstr "אין מגבלה"
+
+msgid "Hide empty categories"
+msgstr "להסתיר קטגוריות ריקות"
+
+msgid "Yes"
+msgstr "כן"
+
+msgid "Downloadable"
+msgstr "להורדה"
+
+msgid "Virtual"
+msgstr "וירטואלי"
+
+msgid "Create text variables (one per line)"
+msgstr "צור משתני טקסט (אחד בכל שורה)"
+
+msgid ""
+"if 'variable' equals to 'equalvalue', then you will get the text 'true', but "
+"if it's not equal, the text will be 'false'. The new variable's name will be "
+"textvariable (the 'variable' replaced by your variable's name)."
+msgstr ""
+"אם 'variable' שווה ל -' equalvalue ', אז תקבל את הטקסט 'true ', אבל אם הוא "
+"לא שווה, הטקסט יהיה' false '. שם המשתנה החדש יהיה משתנה טקסט (\" המשתנה "
+"\"יוחלף בשם המשתנה)."
+
+msgid "Round rating"
+msgstr "דירוג עגול"
+
+msgid "Half"
+msgstr "חצי"
+
+msgid "Third"
+msgstr "שלישי"
+
+msgid "Quarter"
+msgstr "רבע"
+
+msgid "Visibility"
+msgstr "חשיפה"
+
+msgid "Shop and search results"
+msgstr "תוצאות חיפוש נמצאו"
+
+msgid "Shop only"
+msgstr "חנות בלבד"
+
+msgid "Search results only"
+msgstr "רק תוצאות חיפוש"
+
+msgid "Replace these timestamp variables"
+msgstr "החלף את משתני חותמת הזמן"
+
+#, php-format
+msgid "Any PHP date format can be used: %s"
+msgstr "ניתן להשתמש בכל תבנית תאריך PHP: %s"
+
+msgid "Total sales"
+msgstr "סך כל המכירות"
+
+msgid "Regular price"
+msgstr "מחיר רגיל"
+
+msgid "Sale price"
+msgstr "מחיר הנחה"
+
+msgid "IDs (one per line)"
+msgstr "מזהים (אחד לשורה)"
+
+msgid "SKUs (one per line)"
+msgstr "מק\"ט (אחד לשורה)"
+
+msgid "Move"
+msgstr "העברה"
+
+msgid "Reveal"
+msgstr "גלי"
+
+msgid "Bounce"
+msgstr "הקפיצי"
+
+msgid "Special"
+msgstr "ייחודי"
+
+msgid "Left fade"
+msgstr "עמעום שמאלי"
+
+msgid "Right fade"
+msgstr "עמעום ימני"
+
+msgid "Top fade"
+msgstr "דהייה עליונה"
+
+msgid "Bottom fade"
+msgstr "עמעום תחתון"
+
+msgid "Flash"
+msgstr "פלאש"
+
+msgid "Left to Right"
+msgstr "משמאל לימין"
+
+msgid "Top to Bottom"
+msgstr "מלמעלה למטה"
+
+msgid "Skew Left to Right"
+msgstr "משמאל לימין"
+
+msgid "Downscale back out"
+msgstr "Downscale חזרה החוצה"
+
+msgid "Upscale back out"
+msgstr "יציאה משודרגת"
+
+msgid "Pulse"
+msgstr "פולס"
+
+msgid "Flip left"
+msgstr "היפוך לשמאל"
+
+msgid "Flip right"
+msgstr "היפוך לימין"
+
+msgid "Flip down"
+msgstr "הפוך למטה"
+
+msgid "Flip up"
+msgstr "הפוך למעלה"
+
+msgid "Flip in X"
+msgstr "הפוך ב- X"
+
+msgid "Flip in Y"
+msgstr "הפוך ב - Y"
+
+msgid "Flap"
+msgstr "מדף"
+
+msgid "Rotate top left"
+msgstr "סובב לשמאל"
+
+msgid "Rotate top right"
+msgstr "סובב לימין"
+
+msgid "Roll in"
+msgstr "גלגול פנימה"
+
+msgid "Rotate top left back out"
+msgstr "סובב שמאלה למעלה החוצה"
+
+msgid "Rotate all axis"
+msgstr "סובב את כל הצירים"
+
+msgid "Bounce in"
+msgstr "להקפיץ ב"
+
+msgid "Bounce in left"
+msgstr "להקפיץ שמאל"
+
+msgid "Bounce in right"
+msgstr "להקפיץ ישר"
+
+msgid "Bounce in down"
+msgstr "להקפיץ למטה"
+
+msgid "Bounce in up"
+msgstr "להקפיץ למעלה בתוך"
+
+msgid "Rubber band"
+msgstr "גומייה"
+
+msgid "Shake"
+msgstr "נער"
+
+msgid "Swing"
+msgstr "נדנדה"
+
+msgid "Wooble"
+msgstr "וובל"
+
+msgid "Roll"
+msgstr "הטלה"
+
+msgid "Grow rotate"
+msgstr "לגדול לסובב"
+
+msgid "Pendulum"
+msgstr "מטוטלת"
+
+msgid "Pendulum 3D"
+msgstr "3D לבנים למעלה"
+
+msgid "Vertical pendulum 3D"
+msgstr "מטוטלת אנכית 3D"
+
+msgid "We are Passionate About"
+msgstr "אנחנו מתלהבים"
+
+msgid ""
+"Amazing Food\n"
+"Great Hospitality"
+msgstr ""
+"אוכל מדהים\n"
+"אירוח נהדר"
+
+msgid "Before text"
+msgstr "לפני הטקסט"
+
+msgid "Animated text"
+msgstr "טקסט​ ​ באנמציה"
+
+msgid "After text"
+msgstr "אחרי הטקסט"
+
+msgid "Rotating"
+msgstr "נסה לסובב"
+
+msgid "Drop-in"
+msgstr "רשימה נפתחת"
+
+msgid "Slide down"
+msgstr "גלישה מטה"
+
+msgid "Typewriter"
+msgstr "מכונת כתיבה"
+
+msgid "Chars"
+msgstr "תווים"
+
+msgid "Chars 2"
+msgstr "תווים2"
+
+msgid "Auto width"
+msgstr "רוחב אוטומטי"
+
+msgid "Cursor color"
+msgstr "צבע סמן"
+
+msgctxt "Effect"
+msgid "Loop"
+msgstr "לולאה"
+
+msgid "Show duration"
+msgstr "הצג משך זמן"
+
+msgid "Class on the selected tag element."
+msgstr "מחלקה ברכיב התגית שנבחר."
+
+msgid "Area"
+msgstr "אזור"
+
+msgid "Write custom CSS codes here without selectors."
+msgstr "כתוב קודי CSS מותאמים אישית כאן ללא בוררים."
+
+msgid "Audio"
+msgstr "אודיו"
+
+msgid "MP3 audio"
+msgstr "MP3"
+
+msgid "Main color"
+msgstr "צבע עיקרי"
+
+msgid "Secondary color"
+msgstr "צבע משני"
+
+msgid "Audio settings"
+msgstr "הגדרות אודיו"
+
+#, php-format
+msgid ""
+"Audio autoplaying has a lot of limitations made by browsers. You can read "
+"about them %1$shere%2$s."
+msgstr ""
+"לניגון אוטומטי של אודיו יש הרבה מגבלות שנעשו על ידי דפדפנים. אפשר לקרוא "
+"עליהם %1$sכאן%2$s."
+
+msgid "Starts the audio from the beginning when the slide is viewed again."
+msgstr "הפעלת השמע מההתחלה כאשר השקופית מוצגת שוב."
+
+msgid "Progress"
+msgstr "התקדמות"
+
+msgid "Time"
+msgstr "שעה"
+
+msgid "Icon Size"
+msgstr "גודל האייקון"
+
+msgid "Before After"
+msgstr "לפני - אחרי"
+
+msgid "Left top"
+msgstr "שמאל למעלה"
+
+msgid "Center top"
+msgstr "מרכז למעלה"
+
+msgid "Right top"
+msgstr ". למעלה"
+
+msgid "Left center"
+msgstr "שמאל מרכז"
+
+msgid "Right Center"
+msgstr "ימין מרכז"
+
+msgid "Left bottom"
+msgstr "שמאל תחתון"
+
+msgid "Center bottom"
+msgstr "מרכז תחתון"
+
+msgid "Right bottom"
+msgstr "ימין תחתון"
+
+msgid "Before Image"
+msgstr "לפני התמונה"
+
+msgid "After Image"
+msgstr "לאחר התמונה"
+
+msgid "Labels"
+msgstr "תוויות"
+
+msgid "Show Label"
+msgstr "הציגי תווית"
+
+msgid "Always"
+msgstr "תמיד"
+
+msgid "Before label"
+msgstr "לפני התווית"
+
+msgid "After label"
+msgstr "אחרי התווית"
+
+msgid "Behavior"
+msgstr "התנהגות"
+
+msgid "Interaction"
+msgstr "אינטראקציה"
+
+msgid "Divider"
+msgstr "מחיצה"
+
+msgid "Line"
+msgstr "שורה"
+
+msgid "Show Caption"
+msgstr "הצג כיתוב"
+
+msgid "Caption text"
+msgstr "טקסט מורחב"
+
+msgid "Before image alt tag"
+msgstr "תגית ALT ללפני תמונה"
+
+msgid "After image alt tag"
+msgstr "אחרי תגית ALT של תמונה"
+
+msgid "Optimize images"
+msgstr "מיטוב תמונות"
+
+msgid "Full"
+msgstr "מלאה"
+
+msgid "Scales up the image on hover"
+msgstr "הגדל את התמונה בעת ריחוף"
+
+msgid "Overlay background"
+msgstr "רקע שכבת - על"
+
+msgid "Positions the text inside the overlay."
+msgstr "מקם את הטקסט בתוך שכבת - העל."
+
+msgid "Circle counter"
+msgstr "מונה עגול"
+
+msgid "Counter"
+msgstr "מספר מבקרים"
+
+msgid "Value"
+msgstr "ערך"
+
+msgid "Start from"
+msgstr "החל מ"
+
+msgid "Total"
+msgstr "סה\"כ"
+
+msgid "Active color"
+msgstr "צבע פעיל"
+
+msgid "Stroke width"
+msgstr "רוחב שבץ"
+
+msgid "Inner before"
+msgstr "פנימי לפני"
+
+msgid "Inner after"
+msgstr "פנימי לאחר"
+
+msgid "Pre"
+msgstr "טרום"
+
+msgid "Animation duration"
+msgstr "משך ההנפשה"
+
+msgid "Countdown"
+msgstr "ספירה לאחור"
+
+msgid "Days"
+msgstr "ימים"
+
+msgid "Minutes"
+msgstr "דקות"
+
+msgid "Seconds"
+msgstr " שניות"
+
+msgid "Use slide schedule"
+msgstr "השתמש בלוח הזמנים של המשטחים"
+
+msgid "You can use the \"Unpublished on\" date of the slide itself."
+msgstr "באפשרותך להשתמש בתאריך \"לא פורסם בתאריך\" של השקופית עצמה."
+
+msgid "Use Slide Schedule"
+msgstr "השתמש בלוח הזמנים של השקופיות"
+
+msgid "Go to Slide → Content tab and set the Unpublish on date for the slide."
+msgstr ""
+"עבור אל הכרטיסייה → תוכן שקופיות והגדר את ביטול הפרסום בתאריך עבור השקופית."
+
+msgid ""
+"Displays the days, hours, minutes and seconds texts under the counter "
+"numbers. To display the labels in your own language, translate the texts in "
+"the language files."
+msgstr ""
+"מציג את הימים, השעות, הדקות והשניות מתחת למספרים הנגדיים. כדי להציג את "
+"התוויות בשפה שלך, תרגם את הטקסטים בקבצי השפה."
+
+msgid "Gap"
+msgstr "הפסקה"
+
+msgid "Creates vertical and horizontal distance between the counter elements."
+msgstr "יוצר מרחק אנכי ואופקית בין רכיבי המונה."
+
+msgid "Tablet style"
+msgstr "סגנון טאבלט"
+
+msgid "Set custom Gap and Column for tablet."
+msgstr "הגדר מרווח ועמודה מותאמים אישית לטאבלט."
+
+msgid "Mobile style"
+msgstr "סגנון נייד"
+
+msgid "Set custom Gap and Column for mobile."
+msgstr "הגדר מרווח ועמודה מותאמים אישית לנייד."
+
+msgid "Action when ends"
+msgstr "פעולה בסיום"
+
+msgid "No action"
+msgstr "ללא פעולה"
+
+msgid "Hide layer"
+msgstr "הסתר שכבה"
+
+msgid "Redirect to URL"
+msgstr "הפנייה לכתובת ה-URL"
+
+msgid "Choose what happens after the counter reached zero."
+msgstr "בחר מה קורה לאחר הדלפק הגיע לאפס."
+
+msgid "This page is"
+msgstr "העמוד הזה הוא"
+
+msgid "Amazing"
+msgstr "מדהים. "
+
+#, php-format
+msgid "Circle %d"
+msgstr "מעגל %d"
+
+#, php-format
+msgid "Curly %d"
+msgstr "מתולתל %d"
+
+#, php-format
+msgid "Highlight %d"
+msgstr "הדגש %d"
+
+#, php-format
+msgid "Line Through %d"
+msgstr "קו דרך %d"
+
+#, php-format
+msgid "Rectangle %d"
+msgstr "מלבן %d"
+
+#, php-format
+msgid "Underline %d"
+msgstr "קו תחתון %d"
+
+#, php-format
+msgid "Underline double %d"
+msgstr "קו תחתון כפול %d"
+
+#, php-format
+msgid "ZigZag %d"
+msgstr "זיגזג %d"
+
+msgid "Highlighted text"
+msgstr "טקסט מודגש כאן"
+
+msgid "Bring front"
+msgstr "העבירי קדימה"
+
+msgid "Puts the shape on top of the text."
+msgstr "מעמיד את הצורה על גבי הטקסט."
+
+msgid "Loop delay"
+msgstr "עיכוב בלולאה"
+
+msgid "HTML"
+msgstr "‫HTML"
+
+msgid "Empty element"
+msgstr "רכיב ריק"
+
+#, php-format
+msgid ""
+"Please note that %1$swe do not support%2$s the HTML layer and the 3rd party "
+"codes loaded by it. We only suggest using this layer if you are a developer. "
+"%3$sAlso, make sure your HTML code is valid! Invalid HTML codes can mess up "
+"the entire slide and the only way resolving this problem is deleting the "
+"slide."
+msgstr ""
+"שים לב ש-%1$swe אינו תומך ב-%2$s בשכבת ה-HTML ובקודי הצד השלישי הנטענים על "
+"ידה. אנו ממליצים להשתמש בשכבה זו רק אם אתה מפתח. %3$sכמו כן, ודא שקוד ה-HTML "
+"שלך חוקי! קודי HTML לא חוקיים יכולים לבלבל את כל השקופית והדרך היחידה לפתור "
+"בעיה זו היא מחיקת השקופית."
+
+msgid "Repair HTML errors"
+msgstr "תיקון שגיאות HTML"
+
+msgid "Item"
+msgstr "פריט"
+
+msgid ""
+"Item 1\n"
+"Item 2\n"
+"Item 3"
+msgstr ""
+"פריט 1\n"
+"פריט 2\n"
+"פריט 3"
+
+msgid "List type"
+msgstr "סוג הרשימה"
+
+msgctxt "List layer type"
+msgid "None"
+msgstr "בחר"
+
+msgctxt "List layer type"
+msgid "Disc"
+msgstr "תקליטור"
+
+msgctxt "List layer type"
+msgid "Square"
+msgstr "מרובע"
+
+msgctxt "List layer type"
+msgid "Circle"
+msgstr "מעגל"
+
+msgctxt "List layer type"
+msgid "Decimal"
+msgstr "עשרוני"
+
+msgctxt "List layer type"
+msgid "Armenian"
+msgstr "ארמנית"
+
+msgctxt "List layer type"
+msgid "Cjk-ideographic"
+msgstr "Cjk - idografi"
+
+msgctxt "List layer type"
+msgid "Decimal-leading-zero"
+msgstr "עשרוני - מוביל - אפס"
+
+msgctxt "List layer type"
+msgid "Georgian"
+msgstr "גיאורגית"
+
+msgctxt "List layer type"
+msgid "Hebrew"
+msgstr "עברית"
+
+msgctxt "List layer type"
+msgid "Hiragana"
+msgstr "היראגאנה"
+
+msgctxt "List layer type"
+msgid "Hiragana-iroha"
+msgstr "היראגאנה - אירוחה"
+
+msgctxt "List layer type"
+msgid "Katakana"
+msgstr "קטקאנה"
+
+msgctxt "List layer type"
+msgid "Katakana-iroha"
+msgstr "קטקאנה"
+
+msgctxt "List layer type"
+msgid "Lower-alpha"
+msgstr "אלפא תחתונה"
+
+msgctxt "List layer type"
+msgid "Lower-greek"
+msgstr "יוונית תחתונה"
+
+msgctxt "List layer type"
+msgid "Lower-latin"
+msgstr "לטינית תחתונה"
+
+msgctxt "List layer type"
+msgid "Lower-roman"
+msgstr "רומנית תחתונה"
+
+msgctxt "List layer type"
+msgid "Upper-alpha"
+msgstr "אלפא עילית"
+
+msgctxt "List layer type"
+msgid "Upper-latin"
+msgstr "עליון - לטיני"
+
+msgctxt "List layer type"
+msgid "Upper-roman"
+msgstr "הרומאי העליון"
+
+msgid "Icon not found"
+msgstr "סמל לא נמצא"
+
+#, php-format
+msgid "Enter an %1$s aria-label attribute %2$s that describes the link."
+msgstr "הזן %1$s מאפיין תווית אריה %2$s המתאר את הקישור."
+
+msgid "Iframe"
+msgstr "Iframe"
+
+#, php-format
+msgid ""
+"Please note, that %1$swe do not support%2$s customized coding! The iframe "
+"layer often needs code customizations what you have to do yourself, so we "
+"only suggest using this layer if you are a developer!"
+msgstr ""
+"לידיעתך, %1$sאיננו תומכים בקידוד מותאם אישית של %2$s! שכבת iframe דורשת "
+"לעתים קרובות התאמה אישית של קוד מה שאתה צריך לעשות בעצמך, לכן אנו ממליצים "
+"להשתמש בשכבה זו רק אם אתה מפתח!"
+
+msgid "Iframe url"
+msgstr "כתובת Iframe"
+
+msgid "You can disable the scroll on the iframe content."
+msgstr "ניתן להשבית את הגלילה בתוכן iframe."
+
+msgid "Iframe title"
+msgstr "Iframe כותרת"
+
+msgid "Image area"
+msgstr "אזור תמונה"
+
+msgid "Image box"
+msgstr "תמונה"
+
+msgid "Aria label"
+msgstr "תווית ARIA"
+
+msgid ""
+"Positions the text inside the layer. Only works with left and right layout."
+msgstr "מקם את הטקסט בתוך השכבה. עובד רק עם פריסה שמאלית וימנית."
+
+msgid "Input"
+msgstr "מקור"
+
+msgid "Container"
+msgstr "קונטיינר"
+
+msgid "What are you looking for?"
+msgstr "מה מחפשים ?"
+
+msgid ""
+"We only suggest using this layer if you are a developer, since the Input "
+"layer requires deep understanding how HTML form works."
+msgstr ""
+"אנו ממליצים להשתמש בשכבה זו רק אם אתה מפתח, מכיוון ששכבת הקלט דורשת הבנה "
+"עמוקה של אופן הפעולה של טופס HTML."
+
+msgid "Placeholder text"
+msgstr "טקסט מחזיק מיקום"
+
+msgid "Form"
+msgstr "טופס"
+
+msgid "Input name"
+msgstr "שם הקלט"
+
+msgid "Method"
+msgstr "שיטה"
+
+msgid "Form action"
+msgstr "פעולת טופס"
+
+msgid "Parameters"
+msgstr "משתנים"
+
+msgid "Slide action to submit"
+msgstr "פעולת שקופית לשליחה"
+
+msgid "JavaScript"
+msgstr "JavaScript"
+
+msgid "Progress bar"
+msgstr "סרגל ההתקדמות."
+
+msgid "Over"
+msgstr "מעל"
+
+msgid "Transition"
+msgstr "מעבר"
+
+msgid "Front image"
+msgstr ""
+
+msgid "Back image"
+msgstr "תמונה אחורית"
+
+msgid "Vertical flip"
+msgstr "היפוך אנכי"
+
+msgid "Horizontal flip"
+msgstr "היפוך אופקי"
+
+msgid "Front image alt tag"
+msgstr "תגית alt של תמונה קדמית"
+
+msgid "Back image alt tag"
+msgstr "תגית ALT של תמונה"
+
+msgid "MP4 video"
+msgstr "וידאו MP4"
+
+msgid "Preload"
+msgstr "טעינת מוקדמת"
+
+msgid "Joomla module"
+msgstr "מודול"
+
+#, php-format
+msgid ""
+"Please note, that %1$swe do not support%2$s the Joomla module layer!%3$sThe "
+"loaded module often needs code customizations what you have to do yourself, "
+"so we only suggest using this layer if you are a developer!"
+msgstr ""
+"שים לב, %1$sאנחנו לא תומכיםב %2$s שכבת המודול של ג'ומלה!%3$sהמודול הטעון "
+"צריך לעתים קרובות התאמה אישית של קוד מה שאתה צריך לעשות בעצמך, אז אנחנו "
+"מציעים להשתמש בשכבה זו רק אם אתה מפתח!"
+
+msgid "Position name or module ID"
+msgstr "שם תפקיד או מזהה מודול"
+
+msgid ""
+"The position name of your module (for Loadposition and Modulepos) or the "
+"module's ID (Module)."
+msgstr ""
+"שם המיקום של המודול שלך (עבור Loadposition ו - Modulepos) או מזהה המודול "
+"(Module)."
+
+msgid "Constrain ratio"
+msgstr "יחס מעצורים"
+
+msgid "The slide scales horizontally and vertically with the same amount."
+msgstr "השקופית מתאזנת אופקית ואנכית עם אותה כמות."
+
+msgid "Height based on"
+msgstr "גובה מבוסס על"
+
+msgid ""
+"The real height makes your slider have the height of the browser without the "
+"URL bar, while the CSS 100vh makes it exactly as big as the browser height."
+msgstr ""
+"הגובה האמיתי הופך את המחוון שלך לגובה של הדפדפן ללא סרגל כתובת האתר, בעוד ש "
+"- CSS 100vh הופך אותו לגודל בדיוק כמו גובה הדפדפן."
+
+msgid "Decrease height"
+msgstr "ירידה בגובה"
+
+msgid ""
+"You can make your slider smaller than the full height of the browser by a "
+"given pixel, for example, to fit below your menu without causing scrollbar."
+msgstr ""
+"אתה יכול להפוך את המחוון שלך קטן יותר מאשר הגובה המלא של הדפדפן על ידי פיקסל "
+"נתון, למשל, כדי להתאים מתחת לתפריט שלך מבלי לגרום סרגל גלילה."
+
+msgid "Decrease height by selectors"
+msgstr "הקטנת הגובה על ידי בוררים"
+
+msgid "Use global focus selectors"
+msgstr "השתמש בבוררי מיקוד גלובליים"
+
+msgid "Use local selectors"
+msgstr "השתמש בבוררים מקומיים"
+
+msgid ""
+"You can make your slider smaller than the full height of the browser, for "
+"example, to fit below your menu without causing scrollbar."
+msgstr ""
+"אתה יכול להפוך את המחוון שלך קטן יותר מאשר הגובה המלא של הדפדפן, למשל, כדי "
+"להתאים מתחת לתפריט שלך מבלי לגרום סרגל גלילה."
+
+msgid "CSS selector (sum of heights)"
+msgstr "בורר CSS (סכום הגבהים)"
+
+msgctxt "Slider type"
+msgid "Carousel slider"
+msgstr "קרוסלה סליידר:"
+
+msgid "Slide size"
+msgstr "גודל שקופית"
+
+msgid "Max pane width"
+msgstr "רוחב חלונית מקסימלי"
+
+msgid ""
+"You can use this option to limit how many slides can show up next to each "
+"other."
+msgstr ""
+"באפשרותך להשתמש באפשרות זו כדי להגביל את מספר השקופיות שיכולות להופיע זו לצד "
+"זו."
+
+msgid "Minimum slide distance"
+msgstr "מרחק משטחים מינימלי"
+
+msgid "The minimum space between two slides."
+msgstr "הרווח המינימלי בין שתי שקופיות."
+
+msgid "Side spacing"
+msgstr "מרווח צד"
+
+msgid "Desktop side spacing"
+msgstr "מרווח בין צדי שולחן העבודה"
+
+msgid ""
+"You can create a fix distance between the slider and the slides where your "
+"controls are which appear on this device. This way your controls won't cover "
+"the slide content."
+msgstr ""
+"באפשרותך ליצור מרחק קבוע בין המחוון לבין השקופיות שבהן הפקדים שלך מופיעים "
+"במכשיר זה. בדרך זו הפקדים שלך לא יכסה את תוכן השקופית."
+
+msgid "Tablet side spacing"
+msgstr "מרווח צד לטאבלט"
+
+msgid "Mobile side spacing"
+msgstr "מרווח צד לנייד"
+
+msgid "Slide background color"
+msgstr "צבע הרקע של השקופית"
+
+msgid "Slide border width"
+msgstr "רוחב גבול השקופית"
+
+msgid "Slide border color"
+msgstr "צבע גבול שקופית"
+
+msgid "Slide border radius"
+msgstr "רדיוס גבול השקופית"
+
+msgid "Slider border width"
+msgstr "רוחב גבול הסליידר"
+
+msgid "Slider border color"
+msgstr "צבע גבול טקסט סליידר"
+
+msgid "Slider border radius"
+msgstr "רדיוס גבול המחוון"
+
+msgid "The Single Switch setting can only move the slides horizontally!"
+msgstr "הגדרת המתג היחיד יכולה להזיז את השקופיות בצורה אופקית בלבד!"
+
+msgid ""
+"This option will create a complete round from your slides if you have enough "
+"slides. If you don't have enough slides, you could consider duplicating all "
+"the slides or just add more slides until you will get a carousel round."
+msgstr ""
+"אפשרות זו תיצור סיבוב מלא מהמשטחים שלך אם יש לך מספיק משטחים. אם אין לך "
+"מספיק שקופיות, תוכל לשקול לשכפל את כל השקופיות או פשוט להוסיף עוד שקופיות עד "
+"שתקבל קרוסלה עגולה."
+
+msgid "Single switch"
+msgstr "מתג יחיד"
+
+msgid "It switches one slide instead of moving all the visible slides."
+msgstr "הוא מחליף שקופית אחת במקום להזיז את כל השקופיות הנראות לעין."
+
+msgid "Justify slides"
+msgstr "יישר משטחים"
+
+msgctxt "Slider type"
+msgid "Showcase slider"
+msgstr "סליידר חלון ראווה"
+
+msgid "Slide distance"
+msgstr "מרחק השקופית"
+
+msgid "Fix space between the slides."
+msgstr "קבע רווח בין השקופיות."
+
+msgid "Slide CSS Preset"
+msgstr "שקופית CSS מוגדרת מראש"
+
+msgid "Showcase animation"
+msgstr "הנפשת חלון ראווה"
+
+msgid "Horizontal showcase"
+msgstr "תצוגה אופקית"
+
+msgid "Vertical showcase"
+msgstr "תצוגה אנכית"
+
+msgid "Horizontal cover flow"
+msgstr "זרימת כיסוי אופקית"
+
+msgid "Vertical cover flow"
+msgstr "זרימת כיסוי אנכית"
+
+msgid "Switch with next/previous slides"
+msgstr "החלף עם השקופיות הבאות/הקודמות"
+
+msgid ""
+"Clicking on any slide that's not in the middle will make the slider switch "
+"to that slide. With this option you can disable this behavior, for example, "
+"to allow clicking on buttons on the visible slides."
+msgstr ""
+"לחיצה על כל שקופית שאינה באמצע תגרום לסליידר לעבור לשקופית זו. עם אפשרות זו "
+"באפשרותך להשבית התנהגות זו, לדוגמה, כדי לאפשר לחיצה על לחצנים בשקופיות "
+"הגלויות."
+
+msgid "Save as new animation"
+msgstr "שמירת כהנפשה:"
+
+msgid "Sets"
+msgstr "סטים"
+
+msgid "Text animation settings"
+msgstr "הגדרות הנפשת טקסט"
+
+msgid "Words"
+msgstr "מילים"
+
+msgid "Sort"
+msgstr "מייני"
+
+msgid "Reversed"
+msgstr "הוחזר"
+
+msgid "Side shifted"
+msgstr "הזזת צד"
+
+msgid "Center shifted"
+msgstr "המרכז הוזז"
+
+msgid "Stagger"
+msgstr "שסטאגר"
+
+msgid "Turn"
+msgstr "פנייה"
+
+msgid "Prev"
+msgstr "קודמת"
+
+msgid "Next"
+msgstr "הבא"
+
+msgid "Previous label"
+msgstr "תווית קודמת"
+
+msgid "Next label"
+msgstr "תווית הבאה"
+
+msgid "To normal"
+msgstr "לנורמלי"
+
+msgid "To fullscreen"
+msgstr "מסך מלא"
+
+msgid "Fullscreen"
+msgstr "מסך מלא"
+
+msgid "Exit full screen"
+msgstr "יציאה ממסך מלא"
+
+msgid "Enter Full screen"
+msgstr "עבור למסך מלא"
+
+#, php-format
+msgid ""
+"%1$s does not support the full screen API. For this reason the full screen "
+"button will not appear on %1$s devices."
+msgstr ""
+"%1$s אינו תומך ב - API במסך מלא. מסיבה זו לחצן המסך המלא לא יופיע ב -{ 1} "
+"מכשירים."
+
+msgid "Indicator"
+msgstr "אינדיקטור"
+
+msgid "Line thickness"
+msgstr "עובי קווים"
+
+msgid "Track color"
+msgstr "צבע רצועה"
+
+msgid "Bar color"
+msgstr "צבע בר"
