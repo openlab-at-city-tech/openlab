@@ -43,7 +43,11 @@ function openlab_group_privacy_settings($group_type) {
         ));
     }
 
-	$new_group_status = openlab_get_default_group_privacy_setting( $group_type );
+	if ( bp_is_group_create() ) {
+		$group_status = openlab_get_default_group_privacy_setting( $group_type );
+	} else {
+		$group_status = groups_get_current_group()->status;
+	}
 
     ?>
     <div class="panel panel-default">
@@ -59,7 +63,7 @@ function openlab_group_privacy_settings($group_type) {
 
             <div class="row">
                 <div class="col-sm-24">
-                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $new_group_status) ?> />
+                    <label><input type="radio" name="group-status" value="public" <?php checked('public', $group_status) ?> />
                         This is a public <?php echo $group_type_name_uc ?></label>
                     <ul>
                         <li>This <?php echo $group_type_name_uc ?> Profile and related content and activity will be visible to the public.</li>
@@ -67,14 +71,14 @@ function openlab_group_privacy_settings($group_type) {
                         <li>Any OpenLab member may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can change this in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $new_group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="private" <?php checked('private', $group_status) ?> />This is a private <?php echo esc_html( $group_type_name_uc ); ?></label>
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> will be listed in the <?php echo esc_html( $group_type_name_uc ); ?> directory, search results, and may be displayed on the OpenLab home page.</li>
                         <li>Only OpenLab members who request membership and are accepted may join this <?php echo esc_html( $group_type_name_uc ); ?>. You can disable membership requests in the 'Privacy Settings: Membership' section below.</li>
                     </ul>
 
-                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $new_group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
+                    <label><input type="radio" name="group-status" value="hidden" <?php checked('hidden', $group_status) ?> />This is a hidden <?php echo esc_html( $group_type_name_uc ); ?></label>
 
                     <ul>
                         <li>This <?php echo esc_html( $group_type_name_uc ); ?> Profile, related content and activity will only be visible only to members of the <?php echo esc_html( $group_type_name_uc ); ?>.</li>
