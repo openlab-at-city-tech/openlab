@@ -1,5 +1,0 @@
-{
-  "builder.js": "/scripts/builder-bundle.min.js",
-  "frontend.css": "/styles/style.min.css",
-  "frontend.js": "/scripts/frontend-bundle.min.js"
-}
