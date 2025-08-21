@@ -2695,7 +2695,7 @@ function openlab_filter_groups_query_for_resources( $sql, $sql_parts, $args ) {
 			'fylc', // openlabdev.org
 			'first-year-learning-community', // production
 			'citytech-oer', // openlabdev.org
-			'open-education-resource', // production
+			'open-educational-resource', // production
 			'department-model',
 			'resource'
 		];
